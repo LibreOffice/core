@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: npower $ $Date: 2003-07-07 14:07:07 $
+#   last change: $Author: npower $ $Date: 2003-08-19 09:51:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,7 @@ NO_BSYMBOLIC=   TRUE
 
 # --- Allgemein ----------------------------------------------------
 LIB1TARGET=	 $(SLB)$/$(TARGET).lib
-#LIB1FILES= $(SLB)/provider.lib \ $(SLB)/protocolhandler.lib $(SLB)/storage.lib \ $(SLB)/runtimemgr.lib
-LIB1FILES=  $(SLB)/runtimemgr.lib $(SLB)/storage.lib $(SLB)/provider.lib
+LIB1FILES=  $(SLB)/storage.lib $(SLB)/provider.lib
 
 
 #SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)

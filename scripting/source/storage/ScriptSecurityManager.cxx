@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:16 $
+ *  last change: $Author: npower $ $Date: 2003-08-19 09:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@ throw ( RuntimeException )
     //need to check if storage has any scripts
     try
     {
+        /* need to replace this with something better, now logical names are
+         * gone
+
         Reference< XInterface > xInterface;
         Any a = m_xContext->getValueByName(
                 OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
@@ -186,7 +189,7 @@ throw ( RuntimeException )
         if( !logicalNames.getLength() ) // we have no logical names
         {
             return;
-        }
+        } */
 
         // we have some scripts so read config & decide on that basis
         // Setup flags: m_runMacroSetting, m_warning, m_confirmationRequired,

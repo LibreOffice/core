@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-29 14:17:56 $
+ *  last change: $Author: npower $ $Date: 2003-08-19 09:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,14 @@ namespace scripting_impl
 //=============================================================================
 typedef ::std::vector< ScriptData > Datas_vec;
 //-----------------------------------------------------------------------------
-typedef ::std::hash_map < ::rtl::OUString, Datas_vec, ::rtl::OUStringHash,
-    ::std::equal_to< ::rtl::OUString > > ScriptInfo_hash;
+// function name -> ScriptData
+typedef ::std::hash_map < ::rtl::OUString, ScriptData, ::rtl::OUStringHash,
+            ::std::equal_to< ::rtl::OUString > > ScriptFunction_hash;
+//-----------------------------------------------------------------------------
+// language -> hash of function name -> ScriptData
+typedef ::std::hash_map < ::rtl::OUString, ScriptFunction_hash,
+            ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+ScriptData_hash;
 //-----------------------------------------------------------------------------
 typedef ::std::hash_map < ::rtl::OUString,
 css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >,
@@ -209,7 +215,7 @@ private:
 
     ::std::vector < ::rtl::OUString >  mv_logicalNames;
     static ScriptLanguages_hash* mh_scriptLangs;
-    ScriptInfo_hash mh_implementations;
+    ScriptData_hash mh_implementations;
     ScriptOutput_hash mh_parcels;
     sal_Int32 m_scriptStorageID;
     ::rtl::OUString m_stringUri;

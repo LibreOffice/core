@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.27 $
-*  last change: $Author: dfoster $ $Date: 2003-07-23 12:13:38 $
+*  $Revision: 1.28 $
+*  last change: $Author: npower $ $Date: 2003-08-19 09:49:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -510,9 +510,9 @@ throw ( RuntimeException, Exception )
         scriptData.logicalname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
     // and now push onto the usual structures
-    Datas_vec v;
-    v.push_back( scriptData );
-    mh_implementations[ scriptData.logicalname ] = v;
+    ScriptFunction_hash sfh;
+    sfh[ scriptData.functionname ] = scriptData;
+    mh_implementations[ scriptData.language ] = sfh;
     m_bInitialised = true;
 }
 
@@ -545,32 +545,32 @@ ScriptStorage::updateMaps( const Datas_vec & vScriptDatas )
     for ( Datas_vec::const_iterator it = vScriptDatas.begin() ; it != it_end; ++it )
     {
         //find the Datas_vec for this logical name
-        ScriptInfo_hash::iterator h_it = mh_implementations.find( it->logicalname );
+        ScriptData_hash::iterator h_it = mh_implementations.find( it->language );
 
         if ( h_it == mh_implementations.end() )
         {
             //if it's null, need to create a new Datas_vec
             OSL_TRACE(
-                     "updateMaps: new logical name: %s\n", rtl::OUStringToOString(
-                         it->logicalname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            OSL_TRACE(  "language name: %s\n",
-                     rtl::OUStringToOString(
+                     "updateMaps: new language: %s\n", rtl::OUStringToOString(
+                         it->language, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            OSL_TRACE(
+                     "updateMaps: adding functionname: %s\n", rtl::OUStringToOString(
                          it->functionname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
-            Datas_vec v;
-            v.push_back( *it );
-            mh_implementations[ it->logicalname ] = v;
+            ScriptFunction_hash sfh;
+            sfh[ it->functionname ] = *it;
+            mh_implementations[ it->language ] = sfh;
         }
         else
         {
-            OSL_TRACE(  "updateMaps: existing logical name: %s\n",
-                rtl::OUStringToOString( it->logicalname,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            OSL_TRACE(
+                     "updateMaps: adding functionname: %s\n", rtl::OUStringToOString(
+                         it->functionname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             OSL_TRACE(  "                    language name: %s\n",
                 rtl::OUStringToOString( it->functionname,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
-            h_it->second.push_back( *it );
+            h_it->second[ it->functionname ] = *it;
         }
     }
 }
@@ -594,26 +594,26 @@ throw ( RuntimeException )
 
     try
     {
-        ScriptInfo_hash::iterator it_end = mh_implementations.end();
-        for ( ScriptInfo_hash::iterator it = mh_implementations.begin() ; it != it_end; ++it )
+        ScriptData_hash::iterator it_end = mh_implementations.end();
+        for ( ScriptData_hash::iterator it = mh_implementations.begin() ; it != it_end; ++it )
         {
             ::rtl::OUString logName = it->first;
-            Datas_vec::iterator it_datas_end = it->second.end();
-            for ( Datas_vec::iterator it_datas = it->second.begin();
-                    it_datas != it_datas_end ; ++it_datas )
+            ScriptFunction_hash::iterator it_sfh_end = it->second.end();
+            for ( ScriptFunction_hash::iterator it_sfh = it->second.begin();
+                    it_sfh != it_sfh_end ; ++it_sfh )
             {
                 ScriptOutput_hash::const_iterator it_parcels =
-                    mh_parcels.find( it_datas->parcelURI );
+                    mh_parcels.find( it_sfh->second.parcelURI );
                 if ( it_parcels == mh_parcels.end() )
                 {
                     //create new outputstream
-                    OUString parcel_xml_path = it_datas->parcelURI.concat(
+                    OUString parcel_xml_path = it_sfh->second.parcelURI.concat(
                         parcel_suffix );
                     m_xSimpleFileAccess->kill( parcel_xml_path );
                     xOS = m_xSimpleFileAccess->openFileWrite( parcel_xml_path );
 
                     OSL_TRACE(  "saving: %s\n", rtl::OUStringToOString(
-                        it_datas->parcelURI.concat( OUString::createFromAscii(
+                        it_sfh->second.parcelURI.concat( OUString::createFromAscii(
                         "/parcel.xml" ) ),
                         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
@@ -630,14 +630,14 @@ throw ( RuntimeException )
 
                     writeMetadataHeader( xHandler );
 
-                    mh_parcels[ it_datas->parcelURI ] = xHandler;
+                    mh_parcels[ it_sfh->second.parcelURI ] = xHandler;
                 }
                 else
                 {
                     xHandler = it_parcels->second;
                 }
 
-                ScriptElement* pSE = new ScriptElement( *it_datas );
+                ScriptElement* pSE = new ScriptElement( it_sfh->second );
                 // this is to get pSE released correctly
                 Reference < xml::sax::XAttributeList > xal( pSE );
                 pSE->dump( xHandler );
@@ -722,7 +722,8 @@ ScriptStorage::getScriptLogicalNames()
 throw ( RuntimeException )
 {
     Sequence< ::rtl::OUString  > results;
-    ScriptInfo_hash::iterator h_it = mh_implementations.begin();
+    // comment out the rest, and ultimately remove method
+    /*ScriptInfo_hash::iterator h_it = mh_implementations.begin();
     ScriptInfo_hash::iterator h_itEnd =  mh_implementations.end();
     if ( h_it == h_itEnd  )
     {
@@ -757,7 +758,7 @@ throw ( RuntimeException )
         throw RuntimeException( OUSTR(
             "ScriptStorage::getScriptLogicalNames Exception: " ).concat(
             e.Message ), Reference< XInterface > () );
-    }
+    } */
     return results;
 }
 
@@ -771,110 +772,52 @@ throw ( lang::IllegalArgumentException,
 
     Sequence< Reference< storage::XScriptInfo > > results;
     ScriptURI scriptURI( queryURI );
-    OSL_TRACE( "getting impl for logical name: %s",
-        ::rtl::OUStringToOString( scriptURI.getLogicalName(),
+    OSL_TRACE( "getting impl for language %s, function name: %s",
+        ::rtl::OUStringToOString( scriptURI.getLanguage(),
+        RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+        ::rtl::OUStringToOString( scriptURI.getFunctionName(),
         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-    ScriptInfo_hash::iterator h_itEnd =  mh_implementations.end();
-    ScriptInfo_hash::iterator h_it = mh_implementations.begin();
+    ScriptData_hash::iterator h_itEnd =  mh_implementations.end();
+    ScriptData_hash::iterator h_it = mh_implementations.begin();
     if ( h_it == h_itEnd )
     {
         OSL_TRACE( "ScriptStorage::getImplementations: EMPTY STORAGE" );
         return results;
     }
 
-    h_it = mh_implementations.find( scriptURI.getLogicalName() );
+    //find the implementations for the given language
+    h_it = mh_implementations.find( scriptURI.getLanguage() );
 
     if ( h_it == h_itEnd )
     {
         OSL_TRACE( "ScriptStorage::getImplementations: no impls found for %s",
-            ::rtl::OUStringToOString( scriptURI.getLogicalName(),
+            ::rtl::OUStringToOString( scriptURI.getLanguage(),
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         return results;
     }
 
-    //find the implementations for the given logical name
-    Datas_vec::const_iterator it_datas = h_it->second.begin();
-    Datas_vec::const_iterator it_datas_end = h_it->second.end();
+    //find the implementations for the given language
+    ScriptFunction_hash::const_iterator it_datas = h_it->second.find(
+        scriptURI.getFunctionName() );
+    ScriptFunction_hash::const_iterator it_datas_end = h_it->second.end();
 
-    OUString queryLang = scriptURI.getLanguage();
-    OUString queryFunc = scriptURI.getFunctionName();
-    OSL_TRACE(  "Query uri logicalname [%s], functionName [%s], language [%s]",
-                ::rtl::OUStringToOString( scriptURI.getLogicalName(),
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                ::rtl::OUStringToOString( scriptURI.getFunctionName(),
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                ::rtl::OUStringToOString( scriptURI.getLanguage(),
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
-    bool checkFuncNeeded = ( queryFunc.getLength() > 0 );
-    bool checkLangNeeded = ( queryLang.getLength() > 0 );
-    unsigned int scriptsIndex = 0;
-    if ( checkLangNeeded )
-        OSL_TRACE("Need to check language");
-    if ( checkFuncNeeded )
-        OSL_TRACE("Need to check funcname");
-    // initially set the size of the array to be the max set of
-    // matches possible ie the size of the matches on logical name
-    // alone
-    results.realloc( h_it->second.size() );
-
-    for ( ; it_datas != it_datas_end ; ++it_datas )
+    if ( it_datas == it_datas_end )
     {
-        ScriptData scriptData = *it_datas;
-        Reference< storage::XScriptInfo > xScriptInfo;
-        OSL_TRACE(  "compare uri logicalname [%s], functionName [%s], language [%s]",
-                ::rtl::OUStringToOString( scriptData.logicalname,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                ::rtl::OUStringToOString( scriptData.functionname,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                ::rtl::OUStringToOString( scriptData.language,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        OSL_TRACE( "ScriptStorage::getImplementations: no impls found for %s",
+            ::rtl::OUStringToOString( scriptURI.getFunctionName(),
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        return results;
+    }
 
-        if ( checkFuncNeeded && checkLangNeeded )
-        {
-            OSL_TRACE("checking funcname and lang (func)");
-            if ( queryFunc.equals( scriptData.functionname ) != sal_True )
-            {
-                continue;
-            }
-            OSL_TRACE("checking funcname and lang (lang)");
-            if ( queryLang.equals( scriptData.language )!= sal_True)
-            {
-                continue;
-            }
-            OSL_TRACE("checking funcname and lang (pass)");
-        }
-        else if ( checkFuncNeeded )
-        {
-            OSL_TRACE("checking funcname");
-            if ( queryFunc.equals( scriptData.functionname ) != sal_True )
-            {
-                continue;
-            }
-            OSL_TRACE("checking funcname (passed)");
-        }
-        else if ( checkLangNeeded )
-        {
-            OSL_TRACE("checking lang");
-            if ( queryLang.equals( scriptData.language ) != sal_True )
-            {
-                continue;
-            }
-            OSL_TRACE("checking lang (passed)");
-        }
-        OSL_TRACE("match found adding script");
-        xScriptInfo = new ScriptInfo ( scriptData, m_scriptStorageID );
-        results[ scriptsIndex++ ] = xScriptInfo;
-        OSL_TRACE( "Adding to sequence of impls " );
-    }
-    if ( scriptsIndex < h_it->second.size() )
-    {
-        OSL_TRACE("reducing size of array returned from %d to %d",
-            h_it->second.size(), scriptsIndex );
-        results.realloc( scriptsIndex );
-    }
-    OSL_TRACE( "returning from ScriptStorage::getImplementations with %d entries",
-    results.getLength() );
+    results.realloc( 1 );
+    ScriptData scriptData = it_datas->second;
+    OSL_TRACE( "ScriptStorage::getImplementations: impls found for %s",
+        ::rtl::OUStringToOString( scriptData.functionname,
+        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    Reference< storage::XScriptInfo > xScriptInfo =
+        new ScriptInfo ( scriptData, m_scriptStorageID );
+    results[ 0 ] = xScriptInfo;
+
     return results;
 }
 
@@ -884,8 +827,8 @@ ScriptStorage::getAllImplementations() throw ( RuntimeException )
 {
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     Sequence< Reference< storage::XScriptInfo > > results;
-    ScriptInfo_hash::iterator h_itEnd =  mh_implementations.end();
-    ScriptInfo_hash::iterator h_it = mh_implementations.begin();
+    ScriptData_hash::iterator h_itEnd =  mh_implementations.end();
+    ScriptData_hash::iterator h_it = mh_implementations.begin();
     if ( h_it == h_itEnd )
     {
         OSL_TRACE( "ScriptStorage::getImplementations: EMPTY STORAGE" );
@@ -893,7 +836,7 @@ ScriptStorage::getAllImplementations() throw ( RuntimeException )
     }
 
 
-    //iterater through each logical name and gather each implementation
+    //iterate through each logical name and gather each implementation
     //for that name
     for ( sal_Int32 count = 0; h_it !=  h_itEnd; ++h_it )
     {
@@ -901,13 +844,13 @@ ScriptStorage::getAllImplementations() throw ( RuntimeException )
         OSL_TRACE( "Adding implementations for %s",
             ::rtl::OUStringToOString( h_it->first,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        Datas_vec::const_iterator it_datas = h_it->second.begin();
-        Datas_vec::const_iterator it_datas_end = h_it->second.end();
+        ScriptFunction_hash::const_iterator it_sfh = h_it->second.begin();
+        ScriptFunction_hash::const_iterator it_sfh_end = h_it->second.end();
         OSL_TRACE( "Adding %d to sequence of impls ", h_it->second.size() );
-        for ( ; it_datas != it_datas_end ; ++it_datas )
+        for ( ; it_sfh != it_sfh_end ; ++it_sfh )
         {
             Reference< storage::XScriptInfo > xScriptInfo = new ScriptInfo (
-            *it_datas, m_scriptStorageID );
+            it_sfh->second, m_scriptStorageID );
 
             results[ count++ ] = xScriptInfo;
         }

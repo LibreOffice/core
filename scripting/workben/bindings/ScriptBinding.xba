@@ -280,10 +280,10 @@ Sub initialiseNavigationComboArrays()
     
     langCount = 1
     for index = 0 to ubound(svrArray)
-        iPos = inStr(svrArray(index), &quot;ScriptRuntimeFor&quot;)
+        iPos = inStr(svrArray(index), &quot;ScriptProviderFor&quot;)
 
         if (iPos &gt; 0) then
-            lang = Mid(svrArray(index), iPos + Len(&quot;ScriptRuntimeFor&quot;)
+            lang = Mid(svrArray(index), iPos + Len(&quot;ScriptProviderFor&quot;)
 
             if not (lang = &quot;Java&quot;) then
                 &apos;Add to language vector
@@ -812,17 +812,17 @@ end Sub
 
 
 Sub UpdateCfgFile ( fileName as String )
-	dim FuncProvider as Object
-	dim Func as Object
+	dim ScriptProvider as Object
+	dim Script as Object
 	dim args(1)
 	dim displayDialogFlag as boolean
 	displayDialogFlag = false
 	args(0) = ThisComponent
 	args(1) = displayDialogFlag
 	
-	FuncProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.FunctionProvider&quot;)
-	FuncProvider.initialize( args() )
-	Func = FuncProvider.getFunction(&quot;script://_$ScriptFrmwrkHelper.updateCfgFile?&quot; _
+	ScriptProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.MasterScriptProvider&quot;)
+	ScriptProvider.initialize( args() )
+	Script = ScriptProvider.getScript(&quot;script://_$ScriptFrmwrkHelper.updateCfgFile?&quot; _
 		+ &quot;language=Java&amp;function=ScriptFrmwrkHelper.updateCfgFile&amp;location=share&quot;)
 	Dim inArgs(2)
 	Dim outArgs()
@@ -832,8 +832,7 @@ Sub UpdateCfgFile ( fileName as String )
 	inArgs(0) = xmlFile()
 	inArgs(1) = fileName
 	inArgs(2) = numberOfLines
-	Func.invoke( inArgs(), outIndex(), outArgs() )
-
+	Script.invoke( inArgs(), outIndex(), outArgs() )
 End Sub
 
 sub UpdateConfig( a$ )
@@ -1034,15 +1033,15 @@ Sub PopulateLanguageCombo()
 End Sub
 
 Sub PopulateLocationCombo()
-	dim FuncProvider as Object
+	dim ScriptProvider as Object
 	dim args(1)
 	dim displayDialogFlag as boolean
 	displayDialogFlag = false
 	args(0) = ThisComponent
 	args(1) = displayDialogFlag
 	
-	FuncProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.FunctionProvider&quot;)
-	FuncProvider.initialize( args() )
+	ScriptProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.MasterScriptProvider&quot;)
+	ScriptProvider.initialize( args() )
 
 	locCombo =  bindingDialog.getControl( &quot;LocationCombo&quot; )
 	locCombo.removeItems( 0, locCombo.getItemCount() )

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>   ScriptRuntimeManager    </module-name>
+    <module-name>   ScriptProvider  </module-name>
     <component-description>
         <author> Noel Power</author>
         <name>  drafts.com.sun.star.script.framework.provider.ScriptProvider    </name>

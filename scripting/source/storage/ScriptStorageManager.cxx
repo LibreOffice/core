@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.27 $
+*  $Revision: 1.28 $
 *
-*  last change: $Author: npower $ $Date: 2003-07-07 14:28:47 $
+*  last change: $Author: npower $ $Date: 2003-08-19 09:50:57 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -303,6 +303,9 @@ throw ( RuntimeException )
     {
         try
         {
+           OSL_TRACE("Adding to security mgr for %s",
+               ::rtl::OUStringToOString( stringURI,
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             m_securityMgr.addScriptStorage( stringURI, returnedID );
         }
         catch ( RuntimeException & rte )
@@ -311,6 +314,12 @@ throw ( RuntimeException )
                 OUSTR( "ScriptStorageManager::createScriptStorageWithURI: " ).concat(
                     rte.Message ), Reference< XInterface >() );
         }
+    }
+    else
+    {
+       OSL_TRACE("No need to security mgr for %s",
+           ::rtl::OUStringToOString( stringURI,
+               RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
     return returnedID;
 }
