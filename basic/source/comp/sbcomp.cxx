@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbcomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:56:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,6 @@ BOOL SbModule::Compile()
     SbModule* pOld = pCMOD;
     pCMOD = this;
 
-    // #45741# Anderes Wait-Cursor-Handling
-    GetSbData()->bCompWait = BOOL( aOUSource.getLength() > 2048 );
-    if( GetSbData()->bCompWait )
-        Application::EnterWait();
-
     SbiParser* pParser = new SbiParser( (StarBASIC*) GetParent(), this );
     while( pParser->Parse() ) {}
     if( !pParser->GetErrors() )
@@ -101,13 +96,6 @@ BOOL SbModule::Compile()
     // fuer den Disassembler
     if( pImage )
         pImage->aOUSource = aOUSource;
-
-    // #45741# Falls der Wait-Cursor gesetzt ist, jetzt zuruecksetzen
-    if( GetSbData()->bCompWait )
-    {
-        Application::LeaveWait();
-        GetSbData()->bCompWait = FALSE;
-    }
 
     pCMOD = pOld;
 
