@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-16 11:10:24 $
+ *  last change: $Author: dv $ $Date: 2001-07-17 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,11 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#ifndef  _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_CONTENTCREATIONEXCEPTION_HPP_
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #endif
 
 #include <vector>
@@ -128,6 +131,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
 #endif
@@ -187,7 +191,9 @@ public:
     Image                   maFolderImage;
     Link                    maOpenDoneLink;
 
-                            SvtFileView_Impl( sal_Bool bOnlyFolder );
+                            SvtFileView_Impl( Window* pParent,
+                                              sal_Int16 nFlags,
+                                              sal_Bool bOnlyFolder );
                            ~SvtFileView_Impl();
 
     void                    Clear();
@@ -199,6 +205,12 @@ public:
     void                    CreateDisplayText_Impl();
     void                    CreateVector_Impl( const Sequence < OUString > &rList );
     void                    SortFolderContent_Impl();
+
+    void                    EntryRemoved( const OUString& rURL );
+    void                    EntryRenamed( OUString& rURL,
+                                          const OUString& rName );
+    void                    FolderInserted( const OUString& rURL,
+                                            const OUString& rTitle );
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
 };
@@ -270,19 +282,26 @@ class ViewTabListBox_Impl : public SvHeaderTabListBox
 {
 private:
     HeaderBar*              mpHeaderBar;
+    SvtFileView_Impl*       mpParent;
     sal_Bool                mbResizeDisabled    : 1;
     sal_Bool                mbAutoResize        : 1;
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
 
+    void            DeleteEntry( SvLBoxEntry* pEntry );
+
 public:
-    ViewTabListBox_Impl( Window* pParent, sal_Int16 nFlags );
-    ~ViewTabListBox_Impl();
+                    ViewTabListBox_Impl( Window* pParentWin,
+                                         SvtFileView_Impl* pParent,
+                                         sal_Int16 nFlags );
+                   ~ViewTabListBox_Impl();
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    Command( const CommandEvent& rCEvt );
+    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry,
+                                 const XubString& rNewText );
 
     void            ClearAll();
     void            EnableAutoResize() { mbAutoResize = sal_True; }
@@ -292,17 +311,19 @@ public:
 
 // -----------------------------------------------------------------------
 
-ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParent, sal_Int16 nFlags ) :
-
-    SvHeaderTabListBox( pParent, 0 ),
+ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
+                                          SvtFileView_Impl* pParent,
+                                          sal_Int16 nFlags ) :
+    SvHeaderTabListBox( pParentWin, 0 ),
 
     mpHeaderBar     ( NULL ),
+    mpParent        ( pParent ),
     mbResizeDisabled( sal_False ),
     mbAutoResize    ( sal_False )
 
 {
-    Size aBoxSize = pParent->GetSizePixel();
-    mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
+    Size aBoxSize = pParentWin->GetSizePixel();
+    mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
@@ -438,12 +459,18 @@ void ViewTabListBox_Impl::Command( const CommandEvent& rCEvt )
         SvLBoxEntry* pEntry = GetEntry( nPos );
         if ( pEntry )
         {
+            SelectAll( FALSE );
+            Select( pEntry, TRUE );
+
             PopupMenu aMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
             USHORT nId = aMenu.Execute( this, nPos );
             switch ( nId )
             {
                 case MID_FILEVIEW_DELETE :
+                    DeleteEntry( pEntry );
+                    break;
                 case MID_FILEVIEW_RENAME :
+                    EditEntry( pEntry );
                     break;
             }
         }
@@ -461,6 +488,69 @@ void ViewTabListBox_Impl::ClearAll()
     Clear();
 }
 
+// -----------------------------------------------------------------------
+void ViewTabListBox_Impl::DeleteEntry( SvLBoxEntry* pEntry )
+{
+    DBG_ASSERT( pEntry, "Where has the entry gone?" );
+
+    String aURL;
+    if ( pEntry->GetUserData() )
+        aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
+
+    if ( ! aURL.Len() )
+        return;
+
+    INetURLObject aObj( aURL );
+
+    svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+
+    if ( aDlg.Execute() == RET_YES )
+    {
+        if ( ::utl::UCBContentHelper::Kill( aURL ) )
+        {
+            RemoveSelection();
+            mpParent->EntryRemoved( aURL );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+BOOL ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
+                                 const XubString& rNewText )
+{
+    BOOL bRet = FALSE;
+
+    OUString aURL;
+    SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
+
+    if ( pData )
+        aURL = OUString( pData->maURL );
+
+    if ( ! aURL.getLength() )
+        return bRet;
+
+    try
+    {
+        Content aContent( aURL, Reference< XCommandEnvironment > () );
+
+        OUString aPropName = OUString::createFromAscii( "Title" );
+        Any aValue;
+        aValue <<= OUString( rNewText );
+        aContent.setPropertyValue( aPropName, aValue );
+        mpParent->EntryRenamed( aURL, rNewText );
+
+        pData->maURL = aURL;
+        pEntry->SetUserData( pData );
+
+        bRet = TRUE;
+    }
+    catch( ::com::sun::star::ucb::ContentCreationException ) {}
+    catch( ::com::sun::star::ucb::CommandAbortedException ) {}
+    catch( ::com::sun::star::uno::Exception ) {}
+
+    return bRet;
+}
+
 // class SvtFileView -----------------------------------------------------
 
 // -----------------------------------------------------------------------
@@ -470,14 +560,13 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
 
     Control( pParent, rResId )
 {
-    mpImp = new SvtFileView_Impl( bOnlyFolder );
-
     sal_Int8 nFlags = FILEVIEW_SHOW_ALL;
     if ( bOnlyFolder )
         nFlags |= FILEVIEW_ONLYFOLDER;
     if ( bMultiSelection )
         nFlags |= FILEVIEW_MULTISELECTION;
-    mpImp->mpView = new ViewTabListBox_Impl( this, nFlags );
+
+    mpImp = new SvtFileView_Impl( this, nFlags, bOnlyFolder );
 
     long pTabs[] = { 5, 20, 180, 320, 400, 600 };
     mpImp->mpView->SetTabs( &pTabs[0], MAP_PIXEL );
@@ -494,8 +583,8 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags 
 
     Control( pParent, rResId )
 {
-    mpImp = new SvtFileView_Impl( ( nFlags & FILEVIEW_ONLYFOLDER ) == FILEVIEW_ONLYFOLDER );
-    mpImp->mpView = new ViewTabListBox_Impl( this, nFlags );
+    mpImp = new SvtFileView_Impl( this, nFlags,
+                                  ( nFlags & FILEVIEW_ONLYFOLDER ) == FILEVIEW_ONLYFOLDER );
 
     if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
     {
@@ -622,6 +711,8 @@ void SvtFileView::CreateNewFolder( const String& rNewFolder )
         SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( aEntry, mpImp->maFolderImage, mpImp->maFolderImage );
         SvtContentEntry* pUserData = new SvtContentEntry( aURL, TRUE );
         pEntry->SetUserData( pUserData );
+        mpImp->FolderInserted( aURL, aEntry );
+
         mpImp->mpView->MakeVisible( pEntry );
     }
     else
@@ -879,13 +970,17 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
-SvtFileView_Impl::SvtFileView_Impl( sal_Bool bOnlyFolder ) :
+SvtFileView_Impl::SvtFileView_Impl( Window* pParent,
+                                    sal_Int16 nFlags,
+                                    sal_Bool bOnlyFolder ) :
     mnSortColumn    ( COLUMN_TITLE ),
     mbAscending     ( sal_True ),
     mbOnlyFolder    ( bOnlyFolder ),
     maFolderImage   ( SvtResId( IMG_SVT_FOLDER ) )
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
+
+    mpView = new ViewTabListBox_Impl( pParent, this, nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -1092,8 +1187,6 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     OUString aValue;
     OUString aTab     = OUString::createFromAscii( "\t" );
     OUString aDateSep = OUString::createFromAscii( ", " );
-    OUString aOne     = OUString::createFromAscii( "1" );
-    OUString aZero    = OUString::createFromAscii( "0" );
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
@@ -1305,6 +1398,7 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne,
     return ! bRet;
 }
 
+// -----------------------------------------------------------------------
 void SvtFileView_Impl::SortFolderContent_Impl()
 {
     sal_uInt32 nSize = maContent.size();
@@ -1320,3 +1414,144 @@ void SvtFileView_Impl::SortFolderContent_Impl()
     }
 }
 
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
+{
+    std::vector< SortingData_Impl* >::iterator aIt;
+
+    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    {
+        if ( (*aIt)->maTargetURL == rURL )
+        {
+            maContent.erase( aIt );
+            break;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::EntryRenamed( OUString& rURL,
+                                     const OUString& rTitle )
+{
+    std::vector< SortingData_Impl* >::iterator aIt;
+
+    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    {
+        if ( (*aIt)->maTargetURL == rURL )
+        {
+            (*aIt)->maTitle = rTitle;
+            (*aIt)->maLowerTitle = (*aIt)->maTitle.toAsciiLowerCase();
+            OUString aDisplayText = (*aIt)->maDisplayText;
+            sal_Int32 nIndex = aDisplayText.indexOf( '\t' );
+
+            if ( nIndex > 0 )
+                (*aIt)->maDisplayText = aDisplayText.replaceAt( 0, nIndex, rTitle );
+
+            INetURLObject aURLObj( rURL );
+            aURLObj.SetName( rTitle, INetURLObject::ENCODE_ALL );
+
+            rURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+
+            (*aIt)->maTargetURL = rURL;
+            break;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::FolderInserted( const OUString& rURL,
+                                       const OUString& rTitle )
+{
+    SortingData_Impl* pData = new SortingData_Impl;
+
+    pData->maTitle    = rTitle;
+    pData->maLowerTitle = pData->maTitle.toAsciiLowerCase();
+    pData->maSize     = 0;
+    pData->mbIsFolder = sal_True;
+    pData->maTargetURL   = rURL;
+
+    INetURLObject aURLObj( rURL );
+
+    pData->maType = SvFileInformationManager::GetDescription( aURLObj );
+    pData->maImage = maFolderImage;
+
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(),
+                                      Application::GetSettings().GetLocale() );
+
+    OUString aValue;
+    OUString aTab     = OUString::createFromAscii( "\t" );
+    OUString aDateSep = OUString::createFromAscii( ", " );
+
+    // title, type, size, date
+    aValue = pData->maTitle;
+    aValue += aTab;
+    aValue += pData->maType;
+    aValue += aTab;
+    // folders don't have a size
+    aValue += aTab;
+    // set the date
+    aValue += aLocaleWrapper.getDate( pData->maModDate );
+    aValue += aDateSep;
+    aValue += aLocaleWrapper.getTime( pData->maModDate );
+
+    pData->maDisplayText = aValue;
+
+    maContent.push_back( pData );
+}
+
+namespace svtools {
+
+// -----------------------------------------------------------------------
+// QueryDeleteDlg_Impl
+// -----------------------------------------------------------------------
+
+QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
+(
+    Window* pParent,
+    const String& rName      // Eintragsname
+) :
+
+    ModalDialog( pParent, SvtResId( DLG_SVT_QUERYDELETE ) ),
+
+    _aEntryLabel    ( this, ResId( TXT_ENTRY ) ),
+    _aEntry     ( this, ResId( TXT_ENTRYNAME ) ),
+    _aQueryMsg  ( this, ResId( TXT_QUERYMSG ) ),
+    _aYesButton ( this, ResId( BTN_YES ) ),
+    _aNoButton  ( this, ResId( BTN_NO ) ),
+    _aCancelButton( this, ResId( BTN_CANCEL ) )
+
+{
+    FreeResource();
+
+    // Handler
+    Link aLink( STATIC_LINK( this, QueryDeleteDlg_Impl, ClickLink ) );
+    _aYesButton.SetClickHdl( aLink );
+    _aNoButton.SetClickHdl( aLink );
+
+    // Anzeige der spezifizierten Texte
+
+    WinBits nTmpStyle = _aEntry.GetStyle();
+    nTmpStyle |= WB_PATHELLIPSIS;
+    _aEntry.SetStyle( nTmpStyle );
+    _aEntry.SetText( rName );
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton*, pBtn )
+
+/*  [Beschreibung]
+
+    Die Methode wertet das Resultat der Abfrage aus.
+*/
+
+{
+    if ( pBtn == &pThis->_aYesButton )
+        pThis->EndDialog( RET_YES );
+    else
+        pThis->EndDialog( RET_NO );
+
+    return 0;
+}
+
+}
