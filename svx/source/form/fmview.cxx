@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:40:08 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
@@ -534,14 +537,28 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
     if (!xSet.is())
         return;
 
-    if (!pFormShell->GetImpl()->GetWizardUsing())
+    sal_Int16 nClassId = FormComponentType::CONTROL;
+    try
+    {
+        xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
+
+        // some initial property defaults
+        if ( ( nClassId == FormComponentType::SCROLLBAR ) || ( nClassId == FormComponentType::SPINBUTTON ) )
+        {
+            const Rectangle& rBoundRect = pObj->GetBoundRect();
+            sal_Int32 eOrientation = ::com::sun::star::awt::ScrollBarOrientation::HORIZONTAL;
+            if ( rBoundRect.GetWidth() < rBoundRect.GetHeight() )
+                eOrientation = ::com::sun::star::awt::ScrollBarOrientation::VERTICAL;
+            xSet->setPropertyValue( FM_PROP_ORIENTATION, makeAny( eOrientation ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmFormView::ObjectCreated: caught an exception!" );
+    }
+
+    if ( !pFormShell->GetImpl()->GetWizardUsing() )
         return;
-
-    Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
-
-    sal_Int16 nClassId;
-    if(!(aValue >>= nClassId))
-        nClassId = FormComponentType::CONTROL;
 
     Reference< XChild >  xChild(xSet, UNO_QUERY);
     Reference< XRowSet >  xForm(xChild->getParent(), UNO_QUERY);
