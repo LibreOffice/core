@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesPanel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:44:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef SD_TOOLPANEL_CONTROLS_MASTER_PAGES_PANEL_HXX
 #define SD_TOOLPANEL_CONTROLS_MASTER_PAGES_PANEL_HXX
 
-#include "../SubToolPanel.hxx"
+#include "../ScrollPanel.hxx"
 
 namespace sd {
 class ViewShellBase;
@@ -74,8 +74,12 @@ class TreeNode;
 
 namespace sd { namespace toolpanel { namespace controls {
 
+/** The master pages panel combines three master page related panels into
+    one.  This has the benefit that creation of the task pane becomes a
+    little bit simpler and that common scroll bars can be displayed.
+*/
 class MasterPagesPanel
-    : public SubToolPanel
+    : public ScrollPanel
 {
 public:
     MasterPagesPanel (
