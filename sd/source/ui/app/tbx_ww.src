@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-07 08:52:37 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 21:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,5 +1378,6 @@ FloatingWindow RID_POSITION
     Text[ catalan ] = "Posición";
     Text[ finnish ] = "Järjestä";
 };
+
 
 
