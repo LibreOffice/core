@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 14:56:04 $
+ *  last change: $Author: mhu $ $Date: 2001-11-03 19:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_TYPES_H_
-#define _STORE_TYPES_H_ "$Revision: 1.3 $"
+#define _STORE_TYPES_H_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -75,51 +75,59 @@ extern "C" {
 #endif
 
 /** PageSize (recommended) default.
-    @see store_openFile().
+    @see store_openFile()
  */
 #define STORE_DEFAULT_PAGESIZE ((sal_uInt16)0x0400)
 
 
 /** PageSize (enforced) limits.
-    @see store_openFile().
+    @see store_openFile()
  */
 #define STORE_MINIMUM_PAGESIZE ((sal_uInt16)0x0200)
 #define STORE_MAXIMUM_PAGESIZE ((sal_uInt16)0x8000)
 
 
 /** NameSize (enforced) limit.
-    @see any param pName.
+    @see any param pName
     @see store_E_NameTooLong
  */
 #define STORE_MAXIMUM_NAMESIZE 256
 
 
 /** Attributes (predefined).
-    @see store_attrib().
+    @see store_attrib()
  */
 #define STORE_ATTRIB_ISLINK  0x10000000UL
 #define STORE_ATTRIB_ISDIR   0x20000000UL
 #define STORE_ATTRIB_ISFILE  0x40000000UL
 
 
-/** storeAccessMode.
-    @see store_openFile().
-    @see store_openDirectory().
-    @see store_openStream().
+/** Access Mode type.
  */
-typedef enum
+typedef enum __store_AccessMode storeAccessMode;
+
+/** Access Mode enumeration.
+    @see store_openFile()
+    @see store_openDirectory()
+    @see store_openStream()
+ */
+enum __store_AccessMode
 {
     store_AccessCreate,
     store_AccessReadCreate,
     store_AccessReadWrite,
     store_AccessReadOnly,
     store_Access_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} storeAccessMode;
+};
 
 
-/** storeError.
+/** Error Code type.
  */
-typedef enum
+typedef enum __store_Error storeError;
+
+/** Error Code enumeration.
+ */
+enum __store_Error
 {
     store_E_None = 0,
     store_E_AccessViolation,
@@ -144,40 +152,44 @@ typedef enum
     store_E_WrongVersion,
     store_E_Unknown,
     store_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} storeError;
+};
 
 
-/** storeFindData.
-    @see store_findFirst().
-    @see store_findNext().
+/** Find Data type.
  */
-typedef struct
+typedef struct __store_FindData storeFindData;
+
+/** Find Data structure.
+    @see store_findFirst()
+    @see store_findNext()
+ */
+struct __store_FindData
 {
     /** Name.
-        @see m_nLength.
+        @see m_nLength
      */
     sal_Unicode m_pszName[STORE_MAXIMUM_NAMESIZE];
 
     /** Name Length.
-        @see m_pszName.
+        @see m_pszName
      */
     sal_Int32 m_nLength;
 
     /** Attributes.
-        @see store_attrib().
+        @see store_attrib()
      */
     sal_uInt32 m_nAttrib;
 
     /** Size.
-        @see store_getStreamSize().
-        @see store_setStreamSize().
+        @see store_getStreamSize()
+        @see store_setStreamSize()
      */
     sal_uInt32 m_nSize;
 
     /** Reserved for internal use.
      */
     sal_uInt32 m_nReserved;
-} storeFindData;
+};
 
 
 /*========================================================================

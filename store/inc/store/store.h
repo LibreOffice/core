@@ -2,9 +2,9 @@
  *
  *  $RCSfile: store.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 14:56:04 $
+ *  last change: $Author: mhu $ $Date: 2001-11-03 19:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORE_H_
-#define _STORE_STORE_H_ "$Revision: 1.3 $"
+#define _STORE_STORE_H_ "$Revision: 1.4 $"
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
@@ -70,20 +70,22 @@
 extern "C" {
 #endif
 
-/** Opaque type storeHandle.
+/** Handle opaque type.
  */
 typedef void* storeHandle;
 
-/** store_acquireHandle.
-    @param  Handle [in]
+
+/** Acquire a Handle.
+    @param  Handle [in] the Handle.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
-/** store_releaseHandle.
-    @param  Handle [in]
+
+/** Release a Handle.
+    @param  Handle [in] the Handle.
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
@@ -92,14 +94,16 @@ storeError SAL_CALL store_releaseHandle (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Opaque type storeFileHandle.
+
+/** File Handle opaque type.
  */
 typedef void* storeFileHandle;
 
-/** store_createMemoryFile.
+
+/** Open a temporary file in memory.
     @param  nPageSize [in] the creation page size,
             integer multiple of minimum page size.
-    @param  phFile [out]
+    @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_createMemoryFile (
@@ -107,8 +111,9 @@ storeError SAL_CALL store_createMemoryFile (
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C();
 
-/** store_openFile.
-    @param  pFilename [in] the filename in host syntax.
+
+/** Open a file.
+    @param  pFilename [in] the filename as URL or system path.
     @param  eAccessMode [in] the access mode.
             store_AccessCreate     truncate existing and create,
             store_AccessReadCreate create not existing,
@@ -116,7 +121,7 @@ storeError SAL_CALL store_createMemoryFile (
             store_AccessReadOnly   never modifies.
     @param  nPageSize [in] the creation page size,
             integer multiple of minimum page size.
-    @param  phFile [out]
+    @param  phFile [out] the File Handle.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_openFile (
@@ -126,8 +131,9 @@ storeError SAL_CALL store_openFile (
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C();
 
-/** store_closeFile.
-    @param  hFile [in]
+
+/** Close a file.
+    @param  hFile [in] the File Handle.
     @return store_E_None upon     success,
             store_E_InvalidHandle otherwise.
  */
@@ -135,16 +141,18 @@ storeError SAL_CALL store_closeFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
-/** store_flushFile.
-    @param  hFile [in]
+
+/** Flush a file.
+    @param  hFile [in] the File Handle.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_flushFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
-/** store_getFileRefererCount.
-    @param  hFile [in]
+
+/** Get the number of referers to a file.
+    @param  hFile [in] the File Handle.
     @param  pnRefCount [out] number of open directories and streams.
     @return store_E_None upon success
  */
@@ -153,9 +161,10 @@ storeError SAL_CALL store_getFileRefererCount (
     sal_uInt32      *pnRefCount
 ) SAL_THROW_EXTERN_C();
 
-/** store_getFileSize.
-    @param  hFile [in]
-    @param  pnSize [out]
+
+/** Get the size of a file.
+    @param  hFile [in] the File Handle.
+    @param  pnSize [out] the file size in bytes.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_getFileSize (
@@ -163,7 +172,10 @@ storeError SAL_CALL store_getFileSize (
     sal_uInt32      *pnSize
 ) SAL_THROW_EXTERN_C();
 
-/** store_rebuildFile.
+
+/** Recover and Compact a file into another file.
+    @see store_openFile()
+
     @param  pSrcFilename [in] opened with store_AccessReadOnly.
     @param  pDstFilename [in] created with store_AccessCreate.
     @return store_E_None upon success
@@ -174,16 +186,20 @@ storeError SAL_CALL store_rebuildFile (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Opaque type storeDirectoryHandle.
+
+/** Directory Handle opaque type.
  */
 typedef void* storeDirectoryHandle;
 
-/** store_openDirectory.
-    @param  hFile [in]
-    @param  pPath [in]
-    @param  pName [in]
-    @param  eAccessMode [in]
-    @param  phDirectory [out]
+
+/** Open a directory.
+    @see store_openFile()
+
+    @param  hFile [in] the File Handle.
+    @param  pPath [in] the directory path.
+    @param  pName [in] the directory name.
+    @param  eAccessMode [in] the access mode.
+    @param  phDirectory [out] the Directory Handle.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_openDirectory (
@@ -194,8 +210,9 @@ storeError SAL_CALL store_openDirectory (
     storeDirectoryHandle *phDirectory
 ) SAL_THROW_EXTERN_C();
 
-/** store_closeDirectory.
-    @param  hDirectory [in]
+
+/** Close a directory.
+    @param  hDirectory [in] the Directory Handle.
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
@@ -203,9 +220,10 @@ storeError SAL_CALL store_closeDirectory (
     storeDirectoryHandle hDirectory
 ) SAL_THROW_EXTERN_C();
 
-/** store_findFirst.
-    @param  hDirectory [in]
-    @param  pFindData [out]
+
+/** Find first directory entry.
+    @param  hDirectory [in] the Directory Handle.
+    @param  pFindData [out] the Find Data structure.
     @return store_E_None       upon success,
             store_E_NoMoreFile upon end of iteration.
  */
@@ -214,9 +232,10 @@ storeError SAL_CALL store_findFirst (
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C();
 
-/** store_findNext.
-    @param  hDirectory [in]
-    @param  pFindData [out]
+
+/** Find next directory entry.
+    @param  hDirectory [in] the Directory Handle.
+    @param  pFindData [out] the Find Data structure.
     @return store_E_None       upon success,
             store_E_NoMoreFile upon end of iteration.
  */
@@ -226,16 +245,20 @@ storeError SAL_CALL store_findNext (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Opaque type storeStreamHandle.
+
+/** Stream Handle opaque type.
  */
 typedef void* storeStreamHandle;
 
-/** store_openStream.
-    @param  hFile [in]
-    @param  pPath [in]
-    @param  pName [in]
-    @param  eAccessMode [in]
-    @param  phStrm [out]
+
+/** Open a stream.
+    @see store_openFile()
+
+    @param  hFile [in] the File Handle.
+    @param  pPath [in] the stream path.
+    @param  pName [in] the stream name.
+    @param  eAccessMode [in] the access mode.
+    @param  phStrm [out] the Stream Handle.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_openStream (
@@ -246,8 +269,9 @@ storeError SAL_CALL store_openStream (
     storeStreamHandle *phStrm
 ) SAL_THROW_EXTERN_C();
 
-/** store_closeStream.
-    @param  hStrm [in]
+
+/** Close a stream.
+    @param  hStrm [in] the Stream Handle.
     @return store_E_None          upon success,
             store_E_InvalidHandle otherwise.
  */
@@ -255,12 +279,13 @@ storeError SAL_CALL store_closeStream (
     storeStreamHandle hStrm
 ) SAL_THROW_EXTERN_C();
 
-/** store_readStream.
-    @param  hStrm [in]
-    @param  nOffset [in]
-    @param  pBuffer [out]
-    @param  nBytes [in]
-    @param  pnDone [out]
+
+/** Read from a stream.
+    @param  hStrm [in] the Stream Handle.
+    @param  nOffset [in] the offset of the first byte to read.
+    @param  pBuffer [out] the buffer.
+    @param  nBytes [in] the number of bytes to read.
+    @param  pnDone [out] the number of bytes actually read.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_readStream (
@@ -271,12 +296,13 @@ storeError SAL_CALL store_readStream (
     sal_uInt32        *pnDone
 ) SAL_THROW_EXTERN_C();
 
-/** store_writeStream.
-    @param  hStrm [in]
-    @param  nOffset [in]
-    @param  pBuffer [in]
-    @param  nBytes [in]
-    @param  pnDone [out]
+
+/** Write to a stream.
+    @param  hStrm [in] the Stream Handle.
+    @param  nOffset [in] the offset of the first byte to write.
+    @param  pBuffer [in] the buffer.
+    @param  nBytes [in] the number of bytes to write.
+    @param  pnDone [out] the number of bytes actually written.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_writeStream (
@@ -287,17 +313,19 @@ storeError SAL_CALL store_writeStream (
     sal_uInt32        *pnDone
 ) SAL_THROW_EXTERN_C();
 
-/** store_flushStream.
-    @param  hStrm [in]
+
+/** Flush a stream.
+    @param  hStrm [in] the Stream Handle.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_flushStream (
     storeStreamHandle hStrm
 ) SAL_THROW_EXTERN_C();
 
-/** store_getStreamSize.
-    @param  hStrm [in]
-    @param  pnSize [out]
+
+/** Get the size of a stream.
+    @param  hStrm [in] the Stream Handle.
+    @param  pnSize [out] the stream size in bytes.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_getStreamSize (
@@ -305,9 +333,10 @@ storeError SAL_CALL store_getStreamSize (
     sal_uInt32        *pnSize
 ) SAL_THROW_EXTERN_C();
 
-/** store_setStreamSize.
-    @param  hStrm [in]
-    @param  nSize [in]
+
+/** Set the size of a stream.
+    @param  hStrm [in] the Stream Handle.
+    @param  nSize [in] the new stream size in bytes.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_setStreamSize (
@@ -315,13 +344,15 @@ storeError SAL_CALL store_setStreamSize (
     sal_uInt32        nSize
 ) SAL_THROW_EXTERN_C();
 
-/** store_attrib.
-    @param  hFile [in]
-    @param  pPath [in]
-    @param  pName [in]
-    @param  nMask1 [in]
-    @param  nMask2 [in]
-    @param  pnAttrib [out] may be NULL.
+
+
+/** Set attributes of a file entry.
+    @param  hFile [in] the File Handle.
+    @param  pPath [in] the entry path.
+    @param  pName [in] the entry name.
+    @param  nMask1 [in] the attributes to be cleared.
+    @param  nMask2 [in] the attributes to be set.
+    @param  pnAttrib [out] the resulting attributes, may be NULL.
     @return store_E_None upon success
  */
 storeError SAL_CALL store_attrib (
@@ -333,12 +364,17 @@ storeError SAL_CALL store_attrib (
     sal_uInt32     *pnAttrib
 ) SAL_THROW_EXTERN_C();
 
-/** store_link.
-    @param  hFile [in]
-    @param  pSrcPath [in]
-    @param  pSrcName [in]
-    @param  pDstPath [in]
-    @param  pDstName [in]
+
+/** Insert a file entry as 'hard link' to another file entry.
+    @precond  Source must not exist, Destination must exist.
+    @postcond Source has attribute STORE_ATTRIB_ISLINK.
+    @see      store_attrib()
+
+    @param  hFile [in] the File Handle
+    @param  pSrcPath [in] the Source path
+    @param  pSrcName [in] the Source name
+    @param  pDstPath [in] the Destination path
+    @param  pDstName [in] the Destination name
     @return store_E_None upon success
  */
 storeError SAL_CALL store_link (
@@ -347,12 +383,17 @@ storeError SAL_CALL store_link (
     rtl_uString *pDstPath, rtl_uString *pDstName
 ) SAL_THROW_EXTERN_C();
 
-/** store_symlink.
-    @param  hFile [in]
-    @param  pSrcPath [in]
-    @param  pSrcName [in]
-    @param  pDstPath [in]
-    @param  pDstName [in]
+
+/** Insert a file entry as 'symbolic link' to another file entry.
+    @precond  Source must not exist
+    @postcond Source has attribute STORE_ATTRIB_ISLINK.
+    @see      store_attrib()
+
+    @param  hFile [in] the File Handle
+    @param  pSrcPath [in] the Source path
+    @param  pSrcName [in] the Source name
+    @param  pDstPath [in] the Destination path
+    @param  pDstName [in] the Destination name
     @return store_E_None upon success
  */
 storeError SAL_CALL store_symlink (
@@ -361,12 +402,13 @@ storeError SAL_CALL store_symlink (
     rtl_uString *pDstPath, rtl_uString *pDstName
 ) SAL_THROW_EXTERN_C();
 
-/** store_rename.
-    @param  hFile [in]
-    @param  pSrcPath [in]
-    @param  pSrcName [in]
-    @param  pDstPath [in]
-    @param  pDstName [in]
+
+/** Rename a file entry.
+    @param  hFile [in] the File Handle
+    @param  pSrcPath [in] the Source path
+    @param  pSrcName [in] the Source name
+    @param  pDstPath [in] the Destination path
+    @param  pDstName [in] the Destination name
     @return store_E_None upon success
  */
 storeError SAL_CALL store_rename (
@@ -375,10 +417,11 @@ storeError SAL_CALL store_rename (
     rtl_uString *pDstPath, rtl_uString *pDstName
 ) SAL_THROW_EXTERN_C();
 
-/** store_remove.
-    @param  hFile [in]
-    @param  pPath [in]
-    @param  pName [in]
+
+/** Remove a file entry.
+    @param  hFile [in] the File Handle
+    @param  pPath [in] the entry path
+    @param  pName [in] the entry name
     @return store_E_None upon success
  */
 storeError SAL_CALL store_remove (
