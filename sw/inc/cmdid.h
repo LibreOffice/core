@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:04:27 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,8 +456,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_QRY_GET_TABLE_NAME   (FN_INSERT2 + 3)    /* Tabellenname einer Datenbank ermitteln */
 #define FN_QRY_GET_TABLE_COUNT  (FN_INSERT2 + 4)    /* Anzahl aller Tabellen einer Datenbank ermitteln */
 
-#define FN_INSERT_HEADER        (FN_INSERT2 + 5)    /* Kopfzeile im Html-mode ein/ausschalten */
-#define FN_INSERT_FOOTER        (FN_INSERT2 + 6)    /* Fuázeile im Html-mode ein/ausschalten */
+
+
 #define FN_SBA_BRW_UPDATE       (FN_INSERT2 + 7)    /* Datensaetze in Felder einfuegen */
 #define FN_SBA_BRW_INSERT       (FN_INSERT2 + 8)    /* Datensaetze in Text einfuegen */
 #define FN_SBA_BRW_MERGE        (FN_INSERT2 + 9)    /* Serienbriefdruck */
