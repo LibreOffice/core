@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:14:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,69 +84,15 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( 4, 3 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 8, 8 );
-        Text = "SQL Kommando";
-        Text [ english ] = "SQL command";
-        Text [ english_us ] = "SQL command";
-        Text[ portuguese ] = "Comando SQL";
-        Text[ russian ] = "Êîìàíäà SQL";
-        Text[ greek ] = "ÅíôïëŞ SQL";
-        Text[ dutch ] = "SQL-commando";
-        Text[ french ] = "Instruction SQL";
-        Text[ spanish ] = "Orden SQL";
-        Text[ finnish ] = "SQL-lause";
-        Text[ italian ] = "SQL command";
-        Text[ danish ] = "SQL-kommando";
-        Text[ swedish ] = "SQL-kommando";
-        Text[ polish ] = "Polecenie SQL";
-        Text[ portuguese_brazilian ] = "Comando SQL";
-        Text[ japanese ] = "SQL ã‚³ãƒãƒ³ãƒ‰";
-        Text[ korean ] = "SQL ëª…ë ¹";
-        Text[ chinese_simplified ] = "SQL å‘½ä»¤";
-        Text[ chinese_traditional ] = "SQL æŒ‡ä»¤";
-        Text[ turkish ] = "SQL komutu";
-        Text[ arabic ] = "SQL command";
-        Text[ catalan ] = "Comanda SQL";
-        Text[ thai ] = "à¸„à¸³à¸ªà¸±à¹ˆà¸‡ SQL ";
-        Text[ czech ] = "SQL pÅ™Ã­kaz";
-        Text[ hebrew ] = "SQL Kommando";
-        Text[ hindi ] = "SQL à¤†à¤œà¥à¤à¤¾";
-        Text[ slovak ] = "SQL prÃ­kaz";
-        Text[ hungarian ] = "SQL-parancs";
-        Text[ slovenian ] = "SQL-ukaz";
+        Text [ de ] = "SQL Kommando";
+        Text [ en-US ] = "SQL command";
     };
     FixedText FT_SQL
     {
         Pos = MAP_APPFONT( 7, 15 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 8 );
-        Text = "auszuführendes Kommando";
-        Text [ english ] = "Command to execute";
-        Text [ english_us ] = "Command to execute";
-        Text[ portuguese ] = "Comando a executar";
-        Text[ russian ] = "Âûïîëíÿåìàÿ êîìàíäà";
-        Text[ greek ] = "ÅíôïëŞ ğñïò åêôİëåóç";
-        Text[ dutch ] = "uit te voeren commando";
-        Text[ french ] = "Instruction à exécuter";
-        Text[ spanish ] = "Orden que ejecutar";
-        Text[ finnish ] = "Suoritettava lause";
-        Text[ italian ] = "Comando da eseguire";
-        Text[ danish ] = "Kommando, der skal udføres";
-        Text[ swedish ] = "Kommando att utföra";
-        Text[ polish ] = "Polecenie do wykonania";
-        Text[ portuguese_brazilian ] = "Comando a executar";
-        Text[ japanese ] = "å®Ÿè¡Œã‚³ãƒãƒ³ãƒ‰";
-        Text[ korean ] = "ì‹¤í–‰í•  ëª…ë ¹";
-        Text[ chinese_simplified ] = "è¦æ‰§è¡Œçš„å‘½ä»¤";
-        Text[ chinese_traditional ] = "è¦åŸ·è¡Œçš„æŒ‡ä»¤";
-        Text[ turkish ] = "Çalıştırmak için komut";
-        Text[ arabic ] = "Command to execute";
-        Text[ catalan ] = "Comanda per executar";
-        Text[ thai ] = "à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¹ƒà¸™à¸à¸²à¸£à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
-        Text[ czech ] = "PÅ™Ã­kaz k provedenÃ­";
-        Text[ hebrew ] = "auszufÃ¼hrendes Kommando";
-        Text[ hindi ] = "à¤šà¤²à¤¾à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤†à¤œà¥à¤à¤¾";
-        Text[ slovak ] = "PrÃ­kaz na spustenie";
-        Text[ hungarian ] = "VÃ©grehajtandÃ³ parancs";
-        Text[ slovenian ] = "Ukaz, ki naj se izvede";
+        Text [ de ] = "auszuführendes Kommando";
+        Text [ en-US ] = "Command to execute";
     };
     MultiLineEdit ME_SQL
     {
@@ -161,70 +107,16 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( WINDOW_SIZE_X - BUTTON_SIZE_X - 7, 109 );
         Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
-        Text = "Ausführen";
-        Text [ english ] = "Execute";
-        Text [ english_us ] = "Execute";
+        Text [ de ] = "Ausführen";
+        Text [ en-US ] = "Execute";
         DefButton = TRUE;
-        Text[ portuguese ] = "Executar";
-        Text[ russian ] = "Âûïîëíèòü";
-        Text[ greek ] = "Åêôİëåóç";
-        Text[ dutch ] = "Uitvoeren";
-        Text[ french ] = "Exécuter";
-        Text[ spanish ] = "Ejecutar";
-        Text[ finnish ] = "Suorita";
-        Text[ italian ] = "Esegui";
-        Text[ danish ] = "Udfør";
-        Text[ swedish ] = "Utför";
-        Text[ polish ] = "Wykonaj";
-        Text[ portuguese_brazilian ] = "Executar";
-        Text[ japanese ] = "å®Ÿè¡Œ";
-        Text[ korean ] = "ì‹¤í–‰";
-        Text[ chinese_simplified ] = "æ‰§è¡Œ";
-        Text[ chinese_traditional ] = "åŸ·è¡Œ";
-        Text[ turkish ] = "Uygula";
-        Text[ arabic ] = "ÊäİíĞ";
-        Text[ catalan ] = "Executa";
-        Text[ thai ] = "à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
-        Text[ czech ] = "ProvÃ©st";
-        Text[ hebrew ] = "AusfÃ¼hren";
-        Text[ hindi ] = "à¤šà¤²à¤¾à¤“";
-        Text[ slovak ] = "SpustiÅ¥";
-        Text[ hungarian ] = "FuttatÃ¡s";
-        Text[ slovenian ] = "Izvedi";
     };
     FixedText FT_HISTORY
     {
         Pos = MAP_APPFONT( 7, 110 + BUTTON_SIZE_Y + 3 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 8 );
-        Text = "Vorherige Kommandos";
-        Text [ english ] = "Previous commands";
-        Text [ english_us ] = "Previous commands";
-        Text[ portuguese ] = "Comandos anteriores";
-        Text[ russian ] = "Ïğåäûäóùàÿ êîìàíäà";
-        Text[ greek ] = "Ğñïçãïıìåíåò åíôïëİò";
-        Text[ dutch ] = "Vorige commando's";
-        Text[ french ] = "Instructions précédentes";
-        Text[ spanish ] = "Órdenes anteriores";
-        Text[ finnish ] = "Edelliset lauseet";
-        Text[ italian ] = "Comando precedente";
-        Text[ danish ] = "Forrige kommandoer";
-        Text[ swedish ] = "Föregående kommandon";
-        Text[ polish ] = "Poprzednie polecenie";
-        Text[ portuguese_brazilian ] = "Comandos anteriores";
-        Text[ japanese ] = "å‰ã®ã‚³ãƒãƒ³ãƒ‰";
-        Text[ korean ] = "ì´ì „ ëª…ë ¹";
-        Text[ chinese_simplified ] = "å‰ä¸€ä¸ªå‘½ä»¤";
-        Text[ chinese_traditional ] = "å‰ä¸€å€‹æŒ‡ä»¤";
-        Text[ turkish ] = "Önceki komutlar";
-        Text[ arabic ] = "Previous commands";
-        Text[ catalan ] = "Comandes anteriors";
-        Text[ thai ] = "à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¸à¹ˆà¸­à¸™";
-        Text[ czech ] = "PÅ™edchozÃ­ pÅ™Ã­kazy";
-        Text[ hebrew ] = "Vorherige Kommandos";
-        Text[ hindi ] = "à¤ªà¤¿à¤›à¤²à¤¾ à¤†à¤œà¥à¤à¤¾";
-        Text[ slovak ] = "PredchÃ¡dzajÃºce prÃ­kazy";
-        Text[ hungarian ] = "ElÅ‘zÅ‘ parancsok";
-        Text[ slovenian ] = "PrejÅ¡nji ukazi";
+        Text [ de ] = "Vorherige Kommandos";
+        Text [ en-US ] = "Previous commands";
     };
     ListBox LB_HISTORY
     {
@@ -238,35 +130,8 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( 4, 138 + BUTTON_SIZE_Y + 4 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 8, 8 );
-        Text = "Status";
-        Text [ english ] = "Status";
-        Text [ english_us ] = "Status";
-        Text[ portuguese ] = "Estado";
-        Text[ russian ] = "Ñîñòîÿíèå";
-        Text[ greek ] = "ÊáôÜóôáóç";
-        Text[ dutch ] = "Status";
-        Text[ french ] = "Statut";
-        Text[ spanish ] = "Estado";
-        Text[ finnish ] = "Tila";
-        Text[ italian ] = "Stato";
-        Text[ danish ] = "Status";
-        Text[ swedish ] = "Status";
-        Text[ polish ] = "Stan";
-        Text[ portuguese_brazilian ] = "Status";
-        Text[ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹";
-        Text[ korean ] = "ìƒíƒœ";
-        Text[ chinese_simplified ] = "çŠ¶æ€";
-        Text[ chinese_traditional ] = "ç‹€æ…‹";
-        Text[ turkish ] = "Durum";
-        Text[ arabic ] = "ÇáÍÇáÉ";
-        Text[ catalan ] = "Estat";
-        Text[ thai ] = "à¸ªà¸–à¸²à¸™à¸°";
-        Text[ czech ] = "Stav";
-        Text[ hebrew ] = "â€®×¦×ª×‘â€¬";
-        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥à¤¸à¥à¤¥à¤¿à¤¤à¤¿";
-        Text[ slovak ] = "Stav";
-        Text[ hungarian ] = "Ãllapot";
-        Text[ slovenian ] = "Stanje";
+        Text [ de ] = "Status";
+        Text [ en-US ] = "Status";
     };
     MultiLineEdit ME_STATUS
     {
@@ -290,138 +155,37 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( WINDOW_SIZE_X - 7 - BUTTON_SIZE_X, 207 + BUTTON_SIZE_Y );
         Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
-        Text = "Schließen";
-        Text [ english ] = "Close";
-        Text [ english_us ] = "Close";
-        Text[ portuguese ] = "Fechar";
-        Text[ russian ] = "Çàêğûòü";
-        Text[ greek ] = "Êëåßóéìï";
-        Text[ dutch ] = "Sluiten";
-        Text[ french ] = "Fermer";
-        Text[ spanish ] = "Cerrar";
-        Text[ finnish ] = "Sulje";
-        Text[ italian ] = "Chiudi";
-        Text[ danish ] = "Luk";
-        Text[ swedish ] = "Stäng";
-        Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "Fechar";
-        Text[ japanese ] = "é–‰ã˜ã‚‹";
-        Text[ korean ] = "ë‹«ê¸°";
-        Text[ chinese_simplified ] = "å…³é—­";
-        Text[ chinese_traditional ] = "é—œé–‰";
-        Text[ turkish ] = "Kapat";
-        Text[ arabic ] = "ÅÛáÇŞ";
-        Text[ catalan ] = "Tanca";
-        Text[ thai ] = "à¸›à¸´à¸”";
-        Text[ czech ] = "ZavÅ™Ã­t";
-        Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";
-        Text[ hindi ] = "à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";
-        Text[ slovak ] = "ZavrieÅ¥";
-        Text[ hungarian ] = "BezÃ¡rÃ¡s";
-        Text[ slovenian ] = "Zapri";
+        Text [ de ] = "Schließen";
+        Text [ en-US ] = "Close";
     };
 
-    Text                = "SQL Statement ausführen" ;
-    Text [ english ]    = "Excecute SQL statement" ;
-    Text [ english_us ] = "Execute SQL Statement" ;
-    Text[ language_user1 ] = "; zl: statement means SQL commandos which are directly executed.";
-    Text[ portuguese ] = "Executar instrução SQL";
-    Text[ russian ] = "Âûïîëíèòü èíñòğóêöèş SQL";
-    Text[ greek ] = "Åêôİëåóç ğñüôáóçò SQL";
-    Text[ dutch ] = "SQL-instructie uitvoeren";
-    Text[ french ] = "Exécuter l'instruction SQL";
-    Text[ spanish ] = "Ejecutar orden SQL";
-    Text[ finnish ] = "Suorita SQL-lause";
-    Text[ italian ] = "Esegui il comando SQL";
-    Text[ danish ] = "Udfør SQL-udtryk";
-    Text[ swedish ] = "Utför SQL-sats";
-    Text[ polish ] = "Wykonaj polecenie SQL";
-    Text[ portuguese_brazilian ] = "Executar comando SQL";
-    Text[ japanese ] = "SQL ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆã®å®Ÿè¡Œ";
-    Text[ korean ] = "SQLë¬¸ ì‹¤í–‰";
-    Text[ chinese_simplified ] = "ç›´æ¥æ‰§è¡Œ SQL å‘½ä»¤";
-    Text[ chinese_traditional ] = "ç›´æ¥åŸ·è¡Œ SQL æŒ‡ä»¤";
-    Text[ turkish ] = "Excecute SQL deyimi çalıştır";
-    Text[ arabic ] = "Excecute SQL statement";
-    Text[ catalan ] = "Executa una instrucció SQL";
-    Text[ thai ] = "à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸›à¸£à¸°à¹‚à¸¢à¸„ SQL ";
-    Text[ czech ] = "ProvÃ©st SQL pÅ™Ã­kaz";
-    Text[ hebrew ] = "SQL Statement ausfÃ¼hren";
-    Text[ hindi ] = "SQL à¤µà¤¾à¤•à¥à¤¯ à¤šà¤²à¤¾à¤“";
-    Text[ slovak ] = "SpustiÅ¥ prÃ­kaz SQL";
-    Text[ hungarian ] = "SQL-parancs vÃ©grehajtÃ¡sa";
-    Text[ slovenian ] = "Izvedi SQL-izjavo";
+    Text [ de ] = "SQL Statement ausführen" ;
+    Text [ en-US ]  = "Execute SQL Statement" ;
+    Text [ x-comment ] = "; zl: statement means SQL commandos which are directly executed.";
 };
 
 String STR_COMMAND_EXECUTED_SUCCESSFULLY
 {
-    Text = "Befehl erfolgreich ausgeführt." ;
-    Text [ English ] = "Command executed successfully." ;
-    Text [ portuguese ] = "Comando executado com êxito." ;
-    Text [ english_us ] = "Command successfully executed." ;
-    Text [ portuguese_brazilian ] = "Comando executado com sucesso." ;
-    Text [ swedish ] = "Kommando utfört." ;
-    Text [ danish ] = "Kommando gennemført." ;
-    Text [ italian ] = "Comando eseguito con successo." ;
-    Text [ spanish ] = "Orden ejecutada satisfactoriamente." ;
-    Text [ french ] = "Commande exécutée avec succès" ;
-    Text [ dutch ] = "Opdracht is uitgevoerd." ;
-    Text[ chinese_simplified ] = "æ‰§è¡Œå‘½ä»¤å·²ç»æˆåŠŸã€‚";
-    Text[ russian ] = "Êîìàíäà âûïîëíåíà óñïåøíî.";
-    Text[ polish ] = "Polecenie wykonano pomyœlnie.";
-    Text[ japanese ] = "ã‚³ãƒãƒ³ãƒ‰ã¯æ­£å¸¸ã«å®Ÿè¡Œã•ã‚Œã¾ã—ãŸã€‚";
-    Text[ chinese_traditional ] = "åŸ·è¡ŒæŒ‡ä»¤å·²ç¶“æˆåŠŸã€‚";
-    Text[ arabic ] = "Êã ÊäİíĞ ÇáÃãÑ ÈäÌÇÍ.";
-    Text[ greek ] = "Ç åíôïëŞ åêôåëİóôçêå ìå åğéôõ÷ßá.";
-    Text[ korean ] = "ëª…ë ¹ì„ ì„±ê³µì ìœ¼ë¡œ ì‹¤í–‰í–ˆìŠµë‹ˆë‹¤.";
-    Text[ finnish ] = "Käskyn suoritus onnistui.";
-    Text[ turkish ] = "Komut başarıyla çalıştırıldı.";
-    Text[ catalan ] = "Comanda executada amb èxit.";
-    Text[ thai ] = "à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¸ªà¸³à¹€à¸£à¹‡à¸ˆ";
-    Text[ czech ] = "PÅ™Ã­kaz byl ÃºspÄ›Å¡nÄ› vykonÃ¡n.";
-    Text[ hebrew ] = "Befehl erfolgreich ausgefÃ¼hrt.";
-    Text[ hindi ] = "à¤†à¤œà¥à¤à¤¾ à¤¸à¤«à¤²à¤¤à¤¾ à¤¸à¥‡ à¤ªà¥‚à¤°à¤¾ à¤¹à¥à¤† à¥¤";
-    Text[ slovak ] = "PrÃ­kaz ÃºspeÅ¡ne vykonanÃ½.";
-    Text[ hungarian ] = "A mÅ±velet sikeresen befejezÅ‘dÃ¶tt.";
-    Text[ slovenian ] = "Ukaz uspeÅ¡no izvrÅ¡en.";
+    Text [ de ] = "Befehl erfolgreich ausgeführt." ;
+    Text [ en-US ] = "Command successfully executed." ;
 };
 
 String STR_DIRECTSQL_CONNECTIONLOST
 {
-    Text = "Die Verbindung zur Datenbank wurde gelöscht. Dieser Dialog wird geschlossen.";
-    Text [ english ] = "The connection to the database has been lost. This dialog will be closed.";
-    Text [ english_us ] = "The connection to the database has been lost. This dialog will be closed.";
-    Text[ portuguese ] = "A ligação à base de dados foi eliminada. Esta caixa de diálogo será fechada.";
-    Text[ russian ] = "Ñîåäèíåíèå ñ áàçîé äàííûõ ïîòåğÿíî. Äèàëîã áóäåò çàêğûò.";
-    Text[ greek ] = "Ç óıíäåóç ìå ôç âÜóç äåäïìİíùí İ÷åé äéáêïğåß. Áõôü ôï ğáñÜèõñï äéáëüãïõ èá êëåßóåé.";
-    Text[ dutch ] = "Er bestaat geen verbinding met de database. Dit dialoogvenster wordt gesloten.";
-    Text[ french ] = "La connexion à la base de données a été annulée. Fermeture de la boîte de dialogue.";
-    Text[ spanish ] = "Se perdió la conexión a la base de datos. Este diálogo se cerrará.";
-    Text[ finnish ] = "Tietokantayhteys katkesi. Tämä valintaikkuna suljetaan.";
-    Text[ italian ] = "Il collegamento al database è stato eliminato. Questo dialogo verrà chiuso.";
-    Text[ danish ] = "Forbindelsen til databasen blev tabt. Denne dialog lukkes.";
-    Text[ swedish ] = "Förbindelsen till databasen har raderats. Den här dialogrutan kommer att stängas.";
-    Text[ polish ] = "Po³¹czenie z baz¹ danych zosta³o przerwane. Okno dialogowe zostanie zamkniête.";
-    Text[ portuguese_brazilian ] = "A conexão para o banco de dados foi perdida. Esta caixa de diálogo será fechada.";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã¸ã®æ¥ç¶šã¯å‰Šé™¤ã•ã‚Œã¦ã„ã¾ã™ã€‚ã“ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‰ã˜ã¾ã™ã€‚";
-    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ì™€ì˜ ì—°ê²°ì´ í•´ì œë˜ì—ˆìŠµë‹ˆë‹¤. ì´ ëŒ€í™” ìƒìê°€ ë‹«í™ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å·²ç»ç»“æŸå’Œæ•°æ®åº“çš„è¿æ¥ã€‚ç°åœ¨å…³é—­è¿™ä¸ªå¯¹è¯æ¡†ã€‚";
-    Text[ chinese_traditional ] = "å·²ç¶“çµæŸèˆ‡è³‡æ–™åº«çš„é€£ç·šã€‚ç¾åœ¨é—œé–‰é€™å€‹å°è©±æ–¹å¡Šã€‚";
-    Text[ turkish ] = " Veri tabanına olan bağlantı koptu. Bu pencere kapatılıcak.";
-    Text[ arabic ] = "The connection to the database has been lost. This dialog will be closed.";
-    Text[ catalan ] = "S'ha perdut la connexió amb la base de dades. Aquest quadre de diàleg es tancarà.";
-    Text[ thai ] = "à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸à¸±à¸šà¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸²à¸”à¸«à¸²à¸¢ à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸›à¸´à¸”à¸¥à¸‡";
-    Text[ czech ] = "PÅ™ipojenÃ­ k databÃ¡zi bylo ztraceno. Tento dialog bude uzavÅ™en.";
-    Text[ hebrew ] = "Die Verbindung zur Datenbank wurde gelÃ¶scht. Dieser Dialog wird geschlossen.";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤¸à¥‡ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤¨à¤·à¥à¤Ÿ à¤¹à¥‹ à¤—à¤¯à¤¾ à¥¤ à¤¯à¤¹ à¤¡à¤¯à¤²à¥‰à¤— à¤•à¥‹ à¤¬à¤‚à¤¦ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤à¤—à¤¾ à¥¤";
-    Text[ slovak ] = "Spojenie s databÃ¡zou bolo stratenÃ©. Tento dialÃ³g bude zatvorenÃ½.";
-    Text[ hungarian ] = "Az adatbÃ¡zis-kapcsolat elveszett. Ez a pÃ¡rbeszÃ©dablak be fog zÃ¡rulni.";
-    Text[ slovenian ] = "Povezava z zbirko podatkov je bila prekinjena. To pogovorno okno se bo zaprlo.";
+    Text [ de ] = "Die Verbindung zur Datenbank wurde gelöscht. Dieser Dialog wird geschlossen.";
+    Text [ en-US ] = "The connection to the database has been lost. This dialog will be closed.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20.26.3  2004/04/21 05:47:40  hjs
+ *  RESYNC: (1.20-1.21); FILE MERGED
+ *
+ *  Revision 1.21  2003/12/17 15:14:10  vg
+ *  INTEGRATION: CWS geordi2q11 (1.20.72); FILE MERGED
+ *  2003/12/16 11:05:08 hr 1.20.72.1: #111934#: join CWS ooo111fix1
+ *
  *  Revision 1.20.72.1  2003/12/16 11:05:08  hr
  *  #111934#: join CWS ooo111fix1
  *
