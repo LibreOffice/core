@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-25 13:06:15 $
+ *  last change: $Author: dl $ $Date: 2001-06-25 13:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     USHORT nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );
 
-    try
+    TRY
     {
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
@@ -383,10 +383,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
         SetForbiddenCharsTable( new SvxForbiddenCharactersTable( xMgr ) );
     }
-    catch(...)
+    CATCH_ALL()
     {
         DBG_ERROR("Can't get SpellChecker");
     }
+    END_CATCH
 
     rOutliner.SetDefaultLanguage( eLanguage );
 
@@ -444,7 +445,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
 #ifndef SVX_LIGHT
     pHitTestOutliner->SetCalcFieldValueHdl( LINK(SD_MOD(), SdModule, CalcFieldValueHdl) );
-    try
+
+    TRY
     {
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
@@ -462,10 +464,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
                 pHitTestOutliner->SetHyphenator( xHyphenator );
         }
     }
-    catch(...)
+    CATCH_ALL()
     {
         DBG_ERROR("Can't get SpellChecker");
     }
+    END_CATCH
 
     pHitTestOutliner->SetDefaultLanguage( eLanguage );
 #endif // !SVX_LIGHT
