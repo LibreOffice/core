@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:56:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,4 +239,5 @@ String RID_OUTLUNDO_INSERT
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insertar";
 };
+
 
