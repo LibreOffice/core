@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:42:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ japanese ] = "γ‚»γƒ«γ®ζΏε…¥/ε‰ι™¤(~C)";
         Text[ chinese_traditional ] = "ζ’ε…¥/εªι™¤ε„²ε­ζ Ό(~C)";
         Text[ arabic ] = "ΕΟΡΗΜ/ΝΠέ ΞαΗνΗ";
-        Text[ greek ] = "Προσθήκη/Διαγραφή κελιών";
+        Text[ greek ] = "Εισαγωγή/Διαγραφή κελιών";
         Text[ korean ] = "μ…€ μ‚½μ…οΌμ‚­μ (~C)";
         Text[ turkish ] = "Hόcre ~ekle/sil";
         Text[ language_user1 ] = " ";
@@ -639,7 +639,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ japanese ] = "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήη―„ε›²γ®ζ‡ε®";
     Text[ chinese_traditional ] = "ε®ηΎ©θ³‡ζ–™εΊ«ε€ε";
     Text[ arabic ] = "ΚΪΡνέ δΨΗή ήΗΪΟΙ ΗαΘνΗδΗΚ";
-    Text[ greek ] = "Καθορισμός περιοχής βάσης δεδομένων";
+    Text[ greek ] = "Ορισμός περιοχής βάσης δεδομένων";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ λ²”μ„ μ§€μ •";
     Text[ turkish ] = "Veritabanύ aralύπύnύ belirle";
     Text[ language_user1 ] = " ";
@@ -650,6 +650,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ hindi ] = "ΰ¤²ΰ¥‡ΰ¤–ΰ¤Ύΰ¤Έΰ¤‚ΰ¤ΰ¤― ΰ¤«ΰ¥ΰ¤²ΰ¤Ύΰ¤µ ΰ¤•ΰ¥‹ ΰ¤ªΰ¤°ΰ¤Ώΰ¤­ΰ¤Ύΰ¤·ΰ¤Ύ ΰ¤¦ΰ¥‹";
     Text[ slovak ] = "DefinovaΕ¥ rozsah databΓ΅zy";
 };
+
 
 
 
