@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 13:03:25 $
+#   last change: $Author: hjs $ $Date: 2001-12-12 12:38:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -675,20 +675,18 @@ $(MISC)$/%.hid : %.src
 # make *.xml descriptions available in $(MISC)
 $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml : %.xml
     +$(COPY) $< $@
-    +-$(RM) $(MISC)$/$(<:b).mk >& $(NULLDEV)
-    @+dmake $(MFLAGS) $(CALLMACROS)
-    @+echo back from nowhere...
 
-#generate typelists from xml
+# dummy rule to make sure xml file is in place when used in settings.mk
 $(MISC)$/%.mk : $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
-    +xml2cmp -types $(MISC)$/$*.mk $*.xml
+    +$(TOUCH) $@
+    +echo XML2MK_FILES += $(@:b) >> $@
 
 #generate descriptions from xml
 $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR)_description.cxx : $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml 
     +xml2cmp -func $(MISC)$/$*$($(WINVERSIONNAMES)_MAJOR)_description.cxx $<
 
 #generate private rdb
-$(BIN)$/%.rdb: $(COMPRDB) $(MISC)$/%.mk
+$(BIN)$/%.rdb: $(COMPRDB) $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
     +rdbmaker -BUCR -O$(BIN)$/$*.rdb @$(mktmp $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB))
 
 #strip dos lineends
