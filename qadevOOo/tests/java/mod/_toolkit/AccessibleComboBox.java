@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComboBox.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2004-01-05 20:32:14 $
+ *  last change: $Date: 2004-11-02 12:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ public class AccessibleComboBox extends TestCase {
                                            (XMultiServiceFactory) Param.getMSF());
         psDiag.start();
 
-        shortWait();
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
         Object atw = tk.getActiveTopWindow();
 
@@ -168,14 +168,9 @@ public class AccessibleComboBox extends TestCase {
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
         }
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-        }
-
-
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
                                              "AccessibleComboBox");
 
@@ -233,17 +228,6 @@ public class AccessibleComboBox extends TestCase {
         }
     }
 
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
-    }
 
     /**
      * Thread for opening modal dialog 'Character style'.
