@@ -10,7 +10,7 @@
 Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
-		DoUnProtect = 0
+		bDoUnProtect = False
 		bPreSelected = True
 		DocDisposed = False
 		oDocument = StarDesktop.CurrentFrame.Controller.Model
@@ -51,7 +51,7 @@ Dim MaxIndex as Integer
 		If DialogModel.optDocRanges.State = 1 Then
 			&apos; Document is the basis for the conversion
 			ListIndex = Listbox.SelectedItems(0)
-			oCurSheet = RetrieveSheetoutofRangeName(ListIndex)
+			oCurSheet = RetrieveSheetoutofRangeName(Listbox.StringItemList(ListIndex))
 			oDocument.CurrentController.SetActiveSheet(oCurSheet)
 		Else
 			oCurSheet = oDocument.CurrentController.ActiveSheet
@@ -152,7 +152,7 @@ Dim SelList() as String
 
 	bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 	If bDocHasProtectedSheets Then
-		bDocHasProtectedSheets = UnprotectSheetsWithPassWord(oSheets)
+		bDocHasProtectedSheets = UnprotectSheetsWithPassWord(oSheets, bDoUnProtect)
 		DialogModel.cmdGoOn.Enabled = False
 	End If
 	If Not bDocHasProtectedSheets Then
@@ -167,8 +167,6 @@ Dim SelList() as String
 			AssignRangestoStyle(DialogModel.lstSelection.StringItemList(), SelList())
 			ConverttheSoftWay(SelList(), True)
 		Else
-			&apos; Option &apos;Hard Formatation is selected
-			SelectRange()
 			ConverttheHardWay(SelList(), False, True)
 		End If
 		oStatusline.End
@@ -184,15 +182,8 @@ Dim s as Integer
 	DialogModel.cmdGoOn.Enabled = False
 	DialogModel.chkComplete.Enabled = False
 	GoOn = ConvertDocument()
-	If Ubound(DialogModel.lstSelection.StringItemList()) &gt; -1 AND GoOn Then
-		EmptyListbox(DialogModel.lstSelection())
-		EnableStep1DialogControls(True, True, True)
-	Else
-		&apos; The next time ask for unprotection again
-		DoUnprotect = 0
-		DialogModel.cmdGoOn.Enabled = True
-		DialogModel.chkComplete.Enabled = True
-	End If
+	EmptyListbox(DialogModel.lstSelection())
+	EnableStep1DialogControls(True, True, True)
 End Sub
 
 

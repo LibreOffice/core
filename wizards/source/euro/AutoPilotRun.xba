@@ -40,17 +40,24 @@ End Sub
 
 Sub ConvertDocuments()
 Dim FilesList()
-	Source = AssignFileName(DialogModel.txtSource.Text, DialogModel.lblSource.Label, True)
-	TargetDir = AssignFileName(DialogModel.txtTarget.Text, DialogModel.lblTarget.Label, False)
 	If Source &lt;&gt; &quot;&quot; And TargetDir &lt;&gt; &quot;&quot; Then
-		bRecursive = DialogModel.chkRecursive.State = 1
-		InitializeThirdStep()
 		If DialogModel.optSingleFile.State = 1 Then
 			SourceFile = Source
 			TotDocCount = 1
 		Else
 			SourceDir = Source
 			TargetStemDir = TargetDir
+			FilterList(0) = &quot;application/x-starcalc&quot;
+			FilterList(1) = &quot;application/vnd.stardivision.calc&quot;
+			FilterList(2) = &quot;application/vnd.sun.xml.calc&quot;
+
+			If DialogModel.chkTextDocuments.State = 1 Then
+				ReDim Preserve FilterList(6) as String
+				FilterList(3) = &quot;application/x-starwriter&quot;
+				FilterList(4) = &quot;application/vnd.stardivision.writer&quot;
+				FilterList(5) = &quot;application/vnd.stardivision.writer/web&quot;
+				FilterList(6) = &quot;application/vnd.sun.xml.writer&quot;
+			End If			
 			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, FilterList())
 			TotDocCount = Ubound(FilesList(),1) + 1
 		End If
@@ -90,10 +97,9 @@ Dim bIsReadOnly as Boolean
  	oDocument = OpenDocument(SourceFile, NoArgs(), StarDesktop)
 	bIsReadOnly = oDocument.IsReadOnly
 	If Not bIsReadOnly Then
-		DoUnProtect = -6 * Int(DialogModel.chkProtect.State = 1)
 		RetrieveDocumentObjects()
 		sViewPath = CutPathView(SourceFile, 60)
-		DialogModel.lblCurDocument.Label = Str(DocIndex) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+		DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
 	Else
 		Msgbox(sMsgDOCISREADONLY, 16, GetProductName())
 	End If
@@ -182,18 +188,22 @@ End Sub
 
 Sub	InitializeThirdStep()
 Dim TextBoxText as String
+	Source = AssignFileName(DialogModel.txtSource.Text, DialogModel.lblSource.Label, True)
+	TargetDir = AssignFileName(DialogModel.txtTarget.Text, DialogModel.lblTarget.Label, False)
+	bRecursive = DialogModel.chkRecursive.State = 1
+	bDoUnprotect = DialogModel.chkProtect.State = 1
 	DialogModel.lblRetrieval.FontWeight = com.sun.star.awt.FontWeight.BOLD
 	DialogModel.lblRetrieval.Label = sPrgsRETRIEVAL
 	DialogModel.lblCurProgress.Label = sPrgsCONVERTING
 	If DialogModel.optWholeDir.State = 1 Then
 		TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot;
 		If DialogModel.chkRecursive.State = 1 Then
-			TextBoxText = TextBoxText &amp; DeleteStr(sSUBDIR,&quot;&amp;&quot;) &amp; chr(13)&apos; &amp; &quot; &quot;
+			TextBoxText = TextBoxText &amp; DeleteStr(sInclusiveSubDir,&quot;~&quot;) &amp; chr(13)
 		End If
 	Else
-		TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot;
+		TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) 
 	End If
-	TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)&apos; &amp; &quot; &quot;
+	TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)
 	If DialogModel.chkProtect.State = 1 Then
 		TextBoxText = TextboxText &amp; sPrgsUNPROTECT
 	End If
@@ -205,9 +215,11 @@ End Sub
 Sub ToggleProgressStep(Optional aEvent as Object)
 Dim bMakeVisible as Boolean
 Dim LocStep as Integer
+	&apos; If the Sub is call by the &apos;cmdBack&apos; Button then set the &apos;bMakeVisible&apos; variable accordingly
 	bMakeVisible = IsMissing(aEvent)
- 	DialogConvert.GetControl(&quot;lblCurrencies&quot;).Visible = bMakeVisible
- 	DialogConvert.GetControl(&quot;lstCurrencies&quot;).Visible = bMakeVisible
+	&apos; Todo: Wieso können die nicht unsichtbar gemacht werden?
+ 	DialogConvert.GetControl(&quot;lblCurrencies&quot;).Visible = Not bMakeVisible
+ 	DialogConvert.GetControl(&quot;lstCurrencies&quot;).Visible = Not bMakeVisible
 	DialogConvert.GetControl(&quot;cmdBack&quot;).Visible = bMakeVisible
  	DialogConvert.GetControl(&quot;cmdGoOn&quot;).Visible = bMakeVisible
 	If bMakeVisible Then
@@ -319,6 +331,84 @@ End Sub
 
 Sub CallFilePicker()
 	If DialogModel.optSingleFile.State = 1 Then
+		Dim oMasterKey as Object
+		Dim oFilters() as Object
+		
+		oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
+		oFilters() = oMasterKey.Filters
+
+		If DialogModel.chkTextDocuments.State = 1 Then
+			Dim FilterNames(21,1) as String
+
+			FilterNames(9,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+			FilterNames(9,1) = &quot;*.sxw&quot;
+
+			FilterNames(10,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
+			FilterNames(10,1) = &quot;*.vor&quot;
+
+			FilterNames(11,0) = oFilters.GetByName(&quot;writer_StarWriter_10&quot;).UIName
+			FilterNames(11,1) = &quot;*.sdw&quot;
+
+			FilterNames(12,0) = oFilters.GetByName(&quot;writer_StarWriter_30&quot;).UIName
+			FilterNames(12,1) = &quot;*.sdw&quot;
+
+			FilterNames(13,0) = oFilters.GetByName(&quot;writer_StarWriter_30_VorlageTemplate&quot;).UIName
+			FilterNames(13,1) = &quot;*.vor&quot;
+
+			FilterNames(14,0) = oFilters.GetByName(&quot;writer_StarWriter_40&quot;).UIName
+			FilterNames(14,1) = &quot;*.sdw&quot;
+
+			FilterNames(15,0) = oFilters.GetByName(&quot;writer_StarWriter_40_VorlageTemplate&quot;).UIName
+			FilterNames(15,1) = &quot;*.vor&quot;
+
+			FilterNames(16,0) = oFilters.GetByName(&quot;writer_StarWriter_50&quot;).UIName
+			FilterNames(16,1) = &quot;*.sdw&quot;
+
+			FilterNames(17,0) = oFilters.GetByName(&quot;writer_StarWriter_50_VorlageTemplate&quot;).UIName
+			FilterNames(17,1) = &quot;*.vor&quot;
+
+			FilterNames(18,0) = oFilters.GetByName(&quot;writer_web_StarOffice_XML_Writer_Web_Template&quot;).UIName
+			FilterNames(18,1) = &quot;*.stw&quot;
+
+			FilterNames(19,0) = oFilters.GetByName(&quot;writer_web_StarWriterWeb_40_VorlageTemplate&quot;).UIName
+			FilterNames(19,1) = &quot;*.vor&quot;
+
+			FilterNames(20,0) = oFilters.GetByName(&quot;writer_web_StarWriterWeb_50_VorlageTemplate&quot;).UIName
+			FilterNames(20,1) = &quot;*.vor&quot;
+
+			FilterNames(21,0) = oFilters.GetByName(&quot;writer_web_HTML&quot;).UIName
+			FilterNames(21,1) = &quot;*.HTML&quot;
+
+		Else
+			ReDim FilterNames(8,1) as String
+		End If
+		FilterNames(0,0) = oFilters.GetByName(&quot;calc_StarOffice_XML_Calc&quot;).UIName	
+		Filternames(0,1) = &quot;*.sxc&quot;
+
+		FilterNames(1,0) = oFilters.GetByName(&quot;calc_StarOffice_XML_Calc_Template&quot;).UIName
+		Filternames(1,1) = &quot;*.stw&quot;
+
+		FilterNames(2,0) = oFilters.GetByName(&quot;calc_StarCalc_10&quot;).UIName
+		Filternames(2,1) = &quot;*.sdc&quot;
+
+		FilterNames(3,0) = oFilters.GetByName(&quot;calc_StarCalc_30&quot;).UIName
+		Filternames(3,1) = &quot;*.sdc&quot;
+
+		FilterNames(4,0) = oFilters.GetByName(&quot;calc_StarCalc_30_VorlageTemplate&quot;).UIName
+		Filternames(4,1) = &quot;*.vor&quot;
+
+		FilterNames(5,0) = oFilters.GetByName(&quot;calc_StarCalc_40&quot;).UIName
+		Filternames(5,1) = &quot;*.sdc&quot;
+
+		FilterNames(6,0) = oFilters.GetByName(&quot;calc_StarCalc_40_VorlageTemplate&quot;).UIName
+		Filternames(6,1) = &quot;*.vor&quot;
+
+		FilterNames(7,0) = oFilters.GetByName(&quot;calc_StarCalc_50&quot;).UIName
+		Filternames(7,1) = &quot;*.sdc&quot;
+
+		FilterNames(8,0) = oFilters.GetByName(&quot;calc_StarCalc_50_VorlageTemplate&quot;).UIName
+		Filternames(8,1) = &quot;*.vor&quot;
+
 		GetFileName(DialogModel.txtSource, Filternames())
 	Else
 		GetFolderName(DialogModel.txtSource)

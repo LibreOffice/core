@@ -5,14 +5,19 @@ Option Explicit
 
 Dim PWIndex as Integer
 
-Function UnprotectSheetsWithPassWord(oSheets as Object)
+
+Function UnprotectSheetsWithPassWord(oSheets as Object, bDoUnProtect as Boolean)
 Dim i as Integer
 Dim MaxIndex as Integer
+Dim iMsgResult as Integer
 	PWIndex = -1
 	If bDocHasProtectedSheets Then
-		&apos; At First query if sheets shall generally be unprotected
-		DoUnprotect = Msgbox(sMsgUNPROTECT,36,sMsgDLGTITLE)
-		If DoUnProtect = 6 Then	
+		If Not bDoUnprotect Then
+			&apos; At First query if sheets shall generally be unprotected
+			iMsgResult = Msgbox(sMsgUNPROTECT,36,sMsgDLGTITLE)
+			bDoUnProtect = iMsgResult = 6
+		End If
+		If bDoUnProtect Then	
 			MaxIndex = oSheets.Count-1
 			For i = 0 To MaxIndex
 				bDocHasProtectedSheets = Not UnprotectSheet(oSheets(i))

@@ -39,7 +39,7 @@ Function ConvertDocument()
 	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 		bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 		If bDocHasProtectedSheets Then
-			bDocHasProtectedSheets = UnprotectSheetsWithPassword(oSheets)
+			bDocHasProtectedSheets = UnprotectSheetsWithPassword(oSheets, bDoUnProtect)
 		End If
 		If Not bDocHasProtectedSheets Then
 			If Not bRangeListDefined Then
@@ -177,17 +177,18 @@ End Function
 
 Sub StartConversion()
 	GoOn = True
-	ToggleWindow(False)
-	If DialogModel.Step = 2 Then
-		ConvertDocuments()
-	Else
-		If DialogModel.chkComplete.State = 1 Then
-			ConvertWholeDocument()
-		Else
-			ConvertRangesorStylesofDocument()
-		End If
-	End If
-	ToggleWindow(True)
+&apos;	ToggleWindow(False)
+	Select Case DialogModel.Step
+		Case 1
+			If DialogModel.chkComplete.State = 1 Then
+				ConvertWholeDocument()
+			Else
+				ConvertRangesorStylesofDocument()
+			End If
+		Case 2
+			InitializeThirdStep()
+			ConvertDocuments()
+	End Select
 End Sub
 
 

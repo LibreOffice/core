@@ -29,6 +29,9 @@ Dim Stylename as String
 				SwitchNumberFormat(ostyle, oFormats, sEuroSign)
 			End If
 			StyleIndex = StyleIndex + 1
+			If StyleIndex &gt; Ubound(StyleRangeAssignMentList()) Then
+				Redim Preserve StyleRangeAssignmentList(StyleIndex)
+			End If
 			StyleRangeAssignmentList(StyleIndex) = 	&quot;&lt;STYLENAME&gt;&quot; &amp; Stylename &amp; &quot;&lt;/STYLENAME&gt;&quot; &amp; _
 													&quot;&lt;DEFINED&gt;FALSE&lt;/DEFINED&gt;&quot; &amp; &quot;&lt;RANGES&gt;&lt;/RANGES&gt;&quot; &amp;_
 													&quot;&lt;CELLCOUNT&gt;0&lt;/CELLCOUNT&gt;&quot; &amp;_

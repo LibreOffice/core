@@ -17,8 +17,8 @@ Public StyleRangeAssignmentList(SBRANGEUBOUND)as String
 Public SelRangeList(SBRANGEUBOUND) as String
 Public RangeList(SBRANGEUBOUND, 1) as String
 Public UnprotectList() as String
-Public FilterNames(7,1) as String
-
+Public FilterNames(2,1) as String
+Public bDoUnProtect as Boolean
 
 Public sREADY as String
 Public sPROTECT as String
@@ -78,6 +78,7 @@ Public sCurrSYSUNKNOWN as String
 Public sPrgsRETRIEVAL as String
 Public sPrgsCONVERTING as String
 Public sPrgsUNPROTECT as String
+Public sInclusiveSubDir as String
 
 Public Const SBCOUNTRYCOUNT = 12
 Public CurMimeType as String
@@ -164,23 +165,6 @@ Sub InitializeResources()
 			.lblSelection.Label = sCURRRANGES
 		Else
 		 	.hlnExtent.Label = GetResText(1200)
-&apos;Todo: Diese Strings in Resourcen!!
-			FilterNames(0,0) = &quot;Calc 6.0&quot;
-			FilterNames(0,1) = &quot;*.sxc&quot;
-			FilterNames(1,0) = &quot;Calc 6.0 Vorlage&quot;
-			FilterNames(1,1) = &quot;*.stc&quot;	
-			FilterNames(2,0) = &quot;Star Calc 5.0&quot;
-			FilterNames(2,1) = &quot;*.sdc&quot;
-			FilterNames(3,0) = &quot;Star Calc 5.0 Vorlage&quot;
-			FilterNames(3,1) = &quot;*.vor&quot;
-			FilterNames(4,0) = &quot;Star Calc 4.0&quot;
-			FilterNames(4,1) = &quot;*.sdc&quot;
-			FilterNames(5,0) = &quot;Star Calc 4.0 Vorlage&quot;
-			FilterNames(5,1) = &quot;*.vor&quot;
-			FilterNames(6,0) = &quot;Star Calc 3.0&quot;
-			FilterNames(6,1) = &quot;*.sdc&quot;
-			FilterNames(7,0) = &quot;Star Calc 3.0 Vorlage&quot;
-			FilterNames(7,1) = &quot;*.vor&quot;	
 			.optSingleFile.Label = GetResText(1201) &apos;&quot;Einzelnes StarOffice -Dokument&quot;&apos;GetResText(1201)
  			.optWholeDir.Label = GetResText(1202)
  			.chkProtect.Label = GetResText(1207)
@@ -188,7 +172,8 @@ Sub InitializeResources()
 			sSOURCEFILE = GetResText(1203)
 			sSOURCEDIR = GetResText(1204)
  			.lblSource.Label = sSOURCEDIR
- 			.chkRecursive.Label = GetResText(1205)
+ 			sInclusiveSubDir = GetResText(1205)
+ 			.chkRecursive.Label = sInclusiveSubDir
 			sTARGETDIR = GetResText(1206)
  			.lblTarget.Label = STARGETDIR 
 			.optWholeDir.State = 1
@@ -485,13 +470,6 @@ Dim Isthere as Boolean
 	InitializeLocales(oLocale)
 	InitializeCurrencies()
 	InitializeControls()
-	FilterList(0) = &quot;application/x-starcalc&quot;
-	FilterList(1) = &quot;application/x-starwriter&quot;
-	FilterList(2) = &quot;application/vnd.stardivision.calc&quot;
-	FilterList(3) = &quot;application/vnd.stardivision.writer&quot;
-	FilterList(4) = &quot;application/vnd.stardivision.writer/web&quot;
-	FilterList(5) = &quot;application/vnd.sun.xml.calc&quot;
-	FilterList(6) = &quot;application/vnd.sun.xml.writer&quot;
 	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
 	FillUpCurrencyListbox()
 	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	
