@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:51:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,15 +286,28 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         {
             const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();
             // OD 2004-03-24 #i26791# - use new object instance of <SwAnchoredObject>
-            if ( !GetAnchoredObj().GetLastCharRect().Height() ||
+            // OD 2005-01-12 - Due to table break algorithm the character
+            // rectangle can have no height. Thus, check also the width
+            if ( ( !GetAnchoredObj().GetLastCharRect().Height() &&
+                   !GetAnchoredObj().GetLastCharRect().Width() ) ||
                  !GetAnchoredObj().GetLastTopOfLine() )
             {
                 // --> OD 2004-07-15 #117380# - suppress check for paragraph
                 // portion information by passing <false> as first parameter
                 GetAnchoredObj().CheckCharRectAndTopOfLine( false );
-                if ( !GetAnchoredObj().GetLastCharRect().Height() ||
+                // OD 2005-01-12 - Due to table break algorithm the character
+                // rectangle can have no height. Thus, check also the width
+                if ( ( !GetAnchoredObj().GetLastCharRect().Height() &&
+                       !GetAnchoredObj().GetLastCharRect().Width() ) ||
                      !GetAnchoredObj().GetLastTopOfLine() )
                 {
+                    // --> OD 2005-01-12 - get default for <mpVertPosOrientFrm>,
+                    // if it's not set.
+                    if ( !mpVertPosOrientFrm )
+                    {
+                        mpVertPosOrientFrm = rAnchorTxtFrm.GetUpper();
+                    }
+                    // <--
                     return;
                 }
             }
