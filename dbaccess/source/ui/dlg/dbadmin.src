@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:16:13 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 07:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2753,7 +2753,7 @@ TabPage PAGE_TEXT
 
     String STR_FIELDSEPARATORLIST
     {
-        Text = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Leer}\t32" ;
+        Text = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Leerzeichen}\t32" ;
         Text [ english ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
         Text [ NORWEGIAN ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
         Text [ DANISH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{tom}\t32" ;
@@ -4118,6 +4118,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.116  2002/11/25 15:16:13  kz
+ *  Merge SRX644: 25.11.02 - 16:12:20
+ *
  *  Revision 1.115  2002/11/22 07:52:17  oj
  *  #105213# insert english strings
  *
