@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-18 14:29:40 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 14:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,10 @@
 #include <comphelper/extract.hxx>
 #endif
 
-
 using namespace dbaui;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdb;
@@ -138,36 +138,39 @@ void Replace_SQL_PlaceHolder(String& aString)
 DBG_NAME(DlgFilterCrit);
 //------------------------------------------------------------------------------
 DlgFilterCrit::DlgFilterCrit(Window * pParent,
+                             const Reference< XMultiServiceFactory >& _rxORB,
                              const Reference< XConnection>& _rxConnection,
                              const Reference< XSQLQueryComposer>& _rxQueryComposer,
                              const Reference< XNameAccess>& _rxCols,
-                             const String& rFieldName)
-            : ModalDialog( pParent, ModuleRes( DLG_FILTERCRIT ) )
-            ,aLB_WHEREFIELD1    ( this, ResId( LB_WHEREFIELD1 ) )
-            ,aLB_WHERECOMP1     ( this, ResId( LB_WHERECOMP1 ) )
-            ,aET_WHEREVALUE1    ( this, ResId( ET_WHEREVALUE1 ) )
-            ,aLB_WHERECOND2     ( this, ResId( LB_WHERECOND2 ) )
-            ,aLB_WHEREFIELD2    ( this, ResId( LB_WHEREFIELD2 ) )
-            ,aLB_WHERECOMP2     ( this, ResId( LB_WHERECOMP2 ) )
-            ,aET_WHEREVALUE2    ( this, ResId( ET_WHEREVALUE2 ) )
-            ,aLB_WHERECOND3     ( this, ResId( LB_WHERECOND3 ) )
-            ,aLB_WHEREFIELD3    ( this, ResId( LB_WHEREFIELD3 ) )
-            ,aLB_WHERECOMP3     ( this, ResId( LB_WHERECOMP3 ) )
-            ,aET_WHEREVALUE3    ( this, ResId( ET_WHEREVALUE3 ) )
-            ,aFT_WHEREFIELD     ( this, ResId( FT_WHEREFIELD ) )
-            ,aFT_WHERECOMP      ( this, ResId( FT_WHERECOMP ) )
-            ,aFT_WHEREVALUE     ( this, ResId( FT_WHEREVALUE ) )
-            ,aFT_WHEREOPER      ( this, ResId( FT_WHEREOPER ) )
-            ,aFL_FIELDS         ( this, ResId( FL_FIELDS ) )
-            ,aBT_OK             ( this, ResId( BT_OK ) )
-            ,aBT_CANCEL         ( this, ResId( BT_CANCEL ) )
-            ,aBT_HELP           ( this, ResId( BT_HELP ) )
-            ,aSTR_NOENTRY       ( ResId( STR_NOENTRY ) )
-            ,aSTR_COMPARE_OPERATORS( ResId( STR_COMPARE_OPERATORS ) )
-            ,m_xQueryComposer(_rxQueryComposer)
-            ,m_xColumns(_rxCols)
-            ,m_xConnection(_rxConnection)
-            ,m_xMetaData(_rxConnection->getMetaData())
+                             const String& rFieldName
+                             )
+    :ModalDialog( pParent, ModuleRes( DLG_FILTERCRIT ) )
+    ,aLB_WHEREFIELD1    ( this, ResId( LB_WHEREFIELD1 ) )
+    ,aLB_WHERECOMP1     ( this, ResId( LB_WHERECOMP1 ) )
+    ,aET_WHEREVALUE1    ( this, ResId( ET_WHEREVALUE1 ) )
+    ,aLB_WHERECOND2     ( this, ResId( LB_WHERECOND2 ) )
+    ,aLB_WHEREFIELD2    ( this, ResId( LB_WHEREFIELD2 ) )
+    ,aLB_WHERECOMP2     ( this, ResId( LB_WHERECOMP2 ) )
+    ,aET_WHEREVALUE2    ( this, ResId( ET_WHEREVALUE2 ) )
+    ,aLB_WHERECOND3     ( this, ResId( LB_WHERECOND3 ) )
+    ,aLB_WHEREFIELD3    ( this, ResId( LB_WHEREFIELD3 ) )
+    ,aLB_WHERECOMP3     ( this, ResId( LB_WHERECOMP3 ) )
+    ,aET_WHEREVALUE3    ( this, ResId( ET_WHEREVALUE3 ) )
+    ,aFT_WHEREFIELD     ( this, ResId( FT_WHEREFIELD ) )
+    ,aFT_WHERECOMP      ( this, ResId( FT_WHERECOMP ) )
+    ,aFT_WHEREVALUE     ( this, ResId( FT_WHEREVALUE ) )
+    ,aFT_WHEREOPER      ( this, ResId( FT_WHEREOPER ) )
+    ,aFL_FIELDS         ( this, ResId( FL_FIELDS ) )
+    ,aBT_OK             ( this, ResId( BT_OK ) )
+    ,aBT_CANCEL         ( this, ResId( BT_CANCEL ) )
+    ,aBT_HELP           ( this, ResId( BT_HELP ) )
+    ,aSTR_NOENTRY       ( ResId( STR_NOENTRY ) )
+    ,aSTR_COMPARE_OPERATORS( ResId( STR_COMPARE_OPERATORS ) )
+    ,m_xQueryComposer( _rxQueryComposer )
+    ,m_xColumns( _rxCols )
+    ,m_xConnection( _rxConnection )
+    ,m_xMetaData( _rxConnection->getMetaData() )
+    ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )
 {
     DBG_CTOR(DlgFilterCrit,NULL);
     // Den String fuer noEntry in die ListBoxen der Feldnamen schreiben
@@ -248,6 +251,10 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     aLB_WHERECOMP1.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
     aLB_WHERECOMP2.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
     aLB_WHERECOMP3.SetSelectHdl(LINK(this,DlgFilterCrit,ListSelectCompHdl));
+
+    aET_WHEREVALUE1.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
+    aET_WHEREVALUE2.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
+    aET_WHEREVALUE3.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
 
     FreeResource();
 }
@@ -412,13 +419,75 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox&
     if(bNeedText)
     {
         aFilter += ::rtl::OUString::createFromAscii(" ");
-        String aTemp = _rValue.GetText();
-        ::Replace_OS_PlaceHolder(aTemp);
-        addQuoting(_rField.GetSelectEntry(),aTemp);
-        aFilter += aTemp.GetBuffer();
+        String sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_True );
+        ::Replace_OS_PlaceHolder( sPredicateValue );
+        aFilter += sPredicateValue;
     }
     return aFilter;
 }
+
+//------------------------------------------------------------------------------
+Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFieldName ) const
+{
+    Reference< XPropertySet > xColumn;
+    try
+    {
+        if ( m_xColumns.is() && m_xColumns->hasByName( _rFieldName ) )
+            m_xColumns->getByName( _rFieldName ) >>= xColumn;
+    }
+    catch( const Exception& e )
+    {
+        e;  // make compiler happy
+        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: caught an exception!" );
+    }
+
+    return xColumn;
+}
+
+//------------------------------------------------------------------------------
+Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueInput ) const
+{
+    // the name
+    ::rtl::OUString sField;
+    if ( &_rValueInput == &aET_WHEREVALUE1 )
+    {
+        sField = aLB_WHEREFIELD1.GetSelectEntry();
+    }
+    else if ( &_rValueInput == &aET_WHEREVALUE2 )
+    {
+        sField = aLB_WHEREFIELD2.GetSelectEntry();
+    }
+    else if ( &_rValueInput == &aET_WHEREVALUE3 )
+    {
+        sField = aLB_WHEREFIELD3.GetSelectEntry();
+    }
+    else
+        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
+
+    // the field itself
+    return getColumn( sField );
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
+{
+    DBG_ASSERT( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
+    if ( _pField )
+    {
+        // retrieve the field affected
+        Reference< XPropertySet> xColumn( getMatchingColumn( *_pField ) );
+        // and normalize it's content
+        if ( xColumn.is() )
+        {
+            ::rtl::OUString sText( _pField->GetText() );
+            m_aPredicateInput.normalizePredicateString( sText, xColumn );
+            _pField->SetText( sText );
+        }
+    }
+
+    return 0L;
+}
+
 //------------------------------------------------------------------------------
 void DlgFilterCrit::GetFilterList() const
 {
@@ -465,6 +534,8 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     ::Replace_SQL_PlaceHolder(aStr);
     aStr.EraseTrailingChars();
 
+    Reference< XPropertySet > xColumn = getColumn( _rItem.Name );
+
     // remove the predicate from the condition
     switch(_rItem.Handle)
     {
@@ -502,39 +573,49 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     aStr.EraseLeadingChars();
 
     // to make sure that we only set first three
+    ListBox* pColumnListControl =  NULL;
+    ListBox* pPredicateListControl = NULL;
+    Edit* pPredicateValueControl = NULL;
     switch( nIdx )
     {
         case 0:
-        {
-            SelectField( aLB_WHEREFIELD1, _rItem.Name );
-            ListSelectHdl(&aLB_WHEREFIELD1);
-            aLB_WHERECOMP1.SelectEntryPos( GetSelectionPos((OSQLPredicateType)_rItem.Handle , aLB_WHERECOMP1));
-            correctCondition(_rItem.Name,aStr);
-            aET_WHEREVALUE1.SetText( aStr );
-        }
-        break;
+            pColumnListControl = &aLB_WHEREFIELD1;
+            pPredicateListControl = &aLB_WHERECOMP1;
+            pPredicateValueControl = &aET_WHEREVALUE1;
+            break;
 
         case 1:
-        {
             aLB_WHERECOND2.SelectEntryPos( _bOr ? 1 : 0 );
-            SelectField( aLB_WHEREFIELD2, _rItem.Name );
-            ListSelectHdl(&aLB_WHEREFIELD2);
-            aLB_WHERECOMP2.SelectEntryPos( GetSelectionPos((OSQLPredicateType)_rItem.Handle , aLB_WHERECOMP2));
-            correctCondition(_rItem.Name,aStr);
-            aET_WHEREVALUE2.SetText( aStr );
-        }
-        break;
+
+            pColumnListControl = &aLB_WHEREFIELD2;
+            pPredicateListControl = &aLB_WHERECOMP2;
+            pPredicateValueControl = &aET_WHEREVALUE2;
+            break;
 
         case 2:
-        {
             aLB_WHERECOND3.SelectEntryPos( _bOr ? 1 : 0 );
-            SelectField( aLB_WHEREFIELD3, _rItem.Name );
-            ListSelectHdl(&aLB_WHEREFIELD3);
-            aLB_WHERECOMP3.SelectEntryPos( GetSelectionPos((OSQLPredicateType)_rItem.Handle , aLB_WHERECOMP3));
-            correctCondition(_rItem.Name,aStr);
-            aET_WHEREVALUE3.SetText( aStr );
-        }
-        break;
+
+            pColumnListControl = &aLB_WHEREFIELD3;
+            pPredicateListControl = &aLB_WHERECOMP3;
+            pPredicateValueControl = &aET_WHEREVALUE3;
+            break;
+    }
+
+    if ( pColumnListControl && pPredicateListControl && pPredicateValueControl )
+    {
+        // select the appropriate field name
+        SelectField( *pColumnListControl, _rItem.Name );
+        ListSelectHdl( pColumnListControl );
+
+        // select the appropriate condition
+        pPredicateListControl->SelectEntryPos( GetSelectionPos( (OSQLPredicateType)_rItem.Handle, *pPredicateListControl ) );
+
+        // set the appropriate value
+        correctCondition( _rItem.Name, aStr );
+        // initially normalize this value
+        ::rtl::OUString aString( aStr );
+        m_aPredicateInput.normalizePredicateString( aString, xColumn );
+        pPredicateValueControl->SetText( aString );
     }
 }
 
