@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftoken.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
+ *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,6 +956,14 @@ enum RTF_TOKEN_IDS {
     RTF_TRBRDRV,
     RTF_TRHDR,
     RTF_TRKEEP,
+    RTF_TRPADDB,
+    RTF_TRPADDL,
+    RTF_TRPADDR,
+    RTF_TRPADDT,
+    RTF_TRPADDFB,
+    RTF_TRPADDFL,
+    RTF_TRPADDFR,
+    RTF_TRPADDFT,
     RTF_TCELLD,
     RTF_CLTXTBRL,
     RTF_CLTXLRTB,
@@ -967,6 +975,15 @@ enum RTF_TOKEN_IDS {
     RTF_CLTXTBRLV,
     RTF_CLTXBTLR,
     RTF_CLTXLRTBV,
+    RTF_CLPADL,
+    RTF_CLPADT,
+    RTF_CLPADB,
+    RTF_CLPADR,
+    RTF_CLPADFL,
+    RTF_CLPADFT,
+    RTF_CLPADFB,
+    RTF_CLPADFR,
+
 
     RTF_CLBRDRT = (RTF_BRDRDEF|RTF_TABLEDEF),
     RTF_CLBRDRL,
@@ -1256,11 +1273,14 @@ enum RTF_TOKEN_IDS {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.6 2002-01-25 16:21:07 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.7 2002-09-26 14:13:26 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2002/01/25 16:21:07  jp
+      Task #96678# new tokens for flyframe directions
+
       Revision 1.5  2001/05/03 11:47:16  jp
       new: token for fontalignment/scriptspace/forbiddenrule/hangingpuctuation
 

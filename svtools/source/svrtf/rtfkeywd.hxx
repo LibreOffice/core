@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
+ *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,16 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRT, "\\trbrdrt" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRV, "\\trbrdrv" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRHDR, "\\trhdr" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRKEEP, "\\trkeep" );
+
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDB, "\\trpaddb" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDL, "\\trpaddl" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDR, "\\trpaddr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDT, "\\trpaddt" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFB, "\\trpaddfb" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFL, "\\trpaddfl" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFR, "\\trpaddfr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFT, "\\trpaddft" );
+
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_WRAPTRSP, "\\wraptrsp" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_XEF, "\\xef" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ZWJ, "\\zwj" );
@@ -809,6 +819,17 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CHBRDR, "\\chbrdr" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CHCBPAT, "\\chcbpat" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CHCFPAT, "\\chcfpat" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CHSHDNG, "\\chshdng" );
+
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADL, "\\clpadl" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADT, "\\clpadt" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADB, "\\clpadb" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADR, "\\clpadr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFL, "\\clpadfl" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFT, "\\clpadft" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFB, "\\clpadfb" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFR, "\\clpadfr" );
+
+
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLTXLRTB, "\\cltxlrtb" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLTXTBRL, "\\cltxtbrl" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_CLVERTALB, "\\clvertalb" );
@@ -1152,11 +1173,14 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.6 2002-01-25 16:21:07 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.7 2002-09-26 14:13:26 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2002/01/25 16:21:07  jp
+      Task #96678# new tokens for flyframe directions
+
       Revision 1.5  2001/05/03 11:47:16  jp
       new: token for fontalignment/scriptspace/forbiddenrule/hangingpuctuation
 

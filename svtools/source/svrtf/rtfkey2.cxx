@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
+ *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,6 +729,14 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRBRDRT, "\\trbrdrt" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRBRDRV, "\\trbrdrv" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRHDR, "\\trhdr" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRKEEP, "\\trkeep" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDB, "\\trpaddb" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDL, "\\trpaddl" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDR, "\\trpaddr" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDT, "\\trpaddt" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDFB, "\\trpaddfb" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDFL, "\\trpaddfl" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDFR, "\\trpaddfr" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TRPADDFT, "\\trpaddft" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_WRAPTRSP, "\\wraptrsp" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_XEF, "\\xef" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ZWJ, "\\zwj" );
@@ -798,6 +806,14 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CHBRDR, "\\chbrdr" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CHCBPAT, "\\chcbpat" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CHCFPAT, "\\chcfpat" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CHSHDNG, "\\chshdng" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADL, "\\clpadl" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADT, "\\clpadt" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADB, "\\clpadb" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADR, "\\clpadr" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADFL, "\\clpadfl" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADFT, "\\clpadft" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADFB, "\\clpadfb" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLPADFR, "\\clpadfr" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLTXLRTB, "\\cltxlrtb" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLTXTBRL, "\\cltxtbrl" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_CLVERTALB, "\\clvertalb" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
+ *  last change: $Author: cmc $ $Date: 2002-09-26 14:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,14 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 {sRTF_CLBRDRT,       RTF_CLBRDRT},
 {sRTF_CLBRDRL,       RTF_CLBRDRL},
 {sRTF_CLBRDRR,       RTF_CLBRDRR},
+{sRTF_CLPADL,        RTF_CLPADL},
+{sRTF_CLPADT,        RTF_CLPADT},
+{sRTF_CLPADB,        RTF_CLPADB},
+{sRTF_CLPADR,        RTF_CLPADR},
+{sRTF_CLPADFL,       RTF_CLPADFL},
+{sRTF_CLPADFT,       RTF_CLPADFT},
+{sRTF_CLPADFB,       RTF_CLPADFB},
+{sRTF_CLPADFR,       RTF_CLPADFR},
 {sRTF_TROWD,         RTF_TROWD},
 {sRTF_TRQL,          RTF_TRQL},
 {sRTF_TRQR,          RTF_TRQR},
@@ -750,6 +758,16 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 {sRTF_TRBRDRV,      RTF_TRBRDRV},
 {sRTF_TRHDR,            RTF_TRHDR},
 {sRTF_TRKEEP,       RTF_TRKEEP},
+{sRTF_TRPADDB,      RTF_TRPADDB},
+{sRTF_TRPADDL,      RTF_TRPADDL},
+{sRTF_TRPADDR,      RTF_TRPADDR},
+{sRTF_TRPADDT,      RTF_TRPADDT},
+{sRTF_TRPADDFB,      RTF_TRPADDFB},
+{sRTF_TRPADDFL,      RTF_TRPADDFL},
+{sRTF_TRPADDFR,      RTF_TRPADDFR},
+{sRTF_TRPADDFT,      RTF_TRPADDFT},
+
+
 {sRTF_WRAPTRSP,     RTF_WRAPTRSP},
 {sRTF_XEF,          RTF_XEF},
 {sRTF_ZWJ,          RTF_ZWJ},
