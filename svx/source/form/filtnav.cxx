@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-21 08:34:31 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 10:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2047,6 +2047,14 @@ void FmFilterNavigatorWin::Resize()
 
     m_pNavigator->SetPosSizePixel( aExplPos, aExplSize );
 }
+// -----------------------------------------------------------------------------
+void FmFilterNavigatorWin::GetFocus()
+{
+    // oj #97405#
+    if ( m_pNavigator )
+        m_pNavigator->GrabFocus();
+}
+// -----------------------------------------------------------------------------
 
 
 //========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:04:48 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 10:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,8 @@ public:
     void Update( FmFormShell* pFormShell );
     void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void FillInfo( SfxChildWinInfo& rInfo ) const;
+
+    virtual void GetFocus();
 };
 
 //========================================================================
