@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:08:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,10 @@
 #include <uifactory/statusbarfactory.hxx>
 #endif
 
+#ifndef __FRAMEWORK_UIELEMENT_UICATEGORYDESCRPTION_HXX_
+#include <uiconfiguration/uicategorydescription.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
@@ -293,11 +297,11 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::ToolBoxFactory                          )
                         COMPONENTINFO( ::framework::AddonsToolBoxFactory                    )
                         COMPONENTINFO( ::framework::WindowStateConfiguration                )
-                        COMPONENTINFO( ::framework::ToolbarsMenuController                  )
                         COMPONENTINFO( ::framework::ToolbarControllerFactory                )
                         COMPONENTINFO( ::framework::ToolbarsMenuController                  )
                         COMPONENTINFO( ::framework::RecentFilesMenuController               )
                         COMPONENTINFO( ::framework::StatusBarFactory                        )
+                        COMPONENTINFO( ::framework::UICategoryDescription                   )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -336,10 +340,10 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::AddonsToolBoxFactory                    )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
-                        IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
-                        IFFACTORY( ::framework::StatusBarFactory                        )
+                        IFFACTORY( ::framework::StatusBarFactory                        )   else
+                        IFFACTORY( ::framework::UICategoryDescription                   )
             )
 
