@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:04 $
+#   last change: $Author: fs $ $Date: 2001-03-19 07:33:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,6 +141,7 @@ UNOTYPES+=	\
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/VDescriptor.obj					\
         $(SLO)$/VCollection.obj					\
         $(SLO)$/VColumn.obj						\
         $(SLO)$/VIndexColumn.obj				\
