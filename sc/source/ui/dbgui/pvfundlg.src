@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:24:32 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "程" ; Default ; > ;
         < "程" ; Default ; > ;
         < "縩" ; Default ; > ;
-        < "璸计(计)" ; Default ; > ;
+        < "璸计(琌计)" ; Default ; > ;
         < "夹非熬畉(┾妓)" ; Default ; > ;
         < "夹非熬畉(场膀计)" ; Default ; > ;
         < "よ畉(┾妓)" ; Default ; > ;
