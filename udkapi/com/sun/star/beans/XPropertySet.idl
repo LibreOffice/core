@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2001-06-11 14:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,11 @@ interface XPropertySet: com::sun::star::uno::XInterface
         the change event is fired.  If it is a constrained property
         a vetoable event is fired before the property value can be
         changed.  </p>
+
+        @raises com::sun::star::beans::PropertyVetoException
+            if the property is read-only or it is a vetoable
+            property and one of the listeners throws this exception
+            because of the value.
      */
     void setPropertyValue( [in] string aPropertyName,
              [in] any aValue )
@@ -248,6 +253,9 @@ interface XPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 
