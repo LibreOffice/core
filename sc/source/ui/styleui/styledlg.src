@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:16:58 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,12 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Identifier = TP_FONTEFF ;
                 Text = "Schrifteffekt" ;
                 Text [ ENGLISH ] = "Character Extension" ;
-                Text[ english_us ] = "Font effect";
-                Text[ portuguese ] = "Character Extension";
-                Text[ russian ] = "Character Extension";
-                Text[ greek ] = "Character Extension";
-                Text[ dutch ] = "Character Extension";
-                Text[ french ] = "Character Extension";
+                Text[ english_us ] = "Font Effects";
+                Text[ portuguese ] = "Efeitos de caracteres";
+                Text[ russian ] = "İôôåêò øğèôòà";
+                Text[ greek ] = "Åöİ ãñáììáôïóåéñÜò";
+                Text[ dutch ] = "Schrifteffect";
+                Text[ french ] = "Effets de caractères";
                 Text[ spanish ] = "Efecto de fuente";
                 Text[ italian ] = "Effetto carattere";
                 Text[ danish ] = "Character Extension";
@@ -162,8 +162,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ portuguese_brazilian ] = "Character Extension";
                 Text[ japanese ] = "Ì«İÄŒø‰Ê";
                 Text[ korean ] = "¹®ÀÚ È®Àå";
-                Text[ chinese_simplified ] = "Character Extension";
-                Text[ chinese_traditional ] = "Character Extension";
+                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Character Extension";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
             };
