@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-22 07:41:36 $
+ *  last change: $Author: dv $ $Date: 2001-06-25 13:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,17 +760,20 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             }
             else
             {
-                const OUString aPath = aPathSeq[0];
+                INetURLObject aPath( aPathSeq[0] );
+                aPath.setFinalSlash();
+
                 for ( USHORT i = 1; i < aPathSeq.getLength(); ++i )
                 {
-                    OUString aFullPath( aPath );
-                    aFullPath += aPathSeq[i];
+                    if ( i == 1 )
+                        aPath.Append( aPathSeq[i] );
+                    else
+                        aPath.setName( aPathSeq[i] );
 
-                    String* pURL = new String( aFullPath );
+                    String* pURL = new String( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
                     rpURLList->Insert( pURL, rpURLList->Count() );
                 }
             }
-
             return ERRCODE_NONE;
         }
         else
