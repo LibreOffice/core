@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 14:05:21 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 12:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,10 +1018,6 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
             break;
         }
 
-        case SID_OPTIMIZEWIN:
-        case SID_WIN_MINIMIZED:
-        case SID_RESTOREWIN:
-        case SID_WIN_MAXIMIZED:
         case SID_WIN_POSSIZE:
             break;
 
@@ -1114,7 +1110,6 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
             }
 
-            case SID_OPTIMIZEWIN:
             case SID_NEWWINDOW:
                 rSet.DisableItem(nWhich);
                 break;
@@ -1130,18 +1125,6 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
             }
 
             case SID_SHOWPOPUPS :
-                break;
-
-            case SID_RESTOREWIN:
-                rSet.DisableItem(nWhich);
-                break;
-
-            case SID_WIN_MINIMIZED:
-                rSet.DisableItem( nWhich );
-                break;
-
-            case SID_WIN_MAXIMIZED:
-                rSet.DisableItem( nWhich );
                 break;
 
             case SID_WIN_POSSIZE:
