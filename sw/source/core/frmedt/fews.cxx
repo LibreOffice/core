@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:07:09 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,7 +1232,20 @@ Size SwFEShell::GetGraphicDefaultSize() const
     SwFlyFrm *pFly = FindFlyFrm();
     if ( pFly )
     {
-        aRet = pFly->GetAnchorFrm()->Prt().SSize();
+        // --> OD 2004-09-24 #i32951# - due to issue #i28701# no format of a
+        // newly inserted Writer fly frame or its anchor frame is performed
+        // any more. Thus, it could be possible (e.g. on insert of a horizontal
+        // line) that the anchor frame isn't formatted and its printing area
+        // size is (0,0). If this is the case the printing area of the upper
+        // of the anchor frame is taken.
+        const SwFrm* pAnchorFrm = pFly->GetAnchorFrm();
+        aRet = pAnchorFrm->Prt().SSize();
+        if ( aRet.Width() == 0 && aRet.Height() == 0 &&
+             pAnchorFrm->GetUpper() )
+        {
+            aRet = pAnchorFrm->GetUpper()->Prt().SSize();
+        }
+        // <--
 
         SwRect aBound;
         CalcBoundRect( aBound, pFly->GetFmt()->GetAnchor().GetAnchorId());
