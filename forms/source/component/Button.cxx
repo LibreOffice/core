@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:48:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -78,11 +81,15 @@
 #ifndef _COMPHELPER_BASIC_IO_HXX_
 #include <comphelper/basicio.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#endif
 
 //.........................................................................
 namespace frm
 {
 //.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -276,7 +283,9 @@ InterfaceRef SAL_CALL OButtonControl_CreateInstance(const Reference<XMultiServic
 Sequence<Type> OButtonControl::_getTypes()
 {
     return ::comphelper::concatSequences(
-        OButtonControl_BASE::getTypes(), OImageControl::_getTypes()
+        OButtonControl_BASE::getTypes(),
+        OImageControl::_getTypes(),
+        OFormNavigationHelper::getTypes()
     );
 }
 
@@ -294,7 +303,10 @@ StringSequence  OButtonControl::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 OButtonControl::OButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
                  :OImageControl(_rxFactory, VCL_CONTROL_COMMANDBUTTON)
-                 ,nClickEvent(0)
+                 ,OFormNavigationHelper( _rxFactory )
+                 ,m_nClickEvent( 0 )
+                 ,m_nTargetUrlFeatureId( -1 )
+                 ,m_bEnabledByPropertyValue( sal_False )
 {
     increment(m_refCount);
     {
@@ -311,8 +323,8 @@ OButtonControl::OButtonControl(const Reference<XMultiServiceFactory>& _rxFactory
 //------------------------------------------------------------------------------
 OButtonControl::~OButtonControl()
 {
-    if (nClickEvent)
-        Application::RemoveUserEvent(nClickEvent);
+    if (m_nClickEvent)
+        Application::RemoveUserEvent(m_nClickEvent);
 }
 
 // UNO Anbindung
@@ -327,7 +339,26 @@ Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (Runtime
     if ( !aReturn.hasValue() )
         aReturn = OImageControl::queryAggregation( _rType );
 
+    if ( !aReturn.hasValue() )
+        aReturn = OFormNavigationHelper::queryInterface( _rType );
+
     return aReturn;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OButtonControl::disposing()
+{
+    startOrStopModelPropertyListening( false );
+
+    OImageControl::disposing();
+    OFormNavigationHelper::dispose();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( RuntimeException )
+{
+    OControl::disposing( _rSource );
+    OFormNavigationHelper::disposing( _rSource );
 }
 
 // ActionListener
@@ -338,7 +369,7 @@ void OButtonControl::actionPerformed(const ActionEvent& rEvent) throw ( ::com::s
     sal_uInt32 n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        nClickEvent = n;
+        m_nClickEvent = n;
     }
 }
 
@@ -346,7 +377,7 @@ void OButtonControl::actionPerformed(const ActionEvent& rEvent) throw ( ::com::s
 IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
-    nClickEvent = 0;
+    m_nClickEvent = 0;
 
     if (m_aApproveActionListeners.getLength())
     {
@@ -399,9 +430,33 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
             }
         }
         else
-            actionPerformed_Impl( sal_False );
+            actionPerformed_Impl( sal_False, MouseEvent() );
     }
     return 0L;
+}
+
+//------------------------------------------------------------------------------
+void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const MouseEvent& _rEvt )
+{
+    {
+        sal_Int32 nFeatureId = -1;
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            nFeatureId = m_nTargetUrlFeatureId;
+        }
+
+        if ( nFeatureId != -1 )
+        {
+            if ( !approveAction() )
+                return;
+
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            dispatch( nFeatureId );
+            return;
+        }
+    }
+
+    OImageControl::actionPerformed_Impl( _bNotifyListener, _rEvt );
 }
 
 // XButton
@@ -438,6 +493,204 @@ void SAL_CALL OButtonControl::addActionListener(const Reference<XActionListener>
 void SAL_CALL OButtonControl::removeActionListener(const Reference<XActionListener>& _rxListener) throw( RuntimeException )
 {
     m_aActionListeners.removeInterface(_rxListener);
+}
+
+//------------------------------------------------------------------------------
+class DoPropertyListening
+{
+private:
+    Reference< XPropertySet >               m_xProps;
+    Reference< XPropertyChangeListener >    m_xListener;
+    bool                                    m_bStartListening;
+
+public:
+    DoPropertyListening(
+        const Reference< XInterface >& _rxComponent,
+        const Reference< XPropertyChangeListener >& _rxListener,
+        bool _bStart
+    );
+
+    void    handleListening( const ::rtl::OUString& _rPropertyName );
+};
+
+//..............................................................................
+DoPropertyListening::DoPropertyListening(
+        const Reference< XInterface >& _rxComponent, const Reference< XPropertyChangeListener >& _rxListener,
+        bool _bStart )
+    :m_xProps( _rxComponent, UNO_QUERY )
+    ,m_xListener( _rxListener )
+    ,m_bStartListening( _bStart )
+{
+    DBG_ASSERT( m_xProps.is() || !_rxComponent.is(), "DoPropertyListening::DoPropertyListening: valid component, but no property set!" );
+    DBG_ASSERT( m_xListener.is(), "DoPropertyListening::DoPropertyListening: invalid listener!" );
+}
+
+//..............................................................................
+void DoPropertyListening::handleListening( const ::rtl::OUString& _rPropertyName )
+{
+    if ( m_xProps.is() )
+        if ( m_bStartListening )
+            m_xProps->addPropertyChangeListener( _rPropertyName, m_xListener );
+        else
+            m_xProps->removePropertyChangeListener( _rPropertyName, m_xListener );
+}
+
+//------------------------------------------------------------------------------
+void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
+{
+    DoPropertyListening aListeningHandler( getModel(), this, _bStart );
+    aListeningHandler.handleListening( PROPERTY_TARGET_URL );
+    aListeningHandler.handleListening( PROPERTY_BUTTONTYPE );
+    aListeningHandler.handleListening( PROPERTY_ENABLED );
+}
+
+//------------------------------------------------------------------------------
+sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel ) throw ( RuntimeException )
+{
+    startOrStopModelPropertyListening( false );
+    sal_Bool bResult = OImageControl::setModel( _rxModel );
+    startOrStopModelPropertyListening( true );
+
+    m_bEnabledByPropertyValue = sal_True;
+    Reference< XPropertySet > xModelProps( _rxModel, UNO_QUERY );
+    if ( xModelProps.is() )
+        xModelProps->getPropertyValue( PROPERTY_ENABLED ) >>= m_bEnabledByPropertyValue;
+
+    modelFeatureUrlPotentiallyChanged( );
+
+    return bResult;
+}
+
+//------------------------------------------------------------------------------
+void OButtonControl::modelFeatureUrlPotentiallyChanged( )
+{
+    sal_Int32 nOldUrlFeatureId = m_nTargetUrlFeatureId;
+
+    // doe we have another TargetURL now? If so, we need to update our dispatches
+    m_nTargetUrlFeatureId = getModelUrlFeatureId( );
+    if ( nOldUrlFeatureId != m_nTargetUrlFeatureId )
+    {
+        invalidateSupportedFeaturesSet();
+        if ( !isDesignMode() )
+            updateDispatches( );
+    }
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent ) throw ( RuntimeException )
+{
+    if  (   _rEvent.PropertyName.equals( PROPERTY_TARGET_URL )
+        ||  _rEvent.PropertyName.equals( PROPERTY_BUTTONTYPE )
+        )
+    {
+        modelFeatureUrlPotentiallyChanged( );
+    }
+    else if ( _rEvent.PropertyName.equals( PROPERTY_ENABLED ) )
+    {
+        _rEvent.NewValue >>= m_bEnabledByPropertyValue;
+    }
+
+    OImageControl::propertyChange( _rEvent );
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    bool isFormControllerURL( const ::rtl::OUString& _rURL )
+    {
+        const sal_Int32 nPrefixLen = URL_CONTROLLER_PREFIX.length;
+        return  ( _rURL.getLength() > nPrefixLen )
+            &&  ( _rURL.compareToAscii( URL_CONTROLLER_PREFIX, nPrefixLen ) == 0 );
+    }
+}
+
+//------------------------------------------------------------------------------
+sal_Int32 OButtonControl::getModelUrlFeatureId( ) const
+{
+    sal_Int32 nFeatureId = -1;
+
+    // some URL related properties of the model
+    ::rtl::OUString sUrl;
+    FormButtonType eButtonType = FormButtonType_PUSH;
+
+    Reference< XPropertySet > xModelProps( const_cast< OButtonControl* >( this )->getModel(), UNO_QUERY );
+    if ( xModelProps.is() )
+    {
+        xModelProps->getPropertyValue( PROPERTY_TARGET_URL ) >>= sUrl;
+        xModelProps->getPropertyValue( PROPERTY_BUTTONTYPE ) >>= eButtonType;
+    }
+
+    // are we an URL button?
+    if ( eButtonType == FormButtonType_URL )
+    {
+        // is it a feature URL?
+        if ( isFormControllerURL( sUrl ) )
+        {
+            OFormNavigationMapper aMapper( getORB() );
+            nFeatureId = aMapper.getFeatureId( sUrl );
+        }
+    }
+
+    return nFeatureId;
+}
+
+//------------------------------------------------------------------
+void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
+{
+    OImageControl::setDesignMode( _bOn  );
+
+    if ( _bOn )
+        disconnectDispatchers();
+    else
+        connectDispatchers();
+        // this will connect if not already connected and just update else
+}
+
+//------------------------------------------------------------------------------
+void OButtonControl::getSupportedFeatures( ::std::vector< sal_Int32 >& /* [out] */ _rFeatureIds )
+{
+    if ( -1 != m_nTargetUrlFeatureId )
+        _rFeatureIds.push_back( m_nTargetUrlFeatureId );
+}
+
+//------------------------------------------------------------------
+void OButtonControl::featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled )
+{
+    if ( _nFeatureId == m_nTargetUrlFeatureId )
+    {
+        // enable or disable our peer, according to the new state
+        Reference< XVclWindowPeer > xPeer( getPeer(), UNO_QUERY );
+        if ( xPeer.is() )
+            xPeer->setProperty( PROPERTY_ENABLED, makeAny( m_bEnabledByPropertyValue ? _bEnabled : sal_False ) );
+            // if we're disabled according to our model's property, then
+            // we don't care for the feature state, but *are* disabled.
+            // If the model's property states that we're enabled, then we *do*
+            // care for the feature state
+    }
+
+    // base class
+    OFormNavigationHelper::featureStateChanged( _nFeatureId, _bEnabled );
+}
+
+//------------------------------------------------------------------
+void OButtonControl::allFeatureStatesChanged( )
+{
+    if ( -1 != m_nTargetUrlFeatureId )
+        // we have only one supported feature, so simulate it has changed ...
+        featureStateChanged( m_nTargetUrlFeatureId, isEnabled( m_nTargetUrlFeatureId ) );
+
+    // base class
+    OFormNavigationHelper::allFeatureStatesChanged( );
+}
+
+//------------------------------------------------------------------
+bool OButtonControl::isEnabled( sal_Int32 _nFeatureId ) const
+{
+    if ( const_cast< OButtonControl* >( this )->isDesignMode() )
+        // TODO: the model property?
+       return true;
+
+    return OFormNavigationHelper::isEnabled( _nFeatureId );
 }
 
 //.........................................................................
