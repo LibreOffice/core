@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-01 15:10:58 $
+ *  last change: $Author: ka $ $Date: 2002-03-05 13:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ extern BOOL bFastTransparent;
 // - Defines -
 // -----------
 
-#define IPOS( nPos )                ( Point( (nPos) * aSize.Width(), 0L ) )
 #define IMPSYSIMAGEITEM_NOTFREE     ( 0x01 )
 #define IMPSYSIMAGEITEM_MASK        ( 0x02 )
 #define DISA_ALL                    ( 0xffff )
@@ -207,8 +206,9 @@ void ImplImageBmp::Expand( USHORT nGrowSize )
 
 void ImplImageBmp::Replace( USHORT nPos, USHORT nSrcPos )
 {
-    const Rectangle aSrcRect( IPOS( nSrcPos ), aSize );
-    const Rectangle aDstRect( IPOS( nPos ), aSize );
+    const Point     aSrcPos( nSrcPos * aSize.Width(), 0L ), aPos( nPos * aSize.Width(), 0L );
+    const Rectangle aSrcRect( aSrcPos, aSize );
+    const Rectangle aDstRect( aPos, aSize );
 
     ImplClearCaches();
 
@@ -229,8 +229,9 @@ void ImplImageBmp::Replace( USHORT nPos, USHORT nSrcPos )
 
 void ImplImageBmp::Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT nSrcPos )
 {
-    const Rectangle aSrcRect( IPOS( nSrcPos ), aSize );
-    const Rectangle aDstRect( IPOS( nPos ), aSize );
+    const Point     aSrcPos( nSrcPos * aSize.Width(), 0L ), aPos( nPos * aSize.Width(), 0L );
+    const Rectangle aSrcRect( aSrcPos, aSize );
+    const Rectangle aDstRect( aPos, aSize );
 
     ImplClearCaches();
 
@@ -251,9 +252,9 @@ void ImplImageBmp::Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT n
 
 void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp )
 {
-    Point aPoint;
-    const Rectangle aSrcRect( aPoint, aSize );
-    const Rectangle aDstRect( IPOS( nPos ), aSize );
+    const Point     aNullPos, aPos( nPos * aSize.Width(), 0L );
+    const Rectangle aSrcRect( aNullPos, aSize );
+    const Rectangle aDstRect( aPos, aSize );
 
     ImplClearCaches();
 
@@ -265,9 +266,9 @@ void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp )
 
 void ImplImageBmp::Replace( USHORT nPos, const Bitmap& rBmp, const Bitmap& rMaskBmp )
 {
-    Point aPoint;
-    const Rectangle aSrcRect( aPoint, aSize );
-    const Rectangle aDstRect( IPOS( nPos ), aSize );
+    const Point     aNullPos, aPos( nPos * aSize.Width(), 0L );
+    const Rectangle aSrcRect( aNullPos, aSize );
+    const Rectangle aDstRect( aPos, aSize );
 
     ImplClearCaches();
 
@@ -313,8 +314,9 @@ void ImplImageBmp::Merge( USHORT nPos, USHORT nSrcPos )
     {
         ImplClearCaches();
 
-        const Rectangle     aSrcRect( IPOS( nSrcPos ), aSize );
-        const Rectangle     aDstRect( IPOS( nPos ), aSize );
+        const Point         aSrcPos( nSrcPos * aSize.Width(), 0L ), aPos( nPos * aSize.Width(), 0L );
+        const Rectangle     aSrcRect( aSrcPos, aSize );
+        const Rectangle     aDstRect( aPos, aSize );
         BitmapWriteAccess*  pBmp = aBmp.AcquireWriteAccess();
         BitmapWriteAccess*  pMsk = aMask.AcquireWriteAccess();
 
@@ -372,8 +374,9 @@ Bitmap ImplImageBmp::GetBitmap( USHORT nPosCount, USHORT* pPosAry ) const
 
     for( USHORT i = 0; i < nPosCount; i++ )
     {
-        const Rectangle aSrcRect( IPOS( pPosAry[ i ] ), aSize );
-        const Rectangle aDstRect( IPOS( i ), aSize );
+        const Point     aSrcPos( pPosAry[ i ] * aSize.Width(), 0L ), aPos( i * aSize.Width(), 0L );
+        const Rectangle aSrcRect( aSrcPos, aSize );
+        const Rectangle aDstRect( aPos, aSize );
 
         aNewBmp.CopyPixel( aDstRect, aSrcRect, &aBmp );
     }
@@ -396,8 +399,9 @@ Bitmap ImplImageBmp::GetMaskBitmap( USHORT nPosCount, USHORT* pPosAry ) const
 
     for( USHORT i = 0; i < nPosCount; i++ )
     {
-        const Rectangle aSrcRect( IPOS( pPosAry[ i ] ), aSize );
-        const Rectangle aDstRect( IPOS( i ), aSize );
+        const Point     aSrcPos( pPosAry[ i ] * aSize.Width(), 0L ), aPos( i * aSize.Width(), 0L );
+        const Rectangle aSrcRect( aSrcPos, aSize );
+        const Rectangle aDstRect( aPos, aSize );
 
         aNewMask.CopyPixel( aDstRect, aSrcRect, &aMask );
     }
@@ -427,6 +431,8 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 {
     if( pOutDev->IsDeviceOutputNecessary() )
     {
+        const Point aPos( nPos * aSize.Width(), 0 );
+
 #ifndef REMOTE_APPSERVER
 
         if( !aBmpDisp && !!aBmp )
@@ -471,9 +477,8 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 
             if ( nStyle & IMAGE_DRAW_DISABLE )
             {
-                Point aOutPos1( aOutPos.X()+1, aOutPos.Y()+1 );
-                const Point aPos( IPOS( nPos) );
-                const StyleSettings& rSettings = pOutDev->GetSettings().GetStyleSettings();
+                Point                   aOutPos1( aOutPos.X()+1, aOutPos.Y()+1 );
+                const StyleSettings&    rSettings = pOutDev->GetSettings().GetStyleSettings();
 
                 if( !aDisa )
                 {
@@ -501,7 +506,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                 if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM | IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
                 {
                     Bitmap          aTmpBmp( aBmp ), aTmpMsk( aMask );
-                    const Rectangle aCropRect( Rectangle( IPOS( nPos ), aSize ) );
+                    const Rectangle aCropRect( aPos, aSize );
 
                     aTmpBmp.Crop( aCropRect );
                     aTmpMsk.Crop( aCropRect );
@@ -605,7 +610,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                 }
 
                 if( !bDrawn )
-                    pOutDev->DrawBitmapEx( aOutPos, aOutSize, IPOS( nPos), aSize, aBmpEx );
+                    pOutDev->DrawBitmapEx( aOutPos, aOutSize, aPos, aSize, aBmpEx );
             }
 
             pOutDev->mbMap = bOldMap;
@@ -615,11 +620,9 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 #endif
         }
         else if( pSize )
-            pOutDev->DrawBitmap( rPos, *pSize,
-                                 IPOS( nPos), aSize, aBmpEx.GetBitmap() );
+            pOutDev->DrawBitmap( rPos, *pSize, aPos, aSize, aBmpEx.GetBitmap() );
         else
-            pOutDev->DrawBitmap( rPos, pOutDev->PixelToLogic( aSize ),
-                                 IPOS( nPos), aSize, aBmpEx.GetBitmap() );
+            pOutDev->DrawBitmap( rPos, pOutDev->PixelToLogic( aSize ), aPos, aSize, aBmpEx.GetBitmap() );
     }
 }
 
@@ -646,7 +649,7 @@ void ImplImageBmp::ImplUpdateDisaBmp( USHORT nPos )
 
         if( DISA_ALL != nPos )
         {
-            const Point aPos( IPOS( nPos ) );
+            const Point aPos( nPos * aSize.Width(), 0 );
 
             nLeft = aPos.X();
             nTop = aPos.Y();
@@ -744,7 +747,7 @@ void ImplImageBmp::ImplUpdatePaintBmp( USHORT nPos )
 
         if( PAINT_ALL != nPos )
         {
-            const Point aPos( IPOS( nPos ) );
+            const Point aPos( nPos * aSize.Width(), 0 );
 
             nLeft = aPos.X();
             nTop = aPos.Y();
