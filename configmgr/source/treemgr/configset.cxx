@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:18:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 08:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,17 @@ NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, U
 
     UnoAny aValidValue = implValidateValue(aElementNode, aNewValue);
 
-    ElementTreeHolder aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue,false);
+    ElementNodeRef aElementTree = aElement.getElementTree(m_aParentTree.getDataAccessor()).getTree();
+
+    ElementTreeHolder aNewElement;
+    if(aElementTree.getAttributes(aElementTree.getRootNode()).isRemovable())
+    {
+        aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue,true);
+    }
+    else
+    {
+        aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue,false);
+    }
 
     std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceValueImpl(aName, aNewElement) );
 
