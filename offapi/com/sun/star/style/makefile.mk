@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: cl $ $Date: 2001-01-28 16:25:18 $
+#   last change: $Author: os $ $Date: 2001-02-13 07:58:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ IDLFILES=\
     NumberingLevel.idl\
     NumberingRule.idl\
     NumberingType.idl\
+    PageProperties.idl\
     PageStyleLayout.idl\
     ParagraphAdjust.idl\
     ParagraphStyle.idl\
