@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-22 13:02:38 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 17:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2876,8 +2876,20 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
             DBG_ASSERT( pMenu->ImplIsVisible( n ), "Highlight: Item not visible!" );
             if ( pData->eType != MENUITEM_SEPARATOR )
             {
+                BOOL bRestoreLineColor = FALSE;
+                Color oldLineColor;
                 if ( bHighlight )
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                {
+                    if( pData->bEnabled )
+                        SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                    else
+                    {
+                        SetFillColor();
+                        oldLineColor = GetLineColor();
+                        SetLineColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                        bRestoreLineColor = TRUE;
+                    }
+                }
                 else
                     SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
 
@@ -2889,6 +2901,8 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                 }
                 DrawRect( aRect );
                 pMenu->ImplPaint( this, nBorder, nStartY, pData, bHighlight );
+                if( bRestoreLineColor )
+                    SetLineColor( oldLineColor );
             }
             return;
         }
