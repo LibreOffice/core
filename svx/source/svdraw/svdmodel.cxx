@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-06 10:41:03 $
+ *  last change: $Author: aw $ $Date: 2001-12-12 18:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,11 @@
 
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
+#endif
+
+// #95114#
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -886,18 +891,73 @@ void SdrModel::SetTextDefaults() const
     SetTextDefaults( pItemPool, nDefTextHgt );
 }
 
+void ImpGetDefaultFontsLanguage( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rComplex)
+{
+    const USHORT nItemCnt = 3;
+    static struct {
+        USHORT nFntType, nLanguage;
+    }  aOutTypeArr[ nItemCnt ] = {
+        {  DEFAULTFONT_LATIN_TEXT, LANGUAGE_ENGLISH_US },
+        {  DEFAULTFONT_CJK_TEXT, LANGUAGE_ENGLISH_US },
+        {  DEFAULTFONT_CTL_TEXT, LANGUAGE_ARABIC_SAUDI_ARABIA }
+    };
+    SvxFontItem* aItemArr[ nItemCnt ] = { &rLatin, &rAsian, &rComplex };
+
+    for( USHORT n = 0; n < nItemCnt; ++n )
+    {
+        Font aFnt( OutputDevice::GetDefaultFont(
+            aOutTypeArr[ n ].nFntType, aOutTypeArr[ n ].nLanguage,
+            DEFAULTFONT_FLAGS_ONLYONE, 0 ));
+        SvxFontItem* pI = aItemArr[ n ];
+        pI->GetFamily() = aFnt.GetFamily();
+        pI->GetFamilyName() = aFnt.GetName();
+        pI->GetStyleName().Erase();
+        pI->GetPitch() = aFnt.GetPitch();
+        pI->GetCharSet() = aFnt.GetCharSet();
+    }
+}
+
 void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt )
 {
+    // #95114# set application-language specific dynamic pool language defaults
     SvxFontItem aSvxFontItem;
-    SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
-    SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
-    GetDefaultFonts( aSvxFontItem, aSvxFontItemCJK, aSvxFontItemCTL );
-    pItemPool->SetPoolDefaultItem( aSvxFontItem );
-    pItemPool->SetPoolDefaultItem( aSvxFontItemCJK );
-    pItemPool->SetPoolDefaultItem( aSvxFontItemCTL );
+    SvxFontItem aSvxFontItemCJK(EE_CHAR_FONTINFO_CJK);
+    SvxFontItem aSvxFontItemCTL(EE_CHAR_FONTINFO_CTL);
+    sal_uInt16 nLanguage(Application::GetSettings().GetLanguage());
+
+    // get DEFAULTFONT_LATIN_TEXT and set at pool as dynamic default
+    Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
+    aSvxFontItem.GetFamily() = aFont.GetFamily();
+    aSvxFontItem.GetFamilyName() = aFont.GetName();
+    aSvxFontItem.GetStyleName().Erase();
+    aSvxFontItem.GetPitch() = aFont.GetPitch();
+    aSvxFontItem.GetCharSet() = aFont.GetCharSet();
+    pItemPool->SetPoolDefaultItem(aSvxFontItem);
+
+    // get DEFAULTFONT_CJK_TEXT and set at pool as dynamic default
+    Font aFontCJK(OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
+    aSvxFontItemCJK.GetFamily() = aFontCJK.GetFamily();
+    aSvxFontItemCJK.GetFamilyName() = aFontCJK.GetName();
+    aSvxFontItemCJK.GetStyleName().Erase();
+    aSvxFontItemCJK.GetPitch() = aFontCJK.GetPitch();
+    aSvxFontItemCJK.GetCharSet() = aFontCJK.GetCharSet();
+    pItemPool->SetPoolDefaultItem(aSvxFontItemCJK);
+
+    // get DEFAULTFONT_CTL_TEXT and set at pool as dynamic default
+    Font aFontCTL(OutputDevice::GetDefaultFont(DEFAULTFONT_CTL_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
+    aSvxFontItemCTL.GetFamily() = aFontCTL.GetFamily();
+    aSvxFontItemCTL.GetFamilyName() = aFontCTL.GetName();
+    aSvxFontItemCTL.GetStyleName().Erase();
+    aSvxFontItemCTL.GetPitch() = aFontCTL.GetPitch();
+    aSvxFontItemCTL.GetCharSet() = aFontCTL.GetCharSet();
+    pItemPool->SetPoolDefaultItem(aSvxFontItemCTL);
+
+    // set dynamic FontHeight defaults
     pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT ) );
     pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
     pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+
+    // set FontColor defaults
     pItemPool->SetPoolDefaultItem( SvxColorItem(SdrEngineDefaults::GetFontColor()) );
 }
 
