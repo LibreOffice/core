@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:35 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,10 @@
 #include    <codemaker/typemanager.hxx>
 #endif
 
-using namespace rtl;
+#include "registry/reader.hxx"
+#include "registry/version.h"
 
-RegistryTypeReaderLoader & getRegistryTypeReaderLoader()
-{
-    static RegistryTypeReaderLoader aLoader;
-    return aLoader;
-}
+using namespace rtl;
 
 TypeManager::TypeManager()
 {
@@ -201,10 +198,10 @@ sal_Bool RegistryTypeManager::init(
     return sal_True;
 }
 
-TypeReader RegistryTypeManager::getTypeReader(
+typereg::Reader RegistryTypeManager::getTypeReader(
     const OString& name, sal_Bool * pIsExtraType )
 {
-    TypeReader reader;
+    typereg::Reader reader;
     RegistryKey key(searchTypeKey(name, pIsExtraType));
 
     if (key.isValid())
@@ -217,9 +214,8 @@ TypeReader RegistryTypeManager::getTypeReader(
             sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
             if (!key.getValue(OUString(), pBuffer))
             {
-                RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
-
-                reader = TypeReader(rReaderLoader, pBuffer, valueSize, sal_True);
+                reader = typereg::Reader(
+                    pBuffer, valueSize, true, TYPEREG_VERSION_1);
             }
             rtl_freeMemory(pBuffer);
         }
@@ -246,9 +242,8 @@ RTTypeClass RegistryTypeManager::getTypeClass(const OString& name)
                 sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
                 if (!key.getValue(OUString(), pBuffer))
                 {
-                    RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
-
-                    TypeReader reader(rReaderLoader, pBuffer, valueSize, sal_False);
+                    typereg::Reader reader(
+                        pBuffer, valueSize, false, TYPEREG_VERSION_1);
 
                     RTTypeClass ret = reader.getTypeClass();
 
