@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:24:16 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
 #endif
 #ifndef _SFX_MISCCFG_HXX
 #include <svtools/misccfg.hxx>
@@ -293,6 +296,9 @@ using namespace ::com::sun::star::uno;
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -396,6 +402,9 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
         //    aStor->SetVersion( (long)pFlt->GetVersion() );
     }
+    // #i30171# set the UpdateDocMode at the SwDocShell
+    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+    nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
 
     if( pFlt->GetDefaultTemplate().Len() )
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
