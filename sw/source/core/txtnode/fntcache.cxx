@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-14 09:04:37 $
+ *  last change: $Author: od $ $Date: 2002-08-28 12:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,9 +754,15 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     const BOOL bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrmRTL();
     const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
-    const BOOL bBidiPor = ( bSwitchL2R == ( TEXT_LAYOUT_BIDI_STRONG == nMode ) );
+    const BOOL bBidiPor = ( bSwitchL2R == ( TEXT_LAYOUT_COMPLEX_DISABLED == nMode ) );
 
-    // be sure to have the correct layout mode at the printer
+    // If font is CTL font and complex text layout is disabled at the output
+    // device, we have to correct this
+    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
+         TEXT_LAYOUT_COMPLEX_DISABLED == nMode )
+        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+
+    // be sure to have the same value at the printer
     if ( pPrinter )
         pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
 #endif
@@ -1621,7 +1627,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                            rInf.GetText().Len();
 
 #ifdef BIDI
-    // be sure to have the correct layout mode at the printer
+    // If font is CTL font and complex text layout is disabled at the output
+    // device, we have to correct this
+    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
+         TEXT_LAYOUT_COMPLEX_DISABLED == rInf.GetpOut()->GetLayoutMode() )
+        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+
+    // be sure to have the same value at the printer
     if ( pPrinter )
         pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
 #endif
@@ -1778,6 +1790,14 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         nSpaceAdd = 0;
     }
     long *pKernArray = new long[ rInf.GetLen() ];
+
+#ifdef BIDI
+    // If font is CTL font and complex text layout is disabled at the output
+    // device, we have to correct this
+    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
+         TEXT_LAYOUT_COMPLEX_DISABLED == rInf.GetpOut()->GetLayoutMode() )
+        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+#endif
 
     if ( pPrinter )
     {
@@ -2178,7 +2198,7 @@ void SwDrawTextInfo::Shift( USHORT nDir )
 
 #ifdef BIDI
     const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) ==
-                          ( TEXT_LAYOUT_BIDI_STRONG == GetpOut()->GetLayoutMode() );
+                          ( TEXT_LAYOUT_COMPLEX_DISABLED == GetpOut()->GetLayoutMode() );
 
     nDir = bBidiPor ?
             1800 :
@@ -2245,9 +2265,25 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
             {
                 const SvxBrushItem* pItem;
                 SwRect aOrigBackRect;
-                if( GetFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) &&
-                    ! pItem->GetColor().GetTransparency() )
-                    pCol = &pItem->GetColor();
+
+                /// OD 21.08.2002
+                ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
+                ///     - see implementation in /core/layout/paintfrm.cxx
+                /// OD 21.08.2002 #99657#
+                ///     There is a user defined setting for the background, if there
+                ///     is a background brush and its color is *not* "no fill"/"auto fill".
+                ///     Because [GetBackgroundBrush(...)] doesn't return a brush (pItem)
+                ///     with color "no fill"/"auto fill" respectively a color (pCol)
+                ///     that is "no fill"/"auto fill", it is not checked, but asserted.
+                if( GetFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) )
+                {
+                    if ( !pCol )
+                    {
+                        pCol = &pItem->GetColor();
+                    }
+                    ASSERT ( pCol->GetColor() != COL_TRANSPARENT,
+                             "Get 'no fill'/'auto fill' color from SwFrm::GetBackgroundBrush(...)");
+                }
                 else
                     pCol = NULL;
             }

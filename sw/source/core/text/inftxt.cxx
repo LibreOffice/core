@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-14 09:06:34 $
+ *  last change: $Author: od $ $Date: 2002-08-28 12:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     }
     else
     {
-        pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+        pOut->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
         nDirection = DIR_LEFT2RIGHT;
     }
 #endif
@@ -676,12 +676,29 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
     {
         const SvxBrushItem* pItem;
         SwRect aOrigBackRect;
-        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) &&
-            ! pItem->GetColor().GetTransparency() )
-            pCol = &pItem->GetColor();
+
+        /// OD 21.08.2002
+        ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
+        ///     - see implementation in /core/layout/paintfrm.cxx
+        /// OD 21.08.2002 #99657#
+        ///     There is a background color, if there is a background brush and
+        ///     its color is *not* "no fill"/"auto fill".
+        ///     Because [GetBackgroundBrush(...)] does *not* return a brush (pItem)
+        ///     with color "no fill"/"auto fill" respectively a color (pCol)
+        ///     that is "no fill"/"auto fill", it is not checked, but asserted.
+        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) )
+        {
+            if ( !pCol )
+            {
+                pCol = &pItem->GetColor();
+            }
+            ASSERT ( pCol->GetColor() != COL_TRANSPARENT, "Get 'no fill'/'auto fill' color from SwFrm::GetBackgroundBrush(...)");
+        }
         else
             pCol = NULL;
     }
+
+
     if( !pCol )
         pCol = &aGlobalRetoucheColor;
 
@@ -1224,7 +1241,6 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawBackGround()
  *************************************************************************/
-
 void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {
     ASSERT( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
