@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:59:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,6 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
 static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DROP_DOWN[] = "DropDown";
 
-
 SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
 {
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SENDER, FIELD_ID_SENDER ),
@@ -379,6 +378,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     // deprecated fields
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_TABLE_FORMULA, FIELD_ID_TABLE_FORMULA ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DROP_DOWN, FIELD_ID_DROP_DOWN ),
+
     ENUM_STRING_MAP_END()
 };
 
@@ -419,6 +419,8 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
           RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.")),
       sFieldMasterPrefix(
           RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FieldMaster.")),
+      sPresentationServicePrefix(
+          RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.")),
       sPropertyContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
       sPropertyIsFixed(RTL_CONSTASCII_USTRINGPARAM("IsFixed")),
       sPropertyFullName(RTL_CONSTASCII_USTRINGPARAM("FullName")),
@@ -532,6 +534,40 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
         ++pNames;
     }
 
+    // if this is not a normal text field, check if its a presentation text field
+    if( sFieldName.getLength() == 0 )
+    {
+        const OUString* pNames = aServices.getConstArray();
+        sal_Int32 nCount = aServices.getLength();
+        // search for TextField service name
+        while( nCount-- )
+        {
+            if( 0 == pNames->compareTo(sPresentationServicePrefix, sPresentationServicePrefix.getLength()))
+            {
+                // TextField found => postfix is field type!
+                sFieldName = pNames->copy(sPresentationServicePrefix.getLength());
+                break;
+            }
+
+            ++pNames;
+        }
+
+        if( sFieldName.getLength() != 0 )
+        {
+            if( sFieldName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "Header" ) ) == 0 )
+            {
+                return FIELD_ID_DRAW_HEADER;
+            }
+            else if( sFieldName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "Footer" ) ) == 0 )
+            {
+                return FIELD_ID_DRAW_FOOTER;
+            }
+            else if( sFieldName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateTime" ) ) == 0 )
+            {
+                return FIELD_ID_DRAW_DATE_TIME;
+            }
+        }
+    }
 
     // map postfix of service name to field ID
     DBG_ASSERT(sFieldName.getLength()>0, "no TextField service found!");
@@ -855,6 +891,9 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_SEQUENCE_DECL:
     case FIELD_ID_PLACEHOLDER:
     case FIELD_ID_UNKNOWN:
+    case FIELD_ID_DRAW_HEADER:
+    case FIELD_ID_DRAW_FOOTER:
+    case FIELD_ID_DRAW_DATE_TIME:
     default:
         DBG_ERROR("unkown field type/field has no content");
         return sal_True; // invalid info; string in case of doubt
@@ -1062,6 +1101,9 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_MEASURE:
     case FIELD_ID_URL:
     case FIELD_ID_DROP_DOWN:
+    case FIELD_ID_DRAW_DATE_TIME:
+    case FIELD_ID_DRAW_FOOTER:
+    case FIELD_ID_DRAW_HEADER:
         ; // no formats for these fields!
         break;
 
@@ -1871,6 +1913,24 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetStringSequenceProperty( sPropertyItems, rPropSet ),
             GetStringProperty( sPropertySelectedItem, rPropSet ) );
         GetExport().Characters( sPresentation );
+    }
+    break;
+
+    case FIELD_ID_DRAW_HEADER:
+    {
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, XML_HEADER, sal_False, sal_False );
+    }
+    break;
+
+    case FIELD_ID_DRAW_FOOTER:
+    {
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, XML_FOOTER, sal_False, sal_False );
+    }
+    break;
+
+    case FIELD_ID_DRAW_DATE_TIME:
+    {
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, XML_DATE_TIME, sal_False, sal_False );
     }
     break;
 
