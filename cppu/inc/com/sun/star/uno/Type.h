@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:45 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace uno
 
 /** Enum defining UNO_TYPE_NO_ACQUIRE for type description reference transfer.
 */
-enum __UnoType_NoAcquire
+enum UnoType_NoAcquire
 {
     /** This enum value can be used for creating a Type object granting a given type description
         reference, i.e. transferring ownership to it.
@@ -157,7 +157,7 @@ public:
         @param pType C type description reference
         @param dummy UNO_TYPE_NO_ACQUIRE to force obvious distinction to other constructors
     */
-    inline Type( typelib_TypeDescriptionReference * pType, __UnoType_NoAcquire ) SAL_THROW( () );
+    inline Type( typelib_TypeDescriptionReference * pType, UnoType_NoAcquire ) SAL_THROW( () );
     /** Constructor: Type is (copy) constructed by given C type description reference
         without acquiring it.
 

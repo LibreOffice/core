@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,20 +58,19 @@
  *
  *
  ************************************************************************/
-#ifndef __COPY_HXX__
-#define __COPY_HXX__
+#ifndef COPY_HXX
+#define COPY_HXX
 
 #include "prim.hxx"
 #include "constr.hxx"
 
+
 namespace cppu
 {
-
 
 //##################################################################################################
 //#### copy construction ###########################################################################
 //##################################################################################################
-
 
 //--------------------------------------------------------------------------------------------------
 void copyConstructStruct(
@@ -80,7 +79,7 @@ void copyConstructStruct(
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW ( () );
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructStruct(
+inline void _copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
@@ -119,7 +118,7 @@ inline void __copyConstructStruct(
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructArray(
+inline void _copyConstructArray(
     void * pDest, void * pSource,
     typelib_ArrayTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
@@ -153,13 +152,13 @@ inline void __copyConstructArray(
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructUnion(
+inline void _copyConstructUnion(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW ( () )
 {
-    typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pSource, pTypeDescr );
+    typelib_TypeDescriptionReference * pSetType = _unionGetSetType( pSource, pTypeDescr );
     if (mapping)
     {
         ::uno_type_copyAndConvertData(
@@ -184,13 +183,13 @@ void copyConstructSequence(
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW ( () );
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructAnyFromData(
+inline void _copyConstructAnyFromData(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW ( () )
 {
-    __TYPE_ACQUIRE( pType );
+    TYPE_ACQUIRE( pType );
     pDestAny->pType = pType;
 
     switch (pType->eTypeClass)
@@ -260,7 +259,7 @@ inline void __copyConstructAnyFromData(
         *(rtl_uString **)&pDestAny->pReserved = *(rtl_uString **)pSource;
         break;
     case typelib_TypeClass_TYPE:
-        __TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
+        TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
         pDestAny->pData = &pDestAny->pReserved;
         *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = *(typelib_TypeDescriptionReference **)pSource;
         break;
@@ -284,7 +283,7 @@ inline void __copyConstructAnyFromData(
         if (pTypeDescr)
         {
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            __copyConstructStruct(
+            _copyConstructStruct(
                 pDestAny->pData, pSource,
                 (typelib_CompoundTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -293,7 +292,7 @@ inline void __copyConstructAnyFromData(
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            __copyConstructStruct(
+            _copyConstructStruct(
                 pDestAny->pData, pSource,
                 (typelib_CompoundTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -304,7 +303,7 @@ inline void __copyConstructAnyFromData(
         if (pTypeDescr)
         {
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            __copyConstructArray(
+            _copyConstructArray(
                 pDestAny->pData, pSource,
                 (typelib_ArrayTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -313,7 +312,7 @@ inline void __copyConstructAnyFromData(
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            __copyConstructArray(
+            _copyConstructArray(
                 pDestAny->pData, pSource,
                 (typelib_ArrayTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -324,13 +323,13 @@ inline void __copyConstructAnyFromData(
         if (pTypeDescr)
         {
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            __copyConstructUnion( pDestAny->pData, pSource, pTypeDescr, acquire, mapping );
+            _copyConstructUnion( pDestAny->pData, pSource, pTypeDescr, acquire, mapping );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-            __copyConstructUnion( pDestAny->pData, pSource, pTypeDescr, acquire, mapping );
+            _copyConstructUnion( pDestAny->pData, pSource, pTypeDescr, acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
@@ -357,17 +356,17 @@ inline void __copyConstructAnyFromData(
         pDestAny->pData = &pDestAny->pReserved;
         if (mapping)
         {
-            pDestAny->pReserved = __map( *(void **)pSource, pType, pTypeDescr, mapping );
+            pDestAny->pReserved = _map( *(void **)pSource, pType, pTypeDescr, mapping );
         }
         else
         {
-            __acquire( pDestAny->pReserved = *(void **)pSource, acquire );
+            _acquire( pDestAny->pReserved = *(void **)pSource, acquire );
         }
         break;
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructAny(
+inline void _copyConstructAny(
     uno_Any * pDestAny, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
@@ -375,7 +374,7 @@ inline void __copyConstructAny(
 {
     if (typelib_TypeClass_VOID == pType->eTypeClass)
     {
-        __CONSTRUCT_EMPTY_ANY( pDestAny );
+        CONSTRUCT_EMPTY_ANY( pDestAny );
     }
     else
     {
@@ -386,7 +385,7 @@ inline void __copyConstructAny(
                 pType = ((uno_Any *)pSource)->pType;
                 if (typelib_TypeClass_VOID == pType->eTypeClass)
                 {
-                    __CONSTRUCT_EMPTY_ANY( pDestAny );
+                    CONSTRUCT_EMPTY_ANY( pDestAny );
                     return;
                 }
                 pTypeDescr = 0;
@@ -394,17 +393,17 @@ inline void __copyConstructAny(
             }
             else
             {
-                __CONSTRUCT_EMPTY_ANY( pDestAny );
+                CONSTRUCT_EMPTY_ANY( pDestAny );
                 return;
             }
         }
         if (pSource)
         {
-            __copyConstructAnyFromData( pDestAny, pSource, pType, pTypeDescr, acquire, mapping );
+            _copyConstructAnyFromData( pDestAny, pSource, pType, pTypeDescr, acquire, mapping );
         }
         else // default construct
         {
-            __TYPE_ACQUIRE( pType );
+            TYPE_ACQUIRE( pType );
             pDestAny->pType = pType;
             switch (pType->eTypeClass)
             {
@@ -474,7 +473,7 @@ inline void __copyConstructAny(
                 break;
             case typelib_TypeClass_TYPE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = __getVoidType();
+                *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = _getVoidType();
                 break;
             case typelib_TypeClass_ENUM:
                 pDestAny->pData = &pDestAny->pReserved;
@@ -499,14 +498,14 @@ inline void __copyConstructAny(
                 if (pTypeDescr)
                 {
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    __defaultConstructStruct(
+                    _defaultConstructStruct(
                         pDestAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr );
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    __defaultConstructStruct(
+                    _defaultConstructStruct(
                         pDestAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr );
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
@@ -515,14 +514,14 @@ inline void __copyConstructAny(
                 if (pTypeDescr)
                 {
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    __defaultConstructArray(
+                    _defaultConstructArray(
                         pDestAny->pData, (typelib_ArrayTypeDescription *)pTypeDescr );
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    __defaultConstructArray(
+                    _defaultConstructArray(
                         pDestAny->pData, (typelib_ArrayTypeDescription *)pTypeDescr );
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
@@ -531,19 +530,19 @@ inline void __copyConstructAny(
                 if (pTypeDescr)
                 {
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    __defaultConstructUnion( pDestAny->pData, pTypeDescr );
+                    _defaultConstructUnion( pDestAny->pData, pTypeDescr );
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
-                    __defaultConstructUnion( pDestAny->pData, pTypeDescr );
+                    _defaultConstructUnion( pDestAny->pData, pTypeDescr );
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
             case typelib_TypeClass_SEQUENCE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(uno_Sequence **)&pDestAny->pReserved = __getEmptySequence();
+                *(uno_Sequence **)&pDestAny->pReserved = _getEmptySequence();
                 break;
             case typelib_TypeClass_INTERFACE:
                 pDestAny->pData = &pDestAny->pReserved;
@@ -554,7 +553,7 @@ inline void __copyConstructAny(
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructSequence(
+inline void _copyConstructSequence(
     uno_Sequence ** ppDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
@@ -585,11 +584,11 @@ inline void __copyConstructSequence(
                     typelib_TypeDescriptionReference * pType = pSourceElements[nPos].pType;
                     if (typelib_TypeClass_VOID == pType->eTypeClass)
                     {
-                        __CONSTRUCT_EMPTY_ANY( &pDestElements[nPos] );
+                        CONSTRUCT_EMPTY_ANY( &pDestElements[nPos] );
                     }
                     else
                     {
-                        __copyConstructAnyFromData(
+                        _copyConstructAnyFromData(
                             &pDestElements[nPos], pSourceElements[nPos].pData,
                             pType, 0,
                             acquire, mapping );
@@ -609,7 +608,7 @@ inline void __copyConstructSequence(
                 char * pElements = pDest->elements;
                 for ( sal_Int32 nPos = nElements; nPos--; )
                 {
-                    __copyConstructStruct(
+                    _copyConstructStruct(
                         pElements + (nPos * nElementSize),
                         pSourceElements + (nPos * nElementSize),
                         (typelib_CompoundTypeDescription *)pElementTypeDescr,
@@ -629,7 +628,7 @@ inline void __copyConstructSequence(
                 char * pElements = pDest->elements;
                 for ( sal_Int32 nPos = nElements; nPos--; )
                 {
-                    __copyConstructArray(
+                    _copyConstructArray(
                         pElements + (nPos * nElementSize),
                         pSourceElements + (nPos * nElementSize),
                         (typelib_ArrayTypeDescription *)pElementTypeDescr,
@@ -653,7 +652,7 @@ inline void __copyConstructSequence(
                     char * pDest = pElements + (nPos * nElementSize);
                     char * pSource = pSourceElements + (nPos * nElementSize);
 
-                    typelib_TypeDescriptionReference * pSetType = __unionGetSetType(
+                    typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
                         pSource, pElementTypeDescr );
                     ::uno_type_copyAndConvertData(
                         pDest + nValueOffset, pSource + nValueOffset,
@@ -711,7 +710,7 @@ inline void __copyConstructSequence(
                 {
                     for ( sal_Int32 nPos = nElements; nPos--; )
                     {
-                        __acquire( ((void **)pElements)[nPos] = pSourceElements[nPos], acquire );
+                        _acquire( ((void **)pElements)[nPos] = pSourceElements[nPos], acquire );
                     }
                 }
                 break;
@@ -732,7 +731,7 @@ inline void __copyConstructSequence(
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructData(
+inline void _copyConstructData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
@@ -777,11 +776,11 @@ inline void __copyConstructData(
         *(rtl_uString **)pDest = *(rtl_uString **)pSource;
         break;
     case typelib_TypeClass_TYPE:
-        __TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
+        TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
         *(typelib_TypeDescriptionReference **)pDest = *(typelib_TypeDescriptionReference **)pSource;
         break;
     case typelib_TypeClass_ANY:
-        __copyConstructAny(
+        _copyConstructAny(
             (uno_Any *)pDest, ((uno_Any *)pSource)->pData,
             ((uno_Any *)pSource)->pType, 0,
             acquire, mapping );
@@ -798,7 +797,7 @@ inline void __copyConstructData(
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
         {
-            __copyConstructStruct(
+            _copyConstructStruct(
                 pDest, pSource,
                 (typelib_CompoundTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -806,7 +805,7 @@ inline void __copyConstructData(
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __copyConstructStruct(
+            _copyConstructStruct(
                 pDest, pSource,
                 (typelib_CompoundTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -816,7 +815,7 @@ inline void __copyConstructData(
     case typelib_TypeClass_ARRAY:
         if (pTypeDescr)
         {
-            __copyConstructArray(
+            _copyConstructArray(
                 pDest, pSource,
                 (typelib_ArrayTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -824,7 +823,7 @@ inline void __copyConstructData(
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __copyConstructArray(
+            _copyConstructArray(
                 pDest, pSource,
                 (typelib_ArrayTypeDescription *)pTypeDescr,
                 acquire, mapping );
@@ -834,12 +833,12 @@ inline void __copyConstructData(
     case typelib_TypeClass_UNION:
         if (pTypeDescr)
         {
-            __copyConstructUnion( pDest, pSource, pTypeDescr, acquire, mapping );
+            _copyConstructUnion( pDest, pSource, pTypeDescr, acquire, mapping );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __copyConstructUnion( pDest, pSource, pTypeDescr, acquire, mapping );
+            _copyConstructUnion( pDest, pSource, pTypeDescr, acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
@@ -848,7 +847,7 @@ inline void __copyConstructData(
         {
             if (pTypeDescr)
             {
-                __copyConstructSequence(
+                _copyConstructSequence(
                     (uno_Sequence **)pDest, *(uno_Sequence **)pSource,
                     ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                     acquire, mapping );
@@ -856,7 +855,7 @@ inline void __copyConstructData(
             else
             {
                 TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                __copyConstructSequence(
+                _copyConstructSequence(
                     (uno_Sequence **)pDest, *(uno_Sequence **)pSource,
                     ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                     acquire, mapping );
@@ -871,9 +870,9 @@ inline void __copyConstructData(
         break;
     case typelib_TypeClass_INTERFACE:
         if (mapping)
-            *(void **)pDest = __map( *(void **)pSource, pType, pTypeDescr, mapping );
+            *(void **)pDest = _map( *(void **)pSource, pType, pTypeDescr, mapping );
         else
-            __acquire( *(void **)pDest = *(void **)pSource, acquire );
+            _acquire( *(void **)pDest = *(void **)pSource, acquire );
         break;
     }
 }

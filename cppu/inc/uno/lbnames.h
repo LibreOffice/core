@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@
 #error "ms visual c++ version must be at least 4.2"
 #elif (_MSC_VER < 1100) // MSVC 4.x
 #pragma warning( disable: 4290 )
-#define __CPPU_ENV msci
+#define TMP_CPPU_ENV msci
 #elif (_MSC_VER < 1400) // MSVC 5-7
-#define __CPPU_ENV msci
+#define TMP_CPPU_ENV msci
 #else
 #error "ms visual c++ version must be between 4.2 and 7.x"
 #endif /* (_MSC_VER < 1000) */
@@ -81,7 +81,7 @@
 #error "sunpro cc must be at least 5.x"
 provoking error here, because PP ignores #error
 #elif (__SUNPRO_CC < 0x600)
-#define __CPPU_ENV sunpro5
+#define TMP_CPPU_ENV sunpro5
 #else
 #error "sunpro cc version must be 5.x"
 provoking error here, because PP ignores #error
@@ -89,13 +89,13 @@ provoking error here, because PP ignores #error
 /* g++ 2.x, 3.0 */
 #elif defined (__GNUC__)
 #if (__GNUC__ == 2 && __GNUC_MINOR__ == 91)
-#define __CPPU_ENV gcc2
+#define TMP_CPPU_ENV gcc2
 #elif (__GNUC__ == 2 && __GNUC_MINOR__ == 95)
-#define __CPPU_ENV gcc2
+#define TMP_CPPU_ENV gcc2
 #elif (__GNUC__ == 2)
 #error "Tested gcc 2 versions are 2.91 and 2.95.  Patch uno/lbnames.h to try your gcc 2 version."
 #elif (__GNUC__ == 3 && __GNUC_MINOR__ == 0)
-#define __CPPU_ENV gcc3
+#define TMP_CPPU_ENV gcc3
 #elif (__GNUC__ == 3)
 #error "Tested gcc 3 version is 3.0.  Patch uno/lbnames.h to try your gcc 3 version."
 #else
@@ -103,13 +103,13 @@ provoking error here, because PP ignores #error
 #endif /* defined (__GNUC__) */
 #endif /* defined (_MSC_VER) */
 
-#if (! defined (CPPU_ENV) && defined (__CPPU_ENV))
-#define CPPU_ENV __CPPU_ENV
+#if (! defined (CPPU_ENV) && defined (TMP_CPPU_ENV))
+#define CPPU_ENV TMP_CPPU_ENV
 #endif
 
 #ifdef CPPU_ENV
 /* test: whether given CPPU_ENV matches expected one */
-#if (CPPU_ENV != __CPPU_ENV)
+#if (CPPU_ENV != TMP_CPPU_ENV)
 #error "CPPU_ENV: unexpected env!"
 provoking error here, because PP ignores #error
 #endif

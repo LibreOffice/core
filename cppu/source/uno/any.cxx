@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 10:25:51 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@ void SAL_CALL uno_type_any_assign(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    __destructAny( pDest, release );
+    _destructAny( pDest, release );
     if (pType)
     {
-        __copyConstructAny( pDest, pSource, pType, 0, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pType, 0, acquire, 0 );
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( pDest );
+        CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
@@ -91,14 +91,14 @@ void SAL_CALL uno_any_assign(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    __destructAny( pDest, release );
+    _destructAny( pDest, release );
     if (pTypeDescr)
     {
-        __copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( pDest );
+        CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
@@ -110,11 +110,11 @@ void SAL_CALL uno_type_any_construct(
 {
     if (pType)
     {
-        __copyConstructAny( pDest, pSource, pType, 0, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pType, 0, acquire, 0 );
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( pDest );
+        CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
@@ -126,11 +126,11 @@ void SAL_CALL uno_any_construct(
 {
     if (pTypeDescr)
     {
-        __copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
+        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( pDest );
+        CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
@@ -142,11 +142,11 @@ void SAL_CALL uno_type_any_constructAndConvert(
 {
     if (pType)
     {
-        __copyConstructAny( pDest, pSource, pType, 0, 0, mapping );
+        _copyConstructAny( pDest, pSource, pType, 0, 0, mapping );
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( pDest );
+        CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
@@ -158,24 +158,24 @@ void SAL_CALL uno_any_constructAndConvert(
 {
     if (pTypeDescr)
     {
-        __copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
+        _copyConstructAny( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( pDest );
+        CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
 void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    __destructAny( pValue, release );
+    _destructAny( pValue, release );
 }
 //##################################################################################################
 void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    __destructAny( pValue, release );
-    __CONSTRUCT_EMPTY_ANY( pValue );
+    _destructAny( pValue, release );
+    CONSTRUCT_EMPTY_ANY( pValue );
 }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-22 11:03:23 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __PRIM_HXX__
-#define __PRIM_HXX__
+#ifndef PRIM_HXX
+#define PRIM_HXX
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #include <typelib/typedescription.h>
@@ -99,6 +99,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
+
 namespace cppu
 {
 
@@ -107,7 +108,7 @@ extern typelib_TypeDescriptionReference * g_pVoidType;
 extern typelib_TypeDescription * g_pQITD;
 
 //--------------------------------------------------------------------------------------------------
-inline void * __map(
+inline void * _map(
     void * p,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr,
@@ -131,7 +132,7 @@ inline void * __map(
     return pRet;
 }
 //--------------------------------------------------------------------------------------------------
-inline void __acquire( void * p, uno_AcquireFunc acquire )
+inline void _acquire( void * p, uno_AcquireFunc acquire )
     SAL_THROW( () )
 {
     if (p)
@@ -147,7 +148,7 @@ inline void __acquire( void * p, uno_AcquireFunc acquire )
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __releaseRef( void ** pRef, uno_ReleaseFunc release )
+inline void _releaseRef( void ** pRef, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
     void * p = *pRef;
@@ -165,13 +166,13 @@ inline void __releaseRef( void ** pRef, uno_ReleaseFunc release )
 }
 
 //--------------------------------------------------------------------------------------------------
-inline uno_Sequence * __getEmptySequence() SAL_THROW( () )
+inline uno_Sequence * _getEmptySequence() SAL_THROW( () )
 {
     ::osl_incrementInterlockedCount( &g_emptySeq.nRefCount );
     return &g_emptySeq;
 }
 //--------------------------------------------------------------------------------------------------
-inline typelib_TypeDescriptionReference * __getVoidType()
+inline typelib_TypeDescriptionReference * _getVoidType()
     SAL_THROW( () )
 {
     if (! g_pVoidType)
@@ -184,21 +185,21 @@ inline typelib_TypeDescriptionReference * __getVoidType()
 
 //--------------------------------------------------------------------------------------------------
 #ifdef _DEBUG
-#define __CONSTRUCT_EMPTY_ANY( pAny ) \
-(pAny)->pType = __getVoidType(); \
+#define CONSTRUCT_EMPTY_ANY( pAny ) \
+(pAny)->pType = _getVoidType(); \
 (pAny)->pData = (void *)0xdeadbeef;
 #else
-#define __CONSTRUCT_EMPTY_ANY( pAny ) \
-(pAny)->pType = __getVoidType(); \
+#define CONSTRUCT_EMPTY_ANY( pAny ) \
+(pAny)->pType = _getVoidType(); \
 (pAny)->pData = (pAny);
 #endif
 
 //--------------------------------------------------------------------------------------------------
-#define __TYPE_ACQUIRE( pType ) \
+#define TYPE_ACQUIRE( pType ) \
     ::osl_incrementInterlockedCount( &(pType)->nRefCount );
 
 //--------------------------------------------------------------------------------------------------
-inline typelib_TypeDescription * __getQueryInterfaceTypeDescr()
+inline typelib_TypeDescription * _getQueryInterfaceTypeDescr()
     SAL_THROW( () )
 {
     if (! g_pQITD)
@@ -222,7 +223,7 @@ inline typelib_TypeDescription * __getQueryInterfaceTypeDescr()
 }
 
 //--------------------------------------------------------------------------------------------------
-inline typelib_TypeDescriptionReference * __unionGetSetType(
+inline typelib_TypeDescriptionReference * _unionGetSetType(
     void * pUnion, typelib_TypeDescription * pTD )
     SAL_THROW( () )
 {
@@ -247,7 +248,7 @@ inline typelib_TypeDescriptionReference * __unionGetSetType(
     return pRet;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __type_equals(
+inline sal_Bool _type_equals(
     typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
     SAL_THROW( () )
 {

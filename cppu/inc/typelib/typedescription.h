@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,21 +701,21 @@ void SAL_CALL typelib_typedescription_revokeCallback(
 */
 #define TYPELIB_DANGER_GET( ppDescription, pTypeRef ) \
 { \
-    typelib_TypeDescriptionReference * __pMacroTypeRef = (pTypeRef); \
-    typelib_TypeDescription ** __ppMacroTypeDescr = (ppDescription); \
-    if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( __pMacroTypeRef->eTypeClass )) \
+    typelib_TypeDescriptionReference * pMacroTypeRef = (pTypeRef); \
+    typelib_TypeDescription ** ppMacroTypeDescr = (ppDescription); \
+    if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pMacroTypeRef->eTypeClass )) \
     { \
-        typelib_typedescriptionreference_getDescription( __ppMacroTypeDescr, __pMacroTypeRef ); \
+        typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef ); \
     } \
-    else if (!__pMacroTypeRef->pType || !__pMacroTypeRef->pType->pWeakRef) \
+    else if (!pMacroTypeRef->pType || !pMacroTypeRef->pType->pWeakRef) \
     { \
-        typelib_typedescriptionreference_getDescription( __ppMacroTypeDescr, __pMacroTypeRef ); \
-        if (*__ppMacroTypeDescr) \
-            typelib_typedescription_release( *__ppMacroTypeDescr ); \
+        typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef ); \
+        if (*ppMacroTypeDescr) \
+            typelib_typedescription_release( *ppMacroTypeDescr ); \
     } \
     else \
     { \
-        *__ppMacroTypeDescr = __pMacroTypeRef->pType; \
+        *ppMacroTypeDescr = pMacroTypeRef->pType; \
     } \
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-17 12:40:31 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,16 @@
  *
  *
  ************************************************************************/
-#ifndef __SHARE_H__
-#define __SHARE_H__
+#ifndef DIAGNOSE_H
+#define DIAGNOSE_H
 
 #include <sal/types.h>
 #include <stdio.h>
 
 #if defined(__GNUC__) && defined(LINUX) && defined(INTEL)
-#define __ALIGNMENT__(s, n) __alignof__ (s)
+#define ALIGNMENT(s, n) __alignof__ (s)
 #else
-#define __ALIGNMENT__(s, n) n
+#define ALIGNMENT(s, n) n
 #endif
 
 #define OFFSET_OF( s, m ) ((sal_Size)((char *)&((s *)16)->m -16))
@@ -84,8 +84,8 @@
     fprintf( stderr, "> sizeof (" #s ") = %d\n", sizeof(s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #define BINTEST_VERIFYALIGNMENT( s, n ) \
-    fprintf( stderr, "> alignment of " #s " = %d\n", __ALIGNMENT__(s, n) ); \
-    if (__ALIGNMENT__(s, n) != n) { fprintf( stderr, "### alignment of " #s " = %d instead of expected %d!!!\n", __ALIGNMENT__(s, n), n ); abort(); }
+    fprintf( stderr, "> alignment of " #s " = %d\n", ALIGNMENT(s, n) ); \
+    if (ALIGNMENT(s, n) != n) { fprintf( stderr, "### alignment of " #s " = %d instead of expected %d!!!\n", ALIGNMENT(s, n), n ); abort(); }
 
 #else
 
@@ -94,7 +94,7 @@
 #define BINTEST_VERIFYSIZE( s, n ) \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #define BINTEST_VERIFYALIGNMENT( s, n ) \
-    if (__ALIGNMENT__(s, n) != n) { fprintf( stderr, "### alignment of " #s " = %d instead of expected %d!!!\n", __ALIGNMENT__(s, n), n ); abort(); }
+    if (ALIGNMENT(s, n) != n) { fprintf( stderr, "### alignment of " #s " = %d instead of expected %d!!!\n", ALIGNMENT(s, n), n ); abort(); }
 
 #endif
 

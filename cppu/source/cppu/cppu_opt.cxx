@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppu_opt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:47 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 using namespace ::rtl;
 
 //##################################################################################################
-extern "C" rtl_uString * SAL_CALL __cppu_unsatisfied_query_msg(
+extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {

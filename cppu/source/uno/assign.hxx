@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,17 @@
  *
  *
  ************************************************************************/
-#ifndef __ASSIGN_HXX__
-#define __ASSIGN_HXX__
+#ifndef ASSIGN_HXX
+#define ASSIGN_HXX
 
 #include "prim.hxx"
 #include "destr.hxx"
 #include "constr.hxx"
 #include "copy.hxx"
 
+
 namespace cppu
 {
-
 
 //##################################################################################################
 //#### assignment ##################################################################################
@@ -76,7 +76,7 @@ namespace cppu
 
 
 //--------------------------------------------------------------------------------------------------
-inline void __assignInterface(
+inline void _assignInterface(
     void ** ppDest, void * pSource,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW( () )
@@ -99,7 +99,7 @@ inline void __assignInterface(
     *ppDest = pSource;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __queryAndAssignInterface(
+inline sal_Bool _queryAndAssignInterface(
     void ** ppDest, void * pSource,
     typelib_TypeDescriptionReference * pDestType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -120,14 +120,14 @@ inline sal_Bool __queryAndAssignInterface(
             void * aArgs[1];
             aArgs[0] = &pDestType;
 
-            typelib_TypeDescription * pMTqueryInterface = __getQueryInterfaceTypeDescr();
+            typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
             (*((uno_Interface *)pSource)->pDispatcher)(
                 (uno_Interface *)pSource, pMTqueryInterface, &aRet, aArgs, &pExc );
 
             OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
             if (pExc)
             {
-                __destructAny( pExc, 0 );
+                _destructAny( pExc, 0 );
                 pSource = 0;
             }
             else
@@ -164,7 +164,7 @@ sal_Bool assignStruct(
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __assignStruct(
+inline sal_Bool _assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -197,7 +197,7 @@ inline sal_Bool __assignStruct(
     return sal_True;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __assignArray(
+inline sal_Bool _assignArray(
     void * pDest, void * pSource,
     typelib_ArrayTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -243,7 +243,7 @@ inline sal_Bool __assignArray(
         for (i=0; i < nTotalElements; i++)
         {
             ::typelib_typedescriptionreference_release( *((typelib_TypeDescriptionReference **)pDest + i) );
-            __TYPE_ACQUIRE(
+            TYPE_ACQUIRE(
                 *((typelib_TypeDescriptionReference **)pDest + i) = *((typelib_TypeDescriptionReference **)pSource + i) );
 
         }
@@ -252,9 +252,9 @@ inline sal_Bool __assignArray(
     case typelib_TypeClass_ANY:
         for (i=0; i < nTotalElements; i++)
         {
-            __destructAny( (uno_Any *)pDest + i, release );
-            __copyConstructAny( (uno_Any *)pDest + i, (uno_Any *)pSource + i,
-                                pElementTypeRef, pElementTypeDescr, acquire, 0 );
+            _destructAny( (uno_Any *)pDest + i, release );
+            _copyConstructAny( (uno_Any *)pDest + i, (uno_Any *)pSource + i,
+                               pElementTypeRef, pElementTypeDescr, acquire, 0 );
         }
         bRet = sal_True;
         break;
@@ -274,11 +274,11 @@ inline sal_Bool __assignArray(
     case typelib_TypeClass_EXCEPTION:
         for (i=0; i < nTotalElements; i++)
         {
-            bRet = __assignStruct( (sal_Char *)pDest + i * nElementSize,
-                                   (sal_Char *)pSource + i * nElementSize,
-                                   (typelib_CompoundTypeDescription *)pElementTypeDescr,
-                                   queryInterface, acquire, release );
-            if ( !bRet )
+            bRet = _assignStruct( (sal_Char *)pDest + i * nElementSize,
+                                  (sal_Char *)pSource + i * nElementSize,
+                                  (typelib_CompoundTypeDescription *)pElementTypeDescr,
+                                  queryInterface, acquire, release );
+            if (! bRet)
                 break;
         }
         bRet = sal_True;
@@ -286,17 +286,18 @@ inline sal_Bool __assignArray(
     case typelib_TypeClass_UNION:
         for (i=0; i < nTotalElements; i++)
         {
-            __destructUnion( (sal_Char*)pDest + i * nElementSize, pElementTypeDescr, release );
-            __copyConstructUnion( (sal_Char*)pDest + i * nElementSize,
-                                  (sal_Char*)pSource + i * nElementSize,
-                                  pElementTypeDescr, acquire, 0 );
+            _destructUnion( (sal_Char*)pDest + i * nElementSize, pElementTypeDescr, release );
+            _copyConstructUnion( (sal_Char*)pDest + i * nElementSize,
+                                 (sal_Char*)pSource + i * nElementSize,
+                                 pElementTypeDescr, acquire, 0 );
         }
         bRet = sal_True;
         break;
     case typelib_TypeClass_SEQUENCE:
         for (i=0; i < nTotalElements; i++)
         {
-            __destructSequence( *((uno_Sequence **)pDest + i), pElementTypeRef, pElementTypeDescr, release );
+            _destructSequence(
+                *((uno_Sequence **)pDest + i), pElementTypeRef, pElementTypeDescr, release );
             ::osl_incrementInterlockedCount( &(*((uno_Sequence **)pSource + i))->nRefCount );
             *((uno_Sequence **)pDest + i) = *((uno_Sequence **)pSource + i);
         }
@@ -305,9 +306,9 @@ inline sal_Bool __assignArray(
     case typelib_TypeClass_INTERFACE:
         for (i=0; i < nTotalElements; i++)
         {
-            __assignInterface( (void **)((sal_Char*)pDest + i * nElementSize),
-                               *(void **)((sal_Char*)pSource + i * nElementSize),
-                               acquire, release );
+            _assignInterface( (void **)((sal_Char*)pDest + i * nElementSize),
+                              *(void **)((sal_Char*)pSource + i * nElementSize),
+                              acquire, release );
         }
         bRet = sal_True;
         break;
@@ -317,7 +318,7 @@ inline sal_Bool __assignArray(
     return bRet;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __assignData(
+inline sal_Bool _assignData(
     void * pDest,
     typelib_TypeDescriptionReference * pDestType, typelib_TypeDescription * pDestTypeDescr,
     void * pSource,
@@ -330,8 +331,8 @@ inline sal_Bool __assignData(
 
     if (! pSource)
     {
-        __destructData( pDest, pDestType, pDestTypeDescr, release );
-        __defaultConstructData( pDest, pDestType, pDestTypeDescr );
+        _destructData( pDest, pDestType, pDestTypeDescr, release );
+        _defaultConstructData( pDest, pDestType, pDestTypeDescr );
         return sal_True;
     }
     while (typelib_TypeClass_ANY == pSourceType->eTypeClass)
@@ -540,17 +541,17 @@ inline sal_Bool __assignData(
         {
         case typelib_TypeClass_TYPE:
             ::typelib_typedescriptionreference_release( *(typelib_TypeDescriptionReference **)pDest );
-            __TYPE_ACQUIRE(
+            TYPE_ACQUIRE(
                 *(typelib_TypeDescriptionReference **)pDest = *(typelib_TypeDescriptionReference **)pSource );
             return sal_True;
         }
         return sal_False;
     case typelib_TypeClass_ANY:
-        __destructAny( (uno_Any *)pDest, release );
-        __copyConstructAny( (uno_Any *)pDest, pSource, pSourceType, pSourceTypeDescr, acquire, 0 );
+        _destructAny( (uno_Any *)pDest, release );
+        _copyConstructAny( (uno_Any *)pDest, pSource, pSourceType, pSourceTypeDescr, acquire, 0 );
         return sal_True;
     case typelib_TypeClass_ENUM:
-        if (__type_equals( pDestType, pSourceType ))
+        if (_type_equals( pDestType, pSourceType ))
         {
             *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
             return sal_True;
@@ -571,20 +572,32 @@ inline sal_Bool __assignData(
             {
                 typelib_CompoundTypeDescription * pTypeDescr =
                     (typelib_CompoundTypeDescription *)pSourceTypeDescr;
-                while (pTypeDescr && !__type_equals( ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                while (pTypeDescr &&
+                       !_type_equals( ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                {
                     pTypeDescr = pTypeDescr->pBaseTypeDescription;
+                }
                 if (pTypeDescr)
-                    bRet = __assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                {
+                    bRet = _assignStruct(
+                        pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                }
             }
             else
             {
                 TYPELIB_DANGER_GET( &pSourceTypeDescr, pSourceType );
                 typelib_CompoundTypeDescription * pTypeDescr =
                     (typelib_CompoundTypeDescription *)pSourceTypeDescr;
-                while (pTypeDescr && !__type_equals( ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                while (pTypeDescr &&
+                       !_type_equals( ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                {
                     pTypeDescr = pTypeDescr->pBaseTypeDescription;
+                }
                 if (pTypeDescr)
-                    bRet = __assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                {
+                    bRet = _assignStruct(
+                        pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                }
                 TYPELIB_DANGER_RELEASE( pSourceTypeDescr );
             }
             return bRet;
@@ -597,7 +610,7 @@ inline sal_Bool __assignData(
             {
                 typelib_ArrayTypeDescription * pTypeDescr =
                         (typelib_ArrayTypeDescription *)pSourceTypeDescr;
-                bRet = __assignArray( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                bRet = _assignArray( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
             }
             else
             {
@@ -605,25 +618,28 @@ inline sal_Bool __assignData(
                 typelib_ArrayTypeDescription * pTypeDescr =
                     (typelib_ArrayTypeDescription *)pSourceTypeDescr;
                 if ( pTypeDescr )
-                    bRet = __assignArray( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                {
+                    bRet = _assignArray(
+                        pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                }
                 TYPELIB_DANGER_RELEASE( pSourceTypeDescr );
             }
             return bRet;
         }
         return sal_False;
     case typelib_TypeClass_UNION:
-        if (__type_equals( pDestType, pSourceType ))
+        if (_type_equals( pDestType, pSourceType ))
         {
             if (pDestTypeDescr)
             {
-                __destructUnion( pDest, pDestTypeDescr, release );
-                __copyConstructUnion( pDest, pSource, pDestTypeDescr, acquire, 0 );
+                _destructUnion( pDest, pDestTypeDescr, release );
+                _copyConstructUnion( pDest, pSource, pDestTypeDescr, acquire, 0 );
             }
             else
             {
                 TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
-                __destructUnion( pDest, pDestTypeDescr, release );
-                __copyConstructUnion( pDest, pSource, pDestTypeDescr, acquire, 0 );
+                _destructUnion( pDest, pDestTypeDescr, release );
+                _copyConstructUnion( pDest, pSource, pDestTypeDescr, acquire, 0 );
                 TYPELIB_DANGER_RELEASE( pDestTypeDescr );
             }
             return sal_True;
@@ -634,9 +650,9 @@ inline sal_Bool __assignData(
             return sal_False;
         if (*(uno_Sequence **)pSource == *(uno_Sequence **)pDest) // self assignment
             return sal_True;
-        if (__type_equals( pDestType, pSourceType ))
+        if (_type_equals( pDestType, pSourceType ))
         {
-            __destructSequence( *(uno_Sequence **)pDest, pDestType, pDestTypeDescr, release );
+            _destructSequence( *(uno_Sequence **)pDest, pDestType, pDestTypeDescr, release );
             ::osl_incrementInterlockedCount( &(*(uno_Sequence **)pSource)->nRefCount );
             *(uno_Sequence **)pDest = *(uno_Sequence **)pSource;
             return sal_True;
@@ -645,9 +661,9 @@ inline sal_Bool __assignData(
     case typelib_TypeClass_INTERFACE:
         if (typelib_TypeClass_INTERFACE != pSourceType->eTypeClass)
             return sal_False;
-        if (__type_equals( pDestType, pSourceType ))
+        if (_type_equals( pDestType, pSourceType ))
         {
-            __assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
+            _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
             return sal_True;
         }
         else
@@ -656,31 +672,31 @@ inline sal_Bool __assignData(
             if (pSourceTypeDescr)
             {
                 typelib_TypeDescription * pTD = pSourceTypeDescr;
-                while (pTD && !__type_equals( pTD->pWeakRef, pDestType ))
+                while (pTD && !_type_equals( pTD->pWeakRef, pDestType ))
                     pTD = (typelib_TypeDescription *)((typelib_InterfaceTypeDescription *)pTD)->pBaseTypeDescription;
                 if (pTD) // is base of dest
                 {
-                    __assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
+                    _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
                     bRet = sal_True;
                 }
                 else
                 {
                     // query for interface
-                    bRet = __queryAndAssignInterface(
+                    bRet = _queryAndAssignInterface(
                         (void **)pDest, *(void **)pSource, pDestType, queryInterface, release );
                 }
             }
             else
             {
-                if (__type_equals( pSourceType, pDestType ))
+                if (_type_equals( pSourceType, pDestType ))
                 {
-                    __assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
+                    _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
                     bRet = sal_True;
                 }
                 else
                 {
                     // query for interface
-                    bRet = __queryAndAssignInterface(
+                    bRet = _queryAndAssignInterface(
                         (void **)pDest, *(void **)pSource, pDestType, queryInterface, release );
                 }
             }

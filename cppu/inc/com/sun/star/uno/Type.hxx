@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-20 11:04:52 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ inline Type::Type( typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
     ::typelib_typedescriptionreference_acquire( _pType );
 }
 //__________________________________________________________________________________________________
-inline Type::Type( typelib_TypeDescriptionReference * pType, __UnoType_NoAcquire ) SAL_THROW( () )
+inline Type::Type( typelib_TypeDescriptionReference * pType, UnoType_NoAcquire ) SAL_THROW( () )
     : _pType( pType )
 {
 }

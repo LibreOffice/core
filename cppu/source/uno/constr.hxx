@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,11 @@
  *
  *
  ************************************************************************/
-#ifndef __CONSTR_HXX__
-#define __CONSTR_HXX__
+#ifndef CONSTR_HXX
+#define CONSTR_HXX
 
 #include "prim.hxx"
+
 
 namespace cppu
 {
@@ -71,7 +72,7 @@ namespace cppu
 //##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
-inline void __defaultConstructUnion(
+inline void _defaultConstructUnion(
     void * pMem,
     typelib_TypeDescription * pTypeDescr )
     SAL_THROW( () )
@@ -87,7 +88,7 @@ void defaultConstructStruct(
     typelib_CompoundTypeDescription * pCompType )
     SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
-inline void __defaultConstructStruct(
+inline void _defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pTypeDescr )
     SAL_THROW( () )
@@ -108,7 +109,7 @@ inline void __defaultConstructStruct(
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void __defaultConstructArray(
+inline void _defaultConstructArray(
     void * pMem,
     typelib_ArrayTypeDescription * pTypeDescr )
 {
@@ -146,13 +147,13 @@ inline void __defaultConstructArray(
         for (i=0; i < nTotalElements; i++)
         {
             typelib_TypeDescriptionReference** ppElement = (typelib_TypeDescriptionReference **)pMem + i;
-            *ppElement = __getVoidType();
+            *ppElement = _getVoidType();
         }
         break;
     case typelib_TypeClass_ANY:
         for (i=0; i < nTotalElements; i++)
         {
-            __CONSTRUCT_EMPTY_ANY( (uno_Any *)pMem + i );
+            CONSTRUCT_EMPTY_ANY( (uno_Any *)pMem + i );
         }
         break;
     case typelib_TypeClass_ENUM:
@@ -170,20 +171,20 @@ inline void __defaultConstructArray(
     case typelib_TypeClass_EXCEPTION:
         for (i=0; i < nTotalElements; i++)
         {
-            __defaultConstructStruct( (sal_Char*)pMem + i * nElementSize, (typelib_CompoundTypeDescription *)pElementType );
+            _defaultConstructStruct( (sal_Char*)pMem + i * nElementSize, (typelib_CompoundTypeDescription *)pElementType );
         }
         break;
     case typelib_TypeClass_UNION:
         for (i=0; i < nTotalElements; i++)
         {
-            __defaultConstructUnion( (sal_Char*)pMem + i * nElementSize, pElementType );
+            _defaultConstructUnion( (sal_Char*)pMem + i * nElementSize, pElementType );
         }
         break;
     case typelib_TypeClass_SEQUENCE:
         for (i=0; i < nTotalElements; i++)
         {
             uno_Sequence** ppElement = (uno_Sequence **)pMem + i;
-            *ppElement = __getEmptySequence();
+            *ppElement = _getEmptySequence();
         }
         break;
     }
@@ -191,7 +192,7 @@ inline void __defaultConstructArray(
 }
 
 //--------------------------------------------------------------------------------------------------
-inline void __defaultConstructData(
+inline void _defaultConstructData(
     void * pMem,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr )
@@ -231,10 +232,10 @@ inline void __defaultConstructData(
         ::rtl_uString_new( (rtl_uString **)pMem );
         break;
     case typelib_TypeClass_TYPE:
-        *(typelib_TypeDescriptionReference **)pMem = __getVoidType();
+        *(typelib_TypeDescriptionReference **)pMem = _getVoidType();
         break;
     case typelib_TypeClass_ANY:
-        __CONSTRUCT_EMPTY_ANY( (uno_Any *)pMem );
+        CONSTRUCT_EMPTY_ANY( (uno_Any *)pMem );
         break;
     case typelib_TypeClass_ENUM:
         if (pTypeDescr)
@@ -257,41 +258,41 @@ inline void __defaultConstructData(
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
         {
-            __defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
+            _defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
+            _defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
     case typelib_TypeClass_ARRAY:
         if (pTypeDescr)
         {
-            __defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
+            _defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
+            _defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
     case typelib_TypeClass_UNION:
         if (pTypeDescr)
         {
-            __defaultConstructUnion( pMem, pTypeDescr );
+            _defaultConstructUnion( pMem, pTypeDescr );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            __defaultConstructUnion( pMem, pTypeDescr );
+            _defaultConstructUnion( pMem, pTypeDescr );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
     case typelib_TypeClass_SEQUENCE:
-        *(uno_Sequence **)pMem = __getEmptySequence();
+        *(uno_Sequence **)pMem = _getEmptySequence();
         break;
     case typelib_TypeClass_INTERFACE:
         *(void **)pMem = 0; // either cpp or c-uno interface

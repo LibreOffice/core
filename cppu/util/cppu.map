@@ -93,7 +93,7 @@ UDK_3_0_0 {
         uno_threadpool_attach;
         uno_threadpool_detach;
 
-        __cppu_unsatisfied_query_msg;
+        cppu_unsatisfied_iquery_msg;
     local:
         *;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eq.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __EQ_HXX__
-#define __EQ_HXX__
+#ifndef EQ_HXX
+#define EQ_HXX
 
 #include <math.h>
 
@@ -70,17 +70,16 @@
 #include "prim.hxx"
 #include "destr.hxx"
 
+
 namespace cppu
 {
-
 
 //##################################################################################################
 //#### equality ####################################################################################
 //##################################################################################################
 
-
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
+inline sal_Bool _unoEqualObject( void * pUnoI1, void * pUnoI2 )
     SAL_THROW( () )
 {
     if (pUnoI1 == pUnoI2)
@@ -98,14 +97,14 @@ inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
     uno_Any aRet1, aRet2, aExc;
     uno_Any * pExc = &aExc;
 
-    typelib_TypeDescription * pMTqueryInterface = __getQueryInterfaceTypeDescr();
+    typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
     (*((uno_Interface *)pUnoI1)->pDispatcher)(
         (uno_Interface *)pUnoI1, pMTqueryInterface, &aRet1, pArgs, &pExc );
 
     OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
     if (pExc)
     {
-        __destructAny( pExc, 0 );
+        _destructAny( pExc, 0 );
     }
     else
     {
@@ -118,7 +117,7 @@ inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
             OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
             if (pExc)
             {
-                __destructAny( pExc, 0 );
+                _destructAny( pExc, 0 );
             }
             else
             {
@@ -126,10 +125,10 @@ inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
                 {
                     bRet = (*(void **)aRet1.pData == *(void **)aRet2.pData);
                 }
-                __destructAny( &aRet2, 0 );
+                _destructAny( &aRet2, 0 );
             }
         }
-        __destructAny( &aRet1, 0 );
+        _destructAny( &aRet1, 0 );
     }
 
     typelib_typedescription_release( pMTqueryInterface );
@@ -137,7 +136,7 @@ inline sal_Bool __unoEqualObject( void * pUnoI1, void * pUnoI2 )
     return bRet;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __equalObject(
+inline sal_Bool _equalObject(
     void * pI1, void * pI2,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () )
@@ -160,7 +159,7 @@ inline sal_Bool __equalObject(
         }
         return bRet;
     }
-    return __unoEqualObject( pI1, pI2 );
+    return _unoEqualObject( pI1, pI2 );
 }
 
 //==================================================================================================
@@ -170,7 +169,7 @@ sal_Bool equalStruct(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __equalStruct(
+inline sal_Bool _equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -207,7 +206,7 @@ sal_Bool equalSequence(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __equalSequence(
+inline sal_Bool _equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -282,8 +281,8 @@ inline sal_Bool __equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! __type_equals( ((typelib_TypeDescriptionReference **)pDestElements)[nPos],
-                                 ((typelib_TypeDescriptionReference **)pSourceElements)[nPos] ))
+            if (! _type_equals( ((typelib_TypeDescriptionReference **)pDestElements)[nPos],
+                                ((typelib_TypeDescriptionReference **)pSourceElements)[nPos] ))
             {
                 return sal_False;
             }
@@ -315,10 +314,10 @@ inline sal_Bool __equalSequence(
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! __equalStruct( (char *)pDestElements + (nPos * nElementSize),
-                                 (char *)pSourceElements + (nPos * nElementSize),
-                                 (typelib_CompoundTypeDescription *)pElementTypeDescr,
-                                 queryInterface, release ))
+            if (! _equalStruct( (char *)pDestElements + (nPos * nElementSize),
+                                (char *)pSourceElements + (nPos * nElementSize),
+                                (typelib_CompoundTypeDescription *)pElementTypeDescr,
+                                queryInterface, release ))
             {
                 TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 return sal_False;
@@ -337,7 +336,8 @@ inline sal_Bool __equalSequence(
         {
             char * pDest = (char *)pDestElements + (nPos * nElementSize);
             char * pSource = (char *)pSourceElements + (nPos * nElementSize);
-            typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pDest, pElementTypeDescr );
+            typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
+                pDest, pElementTypeDescr );
             sal_Bool bRet = ::uno_type_equalData(
                 pDest + nValueOffset, pSetType,
                 pSource + nValueOffset, pSetType,
@@ -375,8 +375,8 @@ inline sal_Bool __equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! __equalObject( ((void **)pDestElements)[nPos], ((void **)pSourceElements)[nPos],
-                                 queryInterface, release ))
+            if (! _equalObject( ((void **)pDestElements)[nPos], ((void **)pSourceElements)[nPos],
+                                queryInterface, release ))
             {
                 return sal_False;
             }
@@ -387,7 +387,7 @@ inline sal_Bool __equalSequence(
     return sal_False;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool __equalData(
+inline sal_Bool _equalData(
     void * pDest,
     typelib_TypeDescriptionReference * pDestType, typelib_TypeDescription * pDestTypeDescr,
     void * pSource,
@@ -666,13 +666,13 @@ inline sal_Bool __equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_TYPE:
-            return __type_equals(
+            return _type_equals(
                 *(typelib_TypeDescriptionReference **)pDest,
                 *(typelib_TypeDescriptionReference **)pSource );
         }
         return sal_False;
     case typelib_TypeClass_ENUM:
-        return (__type_equals( pDestType, pSourceType ) &&
+        return (_type_equals( pDestType, pSourceType ) &&
                 *(sal_Int32 *)pDest == *(sal_Int32 *)pSource);
 #ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
@@ -681,11 +681,11 @@ inline sal_Bool __equalData(
 #endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
-        if (! __type_equals( pDestType, pSourceType ))
+        if (! _type_equals( pDestType, pSourceType ))
             return sal_False;
         if (pDestTypeDescr)
         {
-            return __equalStruct(
+            return _equalStruct(
                 pDest, pSource,
                 (typelib_CompoundTypeDescription *)pDestTypeDescr,
                 queryInterface, release );
@@ -693,7 +693,7 @@ inline sal_Bool __equalData(
         else
         {
             TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
-            sal_Bool bRet = __equalStruct(
+            sal_Bool bRet = _equalStruct(
                 pDest, pSource,
                 (typelib_CompoundTypeDescription *)pDestTypeDescr,
                 queryInterface, release );
@@ -701,26 +701,32 @@ inline sal_Bool __equalData(
             return bRet;
         }
     case typelib_TypeClass_UNION:
-        if (__type_equals( pDestType, pSourceType ) &&
+        if (_type_equals( pDestType, pSourceType ) &&
             *(sal_Int64 *)pDest == *(sal_Int64 *)pSource) // same discriminant
         {
             sal_Bool bRet;
             if (pDestTypeDescr)
             {
-                typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pDest, pDestTypeDescr );
+                typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
+                    pDest, pDestTypeDescr );
                 bRet = ::uno_type_equalData(
-                    (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
-                    (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
+                    (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
+                    pSetType,
+                    (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
+                    pSetType,
                     queryInterface, release );
                 typelib_typedescriptionreference_release( pSetType );
             }
             else
             {
                 TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
-                typelib_TypeDescriptionReference * pSetType = __unionGetSetType( pDest, pDestTypeDescr );
+                typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
+                    pDest, pDestTypeDescr );
                 bRet = ::uno_type_equalData(
-                    (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
-                    (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset, pSetType,
+                    (char *)pDest + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
+                    pSetType,
+                    (char *)pSource + ((typelib_UnionTypeDescription *)pDestTypeDescr)->nValueOffset,
+                    pSetType,
                     queryInterface, release );
                 typelib_typedescriptionreference_release( pSetType );
                 TYPELIB_DANGER_RELEASE( pDestTypeDescr );
@@ -729,11 +735,11 @@ inline sal_Bool __equalData(
         }
         return sal_False;
     case typelib_TypeClass_SEQUENCE:
-        if (__type_equals( pDestType, pSourceType ))
+        if (_type_equals( pDestType, pSourceType ))
         {
             if (pDestTypeDescr)
             {
-                return __equalSequence(
+                return _equalSequence(
                     *(uno_Sequence **)pDest, *(uno_Sequence **)pSource,
                     ((typelib_IndirectTypeDescription *)pDestTypeDescr)->pType,
                     queryInterface, release );
@@ -741,7 +747,7 @@ inline sal_Bool __equalData(
             else
             {
                 TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
-                sal_Bool bRet = __equalSequence(
+                sal_Bool bRet = _equalSequence(
                     *(uno_Sequence **)pDest, *(uno_Sequence **)pSource,
                     ((typelib_IndirectTypeDescription *)pDestTypeDescr)->pType,
                     queryInterface, release );
@@ -752,7 +758,7 @@ inline sal_Bool __equalData(
         return sal_False;
     case typelib_TypeClass_INTERFACE:
         if (typelib_TypeClass_INTERFACE == eSourceTypeClass)
-            return __equalObject( *(void **)pDest, *(void **)pSource, queryInterface, release );
+            return _equalObject( *(void **)pDest, *(void **)pSource, queryInterface, release );
     }
     return sal_False;
 }

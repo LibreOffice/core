@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 13:02:55 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
 
     typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
     const Type & rXIType = ::getCppuType( (const Reference< XInterface > *)0 );
-    typelib_TypeDescription * pMTqueryInterface = __getQueryInterfaceTypeDescr();
+    typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
 
     void * pArgs[1];
     pArgs[0] = const_cast< Type * >( &rXIType );
@@ -831,7 +831,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
     OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
     if (pExc) // cleanup exception object
     {
-        __destructAny( pExc, 0 );
+        _destructAny( pExc, 0 );
     }
     else
     {
@@ -852,7 +852,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
             OUString aStr( oid.makeStringAndClear() );
             ::rtl_uString_acquire( *ppOId = aStr.pData );
         }
-        __destructAny( &aRet, 0 );
+        _destructAny( &aRet, 0 );
     }
 
     typelib_typedescription_release( pMTqueryInterface );

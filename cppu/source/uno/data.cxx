@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:48 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ void defaultConstructStruct(
     typelib_CompoundTypeDescription * pCompType )
     SAL_THROW( () )
 {
-    __defaultConstructStruct( pMem, pCompType );
+    _defaultConstructStruct( pMem, pCompType );
 }
 //==================================================================================================
 void copyConstructStruct(
@@ -92,7 +92,7 @@ void copyConstructStruct(
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW( () )
 {
-    __copyConstructStruct( pDest, pSource, pTypeDescr, acquire, mapping );
+    _copyConstructStruct( pDest, pSource, pTypeDescr, acquire, mapping );
 }
 //==================================================================================================
 void destructStruct(
@@ -101,7 +101,7 @@ void destructStruct(
     uno_ReleaseFunc release )
     SAL_THROW( () )
 {
-    __destructStruct( pValue, pTypeDescr, release );
+    _destructStruct( pValue, pTypeDescr, release );
 }
 //==================================================================================================
 sal_Bool equalStruct(
@@ -110,7 +110,7 @@ sal_Bool equalStruct(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
-    return __equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
+    return _equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
 }
 //==================================================================================================
 sal_Bool assignStruct(
@@ -119,7 +119,7 @@ sal_Bool assignStruct(
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
-    return __assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+    return _assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
 }
 //==================================================================================================
 void copyConstructSequence(
@@ -128,7 +128,7 @@ void copyConstructSequence(
     uno_AcquireFunc acquire, uno_Mapping * mapping )
     SAL_THROW( () )
 {
-    __copyConstructSequence( ppDest, pSource, pElementType, acquire, mapping );
+    _copyConstructSequence( ppDest, pSource, pElementType, acquire, mapping );
 }
 //==================================================================================================
 void destructSequence(
@@ -143,7 +143,7 @@ void destructSequence(
     {
         if (pSequence->nElements)
         {
-            __destructElements(
+            _destructElements(
                 pSequence->elements, pElementType,
                 0, pSequence->nElements, release );
         }
@@ -157,7 +157,7 @@ sal_Bool equalSequence(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
-    return __equalSequence( pDest, pSource, pElementType, queryInterface, release );
+    return _equalSequence( pDest, pSource, pElementType, queryInterface, release );
 }
 
 extern "C"
@@ -167,14 +167,14 @@ void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
-    __defaultConstructData( pMem, pType, 0 );
+    _defaultConstructData( pMem, pType, 0 );
 }
 //##################################################################################################
 void SAL_CALL uno_constructData(
     void * pMem, typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C()
 {
-    __defaultConstructData( pMem, pTypeDescr->pWeakRef, pTypeDescr );
+    _defaultConstructData( pMem, pTypeDescr->pWeakRef, pTypeDescr );
 }
 //##################################################################################################
 void SAL_CALL uno_type_destructData(
@@ -182,7 +182,7 @@ void SAL_CALL uno_type_destructData(
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    __destructData( pValue, pType, 0, release );
+    _destructData( pValue, pType, 0, release );
 }
 //##################################################################################################
 void SAL_CALL uno_destructData(
@@ -191,7 +191,7 @@ void SAL_CALL uno_destructData(
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    __destructData( pValue, pTypeDescr->pWeakRef, pTypeDescr, release );
+    _destructData( pValue, pTypeDescr->pWeakRef, pTypeDescr, release );
 }
 //##################################################################################################
 void SAL_CALL uno_type_copyData(
@@ -200,7 +200,7 @@ void SAL_CALL uno_type_copyData(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
-    __copyConstructData( pDest, pSource, pType, 0, acquire, 0 );
+    _copyConstructData( pDest, pSource, pType, 0, acquire, 0 );
 }
 //##################################################################################################
 void SAL_CALL uno_copyData(
@@ -209,7 +209,7 @@ void SAL_CALL uno_copyData(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
-    __copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
+    _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
 }
 //##################################################################################################
 void SAL_CALL uno_type_copyAndConvertData(
@@ -218,7 +218,7 @@ void SAL_CALL uno_type_copyAndConvertData(
     uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
-    __copyConstructData( pDest, pSource, pType, 0, 0, mapping );
+    _copyConstructData( pDest, pSource, pType, 0, 0, mapping );
 }
 //##################################################################################################
 void SAL_CALL uno_copyAndConvertData(
@@ -227,7 +227,7 @@ void SAL_CALL uno_copyAndConvertData(
     uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
-    __copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
+    _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
 }
 //##################################################################################################
 sal_Bool SAL_CALL uno_type_equalData(
@@ -236,7 +236,7 @@ sal_Bool SAL_CALL uno_type_equalData(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __equalData(
+    return _equalData(
         pVal1, pVal1Type, 0,
         pVal2, pVal2Type, 0,
         queryInterface, release );
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL uno_equalData(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __equalData(
+    return _equalData(
         pVal1, pVal1TD->pWeakRef, pVal1TD,
         pVal2, pVal2TD->pWeakRef, pVal2TD,
         queryInterface, release );
@@ -260,7 +260,7 @@ sal_Bool SAL_CALL uno_type_assignData(
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __assignData(
+    return _assignData(
         pDest, pDestType, 0,
         pSource, pSourceType, 0,
         queryInterface, acquire, release );
@@ -272,7 +272,7 @@ sal_Bool SAL_CALL uno_assignData(
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
-    return __assignData(
+    return _assignData(
         pDest, pDestTD->pWeakRef, pDestTD,
         pSource, pSourceTD->pWeakRef, pSourceTD,
         queryInterface, acquire, release );
@@ -316,7 +316,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
         void * aArgs[1];
         aArgs[0] = &pAssignable;
 
-        typelib_TypeDescription * pMTqueryInterface = __getQueryInterfaceTypeDescr();
+        typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
         (*((uno_Interface *)pInterface)->pDispatcher)(
             (uno_Interface *)pInterface, pMTqueryInterface, &aRet, aArgs, &pExc );
         ::typelib_typedescription_release( pMTqueryInterface );
@@ -324,13 +324,13 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
         OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
         if (pExc)
         {
-            __destructAny( pExc, 0 );
+            _destructAny( pExc, 0 );
             return sal_False;
         }
         else
         {
             sal_Bool ret = (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass);
-            __destructAny( &aRet, 0 );
+            _destructAny( &aRet, 0 );
             return ret;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-12 13:39:23 $
+ *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ static Mutex & typelib_getStaticInitMutex() SAL_THROW( () )
 }
 
 // !for NOT REALLY WEAK TYPES only!
-static inline typelib_TypeDescriptionReference * __getTypeByName( rtl_uString * pTypeName )
+static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString * pTypeName )
     SAL_THROW( () )
 {
     typelib_TypeDescriptionReference * pRef = 0;
@@ -393,7 +393,7 @@ void SAL_CALL typelib_static_sequence_type_init(
             OUString aTypeName( aBuf.makeStringAndClear() );
 
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
-            if (! (*ppRef = __getTypeByName( aTypeName.pData )))
+            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
             {
                 typelib_TypeDescription * pReg = 0;
                 ::typelib_typedescription_new(
@@ -430,7 +430,7 @@ void SAL_CALL typelib_static_compound_type_init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(eTypeClass) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = __getTypeByName( aTypeName.pData )))
+            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
             {
                 typelib_CompoundTypeDescription * pComp = 0;
                 ::typelib_typedescription_newEmpty(
@@ -498,7 +498,7 @@ void SAL_CALL typelib_static_interface_type_init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_INTERFACE) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = __getTypeByName( aTypeName.pData )))
+            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
             {
                 typelib_InterfaceTypeDescription * pIface = 0;
                 ::typelib_typedescription_newEmpty(
@@ -551,7 +551,7 @@ void SAL_CALL typelib_static_enum_type_init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = __getTypeByName( aTypeName.pData )))
+            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
             {
                 typelib_TypeDescription * pReg = 0;
                 ::typelib_typedescription_newEmpty(
@@ -611,7 +611,7 @@ void SAL_CALL typelib_static_array_type_init(
             OUString aTypeName( aBuf.makeStringAndClear() );
 
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ARRAY) );
-            if (! (*ppRef = __getTypeByName( aTypeName.pData )))
+            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
             {
                 typelib_TypeDescription * pReg = 0;
                 ::typelib_typedescription_newEmpty(
@@ -663,7 +663,7 @@ void SAL_CALL typelib_static_union_type_init(
         {
             OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_UNION) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
-            if (! (*ppRef = __getTypeByName( aTypeName.pData )))
+            if (! (*ppRef = igetTypeByName( aTypeName.pData )))
             {
                 typelib_UnionTypeDescription * pUnion = 0;
                 ::typelib_typedescription_newEmpty(
