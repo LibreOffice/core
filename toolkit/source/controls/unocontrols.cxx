@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-15 07:34:37 $
+ *  last change: $Author: mt $ $Date: 2001-06-22 11:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,7 +1017,7 @@ void UnoEditControl::setEditable( sal_Bool bEditable ) throw(uno::RuntimeExcepti
 
 sal_Int16 UnoEditControl::getMaxTextLen() throw(uno::RuntimeException)
 {
-    return !ImplGetPropertyValue_INT16( BASEPROPERTY_MAXTEXTLEN );
+    return ImplGetPropertyValue_INT16( BASEPROPERTY_MAXTEXTLEN );
 }
 
 void UnoEditControl::setMaxTextLen( sal_Int16 nLen ) throw(uno::RuntimeException)
@@ -1165,6 +1165,7 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
@@ -3027,6 +3028,7 @@ UnoControlDateFieldModel::UnoControlDateFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_SPIN );
@@ -3224,6 +3226,7 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_SPIN );
@@ -3412,6 +3415,7 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_NUMSHOWTHOUSANDSEP );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
@@ -3606,6 +3610,7 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_NUMSHOWTHOUSANDSEP );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
@@ -3803,6 +3808,7 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel()
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_LITERALMASK );
+    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
