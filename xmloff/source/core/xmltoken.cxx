@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.82 $
+*  $Revision: 1.83 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-26 21:59:17 $
+*  last change: $Author: hr $ $Date: 2004-11-27 11:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2015,6 +2015,7 @@ namespace xmloff { namespace token {
         TOKEN( "unchecked",                       XML_UNCHECKED ),
         TOKEN( "checked",                         XML_CHECKED ),
         TOKEN( "unknown",                         XML_UNKNOWN ),
+
         TOKEN( "roll-from-top",                  XML_ROLL_FROM_TOP ),
 
         TOKEN( "binary-data",                     XML_BINARY_DATA ),
@@ -2134,7 +2135,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "dynamic-spacing",                   XML_DYNAMIC_SPACING ),
 
-        TOKEN( "main-etry",                         XML_MAIN_ENTRY ),
+        TOKEN( "main-entry",                        XML_MAIN_ENTRY ),
 
         TOKEN( "use-outline-level",                 XML_USE_OUTLINE_LEVEL ),
 
@@ -2599,6 +2600,7 @@ namespace xmloff { namespace token {
         TOKEN( "preserve",                         XML_PRESERVE ),
         TOKEN( "anyURI",                           XML_ANYURI ),
         TOKEN( "dateTime",                         XML_DATETIME_XSD ),
+        TOKEN( "main-etry",                        XML_MAIN_ETRY),
 
         TOKEN( "remove",                        XML_REMOVE ),
         TOKEN( "hold",                      XML_HOLD ),
