@@ -15,7 +15,6 @@ touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
 del %_DEST%\inc%_EXT%\baside.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basctl
-hedabu: ..\inc\basobj.hxx %_DEST%\inc%_EXT%\basctl\basobj.hxx
 hedabu: ..\source\basicide\iderdll.hxx %_DEST%\inc%_EXT%\basctl\iderdll.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 07:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,19 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
+//----------------------------------------------------------------------------
+
+extern "C" {
+    rtl_uString* basicide_choose_macro( BOOL bExecute, BOOL bChooseOnly, rtl_uString* pMacroDesc )
+    {
+        ::rtl::OUString aMacroDesc( pMacroDesc );
+        ::rtl::OUString aMacroURL = BasicIDE::ChooseMacro( bExecute, bChooseOnly, aMacroDesc );
+        rtl_uString* pMacroURL = aMacroURL.pData;
+        rtl_uString_acquire( pMacroURL );
+
+        return pMacroURL;
+    }
+}
 
 //----------------------------------------------------------------------------
 
@@ -111,6 +124,7 @@ SfxMacro* BasicIDE::CreateMacro()
 
 //----------------------------------------------------------------------------
 
+/*
 SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly )
 {
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
@@ -148,15 +162,18 @@ SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly )
 
     return pMethod;
 }
+*/
 
 //----------------------------------------------------------------------------
 
+/*
 SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
 {
     if ( rPreferredMacroDesciption.Len() )
         IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
     return BasicIDE::ChooseMacro( bExecute, bChooseOnly );
 }
+*/
 
 //----------------------------------------------------------------------------
 
@@ -228,11 +245,12 @@ void BasicIDE::DecBasicDialogCount()
 
 //----------------------------------------------------------------------------
 
-String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
+::rtl::OUString BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
     BASIC_MOD()->Load();
-    if ( rPreferredMacroDesciption.Len() )
-        IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
+
+    if ( rMacroDesc.getLength() )
+        IDE_DLL()->GetExtraData()->GetLastMacro() = String( rMacroDesc );
 
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
     SFX_APP()->EnterBasicCall();
@@ -259,15 +277,15 @@ String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPr
             if ( pMethod )
             {
                 SbModule* pModule = pMethod->GetModule();
-                DBG_ASSERT(pModule, "BasicIDE::SelectMacro: No Module found!");
+                DBG_ASSERT(pModule, "BasicIDE::ChooseMacro: No Module found!");
                 if ( pModule )
                 {
                     StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
-                    DBG_ASSERT(pBasic, "BasicIDE::SelectMacro: No Basic found!");
+                    DBG_ASSERT(pBasic, "BasicIDE::ChooseMacro: No Basic found!");
                     if ( pBasic )
                     {
                         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-                        DBG_ASSERT(pBasMgr, "BasicIDE::SelectMacro: No BasicManager found!");
+                        DBG_ASSERT(pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!");
                         if ( pBasMgr )
                         {
                             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
@@ -326,7 +344,7 @@ String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPr
 
     SFX_APP()->LeaveBasicCall();
 
-    return aMacroURL;
+    return ::rtl::OUString( aMacroURL );
 }
 
 //----------------------------------------------------------------------------
