@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:31:20 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,8 @@
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
 #endif
-#ifndef __SGI_STL_LIST
+
 #include <list>
-#endif
 
 #include "docfunc.hxx"
 
@@ -798,16 +797,23 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
 
 BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi )
 {
+
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
-    ScEditableTester aTester( pDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
-    if (!aTester.IsEditable())
+    BOOL bXMLLoading(pDoc->IsImportingXML());
+
+    // #i925#; it is not neccessary to test whether the cell is editable on loading a XML document
+    if (!bXMLLoading)
     {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        pNewCell->Delete();
-        return FALSE;
+        ScEditableTester aTester( pDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+        if (!aTester.IsEditable())
+        {
+            if (!bApi)
+                rDocShell.ErrorMessage(aTester.GetMessageId());
+            pNewCell->Delete();
+            return FALSE;
+        }
     }
 
     BOOL bEditCell(FALSE);
@@ -838,11 +844,14 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     if (bHeight)
         AdjustRowHeight( ScRange(rPos) );
 
-    rDocShell.PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
+    if (!bXMLLoading)
+        rDocShell.PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
+
     aModificator.SetDocumentModified();
 
+    // #i925#; it is not neccessary to notify on loading a XML document
     // #103934#; notify editline and cell in edit mode
-    if (bApi)
+    if (bApi && !bXMLLoading)
         NotifyInputHandler( rPos );
 
     return TRUE;
@@ -2647,8 +2656,15 @@ BOOL ScDocFunc::ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL 
         return FALSE;
     }
 
+    //  #i12940# ClearItems is called (from setPropertyToDefault) directly with uno object's cached
+    //  MarkData (GetMarkData), so rMark must be changed to multi selection for ClearSelectionItems
+    //  here.
+
     ScRange aMarkRange;
-    rMark.GetMultiMarkArea( aMarkRange );
+    ScMarkData aMultiMark = rMark;
+    aMultiMark.SetMarking(FALSE);       // for MarkToMulti
+    aMultiMark.MarkToMulti();
+    aMultiMark.GetMultiMarkArea( aMarkRange );
 
 //  if (bRecord)
     if (bUndo)
@@ -2658,13 +2674,13 @@ BOOL ScDocFunc::ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL 
 
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab );
-        pDoc->CopyToDocument( aMarkRange, IDF_ATTRIB, TRUE, pUndoDoc, (ScMarkData*)&rMark );
+        pDoc->CopyToDocument( aMarkRange, IDF_ATTRIB, TRUE, pUndoDoc, (ScMarkData*)&aMultiMark );
 
         rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoClearItems( &rDocShell, rMark, pUndoDoc, pWhich ) );
+            new ScUndoClearItems( &rDocShell, aMultiMark, pUndoDoc, pWhich ) );
     }
 
-    pDoc->ClearSelectionItems( pWhich, rMark );
+    pDoc->ClearSelectionItems( pWhich, aMultiMark );
 
     rDocShell.PostPaint( aMarkRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
     aModificator.SetDocumentModified();
