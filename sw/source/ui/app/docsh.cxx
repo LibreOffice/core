@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:51:47 $
+ *  last change: $Author: jp $ $Date: 2001-05-16 15:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1241,8 +1241,13 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             break;
 
         case SID_ATTR_YEAR2000:
-            rSet.Put(SfxUInt16Item(nWhich, pDoc->GetNumberFormatter(TRUE)->GetYear2000()));
-        break;
+            {
+                const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(FALSE);
+                rSet.Put( SfxUInt16Item( nWhich,
+                        pFmtr ? pFmtr->GetYear2000()
+                              : SvNumberFormatter::GetYear2000Default() ));
+            }
+            break;
 
         default: DBG_ASSERT(!this,"Hier darfst Du nicht hinein!");
 
