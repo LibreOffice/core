@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -174,6 +177,9 @@
 #endif
 #ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
 #include <ucbhelper/commandenvironment.hxx>
+#endif
+#ifndef DBAUI_FILEPICKER_INTERACTION_HXX
+#include "finteraction.hxx"
 #endif
 
 //.........................................................................
@@ -939,6 +945,9 @@ namespace dbaui
         Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = Reference< ::com::sun::star::task::XInteractionHandler >(
             xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
+        xInteractionHandler = pHandler;
+
         Reference< XCommandEnvironment > xCmdEnv = new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
         try
         {
@@ -948,7 +957,7 @@ namespace dbaui
         }
         catch(const Exception&)
         {
-            eExists = PATH_NOT_KNOWN;
+            eExists = ( pHandler && pHandler->isDoesNotExist() ) ? PATH_NOT_EXIST: PATH_NOT_KNOWN;
            }
         return eExists;
     }
@@ -1417,4 +1426,124 @@ namespace dbaui
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *  Revision 1.31.2.3.4.1  2003/03/18 09:03:48  oj
+ *  #107728# use own interactionhandler
+ *
+ *  Revision 1.31.2.2.6.1  2003/02/26 11:41:08  oj
+ *  #107728# use own interactionhandler
+ *
+ *  Revision 1.31.2.2  2003/02/21 02:16:50  hr
+ *  INTEGRATION: CWS apps01 (1.31.2.1.2); FILE MERGED
+ *  2003/02/12 14:42:09 fs 1.31.2.1.2.1: #106016# (on behalf of sleepybear@openoffice.org) directoryExists/fileExists merged and more error-prove
+ *
+ *  Revision 1.31.2.1.2.1  2003/02/12 14:42:09  fs
+ *  #106016# (on behalf of sleepybear@openoffice.org) directoryExists/fileExists merged and more error-prove
+ *
+ *  Revision 1.31.2.1  2003/02/06 15:11:48  vg
+ *  INTEGRATION: CWS dba01 (1.31.14); FILE MERGED
+ *  2003/01/16 15:53:36 fs 1.31.14.1: during #i10176# use the dba-owned OLocalResourceAccess
+ *
+ *  Revision 1.31.14.1  2003/01/16 15:53:36  fs
+ *  during #i10176# use the dba-owned OLocalResourceAccess
+ *
+ *  Revision 1.31  2002/12/09 07:50:18  oj
+ *  #106063# change order of error messages
+ *
+ *  Revision 1.30  2002/12/06 14:50:38  oj
+ *  #106045# check if connectionurl should disabled
+ *
+ *  Revision 1.29  2002/11/21 15:23:01  oj
+ *  #105213# impl new feature of rown mysql driver page
+ *
+ *  Revision 1.28  2002/08/19 07:40:33  oj
+ *  #99473# change string resource files
+ *
+ *  Revision 1.27  2001/10/26 16:14:39  hr
+ *  #92924#: gcc-3.0.1 needs lvalue
+ *
+ *  Revision 1.26  2001/09/11 07:07:26  fs
+ *  #92027# accept arbitrary valid URLs - not only file URLs - when browsing for a dBase or text directory
+ *
+ *  Revision 1.25  2001/08/30 16:12:30  fs
+ *  #88427# check for a valid name in implInitControls
+ *
+ *  Revision 1.24  2001/08/27 06:57:23  oj
+ *  #90015# some speedup's
+ *
+ *  Revision 1.23  2001/08/20 11:31:33  fs
+ *  #91278# implInitiControls: more sensitive disabling of the browse button ...
+ *
+ *  Revision 1.22  2001/08/15 07:28:33  fs
+ *  #90803# properly set the cache size
+ *
+ *  Revision 1.21  2001/08/07 16:05:04  fs
+ *  #88431# commitURL: use the pure (untranslated) URL
+ *
+ *  Revision 1.20  2001/08/07 15:57:43  fs
+ *  #88431# centralized methods for setting/retrieving the URL in m_aConnection - this way we can translate URLs so that they're displayed in a decoded version
+ *
+ *  Revision 1.19  2001/08/02 13:46:58  oj
+ *  #90386# set user/pwd and other to zero
+ *
+ *  Revision 1.18  2001/08/01 08:30:41  fs
+ *  #88530# changeConnectionURL / getConnectionURL / minor corrections in the handling of m_eCurrentType
+ *
+ *  Revision 1.17  2001/07/31 16:01:33  fs
+ *  #88530# changes to operate the dialog in a mode where no type change is possible
+ *
+ *  Revision 1.16  2001/07/23 13:13:38  oj
+ *  #90074# check if calc doc exists
+ *
+ *  Revision 1.15  2001/07/17 07:35:00  oj
+ *  #89533# GetMainURL changed
+ *
+ *  Revision 1.14  2001/07/16 07:48:40  oj
+ *  #89578# removed : after address url
+ *
+ *  Revision 1.13  2001/07/12 13:54:20  oj
+ *  #89456# check if old type is already ldap
+ *
+ *  Revision 1.12  2001/07/09 11:45:43  oj
+ *  #89383# ask for directory not displaydir
+ *
+ *  Revision 1.11  2001/06/20 13:45:26  fs
+ *  #88447# call Select when browsing for an address book
+ *
+ *  Revision 1.10  2001/06/15 09:42:43  fs
+ *  #86986# moved css/ui/* to css/ui/dialogs/*
+ *
+ *  Revision 1.9  2001/06/06 12:24:47  fs
+ *  #87187# MUST changes regarding the exceptions thrown by the ucbhelper classes
+ *
+ *  Revision 1.8  2001/05/31 11:09:07  oj
+ *  #87149# change subprotocol and Propertynames
+ *
+ *  Revision 1.7  2001/05/30 15:10:24  fs
+ *  #65293# include CommandAbortedException (solaris can't catch incomplete types)
+ *
+ *  Revision 1.6  2001/05/30 07:44:07  fs
+ *  #87403# removed an obsolete ifdef FS_PRIV_DEBUG
+ *
+ *  Revision 1.5  2001/05/30 06:48:21  fs
+ *  #87531# +SERVICE_EXTENDED_ADABAS_DRIVER (instead of hard coding the string)
+ *
+ *  Revision 1.4  2001/05/30 06:05:45  oj
+ *  #87149# addressbook ui impl
+ *
+ *  Revision 1.3  2001/05/29 13:33:12  oj
+ *  #87149# addressbook ui impl
+ *
+ *  Revision 1.2  2001/05/29 12:28:24  fs
+ *  #87403# OnDatasourceTypeSelected: no check for IsTravelSelect anymore
+ *
+ *  Revision 1.1  2001/05/29 09:59:25  fs
+ *  initial checkin - outsourced the class from commonpages
+ *
+ *
+ *  Revision 1.0 29.05.01 11:33:18  fs
+ ************************************************************************/
 
