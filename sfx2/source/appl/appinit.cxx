@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:07:52 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,9 @@
 
 #include <rtl/logfile.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "unoctitm.hxx"
 #include "appimp.hxx"
