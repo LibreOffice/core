@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-11 16:27:34 $
+ *  last change: $Author: cmc $ $Date: 2000-12-11 16:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2473,6 +2473,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NTEXT:
             ExportText(pNode,nLevel);
             break;
+        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
         case NMATH:
             ExportMath(pNode,nLevel);
             break;
