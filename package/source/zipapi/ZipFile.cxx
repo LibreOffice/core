@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:03:35 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,13 +219,26 @@ Reference < XInputStream > ZipFile::createMemoryStream(
 
     if ( bMustDecrypt )
     {
+        rtlDigest aDigest = rtl_digest_createSHA1();
+        rtlDigestError aDigestResult;
+        Sequence < sal_uInt8 > aDigestSeq ( RTL_DIGEST_LENGTH_SHA1 );
         rtlCipherError aResult = rtl_cipher_decode ( aCipher,
                                       aReadBuffer.getConstArray(),
                                       nSize,
                                       reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
                                       nSize);
         OSL_ASSERT (aResult == rtl_Cipher_E_None);
+        sal_Int32 nEat = n_ConstDigestLength > nSize ? nSize : n_ConstDigestLength;
+        aDigestResult = rtl_digest_updateSHA1 ( aDigest, static_cast < const void * > ( aDecryptBuffer.getConstArray() ), nEat );
+        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+        aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
+        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+        if ( aDigestSeq.getLength() != rData->aDigest.getLength() ||
+             0 != rtl_compareMemory ( aDigestSeq.getConstArray(), rData->aDigest.getConstArray(), aDigestSeq.getLength() ) )
+        {
+        }
         aReadBuffer = aDecryptBuffer; // Now it holds the decrypted data
+        rtl_digest_destroySHA1 ( aDigest );
     }
     if (bRawStream || rEntry.nMethod == STORED)
         aWriteBuffer = aReadBuffer; // bRawStream means the caller doesn't want it decompressed
