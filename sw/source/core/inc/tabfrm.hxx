@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:11:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,30 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                 //statt und dieser Weg kann auch kaum garantien
                                 //geben.
 
+    BOOL bHasFollowFlowLine :1; // Means that the first line in the follow
+                                // is indented to contain content from a broken
+                                // cell
+    BOOL bIsRebuildLastLine :1; // Means that currently the last line of the
+                                // TabFrame is rebuilded. In this case we
+                                // do not want any notification to the master
+                                // table
+    BOOL bRestrictTableGrowth :1;       // Usually, the table may grow infinite,
+                                        // because the table can be split in
+                                        // SwTabFrm::MakeAll. In MakeAll, this
+                                        // flag is set to indicate that the table
+                                        // may only grow inside its upper. This
+                                        // is necessary, in order to let the text
+                                        // flow into the FollowFlowLine
+    BOOL bRemoveFollowFlowLinePending :1;
+    BOOL bDummy2 :1;
+    BOOL bDummy3 :1;
+    BOOL bDummy4 :1;
+
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
     //Follow erzeugt und aufgebaut und direkt hinter this gepastet.
     //Join() Holt sich den Inhalt aus dem Follow und vernichtet diesen.
-    SwTwips Split( const SwTwips nCutPos );
-    SwTwips Join();
+    bool Split( const SwTwips nCutPos );
+    bool Join();
 
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
@@ -130,8 +149,7 @@ public:
 
     inline const SwTabFrm *GetFollow() const;
     inline       SwTabFrm *GetFollow();
-    inline const SwTabFrm *FindMaster() const;
-    inline       SwTabFrm *FindMaster();
+    SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
@@ -161,6 +179,19 @@ public:
     void SetResizeHTMLTable()   { bResizeHTMLTable = TRUE; } //dito
     void SetONECalcLowers()     { bONECalcLowers = TRUE;   }
 
+    // used for breaking table rows:
+    BOOL HasFollowFlowLine() const { return bHasFollowFlowLine; }
+    void SetFollowFlowLine( BOOL bNew ) { bHasFollowFlowLine = bNew; }
+
+    BOOL IsRebuildLastLine() const { return bIsRebuildLastLine; }
+    void SetRebuildLastLine( BOOL bNew ) { bIsRebuildLastLine = bNew; }
+
+    BOOL IsRestrictTableGrowth() const { return bRestrictTableGrowth; }
+    void SetRestrictTableGrowth( BOOL bNew ) { bRestrictTableGrowth = bNew; }
+
+    BOOL IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
+    void SetRemoveFollowFlowLinePending( BOOL bNew ) { bRemoveFollowFlowLinePending = bNew; }
+
     BOOL CalcFlyOffsets( SwTwips& rUpper, long& rLeftOffset,
                          long& rRightOffset ) const;
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
@@ -178,15 +209,6 @@ inline const SwTabFrm *SwTabFrm::GetFollow() const
 inline SwTabFrm *SwTabFrm::GetFollow()
 {
     return (SwTabFrm*)SwFlowFrm::GetFollow();
-}
-
-inline const SwTabFrm *SwTabFrm::FindMaster() const
-{
-    return (const SwTabFrm*)SwFlowFrm::FindMaster();
-}
-inline SwTabFrm *SwTabFrm::FindMaster()
-{
-    return (SwTabFrm*)SwFlowFrm::FindMaster();
 }
 
 #endif  //_TABFRM_HXX
