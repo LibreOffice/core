@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 11:05:12 $
+ *  last change: $Author: ka $ $Date: 2002-06-07 08:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,21 +483,27 @@ void SdDrawDocShell::CancelSearching()
 
 void SdDrawDocShell::ApplySlotFilter() const
 {
-    SfxViewFrame* pFrame = pViewShell ? pViewShell->GetFrame() : GetFrame();
+    SfxViewShell* pTestViewShell = SfxViewShell::GetFirst();
 
-    if( !pFrame )
-        pFrame = SfxViewFrame::GetFirst( this );
-    DBG_ASSERT( pFrame, "kein ViewFrame" );
+    while( pTestViewShell )
+    {
+        if( pTestViewShell->GetObjectShell() == const_cast< SdDrawDocShell* >( this ) &&
+            pTestViewShell->GetViewFrame() &&
+            pTestViewShell->GetViewFrame()->GetDispatcher() )
+        {
+            SfxDispatcher* pDispatcher = pTestViewShell->GetViewFrame()->GetDispatcher();
 
-    SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
+            if( pFilterSIDs )
+                pDispatcher->SetSlotFilter( bFilterEnable, nFilterCount, pFilterSIDs );
+            else
+                pDispatcher->SetSlotFilter();
 
-    if( pFilterSIDs )
-        pDispatcher->SetSlotFilter(bFilterEnable, nFilterCount, pFilterSIDs);
-    else
-        pDispatcher->SetSlotFilter();
+            if( pDispatcher->GetBindings() )
+                pDispatcher->GetBindings()->InvalidateAll( TRUE );
+        }
 
-    if( pFrame )
-        pFrame->GetBindings().InvalidateAll(TRUE);
+        pTestViewShell = SfxViewShell::GetNext( *pTestViewShell );
+    }
 }
 
 
