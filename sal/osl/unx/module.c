@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kr $ $Date: 2001-09-03 11:08:37 $
+ *  last change: $Author: svesik $ $Date: 2001-11-12 23:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,32 @@
 
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
+#endif
+
+#ifdef IRIX
+#ifndef _RLD_INTERFACE_DLFCN_H_DLADDR
+#define _RLD_INTERFACE_DLFCN_H_DLADDR
+typedef struct DL_INFO {
+       const char * dli_fname;
+       void       * dli_fbase;
+       const char * dli_sname;
+       void       * dli_saddr;
+       int          dli_version;
+       int          dli_reserved1;
+       long         dli_reserved[4];
+} Dl_info;
+#endif
+#include <rld_interface.h>
+#define _RLD_DLADDR             14
+int dladdr(void *address, Dl_info *dl);
+
+int dladdr(void *address, Dl_info *dl)
+{
+       void *v;
+       v = _rld_new_interface(_RLD_DLADDR,address,dl);
+
+       return (int)v;
+}
 #endif
 
 #include "system.h"
