@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:16:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,22 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
                 sStyleName = sValue;
                 break;
             }
+            case XML_TOK_MASTERPAGE_USE_HEADER_NAME:
+            {
+                maUseHeaderDeclName =  sValue;
+                break;
+            }
+            case XML_TOK_MASTERPAGE_USE_FOOTER_NAME:
+            {
+                maUseFooterDeclName =  sValue;
+                break;
+            }
+            case XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME:
+            {
+                maUseDateTimeDeclName =  sValue;
+                break;
+            }
+
         }
     }
 
