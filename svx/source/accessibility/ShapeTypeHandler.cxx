@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:19:17 $
+ *  last change: $Author: af $ $Date: 2002-03-20 13:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ const OUString& ShapeTypeHandler::GetServiceName (ShapeTypeId aTypeId) const
 /** This factory method determines the type descriptor for the type of the
     given shape and then calls the descriptor's create function.
 */
-uno::Reference<XAccessible>
+AccessibleShape*
     ShapeTypeHandler::CreateAccessibleObject (
         const uno::Reference<drawing::XShape>& rxShape,
         const uno::Reference<XAccessible>& rxParent,
