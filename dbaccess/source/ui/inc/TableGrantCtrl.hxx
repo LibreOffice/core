@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 06:59:32 $
+ *  last change: $Author: rt $ $Date: 2001-06-20 11:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
