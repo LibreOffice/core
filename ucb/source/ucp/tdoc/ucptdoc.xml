@@ -33,9 +33,6 @@
             com.sun.star.frame.GlobalEventBroadcaster
         </service-dependency>
         <service-dependency>
-            com.sun.star.frame.Desktop
-        </service-dependency>
-        <service-dependency>
             com.sun.star.reflection.ProxyFactory
         </service-dependency>
         <service-dependency>
@@ -87,6 +84,7 @@
     <type> com.sun.star.beans.PropertyAttribute                         </type>
     <type> com.sun.star.beans.PropertyValue                             </type>
     <type> com.sun.star.beans.XPropertySet                              </type>
+    <type> com.sun.star.container.XEnumerationAccess                    </type>
     <type> com.sun.star.container.XNameAccess                           </type>
     <type> com.sun.star.document.XStorageBasedDocument                  </type>
     <type> com.sun.star.document.XEventBroadcaster                      </type>
@@ -94,7 +92,6 @@
     <type> com.sun.star.embed.ElementModes                              </type>
     <type> com.sun.star.embed.XStorage                                  </type>
     <type> com.sun.star.embed.XTransactedObject                         </type>
-    <type> com.sun.star.frame.XFramesSupplier                           </type>
     <type> com.sun.star.frame.XTransientDocumentsDocumentContentFactory </type>
     <type> com.sun.star.io.XActiveDataSink                              </type>
     <type> com.sun.star.io.XActiveDataStreamer                          </type>
