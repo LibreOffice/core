@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupnodeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ namespace configmgr
         {
             enum Result { DONE, CONTINUE };
             virtual Result visit(ValueMemberNode const& aValue) = 0;
+        protected:
+            virtual ~GroupMemberVisitor() {}
         };
 
 
