@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:37:09 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "ViewShellImplementation.hxx"
 
 #include "sdpage.hxx"
@@ -81,6 +80,7 @@
 #include "FactoryIds.hxx"
 #include "slideshow.hxx"
 #include "TaskPaneViewShell.hxx"
+#include "ViewShellBase.hxx"
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -157,8 +157,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     PageKind ePageKind)
 {
     SdDrawDocument* pDocument = mrViewShell.GetDoc();
-    USHORT nPage = pCurrentPage->GetPageNum();
-    //    pCurrentPage = pDocument->GetSdPage(nPage, ePageKind);
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
     BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
     BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
@@ -337,8 +335,10 @@ pShow->InitPageModify();
 
                     if (ePageKind == PK_STANDARD)
                     {
+                        USHORT nPage = (pCurrentPage->GetPageNum()-1) / 2;
                         SdPage* pNotesPage = pDocument->GetSdPage(nPage, PK_NOTES);
-                        pNotesPage->SetName(aNewName);
+                        if (pNotesPage != NULL)
+                            pNotesPage->SetName(aNewName);
                     }
                 }
 
@@ -378,6 +378,32 @@ pShow->InitPageModify();
 
     mrViewShell.Cancel();
     rRequest.Done ();
+}
+
+
+
+
+void ViewShell::Implementation::AssignLayout (
+    SdPage* pPage,
+    AutoLayout aLayout)
+{
+    // Transform the given request into the four argument form that is
+    // understood by ProcessModifyPageSlot().
+    SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
+    BYTE aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+    BYTE aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+    SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
+    SfxRequest aRequest (mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
+    aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
+    aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
+    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
+    aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEOBJ, aVisibleLayers.IsSet(aBackgroundObject)));
+
+    // Forward the call with the new arguments.
+    ProcessModifyPageSlot (
+        aRequest,
+        pPage,
+        pPage->GetPageKind());
 }
 
 
