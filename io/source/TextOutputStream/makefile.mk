@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:32:53 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:20:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..
 
 PRJNAME=io
-TARGET=toutstrm
+TARGET = textoutstream.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
@@ -71,6 +71,7 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+DLLPRE =
 # ------------------------------------------------------------------
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -93,7 +94,7 @@ SLOFILES= \
     $(SLO)$/TextOutputStream.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = toutstrm.map
 
 SHL1STDLIBS= \
         $(SALLIB)	\
