@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:33:45 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,12 @@
 #define _SV_WALL_CXX
 
 #include <math.h>
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
-#else // REMOTE_APPSERVER
-#include <tools/stream.hxx>
-#endif // REMOTE_APPSERVER
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -102,9 +98,6 @@
 #ifndef _SV_GRAPH_HXX
 #include <graph.hxx>
 #endif
-#ifdef REMOTE_APPSERVER
-#include <rmoutdev.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
@@ -126,7 +119,6 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     if( aDstRect.IsEmpty() || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     if( !mpGraphics && !ImplGetGraphics() )
         return;
 
@@ -135,12 +127,6 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
 
     if( mbOutputClipped )
         return;
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-
-    if( !pGraphics )
-        return;
-#endif
 
     const long  nDistX = Max( rDist.Width(), 1L );
     const long  nDistY = Max( rDist.Height(), 1L );
@@ -180,7 +166,6 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     if( mbInitFillColor )
         ImplInitFillColor();
 
-#ifndef REMOTE_APPSERVER
     const BOOL bOldMap = mbMap;
     EnableMapMode( FALSE );
 
@@ -212,11 +197,6 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     }
 
     EnableMapMode( bOldMap );
-#else // REMOTE_APPSERVER
-    aHorzBuf.realloc( nHorzCount );
-    aVertBuf.realloc( nVertCount );
-    pGraphics->DrawGrid( nStartX, nEndX, aHorzBuf, nStartY, nEndY, aVertBuf, nFlags );
-#endif // REMOTE_APPSERVER
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawGrid( rRect, rDist, nFlags );
@@ -302,7 +282,6 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         }
         else
         {
-#ifndef REMOTE_APPSERVER
             PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
             Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
             Point           aPoint;
@@ -462,17 +441,6 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 else
                     DrawPolyPolygon( rPolyPoly );
             }
-#else // REMOTE_APPSERVER
-            ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-            if ( pGraphics )
-            {
-                if ( mbInitLineColor )
-                    ImplInitLineColor();
-                if ( mbInitFillColor )
-                    ImplInitFillColor();
-                pGraphics->DrawTransparent( ImplLogicToDevicePixel( rPolyPoly ), nTransparencePercent );
-            }
-#endif // REMOTE_APPSERVER
         }
 
         mpMetaFile = pOldMetaFile;
@@ -579,11 +547,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 pVDev->EnableMapMode( FALSE );
                 pVDev->DrawMask( Point(), pVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
 
-#ifndef REMOTE_APPSERVER
                 aAlpha = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-#else
-                aAlpha.ImplSetBitmap( pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() ) );
-#endif
 
                 delete pVDev;
 
@@ -605,7 +569,6 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
                                            long nWidth, long nHeight,
                                            const Wallpaper& rWallpaper )
 {
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -630,23 +593,6 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
     mpGraphics->DrawRect( nX+mnOutOffX, nY+mnOutOffY, nWidth, nHeight, this );
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        Color aOldLineColor = GetLineColor();
-        Color aOldFillColor = GetFillColor();
-        SetLineColor();
-        SetFillColor( rWallpaper.GetColor() );
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        pGraphics->DrawRect( Rectangle( Point( nX+mnOutOffX, nY+mnOutOffY ), Size( nWidth, nHeight ) ) );
-        SetLineColor( aOldLineColor );
-        SetFillColor( aOldFillColor );
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -989,40 +935,12 @@ void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
                                         const Color& rLeftTopColor,
                                         const Color& rRightBottomColor )
 {
-#ifndef REMOTE_APPSERVER
     SetFillColor( rLeftTopColor );
     DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Left(), rRect.Bottom()-1 ) ) );
     DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Right()-1, rRect.Top() ) ) );
     SetFillColor( rRightBottomColor );
     DrawRect( Rectangle( rRect.BottomLeft(), rRect.BottomRight() ) );
     DrawRect( Rectangle( rRect.TopRight(), rRect.BottomRight() ) );
-#else
-    if ( mpMetaFile )
-    {
-        BOOL bOutputEnabled = IsOutputEnabled();
-        EnableOutput( FALSE );
-        SetFillColor( rLeftTopColor );
-        DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Left(), rRect.Bottom()-1 ) ) );
-        DrawRect( Rectangle( rRect.TopLeft(), Point( rRect.Right()-1, rRect.Top() ) ) );
-        SetFillColor( rRightBottomColor );
-        DrawRect( Rectangle( rRect.BottomLeft(), rRect.BottomRight() ) );
-        DrawRect( Rectangle( rRect.TopRight(), rRect.BottomRight() ) );
-        EnableOutput( bOutputEnabled );
-    }
-
-    if ( IsDeviceOutputNecessary() && !rRect.IsEmpty() )
-    {
-        ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-        if ( pGraphics )
-        {
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-            Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
-            pGraphics->Draw2ColorFrame( aRect, rLeftTopColor, rRightBottomColor );
-        }
-    }
-    SetFillColor( rRightBottomColor );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1052,7 +970,6 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
         if( GetOutDevType() == OUTDEV_PRINTER )
         {
-#ifndef REMOTE_APPSERVER
             if( !mpGraphics && !ImplGetGraphics() )
                 return;
 
@@ -1064,9 +981,6 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                 bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
                                               (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
             }
-#else
-            DBG_ERROR( "No direct EPS-support for remote appserver!" );
-#endif
         }
 
         if( !bDrawn && pSubst )
