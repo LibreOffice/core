@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:49 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,9 @@ namespace basprov
     {
     private:
         SbMethod* m_pMethod;
-
+        ::rtl::OUString m_funcName;
     public:
-        BasicScriptImpl( SbMethod* pMethod );
+        BasicScriptImpl( const ::rtl::OUString& funcName, SbMethod* pMethod );
         virtual ~BasicScriptImpl();
 
         // XScript
@@ -99,8 +99,8 @@ namespace basprov
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
             ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
-            throw ( ::com::sun::star::lang::IllegalArgumentException,
-                    ::com::sun::star::script::CannotConvertException,
+            throw (
+                    ::drafts::com::sun::star::script::provider::ScriptFrameworkErrorException,
                     ::com::sun::star::reflection::InvocationTargetException,
                     ::com::sun::star::uno::RuntimeException );
     };
