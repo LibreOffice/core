@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:49:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_NUMPARA
         Text [ english_us ] = "Numbering Style" ;
         Text [ portuguese_brazilian ] = "Estilo de Numera��o" ;
         Text [ swedish ] = "~Numreringsformatmall" ;
-        Text [ danish ] = "~Nummereringstypografi" ;
+        Text [ danish ] = "Nummereringstypografi" ;
         Text [ italian ] = "Modello di numerazione" ;
         Text [ spanish ] = "Estilo de numeraci�n" ;
         Text [ french ] = "Style de num�rotation" ;
@@ -103,6 +103,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "~Nummerierungsvorlage";
         Text[ hindi ] = "संख्या देने का शैली";
         Text[ slovak ] = "Štýl číslovania";
+        Text[ hungarian ] = "Számozás stílusa";
+        Text[ slovenian ] = "Slog oštevilčevanja";
     };
     ListBox LB_NUMBER_STYLE
     {
@@ -222,6 +224,14 @@ TabPage TP_NUMPARA
     {
          < "Žiadne" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Nincs" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Brez" ; > ;
+    };
     };
     FixedLine FL_NEW_START
     {
@@ -256,6 +266,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "संख्या देना";
         Text[ slovak ] = "Číslovanie";
+        Text[ hungarian ] = "Számozás";
+        Text[ slovenian ] = "Oštevilčevanje";
     };
     TriStateBox CB_NEW_START
     {
@@ -269,7 +281,7 @@ TabPage TP_NUMPARA
         Text [ english_us ] = "R~estart at this paragraph" ;
         Text [ portuguese_brazilian ] = "R~einiciar neste par�grafo" ;
         Text [ swedish ] = "B�rj~a om vid detta stycke" ;
-        Text [ danish ] = "Begynd nyt ved dette afsnit" ;
+        Text [ danish ] = "Begynd forfra ved dette afsnit" ;
         Text [ italian ] = "Ricomincia con questo paragrafo" ;
         Text [ spanish ] = "~Volver a empezar en este p�rrafo" ;
         Text [ french ] = "~Commencer avec ce paragraphe" ;
@@ -291,6 +303,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "~An diesem Absatz neu beginnen";
         Text[ hindi ] = "~इस परिच्छेद से पुनः प्रारंभ करो";
         Text[ slovak ] = "R~eštartovať v tomto odstavci";
+        Text[ hungarian ] = "Új~rakezdés ennél a bekezdésnél";
+        Text[ slovenian ] = "P~onovno začni s tem odstavkom";
     };
     TriStateBox CB_NUMBER_NEW_START
     {
@@ -325,6 +339,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "~Beginnen mit";
         Text[ hindi ] = "~के सहित प्रारंभ";
         Text[ slovak ] = "~Začať číslom";
+        Text[ hungarian ] = "~Kezdés";
+        Text[ slovenian ] = "Zač~ni z";
     };
     NumericField NF_NEW_START
     {
@@ -375,6 +391,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "‮מיספור שורות‬";
         Text[ hindi ] = "रेखा को संख्या देना";
         Text[ slovak ] = "Číslovanie riadkov";
+        Text[ hungarian ] = "Sorszámozás";
+        Text[ slovenian ] = "Oštevilčevanje vrstic";
     };
     TriStateBox CB_COUNT_PARA
     {
@@ -386,7 +404,7 @@ TabPage TP_NUMPARA
         Text [ english_us ] = "~Include this paragraph in line numbering" ;
         Text [ portuguese_brazilian ] = "~Incluir este par�grafo na numera��o de linhas" ;
         Text [ swedish ] = "~R�kna med raderna i det h�r stycket" ;
-        Text [ danish ] = "Inkluder dette afsnits r�kker" ;
+        Text [ danish ] = "~Inkluder dette afsnit i linjenummerering" ;
         Text [ italian ] = "~Conta le righe di questo paragrafo" ;
         Text [ spanish ] = "Con~tar las l�neas de este p�rrafo" ;
         Text [ french ] = "~Inclure les lignes de ce paragraphe" ;
@@ -409,6 +427,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "~Die Zeilen dieses Absatzes mitzählen";
         Text[ hindi ] = "रे~खा को संख्या देने के समय इस परिच्छेद को सम्मिलित करो";
         Text[ slovak ] = "~Zahrnúť tento odstavec do číslovania riadkov";
+        Text[ hungarian ] = "A s~orok számozásában ez a bekezdés is szerepeljen";
+        Text[ slovenian ] = "~Vključi ta odstavek v oštevilčevanje vrstic";
     };
     TriStateBox CB_RESTART_PARACOUNT
     {
@@ -421,7 +441,7 @@ TabPage TP_NUMPARA
         Text [ english_us ] = "Rest~art at this paragraph" ;
         Text [ portuguese_brazilian ] = "Reinici~ar neste par�grafo" ;
         Text [ swedish ] = "B�rja o~m vid detta stycke" ;
-        Text [ danish ] = "Begynd nyt ved dette afsnit" ;
+        Text [ danish ] = "Begynd forfra ved dette afsnit" ;
         Text [ italian ] = "Ricomincia con questo paragrafo" ;
         Text [ spanish ] = "Volver a empe~zar en este p�rrafo" ;
         Text [ french ] = "Recommencer avec ce paragraphe" ;
@@ -443,6 +463,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "An diese~m Absatz neu beginnen";
         Text[ hindi ] = "इ~स परिच्छेद से पुनः प्रारंभ करो";
         Text[ slovak ] = "Rešt~artovať na začiatku tohto odstavca";
+        Text[ hungarian ] = "Újrak~ezdés ennél a bekezdésnél";
+        Text[ slovenian ] = "Po~novno začni s tem odstavkom";
     };
     FixedText FT_RESTART_NO
     {
@@ -477,6 +499,8 @@ TabPage TP_NUMPARA
         Text[ hebrew ] = "B~eginnen mit";
         Text[ hindi ] = "~के सहित प्रारंभ";
         Text[ slovak ] = "~Začať číslom";
+        Text[ hungarian ] = "Kez~dőérték:";
+        Text[ slovenian ] = "~Začni z";
     };
     NumericField NF_RESTART_PARA
     {
@@ -496,6 +520,7 @@ TabPage TP_NUMPARA
     };
 };
  // ********************************************************************** EOF
+
 
 
 
