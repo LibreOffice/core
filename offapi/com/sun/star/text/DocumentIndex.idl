@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndex.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:26 $
+ *  last change: $Author: os $ $Date: 2001-03-07 12:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ service DocumentIndex
     /**
      contains all index marks that are related to this index.
      */
-    [property] sequence <com::sun::star::text::XDocumentIndexMark> DocumentIndexMarks;
+    [readonly, property] sequence <com::sun::star::text::XDocumentIndexMark> DocumentIndexMarks;
 };
 
 //=============================================================================
