@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-29 21:04:11 $
+ *  last change: $Author: os $ $Date: 2001-09-20 12:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ TabPage TP_OPTLOAD_PAGE
     FixedText FT_TAB
     {
         Pos = MAP_APPFONT ( 130 , 110 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
         Text = "Tabulatorenab~stand";
         Text [ ENGLISH ] = "Default Tab distance" ;
         Text [ italian ] = "Intervallo di tabulazione";
