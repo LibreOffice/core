@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-19 09:23:59 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 12:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,6 +1104,14 @@ void SfxViewShell::WriteUserData( String &, BOOL bBrowse )
 void SfxViewShell::ReadUserData(const String &, BOOL bBrowse )
 {
 }
+
+void SfxViewShell::ReadUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse )
+{
+}
+void SfxViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse )
+{
+}
+
 
 //--------------------------------------------------------------------
 // returns the first shell of spec. type viewing the specified doc.
