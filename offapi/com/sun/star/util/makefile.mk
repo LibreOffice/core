@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: fs $ $Date: 2002-09-11 09:27:46 $
+#   last change: $Author: tl $ $Date: 2002-10-10 11:13:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ IDLFILES=\
     ModeChangeEvent.idl\
     ReplaceDescriptor.idl\
     SearchDescriptor.idl\
+        Sortable.idl\
     SortDescriptor.idl\
     SortField.idl\
     SortFieldType.idl\
