@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 14:16:36 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         xShare   = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aLocale);
         xUser    = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath , eUserMode , sal_False, aLocale);
-        LOG_ASSERT(sLocalizedSharePath==sLocalizedUserPath, "Presethandler::connectToResource()\nDifferent localization sets inside share and user layer found ...")
         sRelPath = sLocalizedUserPath;
     }
 
