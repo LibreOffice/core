@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-03-15 14:22:35 $
+ *  last change: $Author: hr $ $Date: 2001-05-02 15:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <osl/interlck.h>
 #include <osl/diagnose.h>
 
-#if defined ( SOLARIS) && defined ( SPARC )
+#if  ( defined ( SOLARIS ) || defined ( NETBSD ) ) && defined ( SPARC )
 #error please use asm/interlck_sparc.s
 #elif defined ( SOLARIS) && defined ( X86 )
 #error please use asm/interlck_x86.s

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obr $ $Date: 2001-04-11 11:32:33 $
+#   last change: $Author: hr $ $Date: 2001-05-02 15:03:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,7 +130,8 @@ APP1STDLIBS+=-lC
 
 .INCLUDE :  target.mk
 
-.IF "$(OS)$(CPU)"=="SOLARISS"
+.IF "$(OS)$(CPU)"=="SOLARISS" || "$(OS)$(CPU)"=="NETBSDS"
+
 $(SLO)$/interlck.obj: $(SLO)$/interlck.o
      touch $(SLO)$/interlck.obj
 
@@ -138,10 +139,10 @@ $(OBJ)$/interlck.obj: $(OBJ)$/interlck.o
      touch $(OBJ)$/interlck.obj
 
 $(SLO)$/interlck.o: $(MISC)$/interlck_sparc.s
-        /usr/ccs/bin/as -P -q -o $@ $<
+    $(ASM) $(AFLAGS) -o $@ $<
 
 $(OBJ)$/interlck.o: $(MISC)$/interlck_sparc.s
-        /usr/ccs/bin/as -P -q -o $@ $<
+    $(ASM) $(AFLAGS) -o $@ $<
 
 $(MISC)$/interlck_sparc.s: asm/interlck_sparc.s
     +tr -d "\015" < $< > $@
@@ -151,16 +152,16 @@ $(MISC)$/interlck_sparc.s: asm/interlck_sparc.s
 .IF "$(OS)$(CPU)"=="SOLARISI"
 
 $(SLO)$/interlck.obj: $(SLO)$/interlck.o
-     touch $(SLO)$/interlck.obj
+    touch $(SLO)$/interlck.obj
 
 $(OBJ)$/interlck.obj: $(OBJ)$/interlck.o
-     touch $(OBJ)$/interlck.obj
+    touch $(OBJ)$/interlck.obj
 
 $(SLO)$/interlck.o: $(MISC)$/interlck_x86.s
-        /usr/ccs/bin/as -P -q -o $@ $<
+    $(ASM) $(AFLAGS) -o $@ $<
 
 $(OBJ)$/interlck.o: $(MISC)$/interlck_x86.s
-        /usr/ccs/bin/as -P -q -o $@ $<
+    $(ASM) $(AFLAGS) -o $@ $<
 
 $(MISC)$/interlck_x86.s: asm/interlck_x86.s
     +tr -d "\015" < $< > $@

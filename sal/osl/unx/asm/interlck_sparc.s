@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck_sparc.s,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2001-02-23 14:04:07 $
+ *  last change: $Author: hr $ $Date: 2001-05-02 15:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,32 @@ osl_decrementInterLockCountFuncPtr:
 .size osl_decrementInterLockCountFuncPtr,4
 
 .section   ".text"
+
+#if defined(NETBSD)
+/* add the address of the calling "call" instruction (stored in %o7) to
+ * %o5 which contains _GLOBAL_OFFSET_TABLE_
+ */
+.Laddoseven:
+        retl
+        add %o7, %o5, %o5
+#endif
+
  .global   osl_incrementInterlockedCount
  .align   4
 
 osl_incrementInterlockedCount:
 
+#if defined(NETBSD)
+        mov     %o7, %g1
+        sethi   %hi(_GLOBAL_OFFSET_TABLE_-4), %o5
+        call    .Laddoseven
+        add     %o5, %lo(_GLOBAL_OFFSET_TABLE_+4), %o5
+        mov     %g1, %o7
+#endif
         set     osl_incrementInterLockCountFuncPtr, %o1
+#if defined(NETBSD)
+        ld      [%o1 + %o5], %o1
+#endif
         ld      [%o1], %o1
         jmp     %o1
         nop                                             ! delay slot
@@ -108,7 +128,17 @@ osl_incrementInterlockedCount:
 
 osl_decrementInterlockedCount:
 
+#if defined(NETBSD)
+        mov     %o7, %g1
+        sethi   %hi(_GLOBAL_OFFSET_TABLE_-4), %o5
+        call    .Laddoseven
+        add     %o5, %lo(_GLOBAL_OFFSET_TABLE_+4), %o5
+        mov     %g1, %o7
+#endif
         set     osl_decrementInterLockCountFuncPtr, %o1
+#if defined(NETBSD)
+        ld      [%o1 + %o5], %o1
+#endif
         ld      [%o1], %o1
         jmp     %o1
         nop                                             ! delay slot
@@ -121,6 +151,13 @@ osl_decrementInterlockedCount:
 
 osl_InterlockedCountSetV9:
 
+#if defined(NETBSD)
+        mov	    %o7, %g1
+        sethi	%hi(_GLOBAL_OFFSET_TABLE_-4), %o5
+        call	.Laddoseven
+        add	    %o5, %lo(_GLOBAL_OFFSET_TABLE_+4), %o5
+        mov	    %g1, %o7
+#endif
         set     osl_incrementInterLockCountFuncPtr, %o1
         set     osl_decrementInterLockCountFuncPtr, %o2
         cmp     %o0, %g0
@@ -128,11 +165,23 @@ osl_InterlockedCountSetV9:
         nop                                             ! delay slot
         set     osl_incrementInterlockedCountV8, %o0
         set     osl_decrementInterlockedCountV8, %o3
+#if defined(NETBSD)
+        ld      [%o0 + %o5], %o0
+        ld      [%o1 + %o5], %o1
+        ld      [%o2 + %o5], %o2
+        ld      [%o3 + %o5], %o3
+#endif
         st      %o3,[%o2]
         retl
         st      %o0,[%o1]
 1:      set     osl_incrementInterlockedCountV9, %o0
         set     osl_decrementInterlockedCountV9, %o3
+#if defined(NETBSD)
+        ld      [%o0 + %o5], %o0
+        ld      [%o1 + %o5], %o1
+        ld      [%o2 + %o5], %o2
+        ld      [%o3 + %o5], %o3
+#endif
         st      %o3,[%o2]
         retl
         st      %o0,[%o1]

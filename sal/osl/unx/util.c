@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-02-27 14:38:15 $
+ *  last change: $Author: hr $ $Date: 2001-05-02 15:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,4 +367,29 @@ void osl_InitSparcV9(void)
 
 #endif
 
+#if defined(NETBSD) && defined(SPARC) && defined(GCC)
+
+#include <sys/param.h>
+#include <sys/sysctl.h>
+void osl_InitSparcV9(void)  __attribute__((constructor));
+void osl_InterlockedCountSetV9(sal_Bool bV9);
+
+/* Determine which processor we are running on (sparc v8 or v9)
+ * The approach is very similar to Solaris.
+ */
+
+void osl_InitSparcV9(void)
+{
+    int mib[2]={CTL_HW,HW_MACHINE};
+    char processorname[256];
+    size_t len=256;
+
+    /* get the machine name */
+    sysctl(mib, 2, processorname, &len, NULL, 0);
+    if (!strncmp("sparc64",processorname, len)) {
+        osl_InterlockedCountSetV9(sal_True);
+    }
+}
+
+#endif
 
