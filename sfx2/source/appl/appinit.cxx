@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:56:15 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,11 @@
 #include <svtools/saveopt.hxx>
 #include <svtools/localisationoptions.hxx>
 
-#ifndef _SV_CONFIG_HXX
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SV_RESARY_HXX
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #endif
 
 #ifndef _SOERR_HXX //autogen
@@ -99,9 +99,6 @@
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
