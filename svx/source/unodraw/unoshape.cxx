@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-23 09:24:17 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 13:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,10 @@
 #endif
 #include "svdstr.hrc"
 #include "unomaster.hxx"
+
+#ifndef _OUTLOBJ_HXX //autogen
+#include <outlobj.hxx>
+#endif
 
 using namespace ::osl;
 using namespace ::vos;
@@ -2032,6 +2036,29 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 sal_Int32 nCornerRadius;
                 if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) || (nCornerRadius > 5000000))
                     throw IllegalArgumentException();
+            }
+
+            // HACK-fix #99090#
+            // since SdrTextObj::SetVerticalWriting exchanges
+            // SDRATTR_TEXT_AUTOGROWWIDTH and SDRATTR_TEXT_AUTOGROWHEIGHT,
+            // we have to set the textdirection here
+
+            if( pMap->nWID == SDRATTR_TEXTDIRECTION && pObj->ISA(SdrTextObj))
+            {
+                com::sun::star::text::WritingMode eMode;
+                rVal >>= eMode;
+                bool bVertical = eMode == com::sun::star::text::WritingMode_TB_RL;
+                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                if( bVertical || pOPO )
+                {
+                    if( NULL == pOPO )
+                    {
+                        ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
+                        pOPO = pObj->GetOutlinerParaObject();
+                    }
+
+                    pOPO->SetVertical(bVertical);
+                }
             }
 
             SfxItemSet* pSet;
