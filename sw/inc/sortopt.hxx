@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 08:56:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,17 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
 enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
 
 /*--------------------------------------------------------------------
     Beschreibung: SortierSchluessel
  --------------------------------------------------------------------*/
-struct SwSortKey
+struct SW_DLLPUBLIC SwSortKey
 {
     SwSortKey();
     SwSortKey( USHORT nId, const String& rSrtType, SwSortOrder eOrder );
@@ -89,7 +93,7 @@ struct SwSortKey
 
 SV_DECL_PTRARR(SwSortKeys, SwSortKey*, 3, 1)
 
-struct SwSortOptions
+struct SW_DLLPUBLIC SwSortOptions
 {
     SwSortOptions();
     ~SwSortOptions();
