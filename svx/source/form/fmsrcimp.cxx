@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-10 11:47:45 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 11:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,43 +308,43 @@ void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::Prope
 //========================================================================
 // FmSearchEngine - local classes
 //------------------------------------------------------------------------
-FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
-    :ControlTextWrapper(Reference< XInterface > (_xText, UNO_QUERY))
+SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
+    :ControlTextWrapper(_xText.get())
     ,m_xText(_xText)
 {
     DBG_ASSERT(m_xText.is(), "FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper : invalid argument !");
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString FmSearchEngine::SimpleTextWrapper::getCurrentText() const
+::rtl::OUString SimpleTextWrapper::getCurrentText() const
 {
     return m_xText->getText();
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox > & _xBox)
-    :ControlTextWrapper(Reference< XInterface > (_xBox, UNO_QUERY))
+ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox > & _xBox)
+    :ControlTextWrapper(_xBox.get())
     ,m_xBox(_xBox)
 {
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::ListBoxWrapper::ListBoxWrapper : invalid argument !");
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString FmSearchEngine::ListBoxWrapper::getCurrentText() const
+::rtl::OUString ListBoxWrapper::getCurrentText() const
 {
     return m_xBox->getSelectedItem();
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckBox > & _xBox)
-    :ControlTextWrapper(Reference< XInterface > (_xBox, UNO_QUERY))
+CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckBox > & _xBox)
+    :ControlTextWrapper(_xBox.get())
     ,m_xBox(_xBox)
 {
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper : invalid argument !");
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString FmSearchEngine::CheckBoxWrapper::getCurrentText() const
+::rtl::OUString CheckBoxWrapper::getCurrentText() const
 {
     switch ((TriState)m_xBox->getState())
     {
