@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,6 +1913,8 @@ BOOL BrowseBox::ProcessKey( const KeyEvent& rEvt )
             case KEY_HOME:          nId = BROWSER_CURSORTOPOFSCREEN; break;
             case KEY_END:           nId = BROWSER_CURSORENDOFSCREEN; break;
             case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; break;
+            case KEY_LEFT:          nId = BROWSER_MOVECOLUMNLEFT; break;
+            case KEY_RIGHT:         nId = BROWSER_MOVECOLUMNRIGHT; break;
         }
 
     if ( nId != BROWSER_NONE )
@@ -2053,6 +2055,29 @@ void BrowseBox::Dispatch( USHORT nId )
         case BROWSER_SELECT:
             SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), FALSE );
             bDone = TRUE;
+            break;
+        case BROWSER_MOVECOLUMNLEFT:
+        case BROWSER_MOVECOLUMNRIGHT:
+            { // check if column moving is allowed
+                BrowserHeader* pHeaderBar = ( (BrowserDataWin*)pDataWin )->pHeaderBar;
+                if ( pHeaderBar && pHeaderBar->IsDragable() )
+                {
+                    USHORT nColId = GetCurColumnId();
+                    USHORT nNewPos = GetColumnPos(nColId);
+                    BOOL bMoveAllowed = FALSE;
+                    if ( BROWSER_MOVECOLUMNLEFT == nId && nNewPos > 1 )
+                        --nNewPos,bMoveAllowed = TRUE;
+                    else if ( BROWSER_MOVECOLUMNRIGHT == nId && nNewPos < (ColCount()-1) )
+                        ++nNewPos,bMoveAllowed = TRUE;
+
+                    if ( bMoveAllowed )
+                    {
+                        SetColumnPos( nColId, nNewPos );
+                        ColumnMoved( nColId );
+                        MakeFieldVisible(GetCurRow(),nColId,TRUE);
+                    }
+                }
+            }
             break;
     }
 
