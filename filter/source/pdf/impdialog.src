@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:24:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,143 +68,34 @@ ModalDialog RID_PDF_EXPORT_DLG
     Size = MAP_APPFONT ( 179, 101 );
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "PDF Optionen";
-    Text [ ENGLISH ] = "PDF Options";
+    Text [ de ] = "PDF Optionen";
     FixedLine FL_PAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 111 , 8 ) ;
-        Text = "Seiten" ;
-        Text [ ENGLISH ] = "Pages" ;
-        Text[ english_us ] = "Pages";
-        Text[ portuguese ] = "Páginas";
-        Text[ russian ] = "Ñòğàíèöû";
-        Text[ greek ] = "Óåëßäåò";
-        Text[ dutch ] = "Pagina's";
-        Text[ french ] = "Pages";
-        Text[ spanish ] = "Páginas";
-        Text[ finnish ] = "Sivut";
-        Text[ italian ] = "Pagine";
-        Text[ danish ] = "Sider";
-        Text[ swedish ] = "Sidor";
-        Text[ polish ] = "Strony";
-        Text[ portuguese_brazilian ] = "Páginas";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸";
-        Text[ korean ] = "í˜ì´ì§€";
-        Text[ chinese_simplified ] = "é¡µ";
-        Text[ chinese_traditional ] = "é ";
-        Text[ turkish ] = "Sayfa";
-        Text[ arabic ] = "ÕİÍÇÊ";
-        Text[ catalan ] = "Pàgines";
-        Text[ thai ] = "à¸«à¸™à¹‰à¸²";
-        Text[ czech ] = "StrÃ¡nky";
-        Text[ hebrew ] = "â€®×¢××•×“×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¥‡à¤‚";
-        Text[ slovak ] = "StrÃ¡nky";
-        Text[ hungarian ] = "Oldalak";
-        Text[ slovenian ] = "Strani";
+        Text [ de ] = "Seiten" ;
+        Text [ en-US ] = "Pages";
     };
     RadioButton RB_ALL
     {
         Pos = MAP_APPFONT ( 12 , 12 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "~Alle" ;
-        Text [ ENGLISH ] = "~All" ;
-        Text[ english_us ] = "~All";
-        Text[ portuguese ] = "~Todas";
-        Text[ russian ] = "~Âñå";
-        Text[ greek ] = "¼ë~á";
-        Text[ dutch ] = "a~lle";
-        Text[ french ] = "Tout";
-        Text[ spanish ] = "~Todas";
-        Text[ finnish ] = "~Kaikki";
-        Text[ italian ] = "~Tutte";
-        Text[ danish ] = "~Alle";
-        Text[ swedish ] = "~Alla";
-        Text[ polish ] = "Wszystkie";
-        Text[ portuguese_brazilian ] = "~Todos";
-        Text[ japanese ] = "ã™ã¹ã¦(~A)";
-        Text[ korean ] = "ëª¨ë‘(~A)";
-        Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
-        Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
-        Text[ turkish ] = "Tümü";
-        Text[ arabic ] = "Çáßá";
-        Text[ catalan ] = "~Tots";
-        Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-        Text[ czech ] = "VÅ¡e";
-        Text[ hebrew ] = "â€®×”×›×œâ€¬";
-        Text[ hindi ] = "~à¤¸à¤¬";
-        Text[ slovak ] = "~VÅ¡etko";
-        Text[ hungarian ] = "Ã–ss~zes";
-        Text[ slovenian ] = "~Vse";
+        Text [ de ] = "~Alle" ;
+        Text [ en-US ] = "~All";
     };
     RadioButton RB_RANGE
     {
         Pos = MAP_APPFONT ( 12 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Bereich" ;
-        Text [ ENGLISH ] = "~Range" ;
-        Text[ english_us ] = "~Range";
-        Text[ portuguese ] = "Intervalo";
-        Text[ russian ] = "Îáëàñòü";
-        Text[ greek ] = "Ğåñéï÷Ş";
-        Text[ dutch ] = "~Bereik";
-        Text[ french ] = "Plage";
-        Text[ spanish ] = "~Área";
-        Text[ finnish ] = "~Alue";
-        Text[ italian ] = "~Area";
-        Text[ danish ] = "~Område";
-        Text[ swedish ] = "~Område";
-        Text[ polish ] = "Zakres";
-        Text[ portuguese_brazilian ] = "I~ntervalo";
-        Text[ japanese ] = "ç¯„å›²(~R)";
-        Text[ korean ] = "ë²”ìœ„(~R)";
-        Text[ chinese_simplified ] = "èŒƒå›´(~R)";
-        Text[ chinese_traditional ] = "ç¯„åœ(~R)";
-        Text[ turkish ] = "~Aralık";
-        Text[ arabic ] = "ÇáäØÇŞ";
-        Text[ catalan ] = "Àrea";
-        Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡";
-        Text[ czech ] = "Rozsah";
-        Text[ hebrew ] = "â€®×˜×•×•×—â€¬";
-        Text[ hindi ] = "~à¤«à¤¼à¥ˆà¤²à¤¾à¤µ";
-        Text[ slovak ] = "~Rozsah";
-        Text[ hungarian ] = "~TartomÃ¡ny";
-        Text[ slovenian ] = "~Obseg";
+        Text [ de ] = "~Bereich" ;
+        Text [ en-US ] = "~Range";
     };
     RadioButton RB_SELECTION
     {
         Pos = MAP_APPFONT ( 12 , 36 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "A~uswahl" ;
-        Text [ ENGLISH ] = "~Selection" ;
-        Text[ english_us ] = "~Selection";
-        Text[ portuguese ] = "S~elecção";
-        Text[ russian ] = "Âûäåëåíèå";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ dutch ] = "~Selectie";
-        Text[ french ] = "Sélection";
-        Text[ spanish ] = "~Selección";
-        Text[ finnish ] = "~Valinta";
-        Text[ italian ] = "Selezione";
-        Text[ danish ] = "Markeri~ng";
-        Text[ swedish ] = "~Markering";
-        Text[ polish ] = "Selekcja";
-        Text[ portuguese_brazilian ] = "S~eleção";
-        Text[ japanese ] = "é¸æŠã—ãŸéƒ¨åˆ†(~S)";
-        Text[ korean ] = "ì„ íƒ(~S)";
-        Text[ chinese_simplified ] = "é€‰æ‹©(~S)";
-        Text[ chinese_traditional ] = "é¸æ“‡(~S)";
-        Text[ turkish ] = "~Seçilen aralık";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ catalan ] = "Selecció";
-        Text[ thai ] = "à¹€~à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "â€®×‘×—×™×¨×”â€¬";
-        Text[ hindi ] = "~à¤šà¥à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "~VÃ½ber";
-        Text[ hungarian ] = "~KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "~Izbor";
+        Text [ de ] = "A~uswahl" ;
+        Text [ en-US ] = "~Selection";
     };
     Edit ED_PAGES
     {
@@ -216,173 +107,38 @@ ModalDialog RID_PDF_EXPORT_DLG
     {
         Pos = MAP_APPFONT ( 6 , 52 ) ;
         Size = MAP_APPFONT ( 111 , 8 ) ;
-        Text = "Komprimierung";
-        Text [ ENGLISH ] = "Compression";
-        Text[ english_us ] = "Compression";
-        Text[ portuguese ] = "Compression";
-        Text[ russian ] = "Óæàòèå";
-        Text[ greek ] = "Óõìğßåóç";
-        Text[ dutch ] = "Compressie";
-        Text[ french ] = "Compression";
-        Text[ spanish ] = "Compresión";
-        Text[ finnish ] = "Tiivistys";
-        Text[ italian ] = "Compressione";
-        Text[ danish ] = "Komprimering";
-        Text[ swedish ] = "Komprimering";
-        Text[ polish ] = "Kompresja";
-        Text[ portuguese_brazilian ] = "Compressão";
-        Text[ japanese ] = "åœ§ç¸®";
-        Text[ korean ] = "ì••ì¶•";
-        Text[ chinese_simplified ] = "å‹ç¼©";
-        Text[ chinese_traditional ] = "å£“ç¸®";
-        Text[ turkish ] = "Sıkıştırma";
-        Text[ arabic ] = "ÖÛØ";
-        Text[ catalan ] = "Compression";
-        Text[ thai ] = "à¸à¸²à¸£à¸šà¸µà¸šà¸­à¸±à¸”";
-        Text[ czech ] = "Komprese";
-        Text[ hebrew ] = "â€®×“×—×™×¡×”â€¬";
-        Text[ hindi ] = "à¤¦à¤¬à¤¾à¤µ";
-        Text[ slovak ] = "Kompresia";
-        Text[ hungarian ] = "TÃ¶mÃ¶rÃ­tÃ©s";
-        Text[ slovenian ] = "Stiskanje";
+        Text [ de ] = "Komprimierung";
+        Text [ en-US ] = "Compression";
     };
     RadioButton RB_SCREEN
     {
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 165 , 10 ) ;
-        Text = "Optimiert für ~Bildschirm (kleinste Dateigröße)" ;
-        Text [ ENGLISH ] = "S~creen optimized (smallest file size)" ;
-        Text[ english_us ] = "S~creen optimized (smallest file size)";
-        Text[ portuguese ] = "S~creen optimized (smallest file size)";
-        Text[ russian ] = "S~creen optimized (smallest file size)";
-        Text[ greek ] = "Âåë~ôéóôïğïßçóç ãéá ïèüíç (ìéêñüôåñï ìİãåèïò)";
-        Text[ dutch ] = "Optimaal voor S~cherm (kleinste bestandsgrootte)";
-        Text[ french ] = "Optimisé pour l'écran (taille minimum de fichier)";
-        Text[ spanish ] = "~Optimizado para la pantalla (tamaño mínimo de archivo)";
-        Text[ finnish ] = "S~creen optimized (smallest file size)";
-        Text[ italian ] = "Ottimizzato per lo schermo (dimensioni minime file)";
-        Text[ danish ] = "~Skærmoptimeret (mindste filstørrelse)";
-        Text[ swedish ] = "Optimerad för ~bildskärm (minsta filstorlek)";
-        Text[ polish ] = "S~creen optimized (smallest file size)";
-        Text[ portuguese_brazilian ] = "~Otimizado para a tela (menor tamanho de arquivo)";
-        Text[ japanese ] = "ç”»é¢ç”¨ã«æœ€é©åŒ–ã™ã‚‹ (æœ€å°ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º)(~C)";
-        Text[ korean ] = "í™”ë©´ìš©ìœ¼ë¡œ ìµœì í™”(ìµœì†Œ íŒŒì¼ í¬ê¸°)(~C)";
-        Text[ chinese_simplified ] = "ä¼˜åŒ–å±å¹•æ˜¾ç¤º(æœ€å°çš„æ–‡ä»¶å¤§å°)(~C)";
-        Text[ chinese_traditional ] = "å„ªåŒ–å±å¹•é¡¯ç¤º(æœ€å°çš„æª”æ¡ˆå¤§å°)(~C)";
-        Text[ turkish ] = "En uygun ~ekran (en küçük dosya boyutu)";
-        Text[ arabic ] = "S~creen optimized (smallest file size)";
-        Text[ catalan ] = "S~creen optimized (smallest file size)";
-        Text[ thai ] = "S~creen optimized (smallest file size)";
-        Text[ czech ] = "OptimalizovÃ¡no pro obrazovku (nejmenÅ¡Ã­ velikost souboru)";
-        Text[ hebrew ] = "Optimiert fÃ¼r ~Bildschirm (kleinste DateigrÃ¶ÃŸe)";
-        Text[ hindi ] = "S~creen optimized (smallest file size)";
-        Text[ slovak ] = "OptimalizovanÃ© pre o~brazovku (najmenÅ¡ia veÄ¾kosÅ¥)";
-        Text[ hungarian ] = "~KÃ©pernyÅ‘hÃ¶z optimalizÃ¡lva (legkisebb fÃ¡jlmÃ©ret)";
-        Text[ slovenian ] = "O~ptimirano za zaslon (najm. velikost datoteke)";
+        Text [ de ] = "Optimiert für ~Bildschirm (kleinste Dateigröße)" ;
+        Text [ en-US ] = "S~creen optimized (smallest file size)";
     };
     RadioButton RB_PRINT
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 165, 10 ) ;
-        Text = "Optimiert für ~Druck" ;
-        Text [ ENGLISH ] = "~Print optimized" ;
-        Text[ english_us ] = "~Print optimized";
-        Text[ portuguese ] = "~Print optimized";
-        Text[ russian ] = "~Print optimized";
-        Text[ greek ] = "~Âåëôéóôïğïßçóç ãéá åêôığùóç (åêôõğùôŞ)";
-        Text[ dutch ] = "Optimaal voor ~Printer";
-        Text[ french ] = "Optimisé pour l'impression";
-        Text[ spanish ] = "~Optimizado para la impresión";
-        Text[ finnish ] = "~Print optimized";
-        Text[ italian ] = "Stampa ottimizzata";
-        Text[ danish ] = "~Udskriftsoptimeret";
-        Text[ swedish ] = "Optimerad för ~utskrift";
-        Text[ polish ] = "~Print optimized";
-        Text[ portuguese_brazilian ] = "Otimizado para im~pressoras";
-        Text[ japanese ] = "å°åˆ·ç”¨ã«æœ€é©åŒ–ã™ã‚‹(~P)";
-        Text[ korean ] = "ì¸ì‡„ìš©ìœ¼ë¡œ ìµœì í™”(~P)";
-        Text[ chinese_simplified ] = "ä¼˜åŒ–æ‰“å°æ•ˆæœ(~P)";
-        Text[ chinese_traditional ] = "å„ªåŒ–åˆ—å°æ•ˆæœ(~P)";
-        Text[ turkish ] = "~En uygun şekilde yazdır";
-        Text[ arabic ] = "~Print optimized";
-        Text[ catalan ] = "~Print optimized";
-        Text[ thai ] = "~Print optimized";
-        Text[ czech ] = "OptimalizovÃ¡no pro tisk";
-        Text[ hebrew ] = "Optimiert fÃ¼r ~Druck";
-        Text[ hindi ] = "~Print optimized";
-        Text[ slovak ] = "O~ptimalizovanÃ¡ tlaÄ";
-        Text[ hungarian ] = "~NyomtatÃ¡shoz optimalizÃ¡lva";
-        Text[ slovenian ] = "Op~timirano za tiskanje";
+        Text [ de ] = "Optimiert für ~Druck" ;
+        Text [ en-US ] = "~Print optimized";
     };
     RadioButton RB_PRESS
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 165, 10 ) ;
-        Text = "Optimiert für Druck~vorstufe" ;
-        Text [ ENGLISH ] = "Pr~ess optimized" ;
-        Text[ english_us ] = "Pr~ess optimized";
-        Text[ portuguese ] = "Pr~ess optimized";
-        Text[ russian ] = "Pr~ess optimized";
-        Text[ greek ] = "Âåëôéóôïğïßçóç ãéá åğáããåëìáôéêŞ åêôığùóç";
-        Text[ dutch ] = "Optimaal voor ~Drukwerk";
-        Text[ french ] = "Optimisé pour presse à imprimer";
-        Text[ spanish ] = "~Optimizado para la imprenta";
-        Text[ finnish ] = "Pr~ess optimized";
-        Text[ italian ] = "Prestampa ottimizzata";
-        Text[ danish ] = "~Trykoptimeret";
-        Text[ swedish ] = "Optimerad för tr~yck";
-        Text[ polish ] = "Pr~ess optimized";
-        Text[ portuguese_brazilian ] = "Otimizado para ~Gráficas";
-        Text[ japanese ] = "å°åˆ·æº–å‚™ç”¨ã«æœ€é©åŒ–ã™ã‚‹(~E)";
-        Text[ korean ] = "ì¸ì‡„ ë‹¨ê³„ìš©ìœ¼ë¡œ ìµœì í™”(~E)";
-        Text[ chinese_simplified ] = "ä¼˜åŒ–æ–°é—»å°åˆ·(~E)";
-        Text[ chinese_traditional ] = "å„ªåŒ–æ–°èå°åˆ·(~E)";
-        Text[ turkish ] = "Pr~ess optimized";
-        Text[ arabic ] = "Pr~ess optimized";
-        Text[ catalan ] = "Pr~ess optimized";
-        Text[ thai ] = "Pr~ess optimized";
-        Text[ czech ] = "OptimalizovÃ¡no pro sazbu";
-        Text[ hebrew ] = "Optimiert fÃ¼r Druck~vorstufe";
-        Text[ hindi ] = "Pr~ess optimized";
-        Text[ slovak ] = "OptimalizovanÃ¡ kompr~esia";
-        Text[ hungarian ] = "Nyomdai ~elÅ‘kÃ©szÃ­tÃ©shez optimalizÃ¡lva";
-        Text[ slovenian ] = "Opt~imirano za objavo";
+        Text [ de ] = "Optimiert für Druck~vorstufe" ;
+        Text [ en-US ] = "Pr~ess optimized";
     };
     OKButton BT_OK
     {
-        Text = "E~xportieren" ;
-        Text [ ENGLISH ] = "E~xport" ;
+        Text [ de ] = "E~xportieren" ;
         Pos = MAP_APPFONT( 123, 6 );
         Size = MAP_APPFONT( 50 , 14 );
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text[ english_us ] = "E~xport";
-        Text[ portuguese ] = "E~xport";
-        Text[ russian ] = "E~xport";
-        Text[ greek ] = "Å~îáãùãŞ";
-        Text[ dutch ] = "E~xporteren";
-        Text[ french ] = "Exporter";
-        Text[ spanish ] = "E~xportar";
-        Text[ finnish ] = "E~xport";
-        Text[ italian ] = "Esporta";
-        Text[ danish ] = "E~ksporter";
-        Text[ swedish ] = "E~xportera";
-        Text[ polish ] = "E~xport";
-        Text[ portuguese_brazilian ] = "E~xportar";
-        Text[ japanese ] = "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ(~X)";
-        Text[ korean ] = "ë‚´ë³´ë‚´ê¸°(~X)";
-        Text[ chinese_simplified ] = "è¾“å‡º(~X)";
-        Text[ chinese_traditional ] = "åŒ¯å‡º(~X)";
-        Text[ turkish ] = "~Dışa Aktar";
-        Text[ arabic ] = "E~xport";
-        Text[ catalan ] = "E~xport";
-        Text[ thai ] = "E~xport";
-        Text[ czech ] = "Export";
-        Text[ hebrew ] = "E~xport";
-        Text[ hindi ] = "E~xport";
-        Text[ slovak ] = "E~xport";
-        Text[ hungarian ] = "~ExportÃ¡lÃ¡s";
-        Text[ slovenian ] = "I~zvoz";
+        Text [ en-US ] = "E~xport";
     };
     CancelButton BT_CANCEL
     {
@@ -398,33 +154,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    Text[ english_us ] = "PDF Options";
-    Text[ portuguese ] = "PDF Options";
-    Text[ russian ] = "PDF Options";
-    Text[ greek ] = "PDF Options";
-    Text[ dutch ] = "PDF Opties";
-    Text[ french ] = "Options PDF";
-    Text[ spanish ] = "Opciones PDF ";
-    Text[ finnish ] = "PDF Options";
-    Text[ italian ] = "Opzioni PDF";
-    Text[ danish ] = "PDF-indstillinger";
-    Text[ swedish ] = "PDF-alternativ";
-    Text[ polish ] = "PDF Options";
-    Text[ portuguese_brazilian ] = "Opções do PDF";
-    Text[ japanese ] = "PDF ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ korean ] = "PDF ì˜µì…˜";
-    Text[ chinese_simplified ] = "PDF é€‰é¡¹";
-    Text[ chinese_traditional ] = "PDF é¸é …";
-    Text[ turkish ] = "PDF Options";
-    Text[ arabic ] = "PDF Options";
-    Text[ catalan ] = "PDF Options";
-    Text[ thai ] = "PDF Options";
-    Text[ czech ] = "Volby PDF";
-    Text[ hebrew ] = "PDF Options";
-    Text[ hindi ] = "PDF Options";
-    Text[ slovak ] = "PDF voÄ¾by";
-    Text[ hungarian ] = "PDF-beÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "MoÅ¾nosti za PDF";
+    Text [ en-US ] = "PDF Options";
 };
 
 
