@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:35:14 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 16:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,7 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     ModalDialog     ( pParent, ScResId( RID_SCDLG_AUTOFORMAT ) ),
     //
     aLbFormat       ( this, ScResId( LB_FORMAT ) ),
-    aFtFormat       ( this, ScResId( FT_FORMAT ) ),
-    aGbPreview      ( this, ScResId( GB_PREVIEW ) ),
+    aFlFormat       ( this, ScResId( FL_FORMAT ) ),
     pWndPreview     ( new AutoFmtPreview( this, ScResId( WND_PREVIEW ) ) ),
     aBtnNumFormat   ( this, ScResId( BTN_NUMFORMAT ) ),
     aBtnBorder      ( this, ScResId( BTN_BORDER ) ),
@@ -126,7 +125,7 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     aBtnPattern     ( this, ScResId( BTN_PATTERN ) ),
     aBtnAlignment   ( this, ScResId( BTN_ALIGNMENT ) ),
     aBtnAdjust      ( this, ScResId( BTN_ADJUST ) ),
-    aGbFormat       ( this, ScResId( GB_FORMAT ) ),
+    aFlFormatting   ( this, ScResId( FL_FORMATTING ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -187,7 +186,7 @@ void ScAutoFormatDlg::Init()
     aBtnMore.AddWindow( &aBtnPattern );
     aBtnMore.AddWindow( &aBtnAlignment );
     aBtnMore.AddWindow( &aBtnAdjust );
-    aBtnMore.AddWindow( &aGbFormat );
+    aBtnMore.AddWindow( &aFlFormatting );
 
     nCount = pFormat->GetCount();
 
@@ -1285,6 +1284,7 @@ void __EXPORT AutoFmtPreview::Init()
     aEmptyBoxItem.SetLine( NULL, BOX_LINE_LEFT );
     aEmptyBoxItem.SetLine( NULL, BOX_LINE_RIGHT );
     aEmptyBoxItem.SetDistance( 0 );
+    SetBorderStyle( WINDOW_BORDER_MONO );
 
     //------------------------
     // Linienattribut-Feld mit
@@ -1435,11 +1435,6 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
     // (virtual Device fuer Fensterausgabe)
     //--------------------------------------
     aVD.SetOutputSizePixel( theWndSize );
-    BOOL bHadLine  = aVD.IsLineColor();
-    Color aOldLine = aVD.GetLineColor();
-    aVD.SetLineColor( Color( COL_BLACK ) );
-    aVD.DrawRect( Rectangle( Point(0,0), theWndSize ) );
-    if (bHadLine) aVD.SetLineColor(aOldLine); else aVD.SetLineColor();
     aCenterPos  = Point( (theWndSize.Width()  - aPrvSize.Width() ) / 2,
                          (theWndSize.Height() - aPrvSize.Height()) / 2 );
     aVD.DrawBitmap( aCenterPos, thePreview );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:52:27 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 16:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     OutputSize = TRUE ;
     HelpId = SID_AUTOFORMAT ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 312 , 120 ) ;
+    Size = MAP_APPFONT ( 312 , 121 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
     /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
     Text = "AutoFormat" ;
@@ -87,14 +87,14 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     ListBox LB_FORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 65 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 101 ) ;
         TabStop = TRUE ;
     };
-    FixedText FT_FORMAT
+    FixedLine FL_FORMAT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 244 , 8 ) ;
         Text = "~Format" ;
         Text [ ENGLISH ] = "~Format" ;
         Text [ norwegian ] = "~Format" ;
@@ -122,43 +122,15 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     Window WND_PREVIEW
     {
-        Pos = MAP_APPFONT ( 83 , 23 ) ;
-        Size = MAP_APPFONT ( 161 , 86 ) ;
-    };
-    GroupBox GB_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 77 , 12 ) ;
-        Size = MAP_APPFONT ( 172 , 102 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ norwegian ] = "Preview" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Examinar" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Esikatselu" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 159 , 101 ) ;
+        Border = TRUE ;
     };
     CheckBox BTN_ADJUST
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 150 , 147 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 146 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Breite/Höhe anpassen : ~Breite/H÷he anpassen */
         Text = "Breite/Höhe an~passen" ;
         Text [ ENGLISH ] = "Fit ~width and height" ;
@@ -189,8 +161,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     CheckBox BTN_BORDER
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Umrandung" ;
         Text [ ENGLISH ] = "~Border" ;
         Text [ norwegian ] = "~Border" ;
@@ -220,8 +192,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     CheckBox BTN_FONT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 85 , 131 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 93 , 132 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
         Text = "~Schriftart" ;
         Text [ ENGLISH ] = "F~ont" ;
         Text [ norwegian ] = "F~ont" ;
@@ -251,8 +223,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     CheckBox BTN_PATTERN
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 85 , 147 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 93 , 146 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
         Text = "~Muster" ;
         Text [ ENGLISH ] = "~Pattern" ;
         Text [ norwegian ] = "~Pattern" ;
@@ -282,8 +254,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     CheckBox BTN_ALIGNMENT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 150 , 131 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 132 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Ausrichtung" ;
         Text [ ENGLISH ] = "Orien~tation" ;
         Text [ norwegian ] = "Orien~tation" ;
@@ -313,8 +285,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     CheckBox BTN_NUMFORMAT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 131 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "Zahlenf~ormat" ;
         Text [ ENGLISH ] = "~Numberformat" ;
         Text [ norwegian ] = "~Numberformat" ;
@@ -341,14 +313,14 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Formato de números";
     };
-    GroupBox GB_FORMAT
+    FixedLine FL_FORMATTING
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 120 ) ;
-        Size = MAP_APPFONT ( 243 , 43 ) ;
+        Pos = MAP_APPFONT ( 6 , 121 ) ;
+        Size = MAP_APPFONT ( 244 , 8 ) ;
         Text = "Formatierung" ;
-        Text [ ENGLISH ] = "For~mats" ;
-        Text [ norwegian ] = "For~mats" ;
+        Text [ ENGLISH ] = "Formats" ;
+        Text [ norwegian ] = "Formats" ;
         Text [ italian ] = "Formattazione" ;
         Text [ portuguese_brazilian ] = "Formatos" ;
         Text [ portuguese ] = "Formatar" ;
@@ -373,43 +345,28 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 255 , 6 ) ;
+        Pos = MAP_APPFONT ( 256 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 255 , 23 ) ;
+        Pos = MAP_APPFONT ( 256 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     MoreButton BTN_MORE
     {
-        Pos = MAP_APPFONT ( 255 , 101 ) ;
+        Pos = MAP_APPFONT ( 256 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /*
-        Text = "~Zusätze";
-        Text[ ENGLISH ] = "~More";
-        Text[norwegian] = "~Mer";
-        Text[italian] = "~Altro";
-        Text[portuguese_brazilian] = "~Mais";
-        Text[portuguese] = "~Mais";
-        Text[finnish] = "~Enemmän";
-        Text[danish] = "~Flere";
-        Text[french] = " S~uite";
-        Text[swedish] = "~Fler";
-        Text[dutch] = "~Overige";
-        Text[spanish] = "~Más";
-        Text[english_us] = "~More";
-        */
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
         Delta = 48 ;
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT ( 255 , 64 ) ;
+        Pos = MAP_APPFONT ( 256 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */
         Text = "Hi~nzufügen..." ;
@@ -431,10 +388,10 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ polish ] = "Dodaj...";
         Text[ japanese ] = "’Ç‰Á(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
-    Text[ polish ] = "Dodaj...";
-    Text[ japanese ] = "’Ç‰Á(~A)...";
-    Text[ chinese_simplified ] = "²åÈë(~A)...";
-    Text[ chinese_traditional ] = "´¡¤J(~A)...";
+        Text[ polish ] = "Dodaj...";
+        Text[ japanese ] = "’Ç‰Á(~A)...";
+        Text[ chinese_simplified ] = "²åÈë(~A)...";
+        Text[ chinese_traditional ] = "´¡¤J(~A)...";
         Text[ arabic ] = "ÅÖÇÝÉ...";
         Text[ greek ] = "ÐñïóèÞêç...";
         Text[ korean ] = "Ãß°¡(~A)...";
@@ -444,7 +401,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 255 , 81 ) ;
+        Pos = MAP_APPFONT ( 256 , 81 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;
@@ -476,7 +433,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
 
     PushButton BTN_RENAME
     {
-        Pos = MAP_APPFONT ( 255 , 123 ) ;
+        Pos = MAP_APPFONT ( 256 , 123 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         HelpId=HID_SC_RENAME_AUTOFMT;
         Text = "Um~benennen" ;
@@ -507,7 +464,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
 
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 255 , 43 ) ;
+        Pos = MAP_APPFONT ( 256 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
@@ -598,8 +555,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     String STR_DEL_TITLE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : Autoformat löschen */
-        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : Autoformat löschen */
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : AutoFormat l÷schen */
         Text = "AutoFormat löschen" ;
         Text [ ENGLISH ] = "Delete AutoFormat" ;
@@ -628,8 +583,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     String STR_DEL_MSG
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das Autoformat # wirklich löschen? */
-        /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das Autoformat # wirklich löschen? */
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das AutoFormat # wirklich l÷schen? */
         Text = "Wollen Sie das AutoFormat # wirklich löschen?" ;
         Text [ ENGLISH ] = "Do you really want to delete the # autoFormat?" ;

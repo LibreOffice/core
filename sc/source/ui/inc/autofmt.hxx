@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2001-05-25 16:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef SV_GROUP_HXX
-#include <vcl/group.hxx>
-#endif
 #ifndef SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
@@ -112,24 +109,23 @@ public:
     String GetCurrFormatName();
 
 private:
-    FixedText       aFtFormat;
+    FixedLine       aFlFormat;
     ListBox         aLbFormat;
     AutoFmtPreview* pWndPreview;
-    GroupBox        aGbPreview;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
     PushButton      aBtnAdd;
     PushButton      aBtnRemove;
-    PushButton      aBtnRename;
+    MoreButton      aBtnMore;
+    FixedLine       aFlFormatting;
     CheckBox        aBtnNumFormat;
     CheckBox        aBtnBorder;
     CheckBox        aBtnFont;
     CheckBox        aBtnPattern;
     CheckBox        aBtnAlignment;
     CheckBox        aBtnAdjust;
-    GroupBox        aGbFormat;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    MoreButton      aBtnMore;
+    PushButton      aBtnRename;
     String          aStrTitle;
     String          aStrLabel;
     String          aStrClose;
