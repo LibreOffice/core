@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:12:45 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ ModalDialog DLG_PASSWORD
         Text[ portuguese_brazilian ] = "Usu�rio \"$name$:  $\"";
         Text[ japanese ] = "ユーザー \"$name$:  $\"";
         Text[ korean ] = "사용자 \"$name$:  $\"";
-        Text[ chinese_simplified ] = "使用者 \"$Name: not supported by cvs2svn $\"";
+        Text[ chinese_simplified ] = "用户 \"$Name: not supported by cvs2svn $\"";
         Text[ chinese_traditional ] = "使用者 \"$name$:  $\"";
         Text[ turkish ] = "Kullan�c� \"$name$: $\"";
         Text[ arabic ] = "User \"$name$:  $\"";
