@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XOfficeInstallationDirectories.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:17:39 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module util {
     later. In many cases, storing the reference directly would destroy the
     relocatability of an office installation.
 
-    @since #i23104#
+    @since OOo 2.0.0
  */
 interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
 {
