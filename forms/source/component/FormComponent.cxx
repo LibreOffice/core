@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:03:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2085,6 +2085,10 @@ void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxR
         {
             if ( !_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast() )
                 transferDbValueToControl();
+            else
+                // reset the field if the row set is empty
+                // #i30661# / 2004-12-16 / frank.schoenheit@sun.com
+                resetNoBroadcast();
         }
     }
 
