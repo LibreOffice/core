@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 08:29:30 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 06:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,19 +124,36 @@ namespace dbaui
         :m_xORB(_rxORB)
         ,m_pErrorMessageParent(_pMessageParent)
     {
-        OSL_ENSURE(m_xORB.is(), "ODatasourceConnector::ODatasourceConnector: invalid ORB!");
+        implConstruct();
+    }
+
+    //---------------------------------------------------------------------
+    ODatasourceConnector::ODatasourceConnector( const Reference< XMultiServiceFactory >& _rxORB, Window* _pMessageParent,
+        const ::rtl::OUString& _rContextInformation, const ::rtl::OUString& _rContextDetails )
+        :m_xORB(_rxORB)
+        ,m_pErrorMessageParent(_pMessageParent)
+        ,m_sContextInformation( _rContextInformation )
+        ,m_sContextDetails( _rContextDetails )
+    {
+        implConstruct();
+    }
+
+    //---------------------------------------------------------------------
+    void ODatasourceConnector::implConstruct()
+    {
+        OSL_ENSURE(m_xORB.is(), "ODatasourceConnector::implConstruct: invalid ORB!");
         if (m_xORB.is())
         {
             try
             {
                 Reference< XInterface > xContext = m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT);
-                OSL_ENSURE(xContext.is(), "ODatasourceConnector::ODatasourceConnector: got no data source context!");
+                OSL_ENSURE(xContext.is(), "ODatasourceConnector::implConstruct: got no data source context!");
                 m_xDatabaseContext = Reference< XNameAccess >(xContext, UNO_QUERY);
                 OSL_ENSURE(m_xDatabaseContext.is() || !xContext.is(), "ODatasourceConnector::ODatasourceConnector: missing the XNameAccess interface on the data source context!");
             }
             catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "ODatasourceConnector::ODatasourceConnector: caught an exception while creating the data source context!");
+                OSL_ENSURE(sal_False, "ODatasourceConnector::implConstruct: caught an exception while creating the data source context!");
             }
         }
     }
@@ -218,8 +235,21 @@ namespace dbaui
         catch(Exception&) { OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
         // display the error (if any)
-        if (_bShowError)
+        if ( _bShowError && aInfo.isValid() )
+        {
+            if ( m_sContextInformation.getLength() )
+            {
+                SQLContext aContext;
+
+                aContext.Message = m_sContextInformation;
+                aContext.Details = m_sContextDetails;
+                aContext.NextException = aInfo.get();
+
+                aInfo = aContext;
+            }
+
             showError(aInfo, m_pErrorMessageParent, m_xORB);
+        }
 
         return xConnection;
     }
@@ -231,6 +261,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/05/11 08:29:30  fs
+ *  solaris needs complete types to catch them
+ *
  *  Revision 1.1  2001/05/10 12:17:59  fs
  *  initial checkin - helper class for creating a connection for a data source
  *

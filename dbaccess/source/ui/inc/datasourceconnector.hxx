@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourceconnector.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:17:24 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 06:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,20 @@ namespace dbaui
                         m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         m_xDatabaseContext;
+        ::rtl::OUString m_sContextInformation;
+        ::rtl::OUString m_sContextDetails;
 
     public:
         ODatasourceConnector(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            Window* _pMessageParent);
+            Window* _pMessageParent
+        );
+        ODatasourceConnector(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            Window* _pMessageParent,
+            const ::rtl::OUString& _rContextInformation,
+            const ::rtl::OUString& _rContextDetails = ::rtl::OUString()
+        );
 
         /// returns <TRUE/> if the object is able to create data source connections
         sal_Bool    isValid() const { return m_xDatabaseContext.is(); }
@@ -101,6 +110,9 @@ namespace dbaui
         /// create a data source connection
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     connect(const ::rtl::OUString& _rDataSourceName, sal_Bool _bShowError = sal_True) const;
+
+    private:
+        void implConstruct();
     };
 
 //.........................................................................
@@ -112,6 +124,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/10 12:17:24  fs
+ *  initial checkin - helper class for creating a connection for a data source
+ *
  *
  *  Revision 1.0 10.05.01 09:36:22  fs
  ************************************************************************/
