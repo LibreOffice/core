@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:06:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ TabDialog TAB_TEMPLATE
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamentos" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -595,6 +595,7 @@ TabDialog TAB_TEMPLATE
     Text[ hindi ] = "सुचित्र शैलियाँ";
     Text[ slovak ] = "Grafické štýly";
 };
+
 
 
 
