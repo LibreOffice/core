@@ -184,6 +184,13 @@ public class XmlUpdater extends Thread {
             return;
     }
 
+        if (!zd.extractEntry("sframework/bshruntime.zip",progpath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+
+    // Check for OpenOffice Scxripting Security Resource
     // Check for OpenOffice Scxripting Security Resource
         if (!zd.extractEntry("sframework/scripting64301.res",progpath+"resource"+File.separator, statusLabel))
         {
@@ -194,28 +201,6 @@ public class XmlUpdater extends Thread {
             return;
         }
     }
-
-    if (opSys.indexOf("Windows")!=-1){
-            if (!zd.extractEntry("windows/regsingleton.exe",progpath, statusLabel))
-            {
-                onInstallComplete();
-                return;
-            }
-        }
-        else if (opSys.indexOf("Linux")!=-1){
-            if (!zd.extractEntry("linux_x86/regsingleton",progpath, statusLabel))
-            {
-                onInstallComplete();
-                return;
-            }
-        }
-        else if (opSys.indexOf("SunOS")!=-1){
-            if (!zd.extractEntry("solaris_sparc/regsingleton",progpath, statusLabel))
-            {
-                onInstallComplete();
-                return;
-            }
-        }
 
 //--------------------------------
 // Robert Kinsella test 2

@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-01-28 20:49:09 $
+#   last change: $Author: toconnor $ $Date: 2003-01-31 13:53:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -244,7 +244,7 @@
     <zip zipfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
         basedir="${out}/class/sframework">
     </zip>
-    <copy file="${prj}/common/bin/scripting${env.UPD}01.res"
+    <copy file="${prj}/common${proext}/bin/scripting${env.UPD}01.res"
         todir="${out}/class/sframeworkinstall/sframework/"/>
   </target>
 
@@ -256,30 +256,11 @@
     <mkdir dir="${out}/class/bshruntime/skip_registration"/>
     <copy file="${install.dir}/bsh-1.2b7.jar"
         todir="${out}/class/bshruntime/skip_registration"/>
-    <zip zipfile="${out}/class/bshruntime.zip"
+    <zip zipfile="${out}/class/sframeworkinstall/sframework/bshruntime.zip"
         basedir="${out}/class/bshruntime">
     </zip>
   </target>
 
-  <!-- ===================== Package regsingletons ========================= -->
-  <target name="packagesingletons_win7" depends="build.conditions" if="win7.build">
-    <mkdir dir="${out}/class/sframeworkinstall/windows"/>
-    <copy file="${env.SOLARVER}/wntmsci7${proext}/bin${env.UPDMINOREXT}/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
-  </target>
-  <target name="packagesingletons_win9" depends="build.conditions" if="win9.build">
-    <mkdir dir="${out}/class/sframeworkinstall/windows"/>
-    <copy file="${env.SOLARVER}/wntmsci9${proext}/bin${env.UPDMINOREXT}/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
-  </target>
-  <target name="packagesingletons_linux" depends="build.conditions" if="linx86.build">
-    <mkdir dir="${out}/class/sframeworkinstall/linux_x86"/>
-    <copy file="${env.SOLARVER}/unxlngi4${proext}/bin${env.UPDMINOREXT}/regsingleton" todir="${out}/class/sframeworkinstall/linux_x86"/>
-  </target>
-  <target name="packagesingletons_solaris" depends="build.conditions" if="solsparc.build">
-    <mkdir dir="${out}/class/sframeworkinstall/solaris_sparc"/>
-    <copy file="rs_solaris/regsingleton" todir="${out}/class/sframeworkinstall/solaris_sparc"/>
-  </target>
-  <target name="packagesingletons" depends="packagesingletons_win7,packagesingletons_win9,packagesingletons_linux,packagesingletons_solaris">
-  </target>
   <!-- ===================== Package scripts, dialogs & examples =========== -->
   <target name="packagedialogsandexamples" depends="buildexamples">
     <mkdir dir="${out}/class/sframeworkinstall/bindingdialog"/>
@@ -293,17 +274,18 @@
         <fileset dir="${out}/class/examples/"/>
     </copy>
   </target>
-  <!-- ===================== Package scripts, dislogs & examples =========== -->
+
+  <!-- ===================== Package IDEs ================================== -->
   <target name="packageide">
     <mkdir dir="${out}/class/sframeworkinstall/ide"/>
     <copy todir="${out}/class/sframeworkinstall/ide">
         <fileset dir="${out}/class/">
-            <include name="OfficeScripting.jar"/>
             <include name="idesupport.jar"/>
             <include name="office.jar"/>
         </fileset>
     </copy>
   </target>
+
   <!-- ======================== Compile Classes ========================== -->
   <target name="compileinstaller">
     <mkdir dir="${installerclasses}"/>
@@ -314,7 +296,7 @@
   </target>
 
   <!-- ===================== jar ========================= -->
-  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packageide,packagesingletons,buildunopackage,buildbshuno">
+  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packageide,buildunopackage,buildbshuno">
     <jar jarfile="${jardir}/${installerjarname}"
          basedir="${installerclasses}">
         <manifest>

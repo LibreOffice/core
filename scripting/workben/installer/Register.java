@@ -57,52 +57,63 @@ public class Register{
 
     }
     public static boolean register(String path, JLabel statusLabel) {
+        String[] packages = {"ooscriptframe.zip", "bshruntime.zip"};
+
     try {
         String s=null;
         int exitcode=0;
         String env[] = new String[1];
         Runtime rt = Runtime.getRuntime();
+        boolean isWindows =
+                (System.getProperty("os.name").indexOf("Windows") != -1);
 
         String progpath = path.concat("program" + File.separator);
         Process p;
 
             statusLabel.setText("Registering Scripting Framework...");
-        String opSys = System.getProperty("os.name");
 
             // pkgchk Scripting Framework Components
             statusLabel.setText("Registering Scripting Framework Components...");
         System.out.println("Registering Scripting Framework Components...");
 
-        if (opSys.indexOf("Windows") == -1){
-                //System.out.println( "Not Windows");
-        env[0]="LD_LIBRARY_PATH="+progpath;
+            for (int i = 0; i < packages.length; i++) {
+                String cmd = "";
 
-        p=rt.exec("chmod a+x "+progpath+"pkgchk");
-        exitcode=p.waitFor();
-        if (exitcode ==0){
-                    //scriptnm.zip is an old SF. Works with SO6.1 EA2
-            System.err.println(progpath+"pkgchk "+progpath+"ooscriptframe.zip");
-                    p=rt.exec(progpath+"pkgchk "+progpath+"ooscriptframe.zip", env);
-                    //p=rt.exec(progpath+"pkgchk "+progpath+"scriptnm.zip" );
+            if (!isWindows) {
+            env[0]="LD_LIBRARY_PATH=" + progpath;
+
+            p = rt.exec("chmod a+x " + progpath + "pkgchk");
+            exitcode = p.waitFor();
+
+            if (exitcode == 0){
+                        cmd = progpath + "pkgchk " + progpath + packages[i];
+
+                System.err.println(cmd);
+                        p=rt.exec(cmd, env);
+                    }
                 }
+            else {
+                    cmd = "\"" + progpath + "pkgchk.exe\" \"" + progpath +
+                        packages[i] + "\"";
+
+            System.err.println(cmd);
+                    p=rt.exec(cmd);
             }
-        else {
-        //progpath = "C:\\Progra~1\\OpenOffice.org643\\program\\";
-                //System.out.println( "Windows" );
-        //String pkgStr = new String("\""+progpath+"pkgchk.exe\" \""+progpath+"ooscriptframe.zip\"\"");
-        System.err.println("\""+progpath+"pkgchk.exe\" \""+progpath+"ooscriptframe.zip\"");
-                p=rt.exec("\""+progpath+"pkgchk.exe\" \""+progpath+"ooscriptframe.zip\"");
-        }
-            exitcode=p.waitFor();
-            if (exitcode !=0) {
-        if(opSys.indexOf("Windows") == -1){
-            System.out.println("\nPkgChk Failed \nCommand: " +progpath+"pkgchk "+progpath+"ooscriptframe.zip"+ "\n"+ env[0]);
-        }
-        else {
-            System.out.println("\nPkgChk Failed \nCommand: \""+progpath+"pkgchk.exe\" \""+progpath+"ooscriptframe.zip\"");
-        }
-        statusLabel.setText("PkgChk Failed, please view SFrameworkInstall.log");
-        return false;
+
+                exitcode = p.waitFor();
+                if (exitcode != 0) {
+                    System.err.println("\nPkgChk Failed");
+
+            if(!isWindows)
+                System.err.println("Command: " + cmd + "\n" + env[0]);
+            else
+            System.err.println("Command: \"" + cmd + "\"");
+
+            statusLabel.setText(
+                        "PkgChk Failed, please view SFrameworkInstall.log");
+
+            return false;
+                }
         }
 
             // if ( !regSingletons( path, progpath, opSys, statusLabel ) )
