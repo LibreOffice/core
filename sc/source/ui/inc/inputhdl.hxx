@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-28 11:25:03 $
+ *  last change: $Author: nn $ $Date: 2000-12-15 20:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,8 @@ public:
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
 
 
-    void            NotifyChange( const ScInputHdlState* pState, BOOL bForce = FALSE );
+    void            NotifyChange( const ScInputHdlState* pState, BOOL bForce = FALSE,
+                                    ScTabViewShell* pSourceSh = NULL );
 
     void            ResetDelayTimer(); //BugId 54702
 
