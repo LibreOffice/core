@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPropertySet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-26 12:28:53 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,17 @@ using vos::IMutex;
 
 SlaveData::SlaveData ( ChainablePropertySet *pSlave)
 : mpSlave ( pSlave )
-, mbInit ( sal_False )
 , mxSlave ( pSlave )
+, mbInit ( sal_False )
 {
 }
 
 MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, IMutex *pMutex )
     throw()
 : mpInfo ( pInfo )
-, mxInfo ( pInfo )
-, mnLastId ( 0 )
 , mpMutex ( pMutex )
+, mnLastId ( 0 )
+, mxInfo ( pInfo )
 {
 }
 
