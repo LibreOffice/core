@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-14 11:13:34 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,6 +526,11 @@ void ExcTable::FillAsTable( void )
     XclExpTableOpManager    aTableOpList;
     XclExpTableOp*          pTableOpRec = NULL;
 
+    ExcArrays               aArrayFormList;
+    ExcArray*               pLastArray = NULL;
+
+    ExcArrays               aShrdFmlaList;
+    ExcShrdFmla*            pShrdFmla = NULL;
 
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
     DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
@@ -539,14 +544,14 @@ void ExcTable::FillAsTable( void )
     }
 
     // find outline range
-    ScOutlineTable* pOLTable    = rDoc.GetOutlineTable( nScTab );
-    ScOutlineArray* pOLColArray = NULL;
-    ScOutlineArray* pOLRowArray = NULL;
+    ScOutlineTable*         pOLTable    = rDoc.GetOutlineTable( nScTab );
+    ScOutlineArray*         pOLColArray = NULL;
+    ScOutlineArray*         pOLRowArray = NULL;
     if( pOLTable )
     {
-        UINT16 nStart, nEnd;
-        UINT16 nMaxOLCol = 0;
-        UINT16 nMaxOLRow = 0;
+        UINT16              nStart, nEnd;
+        UINT16              nMaxOLCol = 0;
+        UINT16              nMaxOLRow = 0;
 
         pOLColArray = pOLTable->GetColArray();
         if( pOLColArray )
@@ -572,6 +577,7 @@ void ExcTable::FillAsTable( void )
 
 
     ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, nLastCol, nLastRow );
+//  ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, MAXCOL, MAXROW );
     const ScBaseCell*       pAktScCell;
     const ScPatternAttr*    pPatt;
     ExcBlankMulblank*       pLastBlank = NULL;
@@ -714,7 +720,7 @@ void ExcTable::FillAsTable( void )
             nPrevRow++;
         }
 
-        ScAddress aScPos( nCol, nRow, nScTab );
+        ScAddress   aScPos( nCol, nRow, nScTab );
         rR.sAddNoteText.Erase();
 
         if( pAktScCell )
@@ -776,19 +782,19 @@ void ExcTable::FillAsTable( void )
                 {
                     pLastRKMulRK = NULL;
                     ScFormulaCell*      pFormCell = ( ScFormulaCell * ) pAktScCell;
-                    ULONG nCellNumForm = ( pPatt ?
+                    ULONG   nCellNumForm = ( pPatt ?
                         (( const SfxUInt32Item& ) pPatt->GetItem(
                         ATTR_VALUE_FORMAT )).GetValue() : 0 );
-                    ULONG nAltNumForm;
-                    BOOL bForceAltNumForm;
-                    if ( ( nCellNumForm % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+                    ULONG   nAltNumForm;
+                    BOOL    bForceAltNumForm;
+                    if( ( nCellNumForm % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
                     {
                         // #73420# Xcl doesn't know boolean number formats,
                         // we write "TRUE";"TRUE";"FALSE" or "WAHR";"WAHR";"FALSCH"
                         // or any other language dependent key words instead.
                         // Don't do it for automatic formula formats,
                         // because Xcl gets them right.
-                        if ( pFormCell->GetFormatType() == NUMBERFORMAT_LOGICAL )
+                        if( pFormCell->GetFormatType() == NUMBERFORMAT_LOGICAL )
                             nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND;
                         else
                             nAltNumForm = pFormCell->GetStandardFormat(
@@ -800,7 +806,7 @@ void ExcTable::FillAsTable( void )
                         // #73420# If number format set is boolean and
                         // automatic format is boolean don't write that ugly
                         // special format.
-                        if ( pFormCell->GetFormatType() == NUMBERFORMAT_LOGICAL
+                        if( pFormCell->GetFormatType() == NUMBERFORMAT_LOGICAL
                                 && rFormatter.GetType( nCellNumForm ) == NUMBERFORMAT_LOGICAL )
                         {
                             nAltNumForm = 0;
@@ -814,7 +820,8 @@ void ExcTable::FillAsTable( void )
 
                     }
                     ExcFormula* pFmlaCell = new ExcFormula(
-                        &rR, aScPos, pPatt, nAltNumForm, bForceAltNumForm, *pFormCell->GetCode() );
+                        &rR, aScPos, pPatt, nAltNumForm, bForceAltNumForm, *pFormCell->GetCode(),
+                        &pLastArray, ( ScMatrixMode ) pFormCell->GetMatrixFlag(), &pShrdFmla, &aShrdFmlaList );
                     pAktExcCell = pFmlaCell;
                     pTableOpRec = aTableOpList.InsertCell( pFormCell->GetCode(), *pFmlaCell );
                 }
@@ -877,7 +884,25 @@ void ExcTable::FillAsTable( void )
         {
             Add( pAktExcCell );
             pAktExcCell = NULL;
+
+            if( pLastArray )
+            {
+                if( aArrayFormList.Insert( pLastArray ) )
+                    Add( pLastArray );  // really new
+                else
+                    delete pLastArray;  // allready added
+
+                pLastArray = NULL;
+            }
+
+            if( pShrdFmla )
+            {
+                aShrdFmlaList.Append( pShrdFmla );
+                Add( pShrdFmla );
+                pShrdFmla = NULL;
+            }
         }
+
         if( pTableOpRec )
         {
             Add( pTableOpRec );

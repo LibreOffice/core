@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-25 18:07:56 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ class SfxStyleSheet;
 class ExcRecordList;
 //class SvxURLField;
 class XclHlink;
+class XclAddInNameTranslator;
 
 // ---------------------------------------------------------- Excel Imp~/Exp~ -
 
@@ -180,6 +181,8 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     UINT32              nCondRangeCnt;
     UINT16              nLastCond;
     String              GetCondFormStyleName( const UINT16 nCondCnt );  // -> exctools.cxx
+
+    XclAddInNameTranslator* pAddInNameTranslator;
 
     // Erweiterungen fuer Export
     ExcETabNumBuffer*   pTabBuffer;

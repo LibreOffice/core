@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pTabNameBuff = new NameBuffer( pExcRoot );        //&aTabNameBuff;
     pExcRoot->pRNameBuff = new RangeNameBuffer( pExcRoot );     //&aRangeNameBuff;
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
-    pExcRoot->pExtNameBuff = new ExtNameBuff;
+    pExcRoot->pExtNameBuff = new ExtNameBuff ( pExcRoot );
     pExcRoot->pAktTab = &nTab;          // nicht schoen, aber einfach
     pExcRoot->pCharset = &eQuellChar;   // dto.
     pExcRoot->pExtDocOpt = new ScExtDocOptions;

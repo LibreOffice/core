@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
     ComplRefData            aCRD;
     aCRD.InitFlags();
 
-    bExternName = FALSE;
+//  bExternName = FALSE;
 
     if( eStatus != ConvOK )
     {
@@ -907,11 +907,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
         rpTokArray = aPool[ aStack.Get() ];
         eRet = ConvErrCount;
     }
-    else if( bExternName )
-    {
-        rpTokArray = aPool[ aStack.Get() ];
-        eRet = ConvErrExternal;
-    }
+//  else if( bExternName )
+//  {
+//      rpTokArray = aPool[ aStack.Get() ];
+//      eRet = ConvErrExternal;
+//  }
     else if( bArrayFormula )
     {
         rpTokArray = NULL;

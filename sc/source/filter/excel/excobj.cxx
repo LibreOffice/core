@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:15:43 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,101 @@
 
 //------------------------------------------------------------------------
 
+//#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
+//#include <com/sun/star/form/XFormsSupplier.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
+//#include <com/sun/star/form/XForm.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_FORM_XIMAGEPRODUCERSUPPLIER_HPP_
+//#include <com/sun/star/form/XImageProducerSupplier.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
+//#include <com/sun/star/form/XFormController.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
+#include <com/sun/star/form/XFormComponent.hpp>
+#endif
+//#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLERLISTENER_HPP_
+//#include <com/sun/star/form/XFormControllerListener.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+//#include <com/sun/star/frame/XStorable.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+//#include <com/sun/star/frame/XModel.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XCONNECTABLESHAPE_HPP_
+//#include <com/sun/star/drawing/XConnectableShape.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XCONNECTORSHAPE_HPP_
+//#include <com/sun/star/drawing/XConnectorShape.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+//#include <com/sun/star/drawing/XShape.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
+#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEALIGNER_HPP_
+//#include <com/sun/star/drawing/XShapeAligner.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEGROUP_HPP_
+//#include <com/sun/star/drawing/XShapeGroup.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEDESCRIPTOR_HPP_
+//#include <com/sun/star/drawing/XShapeDescriptor.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XUNIVERSALSHAPEDESCRIPTOR_HPP_
+//#include <com/sun/star/drawing/XUniversalShapeDescriptor.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEMIRROR_HPP_
+//#include <com/sun/star/drawing/XShapeMirror.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEARRANGER_HPP_
+//#include <com/sun/star/drawing/XShapeArranger.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+//#include <com/sun/star/drawing/XDrawPage.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEBINDER_HPP_
+//#include <com/sun/star/drawing/XShapeBinder.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEGROUPER_HPP_
+//#include <com/sun/star/drawing/XShapeGrouper.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XSHAPECOMBINER_HPP_
+//#include <com/sun/star/drawing/XShapeCombiner.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+//#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+//#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
+//#include <com/sun/star/loader/XImplementationLoader.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
+//#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+//#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
+//#include <com/sun/star/text/VertOrientation.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
+//#include <com/sun/star/text/TextContentAnchorType.hpp>
+//#endif
+
+
 #include <stdio.h>
 
 #include "scitems.hxx"
@@ -142,6 +237,7 @@
 #include "excimp8.hxx"
 #include "fontbuff.hxx"
 #include "fltprgrs.hxx"
+#include "scmsocximexp.hxx"
 
 #ifndef _SC_XCLIMPCHARTS_HXX
 #include "XclImpCharts.hxx"
@@ -838,7 +934,8 @@ ExcEscherOle::ExcEscherOle( ExcEscherObj*& rpCAD ):
         ExcEscherObj( *rpCAD ),
         nBlipId( 0 ),
         bAsSymbol( FALSE ),
-        bLinked( FALSE )
+        bLinked( FALSE ),
+        eType( OT_OLE )
 {
     delete rpCAD;
     rpCAD = NULL;
@@ -852,24 +949,24 @@ ExcEscherOle::~ExcEscherOle()
 
 OBJECTTYPE ExcEscherOle::GetObjType( void ) const
 {
-    return OT_OLE;
+    return eType;
 }
 
 
 void ExcEscherOle::ReadPictFmla( XclImpStream& rIn, UINT16 nLen )
 {
-    UINT32 nStorageId;
-    UINT16 nFmlaLen;
+    UINT32  nStorageId;
+    UINT16  nFmlaLen;
     rIn >> nFmlaLen;
 
-    String aUserName;
-    ULONG nPos0 = rIn.GetRecPos();      // fmla start
-    BOOL bOk = TRUE;
+    String  aUserName;
+    ULONG   nPos0 = rIn.GetRecPos();        // fmla start
+    BOOL    bOk = TRUE;
     if ( bLinked )
     {
-        BOOL bSizeOk = (sizeof(nFmlaLen) + nFmlaLen == nLen);
+        BOOL    bSizeOk = (sizeof(nFmlaLen) + nFmlaLen == nLen);
         DBG_ASSERT( bSizeOk, "ExcEscherOle::ReadPictFmla: bad linked size" );
-        UINT16 n16;
+        UINT16  n16;
         rIn >> n16;     // should be 7 but who knows ...
         bOk = (n16 + 3 <= nFmlaLen);
         DBG_ASSERT( bOk, "ExcEscherOle::ReadPictFmla: linked length mismatch" );
@@ -883,7 +980,7 @@ void ExcEscherOle::ReadPictFmla( XclImpStream& rIn, UINT16 nLen )
             if ( bOk )
             {
                 rIn >> n16;     // EXTERNSHEET based 0, EXTERNNAME based 1
-                const ExtName* pExtName = pExcRoot->pExtNameBuff->GetName( n16 + 1 );
+                const ExtName*  pExtName = pExcRoot->pExtNameBuff->GetName( n16 + 1 );
                 bOk = (pExtName && pExtName->IsOLE());
                 DBG_ASSERT( bOk, "ExcEscherOle::ReadPictFmla: EXTERNNAME not found or not OLE" );
                 if ( bOk )
@@ -893,7 +990,7 @@ void ExcEscherOle::ReadPictFmla( XclImpStream& rIn, UINT16 nLen )
     }
     else
     {
-        UINT16 n16;
+        UINT16  n16;
         rIn >> n16;     // should be 5 but who knows ...
         DBG_ASSERT( n16 + 4 <= nFmlaLen, "ExcEscherOle::ReadPictFmla: embedded length mismatch" );
         if ( n16 + 4 <= nFmlaLen )
@@ -911,6 +1008,9 @@ void ExcEscherOle::ReadPictFmla( XclImpStream& rIn, UINT16 nLen )
                     rIn.AppendUniString( aUserName, *pExcRoot->pCharset, n16 );
                     // 0:= ID follows, 1:= pad byte + ID
                     DBG_ASSERT( nLeft == 0 || nLeft == 1, "ExcEscherOle::ReadPictFmla: unknown left over" );
+
+                    if( aUserName.EqualsAscii( "Forms.", 0, 6 ) )
+                        eType = OT_CTRL;
                 }
             }
         }
@@ -969,6 +1069,7 @@ void ExcEscherOle::Apply()
             if( pInfoObj )
                 ((SdrOle2Obj*)pSdrObj)->SetName( pInfoObj->GetObjName() );
         }
+
         pExcRoot->pDoc->GetDrawLayer()->GetPage( nTab )->InsertObject( pSdrObj );
         pSdrObj = NULL;
     }
@@ -1282,3 +1383,15 @@ void ExcEscherObjList::Apply( void )
     }
 }
 
+
+
+
+using namespace ::com::sun::star;
+
+BOOL ScMSConvertControls::InsertControl(
+    const uno::Reference< form::XFormComponent >& rFComp,
+    const awt::Size& rSize,
+    uno::Reference< drawing::XShape >* pShape,BOOL bFloatingCtrl )
+{
+    return FALSE;
+}

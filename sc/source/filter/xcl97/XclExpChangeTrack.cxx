@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-18 16:33:24 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,7 +859,8 @@ void XclExpChTrCellContent::GetCellData(
             if( pTokenArray )
             {
                 pExcRoot->pTabBuffer->StartRefLog();
-                rpData->pUPN = new ExcUPN( pExcRoot, *pTokenArray, &pFmlCell->aPos );
+                EC_Codetype eDummy;
+                rpData->pUPN = new ExcUPN( pExcRoot, *pTokenArray, eDummy, &pFmlCell->aPos );
                 pExcRoot->pTabBuffer->EndRefLog();
                 rpData->pRefList = new UINT16List( pExcRoot->pTabBuffer->GetRefLog() );
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "root.hxx"
 #include "tokstack.hxx"
 #include "flttools.hxx"
+#include "XclAddInNameTrans.hxx"
 
 
 const UINT16 RangeNameBuffer::nError = 0xFFFF;
@@ -232,8 +233,7 @@ ShrfmlaBuffer::~ShrfmlaBuffer()
 
 void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
-    String          aName( RTL_CONSTASCII_STRINGPARAM( "SHARED_FORMULA_" ) );
-    aName += String::CreateFromInt32( List::Count() );
+    String          aName( CreateName( rRange.aStart ) );
 
     DBG_ASSERT( List::Count() + nBase <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
@@ -278,6 +278,70 @@ UINT16 ShrfmlaBuffer::Find( const ScAddress aAddr )
     }
 
     return nPos;
+}
+
+
+#define SHRFMLA_BASENAME    "SHARED_FORMULA_"
+
+String ShrfmlaBuffer::CreateName( const ScRange& r )
+{
+    String          aName( RTL_CONSTASCII_STRINGPARAM( SHRFMLA_BASENAME ) );
+    aName += String::CreateFromInt32( r.aStart.Col() );
+    aName.AppendAscii( "_" );
+    aName += String::CreateFromInt32( r.aStart.Row() );
+    aName.AppendAscii( "_" );
+    aName += String::CreateFromInt32( r.aEnd.Col() );
+    aName.AppendAscii( "_" );
+    aName += String::CreateFromInt32( r.aEnd.Row() );
+    aName.AppendAscii( "_" );
+    aName += String::CreateFromInt32( r.aStart.Tab() );
+
+    return aName;
+}
+
+
+BOOL ShrfmlaBuffer::GetAddress( const String& rName, ScRange& rRet )
+{
+    static const xub_StrLen nBaseNameLen = sizeof( SHRFMLA_BASENAME ) - 1;
+    if( rName.EqualsAscii( SHRFMLA_BASENAME, 0, nBaseNameLen ) )
+    {
+        rRet.aStart.Set( 0, 0, 0 );
+        rRet.aEnd.Set( 0, 0, 0 );
+        String              aTmp( rName, nBaseNameLen, rName.Len() );
+
+        xub_StrLen          nPos = aTmp.SearchAscii( "_" );
+        if( nPos != STRING_NOTFOUND )
+        {
+            rRet.aStart.SetCol( ( USHORT ) aTmp.ToInt32() );
+            aTmp.Erase( 0, nPos + 1 );
+
+            nPos = aTmp.SearchAscii( "_" );
+            if( nPos != STRING_NOTFOUND )
+            {
+                rRet.aStart.SetRow( ( USHORT ) aTmp.ToInt32() );
+                aTmp.Erase( 0, nPos + 1 );
+
+                nPos = aTmp.SearchAscii( "_" );
+                if( nPos != STRING_NOTFOUND )
+                {
+                    rRet.aEnd.SetCol( ( USHORT ) aTmp.ToInt32() );
+                    aTmp.Erase( 0, nPos + 1 );
+                    nPos = aTmp.SearchAscii( "_" );
+                    if( nPos != STRING_NOTFOUND )
+                    {
+                        rRet.aStart.SetRow( ( USHORT ) aTmp.ToInt32() );
+                        aTmp.Erase( 0, nPos + 1 );
+
+                        rRet.aStart.SetTab( ( USHORT ) aTmp.ToInt32() );
+                        rRet.aEnd.SetTab( rRet.aStart.Tab() );
+                    }
+                }
+            }
+        }
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 
@@ -457,7 +521,7 @@ BOOL ExtName::IsName( void ) const
 
 
 
-const sal_Char* ExtNameBuff::pJoostTest = "Joost ist doof!";
+const sal_Char* ExtNameBuff::pJoostTest = "Joost ist immer noch doof!";
 
 
 ExtNameBuff::~ExtNameBuff()
@@ -492,7 +556,9 @@ void ExtNameBuff::AddOLE( const String& rName, UINT32 nStorageId )
 
 void ExtNameBuff::AddName( const String& rName )
 {
-    ExtName*    pNew = new ExtName( rName );
+    XclAddInNameTranslator*     pTrans = pExcRoot->pAddInNameTranslator;
+
+    ExtName*                    pNew = new ExtName( pTrans? pTrans->GetScName( rName ) : rName );
     pNew->nFlags = 0x0004;
 
     List::Insert( pNew, LIST_APPEND );

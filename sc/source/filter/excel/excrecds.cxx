@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-14 11:13:34 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1625,22 +1625,109 @@ UINT16 ExcRString::GetLen( void ) const
 
 
 ExcFormula::ExcFormula( RootData* pRD, const ScAddress rPos, const ScPatternAttr* pAttr,
-                    const ULONG nAltNumForm, BOOL bForceAltNumForm, const ScTokenArray& rTokArray ) :
+                    const ULONG nAltNumForm, BOOL bForceAltNumForm, const ScTokenArray& rTokArray,
+                    ExcArray** ppArray, ScMatrixMode eMM, ExcShrdFmla** ppShrdFmla, ExcArrays* pShrdFmlas ) :
     ExcCell( rPos, pAttr, nAltNumForm, bForceAltNumForm )
 {
-    // Formel wandeln
-    ExcUPN aExcUPN( pRD, rTokArray, &rPos );
-    nFormLen = aExcUPN.GetLen();
+    bShrdFmla = FALSE;
+    EC_Codetype     eCodeType;
+    ExcUPN*         pExcUPN;
 
-    if( nFormLen > 0 )
-        pData = new sal_Char[ nFormLen ];
+    switch( eMM )
+    {
+        case MM_FORMULA:
+            pExcUPN = new ExcUPN( TRUE, pRD, rTokArray, eCodeType, rPos );
+            if( eCodeType == EC_ArrayFmla )
+                break;
+            else
+            {
+                delete pExcUPN;
+                pExcUPN = NULL;
+            }
+            goto newchance;
+        case MM_REFERENCE:
+            pExcUPN = new ExcUPN( rTokArray, eCodeType );
+            if( eCodeType == EC_ArrayFmla )
+                break;
+            else
+            {
+                delete pExcUPN;
+                pExcUPN = NULL;
+            }
+
+            // no break here!
+        default:
+            newchance:
+            pExcUPN = new ExcUPN( pRD, rTokArray, eCodeType, &rPos, FALSE, pShrdFmlas );
+    }
+
+    switch( eCodeType )
+    {
+        case EC_StdFmla:
+            nFormLen = pExcUPN->GetLen();
+
+            if( nFormLen > 0 )
+            {
+                pData = new sal_Char[ nFormLen ];
+                memcpy( pData, pExcUPN->GetData(), nFormLen );
+            }
+            else
+                pData = NULL;
+            break;
+        case EC_ArrayFmla:
+            nFormLen = pExcUPN->GetLenWithShrdFmla();
+            pExcUPN->GetShrdFmla( pData, nFormLen );
+
+            if( pExcUPN->GetCode() && pShrdFmlas )
+            {
+                ExcArray*   pNew = new ExcArray( rTokArray, rPos.Col(), rPos.Row() );
+                if( !pShrdFmlas->Insert( pNew ) )
+                    delete pNew;
+            }
+            break;
+        case EC_ShrdFmla:
+            if( ppShrdFmla && pExcUPN->GetShrdFmla( pData, nFormLen ) )
+            {   // shared formula ref only
+                bShrdFmla = TRUE;
+                if( pExcUPN->IsFirstShrdFmla() )
+                    // ... and create shared formula record the first time only
+                    *ppShrdFmla = new ExcShrdFmla( pExcUPN->GetData(), pExcUPN->GetLen(), rPos );
+                else
+                    *ppShrdFmla = NULL;
+            }
+            else
+            {
+                pData = NULL;
+                nFormLen = 0;
+            }
+            break;
+    }
+
+    delete pExcUPN;
+
+/*  if( ppShrdFmla && aExcUPN.GetShrdFmla( pData, nFormLen ) )
+    {   // shared formula ref only
+        if( aExcUPN.IsFirstShrdFmla() )
+            // ... and create shared formula record the first time only
+            *ppShrdFmla = new ExcShrdFmla( aExcUPN.GetData(), aExcUPN.GetLen(), rPos );
+        else
+            *ppShrdFmla = NULL;
+    }
     else
-        pData = NULL;
+    {
+        nFormLen = aExcUPN.GetLen();
 
-    memcpy( pData, aExcUPN.GetData(), nFormLen );
+        if( nFormLen > 0 )
+        {
+//          if( pAltArrayFormula )
+//              rpArray = new ExcArray( *pAltArrayFormula, ( UINT8 ) rPos.Col(), rPos.Row() );
+            pData = new sal_Char[ nFormLen ];
+            memcpy( pData, aExcUPN.GetData(), nFormLen );
+        }
+        else
+            pData = NULL;
 
-    DBG_ASSERT( pData,
-        "*ExcFormula::ExcFormula(): 'n bisschen 'was sollte es schon sein!" );
+    }*/
 }
 
 
@@ -1665,7 +1752,8 @@ void ExcFormula::SetTableOp( USHORT nCol, USHORT nRow )
 
 void ExcFormula::SaveDiff( SvStream &rStr )
 {//                         grbit               chn
-    rStr << ( double ) 0.0 << ( UINT16 ) 0x0003 << ( UINT32 ) 0x00000000
+    UINT16      nGrBit = bShrdFmla? 0x000B : 0x0003;
+    rStr << ( double ) 0.0 << nGrBit  << ( UINT32 ) 0x00000000
         << nFormLen;
     if( pData )
         rStr.Write( pData, nFormLen );
@@ -1800,21 +1888,23 @@ void ExcName::Init( BOOL bHid, BOOL bBIn )
 
 void ExcName::BuildFormula( const ScRange& rRange )
 {   // build formula from range
-    ScTokenArray aArr;
+    ScTokenArray        aArr;
 
-    if ( rRange.aStart == rRange.aEnd )
+    if( rRange.aStart == rRange.aEnd )
     {
-        SingleRefData aRef;
+        SingleRefData   aRef;
         aRef.InitAddress( rRange.aStart );
         aArr.AddSingleReference( aRef );
     }
     else
     {
-        ComplRefData aRef;
+        ComplRefData    aRef;
         aRef.InitRange( rRange );
         aArr.AddDoubleReference( aRef );
     }
-    ExcUPN aExcUPN( pExcRoot, aArr );
+
+    EC_Codetype         eDummy;
+    ExcUPN              aExcUPN( pExcRoot, aArr, eDummy );
     nFormLen = aExcUPN.GetLen();
 
     DBG_ASSERT( nFormLen > 0, "+ExcName::BuildFormula(): No Data, no Name!" );
@@ -1843,7 +1933,8 @@ ExcName::ExcName( RootData* pRD, ScRangeData* pRange ) : eBiff( pRD->eDateiTyp )
         const ScTokenArray* pTokArray = pRange->GetCode();
         if( pTokArray )
         {
-            ExcUPN aExcUPN( pRD, *pTokArray );
+            EC_Codetype         eDummy;
+            ExcUPN aExcUPN( pRD, *pTokArray, eDummy );
             nFormLen = aExcUPN.GetLen();
 
             DBG_ASSERT( nFormLen > 0, "+ExcName::ExcName(): No Data, no Name!" );
@@ -4468,6 +4559,231 @@ UINT16 XclExpPageBreaks::GetLen() const
 {
     return (UINT16)(2 + aPageBreaks.Count() * 2);
 }
+
+
+
+
+void ExcArray::SetColRow( UINT8 nCol, UINT16 nRow )
+{
+    nID = nCol;
+    nID <<= 16;
+    nID += nRow;
+    nID <<= 8;
+    nFirstRow = nLastRow = nRow;
+    nFirstCol = nLastCol = nCol;
+}
+
+
+void ExcArray::SaveCont( SvStream& r )
+{
+    r << nFirstRow << nLastRow << nFirstCol << nLastCol
+        << ( UINT8 ) 0 << nID << ( UINT8 ) 0xFE << nFormLen;
+
+    if( pData )
+        r.Write( pData, nFormLen );
+}
+
+
+ExcArray::ExcArray( const sal_Char* p, UINT16 n, UINT8 nCol, UINT16 nRow )
+{
+    SetColRow( nCol, nRow );
+
+    if( p && n )
+    {
+        pData = new sal_Char[ n ];
+        nFormLen = n;
+        memcpy( pData, p, n );
+    }
+    else
+    {
+        pData = NULL;
+        nFormLen = 0;
+    }
+}
+
+
+ExcArray::ExcArray( const ScTokenArray& rTokArr, UINT8 nCol, UINT16 nRow )
+{
+    SetColRow( nCol, nRow );
+
+    pData = NULL;
+    nFormLen = 0;
+}
+
+
+ExcArray::~ExcArray()
+{
+    if( pData )
+        delete pData;
+}
+
+
+UINT16 ExcArray::GetNum() const
+{
+    return 0x0221;
+}
+
+
+UINT16 ExcArray::GetLen() const
+{
+    return nFormLen + 14;
+}
+
+
+BOOL ExcArray::AppendBy( const ExcArray& r )
+{
+    BOOL    bRet;
+
+    const UINT16    nNewRow = nLastRow + 1;
+    const UINT16    nNewCol = nLastCol + 1;
+
+    if( nNewRow == r.nFirstRow && nFirstCol <= r.nFirstCol && nNewCol >= r.nFirstCol )
+    {
+        nLastRow = nNewRow;
+
+        if( nNewCol == r.nFirstCol )
+            nLastCol = ( UINT8 ) nNewCol;
+
+        bRet = TRUE;
+    }
+    else if( nNewCol == r.nFirstCol && nFirstRow <= r.nFirstRow && nNewRow >= r.nLastRow )
+    {
+        nLastCol = ( UINT8 ) nNewCol;
+
+        if( nNewRow == r.nFirstRow )
+            nLastRow = nNewRow;
+
+        bRet = TRUE;
+    }
+    else
+        bRet = FALSE;
+
+    return bRet;
+}
+
+
+BOOL ExcArray::AppendBy( UINT8 nFCol, UINT16 nFRow, UINT8 nLCol, UINT16 nLRow )
+{
+    if( nFCol != nFirstCol || nFRow != nFirstRow )
+        return FALSE;
+
+    BOOL    bRet;
+
+    const UINT16    nNewRow = nLastRow + 1;
+    const UINT16    nNewCol = nLastCol + 1;
+
+    if( nNewRow == nLRow && nFirstCol <= nFCol && nNewCol >= nLCol )
+    {
+        nLastRow = nNewRow;
+
+        if( nNewCol == nFCol )
+            nLastCol = ( UINT8 ) nNewCol;
+
+        bRet = TRUE;
+    }
+    else if( nNewCol == nLCol && nFirstRow <= nFRow && nNewRow >= nLRow )
+    {
+        nLastRow = ( UINT8 ) nNewRow;
+
+        if( nNewRow == nFRow )
+            nLastRow = nNewRow;
+
+        bRet = TRUE;
+    }
+    else
+        bRet = FALSE;
+
+    return bRet;
+}
+
+
+
+
+ExcArrays::ExcArrays( void )
+{
+}
+
+
+ExcArrays::~ExcArrays()
+{
+}
+
+
+BOOL ExcArrays::Insert( ExcArray* p )
+{
+    ExcArray*   pAct = ( ExcArray* ) List::First();
+
+    while( pAct )
+    {
+        if( pAct->AppendBy( *p ) )
+            return TRUE;
+    }
+
+    Append( p );
+
+    return TRUE;
+}
+
+
+BOOL ExcArrays::Extend( UINT8 nStartCol, UINT16 nStartRow, UINT8 nEndCol, UINT16 nEndRow )
+{
+    ExcArray*   pAct = ( ExcArray* ) List::First();
+
+    while( pAct )
+    {
+        if( pAct->AppendBy( nStartCol, nStartRow, nEndCol, nEndRow ) )
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+
+
+void ExcShrdFmla::SaveCont( SvStream& r )
+{
+    r << nFirstRow << nLastRow << nFirstCol << nLastCol << ( UINT16 ) 0x0000 << nFormLen;
+
+    if( pData )
+        r.Write( pData, nFormLen );
+}
+
+
+ExcShrdFmla::ExcShrdFmla( const sal_Char* p, UINT16 n, const ScRange& r ) :
+    ExcArray( p, n, ( UINT8 ) r.aStart.Col(), r.aStart.Row() )
+{
+/*  if( p && n )
+    {
+        pData = new sal_Char[ n ];
+        nLen = n;
+    }
+    else
+    {
+        pData = NULL;
+        nLen = 0;
+    }*/
+}
+
+
+ExcShrdFmla::~ExcShrdFmla()
+{
+    if( pData )
+        delete[] pData;
+}
+
+
+UINT16 ExcShrdFmla::GetNum() const
+{
+    return 0x04BC;
+}
+
+
+UINT16 ExcShrdFmla::GetLen() const
+{
+    return 10 + nFormLen;
+}
+
+
 
 
 //___________________________________________________________________

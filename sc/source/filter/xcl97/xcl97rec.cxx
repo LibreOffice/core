@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-14 11:18:33 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,12 +385,14 @@ UINT16 XclXct::GetLen() const
 XclSupbook::XclSupbook( UINT16 nTabs ) :
         nTables( nTabs ),
         nLen( 4 ),
-        bSelf( TRUE )
+        bSelf( TRUE ),
+        pExtNameList( NULL )
 {   }
 
 XclSupbook::XclSupbook( const String& rDocName ) :
         sDocName( rDocName ),
-        bSelf( FALSE )
+        bSelf( FALSE ),
+        pExtNameList( NULL )
 {
     INetURLObject aURLObj( rDocName );
     DBG_ASSERT( !aURLObj.HasError(), "XclSupbook::XclSupbook() - Corrupt external filename!" );
@@ -403,6 +405,9 @@ XclSupbook::~XclSupbook()
 {
     for( XclXct* pXct = _First(); pXct; pXct = _Next() )
         delete pXct;
+
+    if( pExtNameList )
+        delete pExtNameList;
 }
 
 const XclUnicodeString* XclSupbook::GetTableName( UINT16 nIndex ) const
@@ -436,6 +441,9 @@ void XclSupbook::Save( SvStream& rStrm )
 
     for( XclXct* pXct = _First(); pXct; pXct = _Next() )
         pXct->Save( rStrm );
+
+    if( pExtNameList )
+        pExtNameList->Save( rStrm );
 }
 
 void XclSupbook::SaveCont( SvStream& rStrm )
@@ -462,6 +470,15 @@ UINT16 XclSupbook::GetNum() const
 UINT16 XclSupbook::GetLen() const
 {
     return ( UINT16 ) nLen;
+}
+
+
+UINT16 XclSupbook::GetAddinIndex( const String& rName )
+{
+    if( !pExtNameList )
+        pExtNameList = new XclExternNameList;
+
+    return pExtNameList->GetIndex( rName );
 }
 
 
@@ -2115,8 +2132,8 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     }
 
     ScTokenArray*   pScTokArry1 = r.CreateTokenArry( 0 );
-//  EC_Codetype     eDummy;
-    ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, /*eDummy, */NULL, TRUE );
+    EC_Codetype     eDummy;
+    ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, eDummy, NULL, TRUE );
     nFormLen1 = pForm1->GetLen();
 
     ScTokenArray*   pScTokArry2 = NULL;
@@ -2126,7 +2143,7 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     else
     {
         pScTokArry2 = r.CreateTokenArry( 1 );
-        pForm2 = new ExcUPN( &rRD, *pScTokArry2, /*eDummy, */NULL, TRUE );
+        pForm2 = new ExcUPN( &rRD, *pScTokArry2, eDummy, NULL, TRUE );
         nFormLen2 = pForm2->GetLen();
     }
 
@@ -3013,4 +3030,117 @@ UINT16 XclExpPageBreaks8::GetLen() const
     return (UINT16)(2 + aPageBreaks.Count() * 6);
 }
 
+
+//___________________________________________________________________
+
+void XclExternName::SaveCont( SvStream& r )
+{
+    if( !pExpStr )
+        pExpStr = new XclRawUnicodeString( aName );
+    //      Grbit           reserved
+    r << ( UINT16 ) 0 << ( UINT32 ) 0 << ( UINT8 ) pExpStr->GetLen() << ( UINT8 ) pExpStr->GetGrbit();
+    pExpStr->WriteToStream( r );
+
+    // 'formula'
+    //      len                 ErrorValue 0x17
+    r << ( UINT16 ) 0x0002 << ( UINT16 ) 0x171C;
+}
+
+
+XclExternName::XclExternName( const String& r ) : aName( r )
+{
+    DBG_ASSERT( aName.Len() <= 256, "*XclExternName::XclExternName(): no strings longer than 256 allowed!" );
+
+    pExpStr = NULL;
+}
+
+
+UINT16 XclExternName::GetNum() const
+{
+    return 0x0023;
+}
+
+
+UINT16 XclExternName::GetLen() const
+{
+    if( !pExpStr )
+        ( ( XclExternName* ) this)->pExpStr = new XclRawUnicodeString( aName );
+
+    return ( UINT16 ) ( pExpStr->GetByteCount() + 12 );
+}
+
+
+inline BOOL XclExternName::operator ==( const String& r ) const
+{
+    return aName == r;
+}
+
+
+
+
+inline XclExternName* XclExternNameList::First( void )
+{
+    return ( XclExternName* ) List::First();
+}
+
+
+inline XclExternName* XclExternNameList::Next( void )
+{
+    return ( XclExternName* ) List::Next();
+}
+
+
+void XclExternNameList::_Save( SvStream& r )
+{
+    XclExternName*  p = First();
+
+    while( p )
+    {
+        p->Save( r );
+        p = Next();
+    }
+}
+
+
+XclExternNameList::~XclExternNameList()
+{
+    XclExternName*  p = First();
+
+    while( p )
+    {
+        delete p;
+        p = Next();
+    }
+}
+
+
+UINT16 XclExternNameList::GetIndex( const String& rName )
+{
+    XclExternName*  p = First();
+    UINT16          nCnt = 1;
+
+    while( p )
+    {
+        if( *p == rName )
+            return nCnt;
+        p = Next();
+        nCnt++;
+    }
+
+    List::Insert( new XclExternName( rName ), LIST_APPEND );
+
+    return nCnt;
+}
+
+
+void XclExternNameList::Save( SvStream& r )
+{
+    XclExternName*  p = First();
+
+    while( p )
+    {
+        p->Save( r );
+        p = Next();
+    }
+}
 

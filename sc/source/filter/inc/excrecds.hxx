@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-14 11:17:29 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
 #endif
+#ifndef SC_CELL_HXX
+#include "cell.hxx"
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -114,6 +117,9 @@ class XclRawUnicodeString;
 
 //class ExcRecordList;
 class UsedAttrList;
+class ExcArray;
+class ExcArrays;
+class ExcShrdFmla;
 
 class ScProgress;
 
@@ -757,9 +763,9 @@ public:
 class ExcFormula : public ExcCell
 {
 private:
-//  double                  fCurVal;
     sal_Char*               pData;
     UINT16                  nFormLen;
+    BOOL                    bShrdFmla;
     //----------------------------------------------------------------
     void                    SaveDiff( SvStream& );// statt SaveCont()
 public:
@@ -768,8 +774,11 @@ public:
                                 const ScPatternAttr *pAttr,
                                 const ULONG nAltNumForm,
                                 BOOL bForceAltNumForm,
-//                              const double &rCurVal,
-                                const ScTokenArray& rCode );
+                                const ScTokenArray& rCode,
+                                ExcArray** ppArray = NULL,
+                                ScMatrixMode eMM = MM_NONE,
+                                ExcShrdFmla** ppShrdFmla = NULL,
+                                ExcArrays* pShrdFmlas = NULL );
                             ~ExcFormula();
 
     inline const ScAddress& GetPosition() const { return aPos; }    // from ExcCell
@@ -1739,6 +1748,86 @@ public:
     virtual UINT16          GetNum() const;
     virtual UINT16          GetLen() const;
 };
+
+
+
+
+class ExcArray : public ExcRecord
+{
+protected:
+    UINT32                  nID;
+    UINT16                  nFirstRow;
+    UINT16                  nLastRow;
+    UINT8                   nFirstCol;
+    UINT8                   nLastCol;
+    sal_Char*               pData;
+    UINT16                  nFormLen;
+
+    void                    SetColRow( UINT8 nCol, UINT16 nRow );
+
+    virtual void            SaveCont( SvStream& rStrm );
+
+                            ExcArray( const sal_Char* pData, UINT16 nLen, UINT8 nCol, UINT16 nRow );
+public:
+                            ExcArray( const ScTokenArray&, UINT8 nCol, UINT16 nRow );
+    virtual                 ~ExcArray();
+
+    virtual UINT16          GetNum() const;
+    virtual UINT16          GetLen() const;
+
+    BOOL                    AppendBy( const ExcArray& rExt );
+                                // TRUE, if rEXt is touching given range and extend range
+    BOOL                    AppendBy( UINT8 nStartCol, UINT16 nStartRow, UINT8 nEndCol, UINT16 nEndRow );
+};
+
+
+
+
+class ExcArrays : protected List
+{
+private:
+protected:
+public:
+                            ExcArrays( void );
+    virtual                 ~ExcArrays();
+
+    BOOL                    Insert( ExcArray* pPossibleNewArrayFormula );
+                                // insert only, if not already in array
+                                // only ref in list, so if return is TRUE, do not delete _before_ using
+                                //  Insert() the _last_ time!
+
+    BOOL                    Extend( UINT8 nStartCol, UINT16 nStartRow, UINT8 nEndCol, UINT16 nEndRow );
+                                // extend existing range, when start is base
+
+    inline void             Append( ExcArray* );
+};
+
+
+inline void ExcArrays::Append( ExcArray* p )
+{
+    List::Insert( p, LIST_APPEND );
+}
+
+
+
+
+class ExcShrdFmla : public ExcArray
+{
+private:
+//  ScRange                 aPos;
+//  sal_Char*               pData;
+//  UINT16                  nLen;
+
+    virtual void            SaveCont( SvStream& rStrm );
+public:
+                            ExcShrdFmla( const sal_Char* pData, UINT16 nLen, const ScRange& rPos );
+    virtual                 ~ExcShrdFmla();
+
+    virtual UINT16          GetNum() const;
+    virtual UINT16          GetLen() const;
+};
+
+
 
 
 //___________________________________________________________________

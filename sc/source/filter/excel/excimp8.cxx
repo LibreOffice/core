@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/unoapi.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -144,6 +145,8 @@
 #include "flttools.hxx"
 #include "scextopt.hxx"
 #include "stlpool.hxx"
+#include "scmsocximexp.hxx"
+#include "XclAddInNameTrans.hxx"
 
 
 extern const sal_Char* pVBAStorageName;
@@ -1242,8 +1245,7 @@ UINT16 XclImpTabIdBuffer::GetIndex( UINT16 nTabId, UINT16 nMaxTabId ) const
 
 
 
-ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc,
-                            SvStorage* pPivotCache ) :
+ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, SvStorage* pPivotCache ) :
     ImportExcel( rStream, pDoc ), aEscherObjList( aPosBuffer, pExcRoot )
 {
     delete pFormConv;
@@ -1273,6 +1275,8 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pCondFormList = NULL;
 
     pExcRoot->pRootStorage = pStorage;
+
+    pExcRoot->pAddInNameTranslator = new XclAddInNameTranslator;
 
     bHasBasic = FALSE;
 }
@@ -2014,14 +2018,15 @@ static sal_Bool lcl_ImportBackgroundGraphic( XclImpStream& rIn, Graphic& rGraphi
                 BitmapWriteAccess*  pAcc = aBmp.AcquireWriteAccess();
 
                 sal_uInt8           nBlue, nGreen, nRed;
-                sal_uInt32          x, y;
-                for( y = 0 ; y < nHeight ; y++ )
+                sal_uInt32          x, y, ys;
+                ys = nHeight - 1;
+                for( y = 0 ; y < nHeight ; y++, ys-- )
                 {
                     for( x = 0 ; x < nWidth ; x++ )
                     {
                         rIn >> nBlue >> nGreen >> nRed;
 
-                        pAcc->SetPixel( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+                        pAcc->SetPixel( ys, x, BitmapColor( nRed, nGreen, nBlue ) );
 
                     }
 
@@ -2043,14 +2048,6 @@ void ImportExcel8::BGPic( void )
 {
     // no documentation available, but it might be, that it's only wmf format
     DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::BGPic(): f... no style sheet!" );
-
-//  BOOL                b = FALSE;
-//  if( b )
-//  {
-//      SvFileStream    aOStr( _STRINGCONST( "svstr.dmp" ), STREAM_STD_WRITE );
-//      aOStr << *pMemStr;
-//      aOStr.Close();
-//  }
 
     Graphic             aGraphic;
     if( lcl_ImportBackgroundGraphic( aIn, aGraphic ) )
@@ -2172,7 +2169,6 @@ void ImportExcel8::SXSelect( void )
 void ImportExcel8::Sst( void )
 {
     aIn.Ignore( 8 );
-
     ShStrTabEntry* pEntry;
 
     while( aIn.GetRecLeft() )
@@ -2690,6 +2686,18 @@ void ImportExcel8::PostDocLoad( void )
         Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( pExcRoot, aPosBuffer, aEscherObjList,
                                             *aExcStreamConsumer.GetStream(), 0, 0, pD->GetDrawLayer(), 1440 );
 
+        const String            aStrName( _STRING( "Ctls" ) );
+        SvStorage&              rStrg = *pExcRoot->pRootStorage;
+        const BOOL              bHasCtrls = rStrg.IsContained( aStrName ) && rStrg.IsStream( aStrName );
+        ScMSConvertControls*    pCtrlConv;
+        SvStorageStreamRef      xStStream;
+
+        if( bHasCtrls )
+        {
+            pCtrlConv = new ScMSConvertControls( pD->GetDocumentShell() );
+            xStStream = pExcRoot->pRootStorage->OpenStream( aStrName, STREAM_READ | STREAM_SHARE_DENYALL );
+        }
+
         const UINT32                    nMax = aPosBuffer.Count();
         const ClientAnchorData*         pAnch;
 
@@ -2758,12 +2766,25 @@ void ImportExcel8::PostDocLoad( void )
                                 p->SetObj( pSdrObj );
                                 switch ( p->GetObjType() )
                                 {
-                                    case OT_CHART :
+                                    case OT_CHART:
                                         nChartCnt++;
                                     break;
-                                    case OT_OLE :
+                                    case OT_OLE:
                                         ((ExcEscherOle*)p)->CreateSdrOle( *pDffMan, nOLEImpFlags );
                                     break;
+                                    case OT_CTRL:
+                                        if( bHasCtrls )
+                                        {
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                                                    xShapeRef = GetXShapeForSdrObject( pSdrObj );
+                                            if( pCtrlConv->ReadOCXExcelKludgeStream( xStStream, &xShapeRef, TRUE ) )
+                                            {
+                                                SdrObject*  pNewObj = GetSdrObjectFromXShape( xShapeRef );
+                                                if( pNewObj )
+                                                    p->SetObj( pNewObj );
+                                            }
+                                        }
+                                        break;
                                 }
                             }
                         }
@@ -2776,11 +2797,25 @@ void ImportExcel8::PostDocLoad( void )
                 pExcRoot->pProgress->StartPostLoadProgress( nChartCnt );
         }
 
+        if( bHasCtrls )
+            delete pCtrlConv;
+
         delete pDffMan;
     }
 
     aEscherObjList.Apply();
 
+    // controls
+/*
+    ScMSConvertControls     aCtrlConverter( pD->GetDocumentShell() );
+    String                  aStrName( String::CreateFromAscii( "Ctls" ) );
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >*  pShapeRef = NULL;
+
+    SvStorageStreamRef      xStStream = pExcRoot->pRootStorage->OpenStream(
+                                aStrName, STREAM_READ | STREAM_SHARE_DENYALL );
+    aCtrlConverter.ReadOCXExcelKludgeStream( xStStream, pShapeRef, TRUE );
+                                                                // BOOL bFloatingCtrl
+*/
     ImportExcel::PostDocLoad();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!

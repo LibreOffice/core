@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-16 13:21:27 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 #include <vcl/color.hxx>
+#include <vcl/svapp.hxx>
 #include <so3/svstor.hxx>
 
 #include <string.h>
@@ -89,6 +90,7 @@
 #include "olinetab.hxx"
 #include "progress.hxx"
 #include "editutil.hxx"
+#include "addincol.hxx"
 
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
@@ -107,6 +109,7 @@
 #include "flttools.hxx"
 #include "excrecds.hxx"
 #include "xcl97rec.hxx"
+#include "XclAddInNameTrans.hxx"
 
 #ifndef _SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
@@ -1197,3 +1200,35 @@ void AppendCString( SvStream& rStrm, String& rString, CharSet eSrc )
 
 
 
+
+XclAddInNameTranslator::XclAddInNameTranslator( void ) : rAddInColl( *ScGlobal::GetAddInCollection() )
+{
+    eLng = ::GetpApp()->GetAppInternational().GetLanguage();
+}
+
+
+XclAddInNameTranslator::~XclAddInNameTranslator()
+{
+}
+
+
+String XclAddInNameTranslator::GetScName( const String& rExcelName )
+{
+    String  aRet;
+
+    if( rAddInColl.GetCalcName( rExcelName, aRet ) )
+        return aRet;
+    else
+        return rExcelName;
+}
+
+
+String XclAddInNameTranslator::GetXclName( const String& rScName )
+{
+    String  aRet;
+
+    if( rAddInColl.GetExcelName( rScName, eLng, aRet ) )
+        return aRet;
+    else
+        return rScName;
+}

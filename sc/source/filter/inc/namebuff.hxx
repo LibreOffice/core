@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,9 @@ public:
     virtual                 ~ShrfmlaBuffer();
     void                    Store( const ScRange& rRange, const ScTokenArray& );
     UINT16                  Find( const ScAddress aAdress );
+
+    static String           CreateName( const ScRange& );
+    static BOOL             GetAddress( const String& rName, ScRange& rReturn );
     };
 
 
@@ -403,12 +406,13 @@ struct ExtName
 
 
 
-class ExtNameBuff : private List
+class ExtNameBuff : private List, protected ExcRoot
 {
 private:
     static const sal_Char*  pJoostTest;
 protected:
 public:
+    inline          ExtNameBuff( RootData* );
     virtual         ~ExtNameBuff();
 
     void            AddDDE( const String& rName );
@@ -419,6 +423,11 @@ public:
 
     void            Reset( void );
 };
+
+
+inline ExtNameBuff::ExtNameBuff( RootData* p ) : ExcRoot( p )
+{
+}
 
 
 #endif

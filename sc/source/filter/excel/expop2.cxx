@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-06 16:08:17 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 
 #include "xcl97exp.hxx"
 #include "xcl97esc.hxx"
+#include "xcladdinnametrans.hxx"
 
 #include "document.hxx"
 #include "filtopt.hxx"
@@ -223,6 +224,8 @@ ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument
     String          aBase = pDoc->GetDocumentShell()->GetBaseURL();
     aBase.Erase( aBase.SearchBackward( '/' ) + 1 );
     pExcRoot->pBasePath = new String( aBase );
+
+    pExcRoot->pAddInNameTranslator = new XclAddInNameTranslator;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 14:12:29 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,8 @@ enum OBJECTTYPE
     OT_PICTURE,
     OT_TXO,
     OT_NOTE,
-    OT_OLE
+    OT_OLE,
+    OT_CTRL
 };
 
 
@@ -301,6 +302,8 @@ private:
     UINT32                      nBlipId;
     BOOL                        bAsSymbol   : 1;
     BOOL                        bLinked     : 1;
+
+    OBJECTTYPE                  eType;      // OLE or CTRL
 protected:
 public:
                                 ExcEscherOle( ExcEscherObj*& rpCopyAndDel );

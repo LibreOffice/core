@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-14 11:17:50 $
+ *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ public:
 
 // --- class XclSupbook ----------------------------------------------
 
+class XclExternNameList;
+
 class XclSupbook : public ExcRecord, private List
 {
 private:
@@ -205,6 +207,7 @@ private:
     XclUnicodeString            sEncoded;
     UINT32                      nLen;
     BOOL                        bSelf;
+    XclExternNameList*          pExtNameList;
 
     inline XclXct*              _First()    { return (XclXct*) List::First(); }
     inline XclXct*              _Next()     { return (XclXct*) List::Next(); }
@@ -230,6 +233,10 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual UINT16              GetLen() const;
+
+//  void                        SetExtNameList( XclExternNameList* pNew );
+//  inline XclExternNameList*   GetExtNameList( void ) const;
+    UINT16                      GetAddinIndex( const String& rName );
 };
 
 
@@ -265,6 +272,8 @@ public:
 
     void                        WriteXtiInfo( SvStream& rStrm, UINT16 nTabFirst, UINT16 nTabLast );
     virtual void                Save( SvStream& rStrm );
+
+    inline UINT16               GetAddinIndex( const String& rName, UINT16 nTab );
 };
 
 inline XclSupbook* XclSupbookList::GetSupbook( UINT16 nExcTab ) const
@@ -272,6 +281,14 @@ inline XclSupbook* XclSupbookList::GetSupbook( UINT16 nExcTab ) const
     return (XclSupbook*) List::GetObject( pSupbookBuffer[ nExcTab ] );
 }
 
+inline UINT16 XclSupbookList::GetAddinIndex( const String& rName, UINT16 nTab )
+{
+    XclSupbook*     p = _Get( nTab );
+    if( p )
+        return p->GetAddinIndex( rName );
+    else
+        return 0xFFFF;
+}
 
 // --- class XclXti --------------------------------------------------
 
@@ -333,6 +350,9 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual UINT16              GetLen() const;
+
+    inline UINT16               GetAddinIndex( const String& rName, UINT16 nTab )
+                                        { return aSupbookList.GetAddinIndex( rName, nTab ); }
 };
 
 inline void XclExternsheetList::WriteXtiInfo( SvStream& rStrm, XclXti& rXti )
@@ -1285,5 +1305,40 @@ public:
 
     virtual UINT16          GetLen() const;
 };
+
+
+//___________________________________________________________________
+
+class XclExternName : public ExcRecord
+{
+private:
+    String                      aName;
+    XclRawUnicodeString*        pExpStr;
+    virtual void                SaveCont( SvStream& rStrm );
+public:
+                                XclExternName( const String& );
+
+    virtual UINT16              GetNum() const;
+    virtual UINT16              GetLen() const;
+
+    inline BOOL                 operator ==( const String& rRef ) const;
+};
+
+
+class XclExternNameList : protected List
+{
+private:
+    virtual void                _Save( SvStream& );
+
+    inline XclExternName*       First( void );
+    inline XclExternName*       Next( void );
+public:
+    virtual                     ~XclExternNameList();
+
+    UINT16                      GetIndex( const String& rName );
+
+    virtual void                Save( SvStream& );
+};
+
 
 #endif // _XCL97REC_HXX
