@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 15:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,9 @@ public:
     // optional auch nur zu kaputten Formeln springen
     FASTBOOL GotoNxtPrvTblFormula( BOOL bNext = TRUE,
                                     BOOL bOnlyErrors = FALSE );
+    // jump to the next / previous hyperlink - inside text and also
+    // on graphics
+    FASTBOOL SelectNxtPrvHyperlink( BOOL bNext = TRUE );
 
     // springe zu dieser Refmark
     FASTBOOL GotoRefMark( const String& rRefMark, USHORT nSubType = 0,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 15:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
 #endif
+#ifndef _SVX_SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
 
 #ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
@@ -136,6 +139,9 @@
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
 #endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
 #endif
@@ -174,6 +180,15 @@
 #endif
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
+#endif
+#ifndef _FESH_HXX
+#include <fesh.hxx>
+#endif
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>
+#endif
+#ifndef _FMTURL_HXX
+#include <fmturl.hxx>
 #endif
 
 
@@ -1996,4 +2011,131 @@ const SwRedline* SwCrsrShell::GotoRedline( USHORT nArrPos, BOOL bSelect )
 }
 
 
+FASTBOOL SwCrsrShell::SelectNxtPrvHyperlink( BOOL bNext )
+{
+    SwNodes& rNds = GetDoc()->GetNodes();
+    const SwNode* pBodyEndNd = &rNds.GetEndOfContent();
+    const SwNode* pBodySttNd = pBodyEndNd->FindStartNode();
+    ULONG nBodySttNdIdx = pBodySttNd->GetIndex();
+    Point aPt;
+
+    _SetGetExpFld aCmpPos( SwPosition( bNext ? *pBodyEndNd : *pBodySttNd ) );
+    _SetGetExpFld aCurPos( bNext ? *pCurCrsr->End() : *pCurCrsr->Start() );
+    if( aCurPos.GetNode() < nBodySttNdIdx )
+    {
+        const SwCntntNode* pCNd = aCurPos.GetNodeFromCntnt()->GetCntntNode();
+        SwCntntFrm* pFrm;
+        if( pCNd && 0 != ( pFrm = pCNd->GetFrm( &aPt )) )
+            aCurPos.SetBodyPos( *pFrm );
+    }
+
+    // check first all the hyperlink fields
+    {
+        const SwTxtNode* pTxtNd;
+        const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
+        for( USHORT n = pFmts->Count(); 1 < n; )
+        {
+            SwClientIter aIter( *(*pFmts)[  --n ] );
+
+            for( SwClient* pFnd = aIter.First(TYPE( SwTxtINetFmt ));
+                    pFnd; pFnd = aIter.Next() )
+                if( 0 != ( pTxtNd = ((SwTxtINetFmt*)pFnd)->GetpTxtNode()) &&
+                    pTxtNd->GetNodes().IsDocNodes() )
+                {
+                    SwTxtINetFmt& rAttr = *(SwTxtINetFmt*)pFnd;
+                    SwPosition aTmpPos( *pTxtNd );
+                    _SetGetExpFld aPos( aTmpPos.nNode, rAttr );
+                    SwCntntFrm* pFrm;
+                    if( pTxtNd->GetIndex() < nBodySttNdIdx &&
+                        0 != ( pFrm = pTxtNd->GetFrm( &aPt )) )
+                        aPos.SetBodyPos( *pFrm );
+
+                    if( bNext
+                        ? ( aPos < aCmpPos && aCurPos < aPos )
+                        : ( aCmpPos < aPos && aPos < aCurPos ))
+                    {
+                        String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
+                                        *rAttr.GetEnd() - *rAttr.GetStart() ) );
+
+                        sTxt.EraseAllChars( 0x0a );
+                        sTxt.EraseLeadingChars().EraseTrailingChars();
+
+                        if( sTxt.Len() )
+                            aCmpPos = aPos;
+                    }
+                }
+        }
+    }
+    // then check all the Flys with a URL or imapge map
+    {
+        const SwSpzFrmFmts* pFmts = GetDoc()->GetSpzFrmFmts();
+        for( USHORT n = 0, nEnd = pFmts->Count(); n < nEnd; ++n )
+        {
+            SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)(*pFmts)[ n ];
+            const SwFmtURL& rURLItem = pFmt->GetURL();
+            if( rURLItem.GetMap() || rURLItem.GetURL().Len() )
+            {
+                SwFlyFrm* pFly = pFmt->GetFrm( &aPt, FALSE );
+                SwPosition aTmpPos( *pBodySttNd );
+                if( pFly &&
+                    GetBodyTxtNode( *GetDoc(), aTmpPos, *pFly->GetLower() ) )
+                {
+                    _SetGetExpFld aPos( *pFmt, &aTmpPos );
+
+                    if( bNext
+                            ? ( aPos < aCmpPos && aCurPos < aPos )
+                            : ( aCmpPos < aPos && aPos < aCurPos ))
+                        aCmpPos = aPos;
+                }
+            }
+        }
+    }
+
+    // found any URL ?
+    FASTBOOL bRet = FALSE;
+    const SwTxtINetFmt* pFndAttr = aCmpPos.GetINetFmt();
+    const SwFlyFrmFmt* pFndFmt = aCmpPos.GetFlyFmt();
+    if( pFndAttr || pFndFmt )
+    {
+        SET_CURR_SHELL( this );
+        SwCallLink aLk( *this );
+
+        // find a text attribute ?
+        if( pFndAttr )
+        {
+            SwCrsrSaveState aSaveState( *pCurCrsr );
+
+            aCmpPos.GetPosOfContent( *pCurCrsr->GetPoint() );
+            pCurCrsr->DeleteMark();
+            pCurCrsr->SetMark();
+            pCurCrsr->GetPoint()->nContent = *pFndAttr->SwTxtAttr::GetEnd();
+
+            if( !pCurCrsr->IsInProtectTable() && !pCurCrsr->IsSelOvr() )
+            {
+                UpdateCrsr( SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|
+                                    SwCrsrShell::READONLY );
+                bRet = TRUE;
+            }
+        }
+        // find a draw object ?
+        else if( RES_DRAWFRMFMT == pFndFmt->Which() )
+        {
+            const SdrObject* pSObj = pFndFmt->FindSdrObject();
+            ((SwFEShell*)this)->SelectObj( pSObj->GetBoundRect().Center() );
+            MakeSelVisible();
+            bRet = TRUE;
+        }
+        else        // then is it a fly
+        {
+            SwFlyFrm* pFly = pFndFmt->GetFrm(&aPt, FALSE );
+            if( pFly )
+            {
+                ((SwFEShell*)this)->SelectFlyFrm( *pFly, TRUE );
+                MakeSelVisible();
+                bRet = TRUE;
+            }
+        }
+    }
+    return bRet;
+}
 

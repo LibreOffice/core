@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:45:37 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 15:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,10 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     FASTBOOL GotoBookmark( const String& rName );
     FASTBOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
     FASTBOOL GoPrevBookmark();
+
+    // jump to the next / previous hyperlink - inside text and also
+    // on graphics
+    FASTBOOL SelectNextPrevHyperlink( BOOL bNext = TRUE );
 
     // Zugehoerige SwView ermitteln
     const SwView&       GetView() const { return rView; }

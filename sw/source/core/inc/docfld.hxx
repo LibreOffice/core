@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 15:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ class SwSectionNode;
 class SwSection;
 class SwTxtTOXMark;
 class SwTableBox;
+class SwTxtINetFmt;
+class SwFlyFrmFmt;
 
 // Update an den Expression Feldern
 class _SetGetExpFld
@@ -90,14 +92,20 @@ class _SetGetExpFld
         const SwPosition* pPos;
         const SwTxtTOXMark* pTxtTOX;
         const SwTableBox* pTBox;
+        const SwTxtINetFmt* pTxtINet;
+        const SwFlyFrmFmt* pFlyFmt;
     } CNTNT;
     enum _SetGetExpFldType
         {
-            TEXTFIELD, TEXTTOXMARK, SECTIONNODE, CRSRPOS, TABLEBOX
+            TEXTFIELD, TEXTTOXMARK, SECTIONNODE, CRSRPOS, TABLEBOX,
+            TEXTINET, FLYFRAME
         } eSetGetExpFldType;
 
 public:
     _SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld = 0,
+                    const SwIndex* pIdx = 0 );
+
+    _SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtINetFmt& rINet,
                     const SwIndex* pIdx = 0 );
 
     _SetGetExpFld( const SwSectionNode& rSectNode,
@@ -110,6 +118,8 @@ public:
                     const SwIndex* pIdx );
 
     _SetGetExpFld( const SwPosition& rPos );
+
+    _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
 
     BOOL operator==( const _SetGetExpFld& rFld ) const
     {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
@@ -125,6 +135,10 @@ public:
         { return SECTIONNODE == eSetGetExpFldType ? CNTNT.pSection : 0; }
     const SwTableBox* GetTableBox() const
         { return TABLEBOX == eSetGetExpFldType ? CNTNT.pTBox : 0; }
+    const SwTxtINetFmt* GetINetFmt() const
+        { return TEXTINET == eSetGetExpFldType ? CNTNT.pTxtINet : 0; }
+    const SwFlyFrmFmt* GetFlyFmt() const
+        { return FLYFRAME == eSetGetExpFldType ? CNTNT.pFlyFmt : 0; }
 
     ULONG GetNode() const { return nNode; }
     xub_StrLen GetCntnt() const { return nCntnt; }

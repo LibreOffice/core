@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 15:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,6 +923,59 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
     }
     return cWord;
 }
+
+
+
+    // jump to the next / previous hyperlink - inside text and also
+    // on graphics
+FASTBOOL SwWrtShell::SelectNextPrevHyperlink( BOOL bNext )
+{
+    StartAction();
+    FASTBOOL bRet = SwCrsrShell::SelectNxtPrvHyperlink( bNext );
+    if( !bRet )
+    {
+        // will we have this feature?
+        EnterStdMode();
+        if( bNext )
+            SwCrsrShell::SttDoc();
+        else
+            SwCrsrShell::EndDoc();
+        bRet = SwCrsrShell::SelectNxtPrvHyperlink( bNext );
+    }
+    EndAction();
+
+    BOOL bCreateXSelection = FALSE;
+    const FASTBOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
+    if( IsSelection() )
+    {
+        if ( bFrmSelected )
+            UnSelectFrm();
+
+        // Funktionspointer fuer das Aufheben der Selektion setzen
+        // bei Cursor setzen
+        fnKillSel = &SwWrtShell::ResetSelect;
+        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        bCreateXSelection = TRUE;
+    }
+    else if( bFrmSelected )
+    {
+        EnterSelFrmMode();
+        bCreateXSelection = TRUE;
+    }
+    else if( (CNT_GRF | CNT_OLE ) & GetCntType() )
+    {
+        SelectObj( GetCharRect().Pos() );
+        EnterSelFrmMode();
+        bCreateXSelection = TRUE;
+    }
+
+    if( bCreateXSelection )
+        SwTransferable::CreateSelection( *this );
+
+    return bRet;
+}
+
+
 /* fuer den Erhalt der Selektion wird nach SetMark() der Cursor
  * nach links bewegt, damit er durch das Einfuegen von Text nicht
  * verschoben wird.  Da auf der CORE-Seite am aktuellen Cursor

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 17:35:17 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 15:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,6 +1028,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_GlossaryExpand, KS_NextPrevGlossary,
                     KS_AutoFmtByInput, KS_DontExpand,
                     KS_KeyToView,
+                    KS_CheckDocReadOnlyKeys,
                     KS_CheckAutoCorrect, KS_EditFormula,
                     KS_ColLeftBig, KS_ColRightBig,
                     KS_ColLeftSmall, KS_ColRightSmall,
@@ -1052,7 +1053,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_AppendNodeInSection,
                     KS_Ende };
 
-    SW_KeyState eKeyState = bIsDocReadOnly ? KS_KeyToView : KS_CheckKey,
+    SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
+                                           : KS_CheckKey,
                 eNextKeyState = KS_Ende;
 
     while( KS_Ende != eKeyState )
@@ -1455,6 +1457,22 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                                     bAutoCmpltEndless );
                         eKeyState = KS_NextPrevGlossary;
                     }
+                    break;
+                }
+            }
+            break;
+
+        case KS_CheckDocReadOnlyKeys:
+            {
+                eKeyState = KS_KeyToView;
+                switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
+                {
+                case KEY_TAB:
+                case KEY_TAB | KEY_SHIFT:
+                    bNormalChar = FALSE;
+                    eKeyState = KS_Ende;
+                    rSh.SelectNextPrevHyperlink(
+                                        KEY_SHIFT != rKeyCode.GetModifier() );
                     break;
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:23:28 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,12 @@
 #endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
+#endif
+#ifndef _FMTCNTNT_HXX
+#include <fmtcntnt.hxx>
+#endif
+#ifndef _TXTINET_HXX
+#include <txtinet.hxx>
 #endif
 
 #ifndef _POOLFMT_HRC
@@ -830,6 +836,18 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,
         nCntnt = 0;
 }
 
+_SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
+                            const SwTxtINetFmt& rINet, const SwIndex* pIdx )
+{
+    eSetGetExpFldType = TEXTINET;
+    CNTNT.pTxtINet = &rINet;
+    nNode = rNdIdx.GetIndex();
+    if( pIdx )
+        nCntnt = pIdx->GetIndex();
+    else
+        nCntnt = *rINet.GetStart();
+}
+
     //Erweiterung fuer Sections:
     //  diese haben immer als Content-Position 0xffff !!
     //  Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
@@ -894,6 +912,24 @@ _SetGetExpFld::_SetGetExpFld( const SwPosition& rPos )
     CNTNT.pPos = &rPos;
     nNode = rPos.nNode.GetIndex();
     nCntnt = rPos.nContent.GetIndex();
+}
+
+_SetGetExpFld::_SetGetExpFld( const SwFlyFrmFmt& rFlyFmt,
+                                const SwPosition* pPos  )
+{
+    eSetGetExpFldType = FLYFRAME;
+    CNTNT.pFlyFmt = &rFlyFmt;
+    if( pPos )
+    {
+        nNode = pPos->nNode.GetIndex();
+        nCntnt = pPos->nContent.GetIndex();
+    }
+    else
+    {
+        const SwFmtCntnt& rCntnt = rFlyFmt.GetCntnt();
+        nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
+        nCntnt = 0;
+    }
 }
 
 void _SetGetExpFld::GetPos( SwPosition& rPos ) const
@@ -997,6 +1033,10 @@ const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
             pRet = &CNTNT.pTxtFld->GetTxtNode();
             break;
 
+        case TEXTINET:
+            pRet = &CNTNT.pTxtINet->GetTxtNode();
+            break;
+
         case SECTIONNODE:
             pRet = CNTNT.pSection->GetFmt()->GetSectionNode();
             break;
@@ -1016,24 +1056,30 @@ const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
                 pRet = aIdx.GetNode().GetNodes().GoNext( &aIdx );
             }
             break;
+
+        case FLYFRAME:
+            {
+                SwNodeIndex aIdx( *CNTNT.pFlyFmt->GetCntnt().GetCntntIdx() );
+                pRet = aIdx.GetNode().GetNodes().GoNext( &aIdx );
+            }
+            break;
         }
     return pRet;
 }
 
-USHORT _SetGetExpFld::GetCntPosFromCntnt() const
+xub_StrLen _SetGetExpFld::GetCntPosFromCntnt() const
 {
     USHORT nRet = 0;
     if( CNTNT.pTxtFld )
         switch( eSetGetExpFldType )
         {
         case TEXTFIELD:
+        case TEXTINET:
+        case TEXTTOXMARK:
             nRet = *CNTNT.pTxtFld->GetStart();
             break;
         case CRSRPOS:
             nRet =  CNTNT.pPos->nContent.GetIndex();
-            break;
-        case TEXTTOXMARK:
-            nRet = *CNTNT.pTxtTOX->GetStart();
             break;
         }
     return nRet;
