@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 08:23:03 $
+ *  last change: $Author: cd $ $Date: 2001-10-23 05:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 //_________________________________________________________________________________________________________________
 
 #include "dynamicmenuoptions.hxx"
+
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include "moduleoptions.hxx"
+#endif
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -273,9 +277,15 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
 
     private:
 
-        vector< MenuItem >  m_aNewMenu            ;
-        vector< MenuItem >  m_aWizardMenu         ;
-        vector< MenuItem >  m_aHelpBookmarksMenu  ;
+        vector< MenuItem >  m_aNewMenu              ;
+        vector< MenuItem >  m_aWizardMenu           ;
+        vector< MenuItem >  m_aHelpBookmarksMenu    ;
+        sal_Bool            m_bWriterInstalled      ;
+        sal_Bool            m_bCalcInstalled        ;
+        sal_Bool            m_bDrawInstalled        ;
+        sal_Bool            m_bMathInstalled        ;
+        sal_Bool            m_bChartInstalled       ;
+        sal_Bool            m_bImpressInstalled     ;
 };
 
 //_________________________________________________________________________________________________________________
@@ -379,6 +389,16 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
         ++nPosition;
         m_aHelpBookmarksMenu.push_back( aItem );
     }
+
+    SvtModuleOptions aModuleOptions;
+
+    m_bWriterInstalled  = aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SWRITER );
+    m_bCalcInstalled    = aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SCALC );
+    m_bDrawInstalled    = aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SDRAW );
+    m_bMathInstalled    = aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SMATH );
+    m_bChartInstalled   = aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SCHART );
+    m_bImpressInstalled = aModuleOptions.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS );
+
 
 /*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of ouer baseclass.
@@ -684,24 +704,96 @@ Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::impl_GetSequen
     // Copy it from beginning of list to the end.
 
     // Initialize return sequence with right size.
-    sal_Int32                               nCount      = aList.size()   ;
-    Sequence< Sequence< PropertyValue > >   lResult     ( nCount        );
-    Sequence< PropertyValue >               lProperties ( PROPERTYCOUNT );
-    // Copy items from given to return list.
-    for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+    sal_Int32                               nCount      = aList.size()  ;
+    Sequence< Sequence< PropertyValue > >   lResult;
+    Sequence< PropertyValue >               lProperties( PROPERTYCOUNT );
+
+    if ( &aList == &m_aNewMenu )
     {
-        lProperties[OFFSET_URL              ].Name  =   PROPERTYNAME_URL             ;
-        lProperties[OFFSET_TITLE            ].Name  =   PROPERTYNAME_TITLE           ;
-        lProperties[OFFSET_IMAGEIDENTIFIER  ].Name  =   PROPERTYNAME_IMAGEIDENTIFIER ;
-        lProperties[OFFSET_TARGETNAME       ].Name  =   PROPERTYNAME_TARGETNAME      ;
+        // Copy items from given to return list and filter not installed new menu entries
+        sal_Int32   nIndex = 0;
+        sal_Bool    bSeperator  = sal_False ;
 
-        lProperties[OFFSET_URL              ].Value <<= aList[nItem].sURL            ;
-        lProperties[OFFSET_TITLE            ].Value <<= aList[nItem].sTitle          ;
-        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= aList[nItem].sImageIdentifier;
-        lProperties[OFFSET_TARGETNAME       ].Value <<= aList[nItem].sTargetName     ;
+        OUString aWriterString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ));
+        OUString aCalcString( RTL_CONSTASCII_USTRINGPARAM( "scalc" ));
+        OUString aImpressString( RTL_CONSTASCII_USTRINGPARAM( "simpress" ));
+        OUString aMathString( RTL_CONSTASCII_USTRINGPARAM( "smath" ));
+        OUString aDrawString( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ));
+        OUString aSeperator( RTL_CONSTASCII_USTRINGPARAM( "private:separator" ));
 
-        lResult[nItem] = lProperties;
+        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        {
+            OUString aURL = aList[nItem].sURL;
+
+            if (( aURL.lastIndexOf( aWriterString ) >= 0 ) && !m_bWriterInstalled )
+                continue;
+            else if (( aURL.lastIndexOf( aCalcString ) >= 0 ) && !m_bCalcInstalled )
+                continue;
+            else if (( aURL.lastIndexOf( aImpressString ) >= 0 ) && !m_bImpressInstalled )
+                continue;
+            else if (( aURL.lastIndexOf( aDrawString ) >= 0 ) && !m_bDrawInstalled )
+                continue;
+            else if (( aURL.lastIndexOf( aMathString ) >= 0 ) && !m_bMathInstalled )
+                continue;
+
+            if ( aURL.lastIndexOf( aSeperator ) >= 0 )
+            {
+                bSeperator = sal_True;
+                continue;
+            }
+            else if ( bSeperator )
+            {
+                OUString aEmpty;
+                lProperties[OFFSET_URL              ].Name  =   PROPERTYNAME_URL             ;
+                lProperties[OFFSET_TITLE            ].Name  =   PROPERTYNAME_TITLE           ;
+                lProperties[OFFSET_IMAGEIDENTIFIER  ].Name  =   PROPERTYNAME_IMAGEIDENTIFIER ;
+                lProperties[OFFSET_TARGETNAME       ].Name  =   PROPERTYNAME_TARGETNAME      ;
+
+                lProperties[OFFSET_URL              ].Value <<= aSeperator  ;
+                lProperties[OFFSET_TITLE            ].Value <<= aEmpty      ;
+                lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= aEmpty      ;
+                lProperties[OFFSET_TARGETNAME       ].Value <<= aEmpty      ;
+
+                lResult.realloc( nIndex+1 );
+                lResult[nIndex++] = lProperties;
+                bSeperator = sal_False;
+            }
+
+            lProperties[OFFSET_URL              ].Name  =   PROPERTYNAME_URL             ;
+            lProperties[OFFSET_TITLE            ].Name  =   PROPERTYNAME_TITLE           ;
+            lProperties[OFFSET_IMAGEIDENTIFIER  ].Name  =   PROPERTYNAME_IMAGEIDENTIFIER ;
+            lProperties[OFFSET_TARGETNAME       ].Name  =   PROPERTYNAME_TARGETNAME      ;
+
+            lProperties[OFFSET_URL              ].Value <<= aList[nItem].sURL            ;
+            lProperties[OFFSET_TITLE            ].Value <<= aList[nItem].sTitle          ;
+            lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= aList[nItem].sImageIdentifier;
+            lProperties[OFFSET_TARGETNAME       ].Value <<= aList[nItem].sTargetName     ;
+
+            lResult.realloc( nIndex+1 );
+            lResult[nIndex++] = lProperties;
+        }
     }
+    else
+    {
+        lResult.realloc( nCount );
+
+        // Copy items from given to return list.
+        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        {
+            lProperties[OFFSET_URL              ].Name  =   PROPERTYNAME_URL             ;
+            lProperties[OFFSET_TITLE            ].Name  =   PROPERTYNAME_TITLE           ;
+            lProperties[OFFSET_IMAGEIDENTIFIER  ].Name  =   PROPERTYNAME_IMAGEIDENTIFIER ;
+            lProperties[OFFSET_TARGETNAME       ].Name  =   PROPERTYNAME_TARGETNAME      ;
+
+            lProperties[OFFSET_URL              ].Value <<= aList[nItem].sURL            ;
+            lProperties[OFFSET_TITLE            ].Value <<= aList[nItem].sTitle          ;
+            lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= aList[nItem].sImageIdentifier;
+            lProperties[OFFSET_TARGETNAME       ].Value <<= aList[nItem].sTargetName     ;
+
+            lResult[nItem] = lProperties;
+        }
+    }
+
     return lResult;
 }
 
