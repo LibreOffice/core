@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 10:34:41 $
+ *  last change: $Author: nf $ $Date: 2000-12-06 11:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include "resids.hrc"
 
 ModalDialog RID_CALLDLG {
-  Text = "Dynamischer%PRODUCTVERSIONLink%PRODUCTVERSIONNr%PRODUCTVERSION";
+  Text = "Dynamischer Link Nr. ";
   Text [ english_us ] = "Dynamic Link No. ";
   PosSize = MAP_SYSFONT (18,18,142,142);
   SVLook = TRUE;
@@ -194,7 +194,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
     FixedText 3 {
             Pos = MAP_APPFONT( 40, 45 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT = "Version%PRODUCTVERSION";
+            TEXT = "Version 1.0";
             TEXT [ english_us ] = "Version 1.0";
             CENTER = TRUE;
             TEXT[ portuguese ] = "Versão 1.0";
@@ -224,7 +224,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
     FixedText 4 {
             Pos = MAP_APPFONT( 40, 70 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT = "%PRODUCTVERSIONSun%PRODUCTVERSIONMicrosystems%PRODUCTVERSIONInc%PRODUCTVERSION";
+            TEXT = "®1995-1998 Sun Microsystems, Inc.";
             TEXT [ english_us ] = "®1995-1998 Sun Microsystems, Inc.";
             CENTER = TRUE;
             TEXT[ portuguese ] = "®1995-1998 Sun Microsystems, Inc.";
@@ -263,7 +263,7 @@ ModalDialog IDD_FIND_DIALOG {
     Pos = MAP_APPFONT( 69, 30 );
     Size = MAP_APPFONT( 185, 70 );
     SVLook = TRUE;
-    TEXT = "StarBasic%PRODUCTVERSIONText%PRODUCTVERSIONsuchen";
+    TEXT = "StarBasic: Text suchen";
     TEXT [ english_us ] = "StarBasic: Find Text";
     MOVEABLE = TRUE;
     // CLOSEABLE = TRUE;    // Hat cancelbutton
@@ -369,14 +369,14 @@ ModalDialog IDD_REPLACE_DIALOG {
     Pos = MAP_APPFONT( 69, 30 );
     Size = MAP_APPFONT( 185, 88 );
     SVLook = TRUE;
-    TEXT = "StarBasic%PRODUCTVERSIONText%PRODUCTVERSIONersetzen";
+    TEXT = "StarBasic: Text ersetzen";
     TEXT [ english_us ] = "StarBasic: Replace Text";
     MOVEABLE = TRUE;
     // CLOSEABLE = TRUE;    // Hat cancelbutton
     FixedText RID_FIXEDTEXT1 {
             Pos = MAP_APPFONT( 5, 10 );
             Size = MAP_APPFONT( 55, 10 );
-            TEXT = "~Alter%PRODUCTVERSIONText";
+            TEXT = "~Alter Text";
             TEXT [ english_us ] = "~Previous text";
             TEXT[ portuguese ] = "~Antigo texto";
         TEXT[ russian ] = "~Previous text";
@@ -399,7 +399,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     FixedText RID_FIXEDTEXT2 {
             Pos = MAP_APPFONT( 5, 30 );
             Size = MAP_APPFONT( 55, 10 );
-            TEXT = "~Neuer%PRODUCTVERSIONText";
+            TEXT = "~Neuer Text";
             TEXT [ english_us ] = "~New text";
             TEXT[ portuguese ] = "~Texto novo";
         TEXT[ russian ] = "~New text";
@@ -500,7 +500,7 @@ ModalDialog IDD_REPLACE_DIALOG {
 };
 
 InfoBox IDS_NOPRINTERERROR {
-    MESSAGE = "Drucken%PRODUCTVERSIONsteht%PRODUCTVERSIONnicht%PRODUCTVERSIONzur%PRODUCTVERSIONVerfügung%PRODUCTVERSION";
+    MESSAGE = "Drucken steht nicht zur Verfügung!";
     MESSAGE [ english_us ] = "The print function is not available!";
     MESSAGE[ portuguese ] = "A função de impressão não está disponível!";
     MESSAGE[ russian ] = "The print function is not available!";
@@ -521,9 +521,9 @@ InfoBox IDS_NOPRINTERERROR {
     MESSAGE[ turkish ] = "Yazdýrma iþlevi kullanýlamaz!";
 };
 ErrorBox IDS_CANTLOAD {
-    TITLE = "StarBasic%PRODUCTVERSIONFehler";
+    TITLE = "StarBasic-Fehler";
     TITLE [ english_us ] = "StarBasic Error";
-    MESSAGE = "Library%PRODUCTVERSIONkann%PRODUCTVERSIONnicht%PRODUCTVERSIONgeladen%PRODUCTVERSIONwerden%PRODUCTVERSION";
+    MESSAGE = "Library kann nicht geladen werden!";
     MESSAGE [ english_us ] = "Library cannot be loaded!";
     MESSAGE[ portuguese ] = "Impossível carregar a biblioteca!";
     MESSAGE[ russian ] = "Library cannot be loaded!";
@@ -561,9 +561,9 @@ ErrorBox IDS_CANTLOAD {
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_CANTSAVE {
-    TITLE = "StarBasic%PRODUCTVERSIONFehler";
+    TITLE = "StarBasic-Fehler";
     TITLE [ english_us ] = "StarBasic Error";
-    MESSAGE = "Library%PRODUCTVERSIONkann%PRODUCTVERSIONnicht%PRODUCTVERSIONgespeichert%PRODUCTVERSIONwerden%PRODUCTVERSION";
+    MESSAGE = "Library kann nicht gespeichert werden!";
     MESSAGE [ english_us ] = "Library cannot be saved!";
     MESSAGE[ portuguese ] = "Impossível guardar a biblioteca!";
     MESSAGE[ russian ] = "Library cannot be saved!";
@@ -601,9 +601,9 @@ ErrorBox IDS_CANTSAVE {
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_NOMAINPGM {
-    TITLE = "StarBasic%PRODUCTVERSIONFehler";
+    TITLE = "StarBasic-Fehler";
     TITLE [ english_us ] = "StarBasic Error";
-    MESSAGE = "Dieses%PRODUCTVERSIONFenster%PRODUCTVERSIONenthält%PRODUCTVERSIONkein%PRODUCTVERSIONHauptprogramm%PRODUCTVERSION";
+    MESSAGE = "Dieses Fenster enthält kein Hauptprogramm!";
     MESSAGE [ english_us ] = "This window does not contain a main program!";
     MESSAGE[ portuguese ] = "Esta janela não contém nenhum programa principal!";
     MESSAGE[ russian ] = "This window does not contain a main program!";
@@ -641,9 +641,9 @@ ErrorBox IDS_NOMAINPGM {
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_READERROR {
-    TITLE = "StarBasic%PRODUCTVERSIONFehler";
+    TITLE = "StarBasic-Fehler";
     TITLE [ english_us ] = "StarBasic Error";
-    MESSAGE = "Datei%PRODUCTVERSIONkann%PRODUCTVERSIONnicht%PRODUCTVERSIONeingelesen%PRODUCTVERSIONwerden%PRODUCTVERSION";
+    MESSAGE = "Datei kann nicht eingelesen werden!";
     MESSAGE [ english_us ] = "File cannot be read!";
     MESSAGE[ portuguese ] = "Impossível ler ficheiro!";
     MESSAGE[ russian ] = "File cannot be read!";
@@ -681,9 +681,9 @@ ErrorBox IDS_READERROR {
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_WRITEERROR {
-    TITLE = "StarBasic%PRODUCTVERSIONFehler";
+    TITLE = "StarBasic-Fehler";
     TITLE [ english_us ] = "StarBasic Error";
-    MESSAGE = "Datei%PRODUCTVERSIONkann%PRODUCTVERSIONnicht%PRODUCTVERSIONabgespeichert%PRODUCTVERSIONwerden%PRODUCTVERSION";
+    MESSAGE = "Datei kann nicht abgespeichert werden!";
     MESSAGE [ english_us ] = "File cannot be saved!";
     MESSAGE[ portuguese ] = "Impossível guardar ficheiro!";
     MESSAGE[ russian ] = "File cannot be saved!";
@@ -721,9 +721,9 @@ ErrorBox IDS_WRITEERROR {
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_PATTERNNOTFOUND {
-    TITLE = "StarBasic%PRODUCTVERSIONFehler";
+    TITLE = "StarBasic-Fehler";
     TITLE [ english_us ] = "StarBasic Error";
-    MESSAGE = "Suchbegriff%PRODUCTVERSIONnicht%PRODUCTVERSIONgefunden%PRODUCTVERSION";
+    MESSAGE = "Suchbegriff nicht gefunden!";
     MESSAGE [ english_us ] = "Search key not found!";
     MESSAGE[ portuguese ] = "Impossível encontrar expressão procurada!";
     MESSAGE[ russian ] = "Search key not found!";
@@ -761,9 +761,9 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_INVALID_VALUE {
-    TITLE = "StarBasic%PRODUCTVERSIONFehler";
+    TITLE = "StarBasic-Fehler";
     TITLE [ english_us ] = "StarBasic Error";
-    MESSAGE = "Der%PRODUCTVERSIONWert%PRODUCTVERSIONist%PRODUCTVERSIONungültig%PRODUCTVERSIONund%PRODUCTVERSIONkann%PRODUCTVERSIONdaher%PRODUCTVERSIONnicht%PRODUCTVERSIONgesetzt%PRODUCTVERSIONwerden%PRODUCTVERSION";
+    MESSAGE = "Der Wert ist ungültig und kann daher nicht gesetzt werden.";
     MESSAGE [ english_us ] = "The value is invalid and cannot be set.";
     MESSAGE[ portuguese ] = "O valor não é válido e não pode ser aplicado.";
     MESSAGE[ russian ] = "The value is invalid and cannot be set.";
@@ -804,7 +804,7 @@ ErrorBox IDS_INVALID_VALUE {
 QueryBox IDS_ASKSAVEERROR {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "Fehler%PRODUCTVERSIONbeim%PRODUCTVERSIONSpeichern%PRODUCTVERSIONder%PRODUCTVERSIONDateien%PRODUCTVERSIONTrotzdem%PRODUCTVERSIONausführen%PRODUCTVERSION";
+    MESSAGE = "Fehler beim Speichern der Dateien! Trotzdem ausführen?";
     MESSAGE [ english_us ] = "Error saving files! Run anyway?";
     BUTTONS = WB_YES_NO;
     MESSAGE[ portuguese ] = "Ocorreu um erro ao guardar os ficheiros!Mesmo assim, executar?";
@@ -845,7 +845,7 @@ QueryBox IDS_ASKSAVEERROR {
 QueryBox IDS_ASK_DIRTY_SAVE {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "Datei%PRODUCTVERSIONist%PRODUCTVERSIONgeändert%PRODUCTVERSIONworden%PRODUCTVERSIONAbspeichern%PRODUCTVERSION";
+    MESSAGE = "Datei ist geändert worden. Abspeichern?";
     MESSAGE [ english_us ] = "File has been changed. Save?";
     BUTTONS = WB_YES_NO_CANCEL;
     MESSAGE[ portuguese ] = "O ficheiro foi modificado. Guardar?";
@@ -886,7 +886,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
 QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "Datei%PRODUCTVERSIONist%PRODUCTVERSIONauf%PRODUCTVERSIONdem%PRODUCTVERSIONDatenträger%PRODUCTVERSIONund%PRODUCTVERSIONnim%PRODUCTVERSIONEditor%PRODUCTVERSIONgeändert%PRODUCTVERSIONworden%PRODUCTVERSIONAbspeichern%PRODUCTVERSION";
+    MESSAGE = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Abspeichern?";
     MESSAGE [ english_us ] = "File has been changed on data medium\nand in the Editor. Save?";
     BUTTONS = WB_YES_NO_CANCEL;
     MESSAGE[ portuguese ] = "O ficheiro foi modificado no suporte\nde dados e no Editor. Guardar?";
@@ -927,7 +927,7 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
 QueryBox IDS_ASK_DISKCHANGE_SAVE {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "Datei%PRODUCTVERSIONist%PRODUCTVERSIONauf%PRODUCTVERSIONdem%PRODUCTVERSIONDatenträger%PRODUCTVERSIONgeändert%PRODUCTVERSIONworden%PRODUCTVERSIONnÜberschreiben%PRODUCTVERSION";
+    MESSAGE = "Datei ist auf dem Datenträger geändert worden.\nÜberschreiben?";
     MESSAGE [ english_us ] = "File has been changed on data medium.\nOverwrite?";
     BUTTONS = WB_YES_NO_CANCEL;
     MESSAGE[ portuguese ] = "O ficheiro foi modificado no suporte de dados.\nSobregravar?";
@@ -968,7 +968,7 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
 QueryBox IDS_ASKRELOAD {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "Datei%PRODUCTVERSIONist%PRODUCTVERSIONauf%PRODUCTVERSIONdem%PRODUCTVERSIONDatenträger%PRODUCTVERSIONgeändert%PRODUCTVERSIONworden%PRODUCTVERSIONErneut%PRODUCTVERSIONLaden%PRODUCTVERSION";
+    MESSAGE = "Datei ist auf dem Datenträger geändert worden. Erneut Laden?";
     MESSAGE [ english_us ] = "File has been changed on data medium. Reload?";
     BUTTONS = WB_YES_NO;
     MESSAGE[ portuguese ] = "O ficheiro foi modificado no suporte de dados. Recarregar?";
@@ -1009,7 +1009,7 @@ QueryBox IDS_ASKRELOAD {
 QueryBox IDS_ASKDIRTYRELOAD {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "Datei%PRODUCTVERSIONist%PRODUCTVERSIONauf%PRODUCTVERSIONdem%PRODUCTVERSIONDatenträger%PRODUCTVERSIONund%PRODUCTVERSIONnim%PRODUCTVERSIONEditor%PRODUCTVERSIONgeändert%PRODUCTVERSIONworden%PRODUCTVERSIONErneut%PRODUCTVERSIONLaden%PRODUCTVERSION";
+    MESSAGE = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Erneut Laden?";
     MESSAGE [ english_us ] = "File has been changed on data medium\nand in the Editor. Reload?";
     BUTTONS = WB_YES_NO;
     MESSAGE[ portuguese ] = "O ficheiro foi modificado no\\suporte de dados e no Editor. Recarregar?";
@@ -1050,7 +1050,7 @@ QueryBox IDS_ASKDIRTYRELOAD {
 QueryBox IDS_RUNNING {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "BASIC%PRODUCTVERSIONProgramm%PRODUCTVERSIONist%PRODUCTVERSIONnoch%PRODUCTVERSIONaktiv%PRODUCTVERSIONDennoch%PRODUCTVERSIONbeenden%PRODUCTVERSION";
+    MESSAGE = "BASIC-Programm ist noch aktiv! Dennoch beenden?";
     MESSAGE [ english_us ] = "BASIC is still running! Exit anyway?";
     BUTTONS = WB_YES_NO;
     MESSAGE[ portuguese ] = "O programa BASIC ainda está activo! Mesmo assim, sair?";
@@ -1091,7 +1091,7 @@ QueryBox IDS_RUNNING {
 QueryBox IDS_LOSS_OF_INFORMATION {
     TITLE = "StarBasic";
     TITLE [ english_us ] = "StarBasic";
-    MESSAGE = "Speichern%PRODUCTVERSIONin%PRODUCTVERSIONFremdformat%PRODUCTVERSIONverursacht%PRODUCTVERSIONInformationsverlust";
+    MESSAGE = "Speichern in Fremdformat verursacht Informationsverlust";
     MESSAGE [ english_us ] = "Saving in an external format causes information loss.";
     BUTTONS = WB_OK_CANCEL;
     MESSAGE[ portuguese ] = "Guardar em formatos externos causará perda de informação.";
@@ -1132,7 +1132,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
 
 InfoBox IDS_NOT_YET_IMPLEMENTED
 {
-    MESSAGE = "Noch%PRODUCTVERSIONnicht%PRODUCTVERSIONimplementiert";
+    MESSAGE = "Noch nicht implementiert";
     MESSAGE[ english_us ] = "Not yet implemented";
     MESSAGE[ portuguese ] = "Ainda não implementado";
     MESSAGE[ russian ] = "Not yet implemented";
@@ -1155,7 +1155,7 @@ InfoBox IDS_NOT_YET_IMPLEMENTED
 
 
 String IDS_WARNING1 {
-    TEXT = "Warnung%PRODUCTVERSION";
+    TEXT = "Warnung ";
     TEXT [ english_us ] = "Warning ";
     TEXT[ portuguese ] = "Aviso ";
     TEXT[ russian ] = "Warning ";
@@ -1176,7 +1176,7 @@ String IDS_WARNING1 {
     TEXT[ turkish ] = "Uyarý ";
 };
 String IDS_ERROR1 {
-    TEXT = "Fehler%PRODUCTVERSION";
+    TEXT = "Fehler ";
     TEXT [ english_us ] = "Error ";
     TEXT[ portuguese ] = "Erro  ";
     TEXT[ russian ] = "Error ";
@@ -1197,7 +1197,7 @@ String IDS_ERROR1 {
     TEXT[ turkish ] = "Hata ";
 };
 String IDS_ERROR2 {
-    TEXT = "%PRODUCTVERSIONin%PRODUCTVERSIONZeile%PRODUCTVERSION";
+    TEXT = " in Zeile ";
     TEXT [ english_us ] = "in row ";
     TEXT[ portuguese ] = "na linha  ";
     TEXT[ russian ] = "in row ";
@@ -1218,7 +1218,7 @@ String IDS_ERROR2 {
     TEXT[ turkish ] = "Satýr: ";
 };
 String IDS_NO_LONGNAME {
-    TEXT = "Kein%PRODUCTVERSIONEintrag%PRODUCTVERSIONin%PRODUCTVERSIONHid%PRODUCTVERSIONLst";
+    TEXT = "Kein Eintrag in Hid.Lst";
     TEXT[ english_us ] = "No entries in Hid.Lst";
     TEXT[ portuguese ] = "Nenhuma entrada em Hid.Lst";
     TEXT[ russian ] = "No entries in Hid.Lst";
@@ -1240,7 +1240,7 @@ String IDS_NO_LONGNAME {
 };
 String IDS_WARNING_PREFIX
 {
-    Text = "Warnung%PRODUCTVERSION";
+    Text = "Warnung: ";
     Text[ english_us ] = "Warning: ";
     Text[ portuguese ] = "Aviso:  ";
     Text[ russian ] = "Warning: ";
@@ -1285,7 +1285,7 @@ String IDS_OBJECT
 };
 String IDS_EDIT_VAR
 {
-    Text = "%PRODUCTVERSIONArg%PRODUCTVERSIONEditieren";
+    Text = "($Arg1) Editieren";
     Text[ english_us ] = "Edit ($Arg1)";
     Text[ LANGUAGE_USER1 ] = "Keine Dati, sondern eine Variable";
     Text[ portuguese ] = "Editar ($Arg1)";
@@ -1450,7 +1450,7 @@ TEXT = "*.TXT";
 };
 
 String IDS_LOADDLG {
-    TEXT = "StarBasic%PRODUCTVERSIONDatei%PRODUCTVERSIONeinlesen";
+    TEXT = "StarBasic: Datei einlesen";
     TEXT [ english_us ] = "StarBasic: Load File";
     TEXT[ portuguese ] = "%PRODUCTNAME Basic: ler ficheiro";
     TEXT[ russian ] = "StarBasic: Load File";
@@ -1471,7 +1471,7 @@ String IDS_LOADDLG {
     TEXT[ turkish ] = "StarBasic: Dosyayý yükle";
 };
 String IDS_SAVEDLG {
-    TEXT = "StarBasic%PRODUCTVERSIONDatei%PRODUCTVERSIONspeichern";
+    TEXT = "StarBasic: Datei speichern";
     TEXT [ english_us ] = "StarBasic: Save File";
     TEXT[ portuguese ] = "%PRODUCTNAME Basic: guardar ficheiro";
     TEXT[ russian ] = "StarBasic: Save File";
@@ -1492,7 +1492,7 @@ String IDS_SAVEDLG {
     TEXT[ turkish ] = "StarBasic: Dosyayý kaydet";
 };
 String IDS_BASFILTER {
-    TEXT = "Quelltexte%PRODUCTVERSIONBAS%PRODUCTVERSION";
+    TEXT = "Quelltexte (*.BAS)";
     TEXT [ english_us ] = "Source text (*.BAS)";
     TEXT[ portuguese ] = "Textos-fonte (*.BAS)";
     TEXT[ russian ] = "Source text (*.BAS)";
@@ -1513,7 +1513,7 @@ String IDS_BASFILTER {
     TEXT[ turkish ] = "Kaynak metinler (*.BAS)";
 };
 String IDS_INCFILTER {
-    TEXT = "Include%PRODUCTVERSIONDateien%PRODUCTVERSIONINC%PRODUCTVERSION";
+    TEXT = "Include-Dateien (*.INC)";
     TEXT [ english_us ] = "Include files (*.INC)";
     TEXT[ portuguese ] = "Ficheiros \"Include\" (*.INC)";
     TEXT[ russian ] = "Include files (*.INC)";
@@ -1534,7 +1534,7 @@ String IDS_INCFILTER {
     TEXT[ turkish ] = "Include dosyalarý (*.INC)";
 };
 String IDS_LIBFILTER {
-    TEXT = "Libraries%PRODUCTVERSIONSB%PRODUCTVERSION";
+    TEXT = "Libraries (*.SB)";
     TEXT [ english_us ] = "Libraries (*.SB)";
     TEXT[ portuguese ] = "Bibliotecas (*.SB)";
     TEXT[ russian ] = "Libraries (*.SB)";
@@ -1555,7 +1555,7 @@ String IDS_LIBFILTER {
     TEXT[ turkish ] = "Kitaplýklar (*.SB)";
 };
 String IDS_RESFILTER {
-    TEXT = "Results%PRODUCTVERSIONRES%PRODUCTVERSION";
+    TEXT = "Results (*.RES)";
     TEXT [ english_us ] = "Results (*.RES)";
     TEXT[ portuguese ] = "Resultados (*.RES)";
     TEXT[ russian ] = "Results (*.RES)";
@@ -1576,7 +1576,7 @@ String IDS_RESFILTER {
     TEXT[ turkish ] = "Sonuçlar (*.RES)";
 };
 String IDS_TXTFILTER {
-    TEXT = "Results%PRODUCTVERSIONals%PRODUCTVERSIONTextdatei%PRODUCTVERSIONTXT%PRODUCTVERSION";
+    TEXT = "Results als Textdatei (*.TXT)";
     TEXT [ english_us ] = "Results as text file (*.TXT)";
     TEXT[ portuguese ] = "Resultados como ficheiro de texto (*.TXT)";
     TEXT[ russian ] = "Results as text file (*.TXT)";
@@ -1597,7 +1597,7 @@ String IDS_TXTFILTER {
     TEXT[ turkish ] = "Metin dosyasý olarak sonuçlar (*.TXT)";
 };
 String IDS_PAGE {
-    TEXT = "Seite%PRODUCTVERSION";
+    TEXT = "Seite ";
     TEXT [ english_us ] = "Page ";
     TEXT[ portuguese ] = "Página ";
     TEXT[ russian ] = "Page ";
@@ -1618,7 +1618,7 @@ String IDS_PAGE {
     TEXT[ turkish ] = "Sayfa ";
 };
 String IDS_PRINTMSG {
-    TEXT = "Ausdruck%PRODUCTVERSIONvon%PRODUCTVERSION";
+    TEXT = "Ausdruck von ";
     TEXT [ english_us ] = "Printout from ";
     TEXT[ portuguese ] = "Impressão de ";
     TEXT[ russian ] = "Printout from ";
@@ -1727,7 +1727,7 @@ Menu RID_APPMENUBAR {
             Identifier = RID_APPFILE;
             TEXT = "~Datei";
             TEXT [ english_us ] = "~File";
-            HELPTEXT = "Dateien%PRODUCTVERSIONöffnen%PRODUCTVERSIONschließen%PRODUCTVERSIONund%PRODUCTVERSIONdrucken";
+            HELPTEXT = "Dateien öffnen, schließen und drucken";
             HELPTEXT [ english_us ] = "Dateien öffnen, schließen und drucken";
             SUBMENU = Menu ,RID_FILE;
             TEXT[ portuguese ] = "~Ficheiro";
@@ -1752,7 +1752,7 @@ Menu RID_APPMENUBAR {
             Identifier = RID_APPEDIT;
             TEXT = "~Bearbeiten";
             TEXT [ english_us ] = "~Edit";
-            HELPTEXT = "Editier%PRODUCTVERSIONFunktionen";
+            HELPTEXT = "Editier-Funktionen";
             HELPTEXT [ english_us ] = "Editier-Funktionen";
             SUBMENU = Menu ,RID_EDIT;
             TEXT[ portuguese ] = "~Editar";
@@ -1777,7 +1777,7 @@ Menu RID_APPMENUBAR {
             Identifier = RID_APPRUN;
             TEXT = "~Programm";
             TEXT [ english_us ] = "~Program";
-            HELPTEXT = "Programme%PRODUCTVERSIONcompilieren%PRODUCTVERSIONund%PRODUCTVERSIONausführen";
+            HELPTEXT = "Programme compilieren und ausführen";
             HELPTEXT [ english_us ] = "Programme compilieren und ausführen";
             SUBMENU = Menu ,RID_RUN;
             TEXT[ portuguese ] = "~Programa";
@@ -1802,7 +1802,7 @@ Menu RID_APPMENUBAR {
             Identifier = RID_APPWINDOW;
             TEXT = "~Fenster";
             TEXT [ english_us ] = "~Window";
-            HELPTEXT = "Fenster%PRODUCTVERSIONanordnen";
+            HELPTEXT = "Fenster anordnen";
             HELPTEXT [ english_us ] = "Fenster anordnen";
             SUBMENU = Menu ,RID_WINDOW;
             TEXT[ portuguese ] = "~Janela";
@@ -1831,7 +1831,7 @@ Menu RID_APPMENUBAR {
             Identifier = RID_APPHELP;
             TEXT = "~Hilfe";
             TEXT [ english_us ] = "~Help";
-            HELPTEXT = "Hilfe%PRODUCTVERSIONFunktionen";
+            HELPTEXT = "Hilfe-Funktionen";
             HELPTEXT [ english_us ] = "Hilfe-Funktionen";
             SUBMENU = Menu ,RID_HELP;
             TEXT[ portuguese ] = "~Ajuda";
@@ -1860,7 +1860,7 @@ Menu RID_FILE {
         Identifier = RID_FILENEW;
         TEXT = "~Neu";
         TEXT [ english_us ] = "~New";
-        HELPTEXT = "Neues%PRODUCTVERSIONleeres%PRODUCTVERSIONFenster%PRODUCTVERSIONöffnen";
+        HELPTEXT = "Neues, leeres Fenster öffnen";
         HELPTEXT [ english_us ] = "Neues, leeres Fenster öffnen";
         AccelKey = KeyCode { Function = KEYFUNC_NEW; };
             TEXT[ portuguese ] = "~Novo";
@@ -1883,9 +1883,9 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILEOPEN;
-        TEXT = "Ö~ffnen%PRODUCTVERSION";
+        TEXT = "Ö~ffnen...";
         TEXT [ english_us ] = "~Open...";
-        HELPTEXT = "Datei%PRODUCTVERSIONin%PRODUCTVERSIONFenster%PRODUCTVERSIONeinlesen";
+        HELPTEXT = "Datei in Fenster einlesen";
         HELPTEXT [ english_us ] = "Datei in Fenster einlesen";
         AccelKey = KeyCode { Function = KEYFUNC_OPEN; };
             TEXT[ portuguese ] = "A~brir...";
@@ -1913,7 +1913,7 @@ Menu RID_FILE {
         Identifier = RID_FILECLOSE;
         TEXT = "S~chließen";
         TEXT [ english_us ] = "~Close";
-        HELPTEXT = "Fenster%PRODUCTVERSIONschließen";
+        HELPTEXT = "Fenster schließen";
         HELPTEXT [ english_us ] = "Fenster schließen";
             TEXT[ portuguese ] = "~Fechar";
             TEXT[ russian ] = "~Close";
@@ -1937,7 +1937,7 @@ Menu RID_FILE {
         Identifier = RID_FILESAVE;
         TEXT = "~Speichern";
         TEXT [ english_us ] = "~Save";
-        HELPTEXT = "Datei%PRODUCTVERSIONunter%PRODUCTVERSIONdem%PRODUCTVERSIONaktuellen%PRODUCTVERSIONNamen%PRODUCTVERSIONspeichern";
+        HELPTEXT = "Datei unter dem aktuellen Namen speichern";
         HELPTEXT [ english_us ] = "Datei unter dem aktuellen Namen speichern";
         AccelKey = KeyCode { Function = KEYFUNC_SAVE; };
             TEXT[ portuguese ] = "~Guardar";
@@ -1960,9 +1960,9 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILESAVEAS;
-        TEXT = "Speichern%PRODUCTVERSION~unter%PRODUCTVERSION";
+        TEXT = "Speichern ~unter...";
         TEXT [ english_us ] = "Save~ As...";
-        HELPTEXT = "Datei%PRODUCTVERSIONunter%PRODUCTVERSIONeinem%PRODUCTVERSIONneuen%PRODUCTVERSIONNamen%PRODUCTVERSIONspeichern";
+        HELPTEXT = "Datei unter einem neuen Namen speichern";
         HELPTEXT [ english_us ] = "Datei unter einem neuen Namen speichern";
         AccelKey = KeyCode { Function = KEYFUNC_SAVEAS; };
             TEXT[ portuguese ] = "Guardar ~como...";
@@ -1988,9 +1988,9 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILELOADLIB;
-        TEXT = "~Library%PRODUCTVERSIONladen%PRODUCTVERSION";
+        TEXT = "~Library laden...";
         TEXT [ english_us ] = "~Load Library...";
-        HELPTEXT = "Modul%PRODUCTVERSIONLibrary%PRODUCTVERSIONladen%PRODUCTVERSIONund%PRODUCTVERSIONaktivieren";
+        HELPTEXT = "Modul-Library laden und aktivieren";
         HELPTEXT [ english_us ] = "Modul-Library laden und aktivieren";
             TEXT[ portuguese ] = "~Carregar biblioteca...";
             TEXT[ russian ] = "~Load Library...";
@@ -2012,9 +2012,9 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILESAVELIB;
-        TEXT = "Li~brary%PRODUCTVERSIONspeichern%PRODUCTVERSION";
+        TEXT = "Li~brary speichern...";
         TEXT [ english_us ] = "Save Li~brary...";
-        HELPTEXT = "Aktuelle%PRODUCTVERSIONModule%PRODUCTVERSIONals%PRODUCTVERSIONLibrary%PRODUCTVERSIONspeichern";
+        HELPTEXT = "Aktuelle Module als Library speichern";
         HELPTEXT [ english_us ] = "Aktuelle Module als Library speichern";
             TEXT[ portuguese ] = "~Guardar biblioteca...";
             TEXT[ russian ] = "Save Li~brary...";
@@ -2041,7 +2041,7 @@ Menu RID_FILE {
         Identifier = RID_FILEPRINT;
         TEXT = "~Drucken";
         TEXT [ english_us ] = "~Print";
-        HELPTEXT = "Datei%PRODUCTVERSIONausdrucken";
+        HELPTEXT = "Datei ausdrucken";
         HELPTEXT [ english_us ] = "Datei ausdrucken";
             TEXT[ portuguese ] = "~Imprimir";
             TEXT[ russian ] = "~Print";
@@ -2063,9 +2063,9 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILESETUP;
-        TEXT = "Druckereinstellun~g%PRODUCTVERSION";
+        TEXT = "Druckereinstellun~g...";
         TEXT [ english_us ] = "P~rinter Setting...";
-        HELPTEXT = "Drucker%PRODUCTVERSIONeinrichten";
+        HELPTEXT = "Drucker einrichten";
         HELPTEXT [ english_us ] = "Drucker einrichten";
             TEXT[ portuguese ] = "Configurar ~impressora...";
             TEXT[ russian ] = "P~rinter Setup...";
@@ -2092,7 +2092,7 @@ Menu RID_FILE {
         Identifier = RID_QUIT;
         TEXT = "~Beenden";
         TEXT [ english_us ] = "~Exit";
-        HELPTEXT = "Programm%PRODUCTVERSIONbeenden";
+        HELPTEXT = "Programm beenden";
         HELPTEXT [ english_us ] = "Programm beenden";
         AccelKey = KeyCode { Function = KEYFUNC_QUIT; };
             TEXT[ portuguese ] = "~Sair";
@@ -2121,7 +2121,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITUNDO;
         TEXT = "~Rückgängig";
         TEXT [ english_us ] = "~Undo";
-        HELPTEXT = "Die%PRODUCTVERSIONletzte%PRODUCTVERSIONÄnderung%PRODUCTVERSIONrückgängig%PRODUCTVERSIONmachen";
+        HELPTEXT = "Die letzte Änderung rückgängig machen";
         HELPTEXT [ english_us ] = "Die letzte Änderung rückgängig machen";
 //      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
             TEXT[ portuguese ] = "~Desfazer";
@@ -2146,7 +2146,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITREDO;
         TEXT = "~Wiederholen";
         TEXT [ english_us ] = "~Repeat";
-        HELPTEXT = "Die%PRODUCTVERSIONzuletzt%PRODUCTVERSIONrückgängig%PRODUCTVERSIONgemachte%PRODUCTVERSIONÄnderung%PRODUCTVERSIONwiederherstellen";
+        HELPTEXT = "Die zuletzt rückgängig gemachte Änderung wiederherstellen";
         HELPTEXT [ english_us ] = "Die zuletzt rückgängig gemachte Änderung wiederherstellen";
 //      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
             TEXT[ portuguese ] = "~Repetir";
@@ -2174,7 +2174,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITCUT;
         TEXT = "~Ausschneiden";
         TEXT [ english_us ] = "~Cut";
-        HELPTEXT = "Markierten%PRODUCTVERSIONText%PRODUCTVERSIONin%PRODUCTVERSIONZwischenablage%PRODUCTVERSIONablegen";
+        HELPTEXT = "Markierten Text in Zwischenablage ablegen";
         HELPTEXT [ english_us ] = "Markierten Text in Zwischenablage ablegen";
         AccelKey = KeyCode { Function = KEYFUNC_CUT; };
             TEXT[ portuguese ] = "Cor~tar";
@@ -2199,7 +2199,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITCOPY;
         TEXT = "~Kopieren";
         TEXT [ english_us ] = "~Copy";
-        HELPTEXT = "Markierten%PRODUCTVERSIONText%PRODUCTVERSIONin%PRODUCTVERSIONZwischenablage%PRODUCTVERSIONkopieren";
+        HELPTEXT = "Markierten Text in Zwischenablage kopieren";
         HELPTEXT [ english_us ] = "Markierten Text in Zwischenablage kopieren";
         AccelKey = KeyCode { Function = KEYFUNC_COPY; };
             TEXT[ portuguese ] = "~Copiar";
@@ -2224,7 +2224,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITPASTE;
         TEXT = "E~infügen";
         TEXT [ english_us ] = "~Paste";
-        HELPTEXT = "Inhalt%PRODUCTVERSIONder%PRODUCTVERSIONZwischenablage%PRODUCTVERSIONeinfügen";
+        HELPTEXT = "Inhalt der Zwischenablage einfügen";
         HELPTEXT [ english_us ] = "Inhalt der Zwischenablage einfügen";
         AccelKey = KeyCode { Function = KEYFUNC_PASTE; };
             TEXT[ portuguese ] = "In~serir";
@@ -2249,7 +2249,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITDEL;
         TEXT = "~Löschen";
         TEXT [ english_us ] = "~Delete";
-        HELPTEXT = "Markierten%PRODUCTVERSIONText%PRODUCTVERSIONlöschen";
+        HELPTEXT = "Markierten Text löschen";
         HELPTEXT [ english_us ] = "Markierten Text löschen";
         AccelKey = KeyCode { Function = KEYFUNC_DELETE; };
             TEXT[ portuguese ] = "E~liminar";
@@ -2275,9 +2275,9 @@ Menu RID_EDIT {
         };
     MenuItem  {
         Identifier = RID_EDITSEARCH;
-        TEXT = "~Suchen%PRODUCTVERSION";
+        TEXT = "~Suchen...";
         TEXT [ english_us ] = "~Find...";
-        HELPTEXT = "Textstelle%PRODUCTVERSIONsuchen";
+        HELPTEXT = "Textstelle suchen";
         HELPTEXT [ english_us ] = "Textstelle suchen";
         AccelKey = KeyCode { Function = KEYFUNC_FIND; };
             TEXT[ portuguese ] = "~Localizar...";
@@ -2300,9 +2300,9 @@ Menu RID_EDIT {
         };
     MenuItem  {
         Identifier = RID_EDITREPLACE;
-        TEXT = "~Ersetzen%PRODUCTVERSION";
+        TEXT = "~Ersetzen...";
         TEXT [ english_us ] = "~Replace...";
-        HELPTEXT = "Textstelle%PRODUCTVERSIONdurch%PRODUCTVERSIONanderen%PRODUCTVERSIONText%PRODUCTVERSIONersetzen";
+        HELPTEXT = "Textstelle durch anderen Text ersetzen";
         HELPTEXT [ english_us ] = "Textstelle durch anderen Text ersetzen";
             TEXT[ portuguese ] = "~Substituir...";
             TEXT[ russian ] = "~Replace...";
@@ -2324,9 +2324,9 @@ Menu RID_EDIT {
         };
     MenuItem  {
         Identifier = RID_EDITREPEAT;
-        TEXT = "S~uchen%PRODUCTVERSIONWiederholen";
+        TEXT = "S~uchen Wiederholen";
         TEXT [ english_us ] = "Repeat S~earch";
-        HELPTEXT = "Suchen%PRODUCTVERSIONersetzen%PRODUCTVERSIONwiederholen";
+        HELPTEXT = "Suchen/ersetzen wiederholen";
         HELPTEXT [ english_us ] = "Suchen/ersetzen wiederholen";
         AccelKey = KeyCode { Code = KEY_F3; };
 //      AccelKey = KeyCode { Function = KEYFUNC_REPEAT; };
@@ -2356,7 +2356,7 @@ Menu RID_RUN {
         Identifier = RID_RUNCOMPILE;
         TEXT = "~Compilieren";
         TEXT [ english_us ] = "~Compile";
-        HELPTEXT = "Programm%PRODUCTVERSIONübersetzen";
+        HELPTEXT = "Programm übersetzen";
         HELPTEXT [ english_us ] = "Programm übersetzen";
         AccelKey = KeyCode { Code = KEY_F5; Shift = TRUE; };
             TEXT[ portuguese ] = "~Compilar";
@@ -2381,7 +2381,7 @@ Menu RID_RUN {
         Identifier = RID_RUNDISAS;
         TEXT = "~Disassemblieren";
         TEXT [ english_us ] = "~Disassemble";
-        HELPTEXT = "Programm%PRODUCTVERSIONdisassemblieren%PRODUCTVERSIONund%PRODUCTVERSIONErgebnis%PRODUCTVERSIONins%PRODUCTVERSIONClipboard%PRODUCTVERSIONstellen";
+        HELPTEXT = "Programm disassemblieren und Ergebnis ins Clipboard stellen";
         HELPTEXT [ english_us ] = "Programm disassemblieren und Ergebnis ins Clipboard stellen";
             TEXT[ portuguese ] = "~Descodificar";
             TEXT[ russian ] = "~Disassemble";
@@ -2405,7 +2405,7 @@ Menu RID_RUN {
         Identifier = RID_RUNSTART;
         TEXT = "~Start";
         TEXT [ english_us ] = "~Start";
-        HELPTEXT = "Programm%PRODUCTVERSIONstarten";
+        HELPTEXT = "Programm starten";
         HELPTEXT [ english_us ] = "Programm starten";
         AccelKey = KeyCode { Code = KEY_F5; };
             TEXT[ portuguese ] = "~Iniciar";
@@ -2430,7 +2430,7 @@ Menu RID_RUN {
         Identifier = RID_RUNSTEPINTO;
         TEXT = "~Einzelschritt";
         TEXT [ english_us ] = "~Single Stepping";
-        HELPTEXT = "Ein%PRODUCTVERSIONProgrammschritt";
+        HELPTEXT = "Ein Programmschritt";
         HELPTEXT [ english_us ] = "Ein Programmschritt";
         AccelKey = KeyCode { Code = KEY_F8; };
             TEXT[ portuguese ] = "Pa~sso a passo";
@@ -2453,9 +2453,9 @@ Menu RID_RUN {
         };
     MenuItem  {
         Identifier = RID_RUNSTEPOVER;
-        TEXT = "Einzelschritt%PRODUCTVERSIONüber%PRODUCTVERSION~Prozeduren";
+        TEXT = "Einzelschritt über ~Prozeduren";
         TEXT [ english_us ] = "Si~ngle Step over Procedure";
-        HELPTEXT = "Ein%PRODUCTVERSIONProgrammschritt%PRODUCTVERSIONohne%PRODUCTVERSIONProzeduren";
+        HELPTEXT = "Ein Programmschritt, ohne Prozeduren";
         HELPTEXT [ english_us ] = "Ein Programmschritt, ohne Prozeduren";
         AccelKey = KeyCode { Code = KEY_F10; };
             TEXT[ portuguese ] = "~Procedimentos passo a passo";
@@ -2486,9 +2486,9 @@ Menu RID_RUN {
 //      };
     MenuItem  {
         Identifier = RID_TOGLEBRKPNT;
-        TEXT = "Brechpunkt%PRODUCTVERSIONsetzen%PRODUCTVERSIONlöschen";
+        TEXT = "Brechpunkt setzen/löschen";
         TEXT [ english_us ] = "Set / Delete Break Point";
-        HELPTEXT = "Brechpunkt%PRODUCTVERSIONsetzen%PRODUCTVERSIONlöschen%PRODUCTVERSIONan%PRODUCTVERSIONder%PRODUCTVERSIONaktuellen%PRODUCTVERSIONCursorposition";
+        HELPTEXT = "Brechpunkt setzen/löschen an der aktuellen Cursorposition";
         HELPTEXT [ english_us ] = "Brechpunkt setzen/löschen an der aktuellen Cursorposition";
         AccelKey = KeyCode { Code = KEY_F9; };
             TEXT[ portuguese ] = "Colocar/Eliminar ponto de quebra ";
@@ -2513,7 +2513,7 @@ Menu RID_RUN {
         Identifier = RID_RUNBREAK;
         TEXT = "~Unterbrechen";
         TEXT [ english_us ] = "~Interrupt";
-        HELPTEXT = "Programmlauf%PRODUCTVERSIONunterbrechen";
+        HELPTEXT = "Programmlauf unterbrechen";
         HELPTEXT [ english_us ] = "Programmlauf unterbrechen";
         AccelKey = KeyCode { Code = KEY_F5; Modifier1 = TRUE; };
             TEXT[ portuguese ] = "~Interromper";
@@ -2538,7 +2538,7 @@ Menu RID_RUN {
         Identifier = RID_RUNSTOP;
         TEXT = "~Abbrechen";
         TEXT [ english_us ] = "~Cancel";
-        HELPTEXT = "Programmlauf%PRODUCTVERSIONabbrechen";
+        HELPTEXT = "Programmlauf abbrechen";
         HELPTEXT [ english_us ] = "Programmlauf abbrechen";
             TEXT[ portuguese ] = "~Cancelar";
             TEXT[ russian ] = "~Cancel";
@@ -2560,9 +2560,9 @@ Menu RID_RUN {
         };
     MenuItem  {
         Identifier = RID_RUNNEXTERR;
-        TEXT = "~Nächster%PRODUCTVERSIONFehler";
+        TEXT = "~Nächster Fehler";
         TEXT [ english_us ] = "~Next Error";
-        HELPTEXT = "Den%PRODUCTVERSIONnächsten%PRODUCTVERSIONProgrammfehler%PRODUCTVERSIONanzeigen";
+        HELPTEXT = "Den nächsten Programmfehler anzeigen";
         HELPTEXT [ english_us ] = "Den nächsten Programmfehler anzeigen";
         AccelKey = KeyCode { Code = KEY_F8; Shift = TRUE; };
             TEXT[ portuguese ] = "Erro ~seguinte";
@@ -2585,9 +2585,9 @@ Menu RID_RUN {
         };
     MenuItem  {
         Identifier = RID_RUNPREVERR;
-        TEXT = "~Vorheriger%PRODUCTVERSIONFehler";
+        TEXT = "~Vorheriger Fehler";
         TEXT [ english_us ] = "~Previous Error";
-        HELPTEXT = "Den%PRODUCTVERSIONvorherigen%PRODUCTVERSIONProgrammfehler%PRODUCTVERSIONanzeigen";
+        HELPTEXT = "Den vorherigen Programmfehler anzeigen";
         HELPTEXT [ english_us ] = "Den vorherigen Programmfehler anzeigen";
         AccelKey = KeyCode { Code = KEY_F7; Shift = TRUE; };
             TEXT[ portuguese ] = "Erro ~anterior";
@@ -2632,7 +2632,7 @@ String RID_TT_EXTRAS_NAME
     Text[ polish ] = "E~xtras";
     Text[ portuguese_brazilian ] = "E~xtras";
     Text[ japanese ] = "E~xtras";
-    Text[ korean ] = "µµ±¸";
+    Text[ korean ] = "º°µµ Ãß°¡(~X)";
     Text[ chinese_simplified ] = "E~xtras";
     Text[ chinese_traditional ] = "E~xtras";
     Text[ arabic ] = "E~xtras";
@@ -2645,7 +2645,7 @@ Menu RID_TT_EXTRAS {
             Identifier = RID_OPTIONS;
             TEXT = "~Einstellungen";
             TEXT [ english_us ] = "~Settings";
-            HELPTEXT = "Einstellungen%PRODUCTVERSIONf%PRODUCTVERSIONr%PRODUCTVERSIONdas%PRODUCTVERSIONTest%PRODUCTVERSIONTool";
+            HELPTEXT = "Einstellungen f³r das Test Tool";
             HELPTEXT [ english_us ] = "Einstellungen f³r das Test Tool";
             TEXT[ portuguese ] = "~Definições";
             TEXT[ russian ] = "~Settings";
@@ -2667,9 +2667,9 @@ Menu RID_TT_EXTRAS {
         };
     MenuItem  {
             Identifier = RID_DECLARE_HELPER;
-            TEXT = "~Dialoge%PRODUCTVERSIONaufnehmen";
+            TEXT = "~Dialoge aufnehmen";
             TEXT [ english_us ] = "~Include Dialogs";
-            HELPTEXT = "Modus%PRODUCTVERSIONzum%PRODUCTVERSIONaufnehmen%PRODUCTVERSIONder%PRODUCTVERSIONDialoge%PRODUCTVERSIONaktivieren";
+            HELPTEXT = "Modus zum aufnehmen der Dialoge aktivieren";
             HELPTEXT [ english_us ] = "Modus zum aufnehmen der Dialoge aktivieren";
             TEXT[ portuguese ] = "~Incluir caixas de diálogo";
             TEXT[ russian ] = "~Include Dialogs";
@@ -2697,7 +2697,7 @@ Menu RID_WINDOW {
             Identifier = RID_WINCASCADE;
             TEXT = "~Überlappend";
             TEXT [ english_us ] = "~Overlapping";
-            HELPTEXT = "Fenster%PRODUCTVERSIONüberlappend%PRODUCTVERSIONanordnen";
+            HELPTEXT = "Fenster überlappend anordnen";
             HELPTEXT [ english_us ] = "Fenster überlappend anordnen";
             TEXT[ portuguese ] = "Em ~cascata";
             TEXT[ russian ] = "~Overlapping";
@@ -2721,7 +2721,7 @@ Menu RID_WINDOW {
             Identifier = RID_WINTILE;
             TEXT = "~Nebeneinander";
             TEXT [ english_us ] = "~Tile";
-            HELPTEXT = "Fenster%PRODUCTVERSIONnebeneinander%PRODUCTVERSIONanordnen";
+            HELPTEXT = "Fenster nebeneinander anordnen";
             HELPTEXT [ english_us ] = "Fenster nebeneinander anordnen";
             TEXT[ portuguese ] = "~Lado a lado";
             TEXT[ russian ] = "~Tile";
@@ -2743,9 +2743,9 @@ Menu RID_WINDOW {
         };
     MenuItem  {
             Identifier = RID_WINTILEHORZ;
-            TEXT = "~Horizontal%PRODUCTVERSIONanordnen";
+            TEXT = "~Horizontal anordnen";
             TEXT [ english_us ] = "~Arrange Horizontally";
-            HELPTEXT = "Fenster%PRODUCTVERSIONhorizontal%PRODUCTVERSIONübereinander%PRODUCTVERSIONanordnen";
+            HELPTEXT = "Fenster horizontal übereinander anordnen";
             HELPTEXT [ english_us ] = "Fenster horizontal übereinander anordnen";
             TEXT[ portuguese ] = "~Dispor na horizontal";
             TEXT[ russian ] = "~Arrange Horizontally";
@@ -2767,9 +2767,9 @@ Menu RID_WINDOW {
         };
     MenuItem  {
             Identifier = RID_WINTILEVERT;
-            TEXT = "~Vertikal%PRODUCTVERSIONanordnen";
+            TEXT = "~Vertikal anordnen";
             TEXT [ english_us ] = "~Arrange Vertically";
-            HELPTEXT = "Fenster%PRODUCTVERSIONvertikal%PRODUCTVERSIONnebeneinander%PRODUCTVERSIONanordnen";
+            HELPTEXT = "Fenster vertikal nebeneinander anordnen";
             HELPTEXT [ english_us ] = "Fenster vertikal nebeneinander anordnen";
             TEXT[ portuguese ] = "~Dispor na vertical";
             TEXT[ russian ] = "~Arrange Vertically";
@@ -2833,9 +2833,9 @@ Menu RID_HELP {
 */  MenuItem  {
             ABOUT = TRUE;
             Identifier = RID_HELPABOUT;
-            TEXT = "~Info%PRODUCTVERSION";
+            TEXT = "~Info...";
             TEXT [ english_us ] = "~About...";
-            HELPTEXT = "Copyright%PRODUCTVERSIONInformationen";
+            HELPTEXT = "Copyright-Informationen";
             HELPTEXT [ english_us ] = "Copyright-Informationen";
             TEXT[ portuguese ] = "~Informação...";
             TEXT[ russian ] = "~About...";
@@ -2860,14 +2860,14 @@ Menu RID_HELP {
 ModelessDialog IDD_PRINT_DIALOG {
     Pos = MAP_APPFONT( 83, 42 );
     Size = MAP_APPFONT( 171, 94 );
-    TEXT = "StarBasic%PRODUCTVERSIONDatei%PRODUCTVERSIONdrucken";
+    TEXT = "StarBasic: Datei drucken";
     TEXT [ english_us ] = "StarBasic: Print File";
     MOVEABLE = TRUE;
     SVLook = TRUE;
     FixedText RID_TEXT {
             Pos = MAP_APPFONT( 11, 9 );
             Size = MAP_APPFONT( 146, 28 );
-            TEXT = "Druck%PRODUCTVERSIONvon%PRODUCTVERSION";
+            TEXT = "Druck von ";
             TEXT [ english_us ] = "Print from ";
             CENTER = TRUE;
             TEXT[ portuguese ] = "Impressão de ";
@@ -3225,7 +3225,7 @@ TabPage RID_TP_SPECIAL {
     FixedText LOG_TEXT {
             Pos = MAP_APPFONT( 7, 12 );
             Size = MAP_APPFONT( 76, 12 );
-            Text = "Log%PRODUCTVERSIONBasisverzeichnis";
+            Text = "Log Basisverzeichnis";
             Text [ english_us ] = "Log home directory";
             Text[ portuguese ] = "Directório LOG de base";
         Text[ russian ] = "Log home directory";
@@ -3271,7 +3271,7 @@ TabPage RID_TP_SPECIAL {
     FixedText HID_TEXT {
             Pos = MAP_APPFONT( 7, 44 );
             Size = MAP_APPFONT( 76, 12 );
-            Text = "HID%PRODUCTVERSIONVerzeichnis";
+            Text = "HID Verzeichnis";
             Text [ english_us ] = "HID directory";
             Text[ portuguese ] = "Directório HID";
         Text[ russian ] = "HID directory";
@@ -3312,7 +3312,7 @@ TabPage RID_TP_SPECIAL {
     PushButton LOG_SET {
             Pos = MAP_APPFONT( 217, 12 );
             Size = MAP_APPFONT( 12, 12 );
-            Text = "%PRODUCTVERSION";
+            Text = "...";
             Text [ english_us ] = "...";
             TabStop = TRUE;
             Text[ portuguese ] = "...";
@@ -3336,7 +3336,7 @@ TabPage RID_TP_SPECIAL {
     PushButton BASIS_SET {
             Pos = MAP_APPFONT( 217, 28 );
             Size = MAP_APPFONT( 12, 12 );
-            Text = "%PRODUCTVERSION";
+            Text = "...";
             Text [ english_us ] = "...";
             TabStop = TRUE;
             Text[ portuguese ] = "...";
@@ -3360,7 +3360,7 @@ TabPage RID_TP_SPECIAL {
     PushButton HID_SET {
             Pos = MAP_APPFONT( 217, 44 );
             Size = MAP_APPFONT( 12, 12 );
-            Text = "%PRODUCTVERSION";
+            Text = "...";
             Text [ english_us ] = "...";
             TabStop = TRUE;
             Text[ portuguese ] = "...";
@@ -3384,7 +3384,7 @@ TabPage RID_TP_SPECIAL {
     GroupBox GB_OTHER {
             Pos = MAP_APPFONT( 4, 62 );
             Size = MAP_APPFONT( 230, 34 );
-            Text = "Andere%PRODUCTVERSIONEinstellungen";
+            Text = "Andere Einstellungen";
             Text [ english_us ] = "Other settings";
             Text[ portuguese ] = "Outras definições";
         Text[ russian ] = "Other settings";
@@ -3407,7 +3407,7 @@ TabPage RID_TP_SPECIAL {
     FixedText TIMEOUT_TEXT {
             Pos = MAP_APPFONT( 8, 70 );
             Size = MAP_APPFONT( 70, 12 );
-            Text = "Server%PRODUCTVERSIONTimeout";
+            Text = "Server Timeout";
             Text [ english_us ] = "Server Timeout";
             Text[ portuguese ] = "Timeout do servidor";
         Text[ russian ] = "Server Timeout";
@@ -3440,7 +3440,7 @@ TabPage RID_TP_SPECIAL {
     CheckBox CB_AUTORELOAD {
             Pos = MAP_APPFONT( 8, 83 );
             Size = MAP_APPFONT( 115, 12 );
-            Text = "Automatischer%PRODUCTVERSIONReload";
+            Text = "Automatischer Reload";
             Text [ english_us ] = "AutoReload";
             Text[ portuguese ] = "Recarga automática";
         Text[ russian ] = "AutoReload";
@@ -3474,7 +3474,7 @@ FloatingWindow IDD_DISPLAY_HID {
     OutputSize = TRUE;
     SVLook = TRUE;
     Size = MAP_APPFONT( 261, 160 );
-    Text = "Display%PRODUCTVERSIONHId";
+    Text = "Display HId";
     Text [ english_us ] = "Display HId";
     Moveable = TRUE;
     Closeable = TRUE;
@@ -3606,7 +3606,7 @@ FloatingWindow IDD_DISPLAY_HID {
     PushButton RID_PB_SELECTALL {
             Pos = MAP_APPFONT( 216, 44 );
             Size = MAP_APPFONT( 40, 12 );
-            Text = "Alle%PRODUCTVERSIONMarkieren";
+            Text = "Alle Markieren";
             Text [ english_us ] = "Select all";
             TabStop = TRUE;
             Text[ portuguese ] = "Seleccionar tudo";
@@ -3775,7 +3775,7 @@ ImageList RID_IMGLST_LAYOUT
 ModelessDialog IDD_EDIT_VAR {
     Pos = MAP_APPFONT( 0, 0 );
     Size = MAP_APPFONT( 171, 87 );
-    Text = "Variable%PRODUCTVERSIONeditieren";
+    Text = "Variable editieren";
     Text [ english_us ] = "Edit variable";
     Moveable = TRUE;
     Closeable = TRUE;
@@ -3828,7 +3828,7 @@ ModelessDialog IDD_EDIT_VAR {
     FixedText RID_FT_NEW_CONTENT {
             Pos = MAP_APPFONT( 8, 38 );
             Size = MAP_APPFONT( 40, 10 );
-            Text = "Neuer%PRODUCTVERSIONInhalt";
+            Text = "Neuer Inhalt";
             Text [ english_us ] = "New content";
             Text[ portuguese ] = "Novo conteúdo";
         Text[ russian ] = "New content";
@@ -3851,7 +3851,7 @@ ModelessDialog IDD_EDIT_VAR {
     FixedText RID_FT_NAME_VALUE {
             Pos = MAP_APPFONT( 53, 8 );
             Size = MAP_APPFONT( 111, 10 );
-            Text = "name%PRODUCTVERSIONder%PRODUCTVERSIONvariablen";
+            Text = "name der variablen";
             Text [ english_us ] = "Name of variable";
             Text[ portuguese ] = "nome das variáveis";
         Text[ russian ] = "Name of variable";
@@ -3874,7 +3874,7 @@ ModelessDialog IDD_EDIT_VAR {
     FixedText RID_FT_CONTENT_VALUE {
             Pos = MAP_APPFONT( 53, 21 );
             Size = MAP_APPFONT( 111, 10 );
-            Text = "Alter%PRODUCTVERSIONInhalt";
+            Text = "Alter Inhalt";
             Text [ english_us ] = "Previous contents";
             Text[ portuguese ] = "Antigo conteúdo";
         Text[ russian ] = "Previous contents";
@@ -4031,14 +4031,14 @@ FloatingWindow LOAD_CONF {
     SVLook = TRUE;
     Pos = MAP_APPFONT( 66, 23 );
     Size = MAP_APPFONT( 156, 51 );
-    Text = "Lese%PRODUCTVERSIONKonfigurationsdateien";
+    Text = "Lese Konfigurationsdateien";
     Text[ english_us ] = "Reading Configuration Files";
     Moveable = TRUE;
     FixedText WORK {
             SVLook = TRUE;
             Pos = MAP_APPFONT( 0, 8 );
             Size = MAP_APPFONT( 155, 10 );
-            Text = "Slot%PRODUCTVERSIONIDs";
+            Text = "Slot IDs";
             Text[ english_us ] = "Slot IDs";
             Center = TRUE;
             Text[ portuguese ] = "Slot IDs";
@@ -4063,7 +4063,7 @@ FloatingWindow LOAD_CONF {
             SVLook = TRUE;
             Pos = MAP_APPFONT( 0, 21 );
             Size = MAP_APPFONT( 155, 10 );
-            Text = "Datei%PRODUCTVERSIONwin";
+            Text = "Datei.win";
             Text[ english_us ] = "File.win";
             Center = TRUE;
             Text[ portuguese ] = "Ficheiro.win";

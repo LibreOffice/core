@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 10:31:20 $
+ *  last change: $Author: nf $ $Date: 2000-12-06 11:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: obo $ $Date: 2000-12-06 10:31:20 $ $Revision: 1.4 $
+// $Author: nf $ $Date: 2000-12-06 11:00:00 $ $Revision: 1.5 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -71,7 +71,7 @@
 
 String RID_KEEP_PASSWORD
 {
-    Text = "Passwort%PRODUCTVERSIONbis%PRODUCTVERSIONApplikationsende%PRODUCTVERSION~merken";
+    Text = "Passwort bis Applikationsende ~merken";
     Text[ english ] = "~Remember password until application ends";
     Text[ arabic ] = " –ﬂ¯— ﬂ·„… «·”— Õ Ï ‰Â«Ì… Ã·”… «·⁄„·";
     Text[ chinese_simplified ] = "Ω· ¯≥Ã–Ú÷Æ«∞“ª÷±º«◊°ø⁄¡Ó(~R)";
@@ -97,7 +97,7 @@ String RID_KEEP_PASSWORD
 
 String RID_SAVE_PASSWORD
 {
-    Text = "Passwort%PRODUCTVERSIONdauerhaft%PRODUCTVERSION~speichern";
+    Text = "Passwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "Õ›Ÿ œ«∆„ ·ﬂ·„… «·”—";
     Text[ chinese_simplified ] = "±£¥Êø⁄¡Ó(~S)";
@@ -123,7 +123,7 @@ String RID_SAVE_PASSWORD
 
 String STR_ERROR_FILEIO
 {
-    Text = "Fehler%PRODUCTVERSIONbeim%PRODUCTVERSIONZugriff%PRODUCTVERSIONauf%PRODUCTVERSIONdie%PRODUCTVERSIONDatei%PRODUCTVERSIONURL%PRODUCTVERSION";
+    Text = "Fehler beim Zugriff auf die Datei ($URL1)";
     Text[ english ] = "Error accessing file ($URL1)";
     Text[ arabic ] = "ÕœÀ Œÿ√ √À‰«¡ „Õ«Ê·… «·Ê’Ê· ≈·Ï «·„·› ($URL1)";
     Text[ chinese_simplified ] = "‘⁄∂¡»°Œƒº˛($URL1) ±∑¢…˙¥ÌŒÛ";
@@ -147,7 +147,7 @@ String STR_ERROR_FILEIO
 
 String STR_ERROR_WRONGMEDIUM
 {
-    Text = "Legen%PRODUCTVERSIONSie%PRODUCTVERSIONbitte%PRODUCTVERSIONden%PRODUCTVERSIONDatentr‰ger%PRODUCTVERSIONein%PRODUCTVERSION";
+    Text = "Legen Sie bitte den Datentr‰ger $$ ein.";
     Text[ english ] = "Please insert disk $$.";
     Text[ arabic ] = "«·—Ã«¡ ≈œŒ«· «·ﬁ—’ $$ .";
     Text[ chinese_simplified ] = "«Îƒ˙∑≈»Î»Ì≈Ã $$°£";
