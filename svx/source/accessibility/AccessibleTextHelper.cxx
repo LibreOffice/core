@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:26:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,9 +1223,17 @@ namespace accessibility
                 UpdateBoundRect();
 
                 // send insert event
-                AccessibleParaManager::WeakPara::HardRefType aChild( maParaManager.GetChild( aFunctor.GetParaIndex() ).first.get() );
-                GotPropertyEvent( uno::makeAny( aChild.getRef() ),
-                                  AccessibleEventId::CHILD );
+                // #109864# Enforce creation of this paragraph
+                try
+                {
+                    GotPropertyEvent( uno::makeAny( getAccessibleChild( aFunctor.GetParaIndex() -
+                                                                        mnFirstVisibleChild + GetStartIndex() ) ),
+                                      AccessibleEventId::CHILD );
+                }
+                catch( const uno::Exception& )
+                {
+                    DBG_ERROR("AccessibleTextHelper_Impl::ProcessQueue: could not create new paragraph");
+                }
             }
             else if( aFunctor.GetHintId() == TEXT_HINT_PARAREMOVED )
             {
@@ -1269,8 +1277,8 @@ namespace accessibility
             // update num of paras
             maParaManager.SetNum( nNewParas );
 
-            // create from scratch
-            UpdateVisibleChildren();
+            // #109864# create from scratch, don't broadcast
+            UpdateVisibleChildren( false );
             UpdateBoundRect();
 
             // no need for further updates later on
@@ -1724,12 +1732,7 @@ namespace accessibility
             Rectangle aParaBounds( rCacheTF.GetParaBounds( static_cast< USHORT > (nChild) ) );
 
             if( aParaBounds.IsInside( aLogPoint ) )
-            {
-                DBG_ASSERT(nChild - mnFirstVisibleChild >= 0 && nChild - mnFirstVisibleChild <= USHRT_MAX,
-                           "AccessibleTextHelper_Impl::getAccessibleAt: index value overflow");
-
-                return getAccessibleChild( static_cast< USHORT > (nChild - mnFirstVisibleChild) );
-            }
+                return getAccessibleChild( nChild - mnFirstVisibleChild + GetStartIndex() );
         }
 
         // found none
