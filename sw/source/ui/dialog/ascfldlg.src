@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:02:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,8 @@ ModalDialog DLG_ASCII_FILTER
     Text[ hindi ] = "ASCII फिल्टर विकल्प";
     Text[ slovak ] = "Nastavenia pre ASCII filter";
 };
+
+
 
 
 
