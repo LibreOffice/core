@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubtn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:22:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ void MenuButton::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSCMENUBUTTON_MENU & nObjMask )
     {

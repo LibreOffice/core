@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morebtn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:23:15 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 {
     PushButton::ImplLoadRes( rResId );
 
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {
@@ -131,7 +131,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
         SetText( GetText() );
     }
     if ( nObjMask & RSC_MOREBUTTON_MAPUNIT )
-        meUnit = (MapUnit)ReadShortRes();
+        meUnit = (MapUnit)ReadLongRes();
     if ( nObjMask & RSC_MOREBUTTON_DELTA )
         // Groesse fuer Erweitern des Dialogs
         mnDelta = ReadShortRes();
