@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processfactory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: hjs $ $Date: 2001-01-17 16:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@ void setProcessServiceFactory(const Reference< XMultiServiceFactory >& xSMgr)
 
 Reference< XMultiServiceFactory > getProcessServiceFactory()
 {
-    return localProcessFactory( Reference< XMultiServiceFactory >(), sal_False );
+    Reference< XMultiServiceFactory> xReturn;
+    xReturn = localProcessFactory( xReturn, sal_False );
+    return xReturn;
 }
 
 } // namesapce comphelper
