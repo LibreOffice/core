@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:18:54 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2273,7 +2273,7 @@ String STR_AUTH_FIELD_ANNOTE
     Text[ portuguese_brazilian ] = "~Anotação";
     Text[ japanese ] = "æ³¨é‡ˆ";
     Text[ korean ] = "ì£¼ì„";
-    Text[ chinese_simplified ] = "å¤‡æ³¨";
+    Text[ chinese_simplified ] = "è¯´æ˜æ–‡";
     Text[ chinese_traditional ] = "å‚™è¨»";
     Text[ turkish ] = "N~ot";
     Text[ arabic ] = "ãáÇÍÙÉ";
@@ -2992,7 +2992,7 @@ String STR_AUTH_FIELD_CUSTOM1
     Text[ portuguese_brazilian ] = "Personalizado~1";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼æ¬„1";
     Text[ korean ] = "ì‚¬ìš©ì ì •ì˜1";
-    Text[ chinese_simplified ] = "ä½¿ç”¨è€…æ ä½1";
+    Text[ chinese_simplified ] = "ç”¨æˆ·è‡ªå®š1";
     Text[ chinese_traditional ] = "è‡ªè¨‚æ¬„ä½ 1";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 1";
     Text[ turkish ] = "Kullanıcı alanı~1";
@@ -3024,7 +3024,7 @@ String STR_AUTH_FIELD_CUSTOM2
     Text[ portuguese_brazilian ] = "Personalizado~2";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼æ¬„2";
     Text[ korean ] = "ì‚¬ìš©ì ì •ì˜2";
-    Text[ chinese_simplified ] = "ä½¿ç”¨è€…æ ä½2";
+    Text[ chinese_simplified ] = "ç”¨æˆ·è‡ªå®š2";
     Text[ chinese_traditional ] = "è‡ªè¨‚æ¬„ä½ 2";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã2";
     Text[ turkish ] = "Kullanıcı alanı~2";
@@ -3056,7 +3056,7 @@ String STR_AUTH_FIELD_CUSTOM3
     Text[ portuguese_brazilian ] = "Personalizado~3";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼æ¬„3";
     Text[ korean ] = "ì‚¬ìš©ì ì •ì˜3";
-    Text[ chinese_simplified ] = "ä½¿ç”¨è€…æ ä½3";
+    Text[ chinese_simplified ] = "ç”¨æˆ·è‡ªå®š3";
     Text[ chinese_traditional ] = "è‡ªè¨‚æ¬„ä½ 3";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã3";
     Text[ turkish ] = "Kullanıcı alanı~3";
@@ -3088,7 +3088,7 @@ String STR_AUTH_FIELD_CUSTOM4
     Text[ portuguese_brazilian ] = "Personalizado~4";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼æ¬„4";
     Text[ korean ] = "ì‚¬ìš©ì ì •ì˜4";
-    Text[ chinese_simplified ] = "ä½¿ç”¨è€…æ ä½4";
+    Text[ chinese_simplified ] = "ç”¨æˆ·è‡ªå®š4";
     Text[ chinese_traditional ] = "è‡ªè¨‚æ¬„ä½ 4";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã4";
     Text[ turkish ] = "Kullanıcı alanı~4";
@@ -3121,7 +3121,7 @@ String STR_AUTH_FIELD_CUSTOM5
     Text[ portuguese_brazilian ] = "Personalizado~5";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼æ¬„5";
     Text[ korean ] = "ì‚¬ìš©ì ì •ì˜5";
-    Text[ chinese_simplified ] = "ä½¿ç”¨è€…æ ä½5";
+    Text[ chinese_simplified ] = "ç”¨æˆ·è‡ªå®š5";
     Text[ chinese_traditional ] = "è‡ªè¨‚æ¬„ä½ 5";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã5";
     Text[ turkish ] = "Kullanıcı alanı~5";
