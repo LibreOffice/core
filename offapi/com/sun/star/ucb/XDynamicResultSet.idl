@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 13:22:25 $
+ *  last change: $Author: mi $ $Date: 2001-01-31 10:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,9 +180,8 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
             Otherwise you get the Exception
             <type>ListenerAlreadySetException</type>.
 
-        <p>The implementor has to call
-        <member>XComponent::addEventListener( [in] XEventListener xListener )
-        </member> in this method, so that we can call
+        <p>The implementor has to call <member>XComponent::addEventListener</member>
+        in this method, so that we can call
         <member>XEventListener::disposing</member> to the listener
     */
     void setListener( [in] XDynamicResultSetListener Listener )
