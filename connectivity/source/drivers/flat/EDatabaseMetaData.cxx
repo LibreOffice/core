@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:32:46 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 12:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,17 +365,6 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getBestRowIdentifier(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getTablePrivileges(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setTablePrivilegesMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getCrossReference(
     const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
     const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
@@ -395,4 +384,6 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getCrossReference(
 
     return ::rtl::OUString::createFromAscii("sdbc:flat:");
 }
+// -----------------------------------------------------------------------------
+
 
