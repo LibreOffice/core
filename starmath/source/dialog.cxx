@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 13:27:00 $
+ *  last change: $Author: tl $ $Date: 2002-07-12 07:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,11 +485,11 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
 void SmFontDialog::InitColor_Impl()
 {
 #ifdef DEBUG
-    Color aBC( GetBackground().GetColor() );
+    Color aBC( GetDisplayBackground().GetColor() );
 #endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
-    if (GetBackground().GetColor().IsDark())
+    if (GetDisplayBackground().GetColor().IsDark())
     {
         const StyleSettings &rS = GetSettings().GetStyleSettings();
         nBgCol  = rS.GetFieldColor().GetColor();
@@ -1608,11 +1608,11 @@ SmSymbolDialog::~SmSymbolDialog()
 void SmSymbolDialog::InitColor_Impl()
 {
 #ifdef DEBUG
-    Color aBC( GetBackground().GetColor() );
+    Color aBC( GetDisplayBackground().GetColor() );
 #endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
-    if (GetBackground().GetColor().IsDark())
+    if (GetDisplayBackground().GetColor().IsDark())
     {
         const StyleSettings &rS = GetSettings().GetStyleSettings();
         nBgCol  = rS.GetFieldColor().GetColor();
@@ -2193,11 +2193,11 @@ SmSymDefineDialog::~SmSymDefineDialog()
 void SmSymDefineDialog::InitColor_Impl()
 {
 #ifdef DEBUG
-    Color aBC( GetBackground().GetColor() );
+    Color aBC( GetDisplayBackground().GetColor() );
 #endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
-    if (GetBackground().GetColor().IsDark())
+    if (GetDisplayBackground().GetColor().IsDark())
     {
         const StyleSettings &rS = GetSettings().GetStyleSettings();
         nBgCol  = rS.GetFieldColor().GetColor();

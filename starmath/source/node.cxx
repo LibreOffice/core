@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-04 11:54:26 $
+ *  last change: $Author: tl $ $Date: 2002-07-12 07:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, BOOL bUseMap100th_mm) :
     }
 }
 
-#define DARK_COL    154
 
 Color SmTmpDevice::Impl_GetColor( const Color& rColor )
 {
@@ -185,16 +184,17 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
     if (COL_AUTO == rColor.GetColor())
     {
         Color aBgCol( rOutDev.GetBackground().GetColor() );
-        BOOL bIsDarkBg = DARK_COL > aBgCol.GetRed() + aBgCol.GetBlue() + aBgCol.GetGreen();
+        if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
+            aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
         SmViewShell *pViewSh = SmGetActiveView();
         if (pViewSh  &&  OUTDEV_PRINTER != rOutDev.GetOutDevType())
         {
             const StyleSettings& rS =
                     pViewSh->GetGraphicWindow().GetSettings().GetStyleSettings();
-            nNewCol = /*bIsDarkBg ? COL_WHITE :*/ rS.GetWindowTextColor().GetColor();
+            nNewCol = rS.GetWindowTextColor().GetColor();
         }
         else
-            nNewCol = bIsDarkBg ? COL_WHITE : COL_BLACK;
+            nNewCol = aBgCol.IsDark() ? COL_WHITE : COL_BLACK;
     }
     return Color( nNewCol );
 }

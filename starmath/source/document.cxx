@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
+ *  last change: $Author: tl $ $Date: 2002-07-12 07:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,25 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
 
     rPosition.X() += aFormat.GetDistance( DIS_LEFTSPACE );
     rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE  );
+
+    //! in case of high contrast-mode (accessibility option!)
+    //! the draw mode needs to be set to default, because when imbedding
+    //! Math for example in Calc in "a over b" the fraction bar may not
+    //! be visible else. More generally: the FillColor may have been changed.
+    ULONG nOldDrawMode = DRAWMODE_DEFAULT;
+    BOOL bRestoreDrawMode = FALSE;
+    if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
+        ((Window &) rDev).GetDisplayBackground().GetColor().IsDark())
+    {
+        nOldDrawMode = rDev.GetDrawMode();
+        rDev.SetDrawMode( DRAWMODE_DEFAULT );
+        bRestoreDrawMode = TRUE;
+    }
+
     pTree->Draw(rDev, rPosition);
+
+    if (bRestoreDrawMode)
+        rDev.SetDrawMode( nOldDrawMode );
 }
 
 
