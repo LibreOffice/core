@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:58 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,6 +1788,8 @@ SvxTbxButtonColorUpdater_Impl::SvxTbxButtonColorUpdater_Impl( USHORT nTbxBtnId,
     pBtnBmp           ( NULL ),
     aCurColor         ( COL_TRANSPARENT )
 {
+    if (nTbxBtnId == SID_BACKGROUND_COLOR)
+        nDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
     DBG_ASSERT( pTbx, "ToolBox not found :-(" );
     bWasHiContrastMode = pTbx ? ( pTbx->GetBackground().GetColor().IsDark() ) : FALSE;
     Update(nTbxBtnId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
