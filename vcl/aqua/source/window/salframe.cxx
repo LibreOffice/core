@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-20 05:42:19 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-20 22:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,93 +207,144 @@ void SalFrame::SetIcon( USHORT nIcon )
 // -----------------------------------------------------------------------
 
 void SalFrame::Show( BOOL bVisible )
-{
-    if ( bVisible )
-        VCLWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
-    else
-        VCLWindow_close( maFrameData.mhWnd );
+    {
+        RGBColor  rectFillColor = { 65535, 25000, 25000 }; // shade of red
+        RGBColor  polyFillColor = { 25000, 25000, 65535 }; // shade of blue
+        RGBColor  linePenColor  = { 25000, 65535, 25000 }; // shade of green
+        RGBColor  pixelColor    = { 60000, 40000, 20000 }; // shade of orange
 
-    // This is temporary code for testing only and should be removed
-    // when development of the SalObject class is complete. This code
-    // allows us to test our SalGraphics drawing methods.
+        ULONG     polyVertexCount = 7;
+        long      polyVertexXCoors[polyVertexCount];
+        long      polyVertexYCoors[polyVertexCount];
+        long      pixelXCoor;
+        long      pixelYCoor;
+        long      pixelXCnt;
+        long      pixelYCnt;
 
-    RGBColor  rectFillColor = { 65535, 25000, 25000 }; // shade of red
-    RGBColor  polyFillColor = { 25000, 25000, 65535 }; // shade of blue
-    RGBColor  linePenColor  = { 25000, 65535, 25000 }; // shade of green
-    ULONG     polyVertexCount = 7;
-    long      polyVertexXCoors[polyVertexCount];
-    long      polyVertexYCoors[polyVertexCount];
 
-    // Get this window's cached handle to its native content view
-    VCLVIEW hView = VCLWindow_contentView ( maFrameData.mhWnd );
+        if ( bVisible )
+            {
+                VCLWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
+            } // if
+        else
+            {
+                VCLWindow_close( maFrameData.mhWnd );
+            } // else
 
-    // Draw a line on the native content view (no color)
-    VCLGraphics_DrawLine ( hView, 15L, 15L, 150L, 150L );
+        // This is temporary code for testing only and should be removed
+        // when development of the SalObject class is complete. This code
+        // allows us to test our SalGraphics drawing methods.
 
-    // Draw a line on the native content view (color)
-    VCLGraphics_DrawColorLine ( hView, 55L, 15L, 190L, 150L, &linePenColor );
+        // Get this window's cached handle to its native content view
 
-    // Draw a rectangle on the native content view (no color)
-    VCLGraphics_DrawRect ( hView, 200L, 15L, 100L, 150L );
+        VCLVIEW hView = VCLWindow_contentView ( maFrameData.mhWnd );
 
-    // Draw a rectangle on the native content view (color)
-    VCLGraphics_DrawColorRect ( hView, 325L, 15L, 100L, 150L, &rectFillColor );
+        // Draw a line on the native content view (no color)
 
-    // Draw a polygon on the native content view (no color)
-    polyVertexXCoors[0] = 350;
-    polyVertexYCoors[0] = 250;
+        VCLGraphics_DrawLine ( hView, 15L, 15L, 150L, 150L );
 
-    polyVertexXCoors[1] = 450;
-    polyVertexYCoors[1] = 250;
+        // Draw a line on the native content view (color)
 
-    polyVertexXCoors[2] = 375;
-    polyVertexYCoors[2] = 350;
+        VCLGraphics_DrawColorLine ( hView, 55L, 15L, 190L, 150L, &linePenColor );
 
-    polyVertexXCoors[3] = 400;
-    polyVertexYCoors[3] = 200;
+        // Draw a rectangle on the native content view (no color)
 
-    polyVertexXCoors[4] = 425;
-    polyVertexYCoors[4] = 350;
+        VCLGraphics_DrawRect ( hView, 200L, 15L, 100L, 150L );
 
-    polyVertexCount = 5;
+        // Draw a rectangle on the native content view (color)
 
-    VCLGraphics_DrawPolygon ( hView,
-                              polyVertexCount,
-                              polyVertexXCoors,
-                              polyVertexYCoors
-                            );
+        VCLGraphics_DrawColorRect ( hView, 325L, 15L, 100L, 150L, &rectFillColor );
 
-    // Draw a polygon on the native content view (color)
-    polyVertexXCoors[0] = 15;
-    polyVertexYCoors[0] = 250;
+        // Draw a polygon on the native content view (no color)
 
-    polyVertexXCoors[1] = 145;
-    polyVertexYCoors[1] = 250;
+        polyVertexXCoors[0] = 350;
+        polyVertexYCoors[0] = 250;
 
-    polyVertexXCoors[2] = 165;
-    polyVertexYCoors[2] = 200;
+        polyVertexXCoors[1] = 450;
+        polyVertexYCoors[1] = 250;
 
-    polyVertexXCoors[3] = 185;
-    polyVertexYCoors[3] = 250;
+        polyVertexXCoors[2] = 375;
+        polyVertexYCoors[2] = 350;
 
-    polyVertexXCoors[4] = 325;
-    polyVertexYCoors[4] = 250;
+        polyVertexXCoors[3] = 400;
+        polyVertexYCoors[3] = 200;
 
-    polyVertexXCoors[5] = 215;
-    polyVertexYCoors[5] = 320;
+        polyVertexXCoors[4] = 425;
+        polyVertexYCoors[4] = 350;
 
-    polyVertexXCoors[6] = 125;
-    polyVertexYCoors[6] = 320;
+        polyVertexCount = 5;
 
-    polyVertexCount = 7;
+        VCLGraphics_DrawPolygon ( hView,
+                                  polyVertexCount,
+                                  polyVertexXCoors,
+                                  polyVertexYCoors
+                                );
 
-    VCLGraphics_DrawColorPolygon ( hView,
-                                   polyVertexCount,
-                                   polyVertexXCoors,
-                                   polyVertexYCoors,
-                                   &polyFillColor
-                                 );
-}
+        // Draw a polygon on the native content view (color)
+
+        polyVertexXCoors[0] = 15;
+        polyVertexYCoors[0] = 250;
+
+        polyVertexXCoors[1] = 145;
+        polyVertexYCoors[1] = 250;
+
+        polyVertexXCoors[2] = 165;
+        polyVertexYCoors[2] = 200;
+
+        polyVertexXCoors[3] = 185;
+        polyVertexYCoors[3] = 250;
+
+        polyVertexXCoors[4] = 325;
+        polyVertexYCoors[4] = 250;
+
+        polyVertexXCoors[5] = 215;
+        polyVertexYCoors[5] = 320;
+
+        polyVertexXCoors[6] = 125;
+        polyVertexYCoors[6] = 320;
+
+        polyVertexCount = 7;
+
+        VCLGraphics_DrawColorPolygon ( hView,
+                                       polyVertexCount,
+                                       polyVertexXCoors,
+                                       polyVertexYCoors,
+                                       &polyFillColor
+                                     );
+
+        // Draw a polygon on the native content view (no color)
+
+        pixelXCnt = 235;
+        pixelYCnt = 390;
+
+        for ( pixelXCoor = 135; pixelXCoor < pixelXCnt; pixelXCoor++ )
+            {
+                for ( pixelYCoor = 355; pixelYCoor < pixelYCnt; pixelYCoor++ )
+                    {
+                        VCLGraphics_DrawPixel ( hView, pixelXCoor, pixelYCoor );
+                    } // for
+            } // for
+
+        // Draw a polygon on the native content view (color)
+
+        pixelXCnt = 115;
+
+        for ( pixelXCoor = 15; pixelXCoor < pixelXCnt; pixelXCoor++ )
+            {
+                for ( pixelYCoor = 355; pixelYCoor < pixelYCnt; pixelYCoor++ )
+                    {
+                        pixelColor.red   = pixelYCoor + pixelXCoor + pixelColor.red;
+                        pixelColor.green = pixelYCoor + pixelXCoor + pixelColor.green;
+                        pixelColor.blue  = pixelYCoor + pixelXCoor + pixelColor.blue;
+
+                        VCLGraphics_DrawColorPixel ( hView,
+                                                     pixelXCoor,
+                                                     pixelYCoor,
+                                                     &pixelColor
+                                                   );
+                    } // for
+            } // for
+    } // SalFrame::Show
 
 // -----------------------------------------------------------------------
 
