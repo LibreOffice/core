@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 08:07:56 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ English ] = "Sy~nonym" ;
         Text [ norwegian ] = "Sy~nonym" ;
         Text [ italian ] = "Si~nonimo" ;
-        Text [ portuguese_brazilian ] = "Si~nänimo" ;
+        Text [ portuguese_brazilian ] = "Si~n?nimo" ;
         Text [ portuguese ] = "Si~nónimo" ;
         Text [ finnish ] = "~Synonyymi" ;
         Text [ danish ] = "Synonym" ;
@@ -314,7 +314,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ English ] = "Variations" ;
         Text [ norwegian ] = "Variasjoner" ;
         Text [ italian ] = "Alternative" ;
-        Text [ portuguese_brazilian ] = "Variaçäes" ;
+        Text [ portuguese_brazilian ] = "Varia??es" ;
         Text [ portuguese ] = "Alternativas" ;
         Text [ finnish ] = "Muunnelmat" ;
         Text [ danish ] = "Variationer" ;
@@ -341,7 +341,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ ENGLISH ] = "Word not found in Thesaurus" ;
         Text [ norwegian ] = "Ordet finnes ikke I Synonymorlisten" ;
         Text [ italian ] = "Parola non trovata nel dizionario dei sinonimi" ;
-        Text [ portuguese_brazilian ] = "Palavra nÆo encontrada no Thesaurus" ;
+        Text [ portuguese_brazilian ] = "Palavra n?o encontrada no Thesaurus" ;
         Text [ portuguese ] = "Palavra não se encontra no dicionário de sinónimos." ;
         Text [ finnish ] = "Sanaa ei löytynyt synonyymisanastosta" ;
         Text [ danish ] = "Ordet findes ikke i synonymordbogen" ;
@@ -392,7 +392,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text [ french ] = "Sélection de la langue" ;
     Text [ swedish ] = "Välj språk" ;
     Text [ danish ] = "Vælg sprog" ;
-    Text [ portuguese_brazilian ] = "Sprache auswählen" ;
+    Text [ portuguese_brazilian ] = "Sprache ausw?hlen" ;
     Text [ portuguese ] = "Seleccionar língua" ;
     Moveable = TRUE ;
     ListBox LB_THES_LANGUAGE
