@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arrdecl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:30:53 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@ SV_DECL_PTRARR_DEL( SfxChildWinFactArr_Impl, SfxChildWinFactory*, 2, 2 );
 
 class SfxModule;
 SV_DECL_PTRARR( SfxModuleArr_Impl, SfxModule*, 2, 2 );
-
-class AsynchronLink;
-SV_DECL_PTRARR_DEL( AsynchronLinkArr_Impl, AsynchronLink*, 2, 2 );
 
 class SfxFilter;
 DECL_PTRARRAY( SfxFilterArr_Impl, SfxFilter*, 4, 4 );
