@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:03:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
 #include "viewsh.hxx"
 #include "dispatch.hxx"
 #include "printer.hxx"
-#include "plugobj.hxx"
 #include "arrdecl.hxx"
 #include "sfxresid.hxx"
 #include "newhdl.hxx"
@@ -108,12 +107,10 @@
 #include "templdlg.hxx"
 #include "tbxconf.hxx"
 #include "msgpool.hxx"
-#include "frameobj.hxx"
 #include "docfile.hxx"
 #include "sfxtypes.hxx"
 #include "appimp.hxx"
 #include "sfxlocal.hrc"
-#include "dataurl.hxx"
 #include "fcontnr.hxx"
 #include "nochaos.hxx"
 #include "appuno.hxx"
@@ -263,7 +260,6 @@ void SfxApplication::Deinitialize()
     // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
     DELETEZ(pMenuMgr);
     DELETEZ(pAcceleratorMgr);
-    SfxObjectFactory::ClearAll_Impl();
     DELETEZ( pImp->pBasicMgr );
     if( pImp->pBasicLibContainer )
         pImp->pBasicLibContainer->release();
@@ -285,8 +281,6 @@ void SfxApplication::Deinitialize()
 
     // ab hier d"urfen keine SvObjects mehr existieren
     DELETEX(pAppData_Impl->pMatcher);
-    DELETEX(pAppData_Impl->pSfxFrameObjectFactoryPtr);
-    DELETEX(pAppData_Impl->pSfxPluginObjectFactoryPtr);
 
     delete pAppData_Impl->pLabelResMgr;
 
@@ -295,7 +289,6 @@ void SfxApplication::Deinitialize()
     DELETEX(pAppData_Impl->pEventConfig);
     DELETEX(pAppData_Impl->pMiscConfig);
     SfxMacroConfig::Release_Impl();
-    DELETEX(pAppData_Impl->pVerbs);
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
 #endif
