@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socketAcceptor.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: kr $ $Date: 2000-11-28 11:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ import com.sun.star.registry.XRegistryKey;
  * <code>sockets</code> for communication.
  * The socketAcceptor is in general used by the Acceptor service.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 11:17:52 $
  * @author      Kay Ramme
  * @see         com.sun.star.connections.XAcceptor
  * @see         com.sun.star.connections.XConnector
@@ -235,7 +235,7 @@ public class socketAcceptor implements XAcceptor {
             Socket socket = _serverSocket.accept();
             socket.setTcpNoDelay(true);
 
-            xConnection = new SocketConnection(_description + socket, socket);
+            xConnection = new SocketConnection(_description, socket);
 
             if (DEBUG) System.err.println("##### " + getClass().getName() + " - accepted from " + socket);
         }

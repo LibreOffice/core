@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socketConnector.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: kr $ $Date: 2000-11-28 11:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ import com.sun.star.registry.XRegistryKey;
  * <code>sockets</code> for communication.
  * The socketConnector is in general used by the Connector service.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 11:17:52 $
  * @author      Kay Ramme
  * @see         com.sun.star.connections.XAcceptor
  * @see         com.sun.star.connections.XConnector
@@ -224,7 +224,7 @@ public class socketConnector implements XConnector {
             InetAddress inetAddress = InetAddress.getByName(_hostname);
             Socket socket = new Socket(inetAddress, _port);
 
-            xConnection = new SocketConnection(description + socket, socket);
+            xConnection = new SocketConnection(description, socket);
         }
         catch(UnknownHostException unknownHostException) {
             throw new com.sun.star.connection.ConnectionSetupException(unknownHostException.toString());
