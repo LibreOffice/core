@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:42:34 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,6 @@ TabPage RID_SVXPAGE_CAPTION
 #define  _POS_SIZE_TEXT \
                 Text [ de ] = "Position und Größe" ;                           \
                 Text [ en-US ] = "Position and Size" ;             \
-
 
 TabDialog RID_SVXDLG_CAPTION
 {
