@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-04-22 12:42:56 $
+ *  last change: $Author: os $ $Date: 2002-04-23 08:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,6 +1077,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
                     KS_GlossaryExpand, KS_NextPrevGlossary,
                     KS_AutoFmtByInput, KS_DontExpand,
+                    KS_NextObject, KS_PrevObject,
                     KS_KeyToView,
                     KS_CheckDocReadOnlyKeys,
                     KS_CheckAutoCorrect, KS_EditFormula,
@@ -1424,6 +1425,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else
                             eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_NextCell;
                     }
+                    else if ( rSh.GetSelectionType() &
+                                (SwWrtShell::SEL_GRF |
+                                    SwWrtShell::SEL_FRM |
+                                    SwWrtShell::SEL_OLE |
+                                    SwWrtShell::SEL_DRW))
+
+                            eKeyState = KS_NextObject;
                     else
                     {
                         eKeyState = KS_InsTab;
@@ -1455,6 +1463,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else
                             eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_PrevCell;
                     }
+                    else if ( rSh.GetSelectionType() &
+                                (SwWrtShell::SEL_GRF |
+                                    SwWrtShell::SEL_FRM |
+                                    SwWrtShell::SEL_OLE |
+                                    SwWrtShell::SEL_DRW))
+
+                            eKeyState = KS_PrevObject;
                     else
                     {
                         eKeyState = KS_Ende;
@@ -1701,7 +1716,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
 //          case KS_NumOrNoNum:
 //          case KS_DontExpand:
 //              break;
-
+            case KS_NextObject:
+            case KS_PrevObject:
+                if(rSh.GotoObj( KS_NextObject == eKeyState, GOTO_ANY))
+                {
+                    rSh.HideCrsr();
+                    rSh.EnterSelFrmMode();
+                }
+            break;
             case KS_GlossaryExpand:
             {
                 // ersetze das Wort oder Kuerzel durch den den Textbaustein
