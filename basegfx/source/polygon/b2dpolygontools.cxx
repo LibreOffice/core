@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:00:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1466,6 +1466,59 @@ namespace basegfx
             aRet.setClosed( true );
 
             return aRet;
+        }
+
+        bool isRectangle( const B2DPolygon& rPoly )
+        {
+            if( rPoly.count() != 4 ||
+                !rPoly.isClosed() )
+            {
+                return false;
+            }
+
+            const ::basegfx::B2DPoint& rPoint0( rPoly.getB2DPoint(0) );
+            const ::basegfx::B2DPoint& rPoint1( rPoly.getB2DPoint(1) );
+
+            bool bEdgeVertical( rPoint0.getX() == rPoint1.getX() );
+            bool bEdgeHorizontal( rPoint0.getY() == rPoint1.getY() );
+
+            if( !bEdgeVertical && !bEdgeHorizontal )
+                return false; // oblique vertex - for sure no rect
+
+            bool bNullVertex( bEdgeVertical && bEdgeHorizontal );
+
+            for( sal_Int32 i=1; i<5; ++i )
+            {
+                const ::basegfx::B2DPoint& rPoint0( rPoly.getB2DPoint( i%4) );
+                const ::basegfx::B2DPoint& rPoint1( rPoly.getB2DPoint( (i+1)%4 ) );
+
+                const bool bCurrEdgeVertical( rPoint0.getX() == rPoint1.getX() );
+                const bool bCurrEdgeHorizontal( rPoint0.getY() == rPoint1.getY() );
+
+                if( !bCurrEdgeVertical && !bCurrEdgeHorizontal )
+                    return false; // oblique vertex - for sure no rect
+
+                const bool bCurrNullVertex( bCurrEdgeVertical && bCurrEdgeHorizontal );
+
+                // direction change from last vertex?
+                if( !bNullVertex && !bCurrNullVertex &&
+                    (bEdgeVertical==bCurrEdgeVertical ||
+                     bEdgeHorizontal==bCurrEdgeHorizontal) )
+                {
+                    // nope, for sure no rect
+                    return false;
+                }
+
+                // might still be a rect - note that this code will
+                // accept all configurations of collinear points as
+                // rectangles, because they are representable as an
+                // axis-aligned rect.
+                bEdgeVertical   = bCurrEdgeVertical;
+                bEdgeHorizontal = bCurrEdgeHorizontal;
+                bNullVertex     = bCurrNullVertex;
+            }
+
+            return true;
         }
 
     } // end of namespace tools
