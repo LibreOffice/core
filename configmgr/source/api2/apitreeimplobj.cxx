@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:11:39 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 14:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,9 +263,6 @@ void ApiTreeImpl::implDisposeTree()
         aContainer.endDisposing();
 
         OSL_ASSERT(aContainer.isDisposed());
-
-        m_aTree.disposeData();
-        OSL_ASSERT(m_aTree.isEmpty());
     }
 }
 //-------------------------------------------------------------------------
@@ -468,7 +465,11 @@ void ApiRootTreeImpl::implSetLocation()
 
 void ApiRootTreeImpl::releaseData()
 {
-    OSL_ENSURE( m_aTreeImpl.getTree().isEmpty(), "Tree must not reference data when it is released" );
+    Tree aTree( m_aTreeImpl.getTree() );
+
+    aTree.disposeData();
+    OSL_ASSERT(aTree.isEmpty());
+
     OSL_ENSURE( m_aLocationPath.getLength(), "Location still needed to release data" );
     OSL_ENSURE( m_xOptions.isValid(), "Options still needed to release data" );
 

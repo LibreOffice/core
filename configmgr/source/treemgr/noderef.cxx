@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:10:21 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 14:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,11 +375,11 @@ Tree::~Tree()
 void Tree::disposeData()
 {
     TreeImpl* pImpl = m_pImpl;
-    m_pImpl = 0;
+//  m_pImpl = 0;
     if (pImpl)
     {
         pImpl->disposeData();
-        pImpl->release();
+//      pImpl->release();
     }
 }
 //-----------------------------------------------------------------------------
