@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:29:22 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,33 +70,28 @@
 #include <basegfx/vector/b2dvector.hxx>
 #endif
 
+#include <vector>
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
     // predefinitions
-    namespace polygon
+    class B3DPolyPolygon;
+    class B3DRange;
+
+    namespace tools
     {
-        class B3DPolyPolygon;
-    } // end of namespace polygon
+        // B3DPolyPolygon tools
 
-    // predefinitions
-    namespace range
-    {
-        class B3DRange;
-    } // end of namespace range
+        // get size of PolyPolygon. Control vectors are included in that ranges.
+        ::basegfx::B3DRange getRange(const ::basegfx::B3DPolyPolygon& rCandidate);
 
-    namespace polygon
-    {
-        namespace tools
-        {
-            // B3DPolyPolygon tools
+        // Apply Line Dashing. This cuts every contained PolyPolygon into line pieces
+        // which are inserted as single polygons into the result.
+        ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen);
 
-            // get size of PolyPolygon. Control vectors are included in that ranges.
-            ::basegfx::range::B3DRange getRange(const ::basegfx::polygon::B3DPolyPolygon& rCandidate);
-
-        } // end of namespace tools
-    } // end of namespace polygon
+    } // end of namespace tools
 } // end of namespace basegfx
 
 #endif //   _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX

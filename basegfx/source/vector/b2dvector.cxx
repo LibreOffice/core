@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-12 12:11:24 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,163 +73,160 @@
 
 namespace basegfx
 {
-    namespace vector
+    B2DVector& B2DVector::normalize()
     {
-        B2DVector& B2DVector::normalize()
-        {
-            double fLen(scalar(*this));
+        double fLen(scalar(*this));
 
-            if(!::basegfx::numeric::fTools::equalZero(fLen))
-            {
-                const double fOne(1.0);
-
-                if(!::basegfx::numeric::fTools::equal(fOne, fLen))
-                {
-                    fLen = sqrt(fLen);
-
-                    if(!::basegfx::numeric::fTools::equalZero(fLen))
-                    {
-                        mfX /= fLen;
-                        mfY /= fLen;
-                    }
-                }
-            }
-
-            return *this;
-        }
-
-        B2DVector& B2DVector::operator=( const ::basegfx::tuple::B2DTuple& rVec )
-        {
-            mfX = rVec.getX();
-            mfY = rVec.getY();
-            return *this;
-        }
-
-
-        double B2DVector::getLength() const
-        {
-            return hypot( mfX, mfY );
-        }
-
-        double B2DVector::scalar( const B2DVector& rVec ) const
-        {
-            return((mfX * rVec.mfX) + (mfY * rVec.mfY));
-        }
-
-        double B2DVector::cross( const B2DVector& rVec ) const
-        {
-            return(mfX * rVec.getY() - mfY * rVec.getX());
-        }
-
-        double B2DVector::angle( const B2DVector& rVec ) const
-        {
-            return atan2(mfX * rVec.getY() - mfY * rVec.getX(),
-                mfX * rVec.getX() + mfY * rVec.getY());
-        }
-
-        const B2DVector& B2DVector::getEmptyVector()
-        {
-            return (const B2DVector&) ::basegfx::tuple::B2DTuple::getEmptyTuple();
-        }
-
-        B2DVector& B2DVector::operator*=( const matrix::B2DHomMatrix& rMat )
-        {
-            const double fTempX( rMat.get(0,0)*mfX +
-                                rMat.get(0,1)*mfY );
-            const double fTempY( rMat.get(1,0)*mfX +
-                                rMat.get(1,1)*mfY );
-            mfX = fTempX;
-            mfY = fTempY;
-
-            return *this;
-        }
-
-        B2DVector& B2DVector::setLength(double fLen)
-        {
-            double fLenNow(scalar(*this));
-
-            if(!::basegfx::numeric::fTools::equalZero(fLenNow))
-            {
-                const double fOne(10.0);
-
-                if(!::basegfx::numeric::fTools::equal(fOne, fLenNow))
-                {
-                    fLen /= sqrt(fLenNow);
-                }
-
-                mfX *= fLen;
-                mfY *= fLen;
-            }
-
-            return *this;
-        }
-
-        sal_Bool B2DVector::isNormalized() const
+        if(!::basegfx::fTools::equalZero(fLen))
         {
             const double fOne(1.0);
-            const double fScalar(scalar(*this));
 
-            return (::basegfx::numeric::fTools::equal(fOne, fScalar));
-        }
-
-        sal_Bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
-        {
-            double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
-            return ::basegfx::numeric::fTools::equalZero(fVal);
-        }
-
-        B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
-        {
-            double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
-
-            if(fVal > 0.0)
+            if(!::basegfx::fTools::equal(fOne, fLen))
             {
-                return ORIENTATION_POSITIVE;
-            }
+                fLen = sqrt(fLen);
 
-            if(fVal < 0.0)
-            {
-                return ORIENTATION_NEGATIVE;
-            }
-
-            return ORIENTATION_NEUTRAL;
-        }
-
-        B2DVector getPerpendicular( const B2DVector& rNormalizedVec )
-        {
-            B2DVector aPerpendicular(-rNormalizedVec.getY(), rNormalizedVec.getX());
-            return aPerpendicular;
-        }
-
-        B2DVector operator*( const matrix::B2DHomMatrix& rMat, const B2DVector& rVec )
-        {
-            B2DVector aRes( rVec );
-            return aRes*=rMat;
-        }
-
-        ::basegfx::vector::B2DVectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
-        {
-            ::basegfx::vector::B2DVectorContinuity eRetval(::basegfx::vector::CONTINUITY_NONE);
-
-            if(!rBackVector.equalZero() && !rForwardVector.equalZero())
-            {
-                const B2DVector aInverseForwardVector(-rForwardVector.getX(), -rForwardVector.getY());
-
-                if(rBackVector.equal(aInverseForwardVector))
+                if(!::basegfx::fTools::equalZero(fLen))
                 {
-                    // same direction and same length -> C2
-                    eRetval = ::basegfx::vector::CONTINUITY_C2;
-                }
-                else if(areParallel(rBackVector, aInverseForwardVector))
-                {
-                    // same direction -> C1
-                    eRetval = ::basegfx::vector::CONTINUITY_C1;
+                    mfX /= fLen;
+                    mfY /= fLen;
                 }
             }
-
-            return eRetval;
         }
-    } // end of namespace vector
+
+        return *this;
+    }
+
+    B2DVector& B2DVector::operator=( const ::basegfx::B2DTuple& rVec )
+    {
+        mfX = rVec.getX();
+        mfY = rVec.getY();
+        return *this;
+    }
+
+
+    double B2DVector::getLength() const
+    {
+        return hypot( mfX, mfY );
+    }
+
+    double B2DVector::scalar( const B2DVector& rVec ) const
+    {
+        return((mfX * rVec.mfX) + (mfY * rVec.mfY));
+    }
+
+    double B2DVector::cross( const B2DVector& rVec ) const
+    {
+        return(mfX * rVec.getY() - mfY * rVec.getX());
+    }
+
+    double B2DVector::angle( const B2DVector& rVec ) const
+    {
+        return atan2(mfX * rVec.getY() - mfY * rVec.getX(),
+            mfX * rVec.getX() + mfY * rVec.getY());
+    }
+
+    const B2DVector& B2DVector::getEmptyVector()
+    {
+        return (const B2DVector&) ::basegfx::B2DTuple::getEmptyTuple();
+    }
+
+    B2DVector& B2DVector::operator*=( const B2DHomMatrix& rMat )
+    {
+        const double fTempX( rMat.get(0,0)*mfX +
+                            rMat.get(0,1)*mfY );
+        const double fTempY( rMat.get(1,0)*mfX +
+                            rMat.get(1,1)*mfY );
+        mfX = fTempX;
+        mfY = fTempY;
+
+        return *this;
+    }
+
+    B2DVector& B2DVector::setLength(double fLen)
+    {
+        double fLenNow(scalar(*this));
+
+        if(!::basegfx::fTools::equalZero(fLenNow))
+        {
+            const double fOne(10.0);
+
+            if(!::basegfx::fTools::equal(fOne, fLenNow))
+            {
+                fLen /= sqrt(fLenNow);
+            }
+
+            mfX *= fLen;
+            mfY *= fLen;
+        }
+
+        return *this;
+    }
+
+    sal_Bool B2DVector::isNormalized() const
+    {
+        const double fOne(1.0);
+        const double fScalar(scalar(*this));
+
+        return (::basegfx::fTools::equal(fOne, fScalar));
+    }
+
+    sal_Bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
+    {
+        double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
+        return ::basegfx::fTools::equalZero(fVal);
+    }
+
+    B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
+    {
+        double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
+
+        if(fVal > 0.0)
+        {
+            return ORIENTATION_POSITIVE;
+        }
+
+        if(fVal < 0.0)
+        {
+            return ORIENTATION_NEGATIVE;
+        }
+
+        return ORIENTATION_NEUTRAL;
+    }
+
+    B2DVector getPerpendicular( const B2DVector& rNormalizedVec )
+    {
+        B2DVector aPerpendicular(-rNormalizedVec.getY(), rNormalizedVec.getX());
+        return aPerpendicular;
+    }
+
+    B2DVector operator*( const B2DHomMatrix& rMat, const B2DVector& rVec )
+    {
+        B2DVector aRes( rVec );
+        return aRes*=rMat;
+    }
+
+    ::basegfx::B2DVectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
+    {
+        ::basegfx::B2DVectorContinuity eRetval(::basegfx::CONTINUITY_NONE);
+
+        if(!rBackVector.equalZero() && !rForwardVector.equalZero())
+        {
+            const B2DVector aInverseForwardVector(-rForwardVector.getX(), -rForwardVector.getY());
+
+            if(rBackVector.equal(aInverseForwardVector))
+            {
+                // same direction and same length -> C2
+                eRetval = ::basegfx::CONTINUITY_C2;
+            }
+            else if(areParallel(rBackVector, aInverseForwardVector))
+            {
+                // same direction -> C1
+                eRetval = ::basegfx::CONTINUITY_C1;
+            }
+        }
+
+        return eRetval;
+    }
 } // end of namespace basegfx
 
 // eof

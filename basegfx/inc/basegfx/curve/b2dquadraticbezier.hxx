@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dquadraticbezier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:23 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,43 +70,40 @@
 
 namespace basegfx
 {
-    namespace curve
+    class B2DQuadraticBezier
     {
-        class B2DQuadraticBezier
-        {
-            ::basegfx::point::B2DPoint                          maStartPoint;
-            ::basegfx::point::B2DPoint                          maEndPoint;
-            ::basegfx::point::B2DPoint                          maControlPoint;
+        ::basegfx::B2DPoint                         maStartPoint;
+        ::basegfx::B2DPoint                         maEndPoint;
+        ::basegfx::B2DPoint                         maControlPoint;
 
-        public:
-            B2DQuadraticBezier();
-            B2DQuadraticBezier(const B2DQuadraticBezier& rBezier);
-            B2DQuadraticBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rEnd);
-            B2DQuadraticBezier(const ::basegfx::point::B2DPoint& rStart,
-                const ::basegfx::point::B2DPoint& rControlPoint, const ::basegfx::point::B2DPoint& rEnd);
-            ~B2DQuadraticBezier();
+    public:
+        B2DQuadraticBezier();
+        B2DQuadraticBezier(const B2DQuadraticBezier& rBezier);
+        B2DQuadraticBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd);
+        B2DQuadraticBezier(const ::basegfx::B2DPoint& rStart,
+            const ::basegfx::B2DPoint& rControlPoint, const ::basegfx::B2DPoint& rEnd);
+        ~B2DQuadraticBezier();
 
-            // assignment operator
-            B2DQuadraticBezier& operator=(const B2DQuadraticBezier& rBezier);
+        // assignment operator
+        B2DQuadraticBezier& operator=(const B2DQuadraticBezier& rBezier);
 
-            // compare operators
-            sal_Bool operator==(const B2DQuadraticBezier& rBezier) const;
-            sal_Bool operator!=(const B2DQuadraticBezier& rBezier) const;
+        // compare operators
+        sal_Bool operator==(const B2DQuadraticBezier& rBezier) const;
+        sal_Bool operator!=(const B2DQuadraticBezier& rBezier) const;
 
-            // test if control point is placed on the edge
-            sal_Bool isBezier() const;
+        // test if control point is placed on the edge
+        sal_Bool isBezier() const;
 
-            // data interface
-            ::basegfx::point::B2DPoint getStartPoint() const { return maStartPoint; }
-            void setStartPoint(const ::basegfx::point::B2DPoint& rValue) { maStartPoint = rValue; }
+        // data interface
+        ::basegfx::B2DPoint getStartPoint() const { return maStartPoint; }
+        void setStartPoint(const ::basegfx::B2DPoint& rValue) { maStartPoint = rValue; }
 
-            ::basegfx::point::B2DPoint getEndPoint() const { return maEndPoint; }
-            void setEndPoint(const ::basegfx::point::B2DPoint& rValue) { maEndPoint = rValue; }
+        ::basegfx::B2DPoint getEndPoint() const { return maEndPoint; }
+        void setEndPoint(const ::basegfx::B2DPoint& rValue) { maEndPoint = rValue; }
 
-            ::basegfx::point::B2DPoint getControlPoint() const { return maControlPoint; }
-            void setControlPoint(const ::basegfx::point::B2DPoint& rValue) { maControlPoint = rValue; }
-        };
-    } // end of namespace curve
+        ::basegfx::B2DPoint getControlPoint() const { return maControlPoint; }
+        void setControlPoint(const ::basegfx::B2DPoint& rValue) { maControlPoint = rValue; }
+    };
 } // end of namespace basegfx
 
 #endif //   _BGFX_CURVE_B2DQUADRATICBEZIER_HXX

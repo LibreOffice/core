@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:39:57 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,56 +70,59 @@
 #include <basegfx/vector/b2dvector.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#include <vector>
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
     // predefinitions
-    namespace polygon
+    class B2DPolyPolygon;
+    class B2DRange;
+
+    namespace tools
     {
-        class B2DPolyPolygon;
-    } // end of namespace polygon
+        // B2DPolyPolygon tools
 
-    // predefinitions
-    namespace range
-    {
-        class B2DRange;
-    } // end of namespace range
+        // Check and evtl. correct orientations of all contained Polygons so that
+        // the orientations of contained polygons will variate to express areas and
+        // holes
+        void correctOrientations(::basegfx::B2DPolyPolygon& rCandidate);
 
-    namespace polygon
-    {
-        namespace tools
-        {
-            // B2DPolyPolygon tools
+        // Remove all intersections, the self intersections and the in-between
+        // polygon intersections. After this operation there are no more intersections
+        // in the given PolyPolygon. Only closed polygons are handled. The non-closed
+        // polygons or the ones with less than 3 points are preserved, but not
+        // computed.
+        // bForceOrientation: If sal_True, the orientations of all contained polygons
+        // is changed to ORIENTATION_POSITIVE before computing.
+        // bInvertRemove: if sal_True, created polygons which are inside others and
+        // have the same orientation are removed (cleanup).
+        void removeIntersections(::basegfx::B2DPolyPolygon& rCandidate,
+            sal_Bool bForceOrientation = sal_True, sal_Bool bInvertRemove = sal_False);
 
-            // Check and evtl. correct orientations of all contained Polygons so that
-            // the orientations of contained polygons will variate to express areas and
-            // holes
-            void correctOrientations(::basegfx::polygon::B2DPolyPolygon& rCandidate);
+        // Subdivide all contained curves. Use distanceBound value if given.
+        ::basegfx::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
 
-            // Remove all intersections, the self intersections and the in-between
-            // polygon intersections. After this operation there are no more intersections
-            // in the given PolyPolygon. Only closed polygons are handled. The non-closed
-            // polygons or the ones with less than 3 points are preserved, but not
-            // computed.
-            // bForceOrientation: If sal_True, the orientations of all contained polygons
-            // is changed to ORIENTATION_POSITIVE before computing.
-            // bInvertRemove: if sal_True, created polygons which are inside others and
-            // have the same orientation are removed (cleanup).
-            void removeIntersections(::basegfx::polygon::B2DPolyPolygon& rCandidate,
-                sal_Bool bForceOrientation = sal_True, sal_Bool bInvertRemove = sal_False);
+        // Subdivide all contained curves. Use distanceBound value if given.
+        ::basegfx::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::B2DPolyPolygon& rCandidate, double fAngleBound = 5.0);
 
-            // Subdivide all contained curves. Use distanceBound value if given.
-            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
+        // get size of PolyPolygon. Control vectors are included in that ranges.
+        ::basegfx::B2DRange getRange(const ::basegfx::B2DPolyPolygon& rCandidate);
 
-            // Subdivide all contained curves. Use distanceBound value if given.
-            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fAngleBound = 5.0);
+        // Apply Line Dashing. This cuts every contained PolyPolygon into line pieces
+        // which are inserted as single polygons into the result.
+        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen);
 
-            // get size of PolyPolygon. Control vectors are included in that ranges.
-            ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolyPolygon& rCandidate);
+        // Apply Line Dashing. This cuts the Polygon into line pieces
+        // which are inserted as single polygons into the result.
+        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen);
 
-        } // end of namespace tools
-    } // end of namespace polygon
+    } // end of namespace tools
 } // end of namespace basegfx
 
 #endif //   _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX

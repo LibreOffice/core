@@ -32,7 +32,8 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\curve
 ..\inc\basegfx\curve\b2dcubicbezier.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dcubicbezier.hxx
 ..\inc\basegfx\curve\b2dquadraticbezier.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dquadraticbezier.hxx
 
-#mkdir: %_DEST%\inc%_EXT%\basegfx\numeric
+mkdir: %_DEST%\inc%_EXT%\basegfx\numeric
+..\inc\basegfx\numeric\ftools.hxx %_DEST%\inc%_EXT%\basegfx\numeric\ftools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b2dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygon.hxx
@@ -46,4 +47,4 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\tuple
 ..\inc\basegfx\tuple\b2dtuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b2dtuple.hxx
-..\inc\basegfx\tuple\b3dtuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b3dpoint.hxx
+..\inc\basegfx\tuple\b3dtuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b3dtuple.hxx

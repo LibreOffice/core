@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:56 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,8 @@
 
 namespace basegfx
 {
-    namespace numeric
-    {
-        // init static member of class fTools
-        double ::basegfx::numeric::fTools::mfSmallValue = 0.000000001;
-    } // end of namespace numeric
+    // init static member of class fTools
+    double ::basegfx::fTools::mfSmallValue = 0.000000001;
 } // end of namespace basegfx
 
 // eof

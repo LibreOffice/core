@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:51 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,8 @@
 
 namespace basegfx
 {
-    namespace tuple
-    {
-        // initialize static member
-        ::basegfx::tuple::B3DTuple B3DTuple::maEmptyTuple(0.0, 0.0, 0.0);
-    } // end of namespace tuple
+    // initialize static member
+    ::basegfx::B3DTuple B3DTuple::maEmptyTuple(0.0, 0.0, 0.0);
 } // end of namespace basegfx
 
 // eof

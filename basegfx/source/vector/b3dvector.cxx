@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dvector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:16 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,71 +69,68 @@
 
 namespace basegfx
 {
-    namespace vector
+    B3DVector& B3DVector::normalize()
     {
-        B3DVector& B3DVector::normalize()
+        double fLen(scalar(*this));
+
+        if(!::basegfx::fTools::equalZero(fLen))
         {
-            double fLen(scalar(*this));
+            const double fOne(1.0);
 
-            if(!::basegfx::numeric::fTools::equalZero(fLen))
+            if(!::basegfx::fTools::equal(fOne, fLen))
             {
-                const double fOne(1.0);
+                fLen = sqrt(fLen);
 
-                if(!::basegfx::numeric::fTools::equal(fOne, fLen))
+                if(!::basegfx::fTools::equalZero(fLen))
                 {
-                    fLen = sqrt(fLen);
-
-                    if(!::basegfx::numeric::fTools::equalZero(fLen))
-                    {
-                        mfX /= fLen;
-                        mfY /= fLen;
-                        mfZ /= fLen;
-                    }
+                    mfX /= fLen;
+                    mfY /= fLen;
+                    mfZ /= fLen;
                 }
             }
-
-            return *this;
         }
 
-        B3DVector B3DVector::getPerpendicular(const B3DVector& rNormalizedVec) const
-        {
-            B3DVector aNew(*this);
-            aNew = cross(aNew, rNormalizedVec);
-            aNew.normalize();
-            return aNew;
-        }
+        return *this;
+    }
 
-        B3DVector B3DVector::getProjectionOnPlane(const B3DVector& rNormalizedPlane) const
-        {
-            B3DVector aNew(*this);
-            aNew = cross(aNew, rNormalizedPlane);
-            aNew = cross(aNew, rNormalizedPlane);
+    B3DVector B3DVector::getPerpendicular(const B3DVector& rNormalizedVec) const
+    {
+        B3DVector aNew(*this);
+        aNew = cross(aNew, rNormalizedVec);
+        aNew.normalize();
+        return aNew;
+    }
 
-            aNew.mfX = mfX - aNew.mfX;
-            aNew.mfY = mfY - aNew.mfY;
-            aNew.mfZ = mfZ - aNew.mfZ;
+    B3DVector B3DVector::getProjectionOnPlane(const B3DVector& rNormalizedPlane) const
+    {
+        B3DVector aNew(*this);
+        aNew = cross(aNew, rNormalizedPlane);
+        aNew = cross(aNew, rNormalizedPlane);
 
-            return aNew;
-        }
+        aNew.mfX = mfX - aNew.mfX;
+        aNew.mfY = mfY - aNew.mfY;
+        aNew.mfZ = mfZ - aNew.mfZ;
 
-        B3DVector& B3DVector::operator*=( const matrix::B3DHomMatrix& rMat )
-        {
-            const double fTempX( rMat.get(0,0)*mfX + rMat.get(0,1)*mfY + rMat.get(0,2)*mfZ );
-            const double fTempY( rMat.get(1,0)*mfX + rMat.get(1,1)*mfY + rMat.get(1,2)*mfZ );
-            const double fTempZ( rMat.get(2,0)*mfX + rMat.get(2,1)*mfY + rMat.get(2,2)*mfZ );
-            mfX = fTempX;
-            mfY = fTempY;
-            mfZ = fTempZ;
+        return aNew;
+    }
 
-            return *this;
-        }
+    B3DVector& B3DVector::operator*=( const B3DHomMatrix& rMat )
+    {
+        const double fTempX( rMat.get(0,0)*mfX + rMat.get(0,1)*mfY + rMat.get(0,2)*mfZ );
+        const double fTempY( rMat.get(1,0)*mfX + rMat.get(1,1)*mfY + rMat.get(1,2)*mfZ );
+        const double fTempZ( rMat.get(2,0)*mfX + rMat.get(2,1)*mfY + rMat.get(2,2)*mfZ );
+        mfX = fTempX;
+        mfY = fTempY;
+        mfZ = fTempZ;
 
-        B3DVector operator*( const matrix::B3DHomMatrix& rMat, const B3DVector& rVec )
-        {
-            B3DVector aRes( rVec );
-            return aRes*=rMat;
-        }
-    } // end of namespace vector
+        return *this;
+    }
+
+    B3DVector operator*( const B3DHomMatrix& rMat, const B3DVector& rVec )
+    {
+        B3DVector aRes( rVec );
+        return aRes*=rMat;
+    }
 } // end of namespace basegfx
 
 // eof

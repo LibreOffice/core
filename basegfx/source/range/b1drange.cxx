@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:59 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 
 namespace basegfx
 {
-    namespace range
-    {
-    } // end of namespace range
 } // end of namespace basegfx
 
 // eof

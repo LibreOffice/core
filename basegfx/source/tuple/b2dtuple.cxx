@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:51 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,65 +69,62 @@
 
 namespace basegfx
 {
-    namespace tuple
+    // initialize static member
+    ::basegfx::B2DTuple B2DTuple::maEmptyTuple(0.0, 0.0);
+
+    sal_Bool B2DTuple::equalZero() const
     {
-        // initialize static member
-        ::basegfx::tuple::B2DTuple B2DTuple::maEmptyTuple(0.0, 0.0);
+        return (this == &maEmptyTuple ||
+                (::basegfx::fTools::equalZero(mfX) && ::basegfx::fTools::equalZero(mfY)));
+    }
 
-        sal_Bool B2DTuple::equalZero() const
-        {
-            return (this == &maEmptyTuple ||
-                    (::basegfx::numeric::fTools::equalZero(mfX) && ::basegfx::numeric::fTools::equalZero(mfY)));
-        }
+    sal_Bool B2DTuple::equalZero(const double& rfSmallValue) const
+    {
+        return (this == &maEmptyTuple ||
+                (::basegfx::fTools::equalZero(mfX, rfSmallValue) && ::basegfx::fTools::equalZero(mfY, rfSmallValue)));
+    }
 
-        sal_Bool B2DTuple::equalZero(const double& rfSmallValue) const
-        {
-            return (this == &maEmptyTuple ||
-                    (::basegfx::numeric::fTools::equalZero(mfX, rfSmallValue) && ::basegfx::numeric::fTools::equalZero(mfY, rfSmallValue)));
-        }
+    sal_Bool B2DTuple::equal(const B2DTuple& rTup) const
+    {
+        return (
+            ::basegfx::fTools::equal(mfX, rTup.mfX) &&
+            ::basegfx::fTools::equal(mfY, rTup.mfY));
+    }
 
-        sal_Bool B2DTuple::equal(const B2DTuple& rTup) const
-        {
-            return (
-                ::basegfx::numeric::fTools::equal(mfX, rTup.mfX) &&
-                ::basegfx::numeric::fTools::equal(mfY, rTup.mfY));
-        }
+    sal_Bool B2DTuple::equal(const B2DTuple& rTup, const double& rfSmallValue) const
+    {
+        return (
+            ::basegfx::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
+            ::basegfx::fTools::equal(mfY, rTup.mfY, rfSmallValue));
+    }
 
-        sal_Bool B2DTuple::equal(const B2DTuple& rTup, const double& rfSmallValue) const
+    void B2DTuple::correctValues(const double fCompareValue)
+    {
+        if(0.0 == fCompareValue)
         {
-            return (
-                ::basegfx::numeric::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
-                ::basegfx::numeric::fTools::equal(mfY, rTup.mfY, rfSmallValue));
-        }
-
-        void B2DTuple::correctValues(const double fCompareValue)
-        {
-            if(0.0 == fCompareValue)
+            if(::basegfx::fTools::equalZero(mfX))
             {
-                if(::basegfx::numeric::fTools::equalZero(mfX))
-                {
-                    mfX = 0.0;
-                }
-
-                if(::basegfx::numeric::fTools::equalZero(mfY))
-                {
-                    mfY = 0.0;
-                }
+                mfX = 0.0;
             }
-            else
-            {
-                if(::basegfx::numeric::fTools::equal(mfX, fCompareValue))
-                {
-                    mfX = fCompareValue;
-                }
 
-                if(::basegfx::numeric::fTools::equal(mfY, fCompareValue))
-                {
-                    mfY = fCompareValue;
-                }
+            if(::basegfx::fTools::equalZero(mfY))
+            {
+                mfY = 0.0;
             }
         }
-    } // end of namespace tuple
+        else
+        {
+            if(::basegfx::fTools::equal(mfX, fCompareValue))
+            {
+                mfX = fCompareValue;
+            }
+
+            if(::basegfx::fTools::equal(mfY, fCompareValue))
+            {
+                mfY = fCompareValue;
+            }
+        }
+    }
 } // end of namespace basegfx
 
 // eof

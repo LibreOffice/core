@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-10 15:10:41 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ namespace basegfx
                     const double fDefault(implGetDefaultValue((RowSize - 1), a));
                     const double fLineValue(mpLine->get(a));
 
-                    if(!::basegfx::numeric::fTools::equal(fDefault, fLineValue))
+                    if(!::basegfx::fTools::equal(fDefault, fLineValue))
                     {
                         return sal_False;
                     }
@@ -226,7 +226,7 @@ namespace basegfx
                 {
                     const double fDefault(implGetDefaultValue((RowSize - 1), nColumn));
 
-                    if(!::basegfx::numeric::fTools::equal(fDefault, rValue))
+                    if(!::basegfx::fTools::equal(fDefault, rValue))
                     {
                         mpLine = new ImplMatLine< RowSize >((RowSize - 1), 0L);
                         mpLine->set(nColumn, rValue);
@@ -245,7 +245,7 @@ namespace basegfx
                         const double fDefault(implGetDefaultValue((RowSize - 1), a));
                         const double fLineValue(mpLine->get(a));
 
-                        if(!::basegfx::numeric::fTools::equal(fDefault, fLineValue))
+                        if(!::basegfx::fTools::equal(fDefault, fLineValue))
                         {
                             bNecessary = sal_True;
                         }
@@ -278,13 +278,13 @@ namespace basegfx
                     {
                         double fTemp(fabs(get(a, b)));
 
-                        if(::basegfx::numeric::fTools::more(fTemp, fBig))
+                        if(::basegfx::fTools::more(fTemp, fBig))
                         {
                             fBig = fTemp;
                         }
                     }
 
-                    if(::basegfx::numeric::fTools::equalZero(fBig))
+                    if(::basegfx::fTools::equalZero(fBig))
                     {
                         return sal_False;
                     }
@@ -321,7 +321,7 @@ namespace basegfx
                         set(a, b, fSum);
                         fDum = fStorage[a] * fabs(fSum);
 
-                        if(::basegfx::numeric::fTools::moreOrEqual(fDum, fBig))
+                        if(::basegfx::fTools::moreOrEqual(fDum, fBig))
                         {
                             fBig = fDum;
                             nAMax = a;
@@ -346,7 +346,7 @@ namespace basegfx
                     // here the failure of precision occurs
                     const double fValBB(fabs(get(b, b)));
 
-                    if(::basegfx::numeric::fTools::equalZero(fValBB))
+                    if(::basegfx::fTools::equalZero(fValBB))
                     {
                         return sal_False;
                     }
@@ -384,7 +384,7 @@ namespace basegfx
                             fSum -= get(a, b) * fRow[b];
                         }
                     }
-                    else if(!::basegfx::numeric::fTools::equalZero(fSum))
+                    else if(!::basegfx::fTools::equalZero(fSum))
                     {
                         a2 = a;
                     }
@@ -403,7 +403,7 @@ namespace basegfx
 
                     const double fValueAA(get(a, a));
 
-                    if(!::basegfx::numeric::fTools::equalZero(fValueAA))
+                    if(!::basegfx::fTools::equalZero(fValueAA))
                     {
                         fRow[a] = fSum / get(a, a);
                     }
@@ -422,7 +422,7 @@ namespace basegfx
                         const double fDefault(implGetDefaultValue(a, b));
                         const double fValueAB(get(a, b));
 
-                        if(!::basegfx::numeric::fTools::equal(fDefault, fValueAB))
+                        if(!::basegfx::fTools::equal(fDefault, fValueAB))
                         {
                             return sal_False;
                         }
@@ -448,14 +448,14 @@ namespace basegfx
 
                 const double fHomValue(get((RowSize - 1), (RowSize - 1)));
 
-                if(::basegfx::numeric::fTools::equalZero(fHomValue))
+                if(::basegfx::fTools::equalZero(fHomValue))
                 {
                     return sal_True;
                 }
 
                 const double fOne(1.0);
 
-                if(::basegfx::numeric::fTools::equal(fOne, fHomValue))
+                if(::basegfx::fTools::equal(fOne, fHomValue))
                 {
                     return sal_True;
                 }
@@ -634,7 +634,7 @@ namespace basegfx
                         const double fValueA(get(a, b));
                         const double fValueB(rMat.get(a, b));
 
-                        if(!::basegfx::numeric::fTools::equal(fValueA, fValueB))
+                        if(!::basegfx::fTools::equal(fValueA, fValueB))
                         {
                             return sal_False;
                         }

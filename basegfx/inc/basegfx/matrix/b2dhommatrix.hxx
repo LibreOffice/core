@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-12 12:12:40 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,127 +68,121 @@
 
 namespace basegfx
 {
-    namespace tuple
+    // predeclaration
+    class B2DTuple;
+
+    // forward declaration
+    class Impl2DHomMatrix;
+
+    class B2DHomMatrix
     {
-        // predeclaration
-        class B2DTuple;
-    } // end of namespace tuple
+    private:
+        Impl2DHomMatrix*                            mpM;
 
-    namespace matrix
-    {
-        // forward declaration
-        class Impl2DHomMatrix;
+        void implPrepareChange();
 
-        class B2DHomMatrix
-        {
-        private:
-            Impl2DHomMatrix*                            mpM;
+    public:
+        B2DHomMatrix();
+        B2DHomMatrix(const B2DHomMatrix& rMat);
+        ~B2DHomMatrix();
 
-            void implPrepareChange();
+        double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
+        void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
 
-        public:
-            B2DHomMatrix();
-            B2DHomMatrix(const B2DHomMatrix& rMat);
-            ~B2DHomMatrix();
+        // Auf Einheitsmatrix zuruecksetzen
+        sal_Bool isIdentity() const;
+        void identity();
 
-            double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
-            void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
+        // Invertierung
+        sal_Bool isInvertible() const;
+        sal_Bool invert();
 
-            // Auf Einheitsmatrix zuruecksetzen
-            sal_Bool isIdentity() const;
-            void identity();
+        // Normalisierung
+        sal_Bool isNormalized() const;
+        void normalize();
 
-            // Invertierung
-            sal_Bool isInvertible() const;
-            sal_Bool invert();
+        // Determinante
+        double determinant() const;
 
-            // Normalisierung
-            sal_Bool isNormalized() const;
-            void normalize();
+        // Trace
+        double trace() const;
 
-            // Determinante
-            double determinant() const;
+        // Transpose
+        void transpose();
 
-            // Trace
-            double trace() const;
+        // Rotation
+        void rotate(double fRadiant);
 
-            // Transpose
-            void transpose();
+        // Translation
+        void translate(double fX, double fY);
 
-            // Rotation
-            void rotate(double fRadiant);
+        // Skalierung
+        void scale(double fX, double fY);
 
-            // Translation
-            void translate(double fX, double fY);
-
-            // Skalierung
-            void scale(double fX, double fY);
-
-            // Shearing-Matrices
-            void shearX(double fSx);
-            void shearY(double fSy);
-
-            // Addition, Subtraktion
-            B2DHomMatrix& operator+=(const B2DHomMatrix& rMat);
-            B2DHomMatrix& operator-=(const B2DHomMatrix& rMat);
-
-            // Vergleichsoperatoren
-            sal_Bool operator==(const B2DHomMatrix& rMat) const;
-            sal_Bool operator!=(const B2DHomMatrix& rMat) const;
-
-            // Multiplikation, Division mit Konstante
-            B2DHomMatrix& operator*=(double fValue);
-            B2DHomMatrix& operator/=(double fValue);
-
-            // Matritzenmultiplikation von links auf die lokale
-            B2DHomMatrix& operator*=(const B2DHomMatrix& rMat);
-
-            // assignment operator
-            B2DHomMatrix& operator=(const B2DHomMatrix& rMat);
-
-            // Help routine to decompose given homogen 3x3 matrix to components. A correction of
-            // the components is done to avoid inaccuracies.
-            // Zerlegung
-            sal_Bool decompose(tuple::B2DTuple& rScale, tuple::B2DTuple& rTranslate, double& rRotate, double& rShearX) const;
-        };
+        // Shearing-Matrices
+        void shearX(double fSx);
+        void shearY(double fSy);
 
         // Addition, Subtraktion
-        inline B2DHomMatrix operator+(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
-        {
-            B2DHomMatrix aSum(rMatA);
-            aSum += rMatB;
-            return aSum;
-        }
+        B2DHomMatrix& operator+=(const B2DHomMatrix& rMat);
+        B2DHomMatrix& operator-=(const B2DHomMatrix& rMat);
 
-        inline B2DHomMatrix operator-(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
-        {
-            B2DHomMatrix aDiv(rMatA);
-            aDiv -= rMatB;
-            return aDiv;
-        }
+        // Vergleichsoperatoren
+        sal_Bool operator==(const B2DHomMatrix& rMat) const;
+        sal_Bool operator!=(const B2DHomMatrix& rMat) const;
 
         // Multiplikation, Division mit Konstante
-        inline B2DHomMatrix operator*(const B2DHomMatrix& rMat, double fValue)
-        {
-            B2DHomMatrix aNew(rMat);
-            aNew *= fValue;
-            return aNew;
-        }
+        B2DHomMatrix& operator*=(double fValue);
+        B2DHomMatrix& operator/=(double fValue);
 
-        inline B2DHomMatrix operator/(const B2DHomMatrix& rMat, double fValue)
-        {
-            B2DHomMatrix aNew(rMat);
-            aNew *= 1.0 / fValue;
-            return aNew;
-        }
+        // Matritzenmultiplikation von links auf die lokale
+        B2DHomMatrix& operator*=(const B2DHomMatrix& rMat);
 
-        inline B2DHomMatrix operator*(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
-        {
-            B2DHomMatrix aMul(rMatB);
-            aMul *= rMatA;
-            return aMul;
-        }
-    } // end of namespace matrix
+        // assignment operator
+        B2DHomMatrix& operator=(const B2DHomMatrix& rMat);
+
+        // Help routine to decompose given homogen 3x3 matrix to components. A correction of
+        // the components is done to avoid inaccuracies.
+        // Zerlegung
+        sal_Bool decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const;
+    };
+
+    // Addition, Subtraktion
+    inline B2DHomMatrix operator+(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
+    {
+        B2DHomMatrix aSum(rMatA);
+        aSum += rMatB;
+        return aSum;
+    }
+
+    inline B2DHomMatrix operator-(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
+    {
+        B2DHomMatrix aDiv(rMatA);
+        aDiv -= rMatB;
+        return aDiv;
+    }
+
+    // Multiplikation, Division mit Konstante
+    inline B2DHomMatrix operator*(const B2DHomMatrix& rMat, double fValue)
+    {
+        B2DHomMatrix aNew(rMat);
+        aNew *= fValue;
+        return aNew;
+    }
+
+    inline B2DHomMatrix operator/(const B2DHomMatrix& rMat, double fValue)
+    {
+        B2DHomMatrix aNew(rMat);
+        aNew *= 1.0 / fValue;
+        return aNew;
+    }
+
+    inline B2DHomMatrix operator*(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
+    {
+        B2DHomMatrix aMul(rMatB);
+        aMul *= rMatA;
+        return aMul;
+    }
 } // end of namespace basegfx
 
 #endif // _BGFX_MATRIX_B2DHOMMATRIX_HXX

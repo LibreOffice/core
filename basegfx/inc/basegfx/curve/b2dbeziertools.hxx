@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-12 12:09:50 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,169 +71,160 @@
 
 namespace basegfx
 {
-    namespace polygon
-    {
-        class B2DPolygon;
-    }
+    class B2DPolygon;
+    class B2DCubicBezier;
+    class B2DQuadraticBezier;
 
-    namespace curve
-    {
+    /** Subdivide given cubic bezier segment.
 
-        class B2DCubicBezier;
-        class B2DQuadraticBezier;
+        This function adaptively subdivides the given bezier
+        segment into as much straight line segments as necessary,
+        such that the maximal orthogonal distance from any of the
+        segments to the true curve is less than the given error
+        value.
 
-        /** Subdivide given cubic bezier segment.
+        @param rPoly
+        Output polygon. The subdivided bezier segment is added to
+        this polygon via B2DPolygon::append().
 
-            This function adaptively subdivides the given bezier
-            segment into as much straight line segments as necessary,
-            such that the maximal orthogonal distance from any of the
-            segments to the true curve is less than the given error
-            value.
+        @param rCurve
+        The cubic bezier curve to subdivide
 
-            @param rPoly
-            Output polygon. The subdivided bezier segment is added to
-            this polygon via B2DPolygon::append().
+        @param distanceBound
+        Bound on the maximal distance of the approximation to the
+        true curve.
 
-            @param rCurve
-            The cubic bezier curve to subdivide
-
-            @param distanceBound
-            Bound on the maximal distance of the approximation to the
-            true curve.
-
-            @return the number of line segments created
-         */
-        sal_Int32 adaptiveSubdivideByDistance( polygon::B2DPolygon&     rPoly,
-                                               const B2DCubicBezier&    rCurve,
-                                               double                   distanceBound );
-
-        /** Subdivide given cubic bezier segment.
-
-            This function adaptively subdivides the given bezier
-            segment into as much quadratic bezier curve segments as
-            necessary, such that the maximal orthogonal distance from
-            any of the segments to the true curve is less than the
-            given error value.
-
-            @param rPoly
-            Output polygon. The subdivided bezier segments are added to
-            this polygon via B2DPolygon::append().
-
-            @param rCurve
-            The cubic bezier curve to subdivide
-
-            @param distanceBound
-            Bound on the maximal distance of the approximation to the
-            true curve.
-
-            @return the number of quadratic curve segments created
-         */
-        sal_Int32 adaptiveDegreeReductionByDistance( polygon::B2DPolygon&       rPoly,
-                                                     const B2DCubicBezier&  rCurve,
-                                                     double                 distanceBound );
-
-
-        /** Subdivide given cubic bezier segment.
-
-            This function adaptively subdivides the given bezier
-            segment into as much straight line segments as necessary,
-            such that the maximal angle change between any adjacent
-            lines is less than the given error value.
-
-            @param rPoly
-            Output polygon. The subdivided bezier segment is added to
-            this polygon via B2DPolygon::append().
-
-            @param rCurve
-            The cubic bezier curve to subdivide
-
-            @param angleBound
-            Bound on the maximal angle difference between two adjacent
-            polygon lines, in degrees.
-
-            @return the number of line segments created
-         */
-        sal_Int32 adaptiveSubdivideByAngle( polygon::B2DPolygon&    rPoly,
+        @return the number of line segments created
+        */
+    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&      rPoly,
                                             const B2DCubicBezier&   rCurve,
-                                            double                  angleBound );
+                                            double                  distanceBound );
 
-        /** Subdivide given cubic bezier segment.
+    /** Subdivide given cubic bezier segment.
 
-            This function adaptively subdivides the given bezier
-            segment into as much quadratic bezier curve segments as
-            necessary, such that the maximal angle difference of the
-            control vectors of any generated quadratic bezier segment
-            is less than the given error value.
+        This function adaptively subdivides the given bezier
+        segment into as much quadratic bezier curve segments as
+        necessary, such that the maximal orthogonal distance from
+        any of the segments to the true curve is less than the
+        given error value.
 
-            @param rPoly
-            Output polygon. The subdivided bezier segments are added to
-            this polygon via B2DPolygon::append().
+        @param rPoly
+        Output polygon. The subdivided bezier segments are added to
+        this polygon via B2DPolygon::append().
 
-            @param rCurve
-            The cubic bezier curve to subdivide
+        @param rCurve
+        The cubic bezier curve to subdivide
 
-            @param distanceBound
-            Bound on the maximal angle difference between the control
-            vectors of any of the generated quadratic bezier
-            segments. The angle must be given in degrees.
+        @param distanceBound
+        Bound on the maximal distance of the approximation to the
+        true curve.
 
-            @return the number of quadratic curve segments created
-         */
-        sal_Int32 adaptiveDegreeReductionByAngle( polygon::B2DPolygon&  rPoly,
-                                                  const B2DCubicBezier& rCurve,
-                                                  double                angleBound );
+        @return the number of quadratic curve segments created
+        */
+    sal_Int32 adaptiveDegreeReductionByDistance( B2DPolygon&        rPoly,
+                                                    const B2DCubicBezier&   rCurve,
+                                                    double                  distanceBound );
 
 
-        /** Subdivide given quadratic bezier segment.
+    /** Subdivide given cubic bezier segment.
 
-            This function adaptively subdivides the given bezier
-            segment into as much straight line segments as necessary,
-            such that the maximal orthogonal distance from any of the
-            segments to the true curve is less than the given error
-            value.
+        This function adaptively subdivides the given bezier
+        segment into as much straight line segments as necessary,
+        such that the maximal angle change between any adjacent
+        lines is less than the given error value.
 
-            @param rPoly
-            Output polygon. The subdivided bezier segment is added to
-            this polygon via B2DPolygon::append().
+        @param rPoly
+        Output polygon. The subdivided bezier segment is added to
+        this polygon via B2DPolygon::append().
 
-            @param rCurve
-            The cubic bezier curve to subdivide
+        @param rCurve
+        The cubic bezier curve to subdivide
 
-            @param distanceBound
-            Bound on the maximal distance of the approximation to the
-            true curve
+        @param angleBound
+        Bound on the maximal angle difference between two adjacent
+        polygon lines, in degrees.
 
-            @return the number of line segments created
-         */
-        sal_Int32 adaptiveSubdivideByDistance( polygon::B2DPolygon&         rPoly,
-                                               const B2DQuadraticBezier&    rCurve,
-                                               double                       distanceBound );
+        @return the number of line segments created
+        */
+    sal_Int32 adaptiveSubdivideByAngle( B2DPolygon& rPoly,
+                                        const B2DCubicBezier&   rCurve,
+                                        double                  angleBound );
 
-        /** Subdivide given quadratic bezier segment.
+    /** Subdivide given cubic bezier segment.
 
-            This function adaptively subdivides the given bezier
-            segment into as much straight line segments as necessary,
-            such that the maximal angle change between any adjacent
-            lines is less than the given error value.
+        This function adaptively subdivides the given bezier
+        segment into as much quadratic bezier curve segments as
+        necessary, such that the maximal angle difference of the
+        control vectors of any generated quadratic bezier segment
+        is less than the given error value.
 
-            @param rPoly
-            Output polygon. The subdivided bezier segment is added to
-            this polygon via B2DPolygon::append().
+        @param rPoly
+        Output polygon. The subdivided bezier segments are added to
+        this polygon via B2DPolygon::append().
 
-            @param rCurve
-            The cubic bezier curve to subdivide
+        @param rCurve
+        The cubic bezier curve to subdivide
 
-            @param angleBound
-            Bound on the maximal angle difference between two adjacent
-            polygon lines, in degrees.
+        @param distanceBound
+        Bound on the maximal angle difference between the control
+        vectors of any of the generated quadratic bezier
+        segments. The angle must be given in degrees.
 
-            @return the number of line segments created
-         */
-        sal_Int32 adaptiveSubdivideByAngle( polygon::B2DPolygon&        rPoly,
+        @return the number of quadratic curve segments created
+        */
+    sal_Int32 adaptiveDegreeReductionByAngle( B2DPolygon&   rPoly,
+                                                const B2DCubicBezier& rCurve,
+                                                double              angleBound );
+
+
+    /** Subdivide given quadratic bezier segment.
+
+        This function adaptively subdivides the given bezier
+        segment into as much straight line segments as necessary,
+        such that the maximal orthogonal distance from any of the
+        segments to the true curve is less than the given error
+        value.
+
+        @param rPoly
+        Output polygon. The subdivided bezier segment is added to
+        this polygon via B2DPolygon::append().
+
+        @param rCurve
+        The cubic bezier curve to subdivide
+
+        @param distanceBound
+        Bound on the maximal distance of the approximation to the
+        true curve
+
+        @return the number of line segments created
+        */
+    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&          rPoly,
                                             const B2DQuadraticBezier&   rCurve,
-                                            double                      angleBound );
+                                            double                      distanceBound );
 
-    }
+    /** Subdivide given quadratic bezier segment.
+
+        This function adaptively subdivides the given bezier
+        segment into as much straight line segments as necessary,
+        such that the maximal angle change between any adjacent
+        lines is less than the given error value.
+
+        @param rPoly
+        Output polygon. The subdivided bezier segment is added to
+        this polygon via B2DPolygon::append().
+
+        @param rCurve
+        The cubic bezier curve to subdivide
+
+        @param angleBound
+        Bound on the maximal angle difference between two adjacent
+        polygon lines, in degrees.
+
+        @return the number of line segments created
+        */
+    sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&     rPoly,
+                                        const B2DQuadraticBezier&   rCurve,
+                                        double                      angleBound );
 }
 
 #endif // _BGFX_CURVE_B2DBEZIERTOOLS_HXX2

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhompoint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,14 @@
 
 namespace basegfx
 {
-    namespace point
+    void B3DHomPoint::implHomogenize()
     {
-        void B3DHomPoint::implHomogenize()
-        {
-            const double fFactor(1.0 / mfW);
-            maTuple.setX(maTuple.getX() * fFactor);
-            maTuple.setY(maTuple.getY() * fFactor);
-            maTuple.setZ(maTuple.getZ() * fFactor);
-            mfW = 1.0;
-        }
-    } // end of namespace point
+        const double fFactor(1.0 / mfW);
+        maTuple.setX(maTuple.getX() * fFactor);
+        maTuple.setY(maTuple.getY() * fFactor);
+        maTuple.setZ(maTuple.getZ() * fFactor);
+        mfW = 1.0;
+    }
 } // end of namespace basegfx
 
 // eof

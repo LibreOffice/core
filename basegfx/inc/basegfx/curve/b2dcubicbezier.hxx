@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:23 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,50 +70,47 @@
 
 namespace basegfx
 {
-    namespace curve
+    class B2DCubicBezier
     {
-        class B2DCubicBezier
-        {
-            ::basegfx::point::B2DPoint                          maStartPoint;
-            ::basegfx::point::B2DPoint                          maEndPoint;
-            ::basegfx::point::B2DPoint                          maControlPointA;
-            ::basegfx::point::B2DPoint                          maControlPointB;
+        ::basegfx::B2DPoint                         maStartPoint;
+        ::basegfx::B2DPoint                         maEndPoint;
+        ::basegfx::B2DPoint                         maControlPointA;
+        ::basegfx::B2DPoint                         maControlPointB;
 
-        public:
-            B2DCubicBezier();
-            B2DCubicBezier(const B2DCubicBezier& rBezier);
-            B2DCubicBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rEnd);
-            B2DCubicBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rControlPointA,
-                const ::basegfx::point::B2DPoint& rControlPointB, const ::basegfx::point::B2DPoint& rEnd);
-            ~B2DCubicBezier();
+    public:
+        B2DCubicBezier();
+        B2DCubicBezier(const B2DCubicBezier& rBezier);
+        B2DCubicBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd);
+        B2DCubicBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rControlPointA,
+            const ::basegfx::B2DPoint& rControlPointB, const ::basegfx::B2DPoint& rEnd);
+        ~B2DCubicBezier();
 
-            // assignment operator
-            B2DCubicBezier& operator=(const B2DCubicBezier& rBezier);
+        // assignment operator
+        B2DCubicBezier& operator=(const B2DCubicBezier& rBezier);
 
-            // compare operators
-            sal_Bool operator==(const B2DCubicBezier& rBezier) const;
-            sal_Bool operator!=(const B2DCubicBezier& rBezier) const;
+        // compare operators
+        sal_Bool operator==(const B2DCubicBezier& rBezier) const;
+        sal_Bool operator!=(const B2DCubicBezier& rBezier) const;
 
-            // test if vectors are used
-            sal_Bool isBezier() const;
+        // test if vectors are used
+        sal_Bool isBezier() const;
 
-            // test if contained bezier is trivial and reset vectors accordingly
-            void testAndSolveTrivialBezier();
+        // test if contained bezier is trivial and reset vectors accordingly
+        void testAndSolveTrivialBezier();
 
-            // data interface
-            ::basegfx::point::B2DPoint getStartPoint() const { return maStartPoint; }
-            void setStartPoint(const ::basegfx::point::B2DPoint& rValue) { maStartPoint = rValue; }
+        // data interface
+        ::basegfx::B2DPoint getStartPoint() const { return maStartPoint; }
+        void setStartPoint(const ::basegfx::B2DPoint& rValue) { maStartPoint = rValue; }
 
-            ::basegfx::point::B2DPoint getEndPoint() const { return maEndPoint; }
-            void setEndPoint(const ::basegfx::point::B2DPoint& rValue) { maEndPoint = rValue; }
+        ::basegfx::B2DPoint getEndPoint() const { return maEndPoint; }
+        void setEndPoint(const ::basegfx::B2DPoint& rValue) { maEndPoint = rValue; }
 
-            ::basegfx::point::B2DPoint getControlPointA() const { return maControlPointA; }
-            void setControlPointA(const ::basegfx::point::B2DPoint& rValue) { maControlPointA = rValue; }
+        ::basegfx::B2DPoint getControlPointA() const { return maControlPointA; }
+        void setControlPointA(const ::basegfx::B2DPoint& rValue) { maControlPointA = rValue; }
 
-            ::basegfx::point::B2DPoint getControlPointB() const { return maControlPointB; }
-            void setControlPointB(const ::basegfx::point::B2DPoint& rValue) { maControlPointB = rValue; }
-        };
-    } // end of namespace curve
+        ::basegfx::B2DPoint getControlPointB() const { return maControlPointB; }
+        void setControlPointB(const ::basegfx::B2DPoint& rValue) { maControlPointB = rValue; }
+    };
 } // end of namespace basegfx
 
 #endif //   _BGFX_CURVE_B2DCUBICBEZIER_HXX

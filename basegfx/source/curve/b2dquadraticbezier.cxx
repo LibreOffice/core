@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dquadraticbezier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:08 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,75 +71,72 @@
 
 namespace basegfx
 {
-    namespace curve
+    B2DQuadraticBezier::B2DQuadraticBezier(const B2DQuadraticBezier& rBezier)
+    :   maStartPoint(rBezier.maStartPoint),
+        maEndPoint(rBezier.maEndPoint),
+        maControlPoint(rBezier.maControlPoint)
     {
-        B2DQuadraticBezier::B2DQuadraticBezier(const B2DQuadraticBezier& rBezier)
-        :   maStartPoint(rBezier.maStartPoint),
-            maEndPoint(rBezier.maEndPoint),
-            maControlPoint(rBezier.maControlPoint)
-        {
-        }
+    }
 
-        B2DQuadraticBezier::B2DQuadraticBezier()
-        {
-        }
+    B2DQuadraticBezier::B2DQuadraticBezier()
+    {
+    }
 
-        B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rEnd)
-        :   maStartPoint(rStart),
-            maEndPoint(rEnd)
-        {
-        }
+    B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
+    :   maStartPoint(rStart),
+        maEndPoint(rEnd)
+    {
+    }
 
-        B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rControl, const ::basegfx::point::B2DPoint& rEnd)
-        :   maStartPoint(rStart),
-            maEndPoint(rEnd),
-            maControlPoint(rControl)
-        {
-        }
+    B2DQuadraticBezier::B2DQuadraticBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rControl, const ::basegfx::B2DPoint& rEnd)
+    :   maStartPoint(rStart),
+        maEndPoint(rEnd),
+        maControlPoint(rControl)
+    {
+    }
 
-        B2DQuadraticBezier::~B2DQuadraticBezier()
-        {
-        }
+    B2DQuadraticBezier::~B2DQuadraticBezier()
+    {
+    }
 
-        // assignment operator
-        B2DQuadraticBezier& B2DQuadraticBezier::operator=(const B2DQuadraticBezier& rBezier)
-        {
-            maStartPoint = rBezier.maStartPoint;
-            maEndPoint = rBezier.maEndPoint;
-            maControlPoint = rBezier.maControlPoint;
+    // assignment operator
+    B2DQuadraticBezier& B2DQuadraticBezier::operator=(const B2DQuadraticBezier& rBezier)
+    {
+        maStartPoint = rBezier.maStartPoint;
+        maEndPoint = rBezier.maEndPoint;
+        maControlPoint = rBezier.maControlPoint;
 
-            return *this;
-        }
+        return *this;
+    }
 
-        // compare operators
-        sal_Bool B2DQuadraticBezier::operator==(const B2DQuadraticBezier& rBezier) const
-        {
-            return (
-                maStartPoint == rBezier.maStartPoint
-                && maEndPoint == rBezier.maEndPoint
-                && maControlPoint == rBezier.maControlPoint
-            );
-        }
+    // compare operators
+    sal_Bool B2DQuadraticBezier::operator==(const B2DQuadraticBezier& rBezier) const
+    {
+        return (
+            maStartPoint == rBezier.maStartPoint
+            && maEndPoint == rBezier.maEndPoint
+            && maControlPoint == rBezier.maControlPoint
+        );
+    }
 
-        sal_Bool B2DQuadraticBezier::operator!=(const B2DQuadraticBezier& rBezier) const
-        {
-            return (
-                maStartPoint != rBezier.maStartPoint
-                || maEndPoint != rBezier.maEndPoint
-                || maControlPoint != rBezier.maControlPoint
-            );
-        }
+    sal_Bool B2DQuadraticBezier::operator!=(const B2DQuadraticBezier& rBezier) const
+    {
+        return (
+            maStartPoint != rBezier.maStartPoint
+            || maEndPoint != rBezier.maEndPoint
+            || maControlPoint != rBezier.maControlPoint
+        );
+    }
 
-        // test if control vector is used
-        sal_Bool B2DQuadraticBezier::isBezier() const
-        {
-            // if control vector is empty, bezier is not used
-            if(maControlPoint == maStartPoint || maControlPoint == maEndPoint)
-                return sal_False;
+    // test if control vector is used
+    sal_Bool B2DQuadraticBezier::isBezier() const
+    {
+        // if control vector is empty, bezier is not used
+        if(maControlPoint == maStartPoint || maControlPoint == maEndPoint)
+            return sal_False;
 
-            return sal_True;
-        }
-    } // end of namespace curve
+        return sal_True;
+    }
 } // end of namespace basegfx
 
 // eof

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhommatrix.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-12 12:12:40 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,136 +68,130 @@
 
 namespace basegfx
 {
-    namespace tuple
+    // predeclaration
+    class B3DTuple;
+
+    // forward declaration
+    class Impl3DHomMatrix;
+
+    class B3DHomMatrix
     {
-        // predeclaration
-        class B3DTuple;
-    } // end of namespace tuple
+    private:
+        Impl3DHomMatrix*                            mpM;
 
-    namespace matrix
-    {
-        // forward declaration
-        class Impl3DHomMatrix;
+        void implPrepareChange();
 
-        class B3DHomMatrix
-        {
-        private:
-            Impl3DHomMatrix*                            mpM;
+    public:
+        B3DHomMatrix();
+        B3DHomMatrix(const B3DHomMatrix& rMat);
+        ~B3DHomMatrix();
 
-            void implPrepareChange();
+        double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
+        void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
 
-        public:
-            B3DHomMatrix();
-            B3DHomMatrix(const B3DHomMatrix& rMat);
-            ~B3DHomMatrix();
+        sal_Bool isIdentity() const;
+        /// Reset to the identity matrix
+        void identity();
 
-            double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
-            void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
+        sal_Bool isInvertible() const;
+        /// Invert the matrix (if possible)
+        sal_Bool invert();
 
-            sal_Bool isIdentity() const;
-            /// Reset to the identity matrix
-            void identity();
+        sal_Bool isNormalized() const;
+        /// Normalize (i.e. force w=1) the matrix
+        void normalize();
 
-            sal_Bool isInvertible() const;
-            /// Invert the matrix (if possible)
-            sal_Bool invert();
+        /// Calc the matrix determinant
+        double determinant() const;
 
-            sal_Bool isNormalized() const;
-            /// Normalize (i.e. force w=1) the matrix
-            void normalize();
+        /// Calc the matrix trace
+        double trace() const;
 
-            /// Calc the matrix determinant
-            double determinant() const;
+        /// Transpose the matrix
+        void transpose();
 
-            /// Calc the matrix trace
-            double trace() const;
+        /// Rotation
+        void rotate(double fAngleX,double fAngleY,double fAngleZ);
 
-            /// Transpose the matrix
-            void transpose();
+        /// Translation
+        void translate(double fX, double fY, double fZ);
 
-            /// Rotation
-            void rotate(double fAngleX,double fAngleY,double fAngleZ);
+        /// Scaling
+        void scale(double fX, double fY, double fZ);
 
-            /// Translation
-            void translate(double fX, double fY, double fZ);
+        // Shearing-Matrices
+        void shearXY(double fSx, double fSy);
+        void shearYZ(double fSy, double fSz);
+        void shearXZ(double fSx, double fSz);
 
-            /// Scaling
-            void scale(double fX, double fY, double fZ);
+        // Projection matrices, used for converting between eye and
+        // clip coordinates
+        void frustum(double fLeft = -1.0, double fRight = 1.0,
+            double fBottom = -1.0, double fTop = 1.0,
+            double fNear = 0.001, double fFar = 1.0);
 
-            // Shearing-Matrices
-            void shearXY(double fSx, double fSy);
-            void shearYZ(double fSy, double fSz);
-            void shearXZ(double fSx, double fSz);
-
-            // Projection matrices, used for converting between eye and
-            // clip coordinates
-            void frustum(double fLeft = -1.0, double fRight = 1.0,
-                double fBottom = -1.0, double fTop = 1.0,
-                double fNear = 0.001, double fFar = 1.0);
-
-            void ortho(double fLeft = -1.0, double fRight = 1.0,
-                double fBottom = -1.0, double fTop = 1.0,
-                double fNear = 0.0, double fFar = 1.0);
-
-            // addition, subtraction
-            B3DHomMatrix& operator+=(const B3DHomMatrix& rMat);
-            B3DHomMatrix& operator-=(const B3DHomMatrix& rMat);
-
-            // comparison
-            sal_Bool operator==(const B3DHomMatrix& rMat) const;
-            sal_Bool operator!=(const B3DHomMatrix& rMat) const;
-
-            // multiplication, division by constant value
-            B3DHomMatrix& operator*=(double fValue);
-            B3DHomMatrix& operator/=(double fValue);
-
-            // matrix multiplication (from the left)
-            B3DHomMatrix& operator*=(const B3DHomMatrix& rMat);
-
-            // assignment operator
-            B3DHomMatrix& operator=(const B3DHomMatrix& rMat);
-
-            // decomposition
-            sal_Bool decompose(tuple::B3DTuple& rScale, tuple::B3DTuple& rTranslate, tuple::B3DTuple& rRotate, tuple::B3DTuple& rShear) const;
-        };
+        void ortho(double fLeft = -1.0, double fRight = 1.0,
+            double fBottom = -1.0, double fTop = 1.0,
+            double fNear = 0.0, double fFar = 1.0);
 
         // addition, subtraction
-        inline B3DHomMatrix operator+(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
-        {
-            B3DHomMatrix aSum(rMatA);
-            aSum += rMatB;
-            return aSum;
-        }
+        B3DHomMatrix& operator+=(const B3DHomMatrix& rMat);
+        B3DHomMatrix& operator-=(const B3DHomMatrix& rMat);
 
-        inline B3DHomMatrix operator-(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
-        {
-            B3DHomMatrix aDiv(rMatA);
-            aDiv -= rMatB;
-            return aDiv;
-        }
+        // comparison
+        sal_Bool operator==(const B3DHomMatrix& rMat) const;
+        sal_Bool operator!=(const B3DHomMatrix& rMat) const;
 
         // multiplication, division by constant value
-        inline B3DHomMatrix operator*(const B3DHomMatrix& rMat, double fValue)
-        {
-            B3DHomMatrix aNew(rMat);
-            aNew *= fValue;
-            return aNew;
-        }
+        B3DHomMatrix& operator*=(double fValue);
+        B3DHomMatrix& operator/=(double fValue);
 
-        inline B3DHomMatrix operator/(const B3DHomMatrix& rMat, double fValue)
-        {
-            B3DHomMatrix aNew(rMat);
-            aNew *= 1.0 / fValue;
-            return aNew;
-        }
+        // matrix multiplication (from the left)
+        B3DHomMatrix& operator*=(const B3DHomMatrix& rMat);
 
-        inline B3DHomMatrix operator*(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
-        {
-            B3DHomMatrix aMul(rMatB);
-            aMul *= rMatA;
-            return aMul;
-        }
-    } // end of namespace matrix
+        // assignment operator
+        B3DHomMatrix& operator=(const B3DHomMatrix& rMat);
+
+        // decomposition
+        sal_Bool decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const;
+    };
+
+    // addition, subtraction
+    inline B3DHomMatrix operator+(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
+    {
+        B3DHomMatrix aSum(rMatA);
+        aSum += rMatB;
+        return aSum;
+    }
+
+    inline B3DHomMatrix operator-(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
+    {
+        B3DHomMatrix aDiv(rMatA);
+        aDiv -= rMatB;
+        return aDiv;
+    }
+
+    // multiplication, division by constant value
+    inline B3DHomMatrix operator*(const B3DHomMatrix& rMat, double fValue)
+    {
+        B3DHomMatrix aNew(rMat);
+        aNew *= fValue;
+        return aNew;
+    }
+
+    inline B3DHomMatrix operator/(const B3DHomMatrix& rMat, double fValue)
+    {
+        B3DHomMatrix aNew(rMat);
+        aNew *= 1.0 / fValue;
+        return aNew;
+    }
+
+    inline B3DHomMatrix operator*(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
+    {
+        B3DHomMatrix aMul(rMatB);
+        aMul *= rMatA;
+        return aMul;
+    }
 } // end of namespace basegfx
 
 #endif // _BGFX_MATRIX_B3DHOMMATRIX_HXX

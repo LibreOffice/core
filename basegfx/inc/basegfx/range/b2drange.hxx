@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:01 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,119 +72,116 @@
 
 namespace basegfx
 {
-    namespace range
+    class B2DRange
     {
-        class B2DRange
+        ::basegfx::BasicRange           maRangeX;
+        ::basegfx::BasicRange           maRangeY;
+
+    public:
+        B2DRange()
         {
-            ::basegfx::range::BasicRange            maRangeX;
-            ::basegfx::range::BasicRange            maRangeY;
+        }
 
-        public:
-            B2DRange()
-            {
-            }
+        B2DRange(const B2DTuple& rTuple)
+        :   maRangeX(rTuple.getX()),
+            maRangeY(rTuple.getY())
+        {
+        }
 
-            B2DRange(const tuple::B2DTuple& rTuple)
-            :   maRangeX(rTuple.getX()),
-                maRangeY(rTuple.getY())
-            {
-            }
+        B2DRange(const B2DRange& rRange)
+        :   maRangeX(rRange.maRangeX),
+            maRangeY(rRange.maRangeY)
+        {
+        }
 
-            B2DRange(const B2DRange& rRange)
-            :   maRangeX(rRange.maRangeX),
-                maRangeY(rRange.maRangeY)
-            {
-            }
+        sal_Bool isEmpty() const
+        {
+            return (
+                maRangeX.isEmpty()
+                || maRangeY.isEmpty()
+                );
+        }
 
-            sal_Bool isEmpty() const
-            {
-                return (
-                    maRangeX.isEmpty()
-                    || maRangeY.isEmpty()
-                    );
-            }
+        void reset()
+        {
+            maRangeX.reset();
+            maRangeY.reset();
+        }
 
-            void reset()
-            {
-                maRangeX.reset();
-                maRangeY.reset();
-            }
+        void operator=(const B2DRange& rRange)
+        {
+            maRangeX = rRange.maRangeX;
+            maRangeY = rRange.maRangeY;
+        }
 
-            void operator=(const B2DRange& rRange)
-            {
-                maRangeX = rRange.maRangeX;
-                maRangeY = rRange.maRangeY;
-            }
+        B2DTuple getMinimum() const
+        {
+            return B2DTuple(
+                maRangeX.getMinimum(),
+                maRangeY.getMinimum()
+                );
+        }
 
-            tuple::B2DTuple getMinimum() const
-            {
-                return tuple::B2DTuple(
-                    maRangeX.getMinimum(),
-                    maRangeY.getMinimum()
-                    );
-            }
+        B2DTuple getMaximum() const
+        {
+            return B2DTuple(
+                maRangeX.getMaximum(),
+                maRangeY.getMaximum()
+                );
+        }
 
-            tuple::B2DTuple getMaximum() const
-            {
-                return tuple::B2DTuple(
-                    maRangeX.getMaximum(),
-                    maRangeY.getMaximum()
-                    );
-            }
+        B2DTuple getRange() const
+        {
+            return B2DTuple(
+                maRangeX.getRange(),
+                maRangeY.getRange()
+                );
+        }
 
-            tuple::B2DTuple getRange() const
-            {
-                return tuple::B2DTuple(
-                    maRangeX.getRange(),
-                    maRangeY.getRange()
-                    );
-            }
+        B2DTuple getCenter() const
+        {
+            return B2DTuple(
+                maRangeX.getCenter(),
+                maRangeY.getCenter()
+                );
+        }
 
-            tuple::B2DTuple getCenter() const
-            {
-                return tuple::B2DTuple(
-                    maRangeX.getCenter(),
-                    maRangeY.getCenter()
-                    );
-            }
+        sal_Bool isInside(const B2DTuple& rTuple) const
+        {
+            return (
+                maRangeX.isInside(rTuple.getX())
+                && maRangeY.isInside(rTuple.getY())
+                );
+        }
 
-            sal_Bool isInside(const tuple::B2DTuple& rTuple) const
-            {
-                return (
-                    maRangeX.isInside(rTuple.getX())
-                    && maRangeY.isInside(rTuple.getY())
-                    );
-            }
+        sal_Bool isInside(const B2DRange& rRange) const
+        {
+            return (
+                maRangeX.isInside(rRange.maRangeX)
+                && maRangeY.isInside(rRange.maRangeY)
+                );
+        }
 
-            sal_Bool isInside(const B2DRange& rRange) const
-            {
-                return (
-                    maRangeX.isInside(rRange.maRangeX)
-                    && maRangeY.isInside(rRange.maRangeY)
-                    );
-            }
+        sal_Bool overlaps(const B2DRange& rRange) const
+        {
+            return (
+                maRangeX.overlaps(rRange.maRangeX)
+                && maRangeY.overlaps(rRange.maRangeY)
+                );
+        }
 
-            sal_Bool overlaps(const B2DRange& rRange) const
-            {
-                return (
-                    maRangeX.overlaps(rRange.maRangeX)
-                    && maRangeY.overlaps(rRange.maRangeY)
-                    );
-            }
+        void expand(const B2DTuple& rTuple)
+        {
+            maRangeX.expand(rTuple.getX());
+            maRangeY.expand(rTuple.getY());
+        }
 
-            void expand(const tuple::B2DTuple& rTuple)
-            {
-                maRangeX.expand(rTuple.getX());
-                maRangeY.expand(rTuple.getY());
-            }
-
-            void expand(const B2DRange& rRange)
-            {
-                maRangeX.expand(rRange.maRangeX);
-                maRangeY.expand(rRange.maRangeY);
-            }
-        };
-    } // end of namespace range
+        void expand(const B2DRange& rRange)
+        {
+            maRangeX.expand(rRange.maRangeX);
+            maRangeY.expand(rRange.maRangeY);
+        }
+    };
 } // end of namespace basegfx
 
 #endif //   _BGFX_RANGE_B2DRANGE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygon.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:29:18 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,89 +72,75 @@ class ImplB3DPolygon;
 
 namespace basegfx
 {
-    namespace polygon
-    {
-        class B3DPolygon;
-    } // end of namespace polygon
-
-    namespace point
-    {
-        class B3DPoint;
-    } // end of namespace point
-
-    namespace matrix
-    {
-        class B3DHomMatrix;
-    } // end of namespace matrix
+    class B3DPolygon;
+    class B3DPoint;
+    class B3DHomMatrix;
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    namespace polygon
+    class B3DPolygon
     {
-        class B3DPolygon
-        {
-        private:
-            // internal data.
-            ImplB3DPolygon*                             mpPolygon;
+    private:
+        // internal data.
+        ImplB3DPolygon*                             mpPolygon;
 
-            // internal method to force a ref-counted instance to be copied
-            // to a modifyable unique copy.
-            void implForceUniqueCopy();
+        // internal method to force a ref-counted instance to be copied
+        // to a modifyable unique copy.
+        void implForceUniqueCopy();
 
-        public:
-            B3DPolygon();
-            B3DPolygon(const B3DPolygon& rPolygon);
-            B3DPolygon(const B3DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount);
-            ~B3DPolygon();
+    public:
+        B3DPolygon();
+        B3DPolygon(const B3DPolygon& rPolygon);
+        B3DPolygon(const B3DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount);
+        ~B3DPolygon();
 
-            // assignment operator
-            B3DPolygon& operator=(const B3DPolygon& rPolygon);
+        // assignment operator
+        B3DPolygon& operator=(const B3DPolygon& rPolygon);
 
-            // compare operators
-            sal_Bool operator==(const B3DPolygon& rPolygon) const;
-            sal_Bool operator!=(const B3DPolygon& rPolygon) const;
+        // compare operators
+        sal_Bool operator==(const B3DPolygon& rPolygon) const;
+        sal_Bool operator!=(const B3DPolygon& rPolygon) const;
 
-            // member count
-            sal_uInt32 count() const;
+        // member count
+        sal_uInt32 count() const;
 
-            // Coordinate interface
-            ::basegfx::point::B3DPoint getB3DPoint(sal_uInt32 nIndex) const;
-            void setB3DPoint(sal_uInt32 nIndex, const ::basegfx::point::B3DPoint& rValue);
+        // Coordinate interface
+        ::basegfx::B3DPoint getB3DPoint(sal_uInt32 nIndex) const;
+        void setB3DPoint(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rValue);
 
-            // Coordinate insert/append
-            void insert(sal_uInt32 nIndex, const ::basegfx::point::B3DPoint& rPoint, sal_uInt32 nCount = 1);
-            void append(const ::basegfx::point::B3DPoint& rPoint, sal_uInt32 nCount = 1);
+        // Coordinate insert/append
+        void insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount = 1);
+        void append(const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount = 1);
 
-            // insert/append other 2D polygons
-            void insert(sal_uInt32 nIndex, const B3DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
-            void append(const B3DPolygon& rPoly, sal_uInt32 nIndex = 0, sal_uInt32 nCount = 0);
+        // insert/append other 2D polygons
+        void insert(sal_uInt32 nIndex, const B3DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
+        void append(const B3DPolygon& rPoly, sal_uInt32 nIndex = 0, sal_uInt32 nCount = 0);
 
-            // remove
-            void remove(sal_uInt32 nIndex, sal_uInt32 nCount = 1);
+        // remove
+        void remove(sal_uInt32 nIndex, sal_uInt32 nCount = 1);
 
-            // clear all points
-            void clear();
+        // clear all points
+        void clear();
 
-            // closed state
-            sal_Bool isClosed() const;
-            void setClosed(sal_Bool bNew);
+        // closed state
+        sal_Bool isClosed() const;
+        void setClosed(sal_Bool bNew);
 
-            // flip polygon direction
-            void flip();
+        // flip polygon direction
+        void flip();
 
-            // test if Polygon has double points
-            sal_Bool hasDoublePoints() const;
+        // test if Polygon has double points
+        sal_Bool hasDoublePoints() const;
 
-            // remove double points, at the begin/end and follow-ups, too
-            void removeDoublePoints();
+        // remove double points, at the begin/end and follow-ups, too
+        void removeDoublePoints();
 
-            // apply transformation given in matrix form to the polygon
-            void transform(const ::basegfx::matrix::B3DHomMatrix& rMatrix);
-        };
-    } // end of namespace polygon
+        // apply transformation given in matrix form to the polygon
+        void transform(const ::basegfx::B3DHomMatrix& rMatrix);
+    };
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

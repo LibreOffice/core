@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:39:54 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,104 +68,98 @@
 
 namespace basegfx
 {
-    namespace matrix
+    // predeclaration
+    class B2DHomMatrix;
+
+    /** Base Point class with two double values
+
+        This class derives all operators and common handling for
+        a 2D data class from B2DTuple. All necessary extensions
+        which are special for points will be added here.
+
+        @see B2DTuple
+    */
+    class B2DPoint : public ::basegfx::B2DTuple
     {
-        // predeclaration
-        class B2DHomMatrix;
-    } // end of namespace matrix;
+    public:
+        /** Create a 2D Point
 
-    namespace point
-    {
-        /** Base Point class with two double values
-
-            This class derives all operators and common handling for
-            a 2D data class from B2DTuple. All necessary extensions
-            which are special for points will be added here.
-
-            @see B2DTuple
+            @param fVal
+            This parameter is used to initialize the coordinate
+            part of the 2D Point.
         */
-        class B2DPoint : public ::basegfx::tuple::B2DTuple
+        B2DPoint(double fVal = 0.0)
+        :   B2DTuple(fVal)
+        {}
+
+        /** Create a 2D Point
+
+            @param fX
+            This parameter is used to initialize the X-coordinate
+            of the 2D Point.
+
+            @param fY
+            This parameter is used to initialize the Y-coordinate
+            of the 2D Point.
+        */
+        B2DPoint(double fX, double fY)
+        :   B2DTuple(fX, fY)
+        {}
+
+        /** Create a copy of a 2D Point
+
+            @param rPoint
+            The 2D Point which will be copied.
+        */
+        B2DPoint(const B2DPoint& rPoint)
+        :   B2DTuple(rPoint)
+        {}
+
+        /** constructor with tuple to allow copy-constructing
+            from B2DTuple-based classes
+        */
+        B2DPoint(const ::basegfx::B2DTuple& rTuple)
+        :   B2DTuple(rTuple)
+        {}
+
+        ~B2DPoint()
+        {}
+
+        /** *=operator to allow usage from B2DPoint, too
+        */
+        B2DPoint& operator*=( const B2DPoint& rPnt )
         {
-        public:
-            /** Create a 2D Point
+            mfX *= rPnt.mfX;
+            mfY *= rPnt.mfY;
+            return *this;
+        }
 
-                @param fVal
-                This parameter is used to initialize the coordinate
-                part of the 2D Point.
-            */
-            B2DPoint(double fVal = 0.0)
-            :   B2DTuple(fVal)
-            {}
+        /** *=operator to allow usage from B2DPoint, too
+        */
+        B2DPoint& operator*=(double t)
+        {
+            mfX *= t;
+            mfY *= t;
+            return *this;
+        }
 
-            /** Create a 2D Point
+        /** assignment operator to allow assigning the results
+            of B2DTuple calculations
+        */
+        B2DPoint& operator=( const ::basegfx::B2DTuple& rPoint );
 
-                @param fX
-                This parameter is used to initialize the X-coordinate
-                of the 2D Point.
+        /** Transform point by given transformation matrix.
 
-                @param fY
-                This parameter is used to initialize the Y-coordinate
-                of the 2D Point.
-            */
-            B2DPoint(double fX, double fY)
-            :   B2DTuple(fX, fY)
-            {}
+            The translational components of the matrix are, in
+            contrast to B2DVector, applied.
+        */
+        B2DPoint& operator*=( const ::basegfx::B2DHomMatrix& rMat );
 
-            /** Create a copy of a 2D Point
-
-                @param rPoint
-                The 2D Point which will be copied.
-            */
-            B2DPoint(const B2DPoint& rPoint)
-            :   B2DTuple(rPoint)
-            {}
-
-            /** constructor with tuple to allow copy-constructing
-                from B2DTuple-based classes
-            */
-            B2DPoint(const ::basegfx::tuple::B2DTuple& rTuple)
-            :   B2DTuple(rTuple)
-            {}
-
-            ~B2DPoint()
-            {}
-
-            /** *=operator to allow usage from B2DPoint, too
-            */
-            B2DPoint& operator*=( const B2DPoint& rPnt )
-            {
-                mfX *= rPnt.mfX;
-                mfY *= rPnt.mfY;
-                return *this;
-            }
-
-            /** *=operator to allow usage from B2DPoint, too
-            */
-            B2DPoint& operator*=(double t)
-            {
-                mfX *= t;
-                mfY *= t;
-                return *this;
-            }
-
-            /** assignment operator to allow assigning the results
-                of B2DTuple calculations
-            */
-            B2DPoint& operator=( const ::basegfx::tuple::B2DTuple& rPoint );
-
-            /** Transform point by given transformation matrix.
-
-                The translational components of the matrix are, in
-                contrast to B2DVector, applied.
-            */
-            B2DPoint& operator*=( const ::basegfx::matrix::B2DHomMatrix& rMat );
-
-            static const B2DPoint& getEmptyPoint()
-            {
-                return (const B2DPoint&) ::basegfx::tuple::B2DTuple::getEmptyTuple();
-            }
-        };
-    } // end of namespace point
+        static const B2DPoint& getEmptyPoint()
+        {
+            return (const B2DPoint&) ::basegfx::B2DTuple::getEmptyTuple();
+        }
+    };
 } // end of namespace basegfx
 
 #endif //  _BGFX_POINT_B2DPOINT_HXX

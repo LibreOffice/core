@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:00 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,88 +68,85 @@
 
 namespace basegfx
 {
-    namespace range
+    class B1DRange
     {
-        class B1DRange
+        ::basegfx::BasicRange                   maRange;
+
+    public:
+        B1DRange()
         {
-            ::basegfx::range::BasicRange                    maRange;
+        }
 
-        public:
-            B1DRange()
-            {
-            }
+        B1DRange(double fStartValue)
+        :   maRange(fStartValue)
+        {
+        }
 
-            B1DRange(double fStartValue)
-            :   maRange(fStartValue)
-            {
-            }
+        B1DRange(const B1DRange& rRange)
+        :   maRange(rRange.maRange)
+        {
+        }
 
-            B1DRange(const B1DRange& rRange)
-            :   maRange(rRange.maRange)
-            {
-            }
+        sal_Bool isEmpty() const
+        {
+            return maRange.isEmpty();
+        }
 
-            sal_Bool isEmpty() const
-            {
-                return maRange.isEmpty();
-            }
+        void reset()
+        {
+            maRange.reset();
+        }
 
-            void reset()
-            {
-                maRange.reset();
-            }
+        void operator=(const B1DRange& rRange)
+        {
+            maRange = rRange.maRange;
+        }
 
-            void operator=(const B1DRange& rRange)
-            {
-                maRange = rRange.maRange;
-            }
+        double getMinimum() const
+        {
+            return maRange.getMinimum();
+        }
 
-            double getMinimum() const
-            {
-                return maRange.getMinimum();
-            }
+        double getMaximum() const
+        {
+            return maRange.getMaximum();
+        }
 
-            double getMaximum() const
-            {
-                return maRange.getMaximum();
-            }
+        double getRange() const
+        {
+            return maRange.getRange();
+        }
 
-            double getRange() const
-            {
-                return maRange.getRange();
-            }
+        double getCenter() const
+        {
+            return maRange.getCenter();
+        }
 
-            double getCenter() const
-            {
-                return maRange.getCenter();
-            }
+        sal_Bool isInside(double fValue) const
+        {
+            return maRange.isInside(fValue);
+        }
 
-            sal_Bool isInside(double fValue) const
-            {
-                return maRange.isInside(fValue);
-            }
+        sal_Bool isInside(const B1DRange& rRange) const
+        {
+            return maRange.isInside(rRange.maRange);
+        }
 
-            sal_Bool isInside(const B1DRange& rRange) const
-            {
-                return maRange.isInside(rRange.maRange);
-            }
+        sal_Bool overlaps(const B1DRange& rRange) const
+        {
+            return maRange.overlaps(rRange.maRange);
+        }
 
-            sal_Bool overlaps(const B1DRange& rRange) const
-            {
-                return maRange.overlaps(rRange.maRange);
-            }
+        void expand(double fValue)
+        {
+            maRange.expand(fValue);
+        }
 
-            void expand(double fValue)
-            {
-                maRange.expand(fValue);
-            }
-
-            void expand(const B1DRange& rRange)
-            {
-                maRange.expand(rRange.maRange);
-            }
-        };
-    } // end of namespace range
+        void expand(const B1DRange& rRange)
+        {
+            maRange.expand(rRange.maRange);
+        }
+    };
 } // end of namespace basegfx
 
 #endif //   _BGFX_RANGE_B1DRANGE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:39:57 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,84 +71,74 @@ class ImplB2DPolyPolygon;
 
 namespace basegfx
 {
-    namespace polygon
-    {
-        class B2DPolygon;
-    } // end of namespace polygon
-
-    namespace matrix
-    {
-        class B2DHomMatrix;
-    } // end of namespace matrix
+    class B2DPolygon;
+    class B2DHomMatrix;
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    namespace polygon
+    class B2DPolyPolygon
     {
-        class B2DPolyPolygon
-        {
-        private:
-            ImplB2DPolyPolygon*                         mpPolyPolygon;
+    private:
+        ImplB2DPolyPolygon*                         mpPolyPolygon;
 
-            // internal method to force a ref-counted instance to be copied
-            // to a modifyable unique copy.
-            void implForceUniqueCopy();
+        // internal method to force a ref-counted instance to be copied
+        // to a modifyable unique copy.
+        void implForceUniqueCopy();
 
-        public:
-            B2DPolyPolygon();
-            B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon);
-            ~B2DPolyPolygon();
+    public:
+        B2DPolyPolygon();
+        B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon);
+        ~B2DPolyPolygon();
 
-            // assignment operator
-            B2DPolyPolygon& operator=(const B2DPolyPolygon& rPolyPolygon);
+        // assignment operator
+        B2DPolyPolygon& operator=(const B2DPolyPolygon& rPolyPolygon);
 
-            // compare operators
-            sal_Bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
-            sal_Bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
+        // compare operators
+        sal_Bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
+        sal_Bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
 
-            // polygon interface
-            sal_uInt32 count() const;
+        // polygon interface
+        sal_uInt32 count() const;
 
-            B2DPolygon getB2DPolygon(sal_uInt32 nIndex) const;
-            void setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
+        B2DPolygon getB2DPolygon(sal_uInt32 nIndex) const;
+        void setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
 
-            // test for curve
-            sal_Bool areControlPointsUsed() const;
+        // test for curve
+        sal_Bool areControlPointsUsed() const;
 
-            // insert/append single polygon
-            void insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
-            void append(const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
+        // insert/append single polygon
+        void insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
+        void append(const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
 
-            // insert/append multiple polygons
-            void insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon);
-            void append(const B2DPolyPolygon& rPolyPolygon);
+        // insert/append multiple polygons
+        void insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon);
+        void append(const B2DPolyPolygon& rPolyPolygon);
 
-            // remove
-            void remove(sal_uInt32 nIndex, sal_uInt32 nCount = 1);
+        // remove
+        void remove(sal_uInt32 nIndex, sal_uInt32 nCount = 1);
 
-            // reset to empty state
-            void clear();
+        // reset to empty state
+        void clear();
 
-            // closed state
-            sal_Bool isClosed() const;
-            void setClosed(sal_Bool bNew);
+        // closed state
+        sal_Bool isClosed() const;
+        void setClosed(sal_Bool bNew);
 
-            // flip polygon direction
-            void flip();
+        // flip polygon direction
+        void flip();
 
-            // test if PolyPolygon has double points
-            sal_Bool hasDoublePoints() const;
+        // test if PolyPolygon has double points
+        sal_Bool hasDoublePoints() const;
 
-            // remove double points, at the begin/end and follow-ups, too
-            void removeDoublePoints();
+        // remove double points, at the begin/end and follow-ups, too
+        void removeDoublePoints();
 
-            // apply transformation given in matrix form to the polygon
-            void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix);
-        };
-    } // end of namespace polygon
+        // apply transformation given in matrix form to the polygon
+        void transform(const ::basegfx::B2DHomMatrix& rMatrix);
+    };
 } // end of namespace basegfx
 
 #endif //   _BGFX_POLYGON_B2DPOLYPOLYGON_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:12 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,153 +87,164 @@
 
 namespace basegfx
 {
-    namespace polygon
+    namespace tools
     {
-        namespace tools
+        // B2DPolyPolygon tools
+
+        void correctOrientations(::basegfx::B2DPolyPolygon& rCandidate)
         {
-            // B2DPolyPolygon tools
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+            sal_uInt32 nIndexOfOutmostPolygon(0L);
+            sal_Bool bIndexOfOutmostPolygonSet(sal_False);
 
-            void correctOrientations(::basegfx::polygon::B2DPolyPolygon& rCandidate)
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
             {
-                const sal_uInt32 nPolygonCount(rCandidate.count());
-                sal_uInt32 nIndexOfOutmostPolygon(0L);
-                sal_Bool bIndexOfOutmostPolygonSet(sal_False);
+                ::basegfx::B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
 
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                if(aCandidate.count() > 2L)
                 {
-                    ::basegfx::polygon::B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                    ::basegfx::B2DVectorOrientation aOrientation =
+                        ::basegfx::tools::getOrientation(aCandidate);
+                    sal_Bool bDoFlip(::basegfx::ORIENTATION_POSITIVE != aOrientation);
 
-                    if(aCandidate.count() > 2L)
+                    // init values for depth and compare point for
+                    // inside test. Since the ordering makes only sense when assuming
+                    // that there are no intersections, the inside test is done with
+                    // any point of the candidate, so teke the first one.
+                    sal_uInt32 nDepth(0L);
+                    const ::basegfx::B2DPoint aTestPoint(aCandidate.getB2DPoint(0L));
+
+                    // loop over other polygons and calculate depth
+                    for(sal_uInt32 b(0L); b < nPolygonCount; b++)
                     {
-                        ::basegfx::vector::B2DVectorOrientation aOrientation =
-                            ::basegfx::polygon::tools::getOrientation(aCandidate);
-                        sal_Bool bDoFlip(::basegfx::vector::ORIENTATION_POSITIVE != aOrientation);
-
-                        // init values for depth and compare point for
-                        // inside test. Since the ordering makes only sense when assuming
-                        // that there are no intersections, the inside test is done with
-                        // any point of the candidate, so teke the first one.
-                        sal_uInt32 nDepth(0L);
-                        const ::basegfx::point::B2DPoint aTestPoint(aCandidate.getB2DPoint(0L));
-
-                        // loop over other polygons and calculate depth
-                        for(sal_uInt32 b(0L); b < nPolygonCount; b++)
+                        if(b != a)
                         {
-                            if(b != a)
-                            {
-                                ::basegfx::polygon::B2DPolygon aComparePolygon = rCandidate.getB2DPolygon(b);
+                            ::basegfx::B2DPolygon aComparePolygon = rCandidate.getB2DPolygon(b);
 
-                                if(::basegfx::polygon::tools::isInside(aComparePolygon, aTestPoint))
-                                {
-                                    nDepth++;
-                                }
+                            if(::basegfx::tools::isInside(aComparePolygon, aTestPoint))
+                            {
+                                nDepth++;
                             }
                         }
-
-                        // if nDepth is odd it is a hole
-                        sal_Bool bIsHole(1L == (nDepth & 0x00000001));
-
-                        // does polygon need to be flipped?
-                        if((bDoFlip && !bIsHole) || (!bDoFlip && bIsHole))
-                        {
-                            aCandidate.flip();
-
-                            // write back changed polygon
-                            rCandidate.setB2DPolygon(a, aCandidate);
-                        }
-
-                        // remember the index if it's the outmost polygon
-                        if(!bIndexOfOutmostPolygonSet && 0L == nDepth)
-                        {
-                            bIndexOfOutmostPolygonSet = sal_True;
-                            nIndexOfOutmostPolygon = a;
-                        }
                     }
-                }
 
-                // if the outmost polygon is not the first, move it in front
-                if(bIndexOfOutmostPolygonSet && nIndexOfOutmostPolygon > 0L)
-                {
-                    ::basegfx::polygon::B2DPolygon aOutmostPolygon = rCandidate.getB2DPolygon(nIndexOfOutmostPolygon);
-                    rCandidate.remove(nIndexOfOutmostPolygon);
-                    rCandidate.insert(0L, aOutmostPolygon);
-                }
-            }
+                    // if nDepth is odd it is a hole
+                    sal_Bool bIsHole(1L == (nDepth & 0x00000001));
 
-            void removeIntersections(::basegfx::polygon::B2DPolyPolygon& rCandidate,
-                sal_Bool bForceOrientation, sal_Bool bInvertRemove)
-            {
-                ::basegfx::polygon::B2DPolyPolygonCutter aCutter;
-
-                aCutter.addPolyPolygon(rCandidate, bForceOrientation);
-                aCutter.removeSelfIntersections();
-                aCutter.removeDoubleIntersections();
-                aCutter.removeIncludedPolygons(!bInvertRemove);
-                rCandidate.clear();
-                aCutter.getPolyPolygon(rCandidate);
-            }
-
-            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound)
-            {
-                ::basegfx::polygon::B2DPolyPolygon aRetval(rCandidate);
-
-                if(aRetval.areControlPointsUsed())
-                {
-                    const sal_uInt32 nPolygonCount(aRetval.count());
-
-                    for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                    // does polygon need to be flipped?
+                    if((bDoFlip && !bIsHole) || (!bDoFlip && bIsHole))
                     {
-                        ::basegfx::polygon::B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+                        aCandidate.flip();
 
-                        if(aCandidate.areControlPointsUsed())
-                        {
-                            aCandidate = ::basegfx::polygon::tools::adaptiveSubdivideByDistance(aCandidate, fDistanceBound);
-                            aRetval.setB2DPolygon(a, aCandidate);
-                        }
+                        // write back changed polygon
+                        rCandidate.setB2DPolygon(a, aCandidate);
                     }
-                }
 
-                return aRetval;
-            }
-
-            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fAngleBound)
-            {
-                ::basegfx::polygon::B2DPolyPolygon aRetval(rCandidate);
-
-                if(aRetval.areControlPointsUsed())
-                {
-                    const sal_uInt32 nPolygonCount(aRetval.count());
-
-                    for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                    // remember the index if it's the outmost polygon
+                    if(!bIndexOfOutmostPolygonSet && 0L == nDepth)
                     {
-                        ::basegfx::polygon::B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
-
-                        if(aCandidate.areControlPointsUsed())
-                        {
-                            aCandidate = ::basegfx::polygon::tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound);
-                            aRetval.setB2DPolygon(a, aCandidate);
-                        }
+                        bIndexOfOutmostPolygonSet = sal_True;
+                        nIndexOfOutmostPolygon = a;
                     }
                 }
-
-                return aRetval;
             }
 
-            ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolyPolygon& rCandidate)
+            // if the outmost polygon is not the first, move it in front
+            if(bIndexOfOutmostPolygonSet && nIndexOfOutmostPolygon > 0L)
             {
-                ::basegfx::range::B2DRange aRetval;
-                const sal_uInt32 nPolygonCount(rCandidate.count());
-
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-                {
-                    ::basegfx::polygon::B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                    aRetval.expand(::basegfx::polygon::tools::getRange(aCandidate));
-                }
-
-                return aRetval;
+                ::basegfx::B2DPolygon aOutmostPolygon = rCandidate.getB2DPolygon(nIndexOfOutmostPolygon);
+                rCandidate.remove(nIndexOfOutmostPolygon);
+                rCandidate.insert(0L, aOutmostPolygon);
             }
-        } // end of namespace tools
-    } // end of namespace polygon
+        }
+
+        void removeIntersections(::basegfx::B2DPolyPolygon& rCandidate,
+            sal_Bool bForceOrientation, sal_Bool bInvertRemove)
+        {
+            ::basegfx::B2DPolyPolygonCutter aCutter;
+
+            aCutter.addPolyPolygon(rCandidate, bForceOrientation);
+            aCutter.removeSelfIntersections();
+            aCutter.removeDoubleIntersections();
+            aCutter.removeIncludedPolygons(!bInvertRemove);
+            rCandidate.clear();
+            aCutter.getPolyPolygon(rCandidate);
+        }
+
+        ::basegfx::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::B2DPolyPolygon& rCandidate, double fDistanceBound)
+        {
+            ::basegfx::B2DPolyPolygon aRetval(rCandidate);
+
+            if(aRetval.areControlPointsUsed())
+            {
+                const sal_uInt32 nPolygonCount(aRetval.count());
+
+                for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                {
+                    ::basegfx::B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+
+                    if(aCandidate.areControlPointsUsed())
+                    {
+                        aCandidate = ::basegfx::tools::adaptiveSubdivideByDistance(aCandidate, fDistanceBound);
+                        aRetval.setB2DPolygon(a, aCandidate);
+                    }
+                }
+            }
+
+            return aRetval;
+        }
+
+        ::basegfx::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::B2DPolyPolygon& rCandidate, double fAngleBound)
+        {
+            ::basegfx::B2DPolyPolygon aRetval(rCandidate);
+
+            if(aRetval.areControlPointsUsed())
+            {
+                const sal_uInt32 nPolygonCount(aRetval.count());
+
+                for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                {
+                    ::basegfx::B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+
+                    if(aCandidate.areControlPointsUsed())
+                    {
+                        aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound);
+                        aRetval.setB2DPolygon(a, aCandidate);
+                    }
+                }
+            }
+
+            return aRetval;
+        }
+
+        ::basegfx::B2DRange getRange(const ::basegfx::B2DPolyPolygon& rCandidate)
+        {
+            ::basegfx::B2DRange aRetval;
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                ::basegfx::B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                aRetval.expand(::basegfx::tools::getRange(aCandidate));
+            }
+
+            return aRetval;
+        }
+
+        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
+        {
+            ::basegfx::B2DPolyPolygon aRetval;
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                ::basegfx::B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
+            }
+
+            return aRetval;
+        }
+    } // end of namespace tools
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

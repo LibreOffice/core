@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:02 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,134 +72,131 @@
 
 namespace basegfx
 {
-    namespace range
+    class B3DRange
     {
-        class B3DRange
+        ::basegfx::BasicRange           maRangeX;
+        ::basegfx::BasicRange           maRangeY;
+        ::basegfx::BasicRange           maRangeZ;
+
+    public:
+        B3DRange()
         {
-            ::basegfx::range::BasicRange            maRangeX;
-            ::basegfx::range::BasicRange            maRangeY;
-            ::basegfx::range::BasicRange            maRangeZ;
+        }
 
-        public:
-            B3DRange()
-            {
-            }
+        B3DRange(const B3DTuple& rTuple)
+        :   maRangeX(rTuple.getX()),
+            maRangeY(rTuple.getY()),
+            maRangeZ(rTuple.getZ())
+        {
+        }
 
-            B3DRange(const tuple::B3DTuple& rTuple)
-            :   maRangeX(rTuple.getX()),
-                maRangeY(rTuple.getY()),
-                maRangeZ(rTuple.getZ())
-            {
-            }
+        B3DRange(const B3DRange& rRange)
+        :   maRangeX(rRange.maRangeX),
+            maRangeY(rRange.maRangeY),
+            maRangeZ(rRange.maRangeZ)
+        {
+        }
 
-            B3DRange(const B3DRange& rRange)
-            :   maRangeX(rRange.maRangeX),
-                maRangeY(rRange.maRangeY),
-                maRangeZ(rRange.maRangeZ)
-            {
-            }
+        sal_Bool isEmpty() const
+        {
+            return (
+                maRangeX.isEmpty()
+                || maRangeY.isEmpty()
+                || maRangeZ.isEmpty()
+                );
+        }
 
-            sal_Bool isEmpty() const
-            {
-                return (
-                    maRangeX.isEmpty()
-                    || maRangeY.isEmpty()
-                    || maRangeZ.isEmpty()
-                    );
-            }
+        void reset()
+        {
+            maRangeX.reset();
+            maRangeY.reset();
+            maRangeZ.reset();
+        }
 
-            void reset()
-            {
-                maRangeX.reset();
-                maRangeY.reset();
-                maRangeZ.reset();
-            }
+        void operator=(const B3DRange& rRange)
+        {
+            maRangeX = rRange.maRangeX;
+            maRangeY = rRange.maRangeY;
+            maRangeZ = rRange.maRangeZ;
+        }
 
-            void operator=(const B3DRange& rRange)
-            {
-                maRangeX = rRange.maRangeX;
-                maRangeY = rRange.maRangeY;
-                maRangeZ = rRange.maRangeZ;
-            }
+        B3DTuple getMinimum() const
+        {
+            return B3DTuple(
+                maRangeX.getMinimum(),
+                maRangeY.getMinimum(),
+                maRangeZ.getMinimum()
+                );
+        }
 
-            tuple::B3DTuple getMinimum() const
-            {
-                return tuple::B3DTuple(
-                    maRangeX.getMinimum(),
-                    maRangeY.getMinimum(),
-                    maRangeZ.getMinimum()
-                    );
-            }
+        B3DTuple getMaximum() const
+        {
+            return B3DTuple(
+                maRangeX.getMaximum(),
+                maRangeY.getMaximum(),
+                maRangeZ.getMaximum()
+                );
+        }
 
-            tuple::B3DTuple getMaximum() const
-            {
-                return tuple::B3DTuple(
-                    maRangeX.getMaximum(),
-                    maRangeY.getMaximum(),
-                    maRangeZ.getMaximum()
-                    );
-            }
+        B3DTuple getRange() const
+        {
+            return B3DTuple(
+                maRangeX.getRange(),
+                maRangeY.getRange(),
+                maRangeZ.getRange()
+                );
+        }
 
-            tuple::B3DTuple getRange() const
-            {
-                return tuple::B3DTuple(
-                    maRangeX.getRange(),
-                    maRangeY.getRange(),
-                    maRangeZ.getRange()
-                    );
-            }
+        B3DTuple getCenter() const
+        {
+            return B3DTuple(
+                maRangeX.getCenter(),
+                maRangeY.getCenter(),
+                maRangeZ.getCenter()
+                );
+        }
 
-            tuple::B3DTuple getCenter() const
-            {
-                return tuple::B3DTuple(
-                    maRangeX.getCenter(),
-                    maRangeY.getCenter(),
-                    maRangeZ.getCenter()
-                    );
-            }
+        sal_Bool isInside(const B3DTuple& rTuple) const
+        {
+            return (
+                maRangeX.isInside(rTuple.getX())
+                && maRangeY.isInside(rTuple.getY())
+                && maRangeZ.isInside(rTuple.getZ())
+                );
+        }
 
-            sal_Bool isInside(const tuple::B3DTuple& rTuple) const
-            {
-                return (
-                    maRangeX.isInside(rTuple.getX())
-                    && maRangeY.isInside(rTuple.getY())
-                    && maRangeZ.isInside(rTuple.getZ())
-                    );
-            }
+        sal_Bool isInside(const B3DRange& rRange) const
+        {
+            return (
+                maRangeX.isInside(rRange.maRangeX)
+                && maRangeY.isInside(rRange.maRangeY)
+                && maRangeZ.isInside(rRange.maRangeZ)
+                );
+        }
 
-            sal_Bool isInside(const B3DRange& rRange) const
-            {
-                return (
-                    maRangeX.isInside(rRange.maRangeX)
-                    && maRangeY.isInside(rRange.maRangeY)
-                    && maRangeZ.isInside(rRange.maRangeZ)
-                    );
-            }
+        sal_Bool overlaps(const B3DRange& rRange) const
+        {
+            return (
+                maRangeX.overlaps(rRange.maRangeX)
+                && maRangeY.overlaps(rRange.maRangeY)
+                && maRangeZ.overlaps(rRange.maRangeZ)
+                );
+        }
 
-            sal_Bool overlaps(const B3DRange& rRange) const
-            {
-                return (
-                    maRangeX.overlaps(rRange.maRangeX)
-                    && maRangeY.overlaps(rRange.maRangeY)
-                    && maRangeZ.overlaps(rRange.maRangeZ)
-                    );
-            }
+        void expand(const B3DTuple& rTuple)
+        {
+            maRangeX.expand(rTuple.getX());
+            maRangeY.expand(rTuple.getY());
+            maRangeZ.expand(rTuple.getZ());
+        }
 
-            void expand(const tuple::B3DTuple& rTuple)
-            {
-                maRangeX.expand(rTuple.getX());
-                maRangeY.expand(rTuple.getY());
-                maRangeZ.expand(rTuple.getZ());
-            }
-
-            void expand(const B3DRange& rRange)
-            {
-                maRangeX.expand(rRange.maRangeX);
-                maRangeY.expand(rRange.maRangeY);
-                maRangeZ.expand(rRange.maRangeZ);
-            }
-        };
-    } // end of namespace range
+        void expand(const B3DRange& rRange)
+        {
+            maRangeX.expand(rRange.maRangeX);
+            maRangeY.expand(rRange.maRangeY);
+            maRangeZ.expand(rRange.maRangeZ);
+        }
+    };
 } // end of namespace basegfx
 
 #endif //  _BGFX_RANGE_B3DRANGE_HXX

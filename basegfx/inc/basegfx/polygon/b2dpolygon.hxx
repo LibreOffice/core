@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:39:56 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,101 +72,83 @@ class ImplB2DPolygon;
 
 namespace basegfx
 {
-    namespace polygon
-    {
-        class B2DPolygon;
-    } // end of namespace polygon
-
-    namespace point
-    {
-        class B2DPoint;
-    } // end of namespace point
-
-    namespace vector
-    {
-        class B2DVector;
-    } // end of namespace vector
-
-    namespace matrix
-    {
-        class B2DHomMatrix;
-    } // end of namespace matrix
+    class B2DPolygon;
+    class B2DPoint;
+    class B2DVector;
+    class B2DHomMatrix;
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    namespace polygon
+    class B2DPolygon
     {
-        class B2DPolygon
-        {
-        private:
-            // internal data.
-            ImplB2DPolygon*                             mpPolygon;
+    private:
+        // internal data.
+        ImplB2DPolygon*                             mpPolygon;
 
-            // internal method to force a ref-counted instance to be copied
-            // to a modifyable unique copy.
-            void implForceUniqueCopy();
+        // internal method to force a ref-counted instance to be copied
+        // to a modifyable unique copy.
+        void implForceUniqueCopy();
 
-        public:
-            B2DPolygon();
-            B2DPolygon(const B2DPolygon& rPolygon);
-            B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount);
-            ~B2DPolygon();
+    public:
+        B2DPolygon();
+        B2DPolygon(const B2DPolygon& rPolygon);
+        B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount);
+        ~B2DPolygon();
 
-            // assignment operator
-            B2DPolygon& operator=(const B2DPolygon& rPolygon);
+        // assignment operator
+        B2DPolygon& operator=(const B2DPolygon& rPolygon);
 
-            // compare operators
-            sal_Bool operator==(const B2DPolygon& rPolygon) const;
-            sal_Bool operator!=(const B2DPolygon& rPolygon) const;
+        // compare operators
+        sal_Bool operator==(const B2DPolygon& rPolygon) const;
+        sal_Bool operator!=(const B2DPolygon& rPolygon) const;
 
-            // member count
-            sal_uInt32 count() const;
+        // member count
+        sal_uInt32 count() const;
 
-            // Coordinate interface
-            ::basegfx::point::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
-            void setB2DPoint(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rValue);
+        // Coordinate interface
+        ::basegfx::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
+        void setB2DPoint(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue);
 
-            // Coordinate insert/append
-            void insert(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount = 1);
-            void append(const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount = 1);
+        // Coordinate insert/append
+        void insert(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
+        void append(const ::basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
 
-            // ControlVector interface
-            ::basegfx::vector::B2DVector getControlVectorA(sal_uInt32 nIndex) const;
-            void setControlVectorA(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue);
-            ::basegfx::vector::B2DVector getControlVectorB(sal_uInt32 nIndex) const;
-            void setControlVectorB(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue);
-            sal_Bool areControlPointsUsed() const;
+        // ControlVector interface
+        ::basegfx::B2DVector getControlVectorA(sal_uInt32 nIndex) const;
+        void setControlVectorA(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
+        ::basegfx::B2DVector getControlVectorB(sal_uInt32 nIndex) const;
+        void setControlVectorB(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
+        sal_Bool areControlPointsUsed() const;
 
-            // insert/append other 2D polygons
-            void insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
-            void append(const B2DPolygon& rPoly, sal_uInt32 nIndex = 0, sal_uInt32 nCount = 0);
+        // insert/append other 2D polygons
+        void insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
+        void append(const B2DPolygon& rPoly, sal_uInt32 nIndex = 0, sal_uInt32 nCount = 0);
 
-            // remove
-            void remove(sal_uInt32 nIndex, sal_uInt32 nCount = 1);
+        // remove
+        void remove(sal_uInt32 nIndex, sal_uInt32 nCount = 1);
 
-            // clear all points
-            void clear();
+        // clear all points
+        void clear();
 
-            // closed state
-            sal_Bool isClosed() const;
-            void setClosed(sal_Bool bNew);
+        // closed state
+        sal_Bool isClosed() const;
+        void setClosed(sal_Bool bNew);
 
-            // flip polygon direction
-            void flip();
+        // flip polygon direction
+        void flip();
 
-            // test if Polygon has double points
-            sal_Bool hasDoublePoints() const;
+        // test if Polygon has double points
+        sal_Bool hasDoublePoints() const;
 
-            // remove double points, at the begin/end and follow-ups, too
-            void removeDoublePoints();
+        // remove double points, at the begin/end and follow-ups, too
+        void removeDoublePoints();
 
-            // apply transformation given in matrix form to the polygon
-            void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix);
-        };
-    } // end of namespace polygon
+        // apply transformation given in matrix form to the polygon
+        void transform(const ::basegfx::B2DHomMatrix& rMatrix);
+    };
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

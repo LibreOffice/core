@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:07 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,90 +67,86 @@
 
 namespace basegfx
 {
-    namespace curve
+    B2DCubicBezier::B2DCubicBezier(const B2DCubicBezier& rBezier)
+    :   maStartPoint(rBezier.maStartPoint),
+        maEndPoint(rBezier.maEndPoint),
+        maControlPointA(rBezier.maControlPointA),
+        maControlPointB(rBezier.maControlPointB)
     {
-        B2DCubicBezier::B2DCubicBezier(const B2DCubicBezier& rBezier)
-        :   maStartPoint(rBezier.maStartPoint),
-            maEndPoint(rBezier.maEndPoint),
-            maControlPointA(rBezier.maControlPointA),
-            maControlPointB(rBezier.maControlPointB)
+    }
+
+    B2DCubicBezier::B2DCubicBezier()
+    {
+    }
+
+    B2DCubicBezier::B2DCubicBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
+    :   maStartPoint(rStart),
+        maEndPoint(rEnd),
+        maControlPointA(rStart),
+        maControlPointB(rEnd)
+    {
+    }
+
+    B2DCubicBezier::B2DCubicBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rControlPointA,
+        const ::basegfx::B2DPoint& rControlPointB, const ::basegfx::B2DPoint& rEnd)
+    :   maStartPoint(rStart),
+        maEndPoint(rEnd),
+        maControlPointA(rControlPointA),
+        maControlPointB(rControlPointB)
+    {
+    }
+
+    B2DCubicBezier::~B2DCubicBezier()
+    {
+    }
+
+    // assignment operator
+    B2DCubicBezier& B2DCubicBezier::operator=(const B2DCubicBezier& rBezier)
+    {
+        maStartPoint = rBezier.maStartPoint;
+        maEndPoint = rBezier.maEndPoint;
+        maControlPointA = rBezier.maControlPointA;
+        maControlPointB = rBezier.maControlPointB;
+
+        return *this;
+    }
+
+    // compare operators
+    sal_Bool B2DCubicBezier::operator==(const B2DCubicBezier& rBezier) const
+    {
+        return (
+            maStartPoint == rBezier.maStartPoint
+            && maEndPoint == rBezier.maEndPoint
+            && maControlPointA == rBezier.maControlPointA
+            && maControlPointB == rBezier.maControlPointB
+        );
+    }
+
+    sal_Bool B2DCubicBezier::operator!=(const B2DCubicBezier& rBezier) const
+    {
+        return (
+            maStartPoint != rBezier.maStartPoint
+            || maEndPoint != rBezier.maEndPoint
+            || maControlPointA != rBezier.maControlPointA
+            || maControlPointB != rBezier.maControlPointB
+        );
+    }
+
+    // test if vectors are used
+    sal_Bool B2DCubicBezier::isBezier() const
+    {
+        if(maControlPointA != maStartPoint || maControlPointB != maEndPoint)
         {
+            return sal_True;
         }
 
-        B2DCubicBezier::B2DCubicBezier()
-        {
-        }
+        return sal_False;
+    }
 
-        B2DCubicBezier::B2DCubicBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rEnd)
-        :   maStartPoint(rStart),
-            maEndPoint(rEnd),
-            maControlPointA(rStart),
-            maControlPointB(rEnd)
-        {
-        }
-
-        B2DCubicBezier::B2DCubicBezier(const ::basegfx::point::B2DPoint& rStart, const ::basegfx::point::B2DPoint& rControlPointA,
-            const ::basegfx::point::B2DPoint& rControlPointB, const ::basegfx::point::B2DPoint& rEnd)
-        :   maStartPoint(rStart),
-            maEndPoint(rEnd),
-            maControlPointA(rControlPointA),
-            maControlPointB(rControlPointB)
-        {
-        }
-
-        B2DCubicBezier::~B2DCubicBezier()
-        {
-        }
-
-        // assignment operator
-        B2DCubicBezier& B2DCubicBezier::operator=(const B2DCubicBezier& rBezier)
-        {
-            maStartPoint = rBezier.maStartPoint;
-            maEndPoint = rBezier.maEndPoint;
-            maControlPointA = rBezier.maControlPointA;
-            maControlPointB = rBezier.maControlPointB;
-
-            return *this;
-        }
-
-        // compare operators
-        sal_Bool B2DCubicBezier::operator==(const B2DCubicBezier& rBezier) const
-        {
-            return (
-                maStartPoint == rBezier.maStartPoint
-                && maEndPoint == rBezier.maEndPoint
-                && maControlPointA == rBezier.maControlPointA
-                && maControlPointB == rBezier.maControlPointB
-            );
-        }
-
-        sal_Bool B2DCubicBezier::operator!=(const B2DCubicBezier& rBezier) const
-        {
-            return (
-                maStartPoint != rBezier.maStartPoint
-                || maEndPoint != rBezier.maEndPoint
-                || maControlPointA != rBezier.maControlPointA
-                || maControlPointB != rBezier.maControlPointB
-            );
-        }
-
-        // test if vectors are used
-        sal_Bool B2DCubicBezier::isBezier() const
-        {
-            if(maControlPointA != maStartPoint || maControlPointB != maEndPoint)
-            {
-                return sal_True;
-            }
-
-            return sal_False;
-        }
-
-        void B2DCubicBezier::testAndSolveTrivialBezier()
-        {
-            // TODO
-        }
-
-    } // end of namespace curve
+    void B2DCubicBezier::testAndSolveTrivialBezier()
+    {
+        // TODO
+    }
 } // end of namespace basegfx
 
 // eof

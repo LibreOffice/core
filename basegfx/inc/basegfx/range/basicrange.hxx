@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:30:28 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,103 +75,100 @@
 
 namespace basegfx
 {
-    namespace range
+    class BasicRange
     {
-        class BasicRange
+    protected:
+        double                                      mfMinimum;
+        double                                      mfMaximum;
+
+    public:
+        void reset()
         {
-        protected:
-            double                                      mfMinimum;
-            double                                      mfMaximum;
+            mfMinimum = START_MINIMUM_VALUE;
+            mfMaximum = START_MAXIMUM_VALUE;
+        }
 
-        public:
-            void reset()
+        sal_Bool isEmpty() const
+        {
+            return sal_Bool(START_MINIMUM_VALUE == mfMinimum && START_MAXIMUM_VALUE == mfMaximum);
+        }
+
+        double getMinimum() const { return mfMinimum; }
+        double getMaximum() const { return mfMaximum; }
+
+        double getRange() const
+        {
+            return (mfMaximum - mfMinimum);
+        }
+
+        double getCenter() const
+        {
+            return ((mfMaximum + mfMinimum) / 2.0);
+        }
+
+        sal_Bool isInside(double fValue) const
+        {
+            return sal_Bool((fValue >= mfMinimum) && (fValue <= mfMaximum));
+        }
+
+        sal_Bool isInside(const BasicRange& rRange) const
+        {
+            return sal_Bool((rRange.getMinimum() >= mfMinimum) && (rRange.getMaximum() <= mfMaximum));
+        }
+
+        sal_Bool overlaps(const BasicRange& rRange) const
+        {
+            return !sal_Bool((rRange.getMaximum() < mfMinimum) || (rRange.getMinimum() > mfMaximum));
+        }
+
+        BasicRange()
+        :   mfMinimum(START_MINIMUM_VALUE),
+            mfMaximum(START_MAXIMUM_VALUE)
+        {
+        }
+        BasicRange(double fStartValue)
+        :   mfMinimum(fStartValue),
+            mfMaximum(fStartValue)
+        {
+        }
+        BasicRange(const BasicRange& rRange)
+        :   mfMinimum(rRange.getMinimum()),
+            mfMaximum(rRange.getMaximum())
+        {
+        }
+
+        void operator=(const BasicRange& rRange)
+        {
+            mfMinimum = rRange.getMinimum();
+            mfMaximum = rRange.getMaximum();
+        }
+
+        void expand(double fValue)
+        {
+            if(fValue < mfMinimum)
             {
-                mfMinimum = START_MINIMUM_VALUE;
-                mfMaximum = START_MAXIMUM_VALUE;
+                mfMinimum = fValue;
             }
 
-            sal_Bool isEmpty() const
+            if(fValue > mfMaximum)
             {
-                return sal_Bool(START_MINIMUM_VALUE == mfMinimum && START_MAXIMUM_VALUE == mfMaximum);
+                mfMaximum = fValue;
             }
+        }
 
-            double getMinimum() const { return mfMinimum; }
-            double getMaximum() const { return mfMaximum; }
-
-            double getRange() const
-            {
-                return (mfMaximum - mfMinimum);
-            }
-
-            double getCenter() const
-            {
-                return ((mfMaximum + mfMinimum) / 2.0);
-            }
-
-            sal_Bool isInside(double fValue) const
-            {
-                return sal_Bool((fValue >= mfMinimum) && (fValue <= mfMaximum));
-            }
-
-            sal_Bool isInside(const BasicRange& rRange) const
-            {
-                return sal_Bool((rRange.getMinimum() >= mfMinimum) && (rRange.getMaximum() <= mfMaximum));
-            }
-
-            sal_Bool overlaps(const BasicRange& rRange) const
-            {
-                return !sal_Bool((rRange.getMaximum() < mfMinimum) || (rRange.getMinimum() > mfMaximum));
-            }
-
-            BasicRange()
-            :   mfMinimum(START_MINIMUM_VALUE),
-                mfMaximum(START_MAXIMUM_VALUE)
-            {
-            }
-            BasicRange(double fStartValue)
-            :   mfMinimum(fStartValue),
-                mfMaximum(fStartValue)
-            {
-            }
-            BasicRange(const BasicRange& rRange)
-            :   mfMinimum(rRange.getMinimum()),
-                mfMaximum(rRange.getMaximum())
-            {
-            }
-
-            void operator=(const BasicRange& rRange)
+        void expand(const BasicRange& rRange)
+        {
+            if(rRange.getMinimum() < mfMinimum)
             {
                 mfMinimum = rRange.getMinimum();
+            }
+
+            if(rRange.getMaximum() > mfMaximum)
+            {
                 mfMaximum = rRange.getMaximum();
             }
-
-            void expand(double fValue)
-            {
-                if(fValue < mfMinimum)
-                {
-                    mfMinimum = fValue;
-                }
-
-                if(fValue > mfMaximum)
-                {
-                    mfMaximum = fValue;
-                }
-            }
-
-            void expand(const BasicRange& rRange)
-            {
-                if(rRange.getMinimum() < mfMinimum)
-                {
-                    mfMinimum = rRange.getMinimum();
-                }
-
-                if(rRange.getMaximum() > mfMaximum)
-                {
-                    mfMaximum = rRange.getMaximum();
-                }
-            }
-        };
-    } // end of namespace range
+        }
+    };
 } // end of namespace basegfx
 
 #endif _BGFX_RANGE_BASICRANGE_HXX

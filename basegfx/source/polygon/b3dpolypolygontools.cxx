@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:31:41 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,26 +87,37 @@
 
 namespace basegfx
 {
-    namespace polygon
+    namespace tools
     {
-        namespace tools
+        // B3DPolyPolygon tools
+        ::basegfx::B3DRange getRange(const ::basegfx::B3DPolyPolygon& rCandidate)
         {
-            // B3DPolyPolygon tools
-            ::basegfx::range::B3DRange getRange(const ::basegfx::polygon::B3DPolyPolygon& rCandidate)
+            ::basegfx::B3DRange aRetval;
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
             {
-                ::basegfx::range::B3DRange aRetval;
-                const sal_uInt32 nPolygonCount(rCandidate.count());
-
-                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
-                {
-                    ::basegfx::polygon::B3DPolygon aCandidate = rCandidate.getB3DPolygon(a);
-                    aRetval.expand(::basegfx::polygon::tools::getRange(aCandidate));
-                }
-
-                return aRetval;
+                ::basegfx::B3DPolygon aCandidate = rCandidate.getB3DPolygon(a);
+                aRetval.expand(::basegfx::tools::getRange(aCandidate));
             }
-        } // end of namespace tools
-    } // end of namespace polygon
+
+            return aRetval;
+        }
+
+        ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
+        {
+            ::basegfx::B3DPolyPolygon aRetval;
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                ::basegfx::B3DPolygon aCandidate = rCandidate.getB3DPolygon(a);
+                aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
+            }
+
+            return aRetval;
+        }
+    } // end of namespace tools
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygontools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:29:20 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,68 +70,67 @@
 #include <basegfx/vector/b3dvector.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b3dpolypolygon.hxx>
+#endif
+
+#include <vector>
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
     // predefinitions
-    namespace polygon
+    class B3DPolygon;
+    class B3DRange;
+
+    namespace tools
     {
-        class B3DPolygon;
-    } // end of namespace polygon
+        // B3DPolygon tools
 
-    // predefinitions
-    namespace range
-    {
-        class B3DRange;
-    } // end of namespace range
+        /** Check if given polygon is closed. This is kind of a
+            'classic' method to support old polygon definitions.
+            Those old polygon definitions define the closed state
+            of the polygon using identical start and endpoints. This
+            method corrects this (removes double start/end points)
+            and sets the Closed()-state of the polygon correctly.
+        */
+        void checkClosed(::basegfx::B3DPolygon& rCandidate);
 
-    namespace polygon
-    {
-        namespace tools
-        {
-            // B3DPolygon tools
+        // Get successor and predecessor indices. Returning the same index means there
+        // is none. Same for successor.
+        sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
+        sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
 
-            /** Check if given polygon is closed. This is kind of a
-                'classic' method to support old polygon definitions.
-                Those old polygon definitions define the closed state
-                of the polygon using identical start and endpoints. This
-                method corrects this (removes double start/end points)
-                and sets the Closed()-state of the polygon correctly.
-            */
-            void checkClosed(::basegfx::polygon::B3DPolygon& rCandidate);
+        // Get index of first different predecessor. Returning the same index means there
+        // is none. Same for successor.
+        sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
+        sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::B3DPolygon& rCandidate);
 
-            // Get successor and predecessor indices. Returning the same index means there
-            // is none. Same for successor.
-            sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B3DPolygon& rCandidate);
-            sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B3DPolygon& rCandidate);
+        // get size of polygon. Control vectors are included in that ranges.
+        ::basegfx::B3DRange getRange(const ::basegfx::B3DPolygon& rCandidate);
 
-            // Get index of first different predecessor. Returning the same index means there
-            // is none. Same for successor.
-            sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B3DPolygon& rCandidate);
-            sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B3DPolygon& rCandidate);
+        // get length of polygon edge from point nIndex to nIndex + 1
+        double getEdgeLength(const ::basegfx::B3DPolygon& rCandidate, sal_uInt32 nIndex);
 
-            // get size of polygon. Control vectors are included in that ranges.
-            ::basegfx::range::B3DRange getRange(const ::basegfx::polygon::B3DPolygon& rCandidate);
+        // get length of polygon
+        double getLength(const ::basegfx::B3DPolygon& rCandidate);
 
-            // get length of polygon edge from point nIndex to nIndex + 1
-            double getEdgeLength(const ::basegfx::polygon::B3DPolygon& rCandidate, sal_uInt32 nIndex);
+        // get position on polygon for absolute given distance. If
+        // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
+        // using getLength(...)
+        ::basegfx::B3DPoint getPositionAbsolute(const ::basegfx::B3DPolygon& rCandidate, double fDistance, double fLength = 0.0);
 
-            // get length of polygon
-            double getLength(const ::basegfx::polygon::B3DPolygon& rCandidate);
+        // get position on polygon for relative given distance in range [0.0 .. 1.0]. If
+        // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
+        // using getLength(...)
+        ::basegfx::B3DPoint getPositionRelative(const ::basegfx::B3DPolygon& rCandidate, double fDistance, double fLength = 0.0);
 
-            // get position on polygon for absolute given distance. If
-            // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
-            // using getLength(...)
-            ::basegfx::point::B3DPoint getPositionAbsolute(const ::basegfx::polygon::B3DPolygon& rCandidate, double fDistance, double fLength = 0.0);
+        // Apply Line Dashing. This cuts the Polygon into line pieces
+        // which are inserted as single polygons into the result.
+        ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen);
 
-            // get position on polygon for relative given distance in range [0.0 .. 1.0]. If
-            // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
-            // using getLength(...)
-            ::basegfx::point::B3DPoint getPositionRelative(const ::basegfx::polygon::B3DPolygon& rCandidate, double fDistance, double fLength = 0.0);
-
-        } // end of namespace tools
-    } // end of namespace polygon
+    } // end of namespace tools
 } // end of namespace basegfx
 
 #endif //   _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX

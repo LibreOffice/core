@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-26 14:40:11 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
 #endif
@@ -91,925 +95,993 @@
 
 namespace basegfx
 {
-    namespace polygon
+    namespace tools
     {
-        namespace tools
+        // B2DPolygon tools
+        void checkClosed(B2DPolygon& rCandidate)
         {
-            // B2DPolygon tools
-            void checkClosed(polygon::B2DPolygon& rCandidate)
+            while(rCandidate.count() > 1L
+                && rCandidate.getB2DPoint(0L).equal(rCandidate.getB2DPoint(rCandidate.count() - 1L)))
             {
-                while(rCandidate.count() > 1L
-                    && rCandidate.getB2DPoint(0L).equal(rCandidate.getB2DPoint(rCandidate.count() - 1L)))
-                {
-                    rCandidate.setClosed(sal_True);
-                    rCandidate.remove(rCandidate.count() - 1L);
-                }
+                rCandidate.setClosed(sal_True);
+                rCandidate.remove(rCandidate.count() - 1L);
             }
+        }
 
-            // Get index of outmost point (e.g. biggest X and biggest Y)
-            sal_uInt32 getIndexOfOutmostPoint(const ::basegfx::polygon::B2DPolygon& rCandidate)
+        // Get index of outmost point (e.g. biggest X and biggest Y)
+        sal_uInt32 getIndexOfOutmostPoint(const ::basegfx::B2DPolygon& rCandidate)
+        {
+            sal_uInt32 nRetval(0L);
+
+            if(rCandidate.count())
             {
-                sal_uInt32 nRetval(0L);
+                ::basegfx::B2DPoint aOutmostPoint(rCandidate.getB2DPoint(0L));
 
-                if(rCandidate.count())
+                for(sal_uInt32 a(1L); a < rCandidate.count(); a++)
                 {
-                    ::basegfx::point::B2DPoint aOutmostPoint(rCandidate.getB2DPoint(0L));
+                    ::basegfx::B2DPoint rPoint(rCandidate.getB2DPoint(a));
 
-                    for(sal_uInt32 a(1L); a < rCandidate.count(); a++)
+                    if(::basegfx::fTools::more(rPoint.getX(), aOutmostPoint.getX()))
                     {
-                        ::basegfx::point::B2DPoint rPoint(rCandidate.getB2DPoint(a));
-
-                        if(::basegfx::numeric::fTools::more(rPoint.getX(), aOutmostPoint.getX()))
+                        nRetval = a;
+                        aOutmostPoint = rPoint;
+                    }
+                    else
+                    {
+                        if(::basegfx::fTools::more(rPoint.getY(), aOutmostPoint.getY()))
                         {
                             nRetval = a;
                             aOutmostPoint = rPoint;
                         }
-                        else
-                        {
-                            if(::basegfx::numeric::fTools::more(rPoint.getY(), aOutmostPoint.getY()))
-                            {
-                                nRetval = a;
-                                aOutmostPoint = rPoint;
-                            }
-                        }
                     }
                 }
-
-                return nRetval;
             }
 
-            // Get successor and predecessor indices. Returning the same index means there
-            // is none. Same for successor.
-            sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
-            {
-                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+            return nRetval;
+        }
 
-                if(nIndex)
+        // Get successor and predecessor indices. Returning the same index means there
+        // is none. Same for successor.
+        sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate)
+        {
+            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
+            if(nIndex)
+            {
+                return nIndex - 1L;
+            }
+            else if(rCandidate.count())
+            {
+                return rCandidate.count() - 1L;
+            }
+            else
+            {
+                return nIndex;
+            }
+        }
+
+        sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate)
+        {
+            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
+            if(nIndex + 1L < rCandidate.count())
+            {
+                return nIndex + 1L;
+            }
+            else
+            {
+                return 0L;
+            }
+        }
+
+        sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate)
+        {
+            sal_uInt32 nNewIndex(nIndex);
+            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
+            if(rCandidate.count() > 1)
+            {
+                nNewIndex = getIndexOfPredecessor(nIndex, rCandidate);
+                ::basegfx::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
+
+                while(nNewIndex != nIndex
+                    && aPoint.equal(rCandidate.getB2DPoint(nNewIndex)))
                 {
-                    return nIndex - 1L;
-                }
-                else if(rCandidate.count())
-                {
-                    return rCandidate.count() - 1L;
-                }
-                else
-                {
-                    return nIndex;
+                    nNewIndex = getIndexOfPredecessor(nNewIndex, rCandidate);
                 }
             }
 
-            sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
-            {
-                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+            return nNewIndex;
+        }
 
-                if(nIndex + 1L < rCandidate.count())
+        sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate)
+        {
+            sal_uInt32 nNewIndex(nIndex);
+            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
+            if(rCandidate.count() > 1)
+            {
+                nNewIndex = getIndexOfSuccessor(nIndex, rCandidate);
+                ::basegfx::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
+
+                while(nNewIndex != nIndex
+                    && aPoint.equal(rCandidate.getB2DPoint(nNewIndex)))
                 {
-                    return nIndex + 1L;
-                }
-                else
-                {
-                    return 0L;
+                    nNewIndex = getIndexOfSuccessor(nNewIndex, rCandidate);
                 }
             }
 
-            sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
+            return nNewIndex;
+        }
+
+        ::basegfx::B2DVectorOrientation getOrientation(const ::basegfx::B2DPolygon& rCandidate)
+        {
+            ::basegfx::B2DVectorOrientation eRetval(::basegfx::ORIENTATION_NEUTRAL);
+
+            if(rCandidate.count() > 2)
             {
-                sal_uInt32 nNewIndex(nIndex);
-                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
-
-                if(rCandidate.count() > 1)
-                {
-                    nNewIndex = getIndexOfPredecessor(nIndex, rCandidate);
-                    ::basegfx::point::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
-
-                    while(nNewIndex != nIndex
-                        && aPoint.equal(rCandidate.getB2DPoint(nNewIndex)))
-                    {
-                        nNewIndex = getIndexOfPredecessor(nNewIndex, rCandidate);
-                    }
-                }
-
-                return nNewIndex;
+                sal_uInt32 nIndex = getIndexOfOutmostPoint(rCandidate);
+                eRetval = getPointOrientation(rCandidate, nIndex);
             }
 
-            sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
+            return eRetval;
+        }
+
+        ::basegfx::B2DVectorContinuity getContinuityInPoint(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nIndex)
+        {
+            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+            ::basegfx::B2DVectorContinuity eRetval(::basegfx::CONTINUITY_NONE);
+
+            if(rCandidate.count() > 1L && rCandidate.areControlPointsUsed())
             {
-                sal_uInt32 nNewIndex(nIndex);
-                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                sal_uInt32 nPrevInd(getIndexOfPredecessor(nIndex, rCandidate));
+                const ::basegfx::B2DVector aForwardVector(rCandidate.getControlVectorA(nIndex));
+                const ::basegfx::B2DVector aBackVector(rCandidate.getControlVectorB(nPrevInd));
 
-                if(rCandidate.count() > 1)
-                {
-                    nNewIndex = getIndexOfSuccessor(nIndex, rCandidate);
-                    ::basegfx::point::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
-
-                    while(nNewIndex != nIndex
-                        && aPoint.equal(rCandidate.getB2DPoint(nNewIndex)))
-                    {
-                        nNewIndex = getIndexOfSuccessor(nNewIndex, rCandidate);
-                    }
-                }
-
-                return nNewIndex;
+                eRetval = ::basegfx::getContinuity(aBackVector, aForwardVector);
             }
 
-            ::basegfx::vector::B2DVectorOrientation getOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate)
+            return eRetval;
+        }
+
+        ::basegfx::B2DPolygon adaptiveSubdivideByDistance(const ::basegfx::B2DPolygon& rCandidate, double fDistanceBound)
+        {
+            ::basegfx::B2DPolygon aRetval(rCandidate);
+
+            if(aRetval.areControlPointsUsed())
             {
-                ::basegfx::vector::B2DVectorOrientation eRetval(::basegfx::vector::ORIENTATION_NEUTRAL);
-
-                if(rCandidate.count() > 2)
-                {
-                    sal_uInt32 nIndex = getIndexOfOutmostPoint(rCandidate);
-                    eRetval = getPointOrientation(rCandidate, nIndex);
-                }
-
-                return eRetval;
-            }
-
-            ::basegfx::vector::B2DVectorContinuity getContinuityInPoint(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
-            {
-                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
-                ::basegfx::vector::B2DVectorContinuity eRetval(::basegfx::vector::CONTINUITY_NONE);
-
-                if(rCandidate.count() > 1L && rCandidate.areControlPointsUsed())
-                {
-                    sal_uInt32 nPrevInd(getIndexOfPredecessor(nIndex, rCandidate));
-                    const ::basegfx::vector::B2DVector aForwardVector(rCandidate.getControlVectorA(nIndex));
-                    const ::basegfx::vector::B2DVector aBackVector(rCandidate.getControlVectorB(nPrevInd));
-
-                    eRetval = ::basegfx::vector::getContinuity(aBackVector, aForwardVector);
-                }
-
-                return eRetval;
-            }
-
-            ::basegfx::polygon::B2DPolygon adaptiveSubdivideByDistance(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistanceBound)
-            {
-                ::basegfx::polygon::B2DPolygon aRetval(rCandidate);
-
-                if(aRetval.areControlPointsUsed())
-                {
-                    const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
-                    aRetval.clear();
-
-                    for(sal_uInt32 a(0L); a < nPointCount; a++)
-                    {
-                        const ::basegfx::vector::B2DVector aVectorA(rCandidate.getControlVectorA(a));
-                        const ::basegfx::vector::B2DVector aVectorB(rCandidate.getControlVectorB(a));
-
-                        if(!aVectorA.equalZero() || !aVectorB.equalZero())
-                        {
-                            // vectors are used, get points
-                            const sal_uInt32 nNext(getIndexOfSuccessor(a, rCandidate));
-                            ::basegfx::point::B2DPoint aPointA(rCandidate.getB2DPoint(a));
-                            ::basegfx::point::B2DPoint aPointB(rCandidate.getB2DPoint(nNext));
-
-                            // build CubicBezier segment
-                            ::basegfx::curve::B2DCubicBezier aBezier(
-                                aPointA, aPointA + aVectorA, aPointB + aVectorB, aPointB);
-
-                            // generate DistanceBound
-                            double fBound;
-
-                            if(0.0 == fDistanceBound)
-                            {
-                                // If not set, calculate rough length of bezier segment by taking
-                                // half of the sum of the edge and the control polygon
-                                ::basegfx::vector::B2DVector aSimpleDistance(aPointB - aPointA);
-                                ::basegfx::vector::B2DVector aTripleDistanceTop((aPointB + aVectorB) - (aPointA + aVectorA));
-                                const double fRoughLength(
-                                    (aSimpleDistance.getLength()
-                                    + (aVectorA.getLength() + aVectorB.getLength() + aTripleDistanceTop.getLength())) / 2.0);
-
-                                // take 1/100th of the rouch curve length
-                                fBound = fRoughLength * 0.01;
-                            }
-                            else
-                            {
-                                // use given bound value
-                                fBound = fDistanceBound;
-                            }
-
-                            // make sure bound value is not too small. The base units are 1/100th mm, thus
-                            // just make sure it's not smaller then 1/100th of that
-                            if(fBound < 0.01)
-                            {
-                                fBound = 0.01;
-                            }
-
-                            // call adaptive subdivide
-                            ::basegfx::curve::adaptiveSubdivideByDistance(aRetval, aBezier, fBound);
-                        }
-                        else
-                        {
-                            // no vectors used, add point
-                            aRetval.append(rCandidate.getB2DPoint(a));
-                        }
-                    }
-
-                    // check closed flag, aRetval was cleared and thus it may be invalid.
-                    if(aRetval.isClosed() != rCandidate.isClosed())
-                    {
-                        aRetval.setClosed(rCandidate.isClosed());
-                    }
-                }
-
-                return aRetval;
-            }
-
-            ::basegfx::polygon::B2DPolygon adaptiveSubdivideByAngle(const ::basegfx::polygon::B2DPolygon& rCandidate, double fAngleBound)
-            {
-                ::basegfx::polygon::B2DPolygon aRetval(rCandidate);
-
-                if(aRetval.areControlPointsUsed())
-                {
-                    const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
-                    aRetval.clear();
-
-                    for(sal_uInt32 a(0L); a < nPointCount; a++)
-                    {
-                        const ::basegfx::vector::B2DVector aVectorA(rCandidate.getControlVectorA(a));
-                        const ::basegfx::vector::B2DVector aVectorB(rCandidate.getControlVectorB(a));
-
-                        if(!aVectorA.equalZero() || !aVectorB.equalZero())
-                        {
-                            // vectors are used, get points
-                            const sal_uInt32 nNext(getIndexOfSuccessor(a, rCandidate));
-                            ::basegfx::point::B2DPoint aPointA(rCandidate.getB2DPoint(a));
-                            ::basegfx::point::B2DPoint aPointB(rCandidate.getB2DPoint(nNext));
-
-                            // build CubicBezier segment
-                            ::basegfx::curve::B2DCubicBezier aBezier(
-                                aPointA, aPointA + aVectorA, aPointB + aVectorB, aPointB);
-
-                            // generate AngleBound
-                            double fBound(fAngleBound);
-
-                            // make sure angle bound is not too small
-                            if(::basegfx::numeric::fTools::less(fAngleBound, 0.1))
-                            {
-                                fAngleBound = 0.1;
-                            }
-
-                            // call adaptive subdivide
-                            ::basegfx::curve::adaptiveSubdivideByAngle(aRetval, aBezier, fBound);
-                        }
-                        else
-                        {
-                            // no vectors used, add point
-                            aRetval.append(rCandidate.getB2DPoint(a));
-                        }
-                    }
-
-                    // check closed flag, aRetval was cleared and thus it may be invalid.
-                    if(aRetval.isClosed() != rCandidate.isClosed())
-                    {
-                        aRetval.setClosed(rCandidate.isClosed());
-                    }
-                }
-
-                return aRetval;
-            }
-
-            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint, sal_Bool bWithBorder)
-            {
-                sal_Bool bRetval(sal_False);
-                const sal_uInt32 nPointCount(rCandidate.count());
+                const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+                aRetval.clear();
 
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
-                    const ::basegfx::point::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
+                    const ::basegfx::B2DVector aVectorA(rCandidate.getControlVectorA(a));
+                    const ::basegfx::B2DVector aVectorB(rCandidate.getControlVectorB(a));
 
-                    if(bWithBorder && aCurrentPoint.equal(rPoint))
+                    if(!aVectorA.equalZero() || !aVectorB.equalZero())
                     {
-                        return sal_True;
-                    }
+                        // vectors are used, get points
+                        const sal_uInt32 nNext(getIndexOfSuccessor(a, rCandidate));
+                        ::basegfx::B2DPoint aPointA(rCandidate.getB2DPoint(a));
+                        ::basegfx::B2DPoint aPointB(rCandidate.getB2DPoint(nNext));
 
-                    // cross-over in Y?
-                    const ::basegfx::point::B2DPoint aPreviousPoint(rCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
-                    const sal_Bool bCompYA(::basegfx::numeric::fTools::more(aPreviousPoint.getY(), rPoint.getY()));
-                    const sal_Bool bCompYB(::basegfx::numeric::fTools::more(aCurrentPoint.getY(), rPoint.getY()));
+                        // build CubicBezier segment
+                        ::basegfx::B2DCubicBezier aBezier(
+                            aPointA, aPointA + aVectorA, aPointB + aVectorB, aPointB);
 
-                    if(bCompYA != bCompYB)
-                    {
-                        const sal_Bool bCompXA(::basegfx::numeric::fTools::more(aPreviousPoint.getX(), rPoint.getX()));
-                        const sal_Bool bCompXB(::basegfx::numeric::fTools::more(aCurrentPoint.getX(), rPoint.getX()));
+                        // generate DistanceBound
+                        double fBound;
 
-                        if(bCompXA == bCompXB)
+                        if(0.0 == fDistanceBound)
                         {
-                            if(bCompXA)
-                            {
-                                bRetval = !bRetval;
-                            }
+                            // If not set, calculate rough length of bezier segment by taking
+                            // half of the sum of the edge and the control polygon
+                            ::basegfx::B2DVector aSimpleDistance(aPointB - aPointA);
+                            ::basegfx::B2DVector aTripleDistanceTop((aPointB + aVectorB) - (aPointA + aVectorA));
+                            const double fRoughLength(
+                                (aSimpleDistance.getLength()
+                                + (aVectorA.getLength() + aVectorB.getLength() + aTripleDistanceTop.getLength())) / 2.0);
+
+                            // take 1/100th of the rouch curve length
+                            fBound = fRoughLength * 0.01;
                         }
                         else
                         {
-                            const double fCompare =
-                                aCurrentPoint.getX() - (aCurrentPoint.getY() - rPoint.getY()) *
-                                (aPreviousPoint.getX() - aCurrentPoint.getX()) /
-                                (aPreviousPoint.getY() - aCurrentPoint.getY());
-
-                            if(bWithBorder && ::basegfx::numeric::fTools::more(fCompare, rPoint.getX()))
-                            {
-                                bRetval = !bRetval;
-                            }
-                            else if(::basegfx::numeric::fTools::moreOrEqual(fCompare, rPoint.getX()))
-                            {
-                                bRetval = !bRetval;
-                            }
+                            // use given bound value
+                            fBound = fDistanceBound;
                         }
+
+                        // make sure bound value is not too small. The base units are 1/100th mm, thus
+                        // just make sure it's not smaller then 1/100th of that
+                        if(fBound < 0.01)
+                        {
+                            fBound = 0.01;
+                        }
+
+                        // call adaptive subdivide
+                        ::basegfx::adaptiveSubdivideByDistance(aRetval, aBezier, fBound);
+                    }
+                    else
+                    {
+                        // no vectors used, add point
+                        aRetval.append(rCandidate.getB2DPoint(a));
                     }
                 }
 
-                return bRetval;
+                // check closed flag, aRetval was cleared and thus it may be invalid.
+                if(aRetval.isClosed() != rCandidate.isClosed())
+                {
+                    aRetval.setClosed(rCandidate.isClosed());
+                }
             }
 
-            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::polygon::B2DPolygon& rPolygon, sal_Bool bWithBorder)
+            return aRetval;
+        }
+
+        ::basegfx::B2DPolygon adaptiveSubdivideByAngle(const ::basegfx::B2DPolygon& rCandidate, double fAngleBound)
+        {
+            ::basegfx::B2DPolygon aRetval(rCandidate);
+
+            if(aRetval.areControlPointsUsed())
             {
-                const sal_uInt32 nPointCount(rPolygon.count());
+                const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+                aRetval.clear();
 
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
-                    const ::basegfx::point::B2DPoint aTestPoint(rPolygon.getB2DPoint(a));
+                    const ::basegfx::B2DVector aVectorA(rCandidate.getControlVectorA(a));
+                    const ::basegfx::B2DVector aVectorB(rCandidate.getControlVectorB(a));
 
-                    if(!isInside(rCandidate, aTestPoint, bWithBorder))
+                    if(!aVectorA.equalZero() || !aVectorB.equalZero())
                     {
-                        return sal_False;
+                        // vectors are used, get points
+                        const sal_uInt32 nNext(getIndexOfSuccessor(a, rCandidate));
+                        ::basegfx::B2DPoint aPointA(rCandidate.getB2DPoint(a));
+                        ::basegfx::B2DPoint aPointB(rCandidate.getB2DPoint(nNext));
+
+                        // build CubicBezier segment
+                        ::basegfx::B2DCubicBezier aBezier(
+                            aPointA, aPointA + aVectorA, aPointB + aVectorB, aPointB);
+
+                        // generate AngleBound
+                        double fBound(fAngleBound);
+
+                        // make sure angle bound is not too small
+                        if(::basegfx::fTools::less(fAngleBound, 0.1))
+                        {
+                            fAngleBound = 0.1;
+                        }
+
+                        // call adaptive subdivide
+                        ::basegfx::adaptiveSubdivideByAngle(aRetval, aBezier, fBound);
+                    }
+                    else
+                    {
+                        // no vectors used, add point
+                        aRetval.append(rCandidate.getB2DPoint(a));
                     }
                 }
 
-                return sal_True;
+                // check closed flag, aRetval was cleared and thus it may be invalid.
+                if(aRetval.isClosed() != rCandidate.isClosed())
+                {
+                    aRetval.setClosed(rCandidate.isClosed());
+                }
             }
 
-            ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolygon& rCandidate)
+            return aRetval;
+        }
+
+        sal_Bool isInside(const ::basegfx::B2DPolygon& rCandidate, const ::basegfx::B2DPoint& rPoint, sal_Bool bWithBorder)
+        {
+            sal_Bool bRetval(sal_False);
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPointCount; a++)
             {
-                ::basegfx::range::B2DRange aRetval;
-                const sal_uInt32 nPointCount(rCandidate.count());
+                const ::basegfx::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
 
-                if(rCandidate.areControlPointsUsed())
+                if(bWithBorder && aCurrentPoint.equal(rPoint))
                 {
-                    for(sal_uInt32 a(0L); a < nPointCount; a++)
+                    return sal_True;
+                }
+
+                // cross-over in Y?
+                const ::basegfx::B2DPoint aPreviousPoint(rCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
+                const sal_Bool bCompYA(::basegfx::fTools::more(aPreviousPoint.getY(), rPoint.getY()));
+                const sal_Bool bCompYB(::basegfx::fTools::more(aCurrentPoint.getY(), rPoint.getY()));
+
+                if(bCompYA != bCompYB)
+                {
+                    const sal_Bool bCompXA(::basegfx::fTools::more(aPreviousPoint.getX(), rPoint.getX()));
+                    const sal_Bool bCompXB(::basegfx::fTools::more(aCurrentPoint.getX(), rPoint.getX()));
+
+                    if(bCompXA == bCompXB)
                     {
-                        const ::basegfx::point::B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
-                        const ::basegfx::vector::B2DVector aVectorA(rCandidate.getControlVectorA(a));
-                        const ::basegfx::vector::B2DVector aVectorB(rCandidate.getControlVectorB(a));
-                        aRetval.expand(aTestPoint);
-
-                        if(!aVectorA.equalZero())
+                        if(bCompXA)
                         {
-                            aRetval.expand(aTestPoint + aVectorA);
+                            bRetval = !bRetval;
                         }
+                    }
+                    else
+                    {
+                        const double fCompare =
+                            aCurrentPoint.getX() - (aCurrentPoint.getY() - rPoint.getY()) *
+                            (aPreviousPoint.getX() - aCurrentPoint.getX()) /
+                            (aPreviousPoint.getY() - aCurrentPoint.getY());
 
-                        if(!aVectorB.equalZero())
+                        if(bWithBorder && ::basegfx::fTools::more(fCompare, rPoint.getX()))
                         {
-                            const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
-                            const ::basegfx::point::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                            aRetval.expand(aNextPoint + aVectorB);
+                            bRetval = !bRetval;
+                        }
+                        else if(::basegfx::fTools::moreOrEqual(fCompare, rPoint.getX()))
+                        {
+                            bRetval = !bRetval;
                         }
                     }
                 }
-                else
-                {
-                    for(sal_uInt32 a(0L); a < nPointCount; a++)
-                    {
-                        const ::basegfx::point::B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
-                        aRetval.expand(aTestPoint);
-                    }
-                }
-
-                return aRetval;
             }
 
-            double getArea(const ::basegfx::polygon::B2DPolygon& rCandidate)
+            return bRetval;
+        }
+
+        sal_Bool isInside(const ::basegfx::B2DPolygon& rCandidate, const ::basegfx::B2DPolygon& rPolygon, sal_Bool bWithBorder)
+        {
+            const sal_uInt32 nPointCount(rPolygon.count());
+
+            for(sal_uInt32 a(0L); a < nPointCount; a++)
             {
-                double fRetval(0.0);
-                const sal_uInt32 nPointCount(rCandidate.count());
+                const ::basegfx::B2DPoint aTestPoint(rPolygon.getB2DPoint(a));
 
-                if(nPointCount > 2)
+                if(!isInside(rCandidate, aTestPoint, bWithBorder))
                 {
-                    for(sal_uInt32 a(0L); a < nPointCount; a++)
-                    {
-                        const ::basegfx::point::B2DPoint aPreviousPoint(rCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
-                        const ::basegfx::point::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
-
-                        fRetval += aPreviousPoint.getX() * aCurrentPoint.getY();
-                        fRetval -= aPreviousPoint.getY() * aCurrentPoint.getX();
-                    }
-
-                    fRetval /= 2.0;
-
-                    const double fZero(0.0);
-
-                    if(::basegfx::numeric::fTools::less(fRetval, fZero))
-                    {
-                        fRetval = -fRetval;
-                    }
+                    return sal_False;
                 }
-
-                return fRetval;
             }
 
-            double getEdgeLength(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
-            {
-                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
-                double fRetval(0.0);
-                const sal_uInt32 nPointCount(rCandidate.count());
+            return sal_True;
+        }
 
-                if(nIndex < nPointCount)
+        ::basegfx::B2DRange getRange(const ::basegfx::B2DPolygon& rCandidate)
+        {
+            ::basegfx::B2DRange aRetval;
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(rCandidate.areControlPointsUsed())
+            {
+                for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
-                    if(rCandidate.isClosed() || nIndex + 1 != nPointCount)
+                    const ::basegfx::B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
+                    const ::basegfx::B2DVector aVectorA(rCandidate.getControlVectorA(a));
+                    const ::basegfx::B2DVector aVectorB(rCandidate.getControlVectorB(a));
+                    aRetval.expand(aTestPoint);
+
+                    if(!aVectorA.equalZero())
                     {
-                        const sal_uInt32 nNextIndex(nIndex + 1 == nPointCount ? 0L : nIndex + 1L);
-                        const ::basegfx::point::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(nIndex));
-                        const ::basegfx::point::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                        const ::basegfx::vector::B2DVector aVector(aNextPoint - aCurrentPoint);
-                        fRetval = aVector.getLength();
+                        aRetval.expand(aTestPoint + aVectorA);
+                    }
+
+                    if(!aVectorB.equalZero())
+                    {
+                        const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
+                        const ::basegfx::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
+                        aRetval.expand(aNextPoint + aVectorB);
                     }
                 }
-
-                return fRetval;
+            }
+            else
+            {
+                for(sal_uInt32 a(0L); a < nPointCount; a++)
+                {
+                    const ::basegfx::B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
+                    aRetval.expand(aTestPoint);
+                }
             }
 
-            double getLength(const ::basegfx::polygon::B2DPolygon& rCandidate)
+            return aRetval;
+        }
+
+        double getArea(const ::basegfx::B2DPolygon& rCandidate)
+        {
+            double fRetval(0.0);
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount > 2)
             {
-                // This method may also be implemented using a loop over getEdgeLength, but
-                // since this would cause a lot of sqare roots to be solved it is much better
-                // to sum up the quadrats first and then use a singe suare root (if necessary)
-                double fRetval(0.0);
-                const sal_uInt32 nPointCount(rCandidate.count());
-                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
-
-                for(sal_uInt32 a(0L); a < nLoopCount; a++)
+                for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
-                    const sal_uInt32 nNextIndex(a + 1 == nPointCount ? 0L : a + 1L);
-                    const ::basegfx::point::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
-                    const ::basegfx::point::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                    const ::basegfx::vector::B2DVector aVector(aNextPoint - aCurrentPoint);
-                    fRetval += aVector.scalar(aVector);
+                    const ::basegfx::B2DPoint aPreviousPoint(rCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
+                    const ::basegfx::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
+
+                    fRetval += aPreviousPoint.getX() * aCurrentPoint.getY();
+                    fRetval -= aPreviousPoint.getY() * aCurrentPoint.getX();
                 }
 
-                if(!::basegfx::numeric::fTools::equalZero(fRetval))
+                fRetval /= 2.0;
+
+                const double fZero(0.0);
+
+                if(::basegfx::fTools::less(fRetval, fZero))
                 {
-                    const double fOne(1.0);
-
-                    if(!::basegfx::numeric::fTools::equal(fOne, fRetval))
-                    {
-                        fRetval = sqrt(fRetval);
-                    }
+                    fRetval = -fRetval;
                 }
-
-                return fRetval;
             }
 
-            ::basegfx::point::B2DPoint getPositionAbsolute(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistance, double fLength)
+            return fRetval;
+        }
+
+        double getEdgeLength(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nIndex)
+        {
+            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+            double fRetval(0.0);
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nIndex < nPointCount)
             {
-                ::basegfx::point::B2DPoint aRetval;
-                const sal_uInt32 nPointCount(rCandidate.count());
-
-                if(nPointCount > 1L)
+                if(rCandidate.isClosed() || nIndex + 1 != nPointCount)
                 {
-                    sal_uInt32 nIndex(0L);
-                    sal_Bool bIndexDone(sal_False);
-                    const double fZero(0.0);
-                    double fEdgeLength(fZero);
-
-                    // get length if not given
-                    if(::basegfx::numeric::fTools::equalZero(fLength))
-                    {
-                        fLength = getLength(rCandidate);
-                    }
-
-                    // handle fDistance < 0.0
-                    if(::basegfx::numeric::fTools::less(fDistance, fZero))
-                    {
-                        if(rCandidate.isClosed())
-                        {
-                            // if fDistance < 0.0 increment with multiple of fLength
-                            sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
-                            fDistance += double(nCount + 1L) * fLength;
-                        }
-                        else
-                        {
-                            // crop to polygon start
-                            fDistance = fZero;
-                            bIndexDone = sal_True;
-                        }
-                    }
-
-                    // handle fDistance >= fLength
-                    if(::basegfx::numeric::fTools::moreOrEqual(fDistance, fLength))
-                    {
-                        if(rCandidate.isClosed())
-                        {
-                            // if fDistance >= fLength decrement with multiple of fLength
-                            sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
-                            fDistance -= (double)(nCount) * fLength;
-                        }
-                        else
-                        {
-                            // crop to polygon end
-                            fDistance = fZero;
-                            nIndex = nPointCount - 1L;
-                            bIndexDone = sal_True;
-                        }
-                    }
-
-                    // look for correct index. fDistance is now [0.0 .. fLength[
-                    if(!bIndexDone)
-                    {
-                        do
-                        {
-                            // get length of next edge
-                            fEdgeLength = getEdgeLength(rCandidate, nIndex);
-
-                            if(::basegfx::numeric::fTools::moreOrEqual(fDistance, fEdgeLength))
-                            {
-                                // go to next edge
-                                fDistance -= fEdgeLength;
-                                nIndex++;
-                            }
-                            else
-                            {
-                                // it's on this edge, stop
-                                bIndexDone = sal_True;
-                            }
-                        } while (!bIndexDone);
-                    }
-
-                    // get the point using nIndex
-                    aRetval = rCandidate.getB2DPoint(nIndex);
-
-                    // if fDistance != 0.0, move that length on the edge. The edge
-                    // length is in fEdgeLength.
-                    if(!::basegfx::numeric::fTools::equalZero(fDistance))
-                    {
-                        sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
-                        const ::basegfx::point::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
-                        double fRelative(fZero);
-
-                        if(!::basegfx::numeric::fTools::equalZero(fEdgeLength))
-                        {
-                            fRelative = fDistance / fEdgeLength;
-                        }
-
-                        // add calculated average value to the return value
-                        aRetval += ::basegfx::tuple::average(aRetval, aNextPoint, fRelative);
-                    }
+                    const sal_uInt32 nNextIndex(nIndex + 1 == nPointCount ? 0L : nIndex + 1L);
+                    const ::basegfx::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(nIndex));
+                    const ::basegfx::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
+                    const ::basegfx::B2DVector aVector(aNextPoint - aCurrentPoint);
+                    fRetval = aVector.getLength();
                 }
-
-                return aRetval;
             }
 
-            ::basegfx::point::B2DPoint getPositionRelative(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistance, double fLength)
+            return fRetval;
+        }
+
+        double getLength(const ::basegfx::B2DPolygon& rCandidate)
+        {
+            // This method may also be implemented using a loop over getEdgeLength, but
+            // since this would cause a lot of sqare roots to be solved it is much better
+            // to sum up the quadrats first and then use a singe suare root (if necessary)
+            double fRetval(0.0);
+            const sal_uInt32 nPointCount(rCandidate.count());
+            const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
+
+            for(sal_uInt32 a(0L); a < nLoopCount; a++)
             {
+                const sal_uInt32 nNextIndex(a + 1 == nPointCount ? 0L : a + 1L);
+                const ::basegfx::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
+                const ::basegfx::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
+                const ::basegfx::B2DVector aVector(aNextPoint - aCurrentPoint);
+                fRetval += aVector.scalar(aVector);
+            }
+
+            if(!::basegfx::fTools::equalZero(fRetval))
+            {
+                const double fOne(1.0);
+
+                if(!::basegfx::fTools::equal(fOne, fRetval))
+                {
+                    fRetval = sqrt(fRetval);
+                }
+            }
+
+            return fRetval;
+        }
+
+        ::basegfx::B2DPoint getPositionAbsolute(const ::basegfx::B2DPolygon& rCandidate, double fDistance, double fLength)
+        {
+            ::basegfx::B2DPoint aRetval;
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount > 1L)
+            {
+                sal_uInt32 nIndex(0L);
+                sal_Bool bIndexDone(sal_False);
+                const double fZero(0.0);
+                double fEdgeLength(fZero);
+
                 // get length if not given
-                if(::basegfx::numeric::fTools::equalZero(fLength))
+                if(::basegfx::fTools::equalZero(fLength))
                 {
                     fLength = getLength(rCandidate);
                 }
 
-                // multiply fDistance with real length to get absolute position and
-                // use getPositionAbsolute
-                return getPositionAbsolute(rCandidate, fDistance * fLength, fLength);
-            }
-
-            ::basegfx::vector::B2DVectorOrientation getPointOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
-            {
-                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
-                ::basegfx::vector::B2DVectorOrientation eRetval(::basegfx::vector::ORIENTATION_NEUTRAL);
-
-                if(rCandidate.count() > 2)
+                // handle fDistance < 0.0
+                if(::basegfx::fTools::less(fDistance, fZero))
                 {
-                    sal_uInt32 nIndPrev = getIndexOfDifferentPredecessor(nIndex, rCandidate);
-
-                    if(nIndPrev != nIndex)
+                    if(rCandidate.isClosed())
                     {
-                        sal_uInt32 nIndNext = getIndexOfDifferentSuccessor(nIndex, rCandidate);
-
-                        if(nIndNext != nIndex && nIndNext != nIndPrev)
-                        {
-                            ::basegfx::point::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
-                            ::basegfx::vector::B2DVector aVecPrev(rCandidate.getB2DPoint(nIndPrev) - aPoint);
-                            ::basegfx::vector::B2DVector aVecNext(rCandidate.getB2DPoint(nIndNext) - aPoint);
-                            eRetval = ::basegfx::vector::getOrientation(aVecPrev, aVecNext);
-                        }
+                        // if fDistance < 0.0 increment with multiple of fLength
+                        sal_uInt32 nCount(sal_uInt32(-fDistance / fLength));
+                        fDistance += double(nCount + 1L) * fLength;
+                    }
+                    else
+                    {
+                        // crop to polygon start
+                        fDistance = fZero;
+                        bIndexDone = sal_True;
                     }
                 }
 
-                return eRetval;
-            }
-
-            CutFlagValue findCut(
-                const ::basegfx::polygon::B2DPolygon& rCandidate,
-                sal_uInt32 nIndex1, sal_uInt32 nIndex2,
-                CutFlagValue aCutFlags,
-                double* pCut1, double* pCut2)
-            {
-                CutFlagValue aRetval(CUTFLAG_NONE);
-                const sal_uInt32 nPointCount(rCandidate.count());
-
-                if(nIndex1 < nPointCount && nIndex2 < nPointCount && nIndex1 != nIndex2)
+                // handle fDistance >= fLength
+                if(::basegfx::fTools::moreOrEqual(fDistance, fLength))
                 {
-                    sal_uInt32 nEnd1(getIndexOfSuccessor(nIndex1, rCandidate));
-                    sal_uInt32 nEnd2(getIndexOfSuccessor(nIndex2, rCandidate));
-
-                    const ::basegfx::point::B2DPoint aStart1(rCandidate.getB2DPoint(nIndex1));
-                    const ::basegfx::point::B2DPoint aEnd1(rCandidate.getB2DPoint(nEnd1));
-                    const ::basegfx::vector::B2DVector aVector1(aEnd1 - aStart1);
-
-                    const ::basegfx::point::B2DPoint aStart2(rCandidate.getB2DPoint(nIndex2));
-                    const ::basegfx::point::B2DPoint aEnd2(rCandidate.getB2DPoint(nEnd2));
-                    const ::basegfx::vector::B2DVector aVector2(aEnd2 - aStart2);
-
-                    aRetval = findCut(
-                        aStart1, aVector1, aStart2, aVector2,
-                        aCutFlags, pCut1, pCut2);
-                }
-
-                return aRetval;
-            }
-
-            CutFlagValue findCut(
-                const ::basegfx::polygon::B2DPolygon& rCandidate1, sal_uInt32 nIndex1,
-                const ::basegfx::polygon::B2DPolygon& rCandidate2, sal_uInt32 nIndex2,
-                CutFlagValue aCutFlags,
-                double* pCut1, double* pCut2)
-            {
-                CutFlagValue aRetval(CUTFLAG_NONE);
-                const sal_uInt32 nPointCount1(rCandidate1.count());
-                const sal_uInt32 nPointCount2(rCandidate2.count());
-
-                if(nIndex1 < nPointCount1 && nIndex2 < nPointCount2)
-                {
-                    sal_uInt32 nEnd1(getIndexOfSuccessor(nIndex1, rCandidate1));
-                    sal_uInt32 nEnd2(getIndexOfSuccessor(nIndex2, rCandidate2));
-
-                    const ::basegfx::point::B2DPoint aStart1(rCandidate1.getB2DPoint(nIndex1));
-                    const ::basegfx::point::B2DPoint aEnd1(rCandidate1.getB2DPoint(nEnd1));
-                    const ::basegfx::vector::B2DVector aVector1(aEnd1 - aStart1);
-
-                    const ::basegfx::point::B2DPoint aStart2(rCandidate2.getB2DPoint(nIndex2));
-                    const ::basegfx::point::B2DPoint aEnd2(rCandidate2.getB2DPoint(nEnd2));
-                    const ::basegfx::vector::B2DVector aVector2(aEnd2 - aStart2);
-
-                    aRetval = findCut(
-                        aStart1, aVector1, aStart2, aVector2,
-                        aCutFlags, pCut1, pCut2);
-                }
-
-                return aRetval;
-            }
-
-            CutFlagValue findCut(
-                const ::basegfx::point::B2DPoint& rEdge1Start, const ::basegfx::vector::B2DVector& rEdge1Delta,
-                const ::basegfx::point::B2DPoint& rEdge2Start, const ::basegfx::vector::B2DVector& rEdge2Delta,
-                CutFlagValue aCutFlags,
-                double* pCut1, double* pCut2)
-            {
-                CutFlagValue aRetval(CUTFLAG_NONE);
-                double fCut1(0.0);
-                double fCut2(0.0);
-                sal_Bool bFinished(!((sal_Bool)(aCutFlags & CUTFLAG_ALL)));
-
-                // test for same points?
-                if(!bFinished
-                    && (aCutFlags & (CUTFLAG_START1|CUTFLAG_END1))
-                    && (aCutFlags & (CUTFLAG_START2|CUTFLAG_END2)))
-                {
-                    // same startpoint?
-                    if(!bFinished && (aCutFlags & (CUTFLAG_START1|CUTFLAG_START2)) == (CUTFLAG_START1|CUTFLAG_START2))
+                    if(rCandidate.isClosed())
                     {
-                        if(rEdge1Start.equal(rEdge2Start))
-                        {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_START1|CUTFLAG_START2);
-                        }
+                        // if fDistance >= fLength decrement with multiple of fLength
+                        sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
+                        fDistance -= (double)(nCount) * fLength;
                     }
-
-                    // same endpoint?
-                    if(!bFinished && (aCutFlags & (CUTFLAG_END1|CUTFLAG_END2)) == (CUTFLAG_END1|CUTFLAG_END2))
+                    else
                     {
-                        const ::basegfx::point::B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
-                        const ::basegfx::point::B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
-
-                        if(aEnd1.equal(aEnd2))
-                        {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_END1|CUTFLAG_END2);
-                            fCut1 = fCut2 = 1.0;
-                        }
-                    }
-
-                    // startpoint1 == endpoint2?
-                    if(!bFinished && (aCutFlags & (CUTFLAG_START1|CUTFLAG_END2)) == (CUTFLAG_START1|CUTFLAG_END2))
-                    {
-                        const ::basegfx::point::B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
-
-                        if(rEdge1Start.equal(aEnd2))
-                        {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_START1|CUTFLAG_END2);
-                            fCut1 = 0.0;
-                            fCut2 = 1.0;
-                        }
-                    }
-
-                    // startpoint2 == endpoint1?
-                    if(!bFinished&& (aCutFlags & (CUTFLAG_START2|CUTFLAG_END1)) == (CUTFLAG_START2|CUTFLAG_END1))
-                    {
-                        const ::basegfx::point::B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
-
-                        if(rEdge2Start.equal(aEnd1))
-                        {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_START2|CUTFLAG_END1);
-                            fCut1 = 1.0;
-                            fCut2 = 0.0;
-                        }
+                        // crop to polygon end
+                        fDistance = fZero;
+                        nIndex = nPointCount - 1L;
+                        bIndexDone = sal_True;
                     }
                 }
 
-                if(!bFinished && (aCutFlags & CUTFLAG_LINE))
+                // look for correct index. fDistance is now [0.0 .. fLength[
+                if(!bIndexDone)
                 {
-                    if(!bFinished && (aCutFlags & CUTFLAG_START1))
+                    do
                     {
-                        // start1 on line 2 ?
-                        if(isPointOnEdge(rEdge1Start, rEdge2Start, rEdge2Delta, &fCut2))
+                        // get length of next edge
+                        fEdgeLength = getEdgeLength(rCandidate, nIndex);
+
+                        if(::basegfx::fTools::moreOrEqual(fDistance, fEdgeLength))
                         {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_LINE|CUTFLAG_START1);
+                            // go to next edge
+                            fDistance -= fEdgeLength;
+                            nIndex++;
                         }
+                        else
+                        {
+                            // it's on this edge, stop
+                            bIndexDone = sal_True;
+                        }
+                    } while (!bIndexDone);
+                }
+
+                // get the point using nIndex
+                aRetval = rCandidate.getB2DPoint(nIndex);
+
+                // if fDistance != 0.0, move that length on the edge. The edge
+                // length is in fEdgeLength.
+                if(!::basegfx::fTools::equalZero(fDistance))
+                {
+                    sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
+                    const ::basegfx::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
+                    double fRelative(fZero);
+
+                    if(!::basegfx::fTools::equalZero(fEdgeLength))
+                    {
+                        fRelative = fDistance / fEdgeLength;
                     }
 
-                    if(!bFinished && (aCutFlags & CUTFLAG_START2))
+                    // add calculated average value to the return value
+                    aRetval = ::basegfx::interpolate(aRetval, aNextPoint, fRelative);
+                }
+            }
+
+            return aRetval;
+        }
+
+        ::basegfx::B2DPoint getPositionRelative(const ::basegfx::B2DPolygon& rCandidate, double fDistance, double fLength)
+        {
+            // get length if not given
+            if(::basegfx::fTools::equalZero(fLength))
+            {
+                fLength = getLength(rCandidate);
+            }
+
+            // multiply fDistance with real length to get absolute position and
+            // use getPositionAbsolute
+            return getPositionAbsolute(rCandidate, fDistance * fLength, fLength);
+        }
+
+        ::basegfx::B2DVectorOrientation getPointOrientation(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nIndex)
+        {
+            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+            ::basegfx::B2DVectorOrientation eRetval(::basegfx::ORIENTATION_NEUTRAL);
+
+            if(rCandidate.count() > 2)
+            {
+                sal_uInt32 nIndPrev = getIndexOfDifferentPredecessor(nIndex, rCandidate);
+
+                if(nIndPrev != nIndex)
+                {
+                    sal_uInt32 nIndNext = getIndexOfDifferentSuccessor(nIndex, rCandidate);
+
+                    if(nIndNext != nIndex && nIndNext != nIndPrev)
                     {
-                        // start2 on line 1 ?
-                        if(isPointOnEdge(rEdge2Start, rEdge1Start, rEdge1Delta, &fCut1))
-                        {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_LINE|CUTFLAG_START2);
-                        }
+                        ::basegfx::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
+                        ::basegfx::B2DVector aVecPrev(rCandidate.getB2DPoint(nIndPrev) - aPoint);
+                        ::basegfx::B2DVector aVecNext(rCandidate.getB2DPoint(nIndNext) - aPoint);
+                        eRetval = ::basegfx::getOrientation(aVecPrev, aVecNext);
                     }
+                }
+            }
 
-                    if(!bFinished && (aCutFlags & CUTFLAG_END1))
+            return eRetval;
+        }
+
+        CutFlagValue findCut(
+            const ::basegfx::B2DPolygon& rCandidate,
+            sal_uInt32 nIndex1, sal_uInt32 nIndex2,
+            CutFlagValue aCutFlags,
+            double* pCut1, double* pCut2)
+        {
+            CutFlagValue aRetval(CUTFLAG_NONE);
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nIndex1 < nPointCount && nIndex2 < nPointCount && nIndex1 != nIndex2)
+            {
+                sal_uInt32 nEnd1(getIndexOfSuccessor(nIndex1, rCandidate));
+                sal_uInt32 nEnd2(getIndexOfSuccessor(nIndex2, rCandidate));
+
+                const ::basegfx::B2DPoint aStart1(rCandidate.getB2DPoint(nIndex1));
+                const ::basegfx::B2DPoint aEnd1(rCandidate.getB2DPoint(nEnd1));
+                const ::basegfx::B2DVector aVector1(aEnd1 - aStart1);
+
+                const ::basegfx::B2DPoint aStart2(rCandidate.getB2DPoint(nIndex2));
+                const ::basegfx::B2DPoint aEnd2(rCandidate.getB2DPoint(nEnd2));
+                const ::basegfx::B2DVector aVector2(aEnd2 - aStart2);
+
+                aRetval = findCut(
+                    aStart1, aVector1, aStart2, aVector2,
+                    aCutFlags, pCut1, pCut2);
+            }
+
+            return aRetval;
+        }
+
+        CutFlagValue findCut(
+            const ::basegfx::B2DPolygon& rCandidate1, sal_uInt32 nIndex1,
+            const ::basegfx::B2DPolygon& rCandidate2, sal_uInt32 nIndex2,
+            CutFlagValue aCutFlags,
+            double* pCut1, double* pCut2)
+        {
+            CutFlagValue aRetval(CUTFLAG_NONE);
+            const sal_uInt32 nPointCount1(rCandidate1.count());
+            const sal_uInt32 nPointCount2(rCandidate2.count());
+
+            if(nIndex1 < nPointCount1 && nIndex2 < nPointCount2)
+            {
+                sal_uInt32 nEnd1(getIndexOfSuccessor(nIndex1, rCandidate1));
+                sal_uInt32 nEnd2(getIndexOfSuccessor(nIndex2, rCandidate2));
+
+                const ::basegfx::B2DPoint aStart1(rCandidate1.getB2DPoint(nIndex1));
+                const ::basegfx::B2DPoint aEnd1(rCandidate1.getB2DPoint(nEnd1));
+                const ::basegfx::B2DVector aVector1(aEnd1 - aStart1);
+
+                const ::basegfx::B2DPoint aStart2(rCandidate2.getB2DPoint(nIndex2));
+                const ::basegfx::B2DPoint aEnd2(rCandidate2.getB2DPoint(nEnd2));
+                const ::basegfx::B2DVector aVector2(aEnd2 - aStart2);
+
+                aRetval = findCut(
+                    aStart1, aVector1, aStart2, aVector2,
+                    aCutFlags, pCut1, pCut2);
+            }
+
+            return aRetval;
+        }
+
+        CutFlagValue findCut(
+            const ::basegfx::B2DPoint& rEdge1Start, const ::basegfx::B2DVector& rEdge1Delta,
+            const ::basegfx::B2DPoint& rEdge2Start, const ::basegfx::B2DVector& rEdge2Delta,
+            CutFlagValue aCutFlags,
+            double* pCut1, double* pCut2)
+        {
+            CutFlagValue aRetval(CUTFLAG_NONE);
+            double fCut1(0.0);
+            double fCut2(0.0);
+            sal_Bool bFinished(!((sal_Bool)(aCutFlags & CUTFLAG_ALL)));
+
+            // test for same points?
+            if(!bFinished
+                && (aCutFlags & (CUTFLAG_START1|CUTFLAG_END1))
+                && (aCutFlags & (CUTFLAG_START2|CUTFLAG_END2)))
+            {
+                // same startpoint?
+                if(!bFinished && (aCutFlags & (CUTFLAG_START1|CUTFLAG_START2)) == (CUTFLAG_START1|CUTFLAG_START2))
+                {
+                    if(rEdge1Start.equal(rEdge2Start))
                     {
-                        // end1 on line 2 ?
-                        const ::basegfx::point::B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
-
-                        if(isPointOnEdge(aEnd1, rEdge2Start, rEdge2Delta, &fCut2))
-                        {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_LINE|CUTFLAG_END1);
-                        }
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_START1|CUTFLAG_START2);
                     }
+                }
 
-                    if(!bFinished && (aCutFlags & CUTFLAG_END2))
+                // same endpoint?
+                if(!bFinished && (aCutFlags & (CUTFLAG_END1|CUTFLAG_END2)) == (CUTFLAG_END1|CUTFLAG_END2))
+                {
+                    const ::basegfx::B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
+                    const ::basegfx::B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
+
+                    if(aEnd1.equal(aEnd2))
                     {
-                        // end2 on line 1 ?
-                        const ::basegfx::point::B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
-
-                        if(isPointOnEdge(aEnd2, rEdge1Start, rEdge1Delta, &fCut1))
-                        {
-                            bFinished = sal_True;
-                            aRetval = (CUTFLAG_LINE|CUTFLAG_END2);
-                        }
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_END1|CUTFLAG_END2);
+                        fCut1 = fCut2 = 1.0;
                     }
+                }
 
-                    if(!bFinished)
+                // startpoint1 == endpoint2?
+                if(!bFinished && (aCutFlags & (CUTFLAG_START1|CUTFLAG_END2)) == (CUTFLAG_START1|CUTFLAG_END2))
+                {
+                    const ::basegfx::B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
+
+                    if(rEdge1Start.equal(aEnd2))
                     {
-                        // cut in line1, line2 ?
-                        fCut1 = (rEdge1Delta.getX() * rEdge2Delta.getY()) - (rEdge1Delta.getY() * rEdge2Delta.getX());
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_START1|CUTFLAG_END2);
+                        fCut1 = 0.0;
+                        fCut2 = 1.0;
+                    }
+                }
 
-                        if(!::basegfx::numeric::fTools::equalZero(fCut1))
+                // startpoint2 == endpoint1?
+                if(!bFinished&& (aCutFlags & (CUTFLAG_START2|CUTFLAG_END1)) == (CUTFLAG_START2|CUTFLAG_END1))
+                {
+                    const ::basegfx::B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
+
+                    if(rEdge2Start.equal(aEnd1))
+                    {
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_START2|CUTFLAG_END1);
+                        fCut1 = 1.0;
+                        fCut2 = 0.0;
+                    }
+                }
+            }
+
+            if(!bFinished && (aCutFlags & CUTFLAG_LINE))
+            {
+                if(!bFinished && (aCutFlags & CUTFLAG_START1))
+                {
+                    // start1 on line 2 ?
+                    if(isPointOnEdge(rEdge1Start, rEdge2Start, rEdge2Delta, &fCut2))
+                    {
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_LINE|CUTFLAG_START1);
+                    }
+                }
+
+                if(!bFinished && (aCutFlags & CUTFLAG_START2))
+                {
+                    // start2 on line 1 ?
+                    if(isPointOnEdge(rEdge2Start, rEdge1Start, rEdge1Delta, &fCut1))
+                    {
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_LINE|CUTFLAG_START2);
+                    }
+                }
+
+                if(!bFinished && (aCutFlags & CUTFLAG_END1))
+                {
+                    // end1 on line 2 ?
+                    const ::basegfx::B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
+
+                    if(isPointOnEdge(aEnd1, rEdge2Start, rEdge2Delta, &fCut2))
+                    {
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_LINE|CUTFLAG_END1);
+                    }
+                }
+
+                if(!bFinished && (aCutFlags & CUTFLAG_END2))
+                {
+                    // end2 on line 1 ?
+                    const ::basegfx::B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
+
+                    if(isPointOnEdge(aEnd2, rEdge1Start, rEdge1Delta, &fCut1))
+                    {
+                        bFinished = sal_True;
+                        aRetval = (CUTFLAG_LINE|CUTFLAG_END2);
+                    }
+                }
+
+                if(!bFinished)
+                {
+                    // cut in line1, line2 ?
+                    fCut1 = (rEdge1Delta.getX() * rEdge2Delta.getY()) - (rEdge1Delta.getY() * rEdge2Delta.getX());
+
+                    if(!::basegfx::fTools::equalZero(fCut1))
+                    {
+                        fCut1 = (rEdge2Delta.getY() * (rEdge2Start.getX() - rEdge1Start.getX())
+                            + rEdge2Delta.getX() * (rEdge1Start.getY() - rEdge2Start.getY())) / fCut1;
+
+                        const double fZero(0.0);
+                        const double fOne(1.0);
+
+                        // inside parameter range edge1 AND fCut2 is calcable
+                        if(::basegfx::fTools::more(fCut1, fZero) && ::basegfx::fTools::less(fCut1, fOne)
+                            && (!::basegfx::fTools::equalZero(rEdge2Delta.getX()) || !::basegfx::fTools::equalZero(rEdge2Delta.getY())))
                         {
-                            fCut1 = (rEdge2Delta.getY() * (rEdge2Start.getX() - rEdge1Start.getX())
-                                + rEdge2Delta.getX() * (rEdge1Start.getY() - rEdge2Start.getY())) / fCut1;
-
-                            const double fZero(0.0);
-                            const double fOne(1.0);
-
-                            // inside parameter range edge1 AND fCut2 is calcable
-                            if(::basegfx::numeric::fTools::more(fCut1, fZero) && ::basegfx::numeric::fTools::less(fCut1, fOne)
-                                && (!::basegfx::numeric::fTools::equalZero(rEdge2Delta.getX()) || !::basegfx::numeric::fTools::equalZero(rEdge2Delta.getY())))
+                            // take the mopre precise calculation of the two possible
+                            if(fabs(rEdge2Delta.getX()) > fabs(rEdge2Delta.getY()))
                             {
-                                // take the mopre precise calculation of the two possible
-                                if(fabs(rEdge2Delta.getX()) > fabs(rEdge2Delta.getY()))
-                                {
-                                    fCut2 = (rEdge1Start.getX() + fCut1
-                                        * rEdge1Delta.getX() - rEdge2Start.getX()) / rEdge2Delta.getX();
-                                }
-                                else
-                                {
-                                    fCut2 = (rEdge1Start.getY() + fCut1
-                                        * rEdge1Delta.getY() - rEdge2Start.getY()) / rEdge2Delta.getY();
-                                }
+                                fCut2 = (rEdge1Start.getX() + fCut1
+                                    * rEdge1Delta.getX() - rEdge2Start.getX()) / rEdge2Delta.getX();
+                            }
+                            else
+                            {
+                                fCut2 = (rEdge1Start.getY() + fCut1
+                                    * rEdge1Delta.getY() - rEdge2Start.getY()) / rEdge2Delta.getY();
+                            }
 
-                                // inside parameter range edge2, too
-                                if(::basegfx::numeric::fTools::more(fCut2, fZero) && ::basegfx::numeric::fTools::less(fCut2, fOne))
-                                {
-                                    bFinished = sal_True;
-                                    aRetval = CUTFLAG_LINE;
-                                }
+                            // inside parameter range edge2, too
+                            if(::basegfx::fTools::more(fCut2, fZero) && ::basegfx::fTools::less(fCut2, fOne))
+                            {
+                                bFinished = sal_True;
+                                aRetval = CUTFLAG_LINE;
                             }
                         }
                     }
                 }
-
-                // copy values if wanted
-                if(pCut1)
-                {
-                    *pCut1 = fCut1;
-                }
-
-                if(pCut2)
-                {
-                    *pCut2 = fCut2;
-                }
-
-                return aRetval;
             }
 
-            sal_Bool isPointOnEdge(
-                const ::basegfx::point::B2DPoint& rPoint,
-                const ::basegfx::point::B2DPoint& rEdgeStart,
-                const ::basegfx::vector::B2DVector& rEdgeDelta,
-                double* pCut)
+            // copy values if wanted
+            if(pCut1)
             {
-                sal_Bool bDeltaXIsZero(::basegfx::numeric::fTools::equalZero(rEdgeDelta.getX()));
-                sal_Bool bDeltaYIsZero(::basegfx::numeric::fTools::equalZero(rEdgeDelta.getY()));
-                const double fZero(0.0);
-                const double fOne(1.0);
+                *pCut1 = fCut1;
+            }
 
-                if(bDeltaXIsZero && bDeltaYIsZero)
-                {
-                    // no line, just a point
-                    return sal_False;
-                }
-                else if(bDeltaXIsZero)
-                {
-                    // vertical line
-                    if(::basegfx::numeric::fTools::equal(rPoint.getX(), rEdgeStart.getX()))
-                    {
-                        double fValue = (rPoint.getY() - rEdgeStart.getY()) / rEdgeDelta.getY();
+            if(pCut2)
+            {
+                *pCut2 = fCut2;
+            }
 
-                        if(::basegfx::numeric::fTools::more(fValue, fZero) && ::basegfx::numeric::fTools::less(fValue, fOne))
-                        {
-                            if(pCut)
-                            {
-                                *pCut = fValue;
-                            }
+            return aRetval;
+        }
 
-                            return sal_True;
-                        }
-                    }
-                }
-                else if(bDeltaYIsZero)
-                {
-                    // horizontal line
-                    if(::basegfx::numeric::fTools::equal(rPoint.getY(), rEdgeStart.getY()))
-                    {
-                        double fValue = (rPoint.getX() - rEdgeStart.getX()) / rEdgeDelta.getX();
+        sal_Bool isPointOnEdge(
+            const ::basegfx::B2DPoint& rPoint,
+            const ::basegfx::B2DPoint& rEdgeStart,
+            const ::basegfx::B2DVector& rEdgeDelta,
+            double* pCut)
+        {
+            sal_Bool bDeltaXIsZero(::basegfx::fTools::equalZero(rEdgeDelta.getX()));
+            sal_Bool bDeltaYIsZero(::basegfx::fTools::equalZero(rEdgeDelta.getY()));
+            const double fZero(0.0);
+            const double fOne(1.0);
 
-                        if(::basegfx::numeric::fTools::more(fValue, fZero)
-                            && ::basegfx::numeric::fTools::less(fValue, fOne))
-                        {
-                            if(pCut)
-                            {
-                                *pCut = fValue;
-                            }
-
-                            return sal_True;
-                        }
-                    }
-                }
-                else
-                {
-                    // any angle line
-                    double fTOne = (rPoint.getX() - rEdgeStart.getX()) / rEdgeDelta.getX();
-                    double fTTwo = (rPoint.getY() - rEdgeStart.getY()) / rEdgeDelta.getY();
-
-                    if(::basegfx::numeric::fTools::equal(fTOne, fTTwo))
-                    {
-                        // same parameter representation, point is on line. Take
-                        // middle value for better results
-                        double fValue = (fTOne + fTTwo) / 2.0;
-
-                        if(::basegfx::numeric::fTools::more(fValue, fZero) && ::basegfx::numeric::fTools::less(fValue, fOne))
-                        {
-                            // point is inside line bounds, too
-                            if(pCut)
-                            {
-                                *pCut = fValue;
-                            }
-
-                            return sal_True;
-                        }
-                    }
-                }
-
+            if(bDeltaXIsZero && bDeltaYIsZero)
+            {
+                // no line, just a point
                 return sal_False;
             }
-        } // end of namespace tools
-    } // end of namespace polygon
+            else if(bDeltaXIsZero)
+            {
+                // vertical line
+                if(::basegfx::fTools::equal(rPoint.getX(), rEdgeStart.getX()))
+                {
+                    double fValue = (rPoint.getY() - rEdgeStart.getY()) / rEdgeDelta.getY();
+
+                    if(::basegfx::fTools::more(fValue, fZero) && ::basegfx::fTools::less(fValue, fOne))
+                    {
+                        if(pCut)
+                        {
+                            *pCut = fValue;
+                        }
+
+                        return sal_True;
+                    }
+                }
+            }
+            else if(bDeltaYIsZero)
+            {
+                // horizontal line
+                if(::basegfx::fTools::equal(rPoint.getY(), rEdgeStart.getY()))
+                {
+                    double fValue = (rPoint.getX() - rEdgeStart.getX()) / rEdgeDelta.getX();
+
+                    if(::basegfx::fTools::more(fValue, fZero)
+                        && ::basegfx::fTools::less(fValue, fOne))
+                    {
+                        if(pCut)
+                        {
+                            *pCut = fValue;
+                        }
+
+                        return sal_True;
+                    }
+                }
+            }
+            else
+            {
+                // any angle line
+                double fTOne = (rPoint.getX() - rEdgeStart.getX()) / rEdgeDelta.getX();
+                double fTTwo = (rPoint.getY() - rEdgeStart.getY()) / rEdgeDelta.getY();
+
+                if(::basegfx::fTools::equal(fTOne, fTTwo))
+                {
+                    // same parameter representation, point is on line. Take
+                    // middle value for better results
+                    double fValue = (fTOne + fTTwo) / 2.0;
+
+                    if(::basegfx::fTools::more(fValue, fZero) && ::basegfx::fTools::less(fValue, fOne))
+                    {
+                        // point is inside line bounds, too
+                        if(pCut)
+                        {
+                            *pCut = fValue;
+                        }
+
+                        return sal_True;
+                    }
+                }
+            }
+
+            return sal_False;
+        }
+
+        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
+        {
+            ::basegfx::B2DPolyPolygon aRetval;
+
+            if(rCandidate.count() && fFullDashDotLen > 0.0)
+            {
+                const sal_uInt32 nCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+                sal_uInt32 nDashDotIndex(0L);
+                double fDashDotLength(raDashDotArray[nDashDotIndex]);
+
+                for(sal_uInt32 a(0L); a < nCount; a++)
+                {
+                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
+                    const ::basegfx::B2DPoint aStart(rCandidate.getB2DPoint(a));
+                    const ::basegfx::B2DPoint aEnd(rCandidate.getB2DPoint(nNextIndex));
+                    const ::basegfx::B2DVector aVector(aEnd - aStart);
+                    double fLength(aVector.getLength());
+                    double fPosOnVector(0.0);
+
+                    while(fLength >= fDashDotLength)
+                    {
+                        // handle [fPosOnVector .. fPosOnVector+fDashDotLength]
+                        if(nDashDotIndex % 2)
+                        {
+                            ::basegfx::B2DPolygon aResult;
+
+                            // add start point
+                            if(fPosOnVector == 0.0)
+                            {
+                                aResult.append(aStart);
+                            }
+                            else
+                            {
+                                aResult.append(aStart + (aVector * fPosOnVector));
+                            }
+
+                            // add end point
+                            aResult.append(aStart + (aVector * (fPosOnVector + fDashDotLength)));
+
+                            // add line to PolyPolygon
+                            aRetval.append(aResult);
+                        }
+
+                        // consume from fDashDotLength
+                        fPosOnVector += fDashDotLength;
+                        fLength -= fDashDotLength;
+                        nDashDotIndex = (nDashDotIndex + 1L) % raDashDotArray.size();
+                        fDashDotLength = raDashDotArray[nDashDotIndex];
+                    }
+
+                    // handle [fPosOnVector .. fPosOnVector+fLength (bzw. end)]
+                    if((fLength > 0.0) && (nDashDotIndex % 2))
+                    {
+                        ::basegfx::B2DPolygon aResult;
+
+                        // add start and end point
+                        const ::basegfx::B2DPoint aPosA(aStart + (aVector * fPosOnVector));
+                        aResult.append(aPosA);
+
+                        // add line to PolyPolygon
+                        aRetval.append(aResult);
+                    }
+
+                    // consume from fDashDotLength
+                    fDashDotLength -= fLength;
+                }
+            }
+
+            return aRetval;
+        }
+    } // end of namespace tools
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

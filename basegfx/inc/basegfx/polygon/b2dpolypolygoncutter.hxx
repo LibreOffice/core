@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:48 $
+ *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,48 +93,45 @@
 
 namespace basegfx
 {
-    namespace polygon
+    class B2DPolygonNode
     {
-        class B2DPolygonNode
-        {
-            ::basegfx::point::B2DPoint              maPosition;
-            B2DPolygonNode*                         mpPrevious;
-            B2DPolygonNode*                         mpNext;
+        ::basegfx::B2DPoint             maPosition;
+        B2DPolygonNode*                         mpPrevious;
+        B2DPolygonNode*                         mpNext;
 
-            B2DPolygonNode*                         mpListPrevious;
-            B2DPolygonNode*                         mpListNext;
+        B2DPolygonNode*                         mpListPrevious;
+        B2DPolygonNode*                         mpListNext;
 
-        public:
-            B2DPolygonNode(const ::basegfx::point::B2DPoint& rPosition, B2DPolygonNode* pPrevious);
-            ~B2DPolygonNode();
+    public:
+        B2DPolygonNode(const ::basegfx::B2DPoint& rPosition, B2DPolygonNode* pPrevious);
+        ~B2DPolygonNode();
 
-            B2DPolygonNode* getPrevious() const { return mpPrevious; }
-            B2DPolygonNode* getNext() const { return mpNext; }
-            const ::basegfx::point::B2DPoint& getPosition() const { return maPosition; }
+        B2DPolygonNode* getPrevious() const { return mpPrevious; }
+        B2DPolygonNode* getNext() const { return mpNext; }
+        const ::basegfx::B2DPoint& getPosition() const { return maPosition; }
 
-            void calcMinMaxX(double& fMaxAX, double& fMinAX) const;
-            void calcMinMaxY(double& fMaxAY, double& fMinAY) const;
+        void calcMinMaxX(double& fMaxAX, double& fMinAX) const;
+        void calcMinMaxY(double& fMaxAY, double& fMinAY) const;
 
-            void swapPreviousNext() { B2DPolygonNode* pZwi = mpPrevious; mpPrevious = mpNext; mpNext = pZwi; }
-            void swapNextPointers(B2DPolygonNode* pCand);
+        void swapPreviousNext() { B2DPolygonNode* pZwi = mpPrevious; mpPrevious = mpNext; mpNext = pZwi; }
+        void swapNextPointers(B2DPolygonNode* pCand);
 
-            void addToList(B2DPolygonNode*& rpList);
-            void remFromList(B2DPolygonNode*& rpList);
+        void addToList(B2DPolygonNode*& rpList);
+        void remFromList(B2DPolygonNode*& rpList);
 
-            sal_Bool getOrientation() const;
-            void swapOrientation();
-            ::basegfx::range::B2DRange getRange() const;
+        sal_Bool getOrientation() const;
+        void swapOrientation();
+        ::basegfx::B2DRange getRange() const;
 
-            // isInside tests for B2dPoint and other B2DPolygonNode Polygon. On border is not inside as long as
-            // not sal_True is given in bWithBorder flag.
-            sal_Bool isInside(const ::basegfx::point::B2DPoint& rPnt, sal_Bool bWithBorder = sal_False) const;
-            sal_Bool isPolygonInside(B2DPolygonNode* pPoly, sal_Bool bWithBorder = sal_False) const;
-        };
+        // isInside tests for B2dPoint and other B2DPolygonNode Polygon. On border is not inside as long as
+        // not sal_True is given in bWithBorder flag.
+        sal_Bool isInside(const ::basegfx::B2DPoint& rPnt, sal_Bool bWithBorder = sal_False) const;
+        sal_Bool isPolygonInside(B2DPolygonNode* pPoly, sal_Bool bWithBorder = sal_False) const;
+    };
 
-        // a type definition to have a vector of pointers to B2DPolygonNodes
-        typedef ::std::vector< B2DPolygonNode* > B2DPolygonNodeVector;
+    // a type definition to have a vector of pointers to B2DPolygonNodes
+    typedef ::std::vector< B2DPolygonNode* > B2DPolygonNodeVector;
 
-    } // end of namespace polygon
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -142,40 +139,37 @@ namespace basegfx
 
 namespace basegfx
 {
-    namespace polygon
+    class B2DSimpleCut
     {
-        class B2DSimpleCut
+        B2DPolygonNode*                         mpLeft;
+        B2DPolygonNode*                         mpRight;
+
+        // bitfield
+        unsigned                                mbCorrectOrientation : 1;
+        unsigned                                mbOrientation : 1;
+
+    public:
+        B2DSimpleCut(B2DPolygonNode* pL, B2DPolygonNode* pR, sal_Bool bCoOr = sal_False, sal_Bool bOr = sal_True)
+        :   mpLeft(pL),
+            mpRight(pR),
+            mbCorrectOrientation(bCoOr),
+            mbOrientation(bOr)
         {
-            B2DPolygonNode*                         mpLeft;
-            B2DPolygonNode*                         mpRight;
+        }
 
-            // bitfield
-            unsigned                                mbCorrectOrientation : 1;
-            unsigned                                mbOrientation : 1;
+        void solve();
+        B2DPolygonNode* getLeft() const { return mpLeft; }
+        B2DPolygonNode* getRight() const { return mpRight; }
 
-        public:
-            B2DSimpleCut(B2DPolygonNode* pL, B2DPolygonNode* pR, sal_Bool bCoOr = sal_False, sal_Bool bOr = sal_True)
-            :   mpLeft(pL),
-                mpRight(pR),
-                mbCorrectOrientation(bCoOr),
-                mbOrientation(bOr)
-            {
-            }
+        sal_Bool isSameCut(B2DPolygonNode* pA, B2DPolygonNode* pB) const
+        {
+            return ((pA == mpLeft && pB == mpRight) || (pB == mpLeft && pA == mpRight));
+        }
+    };
 
-            void solve();
-            B2DPolygonNode* getLeft() const { return mpLeft; }
-            B2DPolygonNode* getRight() const { return mpRight; }
+    // a type definition to have a vector of pointers to B2DSimpleCuts
+    typedef ::std::vector< B2DSimpleCut* > B2DSimpleCutVector;
 
-            sal_Bool isSameCut(B2DPolygonNode* pA, B2DPolygonNode* pB) const
-            {
-                return ((pA == mpLeft && pB == mpRight) || (pB == mpLeft && pA == mpRight));
-            }
-        };
-
-        // a type definition to have a vector of pointers to B2DSimpleCuts
-        typedef ::std::vector< B2DSimpleCut* > B2DSimpleCutVector;
-
-    } // end of namespace polygon
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -183,27 +177,24 @@ namespace basegfx
 
 namespace basegfx
 {
-    namespace polygon
+    class B2DClipExtraPolygonInfo
     {
-        class B2DClipExtraPolygonInfo
-        {
-            ::basegfx::range::B2DRange              maRange;
-            sal_Int32                               mnDepth;
+        ::basegfx::B2DRange             maRange;
+        sal_Int32                               mnDepth;
 
-            // bitfield
-            unsigned                                mbOrientation : 1;
+        // bitfield
+        unsigned                                mbOrientation : 1;
 
-        public:
-            B2DClipExtraPolygonInfo() {}
+    public:
+        B2DClipExtraPolygonInfo() {}
 
-            void init(B2DPolygonNode* pNew);
-            const ::basegfx::range::B2DRange& getRange() const { return maRange; }
-            sal_Bool getOrientation() const { return mbOrientation; }
+        void init(B2DPolygonNode* pNew);
+        const ::basegfx::B2DRange& getRange() const { return maRange; }
+        sal_Bool getOrientation() const { return mbOrientation; }
 
-            sal_Int32 getDepth() const { return mnDepth; }
-            void changeDepth(sal_Bool bOrientation);
-        };
-    } // end of namespace polygon
+        sal_Int32 getDepth() const { return mnDepth; }
+        void changeDepth(sal_Bool bOrientation);
+    };
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -211,69 +202,66 @@ namespace basegfx
 
 namespace basegfx
 {
-    namespace polygon
+    class B2DPolyPolygonCutter
     {
-        class B2DPolyPolygonCutter
+        // list of polys
+        B2DPolygonNodeVector                    maPolygonList;
+        B2DPolyPolygon                          maNotClosedPolygons;
+
+        // help routines
+        sal_Bool isSamePos(const ::basegfx::B2DPoint& rPntA, const ::basegfx::B2DPoint& rPntB)
         {
-            // list of polys
-            B2DPolygonNodeVector                    maPolygonList;
-            B2DPolyPolygon                          maNotClosedPolygons;
+            return rPntA.equal(rPntB);
+        }
 
-            // help routines
-            sal_Bool isSamePos(const ::basegfx::point::B2DPoint& rPntA, const ::basegfx::point::B2DPoint& rPntB)
-            {
-                return rPntA.equal(rPntB);
-            }
+        B2DSimpleCut* getExistingCut(B2DSimpleCutVector& rTmpCuts, B2DPolygonNode* pA, B2DPolygonNode* pB);
+        B2DPolygonNode* extractNextPolygon(B2DPolygonNode*& rpList);
+        sal_Bool isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB);
+        sal_Bool isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave);
 
-            B2DSimpleCut* getExistingCut(B2DSimpleCutVector& rTmpCuts, B2DPolygonNode* pA, B2DPolygonNode* pB);
-            B2DPolygonNode* extractNextPolygon(B2DPolygonNode*& rpList);
-            sal_Bool isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB);
-            sal_Bool isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave);
+        sal_Bool isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
+        {
+            return isSamePos(pA->getNext()->getPosition(), pB->getNext()->getPosition());
+        }
 
-            sal_Bool isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
-            {
-                return isSamePos(pA->getNext()->getPosition(), pB->getNext()->getPosition());
-            }
+        sal_Bool isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
+        {
+            return isSamePos(pA->getPrevious()->getPosition(), pB->getPrevious()->getPosition());
+        }
 
-            sal_Bool isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
-            {
-                return isSamePos(pA->getPrevious()->getPosition(), pB->getPrevious()->getPosition());
-            }
+        void addAllNodes(B2DPolygonNode* pPolygon, B2DPolygonNode*& rpList);
+        B2DPolygonNode* createNewPolygon(const B2DPolygon& rPolygon);
+        void deletePolygon(B2DPolygonNode* pCand);
+        void polysToList(B2DPolygonNode*& rpList);
+        void listToPolys(B2DPolygonNode*& rpList);
 
-            void addAllNodes(B2DPolygonNode* pPolygon, B2DPolygonNode*& rpList);
-            B2DPolygonNode* createNewPolygon(const B2DPolygon& rPolygon);
-            void deletePolygon(B2DPolygonNode* pCand);
-            void polysToList(B2DPolygonNode*& rpList);
-            void listToPolys(B2DPolygonNode*& rpList);
+        sal_Bool doRangesIntersect(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
+        {
+            return rRange1.overlaps(rRange2);
+        }
 
-            sal_Bool doRangesIntersect(const ::basegfx::range::B2DRange& rRange1, const ::basegfx::range::B2DRange& rRange2) const
-            {
-                return rRange1.overlaps(rRange2);
-            }
+        sal_Bool doRangesInclude(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
+        {
+            return rRange1.isInside(rRange2);
+        }
 
-            sal_Bool doRangesInclude(const ::basegfx::range::B2DRange& rRange1, const ::basegfx::range::B2DRange& rRange2) const
-            {
-                return rRange1.isInside(rRange2);
-            }
+        void solveAllCuts(B2DSimpleCutVector& rCuts);
 
-            void solveAllCuts(B2DSimpleCutVector& rCuts);
+    public:
+        B2DPolyPolygonCutter() {}
+        ~B2DPolyPolygonCutter();
 
-        public:
-            B2DPolyPolygonCutter() {}
-            ~B2DPolyPolygonCutter();
+        // put/get poly
+        void addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, sal_Bool bForceOrientation = sal_False);
+        void getPolyPolygon(B2DPolyPolygon& rPolyPolygon);
 
-            // put/get poly
-            void addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, sal_Bool bForceOrientation = sal_False);
-            void getPolyPolygon(B2DPolyPolygon& rPolyPolygon);
+        // transformations
+        void removeSelfIntersections();
+        void removeDoubleIntersections();
 
-            // transformations
-            void removeSelfIntersections();
-            void removeDoubleIntersections();
-
-            // remove included
-            void removeIncludedPolygons(sal_Bool bUseOr = sal_True);
-        };
-    } // end of namespace polygon
+        // remove included
+        void removeIncludedPolygons(sal_Bool bUseOr = sal_True);
+    };
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
