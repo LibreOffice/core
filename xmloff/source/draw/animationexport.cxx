@@ -1,0 +1,1737 @@
+/*************************************************************************
+ *
+ *  $RCSfile: animationexport.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:31:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateColor_HPP_
+#include <com/sun/star/animations/XAnimateColor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateSet_HPP_
+#include <com/sun/star/animations/XAnimateSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XCOMMAND_HPP_
+#include <com/sun/star/animations/XCommand.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_TIMING_HPP_
+#include <com/sun/star/animations/Timing.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_EVENT_HPP_
+#include <com/sun/star/animations/Event.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateMotion_HPP_
+#include <com/sun/star/animations/XAnimateMotion.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateTransform_HPP_
+#include <com/sun/star/animations/XAnimateTransform.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XTransitionFilter_HPP_
+#include <com/sun/star/animations/XTransitionFilter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XITERATECONTAINER_HPP_
+#include <com/sun/star/animations/XIterateContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XAUDIO_HPP_
+#include <com/sun/star/animations/XAudio.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONCOLORSPACE_HPP_
+#include <com/sun/star/animations/AnimationColorSpace.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONRESTART_HPP_
+#include <com/sun/star/animations/AnimationRestart.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_EVENTTRIGGER_HPP_
+#include <com/sun/star/animations/EventTrigger.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONFILL_HPP_
+#include <com/sun/star/animations/AnimationFill.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONENDSYNC_HPP_
+#include <com/sun/star/animations/AnimationEndSync.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONCALCMODE_HPP_
+#include <com/sun/star/animations/AnimationCalcMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONADDITIVEMODE_HPP_
+#include <com/sun/star/animations/AnimationAdditiveMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
+#include <com/sun/star/animations/AnimationTransformType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_TRANSITIONTYPE_HPP_
+#include <com/sun/star/animations/TransitionType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_TRANSITIONSUBTYPE_HPP_
+#include <com/sun/star/animations/TransitionSubType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_VALUEPAIR_HPP_
+#include <com/sun/star/animations/ValuePair.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
+#include <com/sun/star/presentation/EffectNodeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EffectPresetClass_HPP_
+#include <com/sun/star/presentation/EffectPresetClass.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_ParagraphTarget_HPP_
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_TEXTANIMATIONTYPE_HPP_
+#include <com/sun/star/presentation/TextAnimationType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_SHAPEANIMATIONSUBTYPE_HPP_
+#include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTCOMMANDS_HPP_
+#include <com/sun/star/presentation/EffectCommands.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XShape_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+
+#include <tools/debug.hxx>
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
+
+#ifndef _SDXMLEXP_IMPL_HXX
+#include "sdxmlexp_impl.hxx"
+#endif
+
+#ifndef _SDPROPLS_HXX
+#include "sdpropls.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEMENT_HXX
+#include "xmlement.hxx"
+#endif
+
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
+#endif
+
+#ifndef _XMLOFF_SHAPEEXPORT_HXX_
+#include "shapeexport.hxx"
+#endif
+
+#include "animations.hxx"
+#include "animationexport.hxx"
+
+using namespace ::rtl;
+using namespace ::std;
+using namespace ::cppu;
+using namespace ::com::sun::star::animations;
+using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::drawing;
+using namespace ::xmloff::token;
+
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::beans::NamedValue;
+using ::com::sun::star::container::XEnumerationAccess;
+using ::com::sun::star::container::XEnumeration;
+
+namespace xmloff
+{
+
+SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
+{
+    switch( nMap )
+    {
+    case Animations_EnumMap_Fill:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
+            {
+                { XML_DEFAULT,      AnimationFill::DEFAULT },
+                { XML_REMOVE,       AnimationFill::REMOVE },
+                { XML_FREEZE,       AnimationFill::FREEZE },
+                { XML_HOLD,         AnimationFill::HOLD },
+                { XML_TRANSITION,   AnimationFill::TRANSITION },
+                { XML_AUTO,         AnimationFill::AUTO },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_Fill;
+        }
+    case Animations_EnumMap_FillDefault:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
+            {
+                { XML_INHERIT,      AnimationFill::INHERIT },
+                { XML_REMOVE,       AnimationFill::REMOVE },
+                { XML_FREEZE,       AnimationFill::FREEZE },
+                { XML_HOLD,         AnimationFill::HOLD },
+                { XML_TRANSITION,   AnimationFill::TRANSITION },
+                { XML_AUTO,         AnimationFill::AUTO },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_Fill;
+        }
+    case Animations_EnumMap_Restart:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_Restart[] =
+            {
+                { XML_DEFAULT,      AnimationRestart::DEFAULT },
+                { XML_ALWAYS,       AnimationRestart::ALWAYS },
+                { XML_WHENNOTACTIVE,AnimationRestart::WHEN_NOT_ACTIVE },
+                { XML_NEVER,        AnimationRestart::NEVER },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_Restart;
+        }
+    case Animations_EnumMap_RestartDefault:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[] =
+            {
+                { XML_INHERIT,      AnimationRestart::INHERIT },
+                { XML_ALWAYS,       AnimationRestart::ALWAYS },
+                { XML_WHENNOTACTIVE,AnimationRestart::WHEN_NOT_ACTIVE },
+                { XML_NEVER,        AnimationRestart::NEVER },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_RestartDefault;
+        }
+    case Animations_EnumMap_Endsync:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[] =
+            {
+                { XML_FIRST,        AnimationEndSync::FIRST },
+                { XML_LAST,         AnimationEndSync::LAST },
+                { XML_ALL,          AnimationEndSync::ALL },
+                { XML_MEDIA,        AnimationEndSync::MEDIA },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_Endsync;
+        }
+    case Animations_EnumMap_CalcMode:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[] =
+            {
+                { XML_DISCRETE,     AnimationCalcMode::DISCRETE },
+                { XML_LINEAR,       AnimationCalcMode::LINEAR },
+                { XML_PACED,        AnimationCalcMode::PACED },
+                { XML_SPLINE,       AnimationCalcMode::SPLINE },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_CalcMode;
+        }
+    case Animations_EnumMap_AdditiveMode:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[] =
+            {
+                { XML_BASE,         AnimationAdditiveMode::BASE },
+                { XML_SUM,          AnimationAdditiveMode::SUM },
+                { XML_REPLACE,      AnimationAdditiveMode::REPLACE },
+                { XML_MULTIPLY,     AnimationAdditiveMode::MULTIPLY },
+                { XML_NONE,         AnimationAdditiveMode::NONE },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_AdditiveMode;
+        }
+    case Animations_EnumMap_TransformType:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[] =
+            {
+                { XML_TRANSLATE,    AnimationTransformType::TRANSLATE },
+                { XML_SCALE,        AnimationTransformType::SCALE },
+                { XML_ROTATE,       AnimationTransformType::ROTATE },
+                { XML_SKEWX,        AnimationTransformType::SKEWX },
+                { XML_SKEWY,        AnimationTransformType::SKEWY },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_TransformType;
+        }
+    case Animations_EnumMap_TransitionType:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[] =
+            {
+                { XML_BARWIPE,          TransitionType::BARWIPE },
+                { XML_BOXWIPE,          TransitionType::BOXWIPE },
+                { XML_FOURBOXWIPE,      TransitionType::FOURBOXWIPE },
+                { XML_BARNDOORWIPE,     TransitionType::BARNDOORWIPE },
+                { XML_DIAGONALWIPE,     TransitionType::DIAGONALWIPE },
+                { XML_BOWTIEWIPE,       TransitionType::BOWTIEWIPE },
+                { XML_MISCDIAGONALWIPE, TransitionType::MISCDIAGONALWIPE },
+                { XML_VEEWIPE,          TransitionType::VEEWIPE },
+                { XML_BARNVEEWIPE,      TransitionType::BARNVEEWIPE },
+                { XML_ZIGZAGWIPE,       TransitionType::ZIGZAGWIPE },
+                { XML_BARNZIGZAGWIPE,   TransitionType::BARNZIGZAGWIPE },
+                { XML_IRISWIPE,         TransitionType::IRISWIPE },
+                { XML_TRIANGLEWIPE,     TransitionType::TRIANGLEWIPE },
+                { XML_ARROWHEADWIPE,    TransitionType::ARROWHEADWIPE },
+                { XML_PENTAGONWIPE,     TransitionType::PENTAGONWIPE },
+                { XML_HEXAGONWIPE,      TransitionType::HEXAGONWIPE },
+                { XML_ELLIPSEWIPE,      TransitionType::ELLIPSEWIPE },
+                { XML_EYEWIPE,          TransitionType::EYEWIPE },
+                { XML_ROUNDRECTWIPE,    TransitionType::ROUNDRECTWIPE },
+                { XML_STARWIPE,         TransitionType::STARWIPE },
+                { XML_MISCSHAPEWIPE,    TransitionType::MISCSHAPEWIPE },
+                { XML_CLOCKWIPE,        TransitionType::CLOCKWIPE },
+                { XML_PINWHEELWIPE,     TransitionType::PINWHEELWIPE },
+                { XML_SINGLESWEEPWIPE,  TransitionType::SINGLESWEEPWIPE },
+                { XML_FANWIPE,          TransitionType::FANWIPE },
+                { XML_DOUBLEFANWIPE,    TransitionType::DOUBLEFANWIPE },
+                { XML_DOUBLESWEEPWIPE,  TransitionType::DOUBLESWEEPWIPE },
+                { XML_SALOONDOORWIPE,   TransitionType::SALOONDOORWIPE },
+                { XML_WINDSHIELDWIPE,   TransitionType::WINDSHIELDWIPE },
+                { XML_SNAKEWIPE,        TransitionType::SNAKEWIPE },
+                { XML_SPIRALWIPE,       TransitionType::SPIRALWIPE },
+                { XML_PARALLELSNAKESWIPE,TransitionType::PARALLELSNAKESWIPE },
+                { XML_BOXSNAKESWIPE,    TransitionType::BOXSNAKESWIPE },
+                { XML_WATERFALLWIPE,    TransitionType::WATERFALLWIPE },
+                { XML_PUSHWIPE,         TransitionType::PUSHWIPE },
+                { XML_SLIDEWIPE,        TransitionType::SLIDEWIPE },
+                { XML_FADE,             TransitionType::FADE },
+                { XML_RANDOMBARWIPE,    TransitionType::RANDOMBARWIPE },
+                { XML_CHECKERBOARDWIPE, TransitionType::CHECKERBOARDWIPE },
+                { XML_DISSOLVE,         TransitionType::DISSOLVE },
+                { XML_BLINDSWIPE,       TransitionType::BLINDSWIPE },
+                { XML_RANDOM,           TransitionType::RANDOM },
+                { XML_ZOOM,             TransitionType::ZOOM },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_TransitionType;
+        }
+    case Animations_EnumMap_TransitionSubType:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[] =
+            {
+                { XML_DEFAULT,              TransitionSubType::DEFAULT },
+                { XML_LEFTTORIGHT,          TransitionSubType::LEFTTORIGHT },
+                { XML_TOPTOBOTTOM,          TransitionSubType::TOPTOBOTTOM },
+                { XML_TOPLEFT,              TransitionSubType::TOPLEFT },
+                { XML_TOPRIGHT,             TransitionSubType::TOPRIGHT },
+                { XML_BOTTOMRIGHT,          TransitionSubType::BOTTOMRIGHT },
+                { XML_BOTTOMLEFT,           TransitionSubType::BOTTOMLEFT },
+                { XML_TOPCENTER,            TransitionSubType::TOPCENTER },
+                { XML_RIGHTCENTER,          TransitionSubType::RIGHTCENTER },
+                { XML_BOTTOMCENTER,         TransitionSubType::BOTTOMCENTER },
+                { XML_LEFTCENTER,           TransitionSubType::LEFTCENTER },
+                { XML_CORNERSIN,            TransitionSubType::CORNERSIN },
+                { XML_CORNERSOUT,           TransitionSubType::CORNERSOUT },
+                { XML_VERTICAL,             TransitionSubType::VERTICAL },
+                { XML_HORIZONTAL,           TransitionSubType::HORIZONTAL },
+                { XML_DIAGONALBOTTOMLEFT,   TransitionSubType::DIAGONALBOTTOMLEFT },
+                { XML_DIAGONALTOPLEFT,      TransitionSubType::DIAGONALTOPLEFT },
+                { XML_DOUBLEBARNDOOR,       TransitionSubType::DOUBLEBARNDOOR },
+                { XML_DOUBLEDIAMOND,        TransitionSubType::DOUBLEDIAMOND },
+                { XML_DOWN,                 TransitionSubType::DOWN },
+                { XML_LEFT,                 TransitionSubType::LEFT },
+                { XML_UP,                   TransitionSubType::UP },
+                { XML_RIGHT,                TransitionSubType::RIGHT },
+                { XML_RECTANGLE,            TransitionSubType::RECTANGLE },
+                { XML_DIAMOND,              TransitionSubType::DIAMOND },
+                { XML_CIRCLE,               TransitionSubType::CIRCLE },
+                { XML_FOURPOINT,            TransitionSubType::FOURPOINT },
+                { XML_FIVEPOINT,            TransitionSubType::FIVEPOINT },
+                { XML_SIXPOINT,             TransitionSubType::SIXPOINT },
+                { XML_HEART,                TransitionSubType::HEART },
+                { XML_KEYHOLE,              TransitionSubType::KEYHOLE },
+                { XML_CLOCKWISETWELVE,      TransitionSubType::CLOCKWISETWELVE },
+                { XML_CLOCKWISETHREE,       TransitionSubType::CLOCKWISETHREE },
+                { XML_CLOCKWISESIX,         TransitionSubType::CLOCKWISESIX },
+                { XML_CLOCKWISENINE,        TransitionSubType::CLOCKWISENINE },
+                { XML_TWOBLADEVERTICAL,     TransitionSubType::TWOBLADEVERTICAL },
+                { XML_TWOBLADEHORIZONTAL,   TransitionSubType::TWOBLADEHORIZONTAL },
+                { XML_FOURBLADE,            TransitionSubType::FOURBLADE },
+                { XML_CLOCKWISETOP,         TransitionSubType::CLOCKWISETOP },
+                { XML_CLOCKWISERIGHT,       TransitionSubType::CLOCKWISERIGHT },
+                { XML_CLOCKWISEBOTTOM,      TransitionSubType::CLOCKWISEBOTTOM },
+                { XML_CLOCKWISELEFT,        TransitionSubType::CLOCKWISELEFT },
+                { XML_CLOCKWISETOPLEFT,     TransitionSubType::CLOCKWISETOPLEFT },
+                { XML_COUNTERCLOCKWISEBOTTOMLEFT,TransitionSubType::COUNTERCLOCKWISEBOTTOMLEFT },
+                { XML_CLOCKWISEBOTTOMRIGHT, TransitionSubType::CLOCKWISEBOTTOMRIGHT },
+                { XML_COUNTERCLOCKWISETOPRIGHT,TransitionSubType::COUNTERCLOCKWISETOPRIGHT },
+                { XML_CENTERTOP,            TransitionSubType::CENTERTOP },
+                { XML_CENTERRIGHT,          TransitionSubType::CENTERRIGHT },
+                { XML_TOP,                  TransitionSubType::TOP },
+                { XML_BOTTOM,               TransitionSubType::BOTTOM },
+                { XML_FANOUTVERTICAL,       TransitionSubType::FANOUTVERTICAL },
+                { XML_FANOUTHORIZONTAL,     TransitionSubType::FANOUTHORIZONTAL },
+                { XML_FANINVERTICAL,        TransitionSubType::FANINVERTICAL },
+                { XML_FANINHORIZONTAL,      TransitionSubType::FANINHORIZONTAL },
+                { XML_PARALLELVERTICAL,     TransitionSubType::PARALLELVERTICAL },
+                { XML_PARALLELDIAGONAL,     TransitionSubType::PARALLELDIAGONAL },
+                { XML_OPPOSITEVERTICAL,     TransitionSubType::OPPOSITEVERTICAL },
+                { XML_OPPOSITEHORIZONTAL,   TransitionSubType::OPPOSITEHORIZONTAL },
+                { XML_PARALLELDIAGONALTOPLEFT,TransitionSubType::PARALLELDIAGONALTOPLEFT },
+                { XML_PARALLELDIAGONALBOTTOMLEFT,TransitionSubType::PARALLELDIAGONALBOTTOMLEFT },
+                { XML_TOPLEFTHORIZONTAL,    TransitionSubType::TOPLEFTHORIZONTAL },
+                { XML_TOPLEFTDIAGONAL,      TransitionSubType::TOPLEFTDIAGONAL },
+                { XML_TOPRIGHTDIAGONAL,     TransitionSubType::TOPRIGHTDIAGONAL },
+                { XML_BOTTOMRIGHTDIAGONAL,  TransitionSubType::BOTTOMRIGHTDIAGONAL },
+                { XML_BOTTOMLEFTDIAGONAL,   TransitionSubType::BOTTOMLEFTDIAGONAL },
+                { XML_TOPLEFTCLOCKWISE,     TransitionSubType::TOPLEFTCLOCKWISE },
+                { XML_TOPRIGHTCLOCKWISE,    TransitionSubType::TOPRIGHTCLOCKWISE },
+                { XML_BOTTOMRIGHTCLOCKWISE, TransitionSubType::BOTTOMRIGHTCLOCKWISE },
+                { XML_BOTTOMLEFTCLOCKWISE,  TransitionSubType::BOTTOMLEFTCLOCKWISE },
+                { XML_TOPLEFTCOUNTERCLOCKWISE,TransitionSubType::TOPLEFTCOUNTERCLOCKWISE },
+                { XML_TOPRIGHTCOUNTERCLOCKWISE,TransitionSubType::TOPRIGHTCOUNTERCLOCKWISE },
+                { XML_BOTTOMRIGHTCOUNTERCLOCKWISE,TransitionSubType::BOTTOMRIGHTCOUNTERCLOCKWISE },
+                { XML_BOTTOMLEFTCOUNTERCLOCKWISE,TransitionSubType::BOTTOMLEFTCOUNTERCLOCKWISE },
+                { XML_VERTICALTOPSAME,      TransitionSubType::VERTICALTOPSAME },
+                { XML_VERTICALBOTTOMSAME,   TransitionSubType::VERTICALBOTTOMSAME },
+                { XML_VERTICALTOPLEFTOPPOSITE,TransitionSubType::VERTICALTOPLEFTOPPOSITE },
+                { XML_VERTICALBOTTOMLEFTOPPOSITE,TransitionSubType::VERTICALBOTTOMLEFTOPPOSITE },
+                { XML_HORIZONTALLEFTSAME,   TransitionSubType::HORIZONTALLEFTSAME },
+                { XML_HORIZONTALRIGHTSAME,  TransitionSubType::HORIZONTALRIGHTSAME },
+                { XML_HORIZONTALTOPLEFTOPPOSITE,TransitionSubType::HORIZONTALTOPLEFTOPPOSITE },
+                { XML_HORIZONTALTOPRIGHTOPPOSITE,TransitionSubType::HORIZONTALTOPRIGHTOPPOSITE },
+                { XML_DIAGONALBOTTOMLEFTOPPOSITE,TransitionSubType::DIAGONALBOTTOMLEFTOPPOSITE },
+                { XML_DIAGONALTOPLEFTOPPOSITE,TransitionSubType::DIAGONALTOPLEFTOPPOSITE },
+                { XML_TWOBOXTOP,            TransitionSubType::TWOBOXTOP },
+                { XML_TWOBOXBOTTOM,         TransitionSubType::TWOBOXBOTTOM },
+                { XML_TWOBOXLEFT,           TransitionSubType::TWOBOXLEFT },
+                { XML_TWOBOXRIGHT,          TransitionSubType::TWOBOXRIGHT },
+                { XML_FOURBOXVERTICAL,      TransitionSubType::FOURBOXVERTICAL },
+                { XML_FOURBOXHORIZONTAL,    TransitionSubType::FOURBOXHORIZONTAL },
+                { XML_VERTICALLEFT,         TransitionSubType::VERTICALLEFT },
+                { XML_VERTICALRIGHT,        TransitionSubType::VERTICALRIGHT },
+                { XML_HORIZONTALLEFT,       TransitionSubType::HORIZONTALLEFT },
+                { XML_HORIZONTALRIGHT,      TransitionSubType::HORIZONTALRIGHT },
+                { XML_FROMLEFT,             TransitionSubType::FROMLEFT },
+                { XML_FROMTOP,              TransitionSubType::FROMTOP },
+                { XML_FROMRIGHT,            TransitionSubType::FROMRIGHT },
+                { XML_FROMBOTTOM,           TransitionSubType::FROMBOTTOM },
+                { XML_CROSSFADE,            TransitionSubType::CROSSFADE },
+                { XML_FADETOCOLOR,          TransitionSubType::FADETOCOLOR },
+                { XML_FADEFROMCOLOR,        TransitionSubType::FADEFROMCOLOR },
+                { XML_FADEOVERCOLOR,        TransitionSubType::FADEOVERCOLOR },
+                { XML_THREEBLADE,           TransitionSubType::THREEBLADE },
+                { XML_EIGHTBLADE,           TransitionSubType::EIGHTBLADE },
+                { XML_ONEBLADE,             TransitionSubType::ONEBLADE },
+                { XML_ACROSS,               TransitionSubType::ACROSS },
+                { XML_COMBHORIZONTAL,       TransitionSubType::COMBHORIZONTAL },
+                { XML_COMBVERTICAL,         TransitionSubType::COMBVERTICAL },
+                { XML_IN,                   TransitionSubType::IN },
+                { XML_OUT,                  TransitionSubType::OUT },
+                { XML_ROTATEIN,             TransitionSubType::ROTATEIN },
+                { XML_ROTATEOUT,            TransitionSubType::ROTATEOUT },
+                { XML_ROTATEOUT,            TransitionSubType::ROTATEOUT },
+                { XML_FROMTOPLEFT,          TransitionSubType::FROMTOPLEFT },
+                { XML_FROMTOPRIGHT,         TransitionSubType::FROMTOPRIGHT },
+                { XML_FROMBOTTOMLEFT,       TransitionSubType::FROMBOTTOMLEFT },
+                { XML_FROMBOTTOMRIGHT,      TransitionSubType::FROMBOTTOMRIGHT },
+
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_TransitionSubType;
+        }
+    case Animations_EnumMap_EventTrigger:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[] =
+            {
+                { XML_ONBEGIN,          EventTrigger::ON_BEGIN },
+                { XML_ONEND,            EventTrigger::ON_END },
+                { XML_BEGIN,            EventTrigger::BEGIN_EVENT },
+                { XML_END,              EventTrigger::END_EVENT },
+                { XML_CLICK,            EventTrigger::ON_CLICK },
+                { XML_DOUBLECLICK,      EventTrigger::ON_DBL_CLICK },
+                { XML_MOUSEOVER,        EventTrigger::ON_MOUSE_ENTER },
+                { XML_MOUSEOUT,         EventTrigger::ON_MOUSE_LEAVE },
+                { XML_NEXT,             EventTrigger::ON_NEXT },
+                { XML_PREVIOUS,         EventTrigger::ON_PREV },
+                { XML_STOP_AUDIO,       EventTrigger::ON_STOP_AUDIO },
+                { XML_REPEAT,           EventTrigger::REPEAT },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_EventTrigger;
+        }
+
+    case Animations_EnumMap_EffectPresetClass:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[] =
+            {
+                { XML_CUSTOM,       EffectPresetClass::CUSTOM },
+                { XML_ENTRANCE,     EffectPresetClass::ENTRANCE },
+                { XML_EXIT,         EffectPresetClass::EXIT },
+                { XML_EMPHASIS,     EffectPresetClass::EMPHASIS },
+                { XML_MOTION_PATH,  EffectPresetClass::MOTIONPATH },
+                { XML_OLE_ACTION,   EffectPresetClass::OLEACTION },
+                { XML_MEDIA_CALL,   EffectPresetClass::MEDIACALL },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_EffectPresetClass;
+        }
+
+    case Animations_EnumMap_EffectNodeType:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[] =
+            {
+                { XML_DEFAULT,                  EffectNodeType::DEFAULT },
+                { XML_ON_CLICK,                 EffectNodeType::ON_CLICK },
+                { XML_WITH_PREVIOUS,            EffectNodeType::WITH_PREVIOUS },
+                { XML_AFTER_PREVIOUS,           EffectNodeType::AFTER_PREVIOUS },
+                { XML_MAIN_SEQUENCE,            EffectNodeType::MAIN_SEQUENCE },
+                { XML_TIMING_ROOT,              EffectNodeType::TIMING_ROOT },
+                { XML_INTERACTIVE_SEQUENCE,     EffectNodeType::INTERACTIVE_SEQUENCE },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_EffectNodeType;
+        }
+    case Animations_EnumMap_SubItem:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_SubItem[] =
+            {
+                { XML_WHOLE,                    ShapeAnimationSubType::AS_WHOLE },
+                { XML_BACKGROUND,               ShapeAnimationSubType::ONLY_BACKGROUND },
+                { XML_TEXT,                     ShapeAnimationSubType::ONLY_TEXT },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_SubItem;
+        }
+    case Animations_EnumMap_IterateType:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_IterateType[] =
+            {
+                { XML_BY_PARAGRAPH,             TextAnimationType::BY_PARAGRAPH },
+                { XML_BY_WORD,                  TextAnimationType::BY_WORD },
+                { XML_BY_LETTER,                TextAnimationType::BY_LETTER },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_IterateType;
+        }
+    case Animations_EnumMap_Command:
+        {
+            static SvXMLEnumMapEntry aAnimations_EnumMap_Command[] =
+            {
+                { XML_CUSTOM,                   EffectCommands::CUSTOM },
+                { XML_VERB,                     EffectCommands::VERB },
+                { XML_PLAY,                     EffectCommands::PLAY },
+                { XML_TOGGLE_PAUSE,             EffectCommands::TOGGLEPAUSE },
+                { XML_STOP,                     EffectCommands::STOP },
+                { XML_STOP_AUDIO,               EffectCommands::STOPAUDIO },
+                { XML_TOKEN_INVALID, 0 }
+            };
+            return aAnimations_EnumMap_Command;
+        }
+    }
+
+    DBG_ERROR( "xmloff::getAnimationsEnumMap(), invalid map!" );
+    return NULL;
+}
+
+struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList()
+{
+    static struct ImplAttributeNameConversion gImplConversionList[] =
+    {
+        { XML_X,                        "X" },
+        { XML_Y,                        "Y" },
+        { XML_WIDTH,                    "Width" },
+        { XML_HEIGHT,                   "Height" },
+        { XML_ROTATE,                   "Rotate" },
+        { XML_SKEWX,                    "SkewX" },
+        { XML_FILL_COLOR,               "FillColor" },
+        { XML_FILL,                     "FillStyle" },
+        { XML_STROKE_COLOR,             "LineColor" },
+        { XML_STROKE,                   "LineStyle" },
+        { XML_COLOR,                    "CharColor" },
+        { XML_TEXT_ROTATION_ANGLE,      "CharRotation" },
+        { XML_FONT_WEIGHT,              "CharWeight" },
+        { XML_TEXT_UNDERLINE,           "CharUnderline" },
+        { XML_FONT_FAMILY,              "CharFontName" },
+        { XML_FONT_SIZE,                "CharHeight" },
+        { XML_FONT_STYLE,               "CharPosture" },
+        { XML_VISIBILITY,               "Visibility" },
+        { XML_OPACITY,                  "Opacity" },
+        { XML_DIM,                      "DimColor" },
+        { XML_TOKEN_INVALID,            NULL }
+    };
+
+    return gImplConversionList;
+}
+
+
+class AnimationsExporterImpl
+{
+public:
+    AnimationsExporterImpl( SvXMLExport& rExport );
+
+    void prepareNode( const Reference< XAnimationNode >& xNode );
+    void exportNode( const Reference< XAnimationNode >& xNode );
+
+    void exportContainer( const Reference< XTimeContainer >& xNode );
+    void exportAnimate( const Reference< XAnimate >& xNode );
+    void exportAudio( const Reference< XAudio >& xAudio );
+    void exportCommand( const Reference< XCommand >& xCommand );
+
+    Reference< XInterface > getParagraphTarget( const ParagraphTarget* pTarget ) const;
+
+    void convertPath( OUStringBuffer& sTmp, const Any& rPath );
+    void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue );
+    void convertTiming( OUStringBuffer& sTmp, const Any& rTiming );
+    void convertSource( OUStringBuffer& sTmp, const Any& rSource );
+    void convertTarget( OUStringBuffer& sTmp, const Any& rTarget );
+
+    void prepareValue( const Any& rValue );
+
+private:
+    SvXMLExport& mrExport;
+    Reference< XInterface > mxExport;
+};
+
+AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport )
+: mrExport( rExport )
+{
+    try
+    {
+        mxExport = static_cast< ::com::sun::star::document::XFilter *>(&rExport);
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
+    }
+}
+
+void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNode )
+{
+    try
+    {
+        prepareValue( xNode->getBegin() );
+        prepareValue( xNode->getEnd() );
+
+        sal_Int16 nNodeType = xNode->getType();
+        switch( nNodeType )
+        {
+        case AnimationNodeType::ITERATE:
+        {
+            Reference< XIterateContainer > xIter( xNode, UNO_QUERY_THROW );
+            prepareValue( xIter->getTarget() );
+        }
+        // its intended that here is no break!
+        case AnimationNodeType::PAR:
+        case AnimationNodeType::SEQ:
+        {
+            Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+            while( xEnumeration->hasMoreElements() )
+            {
+                Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+                prepareNode( xChildNode );
+            }
+        }
+        break;
+
+        case AnimationNodeType::ANIMATE:
+        case AnimationNodeType::SET:
+        case AnimationNodeType::ANIMATEMOTION:
+        case AnimationNodeType::ANIMATECOLOR:
+        case AnimationNodeType::ANIMATETRANSFORM:
+        case AnimationNodeType::TRANSITIONFILTER:
+        {
+            Reference< XAnimate > xAnimate( xNode, UNO_QUERY_THROW );
+            prepareValue( xAnimate->getTarget() );
+        }
+        break;
+
+        case AnimationNodeType::COMMAND:
+        {
+            Reference< XCommand > xCommand( xNode, UNO_QUERY_THROW );
+            prepareValue( xCommand->getTarget() );
+        }
+        break;
+
+        case AnimationNodeType::AUDIO:
+        {
+            Reference< XAudio > xAudio( xNode, UNO_QUERY_THROW );
+            prepareValue( xAudio->getSource() );
+        }
+        break;
+        }
+
+        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        if( aUserData.hasElements() )
+        {
+            const NamedValue* pValue = aUserData.getConstArray();
+            const sal_Int32 nLength = aUserData.getLength();
+            sal_Int32 nElement;
+            for( nElement = 0; nElement < nLength; nElement++, pValue++ )
+            {
+                if( IsXMLToken( pValue->Name, XML_MASTER ) )
+                {
+                    Reference< XInterface > xMaster;
+                    pValue->Value >>= xMaster;
+                    if( xMaster.is() )
+                        mrExport.getInterfaceToIdentifierMapper().registerReference( xMaster );
+                }
+            }
+        }
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException catched!" );
+    }
+}
+
+void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNode )
+{
+    try
+    {
+        OUStringBuffer sTmp;
+
+        const OUString& rIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xNode );
+        if( rIdentifier.getLength() )
+            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ID, rIdentifier );
+
+        Any aTemp( xNode->getBegin() );
+        if( aTemp.hasValue() )
+        {
+            convertTiming( sTmp, aTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_BEGIN, sTmp.makeStringAndClear() );
+        }
+
+        double fTemp;
+        sal_Int32 nTemp;
+
+        aTemp = xNode->getDuration();
+        if( aTemp.hasValue() )
+        {
+            if( aTemp >>= fTemp )
+            {
+                SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+                sTmp.append( sal_Unicode('s'));
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
+            }
+            else
+            {
+                Timing eTiming;
+                if( aTemp >>= eTiming )
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, eTiming == Timing_INDEFINITE ? XML_INDEFINITE : XML_MEDIA );
+            }
+        }
+
+        aTemp = xNode->getEnd();
+        if( aTemp.hasValue() )
+        {
+            convertTiming( sTmp, aTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_END, sTmp.makeStringAndClear() );
+        }
+
+        nTemp = xNode->getFill();
+        if( nTemp != AnimationFill::DEFAULT )
+        {
+            SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_Fill) );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FILL, sTmp.makeStringAndClear() );
+        }
+
+        nTemp = xNode->getFillDefault();
+        if( nTemp != AnimationFill::INHERIT )
+        {
+            SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_FillDefault) );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FILLDEFAULT, sTmp.makeStringAndClear() );
+        }
+
+        nTemp = xNode->getRestart();
+        if( nTemp != AnimationRestart::DEFAULT )
+        {
+            SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_Restart) );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_RESTART, sTmp.makeStringAndClear() );
+        }
+
+        nTemp = xNode->getRestartDefault();
+        if( nTemp != AnimationRestart::INHERIT )
+        {
+            SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_RestartDefault) );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_RESTARTDEFAULT, sTmp.makeStringAndClear() );
+        }
+
+        fTemp = xNode->getAcceleration();
+        if( fTemp != 0.0 )
+        {
+            SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ACCELERATE, sTmp.makeStringAndClear() );
+        }
+
+        fTemp = xNode->getDecelerate();
+        if( fTemp != 0.0 )
+        {
+            SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DECELERATE, sTmp.makeStringAndClear() );
+        }
+
+        sal_Bool bTemp = xNode->getAutoReverse();
+        if( bTemp )
+        {
+            SvXMLUnitConverter::convertBool( sTmp, bTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_AUTOREVERSE, sTmp.makeStringAndClear() );
+        }
+
+        aTemp = xNode->getRepeatCount();
+        if( aTemp.hasValue() )
+        {
+            Timing eTiming;
+            if( (aTemp >>= eTiming ) && (eTiming == Timing_INDEFINITE ) )
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, XML_INDEFINITE );
+            else if( aTemp >>= fTemp )
+            {
+                SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, sTmp.makeStringAndClear() );
+            }
+        }
+
+        aTemp = xNode->getRepeatDuration();
+        if( aTemp.hasValue() )
+        {
+            Timing eTiming;
+            if( ( aTemp >>= eTiming ) && (eTiming == Timing_INDEFINITE) )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATDUR, XML_INDEFINITE );
+            }
+            else if( aTemp >>= fTemp )
+            {
+                SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATDUR, sTmp.makeStringAndClear() );
+            }
+        }
+
+        aTemp = xNode->getEndSync();
+        if( aTemp.hasValue() )
+        {
+            if( aTemp >>= nTemp )
+            {
+                SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_Endsync) );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ENDSYNC, sTmp.makeStringAndClear() );
+            }
+        }
+
+
+        OUString aPresetId;
+        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        if( aUserData.hasElements() )
+        {
+            const NamedValue* pValue = aUserData.getConstArray();
+            const sal_Int32 nLength = aUserData.getLength();
+            sal_Int32 nElement;
+            for( nElement = 0; nElement < nLength; nElement++, pValue++ )
+            {
+                if( IsXMLToken( pValue->Name, XML_NODE_TYPE ) )
+                {
+                    sal_Int16 nNodeType;
+                    if( (pValue->Value >>= nNodeType) && (nNodeType != EffectNodeType::DEFAULT) )
+                    {
+                        SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nNodeType, getAnimationsEnumMap(Animations_EnumMap_EffectNodeType) );
+                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE, sTmp.makeStringAndClear() );
+                    }
+                }
+                else if( IsXMLToken( pValue->Name, XML_PRESET_ID ) )
+                {
+                    if( pValue->Value >>= aPresetId )
+                    {
+                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_ID, aPresetId );
+                    }
+                }
+                else if( IsXMLToken( pValue->Name, XML_PRESET_SUB_TYPE ) )
+                {
+                    OUString aPresetSubType;
+                    if( pValue->Value >>= aPresetSubType )
+                    {
+                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_SUB_TYPE, aPresetSubType );
+                    }
+                }
+                else if( IsXMLToken( pValue->Name, XML_PRESET_CLASS ) )
+                {
+                    sal_Int16 nEffectPresetClass;
+                    if( pValue->Value >>= nEffectPresetClass )
+                    {
+                        SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nEffectPresetClass, getAnimationsEnumMap(Animations_EnumMap_EffectPresetClass) );
+                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS, sTmp.makeStringAndClear() );
+                    }
+                }
+                else if( IsXMLToken( pValue->Name, XML_MASTER_ELEMENT ) )
+                {
+                    Reference< XInterface > xMaster;
+                    pValue->Value >>= xMaster;
+                    if( xMaster.is() )
+                    {
+                        const OUString& rIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier(xMaster);
+                        if( rIdentifier.getLength() )
+                            mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_MASTER_ELEMENT, rIdentifier );
+                    }
+                }
+                else if( IsXMLToken( pValue->Name, XML_GROUP_ID ) )
+                {
+                    sal_Int32 nGroupId;
+                    if( pValue->Value >>= nGroupId )
+                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_GROUP_ID, OUString::valueOf( nGroupId ) );
+                }
+                else
+                {
+                    OUString aTmp;
+                    if( pValue->Value >>= aTmp )
+                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, pValue->Name, aTmp );
+                }
+            }
+        }
+
+        nTemp = xNode->getType();
+        switch( nTemp )
+        {
+        case AnimationNodeType::PAR:
+        case AnimationNodeType::SEQ:
+        case AnimationNodeType::ITERATE:
+        {
+            Reference< XTimeContainer > xContainer( xNode, UNO_QUERY_THROW );
+            exportContainer( xContainer );
+        }
+        break;
+
+        case AnimationNodeType::ANIMATE:
+        case AnimationNodeType::SET:
+        case AnimationNodeType::ANIMATEMOTION:
+        case AnimationNodeType::ANIMATECOLOR:
+        case AnimationNodeType::ANIMATETRANSFORM:
+        case AnimationNodeType::TRANSITIONFILTER:
+        {
+            Reference< XAnimate > xAnimate( xNode, UNO_QUERY_THROW );
+            exportAnimate( xAnimate );
+        }
+        break;
+        case AnimationNodeType::AUDIO:
+        {
+            Reference< XAudio > xAudio( xNode, UNO_QUERY_THROW );
+            exportAudio( xAudio );
+        }
+        break;
+        case AnimationNodeType::COMMAND:
+        {
+            Reference< XCommand > xCommand( xNode, UNO_QUERY_THROW );
+            exportCommand( xCommand );
+        }
+        break;
+        default:
+            DBG_ERROR( "xmloff::AnimationsExporterImpl::exportNode(), invalid AnimationNodeType!" );
+        }
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException catched!" );
+    }
+
+    // if something goes wrong, its always a good idea to clear the attribute list
+    mrExport.ClearAttrList();
+}
+
+void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >& xContainer )
+{
+    try
+    {
+        const sal_Int32 nNodeType = xContainer->getType();
+
+        if( nNodeType == AnimationNodeType::ITERATE )
+        {
+            OUStringBuffer sTmp;
+            Reference< XIterateContainer > xIter( xContainer, UNO_QUERY_THROW );
+
+            Any aTemp( xIter->getTarget() );
+            if( aTemp.hasValue() )
+            {
+                convertTarget( sTmp, aTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TARGETELEMENT, sTmp.makeStringAndClear() );
+            }
+
+            sal_Int16 nTemp = xIter->getSubItem();
+            if( nTemp )
+            {
+                SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_SubItem) );
+                mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_SUB_ITEM, sTmp.makeStringAndClear() );
+            }
+
+            nTemp = xIter->getIterateType();
+            if( nTemp )
+            {
+                SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_IterateType) );
+                mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_TYPE, sTmp.makeStringAndClear() );
+            }
+
+            double fTemp = xIter->getIterateInterval();
+            if( fTemp )
+            {
+                sTmp.append( fTemp );
+                sTmp.append( (sal_Unicode)'%' );
+                mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, sTmp.makeStringAndClear() );
+            }
+        }
+
+        XMLTokenEnum eElementToken;
+        switch( nNodeType )
+        {
+        case AnimationNodeType::PAR:    eElementToken = XML_PAR; break;
+        case AnimationNodeType::SEQ:    eElementToken = XML_SEQ; break;
+        case AnimationNodeType::ITERATE:eElementToken = XML_ITERATE; break;
+        default:
+            DBG_ERROR( "xmloff::AnimationsExporterImpl::exportContainer(), invalid TimeContainerType!" );
+            return;
+        }
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
+
+        Reference< XEnumerationAccess > xEnumerationAccess( xContainer, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+            exportNode( xChildNode );
+        }
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException catched!" );
+    }
+}
+
+void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimate )
+{
+    try
+    {
+        const sal_Int16 nNodeType = xAnimate->getType();
+
+        OUStringBuffer sTmp;
+        sal_Int32 nTemp;
+        sal_Bool bTemp;
+
+        Any aTemp( xAnimate->getTarget() );
+        if( aTemp.hasValue() )
+        {
+            convertTarget( sTmp, aTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TARGETELEMENT, sTmp.makeStringAndClear() );
+        }
+
+        nTemp = xAnimate->getSubItem();
+        if( nTemp )
+        {
+            SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_SubItem) );
+            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_SUB_ITEM, sTmp.makeStringAndClear() );
+        }
+
+        XMLTokenEnum eAttributeName = XML_TOKEN_INVALID;
+
+        if( nNodeType == AnimationNodeType::TRANSITIONFILTER )
+        {
+            eAttributeName = XML_TRANSITIONFILTER;
+        }
+        else if( nNodeType == AnimationNodeType::ANIMATETRANSFORM )
+        {
+            eAttributeName = XML_ANIMATETRANSFORM;
+        }
+        else if( nNodeType == AnimationNodeType::ANIMATEMOTION )
+        {
+            eAttributeName = XML_ANIMATEMOTION;
+        }
+        else
+        {
+            OUString sTemp( xAnimate->getAttributeName() );
+            if( sTemp.getLength() )
+            {
+                ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
+                while( p->mpAPIName )
+                {
+                    if( sTemp.compareToAscii( p->mpAPIName ) == 0 )
+                    {
+                        sTemp = GetXMLToken( p->meXMLToken );
+                        eAttributeName = p->meXMLToken;
+                        break;
+                    }
+
+                    p++;
+                }
+
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, sTemp );
+            }
+            else
+            {
+                OUString aStr( RTL_CONSTASCII_USTRINGPARAM( "invalid" ) );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, aStr );
+            }
+        }
+
+        Sequence< Any > aValues( xAnimate->getValues() );
+        if( aValues.getLength() )
+        {
+            aTemp <<= aValues;
+            convertValue( eAttributeName, sTmp, aTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_VALUES, sTmp.makeStringAndClear() );
+        }
+        else
+        {
+            aTemp = xAnimate->getFrom();
+            if( aTemp.hasValue() )
+            {
+                convertValue( eAttributeName, sTmp, aTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FROM, sTmp.makeStringAndClear() );
+            }
+
+            aTemp = xAnimate->getBy();
+            if( aTemp.hasValue() )
+            {
+                convertValue( eAttributeName, sTmp, aTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_BY, sTmp.makeStringAndClear() );
+            }
+
+            aTemp = xAnimate->getTo();
+            if( aTemp.hasValue() )
+            {
+                convertValue( eAttributeName, sTmp, aTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TO, sTmp.makeStringAndClear() );
+            }
+        }
+
+        if(nNodeType != AnimationNodeType::SET)
+        {
+            Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
+            if( aKeyTimes.getLength() )
+            {
+                sal_Int32 nLength = aKeyTimes.getLength();
+                const double* p = aKeyTimes.getConstArray();
+
+                while( nLength-- )
+                {
+                    if( sTmp.getLength() )
+                        sTmp.append( (sal_Unicode)';' );
+
+                    sTmp.append( *p++ );
+                }
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_KEYTIMES, sTmp.makeStringAndClear() );
+            }
+
+            OUString sTemp( xAnimate->getFormula() );
+            if( sTemp.getLength() )
+                mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_FORMULA, sTemp );
+
+            if( (nNodeType != AnimationNodeType::TRANSITIONFILTER) &&
+                (nNodeType != AnimationNodeType::AUDIO ) )
+            {
+                // calcMode  = "discrete | linear | paced | spline"
+                nTemp = xAnimate->getCalcMode();
+                if( ((nNodeType == AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::PACED)) ||
+                    ((nNodeType != AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::LINEAR)) )
+                {
+                    SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_CalcMode) );
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_CALCMODE, sTmp.makeStringAndClear() );
+                }
+
+                bTemp = xAnimate->getAccumulate();
+                if( bTemp )
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ACCUMULATE, XML_SUM );
+
+                nTemp = xAnimate->getAdditive();
+                if( nTemp != AnimationAdditiveMode::REPLACE )
+                {
+                    SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_AdditiveMode) );
+                    mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_ADDITIVE, sTmp.makeStringAndClear() );
+                }
+            }
+
+            Sequence< TimeFilterPair > aTimeFilter( xAnimate->getTimeFilter() );
+            if( aTimeFilter.getLength() )
+            {
+                sal_Int32 nLength = aTimeFilter.getLength();
+                const TimeFilterPair* p = aTimeFilter.getConstArray();
+
+                while( nLength-- )
+                {
+                    if( sTmp.getLength() )
+                        sTmp.append( (sal_Unicode)';' );
+
+                    sTmp.append( p->Time );
+                    sTmp.append( (sal_Unicode)',' );
+                    sTmp.append( p->Progress );
+
+                    p++;
+                }
+
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_KEYSPLINES, sTmp.makeStringAndClear() );
+            }
+        }
+
+        XMLTokenEnum eElementToken = XML_ANIMATE;
+
+        switch( nNodeType )
+        {
+        case AnimationNodeType::ANIMATE:
+            eElementToken = XML_ANIMATE;
+            break;
+
+        case AnimationNodeType::SET:
+            eElementToken = XML_SET;
+            break;
+
+        case AnimationNodeType::ANIMATEMOTION:
+        {
+            eElementToken = XML_ANIMATEMOTION;
+
+            Reference< XAnimateMotion > xAnimateMotion( xAnimate, UNO_QUERY_THROW );
+
+            aTemp = xAnimateMotion->getPath();
+            if( aTemp.hasValue() )
+            {
+                convertPath( sTmp, aTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_PATH, sTmp.makeStringAndClear() );
+            }
+
+            // TODO: origin = ( parent | layout )
+            aTemp = xAnimateMotion->getOrigin();
+        }
+        break;
+
+        case AnimationNodeType::ANIMATECOLOR:
+        {
+            eElementToken = XML_ANIMATECOLOR;
+
+            Reference< XAnimateColor > xAnimateColor( xAnimate, UNO_QUERY_THROW );
+
+            nTemp = xAnimateColor->getColorInterpolation();
+            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION, (nTemp == AnimationColorSpace::RGB) ? XML_RGB : XML_HSL );
+
+            bTemp = xAnimateColor->getDirection();
+            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION_DIRECTION, bTemp ? XML_CLOCKWISE : XML_COUNTER_CLOCKWISE );
+        }
+        break;
+
+        case AnimationNodeType::ANIMATETRANSFORM:
+        {
+            eElementToken = XML_ANIMATETRANSFORM;
+
+            Reference< XAnimateTransform > xTransform( xAnimate, UNO_QUERY_THROW );
+            nTemp = xTransform->getTransformType();
+            SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_TransformType) );
+            mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_TYPE, sTmp.makeStringAndClear() );
+        }
+        break;
+
+        case AnimationNodeType::TRANSITIONFILTER:
+        {
+            Reference< XTransitionFilter > xTransitionFilter( xAnimate, UNO_QUERY );
+            eElementToken = XML_TRANSITIONFILTER;
+
+            sal_Int16 nTransition = xTransitionFilter->getTransition();
+            SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTransition, getAnimationsEnumMap(Animations_EnumMap_TransitionType) );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
+
+            sal_Int16 nSubtype = xTransitionFilter->getSubtype();
+            if( nSubtype != TransitionSubType::DEFAULT )
+            {
+                SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nSubtype, getAnimationsEnumMap(Animations_EnumMap_TransitionSubType) );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
+            }
+
+            bTemp = xTransitionFilter->getMode();
+            if( !bTemp )
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_MODE, XML_OUT );
+
+            bTemp = xTransitionFilter->getDirection();
+            if( !bTemp )
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DIRECTION, XML_REVERSE );
+
+            if( (nTransition == TransitionType::FADE) && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR) ))
+            {
+                nTemp = xTransitionFilter->getFadeColor();
+                SvXMLUnitConverter::convertColor( sTmp, nTemp );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
+            }
+        }
+        break;
+        }
+
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
+
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
+    }
+}
+
+void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
+{
+    if( xAudio.is() ) try
+    {
+        OUString aSourceURL;
+        xAudio->getSource() >>= aSourceURL;
+        if( aSourceURL.getLength() )
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference( aSourceURL ) );
+
+        const double fVolume = xAudio->getVolume();
+        if( fVolume != 1.0 )
+        {
+            OUStringBuffer sTmp;
+            SvXMLUnitConverter::convertDouble( sTmp, fVolume );
+            mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_AUDIO_LEVEL, sTmp.makeStringAndClear() );
+        }
+
+/* todo?
+        sal_Int32 nEndAfterSlide = 0;
+        xAudio->getEndAfterSlide() >>= nEndAfterSlide;
+        if( nEndAfterSlide != 0 )
+            mrExport.AddAttribute( );
+*/
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, sal_True, sal_True );
+
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
+    }
+}
+
+void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xCommand )
+{
+    if( xCommand.is() ) try
+    {
+        OUStringBuffer sTmp;
+        Any aTemp( xCommand->getTarget() );
+        if( aTemp.hasValue() )
+        {
+            convertTarget( sTmp, aTemp );
+            mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TARGETELEMENT, sTmp.makeStringAndClear() );
+        }
+
+        sal_Int16 nCommand = xCommand->getCommand();
+        SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nCommand, getAnimationsEnumMap(Animations_EnumMap_Command) );
+        mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
+
+// todo virtual ::com::sun::star::uno::Any SAL_CALL getParameter() throw (::com::sun::star::uno::RuntimeException) = 0;
+
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
+
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
+    }
+}
+
+Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const ParagraphTarget* pTarget ) const
+{
+    if( pTarget ) try
+    {
+        Reference< XEnumerationAccess > xParaEnumAccess( pTarget->Shape, UNO_QUERY_THROW );
+
+        Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_QUERY_THROW );
+        sal_Int32 nParagraph = pTarget->Paragraph;
+
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XInterface > xRef( xEnumeration->nextElement(), UNO_QUERY );
+            if( nParagraph-- == 0 )
+                return xRef;
+        }
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException catched!" );
+    }
+
+    Reference< XInterface > xRef;
+    return xRef;
+}
+
+void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath )
+{
+    OUString aStr;
+    rPath >>= aStr;
+
+    sTmp = aStr;
+}
+
+void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue )
+{
+    if( !rValue.hasValue() )
+        return;
+
+    if( rValue.getValueType() == ::getCppuType((const ValuePair*)0) )
+    {
+        const ValuePair* pValuePair = static_cast< const ValuePair* >( rValue.getValue() );
+        OUStringBuffer sTmp2;
+        convertValue( eAttributeName, sTmp, pValuePair->First );
+        sTmp.append( (sal_Unicode)',' );
+        convertValue( eAttributeName, sTmp2, pValuePair->Second );
+        sTmp.append( sTmp2.makeStringAndClear() );
+    }
+    else if( rValue.getValueType() == ::getCppuType((Sequence<Any>*)0) )
+    {
+        const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
+        const sal_Int32 nLength = pSequence->getLength();
+        sal_Int32 nElement;
+        const Any* pAny = pSequence->getConstArray();
+
+        OUStringBuffer sTmp2;
+
+        for( nElement = 0; nElement < nLength; nElement++, pAny++ )
+        {
+            if( sTmp.getLength() )
+                sTmp.append( (sal_Unicode)';' );
+            convertValue( eAttributeName, sTmp2, *pAny );
+            sTmp.append( sTmp2.makeStringAndClear() );
+        }
+    }
+    else
+    {
+        OUString aString;
+        sal_Int32 nType;
+
+        switch( eAttributeName )
+        {
+        case XML_X:
+        case XML_Y:
+        case XML_WIDTH:
+        case XML_HEIGHT:
+        case XML_ANIMATETRANSFORM:
+        case XML_ANIMATEMOTION:
+        {
+            if( rValue >>= aString )
+            {
+                /*
+                const sal_Char* pSource[] = { "$X", "$Y", "$Width", "$Height", NULL };
+                const sal_Char* pDest[] = { "$x", "$y", "$width", "$height", NULL };
+                const sal_Int32 nLength[] = { 2, 2, 6, 7, 0 };
+
+                sal_Int32 nIndex = 0;
+                while( (nIndex = aString.indexOf( (sal_Unicode)'$', nIndex )) != -1  )
+                {
+                    const sal_Char** ps = pSource;
+                    const sal_Char** pd = pDest;
+                    const sal_Int32* pl = nLength;
+
+                    while( *ps )
+                    {
+                        if( aString.matchAsciiL( *ps, *pl, nIndex ) )
+                        {
+                            const OUString aNew( OUString::createFromAscii( *pd ) );
+                            aString = aString.replaceAt( nIndex, *pl, aNew );
+                            nIndex += aNew.getLength();
+                            break;
+                        }
+
+                        ps++;
+                        pd++;
+                        pl++;
+                    }
+
+                    if( *ps == 0 )
+                        nIndex++;
+                }
+                */
+                sTmp.append( aString );
+            }
+            else if( rValue.getValueType() == ::getCppuType((const double*)0) )
+            {
+                sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
+            }
+            else
+            {
+                DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
+            }
+            return;
+        }
+
+        case XML_SKEWX:
+        case XML_ROTATE:            nType = XML_TYPE_DOUBLE;                    break;
+        case XML_TEXT_ROTATION_ANGLE: nType = XML_TYPE_NUMBER16;                break;
+        case XML_FILL_COLOR:
+        case XML_STROKE_COLOR:
+        case XML_DIM:
+        case XML_COLOR:             nType = XML_TYPE_COLOR;                     break;
+        case XML_FILL:              nType = XML_SD_TYPE_FILLSTYLE;              break;
+        case XML_STROKE:            nType = XML_SD_TYPE_STROKE;                 break;
+        case XML_FONT_WEIGHT:       nType = XML_TYPE_TEXT_WEIGHT;               break;
+        case XML_FONT_STYLE:        nType = XML_TYPE_TEXT_POSTURE;              break;
+        case XML_TEXT_UNDERLINE:    nType = XML_TYPE_TEXT_UNDERLINE_STYLE;      break;
+        case XML_FONT_SIZE:         nType = XML_TYPE_CHAR_HEIGHT;               break;
+        case XML_VISIBILITY:        nType = XML_SD_TYPE_PRESPAGE_VISIBILITY;    break;
+        case XML_OPACITY:
+        case XML_TRANSITIONFILTER:  nType = XML_TYPE_DOUBLE;                    break;
+        default:
+            DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid AttributeName!" );
+            nType = XML_TYPE_STRING;
+        }
+
+        const XMLPropertyHandler* pHandler = static_cast<SdXMLExport*>(&mrExport)->GetSdPropHdlFactory()->GetPropertyHandler( nType );
+        if( pHandler )
+        {
+            pHandler->exportXML( aString, rValue, mrExport.GetMM100UnitConverter() );
+            sTmp.append( aString );
+        }
+    }
+
+/*
+    if( rValue.getValueType() == ::getCppuType((const double*)0) )
+    {
+        sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
+    }
+    else if( rValue.getValueType() == ::getCppuType((const OUString*)0) )
+    {
+        sTmp.append( *(static_cast< const OUString* >( rValue.getValue() )) );
+    }
+    else
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
+    }
+*/
+}
+
+void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rValue )
+{
+    if( !rValue.hasValue() )
+        return;
+
+    if( rValue.getValueType() == ::getCppuType((Sequence<Any>*)0) )
+    {
+        const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
+        const sal_Int32 nLength = pSequence->getLength();
+        sal_Int32 nElement;
+        const Any* pAny = pSequence->getConstArray();
+
+        OUStringBuffer sTmp2;
+
+        for( nElement = 0; nElement < nLength; nElement++, pAny++ )
+        {
+            if( sTmp.getLength() )
+                sTmp.append( (sal_Unicode)';' );
+            convertTiming( sTmp2, *pAny );
+            sTmp.append( sTmp2.makeStringAndClear() );
+        }
+    }
+    else if( rValue.getValueType() == ::getCppuType((const double*)0) )
+    {
+        sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
+        sTmp.append( sal_Unicode('s'));
+    }
+    else if( rValue.getValueType() == ::getCppuType((const Timing*)0) )
+    {
+        const Timing* pTiming = static_cast< const Timing* >( rValue.getValue() );
+        sTmp.append( GetXMLToken( (*pTiming == Timing_MEDIA) ? XML_MEDIA : XML_INDEFINITE ) );
+    }
+    else if( rValue.getValueType() == ::getCppuType((const Event*)0) )
+    {
+        OUStringBuffer sTmp2;
+
+        const Event* pEvent = static_cast< const Event* >( rValue.getValue() );
+
+        if( pEvent->Trigger != EventTrigger::NONE )
+        {
+            if( pEvent->Source.hasValue() )
+            {
+                convertSource( sTmp, pEvent->Source );
+                sTmp.append( (sal_Unicode)'.' );
+            }
+
+            SvXMLUnitConverter::convertEnum( sTmp2, (USHORT)pEvent->Trigger, getAnimationsEnumMap(Animations_EnumMap_EventTrigger) );
+
+            sTmp.append( sTmp2.makeStringAndClear() );
+        }
+
+        if( pEvent->Offset.hasValue() )
+        {
+            convertTiming( sTmp2, pEvent->Offset );
+
+            if( sTmp.getLength() )
+                sTmp.append( (sal_Unicode)'+' );
+
+            sTmp.append( sTmp2.makeStringAndClear() );
+        }
+    }
+    else
+    {
+        DBG_ERROR( "xmloff::AnimationsExporterImpl::convertTiming(), invalid value type!" );
+    }
+}
+
+void AnimationsExporterImpl::convertSource( OUStringBuffer& sTmp, const Any& rSource )
+{
+    convertTarget( sTmp, rSource );
+}
+
+void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTarget )
+{
+    if( !rTarget.hasValue() )
+        return;
+
+    Reference< XInterface > xRef;
+
+    if( rTarget.getValueTypeClass() == typelib_TypeClass_INTERFACE )
+    {
+        rTarget >>= xRef;
+    }
+    else if( rTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    {
+        xRef = getParagraphTarget( static_cast< const ParagraphTarget* >( rTarget.getValue() ) );
+    }
+
+    DBG_ASSERT( xRef.is(), "xmloff::AnimationsExporterImpl::convertTarget(), invalid target type!" );
+    if( xRef.is() )
+    {
+        const OUString& rIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier(xRef);
+        if( rIdentifier.getLength() )
+            sTmp.append( rIdentifier );
+    }
+}
+
+void AnimationsExporterImpl::prepareValue( const Any& rValue )
+{
+    if( !rValue.hasValue() )
+        return;
+
+    if( rValue.getValueType() == ::getCppuType((const ValuePair*)0) )
+    {
+        const ValuePair* pValuePair = static_cast< const ValuePair* >( rValue.getValue() );
+        prepareValue( pValuePair->First );
+        prepareValue( pValuePair->Second );
+    }
+    else if( rValue.getValueType() == ::getCppuType((Sequence<Any>*)0) )
+    {
+        const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
+        const sal_Int32 nLength = pSequence->getLength();
+        sal_Int32 nElement;
+        const Any* pAny = pSequence->getConstArray();
+
+        for( nElement = 0; nElement < nLength; nElement++, pAny++ )
+            prepareValue( *pAny );
+    }
+    else if( rValue.getValueTypeClass() == typelib_TypeClass_INTERFACE )
+    {
+        Reference< XInterface> xRef( rValue, UNO_QUERY );
+        if( xRef.is() )
+            mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
+    }
+    else if( rValue.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    {
+        Reference< XInterface> xRef( getParagraphTarget( static_cast< const ParagraphTarget* >( rValue.getValue() ) ) );
+        if( xRef.is() )
+            mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
+    }
+    else if( rValue.getValueType() == ::getCppuType((const Event*)0) )
+    {
+        const Event* pEvent = static_cast< const Event* >( rValue.getValue() );
+        prepareValue( pEvent->Source );
+    }
+}
+
+AnimationsExporter::AnimationsExporter( SvXMLExport& rExport )
+{
+    mpImpl = new AnimationsExporterImpl( rExport );
+}
+
+AnimationsExporter::~AnimationsExporter()
+{
+    delete mpImpl;
+}
+
+void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )
+{
+    try
+    {
+        if( xRootNode.is() )
+            mpImpl->prepareNode( xRootNode );
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporter::prepare(), exception catched" );
+    }
+}
+
+void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode )
+{
+    try
+    {
+        if( xRootNode.is() )
+            mpImpl->exportNode( xRootNode );
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsExporter::exportAnimations(), exception catched" );
+    }
+}
+
+}
