@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:11:32 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 08:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ ODatabaseImportExport::ODatabaseImportExport(const Sequence< PropertyValue >& _a
 {
 
     DBG_CTOR(ODatabaseImportExport,NULL);
+    osl_incrementInterlockedCount( &m_refCount );
     // get the information we need
     const PropertyValue* pBegin = _aSeq.getConstArray();
     const PropertyValue* pEnd   = pBegin + _aSeq.getLength();
@@ -204,19 +205,13 @@ ODatabaseImportExport::ODatabaseImportExport(const Sequence< PropertyValue >& _a
     }
 
     OSL_ENSURE(m_sDataSourceName.getLength(),"There must be a datsource name!");
-    initialize();
+    osl_decrementInterlockedCount( &m_refCount );
 }
 //-------------------------------------------------------------------
 ODatabaseImportExport::~ODatabaseImportExport()
 {
     acquire();
-    // remove me as listener
-    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-    if (xComponent.is())
-    {
-        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
-        xComponent->removeEventListener(xEvt);
-    }
+
     disposing();
 
     if(m_pReader)
@@ -227,6 +222,13 @@ ODatabaseImportExport::~ODatabaseImportExport()
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::disposing()
 {
+    // remove me as listener
+    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+    if (xComponent.is())
+    {
+        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+        xComponent->removeEventListener(xEvt);
+    }
     if(m_bDisposeConnection)
         ::comphelper::disposeComponent(m_xConnection);
 
@@ -242,7 +244,7 @@ void ODatabaseImportExport::disposing()
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
 {
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
-    if(m_xConnection == xCon)
+    if(m_xConnection.is() && m_xConnection == xCon)
     {
         disposing();
         initialize();
@@ -295,23 +297,33 @@ void ODatabaseImportExport::initialize()
 
     if(m_xObject.is())
     {
-        if(m_xObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
-            m_xObject->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
-
-        m_xResultSet = Reference< XResultSet >(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-        Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
-        if(xProp.is())
+        try
         {
-            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
-            xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(m_nCommandType));
-            xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
-            Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-            xRowSet->execute();
-            m_xRow = Reference<XRow>(xRowSet,UNO_QUERY);
-            m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
+            if(m_xObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
+                m_xObject->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
+
+            m_xResultSet = Reference< XResultSet >(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
+            Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
+            if(xProp.is())
+            {
+                xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
+                xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(m_nCommandType));
+                xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
+                Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
+                xRowSet->execute();
+                m_xRow = Reference<XRow>(xRowSet,UNO_QUERY);
+                m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
+            }
+            else
+                OSL_ASSERT(0);
         }
-        else
-            OSL_ASSERT(0);
+        catch(Exception& )
+        {
+            m_xRow = NULL;
+            m_xResultSetMetaData = NULL;
+            ::comphelper::disposeComponent(m_xResultSet);
+            throw;
+        }
     }
     if(!m_aFont.Name.getLength())
         m_aFont.Name = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
