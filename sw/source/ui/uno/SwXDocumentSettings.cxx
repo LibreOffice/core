@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:12:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,9 @@ enum SwDocumentSettingsPropertyHandles
     // OD 2004-02-16 #106629#
     HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS,
     // OD 2004-03-17 #i11860#
-    HANDLE_USE_FORMER_OBJECT_POSITIONING
+    HANDLE_USE_FORMER_OBJECT_POSITIONING,
+    // FME 2004-04-22 #108724#, #i13832#, #i24135#
+    HANDLE_USE_FORMER_TEXT_WRAPPING
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -207,7 +209,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         CPPUTYPE_BOOLEAN,           0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("UseOldNumbering"),            HANDLE_OLD_NUMBERING,               CPPUTYPE_BOOLEAN,           0,   0}, // #111955#
+        { RTL_CONSTASCII_STRINGPARAM("UseOldNumbering"),            HANDLE_OLD_NUMBERING,                   CPPUTYPE_BOOLEAN,           0,   0}, // #111955#
         /* Stampit It disable the print cancel button of the shown progress dialog. */
         { RTL_CONSTASCII_STRINGPARAM("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           CPPUTYPE_BOOLEAN,           0,   0},
         // DVO, OD 12.01.2004 #i11859#
@@ -215,8 +217,10 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         // OD 2004-02-16 #106629#
         { RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells"), HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, CPPUTYPE_BOOLEAN,           0,   0},
         // OD 2004-03-17 #i11860#
-        { RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   CPPUTYPE_BOOLEAN,
- 0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   CPPUTYPE_BOOLEAN,           0,   0},
+        // FME 2004-04-22 #108724#, #i13832#, #i24135#
+        { RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        CPPUTYPE_BOOLEAN,           0,   0},
+
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -592,6 +596,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetUseFormerObjectPositioning( bTmp );
         }
         break;
+        // FME 2004-04-22 #108724#, #i13832#, #i24135#
+        case HANDLE_USE_FORMER_TEXT_WRAPPING:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetUseFormerTextWrapping( bTmp );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -801,6 +812,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_USE_FORMER_OBJECT_POSITIONING:
         {
             sal_Bool bTmp = mpDoc->IsFormerObjectPositioning();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // FME 2004-04-22 #108724#, #i13832#, #i24135#
+        case HANDLE_USE_FORMER_TEXT_WRAPPING:
+        {
+            sal_Bool bTmp = mpDoc->IsFormerTextWrapping();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
