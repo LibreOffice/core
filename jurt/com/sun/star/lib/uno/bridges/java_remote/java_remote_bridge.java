@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-19 15:42:11 $
+ *  last change: $Author: kr $ $Date: 2000-11-03 10:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2000-10-19 15:42:11 $
+ * @version     $Revision: 1.7 $ $ $Date: 2000-11-03 10:33:50 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -306,6 +306,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     protected Vector            _listeners;
     protected Vector            _stableListeners;
 
+    protected boolean           _negotiate;
+    protected boolean           _forceSynchronouse;
+
     /**
      * This method is for testing only.
      */
@@ -376,6 +379,78 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
     }
 
+
+    private String parseAttributes(String attributeList) {
+        attributeList = attributeList.trim().toLowerCase();
+
+
+        String protocol = null;
+
+        int index = attributeList.indexOf(',');
+        if(index >= 0) { // there are parameters
+            protocol = attributeList.substring(0, index);
+            attributeList = attributeList.substring(index + 1).trim();
+        }
+        else {
+            protocol = attributeList;
+            attributeList = "";
+        }
+        protocol = protocol.trim();
+
+        boolean negotiateTouched = false;
+
+        while(attributeList.length() > 0) {
+            index = attributeList.indexOf(',');
+
+            String word = null;
+
+            if(index >= 0) {
+                word = attributeList.substring(0, index).trim();
+                attributeList = attributeList.substring(index + 1).trim();
+            }
+            else {
+                word = attributeList.trim();
+                attributeList = "";
+            }
+
+            String left = null;
+            String right = null;
+
+            index = word.indexOf('=');
+            if(index >= 0) {
+                left = word.substring(0, index).trim();
+                right = word.substring(index + 1).trim();
+            }
+            else
+                left = word;
+
+            if(left.equals("negotiate")) {
+                if(right != null)
+                    _negotiate = (Integer.parseInt(right) == 1);
+                else
+                    _negotiate = true;
+
+                negotiateTouched = true;
+            }
+            else if(left.equals("forcesynchronouse")) {
+                if(right != null)
+                    _forceSynchronouse = (Integer.parseInt(right) == 1);
+                else
+                    _forceSynchronouse = true;
+
+                if(_forceSynchronouse && !negotiateTouched)
+                    _negotiate = true;
+            }
+            else
+                System.err.println(getClass().getName() + ".<init> - unknown attribute:" + left);
+        }
+
+        if(_negotiate)
+            throw new com.sun.star.uno.RuntimeException("java_remote_bridge: negotiation not available yet, use negotiate=0 to disable");
+
+        return protocol;
+    }
+
     /**
      * Constructs a new bridge.
      * <p>
@@ -389,9 +464,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     public java_remote_bridge(IEnvironment java_environment, IEnvironment remote_environment, Object args[]) throws Exception {
         if(DEBUG) System.err.println("#### " + getClass().getName() + " - instantiated:" + args);
 
-        String protocolDescription = (String)args[0];
+        String protocol = parseAttributes((String)args[0]);
 
-        Class protocol_class = Class.forName("com.sun.star.lib.uno.protocols." + protocolDescription + "." + protocolDescription);
+        Class protocol_class = Class.forName("com.sun.star.lib.uno.protocols." + protocol + "." + protocol);
         Constructor protocol_constructor = protocol_class.getConstructor(new Class[] {IBridge.class});
 
           _iProtocol          = (IProtocol)protocol_constructor.newInstance(new Object[]{this});
@@ -525,7 +600,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         else {
             String oid[] = new String[]{(String)oId};
 
-            Object proxy = Proxy.create(this, oid[0], zInterface, false); // this proxy sends a release, when finalized
+            Object proxy = Proxy.create(this, oid[0], zInterface, false, _forceSynchronouse); // this proxy sends a release, when finalized
             object = _java_environment.registerInterface(proxy, oid, zInterface);
             acquire();
         }
@@ -534,20 +609,6 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
         return object;
     }
-
-//      public Object mapInterfaceFrom(Object oId, Class zInterface) throws MappingException    {
-//          if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").mapInterfaceFrom - is disposed");
-
-//          String oid[] = new String[]{(String)oId};
-
-//          Object proxy = Proxy.create(this, oid[0], zInterface, false); // this proxy sends a release, when finalized
-//          Object object = _java_environment.registerInterface(proxy, oid, zInterface);
-//          acquire();
-
-//          if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceFrom:" + oId + " interface:" + zInterface + " "  + object + " " + proxy);
-
-//          return object;
-//      }
 
     /**
      * Gives the source environment.
@@ -751,7 +812,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     }
 
     public Object sendRequest(Object object, Type type, String operation, Object params[], Boolean synchron[], Boolean mustReply[]) throws Exception {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendRequest:" + object + " " + type +" " + operation + " " + synchron);
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendRequest:" + object + " " + type +" " + operation + " " + synchron + " " + mustReply);
         Object result = null;
 
         if(synchron == null)
