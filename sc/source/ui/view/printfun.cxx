@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:07:06 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,9 +518,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
         nTwipsSizeX += pDoc->GetColWidth( i, nTab );
-    long nTwipsSizeY = 0;
-    for (SCROW j=nY1; j<=nY2; j++)
-        nTwipsSizeY += pDoc->GetRowHeight( j, nTab );
+    long nTwipsSizeY = (long) pDoc->GetRowHeight( nY1, nY2, nTab );
 
     //  wenn keine Linien, dann trotzdem Platz fuer den Aussenrahmen (20 Twips = 1pt)
     //  (HasLines initalisiert aLines auf 0,0,0,0)
@@ -1546,12 +1544,7 @@ void ScPrintFunc::LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
         nEndX -= nOneX;
 
     long nPosY = nScrY - nOneY;
-    for (SCROW nRow=nY1; nRow<=nY2; nRow++)
-    {
-        USHORT nDocH = pDoc->FastGetRowHeight( nRow, nPrintTab );
-        if (nDocH)
-            nPosY += (long) (nDocH * nScaleY);
-    }
+    nPosY += pDoc->FastGetScaledRowHeight( nY1, nY2, nPrintTab, nScaleY);
     Rectangle aCellRect( nScrX, nScrY, nEndX, nPosY );
     rLocationData.AddRowHeaders( aCellRect, nY1, nY2, bRepRow );
 }
@@ -1567,12 +1560,10 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     long nLogStY = aLogPos.Y();
 
     SCCOL nCol;
-    SCROW nRow;
     Point aOffset;
     for (nCol=0; nCol<nX1; nCol++)
         aOffset.X() -= pDoc->GetColWidth( nCol, nPrintTab );
-    for (nRow=0; nRow<nY1; nRow++)
-        aOffset.Y() -= pDoc->GetRowHeight( nRow, nPrintTab );
+    aOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nPrintTab );
 
     Point aMMOffset( aOffset );
     aMMOffset.X() = (long)(aMMOffset.X() * HMM_PER_TWIPS);
@@ -1595,13 +1586,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     }
 
     long nPosY = nScrY - nOneY;
-    for (nRow=nY1; nRow<=nY2; nRow++)
-    {
-        USHORT nDocH = pDoc->FastGetRowHeight( nRow, nPrintTab );
-        if (nDocH)
-            nPosY += (long) (nDocH * nScaleY);
-    }
-
+    nPosY += pDoc->FastGetScaledRowHeight( nY1, nY2, nPrintTab, nScaleY);
     Rectangle aCellRect( nScrX, nScrY, nPosX, nPosY );
     rLocationData.AddCellRange( aCellRect, ScRange( nX1,nY1,nPrintTab, nX2,nY2,nPrintTab ),
                                 bRepCol, bRepRow, aDrawMapMode );
@@ -2221,12 +2206,10 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     }
     if ( bCenterVer )
     {
-        long nDataHeight = 0;
-        for (SCROW i=nY1; i<=nY2; i++)
-            nDataHeight += pDoc->FastGetRowHeight( i,nPrintTab );
+        long nDataHeight = pDoc->FastGetRowHeight( nY1, nY2, nPrintTab);
         if (bDoRepRow)
-            for (SCROW i=nRepeatStartRow; i<=nRepeatEndRow; i++)
-                nDataHeight += pDoc->FastGetRowHeight( i,nPrintTab );
+            nDataHeight += pDoc->FastGetRowHeight( nRepeatStartRow,
+                    nRepeatEndRow, nPrintTab);
         if (aTableParam.bHeaders)
             nDataHeight += (long) PRINT_HEADER_HEIGHT;
         if (pBorderItem)
@@ -2258,12 +2241,12 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         for (SCCOL i=nRepeatStartCol; i<=nRepeatEndCol; i++)
             nRepeatWidth += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
     if (bDoRepRow)
-        for (SCROW j=nRepeatStartRow; j<=nRepeatEndRow; j++)
-            nRepeatHeight += (long) (pDoc->FastGetRowHeight(j,nPrintTab) * nScaleY);
+        nRepeatHeight += pDoc->FastGetScaledRowHeight( nRepeatStartRow,
+                nRepeatEndRow, nPrintTab, nScaleY);
     for (SCCOL i=nX1; i<=nX2; i++)
         nContentWidth += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
-    for (SCROW j=nY1; j<=nY2; j++)
-        nContentHeight += (long) (pDoc->FastGetRowHeight(j,nPrintTab) * nScaleY);
+    nContentHeight += pDoc->FastGetScaledRowHeight( nY1, nY2, nPrintTab,
+            nScaleY);
 
     //  partition the page
 
@@ -3079,31 +3062,38 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
 
     BOOL bVisRow = FALSE;
     SCROW nPageStartRow = nStartRow;
-    for (SCROW j=nStartRow; j<=nEndRow; j++)
+    ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray(
+                nPrintTab), nStartRow, nEndRow);
+    do
     {
-        BYTE nFlags = pDoc->GetRowFlags(j,nPrintTab);
-        if ( j>nStartRow && bVisRow && (nFlags & CR_PAGEBREAK) )
+        BYTE nFlags = *aIter;
+        SCROW nRangeEnd = aIter.GetRangeEnd();
+        for (SCROW j=aIter.GetRangeStart(); j<=nRangeEnd; ++j)
         {
-            pPageEndY[nTotalY] = j-1;
-            ++nTotalY;
-
-            if ( !aTableParam.bSkipEmpty ||
-                    !pDoc->IsPrintEmpty( nPrintTab, nStartCol, nPageStartRow, nEndCol, j-1 ) )
+            if ( j>nStartRow && bVisRow && (nFlags & CR_PAGEBREAK) )
             {
-                pPageRows[nPagesY].SetStartRow( nPageStartRow );
-                pPageRows[nPagesY].SetEndRow( j-1 );
-                pPageRows[nPagesY].SetPagesX( nPagesX );
-                if (aTableParam.bSkipEmpty)
-                    lcl_SetHidden( pDoc, nPrintTab, pPageRows[nPagesY], nStartCol, pPageEndX );
-                ++nPagesY;
-            }
+                pPageEndY[nTotalY] = j-1;
+                ++nTotalY;
 
-            nPageStartRow = j;
-            bVisRow = FALSE;
+                if ( !aTableParam.bSkipEmpty ||
+                        !pDoc->IsPrintEmpty( nPrintTab, nStartCol, nPageStartRow, nEndCol, j-1 ) )
+                {
+                    pPageRows[nPagesY].SetStartRow( nPageStartRow );
+                    pPageRows[nPagesY].SetEndRow( j-1 );
+                    pPageRows[nPagesY].SetPagesX( nPagesX );
+                    if (aTableParam.bSkipEmpty)
+                        lcl_SetHidden( pDoc, nPrintTab, pPageRows[nPagesY], nStartCol, pPageEndX );
+                    ++nPagesY;
+                }
+
+                nPageStartRow = j;
+                bVisRow = FALSE;
+            }
+            if (!(nFlags & CR_HIDDEN))
+                bVisRow = TRUE;
         }
-        if (!(nFlags & CR_HIDDEN))
-            bVisRow = TRUE;
-    }
+    } while (aIter.NextRange());
+
     if (bVisRow)
     {
         pPageEndY[nTotalY] = nEndRow;
