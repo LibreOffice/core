@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXReferenceMarks.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:13:11 $
+ *  last change:$Date: 2005-01-25 16:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ public class SwXReferenceMarks extends TestCase {
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
     }
 
@@ -151,7 +151,7 @@ public class SwXReferenceMarks extends TestCase {
                 oDocMSF.createInstance( "com.sun.star.text.ReferenceMark" );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn´t get ReferenceMark", e);
+            throw new StatusException( "Couldn't get ReferenceMark", e);
         }
         XNamed oObjN = (XNamed) UnoRuntime.queryInterface(XNamed.class, oObj);
         oObjN.setName(Name);
@@ -171,7 +171,7 @@ public class SwXReferenceMarks extends TestCase {
                 oDocMSF.createInstance( "com.sun.star.text.ReferenceMark" );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn´t get ReferenceMark", e);
+            throw new StatusException( "Couldn't get ReferenceMark", e);
         }
         XNamed oObjN2 = (XNamed) UnoRuntime.queryInterface(XNamed.class, oObj);
         oObjN2.setName(Name2);
