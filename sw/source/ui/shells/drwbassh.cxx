@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 12:43:19 $
+ *  last change: $Author: fme $ $Date: 2002-12-06 09:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,10 +405,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 pSh->SetModified();
                 pSh->DelSelectedObj();
 
-                if (rReq.IsAPI())
+                if (rReq.IsAPI() ||
+                    SID_OBJECT_SELECT == GetView().GetEditWin().GetDrawMode() )
                 {
-                    // Wenn Basic-Aufruf, dann zurck in die Textshell, da das
-                    // Basic sonst keine Rckkehrm”glichkeit hat.
+                    // Wenn Basic-Aufruf, dann zurueck in die Textshell, da das
+                    // Basic sonst keine Rueckkehrmoeglichkeit hat.
                     if (GetView().GetDrawFuncPtr())
                     {
                         GetView().GetDrawFuncPtr()->Deactivate();
@@ -420,7 +421,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 if (pSh->IsSelFrmMode())
                 {
                     pSh->LeaveSelFrmMode();
-                    pSh->NoEdit();
+                    // #105852# FME
+//                   pSh->NoEdit();
                 }
                 bNotify = TRUE;
             }
