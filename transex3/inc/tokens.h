@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokens.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-26 12:56:08 $
+ *  last change: $Author: nf $ $Date: 2001-08-23 11:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,22 @@
 #define CFG_TOKEN_COMPONENT         601
 #define CFG_TOKEN_CONFIGNAME        602
 #define CFG_TOKEN_TEMPLATE          603
+
+/*------------------------------------------------------                    */
+/*------------------------------------------------------                    */
+/* Tokens for parsing xrm files                                             */
+/*------------------------------------------------------                    */
+/*------------------------------------------------------                    */
+#define XRM_README_START            501
+#define XRM_README_END              502
+#define XRM_SECTION_START           503
+#define XRM_SECTION_END             504
+#define XRM_PARAGRAPH_START         505
+#define XRM_PARAGRAPH_END           506
+#define XRM_TEXT_START              507
+#define XRM_TEXT_END                508
+#define XRM_LIST_START              509
+#define XRM_LIST_END                510
 
 
 #endif

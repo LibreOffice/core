@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: nf $ $Date: 2001-08-03 14:41:09 $
+#   last change: $Author: nf $ $Date: 2001-08-23 11:45:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,10 +134,16 @@ APP7STACK=  16000
 APP7OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
-APP8TARGET= xgfconv
+# extractor and merger for *.xrm
+APP8TARGET= xrmlex
 APP8STACK=  16000
-APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
-APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS) 
+APP8OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
+
+#APP8TARGET= xgfconv
+#APP8STACK=  16000
+#APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
+#APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS) 
 
 # encoding converter for text files
 #APP9TARGET= txtconv
@@ -158,9 +164,9 @@ DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OB
 
 .INCLUDE :  target.mk
 
-ALLTAR : 	$(MISC)$/src_yy.c 	\
-            $(MISC)$/xml_yy.c	\
-            $(MISC)$/cfg_yy.c
+#ALLTAR : 	$(MISC)$/src_yy.c 	\
+#			$(MISC)$/xml_yy.c	\
+#			$(MISC)$/cfg_yy.c
 
 $(MISC)$/src_yy.c : srclex.l
     +flex -l -8 -o$(MISC)$/src_yy.c srclex.l
@@ -170,3 +176,6 @@ $(MISC)$/xml_yy.c : xmllex.l
 
 $(MISC)$/cfg_yy.c : cfglex.l
     +flex -l -8 -o$(MISC)$/cfg_yy.c cfglex.l
+
+$(MISC)$/xrm_yy.c : xrmlex.l
+    +flex -l -8 -o$(MISC)$/xrm_yy.c xrmlex.l
