@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: bustamam $ $Date: 2002-03-26 04:53:43 $
+#   last change: $Author: jb $ $Date: 2002-04-04 09:34:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,6 +134,7 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssframe.db \
     $(UCR)$/dcssaccessibility.db\
     $(UCR)$/dcssabridge.db\
+    $(UCR)$/dcsscbackend.db\
     $(UCR)$/dcssi18n.db
 
 
