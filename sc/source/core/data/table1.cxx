@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:58:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,15 +374,15 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
     for (SCSIZE i=0; i<nCount; i++)
     {
         BYTE nRowFlag = pRowFlags->GetValue( nStartRow+i);
-        bool bManualSize = ((nRowFlag & CR_MANUALSIZE) == 0);
-        if ( bManualSize || bForce )
+        bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
+        if ( bAutoSize || bForce )
         {
             if (nExtra)
             {
-                if (!bManualSize)
+                if (bAutoSize)
                     pRowFlags->SetValue( nStartRow+i, nRowFlag | CR_MANUALSIZE);
             }
-            else if (bManualSize)
+            else if (!bAutoSize)
                 pRowFlags->SetValue( nStartRow+i, nRowFlag & ~CR_MANUALSIZE);
 
             if (nLast)
