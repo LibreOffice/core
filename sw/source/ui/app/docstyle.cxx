@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:22:53 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,7 +893,11 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
             ASSERT(pColl, "Collektion fehlt!");
             if( pColl && pColl->GetName() != rStr )
             {
-                pColl->SetName( rStr );
+                if (pColl->GetName().Len() > 0)
+                    rDoc.RenameFmt(*pColl, rStr);
+                else
+                    pColl->SetName(rStr);
+
                 bChg = TRUE;
             }
             break;
@@ -903,7 +907,11 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
             ASSERT(pFrmFmt, "FrmFmt fehlt!");
             if( pFrmFmt && pFrmFmt->GetName() != rStr )
             {
-                pFrmFmt->SetName( rStr );
+                if (pFrmFmt->GetName().Len() > 0)
+                    rDoc.RenameFmt(*pFrmFmt, rStr);
+                else
+                    pFrmFmt->SetName( rStr );
+
                 bChg = TRUE;
             }
             break;
@@ -915,7 +923,18 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
                 //PageDesc setzen - mit vorherigem kopieren - ist fuer das
                 //setzen des Namens wohl nicht notwendig. Deshalb erlauben
                 //wir hier mal einen cast.
-                ((SwPageDesc*)pDesc)->SetName( rStr );
+                // -> #116530#
+                SwPageDesc aPageDesc(*((SwPageDesc*)pDesc));
+                String aOldName(aPageDesc.GetName());
+
+                aPageDesc.SetName( rStr );
+                BOOL bDoesUndo = rDoc.DoesUndo();
+
+                rDoc.DoUndo(aOldName.Len() > 0);
+                rDoc.ChgPageDesc(aOldName, aPageDesc);
+                rDoc.DoUndo(bDoesUndo);
+                // <- #116530#
+
                 rDoc.SetModified();
                 bChg = TRUE;
             }
@@ -1304,6 +1323,10 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
         case SFX_STYLE_FAMILY_PSEUDO:
             {
                 ASSERT(pNumRule, "Wo ist die NumRule");
+
+                if (!pNumRule)
+                    break;
+
                 const SfxPoolItem* pItem;
                 switch( rSet.GetItemState( SID_ATTR_NUMBERING_RULE, FALSE, &pItem ))
                 {
@@ -2652,7 +2675,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
             if(pFmt->IsDefault() || pFmt->IsAuto())
+            {
                 continue;
+            }
 
             const USHORT nId = pFmt->GetPoolFmtId();
             BOOL bUsed = bSearchUsed && ( bOrganizer || rDoc.IsUsed(*pFmt));
@@ -2662,7 +2687,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     ? !(nId & USER_FMT)
                     // benutzte gesucht und keine gefunden
                     : bSearchUsed )
+                {
                     continue;
+                }
             }
 
             aLst.Append( cFRAME, pFmt->GetName() );
