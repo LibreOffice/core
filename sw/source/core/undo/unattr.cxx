@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:45:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,8 +257,9 @@ void SwUndoFmtAttr::Undo( SwUndoIter& rUndoIter)
     {
         RestoreFlyAnchor( rUndoIter );
         SaveFlyAnchor();
+        pOldSet->ClearItem(RES_ANCHOR);
     }
-    else
+    //else
     {
         _UndoFmtAttr aTmp( *pFmt, bSaveDrawPt );
         pFmt->SetAttr( *pOldSet );
@@ -429,6 +430,16 @@ void SwUndoFmtAttr::Repeat( SwUndoIter& rUndoIter)
     }
 
     rUndoIter.pLastUndoObj = this;
+}
+
+SwRewriter SwUndoFmtAttr::GetRewriter() const
+{
+    SwRewriter aRewriter;
+
+    if (pFmt)
+        aRewriter.AddRule(UNDO_ARG1, pFmt->GetName());
+
+    return aRewriter;
 }
 
 void SwUndoFmtAttr::PutAttr( const SfxPoolItem& rItem )
