@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2004-04-19 15:56:28 $
+#   last change: $Author: jl $ $Date: 2004-04-20 08:58:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 
 PRJ = ..
 PRJNAME = jvmfwk
-FRAMEWORKLIB=javafwk
+FRAMEWORKLIB=jvmfwk
 TARGET = $(FRAMEWORKLIB)
 #LIBTARGET=NO
 ENABLE_EXCEPTIONS = TRUE
