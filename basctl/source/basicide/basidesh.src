@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 15:15:17 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,7 @@ String RID_STR_SEARCHNOTFOUND
     Text [ portuguese ] = "Impossível encontrar expressão procurada." ;
     Text [ finnish ] = "Hakumallia ei löydy" ;
     Text [ danish ] = "Søgningen gav intet resultat" ;
-    Text [ french ] = "Impossible de détecter l'élément recherché !" ;
+    Text [ french ] = "Terme recherché introuvable !" ;
     Text [ swedish ] = "Sökord hittades inte" ;
     Text [ dutch ] = "Zoekbegrip niet gevonden" ;
     Text [ spanish ] = "No se encontró la expresión buscada" ;
@@ -551,7 +551,7 @@ String RID_STR_SEARCHREPLACES
     Text [ portuguese ] = "Expressão procurada substituída XX vezes" ;
     Text [ finnish ] = "Hakumalli on korvattu XX kertaa" ;
     Text [ danish ] = "Søgeord erstattet XX gange" ;
-    Text [ french ] = "L'élément recherché a été remplacé XX fois" ;
+    Text [ french ] = "Le terme recherché a été remplacé XX fois." ;
     Text [ swedish ] = "Sökord ersatt XX gånger" ;
     Text [ dutch ] = "Zoekbegrip XX keer vervangen" ;
     Text [ spanish ] = "Expresión buscada reemplazada XX veces" ;
@@ -1541,11 +1541,11 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText[ russian ] = "Óáğàòü êîíòğîëüíîå çíà÷åíèå";
     QuickHelpText[ polish ] = "Usuñ czujkê";
     QuickHelpText[ japanese ] = "µÌŞ»Ş°ÊŞ‚Ìíœ";
-    QuickHelpText[ chinese_simplified ] = "ÒşÈë²é¿´";
+    QuickHelpText[ chinese_simplified ] = "ÒşÈë²é¿´!";
     QuickHelpText[ chinese_traditional ] = "Áô¤JÀËµø";
     QuickHelpText[ arabic ] = "ÅÒÇáÉ ÇáãÑÇŞÈ";
     QuickHelpText[ dutch ] = "Bewaker verwijderen";
-    QuickHelpText[ chinese_simplified ] = "ÒşÈë²é¿´";
+    QuickHelpText[ chinese_simplified ] = "ÒşÈë²é¿´!";
     QuickHelpText[ greek ] = "ÊáôÜñãçóç ğáñáôçñçôŞ";
     QuickHelpText[ korean ] = "Remove Watch";
     QuickHelpText[ turkish ] = "Remove Watch";
