@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: tpf $ $Date: 2002-11-21 16:15:19 $
+ *  last change: $Author: tpf $ $Date: 2002-11-25 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Common" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
+		<desc xml:lang="en-US">Contains common settings which are potentially shared by other components.</desc>
+	</info>
 	<templates>
 		<group oor:name="Passwordstorage">
 			<info>
@@ -801,6 +804,7 @@
 		<group oor:name="_3D_Engine">
 			<info>
 				<author>AW</author>
+				<desc xml:lang="en-US">Specifies settings for the 3D engine.</desc>
 			</info>
 			<prop oor:name="Dithering" oor:type="xs:boolean">
 				<!-- OldPath: 3D-Engine/Dithering -->
@@ -2437,6 +2441,10 @@
 			</prop>
 		</group>
 		<group oor:name="Setup">
+			<info>
+				<author>PB</author>
+				<desc xml:lang="en-US">Specifies options related to the setup.</desc>
+			</info>
 			<group oor:name="Language">
 				<prop oor:name="Locales" oor:type="oor:string-list">
 					<!-- OldPath: OfficeLanguage/[Code]=Installed -->
@@ -2769,6 +2777,10 @@
 			</prop>
 		</group>
 		<group oor:name="Help">
+			<info>
+				<author>FS</author>
+				<desc xml:lang="en-US">Contains settings which specify the common help settings.</desc>
+			</info>
 			<prop oor:name="Locale" oor:type="xs:string">
 				<info>
 					<author>ABI</author>
@@ -3255,6 +3267,7 @@
 		<group oor:name="DateFormat">
 			<info>
 				<author>NN</author>
+				<desc xml:lang="en-US">Specifies settings for the date formats used.</desc>
 			</info>
 			<prop oor:name="TwoDigitYear" oor:type="xs:int">
 				<!-- OldPath: General/Other -->
@@ -4262,6 +4275,10 @@
 			</group>
 		</group>
 		<group oor:name="Misc">
+			<info>
+				<author>MBA</author>
+				<desc xml:lang="en-US">Miscellaneous entries for the common group.</desc>
+			</info>
 			<prop oor:name="PluginsEnabled" oor:type="xs:boolean">
 				<!-- OldPath: ? -->
 				<!-- OldLocation: soffice.ini -->
@@ -4636,6 +4653,7 @@
 		<group oor:name="Accessibility">
 			<info>
 				<author>OS</author>
+				<desc xml:lang="en-US">Specifies settings for the accessibility options.</desc>
 			</info>
 			<prop oor:name="IsForDrawings" oor:type="xs:boolean">
 				<info>
