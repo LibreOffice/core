@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:36:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text[ turkish ] = "3B döner nesne oluþtur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear objeto de rotación 3D";
+    Text[ finnish ] = "Luo 3D-kierto-objekti";
 };
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
@@ -98,7 +99,7 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text [ italian ] = "Incolla oggetti" ;
     Text [ portuguese_brazilian ] = "Colar objeto(s)" ;
     Text [ portuguese ] = "Inserir objecto(s)" ;
-    Text [ finnish ] = "Liitä objekteja" ;
+    Text [ finnish ] = "Lisää objekti(t)" ;
     Text [ danish ] = "Indsæt objekt(er)" ;
     Text [ french ] = "Insérer le(s) objet(s)" ;
     Text [ swedish ] = "Infoga objekt" ;
@@ -141,6 +142,7 @@ String RID_SVX_3D_UNDO_SEGMENTS
     Text[ turkish ] = "Parça sayýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número de segmentos";
+    Text[ finnish ] = "Osioiden määrä";
 };
 String RID_SVX_3D_UNDO_DEEPTH
 {
@@ -166,6 +168,7 @@ String RID_SVX_3D_UNDO_DEEPTH
     Text[ turkish ] = "Nesne derinliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Profundidad del objeto";
+    Text[ finnish ] = "Objektin syvyys";
 };
 String RID_SVX_3D_UNDO_FOCAL
 {
@@ -191,6 +194,7 @@ String RID_SVX_3D_UNDO_FOCAL
     Text[ turkish ] = "Kamera odak uzaklýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia focal";
+    Text[ finnish ] = "Polttopistepituus";
 };
 String RID_SVX_3D_UNDO_CAMPOS
 {
@@ -216,6 +220,7 @@ String RID_SVX_3D_UNDO_CAMPOS
     Text[ turkish ] = "Kamera konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición de la cámara";
+    Text[ finnish ] = "Kameran sijainti";
 };
 String RID_SVX_3D_UNDO_ROTATE
 {
@@ -241,6 +246,7 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ turkish ] = "3B nesneyi döndür";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rodar un objeto 3D";
+    Text[ finnish ] = "Kierrä 3D-objektia";
 };
 String RID_SVX_3D_UNDO_EXTRUDE
 {
@@ -266,6 +272,7 @@ String RID_SVX_3D_UNDO_EXTRUDE
     Text[ turkish ] = "Kalýp nesne oluþtur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear un objeto de extrusión";
+    Text[ finnish ] = "Luo pursotinobjekti";
 };
 String RID_SVX_3D_UNDO_LATHE
 {
@@ -293,6 +300,7 @@ String RID_SVX_3D_UNDO_LATHE
     Text[ turkish ] = "Döner nesne oluþtur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear cuerpo de rotación";
+    Text[ finnish ] = "Luo kierto-objekti";
 };
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
@@ -320,6 +328,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text[ turkish ] = "3B nesneyi ayýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Quebrar objeto 3D";
+    Text[ finnish ] = "Jaa 3D-objekti";
 };
 String RID_SVX_3D_UNDO_ATTRIBUTES
 {
@@ -345,5 +354,6 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ turkish ] = "3B öznitelikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos en 3D";
+    Text[ finnish ] = "3D-määritteet";
 };
  // ********************************************************************** EOF
