@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kr $ $Date: 2000-12-21 09:50:26 $
+ *  last change: $Author: jbu $ $Date: 2001-10-19 13:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ import com.sun.star.comp.loader.JavaLoader;
 
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
+import com.sun.star.connection.XConnectionBroadcaster;
+import com.sun.star.io.XStreamListener;
 
 import com.sun.star.container.XSet;
 
@@ -96,6 +98,63 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Type;
 
+/* helper class for terminating an accepting UnoApp */
+class UnoAppHolder extends Thread
+{
+    private int _nRef;
+
+    public UnoAppHolder()
+        { _nRef = 0; }
+
+    public synchronized void acquire()
+        { _nRef ++; }
+
+    public synchronized void release()
+        {
+            _nRef --;
+            if( 0 == _nRef )
+            {
+                // give the bridge some time do dispose ...
+                this.start();
+            }
+        }
+
+    public void run()
+        {
+            try {
+                java.lang.Thread.currentThread().sleep( 1000 );
+            }
+            catch( InterruptedException e )
+            {}
+            System.exit( 0 );
+        }
+}
+
+/* helper class for refcounting of incoming connections */
+class ConnectionListener implements XStreamListener
+{
+    private UnoAppHolder _holder;
+    public ConnectionListener( UnoAppHolder holder )
+        {_holder = holder; _holder.acquire(); }
+    public void disposing ( com.sun.star.lang.EventObject o)
+        { closed(); }
+    public void started(  ) {}
+    public void closed(  )
+        {
+            UnoAppHolder holder = null;
+            synchronized( this )
+            {
+                holder = _holder;
+                _holder = null;
+            }
+            if( holder != null )
+                holder.release();
+        }
+    public void terminated(  )
+        { closed(); }
+    public void error( /*IN*/java.lang.Object aException )
+        { closed(); }
+}
 
 /**
  * <code>UnoApp</code> is the generic UNO application for java.
@@ -237,6 +296,7 @@ public class UnoApp extends Applet {
         }
     }
 
+
     /**
      * Exports the given object via the given url while using
      * the <code>xMultiServiceFactory</code>.
@@ -268,64 +328,53 @@ public class UnoApp extends Applet {
 
         rootOid = dcp.trim().trim();
 
-        class AcceptThread extends Thread {
-            XMultiServiceFactory _xMultiServiceFactory;
-            String  _conDcp;
-            String  _protDcp;
-            String  _rootOid;
-            Object  _object;
-            boolean _singleAccept;
+        UnoAppHolder holder = new UnoAppHolder();
+        holder.acquire();
+        try {
+            // get an acceptor
+            XAcceptor xAcceptor = (XAcceptor)UnoRuntime.queryInterface(XAcceptor.class,
+                                                                       xMultiServiceFactory.createInstance("com.sun.star.connection.Acceptor"));
 
-            AcceptThread(XMultiServiceFactory xMultiServiceFactory, String conDcp, String protDcp, String rootOid, Object object, boolean singleAccept) {
-                _xMultiServiceFactory = xMultiServiceFactory;
-                _conDcp       = conDcp;
-                _protDcp      = protDcp;
-                _rootOid      = rootOid;
-                _object       = object;
-                _singleAccept = singleAccept;
-            }
+            // get a bridgefactory
+            XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
+                                                                                      xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
 
-            public void run() {
+            int connect_count = 0;
+
+            do {
+                XConnection xConnection = null;
                 try {
-                    // get an acceptor
-                    XAcceptor xAcceptor = (XAcceptor)UnoRuntime.queryInterface(XAcceptor.class,
-                                                                               _xMultiServiceFactory.createInstance("com.sun.star.connection.Acceptor"));
+                    System.err.println("waiting for connect [" + conDcp + "#" + connect_count + "]...");
+                    xConnection = xAcceptor.accept(conDcp);
+                    if(xConnection == null)
+                        break;
 
-                    // get a bridgefactory
-                    XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
-                                                                                              _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
+                    XConnectionBroadcaster broadcaster = (XConnectionBroadcaster)
+                        UnoRuntime.queryInterface(
+                            XConnectionBroadcaster.class, xConnection );
+                    if( broadcaster != null )
+                        broadcaster.addStreamListener(
+                            new ConnectionListener( holder ) );
 
-                    int connect_count = 0;
-
-                    do {
-                        XConnection xConnection = null;
-                        try {
-                            System.err.println("waiting for connect [" + _conDcp + "#" + connect_count + "]...");
-                            xConnection = xAcceptor.accept(_conDcp);
-                            if(xConnection == null)
-                                break;
-
-                            // create the bridge
-                            XBridge xBridge = xBridgeFactory.createBridge(_conDcp + ";" + _protDcp + "#" + (connect_count ++), _protDcp, xConnection, new InstanceProvider(_rootOid, _object));
-                        }
-                        catch(com.sun.star.uno.Exception exception) {
-                            System.err.println(getClass().getName() + " exeception occurred - " + exception);
-                            if(xConnection != null)
-                                xConnection.close();
-                        }
-                    }
-                    while(!_singleAccept);
+                    // create the bridge
+                    XBridge xBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp + "#" + (connect_count ++), protDcp, xConnection, new InstanceProvider(rootOid, object));
                 }
                 catch(com.sun.star.uno.Exception exception) {
-                    System.err.println(getClass().getName() + " exeception occurred - " + exception);
-                    System.err.println(getClass().getName() + " dying...");
+                    System.err.println( "UnoApp acceptor:  exeception occurred - " + exception);
+                    if(xConnection != null)
+                        xConnection.close();
                 }
             }
+            while(!singleAccept);
         }
-
-        new AcceptThread(xMultiServiceFactory, conDcp, protDcp, rootOid, object, singleAccept).start();
+        catch(com.sun.star.uno.Exception exception) {
+            System.err.println("UnoApp acceptor: exeception occurred - " + exception);
+        }
+        finally
+        {
+            holder.release();
+        }
     }
-
 
 
     /**
@@ -867,3 +916,4 @@ public class UnoApp extends Applet {
         System.err.println("##### " + getClass().getName() + ".init");
     }
 }
+
