@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:42:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SD_UNO_OUTLINE_VIEW_HXX
 #define SD_UNO_OUTLINE_VIEW_HXX
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
-#include "DrawSubController.hxx"
+#ifndef SD_DRAW_CONTROLLER_HXX
+#include "DrawController.hxx"
 #endif
 
 
@@ -77,10 +77,13 @@ class View;
  * This class implements the view component for a SdOutlineViewShell
  */
 class SdUnoOutlineView
-    : public DrawSubController
+    : public DrawController
 {
 public:
-    SdUnoOutlineView (View& rView, OutlineViewShell& rViewShell) throw();
+    SdUnoOutlineView (
+        ViewShellBase& rBase,
+        OutlineViewShell& rViewShell,
+        View& rView) throw();
     virtual ~SdUnoOutlineView() throw();
 
     void fireSelectionChangeListener() throw();
