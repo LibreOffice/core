@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-16 09:15:10 $
+ *  last change: $Author: mt $ $Date: 2002-09-05 07:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3199,6 +3199,97 @@ sal_Int16 UnoComboBoxControl::getDropDownLineCount() throw(uno::RuntimeException
     return ImplGetPropertyValue_INT16( BASEPROPERTY_LINECOUNT );
 }
 
+
+//  ----------------------------------------------------
+//  UnoSpinFieldControl
+//  ----------------------------------------------------
+UnoSpinFieldControl::UnoSpinFieldControl() : maSpinListeners( *this )
+{
+    mbRepeat = sal_False;
+}
+
+// uno::XInterface
+uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XSpinField*, this ) );
+    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
+}
+
+// lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( UnoSpinFieldControl )
+    getCppuType( ( uno::Reference< awt::XSpinField>* ) NULL ),
+    UnoEditControl::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+void UnoSpinFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    xField->enableRepeat( mbRepeat );
+    if ( maSpinListeners.getLength() )
+        xField->addSpinListener( &maSpinListeners );
+}
+
+    // ::com::sun::star::awt::XSpinField
+void UnoSpinFieldControl::addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    maSpinListeners.addInterface( l );
+    if( mxPeer.is() && maSpinListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+        xField->addSpinListener( &maSpinListeners );
+    }
+}
+
+void UnoSpinFieldControl::removeSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if( mxPeer.is() && maSpinListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+        xField->removeSpinListener( &maSpinListeners );
+    }
+    maSpinListeners.removeInterface( l );
+}
+
+void UnoSpinFieldControl::up() throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    if ( xField.is() )
+        xField->up();
+}
+
+void UnoSpinFieldControl::down() throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    if ( xField.is() )
+        xField->down();
+}
+
+void UnoSpinFieldControl::first() throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    if ( xField.is() )
+        xField->first();
+}
+
+void UnoSpinFieldControl::last() throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    if ( xField.is() )
+        xField->last();
+}
+
+void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno::RuntimeException)
+{
+    mbRepeat = bRepeat;
+
+    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    if ( xField.is() )
+        xField->enableRepeat( bRepeat );
+}
+
 //  ----------------------------------------------------
 //  class UnoControlDateFieldModel
 //  ----------------------------------------------------
@@ -3281,18 +3372,18 @@ uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType ) throw(
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( awt::XDateField*, this ) );
-    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoDateFieldControl )
     getCppuType( ( uno::Reference< awt::XDateField>* ) NULL ),
-    UnoEditControl::getTypes()
+    UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+    UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
     xField->setFirst( mnFirst );
@@ -3507,18 +3598,18 @@ uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType ) throw(
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( awt::XTimeField*, this ) );
-    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoTimeFieldControl )
     getCppuType( ( uno::Reference< awt::XTimeField>* ) NULL ),
-    UnoEditControl::getTypes()
+    UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoTimeFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+    UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XTimeField > xField( mxPeer, uno::UNO_QUERY );
     xField->setFirst( mnFirst );
@@ -3716,18 +3807,18 @@ uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType ) thr
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( awt::XNumericField*, this ) );
-    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoNumericFieldControl )
     getCppuType( ( uno::Reference< awt::XNumericField>* ) NULL ),
-    UnoEditControl::getTypes()
+    UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoNumericFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+    UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XNumericField > xField( mxPeer, uno::UNO_QUERY );
     xField->setFirst( mnFirst );
@@ -3935,18 +4026,18 @@ uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType ) th
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( awt::XCurrencyField*, this ) );
-    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoCurrencyFieldControl )
     getCppuType( ( uno::Reference< awt::XCurrencyField>* ) NULL ),
-    UnoEditControl::getTypes()
+    UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoCurrencyFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+    UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XCurrencyField > xField( mxPeer, uno::UNO_QUERY );
     xField->setFirst( mnFirst );
@@ -4162,13 +4253,13 @@ uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType ) thr
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( awt::XPatternField*, this ) );
-    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoPatternFieldControl )
     getCppuType( ( uno::Reference< awt::XPatternField>* ) NULL ),
-    UnoEditControl::getTypes()
+    UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoPatternFieldControl::setString( const ::rtl::OUString& rString ) throw(uno::RuntimeException)
