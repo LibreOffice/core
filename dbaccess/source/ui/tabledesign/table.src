@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:20:46 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 15:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,23 +83,23 @@
     Text = "Indexentwurf" ; \
     Text [ english ] = "Index Desgin" ; \
     Text [ english_us ] = "Index Desgin";   \
-    Text[ portuguese ] = "Index Desgin";
-    Text[ russian ] = "Проект индекса";
-    Text[ greek ] = "Index Desgin";
-    Text[ dutch ] = "Ontwerp-index";
-    Text[ french ] = "Index Desgin";
-    Text[ spanish ] = "Index Desgin";
-    Text[ italian ] = "Index Desgin";
-    Text[ danish ] = "Index Desgin";
-    Text[ swedish ] = "Indexutkast";
-    Text[ polish ] = "Projekt indeksu";
-    Text[ portuguese_brazilian ] = "Index Desgin";
-    Text[ japanese ] = "Index Desgin";
-    Text[ korean ] = "Index Desgin";
-    Text[ chinese_simplified ] = "Index Desgin";
-    Text[ chinese_traditional ] = "Index Desgin";
-    Text[ turkish ] = "Index Desgin";
-    Text[ arabic ] = "Index Desgin";
+    Text[ portuguese ] = "Index Desgin";\
+    Text[ russian ] = "Проект индекса";\
+    Text[ greek ] = "Index Desgin";\
+    Text[ dutch ] = "Ontwerp-index";\
+    Text[ french ] = "Index Desgin";\
+    Text[ spanish ] = "Index Desgin";\
+    Text[ italian ] = "Index Desgin";\
+    Text[ danish ] = "Index Desgin";\
+    Text[ swedish ] = "Indexutkast";\
+    Text[ polish ] = "Projekt indeksu";\
+    Text[ portuguese_brazilian ] = "Index Desgin";\
+    Text[ japanese ] = "Index Desgin";\
+    Text[ korean ] = "Index Desgin";\
+    Text[ chinese_simplified ] = "Index Desgin";\
+    Text[ chinese_traditional ] = "Index Desgin";\
+    Text[ turkish ] = "Index Desgin";\
+    Text[ arabic ] = "Index Desgin";\
 
 
 String STR_TABLEDESIGN_DBFIELDTYPES
