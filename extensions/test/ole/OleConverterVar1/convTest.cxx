@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convTest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:59:02 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,19 @@
 #include <atlbase.h>
 extern CComModule _Module;
 #include<atlcom.h>
-#include<atlimpl.cpp>
 
 #include <stdio.h>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+
 #include <oletest/XTestSequence.hpp>
 #include <rtl/process.h>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <rtl/string.h>
 #pragma hdrstop
 
@@ -128,7 +131,7 @@ short _short[]={0xffff, 1, 11 ,111, 1111 };
 unsigned short _ushort[]={0xffff, 1, 11 ,111, 1111 };
 long _long[]= { 0xffffffff, 11, 111 ,1111, 1111 };
 unsigned long _ulong[]= { 0xffffffff, 11, 111 ,1111, 1111 };
-float _float[]= { 12345., 1234.5, 123.45, 12.345, 1.2345};
+float _float[]= { 12345.f, 1234.5f, 123.45f, 12.345f, 1.2345f};
 double _double[]= {12345, 1234.5, 123.45, 12.345, 1.2345};
 
 CComVariant _variant[]= {L"variant 1", L"variant2", L"variant3"};
@@ -152,10 +155,16 @@ HRESULT doTest()
     USES_CONVERSION;
     CComPtr<IUnknown> spUnkMgr;
 
-    Reference< XMultiServiceFactory > mgr= createRegistryServiceFactory( OUString(L"applicat.rdb"));
-    Reference< XInterface > xIntSupplier= mgr->createInstance(OUString(L"com.sun.star.bridge.OleBridgeSupplierVar1"));
+    putenv("UNO_TYPES=types.rdb");
+    putenv("UNO_SERVICES=services.rdb");
+    Reference<XComponentContext> xContext = defaultBootstrap_InitialComponentContext();
+
+    Reference< XMultiComponentFactory > mgr = xContext->getServiceManager();//createRegistryServiceFactory( OUString(L"services.rdb"));
+    Reference< XInterface > xIntSupplier= mgr->createInstanceWithContext(
+        OUString(L"com.sun.star.bridge.OleBridgeSupplierVar1"), xContext);
     Reference< XBridgeSupplier2 > xSuppl( xIntSupplier, UNO_QUERY);
-    Reference <XInterface> xOletest= mgr->createInstance( OUString(L"oletest.OleTest"));
+    Reference <XInterface> xOletest= mgr->createInstanceWithContext(
+        OUString(L"oletest.OleTest"), xContext);
     Any any;
     any <<= xOletest;
     sal_uInt8 arId[16];
@@ -501,8 +510,8 @@ HRESULT doTest()
     OutputDebugString( _T(" Properties ###########################################\n\n"));
 
     OutputDebugString(_T("set property \"AttrByte\" | value"));
-    CComVariant propArByte;
-    propArByte.vt= VT_ARRAY | VT_I1;
+    //CComVariant propArByte;
+    //propArByte.vt= VT_ARRAY | VT_I1;
       varParam1.parray= (SAFEARRAY*)arByte;
     printVariant( varParam1);
     hr= oletest.PutPropertyByName( static_cast<LPCOLESTR>(L"AttrByte"), &varParam1);
@@ -510,7 +519,6 @@ HRESULT doTest()
     varRet.Clear();
     hr= oletest.GetPropertyByName( static_cast<LPCOLESTR>(L"AttrByte"), &varRet);
     printVariant( varRet);
-
 
 
     return S_OK;
