@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:24:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,8 +210,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
         nChgFmtLevel = nChkLevel = 0xffff;
         pOutlineRule = new SwNumRule( rRule );
 
-        pNumRuleTbl->Insert(pOutlineRule, pNumRuleTbl->Count()); // #115901#
-        aNumRuleMap[pOutlineRule->GetName()] = pOutlineRule;
+        AddNumRule(pOutlineRule); // #i36749#
     }
 
     pOutlineRule->SetRuleType( OUTLINE_RULE );
@@ -2364,7 +2363,28 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
     pResult = aNumRuleMap[rName];
 
+    if ( !pResult )
+    {
+        for (int n = 0; n < pNumRuleTbl->Count(); n++)
+        {
+            if ((*pNumRuleTbl)[n]->GetName() == rName)
+            {
+                pResult = (*pNumRuleTbl)[n];
+
+                break;
+            }
+        }
+    }
+
     return pResult;
+}
+
+// #i36749#
+void SwDoc::AddNumRule(SwNumRule * pRule)
+{
+    pNumRuleTbl->Insert(pRule, pNumRuleTbl->Count());
+    aNumRuleMap[pRule->GetName()] = pRule;
+    pRule->SetNumRuleMap(&aNumRuleMap);
 }
 
 USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
@@ -2386,9 +2406,8 @@ USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
     else
         pNew = new SwNumRule( GetUniqueNumRuleName( &rName ) );
     USHORT nRet = pNumRuleTbl->Count();
-    pNumRuleTbl->Insert( pNew, nRet );
 
-    aNumRuleMap[pNew->GetName()] = pNew;
+    AddNumRule(pNew); // #i36749#
 
     if (DoesUndo())
     {
@@ -2497,7 +2516,7 @@ const SwNode* lcl_FindBaseNode( const SwNode& rNd )
 
 void SwDoc::UpdateNumRule()
 {
-    SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
+    const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
     for( USHORT n = 0; n < rNmTbl.Count(); ++n )
         if( rNmTbl[ n ]->IsInvalidRule() )
             UpdateNumRule( rNmTbl[ n ]->GetName(), ULONG_MAX );
@@ -2539,7 +2558,9 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdatePos )
     SwNumRule * pRule = FindNumRulePtr(rName);
     ASSERT(pRule, "numrule not found");
     if (pRule == NULL)
+    {
         return;
+    }
 
     UpdateNumRule(*pRule, nUpdatePos);
 }
