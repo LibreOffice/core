@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:27 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,13 +376,13 @@ void XclImpHFConverter::ParseString( const String& rHFString )
 
                     case 'U':           // underline
                         SetAttribs();
-                        mpFontData->meUnderline = (mpFontData->meUnderline == xlUnderlSingle) ?
-                            xlUnderlNone : xlUnderlSingle;
+                        mpFontData->mnUnderline = (mpFontData->mnUnderline == EXC_FONTUNDERL_SINGLE) ?
+                            EXC_FONTUNDERL_NONE : EXC_FONTUNDERL_SINGLE;
                     break;
                     case 'E':           // double underline
                         SetAttribs();
-                        mpFontData->meUnderline = (mpFontData->meUnderline == xlUnderlDouble) ?
-                            xlUnderlNone : xlUnderlDouble;
+                        mpFontData->mnUnderline = (mpFontData->mnUnderline == EXC_FONTUNDERL_DOUBLE) ?
+                            EXC_FONTUNDERL_NONE : EXC_FONTUNDERL_DOUBLE;
                     break;
                     case 'S':           // strikeout
                         SetAttribs();
@@ -390,11 +390,13 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                     break;
                     case 'X':           // superscript
                         SetAttribs();
-                        mpFontData->meEscapem = (mpFontData->meEscapem == xlEscSuper) ? xlEscNone : xlEscSuper;
+                        mpFontData->mnEscapem = (mpFontData->mnEscapem == EXC_FONTESC_SUPER) ?
+                            EXC_FONTESC_NONE : EXC_FONTESC_SUPER;
                     break;
                     case 'Y':           // subsrcipt
                         SetAttribs();
-                        mpFontData->meEscapem = (mpFontData->meEscapem == xlEscSub) ? xlEscNone : xlEscSub;
+                        mpFontData->mnEscapem = (mpFontData->mnEscapem == EXC_FONTESC_SUB) ?
+                            EXC_FONTESC_NONE : EXC_FONTESC_SUB;
                     break;
 
                     case '\"':          // font name
@@ -683,8 +685,11 @@ void XclImpUrlHelper::DecodeUrl(
 
 // Cached Values ==============================================================
 
-XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
-    mfValue( 0.0 )
+XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow) :
+    mfValue( 0.0 ),
+    mnCol( nCol ),
+    mnRow( nRow )
+
 {
     rStrm >> mnType;
     switch( mnType )
@@ -724,6 +729,39 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
+// Matrix Cached Values ==============================================================
+
+XclImpCachedMatrix::XclImpCachedMatrix(sal_uInt16 nColumns, sal_uInt16 nRows) :
+    mnColumns(nColumns),
+    mnRows(nRows)
+{
+}
+
+XclImpCachedMatrix::~XclImpCachedMatrix()
+{
+}
+
+void XclImpCachedMatrix::FillMatrix( ScDocument& rDoc, ScMatrix* pMatrix ) const
+{
+    bool bString = false;
+    bool bEmpty = false;
+
+    for( const XclImpCachedValue* pCachedValue = maValueList.First(); pCachedValue; pCachedValue = maValueList.Next() )
+    {
+        switch( pCachedValue->GetType() )
+        {
+            case EXC_CACHEDVAL_DOUBLE: bString = bEmpty = false; break;
+            case EXC_CACHEDVAL_STRING: bString = true; bEmpty = false; break;
+            case EXC_CACHEDVAL_BOOL:   bString = bEmpty = false; break;
+            case EXC_CACHEDVAL_ERROR:  bString = bEmpty = false; break;
+            default: bString = false;  bEmpty = true; break;
+        }
+        if(const String *pString = pCachedValue->GetString() )
+            rDoc.SetDdeLinkResult(pMatrix,pCachedValue->GetCol(),pCachedValue->GetRow(), *pString ,pCachedValue->GetValue(), bString, bEmpty);
+        else
+            rDoc.SetDdeLinkResult(pMatrix,pCachedValue->GetCol(),pCachedValue->GetRow(), EMPTY_STRING ,pCachedValue->GetValue(), bString, bEmpty);
+    }
+}
 
 // ============================================================================
 
