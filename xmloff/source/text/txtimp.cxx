@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 11:38:57 $
+ *  last change: $Author: mib $ $Date: 2001-04-30 08:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,6 +1577,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             Reference < XShapes > xShapes;
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
                     rImport, nPrefix, rLocalName, xAttrList, xShapes );
+            bContent = sal_False;
         }
     }
 
