@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-07 07:59:24 $
+ *  last change: $Author: jb $ $Date: 2001-06-07 11:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #include "bootstrap.hxx"
 #endif
-//#ifndef CONFIGMGR_SESSIONFACTORY_HXX_
-//#include "sessionfactory.hxx"
-//#endif
 
 #ifndef _OSL_PROFILE_HXX_
 #include <osl/profile.hxx>
@@ -1102,6 +1099,13 @@ namespace configmgr
 
             OUString const sService( RTL_CONSTASCII_USTRINGPARAM(c_sDefaultService) );
             this->setService(sService, Settings::SO_DEFAULT);
+        }
+
+        if ( !hasAsyncSetting() )
+        {
+            Any aDefaultAsync = makeAny(sal_Bool(true));
+            putSetting( SETTING_ASYNC, Settings::Setting(aDefaultAsync, Settings::SO_DEFAULT) );
+            OSL_ASSERT( hasAsyncSetting() && getAsyncSetting() );
         }
     }
 
