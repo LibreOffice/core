@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:31:58 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3866,7 +3866,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_DUMMY3 */             0,
 /* RES_CHRATR_DUMMY4 */             0,
 /* RES_CHRATR_DUMMY5 */             0,
-/* RES_CHRATR_DUMMY1 */             0, // Dummy:
+/* RES_CHRATR_HIDDEN */             0, // Dummy:
 
 /* RES_TXTATR_NOLINEBREAK   */      0,
 /* RES_TXTATR_NOHYPHEN  */          0,
