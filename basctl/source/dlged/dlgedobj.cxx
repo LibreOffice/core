@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:39:00 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,31 +110,37 @@
 #include <tools/shl.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
+#include <com/sun/star/awt/XTabControllerModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XUNOCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XUnoControlContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XVCLCONTAINERPEER_HPP_
+#include <com/sun/star/awt/XVclContainerPeer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
-#include <com/sun/star/script/XScriptEventsSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
-#include <com/sun/star/container/XContainer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#include <map>
 #include <algorithm>
 #include <functional>
 
@@ -144,9 +150,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::rtl;
-
-
-typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
 
 
 TYPEINIT1(DlgEdObj, SdrUnoObj);
@@ -423,88 +426,95 @@ void DlgEdObj::UpdateStep()
 
 void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    // stop listening with all children
-    ::std::vector<DlgEdObj*> aChildList = GetDlgEdForm()->GetChilds();
-    ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
+    DlgEdForm* pForm = GetDlgEdForm();
+    if ( pForm )
     {
-        (*aIter)->EndListening( sal_False );
-    }
-
-    Reference< container::XNameAccess > xNameAcc( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
-    if ( xNameAcc.is() )
-    {
-        // get sequence of control names
-        Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        sal_Int32 nCtrls = aNames.getLength();
-
-        // create a map of tab indices and control names, sorted by tab index
-        IndexToNameMap aIndexToNameMap;
-        for ( sal_Int16 i = 0; i < nCtrls; ++i )
+        // stop listening with all children
+        ::std::vector<DlgEdObj*> aChildList = pForm->GetChilds();
+        ::std::vector<DlgEdObj*>::iterator aIter;
+        for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
         {
-            // get control name
-            ::rtl::OUString aName( pNames[i] );
-
-            // get tab index
-            sal_Int16 nTabIndex = -1;
-            Any aCtrl = xNameAcc->getByName( aName );
-            Reference< beans::XPropertySet > xPSet;
-               aCtrl >>= xPSet;
-            if ( xPSet.is() && xPSet == Reference< beans::XPropertySet >( evt.Source, UNO_QUERY ) )
-                evt.OldValue >>= nTabIndex;
-            else if ( xPSet.is() )
-                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= nTabIndex;
-
-            // insert into map
-            aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
+            (*aIter)->EndListening( sal_False );
         }
 
-        // create a helper list of control names, sorted by tab index
-        ::std::vector< ::rtl::OUString > aNameList( aIndexToNameMap.size() );
-        ::std::transform(
-                aIndexToNameMap.begin(), aIndexToNameMap.end(),
-                aNameList.begin(),
-                ::std::select2nd< IndexToNameMap::value_type >( )
-            );
-
-        // check tab index
-        sal_Int16 nOldTabIndex;
-        evt.OldValue >>= nOldTabIndex;
-        sal_Int16 nNewTabIndex;
-        evt.NewValue >>= nNewTabIndex;
-        if ( nNewTabIndex < 0 )
-            nNewTabIndex = 0;
-        else if ( nNewTabIndex > nCtrls - 1 )
-            nNewTabIndex = nCtrls - 1;
-
-        // reorder helper list
-        ::rtl::OUString aCtrlName = aNameList[nOldTabIndex];
-        aNameList.erase( aNameList.begin() + nOldTabIndex );
-        aNameList.insert( aNameList.begin() + nNewTabIndex , aCtrlName );
-
-        // set new tab indices
-        for ( i = 0; i < nCtrls; ++i )
+        Reference< container::XNameAccess > xNameAcc( pForm->GetUnoControlModel() , UNO_QUERY );
+        if ( xNameAcc.is() )
         {
-            Any aCtrl = xNameAcc->getByName( aNameList[i] );
-            Reference< beans::XPropertySet > xPSet;
-               aCtrl >>= xPSet;
-            if ( xPSet.is() )
+            // get sequence of control names
+            Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
+            const ::rtl::OUString* pNames = aNames.getConstArray();
+            sal_Int32 nCtrls = aNames.getLength();
+
+            // create a map of tab indices and control names, sorted by tab index
+            IndexToNameMap aIndexToNameMap;
+            for ( sal_Int16 i = 0; i < nCtrls; ++i )
             {
-                Any aTabIndex;
-                aTabIndex <<= (sal_Int16) i;
-                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+                // get control name
+                ::rtl::OUString aName( pNames[i] );
+
+                // get tab index
+                sal_Int16 nTabIndex = -1;
+                Any aCtrl = xNameAcc->getByName( aName );
+                Reference< beans::XPropertySet > xPSet;
+                   aCtrl >>= xPSet;
+                if ( xPSet.is() && xPSet == Reference< beans::XPropertySet >( evt.Source, UNO_QUERY ) )
+                    evt.OldValue >>= nTabIndex;
+                else if ( xPSet.is() )
+                    xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= nTabIndex;
+
+                // insert into map
+                aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
             }
+
+            // create a helper list of control names, sorted by tab index
+            ::std::vector< ::rtl::OUString > aNameList( aIndexToNameMap.size() );
+            ::std::transform(
+                    aIndexToNameMap.begin(), aIndexToNameMap.end(),
+                    aNameList.begin(),
+                    ::std::select2nd< IndexToNameMap::value_type >( )
+                );
+
+            // check tab index
+            sal_Int16 nOldTabIndex;
+            evt.OldValue >>= nOldTabIndex;
+            sal_Int16 nNewTabIndex;
+            evt.NewValue >>= nNewTabIndex;
+            if ( nNewTabIndex < 0 )
+                nNewTabIndex = 0;
+            else if ( nNewTabIndex > nCtrls - 1 )
+                nNewTabIndex = nCtrls - 1;
+
+            // reorder helper list
+            ::rtl::OUString aCtrlName = aNameList[nOldTabIndex];
+            aNameList.erase( aNameList.begin() + nOldTabIndex );
+            aNameList.insert( aNameList.begin() + nNewTabIndex , aCtrlName );
+
+            // set new tab indices
+            for ( i = 0; i < nCtrls; ++i )
+            {
+                Any aCtrl = xNameAcc->getByName( aNameList[i] );
+                Reference< beans::XPropertySet > xPSet;
+                   aCtrl >>= xPSet;
+                if ( xPSet.is() )
+                {
+                    Any aTabIndex;
+                    aTabIndex <<= (sal_Int16) i;
+                    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+                }
+            }
+
+            // reorder objects in drawing page
+            GetModel()->GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
+
+            // #110559#
+            pForm->UpdateTabOrderAndGroups();
         }
 
-        // reorder objects in drawing page
-        GetModel()->GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
-    }
-
-    // start listening with all children
-    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
-    {
-        (*aIter)->StartListening();
+        // start listening with all children
+        for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
+        {
+            (*aIter)->StartListening();
+        }
     }
 }
 
@@ -772,6 +782,9 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
             Any aCtrl;
             aCtrl <<= xCtrl;
             xCont->insertByName( aOUniqueName , aCtrl );
+
+            // #110559#
+            pDlgEdForm->UpdateTabOrderAndGroups();
         }
     }
 
@@ -882,72 +895,78 @@ void DlgEdObj::SetDefaults()
     // set parent form
     pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEdForm();
 
-    // add child to parent form
-    pDlgEdForm->AddChild( this );
-
-    Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
-    if ( xPSet.is() )
+    if ( pDlgEdForm )
     {
-        // get unique name
-        ::rtl::OUString aOUniqueName( GetUniqueName() );
+        // add child to parent form
+        pDlgEdForm->AddChild( this );
 
-        // set name property
-        Any aUniqueName;
-        aUniqueName <<= aOUniqueName;
-        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
-
-        // set labels
-        if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) ||
-            supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
+        Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
+        if ( xPSet.is() )
         {
-            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
-        }
+            // get unique name
+            ::rtl::OUString aOUniqueName( GetUniqueName() );
 
-        // set number formats supplier for formatted field
-        if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
-        {
-            Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor()->GetNumberFormatsSupplier();
-            if ( xSupplier.is() )
+            // set name property
+            Any aUniqueName;
+            aUniqueName <<= aOUniqueName;
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
+
+            // set labels
+            if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) ||
+                supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) ||
+                supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) ||
+                supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) ||
+                supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
             {
-                Any aSupplier;
-                aSupplier <<= xSupplier;
-                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatsSupplier" ) ), aSupplier );
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
+            }
+
+            // set number formats supplier for formatted field
+            if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
+            {
+                Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor()->GetNumberFormatsSupplier();
+                if ( xSupplier.is() )
+                {
+                    Any aSupplier;
+                    aSupplier <<= xSupplier;
+                    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatsSupplier" ) ), aSupplier );
+                }
+            }
+
+            // set geometry properties
+            SetPropsFromRect();
+
+            Reference< container::XNameContainer > xCont( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
+            if ( xCont.is() )
+            {
+                // set tabindex
+                   Sequence< OUString > aNames = xCont->getElementNames();
+                uno::Any aTabIndex;
+                aTabIndex <<= (sal_Int16) aNames.getLength();
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+
+                // set step
+                Reference< beans::XPropertySet > xPSetForm( xCont, UNO_QUERY );
+                if ( xPSetForm.is() )
+                {
+                    Any aStep = xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Step" ) ) );
+                    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Step" ) ), aStep );
+                }
+
+                // insert control model in dialog model
+                Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
+                Any aAny;
+                aAny <<= xCtrl;
+                xCont->insertByName( aOUniqueName , aAny );
+
+                // #110559#
+                pDlgEdForm->UpdateTabOrderAndGroups();
             }
         }
 
-        // set geometry properties
-        SetPropsFromRect();
-
-        Reference< container::XNameContainer > xCont( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
-        if ( xCont.is() )
-        {
-            // set tabindex
-               Sequence< OUString > aNames = xCont->getElementNames();
-            uno::Any aTabIndex;
-            aTabIndex <<= (sal_Int16) aNames.getLength();
-            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
-
-            // set step
-            Reference< beans::XPropertySet > xPSetForm( xCont, UNO_QUERY );
-            if ( xPSetForm.is() )
-            {
-                Any aStep = xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Step" ) ) );
-                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Step" ) ), aStep );
-            }
-
-            // insert control model in dialog model
-            Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
-            Any aAny;
-            aAny <<= xCtrl;
-            xCont->insertByName( aOUniqueName , aAny );
-        }
+        // dialog model changed
+        pDlgEdForm->GetDlgEditor()->SetDialogModelChanged( TRUE );
     }
-
-    // dialog model changed
-    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged( TRUE );
 }
 
 //----------------------------------------------------------------------------
@@ -1173,6 +1192,22 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
 
 SdrObject* DlgEdObj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
 {
+    // #109994# fixed here, because the drawing layer doesn't handle objects
+    // with a width or height of 0 in a proper way
+    Rectangle aRect( aOutRect );
+    if ( aRect.IsEmpty() )
+    {
+        aRect.Left() -= nTol;
+        aRect.Top() -= nTol;
+        aRect.Right() = ( aRect.Right() == RECT_EMPTY ? aOutRect.Left() + nTol : aRect.Right() + nTol );
+        aRect.Bottom() = ( aRect.Bottom() == RECT_EMPTY ? aOutRect.Top() + nTol : aRect.Bottom() + nTol );
+
+        if ( aRect.IsInside( rPnt ) )
+            return (SdrObject*)this;
+        else
+            return 0;
+    }
+
     if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ))
     {
         Rectangle aROuter = aOutRect;
@@ -1197,7 +1232,7 @@ SdrObject* DlgEdObj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* p
             return 0;
     }
     else
-        return SdrObject::CheckHit( rPnt, nTol, pSet );
+        return SdrUnoObj::CheckHit( rPnt, nTol, pSet );
 }
 
 
@@ -1442,6 +1477,9 @@ void DlgEdForm::UpdateTabIndices()
                 xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
             }
         }
+
+        // #110559#
+        UpdateTabOrderAndGroups();
     }
 
     // start listening with all children
@@ -1449,6 +1487,112 @@ void DlgEdForm::UpdateTabIndices()
     {
         (*aIter)->StartListening();
     }
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::UpdateTabOrder()
+{
+    // #110559#
+    // When the tabindex of a control model changes, the dialog control is
+    // notified about those changes. Due to #109067# (bad performance of
+    // dialog editor) the dialog control doesn't activate the tab order
+    // in design mode. When the dialog editor has reordered all
+    // tabindices, this method allows to activate the taborder afterwards.
+
+    Window* pWindow = GetDlgEditor() ? GetDlgEditor()->GetWindow() : NULL;
+    if ( pWindow )
+    {
+        Reference< awt::XUnoControlContainer > xCont( GetUnoControl( pWindow ), UNO_QUERY );
+        if ( xCont.is() )
+        {
+            Sequence< Reference< awt::XTabController > > aSeqTabCtrls = xCont->getTabControllers();
+            const Reference< awt::XTabController >* pTabCtrls = aSeqTabCtrls.getConstArray();
+            sal_Int32 nCount = aSeqTabCtrls.getLength();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
+                pTabCtrls[i]->activateTabOrder();
+        }
+    }
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::UpdateGroups()
+{
+    // #110559#
+    // The grouping of radio buttons in a dialog is done by vcl.
+    // In the dialog editor we have two views (=controls) for one
+    // radio button model. One control is owned by the dialog control,
+    // but not visible in design mode. The other control is owned by
+    // the drawing layer object. Whereas the grouping of the first
+    // control is done by vcl, the grouping of the control in the
+    // drawing layer has to be done here.
+
+    Reference< awt::XTabControllerModel > xTabModel( GetUnoControlModel() , UNO_QUERY );
+    if ( xTabModel.is() )
+    {
+        Window* pWindow = GetDlgEditor() ? GetDlgEditor()->GetWindow() : NULL;
+        if ( pWindow )
+        {
+            // create a global list of controls that belong to the dialog
+            ::std::vector<DlgEdObj*> aChildList = GetChilds();
+            sal_uInt32 nSize = aChildList.size();
+            Sequence< Reference< awt::XControl > > aSeqControls( nSize );
+            for ( sal_uInt32 i = 0; i < nSize; ++i )
+                aSeqControls.getArray()[i] = Reference< awt::XControl >( aChildList[i]->GetUnoControl( pWindow ), UNO_QUERY );
+
+            sal_Int32 nGroupCount = xTabModel->getGroupCount();
+            for ( sal_Int32 nGroup = 0; nGroup < nGroupCount; ++nGroup )
+            {
+                // get a list of control models that belong to this group
+                ::rtl::OUString aName;
+                Sequence< Reference< awt::XControlModel > > aSeqModels;
+                xTabModel->getGroup( nGroup, aSeqModels, aName );
+                const Reference< awt::XControlModel >* pModels = aSeqModels.getConstArray();
+                sal_Int32 nModelCount = aSeqModels.getLength();
+
+                // create a list of peers that belong to this group
+                Sequence< Reference< awt::XWindow > > aSeqPeers( nModelCount );
+                for ( sal_Int32 nModel = 0; nModel < nModelCount; ++nModel )
+                {
+                    // for each control model find the corresponding control in the global list
+                    const Reference< awt::XControl >* pControls = aSeqControls.getConstArray();
+                    sal_Int32 nControlCount = aSeqControls.getLength();
+                    for ( sal_Int32 nControl = 0; nControl < nControlCount; ++nControl )
+                    {
+                        const Reference< awt::XControl > xCtrl( pControls[nControl] );
+                        if ( xCtrl.is() )
+                        {
+                            Reference< awt::XControlModel > xCtrlModel( xCtrl->getModel() );
+                            if ( (awt::XControlModel*)xCtrlModel.get() == (awt::XControlModel*)pModels[nModel].get() )
+                            {
+                                // get the control peer and insert into the list of peers
+                                aSeqPeers.getArray()[ nModel ] = Reference< awt::XWindow >( xCtrl->getPeer(), UNO_QUERY );
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // set the group at the dialog peer
+                Reference< awt::XControl > xDlg( GetUnoControl( pWindow ), UNO_QUERY );
+                if ( xDlg.is() )
+                {
+                    Reference< awt::XVclContainerPeer > xDlgPeer( xDlg->getPeer(), UNO_QUERY );
+                    if ( xDlgPeer.is() )
+                        xDlgPeer->setGroup( aSeqPeers );
+                }
+            }
+        }
+    }
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::UpdateTabOrderAndGroups()
+{
+    UpdateTabOrder();
+    UpdateGroups();
 }
 
 //----------------------------------------------------------------------------
