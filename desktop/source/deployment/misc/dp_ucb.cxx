@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:09:14 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,7 @@ bool create_folder(
     if (create_ucb_content(
             &ucb_content, url_, xCmdEnv, false /* no throw */ ))
     {
-        if (ucb_content.isFolder())
-        {
+        if (ucb_content.isFolder()) {
             if (ret_ucb_content != 0)
                 *ret_ucb_content = ucb_content;
             return true;
@@ -130,7 +129,7 @@ bool create_folder(
     sal_Int32 slash = url.lastIndexOf( '/' );
     if (slash < 0) {
         // fallback:
-        url = expand_url( url );
+        url = expandUnoRcUrl( url );
         slash = url.lastIndexOf( '/' );
     }
     ::ucb::Content parentContent;
@@ -140,7 +139,6 @@ bool create_folder(
     Reference<XContentCreator> xCreator( parentContent.get(), UNO_QUERY );
     if (xCreator.is())
     {
-        OUString strTitle( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
         Any title( makeAny( ::rtl::Uri::decode( url.copy( slash + 1 ),
                                                 rtl_UriDecodeWithCharset,
                                                 RTL_TEXTENCODING_UTF8 ) ) );
@@ -162,7 +160,7 @@ bool create_folder(
                 try {
                     if (parentContent.insertNewContent(
                             info.Type,
-                            Sequence<OUString>( &strTitle, 1 ),
+                            Sequence<OUString>( &StrTitle::get(), 1 ),
                             Sequence<Any>( &title, 1 ),
                             ucb_content )) {
                         if (ret_ucb_content != 0)
