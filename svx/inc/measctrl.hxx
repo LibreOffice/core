@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 09:04:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 class SfxItemSet;
 
-class ExtOutputDevice;
+class XOutputDevice;
 class SdrMeasureObj;
 class SdrModel;
 
@@ -85,7 +85,7 @@ class SvxXMeasurePreview : public Control
 
 private:
     const SfxItemSet&   rAttrs;
-    ExtOutputDevice*    pExtOutDev;
+    XOutputDevice*  pExtOutDev;
     SdrMeasureObj*      pMeasureObj;
     SdrModel*           pModel;
 
