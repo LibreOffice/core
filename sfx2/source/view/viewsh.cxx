@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:38:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef GCC
 #pragma hdrstop
@@ -682,7 +683,7 @@ void SfxViewShell::OuterResizePixel
 
 /*  [Beschreibung]
 
-    Diese Methode muá berladen werden, um auf "Anderungen der Gr”áe
+    Diese Methode muï¿½ ï¿½berladen werden, um auf "Anderungen der Grï¿½ï¿½e
     der View zu reagieren. Dabei definieren wir die View als das Edit-Window
     zuz"uglich der um das Edit-Window angeordnenten Tools (z.B. Lineale).
 
@@ -737,7 +738,7 @@ void SfxViewShell::InnerResizePixel
 
 /*  [Beschreibung]
 
-    Diese Methode muá berladen werden, um auf "Anderungen der Gr”áe
+    Diese Methode muï¿½ ï¿½berladen werden, um auf "Anderungen der Grï¿½ï¿½e
     des Edit-Windows zu reagieren.
 
     Das Edit-Window darf weder in Gr"o\se noch Position ver"andert werden.
@@ -1036,7 +1037,7 @@ String SfxViewShell::GetSelectionText
                                 Der selektierte Text wird soweit erweitert,
                                 da\s nur ganze W"orter zur"uckgegeben werden.
                                 Als Worttrenner gelten White-Spaces und die
-                                Satzzeichen ï.,;ï sowie einfache und doppelte
+                                Satzzeichen ï¿½.,;ï¿½ sowie einfache und doppelte
                                 Anf"uhrungszeichen.
                             */
 )
@@ -1047,7 +1048,7 @@ String SfxViewShell::GetSelectionText
     um einen Text zur"uckzuliefern, der in der aktuellen Selektion
     steht. Dieser wird z.B. beim Versenden (email) verwendet.
 
-    Mit ïbCompleteWords == TRUEï ger"ufen, reicht z.B. auch der Cursor,
+    Mit ï¿½bCompleteWords == TRUEï¿½ ger"ufen, reicht z.B. auch der Cursor,
     der in einer URL steht, um die gesamte URL zu liefern.
 */
 
@@ -1275,6 +1276,19 @@ void SfxViewShell::SFX_NOTIFY( SfxBroadcaster& rBC,
 
 //--------------------------------------------------------------------
 
+BOOL SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
+{
+    if (!pImp->pAccExec)
+    {
+        pImp->pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
+        pImp->pAccExec->init(::comphelper::getProcessServiceFactory(), pFrame->GetFrame()->GetFrameInterface());
+    }
+
+    return pImp->pAccExec->execute(aKey.GetKeyCode());
+}
+
+//--------------------------------------------------------------------
+
 FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 /*  [Beschreibung]
@@ -1299,35 +1313,12 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
     <SfxApplication::KeyInput(const KeyEvent&)>
 */
 {
-    SfxAcceleratorManager* pAccMgr = GetAccMgr_Impl();
-    BOOL bRet = ( pAccMgr && pAccMgr->Call( rKeyEvent, GetViewFrame()->GetBindings(), FALSE ) );
-    if ( bRet )
-        return bRet;
-    else
-        bRet = SFX_APP()->GetAppAccel_Impl()->Call( rKeyEvent, GetViewFrame()->GetBindings(), FALSE );
-    if ( !bRet && rKeyEvent.GetKeyCode().GetCode() == KEY_ESCAPE )
-    {
-        SfxTopViewFrame *pTop = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
-        if ( pTop )
-        {
-            WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
-            if ( pWork && pWork->IsFullScreenMode() )
-            {
-                GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_SLOT );
-            }
-        }
-    }
-
-    return bRet;
+    return ExecKey_Impl(rKeyEvent);
 }
 
 FASTBOOL SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 {
-    SfxAcceleratorManager* pAccMgr = GetAccMgr_Impl();
-    BOOL bRet = ( pAccMgr && pAccMgr->Call( rKeyEvent, GetViewFrame()->GetBindings(), TRUE ) );
-    if ( !bRet )
-        bRet = SFX_APP()->GetAppAccel_Impl()->Call( rKeyEvent, GetViewFrame()->GetBindings(), TRUE );
-    return bRet;
+    return ExecKey_Impl(rKeyEvent);
 }
 
 //--------------------------------------------------------------------
@@ -1371,7 +1362,7 @@ ErrCode SfxViewShell::DoVerb(long nVerb)
 /*  [Beschreibung]
 
     Virtuelle Methode, um am selektierten Objekt ein Verb auszuf"uhren.
-    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muá DoVerb
+    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muï¿½ DoVerb
     dort "uberlschrieben werden.
 
 */
