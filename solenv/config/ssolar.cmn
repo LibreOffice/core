@@ -61,6 +61,8 @@ common
 		DMAKE
 		DYNAMIC_CRT
 		ENABLE_CRASHDUMP
+		ENABLE_CUPS
+		ENABLE_FONTCONFIG
 		ENABLEUNICODE
 		GCRINC
 		GCRLIB
@@ -174,6 +176,7 @@ common
 		USE_NEW_SDK
 		USE_NEWCHARSET
 		USE_SHELL
+		use_cygcp
 		use_shl_versions
         VCL
 		WST
