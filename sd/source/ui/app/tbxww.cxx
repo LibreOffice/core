@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-28 09:49:16 $
+ *  last change: $Author: cl $ $Date: 2002-05-30 09:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
             }
             else
             {
-                Image  aImage = GetBindings().GetImageManager()->GetImage( nImage, SD_MOD() );
+                Image  aImage = GetBindings().GetImageManager()->GetImage( nImage, rTbx.GetDisplayBackground().GetColor().IsDark(), SD_MOD() );
                 // Es kann u.U. ein Default-Image zurueckgegeben werden,
                 // welches eine Breite von 0 haben soll
                 // if( aImage.GetSizePixel().Width() > 0 )
