@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:41:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,25 @@ using namespace com::sun::star::uno;
 namespace
 {
 //==================================================================================================
-static void callVirtualMethod( void * pAdjustedThisPtr,
-                                      sal_Int32 nVtableIndex,
-                                      void * pRegisterReturn,
-                                      typelib_TypeClass eReturnType,
-                                      sal_Int32 * pStackLongs,
-                                      sal_Int32 nStackLongs )
+// The call instruction within the asm section of callVirtualMethod may throw
+// exceptions.  So that the compiler handles this correctly, it is important
+// that (a) callVirtualMethod might call dummy_can_throw_anything (although this
+// never happens at runtime), which in turn can throw exceptions, and (b)
+// callVirtualMethod is not inlined at its call site (so that any exceptions are
+// caught which are thrown from the instruction calling callVirtualMethod):
+void callVirtualMethod( void * pAdjustedThisPtr,
+                        sal_Int32 nVtableIndex,
+                        void * pRegisterReturn,
+                        typelib_TypeClass eReturnType,
+                        sal_Int32 * pStackLongs,
+                        sal_Int32 nStackLongs ) __attribute__((noinline));
+
+void callVirtualMethod( void * pAdjustedThisPtr,
+                        sal_Int32 nVtableIndex,
+                        void * pRegisterReturn,
+                        typelib_TypeClass eReturnType,
+                        sal_Int32 * pStackLongs,
+                        sal_Int32 nStackLongs )
 {
     // parameter list is mixed list of * and values
     // reference parameters are pointers
