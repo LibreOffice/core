@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:49:44 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 #endif
 #ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
 #include <svx/AccessibleTextHelper.hxx>
+#endif
+
+#ifndef EDIT_HXX
+#include <edit.hxx>
 #endif
 
 class Window;
@@ -234,6 +238,7 @@ public:
 // classes and helper-classes used for accessibility in the command-window
 //
 
+class SmEditAccessible;
 class SmEditSource;
 class EditEngine;
 class EditView;
@@ -244,14 +249,14 @@ struct ESelection;
 class SmViewForwarder :
     public SvxViewForwarder
 {
-    EditView &          rEditView;
+    SmEditAccessible &          rEditAcc;
 
     // disallow copy-ctor and assignment-operator for now
     SmViewForwarder( const SmViewForwarder & );
     SmViewForwarder & operator = ( const SmViewForwarder & );
 
 public:
-                        SmViewForwarder( EditView &rView );
+                        SmViewForwarder( SmEditAccessible &rAcc );
     virtual             ~SmViewForwarder();
 
     virtual BOOL        IsValid() const;
@@ -264,7 +269,7 @@ public:
 class SmTextForwarder :     /* analog to SvxEditEngineForwarder */
     public SvxTextForwarder
 {
-    EditEngine &        rEditEngine;
+    SmEditAccessible &  rEditAcc;
     SmEditSource &      rEditSource;
 
     DECL_LINK( NotifyHdl, EENotify * );
@@ -274,7 +279,7 @@ class SmTextForwarder :     /* analog to SvxEditEngineForwarder */
     SmTextForwarder & operator = ( const SmTextForwarder & );
 
 public:
-    SmTextForwarder( EditEngine& rEngine, SmEditSource & rSource );
+    SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource );
     virtual ~SmTextForwarder();
 
     virtual USHORT      GetParagraphCount() const;
@@ -323,14 +328,14 @@ public:
 class SmEditViewForwarder :     /* analog to SvxEditEngineViewForwarder */
     public SvxEditViewForwarder
 {
-    EditView &          rEditView;
+    SmEditAccessible&       rEditAcc;
 
     // disallow copy-ctor and assignment-operator for now
     SmEditViewForwarder( const SmEditViewForwarder & );
     SmEditViewForwarder & operator = ( const SmEditViewForwarder & );
 
 public:
-                        SmEditViewForwarder( EditView& rView );
+                        SmEditViewForwarder( SmEditAccessible& rAcc );
     virtual             ~SmEditViewForwarder();
 
     virtual BOOL        IsValid() const;
@@ -355,15 +360,14 @@ class SmEditSource :
     SmTextForwarder         aTextFwd;
     SmEditViewForwarder     aEditViewFwd;
 
-    EditEngine &            rEditEngine;
-    EditView &              rEditView;
+    SmEditAccessible&       rEditAcc;
 
     // disallow copy-ctor and assignment-operator for now
     SmEditSource( const SmEditSource &rSrc );
     SmEditSource & operator = ( const SmEditSource & );
 
 public:
-            SmEditSource( SmEditWindow *pWin, EditEngine &rEditEngine, EditView &rEditView );
+            SmEditSource( SmEditWindow *pWin, SmEditAccessible &rAcc );
     virtual ~SmEditSource();
 
     virtual SvxEditSource*      Clone() const;
@@ -412,6 +416,11 @@ public:
     void                Init();
     SmEditWindow *      GetWin()    { return pWin; }
     void                ClearWin();     // to be called when view is destroyed
+
+    //! access EditEngine and EditView via the functions in the respective window
+    //! pointers may be 0 (e.g. during reload)
+    EditEngine * GetEditEngine()    { return pWin ? pWin->GetEditEngine() : 0; }
+    EditView   * GetEditView()      { return pWin ? pWin->GetEditView() : 0; }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
