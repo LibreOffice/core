@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-12 17:16:55 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _STG_HXX
 #define _STG_HXX
+
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
 
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
@@ -298,6 +302,8 @@ public:
     virtual BOOL                ValidateMode( StreamMode ) const;
     const SvStream*             GetSvStream() const;
     virtual BOOL                Equals( const BaseStorageStream& rStream ) const;
+    BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
+    BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
 };
 
 class UCBStorage_Impl;
@@ -359,6 +365,8 @@ public:
     virtual BOOL                ValidateMode( StreamMode ) const;
     virtual const SvStream*     GetSvStream() const;
     virtual BOOL                Equals( const BaseStorage& rStream ) const;
+    BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
+    BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
 
 #if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
