@@ -36,7 +36,7 @@
 #include <osl/mutex.hxx>
 #endif
 #ifndef _SFX_SFXUNO_HXX
-#include <sfx2/sfxuno.hxx>
+#include <sfxuno.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
