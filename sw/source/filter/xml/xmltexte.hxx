@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 14:03:38 $
+ *  last change: $Author: mib $ $Date: 2001-03-05 11:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@ protected:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle );
 
-    virtual void exportTextAutoStyles();
     virtual void _exportTextEmbedded(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropSet,

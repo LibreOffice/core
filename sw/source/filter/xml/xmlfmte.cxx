@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 16:49:56 $
+ *  last change: $Author: mib $ $Date: 2001-03-05 11:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ void SwXMLExport::_ExportAutoStyles()
     }
 
     GetTextParagraphExport()->exportTextAutoStyles();
+    GetShapeExport()->exportAutoStyles();
     if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
         GetPageExport()->exportAutoStyles();
 

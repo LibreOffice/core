@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 14:03:38 $
+ *  last change: $Author: mib $ $Date: 2001-03-05 11:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,15 +243,6 @@ void SwXMLTextParagraphExport::exportStyleContent(
             }
         }
     }
-}
-
-void SwXMLTextParagraphExport::exportTextAutoStyles()
-{
-    XMLTextParagraphExport::exportTextAutoStyles();
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-                                   GetExport().GetDocHandler(),
-                                   GetExport().GetMM100UnitConverter(),
-                                   GetExport().GetNamespaceMap() );
 }
 
 SwXMLTextParagraphExport::SwXMLTextParagraphExport(
