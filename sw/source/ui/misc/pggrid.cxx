@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:37:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 
 #pragma hdrstop
 
+#include <sfx2/app.hxx>
+
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -78,9 +80,6 @@
 #include <globals.hrc>
 #endif
 
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _XTABLE_HXX //autogen
 #include <svx/xtable.hxx>
 #endif
@@ -183,7 +182,7 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
 
     aDisplayCB.SetClickHdl(LINK(this, SwTextGridPage, DisplayGridHdl));
 
-    XColorTable* pColorTbl = OFF_APP()->GetStdColorTable();
+    XColorTable* pColorTbl = XColorTable::GetStdColorTable();
     aColorLB.InsertAutomaticEntry();
     for( USHORT i = 0; i < pColorTbl->Count(); ++i )
     {
