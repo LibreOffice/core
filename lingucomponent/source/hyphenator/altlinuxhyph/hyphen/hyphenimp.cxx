@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2002-07-29 17:28:00 $
+ *  last change: $Author: svesik $ $Date: 2002-07-29 17:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,8 +388,6 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                OString uTmp(OU2ENC(userdictpath + DictFN,osl_getThreadTextEncoding()));
                OString sTmp(OU2ENC(dictpath + DictFN,osl_getThreadTextEncoding()));
 
-    rtl_TextEncoding DictionaryEnc = L2TE( LocaleToLanguage( aLocale ) );
-
            if ( ( dict = hnj_hyphen_load ( uTmp.getStr() ) ) == NULL )
               if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
           {
@@ -483,7 +481,6 @@ Reference< XPossibleHyphens > SAL_CALL
   rtl_TextEncoding aEnc;
 
   Reference< XPossibleHyphens > xRes;
-
   k = -1;
   for (int j = 0; j < numdict; j++)
      if (aLocale == aDicts[j].aLoc) k = j;
@@ -524,7 +521,6 @@ Reference< XPossibleHyphens > SAL_CALL
       // other wise hyphenate the word with that dictionary
       dict = aDicts[k].aPtr;
       aEnc = aDicts[k].aEnc;
-
 
       OString encWord(OU2ENC(aWord, aEnc));
 
