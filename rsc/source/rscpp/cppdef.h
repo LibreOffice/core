@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdef.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:50:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,18 +310,6 @@
 #ifndef OK_DATE
 #define OK_DATE         TRUE
 #endif
-
-/*
- * Some common definitions.
- */
-
-/* ER 13.06.95 18:48
- wer macht denn sowas?!? dadurch ist ifdef DEBUG immer wahr..
- war wohl mal'n if DEBUG im Source, ist jetzt aber nicht..
-#ifndef DEBUG
-#define DEBUG                   FALSE
-#endif
- */
 
 /*
  * The following definitions are used to allocate memory for
