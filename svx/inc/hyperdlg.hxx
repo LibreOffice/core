@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-19 16:09:15 $
+ *  last change: $Author: gt $ $Date: 2002-05-29 11:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,20 +149,21 @@ private:
     DECL_LINK (ClickCloseHdl_Impl, void * );
 
 protected:
-    virtual BOOL    Close();
-    virtual void    Move();
+    virtual BOOL            Close();
+    virtual void            Move();
 
+//    virtual long          PreNotify( NotifyEvent& rNEvt );
 public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
     ~SvxHpLinkDlg ();
 
-    USHORT SetPage( SvxHyperlinkItem* pItem );
-    void   EnableInetBrowse( sal_Bool bEnable = sal_True );
-    void   SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
-    const BOOL IsHTMLDoc() const { return mbIsHTMLDoc; }
+    USHORT                  SetPage( SvxHyperlinkItem* pItem );
+    void                    EnableInetBrowse( sal_Bool bEnable = sal_True );
+    void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
+    inline const BOOL       IsHTMLDoc() const { return mbIsHTMLDoc; }
 
-    SfxBindings*   GetBindings() const { return mpBindings; };
-    SfxDispatcher* GetDispatcher() const { return mpBindings->GetDispatcher(); }
+    inline SfxBindings*     GetBindings() const { return mpBindings; };
+    inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }
 };
 
 

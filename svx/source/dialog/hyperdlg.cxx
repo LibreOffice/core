@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-01 15:25:27 $
+ *  last change: $Author: gt $ $Date: 2002-05-29 11:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     aImage = Image( SVX_RES ( RID_SVXBMP_HLDOCNTP ) );
     AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
 
+    // all tab pages set -> create mnemonics
+    CreateIconTextAutoMnemonics();
+
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
                                SID_HYPERLINK_SETLINK );
@@ -308,6 +311,26 @@ void SvxHpLinkDlg::Move()
 
     Window::Move();
 }
+
+/*long SvxHpLinkDlg::PreNotify( NotifyEvent& rNEvt )
+{
+    long nRet = 0;
+
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        DBG_ASSERT( rNEvt.GetKeyEvent(), "-SvxHpLinkDlg::PreNotify(): no KeyEvent for key event?!" );
+
+        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+
+        if( KEY_MOD2 == pKEvt->GetKeyCode().GetModifier() && pKEvt->GetCharCode() && HandleShortCutKey( *pKEvt ) )
+            nRet = 1;
+    }
+
+    if( !nRet )
+        nRet = IconChoiceDialog::PreNotify( rNEvt );
+
+    return nRet;
+}*/
 
 /*************************************************************************
 |*
