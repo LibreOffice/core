@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2003-06-12 07:47:30 $
+#   last change: $Author: vg $ $Date: 2003-06-20 10:18:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ SLOFILES=   \
             $(SLO)$/vclxtoolkit.obj 					\
             $(SLO)$/vclxtopwindow.obj 					\
             $(SLO)$/vclxwindow.obj 						\
+            $(SLO)$/vclxwindow1.obj 						\
             $(SLO)$/vclxwindows.obj
 
 SRCFILES=\
