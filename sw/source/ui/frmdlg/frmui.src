@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:00:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String STR_TOP
     TEXT[ chinese_traditional ] = "¤W(~T)";
     TEXT[ arabic ] = "ÃÚáì";
     TEXT[ greek ] = "ĞÜíù";
-    TEXT[ korean ] = "À§";
+    TEXT[ korean ] = "À§(~T)";
     TEXT[ turkish ] = "~Üst";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Arriba";
@@ -112,7 +112,7 @@ String STR_BOTTOM
     TEXT[ chinese_traditional ] = "¤U(~B)";
     TEXT[ arabic ] = "ÃÓİá";
     TEXT[ greek ] = "ÊÜôù";
-    TEXT[ korean ] = "¾Æ·¡";
+    TEXT[ korean ] = "¾Æ·¡(~B)";
     TEXT[ turkish ] = "A~ltta";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "A~bajo";
@@ -134,12 +134,12 @@ String STR_CENTER_HORI
     TEXT [ english_us ] = "~Centered" ;
     TEXT[ chinese_simplified ] = "¾ÓÖĞ(~C)";
     TEXT[ russian ] = "Ïî öåíòğó";
-    TEXT[ polish ] = "Wyœrodkuj";
+    TEXT[ polish ] = "Do œrodka";
     TEXT[ japanese ] = "’†‰›(~C)";
     TEXT[ chinese_traditional ] = "¸m¤¤(~C)";
     TEXT[ arabic ] = "ÊæÓíØ";
     TEXT[ greek ] = "Êåíôñáñéóìİíá";
-    TEXT[ korean ] = "°¡¿îµ¥";
+    TEXT[ korean ] = "°¡¿îµ¥(~C)";
     TEXT[ turkish ] = "~Ortala";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Centrado";
@@ -353,7 +353,7 @@ String STR_CENTER_VERT
     Text[ chinese_traditional ] = "¸m¤¤(~E)";
     Text[ arabic ] = "ÇáæÓØ";
     Text[ greek ] = "Êİíôñï";
-    Text[ korean ] = "Áß°£";
+    Text[ korean ] = "Áß°£(~E)";
     Text[ turkish ] = "O~rta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Centro";
@@ -432,7 +432,7 @@ String STR_REL_BORDER
     Text[ russian ] = "Ïîëå";
     Text[ polish ] = "Margines";
     Text[ japanese ] = "—]”’";
-    Text[ chinese_traditional ] = "Ãä¬É";
+    Text[ chinese_traditional ] = "Ãä®Ø";
     Text[ arabic ] = "ÇáåÇãÔ";
     Text[ greek ] = "Ğåñéèşñéï";
     Text[ korean ] = "¿©¹é";
@@ -486,7 +486,7 @@ String STR_TOPPRT
     TEXT[ russian ] = "Âåğõíèé êğàé";
     TEXT[ polish ] = "Górny margines";
     TEXT[ japanese ] = "ã—]”’";
-    TEXT[ chinese_traditional ] = "¤WÃä¬É";
+    TEXT[ chinese_traditional ] = "¤WÃä®Ø";
     TEXT[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
     TEXT[ greek ] = "¢íù ğåñéèşñéï";
     TEXT[ korean ] = "À§ÂÊ ¿©¹é";
@@ -722,7 +722,7 @@ String STR_REL_PG_LEFT
     Text[ russian ] = "Ëåâûé êğàé ñòğàíèöû";
     Text[ polish ] = "Lewy margines strony";
     Text[ japanese ] = "Íß°¼Ş—]”’ ¶";
-    Text[ chinese_traditional ] = "¥ªÃä¬É";
+    Text[ chinese_traditional ] = "¥ªÃä®Ø";
     Text[ arabic ] = "åÇãÔ ÇáÕİÍÉ ÇáÃíÓÑ";
     Text[ greek ] = "Ğåñéèşñéï óåëßäáò - áñéóôåñÜ";
     Text[ korean ] = "ÂÊ¿©¹é£¬¿ŞÂÊ";
@@ -748,7 +748,7 @@ String STR_MIR_REL_PG_LEFT
     Text[ russian ] = "Âíóòğåííèé êğàé ñòğàíèöû";
     Text[ polish ] = "Wewnêrzny margines strony";
     Text[ japanese ] = "Íß°¼Ş—]”’ “à‘¤";
-    Text[ chinese_traditional ] = "Ãä¬É¤º°¼";
+    Text[ chinese_traditional ] = "Ãä®Ø¤º°¼";
     Text[ arabic ] = "åÇãÔ ÇáÕİÍÉ ÇáÏÇÎáí";
     Text[ greek ] = "Ğåñéèşñéï óåëßäáò - åóùôåñéêÜ";
     Text[ korean ] = "ÂÊ¿©¹é£¬¾ÈÂÊ";
@@ -800,7 +800,7 @@ String STR_MIR_REL_PG_RIGHT
     Text[ russian ] = "Íàğóæíûé êğàé ñòğàíèöû";
     Text[ polish ] = "Zewnêtrzny margines strony";
     Text[ japanese ] = "Íß°¼Ş—]”’ ŠO‘¤";
-    Text[ chinese_traditional ] = "Ãä¬É¥~°¼";
+    Text[ chinese_traditional ] = "Ãä®Ø¥~°¼";
     Text[ arabic ] = "åÇãÔ ÇáÕİÍÉ ÇáÎÇÑÌí";
     Text[ greek ] = "Ğåñéèşñéï óåëßäáò - åîùôåñéêÜ";
     Text[ korean ] = "ÂÊ¿©¹é£¬¹Ù±ùÂÊ";
@@ -1069,7 +1069,7 @@ String STR_TOP_BASE
     Text[ chinese_traditional ] = "°ò½u¤W¤è(~T)";
     Text[ arabic ] = "ÃÚáì ÇáÎØ ÇáÃÓÇÓí";
     Text[ greek ] = "ÂáóéêŞ ãñáììŞ - Üíù";
-    Text[ korean ] = "±âÁØ¼± À§";
+    Text[ korean ] = "±âÁØ¼± À§(~T)";
     Text[ turkish ] = "Taban çizgisi ~üstü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea de base ~encima";
@@ -1095,7 +1095,7 @@ String STR_BOTTOM_BASE
     Text[ chinese_traditional ] = "°ò½u¤U¤è(~B)";
     Text[ arabic ] = "ÃÓİá ÇáÎØ ÇáÃÓÇÓí";
     Text[ greek ] = "ÂáóéêŞ ãñáììŞ - êÜôù";
-    Text[ korean ] = "±âÁØ¼± ¾Æ·¡";
+    Text[ korean ] = "±âÁØ¼± ¾Æ·¡(~B)";
     Text[ turkish ] = "Alt ~taban çizgisi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Base a~bajo";
@@ -1121,7 +1121,7 @@ String STR_CENTER_BASE
     Text[ chinese_traditional ] = "°ò½u¸m¤¤(~C)";
     Text[ arabic ] = "æÓØ ÇáÎØ ÇáÃÓÇÓí";
     Text[ greek ] = "ÂáóéêŞ ãñáììŞ - êåíôñáñéóìİíá";
-    Text[ korean ] = "±âÁØ¼± °¡¿îµ¥";
+    Text[ korean ] = "±âÁØ¼± °¡¿îµ¥(~C)";
     Text[ turkish ] = "Taban çizgisini ~ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Base ~centro";
@@ -1476,6 +1476,7 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La distancia entre columnas es demasiado grande para el ancho de las columnas.";
 };
+
 
 
 
