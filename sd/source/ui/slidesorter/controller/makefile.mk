@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 20:22:09 $
+#   last change: $Author: vg $ $Date: 2005-03-23 14:00:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..$/..
 
 PROJECTPCH=sd
@@ -87,6 +86,7 @@ SLOFILES =      							\
     $(SLO)$/SlsPageObjectFactory.obj		\
     $(SLO)$/SlsPageSelector.obj				\
     $(SLO)$/SlsScrollBarManager.obj			\
+    $(SLO)$/SlsSelectionCommand.obj	    	\
     $(SLO)$/SlsSlotManager.obj				\
     $(SLO)$/SlsTransferable.obj				\
                                             \
