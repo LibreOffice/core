@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.23 2000-12-19 16:19:46 cl Exp $
+	$Id: drawing.mod,v 1.24 2000-12-20 16:35:08 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -142,6 +142,9 @@
 <!ATTLIST draw:circle %zindex;>
 <!ATTLIST draw:circle %draw-end-position; >
 <!ATTLIST draw:circle draw:id %shapeId;>
+<!ATTLIST draw:circle draw:kind (full|section|cut|arc) "full">
+<!ATTLIST draw:circle draw:start-angle %nonNegativeInteger; #IMPLIED>
+<!ATTLIST draw:circle draw:end-angle %nonNegativeInteger; #IMPLIED>
 
 <!ELEMENT draw:ellipse %draw-text; >
 <!ATTLIST draw:ellipse svg:cx %length; #REQUIRED >
@@ -153,6 +156,9 @@
 <!ATTLIST draw:ellipse %zindex;>
 <!ATTLIST draw:ellipse %draw-end-position; >
 <!ATTLIST draw:ellipse draw:id %shapeId;>
+<!ATTLIST draw:ellipse draw:kind (full|section|cut|arc) "full">
+<!ATTLIST draw:ellipse draw:start-angle %nonNegativeInteger; #IMPLIED>
+<!ATTLIST draw:ellipse draw:end-angle %nonNegativeInteger; #IMPLIED>
 
 <!ELEMENT draw:connector %draw-text;>
 <!ATTLIST draw:connector draw:type (standard|lines|line|curve) "standard">
