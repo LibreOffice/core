@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:24:02 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,6 @@
 #endif
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/sfxsids.hrc>
-#endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
 #endif
 
 #include "cell.hxx"
@@ -2525,7 +2522,8 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
         pDoc( pDocP )
 {
     Init();
-    StartListening( *SfxGetpApp() );
+    StartListening(SC_MOD()->GetUserOptions());
+
     ppContentSlots = new ScChangeActionContent* [ nContentSlots ];
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
@@ -2535,7 +2533,7 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const StrCollection& aTempUserC
         aUserCollection(aTempUserCollection)
 {
     Init();
-    StartListening( *SfxGetpApp() );
+    StartListening(SC_MOD()->GetUserOptions());
     ppContentSlots = new ScChangeActionContent* [ nContentSlots ];
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
@@ -2574,10 +2572,10 @@ void ScChangeTrack::Init()
     bUseFixDateTime = FALSE;
     bTime100thSeconds = TRUE;
 
-    SvtUserOptions aUserOpt;
-    aUser = aUserOpt.GetFirstName();
+    const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
+    aUser = rUserOpt.GetFirstName();
     aUser += ' ';
-    aUser += aUserOpt.GetLastName();
+    aUser += rUserOpt.GetLastName();
     aUserCollection.Insert( new StrData( aUser ) );
 }
 
@@ -2636,36 +2634,28 @@ void ScChangeTrack::Clear()
 
 void __EXPORT ScChangeTrack::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( !pDoc->IsInDtorClear() )
+    if ( !pDoc->IsInDtorClear() &&
+         rHint.ISA(SfxSimpleHint) &&
+        ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_USER_OPTIONS_CHANGED )
     {
-        const SfxItemSetHint* pHint = PTR_CAST( SfxItemSetHint, &rHint );
-        if ( pHint )
+        const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
+        USHORT nOldCount = aUserCollection.GetCount();
+
+        String aStr( rUserOptions.GetFirstName() );
+        aStr += ' ';
+        aStr += rUserOptions.GetLastName();
+        SetUser( aStr );
+
+        if ( aUserCollection.GetCount() != nOldCount )
         {
-            const SfxItemSet& rSet = pHint->GetItemSet();
-            const SfxPoolItem* pItem;
-            if ( rSet.GetItemState(
-                    rSet.GetPool()->GetWhich( SID_ATTR_ADDRESS ),
-                    TRUE, &pItem ) == SFX_ITEM_SET )
-            {
-                USHORT nOldCount = aUserCollection.GetCount();
+            //  New user in collection -> have to repaint because
+            //  colors may be different now (#106697#).
+            //  (Has to be done in the Notify handler, to be sure
+            //  the user collection has already been updated)
 
-                String aStr( ((SvxAddressItem*)pItem)->GetFirstName() );
-                aStr += ' ';
-                aStr += ((SvxAddressItem*)pItem)->GetName();
-                SetUser( aStr );
-
-                if ( aUserCollection.GetCount() != nOldCount )
-                {
-                    //  New user in collection -> have to repaint because
-                    //  colors may be different now (#106697#).
-                    //  (Has to be done in the Notify handler, to be sure
-                    //  the user collection has already been updated)
-
-                    SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
-                    if (pDocSh)
-                        pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB), PAINT_GRID ) );
-                }
-            }
+            SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
+            if (pDocSh)
+                pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB), PAINT_GRID ) );
         }
     }
 }
