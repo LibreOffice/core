@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorlist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:46:34 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "vendorlist.hxx"
+#include "gnujre.hxx"
 #include "sunjre.hxx"
 #include "otherjre.hxx"
 #include "osl/thread.h"
@@ -80,6 +81,7 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("IBM Corporation", OtherInfo)
     VENDOR_MAP_ENTRY("Blackdown Java-Linux Team", OtherInfo)
     VENDOR_MAP_ENTRY("Apple Computer, Inc.", OtherInfo)
+    VENDOR_MAP_ENTRY("Free Software Foundation, Inc.", GnuInfo)
 END_VENDOR_MAP()
 
 
