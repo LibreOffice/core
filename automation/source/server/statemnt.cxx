@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 13:47:00 $
+ *  last change: $Author: gh $ $Date: 2004-07-09 07:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4025,21 +4025,32 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 aSubMenuId2 = SmartId();
                 pMenuWindow = NULL;
                 Point aPos;
-                BOOL bAtMousePos = ( nParams & PARAM_BOOL_1 ) && bBool1;
-                if ( bAtMousePos )
+                ToolBox* pTB;
+                if ( (pControl->GetType() == WINDOW_TOOLBOX) ? (pTB = (ToolBox*)pControl)->IsMenuEnabled() : FALSE )
                 {
-                    aPos = pControl->GetPointerPosPixel();
-                    Window *pActualWin = pControl->FindWindow( aPos );
-
-                    if ( pActualWin )
-                    {
-                        aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                      aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
-                        pControl = pActualWin;
-                    }
+                    Rectangle aRect = pTB->GetMenubuttonRect();
+                    AnimateMouse( pControl, aRect.Center() );
+                    MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
+                    ImplMouseButtonDown( pTB, aMEvnt );
                 }
-                CommandEvent aEvent( aPos, COMMAND_CONTEXTMENU, bAtMousePos );
-                ImplCommand( pControl, aEvent );
+                else
+                {
+                    BOOL bAtMousePos = ( nParams & PARAM_BOOL_1 ) && bBool1;
+                    if ( bAtMousePos )
+                    {
+                        aPos = pControl->GetPointerPosPixel();
+                        Window *pActualWin = pControl->FindWindow( aPos );
+
+                        if ( pActualWin )
+                        {
+                            aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
+    //                      aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
+                            pControl = pActualWin;
+                        }
+                    }
+                    CommandEvent aEvent( aPos, COMMAND_CONTEXTMENU, bAtMousePos );
+                    ImplCommand( pControl, aEvent );
+                }
             }
             break;
         case M_UseMenu:
@@ -5041,22 +5052,13 @@ BOOL StatementControl::Execute()
                                     FIND_HELP;
                                     if ( bBool1 )   // FIND_HELP Erfolgreich
                                     {
-                                        Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nNr1));
+                                        Rectangle aRect = pTB->GetItemPosDropDownRect( nNr1 );
                                         AnimateMouse( pControl, aRect.Center() );
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                         ImplMouseButtonDown( pTB, aMEvnt );
 
                                         Window *pWin = NULL;
-                                        StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
-                                        {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
-                                            ULONG nStart = Time::GetSystemTicks();
-                                            ULONG nDelay = pControl->GetSettings().GetMouseSettings().GetActionDelay();
-                                            while ( !(pWin = GetPopupFloatingWin()) && ( Time::GetSystemTicks() - nStart ) < nDelay + 100 )
-                                                SafeReschedule();
-                                        }
-                                        StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
-
-                                        // Das Fenster ist offen.
+                                        // Wait for the window to open.
                                         StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
                                         {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
                                             Time aDelay;
@@ -5065,7 +5067,7 @@ BOOL StatementControl::Execute()
                                         }
                                         StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
 
-                                        if ( pWin )
+                                        if ( pWin && pWin->GetType() == WINDOW_FLOATINGWINDOW )
                                         {
                                             MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonUp( pTB, aMEvnt );
@@ -5085,19 +5087,10 @@ BOOL StatementControl::Execute()
                                     FIND_HELP;
                                     if ( bBool1 )   // FIND_HELP Erfolgreich
                                     {
-                                        Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nNr1));
+                                        Rectangle aRect = pTB->GetItemPosDropDownRect( nNr1 );
                                         AnimateMouse( pControl, aRect.Center() );
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                         ImplMouseButtonDown( pTB, aMEvnt );
-
-                                        StatementList::bExecuting = TRUE;       // Bah ist das ein ekliger Hack
-                                        {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
-                                            ULONG nStart = Time::GetSystemTicks();
-                                            ULONG nDelay = pControl->GetSettings().GetMouseSettings().GetActionDelay();
-                                            while ( ( Time::GetSystemTicks() - nStart ) < nDelay + 100 )
-                                                SafeReschedule();
-                                        }
-                                        StatementList::bExecuting = FALSE;  // Bah ist das ein ekliger Hack
 
                                         // Das Fenster ist offen.
                                         aSubMenuId1 = SmartId();
