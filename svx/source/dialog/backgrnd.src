@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 14:58:33 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "­I´ºÃC¦â";
         Text[ arabic ] = "áæä ÇáÎáÝíÉ";
         Text[ greek ] = "×ñþìá öüíôïõ";
-        Text[ korean ] = "¹è°æ»ö";
+        Text[ korean ] = "¹è°æ»ö»ó";
         Text[ turkish ] = "Artalan rengi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Background color";
@@ -685,11 +685,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ dutch ] = "~Koppelen" ;
         Text [ italian ] = "Collega" ;
         Text [ spanish ] = "~Vincular" ;
-        Text [ french ] = "~Lien" ;
+        Text [ french ] = "Lien" ;
         Text [ swedish ] = "Län~ka" ;
         Text [ danish ] = "Kæd" ;
         Text [ portuguese_brazilian ] = "~Verkn?fen" ;
-        Text [ portuguese ] = "~Ligar" ;
+        Text [ portuguese ] = "~Ligação" ;
         Text[ chinese_simplified ] = "Á´½Ó(~L)";
         Text[ russian ] = "Ñâÿçàòü";
         Text[ polish ] = "Po~³¹cz";
@@ -733,7 +733,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "Ãþ«¬";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôýðïò";
-        Text[ korean ] = "Çü½Ä";
+        Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Type";
@@ -749,7 +749,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ ENGLISH_US ] = "~Position" ;
         Text [ italian ] = "~Posizione" ;
         Text [ spanish ] = "~Posición" ;
-        Text [ french ] = "P~osition" ;
+        Text [ french ] = "Position" ;
         Text [ dutch ] = "~Positie" ;
         Text [ swedish ] = "~Position" ;
         Text [ danish ] = "Placering" ;
@@ -852,7 +852,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ ENGLISH_US ] = "Pre~view" ;
         Text [ italian ] = "Anteprima" ;
         Text [ spanish ] = "Previsuali~zación" ;
-        Text [ french ] = "A~perçu" ;
+        Text [ french ] = "Aperçu" ;
         Text [ dutch ] = "V~oorbeeld" ;
         Text [ swedish ] = "Fö~rhandsvisning" ;
         Text [ danish ] = "Eksempel" ;
@@ -922,5 +922,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     Text[ catalan ] = "Fondo";
 };
  // ********************************************************************** EOF
+
 
 
