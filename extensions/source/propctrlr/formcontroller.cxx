@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 13:25:57 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 13:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2437,6 +2437,7 @@ namespace pcr
             getPropertyBox()->SetPage( m_nDataPageId );
 
             getPropertyBox()->EnableUpdate();
+            getPropertyBox()->GrabFocus();
         }
         catch (Exception&)
         {
@@ -2822,6 +2823,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/05/29 13:25:57  fs
+ *  #87299# SetTables/SetQueries: allow for grid columns
+ *
  *  Revision 1.25  2001/05/29 10:45:45  fs
  *  #87461# +OnImageURLClicked - now using the FileDlgHelper instead of the UNO service
  *
