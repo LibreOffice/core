@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.19 $
+ #  $Revision: 1.20 $
  #
- #  last change: $Author: oj $ $Date: 2001-06-20 07:10:07 $
+ #  last change: $Author: fs $ $Date: 2001-06-25 16:05:58 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -98,6 +98,8 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/datasourceselector.obj	\
+        $(SLO)$/datasourcemap.obj	\
         $(SLO)$/UserAdmin.obj	\
         $(SLO)$/directsql.obj	\
         $(SLO)$/generalpage.obj	\
@@ -126,6 +128,7 @@ SLOFILES=	\
         $(SLO)$/dbfindex.obj
 
 EXCEPTIONSFILES=	\
+        $(SLO)$/datasourcemap.obj	\
         $(SLO)$/UserAdmin.obj	\
         $(SLO)$/directsql.obj	\
         $(SLO)$/generalpage.obj	\
@@ -155,6 +158,9 @@ EXCEPTIONSFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.19  2001/06/20 07:10:07  oj
+ #	#88434# new page for user admin
+ #	
  #	Revision 1.18  2001/06/19 11:00:02  fs
  #	#88393# +directsql.*
  #	
