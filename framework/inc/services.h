@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:18:43 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -29,7 +29,7 @@
  *  Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
+ *  along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
@@ -129,8 +129,11 @@ namespace framework{
 #define SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER        DECLARE_ASCII("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )
 #define SERVICENAME_MODULEUICONFIGURATIONMANAGER                DECLARE_ASCII("drafts.com.sun.star.ui.ModuleUIConfigurationManager" )
 #define SERVICENAME_MENUBARFACTORY                              DECLARE_ASCII("drafts.com.sun.star.ui.UIElementFactory"             )
+#define SERVICENAME_WINDOWSTATECONFIGURATION                    DECLARE_ASCII("drafts.com.sun.star.ui.WindowStateConfiguration"     )
 #define SERVICENAME_STARTMODULE                                 DECLARE_ASCII("com.sun.star.frame.StartModule"                      )
 #define SERVICENAME_FRAMECONTROLLER                             DECLARE_ASCII("com.sun.star.frame.Controller"                       )
+#define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("drafts.com.sun.star.ui.ToolBarFactory"               )
+#define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
 #define SERVICENAME_LICENSE                                     DECLARE_ASCII("com.sun.star.task.Job"                       )
 
 //_________________________________________________________________________________________________________________
@@ -182,6 +185,11 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER         DECLARE_ASCII("com.sun.star.comp.framework.ModuleUIConfigurationManager" )
 #define IMPLEMENTATIONNAME_MENUBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.MenuBarFactory"          )
 #define IMPLEMENTATIONNAME_STARTMODULE                          DECLARE_ASCII("com.sun.star.comp.framework.BackingComp"             )
+#define IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION             DECLARE_ASCII("com.sun.star.comp.framework.WindowStateConfiguration" )
+#define IMPLEMENTATIONNAME_TOOLBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.ToolBarFactory"          )
+#define IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY                 DECLARE_ASCII("com.sun.star.comp.framework.AddonsToolBarFactory"    )
+#define IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER               DECLARE_ASCII("com.sun.star.comp.framework.ToolBarsMenuController"  )
+#define IMPLEMENTATIONNAME_TOOLBARCONTROLLERFACTORY             DECLARE_ASCII("com.sun.star.comp.framework.ToolBarControllerFactory"    )
 #define IMPLEMENTATIONNAME_LICENSE                              DECLARE_ASCII("com.sun.star.comp.framework.License"             )
 
 }       //  namespace framework
