@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,8 +235,8 @@ sal_Bool OWizNameMatching::LeavePage()
 
             m_pParent->m_vColumnPos[nPos].first = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
             m_pParent->m_vColumnPos[nPos].second = ++nParamPos;
-            sal_Bool bNotConvert;
-            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
+            sal_Bool bNotConvert = sal_True;
+            const OTypeInfo* pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
             sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
             if ( pTypeInfo.get() )
                 nType = pTypeInfo->nType;
