@@ -1,10 +1,10 @@
-D/*************************************************************************
+/*************************************************************************
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 11:59:59 $
+ *  last change: $Author: hr $ $Date: 2000-10-26 12:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
