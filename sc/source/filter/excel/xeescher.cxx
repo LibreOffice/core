@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:47:28 $
+ *  last change: $Author: obo $ $Date: 2004-09-13 10:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
+#endif
+
+#ifndef SC_EDITUTIL_HXX
+#include "editutil.hxx"
 #endif
 
 #ifndef SC_FAPIHELPER_HXX
@@ -656,6 +660,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         break;
 
         case xlBiff8:
+{
             ::std::auto_ptr <EditTextObject> pObj; ;
             const EditTextObject* pEditObj;
             Rectangle aRect;
@@ -687,7 +692,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                 pCaption.reset(new SdrCaptionObj( aRect, aDummyTailPos ));
                 (pCaption.get())->SetMergedItemSet(rSet);
 
-                pScNote->InsertObject(pCaption.get(), rDoc, rPos.Tab());
+                pScNote->InsertObject(pCaption.get(), rDoc, rScPos.Tab());
             }
 
             // create the Escher object
@@ -695,9 +700,10 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                 mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, aRect, *pObj, pCaption.get(), mbVisible ) );
 
             if( pScNote )
-                pScNote->RemoveObject(pCaption.get(), rDoc, rPos.Tab());
+                pScNote->RemoveObject(pCaption.get(), rDoc, rScPos.Tab());
 
             SetRecSize( 9 + maAuthor.GetSize() );
+}
         break;
 
         default:    DBG_ERROR_BIFF();
