@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ssa $ $Date: 2001-08-07 09:39:27 $
+ *  last change: $Author: pl $ $Date: 2001-08-08 19:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
 #endif
+#ifndef _VCL_WMADAPTOR_HXX_
+#include <wmadaptor.hxx>
+#endif
 #ifdef USE_PSPRINT
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #include <psprint/printerinfomanager.hxx>
@@ -128,6 +131,8 @@
 #ifndef _SAL_I18N_KEYSYM_HXX
 #include "i18n_keysym.hxx"
 #endif
+
+using namespace vcl_sal;
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define SHOWSTATE_UNKNOWN       -1
@@ -408,7 +413,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
                 }
                 else
                 {
-                    x = 10; // leave some space for dcoration
+                    x = 10; // leave some space for decoration
                     y = 20;
                 }
             }
@@ -429,9 +434,12 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         XtSetArg( aArgs[nArgs], XtNwidth, w );                      nArgs++;
         XtSetArg( aArgs[nArgs], XtNheight, h );                     nArgs++;
         XtSetArg( aArgs[nArgs], XtNallowShellResize, True );        nArgs++;
-
+        XtSetArg( aArgs[nArgs], XtNwinGravity, StaticGravity );     nArgs++;
         if( mpParent )
-            XtSetArg( aArgs[nArgs], XtNtransientFor, mpParent->maFrameData.GetShellWidget() ), nArgs++;
+        {
+            XtSetArg( aArgs[nArgs], XtNsaveUnder, True );           nArgs++;
+        }
+
 #ifdef DEBUG
         fprintf( stderr, "nStyle = 0x%x\n", nStyle_ );
 #endif
@@ -443,34 +451,10 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
                XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True ); nArgs++;
            }
 
-        // Motif sometimes gets stuck on transientShell if the parent was constructed
-        // with SystemParentData ( and is therefore not a real top level
-        // window anymore )
-        /*
-         *  #81918# some WMs (dtwm e.g.) will not map a transient window
-         *  if the parent is iconified. This is normally good behaviour,
-         *  but if a frame is created while the parent is already iconified
-         *  it will usually be an error box or a query (like e.g. the
-         *  save changes? dialogue. In these cases it is better to get
-         *  the users attention. Additionally since on many WMs transient
-         *  leads to minimum decoration (without title) it is better
-         *  to have full decoration for these dialogues, so create a
-         *  frame with iconified parent as a normal application shell
-         */
-
-        if( mpParent                                    &&
-            ! mpParent->maFrameData.hForeignParent_     &&
-            mpParent->maFrameData.nShowState_ != SHOWSTATE_MINIMIZED
-            )
-          hShell_ = XtAppCreateShell( "", "VCLSalFrame",
-                                      transientShellWidgetClass,
-                                      GetXDisplay(),
-                                      aArgs, nArgs );
-        else
-          hShell_ = XtAppCreateShell( "", "VCLSalFrame",
-                                      applicationShellWidgetClass,
-                                      GetXDisplay(),
-                                      aArgs, nArgs );
+        hShell_ = XtAppCreateShell( "", "VCLSalFrame",
+                                    applicationShellWidgetClass,
+                                    GetXDisplay(),
+                                    aArgs, nArgs );
 
         // X-Window erzeugen
         XtSetMappedWhenManaged( hShell_, FALSE );
@@ -483,28 +467,13 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
             NULL );
         XtRealizeWidget( hComposite_ );
 
-        XWMHints *pHints = XGetWMHints( GetXDisplay(),
-                                        pDisplay_->GetWindow() );
-
-        if( pHints
-            && pHints->flags & IconMaskHint
-            && pHints->flags & IconPixmapHint )
+        // default icon
+        if( SelectAppIconPixmap( pDisplay_, mpParent ? mpParent->maFrameData.mnIconID : 1, 32,
+                                 Hints.icon_pixmap, Hints.icon_mask ))
         {
-            Hints.flags        |= IconMaskHint|IconPixmapHint;
-            Hints.icon_pixmap   = pHints->icon_pixmap;
-            Hints.icon_mask     = pHints->icon_mask;
-            XFree( pHints );
-        }
-        else
-        {
-            // default icon
-            if( SelectAppIconPixmap( pDisplay_, 1, 32,
-                    Hints.icon_pixmap, Hints.icon_mask ))
-            {
-                 Hints.flags     |= IconPixmapHint;
-                if( Hints.icon_mask )
-                    Hints.flags |= IconMaskHint;
-            }
+            Hints.flags      |= IconPixmapHint;
+            if( Hints.icon_mask )
+                Hints.flags |= IconMaskHint;
         }
 
         Hints.flags        |= WindowGroupHint;
@@ -529,11 +498,35 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         Atom a[4];
         int  n = 0;
 
-        a[n++] = pDisplay_->GetICCCM().aWM_DeleteWindow_;
-        a[n++] = pDisplay_->GetICCCM().aWM_SaveYourself_;
+        a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
+        a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
 
         XSetWMProtocols( GetXDisplay(), XtWindow( hShell_ ), a, n );
     }
+
+    int nDecoFlags = WMAdaptor::decoration_All;
+    if( nStyle_ & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE)
+        != (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE) )
+    {
+        nDecoFlags = WMAdaptor::decoration_Border;
+        if( ! mpParent )
+            nDecoFlags |= WMAdaptor::decoration_MinimizeBtn;
+        if( nStyle_ & SAL_FRAME_STYLE_CLOSEABLE )
+            nDecoFlags |= WMAdaptor::decoration_CloseBtn;
+        if( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+            nDecoFlags |= WMAdaptor::decoration_MaximizeBtn | WMAdaptor::decoration_Resize;
+        if( nStyle_ & SAL_FRAME_STYLE_MOVEABLE )
+            nDecoFlags |= WMAdaptor::decoration_Title;
+    }
+
+    pDisplay_->getWMAdaptor()->
+        setFrameTypeAndDecoration(
+                                  pFrame_,
+                                  mpParent ?
+                                  WMAdaptor::windowType_ModalDialogue
+                                  : WMAdaptor::windowType_Normal,
+                                  nDecoFlags,
+                                  mpParent );
 
     // Pointer
     pFrame_->SetPointer( POINTER_ARROW );
@@ -599,6 +592,13 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     maResizeTimer.SetTimeout( 50 );
 
     mpDeleteData                = NULL;
+
+    meWindowType                = WMAdaptor::windowType_Normal;
+    mnDecorationFlags           = WMAdaptor::decoration_All;
+    mbMaximizedVert             = false;
+    mbMaximizedHorz             = false;
+
+    mnIconID                    = 0; // ICON_DEFAULT
 }
 
 SalFrame::SalFrame() : maFrameData( this ) {}
@@ -727,6 +727,8 @@ void SalFrame::SetIcon( USHORT nIcon )
     if ( !( maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
             && !( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
     {
+        maFrameData.mnIconID = nIcon;
+
         XIconSize *pIconSize;
         int nSizes;
         int iconSize = 32;
@@ -1366,55 +1368,12 @@ void SalFrameData::Restore()
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalFrameData::ShowFullScreen( BOOL bFullScreen )
-{
-    if( aRestoreFullScreen_.IsEmpty() == !bFullScreen )
-        return;
-
-    const Size &aScreenSize( pDisplay_->GetScreenSize() );
-
-    if( bFullScreen )
-    {
-        aRestoreFullScreen_ = aPosSize_;
-
-        delete pFreeGraphics_;
-        pFreeGraphics_ = NULL;
-
-        if( bMapped_ )
-        {
-            pFrame_->Show( TRUE );
-            XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ),
-                            RevertToNone, CurrentTime );
-        }
-
-        XMoveResizeWindow( GetXDisplay(), GetShellWindow(), 0, 0, aScreenSize.Width(), aScreenSize.Height() );
-        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, aScreenSize.Width(), aScreenSize.Height() );
-
-        aPosSize_ = Rectangle( Point( 0, 0 ), aScreenSize );
-        nWidth_   = aPosSize_.GetWidth();
-        nHeight_  = aPosSize_.GetHeight();
-
-        XRaiseWindow( GetXDisplay(), GetShellWindow() );
-        if( GetStackingWindow() )
-             XRaiseWindow( GetXDisplay(), GetStackingWindow() );
-
-        Call( SALEVENT_RESIZE, NULL );
-    }
-    else
-    {
-        delete pFreeGraphics_;
-        pFreeGraphics_ = NULL;
-
-        SetPosSize( aRestoreFullScreen_ );
-        // SetPosSize does Call( SALEVENT_RESIZE );
-        aRestoreFullScreen_ = Rectangle();
-        nWidth_             = aPosSize_.GetWidth();
-        nHeight_            = aPosSize_.GetHeight();
-    }
-}
-
 void SalFrame::ShowFullScreen( BOOL bFullScreen )
-{ maFrameData.ShowFullScreen( bFullScreen ); }
+{
+    if( maFrameData.aRestoreFullScreen_.IsEmpty() == !bFullScreen )
+        return;
+    maFrameData.pDisplay_->getWMAdaptor()->maximizeFrame( this, bFullScreen, bFullScreen );
+}
 
 /* ---------------------------------------------------------------------
    the xautolock pseudo screen saver needs special treatment since it
@@ -1563,17 +1522,17 @@ void
 SalFrameData::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent)
 {
     XLIB_Window nFocusWindow = GetWindow();
-    Atom        nEventAtom   = GetDisplay()->GetICCCM().aExtTextEvent_;
+    Atom        nEventAtom   = GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::SAL_EXTTEXTEVENT );
 
     sal_uInt32 pEventData[5];
 
-    #if __SIZEOFLONG > 4
+#if __SIZEOFLONG > 4
     pEventData[0] = (sal_uInt32)((long)pExtTextEvent & 0xffffffff);
     pEventData[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
-    #else
+#else
     pEventData[0] = (sal_uInt32)((long)pExtTextEvent);
     pEventData[1] = NULL;
-    #endif
+#endif
     pEventData[2] = (sal_uInt32)nExtTextEventType;
     pEventData[3] = NULL;
     pEventData[4] = NULL;
@@ -1623,7 +1582,7 @@ SalFrameData::HandleExtTextEvent (XClientMessageEvent *pEvent)
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 BOOL SalFrame::PostEvent( void *pData )
 {
-    _GetDisplay()->SendEvent( _GetDisplay()->GetICCCM().aUserEvent_,
+    _GetDisplay()->SendEvent( _GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::SAL_USEREVENT ),
                               pData,
                               maFrameData.GetWindow() );
     return TRUE;
@@ -1633,22 +1592,7 @@ BOOL SalFrame::PostEvent( void *pData )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::SetTitle( const XubString& rTitle )
 {
-    ByteString aByteTitle( rTitle, osl_getThreadTextEncoding() );
-
-    char* pTitle = (char*)aByteTitle.GetBuffer();
-    XTextProperty aTitle;
-
-    if( !XStringListToTextProperty( &pTitle, 1, &aTitle ) )
-    {
-        fprintf( stderr, "SalFrame::SetTitle !XStringListToTextProperty(%s)\n",
-                 pTitle );
-        return;
-    }
-
-    XSetWMName    ( _GetXDisplay(), maFrameData.GetShellWindow(), &aTitle );
-    XSetWMIconName( _GetXDisplay(), maFrameData.GetShellWindow(), &aTitle );
-
-    XFree( aTitle.value );
+    _GetDisplay()->getWMAdaptor()->setWMName( this, rTitle );
 }
 
 // -----------------------------------------------------------------------
@@ -2335,7 +2279,8 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
          // focus is probably lost, so reget it
          XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ), RevertToNone, CurrentTime );
 
-    maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width, aRect.height) ) );
+    // width and height are extents, so they are of by one for rectangle
+    maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width+1, aRect.height+1) ) );
 
     if( nCount || maResizeTimer.IsActive() ) // wait for last expose rectangle
         return 1;
@@ -2683,9 +2628,9 @@ long SalFrameData::HandleStateEvent( XPropertyEvent *pEvent )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
 {
-    SalICCCM &rICCCM = pDisplay_->GetICCCM();
+    const WMAdaptor& rWMAdaptor( *pDisplay_->getWMAdaptor() );
 
-    if( rICCCM.IsUserEvent( pEvent->message_type ) )
+    if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::SAL_USEREVENT ) )
     {
 #if __SIZEOFLONG > 4
         void* pData = (void*)
@@ -2696,28 +2641,28 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
         Call( SALEVENT_USEREVENT, pData );
         return 1;
     }
-    #if !defined(__synchronous_extinput__)
-    if( rICCCM.IsExtTextEvent( pEvent->message_type ) )
+#if !defined(__synchronous_extinput__)
+    if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::SAL_EXTTEXTEVENT ) )
     {
         HandleExtTextEvent (pEvent);
         return 1;
     }
-    #endif
-    else if( rICCCM.IsQuitEvent( pEvent->message_type ) )
+#endif
+    else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::SAL_QUITEVENT ) )
     {
         stderr0( "SalFrameData::Dispatch Quit\n" );
         Close(); // ???
         return 1;
     }
-    else if( rICCCM.IsWM_Protocols( pEvent->message_type ) )
+    else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS ) )
     {
-        if( rICCCM.IsWM_DeleteWindow( pEvent->data.l[0] ) )
+        if( pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
         {
             stderr0( "SalFrameData::Dispatch DeleteWindow\n" );
             Close();
             return 1;
         }
-        else if( rICCCM.IsWM_SaveYourself( pEvent->data.l[0] ) )
+        else if( pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
         {
             SalFrame* pLast = GetSalData()->pFirstFrame_;
             while( pLast->maFrameData.pNextFrame_ )
@@ -2731,7 +2676,7 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
                 XSetCommand( GetXDisplay(), XtWindow( hShell_ ), argv, 2 );
             }
             else
-                XDeleteProperty( GetXDisplay(), XtWindow( hShell_ ), rICCCM.aWM_Command_ );
+                XDeleteProperty( GetXDisplay(), XtWindow( hShell_ ), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ) );
         }
     }
     return 0;
@@ -2877,9 +2822,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
 
             case PropertyNotify:
             {
-                SalICCCM &rICCCM = pDisplay_->GetICCCM();
-
-                if( rICCCM.IsWM_State( pEvent->xproperty.atom ) )
+                if( pEvent->xproperty.atom == pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_STATE ) )
                     nRet = HandleStateEvent( &pEvent->xproperty );
                 else
                     nRet = 1;

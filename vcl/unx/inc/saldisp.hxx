@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 15:45:26 $
+ *  last change: $Author: pl $ $Date: 2001-08-08 19:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 // -=-= exports =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct  SalAppXResource;
 class   SalDisplay;
-class   SalICCCM;
 class   SalColormap;
 class   SalColormapRef;
 class   SalTrueColorConverter;
@@ -94,6 +93,8 @@ class   SalBitmap;
 class   SalFrameData;
 class   ColorMask;
 class   SalSystemData;
+
+namespace vcl_sal { class WMAdaptor; }
 
 #ifndef _XSHM_H_
 struct XShmSegmentInfo;
@@ -162,46 +163,6 @@ enum SalWM { olwm,      // Open Look
              fvwm,      // ...
              pmwm,      // SCO
              otherwm };
-
-// -=-= SalICCCM =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-class SalICCCM
-{
-    STDAPI( SalICCCM )
-
-public:
-            Atom            aWM_Protocols_;     // Window manager
-            Atom            aWM_State_;
-            Atom            aWM_DeleteWindow_;
-            Atom            aWM_SaveYourself_;
-            Atom            aWM_Command_;
-
-            Atom            aQuitEvent_;        // client message events
-            Atom            aUserEvent_;
-    #if !defined(__synchronous_extinput__)
-            Atom            aExtTextEvent_;
-    #endif
-
-    inline  int             IsQuitEvent( Atom a ) const
-                                { return aQuitEvent_ == a; }
-    inline  int             IsUserEvent( Atom a ) const
-                                { return aUserEvent_ == a; }
-    #if !defined(__synchronous_extinput__)
-    inline  int             IsExtTextEvent( Atom a ) const
-                                { return aExtTextEvent_ == a; }
-    #endif
-    inline  int             IsWM_State( Atom a ) const
-                                { return aWM_State_ == a; }
-    inline  int             IsWM_DeleteWindow( Atom a ) const
-                                { return aWM_DeleteWindow_ == a; }
-    inline  int             IsWM_Protocols( Atom a ) const
-                                { return aWM_Protocols_ == a; }
-    inline  int             IsWM_SaveYourself( Atom a ) const
-                                { return aWM_SaveYourself_ == a; }
-    inline  int             IsWM_Command( Atom a ) const
-                                { return aWM_Command_ == a; }
-
-                            SalICCCM( SalDisplay *pDisplay );
-};
 
 // -=-= SalRGB -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // MSB/Bigendian Sicht (SalColor == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
@@ -367,7 +328,6 @@ class SalDisplay
              SalSystemData  *mpSalSystemData;
             // the one to get create and destroy notify events
 
-            SalICCCM       *pICCCM_;            // Atoms
             Display        *pDisp_;             // X Display
             Screen         *pScreen_;           // XDefaultScreenOfDisplay
             int             nScreen_;           // XDefaultScreen
@@ -428,6 +388,8 @@ class SalDisplay
               SalBitmapList Bitmaps_;           // to destroy bitmap resources;
 
             SalImageList    SharedImages_;
+
+            ::vcl_sal::WMAdaptor*   m_pWMAdaptor;
 
             void            DestroyFontCache();
             long            Dispatch( XEvent *pEvent );
@@ -509,7 +471,6 @@ public:
     inline  void            SetServerVendor() {
                                 meServerVendor = sal_GetServerVendor(pDisp_); }
     inline  BOOL            IsDisplay() const { return !!pXLib_; }
-    inline  SalICCCM       &GetICCCM() const { return *pICCCM_; }
     inline  GC              GetMonoGC() const { return pMonoGC_; }
     inline  GC              GetCopyGC() const { return pCopyGC_; }
     inline  GC              GetAndInvertedGC() const { return pAndInvertedGC_; }
@@ -540,6 +501,7 @@ public:
     inline void             SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
                                 { mpKbdExtension = pKbdExtension; }
     const char*             GetKeyboardName( BOOL bRefresh = FALSE );
+    ::vcl_sal::WMAdaptor*   getWMAdaptor() const { return m_pWMAdaptor; }
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-12 09:11:28 $
+ *  last change: $Author: pl $ $Date: 2001-08-08 19:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class   SalGraphics;
 class   SalFrame;
 class   SalColormap;
 class   SalI18N_InputContext;
+namespace vcl_sal { class WMAdaptor; }
 
 class SalFrameDelData
 {
@@ -119,6 +120,7 @@ DECLARE_LIST( SalFrameList, SalFrame *);
 class SalFrameData
 {
     friend  class           SalFrame;
+    friend class            ::vcl_sal::WMAdaptor;
     friend  SalFrame* SalInstance::CreateFrame( SalFrame*, ULONG );
     friend  SalFrame* SalInstance::CreateChildFrame( SystemParentData*, ULONG );
 
@@ -179,6 +181,15 @@ class SalFrameData
             Rectangle       maResizeBuffer;
             Rectangle       maPaintRegion;
 
+            // data for WMAdaptor
+            int             meWindowType;
+            int             mnDecorationFlags;
+            bool            mbMaximizedVert;
+            bool            mbMaximizedHorz;
+
+            // icon id
+            int             mnIconID;
+
             SystemChildData maSystemChildData;
 
             SalI18N_InputContext *mpInputContext;
@@ -196,7 +207,6 @@ class SalFrameData
             void            Minimize();
             void            Maximize();
             void            Restore();
-            void            ShowFullScreen( BOOL bFullScreen );
 
             void            RepositionFloatChildren();
             void            RepositionChildren();

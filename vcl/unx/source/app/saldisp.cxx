@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 15:45:26 $
+ *  last change: $Author: pl $ $Date: 2001-08-08 19:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,9 @@ extern "C" { int gethostname(char*,int); }
 #endif
 #ifndef _VCL_SM_HXX
 #include <sm.hxx>
+#endif
+#ifndef _VCL_WMADAPTOR_HXX_
+#include <wmadaptor.hxx>
 #endif
 
 #include <osl/socket.h>
@@ -682,7 +685,8 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 SalDisplay::SalDisplay( Widget w ) :
-        mpFallbackFactory ( NULL )
+        mpFallbackFactory ( NULL ),
+        m_pWMAdaptor( NULL )
 {
     SalData *pSalData = GetSalData();
 
@@ -724,7 +728,8 @@ SalDisplay::SalDisplay( Widget w ) :
 
 SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
         pDisp_( display ),
-        mpFallbackFactory ( NULL )
+        mpFallbackFactory ( NULL ),
+        m_pWMAdaptor( NULL )
 {
     SalData *pSalData  = GetSalData();
     XVisualInfo aXVI;
@@ -757,6 +762,7 @@ SalDisplay::~SalDisplay( )
 {
     SalData *pSalData = GetSalData();
 
+    delete m_pWMAdaptor;
     SalBitmap::ImplDestroyCache();
     DestroyFontCache();
 
@@ -811,13 +817,11 @@ SalDisplay::~SalDisplay( )
     // free colormap before modifying pVisual_
     xColor_.Clear();
 
-    delete pICCCM_;
     delete pVisual_;
 
     if( pRootVisual_ != pVisual_ )
         delete pRootVisual_;
 
-    pICCCM_         = (SalICCCM*)ILLEGAL_POINTER;
     pVisual_        = (SalVisual*)ILLEGAL_POINTER;
     pRootVisual_    = (SalVisual*)ILLEGAL_POINTER;
 
@@ -891,7 +895,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                         (YieldFunc) DisplayQueue,
                         (YieldFunc) DisplayYield );
 
-        pICCCM_         = new SalICCCM( this );
         pScreen_        = ScreenOfDisplay( pDisp_, nScreen_ );
         hRootWindow_    = RootWindowOfScreen( pScreen_ );
 
@@ -1154,7 +1157,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     }
     else
     {
-        pICCCM_             = NULL;
         pScreen_            = NULL;
         hRootWindow_        = None;
         pRootVisual_        = pVisual_;
@@ -1325,6 +1327,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         if( !XtWindow( hComposite_ ) )
             XtRealizeWidget( hComposite_ );
     }
+    m_pWMAdaptor = new ::vcl_sal::WMAdaptor( this );
 #ifdef DBG_UTIL
     PrintInfo();
 #endif
@@ -3013,17 +3016,6 @@ void SalDisplay::PrintInfo() const
             pEvent = pEvent->pNext_;
         }
     }
-}
-
-// -=-= SalICCCM -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-SalICCCM::SalICCCM( SalDisplay *pDisplay )
-{
-    Display *display = pDisplay->GetDisplay();
-
-    for( int i = 0; i < capacityof( AtomStrings ); i++ )
-        (&aWM_Protocols_)[i] = XInternAtom( display, AtomStrings[i], False );
 }
 
 // -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

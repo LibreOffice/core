@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2001-05-18 14:07:13 $
+#   last change: $Author: pl $ $Date: 2001-08-08 19:09:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,8 @@ SLOFILES=\
             $(SLO)$/soicon.obj			\
             $(SLO)$/sm.obj				\
             $(SLO)$/stacktrace.obj		\
-            $(SLO)$/keysymnames.obj
+            $(SLO)$/keysymnames.obj		\
+            $(SLO)$/wmadaptor.obj
 
 .IF "$(OS)$(CPU)" == "SOLARISS"
 .IF "$(COM)"!="GCC"
