@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 09:23:24 $
+ *  last change: $Author: ka $ $Date: 2001-09-18 10:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #else
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
+#endif
+#ifndef _PERSIST_HXX
+#include <so3/persist.hxx>
 #endif
 #ifndef _SFX_INTERNO_HXX
 #include <sfx2/interno.hxx>
