@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-03 14:11:28 $
+ *  last change: $Author: sj $ $Date: 2001-08-07 13:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,6 +826,17 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
     {
         if( !ImpPeekGraphicFormat( rStream, pConfig->GetImportFormatExtension( rFormat ), TRUE ) )
             return GRFILTER_FORMATERROR;
+        if ( pConfig->GetImportFormatExtension( rFormat ).EqualsIgnoreCaseAscii( "pcd" ) )
+        {
+            sal_Int32 nBase = 2;    // default Base0
+            if ( pConfig->GetImportFilterType( rFormat ).EqualsIgnoreCaseAscii( "pcd_Photo_CD_Base4" ) )
+                nBase = 1;
+            else if ( pConfig->GetImportFilterType( rFormat ).EqualsIgnoreCaseAscii( "pcd_Photo_CD_Base16" ) )
+                nBase = 0;
+            String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
+            FilterConfigItem aFilterConfigItem( aFilterConfigPath );
+            aFilterConfigItem.WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), nBase );
+        }
     }
 
     return GRFILTER_OK;
@@ -1583,20 +1594,10 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                 if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                 {
                     aShortName = GetImportFormatShortName( nFormat ).ToUpperAscii();
-                    if ( aShortName.CompareToAscii( "PCD" ) == COMPARE_EQUAL )
+                    if ( ( pFilterConfigItem == NULL ) && aShortName.EqualsAscii( "PCD" ) )
                     {
-                        sal_Int32 nBase = 2;    // default Base0
-                        String aFilterTypeName( pConfig->GetImportFilterTypeName( nFormat ) );
-                        if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base4" ) == COMPARE_EQUAL )
-                            nBase = 1;
-                        else if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base16" ) == COMPARE_EQUAL )
-                            nBase = 0;
-                        if ( !pFilterConfigItem )
-                        {
-                            String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
-                            pFilterConfigItem = new FilterConfigItem( aFilterConfigPath );
-                        }
-                        pFilterConfigItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), nBase );
+                        String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
+                        pFilterConfigItem = new FilterConfigItem( aFilterConfigPath );
                     }
                 }
                 if( !(*pFunc)( rIStream, rGraphic, &ImpFilterCallback, &aCallbackData, pFilterConfigItem, sal_False ) )
