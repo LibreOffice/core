@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reader.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:42:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace typereg {
 
    <p>Instances of this class are not multi-thread&ndash;safe.</p>
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 class Reader {
 public:
