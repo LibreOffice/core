@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:11:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3505,6 +3505,11 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     // if possible. It's needed for nested tables.
     WW8FlyPara* pTableWFlyPara( 0L );
     WW8SwFlyPara* pTableSFlyPara( 0L );
+    // --> OD 2005-03-21 #i45301# - anchor nested table inside Writer fly frame
+    // only at-character, if absolute position object attributes are available.
+    // Thus, default anchor type is as-character anchored.
+    RndStdIds eAnchor( FLY_IN_CNTNT );
+    // <--
     if ( nInTable )
     {
         WW8_TablePos* pNestedTabPos( 0L );
@@ -3528,6 +3533,10 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
                     maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
                     nIniFlyDx, nIniFlyDy);
+                // --> OD 2005-03-21 #i45301# - anchor nested table Writer fly
+                // frame at-character
+                eAnchor = FLY_AUTO_CNTNT;
+                // <--
             }
         }
     }
@@ -3551,12 +3560,13 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 RES_FRMATR_BEGIN, RES_FRMATR_END-1);
             // --> OD 2005-01-26 #i33818# - anchor the Writer fly frame for
             // the nested table at-character.
-            SwFmtAnchor aAnchor(FLY_AUTO_CNTNT);
-            aAnchor.SetAnchor(pTableDesc->pParentPos);
-            aItemSet.Put(aAnchor);
-            pTableDesc->pFlyFmt = rDoc.MakeFlySection(FLY_AUTO_CNTNT,
+            // --> OD 2005-03-21 #i45301#
+            SwFmtAnchor aAnchor( eAnchor );
+            aAnchor.SetAnchor( pTableDesc->pParentPos );
+            aItemSet.Put( aAnchor );
+            pTableDesc->pFlyFmt = rDoc.MakeFlySection( eAnchor,
                 pTableDesc->pParentPos, &aItemSet);
-            ASSERT( pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT,
+            ASSERT( pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == eAnchor,
                     "Not the anchor type requested!" );
             // <--
             MoveInsideFly(pTableDesc->pFlyFmt);
