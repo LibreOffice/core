@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:13:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,12 +1684,43 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
         if (pRule || !bSetAttr)
         {
-            SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
-            ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
+            SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
+            ASSERT(pTxtNd, "Kein Text-Node an PaM-Position");
 
-            if (bSetAttr)
-                pTxtNode->SwCntntNode::SetAttr(SwNumRuleItem(pRule->GetName()));
-            pTxtNode->UpdateNum(aNum);
+            //#i24136# old is the same as new, and its the outline numbering,
+            //then we don't set the numrule again, and we just take the num node
+            //(the actual outline numbering gets set in SetOutlineNum)
+            using namespace sw::util;
+            bool bUnchangedOutlineNumbering = false;
+            /*
+             If the node is outline numbered, and the new numbering to apply
+             is the one that was chosen to be the outline numbering then all
+             is unchanged
+            */
+            if (
+                 (GetOutlineNumRuleFromTxtNode(*pTxtNd)) &&
+                 (pRule == mpChosenOutlineNumRule)
+               )
+            {
+                bUnchangedOutlineNumbering = true;
+            }
+            if (!bUnchangedOutlineNumbering)
+            {
+                //If its normal numbering, see if its the same as it already
+                //was, if its not, and we have been asked to set it, then set
+                //it to the new one
+                if (bSetAttr)
+                {
+                    const SwNumRule *pNormal =
+                        GetNormalNumRuleFromTxtNode(*pTxtNd);
+                    if (pNormal != pRule)
+                    {
+                        pTxtNd->SwCntntNode::SetAttr(
+                            SwNumRuleItem(pRule->GetName()));
+                    }
+                }
+                pTxtNd->UpdateNum(aNum);
+            }
 
             SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
                     RES_LR_SPACE);
@@ -1832,8 +1863,24 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                         *GetDfltAttr(RES_PARATR_NUMRULE));
                     pTxtNode->UpdateNum(SwNodeNum(NO_NUMBERING));
                 }
+                /*
+                #i24553#
+                Hmm, I can't remove outline numbering on a per txtnode basis,
+                but I can set some normal numbering, and that overrides outline
+                numbering, and then I can say when I come to say that I want no
+                number on the normal numbering rule, that should all work out
+                */
                 if (pTxtNode->GetOutlineNum())
+                {
                     pTxtNode->UpdateOutlineNum(SwNodeNum(NO_NUM));
+                    ASSERT(mpChosenOutlineNumRule, "that doesn't make sense!");
+                    if (mpChosenOutlineNumRule)
+                    {
+                        pTxtNode->SwCntntNode::SetAttr(
+                            SwNumRuleItem(mpChosenOutlineNumRule->GetName()));
+                        pTxtNode->UpdateNum(SwNodeNum(NO_NUM));
+                    }
+                }
 
                 //#94672#
                 pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxLRSpaceItem());
