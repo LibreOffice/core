@@ -1,0 +1,1168 @@
+
+/**
+ * Title:        <p>
+ * Description:  <p>
+ * Copyright:    Copyright (c) <p>
+ * Company:      <p>
+ * @author
+ * @version 1.0
+ */
+package com.sun.star.help;
+
+
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+
+import org.w3c.dom.*;
+import com.sun.xml.tree.*;
+import org.xml.sax.*;
+import javax.xml.parsers.*;
+import com.jclark.xsl.sax.*;
+
+import com.sun.xmlsearch.util.*;
+import com.sun.xmlsearch.xml.qe.*;
+import com.sun.xmlsearch.xml.indexer.*;
+
+import com.sleepycat.db.*;
+import com.sun.star.help.HelpURLStreamHandlerFactory;
+
+public class HelpIndexer {
+
+    private HelpURLStreamHandlerFactory _urlHandler = null;
+    private String _language = null, _module = null, _system = null;
+
+    public HelpIndexer( HelpURLStreamHandlerFactory urlHandler,String language, String module, String system )
+      {
+           _urlHandler = urlHandler;
+        _system = system;
+          _language = language;
+        _module = module;
+      }
+
+
+       private final class TagInfo
+    {
+        String _tag,_id;
+
+          TagInfo( String id,String tag )
+           {
+            _tag = tag;
+             _id = id;
+        }
+    }
+
+    private final class DocInfo
+     {
+          private String _url,_id;
+
+        private ArrayList _helptags = new ArrayList();
+
+
+          public void append( String id,String tag )
+        {
+             _helptags.add( new TagInfo( id,tag ) );
+         }
+
+
+          public String getURL()
+           {
+            return _url;
+        }
+
+        public void setURL( String url )
+          {
+            _url = url;
+          }
+
+        public void setId( String id )
+          {
+            _id = id;
+          }
+
+           public String getId()
+        {
+            return _id;
+        }
+      }
+
+
+    Hashtable _hashDocInfo = new Hashtable();
+
+
+     private void schnitzel()
+      {
+        // Determine the location of the database
+        String installDirectory = HelpDatabases.getInstallDirectory();
+        Db table = null;
+
+          try
+        {
+            table = new Db( null,0 );
+             table.set_error_stream( System.err );
+            table.set_errpfx( "schnitzel" );
+
+
+               // Create indexDirectory, if not existent
+             String indexDirectory = installDirectory + _language + File.separator + _module + ".index";
+              File indexDir = new File( indexDirectory );
+               if( indexDir.exists() && indexDir.isFile() )
+                indexDir.delete();
+
+            if( ! indexDir.exists() )
+                indexDir.mkdir();
+
+            indexDir = null;
+
+             // Initialize the indexBuilder
+            XmlIndexBuilder builder = new XmlIndexBuilder( indexDirectory );
+
+             String[] translations = { "vnd.sun.star.help://", "#HLP#" };
+            PrefixTranslator translator = PrefixTranslator.makePrefixTranslator( translations );
+            builder.setPrefixTranslator( translator );
+
+            builder.clearIndex();               // Build index from scratch
+            builder.setTransformLocation( installDirectory );
+            builder.init( "index" );
+
+
+             // Determine and read the database
+            String fileName = installDirectory
+                              + _language
+                            + File.separator
+                            + _module
+                               + ".db";
+
+            table.open( fileName,null,Db.DB_BTREE,Db.DB_RDONLY,0644 );
+            Dbc cursor = table.cursor( null,0 );
+            StringDbt key = new StringDbt();
+            StringDbt data = new StringDbt();
+
+            boolean first = true;
+              key.set_flags( Db.DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
+             data.set_flags( Db.DB_DBT_MALLOC );
+            int cut = 0;
+            while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) && cut++ < 200000 )
+            {
+                try
+                {
+                       String keyStr = key.getString();
+                    String dataStr = data.getFile();
+                    String tagStr = null;
+
+                      int idx;
+                    boolean isDocument = true;
+                      if( ( idx = dataStr.indexOf( '#' ) ) != -1 )
+                    {
+                         tagStr = dataStr.substring( 1+idx );
+                           //dataStr = dataStr( 0,idx );
+                        isDocument = false;
+                      }
+
+                    DocInfo info = ( DocInfo ) _hashDocInfo.get( dataStr );
+                     if( info == null )
+                     {
+                        info = new DocInfo();
+                        _hashDocInfo.put( dataStr,info );
+                    }
+
+                      if( !isDocument )
+                    {
+                          info.append( keyStr,tagStr );
+                     }
+                      else
+                       {
+                        String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language + "&System=" + _system;
+                        info.setURL( url );
+                         info.setId( keyStr );
+                    }
+                }
+                catch( Exception e )
+                   {
+                  }
+            }
+            cursor.close();
+               table.close( 0 );
+
+            System.out.println( "Indexing..." );
+              Enumeration enum = _hashDocInfo.elements();
+            cut = 0;
+            while( enum.hasMoreElements() && cut < 20 )
+             {
+                  try
+                {
+                      DocInfo info = ( DocInfo ) enum.nextElement();
+                     String url = info.getURL();
+                    if( url == null )
+                         continue;
+                      cut++;
+                      System.out.println( url );
+                       _urlHandler.setMode( null );
+                      byte[] embResolved = getSourceDocument( url );
+                     InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
+                      in.setEncoding( "UTF8" );
+                       Document docResolved = XmlDocument.createXmlDocument( in,false );
+                     String id = info.getId();
+                      if( id == null )
+                           System.out.println( "Found tag without valid id" );
+                    else
+                        addKeywords( docResolved,info.getId() );
+                     _urlHandler.setMode( embResolved );
+                      builder.indexDocument( new URL( url ),"" );
+                }
+                catch( Exception e )
+                {
+                }
+             }
+              builder.close();
+            _keywords.dump();
+/*
+            // Now the database may be indexed, the keywords and helptexts are extracted
+              System.out.println( "Indexing..." );
+              int cut = 0;
+            while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) && cut++ < 200000 )
+            {
+                try
+                {
+                       String keyStr = key.getString();
+                    System.out.println( "   Id = " + keyStr + " is file = " + data.getFile() );
+
+                      // Resolve the embedding
+                    _urlHandler.setMode( null );
+                       String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language + "&System=" + _system;
+                    byte[] embResolved = getSourceDocument( url );
+                      InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
+                    in.setEncoding( "UTF8" );
+                    Document docResolved = XmlDocument.createXmlDocument( in,false );
+
+                    addKeywords( docResolved,keyStr );
+
+                      _urlHandler.setMode( embResolved );    // Fake the embedding
+                      builder.indexDocument( new URL( url ),"" );
+
+
+                     String hash = "";
+                    int idx = data.getFile().indexOf( '#' );
+                       if( idx == -1 )
+                      {
+                        hash = data.getFile().substring(1+idx).trim();
+                    }
+
+                    if( data.getFile().indexOf('#') != -1 ) // && data.getDatabase().equals( _module + ".jar" ) )
+                       {    // Something to schnitzel
+
+
+
+                           hash = data.getFile().substring( 1+idx ).trim();
+                        System.out.println( hash );
+                          Node node = extractHelptext( docResolved,hash );
+                           if( node != null )
+                           {
+                            String text = dump(node);
+                               System.out.println( text );
+                               // transfomHelpText( text );
+                           }
+                       }
+                }
+                  catch( Exception e )
+                {
+                     // System.out.println( "Ignoring exception " + e.getMessage() );
+                }
+
+                   if( first )
+                  {
+                    key.set_flags( Db.DB_DBT_REALLOC );
+                     data.set_flags( Db.DB_DBT_REALLOC );
+                     first = false;
+                }
+            }
+
+            cursor.close();
+            table.close( 0 );
+              builder.close();
+              _keywords.dump();
+            */
+        }
+         catch( DbRunRecoveryException e )
+        {
+            System.out.println( "Not able to create cursor: " + e.getMessage() );
+             System.exit(1);
+        }
+        catch( DbException e )
+        {
+            System.out.println( "Error initializing database" );
+             System.exit(1);
+        }
+        catch (FileNotFoundException fnfe)
+        {
+            System.err.println("HelpAccess: " + fnfe.toString());
+            System.exit(1);
+        }
+          catch( java.lang.Exception e )
+        {
+             System.out.println( "any other exception" );
+         }
+       }
+
+
+
+    private final class NodeIterator
+    {
+        private final class StackElement
+          {
+            public boolean _isDone;
+              public Node _node;
+
+            StackElement( Node node )
+              {
+                _isDone = false;
+                  _node = node;
+            }
+        }
+
+        private Stack stack = new Stack();
+
+        public NodeIterator( Node node )
+          {
+            stack.push( new StackElement(node) );
+        }
+
+         void change()
+          {
+               ((StackElement)(stack.peek()))._isDone = true;
+              NodeList top = ((StackElement)(stack.peek()))._node.getChildNodes();
+              for( int i = top.getLength()-1; i >= 0; --i )
+                stack.push( new StackElement( top.item(i) ) );
+           }
+
+         public Node next()
+          {
+               if( stack.empty() ) return null;
+            while( ! ((StackElement)(stack.peek()))._isDone ) change();
+               return ((StackElement)stack.pop())._node;
+        }
+    }
+
+
+    /**
+     *  Given a dom of the document, the next Help:Helptext following Help:HelpID value="tag" is extracted
+     */
+
+    private Node extractHelptext( Node node,String tag )
+    {
+        boolean found = false;
+        Node test;
+        NodeIterator it = new NodeIterator( node );
+          while( ( test=it.next() ) != null )
+        {
+            if( !found && test.getNodeName().equals("Help:HelpID" ) && ((Element)test).getAttribute("value").equals(tag) )
+                   found = true;
+               if( found && test.getNodeName().equals("Help:HelpText") )
+                 return test;
+          }
+        return null;
+    }
+
+
+    private final class Keywords
+    {
+        private Hashtable _hash = new Hashtable();
+
+         class Data
+          {
+               int pos = 0;
+               String[] _idList = new String[5];
+
+             void append( String id )
+              {
+                if( pos == _idList.length )
+                {
+                    String[] buff = _idList;
+                    _idList = new String[ pos + 5 ];
+                       for( int i = 0; i < buff.length; ++i )
+                          _idList[i] = buff[i];
+                     buff = null;
+                }
+                _idList[ pos++] = id;
+               }
+
+
+            int getLength()
+            {
+                return pos;
+            }
+
+            String getString()
+            {
+                String ret = new String();
+                for( int i = 0; i < pos; ++i )
+                 {
+                      ret += ( _idList[i] + ";" );
+                  }
+                   return ret;
+            }
+           }   // end class data
+
+
+        public void insert( String key, String id )
+          {
+            Data data = (Data)_hash.get(key);
+              if( data == null )
+            {
+                 data = new Data();
+                   _hash.put( key,data );
+             }
+              data.append( id );
+        }
+
+
+         void dump()
+          {
+            Enumeration enum = _hash.keys();
+               int j = 0;
+            String[] list = new String[ _hash.size() ];
+               while( enum.hasMoreElements() )
+              {
+                  list[j++] = ( String ) enum.nextElement();
+               }
+            Arrays.sort( list );
+            // Now dump the whole thing to a database
+
+            Db table;
+              try
+            {
+                table = new Db( null,0 );
+
+                String fileName = HelpDatabases.getInstallDirectory()
+                                    + _language
+                                  + File.separator
+                                  + _module
+                                     + ".key";
+
+                table.open( fileName,null,Db.DB_BTREE,Db.DB_CREATE,0644 );
+
+                for( int i = 0; i < list.length; ++i )
+                {
+                    Data data = ( Data ) _hash.get( list[i] );
+                      StringDbt key = new StringDbt( list[i] );
+                    StringDbt value = new StringDbt( data.getString() );
+                     table.put( null,key,value,0);
+
+                    // System.out.println( list[i] + " " + data.getString() );
+                }
+                 table.close( 0 );
+            }
+             catch( Exception e )
+              {
+                System.out.println( "error writing keydata" );
+            }
+           }
+
+    }
+
+
+    Keywords _keywords = new Keywords();
+
+    private void addKeywords( Node node,String id )
+    {
+          Node test;
+          NodeIterator it = new NodeIterator( node );
+        while( ( test=it.next() ) != null )
+         {
+              if( test.getNodeName().equals( "Help:Keyword" ) )
+            {
+                String keyword = (( Element ) test).getAttribute( "value" );
+                // System.out.println( "found keyword: " + keyword );
+                _keywords.insert( keyword,id );
+             }
+          }
+    }
+
+
+
+    /**
+     *  Returns a textual representation of
+     *  the node
+     */
+
+
+    private String dump( Node node )
+    {
+        String app = new String();
+        if( node.hasChildNodes() )
+          {
+            NodeList list = node.getChildNodes();
+            for( int i = 0; i < list.getLength(); ++ i )
+                 app += dump( list.item(i) );
+        }
+         if( node.getNodeType() == Node.ELEMENT_NODE )
+          {
+             String start = "<" + node.getNodeName();
+               NamedNodeMap attr = node.getAttributes();
+               for( int j = 0; j < attr.getLength(); ++j )
+               {
+                start += ( " " + ((Attr)attr.item(j)).getName()+"=\"" + ((Attr)attr.item(j)).getValue() + "\"");
+            }
+            start += ">";
+              String end = "</" + node.getNodeName() + ">";
+               return start + app + end;
+           }
+        else if( node.getNodeType() == Node.TEXT_NODE )
+        {
+            return ((Text)node).toString();
+        }
+        return app;
+    }
+
+
+
+    // This is a configurable class, which capsulates the parser initialization stuff and all this things
+
+       private static final class ParseStuff
+    {
+        private final XSLProcessor _processor;
+         private final OutputMethodHandlerImpl _output;
+
+
+          public ParseStuff( String styleSheet )
+           {
+            _processor = new XSLProcessorImpl();
+             SAXParserFactory spf = SAXParserFactory.newInstance();
+              spf.setValidating( false );
+               Parser _parser = null;
+            try
+            {
+                SAXParser sp = spf.newSAXParser();
+                 _parser = sp.getParser();
+
+            }
+            catch( java.lang.Exception e )
+            {
+                System.out.println( "<!-- NO HELP AVAILABLE: no parser found -->" );
+                 System.exit( 1 );
+            }
+
+            _processor.setParser( _parser );
+            _output = new OutputMethodHandlerImpl( _processor );
+            _processor.setOutputMethodHandler( _output );
+
+            try
+            {
+                _processor.loadStylesheet( new InputSource( new FileInputStream( styleSheet ) ) );
+            }
+            catch( SAXException e )
+            {
+                System.out.println( "<!-- Syntactic error in stylesheet -->" );
+                   System.exit( 1 );
+            }
+            catch( java.io.IOException e )
+            {
+                System.out.println( "<!-- Style sheet not found: " + styleSheet + " -->" );
+                   System.exit( 1 );
+            }
+        }
+
+
+          public byte[] parse( String url )
+        {
+            InputSource _in = new InputSource( url );
+               _in.setEncoding( "UTF-8" );
+
+            HelpOutputStream _out = new HelpOutputStream();
+               try
+            {
+                  OutputStreamDestination _dest = new OutputStreamDestination( _out );
+                  synchronized( this )
+                 {
+                    _output.setDestination( _dest );
+                    _processor.parse( _in );
+                    _out.flush();
+                }
+             }
+            catch( java.io.IOException e )
+            {
+                System.out.println( "no file corresponding to URL exists, but I don't tell you what the URL is ..." );
+            }
+            catch( SAXException e )
+            {
+                System.out.println( "ill formed xml document: " + e.getMessage() );
+            }
+
+               return _out.getBigBuffer();
+         }
+
+
+          public void setParameter( String key,Object value )
+           {
+            _processor.setParameter( key,value );
+        }
+    }   // end class ParseStuff
+
+
+
+
+    /**
+       *   Returns the embedding resolved document
+     */
+
+    ParseStuff _stuff = null;
+
+    byte[] getSourceDocument( String url )
+     {
+          // Initialize
+          if( _stuff == null )
+        {
+              String styleSheet = HelpDatabases.getInstallDirectory() + "ResEmb.xsl";
+            _stuff = new ParseStuff( styleSheet );
+
+             // Setting the parameters
+             _stuff.setParameter( "Language", _language );
+              _stuff.setParameter( "System", _system );
+               HelpDatabases.StaticModuleInformation _static = HelpDatabases.getStaticInformationForModule( _module,_language );
+               _stuff.setParameter( "Program", _static.get_program() );
+        }
+
+        // and parse
+        return _stuff.parse( url );
+      }
+
+
+
+
+       // Now has to be settled up
+    public static void main( String[] args ) throws Exception
+    {
+         System.setProperty( "XMLSEARCH", HelpDatabases.getInstallDirectory() );
+        if( args.length != 6 )
+          {
+            System.out.println( "Usage example: main -language de -module swriter -system WIN" );
+              System.exit( 1 );
+        }
+
+         String language = null,module = null, system = null;
+
+          for( int i = 0; i < 5; i+=2 )
+           {
+             if( args[i].trim().equals( "-language" ) )
+                language = args[i+1];
+               else if( args[i].trim().equals( "-module" ) )
+                 module = args[i+1];
+               else if( args[i].trim().equals( "-system" ) )
+                 system = args[i+1];
+        }
+
+           if( language == null || module == null || system == null )
+        {
+            System.out.println( "Usage example: main -language de -module swriter -system WIN" );
+              System.exit( 1 );
+        }
+        else
+        {
+              System.out.println( " Configuring for \"system\" = " + system);
+              System.out.println( "                 \"module\" = " + module);
+              System.out.println( "               \"language\" = " + language);
+          }
+
+        try
+          {
+            String urlmode = HelpDatabases.getURLMode();
+              HelpURLStreamHandlerFactory urlHandler = new HelpURLStreamHandlerFactory( urlmode );
+              URL.setURLStreamHandlerFactory( urlHandler );
+
+            HelpIndexer helpIndexer = new HelpIndexer( urlHandler,language,module,system );
+
+            // helpIndexer.indexDatabase();
+             helpIndexer.schnitzel();
+          }
+        catch( Exception e )
+        {
+              e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+       /*
+    private void transformHelpText( String text )
+    {
+        // Nowing module and language
+        // First of all, load the stylesheet
+
+         String fileName = HelpDatabases.getInstallDirectory() + "help.xsl";
+          HelpDatabases.StaticModuleInformation data = HelpDatabases.getStaticInformationForModule( _module,_language );
+           String prog = data.get_program();
+        XSLProcessor _processor = getXSLProcessor( fileName );
+        _processor.setParameter( "Program",prog );
+          _processor.setParameter( "Database",_module );
+        _processor.setParameter( "Language", _language );
+
+    }
+    */
+
+
+
+
+/*
+     private InputSource getSchnitzelXSL()
+      {
+         String schnitzeldata =
+             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>                                                 "+
+             " <xsl:stylesheet version=\"1.0\"  default-space=\"strip\" result-encoding=\"ISO-8859-1\"    "+
+             "  xmlns:nu=\"http://www.jclark.com/xt/java/com.sun.xmlsearch.tree.NodeUtils\"              "+
+             "  xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\""+
+             "  xmlns:office=\"http://openoffice.org/2000/office\""+
+             "  xmlns:style=\"http://openoffice.org/2000/style\""+
+             "  xmlns:text=\"http://openoffice.org/2000/text\""+
+             "  xmlns:table=\"http://openoffice.org/2000/table\""+
+             "  xmlns:draw=\"http://openoffice.org/2000/drawing\""+
+             "  xmlns:fo=\"http://www.w3.org/1999/XSL/Format\""+
+             "  xmlns:xlink=\"http://www.w3.org/1999/xlink\""+
+             "  xmlns:dc=\"http://purl.org/dc/elements/1.1/\""+
+             "  xmlns:meta=\"http://openoffice.org/2000/meta\""+
+             "  xmlns:number=\"http://openoffice.org/2000/datastyle\""+
+             "  xmlns:svg=\"http://www.w3.org/2000/svg\""+
+             "  xmlns:chart=\"http://openoffice.org/2000/chart\""+
+             "  xmlns:Help=\"http://openoffice.org/2000/help\">"+
+
+             " <!-- http://www.ibiblio.org/xml/books/bible/updates/14.html-->"+
+
+             " <!-- //para is short for self::node()/descendant-or-self::node()/child::para -->"+
+
+
+             " <xsl:param name=\"keyword\" select=\"keyword\"/>"+
+
+             " <xsl:template match=\"\\\">"+
+             "   <xsl:apply-templates select=\"//HelpID[@value = $keyword]"+
+             " </xsl:template>"+
+
+             " <xsl:template match=\"HelpID\">"+
+             "   <xsl:apply-templates select=\"following-sibling::*/
+
+    /*   The preceding and follownt text follow immediately and are due to comments interrupted
+
+
+    /HelpText[position()=1]\"/>"+
+             " </xsl:template>"+
+
+
+             " <xsl:template match=\"HelpText\">"+
+             "  <xsl:/apply-templates>"+
+             " </xsl:template>"+
+
+             " </xsl:style-sheet>";
+
+        FileInputStream aFileInputStream = null;
+        try
+        {
+            String transformFile = HelpDatabases.getInstallDirectory() + "doctest.xsl";
+            aFileInputStream = new FileInputStream( transformFile );
+        }
+        catch( FileNotFoundException e )
+        {
+            System.out.println( e.getMessage() );
+        }
+
+        return new InputSource( aFileInputStream );
+    }
+*/
+
+
+
+/*
+
+
+
+      public final void process()
+    {
+        String action = _config.getAttribute( "action" );
+        String transform = _config.getAttribute( "transform" );
+        String location = _config.getAttribute( "location" );
+
+        Element urlList = null;
+        String[] fileList = null;
+
+        NodeList nodeList = _config.getChildNodes();
+
+        for( int i = 0; i < nodeList.getLength(); ++i )
+        {
+              if( "HelpUrlList".equals( nodeList.item(i).getNodeName() ) )
+                urlList = ( Element ) nodeList.item(i);
+        }
+
+        String language = urlList.getAttribute( "language" );
+
+        NodeList tmp = urlList.getChildNodes();
+        fileList = new String[ ( tmp.getLength() - 1 ) / 2 ];
+
+        int j = 0;
+        for( int i = 0; i < tmp.getLength(); ++i )
+        {
+              if( "HelpUrl".equals( tmp.item(i).getNodeName() ) )
+              {
+                Element specialURL = ( Element ) tmp.item(i);
+                fileList[j++] = specialURL.getAttribute( "value" ) + "?Language=" + language;
+              }
+        }
+        // Now we have the list of urls;
+        // and can proceed with building the index
+        try
+        {
+              XmlIndexBuilder builder = new XmlIndexBuilder( location );
+            String[] translations = { "vnd.sun.star.help://.",
+                                        "#HELP#" };
+            PrefixTranslator translator =
+                PrefixTranslator.makePrefixTranslator(translations);
+            builder.setPrefixTranslator(translator);
+
+              if ("create".equals(action))
+              {
+                builder.clearIndex();
+              }
+
+              builder.setTransformLocation( "e:/help/XmlSearch/samples/docs" );
+              if( builder.init( transform ) )
+                  for( int i = 0; i < fileList.length; ++i )
+                  {
+                    System.out.println("Indexing: " + fileList[i] );
+                    builder.indexDocument( new URL( fileList[i] ),"" );
+                  }
+              else
+                  System.out.println( "initialization of indexer failed" );
+             builder.close();
+        }
+        catch( Exception e )
+        {
+          e.printStackTrace();
+        }
+      }
+*/
+
+
+
+
+
+
+     /*
+        try
+          {
+              URL.setURLStreamHandlerFactory( new HelpURLStreamHandlerFactory( "with-jars" ) );
+              Element config = Configuration.configElementFromArgs( args );
+              if( config != null )
+              {
+                HelpIndexer HelpIndexer = new HelpIndexer( config );
+                HelpIndexer.process();
+              }
+              else
+                System.out.println( "no configuration" );
+        }
+        catch( Exception e )
+        {
+              e.printStackTrace();
+        }
+*/
+         /*
+          String args1[] = {    "-cf",
+                              "e:/help/XmlSearch/samples/config/demoIndex.my.cfg" };
+
+
+        try
+        {
+              Element config = Configuration.configElementFromArgs( args1 );
+              QueryProcessorImpl queryProcessor = new QueryProcessorImpl();
+            queryProcessor.init( config );
+               QueryResults queryResults = queryProcessor.processQuery( new QueryStatement( "TheWord","office:document",20 ) );
+
+              if( queryResults == null )
+                System.out.println( "no success ! " );
+
+            queryResults.translate();
+
+            String[] translations = { "#HELP#",
+                                         "vnd.sun.star.help://." };
+            PrefixTranslator translator =
+                PrefixTranslator.makePrefixTranslator(translations);
+
+            QueryHitData hit;
+            int it = 0;
+
+            while( (hit = queryResults.getHit(it++)) != null )
+            {
+                hit.translate( translator );
+                System.out.println( hit.getDocument() + ": " + hit.getPenalty() );
+            }
+          }
+           catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+        */
+
+
+
+
+  /*
+     public void schnitzel()
+      {
+         // Determine the location of the database
+        String installDirectory = HelpDatabases.getInstallDirectory();
+        Db table = null;
+
+          try
+        {
+            table = new Db( null,0 );
+             table.set_error_stream( System.err );
+            table.set_errpfx( "schnitzel" );
+
+             // Determine and initialize the databaseName
+            String fileName = installDirectory
+                              + _language
+                            + File.separator
+                            + _module
+                               + ".db";
+            // fileName = new String( "e:\\newhelp\\de\\swriter.db" );
+
+            table.open( fileName,null,Db.DB_BTREE,Db.DB_RDONLY,0644 );
+            Dbc cursor = table.cursor( null,0 );
+            StringDbt key = new StringDbt();
+            StringDbt data = new StringDbt();
+
+            boolean first = true;
+              key.set_flags( Db.DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
+             data.set_flags( Db.DB_DBT_MALLOC );
+
+
+               // Initialize the XSL-Processor
+            OutputMethodHandlerImpl  m_xOutputMethodHandler = null;
+            XSLProcessor m_xXslProcessor = new XSLProcessorImpl();
+              SAXParserFactory spf = SAXParserFactory.newInstance();
+            spf.setValidating( false );
+            Parser parser = null;
+
+            try
+            {
+                SAXParser sp = spf.newSAXParser();
+                parser = sp.getParser();
+            }
+            catch( java.lang.Exception e )
+            {
+                 System.out.println( "<!-- NO SCHNITZELING AVAILABLE: no parser found -->" );
+                 System.exit( 1 );
+            }
+            // Configuring XMLProcessor
+            m_xXslProcessor.setParser( parser );
+            m_xOutputMethodHandler = new OutputMethodHandlerImpl( m_xXslProcessor );
+            m_xXslProcessor.setOutputMethodHandler( m_xOutputMethodHandler );
+
+            try
+            {
+                m_xXslProcessor.loadStylesheet( getSchnitzelXSL() );
+            }
+            catch( SAXException e )
+            {
+                System.out.println( "<!-- NO SCHNITZELING AVAILABLE: syntactic error in style-sheet -->" );
+                System.out.println( e.getMessage() );
+                   System.exit( 1 );
+            }
+            catch( java.io.IOException e )
+            {
+                System.out.println( "<!-- NO SCHNITZELING AVAILABLE: style-sheet not found -->" );
+                   System.exit( 1 );
+            }
+
+
+            System.out.println( "Schnitzeling..." );
+            while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) )
+            {
+                try
+                {
+                       String keyStr = key.getString();
+                    Long Num = Long.decode( keyStr );
+                       long num = Num.longValue();
+                    String path = data.getFile();
+                     int idx = path.indexOf( '#' );
+                    if( idx != -1 ) // && data.getDatabase().equals( _module + ".jar" ) )
+                       {    // Something to index
+                        String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language;
+                        String hash = path.substring( 1+idx ).trim();
+                        m_xXslProcessor.setParameter( "keyword", hash );
+                        HelpOutputStream out = new HelpOutputStream();
+                          Destination dest = new HelpProvider.ProviderDestination( out );
+
+                          m_xOutputMethodHandler.setDestination( dest );
+                           InputSource input = new InputSource( url );
+                        m_xXslProcessor.parse( new InputSource( url ) );
+                        out.flush();
+
+                          if( out.getBigBuffer() != null )
+                           {
+                               System.out.println( "              " );
+                              System.out.println( "   Id = " + keyStr + " is file = " + data.getFile() );
+                              System.out.println( "                          Hash = " + hash );
+                              System.out.println( " " );
+                              System.out.println( new String( out.getBigBuffer() ) );
+                            System.out.println( "     " );
+                           }
+                       }
+                }
+                  catch( Exception e )
+                {
+                     System.out.println( "Ignoring exception" );
+                }
+                System.exit( 0 );
+                   if( first )
+                  {
+                    key.set_flags( Db.DB_DBT_REALLOC );
+                     data.set_flags( Db.DB_DBT_REALLOC );
+                     first = false;
+                }
+            }
+            cursor.close();
+            table.close( 0 );
+              // builder.close();
+        }
+         catch( DbRunRecoveryException e )
+        {
+            System.out.println( "Not able to create cursor: " + e.getMessage() );
+             System.exit(1);
+        }
+        catch( DbException e )
+        {
+            System.out.println( "Error initializing database" );
+             System.exit(1);
+        }
+        catch (FileNotFoundException fnfe)
+        {
+            System.err.println("HelpAccess: " + fnfe.toString());
+            System.exit(1);
+        }
+    }
+
+
+ */
+
+
+
+
+ /*
+       void indexDatabase() throws Exception
+    {
+         // Determine the location of the index-directory
+        String installDirectory = HelpDatabases.getInstallDirectory();
+
+        // Assure existence of the indexDirectory
+         String indexDirectory = installDirectory + _language + File.separator + _module + ".index";
+          File indexDir = new File( indexDirectory );
+           if( indexDir.exists() && indexDir.isFile() )
+
+            indexDir.delete();
+
+        if( ! indexDir.exists() )
+            indexDir.mkdir();
+
+        indexDir = null;
+        //
+
+        XmlIndexBuilder builder = null;
+        builder = new XmlIndexBuilder( indexDirectory );
+
+         String[] translations = { "vnd.sun.star.help://", "#HLP#" };
+        PrefixTranslator translator = PrefixTranslator.makePrefixTranslator( translations );
+        builder.setPrefixTranslator( translator );
+
+        builder.clearIndex();               // Build index from scratch
+        builder.setTransformLocation( installDirectory );
+
+          if( builder.init( "index" ) )   // Now initialize with the transformation
+        {
+            Db table = null;
+
+              try
+            {
+                table = new Db( null,0 );
+                 table.set_error_stream( System.err );
+                table.set_errpfx( "HelpAccess" );
+
+                 // Determine and initialize the databaseName
+                String fileName = installDirectory
+                                  + _language
+                                + File.separator
+                                + _module
+                                   + ".db";
+
+                table.open( fileName,null,Db.DB_BTREE,Db.DB_RDONLY,0644 );
+                Dbc cursor = table.cursor( null,0 );
+                StringDbt key = new StringDbt();
+                StringDbt data = new StringDbt();
+
+                boolean first = true;
+                  key.set_flags( Db.DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
+                 data.set_flags( Db.DB_DBT_MALLOC );
+
+                System.out.println( "Indexing..." );
+                while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) )
+                {
+                    try
+                    {
+                           String keyStr = key.getString();
+                        Long Num = Long.decode( keyStr );
+                           long num = Num.longValue();
+
+
+                         System.out.println( "Database entry: "
+                                               + keyStr
+                                              + " "
+                                               + data.getFile()
+                                               + " "
+                                              + data.getDatabase()
+                                            + " "
+                                              + data.getTitle() );
+
+                        if( data.getFile().indexOf( '#' ) == -1 ) // && data.getDatabase().equals( _module + ".jar" ) )
+                           {    // Something to index
+                            String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language;
+                             System.out.println( "   Id = " + keyStr + " is file " + data.getFile() );
+                             builder.indexDocument( new URL( url ),"" );
+                           }
+                    }
+                      catch( Exception e )
+                    {
+                         System.out.println( "Ignoring exception" );
+                     }
+                       if( first )
+                      {
+                        key.set_flags( Db.DB_DBT_REALLOC );
+                         data.set_flags( Db.DB_DBT_REALLOC );
+                         first = false;
+                    }
+                }
+                cursor.close();
+                table.close( 0 );
+                 builder.close();
+
+            }
+             catch( DbRunRecoveryException e )
+            {
+                System.out.println( "Not able to create cursor: " + e.getMessage() );
+                 System.exit(1);
+            }
+            catch( DbException e )
+            {
+                System.out.println( "Error initializing database" );
+                 System.exit(1);
+            }
+            catch (FileNotFoundException fnfe)
+            {
+                System.err.println("HelpAccess: " + fnfe.toString());
+                System.exit(1);
+            }
+        }
+    }
+*/

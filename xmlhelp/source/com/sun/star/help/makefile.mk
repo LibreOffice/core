@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2000-11-20 12:08:42 $
+#*    last change       $Author: abi $ $Date: 2000-12-03 18:08:05 $
 #*
-#*    $Revision: 1.6 $
+#*    $Revision: 1.7 $
 #*
 #*    $Logfile:$
 #*
@@ -22,7 +22,7 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar db31.jar
+JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmlsearch.jar db31.jar
 EXTRAJARFILES 	=  
 
 CLASSGENDIR		= $(OUT)$/classgen
@@ -53,10 +53,16 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpDatabases.class                \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerFactory.class  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandler.class         \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnection.class            \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnectionWithJars.class    \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLParameter.class             \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetFactory.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpDynamicResultSet.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetBase.class            \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSet.class                \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetForRoot.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class                  \
     $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
     $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
     $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class
