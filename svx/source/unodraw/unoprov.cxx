@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-12 08:29:01 $
+ *  last change: $Author: cl $ $Date: 2001-06-14 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,7 @@ SfxItemPropertyMap* ImplGetSvxOle2PropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , &::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType(( const ::rtl::OUString*)0),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN("Model"),                    OWN_ATTR_OLEMODEL           , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN("OriginalSize"),             OWN_ATTR_OLESIZE            , &::getCppuType(( const ::com::sun::star::awt::Size*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN("CLSID"),                    OWN_ATTR_CLSID              , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
@@ -459,6 +460,7 @@ SfxItemPropertyMap* ImplGetSvxPluginPropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , &::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType(( const ::rtl::OUString*)0),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         {0,0,0,0,0}
@@ -484,6 +486,7 @@ SfxItemPropertyMap* ImplGetSvxFramePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , &::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType(( const ::rtl::OUString*)0),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         {0,0,0,0,0}
@@ -508,6 +511,7 @@ SfxItemPropertyMap* ImplGetSvxAppletPropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , &::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType(( const ::rtl::OUString*)0),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         {0,0,0,0,0}

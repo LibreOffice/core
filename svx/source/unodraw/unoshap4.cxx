@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-12 15:39:20 $
+ *  last change: $Author: cl $ $Date: 2001-06-14 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 #define _SVX_USE_UNOGLOBALS_
 
-#ifndef SVX_LIGHT
 #ifndef _SVDOOLE2_HXX
 #include "svdoole2.hxx"
 #endif
+
+#ifndef SVX_LIGHT
 #ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
@@ -82,6 +83,7 @@
 #endif
 
 #include "unoshprp.hxx"
+#include "UnoApi.hxx"
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -134,12 +136,65 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
         throw IllegalArgumentException();
 #endif
     }
+    else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ThumbnailGraphicURL" ) ) )
+    {
+#ifndef SVX_LIGHT
+        // only allow setting of thumbnail for player
+        return;
+#else
+        OUString aURL;
+        if( aValue >>= aURL )
+        {
+            SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObj );
+            if( pOle )
+            {
+                GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+                pOle->SetGraphic( &aGrafObj.GetGraphic() );
+            }
+            return;
+        }
+
+        throw IllegalArgumentException();
+#endif
+    }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
 }
 
 Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ThumbnailGraphicURL" ) ) )
+    {
+        OUString aURL;
+
+        SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObj );
+        if( pOle )
+        {
+            Graphic* pGraphic = pOle->GetGraphic();
+
+            // if there isn't already a preview graphic set, check if we need to generate
+            // one if model says so
+            if( pGraphic == NULL && !pOle->IsEmptyPresObj() && pModel->IsSaveOLEPreview() )
+            {
+                const GDIMetaFile* pMetaFile = pOle->GetGDIMetaFile();
+                if( pMetaFile )
+                {
+                    Graphic aNewGrf( *pMetaFile );
+                    pOle->SetGraphic( &aNewGrf );
+                    pGraphic = pOle->GetGraphic();
+                }
+            }
+
+            if( pGraphic )
+            {
+                GraphicObject aObj( *pGraphic );
+                aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+                aURL += OUString::createFromAscii( aObj.GetUniqueID().GetBuffer() );
+            }
+        }
+        return makeAny( aURL );
+    }
+
     return SvxShape::getPropertyValue( PropertyName );
 }
 
@@ -508,7 +563,13 @@ Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) th
                     case OWN_ATTR_PLUGIN_MIMETYPE:
                         return makeAny( OUString( xPlugin->GetMimeType() ) );
                     case OWN_ATTR_PLUGIN_URL:
-                        return makeAny( OUString( xPlugin->GetURL()->GetMainURL() ) );
+                    {
+                        OUString aURL;
+                        DBG_ASSERT( xPlugin->GetURL(), "Plugin without a URL!" );
+                        if( xPlugin->GetURL() )
+                            aURL = xPlugin->GetURL()->GetMainURL();
+                        return makeAny( aURL );
+                    }
                     case OWN_ATTR_PLUGIN_COMMANDS:
                         {
                             Sequence< PropertyValue > aCommandSequence;
