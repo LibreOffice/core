@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:59:37 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 20:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,6 +578,9 @@ String RID_STR_TYPE_COMMAND
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/08/21 20:59:37  kz
+ *  Merge SRC638: 21.08.01 - 22:59:02
+ *
  *  Revision 1.21  2001/08/14 15:05:11  kz
  *  Merge SRC638: 14.08.01 - 17:04:39
  *
@@ -644,6 +647,7 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
 
 
 
