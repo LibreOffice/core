@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:32:20 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #   include <msfilter.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
@@ -165,6 +168,8 @@
 #       include <unotools/localfilehelper.hxx>
 #   endif
 #endif
+
+using namespace com::sun::star;
 
 namespace
 {
@@ -376,6 +381,10 @@ namespace sw
             ASSERT(mxIPRef.is(), "Transferring invalid object to doc");
             if (!mxIPRef.is())
                 return false;
+
+            uno::Reference < container::XChild > xChild( mxIPRef, uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( mrPers.GetModel() );
 
             bool bSuccess = mrPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( mxIPRef, rName );
             if (bSuccess)
