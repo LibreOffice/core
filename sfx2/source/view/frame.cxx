@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-25 15:39:09 $
+ *  last change: $Author: mba $ $Date: 2001-03-29 14:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1940,13 +1940,13 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
     {
         Point aPos ( rBorder.Left(), rBorder.Top() );
         Size aSize( GetWindow().GetOutputSizePixel() );
-        USHORT nDeltaX = rBorder.Left() + rBorder.Right();
+        long nDeltaX = rBorder.Left() + rBorder.Right();
         if ( aSize.Width() > nDeltaX )
             aSize.Width() -= nDeltaX;
         else
             aSize.Width() = 0;
 
-        USHORT nDeltaY = rBorder.Top() + rBorder.Bottom();
+        long nDeltaY = rBorder.Top() + rBorder.Bottom();
         if ( aSize.Height() > nDeltaY )
             aSize.Height() -= nDeltaY;
         else
@@ -2193,4 +2193,10 @@ SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
         return NULL;
 }
 
+const SfxPoolItem* SfxFrame::LoadDocumentSynchron( SfxItemSet& aSet )
+{
+    aSet.Put( SfxFrameItem( SID_DOCFRAME, this ) );
+    aSet.ClearItem( SID_TARGETNAME );
+    return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
+}
 
