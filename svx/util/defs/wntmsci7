@@ -23401,3 +23401,7 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?UnSetState@AccessibleEditableTextPara@accessibility@@QAEXF@Z
 ?SetState@AccessibleImageBullet@accessibility@@AAEXF@Z
 ?UnSetState@AccessibleImageBullet@accessibility@@AAEXF@Z
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx1230719283@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx80031853@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?s_pType_com_sun_star_drawing_DashStyle@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4DashStyle@drawing@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_drawing_HatchStyle@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4HatchStyle@drawing@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
