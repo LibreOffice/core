@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: cl $ $Date: 2001-06-12 15:10:48 $
+#   last change: $Author: as $ $Date: 2001-11-08 11:55:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,9 @@ IDLFILES=\
     XLinkTargetSupplier.idl\
     XRedlinesSupplier.idl \
     XStandaloneDocumentInfo.idl\
-    XTypeDetection.idl
+    XTypeDetection.idl\
+    XInteractionFilterSelect.idl\
+    NoSuchFilterRequest.idl
 
 # ------------------------------------------------------------------
 
