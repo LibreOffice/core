@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-27 17:28:39 $
+#   last change: $Author: hjs $ $Date: 2002-11-12 12:26:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,13 +72,14 @@ TARGET=so_stlport
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
-.IF "$(COMEX)"!="8"
+.IF "$(CCNUMVER)"<="001300000000"
 TARFILE_NAME=STLport-4.0
 PATCH_FILE_NAME=STLport-4.0.patch
-.ELSE           # "$(COMEX)"!="8"
+.ELSE			# "$(CCNUMVER)"<="001300000000"
 TARFILE_NAME=STLport-5.0-0409
+PATCH_FILE_NAME=STLport-5.0-0409.patch
 #PATCH_FILE_NAME=STLport-4.5.3.patch
-.ENDIF          # "$(COMEX)"!="8"
+.ENDIF			# "$(CCNUMVER)"<="001300000000"
 .ELSE
 TARFILE_NAME=STLport-4.5.3
 PATCH_FILE_NAME=STLport-4.5.3.patch
@@ -98,11 +99,11 @@ BUILD_DIR=src
 
 .IF "$(COM)"=="MSC"
 BUILD_ACTION=nmake
-.IF "$(COMEX)"!="8"
+.IF "$(CCNUMVER)"<="001300000000"
 BUILD_FLAGS=-f vc6.mak
-.ELSE           # "$(COMEX)"!="8"
+.ELSE			# "$(CCNUMVER)"<="001300000000"
 BUILD_FLAGS=-f vc7.mak
-.ENDIF          # "$(COMEX)"!="8"
+.ENDIF			# "$(CCNUMVER)"<="001300000000"
 .ENDIF
 
 .IF "$(COM)"=="GCC"
@@ -150,7 +151,7 @@ OUT2LIB= \
 .INCLUDE :	tg_ext.mk
 
 .IF "$(GUI)"=="WNT"
-
+.IF "$(CCNUMVER)"<="001300000000"
 $(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
 avoid_win32_patches :
     @+$(ECHONL)
@@ -180,4 +181,7 @@ $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF			# "$(USE_NEW_SDK)"!=""
+
+.ENDIF			# "$(CCNUMVER)"<="001300000000"
 .ENDIF          # "$(GUI)"=="WNT"
+
