@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dgeom.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-15 15:54:35 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,12 +419,11 @@ void B3dGeometry::Transform(const Matrix4D& rMat)
 |*
 \************************************************************************/
 
-INT32 B3dGeometry::CheckHit(const Vector3D& rFront, const Vector3D& rBack, USHORT nTol)
+sal_Bool B3dGeometry::CheckHit(const Vector3D& rFront, const Vector3D& rBack, sal_uInt16 nTol)
 {
-    UINT32 nPolyCounter = 0;
-    UINT32 nEntityCounter = 0;
-    UINT32 nUpperBound;
-    INT32 nRetval;
+    sal_uInt32 nPolyCounter(0L);
+    sal_uInt32 nEntityCounter(0L);
+    sal_uInt32 nUpperBound(0L);
 
     while(nPolyCounter < aIndexBucket.Count())
     {
@@ -432,68 +431,94 @@ INT32 B3dGeometry::CheckHit(const Vector3D& rFront, const Vector3D& rBack, USHOR
         nUpperBound = aIndexBucket[nPolyCounter++].GetIndex();
 
         // Hittest fuer momentanes Polygon
-        nRetval = CheckSinglePolygonHit(nEntityCounter, nUpperBound, rFront, rBack);
-        if(nRetval != -1L)
-            return nRetval;
+        Vector3D aCut;
+
+        if(CheckSinglePolygonHit(nEntityCounter, nUpperBound, rFront, rBack, aCut))
+        {
+            return sal_True;
+        }
 
         // Auf naechstes Polygon
         nEntityCounter = nUpperBound;
     }
-    return nRetval;
+
+    return sal_False;
 }
 
-INT32 B3dGeometry::CheckSinglePolygonHit(UINT32 nLow, UINT32 nHigh, const Vector3D& rFront, const Vector3D& rBack)
+// #110988# get all cuts of the geometry with the given vector defined by the two positions
+void B3dGeometry::GetAllCuts(Vector3DVector& rVector, const Vector3D& rFront, const Vector3D& rBack) const
+{
+    sal_uInt32 nPolyCounter(0L);
+    sal_uInt32 nEntityCounter(0L);
+    sal_uInt32 nUpperBound;
+
+    while(nPolyCounter < ((B3dGeometry*)this)->aIndexBucket.Count())
+    {
+        // get upper bound for new polygon
+        nUpperBound = ((B3dGeometry*)this)->aIndexBucket[nPolyCounter++].GetIndex();
+
+        // get cut for that polygon
+        Vector3D aCut;
+
+        if(CheckSinglePolygonHit(nEntityCounter, nUpperBound, rFront, rBack, aCut))
+        {
+            rVector.push_back(aCut);
+        }
+
+        // Auf naechstes Polygon
+        nEntityCounter = nUpperBound;
+    }
+}
+
+sal_Bool B3dGeometry::CheckSinglePolygonHit(UINT32 nLow, UINT32 nHigh, const Vector3D& rFront,
+    const Vector3D& rBack, Vector3D& rCut) const
 {
     if(nLow + 2 < nHigh)
     {
-        // Schnittpunkt berechnen
-        Vector3D aCut;
-        if(GetCutPoint(nLow, aCut, rFront, rBack))
+        // calculate cut with plane
+        if(GetCutPoint(nLow, rCut, rFront, rBack))
         {
-            // Schnittpunkt existiert, liegt dieser im angegebenen
-            // konvexen Polygon?
-            if(IsInside(nLow, nHigh, aCut))
+            // cut exists, is it inside the polygon?
+            if(IsInside(nLow, nHigh, rCut))
             {
-                return ((INT32)(aCut.Z() + 0.5));
+                return sal_True;
             }
         }
     }
-    return -1L;
+
+    return sal_False;
 }
 
-BOOL B3dGeometry::GetCutPoint(UINT32 nLow, Vector3D& rCut, const Vector3D& rFront, const Vector3D& rBack)
+sal_Bool B3dGeometry::GetCutPoint(UINT32 nLow, Vector3D& rCut, const Vector3D& rFront, const Vector3D& rBack) const
 {
     BOOL bCutValid = FALSE;
 
     // Normale und Skalar der Ebenengleichung ermitteln
-    Vector3D aNormal = aEntityBucket[nLow].PlaneNormal();
-    double fScalar = -(aEntityBucket[nLow + 1].Point().GetVector3D().Scalar(aNormal));
+    Vector3D aNormal = ((B3dGeometry*)this)->aEntityBucket[nLow].PlaneNormal();
+    double fScalar = -(((B3dGeometry*)this)->aEntityBucket[nLow + 1].Point().GetVector3D().Scalar(aNormal));
     Vector3D aLineVec = rFront - rBack;
     double fZwi = aNormal.Scalar(aLineVec);
 
     if(fabs(fZwi) > SMALL_DVALUE)
     {
         fZwi = (-fScalar - (rBack.Scalar(aNormal))) / fZwi;
-//      if(fZwi > SMALL_DVALUE && fZwi < 1.0 - SMALL_DVALUE)
-//      {
-            rCut.X() = rBack.X() + (aLineVec.X() * fZwi);
-            rCut.Y() = rBack.Y() + (aLineVec.Y() * fZwi);
-            rCut.Z() = rBack.Z() + (aLineVec.Z() * fZwi);
+        rCut.X() = rBack.X() + (aLineVec.X() * fZwi);
+        rCut.Y() = rBack.Y() + (aLineVec.Y() * fZwi);
+        rCut.Z() = rBack.Z() + (aLineVec.Z() * fZwi);
 
-            bCutValid = TRUE;
-//      }
+        bCutValid = TRUE;
     }
     return bCutValid;
 }
 
-BOOL B3dGeometry::IsInside(UINT32 nLow, UINT32 nHigh, const Vector3D& rPnt)
+sal_Bool B3dGeometry::IsInside(UINT32 nLow, UINT32 nHigh, const Vector3D& rPnt) const
 {
     BOOL bInside(FALSE);
     B3dVolume aVolume;
 
     // Volume von genau dieser Flaeche feststellen
     for(UINT32 a=nLow;a<nHigh;a++)
-        aVolume.Union(aEntityBucket[a].Point().GetVector3D());
+        aVolume.Union(((B3dGeometry*)this)->aEntityBucket[a].Point().GetVector3D());
 
     // Hier eigentlich ein aVolume.IsInside(rPnt), doch da hier ein
     // Vergleich mit Epsilon-Umgebung gebraucht wird, vergleiche selbst
@@ -507,14 +532,14 @@ BOOL B3dGeometry::IsInside(UINT32 nLow, UINT32 nHigh, const Vector3D& rPnt)
         BOOL bInsideXY(FALSE);
         BOOL bInsideXZ(FALSE);
         BOOL bInsideYZ(FALSE);
-        const Vector3D* pPrev = &(aEntityBucket[nHigh - 1].Point().GetVector3D());
+        const Vector3D* pPrev = &(((B3dGeometry*)this)->aEntityBucket[nHigh - 1].Point().GetVector3D());
         const Vector3D* pActual;
         Vector3D aDiffPrev, aDiffActual;
 
         while(nLow < nHigh)
         {
             // Neuen Punkt holen
-            pActual = &(aEntityBucket[nLow++].Point().GetVector3D());
+            pActual = &(((B3dGeometry*)this)->aEntityBucket[nLow++].Point().GetVector3D());
 
             // Diffs bilden
             aDiffPrev = *pPrev - rPnt;
@@ -591,12 +616,12 @@ BOOL B3dGeometry::IsInside(UINT32 nLow, UINT32 nHigh, const Vector3D& rPnt)
 |*
 \************************************************************************/
 
-B3dVolume B3dGeometry::GetBoundVolume()
+B3dVolume B3dGeometry::GetBoundVolume() const
 {
     B3dVolume aRetval;
 
-    for(UINT32 a=0;a<aEntityBucket.Count();a++)
-        aRetval.Union(aEntityBucket[a].Point().GetVector3D());
+    for(UINT32 a=0;a<((B3dGeometry*)this)->aEntityBucket.Count();a++)
+        aRetval.Union(((B3dGeometry*)this)->aEntityBucket[a].Point().GetVector3D());
 
     return aRetval;
 }
@@ -607,7 +632,7 @@ B3dVolume B3dGeometry::GetBoundVolume()
 |*
 \************************************************************************/
 
-Vector3D B3dGeometry::GetCenter()
+Vector3D B3dGeometry::GetCenter() const
 {
     B3dVolume aVolume = GetBoundVolume();
     return (aVolume.MaxVec() + aVolume.MinVec()) / 2.0;
@@ -640,7 +665,7 @@ void B3dGeometry::CreateDefaultNormalsSphere()
 |*
 \************************************************************************/
 
-Vector3D B3dGeometry::CalcNormal(UINT32 nLow, UINT32 nHigh)
+Vector3D B3dGeometry::CalcNormal(UINT32 nLow, UINT32 nHigh) const
 {
     const Vector3D* pVec1 = NULL;
     const Vector3D* pVec2 = NULL;
@@ -651,17 +676,17 @@ Vector3D B3dGeometry::CalcNormal(UINT32 nLow, UINT32 nHigh)
     {
         if(!pVec1)
         {
-            pVec1 = &(aEntityBucket[nLow++].Point().GetVector3D());
+            pVec1 = &(((B3dGeometry*)this)->aEntityBucket[nLow++].Point().GetVector3D());
         }
         else if(!pVec2)
         {
-            pVec2 = &(aEntityBucket[nLow++].Point().GetVector3D());
+            pVec2 = &(((B3dGeometry*)this)->aEntityBucket[nLow++].Point().GetVector3D());
             if(*pVec2 == *pVec1)
                 pVec2 = NULL;
         }
         else if(!pVec3)
         {
-            pVec3 = &(aEntityBucket[nLow++].Point().GetVector3D());
+            pVec3 = &(((B3dGeometry*)this)->aEntityBucket[nLow++].Point().GetVector3D());
             if(*pVec3 == *pVec2 || pVec3 == pVec1)
                 pVec3 = NULL;
         }
@@ -984,3 +1009,4 @@ void B3dGeometry::InvertNormals()
         aEntityBucket[a].Normal() = -aEntityBucket[a].Normal();
 }
 
+// eof
