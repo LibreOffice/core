@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mtg $ $Date: 2001-05-11 12:57:29 $
+#   last change: $Author: rt $ $Date: 2001-05-16 09:44:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/unoatxt.obj \
         $(SLO)$/unomod.obj \
         $(SLO)$/unotxvw.obj \
-        $(SLO)$/unofreg.obj
+        $(SLO)$/unofreg.obj \
+        $(SLO)$/SwXDocumentSettings.obj
 
 
 # --- Targets -------------------------------------------------------
