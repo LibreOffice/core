@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:11:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,26 @@ namespace sd { namespace slidesorter { namespace cache {
 //===== QueueProcessorBase  ===================================================
 
 QueueProcessorBase::QueueProcessorBase (void)
-    : mnTimeBetweenRequests (30/*ms*/)
+    : mnTimeBetweenHighPriorityRequests (50/*ms*/),
+      mnTimeBetweenLowPriorityRequests (250/*ms*/)
 {
     maTimer.SetTimeoutHdl (LINK(this,QueueProcessorBase,ProcessRequest));
-    maTimer.SetTimeout (mnTimeBetweenRequests);
+    maTimer.SetTimeout (mnTimeBetweenHighPriorityRequests);
 }
 
 
 
 
-void QueueProcessorBase::Start (void)
+void QueueProcessorBase::Start (int nPriorityClass)
 {
     if ( ! maTimer.IsActive())
+    {
+        if (nPriorityClass == 0)
+            maTimer.SetTimeout (mnTimeBetweenHighPriorityRequests);
+        else
+            maTimer.SetTimeout (mnTimeBetweenLowPriorityRequests);
         maTimer.Start();
+    }
 }
 
 
