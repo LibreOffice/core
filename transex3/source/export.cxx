@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:24:59 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     sPrjRoot = "";
     sActFileName = "";
     Export::sLanguages = "";
+    Export::sForcedLanguages = "";
     sTempFile = "";
     pTempFile = NULL;
     bQuiet = false;
@@ -678,7 +679,6 @@ int Export::Execute( int nToken, char * pToken )
         if ( nOpen < nClose )
             bExecuteDown = TRUE;
     }
-//    printf("sTOKEN = '%s'\n",sToken.GetBuffer());
     switch ( nToken ) {
 
         case NORMDEFINE:
@@ -1267,6 +1267,17 @@ void Export::CutComment( ByteString &rText )
     }
 }
 
+void Export::UnmergeUTF8( ByteString& sOrig ){
+    int nPos1 = sOrig.Search('\"');
+    int nPos2 = sOrig.SearchBackward('\"');
+    if( nPos1 > 0 && nPos2 > 0 && nPos1 < nPos2){
+        ByteString sPart = sOrig.Copy(nPos1+1 , nPos2-1);
+        ByteString sPartUTF8 = sPart;
+        sPartUTF8.Convert( RTL_TEXTENCODING_MS_1252 , RTL_TEXTENCODING_UTF8 );
+        sOrig.SearchAndReplace( sPart , sPartUTF8 );
+    }
+}
+
 /*****************************************************************************/
 BOOL Export::ListExists( ResData *pResData, USHORT nLst )
 /*****************************************************************************/
@@ -1302,6 +1313,12 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
     if ( bUnmerge )
         return TRUE;
 
+/*    ByteStringHashMap::iterator pos3 = pResData->sText.begin();
+    ByteStringHashMap::iterator end3 = pResData->sText.end();
+    for(;pos3!=end3;++pos3){
+
+        printf("[%s]=%s\n", pos3->first.GetBuffer(), pos3->second.GetBuffer() );
+    }*/
        // mandatory to export: german and eng. and/or enus
 
      if (( pResData->sText[ ByteString("de") ].Len() &&
@@ -1718,6 +1735,9 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
 
     if ( !bDontWriteOutput || !bUnmerge ) {
         ByteString sText( rText );
+        // Ivo
+        //sText.SearchAndReplace( "[ ENGLISH ] =" , "[ en ] =");
+        //sText.SearchAndReplace( "[ English ] =" , "[ en ] =");
         while ( sText.SearchAndReplace( " \n", "\n" ) != STRING_NOTFOUND ) {};
         if( pParseQueue->bNextIsM && bSDFContent && sText.Len() > 2 ){
             for( int n = 0 ; n < sText.Len() ; n++ ){
