@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cl $ $Date: 2000-12-07 19:42:03 $
+#   last change: $Author: os $ $Date: 2000-12-09 14:01:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ IDLFILES=\
     AutoTextEntry.idl\
     AutoTextGroup.idl\
     BaseIndex.idl\
+    BaseIndexMark.idl\
     Bibliography.idl\
     BibliographyDataType.idl\
     BibliographyDataField.idl\
@@ -88,6 +89,7 @@ IDLFILES=\
     ChapterFormat.idl\
     ChapterNumberingRule.idl\
     ContentIndex.idl\
+    ContentIndexMark.idl\
     ControlCharacter.idl\
     DependentTextField.idl\
     DocumentIndex.idl\
@@ -169,6 +171,7 @@ IDLFILES=\
     TextViewCursor.idl\
     UserDataPart.idl\
     UserIndex.idl\
+    UserIndexMark.idl\
     UserFieldFormat.idl\
     VertOrientation.idl\
     VertOrientationFormat.idl\
