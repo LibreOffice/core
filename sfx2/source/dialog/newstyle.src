@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:15:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Text[ japanese ] = "γ‚Ήγ‚Ώγ‚¤γƒ«ε";
         Text[ chinese_traditional ] = "ζ¨£εΌεη¨±";
         Text[ arabic ] = "ΗΣγ ΗαδγΨ";
-        Text[ greek ] = "Όνομα προτύπου";
+        Text[ greek ] = "Όνομα στυλ";
         Text[ korean ] = "μ¤νƒ€μΌ μ΄λ¦„";
         Text[ turkish ] = "Biηem adύ";
         Text[ language_user1 ] = " ";
@@ -188,6 +188,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     Text[ hindi ] = "ΰ¤¶ΰ¥ΰ¤²ΰ¥€ ΰ¤‰ΰ¤¤ΰ¥ΰ¤ªΰ¤¨ΰ¥ΰ¤¨ ΰ¤•ΰ¤°ΰ¥‹";
     Text[ slovak ] = "VytvoriΕ¥ Ε΅tΓ½l";
 };
+
 
 
 
