@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-01 10:45:50 $
+ *  last change: $Author: os $ $Date: 2000-12-11 16:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,11 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
      }
     else
     {
-        xRet = SvxFmDrawPage::_CreateShape( pObj );
+        // own block - temporary object has to be destroyed before
+        // the delegator is set #81670#
+        {
+            xRet = SvxFmDrawPage::_CreateShape( pObj );
+        }
         uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
         //don't create an SwXShape if it already exists
         SwXShape* pShape = 0;
