@@ -9,4 +9,5 @@ xo	xmloff\source\draw						nmake	-	all	xo_draw NULL
 xo	xmloff\source\chart						nmake	-	all	xo_chart NULL
 xo	xmloff\source\forms						nmake	-	all	xo_forms NULL
 xo	xmloff\source\script					nmake	-	all	xo_script NULL
+xo	xmloff\source\transform					nmake	-	all	xo_transform xo_core NULL
 xo	xmloff\util								nmake	-	all	xo_util xo_chart xo_core xo_draw xo_forms xo_meta xo_script xo_style xo_text NULL
