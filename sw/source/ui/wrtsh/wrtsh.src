@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:43:05 $
+ *  last change: $Author: kz $ $Date: 2001-04-07 19:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2091,7 +2091,7 @@ String STR_INSERT_TOX
     Text[ chinese_simplified ] = "²åÈëË÷Òı";
     Text[ russian ] = "Âñòàâèòü óêàçàòåëü";
     Text[ polish ] = "Wstaw indeks";
-    Text[ japanese ] = "õˆø‚Ì‘}“ü";
+    Text[ japanese ] = "–ÚŸ¥õˆø‚Ì‘}“ü";
     Text[ chinese_traditional ] = "´¡¤J¥Ø¿ı";
     Text[ arabic ] = "ÅÏÑÇÌ İåÑÓ";
     Text[ dutch ] = "Index invoegen";
@@ -2117,7 +2117,7 @@ String STR_CLEAR_TOX_RANGE
     Text[ chinese_simplified ] = "È¡ÏûË÷Òı";
     Text[ russian ] = "Óáğàòü óêàçàòåëü";
     Text[ polish ] = "Usuñ indeks";
-    Text[ japanese ] = "õˆø‚Ì‰ğœ";
+    Text[ japanese ] = "–ÚŸ¥õˆø‚Ì‰ğœ";
     Text[ chinese_traditional ] = "¨ú®ø¥Ø¿ı";
     Text[ arabic ] = "ÅÒÇáÉ ÇáİåÑÓ";
     Text[ dutch ] = "Index verwijderen";
