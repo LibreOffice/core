@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 17:07:12 $
+ *  last change: $Author: er $ $Date: 2002-03-14 16:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, ScDocument* pDocP,
 
     // set HTML configuration
     OfaHtmlOptions* pHtmlOptions = ((OfficeApplication*)SFX_APP())->GetHtmlOptions();
-    eDestEnc = pHtmlOptions->GetTextEncoding();
+    eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : pHtmlOptions->GetTextEncoding());
     bCopyLocalFileToINet = pHtmlOptions->IsSaveGraphicsLocal();
     for ( USHORT j=0; j < SC_HTML_FONTSIZES; j++ )
     {
@@ -401,11 +401,8 @@ ULONG ScHTMLExport::Write()
     rStrm << '<' << sHTML_doctype << ' ' << sHTML_doctype32 << '>'
         << sNewLine << sNewLine;
     TAG_ON_LF( sHTML_html );
-    if ( bAll )
-    {
-        WriteHeader();
-        OUT_LF();
-    }
+    WriteHeader();
+    OUT_LF();
     WriteBody();
     OUT_LF();
     TAG_OFF_LF( sHTML_html );
@@ -416,26 +413,31 @@ ULONG ScHTMLExport::Write()
 
 void ScHTMLExport::WriteHeader()
 {
-    SfxDocumentInfo& rInfo      = pDoc->GetDocumentShell()->GetDocInfo();
-    String           aStrOut;
-
     IncIndent(1); TAG_ON_LF( sHTML_head );
 
-    SfxFrameHTMLWriter::Out_DocInfo( rStrm, &rInfo, sIndent, eDestEnc, &aNonConvertibleChars );
-    OUT_LF();
-
-    //----------------------------------------------------------
-    if ( rInfo.GetPrinted().GetName().Len() )
-    {
-        OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
-        aStrOut  = GLOBSTR( STR_DOC_PRINTED );
-        aStrOut.AppendAscii( ": " );
-        lcl_AddStamp( aStrOut, rInfo.GetPrinted(), *ScGlobal::pLocaleData );
-        OUT_COMMENT( aStrOut );
+    if ( pDoc->IsClipOrUndo() )
+    {   // no real DocInfo available, but some META information like charset needed
+        SfxFrameHTMLWriter::Out_DocInfo( rStrm, NULL, sIndent, eDestEnc, &aNonConvertibleChars );
     }
-    //----------------------------------------------------------
+    else
+    {
+        SfxDocumentInfo& rInfo      = pDoc->GetDocumentShell()->GetDocInfo();
+        SfxFrameHTMLWriter::Out_DocInfo( rStrm, &rInfo, sIndent, eDestEnc, &aNonConvertibleChars );
+        OUT_LF();
 
-    lcl_WriteTeamInfo( rStrm, eDestEnc );
+        //----------------------------------------------------------
+        if ( rInfo.GetPrinted().GetName().Len() )
+        {
+            OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
+            String aStrOut( GLOBSTR( STR_DOC_PRINTED ) );
+            aStrOut.AppendAscii( ": " );
+            lcl_AddStamp( aStrOut, rInfo.GetPrinted(), *ScGlobal::pLocaleData );
+            OUT_COMMENT( aStrOut );
+        }
+        //----------------------------------------------------------
+
+        lcl_WriteTeamInfo( rStrm, eDestEnc );
+    }
 
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_head );
 }
