@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2001-05-02 15:00:10 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 13:40:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,11 +67,10 @@ TARGET=rmcxt
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
+UNIXVERSIONNAMES=UDK
+
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-.INCLUDE :  $(PRJ)$/version.mk
 # ------------------------------------------------------------------
 
 UNOUCRDEP=$(SOLARUCRDIR)$/uce.rdb 
@@ -79,7 +78,7 @@ UNOUCRRDB=$(SOLARUCRDIR)$/uce.rdb
 
 SLOFILES= $(SLO)$/context.obj
 
-SHL1TARGET= $(RMCXT_TARGET)$(RMCXT_MAJOR)
+SHL1TARGET= $(TARGET)
 
 SHL1STDLIBS= \
         $(SALLIB)
@@ -89,8 +88,10 @@ SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
+SHL1VERSIONMAP=	$(TARGET).map
+
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+#DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Targets ------------------------------------------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:25:54 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 13:35:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,12 +67,10 @@ USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
-# --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
+UNIXVERSIONNAMES=UDK
 
-.INCLUDE :  ..$/version.mk
+# --- Settings -----------------------------------------------------
+.INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
 
@@ -81,7 +79,7 @@ SHL1LIBS= \
         $(SLB)$/cppu_uno.lib		\
         $(SLB)$/cppu_threadpool.lib
 
-SHL1TARGET=	$(CPPU_TARGET)$(CPPU_MAJOR)
+SHL1TARGET=	$(TARGET)
 
 SHL1STDLIBS=	$(SALLIB)
 
@@ -89,8 +87,10 @@ SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
+SHL1VERSIONMAP=	$(TARGET).map
+
 DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+#DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 

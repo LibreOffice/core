@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-14 10:02:24 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 13:32:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,13 +65,10 @@ PRJ=..
 PRJNAME=registry
 TARGET=reg
 
+UNIXVERSIONNAMES=UDK
+
 # --- Settings -----------------------------------------------------
-
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.INCLUDE :  ..$/version.mk
 
 # ------------------------------------------------------------------
 
@@ -90,7 +87,7 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 
 LIB1FILES= 	$(SLB)$/$(TARGET)cpp.lib
 
-SHL1TARGET= $(REGISTRY_TARGET)$(REGISTRY_MAJOR)
+SHL1TARGET= $(TARGET)
 SHL1IMPLIB= ireg
 SHL1STDLIBS= \
     $(SALLIB) \
@@ -98,12 +95,13 @@ SHL1STDLIBS= \
     $(STORELIB) \
     $(LIBCIMT)
 
+SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1LIBS= $(LIB1TARGET)	
 SHL1DEPN= $(LIB1TARGET)
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 DEF1NAME= $(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+#DEF1EXPORTFILE=	exports.dxp
 DEF1DES	= RegistryRuntime
 
 # --- Targets ------------------------------------------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mhu $ $Date: 2001-03-13 21:07:32 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 13:28:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,19 +63,16 @@
 PRJ=..
 
 PRJNAME=store
-TARGET=sto
+TARGET=store
 TARGETTYPE=CUI
 
 USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
 
+UNIXVERSIONNAMES=UDK
+
 # --- Settings ---
-
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
-
-.INCLUDE :  ..$/version.mk
 
 # --- Debug-Library ---
 
@@ -89,7 +86,7 @@ LIB1FILES=	$(LB)$/store.lib
 
 # --- Shared-Library ---
 
-SHL1TARGET= 	$(STORE_TARGET)$(STORE_MAJOR)
+SHL1TARGET= 	$(TARGET)
 SHL1IMPLIB= 	istore
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=	$(TARGET).$(DLLPOSTFIX).map
@@ -106,7 +103,7 @@ SHL1LIBS=	$(SLB)$/store.lib
 # --- Def-File ---
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	$(TARGET).dxp
+#DEF1EXPORTFILE=	$(TARGET).dxp
 DEF1DES=Store
 
 # --- Targets ---
