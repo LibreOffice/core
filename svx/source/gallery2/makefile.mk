@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2001-05-31 10:38:26 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:38:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,8 @@ TARGET=gal
 
 # --- Files --------------------------------------------------------
 
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
             gallery.src				\
             galtheme.src			
 
