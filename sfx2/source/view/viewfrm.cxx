@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:10:16 $
+ *  last change: $Author: sj $ $Date: 2001-06-12 09:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3349,21 +3349,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
     SfxWhichIter aIter( rState );
     for ( USHORT nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
-        if ( nSID == SID_HYPERLINK_DIALOG )
-        {
-            const SfxPoolItem* pDummy = NULL;
-            SfxItemState eState = GetDispatcher()->QueryState( SID_HYPERLINK_SETLINK, pDummy );
-            if ( SFX_ITEM_DISABLED == eState )
-                rState.DisableItem(nSID);
-            else
-            {
-                if ( KnowsChildWindow(nSID) )
-                    rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID)) );
-                else
-                    rState.DisableItem(nSID);
-            }
-        }
-        else if ( nSID == SID_BROWSER )
+        if ( nSID == SID_BROWSER )
         {
             Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface()->
                             findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN );
