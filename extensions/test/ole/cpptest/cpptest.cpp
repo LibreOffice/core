@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpptest.cpp,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ HRESULT doTest()
 //  IUnknown * pUnk;
 //  hr= CoCreateInstance( idOffice, NULL, CLSCTX_ALL, __uuidof(IUnknown), (void**) &pUnk);
 
-    if( FAILED(hr= spUnkMgr.CoCreateInstance(L"stardiv.uno.ServiceManager")))
+    if( FAILED(hr= spUnkMgr.CoCreateInstance(L"com.sun.star.ServiceManager")))
         return hr;
 
     return S_OK;
