@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>WordStar 4.0  (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">WordStar 4.0</value>
+            <value>WordStar 4.0</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
