@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-19 09:21:57 $
+ *  last change: $Author: dv $ $Date: 2001-04-09 08:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,6 @@ using namespace ::vos;
 #include "docfile.hxx"
 #include "progress.hxx"
 #include "loadenv.hxx"
-#include "iodlg.hxx"
 #include "openflag.hxx"
 #include "bastyp.hrc"
 #include "sfxresid.hxx"
