@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AutoControls_tmpl.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:08:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,6 +504,7 @@
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - BUTTON_WIDTH - RELATED_CONTROLS - UNRELATED_CONTROLS , EDIT_HEIGHT ) ; \
         TabStop = TRUE ;                                                              \
         Border = TRUE ;                                                               \
+        HelpId = AUTO_HID;                                                            \
     };                                                                                \
                                                                                                                     \
     PushButton PB_AUTOTESTDRIVERCLASS                                                                               \
@@ -512,6 +513,7 @@
         Pos = MAP_APPFONT ( WIZARD_PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , AUTO_Y + FIXEDTEXT_HEIGHT + 2) ;   \
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;                                                       \
          Size = MAP_APPFONT (50, 14);                                                                               \
+         HelpId = AUTO_HID + 1;                                                                         \
         Text [ de ] = "Klasse testen";                                                                               \
         Text[ en-US ]  = "Test class" ;                                                                             \
     };
@@ -520,10 +522,10 @@
 
 
 #define AUTOHELP_JDBCCONTROLGROUP(AUTO_HID)                                             \
-    AUTO_HELP_NAMECONTROLGROUP(6, AUTO_HID + 1)                                         \
-    AUTO_HOSTCONTROLGROUP(96, AUTO_HID + 2)                                             \
-    AUTO_PORTCONTROLGROUP(113, AUTO_HID + 3 )                                           \
-    AUTO_JDBCDRIVERCLASSGROUP(129, AUTO_HID + 4)
+    AUTO_HELP_NAMECONTROLGROUP(6, AUTO_HID )                                            \
+    AUTO_HOSTCONTROLGROUP(96, AUTO_HID + 1)                                             \
+    AUTO_PORTCONTROLGROUP(113, AUTO_HID + 2 )                                           \
+    AUTO_JDBCDRIVERCLASSGROUP(129, AUTO_HID + 3)
 
 // --------------------------------------------------------------------------------------------------
 
