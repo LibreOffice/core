@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 13:46:54 $
+ *  last change: $Author: sj $ $Date: 2001-04-25 09:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef _FILTER_CONFIG_ITEM_HXX_
 #include "FilterConfigItem.hxx"
 #endif
+
+#ifndef SVX_LIGHT
 #include <tools/debug.hxx>
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -412,5 +414,14 @@ void FilterConfigItem::WriteSize( const OUString& rKey, const Size& rNewValue )
         }
     }
 }
+
+#else
+
+FilterConfigItem::FilterConfigItem( const ::rtl::OUString& rSubTree )
+{
+};
+
+#endif // SVX_LIGHT
+
 
 // ------------------------------------------------------------------------

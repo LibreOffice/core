@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-28 15:17:08 $
+ *  last change: $Author: sj $ $Date: 2001-04-25 09:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#ifndef SVX_LIGHT
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
@@ -91,6 +93,7 @@ using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference
 using namespace ::com::sun::star::beans         ;   // PropertyValue
 using namespace ::utl                           ;   // getProcessServiceFactory();
+#endif SVX_LIGHT
 using namespace ::rtl                           ;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
@@ -141,15 +144,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
     return sFilterName.Len() != 0;
 }
 
-FilterConfigCache::FilterConfigCache()
-{
-    ImplInit();
-}
-
-FilterConfigCache::~FilterConfigCache()
-{
-
-}
+#ifndef SVX_LIGHT
 
 sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rFilterProperties )
 {
@@ -310,7 +305,93 @@ void FilterConfigCache::ImplInit()
     }
 };
 
+#else   // SVX_LIGHT
+
+const char* FilterConfigCache::InternalFilterListForSvxLight[] =
+{
+    "bmp","1","SVBMP",
+    "bmp","2","SVBMP",
+    "dxf","1","idx",
+    "eps","1","ips",
+    "eps","2","eps",
+    "gif","1","SVIGIF",
+    "gif","2","egi",
+    "jpg","1","SVIJPEG",
+    "jpg","2","SVEJPEG",
+    "sgv","1","SVSGV",
+    "sgf","1","SVSGF",
+    "met","1","ime",
+    "met","2","eme",
+    "png","1","SVIPNG",
+    "png","2","epn",
+    "pct","1","ipt",
+    "pct","2","ept",
+    "pcd","1","icd",
+    "psd","1","ipd",
+    "pcx","1","ipx",
+    "pbm","1","ipb",
+    "pbm","2","epb",
+    "pgm","1","ipb",
+    "pgm","2","epg",
+    "ppm","1","ipb",
+    "ppm","2","epp",
+    "ras","1","ira",
+    "ras","2","era",
+    "svm","1","SVMETAFILE",
+    "svm","2","SVMETAFILE",
+    "tga","1","itg",
+    "tif","1","iti",
+    "tif","2","eti",
+    "emf","1","SVEMF",
+    "emf","2","SVEMF",
+    "wmf","1","SVWMF",
+    "wmf","2","SVWMF",
+    "xbm","1","SVIXBM",
+    "xpm","1","SVIXPM",
+    "xpm","2","exp",
+    "svg","2","SVESVG",
+    NULL
+};
+
+void FilterConfigCache::ImplInit()
+{
+    const char** pPtr;
+    for ( pPtr = InternalFilterListForSvxLight; *pPtr; pPtr++ )
+    {
+        FilterConfigCacheEntry  aEntry;
+
+        OUString    sExtension( RTL_CONSTASCII_USTRINGPARAM( *pPtr++ ) );
+
+        aEntry.sType = sExtension;
+        aEntry.sUIName = sExtension;
+
+        ByteString sFlags( RTL_CONSTASCII_USTRINGPARAM( *pPtr++ ) );
+        aEntry.nFlags = sFlags.ToInt32();
+
+        OUString    sUserData( RTL_CONSTASCII_USTRINGPARAM( *pPtr ) );
+        aEntry.CreateFilterName( sUserData );
+
+        aEntry.sExtension = sExtension;
+        if ( aEntry.nFlags & 1 )
+            aImport.push_back( aEntry );
+        if ( aEntry.nFlags & 2 )
+            aExport.push_back( aEntry );
+    }
+}
+
+#endif
+
 // ------------------------------------------------------------------------
+
+FilterConfigCache::FilterConfigCache()
+{
+    ImplInit();
+}
+
+FilterConfigCache::~FilterConfigCache()
+{
+
+}
 
 String FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
 {
