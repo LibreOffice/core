@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngp.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:37:58 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:29:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,14 +91,14 @@ CFLAGSCXX+= -Wno-ctor-dtor-privacy
 .IF "$(PRJNAME)"=="usr" || "$(PRJNAME)"=="uno" || "$(PRJNAME)"=="starone" || "$(PRJNAME)"=="schedule" || "$(PRJNAME)"=="one" || "$(SET_EXEPTIONS)"!=""
 CFLAGSCXX += -fexceptions
 .ENDIF
-
+PICSWITCH:=-fPIC
 #STDOBJVCL=$(L)$/salmain.o
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT=-fPIC
-CFLAGSSLOCUIMT=-fPIC
+CFLAGSSLOGUIMT=$(PICSWITCH)
+CFLAGSSLOCUIMT=$(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
