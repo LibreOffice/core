@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 09:19:43 $
+ *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 
+#ifndef _ACCSELECTIONHELPER_HXX_
+#include <accselectionhelper.hxx>
+#endif
+
 class SwRootFrm;
 class SwFEShell;
 class SwFlyFrm;
@@ -79,13 +83,8 @@ class SwAccessibleDocument : public SwAccessibleContext,
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> xParent;
 
-    // helpers for XAccessibleSelection
-
-    /// get FE-Shell
-    SwFEShell* GetFEShell();
-
-    /// get current selected Fly-Frame, if it's a child of this frame
-    const SwFlyFrm* GetSelectedChildFlyFrame();
+    // Implementation for XAccessibleSelection interface
+    SwAccessibleSelectionHelper aSelectionHelper;
 
 protected:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 09:19:43 $
+ *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
-#ifndef _FESH_HXX
-#include "fesh.hxx"
-#endif
 
 #ifndef _ACCDOC_HXX
 #include <accdoc.hxx>
@@ -123,40 +120,6 @@ using namespace ::rtl;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 
-SwFEShell* SwAccessibleDocument::GetFEShell()
-{
-    DBG_ASSERT( GetMap() != NULL, "no map?" );
-    ViewShell* pViewShell = GetMap()->GetShell();
-    DBG_ASSERT( pViewShell != NULL,
-                "No view shell? Then what are you looking at?" );
-
-    SwFEShell* pFEShell = NULL;
-    if( pViewShell->ISA( SwFEShell ) )
-    {
-        pFEShell = static_cast<SwFEShell*>( pViewShell );
-    }
-
-    return pFEShell;
-}
-
-const SwFlyFrm* SwAccessibleDocument::GetSelectedChildFlyFrame()
-{
-    const SwFlyFrm* pSelectedChildFlyFrame = NULL;
-
-    SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell != NULL )
-    {
-        // Get the selected frame, and check if it's ours (rather
-        // than, say, child of a paragraph).
-        const SwFlyFrm* pFlyFrm = pFEShell->GetCurrFlyFrm();
-        if( (pFlyFrm != NULL) && (GetParent(pFlyFrm) == GetFrm()) )
-            pSelectedChildFlyFrame = pFlyFrm;
-    }
-    // else: no FE-Shell -> no selected frames -> no selected children
-
-    return pSelectedChildFlyFrame;
-}
-
 
 void SwAccessibleDocument::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
@@ -170,7 +133,8 @@ void SwAccessibleDocument::GetStates(
 SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
     SwAccessibleContext( pMap, AccessibleRole::DOCUMENT,
                            pMap->GetShell()->GetDoc()->GetRootFrm() ),
-    xParent( pMap->GetShell()->GetWin()->GetParent()->GetAccessible() )
+    xParent( pMap->GetShell()->GetWin()->GetParent()->GetAccessible() ),
+    aSelectionHelper( *this )
 {
     SetName( GetResource( STR_ACCESS_DOC_NAME ) );
 }
@@ -332,27 +296,7 @@ void SwAccessibleDocument::selectAccessibleChild(
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    // Get the respective child as SwFrm (also do index checking), ...
-    const SwFrmOrObj aChild = GetChild( nChildIndex );
-    if( !aChild.IsValid() )
-        throw IndexOutOfBoundsException();
-
-    // we can only select fly frames, so we ignore (should: return
-    // false) all other attempts at child selection
-    sal_Bool bRet = sal_False;
-    const SwFrm* pFrm = aChild.GetSwFrm();
-    SwFEShell* pFEShell = GetFEShell();
-    if( (pFEShell != NULL) && (pFrm != NULL) && (pFrm->IsFlyFrm()) )
-    {
-        pFEShell->SelectFlyFrm(
-            *(static_cast<SwFlyFrm*>(const_cast<SwFrm*>(pFrm))), TRUE );
-        bRet = sal_True;
-    }
-    // no frame shell, or no frame, or no fly frame -> can't select
-
-    // return bRet;
+    aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
@@ -360,74 +304,25 @@ sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    // Get the respective child as SwFrm (also do index checking), ...
-    const SwFrmOrObj aChild = GetChild( nChildIndex );
-    if( !aChild.IsValid() )
-        throw IndexOutOfBoundsException();
-
-    // ... and compare to the currently selected frame
-    const SwFlyFrm* pSelectedFrame = GetSelectedChildFlyFrame();
-    return (pSelectedFrame == aChild.GetSwFrm());
+    return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleDocument::clearAccessibleSelection(  )
     throw ( RuntimeException )
 {
-    // return sal_False     // we can't deselect
+    aSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleDocument::selectAllAccessible(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    // We can select only one. So iterate over the children to find
-    // the first we can select, and select it.
-
-    sal_Int32 nIndex = 0;
-    const SwFlyFrm* pFirstSelectable = NULL;
-    sal_Bool bContinue = sal_True;
-    do
-    {
-        const SwFrmOrObj aChild = GetChild( nIndex );
-        if( aChild.IsValid() )
-        {
-            const SwFrm* pFrm = aChild.GetSwFrm();
-            if( (pFrm != NULL) && pFrm->IsFlyFrm() )
-            {
-                pFirstSelectable = static_cast<const SwFlyFrm*>( pFrm );
-                bContinue = sal_False;
-            }
-        }
-        else
-            bContinue = sal_False;
-
-        nIndex++;
-    }
-    while( bContinue );
-
-    // select frame (if we found any)
-    if( pFirstSelectable != NULL )
-    {
-        SwFEShell* pFEShell = GetFEShell();
-        if( pFEShell != NULL )
-        {
-            pFEShell->SelectFlyFrm( *(const_cast<SwFlyFrm*>(pFirstSelectable)),
-                                    TRUE );
-        }
-    }
+    aSelectionHelper.selectAllAccessible();
 }
 
 sal_Int32 SwAccessibleDocument::getSelectedAccessibleChildCount(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    // Only one frame can be selected at a time, and we only frames
-    // for selectable children.
-    return (GetSelectedChildFlyFrame() != NULL) ? 1 : 0;
+    return aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
 Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
@@ -435,20 +330,7 @@ Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     throw ( IndexOutOfBoundsException,
             RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    const SwFlyFrm* pFlyFrm = GetSelectedChildFlyFrame();
-
-    // Since the index is relative to the selected children, and since
-    // there can be at most one selected frame child, the index must
-    // be 0, and a selection must exist, otherwise we have to throw an
-    // IndexOutOfBoundsException
-
-    if( (pFlyFrm == NULL) || (nSelectedChildIndex != 0) )
-        throw IndexOutOfBoundsException();
-
-    DBG_ASSERT( GetMap() != NULL, "We need the map." )
-    return GetMap()->GetContext( pFlyFrm, sal_True );
+    return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
 void SwAccessibleDocument::deselectSelectedAccessibleChild(
@@ -456,5 +338,5 @@ void SwAccessibleDocument::deselectSelectedAccessibleChild(
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
-    // return sal_False     // we can't deselect
+    aSelectionHelper.deselectSelectedAccessibleChild(nSelectedChildIndex);
 }

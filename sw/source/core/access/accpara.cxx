@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 15:52:37 $
+ *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,8 @@ SwAccessibleParagraph::SwAccessibleParagraph(
         const SwTxtFrm *pTxtFrm ) :
     SwAccessibleContext( pMap, AccessibleRole::PARAGRAPH, pTxtFrm ),
     pPortionData( NULL ),
-    nOldCaretPos( -1 )
+    nOldCaretPos( -1 ),
+    aSelectionHelper( *this )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -923,6 +924,11 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
     {
         Reference<XAccessibleEditableText> aAccEditText = this;
         aRet <<= aAccEditText;
+    }
+    else if ( rType == ::getCppuType((Reference<XAccessibleSelection> *)0) )
+    {
+        Reference<XAccessibleSelection> aAccSel = this;
+        aRet <<= aAccSel;
     }
     else
     {
@@ -1461,3 +1467,54 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
     return replaceText(0, GetString().getLength(), sText);
 }
 
+//=====  XAccessibleSelection  ============================================
+
+void SwAccessibleParagraph::selectAccessibleChild(
+    sal_Int32 nChildIndex )
+    throw ( IndexOutOfBoundsException,
+            RuntimeException )
+{
+    aSelectionHelper.selectAccessibleChild(nChildIndex);
+}
+
+sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
+    sal_Int32 nChildIndex )
+    throw ( IndexOutOfBoundsException,
+            RuntimeException )
+{
+    return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
+}
+
+void SwAccessibleParagraph::clearAccessibleSelection(  )
+    throw ( RuntimeException )
+{
+    aSelectionHelper.clearAccessibleSelection();
+}
+
+void SwAccessibleParagraph::selectAllAccessible(  )
+    throw ( RuntimeException )
+{
+    aSelectionHelper.selectAllAccessible();
+}
+
+sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
+    throw ( RuntimeException )
+{
+    return aSelectionHelper.getSelectedAccessibleChildCount();
+}
+
+Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
+    sal_Int32 nSelectedChildIndex )
+    throw ( IndexOutOfBoundsException,
+            RuntimeException)
+{
+    return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
+}
+
+void SwAccessibleParagraph::deselectSelectedAccessibleChild(
+    sal_Int32 nSelectedChildIndex )
+    throw ( IndexOutOfBoundsException,
+            RuntimeException )
+{
+    aSelectionHelper.deselectSelectedAccessibleChild(nSelectedChildIndex);
+}

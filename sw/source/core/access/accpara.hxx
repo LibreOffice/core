@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 09:26:03 $
+ *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,17 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
+#ifndef _ACCSELECTIONHELPER_HXX_
+#include "accselectionhelper.hxx"
+#endif
 
 class SwTxtFrm;
 class SwTxtNode;
@@ -86,7 +93,8 @@ namespace com { namespace sun { namespace star {
 } } }
 
 class SwAccessibleParagraph : public    SwAccessibleContext,
-                              public drafts::com::sun::star::accessibility::XAccessibleEditableText
+                              public drafts::com::sun::star::accessibility::XAccessibleEditableText,
+                              public drafts::com::sun::star::accessibility::XAccessibleSelection
 {
     ::rtl::OUString sDesc;  // protected by base classes mutex
 
@@ -102,6 +110,10 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
                             // mutex)
 
     sal_Bool bIsHeading;    // protected by base classes mutex
+
+    // implementation for XAccessibleSelection
+    SwAccessibleSelectionHelper aSelectionHelper;
+
 
     /// get the SwTxtNode (requires frame; check before)
     const SwTxtNode* GetTxtNode() const;
@@ -316,6 +328,32 @@ public:
     virtual sal_Bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::rtl::OUString& sReplacement ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aAttributeSet ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL setText( const ::rtl::OUString& sText ) throw (::com::sun::star::uno::RuntimeException);
+
+    //=====  XAccessibleSelection  ============================================
+    virtual void SAL_CALL selectAccessibleChild(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL clearAccessibleSelection(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL selectAllAccessible(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL deselectSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
 
 };
 

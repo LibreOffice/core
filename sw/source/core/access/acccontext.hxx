@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,12 @@ class SwAccessibleContext :
                 >,
     public SwAccessibleFrame
 {
+    // The implements for the XAccessibleSelection interface has been
+    // 'externalized' and wants access to the protected members like
+    // GetMap, GetChild, GetParent, and GetFrm.
+    friend class SwAccessibleSelectionHelper;
+
+
 protected:
 
     mutable ::osl::Mutex aListenerMutex;

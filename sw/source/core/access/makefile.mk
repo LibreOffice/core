@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+#   last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,7 @@ SLOFILES =	\
         $(SLO)$/accnotextframe.obj \
         $(SLO)$/accpara.obj \
         $(SLO)$/accportions.obj \
+        $(SLO)$/accselectionhelper.obj \
         $(SLO)$/acctable.obj \
         $(SLO)$/acctextframe.obj
 
@@ -121,6 +122,7 @@ EXCEPTIONSFILES=	\
         $(SLO)$/accnotextframe.obj \
         $(SLO)$/accpara.obj \
         $(SLO)$/accportions.obj \
+        $(SLO)$/accselectionhelper.obj \
         $(SLO)$/acctable.obj \
         $(SLO)$/acctextframe.obj
 
