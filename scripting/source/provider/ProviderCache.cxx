@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:53 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 14:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
     // should assert if size !>  0
     if (  m_hProviderDetailsCache.size() )
     {
+        sal_Int32 providerIndex = 0;
         for ( sal_Int32 index  = 0; h_it !=  h_itEnd; ++h_it, index++ )
         {
             Reference< provider::XScriptProvider > xScriptProvider  = h_it->second.provider;
@@ -145,7 +146,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
                 OSL_TRACE("ProviderCache::getAllProviders(), service for %s already in cache",
                     ::rtl::OUStringToOString( h_it->first,
                         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                providers[ index ] = xScriptProvider;
+                providers[ providerIndex++ ] = xScriptProvider;
             }
             else
             {
@@ -155,17 +156,28 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
                 // create provider
                 try
                 {
+                    OSL_TRACE("Trying to create provider %d ", index );
                     xScriptProvider  = createProvider( h_it->second );
-                    providers[ index ] = xScriptProvider;
+                    providers[ providerIndex++ ] = xScriptProvider;
                 }
                 catch ( RuntimeException& e )
                 {
+                    OSL_TRACE("failed to create provider ****");
                     ::rtl::OUString temp = OUSTR( "ProviderCache::getAllProviders: failed to create provider, " );
                     temp.concat( e.Message );
-                    throw RuntimeException( temp.concat( e.Message ),
-                        Reference< XInterface >() );
+                    //throw RuntimeException( temp.concat( e.Message ),
+                    //    Reference< XInterface >() );
+                    OSL_TRACE("ProviderCache::getAllProviders(), failed to create provider message is %s",
+                    ::rtl::OUStringToOString( temp,
+                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 }
             }
+        }
+
+        if ( providerIndex < index )
+        {
+            OSL_TRACE("ProviderCache::getAllProviders(), reducing providers to return to %d index is %d", providerIndex, index );
+            providers.realloc( providerIndex );
         }
 
     }
