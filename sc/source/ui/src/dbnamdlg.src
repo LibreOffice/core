@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:20:01 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,8 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ hindi ] = "लेखासंचय फैलाव को परिभाषा दो";
     Text[ slovak ] = "Definovať rozsah databázy";
 };
+
+
 
 
 
