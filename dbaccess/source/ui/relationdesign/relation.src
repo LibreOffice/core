@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:55:06 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 08:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Edita";
             Text[ finnish ] = "Muokkaa";
+            Text[ thai ] = "แก้ไข";
         };
         ToolBoxItem
         {
@@ -156,6 +157,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ arabic ] = "���";
             Text[ catalan ] = "Desa";
             Text[ finnish ] = "Tallenna";
+            Text[ thai ] = "บันทึก";
         };
         ToolBoxItem
         {
@@ -184,6 +186,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulosta";
+            Text[ thai ] = "พิมพ์";
         };
         ToolBoxItem
         {
@@ -215,6 +218,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Desf�s";
             Text[ finnish ] = "Peruuta";
+            Text[ thai ] = "เลิกทำ";
         };
         ToolBoxItem
         {
@@ -243,6 +247,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Ref�s";
             Text[ finnish ] = "Toista ";
+            Text[ thai ] = "ทำซ้ำ";
         };
         ToolBoxItem
         {
@@ -298,6 +303,7 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ turkish ] = "Bu ili�ki mevcut durumda. D�zenlemek istiyor musunuz?";
     Text[ catalan ] = "Aquesta relaci� ja existeix. Voleu editar-la?";
     Text[ finnish ] = "Suhde on jo olemassa. Haluatko muokata suhdetta?";
+    Text[ thai ] = "มีความสัมพันธ์นี้อยู่แล้ว คุณต้องการแก้ไขมันหรือไม่?";
 };
 String STR_RELATIONDESIGN
 {
@@ -323,6 +329,7 @@ String STR_RELATIONDESIGN
     Text[ arabic ] = "����� ������";
     Text[ catalan ] = "Disseny de la relaci�";
     Text[ finnish ] = "Suhdemalli";
+    Text[ thai ] = "ออกแบบความสัมพันธ์";
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
@@ -348,6 +355,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ arabic ] = "����� �������� �� ���� ��� ������.";
     Text[ catalan ] = "La base de dades no permet les relacions.";
     Text[ finnish ] = "Tietokanta ei tue suhteita.";
+    Text[ thai ] = "ฐานข้อมูลไม่สนับสนุนความสัมพันธ์";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
@@ -375,6 +383,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ arabic ] = "�� ����� ����� ��������.\n�� ���� ��� ��������ʿ";
     Message[ catalan ] = "El disseny de la relaci� ha canviat.\nVoleu desar els canvis?";
     Message[ finnish ] = "Suhdemallia on muutettu.\nHaluatko tallentaa muutokset?";
+    Message[ thai ] = "การออกแบบความสัมพันธ์ได้มีการเปลี่ยนแปลงแล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
 };
 
 Menu RID_RELATION_DESIGN_MAIN_MENU
@@ -471,6 +480,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ arabic ] = "�����";
                     Text[ catalan ] = "Desf�s";
                         Text[ finnish ] = "Peruuta";
+                        Text[ thai ] = "เลิกทำ";
                     };
                 MenuItem
                 {
@@ -500,6 +510,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ arabic ] = "�����";
                     Text[ catalan ] = "Ref�s";
                         Text[ finnish ] = "Toista ";
+                        Text[ thai ] = "ทำซ้ำ";
                     };
                 MenuItem
                 {
@@ -518,6 +529,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ turkish ] = "~D�zenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Edita";
+            Text[ thai ] = "แ~ก้ไข";
         };
 
     MenuItem
@@ -543,7 +555,28 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                 };
             };
         };
-    };
+        Text[ english_us ] = "~Insert";
+            Text[ portuguese ] = "~Insert";
+            Text[ russian ] = "~Insert";
+            Text[ greek ] = "~Insert";
+            Text[ dutch ] = "~Insert";
+            Text[ french ] = "~Insert";
+            Text[ spanish ] = "~Insert";
+            Text[ finnish ] = "~Insert";
+            Text[ italian ] = "~Insert";
+            Text[ danish ] = "~Insert";
+            Text[ swedish ] = "~Insert";
+            Text[ polish ] = "~Insert";
+            Text[ portuguese_brazilian ] = "~Insert";
+            Text[ japanese ] = "~Insert";
+            Text[ korean ] = "~Insert";
+            Text[ chinese_simplified ] = "~Insert";
+            Text[ chinese_traditional ] = "~Insert";
+            Text[ turkish ] = "~Insert";
+            Text[ arabic ] = "~Insert";
+            Text[ catalan ] = "~Insert";
+            Text[ thai ] = "~Insert";
+        };
 
     MenuItem
     {
@@ -589,6 +622,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ turkish ] = "~Ara�lar";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Eines";
+            Text[ thai ] = "เ~ครื่องมือ";
         };
         GLOBLMN_WINMN
         {
@@ -623,6 +657,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ catalan ] = "Quan s'elimini aquesta taula tamb� de suprimiran les seves relacions associades. Voleu continuar?";
+    Text[ thai ] = "เมื่อคุณลบตารางนี้ ความสัมพันธ์ที่สอดคล้องกันทั้งหมดจะถูกลบไปด้วย ทำต่อหรือไม่?";
 };
 
 
