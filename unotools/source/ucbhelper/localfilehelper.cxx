@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 08:20:10 $
+ *  last change: $Author: hro $ $Date: 2001-05-11 13:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,14 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
+#ifdef TF_FILEURL
+        FileBase::getFileURLFromSystemPath( rName, aRet );
+#else
         ::rtl::OUString aTmp;
+
         FileBase::normalizePath( rName, aTmp );
         FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
+#endif
     }
     else
     {
@@ -113,9 +118,13 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
+#ifdef TF_FILEURL
+        FileBase::getSystemPathFromFileURL( rName, aRet );
+#else
         ::rtl::OUString aTmp;
         FileBase::getNormalizedPathFromFileURL( rName, aTmp );
         FileBase::getSystemPathFromNormalizedPath( aTmp, aRet );
+#endif
     }
     else
     {
@@ -135,9 +144,13 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
+#ifdef TF_FILEURL
+        FileBase::getFileURLFromSystemPath( rName, aRet );
+#else
         ::rtl::OUString aTmp;
         FileBase::normalizePath( rName, aTmp );
         FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
+#endif
     }
     else
     {
@@ -158,10 +171,15 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
+#ifdef TF_FILEURL
+        FileBase::getSystemPathFromFileURL( rName, aRet );
+#else
         ::rtl::OUString aTmp;
         FileBase::getNormalizedPathFromFileURL( rName, aTmp );
         FileBase::getSystemPathFromNormalizedPath( aTmp, aRet );
+
         aRet = aTmp;
+#endif
     }
     else
     {
