@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: jl $ $Date: 2000-11-21 15:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,12 @@
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
+
+#include <math.h>
+
+sal_Int32 SAL_CALL numberToStringImplA(sal_Char * str, double d, sal_Int16 significantDigits );
+sal_Int32 SAL_CALL getInfinityStrA(sal_Char * This, sal_Bool bNeg);
+sal_Int32 SAL_CALL getNaNStrA(sal_Char * This);
 
 static sal_Char RTL_STR_DIGITS[] =
 {
@@ -636,17 +642,59 @@ sal_Int32 SAL_CALL rtl_str_valueOfInt64(sal_Char * str, sal_Int64 l, sal_Int16 r
 /*************************************************************************
  *  rtl_str_valueOfFloat
  */
+#define singleSignMask  ((sal_uInt32)0x80000000)
+#define singleExpMask   ((sal_uInt32)0x7f800000)
+#define singleFractMask (~(singleSignMask|singleExpMask))
+#define singleExpShift  ((sal_uInt32)23)
+
 sal_Int32 SAL_CALL rtl_str_valueOfFloat( sal_Char * This, float f)
 {
-    return 0;
+    /* Discover obvious special cases of NaN and Infinity
+     * (like in Java Ctor FloatingDecimal( float f ) ) */
+    sal_uInt32 fBits = *(sal_uInt32*)(&f);
+    sal_uInt32 binExp = (sal_uInt32)( (fBits & singleExpMask) >> singleExpShift );
+    sal_uInt32 fractBits = fBits & singleFractMask;
+    if ( binExp == (sal_uInt32)(singleExpMask>>singleExpShift) )
+    {
+        if ( fractBits == 0L )
+            return getInfinityStrA(This, (sal_Bool)(f < 0.0));
+        else
+            return getNaNStrA(This);
+    }
+    return numberToStringImplA( This, (double)f, 8 );
 }
 
 /*************************************************************************
  *  rtl_str_valueOfDouble
  */
+#ifndef WNT
+#define signMask    ((sal_uInt64)0x8000000000000000LL)
+#define expMask     ((sal_uInt64)0x7ff0000000000000LL)
+#else
+#define signMask    ((sal_uInt64)0x8000000000000000L)
+#define expMask     ((sal_uInt64)0x7ff0000000000000L)
+#endif
+
+#define fractMask   (~(signMask|expMask))
+#define expShift    ((sal_uInt32)52)
+
 sal_Int32 SAL_CALL rtl_str_valueOfDouble( sal_Char * This, double d)
 {
-    return 0;
+#ifndef SAL_INT64_IS_STRUCT
+    /* Discover obvious special cases of NaN and Infinity.
+     * (like in Java Ctor FloatingDecimal( double d ) ) */
+    sal_uInt64 dBits = *(sal_uInt64*)(&d);
+    sal_uInt32 binExp = (sal_uInt32)( (dBits & expMask) >> expShift );
+    sal_uInt64 fractBits = dBits & fractMask;
+    if ( binExp == (int)(expMask >> expShift) )
+    {
+        if ( fractBits == 0L )
+            return getInfinityStrA(This, (sal_Bool)(d < 0.0));
+        else
+            return getNaNStrA(This);
+    }
+#endif
+    return numberToStringImplA( This, d, 17 );
 }
 
 /*************************************************************************
@@ -1011,5 +1059,139 @@ void SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str, sal_
         rtl_string_new(newStr);
 
     return;
+}
+
+/****************************************************************************
+* Internally used functions
+*/
+sal_Int32 SAL_CALL numberToStringImplA(sal_Char * str, double d, sal_Int16 significantDigits )
+{
+    /* Make it very simple without any formatting,
+     * (similar to Double.toString() in Java) */
+    sal_Char buf[ RTL_STR_MAX_VALUEOFDOUBLE ];
+    sal_Char* charPos = buf;
+    sal_Int16 i, len, dig, dotPos, tmpDot;
+    sal_Int16 lastNonZeroPos;
+    sal_Int16 nExpDigits;
+    sal_Bool bExp, bDotSet;
+    double dExp, rem;
+
+    if( d == 0 )
+    {
+        *(charPos++) = '0';
+        *(charPos++) = '.';
+        *(charPos++) = '0';
+    }
+    else
+    {
+        if( d < 0 )
+        {
+            *(charPos++) = '-';
+            d = -d;
+        }
+
+        dExp = log10( d );
+        bExp = sal_False;
+        if( dExp > 7 || dExp <= -7 )
+            bExp = sal_True;
+
+        dExp = floor( dExp );
+        d /= pow( 10, dExp );
+        while( d > 10 )
+        {
+            d /= 10.0;
+            dExp += 1.0;
+        }
+
+        if( d < 1.0 )
+            significantDigits++;
+
+        dotPos = bExp ? 0 : (sal_Int16)dExp;
+        lastNonZeroPos = 0;
+
+        bDotSet= sal_False;
+        for( i = 0 ; i < significantDigits ; i++ )
+        {
+            // handle leading zeros
+            if( dotPos < 0)
+            {
+                *(charPos++) = '0';
+                *(charPos++) = '.';
+                while( ++dotPos < 0)
+                   *(charPos++) = '0';
+                bDotSet= sal_True;
+            }
+            dig = (sal_Int16)d;
+            if( dig )
+                lastNonZeroPos = i;
+//            *(charPos++) = L'0' + dig;
+            *(charPos++) = dig + 0x30;
+            if( i == dotPos && ! bDotSet)
+                *(charPos++) = '.';
+            d -= (double)dig;
+            d *= 10.0;
+        }
+
+        /* Kill trailing zeros */
+        if( lastNonZeroPos > dotPos + 1 )
+            charPos -= (significantDigits - 1 - lastNonZeroPos);
+
+        /* exponent */
+        if( bExp )
+        {
+            *(charPos++) = 'E';
+            if( dExp < 0.0 )
+            {
+                dExp = -dExp;
+                *(charPos++) = '-';
+            }
+
+            nExpDigits = 1;
+            while( dExp >= 10.0 )
+            {
+                nExpDigits++;
+                dExp /= 10;
+            }
+            for( i = 0 ; i < nExpDigits ; i++ )
+            {
+                dig = (sal_Int16)dExp; // sometimes if the debugger shows dExp= 2, the cast produces 1
+                rem= fmod( dExp, 1);
+                if( rem >0.999) // max exponent is about 357
+                    dig++;
+
+                *(charPos++) = '0' + dig;
+                dExp -= (double)dig;
+                dExp *= 10.0;
+            }
+        }
+    }
+
+    *(charPos++) = 0;
+    len = charPos - buf;
+    rtl_copyMemory( str, buf, len * sizeof(sal_Char) );
+    return len - 1;
+}
+
+/*************************************************************************/
+
+sal_Int32 SAL_CALL getInfinityStrA(sal_Char * This, sal_Bool bNeg)
+{
+    sal_Char InfinityStr[] = "-Infinity";
+    sal_Char* pStr = bNeg ? InfinityStr : InfinityStr + 1;
+    sal_Int32 len = bNeg ? 9 : 8;
+    sal_Int32 i;
+    for ( i = 0; i < len+1; i++ )
+        *(This+i) = *(pStr+i);
+    return len;
+}
+
+sal_Int32 SAL_CALL getNaNStrA(sal_Char * This)
+{
+    sal_Char NaNStr[] = "NaN";
+    sal_Int32 len = 3;
+    sal_Int32 i;
+    for ( i = 0; i < len+1; i++ )
+        *(This+i) = NaNStr[i];
+    return len;
 }
 
