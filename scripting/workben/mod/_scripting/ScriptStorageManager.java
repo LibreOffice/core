@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:11:25 $
+ *  last change:$Date: 2002-12-10 14:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ public class ScriptStorageManager extends TestCase {
         oObj = (XInterface) oInterface;
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
+        TestDataLoader.setupData(tEnv, "ScriptStorageManager");
 
         return tEnv ;
     }
