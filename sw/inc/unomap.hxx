@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:19:24 $
+ *  last change: $Author: mtg $ $Date: 2001-07-25 10:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,6 @@
 #define PROPERTY_MAP_TEXT_DOCUMENT          29
 #define PROPERTY_MAP_LINK_TARGET            30
 #define PROPERTY_MAP_AUTO_TEXT_GROUP        31
-#define PROPERTY_MAP_PRINT_SETTINGS         32
-#define PROPERTY_MAP_VIEW_SETTINGS          33
 #define PROPERTY_MAP_TEXTPORTION_EXTENSIONS 34
 #define PROPERTY_MAP_FOOTNOTE               35
 #define PROPERTY_MAP_TEXT_COLUMS            36
@@ -297,50 +295,6 @@
 //AutoText
 #define WID_GROUP_PATH                          0
 #define WID_GROUP_TITLE                         1
-
-//ViewSettings
-#define WID_VIEWSET_HRULER                  0
-#define WID_VIEWSET_VRULER                  1
-#define WID_VIEWSET_HSCROLL                 2
-#define WID_VIEWSET_VSCROLL                 3
-#define WID_VIEWSET_GRAPHICS                4
-#define WID_VIEWSET_TABLES                  5
-#define WID_VIEWSET_DRAWINGS                6
-#define WID_VIEWSET_FIELD_COMMANDS          7
-#define WID_VIEWSET_ANNOTATIONS             8
-#define WID_VIEWSET_INDEX_MARK_BACKGROUND   9
-#define WID_VIEWSET_FOOTNOTE_BACKGROUND     10
-#define WID_VIEWSET_TEXT_FIELD_BACKGROUND   11
-#define WID_VIEWSET_PARA_BREAKS             12
-#define WID_VIEWSET_SOFT_HYPHENS            13
-#define WID_VIEWSET_SPACES                  14
-#define WID_VIEWSET_PROTECTED_SPACES        15
-#define WID_VIEWSET_TABSTOPS                16
-#define WID_VIEWSET_BREAKS                  17
-#define WID_VIEWSET_HIDDEN_TEXT             18
-#define WID_VIEWSET_HIDDEN_PARAGRAPHS       19
-#define WID_VIEWSET_TABLE_BOUNDARIES        20
-#define WID_VIEWSET_TEXT_BOUNDARIES         21
-#define WID_VIEWSET_SMOOTH_SCROLLING        22
-#define WID_VIEWSET_SOLID_MARK_HANDLES      23
-#define WID_VIEWSET_ZOOM                    24
-#define WID_VIEWSET_ZOOM_TYPE               25
-#define WID_VIEWSET_ONLINE_LAYOUT           26
-
-//PrintSettings
-#define WID_PRTSET_LEFT_PAGES           0
-#define WID_PRTSET_RIGHT_PAGES          1
-#define WID_PRTSET_REVERSED             2
-#define WID_PRTSET_PROSPECT             3
-#define WID_PRTSET_GRAPHICS             4
-#define WID_PRTSET_TABLES               5
-#define WID_PRTSET_DRAWINGS             6
-#define WID_PRTSET_CONTROLS             7
-#define WID_PRTSET_PAGE_BACKGROUND      8
-#define WID_PRTSET_BLACK_FONTS          9
-#define WID_PRTSET_ANNOTATION_MODE      10
-#define WID_PRTSET_FAX_NAME             11
-#define WID_PRTSET_PAPER_FROM_SETUP     12
 
 //NumberingRules
 #define WID_IS_AUTOMATIC                0
