@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VclWindowPeerAttribute.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:17:12 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,150 +68,105 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::VclWindowPeerAttribute
-/** @deprecated
+/** specifies attributes for the VCL window implementation.
 
     <p><b>IMPORTANT:</b> These constands have to be disjunct with
-    constants in <type>VclWindowPeerAttribute</type>.</p>
+    constants in <type>WindowAttribute</type>.</p>
+
+    @deprecated
  */
 constants VclWindowPeerAttribute
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::256
 
-    // DocMerge: empty anyway
     const long HSCROLL = 256;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::512
 
-    // DocMerge: empty anyway
     const long VSCROLL = 512;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::1024
 
-    // DocMerge: empty anyway
     const long LEFT = 1024;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::2048
 
-    // DocMerge: empty anyway
     const long CENTER = 2048;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::4096
 
-    // DocMerge: empty anyway
     const long RIGHT = 4096;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::8192
 
-    // DocMerge: empty anyway
     const long SPIN = 8192;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::16384
 
-    // DocMerge: empty anyway
     const long SORT = 16384;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::32768
 
-    // DocMerge: empty anyway
     const long DROPDOWN = 32768;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::65536
 
-    // DocMerge: empty anyway
     const long DEFBUTTON = 65536;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::262144
 
-    // DocMerge: empty anyway
     const long READONLY = 262144;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::524288
 
-    // DocMerge: empty anyway
     const long CLIPCHILDREN = 524288;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::1048576
 
-    // DocMerge: empty anyway
     const long NOBORDER = 1048576;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::2097152
 
-    // DocMerge: empty anyway
     const long GROUP = 2097152;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::4194304
 
-    // DocMerge: empty anyway
     const long OK = 4194304;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::8388608
 
-    // DocMerge: empty anyway
     const long OK_CANCEL = 8388608;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::16777216
 
-    // DocMerge: empty anyway
     const long YES_NO = 16777216;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::33554432
 
-    // DocMerge: empty anyway
     const long YES_NO_CANCEL = 33554432;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::67108864
 
-    // DocMerge: empty anyway
     const long RETRY_CANCEL = 67108864;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::134217728
 
-    // DocMerge: empty anyway
     const long DEF_OK = 134217728;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::268435456
 
-    // DocMerge: empty anyway
     const long DEF_CANCEL = 268435456;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::536870912
 
-    // DocMerge: empty anyway
     const long DEF_RETRY = 536870912;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::1073741824
 
-    // DocMerge: empty anyway
     const long DEF_YES = 1073741824;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::-2147483648
 
-    // DocMerge: empty anyway
     const long DEF_NO = -2147483648;
 
 };
