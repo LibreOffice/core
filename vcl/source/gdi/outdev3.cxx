@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:34:27 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3084,6 +3084,20 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
             pFallbackList[ j+1 ] = pTestFont;
         }
 
+        // sort the fonts for glyph fallback by quality (highest first)
+        // an insertion sort is good enough for this list
+        for( int i = 1, j; i < nMaxLevel; ++i )
+        {
+            ImplDevFontListData* pTestFont = pFallbackList[ i ];
+            int nTestQuality = pTestFont->GetMinQuality();
+            for( j = i; --j >= 0; )
+                if( nTestQuality > pFallbackList[j]->GetMinQuality() )
+                    pFallbackList[ j+1 ] = pFallbackList[ j ];
+                else
+                    break;
+            pFallbackList[ j+1 ] = pTestFont;
+        }
+
         pFontList->SetFallbacks( pFallbackList, nMaxLevel );
     }
 
@@ -6059,7 +6073,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6)
     && (pSalLayout && aLayoutArgs.PrepareFallback()) )
     {
-#ifdef HDU_DEBUG
+#if defined(HDU_DEBUG)
         {
             int nCharPos = -1;
             bool bRTL = false;
@@ -6105,6 +6119,17 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
                     continue;
                 }
             }
+
+#if defined(HDU_DEBUG)
+            {
+                ByteString aOrigFontName( maFont.GetName(), RTL_TEXTENCODING_UTF8);
+                ByteString aFallbackName( aFontSelData.mpFontData->GetFamilyName(),
+                    RTL_TEXTENCODING_UTF8);
+                fprintf(stderr,"\tGlyphFallback[lvl=%d] \"%s\" -> \"%s\" (q=%d)\n",
+                    nFallbackLevel, aOrigFontName.GetBuffer(), aFallbackName.GetBuffer(),
+                    aFontSelData.mpFontData->GetQuality());
+            }
+#endif
 
             pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
 
