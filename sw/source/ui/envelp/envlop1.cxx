@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 12:49:57 $
+ *  last change: $Author: os $ $Date: 2001-12-04 10:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,15 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     SwWait aWait( *pSh->GetView().GetDocShell(), TRUE );
 
     if (pListBox == &aDatabaseLB)
+    {
+        sActDBName = pListBox->GetSelectEntry();
         pSh->GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
-    pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, aTableLB.GetSelectEntry());
+        sActDBName += DB_DELIM;
+    }
+    else
+        sActDBName.SetToken(1, DB_DELIM, aTableLB.GetSelectEntry());
+    pSh->GetNewDBMgr()->GetColumnNames(
+        &aDBFieldLB, aDatabaseLB.GetSelectEntry(), aTableLB.GetSelectEntry());
     return 0;
 }
 
@@ -376,7 +383,7 @@ void SwEnvPage::InitDatabaseBox()
         if (pSh->GetNewDBMgr()->GetTableNames(&aTableLB, sDBName))
         {
             aTableLB.SelectEntry(sTableName);
-            pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, sTableName);
+            pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sDBName, sTableName);
         }
         else
             aDBFieldLB.Clear();

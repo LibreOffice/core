@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:16:53 $
+ *  last change: $Author: os $ $Date: 2001-12-04 10:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ TabPage TP_ENV_ENV
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 162 , 17 ) ;
-        Size = MAP_APPFONT ( 82 , 12 ) ;
+        Size = MAP_APPFONT ( 82 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -361,7 +361,7 @@ TabPage TP_ENV_ENV
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 162 , 44 ) ;
-        Size = MAP_APPFONT ( 82 , 12 ) ;
+        Size = MAP_APPFONT ( 82 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -405,7 +405,7 @@ TabPage TP_ENV_ENV
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 162 , 71 ) ;
-        Size = MAP_APPFONT ( 82 , 12 ) ;
+        Size = MAP_APPFONT ( 82 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
