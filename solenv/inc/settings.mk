@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.97 $
+#   $Revision: 1.98 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-13 16:58:18 $
+#   last change: $Author: hjs $ $Date: 2002-02-14 15:49:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1441,13 +1441,8 @@ UNOUCROUT*=$(OUT)$/inc
 UNOUCRRDB*=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP*=$(SOLARBINDIR)$/udkapi.rdb
 .ELSE           # "$(UDKSTAMP)"==""
-.IF "$(remote)"!=""
-UNOUCRRDB*=$(SOLARBINDIR)$/remote/applicat.rdb
-UNOUCRDEP*=$(SOLARBINDIR)$/remote/applicat.rdb
-.ELSE			# "$(remote)"!=""
 UNOUCRRDB*=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRDEP*=$(SOLARBINDIR)$/applicat.rdb
-.ENDIF			# "$(remote)"!=""
 .ENDIF          # "$(UDKSTAMP)"==""
 
 # --- Compiler -----------------------------------------------------
