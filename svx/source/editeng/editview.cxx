@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-01 15:03:28 $
+ *  last change: $Author: mt $ $Date: 2002-08-20 17:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,12 @@
 #include <editview.hxx>
 #include <flditem.hxx>
 #include <svxacorr.hxx>
+#include <langitem.hxx>
 #include <eerdll.hxx>
 #include <eerdll2.hxx>
 #include <editeng.hrc>
+#include <dlgutil.hxx>
+#include <helpid.hrc>
 #include <tools/isolang.hxx>
 #include <vcl/menu.hxx>
 
@@ -97,6 +100,54 @@ using namespace com::sun::star::linguistic2;
 
 
 DBG_NAME( EditView );
+
+// From SW => Create common method
+LanguageType lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecker1 >  xSpell )
+{
+    LanguageType nLang = LANGUAGE_NONE;
+
+    Reference< XSpellAlternatives >     xAlt;
+    Sequence< short >   aLangs;
+    if (xSpell.is())
+        aLangs = xSpell->getLanguages();
+    const short *pLang = aLangs.getConstArray();
+    INT32   nCount = aLangs.getLength();
+
+    //! due to dieckmann (new german) spellchecker excepting many english
+    //! (and other?) words as correct
+    //! GERMAN and GERMAN_SWISS should be checked last.
+    //! Otherwise e.g. english words might be reported as being german words!
+    for (INT32 i = 0;  i < nCount;  i++)
+    {
+        INT16 nTmpLang = pLang[i];
+        if (nTmpLang != LANGUAGE_NONE  &&
+            nTmpLang != LANGUAGE_GERMAN  &&
+            nTmpLang != LANGUAGE_GERMAN_SWISS)
+        {
+            if (xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ) &&
+                xSpell->hasLanguage( nTmpLang ))
+            {
+                nLang = nTmpLang;
+                break;
+            }
+        }
+    }
+    if (nLang == LANGUAGE_NONE  &&
+        xSpell->isValid( rWord, LANGUAGE_GERMAN, Sequence< PropertyValue >() ) &&
+        xSpell->hasLanguage( LANGUAGE_GERMAN ))
+    {
+        nLang = LANGUAGE_GERMAN;
+    }
+    if (nLang == LANGUAGE_NONE  &&
+        xSpell->isValid( rWord, LANGUAGE_GERMAN_SWISS, Sequence< PropertyValue >() ) &&
+        xSpell->hasLanguage( LANGUAGE_GERMAN_SWISS ))
+    {
+        nLang = LANGUAGE_GERMAN_SWISS;
+    }
+
+    return nLang;
+}
+
 
 // ----------------------------------------------------------------------
 // class EditView
@@ -922,6 +973,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
     aPos = pImpEditView->GetDocPos( aPos );
     EditPaM aPaM = pImpEditView->pEditEngine->pImpEditEngine->GetPaM( aPos, sal_False );
     Reference< XSpellChecker1 >  xSpeller( PIMPEE->GetSpeller() );
+    ESelection aOldSel = GetSelection();
     if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, sal_True ) )
     {
         PopupMenu aPopupMenu( EditResId( RID_MENU_SPELL ) );
@@ -935,6 +987,34 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         String aSelected( GetSelected() );
         Reference< XSpellAlternatives >  xSpellAlt =
                 xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), Sequence< PropertyValue >() );
+
+        // Other language???
+        LanguageType nCorrLang = LANGUAGE_NONE;
+        if (xSpellAlt.is())
+            nCorrLang = lcl_CheckLanguage( xSpellAlt->getWord(), PIMPEE->GetSpeller() );
+
+        if( nCorrLang != LANGUAGE_NONE )
+        {
+            aPopupMenu.InsertSeparator();
+            String aTmp( ::GetLanguageString( nCorrLang ) );
+            String aWordStr( EditResId( RID_STR_WORD ) );
+            aWordStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmp );
+            String aParaStr( EditResId( RID_STR_PARAGRAPH ) );
+            aParaStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmp );
+            aPopupMenu.InsertItem( MN_WORDLANGUAGE, aWordStr );
+            aPopupMenu.SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
+            aPopupMenu.InsertItem( MN_PARALANGUAGE, aParaStr );
+            aPopupMenu.SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
+        }
+
+        // ## Create mnemonics here
+        if ( Application::IsAutoMnemonicEnabled() )
+        {
+            aPopupMenu.CreateAutoMnemonics();
+            aPopupMenu.SetMenuFlags( aPopupMenu.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+        }
+
+        // Replace suggestions...
         Sequence< OUString > aAlt;
         if (xSpellAlt.is())
             aAlt = xSpellAlt->getAlternatives();
@@ -990,6 +1070,30 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 SpellCallbackInfo aInf( SPELLCMD_IGNOREWORD, aWord );
                 pCallBack->Call( &aInf );
             }
+            SetSelection( aOldSel );
+        }
+        else if ( ( nId == MN_WORDLANGUAGE ) || ( nId == MN_PARALANGUAGE ) )
+        {
+            SfxItemSet aAttrs = GetEditEngine()->GetEmptyItemSet();
+            aAttrs.Put( SvxLanguageItem( nCorrLang, EE_CHAR_LANGUAGE ) );
+            aAttrs.Put( SvxLanguageItem( nCorrLang, EE_CHAR_LANGUAGE_CTL ) );
+            aAttrs.Put( SvxLanguageItem( nCorrLang, EE_CHAR_LANGUAGE_CJK ) );
+            if ( nId == MN_PARALANGUAGE )
+            {
+                ESelection aSel = GetSelection();
+                aSel.nStartPos = 0;
+                aSel.nEndPos = 0xFFFF;
+                SetSelection( aSel );
+            }
+            SetAttribs( aAttrs );
+            PIMPEE->StartOnlineSpellTimer();
+
+            if ( pCallBack )
+            {
+                SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SPELLCMD_WORDLANGUAGE : SPELLCMD_PARALANGUAGE, nCorrLang );
+                pCallBack->Call( &aInf );
+            }
+            SetSelection( aOldSel );
         }
         else if ( nId == MN_SPELLING )
         {
@@ -1023,6 +1127,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 SpellCallbackInfo aInf( SPELLCMD_ADDTODICTIONARY, aSelected );
                 pCallBack->Call( &aInf );
             }
+            SetSelection( aOldSel );
         }
         else if ( nId >= MN_AUTOSTART )
         {
@@ -1038,6 +1143,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             DBG_ASSERT(nId - MN_ALTSTART < aAlt.getLength(), "index out of range");
             String aWord = pAlt[nId - MN_ALTSTART];
             InsertText( aWord );
+        }
+        else
+        {
+            SetSelection( aOldSel );
         }
     }
 #endif
