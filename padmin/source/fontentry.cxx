@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+ *  last change: $Author: pl $ $Date: 2001-05-08 13:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,9 @@ FontNameDlg::FontNameDlg( Window *pParent ) :
         if( eType == fonttype::Type1 || eType == fonttype::TrueType )
         {
             m_aFonts[ *font_it ] = m_rFontManager.getFontXLFD( *font_it );
-            INetURLObject aFont( m_rFontManager.getFontFileSysPath( *font_it ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            String aEntry( aFont.GetName() );
+            ByteString aFontFile( m_rFontManager.getFontFileSysPath( *font_it ) );
+            int nTokens = aFontFile.GetTokenCount( '/' );
+            String aEntry( aFontFile.GetToken( nTokens-1, '/' ), gsl_getSystemTextEncoding() );
             aEntry += '=';
             aEntry += String( m_rFontManager.getFontFamily( *font_it ) );
             USHORT nEntry = m_aFontBox.InsertEntry( aEntry );
@@ -352,8 +353,9 @@ void FontNameDlg::ChangeFontEntry( fontID nFont )
             if( m_aFontBox.GetEntryData( i ) == (void*)nFont )
             {
                 m_aFontBox.RemoveEntry( i );
-                INetURLObject aFont( m_rFontManager.getFontFileSysPath( nFont ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-                String aEntry = aFont.GetName();
+                ByteString aFontFile( m_rFontManager.getFontFileSysPath( nFont ) );
+                int nTokens = aFontFile.GetTokenCount( '/' );
+                String aEntry( aFontFile.GetToken( nTokens-1, '/' ), aEncoding );
                 aEntry += '=';
                 aEntry += String( m_rFontManager.getFontFamily( nFont ) );
                 USHORT nEntry = m_aFontBox.InsertEntry( aEntry );
@@ -363,7 +365,7 @@ void FontNameDlg::ChangeFontEntry( fontID nFont )
     }
     else
     {
-        INetURLObject aFont( m_rFontManager.getFontFileSysPath( nFont ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        INetURLObject aFont( OStringToOUString( m_rFontManager.getFontFileSysPath( nFont ), aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         String aString( m_aFontsDirWriteFailed );
         aString.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ),
                                   aFont.GetName() );
