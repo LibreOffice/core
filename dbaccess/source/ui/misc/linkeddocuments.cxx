@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:07:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,7 @@ namespace dbaui
                 aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
                 break;
 
-            case ID_FORM_NEW_PILOT:
+            case SID_DB_FORM_NEW_PILOT:
             default:
                 OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: pleas use newFormWithPilot!");
                 return Reference< XComponent >();
