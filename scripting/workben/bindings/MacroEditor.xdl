@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="MacroEditor" dlg:left="105" dlg:top="117" dlg:width="240" dlg:height="320" dlg:closeable="true" dlg:moveable="true" dlg:title="Python Macro Editor">
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="RunButton" dlg:tab-index="0" dlg:left="57" dlg:top="300" dlg:width="40" dlg:height="14" dlg:value="Run"/>
+  <dlg:button dlg:id="SaveButton" dlg:tab-index="1" dlg:left="100" dlg:top="300" dlg:width="40" dlg:height="14" dlg:value="Save"/>
+  <dlg:button dlg:id="CloseButton" dlg:tab-index="2" dlg:left="143" dlg:top="300" dlg:width="40" dlg:height="14" dlg:value="Close" dlg:button-type="cancel"/>
+  <dlg:textfield dlg:id="EditorTextField" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="228" dlg:height="288" dlg:hscroll="true" dlg:vscroll="true" dlg:multiline="true"/>
+ </dlg:bulletinboard>
+</dlg:window>
