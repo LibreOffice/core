@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swunohelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 16:13:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 11:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ sal_Int32 GetEnumAsInt32( const com::sun::star::uno::Any& rVal );
 
 // methods for UCB actions:
     // delete the file under this URL
-BOOL UCB_DeleteFile( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_DeleteFile( const String& rURL );
 
     // copy/move the file to a new location
 BOOL UCB_CopyFile( const String& rURL, const String& rNewURL,
@@ -98,7 +98,7 @@ BOOL UCB_CopyFile( const String& rURL, const String& rNewURL,
 SW_DLLPUBLIC BOOL UCB_IsCaseSensitiveFileName( const String& rURL );
 
     // is the URL readonly?
-BOOL UCB_IsReadOnlyFileName( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_IsReadOnlyFileName( const String& rURL );
 
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:22:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 11:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 
 class SwMailMergeConfigItem;
 namespace com{ namespace sun{ namespace star{
@@ -109,13 +113,13 @@ namespace com{ namespace sun{ namespace star{
   -----------------------------------------------------------------------*/
 namespace SwMailMergeHelper
 {
-    String  CallSaveAsDialog(String& rFilter);
-    bool    CheckMailAddress( const ::rtl::OUString& rMailAddress );
+    SW_DLLPUBLIC String  CallSaveAsDialog(String& rFilter);
+    SW_DLLPUBLIC bool    CheckMailAddress( const ::rtl::OUString& rMailAddress );
 }
 /* -----------------06.04.2004 10:29-----------------
 
  --------------------------------------------------*/
-class SwBoldFixedInfo : public FixedInfo
+class SW_DLLPUBLIC SwBoldFixedInfo : public FixedInfo
 {
 public:
     SwBoldFixedInfo(Window* pParent, const ResId& rResId);
@@ -132,7 +136,7 @@ namespace com{namespace sun{namespace star{
     Preview window used to show the possible selection of address blocks
     and also the resulting address filled with database data
   -----------------------------------------------------------------------*/
-class SwAddressPreview : public Window
+class SW_DLLPUBLIC SwAddressPreview : public Window
 {
     ScrollBar               aVScrollBar;
     SwAddressPreview_Impl*  pImpl;
@@ -198,7 +202,7 @@ struct SwMergeAddressItem
         bIsColumn(false),
         bIsReturn(false) {}
 };
-class SwAddressIterator
+class SW_DLLPUBLIC   SwAddressIterator
 {
     String sAddress;
 public:
@@ -212,7 +216,7 @@ public:
 /*-- 21.05.2004 10:31:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-class SwAuthenticator :
+class SW_DLLPUBLIC SwAuthenticator :
     public cppu::WeakImplHelper1< ::com::sun::star::mail::XAuthenticator>
 {
     ::rtl::OUString m_aUserName;
@@ -234,7 +238,7 @@ public:
 /*-- 25.08.2004 12:48:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-class SwConnectionContext :
+class SW_DLLPUBLIC SwConnectionContext :
     public cppu::WeakImplHelper1< ::com::sun::star::uno::XCurrentContext >
 {
     ::rtl::OUString     m_sMailServer;
@@ -259,7 +263,7 @@ public:
 /*-- 21.05.2004 10:39:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-class SwConnectionListener :
+class SW_DLLPUBLIC SwConnectionListener :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XConnectionListener >
 {
@@ -363,7 +367,7 @@ public:
 /*-- 21.05.2004 10:17:22---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
+SW_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
         getCurrentCmpCtx(
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory> rSrvMgr);
