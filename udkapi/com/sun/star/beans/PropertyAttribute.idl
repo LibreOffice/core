@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyAttribute.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,12 @@ constants PropertyAttribute
     const short REMOVEABLE = 128;
 
     //-------------------------------------------------------------------------
-    /** same as <const>PropertyAttribute::REMOVEABLE</const>.
+    /** @deprecated
+        same as <const>PropertyAttribute::REMOVEABLE</const>.
      */
     const short REMOVABLE = 128;
 
+    //-------------------------------------------------------------------------
     /** indicates that a property is optional.
 
         <p>This attribute is not of interest for concrete property
@@ -142,6 +144,7 @@ constants PropertyAttribute
 
         @see com::sun::star::reflection::XPropertyTypeDescription
         @see com::sun::star::reflection::XServiceTypeDescription
+    @since #107627#
      */
     const short OPTIONAL = 256;
 };
