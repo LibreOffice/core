@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
+#   last change: $Author: hr $ $Date: 2002-08-27 11:38:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,12 @@ TARGET=salgdi
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"!="MACOSX"
+.IF "$(GUIBASE)"!="aqua"
 
 dummy:
-    @echo "Nothing to build for this platform"
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
-.ELSE		# "$(OS)"!="MACOSX"
+.ELSE		# "$(GUIBASE)"!="aqua"
 
 SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/salrectangleutils.obj \
@@ -111,7 +111,7 @@ OBJFILES=   $(OBJ)$/salmathutils.obj      \
             $(OBJ)$/salogl.obj
 .ENDIF
 
-.ENDIF		# "$(OS)"!="MACOSX"
+.ENDIF		# "$(GUIBASE)"!="aqua"
 
 # --- Targets ------------------------------------------------------
 
