@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLWarning.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ jclass java_sql_SQLWarning_BASE::getMyClass()
 
 void java_sql_SQLWarning_BASE::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==NULL  )
+    if( pClass==NULL  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
