@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:25:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ ScColumn::~ScColumn()
 }
 
 
-void ScColumn::Init(USHORT nNewCol, USHORT nNewTab, ScDocument* pDoc)
+void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc)
 {
     nCol = nNewCol;
     nTab = nNewTab;
@@ -133,27 +133,27 @@ void ScColumn::Init(USHORT nNewCol, USHORT nNewTab, ScDocument* pDoc)
 }
 
 
-short ScColumn::GetNextUnprotected( short nRow, BOOL bUp ) const
+SCsROW ScColumn::GetNextUnprotected( SCROW nRow, BOOL bUp ) const
 {
     return pAttrArray->GetNextUnprotected(nRow, bUp);
 }
 
 
-USHORT ScColumn::GetBlockMatrixEdges( USHORT nRow1, USHORT nRow2, USHORT nMask ) const
+USHORT ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
 {
     // nix:0, mitte:1, unten:2, links:4, oben:8, rechts:16, offen:32
     if ( !pItems )
         return 0;
     if ( nRow1 == nRow2 )
     {
-        USHORT nIndex;
+        SCSIZE nIndex;
         if ( Search( nRow1, nIndex ) )
         {
             ScBaseCell* pCell = pItems[nIndex].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA
                 && ((ScFormulaCell*)pCell)->GetMatrixFlag() )
             {
-                ScAddress aOrg( (UINT32)0xFFFFFFFF );
+                ScAddress aOrg( ScAddress::INITIALIZE_INVALID );
                 return ((ScFormulaCell*)pCell)->GetMatrixEdge( aOrg );
             }
         }
@@ -161,10 +161,10 @@ USHORT ScColumn::GetBlockMatrixEdges( USHORT nRow1, USHORT nRow2, USHORT nMask )
     }
     else
     {
-        ScAddress aOrg( (UINT32)0xFFFFFFFF );
+        ScAddress aOrg( ScAddress::INITIALIZE_INVALID );
         BOOL bOpen = FALSE;
         USHORT nEdges = 0;
-        USHORT nIndex;
+        SCSIZE nIndex;
         Search( nRow1, nIndex );
         while ( nIndex < nCount && pItems[nIndex].nRow <= nRow2 )
         {
@@ -205,15 +205,15 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
     {
         BOOL bFound = FALSE;
 
-        ScAddress aOrg( (UINT32)0xFFFFFFFF );
-        ScAddress aCurOrg( (UINT32)0xFFFFFFFF );
-        USHORT nTop, nBottom;
+        ScAddress aOrg( ScAddress::INITIALIZE_INVALID );
+        ScAddress aCurOrg( ScAddress::INITIALIZE_INVALID );
+        SCROW nTop, nBottom;
         ScMarkArrayIter aMarkIter( rMark.GetArray()+nCol );
         while ( !bFound && aMarkIter.Next( nTop, nBottom ) )
         {
             BOOL bOpen = FALSE;
             USHORT nEdges;
-            USHORT nIndex;
+            SCSIZE nIndex;
             Search( nTop, nIndex );
             while ( !bFound && nIndex < nCount && pItems[nIndex].nRow <= nBottom )
             {
@@ -247,7 +247,8 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                                     pFCell = (ScFormulaCell*) pDocument->GetCell( aOrg );
                                 else
                                     pFCell = (ScFormulaCell*)pCell;
-                                USHORT nC, nR;
+                                SCCOL nC;
+                                SCROW nR;
                                 pFCell->GetMatColsRows( nC, nR );
                                 ScRange aRange( aOrg, ScAddress(
                                     aOrg.Col() + nC - 1, aOrg.Row() + nR - 1,
@@ -272,14 +273,14 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
 }
 
 
-BOOL ScColumn::HasLines( USHORT nRow1, USHORT nRow2, Rectangle& rSizes,
+BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
                             BOOL bLeft, BOOL bRight ) const
 {
     return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
 }
 
 
-BOOL ScColumn::HasAttrib( USHORT nRow1, USHORT nRow2, USHORT nMask ) const
+BOOL ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
 {
     return pAttrArray->HasAttrib( nRow1, nRow2, nMask );
 }
@@ -289,8 +290,8 @@ BOOL ScColumn::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const
 {
     BOOL bFound = FALSE;
 
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
 
     if (rMark.IsMultiMarked())
     {
@@ -306,8 +307,8 @@ BOOL ScColumn::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const
 }
 
 
-BOOL ScColumn::ExtendMerge( USHORT nThisCol, USHORT nStartRow, USHORT nEndRow,
-                            USHORT& rPaintCol, USHORT& rPaintRow,
+BOOL ScColumn::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
+                            SCCOL& rPaintCol, SCROW& rPaintRow,
                             BOOL bRefresh, BOOL bAttrs )
 {
     return pAttrArray->ExtendMerge( nThisCol, nStartRow, nEndRow, rPaintCol, rPaintRow, bRefresh, bAttrs );
@@ -316,8 +317,8 @@ BOOL ScColumn::ExtendMerge( USHORT nThisCol, USHORT nStartRow, USHORT nEndRow,
 
 void ScColumn::MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMark, BOOL bDeep ) const
 {
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
 
     if ( rMark.IsMultiMarked() )
     {
@@ -328,7 +329,7 @@ void ScColumn::MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMar
 }
 
 
-void ScColumn::MergePatternArea( SfxItemSet** ppSet, USHORT nRow1, USHORT nRow2, BOOL bDeep ) const
+void ScColumn::MergePatternArea( SfxItemSet** ppSet, SCROW nRow1, SCROW nRow2, BOOL bDeep ) const
 {
     pAttrArray->MergePatternArea( nRow1, nRow2, ppSet, bDeep );
 }
@@ -336,41 +337,41 @@ void ScColumn::MergePatternArea( SfxItemSet** ppSet, USHORT nRow1, USHORT nRow2,
 
 void ScColumn::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                             ScLineFlags& rFlags,
-                            USHORT nStartRow, USHORT nEndRow, BOOL bLeft, USHORT nDistRight ) const
+                            SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight ) const
 {
     pAttrArray->MergeBlockFrame( pLineOuter, pLineInner, rFlags, nStartRow, nEndRow, bLeft, nDistRight );
 }
 
 
 void ScColumn::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                            USHORT nStartRow, USHORT nEndRow, BOOL bLeft, USHORT nDistRight )
+                            SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight )
 {
     pAttrArray->ApplyBlockFrame( pLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight );
 }
 
 
-const ScPatternAttr* ScColumn::GetPattern( USHORT nRow ) const
+const ScPatternAttr* ScColumn::GetPattern( SCROW nRow ) const
 {
     return pAttrArray->GetPattern( nRow );
 }
 
 
-const SfxPoolItem* ScColumn::GetAttr( USHORT nRow, USHORT nWhich ) const
+const SfxPoolItem* ScColumn::GetAttr( SCROW nRow, USHORT nWhich ) const
 {
     return &pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
 }
 
 
-ULONG ScColumn::GetNumberFormat( USHORT nRow ) const
+ULONG ScColumn::GetNumberFormat( SCROW nRow ) const
 {
     return pAttrArray->GetPattern( nRow )->GetNumberFormat( pDocument->GetFormatTable() );
 }
 
 
-short ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark )
+SCsROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark )
 {
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
     BOOL bFound = FALSE;
 
     if ( rMark.IsMultiMarked() )
@@ -388,14 +389,14 @@ short ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData&
     else if (nTop==0 && nBottom==MAXROW)
         return 0;
     else
-        return (short) nBottom;
+        return nBottom;
 }
 
 
 void ScColumn::ChangeSelectionIndent( BOOL bIncrement, const ScMarkData& rMark )
 {
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
 
     if ( pAttrArray && rMark.IsMultiMarked() )
     {
@@ -408,8 +409,8 @@ void ScColumn::ChangeSelectionIndent( BOOL bIncrement, const ScMarkData& rMark )
 
 void ScColumn::ClearSelectionItems( const USHORT* pWhich,const ScMarkData& rMark )
 {
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
 
     if ( pAttrArray && rMark.IsMultiMarked() )
     {
@@ -422,8 +423,8 @@ void ScColumn::ClearSelectionItems( const USHORT* pWhich,const ScMarkData& rMark
 
 void ScColumn::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
 {
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
 
     if ( rMark.IsMultiMarked() )
     {
@@ -434,7 +435,7 @@ void ScColumn::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
 }
 
 
-void ScColumn::ApplyPattern( USHORT nRow, const ScPatternAttr& rPatAttr )
+void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
     SfxItemPoolCache aCache( pDocument->GetPool(), pSet );
@@ -452,7 +453,7 @@ void ScColumn::ApplyPattern( USHORT nRow, const ScPatternAttr& rPatAttr )
 }
 
 
-void ScColumn::ApplyPatternArea( USHORT nStartRow, USHORT nEndRow, const ScPatternAttr& rPatAttr )
+void ScColumn::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
     SfxItemPoolCache aCache( pDocument->GetPool(), pSet );
@@ -466,10 +467,10 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
     const SfxItemSet* pSet = &rPattern.GetItemSet();
     SfxItemPoolCache aCache( pDocument->GetPool(), pSet );
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-    USHORT nEndRow = rRange.aEnd.Row();
-    for ( USHORT nRow = rRange.aStart.Row(); nRow <= nEndRow; nRow++ )
+    SCROW nEndRow = rRange.aEnd.Row();
+    for ( SCROW nRow = rRange.aStart.Row(); nRow <= nEndRow; nRow++ )
     {
-        USHORT nRow1, nRow2;
+        SCROW nRow1, nRow2;
         const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(
             nRow1, nRow2, nRow );
         ULONG nFormat = pPattern->GetNumberFormat( pFormatter );
@@ -478,8 +479,8 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
             nRow = nRow2;
         else
         {
-            USHORT nNewRow1 = Max( nRow1, nRow );
-            USHORT nNewRow2 = Min( nRow2, nEndRow );
+            SCROW nNewRow1 = Max( nRow1, nRow );
+            SCROW nNewRow2 = Min( nRow2, nEndRow );
             pAttrArray->ApplyCacheArea( nNewRow1, nNewRow2, &aCache );
             nRow = nNewRow2;
         }
@@ -487,7 +488,7 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
 }
 
 
-void ScColumn::ApplyStyle( USHORT nRow, const ScStyleSheet& rStyle )
+void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle )
 {
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
     ScPatternAttr* pNewPattern = new ScPatternAttr(*pPattern);
@@ -500,7 +501,7 @@ void ScColumn::ApplyStyle( USHORT nRow, const ScStyleSheet& rStyle )
 }
 
 
-void ScColumn::ApplyStyleArea( USHORT nStartRow, USHORT nEndRow, const ScStyleSheet& rStyle )
+void ScColumn::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
 {
     pAttrArray->ApplyStyleArea(nStartRow, nEndRow, (ScStyleSheet*)&rStyle);
 }
@@ -508,8 +509,8 @@ void ScColumn::ApplyStyleArea( USHORT nStartRow, USHORT nEndRow, const ScStyleSh
 
 void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
 {
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
 
     if ( rMark.IsMultiMarked() )
     {
@@ -526,8 +527,8 @@ void ScColumn::ApplySelectionLineStyle( const ScMarkData& rMark,
     if ( bColorOnly && !pLine )
         return;
 
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
 
     if (rMark.IsMultiMarked())
     {
@@ -538,7 +539,7 @@ void ScColumn::ApplySelectionLineStyle( const ScMarkData& rMark,
 }
 
 
-const ScStyleSheet* ScColumn::GetStyle( USHORT nRow ) const
+const ScStyleSheet* ScColumn::GetStyle( SCROW nRow ) const
 {
     return pAttrArray->GetPattern( nRow )->GetStyleSheet();
 }
@@ -559,13 +560,13 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, BOOL& 
     const ScStyleSheet* pNewStyle;
 
     ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
-    USHORT nTop;
-    USHORT nBottom;
+    SCROW nTop;
+    SCROW nBottom;
     while (bEqual && aMarkIter.Next( nTop, nBottom ))
     {
         ScAttrIterator aAttrIter( pAttrArray, nTop, nBottom );
-        USHORT nRow;
-        USHORT nDummy;
+        SCROW nRow;
+        SCROW nDummy;
         const ScPatternAttr* pPattern;
         while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ))
         {
@@ -581,7 +582,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, BOOL& 
 }
 
 
-const ScStyleSheet* ScColumn::GetAreaStyle( BOOL& rFound, USHORT nRow1, USHORT nRow2 ) const
+const ScStyleSheet* ScColumn::GetAreaStyle( BOOL& rFound, SCROW nRow1, SCROW nRow2 ) const
 {
     rFound = FALSE;
 
@@ -591,8 +592,8 @@ const ScStyleSheet* ScColumn::GetAreaStyle( BOOL& rFound, USHORT nRow1, USHORT n
     const ScStyleSheet* pNewStyle;
 
     ScAttrIterator aAttrIter( pAttrArray, nRow1, nRow2 );
-    USHORT nRow;
-    USHORT nDummy;
+    SCROW nRow;
+    SCROW nDummy;
     const ScPatternAttr* pPattern;
     while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ))
     {
@@ -619,38 +620,38 @@ BOOL ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyl
 }
 
 
-BOOL ScColumn::ApplyFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags )
+BOOL ScColumn::ApplyFlags( SCROW nStartRow, SCROW nEndRow, INT16 nFlags )
 {
     return pAttrArray->ApplyFlags( nStartRow, nEndRow, nFlags );
 }
 
 
-BOOL ScColumn::RemoveFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags )
+BOOL ScColumn::RemoveFlags( SCROW nStartRow, SCROW nEndRow, INT16 nFlags )
 {
     return pAttrArray->RemoveFlags( nStartRow, nEndRow, nFlags );
 }
 
 
-void ScColumn::ClearItems( USHORT nStartRow, USHORT nEndRow, const USHORT* pWhich )
+void ScColumn::ClearItems( SCROW nStartRow, SCROW nEndRow, const USHORT* pWhich )
 {
     pAttrArray->ClearItems( nStartRow, nEndRow, pWhich );
 }
 
 
-void ScColumn::SetPattern( USHORT nRow, const ScPatternAttr& rPatAttr, BOOL bPutToPool )
+void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, BOOL bPutToPool )
 {
     pAttrArray->SetPattern( nRow, &rPatAttr, bPutToPool );
 }
 
 
-void ScColumn::SetPatternArea( USHORT nStartRow, USHORT nEndRow,
+void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr, BOOL bPutToPool )
 {
     pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, bPutToPool );
 }
 
 
-void ScColumn::ApplyAttr( USHORT nRow, const SfxPoolItem& rAttr )
+void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 {
     //  um nur ein neues SetItem zu erzeugen, brauchen wir keinen SfxItemPoolCache.
     //! Achtung: der SfxItemPoolCache scheint zuviele Refs fuer das neue SetItem zu erzeugen ??
@@ -689,20 +690,20 @@ void ScColumn::ApplyAttr( USHORT nRow, const SfxPoolItem& rAttr )
 #pragma optimize ( "", off )
 
 
-BOOL ScColumn::Search( USHORT nRow, USHORT& nIndex ) const
+BOOL ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
     if ( !pItems || !nCount )
     {
         nIndex = 0;
         return FALSE;
     }
-    USHORT nMinRow = pItems[0].nRow;
+    SCROW nMinRow = pItems[0].nRow;
     if ( nRow <= nMinRow )
     {
         nIndex = 0;
         return nRow == nMinRow;
     }
-    USHORT nMaxRow = pItems[nCount-1].nRow;
+    SCROW nMaxRow = pItems[nCount-1].nRow;
     if ( nRow >= nMaxRow )
     {
         if ( nRow == nMaxRow )
@@ -717,25 +718,25 @@ BOOL ScColumn::Search( USHORT nRow, USHORT& nIndex ) const
         }
     }
 
-    short nOldLo, nOldHi;
-    short   nLo     = nOldLo = 0;
-    short   nHi     = nOldHi = Min( (short)(nCount-1), (short)nRow );
-    short   i       = 0;
+    long nOldLo, nOldHi;
+    long    nLo     = nOldLo = 0;
+    long    nHi     = nOldHi = Min(static_cast<long>(nCount)-1, static_cast<long>(nRow) );
+    long    i       = 0;
     BOOL    bFound  = FALSE;
-    // einigermassen durchgaengige Belegung? => interpolierende Suche
-    BOOL    bInterpol = (nMaxRow - nMinRow < nCount * 2);
-    USHORT  nR;
+    // quite continuous distribution? => interpolating search
+    BOOL    bInterpol = (static_cast<SCSIZE>(nMaxRow - nMinRow) < nCount * 2);
+    SCROW   nR;
 
     while ( !bFound && nLo <= nHi )
     {
         if ( !bInterpol || nHi - nLo < 3 )
-            i = (nLo+nHi) / 2;          // kein Aufwand, kein division by zero
+            i = (nLo+nHi) / 2;          // no effort, no division by zero
         else
-        {   // interpolierende Suche
-            long nLoRow = pItems[nLo].nRow;     // kein USHORT Unterlauf bei Subtraktion
-            i = nLo + (short)((long)(nRow - nLoRow) * (nHi - nLo)
+        {   // interpolating search
+            long nLoRow = pItems[nLo].nRow;     // no unsigned underflow upon substraction
+            i = nLo + (long)((long)(nRow - nLoRow) * (nHi - nLo)
                 / (pItems[nHi].nRow - nLoRow));
-            if ( i < 0 || i >= nCount )
+            if ( i < 0 || static_cast<SCSIZE>(i) >= nCount )
             {   // oops ...
                 i = (nLo+nHi) / 2;
                 bInterpol = FALSE;
@@ -771,35 +772,35 @@ BOOL ScColumn::Search( USHORT nRow, USHORT& nIndex ) const
         }
     }
     if (bFound)
-        nIndex = i;
+        nIndex = static_cast<SCSIZE>(i);
     else
-        nIndex = nLo; // hinterer Index
+        nIndex = static_cast<SCSIZE>(nLo); // rear index
     return bFound;
 }
 
 #pragma optimize ( "", on )
 
 
-ScBaseCell* ScColumn::GetCell( USHORT nRow ) const
+ScBaseCell* ScColumn::GetCell( SCROW nRow ) const
 {
-    USHORT nIndex;
+    SCSIZE nIndex;
     if (Search(nRow, nIndex))
         return pItems[nIndex].pCell;
     return NULL;
 }
 
 
-void ScColumn::Resize( USHORT nSize )
+void ScColumn::Resize( SCSIZE nSize )
 {
-    if (nSize > MAXROW+1)
-        nSize = MAXROW+1;
+    if (nSize > MAXROWCOUNT)
+        nSize = MAXROWCOUNT;
     if (nSize < nCount)
         nSize = nCount;
 
     ColEntry* pNewItems;
     if (nSize)
     {
-        USHORT nNewSize = nSize + COLUMN_DELTA - 1;
+        SCSIZE nNewSize = nSize + COLUMN_DELTA - 1;
         nNewSize -= nNewSize % COLUMN_DELTA;
         nLimit = nNewSize;
         pNewItems = new ColEntry[nLimit];
@@ -820,16 +821,16 @@ void ScColumn::Resize( USHORT nSize )
 
 //  SetNewRow gehoert zu SwapRow
 
-void ScColumn::SetNewRow( USHORT nOldRow, USHORT nNewRow )  // nNewRow muss leer sein
+void ScColumn::SetNewRow( SCROW nOldRow, SCROW nNewRow )    // nNewRow muss leer sein
 {
-    USHORT  nIndex;
+    SCSIZE  nIndex;
     if (Search(nOldRow, nIndex))
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
         --nCount;
         memmove( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ColEntry) );
 
-        ScBroadcasterList* pBC = pCell->GetBroadcaster();
+        SvtBroadcaster* pBC = pCell->GetBroadcaster();
         if (pBC)
         {
             MoveListeners( *pBC, nOldRow );     // Broadcaster bleibt an alter Stelle
@@ -840,7 +841,7 @@ void ScColumn::SetNewRow( USHORT nOldRow, USHORT nNewRow )  // nNewRow muss leer
         {
             Insert(nNewRow, pCell);
 
-            short dy = (short)nNewRow - (short)nOldRow;
+            long dy = (long)nNewRow - (long)nOldRow;
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
                 ScFormulaCell* pFormula = (ScFormulaCell*)pCell;
@@ -855,13 +856,13 @@ void ScColumn::SetNewRow( USHORT nOldRow, USHORT nNewRow )  // nNewRow muss leer
 
 //  SwapRow zum Sortieren
 
-void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
+void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 {
     //      Zeiger vertauschen klappt nicht wegen Broadcastern
     //      (Absturz, wenn Zelle, auch indirekt, auf sich selbst broadcasted)
 
     ScBaseCell *pCell1, *pCell2;
-    USHORT nIndex1, nIndex2;
+    SCSIZE nIndex1, nIndex2;
 
     if ( Search( nRow1, nIndex1 ) )
         pCell1 = pItems[nIndex1].pCell;
@@ -879,7 +880,7 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
     CellType eType2 = ( pCell2 ? pCell2->GetCellType() : CELLTYPE_NONE );
 
     // Broadcaster bleiben an alter Stelle
-    ScBroadcasterList *pBC1, *pBC2;
+    SvtBroadcaster *pBC1, *pBC2;
 
     if ( eType1 != CELLTYPE_FORMULA && eType2 != CELLTYPE_FORMULA )
     {   // simple swap, kann nichts auf sich selbst broadcasten
@@ -1000,7 +1001,7 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
     ScBaseCell *pNew1, *pNew2;
 
     //  hier kein UpdateReference wegen #30529# - mitsortiert werden nur noch relative Referenzen
-//  short dy = (short)nRow2 - (short)nRow1;
+//  long dy = (long)nRow2 - (long)nRow1;
 
     if (pCell1)
     {
@@ -1080,12 +1081,12 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
 }
 
 
-void ScColumn::SwapCell( USHORT nRow, ScColumn& rCol)
+void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
 {
     BOOL bFound1;
     BOOL bFound2;
-    USHORT nIndex1;
-    USHORT nIndex2;
+    SCSIZE nIndex1;
+    SCSIZE nIndex2;
     bFound1 = Search(nRow, nIndex1);
     bFound2 = rCol.Search(nRow, nIndex2);
     if (bFound1 && bFound2)
@@ -1096,7 +1097,7 @@ void ScColumn::SwapCell( USHORT nRow, ScColumn& rCol)
         pItems[nIndex1].pCell = pCell2;
         rCol.pItems[nIndex2].pCell = pCell1;
         // Referenzen aktualisieren
-        short dx = (short)rCol.nCol - (short)nCol;
+        SCsCOL dx = rCol.nCol - nCol;
         if (pCell1->GetCellType() == CELLTYPE_FORMULA)
         {
             ScRange aRange( ScAddress( rCol.nCol, 0, nTab ),
@@ -1121,7 +1122,7 @@ void ScColumn::SwapCell( USHORT nRow, ScColumn& rCol)
         pItems[nCount].nRow = 0;
         pItems[nCount].pCell = NULL;
         // Referenzen aktualisieren
-        short dx = (short)rCol.nCol - (short)nCol;
+        SCsCOL dx = rCol.nCol - nCol;
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
             ScRange aRange( ScAddress( rCol.nCol, 0, nTab ),
@@ -1141,7 +1142,7 @@ void ScColumn::SwapCell( USHORT nRow, ScColumn& rCol)
         rCol.pItems[rCol.nCount].nRow = 0;
         rCol.pItems[rCol.nCount].pCell = NULL;
         // Referenzen aktualisieren
-        short dx = (short)rCol.nCol - (short)nCol;
+        SCsCOL dx = rCol.nCol - nCol;
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
             ScRange aRange( ScAddress( nCol, 0, nTab ),
@@ -1155,13 +1156,13 @@ void ScColumn::SwapCell( USHORT nRow, ScColumn& rCol)
 }
 
 
-BOOL ScColumn::TestInsertCol( USHORT nStartRow, USHORT nEndRow) const
+BOOL ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 {
     if (!IsEmpty())
     {
         BOOL bTest = TRUE;
         if (pItems)
-            for (USHORT i=0; (i<nCount) && bTest; i++)
+            for (SCSIZE i=0; (i<nCount) && bTest; i++)
                 bTest = ((pItems[i].nRow < nStartRow) && (pItems[i].nRow > nEndRow))
                         || !CellVisible(pItems[i].pCell);
 
@@ -1179,7 +1180,7 @@ BOOL ScColumn::TestInsertCol( USHORT nStartRow, USHORT nEndRow) const
 }
 
 
-BOOL ScColumn::TestInsertRow( USHORT nSize ) const
+BOOL ScColumn::TestInsertRow( SCSIZE nSize ) const
 {
     //  AttrArray testet nur zusammengefasste
 
@@ -1190,10 +1191,10 @@ BOOL ScColumn::TestInsertRow( USHORT nSize ) const
 
     //!     rausgeschobene Attribute bei Undo beruecksichtigen
 
-    if ( nSize > MAXROW )
+    if ( nSize > static_cast<SCSIZE>(MAXROW) )
         return FALSE;
 
-    USHORT nVis = nCount;
+    SCSIZE nVis = nCount;
     while ( nVis && !CellVisible(pItems[nVis-1].pCell) )
         --nVis;
 
@@ -1204,7 +1205,7 @@ BOOL ScColumn::TestInsertRow( USHORT nSize ) const
 }
 
 
-void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
+void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 {
     pAttrArray->InsertRow( nStartRow, nSize );
 
@@ -1213,7 +1214,7 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
     if ( !pItems || !nCount )
         return;
 
-    USHORT i;
+    SCSIZE i;
     Search( nStartRow, i );
     if ( i >= nCount )
         return ;
@@ -1221,7 +1222,7 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
     BOOL bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
 
-    USHORT nNewCount = nCount;
+    SCSIZE nNewCount = nCount;
     BOOL bCountChanged = FALSE;
     ScAddress aAdr( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL );    // only areas (ScBaseCell* == NULL)
@@ -1231,17 +1232,17 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
                 (nCount - i)) > 1);
     if ( bSingleBroadcasts )
     {
-        USHORT nLastBroadcast = MAXROW+1;
+        SCROW nLastBroadcast = MAXROW+1;
         for ( ; i < nCount; i++)
         {
-            USHORT nOldRow = pItems[i].nRow;
+            SCROW nOldRow = pItems[i].nRow;
             // #43940# Aenderung Quelle broadcasten
             if ( nLastBroadcast != nOldRow )
             {   // direkt aufeinanderfolgende nicht doppelt broadcasten
                 rAddress.SetRow( nOldRow );
                 pDocument->AreaBroadcast( aHint );
             }
-            USHORT nNewRow = (pItems[i].nRow += nSize);
+            SCROW nNewRow = (pItems[i].nRow += nSize);
             // #43940# Aenderung Ziel broadcasten
             rAddress.SetRow( nNewRow );
             pDocument->AreaBroadcast( aHint );
@@ -1262,7 +1263,7 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
         ScRange aRange( rAddress );
         for ( ; i < nCount; i++)
         {
-            USHORT nNewRow = (pItems[i].nRow += nSize);
+            SCROW nNewRow = (pItems[i].nRow += nSize);
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
@@ -1280,9 +1281,9 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
 
     if (bCountChanged)
     {
-        USHORT nDelCount = nCount - nNewCount;
+        SCSIZE nDelCount = nCount - nNewCount;
         ScBaseCell** ppDelCells = new ScBaseCell*[nDelCount];
-        USHORT* pDelRows = new USHORT[nDelCount];
+        SCROW* pDelRows = new SCROW[nDelCount];
         for (i = 0; i < nDelCount; i++)
         {
             ppDelCells[i] = pItems[nNewCount+i].pCell;
@@ -1294,7 +1295,7 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
         {
             ScBaseCell* pCell = ppDelCells[i];
             DBG_ASSERT( !CellVisible(pCell), "sichtbare Zelle weggeschoben" );
-            ScBroadcasterList* pBC = pCell->GetBroadcaster();
+            SvtBroadcaster* pBC = pCell->GetBroadcaster();
             if (pBC)
             {
                 MoveListeners( *pBC, pDelRows[i] - nSize );
@@ -1311,14 +1312,14 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
 }
 
 
-void ScColumn::CopyToClip(USHORT nRow1, USHORT nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags)
+void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags)
 {
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                             bKeepScenarioFlags ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
 
-    USHORT i;
-    USHORT nBlockCount = 0;
-    USHORT nStartIndex, nEndIndex;
+    SCSIZE i;
+    SCSIZE nBlockCount = 0;
+    SCSIZE nStartIndex, nEndIndex;
     for (i = 0; i < nCount; i++)
         if ((pItems[i].nRow >= nRow1) && (pItems[i].nRow <= nRow2))
         {
@@ -1347,12 +1348,12 @@ void ScColumn::CopyToClip(USHORT nRow1, USHORT nRow2, ScColumn& rColumn, BOOL bK
 }
 
 
-void ScColumn::CopyToColumn(USHORT nRow1, USHORT nRow2, USHORT nFlags, BOOL bMarked,
+void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarked,
                                 ScColumn& rColumn, const ScMarkData* pMarkData, BOOL bAsLink )
 {
     if (bMarked)
     {
-        USHORT nStart, nEnd;
+        SCROW nStart, nEnd;
         if (pMarkData && pMarkData->IsMultiMarked())
         {
             ScMarkArrayIter aIter( pMarkData->GetArray()+nCol );
@@ -1374,7 +1375,7 @@ void ScColumn::CopyToColumn(USHORT nRow1, USHORT nRow2, USHORT nFlags, BOOL bMar
         if ( (nFlags & IDF_STYLES) != IDF_STYLES )
         {   // StyleSheets im Zieldokument bleiben erhalten
             // z.B. DIF und RTF Clipboard-Import
-            for ( USHORT nRow = nRow1; nRow <= nRow2; nRow++ )
+            for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
             {
                 const ScStyleSheet* pStyle =
                     rColumn.pAttrArray->GetPattern( nRow )->GetStyleSheet();
@@ -1392,9 +1393,9 @@ void ScColumn::CopyToColumn(USHORT nRow1, USHORT nRow2, USHORT nFlags, BOOL bMar
 
     if ((nFlags & IDF_CONTENTS) != 0)
     {
-        USHORT i;
-        USHORT nBlockCount = 0;
-        USHORT nStartIndex, nEndIndex;
+        SCSIZE i;
+        SCSIZE nBlockCount = 0;
+        SCSIZE nStartIndex, nEndIndex;
         for (i = 0; i < nCount; i++)
             if ((pItems[i].nRow >= nRow1) && (pItems[i].nRow <= nRow2))
             {
@@ -1433,7 +1434,7 @@ void ScColumn::CopyToColumn(USHORT nRow1, USHORT nRow2, USHORT nFlags, BOOL bMar
 }
 
 
-void ScColumn::UndoToColumn(USHORT nRow1, USHORT nRow2, USHORT nFlags, BOOL bMarked,
+void ScColumn::UndoToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarked,
                                 ScColumn& rColumn, const ScMarkData* pMarkData )
 {
     if (nRow1 > 0)
@@ -1450,11 +1451,11 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 {
     ScDocument* pDestDoc = rDestCol.pDocument;
 
-    USHORT nPosCount = rPosCol.nCount;
-    for (USHORT nPosIndex = 0; nPosIndex < nPosCount; nPosIndex++)
+    SCSIZE nPosCount = rPosCol.nCount;
+    for (SCSIZE nPosIndex = 0; nPosIndex < nPosCount; nPosIndex++)
     {
-        USHORT nRow = rPosCol.pItems[nPosIndex].nRow;
-        USHORT nThisIndex;
+        SCROW nRow = rPosCol.pItems[nPosIndex].nRow;
+        SCSIZE nThisIndex;
         if ( Search( nRow, nThisIndex ) )
         {
             ScBaseCell* pNew = pItems[nThisIndex].pCell->Clone(pDestDoc);
@@ -1472,7 +1473,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
     //  Dies ist die Szenario-Tabelle, die Daten werden hineinkopiert
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    USHORT nStart, nEnd;
+    SCROW nStart, nEnd;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1484,7 +1485,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 
             //  UpdateUsed nicht noetig, schon in TestCopyScenario passiert
 
-            short nDz = ((short)nTab) - (short)rSrcCol.nTab;
+            SCsTAB nDz = nTab - rSrcCol.nTab;
             UpdateReference(URM_COPY, nCol, nStart, nTab,
                                       nCol, nEnd,   nTab,
                                       0, 0, nDz, NULL);
@@ -1503,7 +1504,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
     //  Dies ist die Szenario-Tabelle, die Daten werden in die andere kopiert
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    USHORT nStart, nEnd;
+    SCROW nStart, nEnd;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1515,7 +1516,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 
             //  UpdateUsed nicht noetig, schon in TestCopyScenario passiert
 
-            short nDz = ((short)rDestCol.nTab) - (short)nTab;
+            SCsTAB nDz = rDestCol.nTab - nTab;
             rDestCol.UpdateReference(URM_COPY, rDestCol.nCol, nStart, rDestCol.nTab,
                                                rDestCol.nCol, nEnd,   rDestCol.nTab,
                                                0, 0, nDz, NULL);
@@ -1533,7 +1534,7 @@ BOOL ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
 {
     BOOL bOk = TRUE;
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    USHORT nStart, nEnd;
+    SCROW nStart, nEnd;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern && bOk)
     {
@@ -1552,7 +1553,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
     ScRange aRange( nCol, 0, nTab );
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    USHORT nStart, nEnd;
+    SCROW nStart, nEnd;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1570,7 +1571,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 
 void ScColumn::SwapCol(ScColumn& rCol)
 {
-    USHORT nTemp;
+    SCSIZE nTemp;
 
     nTemp = rCol.nCount;
     rCol.nCount  = nCount;
@@ -1592,7 +1593,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     pAttrArray->SetCol(nCol);
     rCol.pAttrArray->SetCol(rCol.nCol);
 
-    USHORT i;
+    SCSIZE i;
     if (pItems)
         for (i = 0; i < nCount; i++)
         {
@@ -1610,15 +1611,15 @@ void ScColumn::SwapCol(ScColumn& rCol)
 }
 
 
-void ScColumn::MoveTo(USHORT nStartRow, USHORT nEndRow, ScColumn& rCol)
+void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 {
     pAttrArray->MoveTo(nStartRow, nEndRow, *rCol.pAttrArray);
 
     if (pItems)
     {
-        USHORT nStartPos;
-        USHORT nMoveCount=0;
-        USHORT i;
+        SCSIZE nStartPos;
+        SCSIZE nMoveCount=0;
+        SCSIZE i;
         for (i=0; i < nCount; i++)
         {
             if ((pItems[i].nRow >= nStartRow) && (pItems[i].nRow <= nEndRow))
@@ -1635,7 +1636,7 @@ void ScColumn::MoveTo(USHORT nStartRow, USHORT nEndRow, ScColumn& rCol)
             //  Formeln benachrichtigen, dass sich etwas aendert
 
             ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy wie in DeleteRange
-            USHORT nEndPos = nStartPos+nMoveCount-1;
+            SCSIZE nEndPos = nStartPos+nMoveCount-1;
             for (i=nStartPos; i<=nEndPos; i++)
                 pItems[i].pCell = pNoteCell;            // nicht auf die verschobenen zugreifen
             ScAddress aAdr( nCol, 0, nTab );
@@ -1658,8 +1659,8 @@ void ScColumn::MoveTo(USHORT nStartRow, USHORT nEndRow, ScColumn& rCol)
 }
 
 
-void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHORT nRow1, USHORT nTab1,
-             USHORT nCol2, USHORT nRow2, USHORT nTab2, short nDx, short nDy, short nDz,
+void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
              ScDocument* pUndoDoc )
 {
     if (pItems)
@@ -1668,7 +1669,7 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHO
                         ScAddress( nCol2, nRow2, nTab2 ) );
         if ( eUpdateRefMode == URM_COPY && nRow1 == nRow2 )
         {   // z.B. eine einzelne Zelle aus dem Clipboard eingefuegt
-            USHORT nIndex;
+            SCSIZE nIndex;
             if ( Search( nRow1, nIndex ) )
             {
                 ScFormulaCell* pCell = (ScFormulaCell*) pItems[nIndex].pCell;
@@ -1684,11 +1685,11 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHO
             // formulas cells.
             if ( eUpdateRefMode == URM_COPY )
             {
-                USHORT i;
+                SCSIZE i;
                 Search( nRow1, i );
                 for ( ; i < nCount; i++ )
                 {
-                    USHORT nRow = pItems[i].nRow;
+                    SCROW nRow = pItems[i].nRow;
                     if ( nRow > nRow2 )
                         break;
                     ScBaseCell* pCell = pItems[i].pCell;
@@ -1702,13 +1703,13 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHO
             }
             else
             {
-                USHORT i = 0;
+                SCSIZE i = 0;
                 for ( ; i < nCount; i++ )
                 {
                     ScBaseCell* pCell = pItems[i].pCell;
                     if( pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        USHORT nRow = pItems[i].nRow;
+                        SCROW nRow = pItems[i].nRow;
                         ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
@@ -1724,12 +1725,12 @@ void ScColumn::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc )
 {
     if (pItems)
-        for (USHORT i=0; i<nCount; i++)
+        for (SCSIZE i=0; i<nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 ((ScFormulaCell*)pCell)->UpdateTranspose( rSource, rDest, pUndoDoc );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );              // Listener geloescht/eingefuegt?
@@ -1738,15 +1739,15 @@ void ScColumn::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
 }
 
 
-void ScColumn::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY )
+void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
     if (pItems)
-        for (USHORT i=0; i<nCount; i++)
+        for (SCSIZE i=0; i<nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 ((ScFormulaCell*)pCell)->UpdateGrow( rArea, nGrowX, nGrowY );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );              // Listener geloescht/eingefuegt?
@@ -1755,7 +1756,7 @@ void ScColumn::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY )
 }
 
 
-void ScColumn::UpdateInsertTab( USHORT nTable)
+void ScColumn::UpdateInsertTab( SCTAB nTable)
 {
     if (nTab >= nTable) nTab++;
     if( pItems )
@@ -1763,15 +1764,15 @@ void ScColumn::UpdateInsertTab( USHORT nTable)
 }
 
 
-void ScColumn::UpdateInsertTabOnlyCells( USHORT nTable)
+void ScColumn::UpdateInsertTabOnlyCells( SCTAB nTable)
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScFormulaCell* pCell = (ScFormulaCell*) pItems[i].pCell;
             if( pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 pCell->UpdateInsertTab(nTable);
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
@@ -1780,15 +1781,15 @@ void ScColumn::UpdateInsertTabOnlyCells( USHORT nTable)
 }
 
 
-void ScColumn::UpdateInsertTabAbs(USHORT nTable)
+void ScColumn::UpdateInsertTabAbs(SCTAB nTable)
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScFormulaCell* pCell = (ScFormulaCell*) pItems[i].pCell;
             if( pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 pCell->UpdateInsertTabAbs(nTable);
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
@@ -1797,16 +1798,16 @@ void ScColumn::UpdateInsertTabAbs(USHORT nTable)
 }
 
 
-void ScColumn::UpdateDeleteTab( USHORT nTable, BOOL bIsMove, ScColumn* pRefUndo )
+void ScColumn::UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScColumn* pRefUndo )
 {
     if (nTab > nTable)
         pAttrArray->SetTab(--nTab);
 
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
             if ( pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA )
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 ScFormulaCell* pOld = (ScFormulaCell*)pItems[i].pCell;
 
                 ScFormulaCell* pSave = NULL;
@@ -1829,17 +1830,17 @@ void ScColumn::UpdateDeleteTab( USHORT nTable, BOOL bIsMove, ScColumn* pRefUndo 
 }
 
 
-void ScColumn::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos, USHORT nTabNo )
+void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
 {
     nTab = nTabNo;
     pAttrArray->SetTab( nTabNo );
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScFormulaCell* pCell = (ScFormulaCell*) pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 pCell->UpdateMoveTab( nOldPos, nNewPos, nTabNo );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
@@ -1851,12 +1852,12 @@ void ScColumn::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos, USHORT nTabNo )
 void ScColumn::UpdateCompile( BOOL bForceIfNameInUse )
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScFormulaCell* p = (ScFormulaCell*) pItems[i].pCell;
             if( p->GetCellType() == CELLTYPE_FORMULA )
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 p->UpdateCompile( bForceIfNameInUse );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
@@ -1865,12 +1866,12 @@ void ScColumn::UpdateCompile( BOOL bForceIfNameInUse )
 }
 
 
-void ScColumn::SetTabNo(USHORT nNewTab)
+void ScColumn::SetTabNo(SCTAB nNewTab)
 {
     nTab = nNewTab;
     pAttrArray->SetTab( nNewTab );
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScFormulaCell* p = (ScFormulaCell*) pItems[i].pCell;
             if( p->GetCellType() == CELLTYPE_FORMULA )
@@ -1879,11 +1880,11 @@ void ScColumn::SetTabNo(USHORT nNewTab)
 }
 
 
-BOOL ScColumn::IsRangeNameInUse(USHORT nRow1, USHORT nRow2, USHORT nIndex) const
+BOOL ScColumn::IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const
 {
     BOOL bInUse = FALSE;
     if (pItems)
-        for (USHORT i = 0; !bInUse && (i < nCount); i++)
+        for (SCSIZE i = 0; !bInUse && (i < nCount); i++)
             if ((pItems[i].nRow >= nRow1) &&
                 (pItems[i].nRow <= nRow2) &&
                 (pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA))
@@ -1892,18 +1893,18 @@ BOOL ScColumn::IsRangeNameInUse(USHORT nRow1, USHORT nRow2, USHORT nIndex) const
 }
 
 
-void ScColumn::ReplaceRangeNamesInUse(USHORT nRow1, USHORT nRow2,
+void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
                                      const ScIndexMap& rMap )
 {
     BOOL bInUse = FALSE;
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             if ((pItems[i].nRow >= nRow1) &&
                 (pItems[i].nRow <= nRow2) &&
                 (pItems[i].pCell->GetCellType() == CELLTYPE_FORMULA))
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 ((ScFormulaCell*)pItems[i].pCell)->ReplaceRangeNamesInUse( rMap );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
@@ -1914,7 +1915,7 @@ void ScColumn::ReplaceRangeNamesInUse(USHORT nRow1, USHORT nRow2,
 
 void ScColumn::SetDirtyVar()
 {
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) pItems[i].pCell;
         if( p->GetCellType() == CELLTYPE_FORMULA )
@@ -1928,7 +1929,7 @@ void ScColumn::SetDirty()
     // wird nur dokumentweit verwendet, kein FormulaTrack
     BOOL bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) pItems[i].pCell;
         if( p->GetCellType() == CELLTYPE_FORMULA )
@@ -1948,10 +1949,11 @@ void ScColumn::SetDirty( const ScRange& rRange )
         return ;
     BOOL bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
-    USHORT nRow2 = rRange.aEnd.Row();
+    SCROW nRow2 = rRange.aEnd.Row();
     ScAddress aPos( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aPos, NULL );
-    USHORT nRow, nIndex;
+    SCROW nRow;
+    SCSIZE nIndex;
     Search( rRange.aStart.Row(), nIndex );
     while ( nIndex < nCount && (nRow = pItems[nIndex].nRow) <= nRow2 )
     {
@@ -1976,10 +1978,11 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
         return ;
     BOOL bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( FALSE );    // no multiple recalculation
-    USHORT nRow2 = rRange.aEnd.Row();
+    SCROW nRow2 = rRange.aEnd.Row();
     ScAddress aPos( nCol, 0, nTab );
     ScHint aHint( SC_HINT_TABLEOPDIRTY, aPos, NULL );
-    USHORT nRow, nIndex;
+    SCROW nRow;
+    SCSIZE nIndex;
     Search( rRange.aStart.Row(), nIndex );
     while ( nIndex < nCount && (nRow = pItems[nIndex].nRow) <= nRow2 )
     {
@@ -2002,7 +2005,7 @@ void ScColumn::SetDirtyAfterLoad()
 {
     BOOL bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) pItems[i].pCell;
         if ( p->GetCellType() == CELLTYPE_FORMULA && p->GetDirty() )
@@ -2018,7 +2021,7 @@ void ScColumn::SetRelNameDirty()
 {
     BOOL bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) pItems[i].pCell;
         if( p->GetCellType() == CELLTYPE_FORMULA && p->HasRelNameReference() )
@@ -2031,7 +2034,7 @@ void ScColumn::SetRelNameDirty()
 void ScColumn::CalcAll()
 {
     if (pItems)
-        for (USHORT i=0; i<nCount; i++)
+        for (SCSIZE i=0; i<nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
@@ -2058,12 +2061,12 @@ void ScColumn::CalcAll()
 void ScColumn::CompileAll()
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 // fuer unbedingtes kompilieren
                 // bCompile=TRUE und pCode->nError=0
                 ((ScFormulaCell*)pCell)->GetCode()->SetError( 0 );
@@ -2079,12 +2082,12 @@ void ScColumn::CompileAll()
 void ScColumn::CompileXML( ScProgress& rProgress )
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
-                USHORT nRow = pItems[i].nRow;
+                SCROW nRow = pItems[i].nRow;
                 ((ScFormulaCell*)pCell)->CompileXML( rProgress );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
@@ -2096,7 +2099,7 @@ void ScColumn::CompileXML( ScProgress& rProgress )
 void ScColumn::CalcAfterLoad()
 {
     if (pItems)
-        for (USHORT i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
@@ -2105,11 +2108,11 @@ void ScColumn::CalcAfterLoad()
 }
 
 
-void ScColumn::ResetChanged( USHORT nStartRow, USHORT nEndRow )
+void ScColumn::ResetChanged( SCROW nStartRow, SCROW nEndRow )
 {
     if (pItems)
     {
-        USHORT nIndex;
+        SCSIZE nIndex;
         Search(nStartRow,nIndex);
         while (nIndex<nCount && pItems[nIndex].nRow <= nEndRow)
         {
@@ -2122,12 +2125,12 @@ void ScColumn::ResetChanged( USHORT nStartRow, USHORT nEndRow )
 }
 
 
-BOOL ScColumn::HasEditCells(USHORT nStartRow, USHORT nEndRow, USHORT& rFirst) const
+BOOL ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
 {
     //  used in GetOptimalHeight - ambiguous script type counts as edit cell
 
-    USHORT nRow;
-    USHORT nIndex;
+    SCROW nRow;
+    SCSIZE nIndex;
     Search(nStartRow,nIndex);
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
     {
@@ -2145,7 +2148,7 @@ BOOL ScColumn::HasEditCells(USHORT nStartRow, USHORT nEndRow, USHORT& rFirst) co
 }
 
 
-short ScColumn::SearchStyle( short nRow, const ScStyleSheet* pSearchStyle,
+SCsROW ScColumn::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
                                 BOOL bUp, BOOL bInSelection, const ScMarkData& rMark )
 {
     if (bInSelection)
@@ -2161,7 +2164,7 @@ short ScColumn::SearchStyle( short nRow, const ScStyleSheet* pSearchStyle,
 }
 
 
-BOOL ScColumn::SearchStyleRange( short& rRow, short& rEndRow, const ScStyleSheet* pSearchStyle,
+BOOL ScColumn::SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
                                     BOOL bUp, BOOL bInSelection, const ScMarkData& rMark )
 {
     if (bInSelection)
