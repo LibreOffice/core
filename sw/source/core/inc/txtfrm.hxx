@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:21:23 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,8 +417,6 @@ public:
 
     inline       SwTxtFrm *GetFollow();
     inline const SwTxtFrm *GetFollow() const;
-    inline       SwTxtFrm *FindMaster();
-    inline const SwTxtFrm *FindMaster() const;
 
     // Suche die Seitennummer von ErgoSum und QuoVadis
     SwTxtFrm *FindQuoVadisFrm();
@@ -634,14 +632,6 @@ inline SwTwips SwTxtFrm::GetFtnFrmHeight() const
         return 0;
 }
 
-inline SwTxtFrm *SwTxtFrm::FindMaster()
-{
-    return (SwTxtFrm*)SwFlowFrm::FindMaster();
-}
-inline const SwTxtFrm *SwTxtFrm::FindMaster() const
-{
-    return (const SwTxtFrm*)SwFlowFrm::FindMaster();
-}
 inline const SwTxtFrm *SwTxtFrm::GetFollow() const
 {
     return (const SwTxtFrm*)SwCntntFrm::GetFollow();
