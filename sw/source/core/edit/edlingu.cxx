@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:05:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _OFF_APP_HXX //autogen wg. OFF_APP
-#include <offmgr/app.hxx>
-#endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
