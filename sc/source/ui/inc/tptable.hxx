@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 11:20:43 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,29 @@
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-
+#ifndef _SV_LSTBOX_HXX
+#include <vcl/lstbox.hxx>
+#endif
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
+
+//===================================================================
+
+/** A vcl/NumericField that additionally supports empty text.
+    @descr  Value 0 is set as empty text, and empty text is returned as 0. */
+class EmptyNumericField : public NumericField
+{
+public:
+    inline explicit     EmptyNumericField( Window* pParent, WinBits nWinStyle ) :
+                            NumericField( pParent, nWinStyle ) {}
+    inline explicit     EmptyNumericField( Window* pParent, const ResId& rResId ) :
+                            NumericField( pParent, rResId ) {}
+
+    virtual void        Modify();
+    virtual void        SetValue( long nValue );
+    virtual long        GetValue() const;
+};
 
 //===================================================================
 
@@ -88,9 +107,8 @@ public:
     virtual void        DataChanged     ( const DataChangedEvent& rDCEvt );
 
 private:
-           ScTablePage( Window*         pParent,
-                         const SfxItemSet&  rCoreSet );
-            ~ScTablePage();
+                    ScTablePage( Window* pParent, const SfxItemSet& rCoreSet );
+    virtual         ~ScTablePage();
 
     void            ShowImage();
 
@@ -116,22 +134,24 @@ private:
     CheckBox        aBtnFormulas;
     CheckBox        aBtnNullVals;
 
-    FixedLine       aFlScale;
-    RadioButton     aBtnScaleAll;
-    RadioButton     aBtnScalePageNum;
-    MetricField     aEdScaleAll;
-    NumericField    aEdScalePageNum;
+    FixedLine           aFlScale;
+    FixedText           aFtScaleMode;
+    ListBox             aLbScaleMode;
+    FixedText           aFtScaleAll;
+    MetricField         aEdScaleAll;
+    FixedText           aFtScalePageWidth;
+    EmptyNumericField   aEdScalePageWidth;
+    FixedText           aFtScalePageHeight;
+    EmptyNumericField   aEdScalePageHeight;
+    FixedText           aFtScalePageNum;
+    NumericField        aEdScalePageNum;
 
-#ifdef _TPTABLE_CXX
 private:
     //------------------------------------
     // Handler:
-    DECL_LINK( ScaleHdl,   RadioButton* );
-    DECL_LINK( PageDirHdl, RadioButton* );
-    DECL_LINK( PageNoHdl,  CheckBox* );
-#endif
+    DECL_LINK( PageDirHdl,      RadioButton* );
+    DECL_LINK( PageNoHdl,       CheckBox* );
+    DECL_LINK( ScaleHdl,        ListBox* );
 };
-
-
 
 #endif // SC_TPTABLE_HXX
