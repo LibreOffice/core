@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReferencePageSet.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-09 08:20:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module textfield {
     @see com::sun::star::text::TextField
     @see com::sun::star::text::textfield::ReferencePageGet
 */
-service ReferencePageSet
+published service ReferencePageSet
 {
     service  com::sun::star::text::TextField;
     /** determins an offset value to change the displayed value of a ReferencePageGet text field.
