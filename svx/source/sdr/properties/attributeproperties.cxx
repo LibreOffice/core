@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributeproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:31:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,8 @@ namespace sdr
             return *(new SfxItemSet(rPool,
 
                 // ranges from SdrAttrObj
-                SDRATTR_START, SDRATTRSET_SHADOW,
-                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // end
@@ -372,65 +372,65 @@ namespace sdr
             return mpStyleSheet;
         }
 
-        void AttributeProperties::PreProcessSave()
-        {
-            // call parent
-            DefaultProperties::PreProcessSave();
+//BFS01     void AttributeProperties::PreProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         DefaultProperties::PreProcessSave();
+//BFS01
+//BFS01         // force ItemSet
+//BFS01         GetObjectItemSet();
+//BFS01
+//BFS01         // prepare SetItems for storage
+//BFS01         const SfxItemSet& rSet = *mpItemSet;
+//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
+//BFS01
+//BFS01         XLineAttrSetItem aLineAttr(rSet.GetPool());
+//BFS01         aLineAttr.GetItemSet().Put(rSet);
+//BFS01         aLineAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aLineAttr);
+//BFS01
+//BFS01         XFillAttrSetItem aFillAttr(rSet.GetPool());
+//BFS01         aFillAttr.GetItemSet().Put(rSet);
+//BFS01         aFillAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aFillAttr);
+//BFS01
+//BFS01         XTextAttrSetItem aTextAttr(rSet.GetPool());
+//BFS01         aTextAttr.GetItemSet().Put(rSet);
+//BFS01         aTextAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aTextAttr);
+//BFS01
+//BFS01         SdrShadowSetItem aShadAttr(rSet.GetPool());
+//BFS01         aShadAttr.GetItemSet().Put(rSet);
+//BFS01         aShadAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aShadAttr);
+//BFS01
+//BFS01         SdrOutlinerSetItem aOutlAttr(rSet.GetPool());
+//BFS01         aOutlAttr.GetItemSet().Put(rSet);
+//BFS01         aOutlAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aOutlAttr);
+//BFS01
+//BFS01         SdrMiscSetItem aMiscAttr(rSet.GetPool());
+//BFS01         aMiscAttr.GetItemSet().Put(rSet);
+//BFS01         aMiscAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aMiscAttr);
+//BFS01     }
 
-            // force ItemSet
-            GetObjectItemSet();
-
-            // prepare SetItems for storage
-            const SfxItemSet& rSet = *mpItemSet;
-            const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-
-            XLineAttrSetItem aLineAttr(rSet.GetPool());
-            aLineAttr.GetItemSet().Put(rSet);
-            aLineAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aLineAttr);
-
-            XFillAttrSetItem aFillAttr(rSet.GetPool());
-            aFillAttr.GetItemSet().Put(rSet);
-            aFillAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aFillAttr);
-
-            XTextAttrSetItem aTextAttr(rSet.GetPool());
-            aTextAttr.GetItemSet().Put(rSet);
-            aTextAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aTextAttr);
-
-            SdrShadowSetItem aShadAttr(rSet.GetPool());
-            aShadAttr.GetItemSet().Put(rSet);
-            aShadAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aShadAttr);
-
-            SdrOutlinerSetItem aOutlAttr(rSet.GetPool());
-            aOutlAttr.GetItemSet().Put(rSet);
-            aOutlAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aOutlAttr);
-
-            SdrMiscSetItem aMiscAttr(rSet.GetPool());
-            aMiscAttr.GetItemSet().Put(rSet);
-            aMiscAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aMiscAttr);
-        }
-
-        void AttributeProperties::PostProcessSave()
-        {
-            // call parent
-            DefaultProperties::PostProcessSave();
-
-            // remove SetItems from local itemset
-            if(mpItemSet)
-            {
-                mpItemSet->ClearItem(XATTRSET_LINE);
-                mpItemSet->ClearItem(XATTRSET_FILL);
-                mpItemSet->ClearItem(XATTRSET_TEXT);
-                mpItemSet->ClearItem(SDRATTRSET_SHADOW);
-                mpItemSet->ClearItem(SDRATTRSET_OUTLINER);
-                mpItemSet->ClearItem(SDRATTRSET_MISC);
-            }
-        }
+//BFS01     void AttributeProperties::PostProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         DefaultProperties::PostProcessSave();
+//BFS01
+//BFS01         // remove SetItems from local itemset
+//BFS01         if(mpItemSet)
+//BFS01         {
+//BFS01             mpItemSet->ClearItem(XATTRSET_LINE);
+//BFS01             mpItemSet->ClearItem(XATTRSET_FILL);
+//BFS01             mpItemSet->ClearItem(XATTRSET_TEXT);
+//BFS01             mpItemSet->ClearItem(SDRATTRSET_SHADOW);
+//BFS01             mpItemSet->ClearItem(SDRATTRSET_OUTLINER);
+//BFS01             mpItemSet->ClearItem(SDRATTRSET_MISC);
+//BFS01         }
+//BFS01     }
 
         void AttributeProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
         {
