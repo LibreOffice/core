@@ -2,9 +2,9 @@
  *
  *  $RCSfile: maildispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:22:15 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,15 @@ public:
         @return
         <TRUE/> if the sending thread is running.
     */
-    bool isStarted();
+    bool isStarted() const;
 
+    /** returns if the thread is still running
+    */
+    bool isRunning() const;
+    /** returns if shutdown has already been called
+    */
+    bool isShutdownRequested() const
+        { return shutdown_requested_; }
     /**
         Register a listener for mail dispatcher events.
     */
@@ -203,6 +210,7 @@ private:
     ::rtl::Reference<MailDispatcher> m_xSelfReference;
     bool run_;
     bool shutdown_requested_;
+    bool bIsInRun;
 };
 
 #endif // INCLUDED_MAILDISPATCHER_HXX
