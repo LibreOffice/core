@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.55 $
+*  $Revision: 1.56 $
 *
-*  last change: $Author: obo $ $Date: 2004-10-18 14:43:05 $
+*  last change: $Author: obo $ $Date: 2004-10-21 11:39:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -379,7 +379,7 @@ File gid_File_Lib_Cppuhelper
   #endif
 End
 
-#ifdef UNX
+#ifdef LINUX
 #ifdef ENABLE_GNOMEVFS
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
@@ -1473,7 +1473,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Schd , schd)
 
 //
 // start binfilter #110743#
-// 
+//
 
 STD_LIB_FILE( gid_File_Lib_Bf_Sch, bf_sch)
 STD_LIB_FILE( gid_File_Lib_Bf_Lng, bf_lng)
@@ -1490,7 +1490,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Bindet, bindet)
 
 //
 // end binfilter #110743#
-// 
+//
 
 #ifndef MACOSX
 
@@ -1731,7 +1731,7 @@ End
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Localebe, localebe1.uno )
 
-#if defined(UNX) && defined(ENABLE_GNOMEVFS)
+#if defined(LINUX) && defined(ENABLE_GNOMEVFS)
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Gconfebe, gconfbe1.uno )
 #endif
 
@@ -1988,7 +1988,7 @@ File gid_File_Lib_Sunjavaplugin
   #endif
     Styles = (PACKED);
 End
-#endif  
+#endif
 
 // AVMedia
 STD_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
