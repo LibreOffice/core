@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 16:23:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 14:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ namespace dbaui
         m_aIndexes.EndSelection();
 
         if (m_aIndexes.IsEditingActive())
-            m_aIndexes.EndEditing(sal_True);
+            m_aIndexes.EndEditing(sal_False);
 
         // commit the old data
         if (m_aIndexes.FirstSelected() != m_pPreviousSelection)
@@ -884,6 +884,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/11 16:23:16  fs
+ *  #86862# allow reset for new indexes - mapped a drop without confirmation
+ *
  *  Revision 1.9  2001/05/11 15:22:33  fs
  *  #86788# recognize an active editing when closing / #86860# property check for index name conflicts
  *
