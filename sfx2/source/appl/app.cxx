@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:26:37 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,6 @@ SfxApplication* SfxApplication::GetOrCreate()
 
         pNew->NotifyEvent(SfxEventHint(SFX_EVENT_STARTAPP), sal_False);
     }
-
     return pApp;
 }
 
