@@ -1,56 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Joerg Budischewski </Author>
-
-<Name>  com.sun.star.comp.io.Connector </Name>
-
-<Description>
-    This component allows
-    to establish a connection to another process.
-</Description>
-
-<ModuleName>    connectr    </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  c++ </Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>  com.sun.star.connection.Connector   </SupportedService>
-
-<ServiceDependency> ... </ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    vos         </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper2 </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
-<RuntimeModuleDependency>   vos2            </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
-
-<Type>   com.sun.star.connection.XConnector                         </Type>
-<Type>   com.sun.star.connection.XConnectionBroadcaster                         </Type>
-<Type>   com.sun.star.io.UnexpectedEOFException                     </Type>
-<Type>   com.sun.star.io.WrongFormatException                           </Type>
-<Type>   com.sun.star.lang.XComponent                               </Type>
-<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
-<Type>   com.sun.star.lang.XSingleServiceFactory                    </Type>
-<Type>   com.sun.star.lang.XServiceInfo                                 </Type>
-<Type>   com.sun.star.lang.XTypeProvider                                </Type>
-<Type>   com.sun.star.lang.IllegalArgumentException                 </Type>
-<Type>   com.sun.star.registry.XRegistryKey                         </Type>
-<Type>   com.sun.star.registry.XImplementationRegistration          </Type>
-<Type>   com.sun.star.test.XSimpleTest                              </Type>
-<Type>   com.sun.star.uno.TypeClass                                 </Type>
-<Type>   com.sun.star.uno.XWeak                                 </Type>
-<Type>   com.sun.star.uno.XAggregation                              </Type>
-
-</COMPONENTDESCRIPTION>
-
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   connectr    </module-name>
+    <component-description>
+        <author> Joerg Budischewski </author>
+        <name>  com.sun.star.comp.io.Connector </name>
+        <description>
+            This component allows
+            to establish a connection to another process.
+        </description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.connection.Connector   </supported-service>
+        <service-dependency>    ... </service-dependency>
+        <type>   com.sun.star.connection.XConnector                         </type>
+        <type>   com.sun.star.connection.XConnectionBroadcaster                         </type>
+        <type>   com.sun.star.io.UnexpectedEOFException                     </type>
+        <type>   com.sun.star.io.WrongFormatException                           </type>
+        <type>   com.sun.star.lang.XComponent                               </type>
+        <type>   com.sun.star.lang.XMultiServiceFactory             </type>
+        <type>   com.sun.star.lang.XSingleServiceFactory                    </type>
+        <type>   com.sun.star.lang.XServiceInfo                                 </type>
+        <type>   com.sun.star.lang.XTypeProvider                                </type>
+        <type>   com.sun.star.lang.IllegalArgumentException                 </type>
+        <type>   com.sun.star.registry.XRegistryKey                         </type>
+        <type>   com.sun.star.registry.XImplementationRegistration          </type>
+        <type>   com.sun.star.test.XSimpleTest                              </type>
+        <type>   com.sun.star.uno.TypeClass                                 </type>
+        <type>   com.sun.star.uno.XWeak                                 </type>
+        <type>   com.sun.star.uno.XAggregation                              </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper2 </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> vos2            </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>
