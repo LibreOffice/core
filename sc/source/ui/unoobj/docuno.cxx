@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-12 10:20:05 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include <svtools/smplhint.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
-#include <unotools/uno3.hxx>
 #include <unotools/charclass.hxx>
 #include <ctype.h>
 #include <float.h>  // DBL_MAX
