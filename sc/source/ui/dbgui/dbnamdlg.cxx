@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:46:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,12 +265,12 @@ void ScDbNameDlg::Init()
     aBtnMore.AddWindow( &aFTOperations );
 
     String  theAreaStr;
-    USHORT  nStartCol   = 0;
-    USHORT  nStartRow   = 0;
-    USHORT  nStartTab   = 0;
-    USHORT  nEndCol     = 0;
-    USHORT  nEndRow     = 0;
-    USHORT  nEndTab     = 0;
+    SCCOL   nStartCol   = 0;
+    SCROW   nStartRow   = 0;
+    SCTAB   nStartTab   = 0;
+    SCCOL   nEndCol     = 0;
+    SCROW   nEndRow     = 0;
+    SCTAB   nEndTab     = 0;
 
     aBtnOk.SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
@@ -302,7 +302,11 @@ void ScDbNameDlg::Init()
                 String      theDbName;
                 ScAddress&  rStart = theCurArea.aStart;
                 ScAddress&  rEnd   = theCurArea.aEnd;
-                USHORT      nCol1, nCol2, nRow1, nRow2, nTab;
+                SCCOL nCol1;
+                SCCOL  nCol2;
+                SCROW  nRow1;
+                SCROW  nRow2;
+                SCTAB  nTab;
 
                 pDBData->GetArea( nTab, nCol1, nRow1, nCol2, nRow2 );
 
@@ -452,11 +456,11 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
 
     if ( pData )
     {
-        USHORT nColStart = 0;
-        USHORT nRowStart = 0;
-        USHORT nColEnd   = 0;
-        USHORT nRowEnd   = 0;
-        USHORT nTab      = 0;
+        SCCOL nColStart = 0;
+        SCROW nRowStart = 0;
+        SCCOL nColEnd    = 0;
+        SCROW nRowEnd    = 0;
+        SCTAB nTab       = 0;
 
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
@@ -629,7 +633,9 @@ IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 
             if ( pEntry )
             {
-                USHORT nTab, nColStart, nRowStart, nColEnd, nRowEnd;
+                SCTAB nTab;
+                SCCOL nColStart, nColEnd;
+                SCROW nRowStart, nRowEnd;
                 pEntry->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
                 aRemoveList.Insert(
                     new ScRange( ScAddress( nColStart, nRowStart, nTab ),
