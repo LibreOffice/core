@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-24 15:12:24 $
+ *  last change: $Author: mtg $ $Date: 2001-01-25 12:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,6 +895,7 @@ XML_CONSTASCII_ACTION( sXML_list_level, "list-level" );
 XML_CONSTASCII_ACTION( sXML_list_level_style_bullet, "list-level-style-bullet" );
 XML_CONSTASCII_ACTION( sXML_list_level_style_image, "list-level-style-image" );
 XML_CONSTASCII_ACTION( sXML_list_level_style_number, "list-level-style-number" );
+XML_CONSTASCII_ACTION( sXML_list_name, "list-name" );
 XML_CONSTASCII_ACTION( sXML_list_style, "list-style" );
 XML_CONSTASCII_ACTION( sXML_list_style_name, "list-style-name" );
 XML_CONSTASCII_ACTION( sXML_ln, "ln" );
