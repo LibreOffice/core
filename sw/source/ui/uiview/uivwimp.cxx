@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-10-28 08:56:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 #include <cmdid.h>
@@ -305,6 +302,34 @@ void SwView_Impl::AddClipboardListener()
         pClipEvtLstnr->AddRemoveListener( TRUE );
     }
 }
+/* -----------------3/31/2003 11:42AM----------------
+
+ --------------------------------------------------*/
+void SwView_Impl::Invalidate()
+{
+    GetUNOObject_Impl()->Invalidate();
+    Reference< XUnoTunnel > xTunnel(xTransferable.get(), UNO_QUERY);
+    if(xTunnel.is())
+
+    {
+        SwTransferable* pTransferable = (SwTransferable*)xTunnel->getSomething(SwTransferable::getUnoTunnelId());
+        if(pTransferable)
+            pTransferable->Invalidate();
+    }
+}
+/* -----------------3/31/2003 12:40PM----------------
+
+ --------------------------------------------------*/
+void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
+{
+    //prevent removing of the non-referenced SwTransferable
+    rTransferable.m_refCount++;;
+    {
+        xTransferable = Reference<XUnoTunnel> (&rTransferable);
+    }
+    rTransferable.m_refCount--;
+}
+
 // ------------------------- SwScannerEventListener ---------------------
 
 SwScannerEventListener::~SwScannerEventListener()
