@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 13:59:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 06:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,13 @@
 #define HID_DSBROWSER_DIRECTSQL                     (HID_DBACCESS_START + 186)
 #define HID_DSADMIN_LDAP_ROWCOUNT                   (HID_DBACCESS_START + 187)
 #define HID_BROWSER_QUERY_PASTE                     (HID_DBACCESS_START + 188)
+#define HID_BROWSER_QUERY_EDITSQL                   (HID_DBACCESS_START + 189)
+#define HID_BROWSER_NEW_LINK                        (HID_DBACCESS_START + 190)
+#define HID_BROWSER_EDIT_LINK                       (HID_DBACCESS_START + 191)
+#define HID_BROWSER_DROP_LINK                       (HID_DBACCESS_START + 192)
+#define HID_BROWSER_OPEN_DOCUMENT                   (HID_DBACCESS_START + 193)
+#define HID_BROWSER_EDIT_DOCUMENT                   (HID_DBACCESS_START + 194)
+#define HID_BROWSER_BEW_DOCUMENT                    (HID_DBACCESS_START + 195)
 
 
 // don't forget to update the file util/hidother.src
@@ -289,6 +296,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2001/07/03 13:59:25  oj
+ *  #86890# impl query paste in contextmenu
+ *
  *  Revision 1.37  2001/06/25 08:23:31  oj
  *  #88699# new helpids
  *
