@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-11-07 14:42:42 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@ class SwChapterNumRules;
  * --------------------------------------------------*/
 class SwOutlineTabDialog : public SfxTabDialog
 {
+    static     USHORT    nNumLevel;
+
     String              aNullStr;
     String              aCollNames[MAXLEVEL];
     PopupMenu           aFormMenu;
@@ -121,7 +123,6 @@ class SwOutlineTabDialog : public SfxTabDialog
     SwNumRule*          pNumRule;
     SwChapterNumRules*  pChapterNumRules;
 
-    USHORT              nNumLevel;
     BOOL                bModified : 1;
 
     protected:
@@ -141,8 +142,9 @@ class SwOutlineTabDialog : public SfxTabDialog
     SwNumRule*          GetNumRule() {return pNumRule;}
     USHORT              GetLevel(const String &rFmtName) const;
     String*             GetCollNames() {return aCollNames;}
-    USHORT              GetActNumLevel() {return nNumLevel;}
-    void                SetActNumLevel(USHORT nSet) {nNumLevel = nSet;}
+
+    static USHORT       GetActNumLevel() {return nNumLevel;}
+    static void         SetActNumLevel(USHORT nSet) {nNumLevel = nSet;}
 };
 /* -----------------07.07.98 13:47-------------------
  *
