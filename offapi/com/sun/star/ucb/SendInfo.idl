@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SendInfo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module ucb {
     <p>It can contain any string values (server names, user names, passwords,
     ...).
 */
-struct SendInfo
+published struct SendInfo
 {
     //-------------------------------------------------------------------------
     /** the protocol to which the info is related (i.e. "NNTP", "SMTP", "VIM").
