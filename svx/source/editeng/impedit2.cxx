@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:07:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1540,7 +1540,7 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
         i18n::Boundary aBoundary = xBI->getWordBoundary( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale( aPaM ), nWordType, sal_True );
         // don't select when curser at end of word
         if ( ( aBoundary.endPos > aPaM.GetIndex() ) &&
-             ( bAcceptStartOfWord || ( aBoundary.startPos < aPaM.GetIndex() ) ) )
+             ( ( aBoundary.startPos < aPaM.GetIndex() ) || ( bAcceptStartOfWord && ( aBoundary.startPos == aPaM.GetIndex() ) ) ) )
         {
             aNewSel.Min().SetIndex( (USHORT)aBoundary.startPos );
             aNewSel.Max().SetIndex( (USHORT)aBoundary.endPos );
@@ -1597,7 +1597,8 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
                     }
                 }
             }
-            pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() );
+            // #112831# Last Field might go from 0xffff to 0x0000
+            pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : NULL;
         }
 
         ::rtl::OUString aOUText( aText );
@@ -2523,6 +2524,9 @@ EditPaM ImpEditEngine::ImpInsertFeature( EditSelection aCurSel, const SfxPoolIte
     else
         aPaM = aCurSel.Max();
 
+    if ( aPaM.GetIndex() >= 0xfffe )
+        return aPaM;
+
 #ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new EditUndoInsertFeature( this, CreateEPaM( aPaM ), rItem ) );
@@ -2551,6 +2555,12 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditSelection& rCurSel, BOOL bK
 
 EditPaM ImpEditEngine::ImpInsertParaBreak( const EditPaM& rPaM, BOOL bKeepEndingAttribs )
 {
+    if ( aEditDoc.Count() >= 0xFFFE )
+    {
+        DBG_ERROR( "Can't process more than 64K paragraphs!" );
+        return rPaM;
+    }
+
 #ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new EditUndoSplitPara( this, aEditDoc.GetPos( rPaM.GetNode() ), rPaM.GetIndex() ) );
