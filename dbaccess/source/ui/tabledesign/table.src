@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:25:10 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,6 +1344,79 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
 {
     Text = "Primärschlüssel betroffen";
     Text [ english_us ] = "primary key related";
+};
+String STR_COLUMN_NAME
+{
+    Text = "Spalte" ;
+    Text [ ENGLISH ] = "column" ;
+    Text[ english_us ] = "Column";
+    Text[ portuguese ] = "Coluna";
+    Text[ greek ] = "ÓôŞëç";
+    Text[ dutch ] = "Kolom";
+    Text[ french ] = "Colonne";
+    Text[ spanish ] = "Columna";
+    Text[ swedish ] = "Kolumn";
+    Text[ russian ] = "Êîëîíêà";
+    Text[ italian ] = "Colonna";
+    Text[ danish ] = "Kolonne";
+    Text[ polish ] = "Kolumna";
+    Text[ portuguese_brazilian ] = "column";
+    Text[ japanese ] = "—ñ";
+    Text[ korean ] = "¿­";
+    Text[ chinese_simplified ] = "ÁĞ";
+    Text[ chinese_traditional ] = "Äæ";
+    Text[ arabic ] = "ÚãæÏ";
+    Text[ turkish ] = "Sütun";
+};
+String STR_QRY_CONTINUE
+{
+    Text = "Wollen Sie trotzdem fortfahren?" ;
+    Text [ ENGLISH ] = "Continue?" ;
+    Text [ english_us ] = "Continue?" ;
+    Text [ portuguese ] = "Deseja continuar?" ;
+    Text [ portuguese_brazilian ] = "Wollen Sie trotzdem fortfahren?" ;
+    Text [ swedish ] = "Vill Du trots detta fortsätta?" ;
+    Text [ danish ] = "Vil du fortsætte alligevel?" ;
+    Text [ italian ] = "Volete continuare lo stesso?" ;
+    Text [ spanish ] = "¿Desea continuar de todos modos?" ;
+    Text [ french ] = "Voulez-vous vraiment continuer ?" ;
+    Text [ dutch ] = "Wilt u toch doorgaan?" ;
+    Text[ chinese_simplified ] = "Äú»¹ÊÇÒª¼ÌĞø£¿";
+    Text[ russian ] = "Âû õîòèòå âñå ğàâíî ïğîäîëæèòü?";
+    Text[ polish ] = "Chcesz mimo to kontynuowaæ?";
+    Text[ japanese ] = "‚»‚ê‚Å‚à‘±s‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "ÁÙ¬O­nÄ~Äò¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÇáãÊÇÈÚÉ Úáì ÇáÑÛã ãä Ğáß¿";
+    Text[ dutch ] = "Wilt u toch doorgaan?";
+    Text[ chinese_simplified ] = "Äú»¹ÊÇÒª¼ÌĞø£¿";
+    Text[ greek ] = "Èİëåôå íá óõíå÷ßóåôå;";
+    Text[ korean ] = "°è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Yine de devam etmek istiyor musunuz?";
+};
+String STR_STAT_WARNING
+{
+    Text = "Warnung!" ;
+    Text [ ENGLISH ] = "Warning!" ;
+    Text [ english_us ] = "Warning!" ;
+    Text [ portuguese ] = "Aviso!" ;
+    Text [ portuguese_brazilian ] = "Warnung!" ;
+    Text [ swedish ] = "Varning!" ;
+    Text [ danish ] = "Advarsel!" ;
+    Text [ italian ] = "Attenzione!" ;
+    Text [ spanish ] = "¡Advertencia!" ;
+    Text [ french ] = "Avertissement !" ;
+    Text [ dutch ] = "Waarschuwing!" ;
+    Text[ chinese_simplified ] = "¾¯¸æ£¡";
+    Text[ russian ] = "Ïğåäóïğåæäåíèå!";
+    Text[ polish ] = "Ostrze¿enie!";
+    Text[ japanese ] = "Œx!";
+    Text[ chinese_traditional ] = "Äµ§i¡I";
+    Text[ arabic ] = "ÊÍĞíÑ!";
+    Text[ dutch ] = "Waarschuwing!";
+    Text[ chinese_simplified ] = "¾¯¸æ£¡";
+    Text[ greek ] = "Ğñïåéäïğïßçóç!";
+    Text[ korean ] = "°æ°í!";
+    Text[ turkish ] = "Uyarı!";
 };
 
 
