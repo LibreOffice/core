@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-08 01:28:59 $
+ *  last change: $Author: pluby $ $Date: 2000-12-16 02:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,14 @@
 
 void SalTimer::Start( ULONG nMS )
 {
-    VCLApplication_StartPeriodicEvents( nMS );
+    VCLEvent_StartPeriodicEvents( nMS );
 }
 
 // -----------------------------------------------------------------------
 
 void SalTimer::Stop()
 {
-    VCLApplication_StopPeriodicEvents();
+    VCLEvent_StopPeriodicEvents();
 }
 
 // -----------------------------------------------------------------------
