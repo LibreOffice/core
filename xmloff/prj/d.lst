@@ -98,6 +98,8 @@ hedabu: ..\inc\GradientStyle.hxx %_DEST%\inc%_EXT%\xmloff\GradientStyle.hxx
 hedabu: ..\inc\MarkerStyle.hxx %_DEST%\inc%_EXT%\xmloff\MarkerStyle.hxx
 hedabu: ..\inc\HatchStyle.hxx %_DEST%\inc%_EXT%\xmloff\HatchStyle.hxx
 hedabu: ..\inc\ImageStyle.hxx %_DEST%\inc%_EXT%\xmloff\ImageStyle.hxx
+hedabu: ..\inc\SettingsExportHelper.hxx %_DEST%inc%_EXT%\xmloff\SettingsExportHelper.hxx
+hedabu: ..\inc\DocumentSettingsContext.hxx %_DEST%inc%_EXT%\xmloff\DocumentSettingsContext.hxx
 
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
