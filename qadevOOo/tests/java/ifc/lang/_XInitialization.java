@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInitialization.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:45:05 $
+ *  last change:$Date: 2005-02-24 17:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,31 @@ public class _XInitialization extends MultiMethodTest {
         boolean result = true ;
 
         try {
+            XInitialization xInit = (XInitialization) tEnv.getObjRelation("XInitialization.xIni");
+            if (xInit == null) xInit = oObj;
+
+            log.println("calling method with valid arguments...");
             Object[] args = (Object[]) tEnv.getObjRelation("XInitialization.args");
             if (args==null) {
-                oObj.initialize(new Object[0]);
+                xInit.initialize(new Object[0]);
             } else {
-                oObj.initialize(args);
+                xInit.initialize(args);
+            }
+
+            // try to call the method with invalid parameters
+            Object[] ExArgs = (Object[]) tEnv.getObjRelation("XInitialization.ExceptionArgs");
+            if (ExArgs !=null) {
+                log.println("calling method with in-valid arguments...");
+                try{
+                    result = false;
+                    xInit.initialize(ExArgs);
+                } catch (com.sun.star.uno.Exception e) {
+                    log.println("Expected Exception 'com.sun.star.uno.Exception' occured -> OK") ;
+                    result = true ;
+                } catch (Exception e) {
+                    log.println("Un-Expected Exception occured -> FALSE") ;
+                    log.println(e.toString());
+                }
             }
 
         } catch (com.sun.star.uno.Exception e) {
