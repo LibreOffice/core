@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:27:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,7 +1151,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
 {
     short eType = SYMBOLTYPE_FORMAT;
     sal_Unicode cToken;
-    sal_Unicode cLetter;                               // Zwischenergebnis
+    sal_Unicode cLetter = ' ';                               // Zwischenergebnis
     xub_StrLen nLen = rString.Len();
     ScanState eState = SsStart;
     sSymbol.Erase();
@@ -1426,8 +1426,9 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     rStream >> eType >> fLimit1 >> fLimit2
             >> nOp1 >> nOp2 >> bStandard >> bIsUsed;
     NfHackConversion eHackConversion = NF_CONVERT_NONE;
-    BOOL bOldConvert;
-    LanguageType eOldTmpLang, eOldNewLang;
+    BOOL bOldConvert = FALSE;
+    LanguageType eOldTmpLang = 0;
+    LanguageType eOldNewLang = 0;
     if ( pHackConverter )
     {   // werden nur hierbei gebraucht
         bOldConvert = rScan.GetConvertMode();
@@ -2533,6 +2534,13 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
         nMin = (nSeconds%3600) / 60;
         nSec = nSeconds%60;
     }
+    else {
+        // TODO  What should these be set to?
+        nHour = 0;
+        nMin  = 0;
+        nSec  = 0;
+    }
+
     sal_Unicode cAmPm = ' ';                   // a oder p
     if (rInfo.nCntExp)     // AM/PM
     {
@@ -3044,6 +3052,11 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         nHour = nSeconds / 3600;
         nMin = (nSeconds%3600) / 60;
         nSec = nSeconds%60;
+    }
+    else {
+        nHour = 0;  // TODO What should these values be?
+        nMin  = 0;
+        nSec  = 0;
     }
     sal_Unicode cAmPm = ' ';                   // a oder p
     if (rInfo.nCntExp)     // AM/PM
@@ -4310,7 +4323,7 @@ void SvNumberformat::EraseComment( String& rStr )
     BOOL bInString = FALSE;
     BOOL bEscaped = FALSE;
     BOOL bFound = FALSE;
-    xub_StrLen nPos;
+    xub_StrLen nPos = 0;
     while ( !bFound && *p )
     {
         switch ( *p )
