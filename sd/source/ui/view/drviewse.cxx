@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-29 14:03:56 $
+ *  last change: $Author: ka $ $Date: 2001-07-26 12:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,9 +982,6 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         {
             const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-            GetViewFrame()->GetDispatcher()->Execute (SID_VIEWSHELL3, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-
-/*
             if ( pReqArgs )
             {
                 SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_OUTLINEMODE, FALSE);
@@ -993,7 +990,6 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL2,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-*/
 
             Invalidate ();
             rReq.Ignore ();
