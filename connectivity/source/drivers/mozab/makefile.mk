@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2001-10-16 11:52:03 $
+#   last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,7 +149,6 @@ MOZSLOFILES=\
 SLO2FILES=\
         $(SLO)$/MCatalog.obj					\
         $(SLO)$/MColumns.obj					\
-        $(SLO)$/MDriver.obj					\
         $(SLO)$/MTable.obj						\
         $(SLO)$/MTables.obj						\
         $(SLO)$/MColumnAlias.obj				\
@@ -176,11 +175,6 @@ SHL2STDLIBS=\
     $(COMPHELPERLIB)			\
     $(MOZ_LIB_XPCOM)
 
-.IF "$(GUI)" == "WNT"
-SHL2STDLIBS+= i$(MOZAB_TARGET)$(MOZAB_MAJOR).lib
-.ELSE
-SHL2STDLIBS+= -l$(MOZAB_TARGET)$(MOZAB_MAJOR)
-.ENDIF
 
 SHL2DEPN=
 SHL2IMPLIB=	i$(TARGET2)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:27:28 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,12 @@ namespace connectivity
 
             const OColumnAlias & getColumnAlias() const
                               { return (m_aColumnAlias); }
+
+            static const sal_Char*    getSDBC_SCHEME_MOZILLA();
+            static const sal_Char*    getSDBC_SCHEME_LDAP();
+            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
+            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
+            static ::rtl::OUString    getImplementationName_Static();
 
             // End of Additions from the land of mozilla
         };

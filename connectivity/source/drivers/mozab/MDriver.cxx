@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 07:51:48 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ void MozabDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.MozabDriver");
+    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
         // this name is referenced in the configuration and in the mozab.xml
         // Please take care when changing it.
 }
@@ -246,28 +246,27 @@ sal_Bool MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
 // -----------------------------------------------------------------------------
 const sal_Char* MozabDriver::getSDBC_SCHEME_MOZILLA()
 {
-    static sal_Char*    SDBC_SCHEME_MOZILLA         = "mozilla";
+    static sal_Char*    SDBC_SCHEME_MOZILLA         = MOZAB_MOZILLA_SCHEMA;
     return SDBC_SCHEME_MOZILLA;
 }
 // -----------------------------------------------------------------------------
 const sal_Char* MozabDriver::getSDBC_SCHEME_LDAP()
 {
-    static sal_Char*    SDBC_SCHEME_LDAP            = "ldap";
+    static sal_Char*    SDBC_SCHEME_LDAP            = MOZAB_LDAP_SCHEMA;
     return SDBC_SCHEME_LDAP;
 }
 // -----------------------------------------------------------------------------
 const sal_Char* MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI()
 {
-    static sal_Char*    SDBC_SCHEME_OUTLOOK_MAPI    = "outlook";
+    static sal_Char*    SDBC_SCHEME_OUTLOOK_MAPI    = MOZAB_OUTLOOK_SCHEMA;
     return SDBC_SCHEME_OUTLOOK_MAPI;
 }
 // -----------------------------------------------------------------------------
 const sal_Char* MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS()
 {
-    static sal_Char*    SDBC_SCHEME_OUTLOOK_EXPRESS = "outlookexp";
+    static sal_Char*    SDBC_SCHEME_OUTLOOK_EXPRESS = MOZAB_OUTLOOKEXP_SCHEMA;
     return SDBC_SCHEME_OUTLOOK_EXPRESS;
-}
-// -----------------------------------------------------------------------------
+}// -----------------------------------------------------------------------------
 void MozabDriver::registerClient()
 {
     if (!s_hModule)

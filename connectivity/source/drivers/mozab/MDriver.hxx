@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #include <osl/module.h>
 #endif
 
+
+#define MOZAB_MOZILLA_SCHEMA    "mozilla"
+#define MOZAB_LDAP_SCHEMA       "ldap"
+#define MOZAB_OUTLOOK_SCHEMA    "outlook"
+#define MOZAB_OUTLOOKEXP_SCHEMA "outlookexp"
+#define MOZAB_DRIVER_IMPL_NAME "com.sun.star.comp.sdbc.MozabDriver"
 
 extern "C" void* SAL_CALL OMozabConnection_CreateInstance(void* _pDriver);
 namespace connectivity

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MColumnAlias.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
 #include "MColumnAlias.hxx"
 #endif
-#ifndef _CONNECTIVITY_MAB_DRIVER_HXX_
-#include "MDriver.hxx"
+#ifndef CONNECTIVITY_SCONNECTION_HXX
+#include "MConnection.hxx"
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -210,7 +210,7 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
         // open our driver settings config node
 
         // the config path for our own driver's settings
-    Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB, MozabDriver::getImplementationName_Static() );
+    Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB, OConnection::getImplementationName_Static() );
     if ( xDriverNode.is() )
     {
         try

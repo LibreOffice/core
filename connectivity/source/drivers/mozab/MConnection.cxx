@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:38:07 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,35 @@ namespace connectivity {
     }
 }
 // -----------------------------------------------------------------------------
-
+const sal_Char* OConnection::getSDBC_SCHEME_MOZILLA()
+{
+    static sal_Char*    SDBC_SCHEME_MOZILLA         = MOZAB_MOZILLA_SCHEMA;
+    return SDBC_SCHEME_MOZILLA;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* OConnection::getSDBC_SCHEME_LDAP()
+{
+    static sal_Char*    SDBC_SCHEME_LDAP            = MOZAB_LDAP_SCHEMA;
+    return SDBC_SCHEME_LDAP;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* OConnection::getSDBC_SCHEME_OUTLOOK_MAPI()
+{
+    static sal_Char*    SDBC_SCHEME_OUTLOOK_MAPI    = MOZAB_OUTLOOK_SCHEMA;
+    return SDBC_SCHEME_OUTLOOK_MAPI;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* OConnection::getSDBC_SCHEME_OUTLOOK_EXPRESS()
+{
+    static sal_Char*    SDBC_SCHEME_OUTLOOK_EXPRESS = MOZAB_OUTLOOKEXP_SCHEMA;
+    return SDBC_SCHEME_OUTLOOK_EXPRESS;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OConnection::getImplementationName_Static()
+{
+    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
+}
+// -----------------------------------------------------------------------------
 
 OConnection::OConnection(MozabDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
@@ -222,11 +250,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
     //
     m_IsLDAP = sal_False ;
-    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_MOZILLA() ) == 0 ) {
+    if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_MOZILLA() ) == 0 ) {
         m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
         m_UsesFactory = USES_FACTORY_MOZILLA ;
     }
-    else if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_LDAP() ) == 0 ) {
+    else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_LDAP() ) == 0 ) {
         rtl::OUString sHostName;
         rtl::OUString sBaseDN;
         sal_Int32     nPortNumber = -1;
@@ -284,11 +312,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         m_sMozillaURI += ::rtl::OUString::createFromAscii("?(or(DisplayName,=,DontDoThisAtHome))");
 
     }
-    else if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 ) {
+    else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 ) {
         m_sMozillaURI       = ::rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_MAPI );
         m_UsesFactory       = USES_FACTORY_OUTLOOK_MAPI ;
     }
-    else if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 ) {
+    else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 ) {
         m_sMozillaURI       = rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_EXPRESS );
         m_UsesFactory       = USES_FACTORY_OUTLOOK_EXPRESS ;
         m_bOutlookExpress   = sal_True;

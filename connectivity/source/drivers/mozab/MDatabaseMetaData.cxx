@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,10 +135,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
 {
     static ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
-
-    ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
     aRows.clear();
-
 
     const ::std::vector< ::rtl::OUString >& colNames = m_pConnection->getColumnAlias().getAlias();
     ::osl::MutexGuard aGuard( m_aMutex );
