@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 10:42:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+
+#include <dbgoutsw.hxx>
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 {
@@ -1775,7 +1777,7 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
     }
     // <- #115901#
 
-    BOOL bRet = FALSE;
+    BOOL bRet = TRUE;
     char nDiff = bDown ? 1 : -1;
 
     // ->#115901#
@@ -2941,6 +2943,40 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
         pRule->SetInvalidRule( FALSE );
 }
 // <- #111955#
+
+// -> #i27615#
+void SwDoc::SetMarkedNumLevel(SwNumRule & rNumRule, BYTE nLevel, BOOL nValue)
+{
+    /*
+       - Set new marked level.
+       - Notify all affected nodes of the changed mark.
+    */
+
+    SwBitArray aChangedLevels = rNumRule.SetLevelMarked(nLevel, nValue);
+
+    SwNumRuleInfo aInfo(rNumRule.GetName());
+
+    aInfo.MakeList(*this, FALSE);
+
+    for (int i = 0; i < aInfo.GetList().Count(); i++)
+    {
+        SwTxtNode * pTxtNd = aInfo.GetList().GetObject(i);
+        const SwNodeNum * pNdNum = pTxtNd->GetNum();
+
+        if (pNdNum && aChangedLevels.Get(pNdNum->GetRealLevel()))
+            pTxtNd->NumRuleChgd();
+    }
+}
+
+void SwDoc::SetMarkedNumLevel(const String & sNumRule, BYTE nLevel,
+                              BOOL bValue)
+{
+    SwNumRule * pNumRule = FindNumRulePtr(sNumRule);
+
+    if (pNumRule)
+        SetMarkedNumLevel(*pNumRule, nLevel, bValue);
+}
+// <- #i27615#
 
 // #i23726#
 BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
