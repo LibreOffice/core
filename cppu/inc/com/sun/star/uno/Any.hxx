@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 10:25:04 $
+ *  last change: $Author: mh $ $Date: 2001-10-01 16:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,8 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SA
     case typelib_TypeClass_UNSIGNED_SHORT:
         value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
         return sal_True;
+    default:
+        return sal_False;
     }
     return sal_False;
 }
@@ -268,6 +270,8 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) S
     case typelib_TypeClass_UNSIGNED_SHORT:
         value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
         return sal_True;
+    default:
+        return sal_False;
     }
     return sal_False;
 }
@@ -290,6 +294,8 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SA
     case typelib_TypeClass_UNSIGNED_LONG:
         value = * reinterpret_cast< const sal_Int32 * >( &rAny.pReserved );
         return sal_True;
+    default:
+        return sal_False;
     }
     return sal_False;
 }
@@ -311,6 +317,8 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) S
     case typelib_TypeClass_UNSIGNED_LONG:
         value = * reinterpret_cast< const sal_uInt32 * >( &rAny.pReserved );
         return sal_True;
+    default:
+        return sal_False;
     }
     return sal_False;
 }
@@ -340,6 +348,9 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SA
         value = * reinterpret_cast< const sal_Int64 * >(
             (sizeof(void *) >= sizeof(sal_Int64)) ? (void *)&rAny.pReserved : rAny.pData );
         return sal_True;
+
+    default:
+        return sal_False;
     }
     return sal_False;
 }
@@ -368,6 +379,9 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) S
         value = * reinterpret_cast< const sal_uInt64 * >(
             (sizeof(void *) >= sizeof(sal_uInt64)) ? (void *)&rAny.pReserved : rAny.pData );
         return sal_True;
+
+    default:
+        return sal_False;
     }
     return sal_False;
 }
@@ -390,6 +404,9 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_TH
         value = * reinterpret_cast< const float * >(
             (sizeof(void *) >= sizeof(float)) ? (void *)&rAny.pReserved : rAny.pData );
         return sal_True;
+
+    default:
+        return sal_False;
     }
     return sal_False;
 }
@@ -422,6 +439,9 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_T
         value = * reinterpret_cast< const double * >(
             (sizeof(void *) >= sizeof(double)) ? (void *)&rAny.pReserved : rAny.pData );
         return sal_True;
+
+    default:
+        return sal_False;
     }
     return sal_False;
 }
