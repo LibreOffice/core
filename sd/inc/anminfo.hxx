@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:00 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ private:
 public:
 
 //BFS02 Polygon*                pPolygon;       // fuer nichtlinearen Pfad (unbenutzt)
-    Point                   aStart;         // Startpunkt eines linearen Pfades (unbenutzt)
-    Point                   aEnd;           // Endpunkt eines linearen Pfades (unbenutzt)
+//  Point                   aStart;         // Startpunkt eines linearen Pfades (unbenutzt)
+//  Point                   aEnd;           // Endpunkt eines linearen Pfades (unbenutzt)
     ::com::sun::star::presentation::AnimationEffect         eEffect;        // Animationseffekt
     ::com::sun::star::presentation::AnimationEffect         eTextEffect;    // Animationseffekt fuer Textinhalt
     ::com::sun::star::presentation::AnimationSpeed          eSpeed;         // Geschwindigkeit der Animation
@@ -124,16 +124,17 @@ public:
     BOOL                    bSecondPlayFull;// fuer Objekt ausblenden
     String                  aBookmark;      // Sprung zu Objekt/Seite
     USHORT                  nVerb;          // fuer OLE-Objekt
-    BOOL                    bInvisibleInPresentation;
-    BOOL                    bIsShown;       // in der Show gerade sichtbar, NICHT PERSISTENT!
-    BOOL                    bShow;          // Befehl: mit 1. Effekt zeigen (TRUE)
+//  BOOL                    bInvisibleInPresentation;
+//  BOOL                    bIsShown;       // in der Show gerade sichtbar, NICHT PERSISTENT!
+//  BOOL                    bShow;          // Befehl: mit 1. Effekt zeigen (TRUE)
                                             // oder mit 2. Effekt entfernen (FALSE)
                                             // NICHT PERSISTENT!
-    BOOL                    bDimmed;        // in der Show abgeblendet (TRUE) oder
+//  BOOL                    bDimmed;        // in der Show abgeblendet (TRUE) oder
                                             // nicht (TRUE)
                                             // NICHT PERSISTENT!
     ULONG                   nPresOrder;
 
+public:
                             SdAnimationInfo(SdDrawDocument* pTheDoc);
                             SdAnimationInfo(const SdAnimationInfo& rAnmInfo);
     virtual                 ~SdAnimationInfo();
