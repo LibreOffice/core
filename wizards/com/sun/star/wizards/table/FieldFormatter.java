@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FieldFormatter.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:22:13 $
+*  last change: $Author: hr $ $Date: 2005-04-06 10:19:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -112,6 +112,7 @@ public class FieldFormatter  implements XItemListener{
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (TableWizard.SOFIELDSFORMATPAGE * 100);
         IFieldFormatStep = new Integer(TableWizard.SOFIELDSFORMATPAGE);
+        String sFieldName = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 23);
         String sFieldNames = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 25);
         String sfieldinfo = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 20);
         String sbtnplushelptext = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 45);
@@ -159,7 +160,7 @@ public class FieldFormatter  implements XItemListener{
 
         CurUnoDialog.insertLabel("lblFieldName",
                 new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                new Object[] {UIConsts.INTEGERS[8], sFieldNames, new Integer(158), new Integer(39),IFieldFormatStep, new Short(curtabindex++), new Integer(100)});
+                new Object[] {UIConsts.INTEGERS[8], sFieldName, new Integer(158), new Integer(39),IFieldFormatStep, new Short(curtabindex++), new Integer(100)});
 
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
                 new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
