@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPrintable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:08 $
+ *  last change:$Date: 2003-05-27 12:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.view;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.PaperOrientation;
@@ -164,12 +165,13 @@ public class _XPrintable extends MultiMethodTest {
         boolean result = true ;
 
         final String file = "XPrintable.prt" ;
-        final String fileName = utils.getOfficeTempDirSys(tParam.getMSF())+file ;
-        final String fileURL = utils.getOfficeTemp(tParam.getMSF()) + file ;
+        final String fileName = utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF())+file ;
+        final String fileURL = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) + file ;
 
         XSimpleFileAccess fAcc = null ;
         try {
-            Object oFAcc = tParam.getMSF().createInstance
+            Object oFAcc =
+                ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.ucb.SimpleFileAccess") ;
             fAcc = (XSimpleFileAccess) UnoRuntime.queryInterface
                 (XSimpleFileAccess.class, oFAcc) ;
