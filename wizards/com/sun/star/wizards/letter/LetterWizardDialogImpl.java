@@ -2,8 +2,10 @@ package com.sun.star.wizards.letter;
 
 import java.util.Vector;
 import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.SystemDialog;
@@ -13,9 +15,12 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
+import com.sun.star.document.MacroExecMode;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.*;
@@ -79,14 +84,19 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     public static void main(String args[]) {
         //only being called when starting wizard remotely
-        try {
+
             String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
-            XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
+            XMultiServiceFactory xLocMSF = null;
+            try {
+                xLocMSF = Desktop.connect(ConnectStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } catch (java.lang.Exception e) {
+                e.printStackTrace();
+            }
             LetterWizardDialogImpl lw = new LetterWizardDialogImpl(xLocMSF);
             lw.startWizard(xLocMSF, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void startWizard(XMultiServiceFactory xMSF, Object[] CurPropertyValue) {
@@ -119,6 +129,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             //load the last used settings from the registry and apply listeners to the controls:
             initConfiguration();
 
+            //set the language according to the Linguistic
+            getCurrentLetter().cp_Norm = getOfficeLinguistic();
             initializeTemplates(xMSF);
 
             //update the dialog UI according to the loaded Configuration
@@ -162,7 +174,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     public void finishWizard() {
         switchToStep(getCurrentStep(),getMaxStep());
-        myLetterDoc.setWizardTemplateDocInfo(resources.resLetterWizardDialog_title, resources.resTemplateDescription);
         try {
             //myLetterDoc.xTextDocument.lockControllers();
             FileAccess fileAccess = new FileAccess(xMSF);
@@ -172,11 +183,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                 sPath = myPathSelection.getSelectedPath();
             }
             sPath = fileAccess.getURL(sPath);
-            myLetterDoc.killEmptyUserFields();
-            myLetterDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
-            myLetterDoc.keepBendMarksFrame = (chkUseBendMarks.getState() != 0);
-            myLetterDoc.keepLetterSignsFrame = (chkUseSigns.getState() != 0);
-            myLetterDoc.killEmptyFrames();
 
             //first, if the filename was not changed, thus
             //it is coming from a saved session, check if the
@@ -188,19 +194,31 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                     if (answer == 3) // user said: no, do not overwrite....
                         return;
                 }
+            myLetterDoc.setWizardTemplateDocInfo(resources.resLetterWizardDialog_title, resources.resTemplateDescription);
+            myLetterDoc.killEmptyUserFields();
+            myLetterDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
+            myLetterDoc.keepBendMarksFrame = (chkUseBendMarks.getState() != 0);
+            myLetterDoc.keepLetterSignsFrame = (chkUseSigns.getState() != 0);
+            myLetterDoc.killEmptyFrames();
 
 
-            //bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer_StarOffice_XML_Writer_Template", false, "Template could not be saved!");
-                bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to " + sPath);
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to " + sPath);
 
             if (bSaveSuccess) {
                 saveConfiguration();
                 xWindow.setVisible(false);
                 closeDocument();
                 //myLetterDoc.xTextDocument.unlockControllers();
-                PropertyValue loadValues[] = new PropertyValue[1];
+                PropertyValue loadValues[] = new PropertyValue[3];
                 loadValues[0] = new PropertyValue();
                 loadValues[0].Name = "AsTemplate";
+                loadValues[1] = new PropertyValue();
+                loadValues[1].Name = "MacroExecutionMode";
+                loadValues[1].Value = new Short (MacroExecMode.ALWAYS_EXECUTE);
+                loadValues[2] = new PropertyValue();
+                loadValues[2].Name = "UpdateDocMode";
+                loadValues[2].Value = new Short (com.sun.star.document.UpdateDocMode.FULL_UPDATE);
+
                 if (bEditTemplate) {
                     loadValues[0].Value = Boolean.FALSE;
                 } else {
@@ -539,7 +557,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                 myLetterDoc.switchElement("Company Logo", logostatus);
             }
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -551,7 +568,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                 myLetterDoc.switchElement("Sender Address Repeated", rstatus);
             }
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -613,10 +629,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     private void setPossibleAddressReceiver(boolean bState) {
         if (myLetterDoc.hasElement("Sender Address Repeated")) {
             setControlProperty("chkUseAddressReceiver", "Enabled", new Boolean(bState));
-            /*
-            if (!bState) {
-                chkUseAddressReceiver.setState((short) 0);
-            }*/
             chkUseAddressReceiverItemChanged();
         }
     }
@@ -714,7 +726,19 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             enableBusinessPaper();
         } else {
             disableBusinessPaper();
+            setPossibleSenderData(true);
         }
+    }
+
+    private int getOfficeLinguistic() {
+        int oL = 0;
+        String OfficeLinguistic = Configuration.getOfficeLinguistic(xMSF);
+        for (int i = 0; i < Norms.length; i++){
+            if (Norms[i].equalsIgnoreCase(OfficeLinguistic)) {
+                oL = i;
+            }
+        }
+        return oL;
     }
 
     private void setPossibleSenderData(boolean bState) {
