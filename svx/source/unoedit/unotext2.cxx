@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:47:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 17:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ void SAL_CALL SvxUnoTextContent::attach( const uno::Reference< text::XTextRange 
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextContent::getAnchor() throw( uno::RuntimeException )
 {
-    return uno::Reference< text::XTextRange > ();
+    return uno::Reference< text::XTextRange >::query( xParentText );
 }
 
 // XComponent
