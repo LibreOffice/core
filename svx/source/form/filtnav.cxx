@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,6 @@
 #include <tools/shl.hxx>
 #endif
 
-#ifndef _SVT_SDBPARSE_HXX //autogen wg. SdbSqlParser
-#include <svtools/sdbparse.hxx>
-#endif
-
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
@@ -183,6 +179,9 @@
 #endif
 #ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 
 #define SYNC_DELAY                      200
@@ -270,11 +269,12 @@ Image FmFilterItems::GetImage() const
 //========================================================================
 TYPEINIT1(FmFilterItem, FmFilterData);
 //------------------------------------------------------------------------
-FmFilterItem::FmFilterItem(FmFilterItems* pParent,
+FmFilterItem::FmFilterItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+                           FmFilterItems* pParent,
                      const ::rtl::OUString& aFieldName,
                      const ::rtl::OUString& aText,
                      const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
-          :FmFilterData(pParent, aText)
+          :FmFilterData(_rxFactory,pParent, aText)
           ,m_aFieldName(aFieldName)
           ,m_xText(_xText)
 {
@@ -609,7 +609,7 @@ void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e)
             // searching the component by field name
             ::rtl::OUString aFieldName = getLabelName(Reference< ::com::sun::star::beans::XPropertySet > (Reference< ::com::sun::star::awt::XControl > (xText, UNO_QUERY)->getModel(),UNO_QUERY));
 
-            pFilterItem = new FmFilterItem(pFilter, aFieldName, xText->getText(), xText);
+            pFilterItem = new FmFilterItem(m_pModel->getORB(),pFilter, aFieldName, xText->getText(), xText);
             m_pModel->Insert(pFilter->GetChilds().end(), pFilterItem);
         }
         m_pModel->CheckIntegrity(pFormItem);
@@ -621,10 +621,12 @@ void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e)
 //========================================================================
 TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
-FmFilterModel::FmFilterModel()
-              :FmParentData(NULL, ::rtl::OUString())
+FmFilterModel::FmFilterModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+              :FmParentData(_rxFactory,NULL, ::rtl::OUString())
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)
+              ,m_aParser(_rxFactory)
+              ,m_xORB(_rxFactory)
 {
 }
 
@@ -703,7 +705,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
         ::rtl::OUString aName = ::comphelper::getString(xModelAsSet->getPropertyValue(FM_PROP_NAME));
 
         // Insert a new ::com::sun::star::form
-        FmFormItem* pFormItem = new FmFormItem(pParent, xController, aName);
+        FmFormItem* pFormItem = new FmFormItem(m_xORB,pParent, xController, aName);
         Insert(pParent->GetChilds().end(), pFormItem);
 
         // And now insert the filters for the form
@@ -727,13 +729,13 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
             // now add the filter rows
             // One Row always exists
 
-            FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, aTitle);
+            FmFilterItems* pFilterItems = new FmFilterItems(m_xORB,pFormItem, aTitle);
             Insert(pFormItem->GetChilds().end(), pFilterItems);
             for (FmFilterRow::const_iterator iter1 = rRow.begin(); iter1 != rRow.end(); ++iter1)
             {
                 // insert new and conditons
                 ::rtl::OUString aFieldName = getLabelName(Reference< ::com::sun::star::beans::XPropertySet > (Reference< ::com::sun::star::awt::XControl > ((*iter1).first, UNO_QUERY)->getModel(),UNO_QUERY));
-                FmFilterItem* pANDCondition = new FmFilterItem(pFilterItems, aFieldName, (*iter1).second, (*iter1).first);
+                FmFilterItem* pANDCondition = new FmFilterItem(m_xORB,pFilterItems, aFieldName, (*iter1).second, (*iter1).first);
                 Insert(pFilterItems->GetChilds().end(), pANDCondition);
             }
             // title for the next conditions
@@ -808,7 +810,7 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
 {
     DBG_ASSERT(pFormItem, "AppendFilterItems(): no form item present");
 
-    FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, ::rtl::OUString(SVX_RES(RID_STR_FILTER_FILTER_OR)));
+    FmFilterItems* pFilterItems = new FmFilterItems(m_xORB,pFormItem, ::rtl::OUString(SVX_RES(RID_STR_FILTER_FILTER_OR)));
     // insert the condition behind the last filter items
     ::std::vector<FmFilterData*>::reverse_iterator iter;
     for (iter = pFormItem->GetChilds().rbegin();
@@ -981,7 +983,7 @@ void FmFilterModel::Remove(const ::std::vector<FmFilterData*>::iterator& rPos, F
 
     delete pData;
 }
-
+using namespace connectivity;
 //------------------------------------------------------------------------
 sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const
 {
@@ -989,22 +991,23 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
     Reference< ::com::sun::star::beans::XPropertySet >  xField(m_pAdapter->getField(pItem->GetTextComponent()));
     Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xController->getModel(), UNO_QUERY)));
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
-    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(::comphelper::getProcessServiceFactory()
-                        ->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
+    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
-    String aErr,aTxt;
-    SdbSqlParseNode* pParseNode = getSQLParser().PredicateTree(aErr, aTxt, xFormatter, Application::GetAppInternational(), xField);
-    rErrorMsg = aErr;
-    rText = aTxt;
+    ::rtl::OUString aErr,aTxt;
+    OSQLParseNode* pParseNode = const_cast< OSQLParser*>(&m_aParser)->predicateTree(aErr, aTxt, xFormatter, xField);
+    rErrorMsg = aErr.getStr();
+    rText = aTxt.getStr();
     if (pParseNode)
     {
-        String aPreparedText;
-        pParseNode->ParseNodeToPredicateStr(aPreparedText,
+        ::rtl::OUString aPreparedText;
+        XubString sLanguage, sCountry;
+        ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+        ::com::sun::star::lang::Locale aAppLocale(sLanguage, sCountry, ::rtl::OUString());
+        pParseNode->parseNodeToPredicateStr(aPreparedText,
                                    xConnection->getMetaData(),
                                    xFormatter,
-                                   Application::GetAppInternational(),
-                                   xField);
+                                   xField,aAppLocale,'.');
         rText = aPreparedText;
         delete pParseNode;
         return sal_True;
@@ -1238,7 +1241,7 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
     Image aExpandedNodeImg = aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE );
     SetNodeBitmaps( aCollapsedNodeImg, aExpandedNodeImg );
 
-    m_pModel = new FmFilterModel();
+    m_pModel = new FmFilterModel(comphelper::getProcessServiceFactory());
     StartListening( *m_pModel );
 
     EnableInplaceEditing( sal_True );
@@ -1554,7 +1557,7 @@ sal_Bool FmFilterNavigator::Drop( const DropEvent& rDEvt )
             String aText = (*i)->GetText();
             if (!pFilterItem)
             {
-                pFilterItem = new FmFilterItem(pTargetItems, (*i)->GetFieldName(), aText, (*i)->GetTextComponent());
+                pFilterItem = new FmFilterItem(m_pModel->getORB(),pTargetItems, (*i)->GetFieldName(), aText, (*i)->GetTextComponent());
                 m_pModel->Append(pTargetItems, pFilterItem);
             }
 

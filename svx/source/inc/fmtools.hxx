@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ double ToNullDate(const Date& rNullDate, double rVal);
 class CursorWrapper
 {
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xGeneric;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>               m_xMoveOperations;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>              m_xBookmarkOperations;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
@@ -334,14 +335,15 @@ public:
     sal_Bool Is() const { return m_xMoveOperations.is(); }
 
     CursorWrapper* operator ->() { return this; }
-    operator ::com::sun::star::uno::XInterface* () const { return (::com::sun::star::uno::XInterface *)m_xMoveOperations.get(); }
-    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const{ return (::com::sun::star::uno::XInterface *)m_xMoveOperations.get(); }
+    operator const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& () const{ return m_xGeneric; }
 
     // 'Konvertierungen'
     const CursorWrapper& operator=(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xCursor);
     operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
     operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>& () const         { return m_xBookmarkOperations; }
     operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& () const   { return m_xColumnsSupplier; }
+    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> () const{ return m_xColumnsSupplier; }
+
 
     // das normale queryInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )

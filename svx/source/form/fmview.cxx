@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 17:07:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,22 +244,7 @@ void getConnectionSpecs(const ::com::sun::star::uno::Reference< ::com::sun::star
     }
 
     if (rURL.getLength())
-    {
-        try
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XLocalizedAliases > xAliases(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
-            if (xAliases.is())
-            {
-                // get the application language
-                String sLanguage, sCountry;
-                ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-                _rRegisteredTitle = xAliases->lookupProgrammatic(::com::sun::star::lang::Locale(sLanguage, sCountry, ::rtl::OUString()), rURL);
-            }
-        }
-        catch(...)
-        {
-        }
-    }
+        _rRegisteredTitle = rURL;
 }
 
 //------------------------------------------------------------------------
@@ -290,7 +275,7 @@ FmFormView::FmFormView( FmFormModel* pModel )
 void FmFormView::Init()
 {
     pFormShell = NULL;
-    pImpl = new FmXFormView(this);
+    pImpl = new FmXFormView(::comphelper::getProcessServiceFactory(),this);
     pImpl->acquire();
 
     //////////////////////////////////////////////////////////////////////
@@ -436,13 +421,8 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         {
             UnmarkAll();
 
-            // activate the first form
+            // Erste ::com::sun::star::form aktivieren
             pImpl->Activate(NULL);
-
-            // set the auto focus to the first control (if indicated by the model to do so)
-            sal_Bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
-            if (bForceControlFocus)
-                pImpl->AutoFocus();
         }
     }
 
@@ -809,16 +789,15 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
         if (!xDatabase.is())
         {   // aDatabaseName isn't a database path. maybe a favorite name ?
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >  xDatabaseAccesses(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >  xDatabaseAccesses(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
             if (xDatabaseAccesses.is())
             {
                 try
                 {
                     xDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess > (xDatabaseAccesses->getRegisteredObject(sDatabaseName), ::com::sun::star::uno::UNO_QUERY);
                 }
-                catch( ::com::sun::star::container::NoSuchElementException e)
+                catch( ::com::sun::star::container::NoSuchElementException&)
                 {   // allowed, means aDatabaseName isn't a valid favorite name ....
-                    e; // make compiler happy
                 }
             }
         }

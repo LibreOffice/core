@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-01 14:52:23 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_AWT_XTABCONTROLLER_HPP_
 #include <com/sun/star/awt/XTabController.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
 #endif
@@ -123,10 +126,6 @@
 #ifndef _SVDPAGV_HXX
 #include "svdpagv.hxx"
 #endif
-#ifndef _SVDITER_HXX
-#include "svditer.hxx"
-#endif
-
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
@@ -138,16 +137,21 @@
 #endif
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::lang;
+using namespace dbtools;
+using namespace comphelper;
 
 DBG_NAME(FmXPageViewWinRec);
 //------------------------------------------------------------------------
-FmXPageViewWinRec::FmXPageViewWinRec(const SdrPageViewWinRec* pWinRec,
+FmXPageViewWinRec::FmXPageViewWinRec(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
+                                     const SdrPageViewWinRec* pWinRec,
                                    FmXFormView* _pViewImpl)
                  :m_pViewImpl(_pViewImpl)
                  ,m_pWindow( (Window*)pWinRec->GetOutputDevice() )
+                 ,m_xORB(_xORB)
 {
     DBG_CTOR(FmXPageViewWinRec,NULL);
 
@@ -163,19 +167,17 @@ FmXPageViewWinRec::FmXPageViewWinRec(const SdrPageViewWinRec* pWinRec,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xForms(pP->GetForms(), ::com::sun::star::uno::UNO_QUERY);
         sal_uInt32 nLength = xForms->getCount();
         ::com::sun::star::uno::Any aElement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm;
         for (sal_uInt32 i = 0; i < nLength; i++)
         {
-            aElement = xForms->getByIndex(i);
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(*(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > *)aElement.getValue());
+            xForms->getByIndex(i) >>= xForm;
             setController(xForm, pWinRec->GetControlContainerRef() );
         }
     }
 }
-
-//------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 FmXPageViewWinRec::~FmXPageViewWinRec()
 {
-
     DBG_DTOR(FmXPageViewWinRec,NULL);
 }
 
@@ -194,10 +196,12 @@ void FmXPageViewWinRec::dispose()
             xEventManager->detach( i - m_aControllerList.begin(), xIfc );
         }
 
+        // dispose the formcontroller
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp(*i, ::com::sun::star::uno::UNO_QUERY);
         xComp->dispose();
     }
-    m_aControllerList.clear();
+    m_aControllerList.clear(); // this call deletes the formcontrollers
+    m_xORB = NULL;
 }
 
 
@@ -244,9 +248,10 @@ sal_Int32 SAL_CALL FmXPageViewWinRec::getCount(void) throw( ::com::sun::star::un
 {
     if (xIndex.is() && xIndex->getCount())
     {
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController;
         for (sal_Int32 n = xIndex->getCount(); n--; )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(*(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > *)xIndex->getByIndex(n).getValue());
+            xIndex->getByIndex(n) >>= xController;
             if ((::com::sun::star::awt::XTabControllerModel*)xModel.get() == (::com::sun::star::awt::XTabControllerModel*)xController->getModel().get())
                 return xController;
             else
@@ -293,7 +298,7 @@ void FmXPageViewWinRec::setController(const ::com::sun::star::uno::Reference< ::
         // this "no page" should result in a empty ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  provided by the controller's external dispatcher
 
     // Anlegen des Tabcontrollers
-    FmXFormController* pController = new FmXFormController(m_pViewImpl->getView(), m_pWindow, sPageId);
+    FmXFormController* pController = new FmXFormController(m_xORB,m_pViewImpl->getView(), m_pWindow, sPageId);
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(pController);
 
     pController->setModel(xTabOrder);
@@ -305,7 +310,7 @@ void FmXPageViewWinRec::setController(const ::com::sun::star::uno::Reference< ::
         pParent->addChild(pController);
     else
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(pController);
+        //  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(pController);
         m_aControllerList.push_back(xController);
 
         pController->setParent(*this);
@@ -320,13 +325,12 @@ void FmXPageViewWinRec::setController(const ::com::sun::star::uno::Reference< ::
 
     // jetzt die Subforms durchgehen
     sal_uInt32 nLength = xFormCps->getCount();
-    ::com::sun::star::uno::Any aElement;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xSubForm;
     for (sal_uInt32 i = 0; i < nLength; i++)
     {
-        aElement = xFormCps->getByIndex(i);
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)aElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
-        if (xForm.is())
-            setController(xForm, xCC, pController);
+        xFormCps->getByIndex(i) >>= xSubForm;
+        if (xSubForm.is())
+            setController(xSubForm, xCC, pController);
     }
 }
 
@@ -430,9 +434,11 @@ void SAL_CALL FmXFormView::elementInserted(const ::com::sun::star::container::Co
     if( xCC.is() )
     {
         FmWinRecList::iterator i = findWindow( xCC );
+
         if ( i != m_aWinList.end() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl(*(::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > *)evt.Element.getValue());
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl;
+            evt.Element >>= xControl;
             if( xControl.is() )
                 (*i)->updateTabOrder( xControl, xCC );
         }
@@ -491,7 +497,7 @@ void FmXFormView::addWindow(const SdrPageViewWinRec* pRec)
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCC = pRec->GetControlContainerRef();
         if ( rCC.is() && findWindow( rCC ) == m_aWinList.end())
         {
-            FmXPageViewWinRec *pFmRec = new FmXPageViewWinRec(pRec, this);
+            FmXPageViewWinRec *pFmRec = new FmXPageViewWinRec(m_xORB,pRec, this);
             pFmRec->acquire();
 
             m_aWinList.push_back(pFmRec);
@@ -537,62 +543,6 @@ IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, EMPTYTAG)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::AutoFocus()
-{
-    if (m_nAutoFocusEvent)
-        Application::RemoveUserEvent(m_nAutoFocusEvent);
-    m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
-{
-    m_nAutoFocusEvent = 0;
-
-    // go to the first form of our page, examine it's TabController, go to it's first (in terms of the tab order)
-    // control, give it the focus
-
-    // get the forms collection of the page we belong to
-    FmFormPage* pPage = m_pView ? PTR_CAST(FmFormPage, m_pView->GetPageViewPvNum(0)->GetPage()) : NULL;
-    Reference< XIndexAccess > xForms;
-    if (pPage)
-        xForms = Reference< XIndexAccess >(pPage->GetForms(), UNO_QUERY);
-
-    FmXPageViewWinRec* pViewWinRec = m_aWinList.size() ? m_aWinList[0] : NULL;
-    if (pViewWinRec)
-    {
-        try
-        {
-            // go for the tab controller of the first form
-            sal_Int32 nObjects = xForms->getCount();
-            ::com::sun::star::uno::Reference< XForm > xForm;
-            if (nObjects)
-                ::cppu::extractInterface(xForm, xForms->getByIndex(0));
-            Reference< XTabController > xTabControllerModel(pViewWinRec->getController( xForm ), UNO_QUERY);
-
-            // go for the first control of the controller
-            Sequence< Reference< XControl > > aControls;
-            if (xTabControllerModel.is())
-                aControls = xTabControllerModel->getControls();
-            Reference< XControl > xFirstControl;
-            if (aControls.getLength())
-                xFirstControl = aControls[0];
-
-            // set the focus to this first control
-            Reference< XWindow > xControlWindow(xFirstControl, UNO_QUERY);
-            if (xControlWindow.is())
-                xControlWindow->setFocus();
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("FmXFormView::OnAutoFocus: could not activate the first control!");
-        }
-    }
-
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
 IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 {
     m_nEvent = 0;
@@ -609,11 +559,11 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
         FmFormPage* pPage = (FmFormPage*)m_pPageViewForActivation->GetPage();
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xForms(pPage->GetForms(), ::com::sun::star::uno::UNO_QUERY);
         ::com::sun::star::uno::Any aElement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xForm;
         for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
         {
-            aElement = xForms->getByIndex(i);
+            xForms->getByIndex(i) >>= xForm;
             // a database form must be loaded for
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xForm(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)aElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
             if (::isLoadable(xForm) && !xForm->isLoaded())
                 xForm->load();
         }
@@ -722,5 +672,58 @@ FmFormShell* FmXFormView::GetFormShell() const
 {
     return m_pView ? m_pView->GetFormShell() : NULL;
 }
+// -----------------------------------------------------------------------------
+void FmXFormView::AutoFocus()
+{
+    if (m_nAutoFocusEvent)
+          Application::RemoveUserEvent(m_nAutoFocusEvent);
+    m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
+{
+    m_nAutoFocusEvent = 0;
+
+    // go to the first form of our page, examine it's TabController, go to it's first (in terms of the tab order)
+    // control, give it the focus
+
+    // get the forms collection of the page we belong to
+    FmFormPage* pPage = m_pView ? PTR_CAST(FmFormPage, m_pView->GetPageViewPvNum(0)->GetPage()) : NULL;
+    Reference< XIndexAccess > xForms;
+    if (pPage)
+        xForms = Reference< XIndexAccess >(pPage->GetForms(), UNO_QUERY);
+    FmXPageViewWinRec* pViewWinRec = m_aWinList.size() ? m_aWinList[0] : NULL;
+    if (pViewWinRec)
+    {
+        try
+        {
+            // go for the tab controller of the first form
+            sal_Int32 nObjects = xForms->getCount();
+            ::com::sun::star::uno::Reference< XForm > xForm;
+            if (nObjects)
+                ::cppu::extractInterface(xForm, xForms->getByIndex(0));
+
+            Reference< XTabController > xTabControllerModel(pViewWinRec->getController( xForm ), UNO_QUERY);
+            // go for the first control of the controller
+            Sequence< Reference< XControl > > aControls;
+            if (xTabControllerModel.is())
+                aControls = xTabControllerModel->getControls();
+            Reference< XControl > xFirstControl;
+            if (aControls.getLength())
+                xFirstControl = aControls[0];
+
+            // set the focus to this first control
+            Reference< XWindow > xControlWindow(xFirstControl, UNO_QUERY);
+            if (xControlWindow.is())
+                xControlWindow->setFocus();
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("FmXFormView::OnAutoFocus: could not activate the first control!");
+        }
+    }
+    return 0L;
+}
+// -----------------------------------------------------------------------------
 
 

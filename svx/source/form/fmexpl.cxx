@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 16:27:43 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1665,7 +1665,8 @@ SdrObject* FmExplorerModel::Search(SdrObjListIter& rIter, const ::com::sun::star
 //========================================================================
 
 //------------------------------------------------------------------------
-FmExplorer::FmExplorer( Window* pParent )
+FmExplorer::FmExplorer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+                       Window* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER )
     ,nEditEvent(0)
     ,m_pEditEntry(NULL)
@@ -1683,6 +1684,7 @@ FmExplorer::FmExplorer( Window* pParent )
     ,m_bShellOrPageChanged(sal_False)
     ,m_bDragDataDirty(sal_False)
     ,m_pRootEntry(NULL)
+    ,m_xORB(_xORB)
 {
     SetHelpId( HID_FORM_NAVIGATOR );
 
@@ -1982,7 +1984,7 @@ void FmExplorer::Command( const CommandEvent& rEvt )
 
                         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  xTabController(xForm, ::com::sun::star::uno::UNO_QUERY);
                         if( !xTabController.is() ) break;
-                        FmTabOrderDlg aTabDlg( GetpApp()->GetAppWindow(), GetExplModel()->GetFormShell() );
+                        FmTabOrderDlg aTabDlg(m_xORB, GetpApp()->GetAppWindow(), GetExplModel()->GetFormShell() );
                         aTabDlg.Execute();
 
                     }
@@ -2637,7 +2639,7 @@ void FmExplorer::NewForm( SvLBoxEntry* pParentEntry )
 
     //////////////////////////////////////////////////////////////////////
     // Neue ::com::sun::star::form::Form erzeugen
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xNewForm(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xNewForm(m_xORB->createInstance(FM_SUN_COMPONENT_FORM), ::com::sun::star::uno::UNO_QUERY);
     if (!xNewForm.is())
         return;
 
@@ -3424,7 +3426,7 @@ FmExplorerWin::FmExplorerWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
     DBG_CTOR(FmExplorerWin,NULL);
     SetHelpId( HID_FORM_NAVIGATOR_WIN );
 
-    m_pFmExplorer = new FmExplorer( this );
+    m_pFmExplorer = new FmExplorer(comphelper::getProcessServiceFactory(), this );
     m_pFmExplorer->Show();
     SetText( SVX_RES(RID_STR_FMEXPLORER) );
     SetSizePixel( Size(200,200) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,10 +215,6 @@
 
 #ifndef _SFXFRAME_HXX //autogen wg. SfxFrame
 #include <sfx2/frame.hxx>
-#endif
-
-#ifndef _SVT_SDBPARSE_HXX
-#include <svtools/sdbparse.hxx>
 #endif
 
 #ifndef _SVX_FMSERVS_HXX
@@ -1062,7 +1058,21 @@ void FmXFormShell::disposing()
     }
 
     // we are disposed from within the destructor of our shell, so now the shell pointer is invalid ....
-    m_pShell = NULL;
+    m_pShell                    = NULL;
+    m_xActiveController         = NULL;
+    m_xNavigationController     = NULL;
+    m_xActiveForm               = NULL;
+    m_xParser                   = NULL;
+    m_xForms                    = NULL;
+    m_xSelObject                = NULL;
+    m_xCurControl               = NULL;
+    m_xCurForm                  = NULL;
+    m_aLastGridFound            = NULL;
+    m_xAttachedFrame            = NULL;
+    m_xExternalViewController   = NULL;
+    m_xExtViewTriggerController = NULL;
+    m_xExternalDisplayedForm    = NULL;
+    m_aLastGridFound            = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -4117,8 +4127,8 @@ void FmXFormShell::CreateExternalView()
     // the frame the external view is displayed in
     sal_Bool bAlreadyExistent = m_xExternalViewController.is();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame;
-    ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_partwindow");
-    sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::SELF | ::com::sun::star::frame::FrameSearchFlag::PARENT | ::com::sun::star::frame::FrameSearchFlag::CREATE;
+    ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
+    sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController> xCurrentNavController( getNavController());
         // the creation of the "partwindow" may cause a deactivate of the document which will result in our nav controller to be set to NULL
@@ -4165,7 +4175,7 @@ void FmXFormShell::CreateExternalView()
         }
 
         // with this the component should be loaded, now search the frame where it resides in
-        xExternalViewFrame = m_xAttachedFrame->findFrame(sFrameName, nSearchFlags & ~::com::sun::star::frame::FrameSearchFlag::CREATE);
+        xExternalViewFrame = m_xAttachedFrame->findFrame(sFrameName, ::com::sun::star::frame::FrameSearchFlag::CHILDREN);
         if (xExternalViewFrame.is())
         {
             m_xExternalViewController = xExternalViewFrame->getController();

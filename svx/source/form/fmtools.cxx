@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 11:59:33 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,10 +214,6 @@
 #include <svtools/stritem.hxx>
 #endif
 
-#ifndef _SVT_SDBPARSE_HXX
-#include <svtools/sdbparse.hxx>
-#endif
-
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
 #endif
@@ -260,29 +256,8 @@ using namespace ::com::sun::star::uno;
 IMPLEMENT_CONSTASCII_USTRING(DATA_MODE,"DataMode");
 IMPLEMENT_CONSTASCII_USTRING(FILTER_MODE,"FilterMode");
 
-Date STANDARD_DATE(1,1,1900);
-//------------------------------------------------------------------------------
-double ToStandardDate(const Date& rNullDate, double rVal)
-{
-    if (rNullDate != STANDARD_DATE)
-        rVal -= (STANDARD_DATE - rNullDate);
-    return rVal;
-}
-
-//------------------------------------------------------------------
-double ToNullDate(const Date& rNullDate, double rVal)
-{
-    if (rNullDate != STANDARD_DATE)
-        rVal += (STANDARD_DATE - rNullDate);
-    return rVal;
-}
-
-//------------------------------------------------------------------------------
-SdbSqlParser& getSQLParser()
-{
-    static SdbSqlParser aParser(Application::GetAppInternational().GetLanguage());
-    return aParser;
-}
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 
 //==============================================================================
 //------------------------------------------------------------------------------
@@ -338,41 +313,41 @@ _Optlink
 
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> clone(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>& _xObj)
+Reference< XInterface> clone(const Reference< ::com::sun::star::io::XPersistObject>& _xObj)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xClone;
+    Reference< XInterface> xClone;
     if (!_xObj.is())
-        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>();
+        return Reference< XInterface>();
 
     // ::std::copy it by streaming
 
     // creating a pipe
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream> xOutPipe(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> xInPipe(xOutPipe, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XOutputStream> xOutPipe(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XInputStream> xInPipe(xOutPipe, UNO_QUERY);
 
     // creating the mark streams
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink> xMarkSink(xMarkIn, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XInputStream> xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSink> xMarkSink(xMarkIn, UNO_QUERY);
     xMarkSink->setInputStream(xInPipe);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream> xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource> xMarkSource(xMarkOut, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XOutputStream> xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSource> xMarkSource(xMarkOut, UNO_QUERY);
     xMarkSource->setOutputStream(xOutPipe);
 
     // connect mark and sink
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink> xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSink> xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), UNO_QUERY);
     xSink->setInputStream(xMarkIn);
 
     // connect mark and source
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource> xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSource> xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), UNO_QUERY);
     xSource->setOutputStream(xMarkOut);
 
     // write the string to source
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream> xOutStrm(xSource, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XObjectOutputStream> xOutStrm(xSource, UNO_QUERY);
     xOutStrm->writeObject(_xObj);
     xOutStrm->closeOutput();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream> xInStrm(xSink, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XObjectInputStream> xInStrm(xSink, UNO_QUERY);
     xClone = xInStrm->readObject();
     xInStrm->closeInput();
 
@@ -380,25 +355,25 @@ _Optlink
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> cloneUsingProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>& _xObj)
+Reference< XInterface> cloneUsingProperties(const Reference< ::com::sun::star::io::XPersistObject>& _xObj)
 {
     if (!_xObj.is())
-        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>();
+        return Reference< XInterface>();
 
     // create a new object
     ::rtl::OUString aObjectService = _xObj->getServiceName();
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xDestSet(::comphelper::getProcessServiceFactory()->createInstance(aObjectService), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet> xDestSet(::comphelper::getProcessServiceFactory()->createInstance(aObjectService), UNO_QUERY);
     if (!xDestSet.is())
     {
         DBG_ERROR("cloneUsingProperties : could not instantiate an object of the given type !");
-        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>();
+        return Reference< XInterface>();
     }
     // transfer properties
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xSourceSet(_xObj, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> xSourceInfo( xSourceSet->getPropertySetInfo());
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aSourceProperties = xSourceInfo->getProperties();
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> xDestInfo( xDestSet->getPropertySetInfo());
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aDestProperties = xDestInfo->getProperties();
+    Reference< ::com::sun::star::beans::XPropertySet> xSourceSet(_xObj, UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySetInfo> xSourceInfo( xSourceSet->getPropertySetInfo());
+    Sequence< ::com::sun::star::beans::Property> aSourceProperties = xSourceInfo->getProperties();
+    Reference< ::com::sun::star::beans::XPropertySetInfo> xDestInfo( xDestSet->getPropertySetInfo());
+    Sequence< ::com::sun::star::beans::Property> aDestProperties = xDestInfo->getProperties();
     int nDestLen = aDestProperties.getLength();
 
     ::com::sun::star::beans::Property* pSourceProps = aSourceProperties.getArray();
@@ -436,61 +411,61 @@ _Optlink
 }
 
 //------------------------------------------------------------------------------
-void CloneForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& _xSource, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& _xDest)
+void CloneForms(const Reference< ::com::sun::star::container::XIndexContainer>& _xSource, const Reference< ::com::sun::star::container::XIndexContainer>& _xDest)
 {
     DBG_ASSERT(_xSource.is() && _xDest.is(), "CloneForms : invalid argument !");
 
     sal_Int32 nSourceCount = _xSource->getCount();
     for (sal_Int32 i=nSourceCount-1; i>=0; --i)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xCurrent(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)_xSource->getByIndex(i).getValue(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::sdbc::XRowSet> xCurrent(*(Reference< XInterface>*)_xSource->getByIndex(i).getValue(), UNO_QUERY);
         if (!xCurrent.is())
             continue;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject> xCurrentPersist(xCurrent, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::io::XPersistObject> xCurrentPersist(xCurrent, UNO_QUERY);
         DBG_ASSERT(xCurrentPersist.is(), "CloneForms : a form should always be a PersistObject !");
 
         // don't use a simple clone on xCurrentPersist as this would clone all childs, too
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xNewObject( cloneUsingProperties(xCurrentPersist));
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xNew(xNewObject, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XInterface> xNewObject( cloneUsingProperties(xCurrentPersist));
+        Reference< ::com::sun::star::sdbc::XRowSet> xNew(xNewObject, UNO_QUERY);
         if (!xNew.is())
         {
             DBG_ERROR("CloneForms : could not clone a form object !");
             ::comphelper::disposeComponent(xNewObject);
             continue;
         }
-        _xDest->insertByIndex(0, ::com::sun::star::uno::makeAny(xNew));
+        _xDest->insertByIndex(0, makeAny(xNew));
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> xStepIntoSource(xCurrent, ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> xStepIntoDest(xNew, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexContainer> xStepIntoSource(xCurrent, UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexContainer> xStepIntoDest(xNew, UNO_QUERY);
         if (xStepIntoSource.is() && xStepIntoDest.is())
             CloneForms(xStepIntoSource, xStepIntoDest);
     }
 }
 
 //------------------------------------------------------------------------------
-sal_Bool searchElement(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& xCont, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElement)
+sal_Bool searchElement(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface>& xElement)
 {
     if (!xCont.is() || !xElement.is())
         return sal_False;
 
     sal_Int32 nCount = xCont->getCount();
-    ::com::sun::star::uno::Any aRet;
+    Any aRet;
     for (sal_Int32 i = 0; i < nCount; i++)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xComp;
+        Reference< XInterface> xComp;
         try
         {
             aRet = xCont->getByIndex(i);
             if (aRet.hasValue())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xIface(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*) aRet.getValue());
+                Reference< XInterface> xIface(*(Reference< XInterface>*) aRet.getValue());
                 ::comphelper::query_interface(xIface, xComp);
-                if (((::com::sun::star::uno::XInterface *)xElement.get()) == (::com::sun::star::uno::XInterface*)xComp.get())
+                if (((XInterface *)xElement.get()) == (XInterface*)xComp.get())
                     return sal_True;
                 else
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xCont2(xComp, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::container::XIndexAccess> xCont2(xComp, UNO_QUERY);
                     if (xCont2.is() && searchElement(xCont2, xElement))
                         return sal_True;
                 }
@@ -504,21 +479,21 @@ sal_Bool searchElement(const ::com::sun::star::uno::Reference< ::com::sun::star:
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& xCont, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElement)
+sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface>& xElement)
 {
     sal_Int32 nIndex = -1;
     if (!xCont.is())
         return nIndex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xToFind;
-    ::com::sun::star::uno::Type xRequestedElementClass( xCont->getElementType());
+    Reference< XInterface> xToFind;
+    Type xRequestedElementClass( xCont->getElementType());
 
-    if (::comphelper::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>*)0))
-        xToFind = ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>(xElement, ::com::sun::star::uno::UNO_QUERY);
-    else if (::comphelper::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>*)0))
-        xToFind = ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>(xElement, ::com::sun::star::uno::UNO_QUERY);
-    else if (::comphelper::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)0))
-        xToFind = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(xElement, ::com::sun::star::uno::UNO_QUERY);
+    if (::comphelper::isA(xRequestedElementClass,(Reference< ::com::sun::star::form::XFormComponent>*)0))
+        xToFind = Reference< ::com::sun::star::form::XFormComponent>(xElement, UNO_QUERY);
+    else if (::comphelper::isA(xRequestedElementClass,(Reference< ::com::sun::star::form::XForm>*)0))
+        xToFind = Reference< ::com::sun::star::form::XForm>(xElement, UNO_QUERY);
+    else if (::comphelper::isA(xRequestedElementClass,(Reference< ::com::sun::star::beans::XPropertySet>*)0))
+        xToFind = Reference< ::com::sun::star::beans::XPropertySet>(xElement, UNO_QUERY);
 
     DBG_ASSERT(xToFind.is(), "Unknown Element");
     if (xToFind.is())
@@ -529,7 +504,7 @@ sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star
         {
             try
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xCurrent;
+                Reference< XInterface> xCurrent;
                 ::cppu::extractInterface(xCurrent, xCont->getByIndex(nIndex));
                 if (xToFind == xCurrent)
                     break;
@@ -544,12 +519,12 @@ sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star
 }
 
 //------------------------------------------------------------------
-String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xElement, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rTopLevelElement)
+String getFormComponentAccessPath(const Reference< XInterface>& _xElement, Reference< XInterface>& _rTopLevelElement)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xParent;
+    Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess> xParent;
     if (xChild.is())
-        xParent = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+        xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
 
     // while the current content is a form
     String sReturn;
@@ -570,8 +545,8 @@ String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com:
         sReturn = sCurrentIndex;
 
         // travel up
-        if (::comphelper::query_interface((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)xParent,xChild))
-            xParent = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+        if (::comphelper::query_interface((Reference< XInterface >)xParent,xChild))
+            xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
     }
 
     _rTopLevelElement = xParent;
@@ -579,32 +554,32 @@ String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com:
 }
 
 //------------------------------------------------------------------
-String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xElement)
+String getFormComponentAccessPath(const Reference< XInterface>& _xElement)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xDummy;
+    Reference< XInterface> xDummy;
     return getFormComponentAccessPath(_xElement, xDummy);
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> getElementFromAccessPath(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xParent, const String& _rRelativePath)
+Reference< XInterface> getElementFromAccessPath(const Reference< ::com::sun::star::container::XIndexAccess>& _xParent, const String& _rRelativePath)
 {
     if (!_xParent.is())
-        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>();
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xContainer(_xParent);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xElement( _xParent);
+        return Reference< XInterface>();
+    Reference< ::com::sun::star::container::XIndexAccess> xContainer(_xParent);
+    Reference< XInterface> xElement( _xParent);
 
     String sPath(_rRelativePath);
     while (sPath.Len() && xContainer.is())
     {
-        sal_Int32 nSepPos = sPath.Search((sal_Unicode)'\\');
+        xub_StrLen nSepPos = sPath.Search((sal_Unicode)'\\');
 
-        String sIndex(sPath.Copy(0, (nSepPos == -1) ? sPath.Len() : nSepPos));
+        String sIndex(sPath.Copy(0, (nSepPos == STRING_NOTFOUND) ? sPath.Len() : nSepPos));
         //  DBG_ASSERT(sIndex.IsNumeric(), "getElementFromAccessPath : invalid path !");
 
-        sPath = sPath.Copy((nSepPos == -1) ? sPath.Len() : nSepPos+1);
+        sPath = sPath.Copy((nSepPos == STRING_NOTFOUND) ? sPath.Len() : nSepPos+1);
 
         ::cppu::extractInterface(xElement, xContainer->getByIndex(sIndex.ToInt32()));
-        xContainer = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>::query(xElement);
+        xContainer = Reference< ::com::sun::star::container::XIndexAccess>::query(xElement);
     }
 
     if (sPath.Len() != 0)
@@ -629,7 +604,7 @@ _Optlink
 }
 
 //------------------------------------------------------------------------------
-sal_Bool hasString(const ::rtl::OUString& aStr, const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList)
+sal_Bool hasString(const ::rtl::OUString& aStr, const Sequence< ::rtl::OUString>& rList)
 {
     const ::rtl::OUString* pStrList = rList.getConstArray();
     ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(::rtl::OUString),
@@ -639,7 +614,7 @@ sal_Bool hasString(const ::rtl::OUString& aStr, const ::com::sun::star::uno::Seq
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 findPos(const ::rtl::OUString& aStr, const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList)
+sal_Int32 findPos(const ::rtl::OUString& aStr, const Sequence< ::rtl::OUString>& rList)
 {
     const ::rtl::OUString* pStrList = rList.getConstArray();
     ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(::rtl::OUString),
@@ -652,12 +627,12 @@ sal_Int32 findPos(const ::rtl::OUString& aStr, const ::com::sun::star::uno::Sequ
 }
 
 //------------------------------------------------------------------
-void ModifyPropertyAttributes(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, const ::rtl::OUString& ustrPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
+void ModifyPropertyAttributes(Sequence< ::com::sun::star::beans::Property>& seqProps, const ::rtl::OUString& ustrPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
 {
     sal_Int32 nLen = seqProps.getLength();
 
     // binaere Suche
-    ::com::sun::star::uno::Type type;
+    Type type;
     ::com::sun::star::beans::Property propSearchDummy(ustrPropName, 0, type, 0);
     ::com::sun::star::beans::Property* pResult = (::com::sun::star::beans::Property*) bsearch(&propSearchDummy, (void*)seqProps.getArray(), nLen, sizeof(::com::sun::star::beans::Property),
         &PropertyCompare);
@@ -671,12 +646,12 @@ void ModifyPropertyAttributes(::com::sun::star::uno::Sequence< ::com::sun::star:
 }
 
 //------------------------------------------------------------------
-void RemoveProperty(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, const ::rtl::OUString& ustrPropName)
+void RemoveProperty(Sequence< ::com::sun::star::beans::Property>& seqProps, const ::rtl::OUString& ustrPropName)
 {
     sal_Int32 nLen = seqProps.getLength();
 
     // binaere Suche
-    ::com::sun::star::uno::Type type;
+    Type type;
     ::com::sun::star::beans::Property propSearchDummy(ustrPropName, 0, type, 0);
     const ::com::sun::star::beans::Property* pProperties = seqProps.getConstArray();
     ::com::sun::star::beans::Property* pResult = (::com::sun::star::beans::Property*) bsearch(&propSearchDummy, (void*)pProperties, nLen, sizeof(::com::sun::star::beans::Property),
@@ -691,17 +666,17 @@ void RemoveProperty(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pr
 }
 
 //------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel> getXModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xIface)
+Reference< ::com::sun::star::frame::XModel> getXModel(const Reference< XInterface>& xIface)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel> xModel(xIface, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::frame::XModel> xModel(xIface, UNO_QUERY);
     if (xModel.is())
         return xModel;
     else
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xIface, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XChild> xChild(xIface, UNO_QUERY);
         if (xChild.is())
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xParent( xChild->getParent());
+            Reference< XInterface> xParent( xChild->getParent());
             return getXModel(xParent);
         }
         else
@@ -710,21 +685,21 @@ void RemoveProperty(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pr
 }
 
 //------------------------------------------------------------------
-::rtl::OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
+::rtl::OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
 {
     if (!xControlModel.is())
         return ::rtl::OUString();
 
     if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlModel))
     {
-        ::com::sun::star::uno::Any aLabelModel( xControlModel->getPropertyValue(FM_PROP_CONTROLLABEL) );
-        if (aLabelModel.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE)
+        Any aLabelModel( xControlModel->getPropertyValue(FM_PROP_CONTROLLABEL) );
+        if (aLabelModel.getValueTypeClass() == TypeClass_INTERFACE)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xLabelSet(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aLabelModel.getValue(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::beans::XPropertySet> xLabelSet(*(Reference< XInterface>*)aLabelModel.getValue(), UNO_QUERY);
             if (xLabelSet.is() && ::comphelper::hasProperty(FM_PROP_LABEL, xLabelSet))
             {
-                ::com::sun::star::uno::Any aLabel( xLabelSet->getPropertyValue(FM_PROP_LABEL) );
-                if ((aLabel.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) && ::comphelper::getString(aLabel).getLength())
+                Any aLabel( xLabelSet->getPropertyValue(FM_PROP_LABEL) );
+                if ((aLabel.getValueTypeClass() == TypeClass_STRING) && ::comphelper::getString(aLabel).getLength())
                     return ::comphelper::getString(aLabel);
             }
         }
@@ -736,39 +711,39 @@ void RemoveProperty(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pr
 
 
 //------------------------------------------------------------------
-//sal_Bool set_impl(Reflection* pRefl, void* pData, const ::com::sun::star::uno::Any& rValue)
+//sal_Bool set_impl(Reflection* pRefl, void* pData, const Any& rValue)
 //{
 //  sal_Bool bRes = sal_True;
 //  void* pConv = TypeConversion::to(pRefl, rValue);
 //
-//  if (!pConv && pRefl->getTypeClass() != ::com::sun::star::uno::TypeClass_ANY)
-//      bRes = pRefl->getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+//  if (!pConv && pRefl->getTypeClass() != TypeClass_ANY)
+//      bRes = pRefl->getTypeClass() == TypeClass_VOID;
 //  else
 //  {
 //      switch (pRefl->getTypeClass())
 //      {
-//          case ::com::sun::star::uno::TypeClass_BOOLEAN:
+//          case TypeClass_BOOLEAN:
 //              *(sal_Bool*)pData = *(sal_Bool *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_CHAR:
+//          case TypeClass_CHAR:
 //              *(char*)pData = *(char *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_STRING:
+//          case TypeClass_STRING:
 //              *(::rtl::OUString*)pData = *(::rtl::OUString *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_FLOAT:
+//          case TypeClass_FLOAT:
 //              *(float*)pData = *(float *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_DOUBLE:
+//          case TypeClass_DOUBLE:
 //              *(double*)pData = *(double *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_BYTE:
+//          case TypeClass_BYTE:
 //              *(BYTE*)pData = *(BYTE *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_SHORT:
+//          case TypeClass_SHORT:
 //              *(sal_Int16*)pData = *(sal_Int16 *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_LONG:
+//          case TypeClass_LONG:
 //              *(sal_Int32*)pData = *(sal_Int32 *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+//          case TypeClass_UNSIGNED_SHORT:
 //              *(sal_uInt16*)pData = *(sal_uInt16 *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG:
+//          case TypeClass_UNSIGNED_LONG:
 //              *(sal_uInt32*)pData = *(sal_uInt32 *)pConv; break;
-//          case ::com::sun::star::uno::TypeClass_ANY:
-//              *(::com::sun::star::uno::Any*)pData = rValue; break;
+//          case TypeClass_ANY:
+//              *(Any*)pData = rValue; break;
 //          default:
 //              bRes = sal_False;
 //      }
@@ -778,10 +753,10 @@ void RemoveProperty(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pr
 
 
 //------------------------------------------------------------------------------
-sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& rList, const ::com::sun::star::uno::Any& rValue)
+sal_uInt32 findValue(const Sequence< Any>& rList, const Any& rValue)
 {
     sal_uInt32 nLen = rList.getLength();
-    const ::com::sun::star::uno::Any* pArray = (const ::com::sun::star::uno::Any*)rList.getConstArray();
+    const Any* pArray = (const Any*)rList.getConstArray();
     sal_uInt32 i;
     for (i = 0; i < nLen; i++)
     {
@@ -792,7 +767,7 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence<sal_Int16> findValueINT16(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue, sal_Bool bOnlyFirst )
+Sequence<sal_Int16> findValueINT16(const Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue, sal_Bool bOnlyFirst )
 {
     if( bOnlyFirst )
     {
@@ -810,16 +785,16 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
         }
 
         //////////////////////////////////////////////////////////////////////
-        // ::com::sun::star::uno::Sequence fuellen
+        // Sequence fuellen
         if( nPos>-1 )
         {
-            ::com::sun::star::uno::Sequence<sal_Int16> aRetSeq( 1 );
+            Sequence<sal_Int16> aRetSeq( 1 );
             aRetSeq.getArray()[0] = (sal_Int16)nPos;
 
             return aRetSeq;
         }
 
-        return ::com::sun::star::uno::Sequence<sal_Int16>();
+        return Sequence<sal_Int16>();
 
     }
     else
@@ -836,8 +811,8 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
         }
 
         //////////////////////////////////////////////////////////////////////
-        // Jetzt ::com::sun::star::uno::Sequence fuellen
-        ::com::sun::star::uno::Sequence<sal_Int16> aRetSeq( nCount );
+        // Jetzt Sequence fuellen
+        Sequence<sal_Int16> aRetSeq( nCount );
         sal_uInt32 j = 0;
         for (i = 0; i < rList.getLength(); i++)
         {
@@ -853,7 +828,7 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence<sal_Int16> findValue(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue, sal_Bool bOnlyFirst )
+Sequence<sal_Int16> findValue(const Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue, sal_Bool bOnlyFirst )
 {
     if( bOnlyFirst )
     {
@@ -871,16 +846,16 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
         }
 
         //////////////////////////////////////////////////////////////////////
-        // ::com::sun::star::uno::Sequence fuellen
+        // Sequence fuellen
         if( nPos>-1 )
         {
-            ::com::sun::star::uno::Sequence<sal_Int16> aRetSeq( 1 );
+            Sequence<sal_Int16> aRetSeq( 1 );
             aRetSeq.getArray()[0] = (sal_Int16)nPos;
 
             return aRetSeq;
         }
 
-        return ::com::sun::star::uno::Sequence<sal_Int16>();
+        return Sequence<sal_Int16>();
 
     }
 
@@ -898,8 +873,8 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
         }
 
         //////////////////////////////////////////////////////////////////////
-        // Jetzt ::com::sun::star::uno::Sequence fuellen
-        ::com::sun::star::uno::Sequence<sal_Int16> aRetSeq( nCount );
+        // Jetzt Sequence fuellen
+        Sequence<sal_Int16> aRetSeq( nCount );
         sal_uInt32 j = 0;
         for (i = 0; i < rList.getLength(); i++)
         {
@@ -915,7 +890,7 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
-sal_uInt32 findValue1(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue)
+sal_uInt32 findValue1(const Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue)
 {
     const ::rtl::OUString* pTArray = (const ::rtl::OUString*)rList.getConstArray();
     ::rtl::OString aStr1 = S(rValue);
@@ -933,89 +908,89 @@ sal_uInt32 findValue1(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& r
 //==================================================================
 // StringConversion
 //==================================================================
-::rtl::OUString AnyToStr( const ::com::sun::star::uno::Any& aValue)
+::rtl::OUString AnyToStr( const Any& aValue)
 {
     UniString aRetStr;
 
     switch( aValue.getValueTypeClass() )
     {
-        case ::com::sun::star::uno::TypeClass_INTERFACE:        aRetStr.AssignAscii("TYPE INTERFACE");          break;
-        case ::com::sun::star::uno::TypeClass_SERVICE:          aRetStr.AssignAscii("TYPE SERVICE");            break;
-        case ::com::sun::star::uno::TypeClass_MODULE:           aRetStr.AssignAscii("TYPE MODULE");             break;
-        case ::com::sun::star::uno::TypeClass_STRUCT:           aRetStr.AssignAscii("TYPE STRUCT");             break;
-        case ::com::sun::star::uno::TypeClass_TYPEDEF:          aRetStr.AssignAscii("TYPE TYPEDEF");            break;
-        case ::com::sun::star::uno::TypeClass_UNION:            aRetStr.AssignAscii("TYPE UNION");              break;
-        case ::com::sun::star::uno::TypeClass_ENUM:             aRetStr.AssignAscii("TYPE ENUM");               break;
-        case ::com::sun::star::uno::TypeClass_EXCEPTION:        aRetStr.AssignAscii("TYPE EXCEPTION");          break;
-        case ::com::sun::star::uno::TypeClass_ARRAY:            aRetStr.AssignAscii("TYPE ARRAY");              break;
-        case ::com::sun::star::uno::TypeClass_SEQUENCE:         aRetStr.AssignAscii("TYPE SEQUENCE");           break;
-        case ::com::sun::star::uno::TypeClass_VOID:             aRetStr.AssignAscii("");                        break;
-        case ::com::sun::star::uno::TypeClass_ANY:              aRetStr.AssignAscii("TYPE any");                break;
-        case ::com::sun::star::uno::TypeClass_UNKNOWN:          aRetStr.AssignAscii("TYPE unknown");            break;
-        case ::com::sun::star::uno::TypeClass_BOOLEAN:          aRetStr = ::comphelper::getBOOL(aValue) ? '1' : '0';    break;
-        case ::com::sun::star::uno::TypeClass_CHAR:             aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));          break;
-        case ::com::sun::star::uno::TypeClass_STRING:           aRetStr = (const sal_Unicode*)::comphelper::getString(aValue);  break;
-        //  case ::com::sun::star::uno::TypeClass_FLOAT:            SolarMath::DoubleToString( aRetStr, ::comphelper::getFloat(aValue), 'F', 40, '.', sal_True); break;
-        //  case ::com::sun::star::uno::TypeClass_DOUBLE:           SolarMath::DoubleToString( aRetStr, ::comphelper::getDouble(aValue), 'F', 400, '.', sal_True); break;
-        case ::com::sun::star::uno::TypeClass_FLOAT:            aRetStr = String::CreateFromFloat( ::comphelper::getFloat(aValue));break;
-        case ::com::sun::star::uno::TypeClass_DOUBLE:           aRetStr = String::CreateFromDouble( ::comphelper::getDouble(aValue));break;
+        case TypeClass_INTERFACE:       aRetStr.AssignAscii("TYPE INTERFACE");          break;
+        case TypeClass_SERVICE:         aRetStr.AssignAscii("TYPE SERVICE");            break;
+        case TypeClass_MODULE:          aRetStr.AssignAscii("TYPE MODULE");             break;
+        case TypeClass_STRUCT:          aRetStr.AssignAscii("TYPE STRUCT");             break;
+        case TypeClass_TYPEDEF:         aRetStr.AssignAscii("TYPE TYPEDEF");            break;
+        case TypeClass_UNION:           aRetStr.AssignAscii("TYPE UNION");              break;
+        case TypeClass_ENUM:                aRetStr.AssignAscii("TYPE ENUM");               break;
+        case TypeClass_EXCEPTION:       aRetStr.AssignAscii("TYPE EXCEPTION");          break;
+        case TypeClass_ARRAY:           aRetStr.AssignAscii("TYPE ARRAY");              break;
+        case TypeClass_SEQUENCE:            aRetStr.AssignAscii("TYPE SEQUENCE");           break;
+        case TypeClass_VOID:                aRetStr.AssignAscii("");                        break;
+        case TypeClass_ANY:             aRetStr.AssignAscii("TYPE any");                break;
+        case TypeClass_UNKNOWN:         aRetStr.AssignAscii("TYPE unknown");            break;
+        case TypeClass_BOOLEAN:         aRetStr = ::comphelper::getBOOL(aValue) ? '1' : '0';    break;
+        case TypeClass_CHAR:                aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));          break;
+        case TypeClass_STRING:          aRetStr = (const sal_Unicode*)::comphelper::getString(aValue);  break;
+        //  case TypeClass_FLOAT:           SolarMath::DoubleToString( aRetStr, ::comphelper::getFloat(aValue), 'F', 40, '.', sal_True); break;
+        //  case TypeClass_DOUBLE:          SolarMath::DoubleToString( aRetStr, ::comphelper::getDouble(aValue), 'F', 400, '.', sal_True); break;
+        case TypeClass_FLOAT:           aRetStr = String::CreateFromFloat( ::comphelper::getFloat(aValue));break;
+        case TypeClass_DOUBLE:          aRetStr = String::CreateFromDouble( ::comphelper::getDouble(aValue));break;
                 // use SolarMath::DoubleToString instead of sprintf as it is more flexible
                 // with respect to the decimal digits (sprintf uses a default value for the number
                 // of dec digits and isn't able to cut trailing zeros)
                 // 67901 - 27.07.99 - FS
-        case ::com::sun::star::uno::TypeClass_BYTE:             aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
-        case ::com::sun::star::uno::TypeClass_SHORT:            aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
-        case ::com::sun::star::uno::TypeClass_LONG:             aRetStr = String::CreateFromInt32(::comphelper::getINT32(aValue));      break;
-        case ::com::sun::star::uno::TypeClass_HYPER:            aRetStr.AssignAscii("TYPE HYPER");          break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT:   aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG:    aRetStr = String::CreateFromInt32(::comphelper::getINT32(aValue));      break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_HYPER:   aRetStr.AssignAscii("TYPE UNSIGNED_HYPER"); break;
+        case TypeClass_BYTE:                aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
+        case TypeClass_SHORT:           aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
+        case TypeClass_LONG:                aRetStr = String::CreateFromInt32(::comphelper::getINT32(aValue));      break;
+        case TypeClass_HYPER:           aRetStr.AssignAscii("TYPE HYPER");          break;
+        case TypeClass_UNSIGNED_SHORT:  aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
+        case TypeClass_UNSIGNED_LONG:   aRetStr = String::CreateFromInt32(::comphelper::getINT32(aValue));      break;
+        case TypeClass_UNSIGNED_HYPER:  aRetStr.AssignAscii("TYPE UNSIGNED_HYPER"); break;
     }
 
     return aRetStr;
 }
 
 // Hilfs-Funktion, um ein ::rtl::OUString in einen Any zu konvertieren
-::com::sun::star::uno::Any StringToAny( ::rtl::OUString _Str, ::com::sun::star::uno::TypeClass eTargetType )
+Any StringToAny( ::rtl::OUString _Str, TypeClass eTargetType )
 {
     String aStr(_Str);
-    ::com::sun::star::uno::Any aRetAny;
+    Any aRetAny;
     switch( eTargetType )
     {
-        case ::com::sun::star::uno::TypeClass_INTERFACE:        break;
-        case ::com::sun::star::uno::TypeClass_SERVICE:          break;
-        case ::com::sun::star::uno::TypeClass_MODULE:           break;
-        case ::com::sun::star::uno::TypeClass_STRUCT:           break;
-        case ::com::sun::star::uno::TypeClass_TYPEDEF:          break;
-        case ::com::sun::star::uno::TypeClass_UNION:            break;
-        case ::com::sun::star::uno::TypeClass_ENUM:             break;
-        case ::com::sun::star::uno::TypeClass_EXCEPTION:        break;
-        case ::com::sun::star::uno::TypeClass_ARRAY:            break;
-        case ::com::sun::star::uno::TypeClass_SEQUENCE:         break;
-        case ::com::sun::star::uno::TypeClass_VOID:             break;
-        case ::com::sun::star::uno::TypeClass_ANY:              break;
-        case ::com::sun::star::uno::TypeClass_UNKNOWN:          break;
-        case ::com::sun::star::uno::TypeClass_BOOLEAN:
+        case TypeClass_INTERFACE:       break;
+        case TypeClass_SERVICE:         break;
+        case TypeClass_MODULE:          break;
+        case TypeClass_STRUCT:          break;
+        case TypeClass_TYPEDEF:         break;
+        case TypeClass_UNION:           break;
+        case TypeClass_ENUM:                break;
+        case TypeClass_EXCEPTION:       break;
+        case TypeClass_ARRAY:           break;
+        case TypeClass_SEQUENCE:            break;
+        case TypeClass_VOID:                break;
+        case TypeClass_ANY:             break;
+        case TypeClass_UNKNOWN:         break;
+        case TypeClass_BOOLEAN:
             {
                 sal_Bool bB = (aStr.ToInt32() != 0);
                 aRetAny.setValue(&bB,getBooleanCppuType() );
                 break;
             }
-        case ::com::sun::star::uno::TypeClass_CHAR:
+        case TypeClass_CHAR:
             {
                 sal_Char cC = (aStr.GetChar(0));
                 aRetAny.setValue(&cC,getCharCppuType() );       break;
             }
-        case ::com::sun::star::uno::TypeClass_STRING:           aRetAny <<= _Str;           break;
-        case ::com::sun::star::uno::TypeClass_FLOAT:            aRetAny <<= aStr.ToFloat(); break;
-        case ::com::sun::star::uno::TypeClass_DOUBLE:           aRetAny <<= aStr.ToDouble(); break;
-        case ::com::sun::star::uno::TypeClass_BYTE:             aRetAny <<=  (sal_uInt8)aStr.ToInt32(); break;
-        case ::com::sun::star::uno::TypeClass_SHORT:            aRetAny <<=  (sal_Int16)aStr.ToInt32(); break;
-        case ::com::sun::star::uno::TypeClass_LONG:             aRetAny <<=  (sal_Int32)aStr.ToInt32(); break;
-        case ::com::sun::star::uno::TypeClass_HYPER:            break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT:   aRetAny <<=  (sal_uInt16)aStr.ToInt32();    break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG:    aRetAny <<=  (sal_uInt32)aStr.ToInt32();    break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_HYPER:   break;
+        case TypeClass_STRING:          aRetAny <<= _Str;           break;
+        case TypeClass_FLOAT:           aRetAny <<= aStr.ToFloat(); break;
+        case TypeClass_DOUBLE:          aRetAny <<= aStr.ToDouble(); break;
+        case TypeClass_BYTE:                aRetAny <<=  (sal_uInt8)aStr.ToInt32(); break;
+        case TypeClass_SHORT:           aRetAny <<=  (sal_Int16)aStr.ToInt32(); break;
+        case TypeClass_LONG:                aRetAny <<=  (sal_Int32)aStr.ToInt32(); break;
+        case TypeClass_HYPER:           break;
+        case TypeClass_UNSIGNED_SHORT:  aRetAny <<=  (sal_uInt16)aStr.ToInt32();    break;
+        case TypeClass_UNSIGNED_LONG:   aRetAny <<=  (sal_uInt32)aStr.ToInt32();    break;
+        case TypeClass_UNSIGNED_HYPER:  break;
     }
     return aRetAny;
 }
@@ -1024,26 +999,26 @@ sal_uInt32 findValue1(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& r
 //========================================================================
 // = CursorWrapper
 //------------------------------------------------------------------------
-CursorWrapper::CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned)
+CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned)
 {
-    ImplConstruct(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, ::com::sun::star::uno::UNO_QUERY), bUseCloned);
+    ImplConstruct(Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY), bUseCloned);
 }
 
 //------------------------------------------------------------------------
-CursorWrapper::CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
+CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
 {
     ImplConstruct(_rxCursor, bUseCloned);
 }
 
 //------------------------------------------------------------------------
-void CursorWrapper::ImplConstruct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
+void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
 {
     if (bUseCloned)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XResultSetAccess> xAccess(_rxCursor, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::sdb::XResultSetAccess> xAccess(_rxCursor, UNO_QUERY);
         try
         {
-            m_xMoveOperations = xAccess.is() ? xAccess->createResultSet() : ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>();
+            m_xMoveOperations = xAccess.is() ? xAccess->createResultSet() : Reference< ::com::sun::star::sdbc::XResultSet>();
         }
         catch(Exception&)
         {
@@ -1052,8 +1027,8 @@ void CursorWrapper::ImplConstruct(const ::com::sun::star::uno::Reference< ::com:
     else
         m_xMoveOperations   = _rxCursor;
 
-    m_xBookmarkOperations   = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>(m_xMoveOperations, ::com::sun::star::uno::UNO_QUERY);
-    m_xColumnsSupplier      = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(m_xMoveOperations, ::com::sun::star::uno::UNO_QUERY);
+    m_xBookmarkOperations   = Reference< ::com::sun::star::sdbcx::XRowLocate>(m_xMoveOperations, UNO_QUERY);
+    m_xColumnsSupplier      = Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(m_xMoveOperations, UNO_QUERY);
 
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
     {   // all or nothing !!
@@ -1066,11 +1041,11 @@ void CursorWrapper::ImplConstruct(const ::com::sun::star::uno::Reference< ::com:
 }
 
 //------------------------------------------------------------------------
-const CursorWrapper& CursorWrapper::operator=(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor)
+const CursorWrapper& CursorWrapper::operator=(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor)
 {
-    m_xMoveOperations = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, ::com::sun::star::uno::UNO_QUERY);
-    m_xBookmarkOperations = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>(_rxCursor, ::com::sun::star::uno::UNO_QUERY);
-    m_xColumnsSupplier = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(_rxCursor, ::com::sun::star::uno::UNO_QUERY);
+    m_xMoveOperations = Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY);
+    m_xBookmarkOperations = Reference< ::com::sun::star::sdbcx::XRowLocate>(_rxCursor, UNO_QUERY);
+    m_xColumnsSupplier = Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(_rxCursor, UNO_QUERY);
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
     {   // all or nothing !!
         m_xMoveOperations = NULL;
@@ -1082,7 +1057,7 @@ const CursorWrapper& CursorWrapper::operator=(const ::com::sun::star::uno::Refer
 
 //==============================================================================
 //==============================================================================
-//IndexAccessIterator::IndexAccessIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint)
+//IndexAccessIterator::IndexAccessIterator(Reference< XInterface> xStartingPoint)
 //  :m_xStartingPoint(xStartingPoint)
 //  ,m_xCurrentObject(NULL)
 //{
@@ -1090,7 +1065,7 @@ const CursorWrapper& CursorWrapper::operator=(const ::com::sun::star::uno::Refer
 //}
 //
 //  ------------------------------------------------------------------------------
-//::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> IndexAccessIterator::Next()
+//Reference< XInterface> IndexAccessIterator::Next()
 //{
 //  sal_Bool bCheckingStartingPoint = !m_xCurrentObject.is();
 //      // ist die aktuelle Node der Anfangspunkt ?
@@ -1099,7 +1074,7 @@ const CursorWrapper& CursorWrapper::operator=(const ::com::sun::star::uno::Refer
 //  if (!m_xCurrentObject.is())
 //      m_xCurrentObject = m_xStartingPoint;
 //
-//  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xSearchLoop( m_xCurrentObject);
+//  Reference< XInterface> xSearchLoop( m_xCurrentObject);
 //  sal_Bool bHasMoreToSearch = sal_True;
 //  sal_Bool bFoundSomething = sal_False;
 //  while (!bFoundSomething && bHasMoreToSearch)
@@ -1113,11 +1088,11 @@ const CursorWrapper& CursorWrapper::operator=(const ::com::sun::star::uno::Refer
 //      else
 //      {
 //          // zuerst absteigen, wenn moeglich
-//          ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xContainerAccess(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
+//          Reference< ::com::sun::star::container::XIndexAccess> xContainerAccess(xSearchLoop, UNO_QUERY);
 //          if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
 //          {   // zum ersten Child
-//              ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(0));
-//              xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue();
+//              Any aElement(xContainerAccess->getByIndex(0));
+//              xSearchLoop = *(Reference< XInterface>*)aElement.getValue();
 //              bCheckingStartingPoint = sal_False;
 //
 //              m_arrChildIndizies.Insert(ULONG(0), m_arrChildIndizies.Count());
@@ -1127,11 +1102,11 @@ const CursorWrapper& CursorWrapper::operator=(const ::com::sun::star::uno::Refer
 //              // dann nach oben und nach rechts, wenn moeglich
 //              while (m_arrChildIndizies.Count() > 0)
 //              {   // (mein Stack ist nich leer, also kann ich noch nach oben gehen)
-//                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
+//                  Reference< ::com::sun::star::container::XChild> xChild(xSearchLoop, UNO_QUERY);
 //                  DBG_ASSERT(xChild.is(), "IndexAccessIterator::Next : a content has no approriate interface !");
 //
-//                  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xParent( xChild->getParent());
-//                  xContainerAccess = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xParent, ::com::sun::star::uno::UNO_QUERY);
+//                  Reference< XInterface> xParent( xChild->getParent());
+//                  xContainerAccess = Reference< ::com::sun::star::container::XIndexAccess>(xParent, UNO_QUERY);
 //                  DBG_ASSERT(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 //
 //                  // den Index, den SearchLoop in diesem Parent hatte, von meinem 'Stack'
@@ -1142,8 +1117,8 @@ const CursorWrapper& CursorWrapper::operator=(const ::com::sun::star::uno::Refer
 //                  {   // auf dieser Ebene geht es noch nach rechts
 //                      ++nOldSearchChildIndex;
 //                      // also das naechste Child
-//                      ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
-//                      xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*) aElement.getValue();
+//                      Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
+//                      xSearchLoop = *(Reference< XInterface>*) aElement.getValue();
 //                      bCheckingStartingPoint = sal_False;
 //                      // und dessen Position auf den 'Stack'
 //                      m_arrChildIndizies.Insert(ULONG(nOldSearchChildIndex), m_arrChildIndizies.Count());
@@ -1215,7 +1190,7 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 //==============================================================================
 DBG_NAME(FmXDisposeMultiplexer);
 //------------------------------------------------------------------------------
-FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
+FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
     :m_pListener(_pListener)
     ,m_xObject(_rxObject)
     ,m_nId(_nId)
@@ -1235,9 +1210,9 @@ FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 
 // ::com::sun::star::lang::XEventListener
 //------------------------------------------------------------------
-void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject& _Source) throw( ::com::sun::star::uno::RuntimeException )
+void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject& _Source) throw( RuntimeException )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
+    Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
 
     if (m_pListener)
     {
@@ -1253,7 +1228,7 @@ void FmXDisposeMultiplexer::dispose()
 {
     if (m_xObject.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
+        Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
 
         m_xObject->removeEventListener(this);
         m_xObject = NULL;
@@ -1265,10 +1240,10 @@ void FmXDisposeMultiplexer::dispose()
 
 //==============================================================================
 //------------------------------------------------------------------------------
-sal_Int16 getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
+sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
 {
     // ask for the persistent service name
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject> xPersistence(_rxObject, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
     DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument shold be an ::com::sun::star::io::XPersistObject !");
     if (!xPersistence.is())
         return OBJ_FM_CONTROL;
@@ -1411,15 +1386,15 @@ sal_Int16 getControlTypeByModelName(const ::rtl::OUString& rModel)
     return ::rtl::OUString();
 }
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString> getEventMethods(const ::com::sun::star::uno::Type& type)
+Sequence< ::rtl::OUString> getEventMethods(const Type& type)
 {
     typelib_InterfaceTypeDescription *pType=0;
     type.getDescription( (typelib_TypeDescription**)&pType);
 
     if(!pType)
-        return ::com::sun::star::uno::Sequence< ::rtl::OUString>();
+        return Sequence< ::rtl::OUString>();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aNames(pType->nMembers);
+    Sequence< ::rtl::OUString> aNames(pType->nMembers);
     ::rtl::OUString* pNames = aNames.getArray();
     for(sal_Int32 i=0;i<pType->nMembers;i++,++pNames)
     {
@@ -1432,15 +1407,15 @@ sal_Int16 getControlTypeByModelName(const ::rtl::OUString& rModel)
 
 
 //------------------------------------------------------------------------------
-void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl,
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>& rTransferIfAvailable)
+void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>& xModel, const Reference< ::com::sun::star::awt::XControl>& xControl,
+    const Sequence< ::com::sun::star::script::ScriptEventDescriptor>& rTransferIfAvailable)
 {
     // first check if we have a XEventAttacherManager for the model
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xModelChild(xModel, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XChild> xModelChild(xModel, UNO_QUERY);
     if (!xModelChild.is())
         return; // nothing to do
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager> xEventManager(xModelChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::script::XEventAttacherManager> xEventManager(xModelChild->getParent(), UNO_QUERY);
     if (!xEventManager.is())
         return; // nothing to do
 
@@ -1448,7 +1423,7 @@ void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::st
         return; // nothing to do
 
     // check for the index of the model within it's parent
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xParentIndex(xModelChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess> xParentIndex(xModelChild->getParent(), UNO_QUERY);
     if (!xParentIndex.is())
         return; // nothing to do
     sal_Int32 nIndex = getElementPos(xParentIndex, xModel);
@@ -1456,21 +1431,21 @@ void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::st
         return; // nothing to do
 
     // then we need informations about the listeners supported by the control and the model
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   aModelListeners;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   aControlListeners;
+    Sequence< Type> aModelListeners;
+    Sequence< Type> aControlListeners;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
+    Reference< ::com::sun::star::beans::XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
 
     if (xModelIntrospection.is() && xModel.is())
     {
-        ::com::sun::star::uno::Any aModel(::com::sun::star::uno::makeAny(xModel));
+        Any aModel(makeAny(xModel));
         aModelListeners = xModelIntrospection->inspect(aModel)->getSupportedListeners();
     }
 
     if (xControlIntrospection.is() && xControl.is())
     {
-        ::com::sun::star::uno::Any aControl(::com::sun::star::uno::makeAny(xControl));
+        Any aControl(makeAny(xControl));
         aControlListeners = xControlIntrospection->inspect(aControl)->getSupportedListeners();
     }
 
@@ -1478,7 +1453,7 @@ void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::st
     if (!nMaxNewLen)
         return; // the model and the listener don't support any listeners (or we were unable to retrieve these infos)
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   aTransferable(nMaxNewLen);
+    Sequence< ::com::sun::star::script::ScriptEventDescriptor>  aTransferable(nMaxNewLen);
     ::com::sun::star::script::ScriptEventDescriptor* pTransferable = aTransferable.getArray();
 
     const ::com::sun::star::script::ScriptEventDescriptor* pCurrent = rTransferIfAvailable.getConstArray();
@@ -1486,12 +1461,12 @@ void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::st
     for (i=0; i<rTransferIfAvailable.getLength(); ++i, ++pCurrent)
     {
         // search the model/control idl classes for the event described by pCurrent
-        for (   ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>* pCurrentArray = &aModelListeners;
+        for (   Sequence< Type>* pCurrentArray = &aModelListeners;
                 pCurrentArray;
                 pCurrentArray = (pCurrentArray == &aModelListeners) ? &aControlListeners : NULL
             )
         {
-            const ::com::sun::star::uno::Type* pCurrentListeners = pCurrentArray->getConstArray();
+            const Type* pCurrentListeners = pCurrentArray->getConstArray();
             for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
             {
                 UniString aListener = (*pCurrentListeners).getTypeName();
@@ -1504,7 +1479,7 @@ void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::st
                     continue;
 
                 // now check the methods
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> aMethodsNames = getEventMethods(*pCurrentListeners);
+                Sequence< ::rtl::OUString> aMethodsNames = getEventMethods(*pCurrentListeners);
                 const ::rtl::OUString* pMethodsNames = aMethodsNames.getConstArray();
                 for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
                 {
@@ -1530,7 +1505,7 @@ void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::st
 }
 
 //------------------------------------------------------------------------------
-sal_Int16   GridModel2ViewPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nModelPos)
+sal_Int16   GridModel2ViewPos(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nModelPos)
 {
     if (rColumns.is())
     {
@@ -1539,7 +1514,7 @@ sal_Int16   GridModel2ViewPos(const ::com::sun::star::uno::Reference< ::com::sun
             return (sal_Int16)-1;
 
         // the column itself shouldn't be hidden
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xAskedFor( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(nModelPos).getValue());
+        Reference< ::com::sun::star::beans::XPropertySet> xAskedFor( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(nModelPos).getValue());
         if (::comphelper::getBOOL(xAskedFor->getPropertyValue(FM_PROP_HIDDEN)))
         {
             DBG_ERROR("GridModel2ViewPos : invalid argument !");
@@ -1549,7 +1524,7 @@ sal_Int16   GridModel2ViewPos(const ::com::sun::star::uno::Reference< ::com::sun
         sal_Int16 nViewPos = nModelPos;
         for (sal_Int16 i=0; i<nModelPos; ++i)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCur( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
+            Reference< ::com::sun::star::beans::XPropertySet> xCur( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
             if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
                 --nViewPos;
         }
@@ -1559,7 +1534,7 @@ sal_Int16   GridModel2ViewPos(const ::com::sun::star::uno::Reference< ::com::sun
 }
 
 //------------------------------------------------------------------------------
-sal_Int16   GridView2ModelPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nViewPos)
+sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nViewPos)
 {
     if (rColumns.is())
     {
@@ -1567,7 +1542,7 @@ sal_Int16   GridView2ModelPos(const ::com::sun::star::uno::Reference< ::com::sun
         sal_Int16 i;
         for (i=0; i<rColumns->getCount(); ++i)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCur( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
+            Reference< ::com::sun::star::beans::XPropertySet> xCur( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
             if (!::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
                 // for every visible col : if nViewPos is greater zero, decrement it, else we
                 // have found the model position
@@ -1583,7 +1558,7 @@ sal_Int16   GridView2ModelPos(const ::com::sun::star::uno::Reference< ::com::sun
 }
 
 //------------------------------------------------------------------------------
-sal_Int16   GridViewColumnCount(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns)
+sal_Int16   GridViewColumnCount(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns)
 {
     if (rColumns.is())
     {
@@ -1591,7 +1566,7 @@ sal_Int16   GridViewColumnCount(const ::com::sun::star::uno::Reference< ::com::s
         // loop through all columns
         for (sal_Int16 i=0; i<rColumns->getCount(); ++i)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCur( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
+            Reference< ::com::sun::star::beans::XPropertySet> xCur( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
             if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
                 --nCount;
         }
@@ -1611,7 +1586,7 @@ UniString quoteName(const UniString& rQuote, const UniString& rName)
 }
 
 //------------------------------------------------------------------------------
-UniString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const UniString& rName)
+UniString quoteTableName(const Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const UniString& rName)
 {
     UniString sQuote = _rxMeta->getIdentifierQuoteString();
     UniString sQuotedName;
@@ -1658,7 +1633,7 @@ UniString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::sta
 
 DBG_NAME(FmSlotDispatch);
 //------------------------------------------------------------------------------
-FmSlotDispatch::FmSlotDispatch(const  ::com::sun::star::util::URL& rUrl, sal_Int16 nSlotId, SfxBindings& rBindings)
+FmSlotDispatch::FmSlotDispatch(const  URL& rUrl, sal_Int16 nSlotId, SfxBindings& rBindings)
     :SfxControllerItem(nSlotId, rBindings)
     ,m_aDisposeListeners(m_aAccessSafety)
     ,m_aStatusListeners(m_aAccessSafety)
@@ -1677,7 +1652,7 @@ FmSlotDispatch::~FmSlotDispatch()
 }
 
 //------------------------------------------------------------------------------
-void FmSlotDispatch::dispatch(const  ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw( ::com::sun::star::uno::RuntimeException )
+void FmSlotDispatch::dispatch(const  URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw( RuntimeException )
 {
     DBG_ASSERT(aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL, "FmSlotDispatch::dispatch : invalid argument !");
     DBG_ASSERT(m_aExecutor.IsSet(), "FmSlotDispatch::dispatch : no executor !");
@@ -1687,7 +1662,7 @@ void FmSlotDispatch::dispatch(const  ::com::sun::star::util::URL& aURL, const ::
 }
 
 //------------------------------------------------------------------------------
-void FmSlotDispatch::NotifyState(SfxItemState eState, const SfxPoolItem* pState, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>& rListener)
+void FmSlotDispatch::NotifyState(SfxItemState eState, const SfxPoolItem* pState, const Reference< ::com::sun::star::frame::XStatusListener>& rListener)
 {
     ::com::sun::star::frame::FeatureStateEvent aEvent = BuildEvent(eState, pState);
 
@@ -1698,7 +1673,7 @@ void FmSlotDispatch::NotifyState(SfxItemState eState, const SfxPoolItem* pState,
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmSlotDispatch::addStatusListener( const Reference< ::com::sun::star::frame::XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
     DBG_ASSERT((aURL.Main.getLength() == 0) || (aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL),
         "FmSlotDispatch::dispatch : invalid argument !");
@@ -1712,7 +1687,7 @@ void SAL_CALL FmSlotDispatch::addStatusListener( const ::com::sun::star::uno::Re
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmSlotDispatch::removeStatusListener( const Reference< ::com::sun::star::frame::XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
     DBG_ASSERT((aURL.Main.getLength() == 0) || (aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL),
         "FmSlotDispatch::dispatch : invalid argument !");
@@ -1720,21 +1695,21 @@ void SAL_CALL FmSlotDispatch::removeStatusListener( const ::com::sun::star::uno:
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmSlotDispatch::dispose(  ) throw(RuntimeException)
 {
-    ::com::sun::star::lang::EventObject aEvt(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*this));
+    ::com::sun::star::lang::EventObject aEvt(Reference< XInterface >(*this));
     m_aDisposeListeners.disposeAndClear(aEvt);
     m_aStatusListeners.disposeAndClear(aEvt);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmSlotDispatch::addEventListener( const Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(RuntimeException)
 {
     m_aDisposeListeners.addInterface( xListener );
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL FmSlotDispatch::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(RuntimeException)
 {
     m_aDisposeListeners.removeInterface( aListener );
 }
@@ -1752,7 +1727,7 @@ void FmSlotDispatch::StateChanged(sal_Int16 nSID, SfxItemState eState, const Sfx
 ::com::sun::star::frame::FeatureStateEvent FmSlotDispatch::BuildEvent(SfxItemState eState, const SfxPoolItem* pState)
 {
     ::com::sun::star::frame::FeatureStateEvent aReturn;
-    aReturn.Source = (::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)(*this);
+    aReturn.Source = (Reference< XInterface >)(*this);
     aReturn.FeatureURL = m_aUrl;
     aReturn.IsEnabled = (SFX_ITEM_DISABLED != eState) && m_aExecutor.IsSet();
     aReturn.Requery = sal_False;
@@ -1774,12 +1749,12 @@ void FmSlotDispatch::StateChanged(sal_Int16 nSID, SfxItemState eState, const Sfx
 
 // search in the hierarchy for a connection
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> findConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xParent)
+Reference< ::com::sun::star::sdbc::XConnection> findConnection(const Reference< XInterface>& xParent)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection(xParent, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::sdbc::XConnection> xConnection(xParent, UNO_QUERY);
     if (!xConnection.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xParent, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XChild> xChild(xParent, UNO_QUERY);
         if (xChild.is())
             return findConnection(xChild->getParent());
     }
@@ -1792,7 +1767,7 @@ void FmSlotDispatch::StateChanged(sal_Int16 nSID, SfxItemState eState, const Sfx
 
 DBG_NAME(FmXDispatchInterceptorImpl);
 //------------------------------------------------------------------------
-FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster, sal_Int16 _nId)
+FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster, sal_Int16 _nId)
     : ::cppu::OComponentHelper(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
     ,m_xIntercepted(_rToIntercept)
     ,m_pMaster(_pMaster)
@@ -1801,13 +1776,13 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const ::com::sun::star::u
     DBG_CTOR(FmXDispatchInterceptorImpl,NULL);
 
     ::osl::MutexGuard aGuard(getAccessSafety());
-    if (m_xIntercepted.is())
     ::comphelper::increment(m_refCount);
+    if (m_xIntercepted.is())
     {
         m_xIntercepted->registerDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
         // this should make us the top-level dispatch-provider for the component, via a call to our
         // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
         if (xInterceptedComponent.is())
             xInterceptedComponent->addEventListener((::com::sun::star::lang::XEventListener*)this);
     }
@@ -1824,9 +1799,9 @@ FmXDispatchInterceptorImpl::~FmXDispatchInterceptorImpl()
 }
 
 //------------------------------------------------------------------------
-::com::sun::star::uno::Any SAL_CALL FmXDispatchInterceptorImpl::queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
+Any SAL_CALL FmXDispatchInterceptorImpl::queryInterface( const Type& type) throw ( RuntimeException )
 {
-    ::com::sun::star::uno::Any aOut = ::cppu::queryInterface(type,static_cast< ::com::sun::star::frame::XDispatchProviderInterceptor*>(this),
+    Any aOut = ::cppu::queryInterface(type,static_cast< ::com::sun::star::frame::XDispatchProviderInterceptor*>(this),
         static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
         static_cast< ::com::sun::star::lang::XEventListener*>(this));
     if(aOut.hasValue())
@@ -1834,26 +1809,26 @@ FmXDispatchInterceptorImpl::~FmXDispatchInterceptorImpl()
     return OComponentHelper::queryInterface(type);
 }
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXDispatchInterceptorImpl::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< Type > SAL_CALL FmXDispatchInterceptorImpl::getTypes(  ) throw(RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypes(OComponentHelper::getTypes());
+    Sequence< Type > aTypes(OComponentHelper::getTypes());
     aTypes.realloc(2);
-    ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
+    Type* pTypes = aTypes.getArray();
 
-    pTypes[aTypes.getLength()-2] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>*)0);
-    pTypes[aTypes.getLength()-1] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>*)0);
+    pTypes[aTypes.getLength()-2] = ::getCppuType((const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>*)0);
+    pTypes[aTypes.getLength()-1] = ::getCppuType((const Reference< ::com::sun::star::lang::XEventListener>*)0);
     return aTypes;
 }
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL FmXDispatchInterceptorImpl::getImplementationId() throw(::com::sun::star::uno::RuntimeException)
+Sequence< sal_Int8 > SAL_CALL FmXDispatchInterceptorImpl::getImplementationId() throw(RuntimeException)
 {
     return ::form::OImplementationIds::getImplementationId(getTypes());
 }
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL FmXDispatchInterceptorImpl::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(::com::sun::star::uno::RuntimeException)
+Reference< ::com::sun::star::frame::XDispatch > SAL_CALL FmXDispatchInterceptorImpl::queryDispatch( const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> xResult;
+    Reference< ::com::sun::star::frame::XDispatch> xResult;
     // ask our 'real' interceptor
     if (m_pMaster)
         xResult = m_pMaster->interceptedQueryDispatch(m_nId, aURL, aTargetFrameName, nSearchFlags);
@@ -1866,12 +1841,12 @@ FmXDispatchInterceptorImpl::~FmXDispatchInterceptorImpl()
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL
-FmXDispatchInterceptorImpl::queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL
+FmXDispatchInterceptorImpl::queryDispatches( const Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> > aReturn(aDescripts.getLength());
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>* pReturn = aReturn.getArray();
+    Sequence< Reference< ::com::sun::star::frame::XDispatch> > aReturn(aDescripts.getLength());
+    Reference< ::com::sun::star::frame::XDispatch>* pReturn = aReturn.getArray();
     const ::com::sun::star::frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
     for (sal_Int16 i=0; i<aDescripts.getLength(); ++i, ++pReturn, ++pDescripts)
     {
@@ -1881,35 +1856,35 @@ FmXDispatchInterceptorImpl::queryDispatches( const ::com::sun::star::uno::Sequen
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL FmXDispatchInterceptorImpl::getSlaveDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException)
+Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL FmXDispatchInterceptorImpl::getSlaveDispatchProvider(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
     return m_xSlaveDispatcher;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXDispatchInterceptorImpl::setSlaveDispatchProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>& xNewDispatchProvider) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXDispatchInterceptorImpl::setSlaveDispatchProvider(const Reference< ::com::sun::star::frame::XDispatchProvider>& xNewDispatchProvider) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
     m_xSlaveDispatcher = xNewDispatchProvider;
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider> SAL_CALL FmXDispatchInterceptorImpl::getMasterDispatchProvider(void) throw( ::com::sun::star::uno::RuntimeException )
+Reference< ::com::sun::star::frame::XDispatchProvider> SAL_CALL FmXDispatchInterceptorImpl::getMasterDispatchProvider(void) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
     return m_xMasterDispatcher;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXDispatchInterceptorImpl::setMasterDispatchProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>& xNewSupplier) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXDispatchInterceptorImpl::setMasterDispatchProvider(const Reference< ::com::sun::star::frame::XDispatchProvider>& xNewSupplier) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
     m_xMasterDispatcher = xNewSupplier;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXDispatchInterceptorImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmXDispatchInterceptorImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
 {
     if (Source.Source == m_xIntercepted)
     {
@@ -1924,11 +1899,11 @@ void FmXDispatchInterceptorImpl::ImplDetach()
 
 /*! PB: das macht der Frame lieber selber
     // remove ourself from the interceptor chain
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor> xSlave(m_xSlaveDispatcher, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatchProviderInterceptor> xSlave(m_xSlaveDispatcher, UNO_QUERY);
     if (xSlave.is())
         xSlave->setMasterDispatchProvider(m_xMasterDispatcher);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor> xMaster(m_xMasterDispatcher, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatchProviderInterceptor> xMaster(m_xMasterDispatcher, UNO_QUERY);
     if (xMaster.is())
         xMaster->setSlaveDispatchProvider(m_xSlaveDispatcher);
 
@@ -1947,7 +1922,7 @@ void FmXDispatchInterceptorImpl::ImplDetach()
 void FmXDispatchInterceptorImpl::disposing()
 {
     // remove ourself as event listener from the interception component
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
     if (xInterceptedComponent.is())
         xInterceptedComponent->removeEventListener((::com::sun::star::lang::XEventListener*)this);
 
@@ -1960,19 +1935,19 @@ void FmXDispatchInterceptorImpl::disposing()
 //==============================================================================
 
 //------------------------------------------------------------------------------
-sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xLoad)
+sal_Bool isLoadable(const Reference< XInterface>& xLoad)
 {
     // determines whether a form should be loaded or not
     // if there is no datasource or connection there is no reason to load a form
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xSet(xLoad, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet> xSet(xLoad, UNO_QUERY);
     if (xSet.is())
     {
         try
         {
             // is there already a active connection
-            ::com::sun::star::uno::Any aConn( xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) );
-            if (aConn.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE &&
-                ((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aConn.getValue())->is())
+            Any aConn( xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) );
+            if (aConn.getValueTypeClass() == TypeClass_INTERFACE &&
+                ((Reference< XInterface>*)aConn.getValue())->is())
                 return sal_True;
             else if (::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).len() ||
                      ::comphelper::getString(xSet->getPropertyValue(FM_PROP_URL)).len() ||
@@ -1988,72 +1963,54 @@ sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::un
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rsName)
+Reference< ::com::sun::star::container::XNameAccess> getTableFields(const Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rsName)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier> xSupplyTables(_rxConn, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::sdbcx::XTablesSupplier> xSupplyTables(_rxConn, UNO_QUERY);
     DBG_ASSERT(xSupplyTables.is(), "::getTableFields : invalid connection !");
         // the conn already said it would support the service sdb::Connection
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xTables( xSupplyTables->getTables());
+    Reference< ::com::sun::star::container::XNameAccess> xTables( xSupplyTables->getTables());
     if (xTables.is() && xTables->hasByName(_rsName))
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xTableCols(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xTables->getByName(_rsName).getValue(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xTableCols(*(Reference< XInterface>*)xTables->getByName(_rsName).getValue(), UNO_QUERY);
         DBG_ASSERT(xTableCols.is(), "::getTableFields : invalid table !");
             // the table is expected to support the service sddb::Table, which requires an ::com::sun::star::sdbcx::XColumnsSupplier interface
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xFieldNames(xTableCols->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XNameAccess> xFieldNames(xTableCols->getColumns(), UNO_QUERY);
         DBG_ASSERT(xFieldNames.is(), "::getTableFields : TableCols->getColumns doesn't export a NameAccess !");
         return xFieldNames;
     }
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>();
+    return Reference< ::com::sun::star::container::XNameAccess>();
 }
 
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsTitleOrPath)
+Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsTitleOrPath)
 {
     DBG_ASSERT(_rsTitleOrPath.len(), "::getDataSource : invalid arg !");
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>  xReturn;
+    Reference< ::com::sun::star::sdbc::XDataSource>  xReturn;
 
     // is it a file url ?
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xNamingContext(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XNameAccess> xNamingContext(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_CONTEXT), UNO_QUERY);
     if (xNamingContext.is() && xNamingContext->hasByName(_rsTitleOrPath))
     {
-        DBG_ASSERT(::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService>(xNamingContext, ::com::sun::star::uno::UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
-        xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService>(xNamingContext, ::com::sun::star::uno::UNO_QUERY)->getRegisteredObject(_rsTitleOrPath), ::com::sun::star::uno::UNO_QUERY);
+        DBG_ASSERT(Reference< XNamingService>(xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
+        xReturn = Reference< ::com::sun::star::sdbc::XDataSource>(Reference< XNamingService>(xNamingContext, UNO_QUERY)->getRegisteredObject(_rsTitleOrPath), UNO_QUERY);
     }
-    else
-    {   // is it a favorite title ?
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment> xEnvironment(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ENVIRONMENT), ::com::sun::star::uno::UNO_QUERY);
-        if (xEnvironment.is())
-        {
-            try
-            {
-                xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(xEnvironment->getDatabaseAccess(_rsTitleOrPath), ::com::sun::star::uno::UNO_QUERY);
-            }
-            catch(::com::sun::star::sdbc::SQLException e)
-            {   // allowed, the env may throw an exception in case of an invalid name
-                e; // make compiler happy
-            }
-
-        }
-
-    }
-
     return xReturn;
 }
 
 
 //------------------------------------------------------------------------------
-void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn)
+void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, const Reference< ::com::sun::star::sdbc::XConnection>& _rxConn)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
     {
         try
         {
-            ::com::sun::star::uno::Any aConn(::com::sun::star::uno::makeAny(_rxConn));
+            Any aConn(makeAny(_rxConn));
             xRowSetProps->setPropertyValue(FM_PROP_ACTIVE_CONNECTION, aConn);
         }
         catch(Exception&)
@@ -2066,16 +2023,16 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
 
 // retrieve the current command of a rowset
 //------------------------------------------------------------------------------
-::rtl::OUString getCommand(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, sal_Bool& bEscapeProcessing, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConn)
+::rtl::OUString getCommand(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, sal_Bool& bEscapeProcessing, Reference< ::com::sun::star::sdbc::XConnection>& xConn)
 {
     ::rtl::OUString aReturn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
     {
         try
         {
-            ::com::sun::star::uno::Any aConn( xRowSetProps->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) );
-            if (aConn.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE)
+            Any aConn( xRowSetProps->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) );
+            if (aConn.getValueTypeClass() != TypeClass_INTERFACE)
                 return ::rtl::OUString();
 
             ::cppu::extractInterface(xConn, aConn);
@@ -2092,7 +2049,7 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
             {
                 case ::com::sun::star::sdb::CommandType::TABLE:
                 {
-                    //  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> xMeta( xConn->getMetaData());
+                    //  Reference< ::com::sun::star::sdbc::XDatabaseMetaData> xMeta( xConn->getMetaData());
                     UniString aStmt;
                     aStmt.AssignAscii("SELECT * FROM ");
                     aStmt += quoteTableName(xConn->getMetaData(), aCommand);
@@ -2100,14 +2057,14 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
                 }   break;
                 case ::com::sun::star::sdb::CommandType::QUERY:
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XQueriesSupplier> xQueriesAccess(xConn, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::sdb::XQueriesSupplier> xQueriesAccess(xConn, UNO_QUERY);
                     if (xQueriesAccess.is())
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xQueries(xQueriesAccess->getQueries());
+                        Reference< ::com::sun::star::container::XNameAccess> xQueries(xQueriesAccess->getQueries());
                         if (xQueries->hasByName(aCommand))
                         {
-                            ::com::sun::star::uno::Any aElement(xQueries->getByName(aCommand));
-                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xQuery(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
+                            Any aElement(xQueries->getByName(aCommand));
+                            Reference< ::com::sun::star::beans::XPropertySet> xQuery(*(Reference< XInterface>*)aElement.getValue(), UNO_QUERY);
                             aReturn= ::comphelper::getString(xQuery->getPropertyValue(FM_PROP_COMMAND));
                             bEscapeProcessing = ::comphelper::getBOOL(xQuery->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
                         }
@@ -2128,11 +2085,11 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps)
+Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(const Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> xReturn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xRowSet(_rxRowSetProps, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConn( ::dbtools::calcConnection(xRowSet,::comphelper::getProcessServiceFactory()));
+    Reference< ::com::sun::star::sdb::XSQLQueryComposer> xReturn;
+    Reference< ::com::sun::star::sdbc::XRowSet> xRowSet(_rxRowSetProps, UNO_QUERY);
+    Reference< ::com::sun::star::sdbc::XConnection> xConn( ::dbtools::calcConnection(xRowSet,::comphelper::getProcessServiceFactory()));
     try
     {
         if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
@@ -2174,15 +2131,15 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
                     case ::com::sun::star::sdb::CommandType::QUERY:
                     {
                         // ask the connection for the query
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XQueriesSupplier> xSupplyQueries(xConn, ::com::sun::star::uno::UNO_QUERY);
+                        Reference< ::com::sun::star::sdb::XQueriesSupplier> xSupplyQueries(xConn, UNO_QUERY);
                         if (!xSupplyQueries.is())
                             break;
 
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xQueries(xSupplyQueries->getQueries(), ::com::sun::star::uno::UNO_QUERY);
+                        Reference< ::com::sun::star::container::XNameAccess> xQueries(xSupplyQueries->getQueries(), UNO_QUERY);
                         if (!xQueries.is() || !xQueries->hasByName(sCommand))
                             break;
 
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xQueryProps(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xQueries->getByName(sCommand).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                        Reference< ::com::sun::star::beans::XPropertySet> xQueryProps(*(Reference< XInterface>*)xQueries->getByName(sCommand).getValue(), UNO_QUERY);
                         if (!xQueryProps.is())
                             break;
 
@@ -2199,8 +2156,8 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
                         sStatement = ::comphelper::getString(xQueryProps->getPropertyValue(FM_PROP_COMMAND));
 
                         // use an additional composer to build a statement from the query filter/order props
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, ::com::sun::star::uno::UNO_QUERY);
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> xLocalComposer;
+                        Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
+                        Reference< ::com::sun::star::sdb::XSQLQueryComposer> xLocalComposer;
                         if (xFactory.is())
                             xLocalComposer = xFactory->createQueryComposer();
                         if (!xLocalComposer.is())
@@ -2232,7 +2189,7 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
             if (sStatement.getLength())
             {
                 // create an composer
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
                 if (xFactory.is())
                     xReturn = xFactory->createQueryComposer();
                 if (xReturn.is())
@@ -2258,13 +2215,13 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
 }
 
 //------------------------------------------------------------------------------
-sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet)
+sal_Bool isRowSetAlive(const Reference< XInterface>& _rxRowSet)
 {
     sal_Bool bIsAlive = sal_False;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xCols;
+    Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess> xCols;
     if (xSupplyCols.is())
-        xCols = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xSupplyCols->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+        xCols = Reference< ::com::sun::star::container::XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
     if (xCols.is() && (xCols->getCount() > 0))
         bIsAlive = sal_True;
 
@@ -2273,11 +2230,11 @@ sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star:
 
 
 //==============================================================================
-DataColumn::DataColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxIFace)
+DataColumn::DataColumn(const Reference< ::com::sun::star::beans::XPropertySet>& _rxIFace)
 {
     m_xPropertySet = _rxIFace;
-    m_xColumn = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>(_rxIFace, ::com::sun::star::uno::UNO_QUERY);
-    m_xColumnUpdate = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>(_rxIFace, ::com::sun::star::uno::UNO_QUERY);
+    m_xColumn = Reference< ::com::sun::star::sdb::XColumn>(_rxIFace, UNO_QUERY);
+    m_xColumnUpdate = Reference< ::com::sun::star::sdb::XColumnUpdate>(_rxIFace, UNO_QUERY);
 
     if (!m_xPropertySet.is() || !m_xColumn.is())
     {

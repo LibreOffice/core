@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 15:20:53 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -273,7 +276,7 @@
         action;                                                             \
         successflag = sal_True;                                                 \
     }                                                                       \
-    catch(::com::sun::star::sdbc::SQLException e)                                                   \
+    catch(::com::sun::star::sdbc::SQLException& e)                                                  \
     {                                                                       \
         ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
         ::dbtools::prependContextInfo(e, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (), context);                \
@@ -682,6 +685,9 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     }
     return bResult;
 }
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 
 //------------------------------------------------------------------------
 void FmFormShell::Execute(SfxRequest &rReq)
@@ -693,6 +699,23 @@ void FmFormShell::Execute(SfxRequest &rReq)
     switch( nSlot )
     {
         case SID_FM_PUSHBUTTON:
+            {
+                sal_Int32 nSearchFlags =    ::com::sun::star::frame::FrameSearchFlag::SELF      |
+                                            ::com::sun::star::frame::FrameSearchFlag::PARENT    |
+                                            ::com::sun::star::frame::FrameSearchFlag::CREATE;
+
+                ::com::sun::star::util::URL aWantToDispatch;
+                aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DatasourceBrowser");
+
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_pImpl->m_xAttachedFrame, ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> xDisp;
+                if (xProv.is())
+                    xDisp = xProv->queryDispatch(aWantToDispatch, ::rtl::OUString::createFromAscii("_blank"), nSearchFlags);
+                // create the new frame
+                if (xDisp.is())
+                    xDisp->dispatch(aWantToDispatch, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>());
+            }
+            break;
         case SID_FM_RADIOBUTTON:
         case SID_FM_CHECKBOX:
         case SID_FM_FIXEDTEXT:
@@ -915,7 +938,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_TAB_DIALOG:
         {
-            FmTabOrderDlg aTabOrderDlg( GetpApp()->GetAppWindow(), this );
+            FmTabOrderDlg aTabOrderDlg(::comphelper::getProcessServiceFactory(), GetpApp()->GetAppWindow(), this );
             aTabOrderDlg.Execute();
             rReq.Done();
         }   break;

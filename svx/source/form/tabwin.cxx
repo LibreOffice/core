@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:57 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,9 @@ const long MIN_WIN_SIZE_X = 50;
 const long MIN_WIN_SIZE_Y = 50;
 
 const long LISTBOX_BORDER = 2;
+
+using namespace ::com::sun::star::sdbc;
+
 
 //==================================================================
 // class FmFieldWinListBox
@@ -379,21 +382,9 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
                 }
 
                 if (xTitleSupplier.is() && ::comphelper::hasProperty(FM_PROP_URL, xTitleSupplier))
-                {
                     xTitleSupplier->getPropertyValue(FM_PROP_URL) >>= sDisplayName;
-                    // then check if we have an alias for the URL
-                            ::com::sun::star::uno::Reference< ::com::sun::star::util::XLocalizedAliases >
-                                xAliases(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
-                    if (xAliases.is())
-                    {
-                        // get the application language
-                        XubString sLanguage, sCountry;
-                        ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-                        sDisplayName = xAliases->lookupProgrammatic(::com::sun::star::lang::Locale(sLanguage, sCountry, ::rtl::OUString()), sDisplayName);
-                    }
-                }
             }
-            catch(...)
+            catch(SQLException&)
             {
             }
             m_aDatabaseName = sDisplayName;
@@ -416,7 +407,8 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >  xSupplyTables(xConnection, ::com::sun::star::uno::UNO_QUERY);
                 if (xSupplyTables.is() && xSupplyTables->getTables().is() && xSupplyTables->getTables()->hasByName(m_aObjectName))
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xSupplyTables->getTables()->getByName(m_aObjectName).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
+                    xSupplyTables->getTables()->getByName(m_aObjectName) >>= xSupplyColumns;
                     xFields = xSupplyColumns->getColumns();
                 }
             }
@@ -426,7 +418,8 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XQueriesSupplier >  xSupplyQueries(xConnection, ::com::sun::star::uno::UNO_QUERY);
                 if (xSupplyQueries.is() && xSupplyQueries->getQueries().is() && xSupplyQueries->getQueries()->hasByName(m_aObjectName))
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xSupplyQueries->getQueries()->getByName(m_aObjectName).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
+                    xSupplyQueries->getQueries()->getByName(m_aObjectName) >>= xSupplyColumns;
                     xFields  = xSupplyColumns->getColumns();
                 }
             }
