@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-04-26 17:52:42 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,9 +248,11 @@ public:
     // simple number formatting
             String              getNum( long nNumber, USHORT nDecimals ) const;
 
-    // dummy returns
+    // dummy returns, to be implemented
     inline  sal_Unicode         getCurrZeroChar() const
                                     { return cCurrZeroChar; }
+    inline  BOOL                isNumLeadingZero() const
+                                    { return TRUE; }
 
 
     // reserved words
