@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:30:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2193,22 +2193,6 @@ Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
         lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
 
-    return aRect;
-}
-
-Rectangle SwAccessibleMap::PixelToCore( const Rectangle& rRect ) const
-{
-    Rectangle aRect;
-    if( GetShell()->GetWin() )
-    {
-        // OD 15.01.2003 #103492# - replace <PreviewAdjust(..)> by <GetMapMode(..)>
-        MapMode aMapMode;
-        GetMapMode( rRect.TopLeft(), aMapMode );
-        aRect = GetShell()->GetWin()->PixelToLogic( rRect, aMapMode );
-
-        Rectangle aTmpRect = GetShell()->GetWin()->LogicToPixel( aRect, aMapMode );
-        lcl_CorrectRectangle(aRect, rRect, aTmpRect);
-    }
     return aRect;
 }
 
