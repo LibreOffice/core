@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 16:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,16 @@
 
 #include "mergechange.hxx"
 
+#ifndef CONFIGMGR_MERGEHELPER_HXX
+#include "mergehelper.hxx"
+#endif
+#ifndef CONFIGMGR_UPDATEHELPER_HXX
+#include "updatehelper.hxx"
+#endif
+#ifndef _CONFIGMGR_TREEACTIONS_HXX_
+#include "treeactions.hxx"
+#endif
+
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
 #endif
@@ -72,9 +82,7 @@
 #ifndef CONFIGMGR_TREECHANGELIST_HXX
 #include "treechangelist.hxx"
 #endif
-#ifndef _CONFIGMGR_TREEACTIONS_HXX_
-#include "treeactions.hxx"
-#endif
+
 #ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
 #endif
@@ -90,6 +98,91 @@ namespace configmgr
     using namespace com::sun::star::uno;
     using namespace configuration;
     using namespace std;
+
+    // -----------------------------------------------------------------------------
+    // TODO: check name match
+    void mergeLayer(TreeChangeList & _aLayer, ISubtree& _aTree)
+    {
+        OSL_ENSURE(_aLayer.root.getNodeName() == _aTree.getName(),
+                    "Layer root node does not match the module name being updated");
+        mergeLayerToTree(_aLayer.root,_aTree);
+    }
+    // -----------------------------------------------------------------------------
+    // TODO: check name match
+    void applyUpdateWithAdjustment(TreeChangeList & _anUpdate, ISubtree& _aTree)
+    {
+        OSL_ENSURE(_anUpdate.root.getNodeName() == _aTree.getName(),
+                    "Update does not match the tree being updated");
+        applyUpdateWithAdjustmentToTree(_anUpdate.root,_aTree);
+    }
+
+    // -----------------------------------------------------------------------------
+    class OMergeTreeChangeList : private ChangeTreeAction, private OPathCreator<AbsolutePath>
+    {
+        TreeChangeList &m_aTreeChangeList;       // ChangeList, which will be grown
+        SubtreeChange *m_pCurrentParent;         // our current position
+
+        // ------- Helper for Path stack -------
+        SubtreeChange* pushTree(SubtreeChange& _rTree);
+        void popTree(SubtreeChange* _pSaveTree);
+    public:
+        // CTor
+        OMergeTreeChangeList(TreeChangeList& _aTree);
+
+        // start function, with the Change we want to do.
+        // WARNING this could be a big tree, because a change can contain subtreechanges!
+        void mergeChanges(TreeChangeList const&_rList);
+    private:
+        void initRoot(TreeChangeList const& _aChanges);
+
+    private:
+        virtual void handle(ValueChange const& _rValueNode);
+        virtual void handle(AddNode const& _rAddNode);
+        virtual void handle(RemoveNode const& _rRemoveNode);
+        virtual void handle(SubtreeChange const& _rSubtree);
+    };
+    // -----------------------------------------------------------------------------
+    void applyLayerUpdate(TreeChangeList const& _anUpdate, TreeChangeList& _aLayer)
+    {
+        OMergeTreeChangeList aMerge(_aLayer);
+        aMerge.mergeChanges(_anUpdate);
+    }
+    // -----------------------------------------------------------------------------
+    class OMergeChanges : private ChangeTreeAction, private OPathCreator<RelativePath>
+    {
+        SubtreeChange &m_rSubtreeChange;          // ChangeList, which will be grown
+        SubtreeChange *m_pCurrentParent;          // our current position
+
+        typedef configuration::RelativePath RelativePath;
+        // ------- Helper for Path stack -------
+        SubtreeChange* pushTree(SubtreeChange& _rTree);
+        void popTree(SubtreeChange* _pSaveTree);
+
+    public:
+        // CTor
+        OMergeChanges(SubtreeChange& _rTree);
+
+        // start function, with the Change we want to do.
+        // WARNING this could be a big tree, because a change can contain subtreechanges!
+        void mergeChanges(const SubtreeChange &_rChange, const RelativePath& _aPathToChange);
+        void mergeChanges(const SubtreeChange &_rChange);
+
+    private:
+        void initRoot(const SubtreeChange &_rRootChange, const RelativePath& _aPathToChange);
+    private:
+        virtual void handle(ValueChange const& _rValueNode);
+        virtual void handle(AddNode const& _rAddNode);
+        virtual void handle(RemoveNode const& _rRemoveNode);
+        virtual void handle(SubtreeChange const& _rSubtree);
+
+    };
+    // -----------------------------------------------------------------------------
+    void combineUpdates(SubtreeChange  const& _anUpdate, SubtreeChange& _aCombinedUpdate)
+    {
+        OMergeChanges aCombined(_aCombinedUpdate);
+        aCombined.mergeChanges(_anUpdate);
+    }
+    // -----------------------------------------------------------------------------
 
     RelativePath ONameCreator::buildPath() const
     {
@@ -142,6 +235,7 @@ namespace configmgr
             return Path::wrapSafeName(sElementName);
         }
     }
+
 
     // -----------------------------------------------------------------------------
     class OMergeValueChange : private ChangeTreeModification
@@ -586,30 +680,6 @@ namespace configmgr
         }
     }
 // -----------------------------------------------------------------------------
-    void applyChanges(TreeChangeList & _aTreeChangeList, ISubtree& _aSubtree)
-    {
-        // coarse: _aSubtree = _aSubtree + _aSubtreeChange;
-
-        TreeUpdate aTreeUpdate(&_aSubtree);
-
-        // pSubtree = pSubtree + aChangeList
-        TreeChangeList aMergeChangeList(_aTreeChangeList, SubtreeChange::NoChildCopy());
-
-        OMergeTreeAction aChangeHandler(aMergeChangeList.root, &_aSubtree);
-        _aTreeChangeList.root.forEachChange(aChangeHandler);
-
-        // now check the real modifications
-        OChangeActionCounter aChangeCounter;
-        aChangeCounter.handle(aMergeChangeList.root);
-        CFG_TRACE_INFO_NI("cache manager: counted changes from notification : additions: %i , removes: %i, value changes: %i", aChangeCounter.nAdds, aChangeCounter.nRemoves, aChangeCounter.nValues);
-        if (aChangeCounter.hasChanges())
-        {
-            // aTree.updateTree(aMergeChangeList);
-            aMergeChangeList.root.forEachChange(aTreeUpdate);
-        }
-    }
-
-// -----------------------------------------------------------------------------
 
     void OMergeTreeChangeList::handle(SubtreeChange const& _rSubtree)
     {
@@ -675,7 +745,7 @@ namespace configmgr
 
                     // Now apply _rSubtree to the subtree
                     TreeChangeList aChangeList(m_aTreeChangeList.getOptions(), aSubtreePath, _rSubtree, SubtreeChange::DeepChildCopy()); // expensive!
-                    applyChanges(aChangeList, *pSubtree);
+                    mergeLayer(aChangeList, *pSubtree);
                 }
                 else
                 {

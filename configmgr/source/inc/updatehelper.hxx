@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: treeactions.hxx,v $
+ *  $RCSfile: updatehelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
  *
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _CONFIGMGR_TREEACTIONS_HXX_
-#define _CONFIGMGR_TREEACTIONS_HXX_
+#ifndef CONFIGMGR_UPDATEHELPER_HXX
+#define CONFIGMGR_UPDATEHELPER_HXX
 
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
@@ -69,85 +69,21 @@
 //..........................................................................
 namespace configmgr
 {
-//==========================================================================
-//= OIdPropagator
-//==========================================================================
-/** propagates a node id to a subtree and its descendants
-*/
-class OIdPropagator : private NodeModification
-{
-    ::rtl::OUString sId;
+//..........................................................................
 
-    OIdPropagator(const ::rtl::OUString& _rId) : sId(_rId) { }
-    virtual void handle(ValueNode& _rValueNode);
-    virtual void handle(ISubtree& _rSubtree);
+// adjust a set of changes to the target tree, return true, if there are changes left
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, ISubtree const& _aTargetTree);
 
-public:
-    static void propagateIdToChildren(ISubtree& rTree);
-    static void propagateIdToTree( ::rtl::OUString const& aId, ISubtree& rTree);
-};
+// apply a already matching set of changes to the target tree
+    void applyUpdateToTree(SubtreeChange& _anUpdateTree, ISubtree& _aTree);
 
-//==========================================================================
-//= OIdRemover
-//==========================================================================
-/** propagates a node id to a subtree and its descendants
-*/
-class OIdRemover : private NodeModification
-{
-    virtual void handle(ValueNode& _rValueNode);
-    virtual void handle(ISubtree& _rSubtree);
-
-public:
-    static void removeIds(INode& rNode);
-};
-
-//==========================================================================
-//= OChangeActionCounter
-//==========================================================================
-/** collects meta data about a changes tree
-*/
-struct OChangeActionCounter : public ChangeTreeAction
-{
-    sal_Int32       nValues, nAdds, nRemoves;
-
-    OChangeActionCounter() :nValues(0), nAdds(0), nRemoves(0) {}
-
-    virtual void handle(ValueChange const& aValueNode);
-    virtual void handle(AddNode const& aAddNode);
-    virtual void handle(RemoveNode const& aRemoveNode);
-    virtual void handle(SubtreeChange const& aSubtree);
-
-    sal_Bool hasChanges() const {return nValues || nAdds || nRemoves;}
-};
-
-// ===================================================================
-// = CollectNames
-// ===================================================================
-class CollectNames :  public NodeAction
-{
-public:
-    typedef std::vector<OUString> NameList;
-
-public:
-    NameList const& list() const { return aList; }
-
-    CollectNames() : aList() {}
-
-    void handle(ValueNode const& aValue)    { add(aValue); }
-    void handle(ISubtree const&  m_aSubtree)    { add(m_aSubtree); }
-
-    void add(INode const& aNode)
-    {
-        aList.push_back(aNode.getName());
-    }
-private:
-    NameList aList;
-};
+// apply a set of changes to the target tree
+    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, ISubtree& _aTree);
 
 //..........................................................................
 }   // namespace configmgr
 //..........................................................................
 
-#endif // _CONFIGMGR_TREEACTIONS_HXX_
+#endif // CONFIGMGR_MERGEHELPER_HXX
 
 

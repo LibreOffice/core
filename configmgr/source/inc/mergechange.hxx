@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,63 +77,11 @@ namespace configmgr
 {
     // -----------------------------------------------------------------------------
 
-    class OMergeTreeChangeList : private ChangeTreeAction, private OPathCreator<AbsolutePath>
-    {
-        TreeChangeList &m_aTreeChangeList;       // ChangeList, which will be grown
-        SubtreeChange *m_pCurrentParent;         // our current position
-
-        // ------- Helper for Path stack -------
-        SubtreeChange* pushTree(SubtreeChange& _rTree);
-        void popTree(SubtreeChange* _pSaveTree);
-    public:
-        // CTor
-        OMergeTreeChangeList(TreeChangeList& _aTree);
-
-        // start function, with the Change we want to do.
-        // WARNING this could be a big tree, because a change can contain subtreechanges!
-        void mergeChanges(TreeChangeList const&_rList);
-    private:
-        void initRoot(TreeChangeList const& _aChanges);
-
-    private:
-        virtual void handle(ValueChange const& _rValueNode);
-        virtual void handle(AddNode const& _rAddNode);
-        virtual void handle(RemoveNode const& _rRemoveNode);
-        virtual void handle(SubtreeChange const& _rSubtree);
-    };
-
     // method that applies changes on a existing subtree
-    void applyChanges(TreeChangeList & _aTreeChangeList, ISubtree& _aSubtree);
-
-    // -----------------------------------------------------------------------------
-    class OMergeChanges : private ChangeTreeAction, private OPathCreator<RelativePath>
-    {
-        SubtreeChange &m_rSubtreeChange;          // ChangeList, which will be grown
-        SubtreeChange *m_pCurrentParent;          // our current position
-
-        typedef configuration::RelativePath RelativePath;
-        // ------- Helper for Path stack -------
-        SubtreeChange* pushTree(SubtreeChange& _rTree);
-        void popTree(SubtreeChange* _pSaveTree);
-
-    public:
-        // CTor
-        OMergeChanges(SubtreeChange& _rTree);
-
-        // start function, with the Change we want to do.
-        // WARNING this could be a big tree, because a change can contain subtreechanges!
-        void mergeChanges(const SubtreeChange &_rChange, const RelativePath& _aPathToChange);
-        void mergeChanges(const SubtreeChange &_rChange);
-
-    private:
-        void initRoot(const SubtreeChange &_rRootChange, const RelativePath& _aPathToChange);
-    private:
-        virtual void handle(ValueChange const& _rValueNode);
-        virtual void handle(AddNode const& _rAddNode);
-        virtual void handle(RemoveNode const& _rRemoveNode);
-        virtual void handle(SubtreeChange const& _rSubtree);
-
-    };
+    void applyUpdateWithAdjustment(TreeChangeList & _anUpdate,    ISubtree& _aTree);
+    void mergeLayer         (TreeChangeList & _aLayer,      ISubtree& _aTree);
+    void combineUpdates     (SubtreeChange  const& _anUpdate, SubtreeChange& _aCombinedUpdate);
+    void applyLayerUpdate   (TreeChangeList const& _anUpdate, TreeChangeList& _aLayer);
 
     // -----------------------------------------------------------------------------
     class OStripDefaults : private ChangeTreeModification

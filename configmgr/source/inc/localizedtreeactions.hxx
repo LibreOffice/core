@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: treeactions.cxx,v $
+ *  $RCSfile: localizedtreeactions.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:14 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,98 +59,65 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
+#ifndef CONFIGMGR_LOCALIZEDTREEACTIONS_HXX
+#define CONFIGMGR_LOCALIZEDTREEACTIONS_HXX
 
-#include "treeactions.hxx"
-
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-
+#include "valuenode.hxx"
 
 //..........................................................................
 namespace configmgr
 {
+//==========================================================================
+//= OCloneForLocale
+//==========================================================================
+//= clones a subtree , in the process selecting only the best match locale
+//= from the set representation of localized values
+//==========================================================================
+class OCloneForLocale : public NodeAction
+{
+    rtl::OUString           m_sTargetLocale;
+    std::auto_ptr<INode>    m_pClone;
+public:
+    OCloneForLocale(OUString const& aLocale) : m_sTargetLocale(aLocale) {}
+    std::auto_ptr<INode> getResult() { return m_pClone; }
+
+private:
+    void handle(ValueNode const& _aValue);
+    void handle(ISubtree const&  _aSubtree);
+};
 
 //==========================================================================
-//= OIdPropagator
+//= OExpandLocalizedValues
 //==========================================================================
-
-void OIdPropagator::propagateIdToChildren(ISubtree& rTree)
-{
-    if (rTree.hasId())
-    {
-        OIdPropagator aAction(rTree.getId());
-        aAction.applyToChildren(rTree);
-    }
-}
-//--------------------------------------------------------------------------
-
-void OIdPropagator::propagateIdToTree(OUString const& aId, ISubtree& rTree)
-{
-    OSL_ENSURE(!rTree.hasId(), "OIdPropagator::propagateIdToTree: Tree already has an Id, propagating may not work");
-    rTree.setId(aId);
-    propagateIdToChildren(rTree);
-}
-//--------------------------------------------------------------------------
-
-void OIdPropagator::handle(ValueNode& _rValueNode)
-{ /* not interested in value nodes */ }
-//--------------------------------------------------------------------------
-
-void OIdPropagator::handle(ISubtree& _rSubtree)
-{
-    if (!_rSubtree.hasId())
-    {
-        _rSubtree.setId(sId);
-        applyToChildren(_rSubtree);
-    }
-}
-
+//= clones a subtree , in the process expanding localized value nodes to a one-element set
 //==========================================================================
-//= OIdRemover
-//==========================================================================
-
-void OIdRemover::removeIds(INode& rNode)
+class OExpandLocalizedValues : public NodeAction
 {
-    OIdRemover().applyToNode(rNode);
-}
-//--------------------------------------------------------------------------
+    std::auto_ptr<INode>    m_pClone;
+public:
+    OExpandLocalizedValues() {}
+    std::auto_ptr<INode> getResult() { return m_pClone; }
 
-void OIdRemover::handle(ValueNode& _rValueNode)
-{ /* not interested in value nodes */ }
-//--------------------------------------------------------------------------
-
-void OIdRemover::handle(ISubtree& _rSubtree)
-{
-    if (_rSubtree.hasId())
-    {
-        _rSubtree.setId(OUString());
-        applyToChildren(_rSubtree);
-    }
-}
-
+private:
+    void handle(ValueNode const& _aValue);
+    void handle(ISubtree const&  _aSubtree);
+};
 //==========================================================================
-//= OChangeActionCounter
-//==========================================================================
+// Helper function to invoke the previous ones properly
 
-//--------------------------------------------------------------------------
-void OChangeActionCounter::handle(ValueChange const& aValueNode){ ++nValues; }
-
-//--------------------------------------------------------------------------
-void OChangeActionCounter::handle(AddNode const& aAddNode){ ++nAdds; }
-
-//--------------------------------------------------------------------------
-void OChangeActionCounter::handle(RemoveNode const& aRemoveNode){ ++nRemoves; }
-
-//--------------------------------------------------------------------------
-void OChangeActionCounter::handle(SubtreeChange const& aSubtree)
-{
-    applyToChildren(aSubtree);
-}
+// convert to the given locale format, no matter what the original representation
+std::auto_ptr<INode> cloneForLocale(INode const* _pNode, OUString const& _sLocale);
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const& _sLocale);
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> cloneExpandedForLocale(ISubtree const* _pNode, OUString const& _sLocale);
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale);
 
 //..........................................................................
 }   // namespace configmgr
 //..........................................................................
+
+#endif // CONFIGMGR_LOCALIZEDTREEACTIONS_HXX
 
 

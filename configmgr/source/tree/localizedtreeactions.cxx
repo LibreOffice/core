@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 10:39:58 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 16:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,21 @@
 
 #include <stdio.h>
 
+#include "localizedtreeactions.hxx"
+
+#ifndef _CONFIGMGR_TREEACTIONS_HXX_
 #include "treeactions.hxx"
+#endif
+
+#ifndef CONFIGMGR_SUBTREE_HXX
 #include "subtree.hxx"
+#endif
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
 #include "matchlocale.hxx"
+#endif
+#ifndef CONFIGMGR_TYPECONVERTER_HXX
 #include "typeconverter.hxx"
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
