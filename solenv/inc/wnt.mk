@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 13:46:40 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:33:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ CAPLIB=$(LIBPRE) cap.lib
 .IF "$(COM)" == "MSC" || "$(COM)" == "GCC"
 #Fallback, normaly set by winenv.*
 WRAPCMD*=guw.pl
+WRAPCMD_ENV*=$(WRAPCMD) -env
 .ENDIF
 .ENDIF
 .ENDIF
@@ -418,7 +419,7 @@ DLLPOSTFIX=mi
 IDLC=$(WRAPCMD) idlc
 REGMERGE=$(WRAPCMD) regmerge
 REGCOMPARE=$(WRAPCMD) regcompare
-REGCOMP=$(WRAPCMD) regcomp
+REGCOMP=$(WRAPCMD_ENV) regcomp
 CPPUMAKER=$(WRAPCMD) cppumaker
 JAVAMAKER=$(WRAPCMD) javamaker
 CLIMAKER=$(WRAPCMD) climaker
