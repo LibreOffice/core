@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:08:56 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
         aModName = String();
         createModImpl( static_cast<Window*>( this ), pShell,
-            pBasic, aBasicBox, aLibName, aModName );
+            pBasic, aBasicBox, aLibName, aModName, true );
     }
     else if ( pButton == &aOrganizeButton )
     {
