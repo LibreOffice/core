@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:08:39 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _MSASHAPE_HXX
 #include <msashape.hxx>
 #endif
@@ -5252,7 +5255,7 @@ SvxMSDffCustomShape::SvxMSDffCustomShape( const DffPropertyReader& rPropReader, 
                 nNumElemSeg = nTmp16;
                 bSegAlloc = TRUE;
                 pSegData = new sal_uInt16[ nNumElemSeg + 1 ];   // #97948# allocate one more element,
-#ifdef __BIGENDIAN                                              // so it won't be difficult to append
+#ifdef OSL_BIGENDIAN                                              // so it won't be difficult to append
                 sal_uInt32 i = nNumElemSeg;                     // a missing end segment action
                 sal_uInt16* pTmp = pSegData;
                 while( i-- )
@@ -6380,7 +6383,7 @@ SdrObject* SvxMSDffCustomShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet
                                 while( j )
                                 {
                                     const Point& rPoint = rPoly[ --j ];
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
                                     aVal[ 0 ] = SWAPLONG( rPoint.X() - nLeft );
                                     aVal[ 1 ] = SWAPLONG( rPoint.Y() - nTop );
                                     aVal[ 2 ] = SWAPLONG( rPoly.GetFlags( j ) );
