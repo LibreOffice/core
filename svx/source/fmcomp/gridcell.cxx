@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 16:43:04 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 15:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,7 +1006,7 @@ void DbFormattedField::Init(Window* pParent, const Reference< XRowSet >& xCursor
                 break;
             case TypeClass_STRING:
             {
-                XubString sDefault( UniString( ::comphelper::getString(aDefault) ) );
+                String sDefault( ::comphelper::getString(aDefault) );
                 if (m_rColumn.IsNumeric())
                 {
                     double dVal;
