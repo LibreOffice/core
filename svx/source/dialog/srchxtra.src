@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:10:38 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,18 +164,18 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ english_us ] = "Asian Layout" ;
                 Text[ portuguese ] = "Asian Layout";
                 Text[ russian ] = "Àçèàòñêàÿ ğàçìåòêà";
-                Text[ greek ] = "Asian Layout";
-                Text[ dutch ] = "Asian Layout";
+                Text[ greek ] = "ÁóéáôéêŞ äéÜôáîç";
+                Text[ dutch ] = "Asiatisch lay-out";
                 Text[ french ] = "Mise en page asiatique";
-                Text[ spanish ] = "Asian Layout";
-                Text[ italian ] = "Asian Layout";
+                Text[ spanish ] = "Diseño asiático";
+                Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian Layout";
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Layout azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ ·¹ÀÌ¾Æ¿ô";
-                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö°æÊ½";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«°æÊ½";
                 Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
@@ -271,13 +271,13 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Asian typography";
                 Text[ russian ] = "Àçèàòñêèå øğèôòû";
-                Text[ greek ] = "Asian typography";
-                Text[ dutch ] = "Asian typography";
+                Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
+                Text[ dutch ] = "Asiatische typografie";
                 Text[ french ] = "Typographie asiatique";
-                Text[ spanish ] = "Asian typography";
-                Text[ italian ] = "Asian typography";
+                Text[ spanish ] = "Tipografía asiática";
+                Text[ italian ] = "Tipografia asiatica";
                 Text[ danish ] = "Asian typography";
-                Text[ swedish ] = "Asian typography";
+                Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
