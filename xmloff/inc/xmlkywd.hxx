@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-07 17:09:34 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 19:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,6 +848,7 @@ XML_CONSTASCII_ACTION( sXML_logarithmic, "logarithmic" );
 XML_CONSTASCII_ACTION( sXML_logbase, "logbase" );
 XML_CONSTASCII_ACTION( sXML_long, "long" );
 XML_CONSTASCII_ACTION( sXML_lowlimit, "lowlimit" );
+XML_CONSTASCII_ACTION( sXML_lr_tb, "lr-tb" );
 XML_CONSTASCII_ACTION( sXML_lt, "lt");
 XML_CONSTASCII_ACTION( sXML_ltr, "ltr");
 XML_CONSTASCII_ACTION( sXML_luminance , "luminance" );
@@ -1361,6 +1362,7 @@ XML_CONSTASCII_ACTION( sXML_tanh, "tanh" );
 XML_CONSTASCII_ACTION( sXML_target_cell_address, "target-cell-address");
 XML_CONSTASCII_ACTION( sXML_target_frame_name, "target-frame-name" );
 XML_CONSTASCII_ACTION( sXML_target_range_address, "target-range-address");
+XML_CONSTASCII_ACTION( sXML_tb_rl, "tb-rl" );
 XML_CONSTASCII_ACTION( sXML_techreport, "techreport" );
 XML_CONSTASCII_ACTION( sXML_template, "template" );
 XML_CONSTASCII_ACTION( sXML_template_name, "template-name" );
@@ -1534,6 +1536,7 @@ XML_CONSTASCII_ACTION( sXML_wrap, "wrap" );
 XML_CONSTASCII_ACTION( sXML_wrap_contour, "wrap-contour" );
 XML_CONSTASCII_ACTION( sXML_wrap_contour_mode, "wrap-contour-mode" );
 XML_CONSTASCII_ACTION( sXML_wrap_option, "wrap-option" );
+XML_CONSTASCII_ACTION( sXML_writing_mode, "writing-mode" );
 XML_CONSTASCII_ACTION( sXML_www, "www" );
 XML_CONSTASCII_ACTION( sXML_x, "x" );
 XML_CONSTASCII_ACTION( sXML_x1, "x1" );

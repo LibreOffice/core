@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 17:58:52 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 19:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
 
     // text frame attributes
+    { "TextWritingMode",    XML_NAMESPACE_FO,   sXML_writing_mode,      XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
 
     // shadow attributes
     { "Shadow",         XML_NAMESPACE_DRAW, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
@@ -580,6 +581,13 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLOpacityPropertyHdl();
                 break;
             }
+            case XML_SD_TYPE_WRITINGMODE :
+            {
+                const OUString aTrueStr( OUString::createFromAscii(sXML_tb_rl) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_lr_tb) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
 // still missing:
 //          case XML_SD_TYPE_PRESPAGE_VISIBILITY :
 //          {
@@ -641,6 +649,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                     xCompare = xCompareFac->createAnyCompareByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ) );
 
                 pHdl = new XMLNumRulePropHdl( xCompare );
+                break;
             }
         }
 
@@ -713,6 +722,16 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                     else
                     {
                         property->mnIndex = -1;
+                    }
+                }
+                break;
+            case CTF_WRITINGMODE:
+                {
+                    sal_Bool bWritingMode;
+                    if( property->maValue >>= bWritingMode )
+                    {
+                        if( !bWritingMode )
+                            property->mnIndex = -1;
                     }
                 }
                 break;
