@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:35:11 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,9 @@ BOOL SwpHintsArr::Resort()
 {
     BOOL bResort = FALSE;
     const SwTxtAttr *pLast = 0;
-    for( USHORT i = 0; i < SwpHtStart::Count(); ++i )
+    USHORT i;
+
+    for( i = 0; i < SwpHtStart::Count(); ++i )
     {
         const SwTxtAttr *pHt = (*this)[i];
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
