@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:11:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,23 +77,12 @@
 #include "typeconverter.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/SchemaAttribute.hpp>
-#include <drafts/com/sun/star/configuration/backend/NodeAttribute.hpp>
-
-/*
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_SCHEMAATTRIBUTE_HPP_
+#include <com/sun/star/configuration/backend/SchemaAttribute.hpp>
 #endif
-
-#ifndef INCLUDED_ALGORITHM
-#include <algorithm>
-#define INCLUDED_ALGORITHM
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_NODEATTRIBUTE_HPP_
+#include <com/sun/star/configuration/backend/NodeAttribute.hpp>
 #endif
-#ifndef INCLUDED_VECTOR
-#include <vector>
-#define INCLUDED_VECTOR
-#endif
-*/
 
 namespace configmgr
 {
@@ -256,7 +245,7 @@ void LayerMergeHandler::propagateAttributes(ISubtree & _rParent)
 // -----------------------------------------------------------------------------
 
 node::Attributes LayerMergeHandler::makePropertyAttributes(sal_Int16 aSchemaAttributes)
-    CFG_UNO_THROW1( lang::IllegalArgumentException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     const sal_uInt16 k_allPropertySchemaAttributes =
         SchemaAttribute::REQUIRED;
@@ -287,7 +276,7 @@ node::Attributes LayerMergeHandler::makePropertyAttributes(sal_Int16 aSchemaAttr
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
-    CFG_UNO_THROW1( beans::IllegalTypeException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_ASSERT(m_pProperty);
 
@@ -340,7 +329,7 @@ void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::setValueAndCheck(ValueNode& _rValueNode, uno::Any const & _aValue)
-    CFG_UNO_THROW1( beans::IllegalTypeException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     if (_aValue.hasValue() && m_pConverter && m_pConverter->m_bConvertData)
     {
@@ -360,7 +349,7 @@ void LayerMergeHandler::setValueAndCheck(ValueNode& _rValueNode, uno::Any const 
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const & _aValue, OUString const & _aLocale)
-    CFG_UNO_THROW1( beans::IllegalTypeException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     if (ISubtree * pLocalizedCont = pProperty->asISubtree())
     {
@@ -407,7 +396,7 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue)
-    CFG_UNO_THROW1( beans::IllegalTypeException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_ASSERT(m_pProperty);
 
@@ -427,7 +416,7 @@ void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue)
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue, OUString const & _aLocale)
-    CFG_UNO_THROW2( beans::IllegalTypeException, lang::IllegalArgumentException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_ASSERT(m_pProperty);
 
@@ -451,7 +440,7 @@ void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue, OUString co
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::applyAttributes(INode * pNode, sal_Int16 aNodeAttributes)
-    CFG_UNO_THROW1( lang::IllegalArgumentException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     sal_Int16 const k_allNodeAttributes =
             NodeAttribute::MANDATORY |
@@ -499,19 +488,21 @@ void LayerMergeHandler::applyAttributes(INode * pNode, sal_Int16 aNodeAttributes
 }
 // -----------------------------------------------------------------------------
 
-bool LayerMergeHandler::startOverride(INode * pNode) /* ensure writable, mark merged */
+bool LayerMergeHandler::startOverride(INode * pNode, sal_Bool bClear) /* ensure writable, mark merged */
     CFG_NOTHROW( )
 {
     if (!m_aContext.isWritable(pNode)) return false;
 
     if (pNode->isDefault()) pNode->modifyState( node::isMerged );
 
+    OSL_ENSURE(!bClear,"'clear' operation is not yet supported");
+
     return true;
 }
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::ensureUnchanged(INode const * pNode) const
-    CFG_THROW2( MalformedDataException, uno::RuntimeException )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     // to do: change state handling to detect this within sets
     OSL_PRECOND(pNode,"INTERNAL ERROR: Unexpected NULL node pointer");
@@ -527,7 +518,7 @@ void LayerMergeHandler::ensureUnchanged(INode const * pNode) const
 // XLayerHandler
 
 void SAL_CALL LayerMergeHandler::startLayer( )
-    throw (MalformedDataException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ISubtree * pSchema = m_rData.getSchemaTree();
     OSL_ENSURE(pSchema,"No base data to merge layer into");
@@ -547,7 +538,7 @@ void SAL_CALL LayerMergeHandler::startLayer( )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::endLayer( )
-    throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
         m_aContext.raiseMalformedDataException("Layer merging: Unmatched data being skipped was not terminated properly.");
@@ -561,8 +552,8 @@ void SAL_CALL LayerMergeHandler::endLayer( )
 }
 // -----------------------------------------------------------------------------
 
-void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAttributes )
-    CFG_THROW4 (MalformedDataException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND( m_aContext.hasActiveComponent(),  "Layer merging: active component is not set");
     OSL_PRECOND( m_aContext.isDone(), "Layer merging: node is not root");
@@ -577,7 +568,7 @@ void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAtt
 
         ensureUnchanged(pSchema);
 
-        if (startOverride(pSchema))
+        if (startOverride(pSchema,bClear))
         {
             applyAttributes(pSchema,aAttributes);
 
@@ -597,8 +588,8 @@ void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAtt
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes )
-    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
     {
@@ -606,13 +597,13 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
     }
     else if (m_aContext.isDone())
     {
-        this->overrideLayerRoot(aName,aAttributes);
+        this->overrideLayerRoot(aName,aAttributes,bClear);
     }
     else if (ISubtree * pNode = m_aContext.findNode(aName))
     {
         ensureUnchanged(pNode);
 
-        if (startOverride(pNode))
+        if (startOverride(pNode,bClear))
         {
             applyAttributes(pNode, aAttributes);
 
@@ -631,7 +622,7 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-    CFG_THROW4 (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
+    CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     ISubtree * pReplacedNode = m_aContext.findNode(aName);
     if (pReplacedNode)
@@ -675,7 +666,7 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
     {
@@ -688,7 +679,7 @@ void SAL_CALL LayerMergeHandler::addOrReplaceNode( const OUString& aName, sal_In
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-    throw (MalformedDataException, container::NoSuchElementException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
     {
@@ -702,7 +693,7 @@ void SAL_CALL LayerMergeHandler::addOrReplaceNodeFromTemplate( const OUString& a
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::endNode( )
-    throw (MalformedDataException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->leaveSkippedNode())
         return;
@@ -714,7 +705,7 @@ void SAL_CALL LayerMergeHandler::endNode( )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
-    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
         return;
@@ -737,8 +728,8 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-    throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException,  lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
     {
@@ -748,7 +739,7 @@ void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_In
     {
         ensureUnchanged(pProp);
 
-        if (startOverride(pProp))
+        if (startOverride(pProp,bClear))
         {
             applyAttributes(pProp,aAttributes);
 
@@ -769,7 +760,7 @@ void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_In
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::endProperty( )
-    throw (MalformedDataException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->leaveSkippedNode())
         return;
@@ -786,7 +777,7 @@ void SAL_CALL LayerMergeHandler::endProperty( )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-    throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
         return;
@@ -805,7 +796,7 @@ void SAL_CALL LayerMergeHandler::addProperty( const OUString& aName, sal_Int16 a
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-    throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
         return;
@@ -823,7 +814,7 @@ void SAL_CALL LayerMergeHandler::addPropertyWithValue( const OUString& aName, sa
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::setPropertyValue( const uno::Any& aValue )
-    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
         return;
@@ -836,7 +827,7 @@ void SAL_CALL LayerMergeHandler::setPropertyValue( const uno::Any& aValue )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::setPropertyValueForLocale( const uno::Any& aValue, OUString const & aLocale )
-    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (this->isSkipping())
         return;
