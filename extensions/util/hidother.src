@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 07:47:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 14:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,3 +127,8 @@ hidspecial UID_DBIWIZARD_FORMS                  { HelpId = UID_DBIWIZARD_FORMS; 
 hidspecial UID_DBIWIZARD_FORMS_SAVETO           { HelpId = UID_DBIWIZARD_FORMS_SAVETO; }
 hidspecial UID_BIB_FRAME_WINDOW                 { HelpId = UID_BIB_FRAME_WINDOW;}
 
+hidspecial HID_ABSPILOT_PREVIOUS                { HelpId = HID_ABSPILOT_PREVIOUS; }
+hidspecial HID_ABSPILOT_NEXT                    { HelpId = HID_ABSPILOT_NEXT; }
+hidspecial HID_ABSPILOT_CANCEL                  { HelpId = HID_ABSPILOT_CANCEL; }
+hidspecial HID_ABSPILOT_FINISH                  { HelpId = HID_ABSPILOT_FINISH; }
+hidspecial HID_ABSPILOT                         { HelpId = HID_ABSPILOT; }
