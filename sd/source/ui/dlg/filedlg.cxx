@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-05 12:52:53 $
+ *  last change: $Author: ka $ $Date: 2001-10-15 14:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,11 +153,14 @@ private:
     css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
 
     Sound                       maSound;
+    ULONG                       mnPlaySoundEvent;
     BOOL                        mbUsableSelection;
     BOOL                        mbLabelPlaying;
 
     void                        CheckSelectionState();
-    DECL_LINK( StopMusicHdl, void * );
+
+                                DECL_LINK( PlayMusicHdl, void * );
+                                DECL_LINK( StopMusicHdl, void * );
 
 public:
                                 SdFileDialog_Imp( const short nDialogType, sal_Bool bUsableSelection );
@@ -185,69 +188,82 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
         case css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
             if( mxControlAccess.is() )
             {
-                if( mbLabelPlaying )
-                {
-                    // switch from playing to not playing
+                if( mnPlaySoundEvent )
+                    Application::RemoveUserEvent( mnPlaySoundEvent );
 
-                    // reset, so that sound file gets unlocked
-                    maSound.Stop();
-                    maSound.SetSoundName( String() );
-
-                    try
-                    {
-                        mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                                   String( SdResId( STR_PLAY ) ) );
-
-                        mbLabelPlaying = FALSE;
-                    }
-                    catch( css::lang::IllegalArgumentException )
-                    {
-#ifdef DBG_UTIL
-                        DBG_ERROR( "Cannot access play button" );
-#endif
-                    }
-                }
-                else
-                {
-                    // switch from not playing to playing of current file
-                    if( maSound.IsPlaying() )
-                    {
-                        // reset, so that sound file gets unlocked
-                        maSound.Stop();
-                        maSound.SetSoundName( String() );
-                    }
-
-                    INetURLObject   aUrl( GetPath() );
-                    String          aSoundFile( aUrl.GetMainURL( INetURLObject::NO_DECODE ) );
-
-                    if( aSoundFile.Len() > 0 )
-                    {
-                        maSound.SetNotifyHdl( LINK( this, SdFileDialog_Imp, StopMusicHdl ) );
-                        maSound.SetSoundName( aSoundFile );
-                        maSound.Play();
-
-                        // guard against early stopping
-                        if( maSound.IsPlaying() )
-                        {
-                            try
-                            {
-                                mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                                           String( SdResId( STR_STOP ) ) );
-
-                                mbLabelPlaying = TRUE;
-                            }
-                            catch( css::lang::IllegalArgumentException )
-                            {
-#ifdef DBG_UTIL
-                                DBG_ERROR( "Cannot access play button" );
-#endif
-                            }
-                        }
-                    }
-                }
+                mnPlaySoundEvent = Application::PostUserEvent( LINK( this, SdFileDialog_Imp, PlayMusicHdl ) );
             }
             break;
     }
+}
+
+// ------------------------------------------------------------------------
+IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
+{
+    mnPlaySoundEvent = 0;
+
+    if( mbLabelPlaying )
+    {
+        // switch from playing to not playing
+
+        // reset, so that sound file gets unlocked
+        maSound.Stop();
+        maSound.SetSoundName( String() );
+
+        try
+        {
+            mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                       String( SdResId( STR_PLAY ) ) );
+
+            mbLabelPlaying = FALSE;
+        }
+        catch( css::lang::IllegalArgumentException )
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot access play button" );
+#endif
+        }
+    }
+    else
+    {
+        // switch from not playing to playing of current file
+        if( maSound.IsPlaying() )
+        {
+            // reset, so that sound file gets unlocked
+            maSound.Stop();
+            maSound.SetSoundName( String() );
+        }
+
+        INetURLObject   aUrl( GetPath() );
+        String          aSoundFile( aUrl.GetMainURL( INetURLObject::NO_DECODE ) );
+
+        if( aSoundFile.Len() > 0 )
+        {
+            maSound.SetNotifyHdl( LINK( this, SdFileDialog_Imp, StopMusicHdl ) );
+            maSound.SetSoundName( aSoundFile );
+            maSound.Play();
+
+            // guard against early stopping
+            if( maSound.IsPlaying() )
+            {
+                try
+                {
+                    mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                               String( SdResId( STR_STOP ) ) );
+
+                    mbLabelPlaying = TRUE;
+                }
+                catch( css::lang::IllegalArgumentException )
+                {
+#ifdef DBG_UTIL
+                    DBG_ERROR( "Cannot access play button" );
+#endif
+                }
+            }
+        }
+    }
+
+    return 0;
 }
 
 // ------------------------------------------------------------------------
@@ -304,6 +320,7 @@ void SdFileDialog_Imp::CheckSelectionState()
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                                     sal_Bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),
+    mnPlaySoundEvent( 0 ),
     mbUsableSelection( bUsableSelection ),
     mbLabelPlaying(FALSE)
 {
@@ -348,6 +365,8 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 // ------------------------------------------------------------------------
 SdFileDialog_Imp::~SdFileDialog_Imp()
 {
+    if( mnPlaySoundEvent )
+        Application::RemoveUserEvent( mnPlaySoundEvent );
 }
 
 // ------------------------------------------------------------------------
