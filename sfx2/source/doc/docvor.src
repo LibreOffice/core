@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:26:43 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ japanese ] =
     {
-            < "ÄÞ·­ÒÝÄ‚ÌÃÝÌßÚ°Ä" ; Default ; > ;
+            < "ÄÞ·­ÒÝÄÃÝÌßÚ°Ä" ; Default ; > ;
         < "ÄÞ·­ÒÝÄ" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
@@ -392,7 +392,7 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ japanese ] =
     {
-            < "ÄÞ·­ÒÝÄ‚ÌÃÝÌßÚ°Ä" ; Default ; > ;
+            < "ÄÞ·­ÒÝÄÃÝÌßÚ°Ä" ; Default ; > ;
         < "ÄÞ·­ÒÝÄ" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
@@ -607,7 +607,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ russian ] = "Èìïîðò øàáëîíà...";
                     Text[ polish ] = "Importuj szablon...";
                     Text[ japanese ] = "ÃÝÌßÚ°Ä‚Ì²ÝÎß°Ä...";
-                    Text[ chinese_traditional ] = "¿é¤J¼Ë¦¡(~M)...";
+                    Text[ chinese_traditional ] = "¶×¤J¼Ë¦¡(~M)...";
                     Text[ arabic ] = "ÇÓÊíÑÇÏ ÞÇáÈ...";
                     Text[ greek ] = "Å~éóáãùãÞ ðñïôýðïõ...";
                     Text[ korean ] = "¼­½ÄÆÄÀÏ °¡Á®¿À±â...";
