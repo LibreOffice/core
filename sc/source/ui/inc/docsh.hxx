@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:32:12 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     USHORT              nDocumentLock;
     sal_Int16           nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
     BOOL                bUpdateEnabled;
+
+    ScDBData*           pOldAutoDBRange;
 
     ScSbxDocHelper*     pDocHelper;
 
@@ -328,6 +330,8 @@ public:
 
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL bForceMark );
+    ScDBData*       GetOldAutoDBRange();    // has to be deleted by caller!
+    void            CancelAutoDBRange();    // called when dialog is cancelled
 
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
     BOOL            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
