@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: rt $ $Date: 2004-08-20 09:15:56 $
-#*    $Revision: 1.6 $
+#*    last change   $Author: kz $ $Date: 2005-01-18 13:28:03 $
+#*    $Revision: 1.7 $
 #*
 #*    $Logfile: $
 #*
@@ -337,14 +337,8 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     virtual Reference< XMulti > SAL_CALL getMulti() throw (RuntimeException);
-    virtual sal_Int32 SAL_CALL testMultiF1(Reference< XMulti > const & multi)
-        throw (RuntimeException);
-    virtual sal_Int32 SAL_CALL testMultiF2(Reference< XMulti > const & multi)
-        throw (RuntimeException);
-    virtual sal_Int32 SAL_CALL testMultiF3(Reference< XMulti > const & multi)
-        throw (RuntimeException);
-    virtual sal_Int32 SAL_CALL testMultiA(
-        Reference< XMulti > const & multi, sal_Int32 value)
+
+    virtual rtl::OUString SAL_CALL testMulti(Reference< XMulti > const & multi)
         throw (RuntimeException);
 
 public: // XBridgeTest
@@ -506,29 +500,10 @@ Reference< XMulti > Test_Impl::getMulti() throw (RuntimeException) {
     return new testtools::bridgetest::Multi;
 }
 
-sal_Int32 Test_Impl::testMultiF1(Reference< XMulti > const & multi)
+rtl::OUString Test_Impl::testMulti(Reference< XMulti > const & multi)
     throw (RuntimeException)
 {
-    return multi->f1();
-}
-
-sal_Int32 Test_Impl::testMultiF2(Reference< XMulti > const & multi)
-    throw (RuntimeException)
-{
-    return multi->f2();
-}
-
-sal_Int32 Test_Impl::testMultiF3(Reference< XMulti > const & multi)
-    throw (RuntimeException)
-{
-    return multi->f3();
-}
-
-sal_Int32 Test_Impl::testMultiA(
-    Reference< XMulti > const & multi, sal_Int32 value) throw (RuntimeException)
-{
-    multi->seta(value);
-    return multi->geta();
+    return testtools::bridgetest::testMulti(multi);
 }
 
 //__________________________________________________________________________________________________
