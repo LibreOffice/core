@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-10-25 06:16:44 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 12:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,11 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
+
+
+#include <algorithm>
+#include <vector>
+#include <exception>
 
 #ifndef __FRAMEWORK_FRAMECONTAINER_HXX_
 #include <classes/framecontainer.hxx>
@@ -290,7 +295,7 @@ Reference< XFrame > FrameContainer::operator[]( sal_uInt32 nIndex ) const
             // If index not valid, a out_of_range exception is thrown.
             xFrame = m_aContainer.at( nIndex );
         }
-        catch( out_of_range& )
+        catch( std::out_of_range& )
         {
             // The index is not valid for current container-content ...
             // ... but we must handle this case!

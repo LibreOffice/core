@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 12:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace configmgr
 
 #ifdef CFG_ENABLE_TRACING
 
+#include <cstdarg>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
@@ -369,6 +370,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.1.1.1  2000/09/18 16:13:41  hr
+//  initial import
+//
 //  Revision 1.7  2000/09/15 09:51:51  willem.vandorp
 //  OpenOffice header added
 //
