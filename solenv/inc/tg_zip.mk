@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-16 12:58:28 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:14:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -212,13 +212,8 @@ $(ZIP$(TNR)TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP$(TNR)TMP).{$(subst,$(ZIP$(TNR)HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
