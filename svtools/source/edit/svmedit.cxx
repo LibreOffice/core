@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-08 10:41:47 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvent );
-
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
 
     virtual void    Command( const CommandEvent& rCEvt );
 
@@ -654,7 +651,6 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
     Color aBackgroundColor = GetSettings().GetStyleSettings().GetWorkspaceColor();
     SetBackground( aBackgroundColor );
     pParent->SetBackground( aBackgroundColor );
-    EnableDrop( TRUE );
 }
 
 TextWindow::~TextWindow()
@@ -851,17 +847,6 @@ void TextWindow::LoseFocus()
     if ( mbFocusSelectionHide && !mbActivePopup )
         mpExtTextView->SetPaintSelection( FALSE );
 }
-
-BOOL TextWindow::QueryDrop( DropEvent& rEvt )
-{
-    return mpExtTextView->QueryDrop( rEvt );
-}
-
-BOOL TextWindow::Drop( const DropEvent& rEvt )
-{
-    return mpExtTextView->Drop( rEvt );
-}
-
 
 MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
     : Edit( pParent, nWinStyle )

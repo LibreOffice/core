@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-07 16:05:44 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,24 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
+#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#endif
+
+
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+
+#include <vos/mutex.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -272,7 +288,20 @@ TextView::TextView( TextEngine* pEng, Window* pWindow )
 
     pWindow->SetLineColor();
 
-    mpDDInfo = 0;
+    mpDDInfo = NULL;
+
+    if ( pWindow->GetDragGestureRecognizer().is() )
+    {
+        vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
+        mxDnDListener = pDnDWrapper;
+
+        uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
+        pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
+        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
+        pWindow->GetDropTarget()->addDropTargetListener( xDTL );
+        pWindow->GetDropTarget()->setActive( sal_True );
+        pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
+    }
 }
 
 TextView::~TextView()
@@ -822,8 +851,8 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject(  maSelection.GetEnd().GetPara() );
                 uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
                 i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), maSelection.GetEnd().GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
-                maSelection.GetStart().GetIndex() = aBoundary.startPos;
-                maSelection.GetEnd().GetIndex() = aBoundary.endPos;
+                maSelection.GetStart().GetIndex() = (USHORT)aBoundary.startPos;
+                maSelection.GetEnd().GetIndex() = (USHORT)aBoundary.endPos;
                 ShowSelection();
                 ShowCursor( TRUE, TRUE );
             }
@@ -1189,7 +1218,7 @@ TextPaM TextView::CursorLeft( const TextPaM& rPaM, BOOL bWordMode )
         else
         {
             sal_Int32 nCount = 1;
-            aPaM.GetIndex() = xBI->previousCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+            aPaM.GetIndex() = (USHORT)xBI->previousCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
         }
     }
     else if ( aPaM.GetPara() )
@@ -1212,12 +1241,12 @@ TextPaM TextView::CursorRight( const TextPaM& rPaM, BOOL bWordMode )
         if ( bWordMode )
         {
             i18n::Boundary aBoundary = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-            aPaM.GetIndex() = aBoundary.startPos;
+            aPaM.GetIndex() = (USHORT)aBoundary.startPos;
         }
         else
         {
             sal_Int32 nCount = 1;
-            aPaM.GetIndex() = xBI->nextCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+            aPaM.GetIndex() = (USHORT)xBI->nextCharacters( pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
         }
     }
     else if ( aPaM.GetPara() < ( mpTextEngine->mpDoc->GetNodes().Count()-1) )
@@ -1249,7 +1278,7 @@ TextPaM TextView::ImpDelete( BYTE nMode, BYTE nDelMode )
             i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), maSelection.GetEnd().GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
             if ( aBoundary.startPos == maSelection.GetEnd().GetIndex() )
                 aBoundary = xBI->previousWord( pNode->GetText(), maSelection.GetEnd().GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-            aEndPaM.GetIndex() = aBoundary.startPos;
+            aEndPaM.GetIndex() = (USHORT)aBoundary.startPos;
         }
         else    // DELMODE_RESTOFCONTENT
         {
@@ -1274,7 +1303,7 @@ TextPaM TextView::ImpDelete( BYTE nMode, BYTE nDelMode )
             TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject(  aEndPaM.GetPara() );
             uno::Reference < i18n::XBreakIterator > xBI = mpTextEngine->GetBreakIterator();
             i18n::Boundary aBoundary = xBI->nextWord( pNode->GetText(), maSelection.GetEnd().GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-            aEndPaM.GetIndex() = aBoundary.startPos;
+            aEndPaM.GetIndex() = (USHORT)aBoundary.startPos;
         }
         else    // DELMODE_RESTOFCONTENT
         {
@@ -1660,204 +1689,6 @@ void TextView::ImpShowDDCursor()
     }
 }
 
-void TextView::BeginDrag()
-{
-    delete mpDDInfo;
-    mpDDInfo = new TextDDInfo;
-
-    mpDDInfo->mbStarterOfDD = TRUE;
-
-    DragServer::Clear();
-
-    TextSelection aSel( maSelection );
-    aSel.Justify();
-
-    // D&D eines Hyperlinks.
-    // Besser waere es im MBDown sich den MBDownPaM zu merken,
-    // ist dann aber inkompatibel => spaeter mal umstellen.
-    TextPaM aPaM( mpTextEngine->GetPaM( GetDocPos( GetWindow()->GetPointerPosPixel() ) ) );
-
-    const TextCharAttrib* pAttr = mpTextEngine->FindCharAttrib( aPaM, TEXTATTR_HYPERLINK );
-    if ( pAttr )
-    {
-        aSel = aPaM;
-        aSel.GetStart().GetIndex() = pAttr->GetStart();
-        aSel.GetEnd().GetIndex() = pAttr->GetEnd();
-
-        const TextAttribHyperLink& rLink = (const TextAttribHyperLink&)pAttr->GetAttr();
-        String aText( rLink.GetDescription() );
-        if ( !aText.Len() )
-            aText = mpTextEngine->GetText( aSel );
-        INetBookmark aBookmark( rLink.GetURL(), aText );
-        aBookmark.CopyDragServer();
-    }
-
-    DragServer::CopyString( mpTextEngine->GetText( aSel ) );
-
-    Region* pDDRegion = NULL;
-#ifdef MAC
-    // ... Region ermitteln
-    Size aOutSz = mpWindow->GetOutputSizePixel();
-    Rectangle aStartCursor( mpTextEngine->GetEditCursor( aSel.GetStart(), FALSE ) );
-    Rectangle aEndCursor( mpTextEngine->GetEditCursor( aSel.GetEnd(), TRUE ) );
-
-    Point aTopLeft = aStartCursor.TopLeft();
-    aTopLeft -= maStartDocPos;
-
-    Point aBottomRight = aStartCursor.BottomRight();
-    aBottomRight -= maStartDocPos;
-
-    if ( aStartCursor.Top() != aEndCursor.Top() )
-    {
-        // Dann einfach das Rechteck mit den kompletten Zeilem
-        aTopLeft.X() = 0;
-        aBottomRight.X() = aOutSz.Width();
-    }
-
-    pDDRegion = new Region( Rectangle( aTopLeft, aBottomRight ) );
-#endif
-
-    mpCursor->Hide();
-
-    mpWindow->ExecuteDrag( Pointer( POINTER_MOVEDATA ),
-                        Pointer( POINTER_COPYDATA ), DRAG_ALL, pDDRegion );
-
-    DragServer::Clear();
-    ImpHideDDCursor();
-
-    delete mpDDInfo;
-    mpDDInfo = 0;
-}
-
-BOOL TextView::QueryDrop( DropEvent& rEvt )
-{
-    if ( rEvt.IsLeaveWindow() )
-    {
-        ImpHideDDCursor();
-        return FALSE;
-    }
-
-    BOOL bDrop = FALSE;
-    if ( !mbReadOnly && DragServer::HasFormat( 0, FORMAT_STRING ) &&
-        ( ( rEvt.GetAction() == DROP_COPY ) || ( rEvt.GetAction() == DROP_MOVE ) ) )
-    {
-        if ( !mpDDInfo )
-            mpDDInfo = new TextDDInfo;
-
-        TextPaM aPrevDropPos = mpDDInfo->maDropPos;
-        Point aDocPos = GetDocPos( rEvt.GetPosPixel() );
-        mpDDInfo->maDropPos = mpTextEngine->GetPaM( aDocPos );
-
-        Size aOutSize = mpWindow->GetOutputSizePixel();
-        if ( ( rEvt.GetPosPixel().X() < 0 ) || ( rEvt.GetPosPixel().X() > aOutSize.Width() ) ||
-             ( rEvt.GetPosPixel().Y() < 0 ) || ( rEvt.GetPosPixel().Y() > aOutSize.Height() ) )
-        {
-            // Scrollen ?
-        }
-
-        // Nicht in Selektion droppen:
-        if ( IsInSelection( mpDDInfo->maDropPos ) )
-        {
-            ImpHideDDCursor();
-            return FALSE;
-        }
-
-        // Alten Cursor wegzeichnen...
-        if ( !mpDDInfo->mbVisCursor || ( aPrevDropPos != mpDDInfo->maDropPos ) )
-        {
-            ImpHideDDCursor();
-            ImpShowDDCursor();
-        }
-        bDrop = TRUE;
-    }
-    return bDrop;
-}
-
-BOOL TextView::Drop( const DropEvent& rEvt )
-{
-    BOOL bDone = FALSE;
-    if ( !mbReadOnly && mpDDInfo )
-    {
-        ImpHideDDCursor();
-
-        // Daten fuer das loeschen nach einem DROP_MOVE:
-        TextSelection aPrevSel( maSelection );
-        aPrevSel.Justify();
-        ULONG nPrevParaCount = mpTextEngine->GetParagraphCount();
-        USHORT nPrevStartParaLen = mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() );
-
-        BOOL bStarterOfDD = FALSE;
-        for ( USHORT nView = mpTextEngine->GetViewCount(); nView && !bStarterOfDD; )
-            bStarterOfDD = mpTextEngine->GetView( --nView )->mpDDInfo ? mpTextEngine->GetView( nView )->mpDDInfo->mbStarterOfDD : FALSE;
-
-        HideSelection();
-        maSelection = mpDDInfo->maDropPos;
-
-        mpTextEngine->UndoActionStart( TEXTUNDO_DRAGANDDROP );
-
-        String aText = DragServer::PasteString( 0 );
-        aText.ConvertLineEnd( LINEEND_LF );
-
-        if ( aText.Len() && ( aText.GetChar( aText.Len()-1 ) == LINE_SEP ) )
-            aText.Erase( aText.Len()-1 );
-
-        if ( ImplCheckTextLen( aText ) )
-            maSelection = mpTextEngine->ImpInsertText( mpDDInfo->maDropPos, aText );
-
-        if ( aPrevSel.HasRange() &&
-                ( rEvt.GetAction() == DROP_MOVE ) || !bStarterOfDD )
-        {
-            // ggf. Selection anpasssen:
-            if ( ( mpDDInfo->maDropPos.GetPara() < aPrevSel.GetStart().GetPara() ) ||
-                 ( ( mpDDInfo->maDropPos.GetPara() == aPrevSel.GetStart().GetPara() )
-                        && ( mpDDInfo->maDropPos.GetIndex() < aPrevSel.GetStart().GetIndex() ) ) )
-            {
-                ULONG nNewParasBeforeSelection =
-                    mpTextEngine->GetParagraphCount() - nPrevParaCount;
-
-                aPrevSel.GetStart().GetPara() += nNewParasBeforeSelection;
-                aPrevSel.GetEnd().GetPara() += nNewParasBeforeSelection;
-
-                if ( mpDDInfo->maDropPos.GetPara() == aPrevSel.GetStart().GetPara() )
-                {
-                    USHORT nNewChars =
-                        mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() ) - nPrevStartParaLen;
-
-                    aPrevSel.GetStart().GetIndex() += nNewChars;
-                    if ( aPrevSel.GetStart().GetPara() == aPrevSel.GetEnd().GetPara() )
-                        aPrevSel.GetEnd().GetIndex() += nNewChars;
-                }
-            }
-            else
-            {
-                // aktuelle Selektion anpassen
-                TextPaM aPaM = maSelection.GetStart();
-                aPaM.GetPara() -= ( aPrevSel.GetEnd().GetPara() - aPrevSel.GetStart().GetPara() );
-                if ( aPrevSel.GetEnd().GetPara() == mpDDInfo->maDropPos.GetPara() )
-                {
-                    aPaM.GetIndex() -= aPrevSel.GetEnd().GetIndex();
-                    if ( aPrevSel.GetStart().GetPara() == mpDDInfo->maDropPos.GetPara() )
-                        aPaM.GetIndex() += aPrevSel.GetStart().GetIndex();
-                }
-                maSelection = aPaM;
-
-            }
-            mpTextEngine->ImpDeleteText( aPrevSel );
-        }
-
-        mpTextEngine->UndoActionEnd( TEXTUNDO_DRAGANDDROP );
-
-        delete mpDDInfo;
-        mpDDInfo = 0;
-
-        mpTextEngine->FormatAndUpdate( this );
-
-        mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
-    }
-
-    return bDone;
-}
-
 void TextView::SetPaintSelection( BOOL bPaint )
 {
     if ( bPaint != mbPaintSelection )
@@ -1911,6 +1742,203 @@ BOOL TextView::ImplCheckTextLen( const String& rNewText )
     return bOK;
 }
 
+void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( maSelection.HasRange() )
+    {
+        vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+        delete mpDDInfo;
+        mpDDInfo = new TextDDInfo;
+        mpDDInfo->mbStarterOfDD = TRUE;
+
+        TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
+
+        if ( mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )  // Dann auch als HTML
+            mpTextEngine->Write( pDataObj->GetHTMLStream(), &maSelection, TRUE );
+
+
+        /*
+        // D&D eines Hyperlinks.
+        // Besser waere es im MBDown sich den MBDownPaM zu merken,
+        // ist dann aber inkompatibel => spaeter mal umstellen.
+        TextPaM aPaM( mpTextEngine->GetPaM( GetDocPos( GetWindow()->GetPointerPosPixel() ) ) );
+        const TextCharAttrib* pAttr = mpTextEngine->FindCharAttrib( aPaM, TEXTATTR_HYPERLINK );
+        if ( pAttr )
+        {
+            aSel = aPaM;
+            aSel.GetStart().GetIndex() = pAttr->GetStart();
+            aSel.GetEnd().GetIndex() = pAttr->GetEnd();
+
+            const TextAttribHyperLink& rLink = (const TextAttribHyperLink&)pAttr->GetAttr();
+            String aText( rLink.GetDescription() );
+            if ( !aText.Len() )
+                aText = mpTextEngine->GetText( aSel );
+            INetBookmark aBookmark( rLink.GetURL(), aText );
+            aBookmark.CopyDragServer();
+        }
+        */
+
+        mpCursor->Hide();
+
+        rDGE.DragSource->startDrag( rDGE, datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
+    }
+}
+
+void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ImpHideDDCursor();
+    delete mpDDInfo;
+    mpDDInfo = NULL;
+}
+
+void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    BOOL bChanges = FALSE;
+    if ( !mbReadOnly && mpDDInfo )
+    {
+        ImpHideDDCursor();
+
+        // Daten fuer das loeschen nach einem DROP_MOVE:
+        TextSelection aPrevSel( maSelection );
+        aPrevSel.Justify();
+        ULONG nPrevParaCount = mpTextEngine->GetParagraphCount();
+        USHORT nPrevStartParaLen = mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() );
+
+        BOOL bStarterOfDD = FALSE;
+        for ( USHORT nView = mpTextEngine->GetViewCount(); nView && !bStarterOfDD; )
+            bStarterOfDD = mpTextEngine->GetView( --nView )->mpDDInfo ? mpTextEngine->GetView( nView )->mpDDInfo->mbStarterOfDD : FALSE;
+
+        HideSelection();
+        maSelection = mpDDInfo->maDropPos;
+
+        mpTextEngine->UndoActionStart( TEXTUNDO_DRAGANDDROP );
+
+        String aText;
+        uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+        if ( xDataObj.is() )
+        {
+            datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                ::rtl::OUString aOUString;
+                aData >>= aOUString;
+                aText = aOUString;
+                aText.ConvertLineEnd( LINEEND_LF );
+            }
+        }
+
+        if ( aText.Len() && ( aText.GetChar( aText.Len()-1 ) == LINE_SEP ) )
+            aText.Erase( aText.Len()-1 );
+
+        if ( ImplCheckTextLen( aText ) )
+            maSelection = mpTextEngine->ImpInsertText( mpDDInfo->maDropPos, aText );
+
+        if ( aPrevSel.HasRange() &&
+                ( rDTDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD )
+        {
+            // ggf. Selection anpasssen:
+            if ( ( mpDDInfo->maDropPos.GetPara() < aPrevSel.GetStart().GetPara() ) ||
+                 ( ( mpDDInfo->maDropPos.GetPara() == aPrevSel.GetStart().GetPara() )
+                        && ( mpDDInfo->maDropPos.GetIndex() < aPrevSel.GetStart().GetIndex() ) ) )
+            {
+                ULONG nNewParasBeforeSelection =
+                    mpTextEngine->GetParagraphCount() - nPrevParaCount;
+
+                aPrevSel.GetStart().GetPara() += nNewParasBeforeSelection;
+                aPrevSel.GetEnd().GetPara() += nNewParasBeforeSelection;
+
+                if ( mpDDInfo->maDropPos.GetPara() == aPrevSel.GetStart().GetPara() )
+                {
+                    USHORT nNewChars =
+                        mpTextEngine->GetTextLen( aPrevSel.GetStart().GetPara() ) - nPrevStartParaLen;
+
+                    aPrevSel.GetStart().GetIndex() += nNewChars;
+                    if ( aPrevSel.GetStart().GetPara() == aPrevSel.GetEnd().GetPara() )
+                        aPrevSel.GetEnd().GetIndex() += nNewChars;
+                }
+            }
+            else
+            {
+                // aktuelle Selektion anpassen
+                TextPaM aPaM = maSelection.GetStart();
+                aPaM.GetPara() -= ( aPrevSel.GetEnd().GetPara() - aPrevSel.GetStart().GetPara() );
+                if ( aPrevSel.GetEnd().GetPara() == mpDDInfo->maDropPos.GetPara() )
+                {
+                    aPaM.GetIndex() -= aPrevSel.GetEnd().GetIndex();
+                    if ( aPrevSel.GetStart().GetPara() == mpDDInfo->maDropPos.GetPara() )
+                        aPaM.GetIndex() += aPrevSel.GetStart().GetIndex();
+                }
+                maSelection = aPaM;
+
+            }
+            mpTextEngine->ImpDeleteText( aPrevSel );
+        }
+
+        mpTextEngine->UndoActionEnd( TEXTUNDO_DRAGANDDROP );
+
+        delete mpDDInfo;
+        mpDDInfo = 0;
+
+        mpTextEngine->FormatAndUpdate( this );
+
+        mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+    }
+    rDTDE.Context->dropComplete( bChanges );
+}
+
+void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException)
+{
+    sal_Bool bTextContent = mbReadOnly ? sal_False : sal_True;   // quiery from rDTDEE.SupportedDataFlavors()
+}
+
+void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    ImpHideDDCursor();
+}
+
+void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    if ( !mpDDInfo )
+        mpDDInfo = new TextDDInfo;
+
+    TextPaM aPrevDropPos = mpDDInfo->maDropPos;
+    Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
+    Point aDocPos = GetDocPos( aMousePos );
+    mpDDInfo->maDropPos = mpTextEngine->GetPaM( aDocPos );
+
+    Size aOutSize = mpWindow->GetOutputSizePixel();
+    if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) ||
+         ( aMousePos.Y() < 0 ) || ( aMousePos.Y() > aOutSize.Height() ) )
+    {
+        // Scrollen ?
+    }
+
+    // Nicht in Selektion droppen:
+    if ( IsInSelection( mpDDInfo->maDropPos ) )
+    {
+        ImpHideDDCursor();
+        rDTDE.Context->rejectDrag();
+    }
+    else
+    {
+        // Alten Cursor wegzeichnen...
+        if ( !mpDDInfo->mbVisCursor || ( aPrevDropPos != mpDDInfo->maDropPos ) )
+        {
+            ImpHideDDCursor();
+            ImpShowDDCursor();
+        }
+        rDTDE.Context->acceptDrag(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
+    }
+}
+
 
 // -------------------------------------------------------------------------
 // (+) class TextSelFunctionSet
@@ -1922,7 +1950,6 @@ TextSelFunctionSet::TextSelFunctionSet( TextView* pView )
 
 void __EXPORT TextSelFunctionSet::BeginDrag()
 {
-    mpView->BeginDrag();
 }
 
 void __EXPORT TextSelFunctionSet::CreateAnchor()
