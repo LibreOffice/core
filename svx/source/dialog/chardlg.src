@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-08 13:41:42 $
+ *  last change: $Author: hjs $ $Date: 2001-05-11 05:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ TabPage RID_SVXPAGE_CHAR_STD
     Text [ italian ] = "Carattere" ;
     Text [ portuguese_brazilian ] = "Caractere" ;
     Text [ portuguese ] = "Tipo de letra" ;
-    Text [ finnish ] = "Merkki" ;
+    Text [ finnish ] = "Fontti" ;
     Text [ danish ] = "Skrifttype" ;
     Text [ french ] = "Police" ;
     Text [ swedish ] = "Teckensnitt" ;
@@ -119,6 +119,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ turkish ] = "Saydam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Transparente";
+        Text[ finnish ] = "L‰pin‰kyv‰";
     };
     String STR_NOSTYLE
     {
@@ -144,6 +145,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "%s æ∆¥‘";
         Text[ turkish ] = "%s deil";
         Text[ catalan ] = "No %s";
+        Text[ finnish ] = "Ei kohdetta %s";
     };
 
     FixedText FT_FONT
@@ -266,9 +268,9 @@ TabPage RID_SVXPAGE_CHAR_STD
         StringList [ finnish ] =
         {
             "Normaali" ;
-            "Kursivoitu" ;
-            "Lihavoitu" ;
-            "Lihavoitu Kursivoitu" ;
+            "Kursivointi" ;
+            "Lihavointi" ;
+            "Lihavointi ja kursivointi" ;
         };
         StringList [ danish ] =
         {
@@ -310,7 +312,7 @@ TabPage RID_SVXPAGE_CHAR_STD
             "Normal" ;
             "Italic" ;
             "Bold" ;
-            "Bold Italic" ;
+            "Bold italic" ;
         };
     StringList [ language_user1 ] =
     {
@@ -498,7 +500,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text [ italian ] = "~Sottolineato" ;
         Text [ portuguese_brazilian ] = "~Sublinhar" ;
         Text [ portuguese ] = "~Sublinhado" ;
-        Text [ finnish ] = "~Alleviivattu" ;
+        Text [ finnish ] = "~Alleviivaa" ;
         Text [ danish ] = "Understreget" ;
         Text [ french ] = "So~ulignage" ;
         Text [ swedish ] = "~Understruken" ;
@@ -642,6 +644,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ turkish ] = "~Artalan rengi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color de fondo";
+        Text[ finnish ] = "~T‰yttˆv‰ri";
     };
     ListBox LB_FILLCOLOR
     {
@@ -663,7 +666,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text [ italian ] = "~Lingua" ;
         Text [ portuguese_brazilian ] = "~Idioma" ;
         Text [ portuguese ] = "~LÌngua" ;
-        Text [ finnish ] = "K~ieli" ;
+        Text [ finnish ] = "~Kieli" ;
         Text [ danish ] = "Sprog" ;
         Text [ french ] = "~Langue" ;
         Text [ swedish ] = "S~prÂk" ;
@@ -722,6 +725,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ turkish ] = "÷rnek";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ejemplo";
+        Text[ finnish ] = "Esimerkki";
     };
     GroupBox GB_EXAMPLE
     {
@@ -766,7 +770,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
     Text [ italian ] = "Effetto carattere" ;
     Text [ portuguese_brazilian ] = "Extens„o de Caracter" ;
     Text [ portuguese ] = "Efeitos do tipo de letra" ;
-    Text [ finnish ] = "Merkin tehosteet" ;
+    Text [ finnish ] = "Fonttitehosteet" ;
     Text [ danish ] = "Skrifteffekt" ;
     Text [ french ] = "Effets de caractËres" ;
     Text [ swedish ] = "Teckensnittseffekt" ;
@@ -965,6 +969,14 @@ TabPage RID_SVXPAGE_CHAR_EXT
         < "Car·cter tÌtulo" ; Default ; > ;
         < "Versalitas" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Ei mit‰‰n" ; Default ; > ;
+        < "Isot kirjaimet" ; Default ; > ;
+        < "Pienet kirjaimet" ; Default ; > ;
+        < "Otsikko" ; Default ; > ;
+        < "Pienet alkukirjaimet" ; Default ; > ;
+    };
     };
     RadioButton BTN_NONE
     {
@@ -976,7 +988,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "~Nessuno" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei ole" ;
+        Text [ finnish ] = "~Ei mit‰‰n" ;
         Text [ danish ] = "Ingen" ;
         Text [ french ] = "~Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
@@ -1005,7 +1017,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Ma~iuscolo" ;
         Text [ portuguese_brazilian ] = "~Tudo em caixa alta" ;
         Text [ portuguese ] = "~Mai˙sculas" ;
-        Text [ finnish ] = "I~soin kirjaimin" ;
+        Text [ finnish ] = "~Kaikki isoja" ;
         Text [ danish ] = "Store bogst." ;
         Text [ french ] = "Ma~juscules" ;
         Text [ swedish ] = "~Versaler" ;
@@ -1034,7 +1046,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "~Minuscolo" ;
         Text [ portuguese_brazilian ] = "~Caixa Baixa" ;
         Text [ portuguese ] = "Min˙s~culas" ;
-        Text [ finnish ] = "~Pienin kirjaimin" ;
+        Text [ finnish ] = "~Pienet kirjaimet" ;
         Text [ danish ] = "SmÂ bogst." ;
         Text [ french ] = "Minuscu~les" ;
         Text [ swedish ] = "~Gemener" ;
@@ -1065,7 +1077,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "M~aiuscoletto" ;
         Text [ portuguese_brazilian ] = "V~ersaletes" ;
         Text [ portuguese ] = "~Versaletes" ;
-        Text [ finnish ] = "~Kapiteelein" ;
+        Text [ finnish ] = "~Pienet kirjaimet" ;
         Text [ danish ] = "KapitÊler" ;
         Text [ french ] = "Petites ~majusc." ;
         Text [ swedish ] = "K~apit‰ler" ;
@@ -1094,7 +1106,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Cara~ttere" ;
         Text [ portuguese_brazilian ] = "~TÌtulo" ;
         Text [ portuguese ] = "~Caracteres do tÌtulo" ;
-        Text [ finnish ] = "~Arvo" ;
+        Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Titelskrift" ;
         Text [ french ] = "~CaractËres du titre" ;
         Text [ swedish ] = "~Titel" ;
@@ -1145,6 +1157,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ turkish ] = "~Yan˝p sˆnen metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Intermitente";
+        Text[ finnish ] = "~Vilkkuva";
     };
     GroupBox GB_EFFECT
     {
@@ -1185,7 +1198,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "~Apice" ;
         Text [ portuguese_brazilian ] = "~Sobre" ;
         Text [ portuguese ] = "~Superior" ;
-        Text [ finnish ] = "Y~l‰indeksi" ;
+        Text [ finnish ] = "~Yl‰puolella" ;
         Text [ danish ] = "HÊvet" ;
         Text [ french ] = "Expo~sant" ;
         Text [ swedish ] = "Upphˆj~d" ;
@@ -1214,7 +1227,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "N~ormale" ;
         Text [ portuguese_brazilian ] = "N~ormal" ;
         Text [ portuguese ] = "~Padr„o" ;
-        Text [ finnish ] = "~Normaali" ;
+        Text [ finnish ] = "~Tavallinen" ;
         Text [ danish ] = "Normal" ;
         Text [ french ] = "N~ormal" ;
         Text [ swedish ] = "No~rmal" ;
@@ -1243,7 +1256,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Pedice" ;
         Text [ portuguese_brazilian ] = "S~ob" ;
         Text [ portuguese ] = "~Inferior" ;
-        Text [ finnish ] = "~Alaindeksi" ;
+        Text [ finnish ] = "~Alapuolella" ;
         Text [ danish ] = "SÊnket" ;
         Text [ french ] = "Indi~ce" ;
         Text [ swedish ] = "~Neds‰nkt" ;
@@ -1288,6 +1301,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PosiciÛn";
+        Text[ finnish ] = "Sijainti";
     };
     FixedText FT_ESCDEEPHIGH
     {
@@ -1299,7 +1313,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Api~ce/Pedice di" ;
         Text [ portuguese_brazilian ] = "Sub~re/Sob" ;
         Text [ portuguese ] = "~Superior/Inferior em" ;
-        Text [ finnish ] = "Yl‰/alain~deksi" ;
+        Text [ finnish ] = "~Suurenna/pienenn‰ arvolla" ;
         Text [ danish ] = "HÊv/sÊnk" ;
         Text [ french ] = "~Exposant/Indice" ;
         Text [ swedish ] = "Hˆj/s‰n~k" ;
@@ -1345,7 +1359,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Dim. relative ~caratt." ;
         Text [ portuguese_brazilian ] = "~Tamanho rel. de fonte" ;
         Text [ portuguese ] = "~Tamanho relativo" ;
-        Text [ finnish ] = "~Fontin koko suht." ;
+        Text [ finnish ] = "~Suhteellinen fonttikoko" ;
         Text [ danish ] = "Relativ st¯rrelse" ;
         Text [ french ] = "~Taille relative" ;
         Text [ swedish ] = "Rel. ~teckenstorlek" ;
@@ -1405,6 +1419,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ turkish ] = "O~tomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autom·tico";
+        Text[ finnish ] = "~Automaattinen";
     };
     GroupBox GB_POSEXT
     {
@@ -1481,9 +1496,9 @@ TabPage RID_SVXPAGE_CHAR_EXT
         };
         StringList [ finnish ] =
         {
-            < "Standard" ; Default ; > ;
-            < "Gesperrt" ; Default ; > ;
-            < "Schmal" ; Default ; > ;
+            < "Vakio" ; Default ; > ;
+            < "Laajennettu" ; Default ; > ;
+            < "Tiivistetty" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -1598,7 +1613,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "~per" ;
         Text [ portuguese_brazilian ] = "~por" ;
         Text [ portuguese ] = "P~or" ;
-        Text [ finnish ] = "~m‰‰r‰" ;
+        Text [ finnish ] = "~laatija" ;
         Text [ danish ] = "pÂ" ;
         Text [ french ] = "~par" ;
         Text [ swedish ] = "o~m" ;
@@ -1639,7 +1654,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "C~renatura caratteri a coppia" ;
         Text [ portuguese_brazilian ] = "~Par de Kerning" ;
         Text [ portuguese ] = "~Kerning de pares" ;
-        Text [ finnish ] = "~Parien v‰listys" ;
+        Text [ finnish ] = "~Parilimitys" ;
         Text [ danish ] = "Parvis knibning" ;
         Text [ french ] = "~CrÈnage pair" ;
         Text [ swedish ] = "~Parvis kerning" ;
@@ -1668,7 +1683,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Spaziatura" ;
         Text [ portuguese_brazilian ] = "EspaÁamento" ;
         Text [ portuguese ] = "EspaÁamento" ;
-        Text [ finnish ] = "V‰li" ;
+        Text [ finnish ] = "V‰lit" ;
         Text [ danish ] = "Afstand" ;
         Text [ french ] = "Espacement" ;
         Text [ swedish ] = "AvstÂnd" ;
@@ -1697,7 +1712,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "S~ottolineato" ;
         Text [ portuguese_brazilian ] = "Estilo Sub~linhado" ;
         Text [ portuguese ] = "Sub~linhado" ;
-        Text [ finnish ] = "~Alleviivaustapa" ;
+        Text [ finnish ] = "Alleviivaus" ;
         Text [ danish ] = "Understregning" ;
         Text [ french ] = "Soulignage" ;
         Text [ swedish ] = "Und~erstrykning" ;
@@ -1826,9 +1841,22 @@ TabPage RID_SVXPAGE_CHAR_EXT
         };
         StringList [ finnish ] =
         {
-            < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-            < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-            < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Yksitt‰inen" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Kaksinkertainen" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Lihavointi"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pisteet" ; CHRDLG_UNDERLINE_DOTTED ; >
+            < "Pisteet (lihavointi)" ; CHRDLG_UNDERLINE_BOLDDOTTED; >
+            < "V‰liviiva"; CHRDLG_UNDERLINE_DASH; >
+            < "V‰liviiva (lihavoitu)"; CHRDLG_UNDERLINE_BOLDDASH; >
+            < "Pitk‰ ajatusviiva"; CHRDLG_UNDERLINE_LONGDASH; >
+            < "Pitk‰ ajatusviiva (lihavoitu)"; CHRDLG_UNDERLINE_BOLDLONGDASH; >
+            < "Pisteyhdysviiva"; CHRDLG_UNDERLINE_DASHDOT; >
+            < "Pisteyhdysviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOT; >
+            < "Piste piste viiva"; CHRDLG_UNDERLINE_DASHDOTDOT; >
+            < "Piste piste viiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; >
+            < "Aalto"; CHRDLG_UNDERLINE_WAVE; >
+            < "Aaltoviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDWAVE; >
+            < "Kaksinkertainen aalto"; CHRDLG_UNDERLINE_DOUBLEWAVE; >
         };
         StringList [ danish ] =
         {
@@ -2136,21 +2164,21 @@ TabPage RID_SVXPAGE_CHAR_EXT
     };
     StringList [ catalan ] =
     {
-            < "Sencillo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punteado"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punteado negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo negrita largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Ondulada"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Ondulada negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+            < "Sencillo" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "Doble" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "Negrita"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "Punteado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "Punteado negrita" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "Trazo"; CHRDLG_UNDERLINE_DASH; > ;
+        < "Trazo negrita"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "Trazo largo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Trazo negrita largo"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+        < "Punto trazo"; CHRDLG_UNDERLINE_DASHDOT; > ;
+        < "Punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+        < "Punto punto trazo"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+        < "Ondulada"; CHRDLG_UNDERLINE_WAVE; > ;
+        < "Ondulada negrita"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
         < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
     };
@@ -2164,7 +2192,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Stile ~barrato" ;
         Text [ portuguese_brazilian ] = "Estilo Ris~cado" ;
         Text [ portuguese ] = "~Rasurado" ;
-        Text [ finnish ] = "~Yliviivaustapa" ;
+        Text [ finnish ] = "~Yliviivaus" ;
         Text [ danish ] = "Gennemstreget" ;
         Text [ french ] = "~BarrÈ" ;
         Text [ swedish ] = "Genomstr~ykning" ;
@@ -2236,8 +2264,11 @@ TabPage RID_SVXPAGE_CHAR_EXT
         };
         StringList [ finnish ] =
         {
-            < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-            < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Yksitt‰inen" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Kaksinkertainen" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Lihavointi" ; CHRDLG_STRIKEOUT_BOLD ; >
+            < "kenoviivoilla (/)" ; CHRDLG_STRIKEOUT_SLASH ; >
+            < "X-merkeill‰" ; CHRDLG_STRIKEOUT_X ; >
         };
         StringList [ danish ] =
         {
@@ -2369,10 +2400,10 @@ TabPage RID_SVXPAGE_CHAR_EXT
     };
     StringList [ catalan ] =
     {
-            < "Sencillo" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Doble" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Negrita" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Con /" ; CHRDLG_STRIKEOUT_X ; > ;
+            < "Sencillo" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        < "Doble" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+        < "Negrita" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+        < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
     };
     };
@@ -2386,7 +2417,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ italian ] = "Solo par~ole" ;
         Text [ portuguese_brazilian ] = "~Apenas Palavras" ;
         Text [ portuguese ] = "SÛ p~alavras" ;
-        Text [ finnish ] = "~Vain sanat" ;
+        Text [ finnish ] = "~Yksitt‰iset sanat" ;
         Text [ danish ] = "Ordvis" ;
         Text [ french ] = "~Mot par mot" ;
         Text [ swedish ] = "Ord~vis" ;
@@ -2437,6 +2468,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ turkish ] = "÷rnek";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ejemplo";
+        Text[ finnish ] = "Esimerkki";
     };
     GroupBox GB_EXAMPLE
     {
@@ -2531,6 +2563,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Schriftart f¸r westlichen Text";
         Text[ arabic ] = "Œÿ «·‰’ «·€—»Ì";
         Text[ catalan ] = "Fuente para texto occidental";
+        Text[ finnish ] = "L‰nsimaiset tekstifontit";
     };
     FixedText FT_WEST_NAME
     {
@@ -2556,6 +2589,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Font";
         Text[ arabic ] = "‰Ê⁄ «·Œÿ";
         Text[ catalan ] = "Fuente";
+        Text[ finnish ] = "Fontti";
     };
     ComboBox LB_WEST_NAME
     {
@@ -2589,6 +2623,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Type";
         Text[ arabic ] = "‰„ÿ «·Œÿ";
         Text[ catalan ] = "Estilo";
+        Text[ finnish ] = "Tyyppi";
     };
     ComboBox LB_WEST_STYLE
     {
@@ -2609,7 +2644,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
             "Normal" ;
             "Italic" ;
             "Bold" ;
-            "Bold Italic" ;
+            "Bold italic" ;
         };
     StringList [ language_user1 ] =
     {
@@ -2671,8 +2706,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
          "Normal" ;
          "Kursiv" ;
-         "Fett" ;
-         "Fett Kursiv" ;
+         "Fed" ;
+         "Fed kursiv" ;
     };
     StringList [ swedish ] =
     {
@@ -2726,9 +2761,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
     StringList [ turkish ] =
     {
          "Normal" ;
-         "Kursiv" ;
-         "Fett" ;
-         "Fett Kursiv" ;
+         "›talik" ;
+         "Kal˝n" ;
+         "Kal˝n italik" ;
     };
     StringList [ arabic ] =
     {
@@ -2743,6 +2778,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
          "Cursiva" ;
          "Negrita" ;
          "Negrita cursiva" ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Normaali" ;
+        < "Kursivointi" ;
+        < "Lihavointi" ;
+        < "Lihavointi ja kursivointi" ;
     };
     };
     FixedText FT_WEST_SIZE
@@ -2769,6 +2811,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Size";
         Text[ arabic ] = "ÕÃ„ «·Œÿ";
         Text[ catalan ] = "TamaÒo";
+        Text[ finnish ] = "Koko";
     };
     MetricBox LB_WEST_SIZE
     {
@@ -2802,6 +2845,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Language";
         Text[ arabic ] = "«··€…";
         Text[ catalan ] = "Idioma";
+        Text[ finnish ] = "Kieli";
     };
     ListBox LB_WEST_LANG
     {
@@ -2836,6 +2880,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Schriftart f¸r asiatischen Text";
         Text[ arabic ] = "Œÿ «·‰’ «·¬”ÌÊÌ";
         Text[ catalan ] = "Fuente para texto asi·tico";
+        Text[ finnish ] = "Aasialaiset tekstifontit";
     };
     FixedText FT_EAST_NAME
     {
@@ -2861,6 +2906,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Font";
         Text[ arabic ] = "‰Ê⁄ «·Œÿ";
         Text[ catalan ] = "Fuente";
+        Text[ finnish ] = "Fontti";
     };
     ComboBox LB_EAST_NAME
     {
@@ -2894,6 +2940,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Type";
         Text[ arabic ] = "‰„ÿ «·Œÿ";
         Text[ catalan ] = "Estilo";
+        Text[ finnish ] = "Tyyppi";
     };
     ComboBox LB_EAST_STYLE
     {
@@ -2914,7 +2961,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
             "Normal" ;
             "Italic" ;
             "Bold" ;
-            "Bold Italic" ;
+            "Bold italic" ;
         };
     StringList [ language_user1 ] =
     {
@@ -2976,8 +3023,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
          "Normal" ;
          "Kursiv" ;
-         "Fett" ;
-         "Fett Kursiv" ;
+         "Fed" ;
+         "Fed kursiv" ;
     };
     StringList [ swedish ] =
     {
@@ -3031,9 +3078,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
     StringList [ turkish ] =
     {
          "Normal" ;
-         "Kursiv" ;
-         "Fett" ;
-         "Fett Kursiv" ;
+         "›talik" ;
+         "Kal˝n" ;
+         "Kal˝n italik" ;
     };
     StringList [ arabic ] =
     {
@@ -3048,6 +3095,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
          "Cursiva" ;
          "Negrita" ;
          "Negrita cursiva" ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Normaali" ;
+        < "Kursivointi" ;
+        < "Lihavointi" ;
+        < "Lihavointi ja kursivointi" ;
     };
     };
     FixedText FT_EAST_SIZE
@@ -3074,6 +3128,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Size";
         Text[ arabic ] = "ÕÃ„ «·Œÿ";
         Text[ catalan ] = "TamaÒo";
+        Text[ finnish ] = "Koko";
     };
     MetricBox LB_EAST_SIZE
     {
@@ -3107,6 +3162,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Language";
         Text[ arabic ] = "«··€…";
         Text[ catalan ] = "Idioma";
+        Text[ finnish ] = "Kieli";
     };
     ListBox LB_EAST_LANG
     {
@@ -3141,6 +3197,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "«·„⁄«Ì‰…";
         Text[ catalan ] = "PrevisualizaciÛn";
+        Text[ finnish ] = "Esikatselu";
     };
     Window WIN_CHAR_PREVIEW
     {
@@ -3167,6 +3224,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Example";
         Text[ arabic ] = "„À«·";
         Text[ catalan ] = "Ejemplo";
+        Text[ finnish ] = "Esimerkki";
     };
     FixedText FT_CHAR_FONTTYPE
     {
@@ -3202,6 +3260,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ turkish ] = "Font ~Color";
         Text[ arabic ] = "·Ê‰ «·Œÿ";
         Text[ catalan ] = "Color de fuente";
+        Text[ finnish ] = "Fontin ~v‰ri";
     };
     ListBox LB_COLOR2
     {
@@ -3234,6 +3293,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ korean ] = "%s æ∆¥‘";
         Text[ turkish ] = "%s deil";
         Text[ catalan ] = "No %s";
+        Text[ finnish ] = "Ei %s";
     };
     String STR_CHARNAME_TRANSPARENT
     {
@@ -3258,6 +3318,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ korean ] = "≈ı∏Ì";
         Text[ turkish ] = "Saydam";
         Text[ catalan ] = "Transparente";
+        Text[ finnish ] = "L‰pin‰kyv‰";
     };
 };
 
@@ -3292,6 +3353,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Underlining";
         Text[ arabic ] = "Œÿ  Õ Ì";
         Text[ catalan ] = "Subrayado";
+        Text[ finnish ] = "Alleviivaus";
     };
     ListBox LB_UNDERLINE
     {
@@ -3503,22 +3565,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ danish ] =
     {
             < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Enkelt" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "Dobbelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "Fed"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "Punkteret" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "Punkteret (fed)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "Stiplet"; CHRDLG_UNDERLINE_DASH; > ;
+        < "Stiplet (fed)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "Stiplet lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Stiplet lang (fed)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+        < "Prik streg"; CHRDLG_UNDERLINE_DASHDOT; > ;
+        < "Prik streg (fed)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+        < "Prik prik streg"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+        < "Prik prik streg (fed)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+        < "B¯lge"; CHRDLG_UNDERLINE_WAVE; > ;
+        < "B¯lge (fed)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+        < "Dobbelt b¯lge"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
     StringList [ swedish ] =
     {
@@ -3663,22 +3725,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ turkish ] =
     {
             < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Tek" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "«ift" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "Kal˝n"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "Noktal˝" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "Kal˝n noktal˝" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "«izgi"; CHRDLG_UNDERLINE_DASH; > ;
+        < "Kal˝n Áizgi"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "Uzun Áizgi"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Kal˝n uÁun Áizgi"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+        < "Nokta Áizgi"; CHRDLG_UNDERLINE_DASHDOT; > ;
+        < "Kal˝n nokta Áizgi"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+        < "Nokta nokta Áizgi"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+        < "Kal˝n nokta nokta Áizgi"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+        < "Dalga"; CHRDLG_UNDERLINE_WAVE; > ;
+        < "Kal˝n dalga"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+        < "«ift dalga"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
     StringList [ arabic ] =
     {
@@ -3702,23 +3764,43 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ catalan ] =
     {
-            < "(Sin)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Sencillo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punteado"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punteado negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Trazo negrita largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Ondulada"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-        < "Ondulada negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+            < "(Sin)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "Sencillo" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "Doble" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "Negrita"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "Punteado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "Punteado negrita" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "Trazo"; CHRDLG_UNDERLINE_DASH; > ;
+        < "Trazo negrita"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "Trazo largo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Trazo negrita largo"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+        < "Punto trazo"; CHRDLG_UNDERLINE_DASHDOT; > ;
+        < "Punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+        < "Punto punto trazo"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+        < "Ondulada"; CHRDLG_UNDERLINE_WAVE; > ;
+        < "Ondulada negrita"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
         < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "(Ilman)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Yksitt‰inen"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Kaksinkertainen"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Lihavointi"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Pisteet"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Pisteet (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "V‰liviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "V‰liviiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Pitk‰ ajatusviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Pitk‰ ajatusviiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Piste-viiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Piste-piste-viiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Piste-piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Aaltoviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Aaltoviiva (lihavointi)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Kaksinkertainen aaltoviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
     };
     FixedText FT_UNDERLINE_COLOR
@@ -3745,6 +3827,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Color";
         Text[ arabic ] = "«··Ê‰";
         Text[ catalan ] = "Color";
+        Text[ finnish ] = "V‰ri";
     };
     ListBox LB_UNDERLINE_COLOR
     {
@@ -3778,6 +3861,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Strikethrough";
         Text[ arabic ] = "‘ÿ»";
         Text[ catalan ] = "Tachado";
+        Text[ finnish ] = "Yliviivaus";
     };
     ListBox LB_STRIKEOUT
     {
@@ -3879,10 +3963,10 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ danish ] =
     {
             < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+        < "Enkelt" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        < "Dobbelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+        < "Fed" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+        < "Med /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
     };
     StringList [ swedish ] =
@@ -3951,11 +4035,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ turkish ] =
     {
             < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Basit" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        < "«ift" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+        < "Kal˝n" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+        < "/ ile" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+        < "X ile" ; CHRDLG_STRIKEOUT_X ; > ;
     };
     StringList [ arabic ] =
     {
@@ -3968,12 +4052,21 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ catalan ] =
     {
-            < "(Sin)" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Sencillo" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Doble" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Negrita" ; CHRDLG_STRIKEOUT_X ; > ;
-        < "Con /" ; CHRDLG_STRIKEOUT_X ; > ;
+            < "(Sin)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "Sencillo" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        < "Doble" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+        < "Negrita" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+        < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "(Ilman)" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Yksitt‰inen" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Kaksinkertainen" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Lihavointi" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Kenoviivoilla" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "X-kirjaimilla" ; CHRDLG_STRIKEOUT_X ; > ;
     };
     };
     CheckBox CB_INDIVIDUALWORDS
@@ -4001,6 +4094,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Individual words";
         Text[ arabic ] = "«·ﬂ·„«  ›ﬁÿ";
         Text[ catalan ] = "Por palabras";
+        Text[ finnish ] = "~Sanakohtaisesti";
     };
     FixedText FT_EMPHASIS
     {
@@ -4026,6 +4120,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Emphasis character";
         Text[ arabic ] = "√Õ—› ≈»—«“";
         Text[ catalan ] = "Car·cter de entonaciÛn";
+        Text[ finnish ] = "Painotusmerkki";
     };
     ListBox LB_EMPHASIS
     {
@@ -4200,13 +4295,21 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "‰ﬁÿ…" ; default ; > ;
         < "œ«∆—…" ; default ; > ;
         < "ﬁ—’" ; default ; > ;
-        < "Akzent" ; default ; > ;
+        < "⁄·«„… ‰ÿﬁÌ… " ; default ; > ;
     };
     StringList [ catalan ] =
     {
             < "(Sin)" ; default ; > ;
         < "Dot" ; default ; > ;
         < "CÌrculo" ; default ; > ;
+        < "Scheibe" ; default ; > ;
+        < "Akzent" ; default ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "(Ei mit‰‰n)" ; default ; > ;
+        < "Pilkku" ; default ; > ;
+        < "Ympyr‰" ; default ; > ;
         < "Scheibe" ; default ; > ;
         < "Akzent" ; default ; > ;
     };
@@ -4235,6 +4338,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Position";
         Text[ arabic ] = "«·„Ê÷⁄";
         Text[ catalan ] = "PosiciÛn";
+        Text[ finnish ] = "Sijainti";
     };
     ListBox LB_POSITION
     {
@@ -4345,8 +4449,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ catalan ] =
     {
-            < "Sobre texto" ; CHRDLG_POSITION_UNDER ; > ;
+            < "Sobre texto" ; CHRDLG_POSITION_OVER ; > ;
         < "Debajo de texto" ; CHRDLG_POSITION_UNDER ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Tekstin yl‰puolella" ; CHRDLG_POSITION_UNDER ; > ;
+        < "Tekstin alapuolella" ; CHRDLG_POSITION_UNDER ; > ;
     };
     };
     FixedText FT_EFFECTS
@@ -4373,6 +4482,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Effects";
         Text[ arabic ] = "«· √ÀÌ—« ";
         Text[ catalan ] = "Efectos";
+        Text[ finnish ] = "Tehosteet";
     };
     ListBox LB_EFFECTS2
     {
@@ -4461,11 +4571,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ danish ] =
         {
-                < "Keine" ; Default ; > ;
-            < "Versalien" ; Default ; > ;
-            < "Gemeine" ; Default ; > ;
-            < "Titelschrift" ; Default ; > ;
-            < "Kapit‰lchen" ; Default ; > ;
+                < "Ingen" ; Default ; > ;
+            < "Store bogstaver" ; Default ; > ;
+            < "SmÂ bogstaver" ; Default ; > ;
+            < "Titelskrift" ; Default ; > ;
+            < "KapitÊler" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
@@ -4525,11 +4635,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ turkish ] =
         {
-                < "Keine" ; Default ; > ;
-            < "Versalien" ; Default ; > ;
-            < "Gemeine" ; Default ; > ;
-            < "Titelschrift" ; Default ; > ;
-            < "Kapit‰lchen" ; Default ; > ;
+                < "Yok" ; Default ; > ;
+            < "B¸y¸k harflerle" ; Default ; > ;
+            < "K¸Á¸k harflerle" ; Default ; > ;
+            < "Ba˛l˝k yaz˝tipi" ; Default ; > ;
+            < "K¸Á¸k b¸y¸k harf" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -4546,6 +4656,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "Min˙sculas" ; Default ; > ;
         < "TÌtulo" ; Default ; > ;
         < "Versalitas" ; Default ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Ei mit‰‰n" ; Default ; > ;
+        < "Isot kirjaimet" ; Default ; > ;
+        < "Pienet kirjaimet" ; Default ; > ;
+        < "Otsikko" ; Default ; > ;
+        < "Pienet alkukirjaimet" ; Default ; > ;
     };
     };
     FixedText FT_RELIEF
@@ -4573,6 +4691,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Relief";
         Text[ arabic ] = "‰ﬁ‘";
         Text[ catalan ] = "Relief";
+        Text[ finnish ] = "~Relief";
     };
     ListBox LB_RELIEF
     {
@@ -4647,7 +4766,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ danish ] =
     {
-            < "Keine" ; Default ; > ;
+            < "Ingen" ; Default ; > ;
         < "Erhaben" ; Default ; > ;
         < "Vertieft" ; Default ; > ;
     };
@@ -4695,7 +4814,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ turkish ] =
     {
-            < "Keine" ; Default ; > ;
+            < "Yok" ; Default ; > ;
         < "Erhaben" ; Default ; > ;
         < "Vertieft" ; Default ; > ;
     };
@@ -4706,6 +4825,12 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "„Õ›Ê—" ; Default ; > ;
     };
     StringList [ catalan ] =
+    {
+            < "Keine" ; Default ; > ;
+        < "Erhaben" ; Default ; > ;
+        < "Vertieft" ; Default ; > ;
+    };
+    StringList [ finnish ] =
     {
             < "Keine" ; Default ; > ;
         < "Erhaben" ; Default ; > ;
@@ -4736,6 +4861,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Outline";
         Text[ arabic ] = "Œÿ ﬂˆ›«›Ì";
         Text[ catalan ] = "Contorno";
+        Text[ finnish ] = "J‰sennys";
     };
     TriStateBox CB_SHADOW
     {
@@ -4761,6 +4887,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Shadow";
         Text[ arabic ] = "Ÿ·";
         Text[ catalan ] = "Sombra";
+        Text[ finnish ] = "Varjo ";
     };
     CheckBox CB_BLINKING
     {
@@ -4787,6 +4914,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Blinking";
         Text[ arabic ] = "Ê„Ì÷";
         Text[ catalan ] = "Intermitente";
+        Text[ finnish ] = "~Vilkkuva";
     };
     FixedLine FL_EFFECTS_PREVIEW
     {
@@ -4812,6 +4940,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "«·„⁄«Ì‰…";
         Text[ catalan ] = "PrevisualizaciÛn";
+        Text[ finnish ] = "Esikatselu";
     };
     Window WIN_EFFECTS_PREVIEW
     {
@@ -4838,6 +4967,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Example";
         Text[ arabic ] = "„À«·";
         Text[ catalan ] = "Ejemplo";
+        Text[ finnish ] = "Esimerkki";
     };
     FixedText FT_EFFECTS_FONTTYPE
     {
@@ -4866,6 +4996,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Capitals";
         Text[ arabic ] = "√Õ—› ﬂ»Ì—…";
         Text[ catalan ] = "May˙sculas";
+        Text[ finnish ] = "Isot kirjaimet";
     };
     String STR_EFFECTS_LOWERCASE
     {
@@ -4889,6 +5020,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Lowercase";
         Text[ arabic ] = "√Õ—› ’€Ì—…";
         Text[ catalan ] = "Min˙sculas";
+        Text[ finnish ] = "Pienet kirjaimet";
     };
     String STR_EFFECTS_TITLE
     {
@@ -4912,6 +5044,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Title";
         Text[ arabic ] = "Œÿ ⁄‰Ê«‰";
         Text[ catalan ] = "TÌtulo";
+        Text[ finnish ] = "Otsikko";
     };
     String STR_EFFECTS_SMALL
     {
@@ -4935,6 +5068,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Small Capitals";
         Text[ arabic ] = "Õ—› »œ«Ì… √ﬂ»—";
         Text[ catalan ] = "Versalitas";
+        Text[ finnish ] = "Pienet alkukirjaimet";
     };
     String STR_EFFECTS_OUTLINE
     {
@@ -4958,6 +5092,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Outline";
         Text[ arabic ] = "Œÿ ﬂˆ›«›Ì";
         Text[ catalan ] = "Contorno";
+        Text[ finnish ] = "J‰sennys";
     };
     String STR_EFFECTS_SHADOW
     {
@@ -4981,6 +5116,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Shadow";
         Text[ arabic ] = "Ÿ·";
         Text[ catalan ] = "Sombra";
+        Text[ finnish ] = "Varjo ";
     };
     String STR_EFFECTS_BLINKING
     {
@@ -5004,6 +5140,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Blinking";
         Text[ arabic ] = "Ê„Ì÷";
         Text[ catalan ] = "Intermitente";
+        Text[ finnish ] = "Vilkkuva";
     };
 };
 
@@ -5027,7 +5164,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "Position";
         Text[ spanish ] = "PosiciÛn";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "Position";
+        Text[ danish ] = "Start_ved";
         Text[ swedish ] = "Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Position";
@@ -5035,9 +5172,10 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ korean ] = "¿ßƒ°";
         Text[ chinese_simplified ] = "Œª÷√";
         Text[ chinese_traditional ] = "¶Ï∏m";
-        Text[ turkish ] = "Position";
+        Text[ turkish ] = "Pozisyon";
         Text[ arabic ] = "«·„Ê÷⁄";
         Text[ catalan ] = "PosiciÛn";
+        Text[ finnish ] = "Sijainti";
     };
     RadioButton RB_HIGHPOS
     {
@@ -5064,6 +5202,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Super";
         Text[ arabic ] = "„— ›⁄";
         Text[ catalan ] = "SuperÌndice";
+        Text[ finnish ] = "Yl‰puolella";
     };
     RadioButton RB_NORMALPOS
     {
@@ -5090,6 +5229,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Normal";
         Text[ arabic ] = "⁄«œÌ";
         Text[ catalan ] = "Normal";
+        Text[ finnish ] = "Normaali";
     };
     RadioButton RB_LOWPOS
     {
@@ -5116,6 +5256,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Sub";
         Text[ arabic ] = "„‰Œ›÷";
         Text[ catalan ] = "SubÌndice";
+        Text[ finnish ] = "Alapuolella";
     };
     FixedText FT_HIGHLOW
     {
@@ -5141,6 +5282,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Raise/lower by";
         Text[ arabic ] = "„— ›⁄/„‰Œ›÷ »„ﬁœ«—";
         Text[ catalan ] = "Super/subÌndice";
+        Text[ finnish ] = "Nosta/laske";
     };
     MetricField ED_HIGHLOW
     {
@@ -5183,6 +5325,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Automatic";
         Text[ arabic ] = " ·ﬁ«∆Ì";
         Text[ catalan ] = "Autom·tico";
+        Text[ finnish ] = "A~utomatisch";
     };
     FixedText FT_FONTSIZE
     {
@@ -5208,6 +5351,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Relative font size";
         Text[ arabic ] = "«·ÕÃ„ «·‰”»Ì ··Œÿ";
         Text[ catalan ] = "TamaÒo relativo";
+        Text[ finnish ] = "Suhteellinen fonttikoko";
     };
     MetricField ED_FONTSIZE
     {
@@ -5249,6 +5393,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Rotation / scaling";
         Text[ arabic ] = "«” œ«—… /  ÕÃÌ„";
         Text[ catalan ] = "RotaciÛn / Escala";
+        Text[ finnish ] = "Rotation / Skalierung";
     };
     FixedLine FL_SCALING
     {
@@ -5274,6 +5419,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Scaling";
         Text[ arabic ] = "Scaling";
         Text[ catalan ] = "Scaling";
+        Text[ finnish ] = "Skalierung";
     };
     RadioButton RB_0_DEG
     {
@@ -5300,6 +5446,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "0 degree";
         Text[ arabic ] = "0 œ—Ã…";
         Text[ catalan ] = "0 grados";
+        Text[ finnish ] = "0 Grad";
     };
     RadioButton RB_90_DEG
     {
@@ -5326,6 +5473,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "90 degree";
         Text[ arabic ] = "90 œ—Ã…";
         Text[ catalan ] = "90 grados";
+        Text[ finnish ] = "90 Grad";
     };
     RadioButton RB_270_DEG
     {
@@ -5352,6 +5500,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "270 degree";
         Text[ arabic ] = "270 œ—Ã…";
         Text[ catalan ] = "270 grados";
+        Text[ finnish ] = "270 Grad";
     };
     CheckBox CB_FIT_TO_LINE
     {
@@ -5378,6 +5527,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Fit to line";
         Text[ arabic ] = "„·«¡„… ··”ÿ—";
         Text[ catalan ] = "Ajustar a fila";
+        Text[ finnish ] = "An Zeile anpassen";
     };
     FixedText FT_SCALE_WIDTH
     {
@@ -5403,6 +5553,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Scale width";
         Text[ arabic ] = " ÕÃÌ„ «·⁄—÷";
         Text[ catalan ] = "TamaÒo del ancho";
+        Text[ finnish ] = "Breite skalieren";
     };
     MetricField MF_SCALE_WIDTH
     {
@@ -5444,6 +5595,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Spacing";
         Text[ arabic ] = " »«⁄œ «·√Õ—›";
         Text[ catalan ] = "Espacios";
+        Text[ finnish ] = "Objektiv‰lit";
     };
     ListBox LB_KERNING2
     {
@@ -5513,9 +5665,9 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         };
         StringList [ danish ] =
         {
-                < "Standard" ; Default ; > ;
-            < "Gesperrt" ; Default ; > ;
-            < "Schmal" ; Default ; > ;
+                < "Normal" ; Default ; > ;
+            < "Bred" ; Default ; > ;
+            < "Smal" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
@@ -5531,7 +5683,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         };
         StringList [ portuguese_brazilian ] =
         {
-                < "Standard" ; Default ; > ;
+                < "Padr„o" ; Default ; > ;
             < "Gesperrt" ; Default ; > ;
             < "Schmal" ; Default ; > ;
         };
@@ -5561,9 +5713,9 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         };
         StringList [ turkish ] =
         {
-                < "Standard" ; Default ; > ;
-            < "Gesperrt" ; Default ; > ;
-            < "Schmal" ; Default ; > ;
+                < "Standart" ; Default ; > ;
+            < "Aral˝˝ b¸y¸t" ; Default ; > ;
+            < "Aral˝˝ k¸Á¸lt" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -5576,6 +5728,12 @@ TabPage RID_SVXPAGE_CHAR_POSITION
             < "Est·ndar" ; Default ; > ;
         < "Expandido" ; Default ; > ;
         < "Condensado" ; Default ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Oletusarvo" ; Default ; > ;
+        < "Laajennettu" ; Default ; > ;
+        < "Tiivistetty" ; Default ; > ;
     };
     };
     FixedText FT_KERNING2
@@ -5602,6 +5760,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "by";
         Text[ arabic ] = "»„ﬁœ«—";
         Text[ catalan ] = "de";
+        Text[ finnish ] = "/";
     };
     MetricField ED_KERNING2
     {
@@ -5641,6 +5800,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "~Pair kerning";
         Text[ arabic ] = " ﬁ‰Ì‰ √Õ—› “ÊÃÌ";
         Text[ catalan ] = "~Ajuste par entre caracteres";
+        Text[ finnish ] = "~Parilimitys";
     };
     FixedLine FL_POS_PREVIEW
     {
@@ -5666,6 +5826,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "«·„⁄«Ì‰…";
         Text[ catalan ] = "PrevisualizaciÛn";
+        Text[ finnish ] = "Esikatselu";
     };
     Window WIN_POS_PREVIEW
     {
@@ -5692,6 +5853,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ turkish ] = "Example";
         Text[ arabic ] = "„À«·";
         Text[ catalan ] = "Ejemplo";
+        Text[ finnish ] = "Esimerkki";
     };
     FixedText FT_POS_FONTTYPE
     {
@@ -5729,6 +5891,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ turkish ] = "Two lines";
         Text[ arabic ] = "”ÿ—Ì‰";
         Text[ catalan ] = "Doble";
+        Text[ finnish ] = "Kaksoisviiva";
     };
     CheckBox CB_TWOLINES
     {
@@ -5755,6 +5918,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ turkish ] = "Two lines each line";
         Text[ arabic ] = "«·ﬂ «»… ›Ì ”ÿ—Ì‰";
         Text[ catalan ] = "Dos lÌneas por renglÛn";
+        Text[ finnish ] = "~K‰yt‰ kaksoisviivoja";
     };
     FixedLine FL_ENCLOSE
     {
@@ -5780,6 +5944,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ turkish ] = "Enclose character";
         Text[ arabic ] = "√Õ—› ≈Õ«ÿ…";
         Text[ catalan ] = "Caracteres de inclusiÛn";
+        Text[ finnish ] = "Ymp‰rˆiv‰ merkki";
     };
     FixedText FT_STARTBRACKET
     {
@@ -5805,6 +5970,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ turkish ] = "Beginning character";
         Text[ arabic ] = "√Õ— › »œ«Ì…";
         Text[ catalan ] = "Car·cter inicial";
+        Text[ finnish ] = "En~simm‰inen merkki";
     };
     ListBox ED_STARTBRACKET
     {
@@ -5994,12 +6160,21 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     StringList [ catalan ] =
     {
-            < "(Ninguno)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "(Ninguno)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "(Ei mit‰‰n)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < "(" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < "[" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < "<" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < "{" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
     };
     FixedText FT_ENDBRACKET
@@ -6026,6 +6201,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ turkish ] = "End character";
         Text[ arabic ] = "√Õ—› ‰Â«Ì…";
         Text[ catalan ] = "Car·cter final";
+        Text[ finnish ] = "Viimeinen merk~ki";
     };
     ListBox ED_ENDBRACKET
     {
@@ -6215,12 +6391,21 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     StringList [ catalan ] =
     {
-            < "(Ninguno)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+            < "(Ninguno)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "(Ei mit‰‰n)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < ")" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < "]" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < ">" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         < "}" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
     };
     FixedLine FL_TWOLINES_PREVIEW
@@ -6247,6 +6432,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "«·„⁄«Ì‰…";
         Text[ catalan ] = "PrevisualizaciÛn";
+        Text[ finnish ] = "Esikatselu";
     };
     Window WIN_TWOLINES_PREVIEW
     {
@@ -6273,6 +6459,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ turkish ] = "Example";
         Text[ arabic ] = "„À«·";
         Text[ catalan ] = "Ejemplo";
+        Text[ finnish ] = "Esimerkki";
     };
     FixedText FT_TWOLINES_FONTTYPE
     {
