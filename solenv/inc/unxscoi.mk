@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxscoi.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:20 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:48:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE -DX86 -DNEW_S
 
 CXX*=/nw386/dev/s/solenv/unxscoi/bin/g++
 CC*=/nw386/dev/s/solenv/unxscoi/bin/gcc
-CFLAGS=-w -c $(INCLUDE)
+CFLAGS=-c $(INCLUDE)
 CFLAGSCC=-mpentium
 CFLAGSCXX= -mpentium
 CFLAGSEXCEPTIONS=-fexceptions
