@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 15:30:39 $
+ *  last change: $Author: dr $ $Date: 2000-10-24 08:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,14 @@
 #include "PageMasterPropMapper.hxx"
 #endif
 
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
+#include <com/sun/star/table/BorderLine.hpp>
+#endif
+
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include "PageMasterStyleMap.hxx"
 #endif
@@ -70,13 +78,10 @@
 #include "PageMasterPropHdlFactory.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
-#include <com/sun/star/table/BorderLine.hpp>
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::comphelper;
 
 
 //______________________________________________________________________________
@@ -238,6 +243,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& r
 
 
 //______________________________________________________________________________
+
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
     XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory())
 {
@@ -331,8 +337,7 @@ void XMLPageMasterPropSetMapper::ContextFilter(
 
     if( pPMHeaderHeight && pPMHeaderMinHeight )
     {
-        sal_Bool bIsDynamic;
-        if( pPMHeaderDynamic && (pPMHeaderDynamic->maValue >>= bIsDynamic) && bIsDynamic )
+        if( pPMHeaderDynamic && getBOOL( pPMHeaderDynamic->maValue ) )
             lcl_RemoveState( pPMHeaderHeight );
         else
             lcl_RemoveState( pPMHeaderMinHeight );
@@ -342,8 +347,7 @@ void XMLPageMasterPropSetMapper::ContextFilter(
 
     if( pPMFooterHeight && pPMFooterMinHeight )
     {
-        sal_Bool bIsDynamic;
-        if( pPMFooterDynamic && (pPMFooterDynamic->maValue >>= bIsDynamic) && bIsDynamic )
+        if( pPMFooterDynamic && getBOOL( pPMFooterDynamic->maValue ) )
             lcl_RemoveState( pPMFooterHeight );
         else
             lcl_RemoveState( pPMFooterMinHeight );
