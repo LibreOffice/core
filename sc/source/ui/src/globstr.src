@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:09:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Vložiť";
     };
     String STR_UNDO_DELETECELLS
     {
@@ -128,6 +129,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मिटाओ";
+        Text[ slovak ] = "Zmazať";
     };
     String STR_UNDO_CUT
     {
@@ -159,6 +161,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyjmout";
         Text[ hebrew ] = "‮גזירה‬";
         Text[ hindi ] = "काटो";
+        Text[ slovak ] = "Vystrihnúť";
     };
     String STR_UNDO_PASTE
     {
@@ -191,6 +194,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Vložiť";
     };
     String STR_UNDO_DRAGDROP
     {
@@ -222,6 +226,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Táhni a pusť";
         Text[ hebrew ] = "Drag&Drop";
         Text[ hindi ] = "खींचो और गिराओ";
+        Text[ slovak ] = "Ťahaj a pusť";
     };
     String STR_UNDO_MOVE
     {
@@ -253,6 +258,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přesunout";
         Text[ hebrew ] = "Verschieben";
         Text[ hindi ] = "स्थान परिवर्तन करो";
+        Text[ slovak ] = "Presunúť";
     };
     String STR_UNDO_COPY
     {
@@ -284,6 +290,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kopírovat";
         Text[ hebrew ] = "‮העתקה‬";
         Text[ hindi ] = "प्रतिलिपि";
+        Text[ slovak ] = "Kopírovať";
     };
     String STR_UNDO_DELETECONTENTS
     {
@@ -316,6 +323,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मिटाओ";
+        Text[ slovak ] = "Zmazať";
     };
     String STR_UNDO_SELATTR
     {
@@ -347,6 +355,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Atributy";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     String STR_UNDO_SELATTRLINES
     {
@@ -378,6 +387,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Atributy/Čáry";
         Text[ hebrew ] = "Attribute/Linien";
         Text[ hindi ] = "ऐट्रिब्यूट्स/रेखाएँ";
+        Text[ slovak ] = "Atribúty/Čiary";
     };
     String STR_UNDO_COLWIDTH
     {
@@ -409,6 +419,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Šířka sloupce";
         Text[ hebrew ] = "Spaltenbreite";
         Text[ hindi ] = "स्तंभ चौड़ाई";
+        Text[ slovak ] = "Šírka stĺpca";
     };
     String STR_UNDO_OPTCOLWIDTH
     {
@@ -440,6 +451,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Optimální šířka sloupce";
         Text[ hebrew ] = "‮רוחב טור מיטבי‬";
         Text[ hindi ] = "योग्य स्तंभ चौड़ाई";
+        Text[ slovak ] = "Optimálna šírka stĺpca";
     };
     String STR_UNDO_ROWHEIGHT
     {
@@ -472,6 +484,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Výška řádku";
         Text[ hebrew ] = "Zeilenhöhe";
         Text[ hindi ] = "पंक्ति ऊँचाई";
+        Text[ slovak ] = "Výška riadku";
     };
     String STR_UNDO_OPTROWHEIGHT
     {
@@ -504,6 +517,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Optimální výška řádku";
         Text[ hebrew ] = "‮גובה שורה מיטבי‬";
         Text[ hindi ] = "योग्य पंक्ति ऊँचाई";
+        Text[ slovak ] = "Optimálna výška riadku";
     };
     String STR_UNDO_AUTOFILL
     {
@@ -536,6 +550,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyplnit";
         Text[ hebrew ] = "Füllen";
         Text[ hindi ] = "भरो";
+        Text[ slovak ] = "Vyplnenie";
     };
     String STR_UNDO_MERGE
     {
@@ -567,6 +582,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sloučit";
         Text[ hebrew ] = "Zusammenfassen";
         Text[ hindi ] = "मिलाओ";
+        Text[ slovak ] = "Zlúčiť";
     };
     String STR_UNDO_REMERGE
     {
@@ -598,6 +614,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Rozdělit";
         Text[ hebrew ] = "Zusammenfassung aufheben";
         Text[ hindi ] = "अलगाना";
+        Text[ slovak ] = "Rozdeliť";
     };
     String STR_UNDO_AUTOFORMAT
     {
@@ -630,6 +647,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Automatický formát";
         Text[ hebrew ] = "‮עיצוב אוטומטי‬";
         Text[ hindi ] = "स्वचालित रचना";
+        Text[ slovak ] = "Automatický formát";
     };
     String STR_UNDO_REPLACE
     {
@@ -661,6 +679,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nahradit";
         Text[ hebrew ] = "‮החלפה‬";
         Text[ hindi ] = "प्रतिस्थापन";
+        Text[ slovak ] = "Nahradiť";
     };
     String STR_UNDO_CURSORATTR
     {
@@ -692,6 +711,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Atributy";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     String STR_UNDO_ENTERDATA
     {
@@ -723,6 +743,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vstup";
         Text[ hebrew ] = "Eingabe";
         Text[ hindi ] = "इनपुट्";
+        Text[ slovak ] = "Vstup";
     };
     String STR_UNDO_INSCOLBREAK
     {
@@ -755,6 +776,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložit zalomení sloupce";
         Text[ hebrew ] = "‮הוספת הפסרת טור יזומה‬";
         Text[ hindi ] = "Insert Column Break";
+        Text[ slovak ] = "Vložiť zalomenie stĺpca";
     };
     String STR_UNDO_DELCOLBREAK
     {
@@ -787,6 +809,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odstranit zalomení sloupce";
         Text[ hebrew ] = "Spaltenumbruch löschen";
         Text[ hindi ] = "स्तंभ खण्डन मिटाओ";
+        Text[ slovak ] = "Odstrániť zalomenie stĺpca";
     };
     String STR_UNDO_INSROWBREAK
     {
@@ -799,7 +822,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "Inserir quebra de linha" ;
         Text [ finnish ] = "Lis�� rivinvaihto" ;
         Text [ danish ] = "Inds�t linjeskift" ;
-        Text [ french ] = "Ins�rer un renvoi � la ligne" ;
+        Text [ french ] = "Ins�rer un retour � la ligne" ;
         Text [ swedish ] = "Infoga radbrytning" ;
         Text [ dutch ] = "Rij-einde invoegen" ;
         Text [ spanish ] = "Insertar salto de fila" ;
@@ -819,6 +842,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložit zalomení řádku";
         Text[ hebrew ] = "Zeilenumbruch einfügen";
         Text[ hindi ] = "पंक्ति खण्डन जोड़ो";
+        Text[ slovak ] = "Vložiť zalomenie riadku";
     };
     String STR_UNDO_DELROWBREAK
     {
@@ -831,7 +855,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "Eliminar quebra de linha" ;
         Text [ finnish ] = "Poista rivinvaihto" ;
         Text [ danish ] = "Slet linjeskift" ;
-        Text [ french ] = "Supprimer le renvoi � la ligne" ;
+        Text [ french ] = "Supprimer le retour � la ligne" ;
         Text [ swedish ] = "Radera radbrytning" ;
         Text [ dutch ] = "Rij-einde verwijderen" ;
         Text [ spanish ] = "Borrar salto de fila" ;
@@ -851,6 +875,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odstranit zalomení řádku";
         Text[ hebrew ] = "Zeilenumbruch löschen";
         Text[ hindi ] = "पंक्ति खण्डन मिटाओ";
+        Text[ slovak ] = "Odstrániť zalomenie riadku";
     };
     String STR_UNDO_DOOUTLINE
     {
@@ -882,6 +907,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zobrazit detaily";
         Text[ hebrew ] = "Detail einblenden";
         Text[ hindi ] = "दृश्य विवरण";
+        Text[ slovak ] = "Zobraziť podrobnosti";
     };
     String STR_UNDO_REDOOUTLINE
     {
@@ -913,6 +939,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Skrýt detaily";
         Text[ hebrew ] = "Detail ausblenden";
         Text[ hindi ] = "विवरणों को छिपाना";
+        Text[ slovak ] = "Skryť detaily";
     };
     String STR_UNDO_MAKEOUTLINE
     {
@@ -944,6 +971,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Seskupit";
         Text[ hebrew ] = "Gruppierung";
         Text[ hindi ] = "समूह";
+        Text[ slovak ] = "Zoskupiť";
     };
     String STR_UNDO_REMAKEOUTLINE
     {
@@ -975,6 +1003,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zrušit seskupení";
         Text[ hebrew ] = "Gruppierung aufheben";
         Text[ hindi ] = "अलगाना";
+        Text[ slovak ] = "Zrušiť zoskupenie";
     };
     String STR_UNDO_OUTLINELEVEL
     {
@@ -1007,6 +1036,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vybrat úroveň osnovy";
         Text[ hebrew ] = "Gliederungsebene auswählen";
         Text[ hindi ] = "बाहरी रूपरेखा स्तर चुनो";
+        Text[ slovak ] = "Vybrať úroveň konspektu";
     };
     String STR_UNDO_DOOUTLINEBLK
     {
@@ -1038,6 +1068,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zobrazit detaily";
         Text[ hebrew ] = "Detail einblenden";
         Text[ hindi ] = "दृश्य विवरण";
+        Text[ slovak ] = "Zobraziť podrobnosti";
     };
     String STR_UNDO_REDOOUTLINEBLK
     {
@@ -1069,6 +1100,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Skrýt detaily";
         Text[ hebrew ] = "Detail ausblenden";
         Text[ hindi ] = "विवरणों को छिपाना";
+        Text[ slovak ] = "Skryť detaily";
     };
     String STR_UNDO_REMOVEALLOTLNS
     {
@@ -1100,6 +1132,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyčistit osnovu";
         Text[ hebrew ] = "Gliederung entfernen";
         Text[ hindi ] = "बाहरी रूपरेखा की सफाई";
+        Text[ slovak ] = "Vyčistiť osnovu";
     };
     String STR_UNDO_AUTOOUTLINE
     {
@@ -1132,6 +1165,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Automatické souhrny";
         Text[ hebrew ] = "AutoGliederung";
         Text[ hindi ] = "स्वचालित बाहरी रूपरेखा";
+        Text[ slovak ] = "Automatický konspekt";
     };
     String STR_UNDO_SUBTOTALS
     {
@@ -1163,6 +1197,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Mezisoučty";
         Text[ hebrew ] = "Teilergebnisse";
         Text[ hindi ] = "आधा कुलजोड";
+        Text[ slovak ] = "Medzisúčty";
     };
     String STR_UNDO_SORT
     {
@@ -1194,6 +1229,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Řadit";
         Text[ hebrew ] = "‮מיון‬";
         Text[ hindi ] = "सोर्ट";
+        Text[ slovak ] = "Zoradiť";
     };
     String STR_UNDO_QUERY
     {
@@ -1225,6 +1261,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Filtr";
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "फिल्टर";
+        Text[ slovak ] = "Filter";
     };
     String STR_UNDO_DBDATA
     {
@@ -1257,6 +1294,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Změnit rozsah databáze";
         Text[ hebrew ] = "Datenbankbereiche ändern";
         Text[ hindi ] = "लेखासंचय फैलाव बदलो";
+        Text[ slovak ] = "Zmeniť databázovú oblasť";
     };
     String STR_UNDO_IMPORTDATA
     {
@@ -1288,6 +1326,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Importuje se";
         Text[ hebrew ] = "Importieren";
         Text[ hindi ] = "निर्यात करना";
+        Text[ slovak ] = "Importuje sa";
     };
     String STR_UNDO_REPEATDB
     {
@@ -1318,6 +1357,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Obnovit oblast";
         Text[ hebrew ] = "Bereich aktualisieren";
         Text[ hindi ] = "नवीकरण फैलाव";
+        Text[ slovak ] = "Obnoviť oblasť";
     };
     String STR_UNDO_GRAFEDIT
     {
@@ -1348,6 +1388,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit obrázek";
         Text[ hebrew ] = "Grafik bearbeiten";
         Text[ hindi ] = "सुचित्र का संपादन";
+        Text[ slovak ] = "Upraviť obrázok";
     };
     String STR_UNDO_LISTNAMES
     {
@@ -1378,6 +1419,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vypsat názvy";
         Text[ hebrew ] = "Namen auflisten";
         Text[ hindi ] = "सूची नाम";
+        Text[ slovak ] = "Vypísať mená";
     };
     String STR_UNDO_PIVOT_NEW
     {
@@ -1408,6 +1450,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vytvořit Kontingenční tabulku";
         Text[ hebrew ] = "Datenpilot-Tabelle anlegen";
         Text[ hindi ] = "ड़ॉटापैलट् सारणी को उत्पन्न करो";
+        Text[ slovak ] = "Vytvoriť tabuľku sprievodcu dátami";
     };
     String STR_UNDO_PIVOT_MODIFY
     {
@@ -1438,6 +1481,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit Kontingenční tabulku";
         Text[ hebrew ] = "Datenpilot-Tabelle bearbeiten";
         Text[ hindi ] = "ड़ॉटापैलट् सारणी का संपादन";
+        Text[ slovak ] = "Upraviť sprievodcu tabuľkou";
     };
     String STR_UNDO_PIVOT_DELETE
     {
@@ -1469,6 +1513,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Smazat Kontingenční tabulku";
         Text[ hebrew ] = "Datenpilot-Tabelle löschen";
         Text[ hindi ] = "ड़ॉटापैलट् सारणी को मिटाओ";
+        Text[ slovak ] = "Odstrániť tabuľku sprievodcu dátami";
     };
     String STR_UNDO_CONSOLIDATE
     {
@@ -1499,6 +1544,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Konsolidovat";
         Text[ hebrew ] = "Konsolidieren";
         Text[ hindi ] = "एक करना";
+        Text[ slovak ] = "Konsolidovať";
     };
     String STR_UNDO_USESCENARIO
     {
@@ -1529,6 +1575,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Použít scénář";
         Text[ hebrew ] = "Szenario anwenden";
         Text[ hindi ] = "विवरण का उपयोग करो";
+        Text[ slovak ] = "Použiť scenár";
     };
     String STR_UNDO_MAKESCENARIO
     {
@@ -1559,6 +1606,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vytvořit scénář";
         Text[ hebrew ] = "Szenario anlegen";
         Text[ hindi ] = "विवरण उत्पन्न करो";
+        Text[ slovak ] = "Vytvoriť scenár";
     };
     String STR_UNDO_EDITSCENARIO
     {
@@ -1589,6 +1637,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit scénář";
         Text[ hebrew ] = "Szenario bearbeiten";
         Text[ hindi ] = "विवरण का संपादन";
+        Text[ slovak ] = "Upraviť scenár";
     };
     String STR_UNDO_APPLYCELLSTYLE
     {
@@ -1619,6 +1668,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Použít styl buňky";
         Text[ hebrew ] = "Zellvorlage anwenden";
         Text[ hindi ] = "कोष्ठ शैली लागू करो";
+        Text[ slovak ] = "Použiť štýl bunky";
     };
     String STR_UNDO_EDITCELLSTYLE
     {
@@ -1648,6 +1698,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit styl buňky";
         Text[ hebrew ] = "Zellvorlage bearbeiten";
         Text[ hindi ] = "कोष्ठ शैली का संपादन";
+        Text[ slovak ] = "Upraviť štýl bunky";
     };
     String STR_UNDO_APPLYPAGESTYLE
     {
@@ -1677,6 +1728,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Použít styl stránky";
         Text[ hebrew ] = "‮החלת סגנון דף‬";
         Text[ hindi ] = "पृष्ठ शैली लागू करो";
+        Text[ slovak ] = "Použiť štýl stránky";
     };
     String STR_UNDO_EDITPAGESTYLE
     {
@@ -1706,6 +1758,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit styl stránky";
         Text[ hebrew ] = "Seitenvorlage bearbeiten";
         Text[ hindi ] = "पृष्ठ शैली का संपादन";
+        Text[ slovak ] = "Upraviť štýl stránky";
     };
     String STR_UNDO_DETADDPRED
     {
@@ -1737,6 +1790,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sledovat předchůdce";
         Text[ hebrew ] = "Spur zum Vorgänger";
         Text[ hindi ] = "पूर्व अवलम्बी को जाचँ करो";
+        Text[ slovak ] = "Sledovať predchodcov";
     };
     String STR_UNDO_DETDELPRED
     {
@@ -1768,6 +1822,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odstranit předchůdce";
         Text[ hebrew ] = "Spur zum Vorgänger entfernen";
         Text[ hindi ] = "पूर्व अवलम्बी को हटाओ";
+        Text[ slovak ] = "Odstrániť predchodcu";
     };
     String STR_UNDO_DETADDSUCC
     {
@@ -1798,6 +1853,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sledovat závislosti";
         Text[ hebrew ] = "Spur zum Nachfolger";
         Text[ hindi ] = "अवलम्बी को जाँच करो";
+        Text[ slovak ] = "Sledovať závislosti";
     };
     String STR_UNDO_DETDELSUCC
     {
@@ -1828,6 +1884,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odstranit závislost";
         Text[ hebrew ] = "Spur zum Nachfolger entfernen";
         Text[ hindi ] = "अवलम्बी को हटाओ";
+        Text[ slovak ] = "Odstrániť závislosť";
     };
     String STR_UNDO_DETADDERROR
     {
@@ -1858,6 +1915,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba ve sledování";
         Text[ hebrew ] = "Spur zum Fehler";
         Text[ hindi ] = "गलती जाचँ करो";
+        Text[ slovak ] = "Nájsť chybu";
     };
     String STR_UNDO_DETDELALL
     {
@@ -1888,6 +1946,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odstranit všechna sledování";
         Text[ hebrew ] = "Alle Spuren entfernen";
         Text[ hindi ] = "सब जाचँ को हटाओ";
+        Text[ slovak ] = "Odstrániť všetky sledovania";
     };
     String STR_UNDO_DETINVALID
     {
@@ -1919,6 +1978,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Označit neplatná data";
         Text[ hebrew ] = "Ungültige Daten einkreisen";
         Text[ hindi ] = "अमान्य ड़ॉटा को चिह्नित करो";
+        Text[ slovak ] = "Označiť neplatné dáta";
     };
     String STR_UNDO_DETREFRESH
     {
@@ -1949,6 +2009,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Obnovit sledování";
         Text[ hebrew ] = "Spuren aktualisieren";
         Text[ hindi ] = "जाचँ नवीकरण";
+        Text[ slovak ] = "Obnoviť sledovanie";
     };
     String STR_UNDO_CHARTDATA
     {
@@ -1980,6 +2041,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit oblast dat grafu";
         Text[ hebrew ] = "Datenbereich von Diagramm ändern";
         Text[ hindi ] = "चार्ट ड़ॉटा फैलाव को सुधारो";
+        Text[ slovak ] = "Upraviť oblasť dát grafu";
     };
     String STR_UNDO_ORIGINALSIZE
     {
@@ -2012,6 +2074,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Původní velikost";
         Text[ hebrew ] = "Originalgröße";
         Text[ hindi ] = "यथार्थ परिमाण";
+        Text[ slovak ] = "Pôvodná veľkosť";
     };
     String STR_UNDO_UPDATELINK
     {
@@ -2043,6 +2106,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Aktualizovat odkaz";
         Text[ hebrew ] = "Verknüpfung aktualisieren";
         Text[ hindi ] = "लिंक अपडेट् करो";
+        Text[ slovak ] = "Aktualizovať odkaz";
     };
     String STR_UNDO_REMOVELINK
     {
@@ -2074,6 +2138,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Bez odkazu";
         Text[ hebrew ] = "Verknüpfung aufheben";
         Text[ hindi ] = "लिंक हटाओ";
+        Text[ slovak ] = "Bez odkazu";
     };
     String STR_UNDO_INSERTAREALINK
     {
@@ -2105,6 +2170,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložit odkaz";
         Text[ hebrew ] = "Verknüpfung einfügen";
         Text[ hindi ] = "लिंक जोड़ो";
+        Text[ slovak ] = "Vložiť odkaz";
     };
     String STR_UNDO_ENTERMATRIX
     {
@@ -2136,6 +2202,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložit maticový vzorec";
         Text[ hebrew ] = "Matrixformel einfügen";
         Text[ hindi ] = "श्रेणी सूत्र को जोड़ो";
+        Text[ slovak ] = "Vložiť vzorec nad pole";
     };
     String STR_UNDO_SHOWNOTE
     {
@@ -2166,6 +2233,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zobrazit poznámku";
         Text[ hebrew ] = "Notiz anzeigen";
         Text[ hindi ] = "टिप्पणी दिखाओ";
+        Text[ slovak ] = "Zobraziť poznámku";
     };
     String STR_UNDO_HIDENOTE
     {
@@ -2196,6 +2264,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Skrýt poznámku";
         Text[ hebrew ] = "Notiz ausblenden";
         Text[ hindi ] = "टिप्पणी छिपाओ";
+        Text[ slovak ] = "Skryť komentár";
     };
     String STR_UNDO_EDITNOTE
     {
@@ -2226,6 +2295,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit poznámku";
         Text[ hebrew ] = "Notiz bearbeiten";
         Text[ hindi ] = "टिप्पणी संपादन";
+        Text[ slovak ] = "Upraviť poznámku";
     };
     String STR_UNDO_DEC_INDENT
     {
@@ -2256,6 +2326,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zmenšit odsazení";
         Text[ hebrew ] = "‮הפחתת שוליים‬";
         Text[ hindi ] = "इन्डेन्ट घटाओ";
+        Text[ slovak ] = "Zmenšiť odsadenie";
     };
     String STR_UNDO_INC_INDENT
     {
@@ -2287,6 +2358,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zvětšit odsazení";
         Text[ hebrew ] = "‮הוספת שוליים‬";
         Text[ hindi ] = "इन्डेन्ट बढाओ";
+        Text[ slovak ] = "Zväčšiť odsadenie";
     };
     String STR_UNDO_PROTECT_TAB
     {
@@ -2318,6 +2390,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zamknout list";
         Text[ hebrew ] = "Tabelle schützen";
         Text[ hindi ] = "शीट् को रक्षा करो";
+        Text[ slovak ] = "Zamknúť list";
     };
     String STR_UNDO_UNPROTECT_TAB
     {
@@ -2348,6 +2421,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odemknout list";
         Text[ hebrew ] = "‮הסרת הגנה מגליון‬";
         Text[ hindi ] = "शीट् को रक्षा मत करो";
+        Text[ slovak ] = "Odomknúť list";
     };
     String STR_UNDO_PROTECT_DOC
     {
@@ -2379,6 +2453,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zamknout dokument";
         Text[ hebrew ] = "Dokument schützen";
         Text[ hindi ] = "लेखपत्र को रक्षा करो";
+        Text[ slovak ] = "Zamknúť dokument";
     };
     String STR_UNDO_UNPROTECT_DOC
     {
@@ -2409,6 +2484,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odemknout dokument";
         Text[ hebrew ] = "Dokumentschutz aufheben";
         Text[ hindi ] = "लेखपत्र को रक्षा मत करो";
+        Text[ slovak ] = "Odomknúť dokument";
     };
     String STR_UNDO_PRINTRANGES
     {
@@ -2439,6 +2515,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Rozsah tisku";
         Text[ hebrew ] = "‮טווח הדפסה‬";
         Text[ hindi ] = "छपाई फैलाव";
+        Text[ slovak ] = "Tlač oblasti";
     };
     String STR_UNDO_REMOVEBREAKS
     {
@@ -2470,6 +2547,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Smazat zalomení stránek";
         Text[ hebrew ] = "Seitenumbrüche löschen";
         Text[ hindi ] = "पृष्ठ खण्डन मिटाओ";
+        Text[ slovak ] = "Odstrániť zalomenie stránok";
     };
     String STR_UNDO_PRINTSCALE
     {
@@ -2501,6 +2579,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Změnit měřítko";
         Text[ hebrew ] = "Skalierung ändern";
         Text[ hindi ] = "स्केल बदलो";
+        Text[ slovak ] = "Zmeniť mierku";
     };
     String STR_UNDO_DRAG_BREAK
     {
@@ -2531,6 +2610,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přesunout zalomení stránky";
         Text[ hebrew ] = "Seitenumbruch verschieben";
         Text[ hindi ] = "पृष्ठ खण्डन का स्थान परिवर्तन करो";
+        Text[ slovak ] = "Presunúť zalomenie stránky";
     };
     String STR_UNDO_RANGENAMES
     {
@@ -2561,6 +2641,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit názvy oblastí";
         Text[ hebrew ] = "Bereichsnamen bearbeiten";
         Text[ hindi ] = "फैलाव नामों का संपादन";
+        Text[ slovak ] = "Upraviť názvy oblastí­";
     };
     String STR_UNDO_TRANSLITERATE
     {
@@ -2591,6 +2672,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Velikost/znaky";
         Text[ hebrew ] = "‮סיווג אותיות‬";
         Text[ hindi ] = "केस/अक्षरें";
+        Text[ slovak ] = "Veľkosť/znaky";
     };
     String STR_DB_NONAME
     {
@@ -2622,6 +2704,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "nepojmenované";
         Text[ hebrew ] = "unbenannt";
         Text[ hindi ] = "नाम रहित";
+        Text[ slovak ] = "nepomenované";
     };
     String STR_DBNAME_IMPORT
     {
@@ -2652,6 +2735,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Importovat";
         Text[ hebrew ] = "Import";
         Text[ hindi ] = "आयात";
+        Text[ slovak ] = "Importovať";
     };
     String STR_MSSG_DOSUBTOTALS_0
     {
@@ -2683,6 +2767,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "%PRODUCTNAME Calc";
         Text[ hebrew ] = "%PRODUCTNAME Calc";
         Text[ hindi ] = "%PRODUCTNAME गणना";
+        Text[ slovak ] = "%PRODUCTNAME Calc";
     };
     String STR_MSSG_DOSUBTOTALS_1
     {
@@ -2715,6 +2800,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odstranit data?";
         Text[ hebrew ] = "Daten löschen?";
         Text[ hindi ] = "ड़ॉटा को मिटाना है?";
+        Text[ slovak ] = "Odstrániť dáta?";
     };
     String STR_MSSG_DOSUBTOTALS_2
     {
@@ -2747,6 +2833,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nelze vložit řádky";
         Text[ hebrew ] = "Kann keine Zeilen einfügen";
         Text[ hindi ] = "पंक्तियों को जोड़ना संभव नहीं है";
+        Text[ slovak ] = "Nie je možné vložiť riadky";
     };
     String STR_MSSG_REPEATDB_0
     {
@@ -2779,6 +2866,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Žádné operace k provedení";
         Text[ hebrew ] = "Keine Operationen auszuführen";
         Text[ hindi ] = "चलाने केलिए कोई कार्य नहीं";
+        Text[ slovak ] = "Žiadne operácie na vykonanie";
     };
     String STR_MSSG_MAKEAUTOFILTER_0
     {
@@ -2811,6 +2899,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Oblast neobsahuje popisky sloupců.\nChcete použít data v prvním řádku jako popisky sloupců?";
         Text[ hebrew ] = "Der Bereich enthält keine Spaltenköpfe.\nSoll die erste Zeile als Spaltenköpfe verwendet werden?";
         Text[ hindi ] = "फैलाव स्तंभ शीर्षकों को सम्मिलित नहीं किया है ।\nआप पहिला वाक्य को स्तंभ शीर्षक जैसे उपयोग करना चाहते है?";
+        Text[ slovak ] = "Oblasť neobsahuje záhlavia stĺpcov.\nChcete použiť prvý riadok ako záhlavie stĺpcov?";
     };
     String STR_MSSG_IMPORTDATA_0
     {
@@ -2842,6 +2931,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba při importu dat!";
         Text[ hebrew ] = "Fehler beim Importieren";
         Text[ hindi ] = "ड़ॉटा को निर्यात करने के समय गलती!";
+        Text[ slovak ] = "Chyba pri importe dát!";
     };
     String STR_DATABASE_NOTFOUND
     {
@@ -2872,6 +2962,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Databázi '#' nelze otevřít.";
         Text[ hebrew ] = "Die Datenbank '#' konnte nicht geöffnet werden.";
         Text[ hindi ] = "'#' लेखासंचय को नहीं खोल सकते है ।";
+        Text[ slovak ] = "Databázu '#' nie je možné otvoriť.";
     };
     String STR_QUERY_NOTFOUND
     {
@@ -2902,6 +2993,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Dotaz '#' nelze otevřít.";
         Text[ hebrew ] = "Die Abfrage '#' konnte nicht geöffnet werden.";
         Text[ hindi ] = "'#' जानकारी को नहीं खोल सकते है ।";
+        Text[ slovak ] = "Dotaz '#' nie je možné otvoriť.";
     };
     String STR_DATABASE_ABORTED
     {
@@ -2932,6 +3024,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Import databáze zastaven.";
         Text[ hebrew ] = "Der Datenbank-Import wurde abgebrochen.";
         Text[ hindi ] = "लेखासंचय निर्यात समाप्त हुआ ।";
+        Text[ slovak ] = "Import databázy zastavený.";
     };
     String STR_PROGRESS_IMPORT
     {
@@ -2963,6 +3056,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "# záznamů importováno...";
         Text[ hebrew ] = "# Datensätze importiert...";
         Text[ hindi ] = "# लेखों को निर्यात किया है...";
+        Text[ slovak ] = "# záznamov importovaných...";
     };
     String STR_MSSG_MAKEOUTLINE_0
     {
@@ -2995,6 +3089,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nelze seskupit";
         Text[ hebrew ] = "Gruppierung nicht möglich";
         Text[ hindi ] = "एकत्रित करना असंभव है";
+        Text[ slovak ] = "Zoskupenie nie je možné";
     };
     String STR_MSSG_REMOVEOUTLINE_0
     {
@@ -3027,6 +3122,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nelze zrušit seskupení";
         Text[ hebrew ] = "Aufheben nicht möglich";
         Text[ hindi ] = "अलगाना असंभव है";
+        Text[ slovak ] = "Zrušiť zoskupenie nie je možné";
     };
     String STR_MSSG_PASTEFROMCLIP_0
     {
@@ -3059,6 +3155,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vkládání do vícenásobného výběru není možné";
         Text[ hebrew ] = "Einfügen auf Mehrfachselektion nicht möglich";
         Text[ hindi ] = "बहुमुखी चनाव में जोड़ना असंभव है";
+        Text[ slovak ] = "Vložiť do viacnásobného výberu nie je možné";
     };
     String STR_MSSG_PASTEFROMCLIP_1
     {
@@ -3090,6 +3187,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sloučení buněk není možné, buňky už jsou sloučené!";
         Text[ hebrew ] = "Zusammenfassen nicht verschachteln";
         Text[ hindi ] = "अगर कोष्ठ को पहिले से ही मिलाया है, तो कोष्ठ को मिलाना संभव नहीं है!";
+        Text[ slovak ] = "Spojenie buniek nie je možné ak sú bunky už spojené!";
     };
     String STR_MSSG_MOVEBLOCKTO_0
     {
@@ -3121,6 +3219,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sloučení buněk není možné, buňky už jsou sloučené!";
         Text[ hebrew ] = "Zusammenfassen nicht verschachteln";
         Text[ hindi ] = "अगर कोष्ठ को पहिले से ही मिलाया है, तो कोष्ठ को मिलाना संभव नहीं है!";
+        Text[ slovak ] = "Spojenie buniek nie je možné ak sú bunky už spojené!";
     };
     String STR_MSSG_APPLYPATTLINES_0
     {
@@ -3152,6 +3251,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nelze nastavit okraje vícenásobnému výběru";
         Text[ hebrew ] = "Rahmen nicht auf Mehrfachselektion";
         Text[ hindi ] = "बहुमुखी चनाव केलिए किनारों को लागू नहीं कर सकते है";
+        Text[ slovak ] = "Nie je možné aplikovať ohraničenie na viacnásobný výber";
     };
     String STR_MSSG_INSERTCELLS_0
     {
@@ -3184,6 +3284,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vkládání do sloučených oblastí není možné";
         Text[ hebrew ] = "Kann nicht in zusammengefasste Bereiche einfügen";
         Text[ hindi ] = "Inserting into merged ranges not possible";
+        Text[ slovak ] = "Vkladanie do zlúčených oblastí nie je možné";
     };
     String STR_MSSG_DELETECELLS_0
     {
@@ -3216,6 +3317,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Mazání ve sloučených oblastech není možné";
         Text[ hebrew ] = "Kann nicht aus zusammengefassten Bereichen löschen";
         Text[ hindi ] = "मिलाया हुआ फैलाव से मिटाना संभव नहीं है";
+        Text[ slovak ] = "Mazanie v zlúčených oblastiach nie je možné";
     };
     String STR_MSSG_MERGECELLS_0
     {
@@ -3247,6 +3349,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sloučení buněk není možné pokud jsou buňky už sloučené";
         Text[ hebrew ] = "Zusammenfassungen nicht verschachteln ";
         Text[ hindi ] = "अगर कोष्ठ को पहिले से ही मिलाया है, तो कोष्ठ को मिलाना संभव नहीं है";
+        Text[ slovak ] = "Spojenie buniek nie je možné ak sú bunky už spojené";
     };
     String STR_SORT_ERR_MERGED
     {
@@ -3278,6 +3381,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Oblasti obsahující sloučené buňky lze řadit pouze bez formátu.";
         Text[ hebrew ] = "Bereiche mit zusammengefassten Zellen können nur ohne Formate sortiert werden.";
         Text[ hindi ] = "फैलाव में रहनेवाला मिलाया हुआ कोष्ठों को केवल रचना के बिना ही सोर्ट कर सकते है ।";
+        Text[ slovak ] = "Oblasti obsahujúce spojené bunky, môžu byť zoradené iba bez formátov.";
     };
     String STR_MSSG_SEARCHANDREPLACE_0
     {
@@ -3308,6 +3412,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Hledané klíčové slovo nenalezeno.";
         Text[ hebrew ] = "Suchbegriff nicht gefunden.";
         Text[ hindi ] = "खोज किया हुआ चाभी नहीं मिला ।";
+        Text[ slovak ] = "Hľadané kľúčové slovo nenájdené";
     };
     String STR_MSSG_SOLVE_0
     {
@@ -3339,6 +3444,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyhledání cíle úspěšné.\n";
         Text[ hebrew ] = "Die Zielwertsuche war erfolgreich.\n";
         Text[ hindi ] = "गोलसीक सफल हुआ ।\n";
+        Text[ slovak ] = "Vyhľadanie cieľa úspešné.\n";
     };
     String STR_MSSG_SOLVE_1
     {
@@ -3370,6 +3476,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložte výsledek (";
         Text[ hebrew ] = "Soll das Ergebnis (";
         Text[ hindi ] = "नतीजा जोड़ो (";
+        Text[ slovak ] = "Vložiť výsledok (";
     };
     String STR_MSSG_SOLVE_2
     {
@@ -3377,7 +3484,7 @@ Resource RID_GLOBSTR
         Text = ") in die aktuelle Zelle �bernommen werden?" ;
         Text [ ENGLISH ] = ") in current cell?" ;
         Text [ norwegian ] = ") in current cell?" ;
-        Text [ italian ] = ") nella cella corrente?" ;
+        Text [ italian ] = ") nella cella attiva?" ;
         Text [ portuguese_brazilian ] = ") na c�lula atual?" ;
         Text [ portuguese ] = ") na c�lula activa?" ;
         Text [ finnish ] = ") nykyiseen soluun?" ;
@@ -3402,6 +3509,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = ") do současné buňky?";
         Text[ hebrew ] = ") in die aktuelle Zelle übernommen werden?";
         Text[ hindi ] = ") वर्तमान कोष्ठ में ?";
+        Text[ slovak ] = ") do aktuálnej bunky?";
     };
     String STR_MSSG_SOLVE_3
     {
@@ -3433,6 +3541,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyhledání cíle neúspěšné.\n";
         Text[ hebrew ] = "Die Zielwertsuche war erfolglos.\n";
         Text[ hindi ] = "गोलसीक असफल हुआ\n";
+        Text[ slovak ] = "Vyhľadanie cieľa neúspešné.\n";
     };
     String STR_MSSG_SOLVE_4
     {
@@ -3464,6 +3573,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odpovídající hodnota nenalezena. \n";
         Text[ hebrew ] = "Es konnte kein exakter Wert gefunden werden.\n";
         Text[ hindi ] = "यथार्थ मूल्य नहीं मिला । \n";
+        Text[ slovak ] = "Zodpovedajúca hodnota nenájdená. \n";
     };
     String STR_MSSG_SOLVE_5
     {
@@ -3496,6 +3606,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložte nejbližší hodnotu (";
         Text[ hebrew ] = "Soll die beste Näherung (";
         Text[ hindi ] = "अति समीप का मूल्य जोड़ो (";
+        Text[ slovak ] = "Vložiť najbližšiu hodnotu (";
     };
     String STR_MSSG_SOLVE_6
     {
@@ -3528,6 +3639,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = ")?";
         Text[ hebrew ] = ") übernommen werden?";
         Text[ hindi ] = ")?";
+        Text[ slovak ] = ")?";
     };
     String STR_TABLE_GESAMTERGEBNIS
     {
@@ -3559,6 +3671,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Celkem";
         Text[ hebrew ] = "Gesamtergebnis";
         Text[ hindi ] = "कुल जोड़";
+        Text[ slovak ] = "Celkom";
     };
     String STR_TABLE_ERGEBNIS
     {
@@ -3590,6 +3703,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Výsledek";
         Text[ hebrew ] = "Ergebnis";
         Text[ hindi ] = "नतीजा";
+        Text[ slovak ] = "Výsledok";
     };
     String STR_UNDO_SPELLING
     {
@@ -3620,6 +3734,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kontrola pravopisu";
         Text[ hebrew ] = "‮בדיקת איות‬";
         Text[ hindi ] = "अक्षर की जाँच";
+        Text[ slovak ] = "Kontrola pravopisu";
     };
     String STR_TABLE_UND
     {
@@ -3651,6 +3766,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "AND";
         Text[ hebrew ] = "UND";
         Text[ hindi ] = "AND";
+        Text[ slovak ] = "AND";
     };
     String STR_TABLE_ODER
     {
@@ -3682,6 +3798,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "OR";
         Text[ hebrew ] = "ODER";
         Text[ hindi ] = "OR";
+        Text[ slovak ] = "OR";
     };
     String STR_TABLE_DEF
     {
@@ -3713,6 +3830,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "List";
         Text[ hebrew ] = "Tabelle";
         Text[ hindi ] = "शीट्";
+        Text[ slovak ] = "List";
     };
     String STR_MOVE_TO_END
     {
@@ -3744,6 +3862,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "- přesunout na konec -";
         Text[ hebrew ] = "- ans Ende stellen -";
         Text[ hindi ] = "- अंतिम स्थान में स्थान परिवर्तन करो -";
+        Text[ slovak ] = "- presuň na koniec -";
     };
     String STR_BOX_YNI
     {
@@ -3775,6 +3894,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "V této verzi není implementováno.";
         Text[ hebrew ] = "Nicht implementiert in diesem Build";
         Text[ hindi ] = "इस बिल्ड में कार्यान्वित नहीं किया है ।";
+        Text[ slovak ] = "V tejto verzii nie je implementované";
     };
     String STR_NO_REF_TABLE
     {
@@ -3806,6 +3926,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#REF!";
         Text[ hebrew ] = "#REF!";
         Text[ hindi ] = "#REF!";
+        Text[ slovak ] = "#REF!";
     };
     String STR_PIVOT_INVALID_DBAREA
     {
@@ -3838,6 +3959,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Oblast dat musí obsahovat alespoň jeden řádek.";
         Text[ hebrew ] = "Der Datenbereich muss mindestens eine Daten-Zeile enthalten.";
         Text[ hindi ] = "ड़ॉटा फैलाव में कम से कम एक पंक्ति का रहना ज़रूरी है ।";
+        Text[ slovak ] = "Dátová oblasť musí obsahovať najmenej jeden riadok.";
     };
     String STR_PIVOT_NODATA
     {
@@ -3870,6 +3992,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kontingeční tabulka musí obsahovat alespoň jednu položku.";
         Text[ hebrew ] = "Die Datenpilot-Tabelle muss mindestens einen Eintrag enthalten.";
         Text[ hindi ] = "ड़ॉटापैलट् सारणी में कम से कम एक प्रविष्टि का रहना ज़रूरी है ।";
+        Text[ slovak ] = "Sprievodca dátami musí obsahovať aspoň jednu položku.";
     };
     String STR_PIVOT_MOVENOTALLOWED
     {
@@ -3902,6 +4025,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Oblast dat nelze smazat.";
         Text[ hebrew ] = "Der Datenbereich kann nicht gelöscht werden.";
         Text[ hindi ] = "ड़ॉटा फैलाव को नहीं मिटा सकते है ।";
+        Text[ slovak ] = "Dátová oblasť nemôže byť vymazaná.";
     };
     String STR_PIVOT_ERROR
     {
@@ -3932,6 +4056,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba při vytváření tabulky Průvodce daty.";
         Text[ hebrew ] = "Fehler beim Erstellen der Datenpilot-Tabelle.";
         Text[ hindi ] = "ड़ॉटापैलट् सारणी को उत्पन्न करने के समय गलती ।";
+        Text[ slovak ] = "Chyba pri vytváraní Sprievodcu dátami.";
     };
     String STR_PIVOT_OVERLAP
     {
@@ -3963,6 +4088,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kontingenční tabulky se nemohou překrývat.";
         Text[ hebrew ] = "Datenpilot-Tabellen dürfen sich nicht überlappen.";
         Text[ hindi ] = "ड़ॉटापैलट् सारणी ओवरलॉप नहीं हो सकता है ।";
+        Text[ slovak ] = "Sprievodca dátami nesmie presahovať.";
     };
     String STR_PIVOT_NOTEMPTY
     {
@@ -3994,6 +4120,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Cílová oblast není prázdná. Má se přepsat nynější obsah?";
         Text[ hebrew ] = "Der Zielbereich ist nicht leer. Soll er überschrieben werden?";
         Text[ hindi ] = "नियत स्थान फैलाव खाली नहीं है । अस्तित्व में रहनेवाला विषयों को ओवररइट् करना है?";
+        Text[ slovak ] = "Cieľová oblasť nie je prázdna. Prepísať existujúci obsah?";
     };
     String STR_DATAPILOT_SUBTOTAL
     {
@@ -4023,6 +4150,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zdrojová oblast obsahuje mezisoučty, které mohou zkreslit výsledek. Má se přesto použít?";
         Text[ hebrew ] = "Der Quellbereich enthält Teilergebnisse, die das Ergebnis verfälschen können. Soll er trotzdem verwendet werden?";
         Text[ hindi ] = "मूल फैलाव में रहनेवाला आधा जोड़, नतीजों का रूप बिगाड़ सकता है । किसी तरह उपयोग करना है?";
+        Text[ slovak ] = "Zdrojová oblasť obsahuje medzisúčet, ktorý môže skresliť výsledok. Použiť?";
     };
     String STR_PIVOT_PROGRESS
     {
@@ -4053,6 +4181,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vytvořit Kontingenční tabulku";
         Text[ hebrew ] = "Datenpilot-Tabelle erstellen";
         Text[ hindi ] = "ड़ॉटा पैलट् सारणी को उत्पन्न करो";
+        Text[ slovak ] = "Vytvoriť tabuľku sprievodcu dátami";
     };
     String STR_PIVOT_TOTAL
     {
@@ -4084,6 +4213,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Celkem";
         Text[ hebrew ] = "Gesamt";
         Text[ hindi ] = "कुलजोड़";
+        Text[ slovak ] = "Celkom";
     };
     String STR_PIVOT_DATA
     {
@@ -4115,6 +4245,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Data";
         Text[ hebrew ] = "Daten";
         Text[ hindi ] = "डॉटा";
+        Text[ slovak ] = "Dáta";
     };
     String STR_PIVOTFUNC_SUM
     {
@@ -4146,6 +4277,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "SUM";
         Text[ hebrew ] = "SUMME";
         Text[ hindi ] = "SUM";
+        Text[ slovak ] = "SUM";
     };
     String STR_PIVOTFUNC_COUNT
     {
@@ -4177,6 +4309,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "COUNT";
         Text[ hebrew ] = "ANZAHL";
         Text[ hindi ] = "COUNT";
+        Text[ slovak ] = "COUNT";
     };
     String STR_PIVOTFUNC_AVG
     {
@@ -4208,6 +4341,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "AVERAGE";
         Text[ hebrew ] = "MITTELWERT";
         Text[ hindi ] = "AVERAGE";
+        Text[ slovak ] = "AVERAGE";
     };
     String STR_PIVOTFUNC_MAX
     {
@@ -4239,6 +4373,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "MAX";
         Text[ hebrew ] = "MAX";
         Text[ hindi ] = "MAX";
+        Text[ slovak ] = "MAX";
     };
     String STR_PIVOTFUNC_MIN
     {
@@ -4270,6 +4405,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "MIN";
         Text[ hebrew ] = "MIN";
         Text[ hindi ] = "MIN";
+        Text[ slovak ] = "MIN";
     };
     String STR_PIVOTFUNC_PROD
     {
@@ -4301,6 +4437,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "PRODUCT";
         Text[ hebrew ] = "PRODUKT";
         Text[ hindi ] = "PRODUCT";
+        Text[ slovak ] = "PRODUCT";
     };
     String STR_PIVOTFUNC_COUNT2
     {
@@ -4332,6 +4469,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "COUNTA";
         Text[ hebrew ] = "ANZAHL2";
         Text[ hindi ] = "COUNTA";
+        Text[ slovak ] = "COUNTA";
     };
     String STR_PIVOTFUNC_STDDEV
     {
@@ -4363,6 +4501,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "STDEV";
         Text[ hebrew ] = "STABW";
         Text[ hindi ] = "STDEV";
+        Text[ slovak ] = "STDEV";
     };
     String STR_PIVOTFUNC_STDDEV2
     {
@@ -4394,6 +4533,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "STDEVP";
         Text[ hebrew ] = "STABWN";
         Text[ hindi ] = "STDEVP";
+        Text[ slovak ] = "STDEVP";
     };
     String STR_PIVOTFUNC_VAR
     {
@@ -4425,6 +4565,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "VAR";
         Text[ hebrew ] = "VARIANZ";
         Text[ hindi ] = "VAR";
+        Text[ slovak ] = "VAR";
     };
     String STR_PIVOTFUNC_VAR2
     {
@@ -4456,6 +4597,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "VARP";
         Text[ hebrew ] = "VARIANZEN";
         Text[ hindi ] = "VARP";
+        Text[ slovak ] = "VARP";
     };
     String STR_TABLE
     {
@@ -4487,6 +4629,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "List";
         Text[ hebrew ] = "Tabelle";
         Text[ hindi ] = "शीट्";
+        Text[ slovak ] = "List";
     };
     String STR_COLUMN
     {
@@ -4518,6 +4661,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sloupec";
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
+        Text[ slovak ] = "Stĺpec";
     };
     String STR_ROW
     {
@@ -4549,6 +4693,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Řádek";
         Text[ hebrew ] = "Zeile";
         Text[ hindi ] = "पंक्ति";
+        Text[ slovak ] = "Riadok";
     };
     String STR_PAGE
     {
@@ -4580,6 +4725,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Stránka";
         Text[ hebrew ] = "‮דף‬";
         Text[ hindi ] = "पृष्ठ";
+        Text[ slovak ] = "Stránka";
     };
     String STR_LOAD_DOC
     {
@@ -4611,6 +4757,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Načíst dokument";
         Text[ hebrew ] = "‮טעינת מסמך‬";
         Text[ hindi ] = "लेखपत्र लोड़ करो";
+        Text[ slovak ] = "Načítavam dokument";
     };
     String STR_SAVE_DOC
     {
@@ -4642,6 +4789,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Uložit dokument";
         Text[ hebrew ] = "Dokument speichern";
         Text[ hindi ] = "लेखपत्र संचित करो";
+        Text[ slovak ] = "Ukladám dokument";
     };
     String STR_ERR_INVALID_TABREF
     {
@@ -4673,6 +4821,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "<odkaz na neznámou tabulku>";
         Text[ hebrew ] = "<unbekannte Tabellenreferenz>";
         Text[ hindi ] = "<अज्ञात सारणी रेफरेन्स>";
+        Text[ slovak ] = "<odkaz na neznámou tabulku>";
     };
     String STR_AREA_ALREADY_INSERTED
     {
@@ -4705,6 +4854,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tato oblast už byla vložena.";
         Text[ hebrew ] = "Dieser Bereich wurde bereits eingefügt.";
         Text[ hindi ] = "इस फैलाव को पहिले से ही जोड़ा है ।";
+        Text[ slovak ] = "Táto oblasť je už vložená.";
     };
     String STR_INVALID_TABREF
     {
@@ -4737,6 +4887,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatný odkaz na list..";
         Text[ hebrew ] = "Ungültiger Tabellenbezug.";
         Text[ hindi ] = "शीट् रेफरेन्स अमान्य है ।";
+        Text[ slovak ] = "Neplatný odkaz na list.";
     };
     String STR_INVALID_QUERYAREA
     {
@@ -4769,6 +4920,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tato oblast neobsahuje platný dotaz.";
         Text[ hebrew ] = "Dieser Bereich enthält keine gültige Abfrage.";
         Text[ hindi ] = "इस फैलाव में मान्य जानकारी नहीं है ।";
+        Text[ slovak ] = "Táto oblasť neobsahuje platný dotaz.";
     };
     String STR_REIMPORT_EMPTY
     {
@@ -4801,6 +4953,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tato oblast neobsahuje importovaná data.";
         Text[ hebrew ] = "Dieser Bereich enthält keine importierten Daten.";
         Text[ hindi ] = "इस फैलाव में निर्यात किया हुआ ड़ॉटा नहीं है ।";
+        Text[ slovak ] = "Táto oblasť neobsahuje importované dáta.";
     };
     String STR_NOMULTISELECT
     {
@@ -4833,6 +4986,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tuto funkci nelze použít s vícenásobnými výběry.";
         Text[ hebrew ] = "Diese Funktion lässt sich nicht auf Mehrfachselektionen anwenden.";
         Text[ hindi ] = "इस फंक्शन् को बहुमुखी चुनाव सहित उपयोग नहीं कर सकते है ।";
+        Text[ slovak ] = "Táto funkcia nemôže byť použitá z viacnásobnými výbermi.";
     };
     String STR_FILL_SERIES_PROGRESS
     {
@@ -4865,6 +5019,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyplnit řádek...";
         Text[ hebrew ] = "Reihe Auffüllen...";
         Text[ hindi ] = "पंक्ति भरो...";
+        Text[ slovak ] = "Vyplniť Riadok.";
     };
     String STR_UNKNOWN_FILTER
     {
@@ -4896,6 +5051,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neznámý filtr: ";
         Text[ hebrew ] = "Unbekannter Filter:";
         Text[ hindi ] = "अज्ञात फिल्टर: ";
+        Text[ slovak ] = "Neznámy filter ";
     };
     String STR_NO_NAME_REF
     {
@@ -4927,6 +5083,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#NAME?";
         Text[ hebrew ] = "#NAME?";
         Text[ hindi ] = "#NAME?";
+        Text[ slovak ] = "#NAME?";
     };
     String STR_NO_ADDIN
     {
@@ -4958,6 +5115,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#ADDIN?";
         Text[ hebrew ] = "#ADDIN?";
         Text[ hindi ] = "#ADDIN?";
+        Text[ slovak ] = "#ADDIN?";
     };
     String STR_NO_MACRO
     {
@@ -4989,6 +5147,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#MACRO?";
         Text[ hebrew ] = "#MAKRO?";
         Text[ hindi ] = "#MACRO?";
+        Text[ slovak ] = "#MACRO?";
     };
     String STR_UNDO_THESAURUS
     {
@@ -5019,6 +5178,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Slovník synonym";
         Text[ hebrew ] = "‮מלים נרדפות‬";
         Text[ hindi ] = "शब्दकोश";
+        Text[ slovak ] = "Slovník synoným";
     };
     String STR_FILL_TAB
     {
@@ -5051,6 +5211,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyplnit listy";
         Text[ hebrew ] = "Tabellen füllen";
         Text[ hindi ] = "शीटों को भरो";
+        Text[ slovak ] = "Vyplniť listy";
     };
     String STR_NO_VALUE
     {
@@ -5082,6 +5243,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#VALUE!";
         Text[ hebrew ] = "#WERT";
         Text[ hindi ] = "#VALUE!";
+        Text[ slovak ] = "#VALUE!";
     };
     String STR_UPDATE_SCENARIO
     {
@@ -5113,6 +5275,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přidat vybrané oblasti k aktuálnímu scénáři?";
         Text[ hebrew ] = "Szenario um die markierten Bereiche erweitern?";
         Text[ hindi ] = "वर्तमान विवरण में चुने हुए फैलाव को जोड़ो?";
+        Text[ slovak ] = "Pridať vybrané oblasti do aktuálneho scenára?";
     };
     String STR_ERR_NEWSCENARIO
     {
@@ -5145,6 +5308,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Musíte vybrat oblasti scénáře, aby bylo možné vytvořit nový scénář.";
         Text[ hebrew ] = "Zum Anlegen eines Szenarios müssen die Szenariobereiche markiert werden.";
         Text[ hindi ] = "नया विवरण को उत्पन्न करने के प्रकार से विवरण फैलाव को चुनना चाहिए ।";
+        Text[ slovak ] = "Oblasť scenára musí byť vybraná, aby bolo možné vytvoriť nový scenár.";
     };
     String STR_NOAREASELECTED
     {
@@ -5176,6 +5340,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nebyla vybrána oblast.";
         Text[ hebrew ] = "Kein Bereich markiert.";
         Text[ hindi ] = "फैलाव को नहीं चुना है ।";
+        Text[ slovak ] = "Oblasť nie je vybraná.";
     };
     String STR_NEWTABNAMENOTUNIQUE
     {
@@ -5207,6 +5372,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tento název již existuje.";
         Text[ hebrew ] = "Dieser Tabellenname wurde bereits vergeben.";
         Text[ hindi ] = "इस नाम पहिले से ही अस्तित्व में है ।";
+        Text[ slovak ] = "Také meno už existuje.";
     };
     String STR_INVALIDTABNAME
     {
@@ -5239,6 +5405,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatný název listu.";
         Text[ hebrew ] = "Ungültiger Tabellenname.";
         Text[ hindi ] = "शीट् का नाम अमान्य है ।";
+        Text[ slovak ] = "Neplatný názov listu.";
     };
     String STR_SCENARIO
     {
@@ -5270,6 +5437,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Scénář";
         Text[ hebrew ] = "Szenario";
         Text[ hindi ] = "विवरण";
+        Text[ slovak ] = "Scenár";
     };
     String STR_PIVOT_TABLE
     {
@@ -5301,6 +5469,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kontingenční tabulka";
         Text[ hebrew ] = "Datenpilot";
         Text[ hindi ] = "ड़ॉटापैलट्";
+        Text[ slovak ] = "Sprievodca dátami";
     };
      //                      Texte fuer Ueberschriften bei Teilergebnis etc.
     String STR_FUN_TEXT_SUM
@@ -5333,6 +5502,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Sum";
         Text[ hebrew ] = "‮סכום‬";
         Text[ hindi ] = "जोड़";
+        Text[ slovak ] = "Celkom";
     };
     String STR_FUN_TEXT_COUNT
     {
@@ -5364,6 +5534,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Count";
         Text[ hebrew ] = "Anzahl";
         Text[ hindi ] = "गिनती";
+        Text[ slovak ] = "Počet";
     };
     String STR_FUN_TEXT_COUNT2
     {
@@ -5394,6 +5565,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "CountA";
         Text[ hebrew ] = "Anzahl2";
         Text[ hindi ] = "गिनती ए";
+        Text[ slovak ] = "PočetA";
     };
     String STR_FUN_TEXT_AVG
     {
@@ -5425,6 +5597,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Average";
         Text[ hebrew ] = "Mittelwert";
         Text[ hindi ] = "माध्य";
+        Text[ slovak ] = "Priemer";
     };
     String STR_FUN_TEXT_MAX
     {
@@ -5456,6 +5629,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Max";
         Text[ hebrew ] = "Max";
         Text[ hindi ] = "अधिकतम";
+        Text[ slovak ] = "Max";
     };
     String STR_FUN_TEXT_MIN
     {
@@ -5487,6 +5661,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Min";
         Text[ hebrew ] = "Min";
         Text[ hindi ] = "न्यूनतम";
+        Text[ slovak ] = "Min";
     };
     String STR_FUN_TEXT_PRODUCT
     {
@@ -5518,6 +5693,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Product";
         Text[ hebrew ] = "Produkt";
         Text[ hindi ] = "Product";
+        Text[ slovak ] = "Produkt";
     };
     String STR_FUN_TEXT_STDDEV
     {
@@ -5549,6 +5725,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "StDev";
         Text[ hebrew ] = "StAbw";
         Text[ hindi ] = "StDev";
+        Text[ slovak ] = "ŠtandOch";
     };
     String STR_FUN_TEXT_VAR
     {
@@ -5580,6 +5757,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Var";
         Text[ hebrew ] = "Varianz";
         Text[ hindi ] = "Var";
+        Text[ slovak ] = "Var";
     };
     /*  String STR_GOALSEEK
     {
@@ -5628,6 +5806,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Na této pozici nebyl nalezen žádný graf.";
         Text[ hebrew ] = "Kein Diagramm an dieser Position gefunden.";
         Text[ hindi ] = "इस स्थान में कोई चार्ट प्राप्त नहीं हुआ ।";
+        Text[ slovak ] = "Na tomto nieste sa nenachádza žiadny graf.";
     };
     String STR_PIVOT_NOTFOUND
     {
@@ -5659,6 +5838,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Na této pozici nebyla nalezena žádná Kontingenční tabulka";
         Text[ hebrew ] = "Keine Datenpilot-Tabelle an dieser Position gefunden.";
         Text[ hindi ] = "इस स्थान में कोई ड़ॉटा पैलट् सारणी प्राप्त नहीं हुआ ।";
+        Text[ slovak ] = "Na tomto mieste sa nenachádza žiadny sprievodca dátami.";
     };
     String STR_ERROR_STR
     {
@@ -5690,6 +5870,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba:";
         Text[ hebrew ] = "Err:";
         Text[ hindi ] = "गलती:";
+        Text[ slovak ] = "Chyba:";
     };
     String STR_NV_STR
     {
@@ -5722,6 +5903,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#N/A";
         Text[ hebrew ] = "#NV";
         Text[ hindi ] = "#N/A";
+        Text[ slovak ] = "#N/A";
     };
     String STR_NOREF_STR
     {
@@ -5754,6 +5936,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#REF!";
         Text[ hebrew ] = "#BEZUG";
         Text[ hindi ] = "#REF!";
+        Text[ slovak ] = "#REF!";
     };
     String STR_EMPTYDATA
     {
@@ -5785,6 +5968,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "(prázdné)";
         Text[ hebrew ] = "(leer)";
         Text[ hindi ] = "(खाली)";
+        Text[ slovak ] = "(prázdny)";
     };
     String STR_PRINT_INVALID_AREA
     {
@@ -5817,6 +6001,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatný rozsah tisku";
         Text[ hebrew ] = "Ungültiger Druckbereich";
         Text[ hindi ] = "अमान्य छपाई फैलाव";
+        Text[ slovak ] = "Neplatná oblasť pre tlač";
     };
     String STR_PAGESTYLE
     {
@@ -5848,6 +6033,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Styl stránky";
         Text[ hebrew ] = "‮סגנון‬";
         Text[ hindi ] = "पृष्ठ शैली";
+        Text[ slovak ] = "Štýl stránky";
     };
     String STR_HEADER
     {
@@ -5879,6 +6065,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Záhlaví";
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
+        Text[ slovak ] = "Záhlavie";
     };
     String STR_FOOTER
     {
@@ -5911,6 +6098,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zápatí";
         Text[ hebrew ] = "‮כותרת תחתונה‬";
         Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
+        Text[ slovak ] = "Zápätie";
     };
     String STR_TEXTATTRS
     {
@@ -5942,6 +6130,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Atributy textu";
         Text[ hebrew ] = "Textattribute";
         Text[ hindi ] = "टेक्स्ट् ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty textu";
     };
     String STR_HFCMD_DELIMITER
     {
@@ -5973,6 +6162,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "\\";
         Text[ hebrew ] = "\\";
         Text[ hindi ] = "\\";
+        Text[ slovak ] = "\\";
     };
     String STR_HFCMD_PAGE
     {
@@ -6004,6 +6194,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "PAGE";
         Text[ hebrew ] = "SEITE";
         Text[ hindi ] = "PAGE";
+        Text[ slovak ] = "PAGE";
     };
     String STR_HFCMD_PAGES
     {
@@ -6035,6 +6226,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "PAGES";
         Text[ hebrew ] = "SEITEN";
         Text[ hindi ] = "PAGES";
+        Text[ slovak ] = "PAGES";
     };
     String STR_HFCMD_DATE
     {
@@ -6066,6 +6258,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "DATE";
         Text[ hebrew ] = "‮תאריך‬";
         Text[ hindi ] = "DATE";
+        Text[ slovak ] = "DATE";
     };
     String STR_HFCMD_TIME
     {
@@ -6097,6 +6290,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "TIME";
         Text[ hebrew ] = "ZEIT";
         Text[ hindi ] = "TIME";
+        Text[ slovak ] = "TIME";
     };
     String STR_HFCMD_FILE
     {
@@ -6128,6 +6322,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "FILE";
         Text[ hebrew ] = "DATEI";
         Text[ hindi ] = "FILE";
+        Text[ slovak ] = "FILE";
     };
     String STR_HFCMD_TABLE
     {
@@ -6159,6 +6354,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "SHEET";
         Text[ hebrew ] = "TABELLE";
         Text[ hindi ] = "SHEET";
+        Text[ slovak ] = "SHEET";
     };
     String STR_PROTECTIONERR
     {
@@ -6191,6 +6387,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zamknuté buňky nelze měnit.";
         Text[ hebrew ] = "Gesperrte Zellen können nicht geändert werden.";
         Text[ hindi ] = "रक्षित कोष्ठों को नहीं सुधार सकते है ।";
+        Text[ slovak ] = "Uzamknuté bunky nie je možné meniť.";
     };
     String STR_READONLYERR
     {
@@ -6221,6 +6418,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Dokument je otevřen v režimu pouze pro čtení.";
         Text[ hebrew ] = "Dokument ist nur zum Lesen geöffnet.";
         Text[ hindi ] = "लेखपत्र को केवल पढ़ने के प्रकार में खोला है ।";
+        Text[ slovak ] = "Dokument je iba pre čítanie.";
     };
     String STR_MATRIXFRAGMENTERR
     {
@@ -6262,6 +6460,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nelze měnit část pole.";
         Text[ hebrew ] = "Sie können nicht nur einen Teil einer Matrix ändern.";
         Text[ hindi ] = "श्रेणी का केवल एक भाग को नहीं सुधार सकते है ।";
+        Text[ slovak ] = "Časť poľa nie je možné modifikovať.";
     };
     String STR_PAGEHEADER
     {
@@ -6293,6 +6492,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Záhlaví";
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
+        Text[ slovak ] = "Záhlavie";
     };
     String STR_PAGEFOOTER
     {
@@ -6325,6 +6525,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zápatí";
         Text[ hebrew ] = "‮כותרת תחתונה‬";
         Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
+        Text[ slovak ] = "Zápätie";
     };
     String STR_LONG_ERR_ILL_ARG
     {
@@ -6346,7 +6547,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "������: ������������ ��������";
         Text[ polish ] = "B��d: Nieprawid�owy argument";
         Text[ japanese ] = "エラー: 無効な引数が使われています";
-        Text[ chinese_traditional ] = "錯誤：無效的自變量";
+        Text[ chinese_traditional ] = "錯誤：無效的參數";
         Text[ arabic ] = "���: ����� ��� �����";
         Text[ greek ] = "������: �� ������ ������";
         Text[ korean ] = "오류: 잘못된 독립 변수";
@@ -6357,6 +6558,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Neplatný argument";
         Text[ hebrew ] = "Fehler: Ungültiges Argument";
         Text[ hindi ] = "गलती: अमान्य आर्गुमेन्ट्";
+        Text[ slovak ] = "Chyba: Neplatný argument";
     };
     String STR_LONG_ERR_ILL_PAR
     {
@@ -6388,6 +6590,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba v seznamu parametrů";
         Text[ hebrew ] = "Fehler in der Parameterliste";
         Text[ hindi ] = "पैरामीटर सूची में गलती";
+        Text[ slovak ] = "Chyba v zozname parametrov";
     };
     String STR_LONG_ERR_ILL_FPO
     {
@@ -6420,6 +6623,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Neplatná operace s plovoucí desetinnou čárkou";
         Text[ hebrew ] = "Fehler: Ungültige Gleitkommaoperation";
         Text[ hindi ] = "Error: Invalid floating point operation";
+        Text[ slovak ] = "Chyba: Neplatná operácia s plávajúcou desatinnou čiarkou";
     };
     String STR_LONG_ERR_ILL_CHAR
     {
@@ -6452,6 +6656,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Neplatný znak";
         Text[ hebrew ] = "Fehler: Ungültiges Zeichen";
         Text[ hindi ] = "गलती: अमान्य अक्षर";
+        Text[ slovak ] = "Chyba: Neplatný znak";
     };
     String STR_LONG_ERR_ILL_SEP
     {
@@ -6484,6 +6689,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Neplatný středník";
         Text[ hebrew ] = "Fehler: ungültiges Semikolon";
         Text[ hindi ] = "गलती: अमान्य अर्ध विराम का चिह्न";
+        Text[ slovak ] = "Chyba: Neplatná bodkočiarka";
     };
     String STR_LONG_ERR_PAIR
     {
@@ -6515,6 +6721,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba v počtu nebo umístění závorek";
         Text[ hebrew ] = "Fehler in der Klammerung";
         Text[ hindi ] = "गलती: कोष्ठक ढालने में";
+        Text[ slovak ] = "Chyba v počte alebo umiestnení­ zátvoriek";
     };
     String STR_LONG_ERR_OP_EXP
     {
@@ -6546,6 +6753,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Chybí operátor";
         Text[ hebrew ] = "Fehler: Fehlender Operator";
         Text[ hindi ] = "गलती: अनुपस्थित प्रवर्तक";
+        Text[ slovak ] = "Chyba: Chýba operátor";
     };
     String STR_LONG_ERR_VAR_EXP
     {
@@ -6566,7 +6774,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "������: ���������� �����������";
         Text[ polish ] = "B��d: Brak zmiennej";
         Text[ japanese ] = "エラー: 変数が足りません";
-        Text[ chinese_traditional ] = "錯誤：缺少變量";
+        Text[ chinese_traditional ] = "錯誤：遺漏變數";
         Text[ arabic ] = "���: �������� ��� ������";
         Text[ greek ] = "������: ������� ����������";
         Text[ korean ] = "오류: 변수가 없습니다.";
@@ -6577,6 +6785,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Chybí proměnná";
         Text[ hebrew ] = "Fehler: Fehlende Variable";
         Text[ hindi ] = "गलती: अनुपस्थित वेरिऐबल";
+        Text[ slovak ] = "Chyba: Chýba premenná";
     };
     String STR_LONG_ERR_CODE_OVF
     {
@@ -6608,6 +6817,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Přetečení vzorce";
         Text[ hebrew ] = "Fehler: Formel zu lang";
         Text[ hindi ] = "गलती: सूत्र अधिकता";
+        Text[ slovak ] = "Chyba: Pretečenie vzorca";
     };
     String STR_LONG_ERR_STR_OVF
     {
@@ -6639,6 +6849,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Přetečení řetězce";
         Text[ hebrew ] = "Fehler: Zeichenkette zu lang";
         Text[ hindi ] = "गलती: स्ट्रिंग अधिकता";
+        Text[ slovak ] = "Chyba: Pretečenie reťazca";
     };
     String STR_LONG_ERR_STACK_OVF
     {
@@ -6671,6 +6882,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Vnitřní přetečení";
         Text[ hebrew ] = "Fehler: Interner Überlauf";
         Text[ hindi ] = "गलती: भीतरी अधिकता";
+        Text[ slovak ] = "Chyba: Vnútorné pretečenie";
     };
     String STR_LONG_ERR_SYNTAX
     {
@@ -6702,6 +6914,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Interní syntaktická chyba";
         Text[ hebrew ] = "Interner Syntaxfehler";
         Text[ hindi ] = "भीतरी सिन्टाक्टिकल गलती";
+        Text[ slovak ] = "Vnútorná syntaktická chyba";
     };
     String STR_LONG_ERR_CIRC_REF
     {
@@ -6734,6 +6947,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Cyklický odkaz";
         Text[ hebrew ] = "Fehler: Zirkuläre Referenz";
         Text[ hindi ] = "गलती: चक्राकार रेफरेन्स";
+        Text[ slovak ] = "Chyba: Cyklický odkaz";
     };
     String STR_LONG_ERR_NO_NAME
     {
@@ -6766,6 +6980,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Neplatný název";
         Text[ hebrew ] = "Fehler: Ungültiger Name";
         Text[ hindi ] = "गलती: अमान्य नाम";
+        Text[ slovak ] = "Chyba: Neplatný názov";
     };
     String STR_LONG_ERR_NO_ADDIN
     {
@@ -6797,6 +7012,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Modul nenalezen";
         Text[ hebrew ] = "Fehler: AddIn nicht gefunden";
         Text[ hindi ] = "गलती: जोड़ो-इन नहीं मिला";
+        Text[ slovak ] = "Chyba: Add-in nenájdený";
     };
     String STR_LONG_ERR_NO_MACRO
     {
@@ -6828,6 +7044,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Makro nenalezeno";
         Text[ hebrew ] = "Fehler: Makro nicht gefunden";
         Text[ hindi ] = "गलती: मॉक्रो नहीं मिला";
+        Text[ slovak ] = "Chyba Makro nenájdené";
     };
     String STR_LONG_ERR_NO_REF
     {
@@ -6871,6 +7088,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Neplatný odkaz";
         Text[ hebrew ] = "Fehler: Ungültiger Bezug";
         Text[ hindi ] = "गलती: मान्य रेफरेन्स नहीं है";
+        Text[ slovak ] = "Chyba: Toto nie je platný odkaz";
     };
     String STR_LONG_ERR_NO_CONV
     {
@@ -6902,6 +7120,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Výpočet nekonverguje";
         Text[ hebrew ] = "Fehler: Rechenverfahren konvergiert nicht";
         Text[ hindi ] = "गलती: गणना एकत्र नहीं हुआ";
+        Text[ slovak ] = "Chyba: Výpočet nekonverguje";
     };
     String STR_LONG_ERR_NO_VALUE
     {
@@ -6933,6 +7152,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Není výsledek";
         Text[ hebrew ] = "Fehler: kein Ergebnis";
         Text[ hindi ] = "गलती: कोई नतीजा नहीं";
+        Text[ slovak ] = "Chyba: Žiadny výsledok";
     };
     String STR_LONG_ERR_NV
     {
@@ -6965,6 +7185,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Chyba: Hodnota není dostupná";
         Text[ hebrew ] = "Fehler: Wert nicht verfügbar";
         Text[ hindi ] = "Error: Value not available";
+        Text[ slovak ] = "Chyba: Hodnota nie je dostupná";
     };
     String STR_ODER_SO
     {
@@ -6996,6 +7217,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "%s nebo podobné";
         Text[ hebrew ] = "%s oder so";
         Text[ hindi ] = "%s अथवा सदृश";
+        Text[ slovak ] = "%s nebo podobné";
     };
     String STR_GRIDCOLOR
     {
@@ -7027,6 +7249,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Barva mřížky";
         Text[ hebrew ] = "Gitterfarbe";
         Text[ hindi ] = "जाल का रंग";
+        Text[ slovak ] = "Farba mriežky";
     };
     String STR_MERGE_NOTEMPTY
     {
@@ -7058,6 +7281,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Má se přesunout obsah skrytých buněk do první buňky?";
         Text[ hebrew ] = "Soll der Inhalt der verdeckten Zellen in die erste Zelle verschoben werden?";
         Text[ hindi ] = "छिपाया हुआ कोष्ठों का विषयों को पहिला कोष्ठ में स्थान परिवर्तन करना है?";
+        Text[ slovak ] = "Preniesť obsah skrytých buniek do prvej bunky?";
     };
     String STR_CELL_FILTER
     {
@@ -7089,6 +7313,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Filtr";
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "फिल्टर";
+        Text[ slovak ] = "Filter";
     };
     String STR_TARGETNOTFOUND
     {
@@ -7120,6 +7345,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Cílová databáze neexistuje.";
         Text[ hebrew ] = "Der Zieldatenbankbereich existiert nicht.";
         Text[ hindi ] = "लक्ष का लेखासंचय फैलाव अस्तित्व में नहीं है ।";
+        Text[ slovak ] = "Oblasť cieľovej databázi neexistuje.";
     };
     String STR_INVALID_EPS
     {
@@ -7152,6 +7378,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatný přírůstek";
         Text[ hebrew ] = "Ungültige Schrittweite";
         Text[ hindi ] = "अमान्य बढती";
+        Text[ slovak ] = "Neplatný prírastok";
     };
     String STR_TABLE_OP
     {
@@ -7183,6 +7410,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "MULTIPLE.OPERATIONS";
         Text[ hebrew ] = "MEHRFACHOPERATION";
         Text[ hindi ] = "MULTIPLE.OPERATIONS";
+        Text[ slovak ] = "VIACNÁSOBNÉ.OPERÁCIE";
     };
     String STR_UNDO_TABOP
     {
@@ -7214,6 +7442,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vícenásobné operace";
         Text[ hebrew ] = "Mehrfachoperation";
         Text[ hindi ] = "बहुमुखी कार्य";
+        Text[ slovak ] = "Viacnásobné operácie";
     };
     String STR_INVALID_AFNAME
     {
@@ -7248,6 +7477,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zadali jste neplatný název.\nAutomatický formát nebyl vytvořen.\nZkuste zadat jiné jméno.";
         Text[ hebrew ] = "Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen.";
         Text[ hindi ] = "आपका प्रविष्ट की हुयी नाम अमान्य है ।\nस्वचालित रचना को उत्पन्न नहीं कर सकते है ।\nभिन्न नाम के साथ फिर से प्रयत्न कीजिए ।";
+        Text[ slovak ] = "Zadali ste neplatný názov.\nAutomatický formát nebol vytvorený.\nSkúste zadať iný názov.";
     };
     String STR_AREA
     {
@@ -7279,6 +7509,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Rozsah";
         Text[ hebrew ] = "Bereich";
         Text[ hindi ] = "फैलाव";
+        Text[ slovak ] = "Oblasť";
     };
     String STR_YES
     {
@@ -7310,6 +7541,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Ano";
         Text[ hebrew ] = "‮כן‬";
         Text[ hindi ] = "हाँ";
+        Text[ slovak ] = "Áno";
     };
     String STR_NO
     {
@@ -7341,6 +7573,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Ne";
         Text[ hebrew ] = "‮לא‬";
         Text[ hindi ] = "नहीं";
+        Text[ slovak ] = "Nie";
     };
     String STR_PROTECTION
     {
@@ -7372,6 +7605,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Ochrana";
         Text[ hebrew ] = "Schutz";
         Text[ hindi ] = "रक्षा";
+        Text[ slovak ] = "Ochrana";
     };
     String STR_FORMULAS
     {
@@ -7403,6 +7637,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vzorce";
         Text[ hebrew ] = "Formeln";
         Text[ hindi ] = "Formulas";
+        Text[ slovak ] = "Vzorce";
     };
     String STR_HIDE
     {
@@ -7434,6 +7669,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Skrýt";
         Text[ hebrew ] = "Ausblenden";
         Text[ hindi ] = "छिपाओ";
+        Text[ slovak ] = "Skryť";
     };
     String STR_PRINT
     {
@@ -7465,6 +7701,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tisknout";
         Text[ hebrew ] = "‮הדפסה‬";
         Text[ hindi ] = "छपाई";
+        Text[ slovak ] = "Tlač";
     };
     String STR_INVALID_AFAREA
     {
@@ -7499,6 +7736,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Pro použití Automatického formátu,\nmusí být vybrána\nalespoň oblast 3x3 buňky.";
         Text[ hebrew ] = "Um das AutoFormat anwenden zu können,\nmuß ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein.";
         Text[ hindi ] = "स्वचालित रचना को लागू करने केलिए,\nकम से कम 3x3 कोष्ठों का\nसारणी फैलाव को चुनना ज़रूरी है ।";
+        Text[ slovak ] = "Použitie AutoFormátu\nje podmienené výberom najmenej\n3x3 buniek.";
     };
     String STR_CASCADE
     {
@@ -7530,6 +7768,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "(vnořeno)";
         Text[ hebrew ] = " (verschachtelt)";
         Text[ hindi ] = "(नेस्टेड्)";
+        Text[ slovak ] = "(vnorené)";
     };
     String STR_OPTIONAL
     {
@@ -7561,6 +7800,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "(volitelné)";
         Text[ hebrew ] = " (optional)";
         Text[ hindi ] = "(वैकल्पिक)";
+        Text[ slovak ] = "(voliteľné)";
     };
     String STR_REQUIRED
     {
@@ -7592,6 +7832,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "(vyžadováno)";
         Text[ hebrew ] = " (erforderlich)";
         Text[ hindi ] = "(आवश्यक)";
+        Text[ slovak ] = "(požadované)";
     };
     String STR_INVALID
     {
@@ -7624,6 +7865,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "neplatné";
         Text[ hebrew ] = "ungültig";
         Text[ hindi ] = "अमान्य";
+        Text[ slovak ] = "neplatné";
     };
     String STR_EDITFUNCTION
     {
@@ -7655,6 +7897,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit funkci";
         Text[ hebrew ] = "Funktion bearbeiten";
         Text[ hindi ] = "फंक्शन का संपादन";
+        Text[ slovak ] = "Upraviť funkciu";
     };
     String STR_NOTES
     {
@@ -7686,6 +7929,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Poznámky";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "टिप्पणी";
+        Text[ slovak ] = "Poznámky";
     };
     String STR_QUERY_DELTAB
     {
@@ -7717,6 +7961,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Opravdu si přejete permanentně smazat současný list?";
         Text[ hebrew ] = "Wollen Sie die ausgewählten Tabellen löschen?";
         Text[ hindi ] = "आप वर्तमान शीट् को सचमुच में स्थायी रूप से मिटाना चाहते है?";
+        Text[ slovak ] = "Ste si naozaj istý, že chcete natrvalo odstrániť aktuálny list(y)?";
     };
     String STR_QUERY_DELSCENARIO
     {
@@ -7747,6 +7992,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Opravdu si přejete smazat vybraný scénář?";
         Text[ hebrew ] = "Wollen Sie das ausgewählte Szenario löschen?";
         Text[ hindi ] = "आप चुने हुए विवरण को सचमुच में मिटाना चाहते है?";
+        Text[ slovak ] = "Ste si naozaj istý že chcete odstrániť zvolený scenár?";
     };
     String STR_EXPORT_ASCII_WARNING
     {
@@ -7778,6 +8024,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Slovník synonym není dostupný";
         Text[ hebrew ] = "Der Thesaurus ist nicht verfügbar";
         Text[ hindi ] = "शब्दकोश उपलब्ध नहीं है";
+        Text[ slovak ] = "Slovník synoným nie je dostupný";
     };
     String STR_IMPORT_ERROR
     {
@@ -7809,6 +8056,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kontrola pravopisu není dostupná";
         Text[ hebrew ] = "Die Rechtschreibprüfung ist nicht verfügbar";
         Text[ hindi ] = "अक्षर की जाँच उपलब्ध नहीं है";
+        Text[ slovak ] = "Kontrola pravopisu nie je dostupná";
     };
     String STR_IMPORT_ASCII
     {
@@ -7839,6 +8087,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Importovat textový soubor";
         Text[ hebrew ] = "Textimport";
         Text[ hindi ] = "टेक्स्ट् फाइलों को आयात करो";
+        Text[ slovak ] = "Importovať textový súbor";
     };
     String STR_EXPORT_ASCII
     {
@@ -7869,6 +8118,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Exportovat textový soubor";
         Text[ hebrew ] = "Textexport";
         Text[ hindi ] = "Export of text files";
+        Text[ slovak ] = "Exportovať textový súbor";
     };
     String STR_IMPORT_LOTUS
     {
@@ -7899,6 +8149,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Importovat soubory Lotus";
         Text[ hebrew ] = "Lotusimport";
         Text[ hindi ] = "Import Lotus files";
+        Text[ slovak ] = "Importovať súbory Lotus";
     };
     String STR_IMPORT_DBF
     {
@@ -7929,6 +8180,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Importovat soubor dBase";
         Text[ hebrew ] = "DBaseimport";
         Text[ hindi ] = "Import DBase files";
+        Text[ slovak ] = "Importovať súbor dBase";
     };
     String STR_EXPORT_DBF
     {
@@ -7958,6 +8210,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Exportovat soubor dBase";
         Text[ hebrew ] = "DBase-Export";
         Text[ hindi ] = "DBase निर्यात";
+        Text[ slovak ] = "Exportovať súbor dBase";
     };
     String STR_EXPORT_DIF
     {
@@ -7988,6 +8241,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Exportovat soubor Dif";
         Text[ hebrew ] = "Dif-Export";
         Text[ hindi ] = "Dif निर्यात";
+        Text[ slovak ] = "Exportovať súbor Dif";
     };
     String STR_IMPORT_DIF
     {
@@ -8018,6 +8272,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Importovat soubor Dif";
         Text[ hebrew ] = "Dif-Import";
         Text[ hindi ] = "Dif आयात";
+        Text[ slovak ] = "Importovať súbor Dif";
     };
     String STR_STYLENAME_STANDARD
     {
@@ -8048,6 +8303,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अनुपस्थिति";
+        Text[ slovak ] = "Východzie";
     };
     String STR_STYLENAME_RESULT
     {
@@ -8079,6 +8335,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Výsledek";
         Text[ hebrew ] = "Ergebnis";
         Text[ hindi ] = "नतीजा";
+        Text[ slovak ] = "Výsledok";
     };
     String STR_STYLENAME_RESULT1
     {
@@ -8110,6 +8367,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Výsledek2";
         Text[ hebrew ] = "Ergebnis2";
         Text[ hindi ] = "नतीजा2";
+        Text[ slovak ] = "Výsledok2";
     };
     String STR_STYLENAME_HEADLINE
     {
@@ -8141,6 +8399,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nadpis";
         Text[ hebrew ] = "Überschrift";
         Text[ hindi ] = "शीर्षक";
+        Text[ slovak ] = "Nadpis";
     };
     String STR_STYLENAME_HEADLINE1
     {
@@ -8172,6 +8431,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nadpis1";
         Text[ hebrew ] = "Überschrift1";
         Text[ hindi ] = "शीर्षक1";
+        Text[ slovak ] = "Nadpis1";
     };
     String STR_STYLENAME_REPORT
     {
@@ -8202,6 +8462,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zpráva";
         Text[ hebrew ] = "‮דו\"ח‬";
         Text[ hindi ] = "रिपोर्ट";
+        Text[ slovak ] = "Správa";
     };
     String STR_STYLENAME_REPORT1
     {
@@ -8232,6 +8493,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zpráva1";
         Text[ hebrew ] = "Bericht1";
         Text[ hindi ] = "रिपोर्ट1";
+        Text[ slovak ] = "Správa1";
     };
     String STR_IMPORT_EXCEL_WARNING
     {
@@ -8263,6 +8525,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "není dostupné pro kontrolu pravopisu.\nZkontrolujte vaši instalaci a podle potřeby\nnainstalujte požadovaný jazyk";
         Text[ hebrew ] = " ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache";
         Text[ hindi ] = "अक्षर की जाँच केलिए उपलब्ध नहीं है ।\nकृपया आपका प्रतिष्ठापन का जाँच करो और \nआवश्यक भाषा का प्रतिष्ठापन कीजिए";
+        Text[ slovak ] = "nie je použiteľný pre kontrolu pravopisu\nProsím skontrolujte svoju inštaláciu a nainštalujte\npožadovaný jazyk";
     };
     String STR_THESAURUS_NO_STRING
     {
@@ -8294,6 +8557,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Slovník synonym lze použít pouze v textových buňkách!";
         Text[ hebrew ] = "Thesaurus nur in Textzellen möglich";
         Text[ hindi ] = "शब्दकोश को केवल टेक्स्ट् कोष्ठों में उपयोग कर सकते है!";
+        Text[ slovak ] = "Slovník synoným možno použiť len na bunky obsahujúce text!";
     };
     String STR_SPELLING_BEGIN_TAB
     {
@@ -8325,6 +8589,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Má kontrola pravopisu pokračovat od začátku aktivního listu?";
         Text[ hebrew ] = "Soll die Rechtschreibprüfung am Tabellenanfang fortgesetzt werden?";
         Text[ hindi ] = "आप अक्षर की जाँच को प्रचलित शीट् का प्रारंभ से जारी रखना चाहते है?";
+        Text[ slovak ] = "Má kontrola pravopisu pokračovať od začiatku aktuálneho listu?";
     };
     String STR_SPELLING_NO_LANG
     {
@@ -8356,6 +8621,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "není dostupné pro slovník synonym.\nZkontrolujte vaši instalaci a podle potřeby\nnainstalujte požadovaný jazyk";
         Text[ hebrew ] = " ist für den Thesaurus nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache";
         Text[ hindi ] = "शब्दकोश केलिए उपलब्ध नहीं है ।\nकृपया आपका प्रतिष्ठापन का जाँच करो और \nआवश्यक भाषा का प्रतिष्ठापन कीजिए";
+        Text[ slovak ] = "nie je použiteľný pre kontrolu pravopisu\nProsím skontrolujte svoju inštaláciu a nainštalujte\npožadovaný jazyk";
     };
     String STR_SPELLING_STOP_OK
     {
@@ -8387,6 +8653,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kontrola pravopisu tohoto listu byla dokončena.";
         Text[ hebrew ] = "Die Rechtschreibprüfung dieser Tabelle ist abgeschlossen";
         Text[ hindi ] = "इस शीट् में अक्षर की जाँच समाप्त हुआ ।";
+        Text[ slovak ] = "Kontrola pravopisu tohoto listu je hotová.";
     };
     String STR_NOLANGERR
     {
@@ -8417,6 +8684,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Není nastaven žádný jazyk";
         Text[ hebrew ] = "Keine Sprache eingestellt";
         Text[ hindi ] = "कोई भाषा सेट्ट नहीं है";
+        Text[ slovak ] = "Žiadny jazyk nie je nastavený";
     };
     String STR_UNDO_INSERT_TAB
     {
@@ -8448,6 +8716,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vložit list";
         Text[ hebrew ] = "Tabellen einfügen";
         Text[ hindi ] = "शीट् जोड़ो";
+        Text[ slovak ] = "Vložiť list";
     };
     String STR_UNDO_DELETE_TAB
     {
@@ -8479,6 +8748,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Smazat listy";
         Text[ hebrew ] = "Tabellen löschen";
         Text[ hindi ] = "शीट् मिटाओ";
+        Text[ slovak ] = "Odstrániť listy";
     };
     String STR_UNDO_RENAME_TAB
     {
@@ -8509,6 +8779,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přejmenovat list";
         Text[ hebrew ] = "Tabelle umbenennen";
         Text[ hindi ] = "शीट् को पुनः नाम दो";
+        Text[ slovak ] = "Premenovať list";
     };
     String STR_UNDO_MOVE_TAB
     {
@@ -8539,6 +8810,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přesunout listy";
         Text[ hebrew ] = "Tabellen verschieben";
         Text[ hindi ] = "शीटों का स्थान परिवर्तन करो";
+        Text[ slovak ] = "Presunúť listy";
     };
     String STR_UNDO_COPY_TAB
     {
@@ -8569,6 +8841,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kopírovat list";
         Text[ hebrew ] = "Tabellen kopieren";
         Text[ hindi ] = "शीट् की प्रतिलिपि";
+        Text[ slovak ] = "Kopírovať list";
     };
     String STR_UNDO_APPEND_TAB
     {
@@ -8600,6 +8873,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Připojit list";
         Text[ hebrew ] = "Tabelle anhängen";
         Text[ hindi ] = "शीट् जोड़ो";
+        Text[ slovak ] = "Pripojiť list";
     };
     String STR_UNDO_SHOWTAB
     {
@@ -8630,6 +8904,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zobrazit list";
         Text[ hebrew ] = "Tabelle einblenden";
         Text[ hindi ] = "शीट् दिखाओ";
+        Text[ slovak ] = "Zobraziť list";
     };
     String STR_UNDO_HIDETAB
     {
@@ -8660,6 +8935,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Skrýt list";
         Text[ hebrew ] = "Tabelle ausblenden";
         Text[ hindi ] = "शीट् छिपाओ";
+        Text[ slovak ] = "Skryť list";
     };
     String STR_CHART_MAINTITLE
     {
@@ -8690,6 +8966,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Hlavní nadpis";
         Text[ hebrew ] = "Haupttitel";
         Text[ hindi ] = "मुख्य शीर्षक";
+        Text[ slovak ] = "Hlavný nadpis";
     };
     String STR_CHART_SUBTITLE
     {
@@ -8720,6 +8997,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Podnadpis";
         Text[ hebrew ] = "Untertitel";
         Text[ hindi ] = "अधीन शीर्षक";
+        Text[ slovak ] = "Podtitul";
     };
     String STR_CHART_XTITLE
     {
@@ -8750,6 +9028,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Popis osy X";
         Text[ hebrew ] = "X-Achsentitel";
         Text[ hindi ] = "X अक्षरेखा शीर्षक";
+        Text[ slovak ] = "Popis osy X";
     };
     String STR_CHART_YTITLE
     {
@@ -8780,6 +9059,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Popis osy Y";
         Text[ hebrew ] = "Y-Achsentitel";
         Text[ hindi ] = "Y अक्षरेखा शीर्षक";
+        Text[ slovak ] = "Popis osy Y";
     };
     String STR_CHART_ZTITLE
     {
@@ -8810,6 +9090,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Popis osy Z";
         Text[ hebrew ] = "Z-Achsentitel";
         Text[ hindi ] = "Z अक्षरेखा शीर्षक";
+        Text[ slovak ] = "Popis osy Z";
     };
     String STR_ABSREFLOST
     {
@@ -8841,6 +9122,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nová tabulka obsahuje absolutní odkazy do dalších tabulek, které mohou být chybné!";
         Text[ hebrew ] = "Die neue Tabelle enthält absolute Referenzen auf andere Tabellen, die nicht mehr stimmen müssen";
         Text[ hindi ] = "नया सारणी में अन्य सारणियों के लिए रहनेवाला निश्चित रेफरेन्स गलत हो सकता है!";
+        Text[ slovak ] = "Nová tabuľka obsahuje absolútne odkazy na iné tabuľky, ktoré môžu byť nesprávne!";
     };
     String STR_NAMECONFLICT
     {
@@ -8872,6 +9154,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kvůli identickým názvům byl existující název oblasti v cílovém dokumentu změněn!";
         Text[ hebrew ] = "Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname verändert";
         Text[ hindi ] = "समान नाम के कारण, नियत स्थान लेखपत्र में अस्तित्व में रहनेवाला फैलाव नाम में परिवर्तन हुआ है !";
+        Text[ slovak ] = "Kvôli identickým názvom bol zmenený existujúci rozsah názvov v cieľovom dokumente!";
     };
     String STR_ERR_AUTOFILTER
     {
@@ -8903,6 +9186,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nelze provést automatické filtrování";
         Text[ hebrew ] = "AutoFilter nicht möglich";
         Text[ hindi ] = "स्वचालित फिल्टर करना संभव नहीं है";
+        Text[ slovak ] = "Nie je možné uskutočniť automatické filtrovanie";
     };
     String STR_MSSG_SEARCHANDREPLACE_1
     {
@@ -8934,6 +9218,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "%PRODUCTNAME Calc dosáhl při hledání začátku listu. Chcete pokračovat od konce?";
         Text[ hebrew ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?";
         Text[ hindi ] = "%PRODUCTNAME गणना शीट् का प्रारंभ तक खोज किया । आप अंत से खोज जारी रखना चाहते है?";
+        Text[ slovak ] = "%PRODUCTNAME Calc prehľadal list od začiatku. Chcete pokračovať do konca?";
     };
     String STR_MSSG_SEARCHANDREPLACE_2
     {
@@ -8965,6 +9250,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "%PRODUCTNAME Calc dosáhl při hledání konce listu. Chcete pokračovat od začátku?";
         Text[ hebrew ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?";
         Text[ hindi ] = "%PRODUCTNAME गणना शीट् का अंत तक खोज किया । आप प्रारंभ से खोज जारी रखना चाहते है?";
+        Text[ slovak ] = "%PRODUCTNAME Calc prehľadal list do konca. Chcete pokračovať od začiatku?";
     };
     String STR_MSSG_SEARCHANDREPLACE_3
     {
@@ -8983,7 +9269,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "����� � ��������";
         Text[ polish ] = "Znajd� i zamie�";
         Text[ japanese ] = "検索と置換";
-        Text[ chinese_traditional ] = "搜尋和代替";
+        Text[ chinese_traditional ] = "尋找和代替";
         Text[ arabic ] = "����� ����������";
         Text[ greek ] = "��������� ��� �������������";
         Text[ korean ] = "찾기 및 바꾸기";
@@ -8995,6 +9281,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Najít a nahradit";
         Text[ hebrew ] = "‮חיפוש והחלפה‬";
         Text[ hindi ] = "अन्वेषण और प्रतिस्थापन";
+        Text[ slovak ] = "Nájsť a Nahradiť";
     };
     String STR_MSSG_SEARCHANDREPLACE_4
     {
@@ -9025,6 +9312,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "%PRODUCTNAME Calc dosáhl při hledání začátku listu. Chcete pokračovat od konce?";
         Text[ hebrew ] = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?";
         Text[ hindi ] = "%PRODUCTNAME गणना लेखपत्र का प्रारंभ तक खोज किया । आप अंत से खोज जारी रखना चाहते है?";
+        Text[ slovak ] = "%PRODUCTNAME Calc prehľadal dokument od začiatku. Chcete pokračovať do konca?";
     };
     String STR_MSSG_SEARCHANDREPLACE_5
     {
@@ -9055,6 +9343,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "%PRODUCTNAME Calc dosáhl při hledání konce listu. Chcete pokračovat od začátku?";
         Text[ hebrew ] = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?";
         Text[ hindi ] = "%PRODUCTNAME गणना लेखपत्र का अंत तक खोज किया । आप प्रारंभ से खोज जारी रखना चाहते है?";
+        Text[ slovak ] = "%PRODUCTNAME Calc prehľadal dokument do konca. Chcete pokračovať od začiatku?";
     };
     String STR_CREATENAME_REPLACE
     {
@@ -9085,6 +9374,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nahradit stávající definici #?";
         Text[ hebrew ] = "Vorhandene Definition von # ersetzen?";
         Text[ hindi ] = "# का अस्तित्व में रहनेवाला परिभाषा को प्रतिस्थापित करना है ?";
+        Text[ slovak ] = "Nahradiť existujúcu definíciu #?";
     };
     String STR_CREATENAME_MARKERR
     {
@@ -9116,6 +9406,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatný výběr pro názvy oblastí";
         Text[ hebrew ] = "Falsche Markierung für Bereichsnamen";
         Text[ hindi ] = "फैलाव नाम केलिए अमान्य चुनाव";
+        Text[ slovak ] = "Neplatný výber pre mená oblasti";
     };
     String STR_CONSOLIDATE_ERR1
     {
@@ -9147,6 +9438,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Odkazy nelze vkládat nad zdrojová data.";
         Text[ hebrew ] = "Verbindungen können nicht oberhalb der Quelldaten eingefügt werden.";
         Text[ hindi ] = "मूल ड़ॉटा के ऊपर रेफरेन्स को नहीं जोड़ सकते है ।";
+        Text[ slovak ] = "Odkazy nie je možné vkladať nad zdrojové dáta.";
     };
     String STR_SCENARIO_NOTFOUND
     {
@@ -9177,6 +9469,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Scénář nebyl nalezen";
         Text[ hebrew ] = "Szenario nicht gefunden";
         Text[ hindi ] = "विवरण नहीं मिला";
+        Text[ slovak ] = "Scenár nebol nájdený";
     };
     String STR_QUERY_DELENTRY
     {
@@ -9208,6 +9501,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Opravdu chcete smazat položku #?";
         Text[ hebrew ] = "Wollen Sie den Eintrag # wirklich löschen?";
         Text[ hindi ] = "आप # प्रविष्टि को सचमुच में मिटाना चाहते है?";
+        Text[ slovak ] = "Naozaj chcete zmazať položku #?";
     };
     String STR_VOBJ_OBJECT
     {
@@ -9238,6 +9532,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Objekty/obrázky";
         Text[ hebrew ] = "Objekte/Grafiken";
         Text[ hindi ] = "वस्तु/सुचित्र";
+        Text[ slovak ] = "Objekty/obrázky";
     };
     String STR_VOBJ_CHART
     {
@@ -9268,6 +9563,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Grafy";
         Text[ hebrew ] = "Diagramme";
         Text[ hindi ] = "चार्ट";
+        Text[ slovak ] = "Grafy";
     };
     String STR_VOBJ_DRAWINGS
     {
@@ -9298,6 +9594,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Grafické objekty";
         Text[ hebrew ] = "Zeichenobjekte";
         Text[ hindi ] = "रेखाचित्र वस्तु";
+        Text[ slovak ] = "Kresba";
     };
     String STR_VOBJ_MODE_SHOW
     {
@@ -9328,6 +9625,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zobrazit";
         Text[ hebrew ] = "Anzeigen";
         Text[ hindi ] = "दिखाओ";
+        Text[ slovak ] = "Zobraziť";
     };
     String STR_VOBJ_MODE_HIDE
     {
@@ -9358,6 +9656,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Skrýt";
         Text[ hebrew ] = "Ausblenden";
         Text[ hindi ] = "छिपाओ";
+        Text[ slovak ] = "Skryť";
     };
     String STR_VOBJ_MODE_DUMMY
     {
@@ -9388,6 +9687,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zástupné znaky";
         Text[ hebrew ] = "Platzhalter";
         Text[ hindi ] = "स्थानधारक";
+        Text[ slovak ] = "Zástupné znaky";
     };
     String STR_SCATTR_PAGE_TOPDOWN
     {
@@ -9418,6 +9718,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Shora dolů";
         Text[ hebrew ] = "Von oben nach unten";
         Text[ hindi ] = "ऊपर से नीचे तक";
+        Text[ slovak ] = "Zhora dole";
     };
     String STR_SCATTR_PAGE_LEFTRIGHT
     {
@@ -9448,6 +9749,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zleva doprava";
         Text[ hebrew ] = "‮משמאל-לימין‬";
         Text[ hindi ] = "बायाँ ओर से दाहिनी ओर";
+        Text[ slovak ] = "Zľava-do-prava";
     };
     String STR_SCATTR_PAGE_NOTES
     {
@@ -9478,6 +9780,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Poznámky";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "टिप्पणी";
+        Text[ slovak ] = "Poznámky";
     };
     String STR_SCATTR_PAGE_GRID
     {
@@ -9508,6 +9811,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Mřížka";
         Text[ hebrew ] = "Tabellengitter";
         Text[ hindi ] = "जाल";
+        Text[ slovak ] = "Mriežka";
     };
     String STR_SCATTR_PAGE_HEADERS
     {
@@ -9539,6 +9843,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Záhlaví řádků a sloupců";
         Text[ hebrew ] = "Zeilen- & Spaltenköpfe";
         Text[ hindi ] = "पंक्ति और स्तंभ शीर्षक";
+        Text[ slovak ] = "Riadok Stĺpec";
     };
     String STR_SCATTR_PAGE_FORMULAS
     {
@@ -9569,6 +9874,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vzorce";
         Text[ hebrew ] = "Formeln";
         Text[ hindi ] = "सूत्र";
+        Text[ slovak ] = "Vzorce";
     };
     String STR_SCATTR_PAGE_NULLVALS
     {
@@ -9599,6 +9905,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nulové hodnoty";
         Text[ hebrew ] = "Nullwerte";
         Text[ hindi ] = "शून्य मूल्य";
+        Text[ slovak ] = "Nulové hodnoty";
     };
     String STR_SCATTR_PAGE_PRINTDIR
     {
@@ -9629,6 +9936,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Směr tisku";
         Text[ hebrew ] = "Druckrichtung";
         Text[ hindi ] = "छपाई दिशा";
+        Text[ slovak ] = "Smer tlače";
     };
     String STR_SCATTR_PAGE_FIRSTPAGENO
     {
@@ -9659,6 +9967,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Číslo první stránky";
         Text[ hebrew ] = "Erste Seitenzahl";
         Text[ hindi ] = "पहिला पृष्ठ संख्या";
+        Text[ slovak ] = "Číslo prvej stránky";
     };
     String STR_SCATTR_PAGE_SCALE
     {
@@ -9688,6 +9997,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přizpůsobit [%]";
         Text[ hebrew ] = "Alles auf [%]";
         Text[ hindi ] = "सब [%] केलिए";
+        Text[ slovak ] = "Všetko do [%]";
     };
     String STR_SCATTR_PAGE_SCALETOPAGES
     {
@@ -9718,6 +10028,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Maximální počet stran";
         Text[ hebrew ] = "Max. Seitenzahl";
         Text[ hindi ] = "पृष्ठों की अधिकतम संख्या";
+        Text[ slovak ] = "Maximálny počet strán";
     };
     String STR_DOC_STAT
     {
@@ -9749,6 +10060,7 @@ Resource RID_GLOBSTR
         TEXT[ czech ] = "Statistika";
         TEXT[ hebrew ] = "‮סטטיסטיקות‬";
         TEXT[ hindi ] = "अँकड़े";
+        TEXT[ slovak ] = "Štatistika";
     };
     String STR_LINKERROR
     {
@@ -9780,6 +10092,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nelze aktualizovat odkaz.";
         Text[ hebrew ] = "Die Verknüpfung konnte nicht aktualisiert werden.";
         Text[ hindi ] = "लिंक को अपडेट् नहीं कर सकते है ।  ";
+        Text[ slovak ] = "Nie je možné aktualizovať odkaz.";
     };
     String STR_LINKERRORFILE
     {
@@ -9810,6 +10123,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Soubor:";
         Text[ hebrew ] = "‮קובץ:‬";
         Text[ hindi ] = "फाइल:";
+        Text[ slovak ] = "Súbor:";
     };
     String STR_LINKERRORTAB
     {
@@ -9840,6 +10154,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "List:";
         Text[ hebrew ] = "Tabelle:";
         Text[ hindi ] = "शीट्:";
+        Text[ slovak ] = "List:";
     };
     String STR_OVERVIEW
     {
@@ -9871,6 +10186,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přehled";
         Text[ hebrew ] = "Übersicht";
         Text[ hindi ] = "सारांश";
+        Text[ slovak ] = "Prehľad";
     };
     String STR_DOC_INFO
     {
@@ -9901,6 +10217,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Informace o dokumentu";
         Text[ hebrew ] = "Dokumentinfo";
         Text[ hindi ] = "लेखपत्र सूचना";
+        Text[ slovak ] = "Informácie o dokumente";
     };
     String STR_DOC_CREATED
     {
@@ -9931,6 +10248,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vytvořeno";
         Text[ hebrew ] = "‮נוצר‬";
         Text[ hindi ] = "उत्पन्न किया";
+        Text[ slovak ] = "Vytvorené";
     };
     String STR_DOC_MODIFIED
     {
@@ -9962,6 +10280,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Změněno";
         Text[ hebrew ] = "‮עודכן‬";
         Text[ hindi ] = "सुधार किया";
+        Text[ slovak ] = "Zmenené";
     };
     String STR_DOC_PRINTED
     {
@@ -9992,6 +10311,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vytištěno";
         Text[ hebrew ] = "‮הודפס‬";
         Text[ hindi ] = "छपाई किया";
+        Text[ slovak ] = "Vytlačené";
     };
     String STR_DOC_THEME
     {
@@ -10022,6 +10342,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Předmět";
         Text[ hebrew ] = "‮נושא‬";
         Text[ hindi ] = "विषय";
+        Text[ slovak ] = "Predmet";
     };
     String STR_DOC_KEYWORDS
     {
@@ -10053,6 +10374,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Klíčová slova";
         Text[ hebrew ] = "‮מילות מפתח‬";
         Text[ hindi ] = "प्रधान शब्द";
+        Text[ slovak ] = "Kľúčové slová";
     };
     String STR_DOC_COMMENT
     {
@@ -10083,6 +10405,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Komentáře";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "अपवाद";
+        Text[ slovak ] = "Komentár";
     };
     String STR_BY
     {
@@ -10113,6 +10436,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "von";
         Text[ hindi ] = "से";
+        Text[ slovak ] = "Autor";
     };
     String STR_ON
     {
@@ -10143,6 +10467,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "zapnuto";
         Text[ hebrew ] = "am";
         Text[ hindi ] = "में";
+        Text[ slovak ] = "zapnúť";
     };
     String STR_RELOAD_TABLES
     {
@@ -10151,7 +10476,7 @@ Resource RID_GLOBSTR
         Text = "Diese Datei enth�lt Verkn�pfungen zu anderen Dateien.\nSollen diese aktualisiert werden?" ;
         Text [ ENGLISH ] = "This file contains links to other files.\nRefresh them?" ;
         Text [ ENGLISH_US ] = "This file contains links to other files.\nShould they be updated?" ;
-        Text [ italian ] = "Il file corrente contiene collegamenti ad altri file.\nVolete aggiornarli?" ;
+        Text [ italian ] = "Il file attivo contiene collegamenti ad altri file.\nVolete aggiornarli?" ;
         Text [ spanish ] = "Este archivo est� vinculado a otros archivos.\n�Desea usted actualizarlos?" ;
         Text [ french ] = "Ce fichier contient des liens vers d'autres fichiers. Les actualiser ?" ;
         Text [ dutch ] = "Dit bestand bevat koppelingen naar andere bestanden.\n Wilt u deze bijwerken?" ;
@@ -10175,6 +10500,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tento soubor obsahuje odkazy na jiné soubory.\nMají se odkazy aktualizovat?";
         Text[ hebrew ] = "Diese Datei enthält Verknüpfungen zu anderen Dateien.\nSollen diese aktualisiert werden?";
         Text[ hindi ] = "इस फाइल में अन्य फाइलों के लिए लिंक्स है ।\nउनको अपडेट् करना है?";
+        Text[ slovak ] = "Tento súbor obsahuje odkazy na iné súbory.\nMajú sa aktualizovať?";
     };
     String STR_REIMPORT_AFTER_LOAD
     {
@@ -10206,6 +10532,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tento soubor obsahuje dotazy do databází. Výsledky těchto dotazů nebyly uloženy.\nChcete opakovat provedení těchto dotazů?";
         Text[ hebrew ] = "Diese Datei enthält Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden?";
         Text[ hindi ] = "इस फाइल में जानकारी है । इन जानकारियों का नतीजों को संचित नहीं किया है ।\nआप इन जानकारियों को दुहराना चाहते है?";
+        Text[ slovak ] = "Tento súbor obsahuje dotazy. Výsledky týchto dotazov neboli uložené\nChcete aby boli tieto dotazy zopakované?";
     };
     String STR_FILTER_TOOMANY
     {
@@ -10236,6 +10563,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Příliš mnoho podmínek";
         Text[ hebrew ] = "Zuviele Bedingungen";
         Text[ hindi ] = "बहुत अधिक शर्तें";
+        Text[ slovak ] = "Príliš veľa podmienok";
     };
     String STR_INSERT_FULL
     {
@@ -10267,6 +10595,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vyplněné buňky nelze přenést\nza list.";
         Text[ hebrew ] = "Ausgefüllte Zellen können nicht über\ndas Blatt hinaus verschoben werden.";
         Text[ hindi ] = "भरा हुआ कोष्ठों को शीट् से बाहर स्थान परिवर्तन\nनहीं कर सकते है ।";
+        Text[ slovak ] = "Vyplnené bunky v liste nie je \nmožné posunúť ďalej.";
     };
     String STR_TABINSERT_ERROR
     {
@@ -10298,6 +10627,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tabulku nebylo možné vložit.";
         Text[ hebrew ] = "Die Tabelle konnte nicht eingefügt werden.";
         Text[ hindi ] = "सारणी को नहीं जोड़ सकते है ।";
+        Text[ slovak ] = "Tabuľku nebolo možné vložiť.";
     };
     String STR_TABREMOVE_ERROR
     {
@@ -10328,6 +10658,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Listy nelze smazat.";
         Text[ hebrew ] = "Die Tabellen konnten nicht gelöscht werden.";
         Text[ hindi ] = "शीट् को नहीं मिटा सकते है ।";
+        Text[ slovak ] = "Listy nie je možné zmazať.";
     };
     String STR_PASTE_ERROR
     {
@@ -10359,6 +10690,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Obsah schránky nelze vložit.";
         Text[ hebrew ] = "Der Inhalt der Zwischenablage konnte nicht eingefügt werden.";
         Text[ hindi ] = "क्लिपबोर्ड की विषय को नहीं छिपका सकते है ।";
+        Text[ slovak ] = "Nebolo možné vložiť obsah schránky.";
     };
     String STR_PASTE_FULL
     {
@@ -10390,6 +10722,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "V listu není dostatek místa, proto sem není možné vkládat.";
         Text[ hebrew ] = "Es kann nicht über das Blatt hinaus eingefügt werden.";
         Text[ hindi ] = "यहाँ पर जोड़ने केलिए शीट् में जगह अपर्याप्त है ।";
+        Text[ slovak ] = "Na vloženie listu tu nie je dostatok miesta.";
     };
     String STR_PASTE_BIGGER
     {
@@ -10420,6 +10753,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Obsah schránky je větší než vybraná oblast.\nChcete přesto vložit obsah schránky?";
         Text[ hebrew ] = "Der Inhalt der Zwischenablage ist größer als der ausgewählte Bereich.\nMöchten Sie trotzdem einfügen?";
         Text[ hindi ] = "चुने हुए फैलाव से क्लिपबोर्ड की विषय बड़ा है ।\nआप किसी तरह उसको जोड़ना चाहते है?";
+        Text[ slovak ] = "Obsah schránky je väčší ako zvolená oblasť\n Chcete ju napriek tomu vložiť?";
     };
     String STR_ERR_NOREF
     {
@@ -10450,6 +10784,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nebyly nalezeny žádné odkazy.";
         Text[ hebrew ] = "Keine Referenzen gefunden.";
         Text[ hindi ] = "कोई रेफरेन्स नहीं मिला ।";
+        Text[ slovak ] = "Odkazy neboli nájdené.";
     };
     String STR_ERR_LINKOVERLAP
     {
@@ -10481,6 +10816,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Zdroj a cíl se nesmějí překrývat.";
         Text[ hebrew ] = "Quell- und Zielbereich dürfen sich nicht überlappen.";
         Text[ hindi ] = "मूल और नियत स्थान ओवरलॉप नहीं हो सकता है ।";
+        Text[ slovak ] = "Zdroj a cieľ sa nesmú prekrývať.";
     };
     String STR_GRAPHICNAME
     {
@@ -10511,6 +10847,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Obrázky";
         Text[ hebrew ] = "‮גרפיקה‬";
         Text[ hindi ] = "सुचित्र";
+        Text[ slovak ] = "Obrázky";
     };
     String STR_INVALIDNAME
     {
@@ -10542,6 +10879,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatný název.";
         Text[ hebrew ] = "Ungültiger Name.";
         Text[ hindi ] = "अमान्य नाम ।";
+        Text[ slovak ] = "Neplatný názov.";
     };
     String STR_VALID_MACRONOTFOUND
     {
@@ -10572,6 +10910,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Vybrané makro nebylo nalezeno.";
         Text[ hebrew ] = "Das eingestellte Makro wurde nicht gefunden.";
         Text[ hindi ] = "चुना हुआ मॉक्रो नहीं मिला ।";
+        Text[ slovak ] = "Vybrané makro nebolo nájdené";
     };
     String STR_VALID_DEFERROR
     {
@@ -10603,6 +10942,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatná hodnota.";
         Text[ hebrew ] = "Der eingegebene Wert ist ungültig.";
         Text[ hindi ] = "अमान्य मूल्य ।";
+        Text[ slovak ] = "Neplatná hodnota.";
     };
     String STR_PROGRESS_CALCULATING
     {
@@ -10633,6 +10973,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "probíhá výpočet";
         Text[ hebrew ] = "berechnen";
         Text[ hindi ] = "गणना करना";
+        Text[ slovak ] = "prebieha výpočet";
     };
     String STR_PROGRESS_SORTING
     {
@@ -10663,6 +11004,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "probíhá řazení";
         Text[ hebrew ] = "sortieren";
         Text[ hindi ] = "सोर्ट करना";
+        Text[ slovak ] = "prebieha triedenie";
     };
     String STR_PROGRESS_HEIGHTING
     {
@@ -10694,6 +11036,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přizpůsobit výšku řádku";
         Text[ hebrew ] = "Zeilenhöhen anpassen";
         Text[ hindi ] = "पंक्ति ऊँचाई स्वीकार करो";
+        Text[ slovak ] = "Prispôsobujem výšku riadka";
     };
     String STR_PROGRESS_COMPARING
     {
@@ -10724,6 +11067,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Porovnat #";
         Text[ hebrew ] = "Vergleiche #";
         Text[ hindi ] = "तुलना करो #";
+        Text[ slovak ] = "Porovnanie #";
     };
     String STR_DETINVALID_OVERFLOW
     {
@@ -10755,6 +11099,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Byl překročen maximální počet neplatných buněk.\nNe všechny neplatné buňky jsou označené.";
         Text[ hebrew ] = "Die maximale Anzahl ungültiger Zellen wurde überschritten.\nEs wurden nicht alle ungültigen Zellen markiert.";
         Text[ hindi ] = "अमान्य कोष्ठों की अधिकतम संख्या सीमा से बाहर है ।\nसब अमान्य कोष्ठों को चिह्नित नहीं किया जाएगा ।";
+        Text[ slovak ] = "Bol prekročený maximálny počet neplatných buniek.\nNie všetky budú označené.";
     };
     String STR_QUICKHELP_DELETE
     {
@@ -10786,6 +11131,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Smazat obsah";
         Text[ hebrew ] = "Inhalte löschen";
         Text[ hindi ] = "विषयों को मिटाओ";
+        Text[ slovak ] = "Zmazať obsah";
     };
     String STR_QUICKHELP_REF
     {
@@ -10816,6 +11162,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "%1 S  x %2 Ř";
         Text[ hebrew ] = "%1 Z x %2 S";
         Text[ hindi ] = "%1 R  x %2 C";
+        Text[ slovak ] = "%1 S  x %2 R";
     };
     String STR_FUNCTIONLIST_MORE
     {
@@ -10846,6 +11193,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Více...";
         Text[ hebrew ] = "Andere...";
         Text[ hindi ] = "अधिक...";
+        Text[ slovak ] = "Viac...";
     };
     String STR_ERR_INVALID_AREA
     {
@@ -10877,6 +11225,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Neplatný rozsah";
         Text[ hebrew ] = "Ungültiger Bereich";
         Text[ hindi ] = "अमान्य फैलाव";
+        Text[ slovak ] = "Neplatný rozsah";
     };
      // Vorlagen fuer Pivottabellen
     String STR_PIVOT_STYLE_INNER
@@ -10908,6 +11257,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Hodnota Kontingenční tabulky";
         Text[ hebrew ] = "Datenpilot Wert";
         Text[ hindi ] = "ड़ॉटापैलट् मूल्य";
+        Text[ slovak ] = "Hodnota sprievodcu dátami";
     };
     String STR_PIVOT_STYLE_RESULT
     {
@@ -10938,6 +11288,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Výsledek Kontingenční tabulky";
         Text[ hebrew ] = "Datenpilot Ergebnis";
         Text[ hindi ] = "ड़ॉटापैलट् नतीजा";
+        Text[ slovak ] = "Výsledok sprievodcu dátami";
     };
     String STR_PIVOT_STYLE_CATEGORY
     {
@@ -10968,6 +11319,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Kategorie Kontingenční tabulky";
         Text[ hebrew ] = "Datenpilot Kategorie";
         Text[ hindi ] = "ड़ॉटापैलट् वर्ग";
+        Text[ slovak ] = "Kategória sprievodcu dátami";
     };
     String STR_PIVOT_STYLE_TITLE
     {
@@ -10998,6 +11350,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nadpis Kontingenční tabulky";
         Text[ hebrew ] = "Datenpilot Titel";
         Text[ hindi ] = "ड़ॉटापैलट् शीर्षक";
+        Text[ slovak ] = "Nadpis sprievodcu dátami";
     };
     String STR_PIVOT_STYLE_FIELDNAME
     {
@@ -11028,6 +11381,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Pole Kontingenční tabulky";
         Text[ hebrew ] = "Datenpilot Feld";
         Text[ hindi ] = "ड़ॉटापैलट् क्षेत्र";
+        Text[ slovak ] = "Položka sprievodcu dátami";
     };
     String STR_PIVOT_STYLE_TOP
     {
@@ -11058,6 +11412,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Roh Kontingenční tabulky";
         Text[ hebrew ] = "Datenpilot Ecke";
         Text[ hindi ] = "ड़ॉटापैलट् कोना";
+        Text[ slovak ] = "Roh sprievodcu dátami";
     };
     String STR_OPERATION_FILTER
     {
@@ -11088,6 +11443,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Filtr";
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "Filter";
+        Text[ slovak ] = "Filter";
     };
     String STR_OPERATION_SORT
     {
@@ -11118,6 +11474,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Řadit";
         Text[ hebrew ] = "‮מיון‬";
         Text[ hindi ] = "सोर्ट";
+        Text[ slovak ] = "Zoradiť";
     };
     String STR_OPERATION_SUBTOTAL
     {
@@ -11148,6 +11505,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Mezisoučty";
         Text[ hebrew ] = "Teilergebnisse";
         Text[ hindi ] = "आधा कुलजोड़";
+        Text[ slovak ] = "Medzisúčty";
     };
     String STR_OPERATION_NONE
     {
@@ -11178,6 +11536,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Nic";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "कोई नहीं";
+        Text[ slovak ] = "Žiadne";
     };
     String STR_IMPORT_REPLACE
     {
@@ -11208,6 +11567,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Přejete si nahradit obsah #?";
         Text[ hebrew ] = "Wollen Sie den Inhalt von # ersetzen?";
         Text[ hindi ] = "आप # के विषयों को प्रतिस्थापित करना चाहते है?";
+        Text[ slovak ] = "Chcete nahradiť obsah #?";
     };
     String STR_TIP_WIDTH
     {
@@ -11238,6 +11598,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Šířka:";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई:";
+        Text[ slovak ] = "Šírka:";
     };
     String STR_TIP_HEIGHT
     {
@@ -11269,6 +11630,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Výška:";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई:";
+        Text[ slovak ] = "Výška:";
     };
     String STR_TIP_HIDE
     {
@@ -11299,6 +11661,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Skrýt";
         Text[ hebrew ] = "Ausblenden";
         Text[ hindi ] = "छिपाओ";
+        Text[ slovak ] = "Skryť";
     };
     String STR_ERR_INSERTOBJ
     {
@@ -11329,6 +11692,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Objekt nebylo možné vložit.";
         Text[ hebrew ] = "Das Objekt konnte nicht eingefügt werden.";
         Text[ hindi ] = "वस्तु को नहीं जोड़ सकते है ।";
+        Text[ slovak ] = "Objekt nebolo možné vložiť.";
     };
     String STR_CHANGED_BLANK
     {
@@ -11359,6 +11723,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "<prázdné>";
         Text[ hebrew ] = "<leer>";
         Text[ hindi ] = "<खाली>";
+        Text[ slovak ] = "<prázdne>";
     };
     String STR_CHANGED_CELL
     {
@@ -11389,6 +11754,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Buňka #1 změněna z '#2' na '#3'";
         Text[ hebrew ] = "Zelle #1 von '#2' zu '#3' geändert";
         Text[ hindi ] = "कोष्ठ #1 को '#2' से '#3' में परिवर्तन किया";
+        Text[ slovak ] = "Bunka #1 zmenená z '#2' na '#3'";
     };
     String STR_CHANGED_INSERT
     {
@@ -11419,6 +11785,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#1 vloženo";
         Text[ hebrew ] = "#1 eingefügt";
         Text[ hindi ] = "#1 जोड़ा";
+        Text[ slovak ] = "#1 vložené";
     };
     String STR_CHANGED_DELETE
     {
@@ -11449,6 +11816,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "#1 smazáno";
         Text[ hebrew ] = "#1 gelöscht";
         Text[ hindi ] = "#1मिटाया";
+        Text[ slovak ] = "#1 zmazané";
     };
     String STR_CHANGED_MOVE
     {
@@ -11479,6 +11847,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Oblast přesunuta z #1 na #2";
         Text[ hebrew ] = "Bereich von #1 nach #2 verschoben";
         Text[ hindi ] = "फैलाव को #1 से #2 को स्थान परिवर्तन किया है";
+        Text[ slovak ] = "Oblasť presunutá z #1 na #2";
     };
     String STR_END_REDLINING_TITLE
     {
@@ -11509,6 +11878,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Ukončit nahrávání";
         Text[ hebrew ] = "Aufzeichnung beenden";
         Text[ hindi ] = "रेकोर्डिंग से निर्गम";
+        Text[ slovak ] = "Ukončiť nahrávanie";
     };
     String STR_END_REDLINING
     {
@@ -11539,6 +11909,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tato akce ukončí režim záznamu změn.\nInformace o změnách budou ztraceny.\n\nUkončit režim záznamu změn?\n\n";
         Text[ hebrew ] = "Mit dieser Aktion wird die Aufzeichnung von Änderungen beendet.\nDie Information über Änderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n";
         Text[ hindi ] = "इस कार्य से रेकोर्डिंग प्रकार को बदलने से निर्गम कर सकते है ।\nपरिवर्तनों के बारे में कोई सूचना है तो वह नष्ट होगा ।\n\nरेकोर्डिंग प्रकार को बदलने से निर्गम करे?\n\n";
+        Text[ slovak ] = "Táto činnosť ukončí zmenu záznamového módu.\nVšetky informácie o zmenách sa stratia.\nUkončiť zmenu záznamového módu?\n\n";
     };
     String STR_CLOSE_ERROR_LINK
     {
@@ -11569,6 +11940,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Dokument nelze zavřít, pokud je aktualizován odkaz.";
         Text[ hebrew ] = "Das Dokument kann nicht geschlossen werden, während eine Verknüpfung aktualisiert wird.";
         Text[ hindi ] = "लिंक को अपडेट् करने के समय लेखपत्र को बन्द नहीं कर सकते है ।";
+        Text[ slovak ] = "Dokument nie je možné zavtvoriť, pokiaľ je aktualizovaný odkaz.";
     };
     String STR_UNDO_RESIZEMATRIX
     {
@@ -11599,6 +11971,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Upravit pole";
         Text[ hebrew ] = "Matrixbereich anpassen";
         Text[ hindi ] = "श्रेणी विस्तीर्ण स्वीकार करो";
+        Text[ slovak ] = "Prispôsobiť rozsah poľa";
     };
     String STR_TIP_RESIZEMATRIX
     {
@@ -11629,6 +12002,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Maticový vzorec %1 Ř x %2 S";
         Text[ hebrew ] = "Matrixformel %1 Z x %2 S";
         Text[ hindi ] = "श्रेणी सूत्र  %1 R x %2 C";
+        Text[ slovak ] = "Pole vzorca %1 R x %2 S";
     };
     String STR_MACRO_WARNING
     {
@@ -11659,6 +12033,7 @@ Resource RID_GLOBSTR
         Text[ czech ] = "Tento dokument obsahuje volání makrofunkcí.\nChcete je spustit?";
         Text[ hebrew ] = "Das Dokument enthält Makro-Aufrufe.\nSollen diese ausgeführt werden?";
         Text[ hindi ] = "इस लेखपत्र में मॉक्रो फंक्शन बुलावा है ।\nआप इनको चलाना चाहते है?";
+        Text[ slovak ] = "Tento dokument obsahuje makro.\nChcete ho spustiť?";
     };
     /*
     String STR_
@@ -11669,6 +12044,8 @@ Resource RID_GLOBSTR
     };
 */
 };
+
+
 
 
 
