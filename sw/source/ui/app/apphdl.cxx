@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
@@ -113,13 +110,10 @@
 #include <svtools/isethint.hxx>
 #endif
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
-#include <offmgr/hyprlink.hxx>
+#include <svx/hyprlink.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _OFA_OSPLCFG_HXX //autogen
-#include <offmgr/osplcfg.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -569,7 +563,7 @@ void SwModule::ExecWizzard(SfxRequest & rReq)
 void SwModule::ExecViewOptions(SfxRequest &rReq)
 {
     SwViewOption* pOpt = 0;
-    OfficeApplication* pOffApp = OFF_APP();
+    SfxApplication* pOffApp = OFF_APP();
     sal_Bool bModified = sal_True;
     if ( GetView() )
     {
