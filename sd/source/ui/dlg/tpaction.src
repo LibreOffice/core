@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:05:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,15 @@ TabPage TP_ANIMATION
 #define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
 #define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
 
+    Edit EDT_SOUND
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+
      // Es ist schon wichtig, daﬂ Durchsuchen (search) und Suchen (seek/find) unter-
      // schiedlich heissen, da sie eben auch eine unterschiedliche Bedeutung haben
     PushButton BTN_SEARCH
@@ -133,6 +142,14 @@ TabPage TP_ANIMATION
     Control LB_TREE_DOCUMENT
     {
         HelpID = HID_CTL_ACTION_DLG_2 ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    ListBox LB_OLE_ACTION
+    {
         Border = TRUE ;
         Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
         Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
