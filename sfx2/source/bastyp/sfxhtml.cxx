@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 13:06:55 $
+ *  last change: $Author: os $ $Date: 2001-07-26 05:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,11 +638,9 @@ rtl_TextEncoding SfxHTMLParser::GetEncodingByMIME( const String& rMime )
     }
     return RTL_TEXTENCODING_DONTKNOW;
 }
-
-BOOL SfxHTMLParser::SetEncodingByHTTPHeader(
-                                SvKeyValueIterator *pHTTPHeader )
+rtl_TextEncoding SfxHTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader )
 {
-    BOOL bRet = FALSE;
+    rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;
     if( pHTTPHeader )
     {
         SvKeyValue aKV;
@@ -653,19 +651,24 @@ BOOL SfxHTMLParser::SetEncodingByHTTPHeader(
             {
                 if( aKV.GetValue().Len() )
                 {
-                    rtl_TextEncoding eEnc =
-                        GetEncodingByMIME( aKV.GetValue() );
-                    if( RTL_TEXTENCODING_DONTKNOW != eEnc )
-                    {
-                        SetSrcEncoding( eEnc );
-                        bRet = TRUE;
-                    }
+                    eRet = SfxHTMLParser::GetEncodingByMIME( aKV.GetValue() );
                 }
-//              break;
             }
         }
     }
+    return eRet;
+}
 
+BOOL SfxHTMLParser::SetEncodingByHTTPHeader(
+                                SvKeyValueIterator *pHTTPHeader )
+{
+    BOOL bRet = FALSE;
+    rtl_TextEncoding eEnc = SfxHTMLParser::GetEncodingByHttpHeader( pHTTPHeader );
+    if(RTL_TEXTENCODING_DONTKNOW != eEnc)
+    {
+        SetSrcEncoding( eEnc );
+        bRet = TRUE;
+    }
     return bRet;
 }
 
