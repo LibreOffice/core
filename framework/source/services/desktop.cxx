@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 14:58:14 $
+ *  last change: $Author: as $ $Date: 2001-12-12 14:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,9 +809,19 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer, empty AND not loadable URL's are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 1 );
     }
     // Attention: An empty target name is equal to "_self"!
-    if( &sTargetFrameName == NULL )
+    if(
+        ( &sTargetFrameName                               == NULL )   ||
+        ( sTargetFrameName.getLength()                    <  1    )   ||
+        (
+            // is it a special target && ( not _blank || _default ) ...
+            // These two ones are supported only!
+            ( sTargetFrameName.indexOf( (sal_Unicode)'_' ) == 0                     )    &&
+            ( sTargetFrameName                             != SPECIALTARGET_BLANK   )    &&
+            ( sTargetFrameName                             != SPECIALTARGET_DEFAULT )
+        )
+      )
     {
-        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 2 );
+        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Unsupported target name found!"), static_cast< ::cppu::OWeakObject* >(this), 2 );
     }
     /* TODO: How can I test the search flags?! */
     // Attention: Arguments are optional!
