@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleTabPage.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:23:00 $ 
+'*  last change:$Date: 2003-10-06 13:29:31 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -73,6 +73,8 @@ option explicit
 
 ' REQUIRED VARIABLES for interface/service tests:
 Global accButton As Object
+   Global accText as String
+   Global readOnly as Boolean
 
 
 Sub CreateObj()
@@ -107,6 +109,9 @@ On Error Goto ErrHndl
         accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Close")
         oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PAGE_TAB)
         Out.Log("Implementation name: "+oObj.getImplementationName())
+        accText = oObj.getText()
+        readOnly = true
+
     else
         Out.Log("QueryDispatch FAILED. Cannot open InsertField dialog...")
     End If
