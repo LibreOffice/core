@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:01:47 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_TEXT_ANIDELAY        -SDRATTR_START]=new SdrTextAniDelayItem;
     ppPoolDefaults[SDRATTR_TEXT_ANIAMOUNT       -SDRATTR_START]=new SdrTextAniAmountItem;
     ppPoolDefaults[SDRATTR_TEXT_CONTOURFRAME    -SDRATTR_START]=new SdrTextContourFrameItem;
-    ppPoolDefaults[SDRATTR_AUTOSHAPE_ADJUSTMENT -SDRATTR_START]=new SdrAutoShapeAdjustmentItem;
+    ppPoolDefaults[SDRATTR_CUSTOMSHAPE_ADJUSTMENT -SDRATTR_START]=new SdrCustomShapeAdjustmentItem;
 #ifndef SVX_LIGHT
     ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
 #else
@@ -247,7 +247,9 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SfxVoidItem( SDRATTR_XMLATTRIBUTES );
 #endif // #ifndef SVX_LIGHT
     ppPoolDefaults[SDRATTR_TEXT_USEFIXEDCELLHEIGHT -SDRATTR_START]=new SdrTextFixedCellHeightItem;
-    for (i=SDRATTR_RESERVE16; i<=SDRATTR_RESERVE19; i++) {
+    ppPoolDefaults[SDRATTR_TEXT_WORDWRAP           -SDRATTR_START]=new SdrTextWordWrapItem;
+    ppPoolDefaults[SDRATTR_TEXT_AUTOGROWSIZE       -SDRATTR_START]=new SdrTextAutoGrowSizeItem;
+    for (i=SDRATTR_RESERVE18; i<=SDRATTR_RESERVE19; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
     }
     ppPoolDefaults[SDRATTRSET_MISC-SDRATTR_START]=new SdrMiscSetItem(pMaster);
@@ -433,6 +435,14 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     for( i = SDRATTR_3DSCENE_RESERVED_01; i <= SDRATTR_3DSCENE_RESERVED_20; i++ )
         ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
 
+    // CustomShape Attr
+    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_ENGINE - SDRATTR_START ] = new SdrCustomShapeEngineItem;
+    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_DATA - SDRATTR_START ] = new SdrCustomShapeDataItem;
+    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_GEOMETRY - SDRATTR_START ] = new SdrCustomShapeGeometryItem;
+    ppPoolDefaults[ SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL - SDRATTR_START ] = new SdrCustomShapeReplacementURLItem;
+    for ( i = SDRATTR_CUSTOMSHAPE_RESERVED_01; i <= SDRATTR_CUSTOMSHAPE_RESERVED_20; i++ )
+        ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
+
     ////////////////////////////////
 #ifdef DBG_UTIL
     UINT16 nAnz(SDRATTR_END-SDRATTR_START + 1);
@@ -579,7 +589,7 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case XATTR_FILLBMP_SIZEX        : nResId = SIP_XA_FILLBMP_SIZEX;break;
         case XATTR_FILLBMP_SIZEY        : nResId = SIP_XA_FILLBMP_SIZEY;break;
         case XATTR_FILLFLOATTRANSPARENCE: nResId = SIP_XA_FILLFLOATTRANSPARENCE;break;
-        case XATTR_FILLRESERVED2        : nResId = SIP_XA_FILLRESERVED2;break;
+        case XATTR_SECONDARYFILLCOLOR   : nResId = SIP_XA_SECONDARYFILLCOLOR;break;
         case XATTR_FILLBMP_SIZELOG      : nResId = SIP_XA_FILLBMP_SIZELOG;break;
         case XATTR_FILLBMP_TILEOFFSETX  : nResId = SIP_XA_FILLBMP_TILEOFFSETX;break;
         case XATTR_FILLBMP_TILEOFFSETY  : nResId = SIP_XA_FILLBMP_TILEOFFSETY;break;
@@ -674,11 +684,11 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_TEXT_ANIDELAY          : nResId = SIP_SA_TEXT_ANIDELAY;break;
         case SDRATTR_TEXT_ANIAMOUNT         : nResId = SIP_SA_TEXT_ANIAMOUNT;break;
         case SDRATTR_TEXT_CONTOURFRAME      : nResId = SIP_SA_TEXT_CONTOURFRAME;break;
-        case SDRATTR_AUTOSHAPE_ADJUSTMENT   : nResId = SIP_SA_AUTOSHAPE_ADJUSTMENT;break;
+        case SDRATTR_CUSTOMSHAPE_ADJUSTMENT : nResId = SIP_SA_CUSTOMSHAPE_ADJUSTMENT;break;
         case SDRATTR_XMLATTRIBUTES          : nResId = SIP_SA_XMLATTRIBUTES;break;
         case SDRATTR_TEXT_USEFIXEDCELLHEIGHT: nResId = SIP_SA_TEXT_USEFIXEDCELLHEIGHT;break;
-        case SDRATTR_RESERVE16              : nResId = SIP_SA_RESERVE16;break;
-        case SDRATTR_RESERVE17              : nResId = SIP_SA_RESERVE17;break;
+        case SDRATTR_TEXT_WORDWRAP          : nResId = SIP_SA_WORDWRAP;break;
+        case SDRATTR_TEXT_AUTOGROWSIZE      : nResId = SIP_SA_AUTOGROWSIZE;break;
         case SDRATTR_RESERVE18              : nResId = SIP_SA_RESERVE18;break;
         case SDRATTR_RESERVE19              : nResId = SIP_SA_RESERVE19;break;
         case SDRATTRSET_MISC                : nResId = SIP_SDRATTRSET_MISC;break;
@@ -865,7 +875,7 @@ BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
         case XATTR_FILLBMP_SIZEX             : aStr="XATTR_FILLBMP_SIZEX             "; break;
         case XATTR_FILLBMP_SIZEY             : aStr="XATTR_FILLBMP_SIZEY             "; break;
         case XATTR_FILLFLOATTRANSPARENCE     : aStr="XATTR_FILLFLOATTRANSPARENCE     "; break;
-        case XATTR_FILLRESERVED2             : aStr="XATTR_FILLRESERVED2             "; break;
+        case XATTR_SECONDARYFILLCOLOR        : aStr="XATTR_SECONDARYFILLCOLOR        "; break;
         case XATTR_FILLBMP_SIZELOG           : aStr="XATTR_FILLBMP_SIZELOG           "; break;
         case XATTR_FILLBMP_TILEOFFSETX       : aStr="XATTR_FILLBMP_TILEOFFSETX       "; break;
         case XATTR_FILLBMP_TILEOFFSETY       : aStr="XATTR_FILLBMP_TILEOFFSETY       "; break;
@@ -961,11 +971,11 @@ BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
         case SDRATTR_TEXT_ANIDELAY           : aStr="SDRATTR_TEXT_ANIDELAY           "; break;
         case SDRATTR_TEXT_ANIAMOUNT          : aStr="SDRATTR_TEXT_ANIAMOUNT          "; break;
         case SDRATTR_TEXT_CONTOURFRAME       : aStr="SDRATTR_TEXT_CONTOURFRAME       "; break;
-        case SDRATTR_AUTOSHAPE_ADJUSTMENT    : aStr="SDRATTR_AUTOSHAPE_ADJUSTMENT    "; break;
+        case SDRATTR_CUSTOMSHAPE_ADJUSTMENT  : aStr="SDRATTR_CUSTOMSHAPE_ADJUSTMENT    "; break;
         case SDRATTR_XMLATTRIBUTES           : aStr="SDRATTR_XMLATTRIBUTES           "; break;
         case SDRATTR_TEXT_USEFIXEDCELLHEIGHT : aStr="SDRATTR_TEXT_USEFIXEDCELLHEIGHT "; break;
-        case SDRATTR_RESERVE16               : aStr="SDRATTR_RESERVE16               "; break;
-        case SDRATTR_RESERVE17               : aStr="SDRATTR_RESERVE17               "; break;
+        case SDRATTR_TEXT_WORDWRAP           : aStr="SDRATTR_TEXT_WORDWRAP           "; break;
+        case SDRATTR_TEXT_AUTOGROWSIZE       : aStr="SDRATTR_AUTOGROWSIZE            "; break;
         case SDRATTR_RESERVE18               : aStr="SDRATTR_RESERVE18               "; break;
         case SDRATTR_RESERVE19               : aStr="SDRATTR_RESERVE19               "; break;
         case SDRATTRSET_MISC                 : aStr="SDRATTRSET_MISC                 "; break;
@@ -2076,18 +2086,18 @@ int __EXPORT SdrTextFixedCellHeightItem::IsPoolable() const
 }
 #endif
 
-TYPEINIT1_AUTOFACTORY( SdrAutoShapeAdjustmentItem, SfxPoolItem );
+TYPEINIT1_AUTOFACTORY( SdrCustomShapeAdjustmentItem, SfxPoolItem );
 
-SdrAutoShapeAdjustmentItem::SdrAutoShapeAdjustmentItem() : SfxPoolItem( SDRATTR_AUTOSHAPE_ADJUSTMENT )
+SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem() : SfxPoolItem( SDRATTR_CUSTOMSHAPE_ADJUSTMENT )
 {
 }
 
-SdrAutoShapeAdjustmentItem::SdrAutoShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion ):
-    SfxPoolItem( SDRATTR_AUTOSHAPE_ADJUSTMENT )
+SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion ):
+    SfxPoolItem( SDRATTR_CUSTOMSHAPE_ADJUSTMENT )
 {
     if ( nVersion )
     {
-        SdrAutoShapeAdjustmentValue aVal;
+        SdrCustomShapeAdjustmentValue aVal;
         sal_uInt32 i, nCount;
         rIn >> nCount;
         for ( i = 0; i < nCount; i++ )
@@ -2098,25 +2108,25 @@ SdrAutoShapeAdjustmentItem::SdrAutoShapeAdjustmentItem( SvStream& rIn, sal_uInt1
     }
 }
 
-SdrAutoShapeAdjustmentItem::~SdrAutoShapeAdjustmentItem()
+SdrCustomShapeAdjustmentItem::~SdrCustomShapeAdjustmentItem()
 {
     void* pPtr;
     for ( pPtr = aAdjustmentValueList.First(); pPtr; pPtr = aAdjustmentValueList.Next() )
-        delete (SdrAutoShapeAdjustmentValue*)pPtr;
+        delete (SdrCustomShapeAdjustmentValue*)pPtr;
 }
 
-int __EXPORT SdrAutoShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
+int __EXPORT SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
 {
     int bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
     {
-        bRet = ((SdrAutoShapeAdjustmentItem&)rCmp).GetCount() == GetCount();
+        bRet = ((SdrCustomShapeAdjustmentItem&)rCmp).GetCount() == GetCount();
         if ( bRet )
         {
             sal_uInt32 i;
             for ( i = 0; i < GetCount(); i++ )
             {
-                if ( ((SdrAutoShapeAdjustmentItem&)rCmp).GetValue( i ).nValue != GetValue( i ).nValue )
+                if ( ((SdrCustomShapeAdjustmentItem&)rCmp).GetValue( i ).nValue != GetValue( i ).nValue )
                 {
                     bRet = 0;
                     break;
@@ -2127,7 +2137,7 @@ int __EXPORT SdrAutoShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) c
     return bRet;
 }
 
-SfxItemPresentation __EXPORT SdrAutoShapeAdjustmentItem::GetPresentation(
+SfxItemPresentation __EXPORT SdrCustomShapeAdjustmentItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric,
     SfxMapUnit ePresentationMetric, XubString &rText, const IntlWrapper *) const
 {
@@ -2149,12 +2159,12 @@ SfxItemPresentation __EXPORT SdrAutoShapeAdjustmentItem::GetPresentation(
     return ePresentation;
 }
 
-SfxPoolItem* __EXPORT SdrAutoShapeAdjustmentItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
+SfxPoolItem* __EXPORT SdrCustomShapeAdjustmentItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
 {
-    return new SdrAutoShapeAdjustmentItem( rIn, nItemVersion );
+    return new SdrCustomShapeAdjustmentItem( rIn, nItemVersion );
 }
 
-SvStream& __EXPORT SdrAutoShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& __EXPORT SdrCustomShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 {
     if ( nItemVersion )
     {
@@ -2166,53 +2176,53 @@ SvStream& __EXPORT SdrAutoShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16
     return rOut;
 }
 
-SfxPoolItem* __EXPORT SdrAutoShapeAdjustmentItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* __EXPORT SdrCustomShapeAdjustmentItem::Clone( SfxItemPool *pPool ) const
 {
     sal_uInt32 i;
-    SdrAutoShapeAdjustmentItem* pItem = new SdrAutoShapeAdjustmentItem;
+    SdrCustomShapeAdjustmentItem* pItem = new SdrCustomShapeAdjustmentItem;
     for ( i = 0; i < GetCount(); i++ )
     {
-        const SdrAutoShapeAdjustmentValue& rVal = GetValue( i );
+        const SdrCustomShapeAdjustmentValue& rVal = GetValue( i );
         pItem->SetValue( i, rVal );
     }
     return pItem;
 }
 
 #ifdef SDR_ISPOOLABLE
-int __EXPORT SdrAutoShapeAdjustmentItem::IsPoolable() const
+int __EXPORT SdrCustomShapeAdjustmentItem::IsPoolable() const
 {
     USHORT nId=Which();
     return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
 }
 #endif
 
-const SdrAutoShapeAdjustmentValue& SdrAutoShapeAdjustmentItem::GetValue( sal_uInt32 nIndex ) const
+const SdrCustomShapeAdjustmentValue& SdrCustomShapeAdjustmentItem::GetValue( sal_uInt32 nIndex ) const
 {
 #ifdef DBG_UTIL
     if ( aAdjustmentValueList.Count() <= nIndex )
-        DBG_ERROR( "SdrAutoShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
+        DBG_ERROR( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
 #endif
-    return *(SdrAutoShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
+    return *(SdrCustomShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
 }
 
-void SdrAutoShapeAdjustmentItem::SetValue( sal_uInt32 nIndex, const SdrAutoShapeAdjustmentValue& rVal )
+void SdrCustomShapeAdjustmentItem::SetValue( sal_uInt32 nIndex, const SdrCustomShapeAdjustmentValue& rVal )
 {
     sal_uInt32 i;
     for ( i = GetCount(); i <= nIndex; i++ )
     {
-        SdrAutoShapeAdjustmentValue* pItem = new SdrAutoShapeAdjustmentValue;
+        SdrCustomShapeAdjustmentValue* pItem = new SdrCustomShapeAdjustmentValue;
         aAdjustmentValueList.Insert( pItem, LIST_APPEND );
     }
-    SdrAutoShapeAdjustmentValue& rValue = *(SdrAutoShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
+    SdrCustomShapeAdjustmentValue& rValue = *(SdrCustomShapeAdjustmentValue*)aAdjustmentValueList.GetObject( nIndex );
     rValue.nValue = rVal.nValue;
 }
 
-sal_uInt16 SdrAutoShapeAdjustmentItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
+sal_uInt16 SdrCustomShapeAdjustmentItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
 {
     return 1;
 }
 
-sal_Bool SdrAutoShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SdrCustomShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_uInt32 i, nCount = GetCount();
     uno::Sequence< sal_Int32 > aSequence( nCount );
@@ -2226,7 +2236,7 @@ sal_Bool SdrAutoShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE nMemberId 
     return sal_True;
 }
 
-sal_Bool SdrAutoShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     uno::Sequence< sal_Int32 > aSequence;
     if( !( rVal >>= aSequence ) )
@@ -2234,7 +2244,7 @@ sal_Bool SdrAutoShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE nMembe
 
     void* pPtr;
     for ( pPtr = aAdjustmentValueList.First(); pPtr; pPtr = aAdjustmentValueList.Next() )
-        delete (SdrAutoShapeAdjustmentValue*)pPtr;
+        delete (SdrCustomShapeAdjustmentValue*)pPtr;
 
     sal_uInt32 i, nCount = aSequence.getLength();
     if ( nCount )
@@ -2242,7 +2252,7 @@ sal_Bool SdrAutoShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE nMembe
         const sal_Int32* pPtr = aSequence.getConstArray();
         for ( i = 0; i < nCount; i++ )
         {
-            SdrAutoShapeAdjustmentValue* pItem = new SdrAutoShapeAdjustmentValue;
+            SdrCustomShapeAdjustmentValue* pItem = new SdrCustomShapeAdjustmentValue;
             pItem->nValue = *pPtr++;
             aAdjustmentValueList.Insert( pItem, LIST_APPEND );
         }
