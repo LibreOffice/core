@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 14:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,9 @@ SwXMLImport::SwXMLImport(
                              rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
         }
     }
+
+    // We need a draw model to be able to set the z order
+    rDoc.MakeDrawModel();
 }
 
 SwXMLImport::~SwXMLImport()

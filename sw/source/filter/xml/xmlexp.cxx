@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 14:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,12 @@
 #endif
 #ifndef _SWMODULE_HXX //autogen wg. SW_MOD
 #include <swmodule.hxx>
+#endif
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
+#endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SWDOCSH_HXX
@@ -263,6 +269,11 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     SfxObjectShell* pObjSh = pDoc->GetDocShell();
     if( pObjSh )
         pObjSh->UpdateDocInfoForSave();     // update information
+
+    //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
+    SdrModel* pModel = pDoc->GetDrawModel();
+    if( pModel )
+        pModel->GetPage( 0 )->RecalcObjOrdNums();
 }
 
 XMLTextParagraphExport* SwXMLExport::CreateTextParagraphExport()

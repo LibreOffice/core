@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 11:36:14 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 14:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,7 +1256,6 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         {
             sal_Int32 nZOrder = - 1;
             aValue >>= nZOrder;
-            const SwContact* pContact = pFmt->FindContactObj();
             if( nZOrder >= 0)
             {
                 SdrObject* pObject =
@@ -1414,10 +1413,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_UNO_Z_ORDER == pCur->nWID)
         {
-            const SwContact* pContact = pFmt->FindContactObj();
-            if(pContact)
+            const SdrObject* pObj = pFmt->FindRealSdrObject();
+            if( pObj )
             {
-                const SdrObject* pObj = pContact->GetMaster();
                 aAny <<= (sal_Int32)pObj->GetOrdNum();
             }
         }
