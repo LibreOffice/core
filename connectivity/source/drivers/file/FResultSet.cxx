@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 14:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,6 +874,10 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
         // don't touch the m_pFileSet member here
         TInt2IntMap::iterator aFind = m_aBookmarks.find(nPos);
         OSL_ENSURE(aFind != m_aBookmarks.end(),"OResultSet::deleteRow() bookmark not found!");
+        TInt2IntMap::iterator aIter = aFind;
+        ++aIter;
+        for (; aIter != m_aBookmarks.end() ; ++aIter)
+            --(aIter->second);
         m_aBookmarksPositions.erase(m_aBookmarksPositions.begin() + aFind->second-1);
         m_aBookmarks.erase(nPos);
     }
