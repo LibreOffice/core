@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 12:41:27 $
+ *  last change: $Author: od $ $Date: 2002-08-28 13:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,16 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
         const SvxBrushItem &rBack = pFrm->GetAttrSet()->GetBackground();
         if( !rBack.GetColor().GetTransparency() ||
              rBack.GetGraphicPos() != GPOS_NONE )
+            return sal_True;
+
+        /// OD 20.08.2002 #99657#
+        ///     If a fly frame has a transparent background color, we have
+        ///     to consider the background.
+        ///     But a background color "no fill"/"auto fill" has *not* to be considered.
+        if( pFrm->IsFlyFrm() &&
+            (rBack.GetColor().GetTransparency() != 0) &&
+            (rBack.GetColor() != COL_TRANSPARENT)
+          )
             return sal_True;
 
         if( pFrm->IsSctFrm() )
