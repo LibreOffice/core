@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 21:56:29 $
+ *  last change: $Author: nn $ $Date: 2001-12-14 11:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,4 +492,9 @@ hidspecial HID_AAI_FUNC_OCT2DEZ     { HelpID = HID_AAI_FUNC_OCT2DEZ; };
 hidspecial HID_AAI_FUNC_OCT2HEX     { HelpID = HID_AAI_FUNC_OCT2HEX; };
 hidspecial HID_AAI_FUNC_CONVERT     { HelpID = HID_AAI_FUNC_CONVERT; };
 hidspecial HID_AAI_FUNC_FACTDOUBLE  { HelpID = HID_AAI_FUNC_FACTDOUBLE; };
+
+//  These HelpIDs do appear in resources, but don't have hid list entries
+//  generated from there, because of the use of macros (#95943#):
+
+hidspecial SID_RENAME_OBJECT        { HelpID = SID_RENAME_OBJECT; };
 
