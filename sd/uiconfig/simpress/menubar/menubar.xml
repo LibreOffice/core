@@ -82,7 +82,7 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:helpid="10000" menu:label="" />
+            <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:helpid="27420" menu:label="" />
             <menu:menuitem menu:id=".uno:OutlineMode" menu:helpid="27010" menu:label="" />
             <menu:menuitem menu:id=".uno:DiaMode" menu:helpid="27011" menu:label="" />
             <menu:menuitem menu:id=".uno:Presentation" menu:helpid="10157" menu:label="" />
@@ -94,7 +94,8 @@
                     <menu:menuitem menu:id=".uno:SlideMasterPage" menu:helpid="27348" menu:label="" />
                     <menu:menuitem menu:id=".uno:TitleMasterPage" menu:helpid="27351" menu:label="" />
                     <menu:menuitem menu:id=".uno:NotesMasterPage" menu:helpid="27350" menu:label="" />
-                    <menu:menuitem menu:id=".uno:HandoutMasterPage" menu:helpid="27349" menu:label="" />
+                    <menu:menuseparator/>
+                       <menu:menuitem menu:id=".uno:MasterLayouts" menu:helpid="27408" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:DisplayQualityMenu" menu:label="" >
@@ -105,7 +106,8 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:RightPaneChildWindow" menu:helpid="5910" menu:label="" />
+            <menu:menuitem menu:id=".uno:RightPane" menu:helpid="27416" menu:label="" />
+            <menu:menuitem menu:id=".uno:LeftPaneImpress" menu:helpid="27414" menu:label="" />
             <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
             <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
@@ -122,15 +124,6 @@
                     <menu:menuitem menu:id=".uno:HelplinesVisible" menu:helpid="27324" menu:label="" />
                     <menu:menuitem menu:id=".uno:HelplinesUse" menu:helpid="27152" menu:label="" />
                     <menu:menuitem menu:id=".uno:HelplinesFront" menu:helpid="27325" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:LeftPaneChildWindow" menu:helpid="5910" menu:label="" />
-            <menu:menu menu:id=".uno:MasterLayoutsMenu" menu:label="">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MasterLayoutsSlide" menu:helpid="27408" menu:label="" />
-                    <menu:menuitem menu:id=".uno:MasterLayoutsNotes" menu:helpid="27409" menu:label="" />
-                    <menu:menuitem menu:id=".uno:MasterLayoutsHandouts" menu:helpid="27410" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
