@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-24 15:14:56 $
+ *  last change: $Author: sab $ $Date: 2001-01-30 17:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ enum ScXMLDocTokens
     XML_TOK_DOC_MASTERSTYLES,
     XML_TOK_DOC_META,
     XML_TOK_DOC_SCRIPTS,
+    XML_TOK_DOC_TRACKED_CHANGES,
     XML_TOK_DOC_BODY,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
@@ -154,7 +155,6 @@ enum ScXMLBodyTokens
     XML_TOK_BODY_DATA_PILOT_TABLES,
     XML_TOK_BODY_CONSOLIDATION,
     XML_TOK_BODY_DDE_LINKS,
-    XML_TOK_BODY_TRACKED_CHANGES
 };
 
 enum ScXMLContentValidationsElemTokens
@@ -607,6 +607,7 @@ class SfxItemSet;
 class SvXMLNumFmtHelper;
 class XMLShapeImportHelper;
 //class ScDocument;
+class ScXMLChangeTrackingImportHelper;
 
 struct tScMyCellRange
 {
@@ -649,6 +650,7 @@ typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 class ScXMLImport: public SvXMLImport
 {
     ScDocument*             pDoc;
+    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 //  SvXMLAutoStylePoolP     *pScAutoStylePool;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
@@ -775,6 +777,8 @@ public:
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
 //  SvXMLImportContext *CreateUseStylesContext(const NAMESPACE_RTL(OUString)& rLocalName ,
 //                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    SvXMLImportContext *CreateTrackedChangesContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
 
@@ -886,6 +890,7 @@ public:
 
     void SetRemoveLastChar(sal_Bool bValue) { bRemoveLastChar = bValue; }
     sal_Bool GetRemoveLastChar() { return bRemoveLastChar; }
+    void CreateChangeTrack();
 };
 
 #endif

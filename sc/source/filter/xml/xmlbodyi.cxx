@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-24 15:14:56 $
+ *  last change: $Author: sab $ $Date: 2001-01-30 17:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,10 +178,6 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         pContext = new ScXMLDDELinksContext ( GetScImport(), nPrefix, rLocalName,
                                                         xAttrList );
         break;
-    case XML_TOK_BODY_TRACKED_CHANGES:
-        pContext = new ScXMLTrackedChangesContext ( GetScImport(), nPrefix, rLocalName,
-                                                        xAttrList );
-        break;
     }
 
     if( !pContext )
@@ -202,5 +198,7 @@ void ScXMLBodyContext::EndElement()
         ScDetOpData aOpData( rDetOp.aPosition, rDetOp.eOpType );
         pDoc->AddDetectiveOperation( aOpData );
     }
+
+    GetScImport().CreateChangeTrack();
 }
 
