@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-15 09:08:04 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 TYPEINIT1(ScMergeAttr,          SfxPoolItem);
-TYPEINIT1(ScProtectionAttr,     SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(ScProtectionAttr,     SfxPoolItem);
 TYPEINIT1(ScRangeItem,          SfxPoolItem);
 TYPEINIT1(ScTableListItem,      SfxPoolItem);
 TYPEINIT1(ScPageHFItem,         SfxPoolItem);
@@ -296,29 +296,68 @@ __EXPORT ScProtectionAttr::~ScProtectionAttr()
 
 BOOL __EXPORT ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    util::CellProtection aProtection;
-    aProtection.IsLocked        = bProtection;
-    aProtection.IsFormulaHidden = bHideFormula;
-    aProtection.IsHidden        = bHideCell;
-    aProtection.IsPrintHidden   = bHidePrint;
-    rVal <<= aProtection;
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId  )
+    {
+        case 0 :
+        {
+            util::CellProtection aProtection;
+            aProtection.IsLocked        = bProtection;
+            aProtection.IsFormulaHidden = bHideFormula;
+            aProtection.IsHidden        = bHideCell;
+            aProtection.IsPrintHidden   = bHidePrint;
+            rVal <<= aProtection;
+            break;
+        }
+        case MID_1 :
+            rVal <<= (sal_Bool ) bProtection; break;
+        case MID_2 :
+            rVal <<= (sal_Bool ) bHideFormula; break;
+        case MID_3 :
+            rVal <<= (sal_Bool ) bHideCell; break;
+        case MID_4 :
+            rVal <<= (sal_Bool ) bHidePrint; break;
+        default:
+            DBG_ERROR("Wrong MemberID!")
+            return FALSE;
+    }
+
     return TRUE;
 }
 
 BOOL __EXPORT ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     BOOL bRet = FALSE;
-    util::CellProtection aProtection;
-    if ( rVal >>= aProtection )
+    sal_Bool bVal;
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
     {
-        bProtection  = aProtection.IsLocked;
-        bHideFormula = aProtection.IsFormulaHidden;
-        bHideCell    = aProtection.IsHidden;
-        bHidePrint   = aProtection.IsPrintHidden;
-        bRet = TRUE;
+        case 0 :
+        {
+            util::CellProtection aProtection;
+            if ( rVal >>= aProtection )
+            {
+                bProtection  = aProtection.IsLocked;
+                bHideFormula = aProtection.IsFormulaHidden;
+                bHideCell    = aProtection.IsHidden;
+                bHidePrint   = aProtection.IsPrintHidden;
+                bRet = TRUE;
+            }
+            else
+                DBG_ERROR("exception - wrong argument");
+            break;
+        }
+        case MID_1 :
+            bRet = (rVal >>= bVal); if (bRet) bProtection=bVal; break;
+        case MID_2 :
+            bRet = (rVal >>= bVal); if (bRet) bHideFormula=bVal; break;
+        case MID_3 :
+            bRet = (rVal >>= bVal); if (bRet) bHideCell=bVal; break;
+        case MID_4 :
+            bRet = (rVal >>= bVal); if (bRet) bHidePrint=bVal; break;
+        default:
+            DBG_ERROR("Wrong MemberID!")
     }
-    else
-        DBG_ERROR("exception - wrong argument");
 
     return bRet;
 }
