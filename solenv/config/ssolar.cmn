@@ -1,0 +1,546 @@
+common
+{
+	switches
+	{
+		pro
+		bsclient
+	}
+	extern
+	{
+		PATH
+		TMP
+		VCSID
+	}
+	reset
+	{
+		__mgrdir
+		BIG_GOODIES
+		BIG_SVX
+		BIG_TOOLS
+		BISON_HAIRY
+		BISON_SIMPLE
+		BMP_WRITES_FLAG
+		bndchk
+		BOTH
+		BSCLIENT
+		BUILD_TOOLS
+		CLASSPATH
+		COMEX
+		common_build
+		COMMON_OUTDIR
+		COPYALL
+		CPPRTST
+		DB2IMP
+		DB2INC
+		DB2LIB
+		DB2PATH
+		DMAKE_INC
+		DYNAMIC_CRT
+		ENABLEUNICODE
+		GCRINC
+		GCRLIB
+		GCRPATH
+		GLIBC
+		HBTOOLKIT
+		HOMEDRIVE
+		HOMEPATH
+		IENV
+		INCLUDE
+		JAVA_HOME
+		JAVAHOME
+		JDK_VERSION
+		JDKINC
+		JDKINCS
+		JDKLIB
+		JDKLIBS
+		JDKPATH
+		LOCAL_SOLENV
+		MK_UNROLL
+		MKDIR
+		MKSPATH
+		MULTITHREAD_OBJ
+		NEW_JAR_PACK
+		NO_BSYMBOLIC
+		no_hids
+		NO_REC_RES
+		no_srs_patch
+		no_transex
+		NOSOLAR_JAVA
+		ODBCINC
+		ODBCLIB
+		ODBCPATH
+		ODBCVER
+		OLD_CHAOS
+		OLD_CHAOS
+		PCLEAN_PATH
+		PRE
+		PROEXT
+		profile
+		RES_ARAB
+		RES_CHINSIM
+		RES_CHINTRAD
+		RES_DAN
+		RES_DTCH
+		RES_ENUS
+		RES_FREN
+		RES_GREEK
+		RES_ITAL
+		RES_JAPN
+		RES_KOREAN
+		RES_POL
+		RES_PORT
+		RES_RUSS
+		RES_SPAN
+		RES_SWED
+		RES_TURK
+		ROOTDIR
+		RSCRES
+		SET_EXCEPTIONS
+		SOLAR_JAVA
+		SOLAR_PLUGIN
+		SOLARINC
+		SOLARLIB
+		SOLARVERSION
+		SYSPATH
+		TF_CFG
+		TF_CNTEX
+		TF_NEWEX
+		TF_ONE51
+		TF_PACKAGES_NO_S2U
+		TF_SDBAPI
+		TF_SERVER
+		TF_UCB
+		TFDEF
+		TFDIR
+		truetime
+		URD_ONLY
+		USE_MAPFILES
+		USE_NAMESPACE
+		USE_NEW_RSC
+		USE_NEWCHARSET
+		use_shl_versions
+		WST
+	}
+	restore
+	{
+		PATH
+	}
+	order pro common bsclient
+	environment
+	{
+		pro
+		{
+			PROEXT .pro
+		}
+		common
+		{
+			NO_SRS_PATCH true
+			CVSROOT :pserver:%VCSID%@cvsserver:/cvs/Archiv
+		}
+		bsclient
+		{
+			BSCLIENT TRUE
+		}
+	}
+}
+wntmsci
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+wntmsci3
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+wnt__mi
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+os2icci3
+{
+	order common
+	environment
+	{
+		common
+		{
+			PERL_SH_DIR R:\solenv\os2i\PERL\bin
+			PERLLIB_PREFIX F:/perllib/lib;R:\solenv\os2i\PERL\LIB
+			PERLLIB R:\solenv\os2i\perl\LIB\SITE_PERL/os2;R:\solenv\os2i\perl\LIB\SITE_PERL
+			SOLARSRC o:\%UPD%
+			PVCSMCF t:\solar\inc\mcf.cfg
+		}
+	}
+}
+
+os2gcci
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+winmsci
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+wntwtci
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+wntmsci5
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+winblci5
+{
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC o:\%UPD%
+		}
+	}
+}
+
+unxsols
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxsogs
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxsoli
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxhpxr
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxlnxi
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxlngi
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxlngi2
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxlngi3
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxscoi
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxaixp
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxfbsdi
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxbsda
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxmvsg
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxirxm
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxbsdi
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxsols2
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxsoli2
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+unxsols4
+{
+	standlst
+	{
+		DRIVE_O %WORK_STAMP%/drives/o:/UnixVolume
+	}
+	order common
+	environment
+	{
+		common
+		{
+			SOLARSRC %DRIVE_O%/%UPD%
+		}
+	}
+}
+
+
