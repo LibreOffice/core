@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:29:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,8 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,nDelayedGrabFocusEvent(0)
     ,pActFieldDescr(NULL)
     ,m_pActFocusWindow(NULL)
+    ,m_bRight(sal_False)
+    ,m_nWidth(50)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -321,6 +323,8 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,nDelayedGrabFocusEvent(0)
     ,pActFieldDescr(0)
     ,m_pActFocusWindow(NULL)
+    ,m_bRight(sal_False)
+    ,m_nWidth(50)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -1410,6 +1414,53 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
 void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
+
+    //////////////////////////////////////////////////////////////////////
+    // Groesse ermitteln
+    Size aSize;
+    switch( nCol )
+    {
+    case 0:
+        aSize.Width()  = CONTROL_WIDTH_1;
+        aSize.Height() = CONTROL_HEIGHT;
+        break;
+    case 1:
+        if ( m_bRight )
+            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
+        else
+            aSize.Width()  = CONTROL_WIDTH_2;
+        aSize.Height() = CONTROL_HEIGHT;
+        break;
+    case 2:
+        if ( m_bRight )
+            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
+        else
+            aSize.Width()  = CONTROL_WIDTH_2;
+        aSize.Height() = long(1.5*CONTROL_HEIGHT);
+        break;
+    case 3:
+        if ( m_bRight )
+            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
+        else
+            aSize.Width()  = CONTROL_WIDTH_3;
+        aSize.Height() = CONTROL_HEIGHT;
+        break;
+    case 4:
+        if ( m_bRight )
+            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
+        else
+            aSize.Width()  = CONTROL_WIDTH_4;
+        aSize.Height() = CONTROL_HEIGHT;
+        break;
+    default:
+        if ( m_bRight )
+            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
+        else
+            aSize.Width()  = CONTROL_WIDTH_1;
+        aSize.Height() = CONTROL_HEIGHT;
+    }
+
+
     //////////////////////////////////////////////////////////////////////
     // Position ermitteln
     Point aPosition;
@@ -1422,7 +1473,13 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     case 2:
     case 3:
     case 4:
-        aPosition.X() = CONTROL_WIDTH_1 + CONTROL_SPACING_X;
+        if ( m_bRight )
+        {
+            Size aOwnSize = GetSizePixel();
+            aPosition.X() = aOwnSize.Width() - aSize.Width();
+        }
+        else
+            aPosition.X() = CONTROL_WIDTH_1 + CONTROL_SPACING_X;
         break;
     default:
         aPosition.X() = 0;
@@ -1430,37 +1487,6 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
 
     aPosition.Y() = ((nRow+1)*CONTROL_SPACING_Y) +
                     (nRow*CONTROL_HEIGHT);
-
-    //////////////////////////////////////////////////////////////////////
-    // Groesse ermitteln
-    Size aSize;
-    switch( nCol )
-    {
-    case 0:
-        aSize.Width()  = CONTROL_WIDTH_1;
-        aSize.Height() = CONTROL_HEIGHT;
-        break;
-    case 1:
-        aSize.Width()  = CONTROL_WIDTH_2;
-        aSize.Height() = CONTROL_HEIGHT;
-        break;
-    case 2:
-        aSize.Width()  = CONTROL_WIDTH_2;
-        aSize.Height() = long(1.5*CONTROL_HEIGHT);
-        break;
-    case 3:
-        aSize.Width()  = CONTROL_WIDTH_3;
-        aSize.Height() = CONTROL_HEIGHT;
-        break;
-    case 4:
-        aSize.Width()  = CONTROL_WIDTH_4;
-        aSize.Height() = CONTROL_HEIGHT;
-        break;
-    default:
-        aSize.Width()  = CONTROL_WIDTH_1;
-        aSize.Height() = CONTROL_HEIGHT;
-    }
-
 
     //////////////////////////////////////////////////////////////////////
     // Control anzeigen
