@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,65 +602,44 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
 
 // -----------------------------------------------------------------------
 
-void SimpleWinLayout::DrawText( SalGraphics& ) const
+void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 {
     if( mnGlyphCount <= 0 )
         return;
+
+    HDC aHDC = rGraphics.maGraphicsData.mhDC;
 
     UINT mnDrawOptions = ETO_GLYPH_INDEX;
     if( mbDisableGlyphs )
         mnDrawOptions = 0;
 
-#ifndef DEBUG_GETNEXTGLYPHS
     Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
+    // #108267#, limit the number of glyphs to avoid paint errors
+    UINT limitedGlyphCount = std::min( 8192, mnGlyphCount );
     if( mnDrawOptions || aSalShlData.mbWNT )
     {
-        ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-            mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
+        ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
+            mpOutGlyphs, limitedGlyphCount, mpGlyphAdvances );
     }
     else
     {
         if( !mpGlyphOrigAdvs )
-            ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), 0, NULL,
-                mpOutGlyphs, mnGlyphCount, NULL );
+            ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), 0, NULL,
+                mpOutGlyphs, limitedGlyphCount, NULL );
         else
         {
             // workaround for problem in #106259#
             long nXPos = mnBaseAdv;
-            for( int i = 0; i < mnGlyphCount; ++i )
+            for( int i = 0; i < limitedGlyphCount; ++i )
             {
-                ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), 0, NULL,
+                ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), 0, NULL,
                     mpOutGlyphs+i, 1, NULL );
                 nXPos += mpGlyphAdvances[ i ];
                 aPos = GetDrawPosition( Point( nXPos, 0 ) );
             }
         }
     }
-#else // DEBUG_GETNEXTGLYPHS
-    #define MAXGLYPHCOUNT 8
-    long pLGlyphs[ MAXGLYPHCOUNT ];
-    long pWidths[ MAXGLYPHCOUNT ];
-    int  pCharPosAry[ MAXGLYPHCOUNT ];
-    Point aPos;
-    for( int nStart = 0;;)
-    {
-        int nGlyphs = GetNextGlyphs( MAXGLYPHCOUNT, pLGlyphs, aPos, nStart, pWidths, pCharPosAry );
-        if( !nGlyphs )
-            break;
-
-        WCHAR pWGlyphs[ MAXGLYPHCOUNT ];
-        int pGlyphWidths[ MAXGLYPHCOUNT ];
-        for( int i = 0; i < nGlyphs; ++i )
-        {
-            pWGlyphs[i] = pLGlyphs[i];
-            pGlyphWidths[i] = pWidths[i];
-        }
-
-        ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-            pWGlyphs, nGlyphs, pGlyphWidths );
-    }
-#endif // DEBUG_GETNEXTGLYPHS
 }
 
 // -----------------------------------------------------------------------
@@ -952,7 +931,7 @@ void SimpleWinLayout::Simplify( bool bIsBase )
 
     // skip to first dropped glyph
     for( i = 0; i < mnGlyphCount; ++i )
-        if( mpOutGlyphs[ i ] != DROPPED_OUTGLYPH )
+        if( mpOutGlyphs[ i ] == DROPPED_OUTGLYPH )
             break;
 
     // remove dropped glyphs inbetween
@@ -1240,14 +1219,14 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     int nSubStringEnd = rArgs.mnLength;
     if( aScriptState.fOverrideDirection )
     {
-#if (_MSC_VER < 1300)
         // TODO: limit substring to portion limits
-        mnSubStringMin = std::max( rArgs.mnMinCharPos - 8, 0 );
-        nSubStringEnd = std::min( rArgs.mnEndCharPos + 8, rArgs.mnLength );
-#else
-        mnSubStringMin = max( rArgs.mnMinCharPos - 8, 0 );
-        nSubStringEnd = min( rArgs.mnEndCharPos + 8, rArgs.mnLength );
-#endif
+        mnSubStringMin = rArgs.mnMinCharPos - 8;
+        if( mnSubStringMin < 0 )
+            mnSubStringMin = 0;
+        nSubStringEnd = rArgs.mnEndCharPos + 8;
+        if( nSubStringEnd > rArgs.mnLength )
+            nSubStringEnd = rArgs.mnLength;
+
     }
     for( int nItemCapacity = 8; /*FOREVER*/; nItemCapacity *= 2 )
     {
@@ -1284,13 +1263,17 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // reorder visual item order if needed
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
     {
-        // override item ordering if requested
+        // force RTL item ordering if requested
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
         {
-            VisualItem*  pVI = &mpVisualItems[0];
-            SCRIPT_ITEM* pSI = &mpScriptItems[mnItemCount];
-            for( nItem = mnItemCount; --nItem >= 0; )
-                (pVI++)->mpScriptItem = --pSI;
+            VisualItem* pVI0 = &mpVisualItems[ 0 ];
+            VisualItem* pVI1 = &mpVisualItems[ mnItemCount ];
+            while( pVI0 < --pVI1 )
+            {
+                VisualItem aVtmp = *pVI0;
+                *(pVI0++) = *pVI1;
+                *(pVI1++) = aVtmp;
+            }
         }
     }
     else if( mnItemCount > 1 )
@@ -1319,11 +1302,11 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                 VisualItem* pVImax = pVI++;
 
                 // reverse order of items in this range
-                for(; pVImin < --pVImax; ++pVImin )
+                while( pVImin < --pVImax )
                 {
-                    SCRIPT_ITEM* pSI = pVImin->mpScriptItem;
-                    pVImin->mpScriptItem = pVImax->mpScriptItem;
-                    pVImax->mpScriptItem = pSI;
+                    VisualItem aVtmp = *pVImin;
+                    *(pVImin++) = *pVImax;
+                    *(pVImax++) = aVtmp;
                 }
             }
         }
@@ -1368,7 +1351,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         // override bidi analysis if requested
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
         {
-            rVisualItem.mpScriptItem->a.fRTL                 = aScriptState.uBidiLevel;;
+            rVisualItem.mpScriptItem->a.fRTL                 = aScriptState.uBidiLevel;
             rVisualItem.mpScriptItem->a.s.uBidiLevel         = aScriptState.uBidiLevel;
             rVisualItem.mpScriptItem->a.s.fOverrideDirection = aScriptState.fOverrideDirection;
         }
@@ -1870,8 +1853,8 @@ void UniscribeLayout::Simplify( bool bIsBase )
 
 void UniscribeLayout::DrawText( SalGraphics& ) const
 {
-#ifndef DEBUG_GETNEXTGLYPHS
-    const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
+    int nBaseClusterOffset = 0;
+    int nBaseGlyphPos = -1;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         const VisualItem& rVisualItem = mpVisualItems[ nItem ];
@@ -1881,24 +1864,31 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         if( !GetItemSubrange( rVisualItem, nMinGlyphPos, nEndGlyphPos ) )
             continue;
 
-        Point aRelPos( rVisualItem.mnXOffset, 0 );
+        if( nBaseGlyphPos < 0 )
+        {
+            // adjust draw position relative to cluster start
+            if( rVisualItem.mpScriptItem->a.fRTL )
+                nBaseGlyphPos = nEndGlyphPos - 1;
+            else
+                nBaseGlyphPos = nMinGlyphPos;
 
-        // adjust draw position relative to cluster start
-        int i = mnMinCharPos;
-        if( !rVisualItem.mpScriptItem->a.fRTL )
-        {
-            int nTmpIndex = nMinGlyphPos;
-            while( (--i >= rVisualItem.mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
-                aRelPos.X() -= mpCharWidths[i];
-        }
-        else
-        {
-            int nTmpIndex = nEndGlyphPos - 1;
-            while( (--i >= rVisualItem.mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
-                aRelPos.X() += mpCharWidths[i];
+            const int* pGlyphWidths;
+            if( mpJustifications )
+                pGlyphWidths = mpJustifications;
+            else
+                pGlyphWidths = mpGlyphAdvances;
+
+            int i = mnMinCharPos;
+            while( (--i >= rVisualItem.mnMinCharPos)
+                && (nBaseGlyphPos == mpLogClusters[i]) )
+                 nBaseClusterOffset += mpCharWidths[i];
+
+            if( !rVisualItem.mpScriptItem->a.fRTL )
+                nBaseClusterOffset = -nBaseClusterOffset;
         }
 
         // now draw the matching glyphs in this item
+        Point aRelPos( rVisualItem.mnXOffset + nBaseClusterOffset, 0 );
         Point aPos = GetDrawPosition( aRelPos );
         HRESULT nRC = (*pScriptTextOut)( mhDC, &maScriptCache,
             aPos.X(), aPos.Y(), 0, NULL,
@@ -1909,38 +1899,6 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
             mpJustifications ? mpJustifications + nMinGlyphPos : NULL,
             mpGlyphOffsets + nMinGlyphPos );
     }
-#else
-    #define MAXGLYPHCOUNT 4
-    long pLGlyphs[ MAXGLYPHCOUNT ];
-    long pWidths[ MAXGLYPHCOUNT ];
-    int  pCharPosAry[ MAXGLYPHCOUNT ];
-    Point aPos;
-    for( int nStart = 0;;)
-    {
-        int nGlyphs = GetNextGlyphs( MAXGLYPHCOUNT, pLGlyphs, aPos, nStart, pWidths, pCharPosAry );
-        if( !nGlyphs )
-            break;
-
-        WORD pWGlyphs[ MAXGLYPHCOUNT ];
-        GOFFSET pGlyphOffsets[ MAXGLYPHCOUNT ];
-        int pGlyphAdvances[ MAXGLYPHCOUNT ];
-        for( int i = 0; i < nGlyphs; ++i )
-        {
-            pWGlyphs[ i ] = pLGlyphs[ i ];
-            pGlyphOffsets[i].du = 0;
-            pGlyphOffsets[i].dv = 0;
-            pGlyphAdvances[i] = pWidths[i];
-        }
-
-        SCRIPT_ANALYSIS aSADummy = {SCRIPT_UNDEFINED,0,0,0,0,0,0};
-        HRESULT nRC = (*pScriptTextOut)( mhDC, &maScriptCache,
-            aPos.X(), aPos.Y(), 0, NULL,
-            &aSADummy, NULL, 0,
-            pWGlyphs, nGlyphs,
-            pGlyphAdvances, NULL,
-            pGlyphOffsets );
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
