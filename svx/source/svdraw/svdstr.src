@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2000-10-09 09:02:19 $
+ *  last change: $Author: sj $ $Date: 2000-10-10 15:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13043,26 +13043,8 @@ String SIP_SA_TEXT_CONTOURFRAME
 
 String SIP_SA_AUTOSHAPE_ADJUSTMENT
 {
-    Text = "SvDraw Autoshape Adjustment";
-    Text [ ENGLISH ] = "SvDraw Autoshape Adjustment" ;
-    Text[ english_us ] = "SvDraw Autoshape Adjustment";
-    Text[ portuguese ] = "SvDraw Autoshape Adjustment";
-    Text[ russian ] = "SvDraw Autoshape Adjustment";
-    Text[ greek ] = "SvDraw Autoshape Adjustment";
-    Text[ dutch ] = "SvDraw Autoshape Adjustment";
-    Text[ french ] = "SvDraw Autoshape Adjustment";
-    Text[ spanish ] = "SvDraw Autoshape Adjustment";
-    Text[ italian ] = "SvDraw Autoshape Adjustment";
-    Text[ danish ] = "SvDraw Autoshape Adjustment";
-    Text[ swedish ] = "SvDraw Autoshape Adjustment";
-    Text[ polish ] = "SvDraw Autoshape Adjustment";
-    Text[ portuguese_brazilian ] = "SvDraw Autoshape Adjustment";
-    Text[ japanese ] = "SvDraw Autoshape Adjustment";
-    Text[ korean ] = "SvDraw Autoshape Adjustment";
-    Text[ chinese_simplified ] = "SvDraw Autoshape Adjustment";
-    Text[ chinese_traditional ] = "SvDraw Autoshape Adjustment";
-    Text[ turkish ] = "SvDraw Autoshape Adjustment";
-    Text[ arabic ] = "SvDraw Autoshape Adjustment";
+    Text = "Autoformen Justierung";
+    Text [ ENGLISH ] = "Autoshape Adjustment" ;
 };
 
 String SIP_SA_RESERVE14
