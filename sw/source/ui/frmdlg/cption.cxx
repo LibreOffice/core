@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:11:03 $
+ *  last change: $Author: os $ $Date: 2002-02-05 10:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,14 +560,19 @@ long SwCaptionDialog::SwCptComboBox::PreNotify( NotifyEvent& rNEvt )
     if( rNEvt.GetType() == EVENT_KEYINPUT &&
         rNEvt.GetKeyEvent()->GetCharCode() )
     {
-        String sKey( rNEvt.GetKeyEvent()->GetCharCode() ), sName( GetText() );
-        Selection aSel( GetSelection() );
-        aSel.Justify();
-        if( aSel.Len() )
-            sName.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
-        sName.Insert( sKey, (xub_StrLen)aSel.Min() );
-        if( !SwCalc::IsValidVarName( sName ))
-            nHandled = 1;
+        const KeyEvent* pEvent = rNEvt.GetKeyEvent();
+        const KeyCode&  rKeyCode = pEvent->GetKeyCode();
+        if(rKeyCode != KEY_BACKSPACE && rKeyCode != KEY_RETURN)
+        {
+            String sKey( pEvent->GetCharCode() ), sName( GetText() );
+            Selection aSel( GetSelection() );
+            aSel.Justify();
+            if( aSel.Len() )
+                sName.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+            sName.Insert( sKey, (xub_StrLen)aSel.Min() );
+            if( !SwCalc::IsValidVarName( sName ))
+                nHandled = 1;
+        }
     }
     if(!nHandled)
         nHandled = ComboBox::PreNotify( rNEvt );
