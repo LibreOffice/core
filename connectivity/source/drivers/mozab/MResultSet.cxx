@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:06:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,9 +688,9 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     sal_Int32 nPos = 0;
     DECL_PROP0(FETCHDIRECTION,          sal_Int32);
     DECL_PROP0(FETCHSIZE,               sal_Int32);
+     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
-     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
 }
@@ -1237,7 +1237,7 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 {
     OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, nCardNum = %u", nCardNum );
     sal_Int32  nPos;
-    for(nPos=0;nPos < m_pKeySet->size();nPos++)
+    for(nPos=0;nPos < (sal_Int32)m_pKeySet->size();nPos++)
     {
         if (nCardNum == (*m_pKeySet)[nPos])
             break;
@@ -1310,8 +1310,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
                 OValueVector::iterator aRowIter = m_aRow->begin()+1;
                 ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
-                ::std::vector<sal_Int16>::size_type i;
-                for ( i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
+                for ( ::std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
                 {
                     OSL_ENSURE((sal_Int32)m_aRow->size() > *aOrderByIter,"Invalid Index");
                     switch ((m_aRow->begin()+*aOrderByIter)->getTypeKind())
@@ -1365,7 +1364,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                     OSL_TRACE("OrderbyColumnNumber->size() = %d",m_aOrderbyColumnNumber.size());
 #if OSL_DEBUG_LEVEL > 0
-                    for ( sal_uInt32 i = 0; i < m_aColMapping.size(); i++ )
+                    for ( ::std::vector<sal_Int32>::size_type i = 0; i < m_aColMapping.size(); i++ )
                         OSL_TRACE("Mapped: %d -> %d", i, m_aColMapping[i] );
 #endif
                     for ( sal_Int32 nRow = 1; nRow <= m_aQuery.getRowCount(); nRow++ ) {
@@ -1387,7 +1386,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                     m_pKeySet = m_pSortIndex->CreateKeySet();
 #if OSL_DEBUG_LEVEL > 0
-                    for( i = 0; i < m_pKeySet->size(); i++ )
+                    for( OKeySet::size_type i = 0; i < m_pKeySet->size(); i++ )
                         OSL_TRACE("Sorted: %d -> %d", i, (*m_pKeySet)[i] );
 #endif
 
@@ -1402,7 +1401,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                 {
                     OValueRow aSearchRow = new OValueVector( m_aRow->size() );
 
-                    for( i = 0; i < m_pKeySet->size(); i++ )
+                    for( OKeySet::size_type i = 0; i < m_pKeySet->size(); i++ )
                     {
                         fetchRow( (*m_pKeySet)[i] );        // Fills m_aRow
                         if ( matchRow( m_aRow, aSearchRow ) )
@@ -1478,7 +1477,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                     ++aIter,++nColumnPos
                 )
             {
-                if(nColumnPos < aColumnNames.size())
+                if ( nColumnPos < (sal_Int32)aColumnNames.size() )
                     sSelectColumnRealName = aColumnNames[nColumnPos];
                 else
                 {
@@ -1566,7 +1565,7 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     {
          sal_Int32  nKeyValue;
          sal_Int32  nKeyPos;
-         if (m_pKeySet->capacity() <nMaxCardNumber)
+         if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
              m_pKeySet->reserve(nMaxCardNumber + 20 );
 
          for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
@@ -1634,7 +1633,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
         return sal_False;
     }
     sal_Int32 nCurCard = nCurPos;
-    if (nCurPos < m_pKeySet->size()) //The requested row is exist in m_pKeySet, so we just use it
+    if ( nCurPos < (sal_Int32)m_pKeySet->size() ) //The requested row is exist in m_pKeySet, so we just use it
     {
         nCurCard = (*m_pKeySet)[nCurPos-1];
     }
@@ -1947,7 +1946,7 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
         throw SQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" Can't get Current Row")) ,*this
                     ,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000)
                     ,1000,Any());
-    sal_Bool m_bRowDeleted = m_aQuery.deleteRow(nCurrentRow);
+    sal_Bool m_bRowDeleted = ( m_aQuery.deleteRow( nCurrentRow ) > 0 );
     if (!m_bRowDeleted)
         ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
 
@@ -2010,5 +2009,6 @@ sal_Bool OResultSet::determineReadOnly()
         //m_nRowCountResult == 0 mean user call with where case 0 = 1
         m_bIsReadOnly = !m_aQuery.isWritable() || (m_nRowCountResult == 0);
     }
-    return m_bIsReadOnly;
+
+    return m_bIsReadOnly != 0;
 }
