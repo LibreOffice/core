@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 11:52:21 $
+ *  last change: $Author: gt $ $Date: 2002-05-24 09:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,23 +63,65 @@
 #include <svlbox.hxx>
 #include <svlbitm.hxx>
 
-#pragma hdrstop
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
+#ifndef _SV_DECOVIEW_HXX
+#include <vcl/decoview.hxx>
+#endif
 
 #define TABOFFS_NOT_VALID -2000000
 
+
+struct SvLBoxButtonData_Impl
+{
+    SvLBoxEntry*            pEntry;
+    BOOL                    bDefaultImages;
+};
+
+
 DBG_NAME(SvLBoxButtonData);
+
+void SvLBoxButtonData::InitData( BOOL bImagesFromDefault, const Control* pCtrl )
+{
+    pImpl = new SvLBoxButtonData_Impl;
+
+    bDataOk = FALSE;
+    pImpl->pEntry = 0;
+
+    eState = SV_BUTTON_UNCHECKED;
+
+    pImpl->bDefaultImages = bImagesFromDefault;
+
+    if( bImagesFromDefault )
+        SetDefaultImages( pCtrl );
+}
+
+SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings )
+{
+    DBG_CTOR(SvLBoxButtonData,0);
+
+    InitData( TRUE, pControlForSettings );
+}
 
 SvLBoxButtonData::SvLBoxButtonData()
 {
     DBG_CTOR(SvLBoxButtonData,0);
-    bDataOk = FALSE;
-    pEntry = 0;
-    eState = SV_BUTTON_UNCHECKED;
+
+    InitData( FALSE );
 }
 
 SvLBoxButtonData::~SvLBoxButtonData()
 {
     DBG_DTOR(SvLBoxButtonData,0);
+
+    delete pImpl;
+#ifdef DBG_UTIL
+    pImpl = NULL;
+#endif
 }
 
 
@@ -128,7 +170,7 @@ void SvLBoxButtonData::SetWidthAndHeight()
 void SvLBoxButtonData::StoreButtonState( SvLBoxEntry* pActEntry, USHORT nItemFlags )
 {
     DBG_CHKTHIS(SvLBoxButtonData,0);
-    pEntry = pActEntry;
+    pImpl->pEntry = pActEntry;
     eState = ConvertToButtonState( nItemFlags );
 }
 
@@ -151,6 +193,29 @@ SvButtonState SvLBoxButtonData::ConvertToButtonState( USHORT nItemFlags ) const
         default:
             return SV_BUTTON_UNCHECKED;
     }
+}
+
+SvLBoxEntry* SvLBoxButtonData::GetActEntry() const
+{
+    DBG_ASSERT( pImpl, "-SvLBoxButtonData::GetActEntry(): don't use me that way!" );
+    return pImpl->pEntry;
+}
+
+void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
+{
+    const AllSettings& rSettings = pCtrl? pCtrl->GetSettings() : Application::GetSettings();
+
+    aBmps[ SV_BMP_UNCHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT );
+    aBmps[ SV_BMP_CHECKED ]     = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED );
+    aBmps[ SV_BMP_HICHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
+    aBmps[ SV_BMP_HIUNCHECKED ] = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
+    aBmps[ SV_BMP_TRISTATE ]    = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW );
+    aBmps[ SV_BMP_HITRISTATE ]  = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+}
+
+BOOL SvLBoxButtonData::HasDefaultImages( void ) const
+{
+    return pImpl->bDefaultImages;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:31:59 $
+ *  last change: $Author: gt $ $Date: 2002-05-24 09:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2413,6 +2413,10 @@ void SvTreeListBox::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
+
+    // always try to re-create default-SvLBoxButtonData
+    if( pCheckButtonData && pCheckButtonData->HasDefaultImages() )
+        pCheckButtonData->SetDefaultImages( this );
 }
 
 void SvTreeListBox::InitStartEntry()
