@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:22:24 $
+ *  last change: $Author: af $ $Date: 2002-04-23 11:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,4 +1592,18 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
         }
         break;
     }
+}
+
+
+
+
+/** This default implemenation returns only an empty reference.  See derived
+    classes for more interesting examples.
+*/
+::com::sun::star::uno::Reference<
+    ::drafts::com::sun::star::accessibility::XAccessible>
+SdViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
+{
+    return ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible> ();
 }
