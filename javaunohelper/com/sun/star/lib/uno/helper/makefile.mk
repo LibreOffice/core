@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2002-04-11 13:39:51 $
+#   last change: $Author: jl $ $Date: 2002-04-25 11:32:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,8 @@ JAVACLASSFILES= \
         $(CLASSDIR)$/$(PACKAGE)$/WeakAdapter.class  	\
     $(CLASSDIR)$/$(PACKAGE)$/ComponentBase.class		\
     $(CLASSDIR)$/$(PACKAGE)$/InterfaceContainer.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/MultiTypeInterfaceContainer.class
+    $(CLASSDIR)$/$(PACKAGE)$/MultiTypeInterfaceContainer.class \
+        $(CLASSDIR)$/$(PACKAGE)$/PropertySet.class
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
