@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 14:15:27 $
+ *  last change: $Author: fs $ $Date: 2001-05-21 03:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,7 +1039,7 @@ FmXGridPeer::FmXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::sta
             ,m_aContainerListeners(m_aMutex)
             ,m_aSelectionListeners(m_aMutex)
             ,m_nCursorListening(0)
-            ,m_aMode( DATA_MODE )
+            ,m_aMode( (::rtl::OUString)DATA_MODE )
             ,m_pStateCache(NULL)
             ,m_pDispatchers(NULL)
             ,m_bInterceptingDispatch(sal_False)
