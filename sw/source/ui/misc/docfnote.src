@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:33:32 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ russian ] = "Κξνφεβϋε ρνξρκθ";
                 Text[ polish ] = "Przypisy koρc.";
                 Text[ japanese ] = "•¶––‹r’";
-                Text[ chinese_traditional ] = "§ΐª`";
+                Text[ chinese_traditional ] = "§ΐµω";
                 Text[ arabic ] = "ΚΪανήΗΚ ΞΚΗγνΙ";
                 Text[ greek ] = "Σημειώσεις τέλους";
                 Text[ korean ] = "ΉΜΑΦ";
@@ -810,7 +810,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ russian ] = "Β κξνφε ρνξρκθ";
         Text[ polish ] = "Na koncu przypisσw dolnych";
         Text[ japanese ] = "‹r’––(~O)";
-        Text[ chinese_traditional ] = "¦bª`Έ}¥½(~N)";
+        Text[ chinese_traditional ] = "¦bµωΈ}µ²§ΐ(~N)";
         Text[ arabic ] = "ΪδΟ δεΗνΙ ΗαΝΗΤνΙ ΗαΣέανΙ";
         Text[ greek ] = "Στο τέλος της υπ~οσημείωσης";
         Text[ korean ] = "°ΆΑΦ ³΅";
@@ -1369,7 +1369,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ russian ] = "Ξαλΰρςό κξνφεβξι ρνξρκθ";
         Text[ polish ] = "Obszar przyp. koρc.";
         Text[ japanese ] = "•¶––‹r’”ΝΝ(~E)";
-        Text[ chinese_traditional ] = "§ΐª`°Ο°μ(~E)";
+        Text[ chinese_traditional ] = "§ΐµω°Ο°μ(~E)";
         Text[ arabic ] = "δΨΗή ΗαΚΪανή ΗαΞΚΗγν";
         Text[ greek ] = "Περιοχή σημείωσης τέλους";
         Text[ korean ] = "ΉΜΑΦ ±βΘ£(~E)";
@@ -1545,7 +1545,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ norwegian ] = "~Startet" ;
         Text [ italian ] = "~Inizio" ;
         Text [ portuguese_brazilian ] = "~Iniciado" ;
-        Text [ portuguese ] = "~Iniciar" ;
+        Text [ portuguese ] = "~Inνcio" ;
         Text [ finnish ] = "~Alkaa" ;
         Text [ danish ] = "Begyndelse" ;
         Text [ french ] = "~Dιbut" ;
