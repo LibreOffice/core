@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:33:43 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:32:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,7 +200,7 @@ all :
        +$(COPY) $(STLPORT4)$/lib$/*stlport*$(DLLPOST) $(DLLDEST)
 .ENDIF
 
-.INCLUDE : set_ext.mk
+.INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
