@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
+ *  last change: $Author: aw $ $Date: 2001-04-05 11:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,8 +1072,11 @@ void SAL_CALL ImplSvxPolyPolygonBezierCoordsToPolyPolygon( drawing::PolyPolygonB
     // Zeiger auf innere sequences holen
     const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
     const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
+    sal_Bool bIsCurve(FALSE);
+    sal_Bool bCurveValid(TRUE);
+    sal_Bool bCurveTestActive(FALSE);
 
-    for(sal_Int32 a=0;a<nOuterSequenceCount;a++)
+    for(sal_Int32 a(0); bCurveValid && a < nOuterSequenceCount; a++)
     {
         sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
 
@@ -1087,11 +1090,77 @@ void SAL_CALL ImplSvxPolyPolygonBezierCoordsToPolyPolygon( drawing::PolyPolygonB
         const awt::Point* pArray = pInnerSequence->getConstArray();
         const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
 
-        for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
+        for(sal_Int32 b(0); bCurveValid && b < nInnerSequenceCount; b++)
         {
+            // coordinate data
             aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
             pArray++;
-            aNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
+
+            // flag data
+            XPolyFlags ePolyFlag = (XPolyFlags)((sal_uInt16)*pArrayFlags++);
+
+            // set curve flag
+            if(!bIsCurve && ePolyFlag == XPOLY_CONTROL)
+                bIsCurve = TRUE;
+
+            // curve testing
+            if(bIsCurve && bCurveValid && (bCurveTestActive || ePolyFlag == XPOLY_CONTROL))
+            {
+                if(!bCurveTestActive)
+                {
+                    // first control point found, test it
+                    if(b == 0)
+                    {
+                        // no curve startpoint possible
+                        bCurveValid = FALSE;
+                    }
+                    else
+                    {
+                        // test type of prev point
+                        XPolyFlags ePrevPolyFlag = (XPolyFlags)((sal_uInt16)*(pArrayFlags - 2));
+                        if(ePrevPolyFlag == XPOLY_CONTROL)
+                        {
+                            // curve startpoint is a control point,
+                            // this is not allowed (three control points in a row)
+                            bCurveValid = FALSE;
+                        }
+                    }
+
+                    // next curve test state
+                    bCurveTestActive = TRUE;
+                }
+                else
+                {
+                    // prev was a valid curve start, this should be the second
+                    // curve control point, test it
+                    if(ePolyFlag != XPOLY_CONTROL)
+                    {
+                        // no second curve control point
+                        bCurveValid = FALSE;
+                    }
+                    else if(b == nInnerSequenceCount-1)
+                    {
+                        // no curve endpoint possible
+                        bCurveValid = FALSE;
+                    }
+                    else
+                    {
+                        // test type of next point
+                        XPolyFlags eNextPolyFlag = (XPolyFlags)((sal_uInt16)*pArrayFlags);
+                        if(eNextPolyFlag == XPOLY_CONTROL)
+                        {
+                            // curve endpoint is the next control point,
+                            // this is not allowed (three control points in a row)
+                            bCurveValid = FALSE;
+                        }
+                    }
+
+                    // end curve test for this segment
+                    bCurveTestActive = FALSE;
+                }
+            }
+
+            aNewPolygon.SetFlags((USHORT)b, ePolyFlag);
         }
 
         pInnerSequence++;
@@ -1100,6 +1169,10 @@ void SAL_CALL ImplSvxPolyPolygonBezierCoordsToPolyPolygon( drawing::PolyPolygonB
         // Neues Teilpolygon einfuegen
         rNewPolyPolygon.Insert(aNewPolygon);
     }
+
+    // throw exception if polygon data is an invalid curve definition
+    if(bIsCurve && !bCurveValid)
+        throw IllegalArgumentException();
 }
 
 //----------------------------------------------------------------------
