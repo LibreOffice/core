@@ -386,8 +386,11 @@
             </node>
             <node oor:name=".uno:StarChartDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="de">~Diagramm...</value>
+                    <value xml:lang="de">~Diagramm...</value>
                     <value xml:lang="en-US">Ch~art...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:JumpToNextUnprotected" oor:op="replace">
@@ -833,6 +836,10 @@
             </node>
             <node oor:name=".uno:InsertRows" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Z~eilen einfügen</value>
+                    <value xml:lang="en-US">Insert ~Rows</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
                     <value xml:lang="de">Z~eilen</value>
                     <value xml:lang="en-US">~Rows</value>
                 </prop>
@@ -842,6 +849,10 @@
             </node>
             <node oor:name=".uno:InsertColumns" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">S~palten einfügen</value>
+                    <value xml:lang="en-US">Insert Co~lumns</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
                     <value xml:lang="de">S~palten</value>
                     <value xml:lang="en-US">Co~lumns</value>
                 </prop>
