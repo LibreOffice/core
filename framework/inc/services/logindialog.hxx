@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-05-10 10:36:52 $
+ *  last change: $Author: as $ $Date: 2001-05-10 10:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #include <macros/xserviceinfo.hxx>
 #endif
 
-#include <logindialog.hrc>
+#include <services/logindialog.hrc>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
