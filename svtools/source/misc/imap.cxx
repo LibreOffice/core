@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,9 @@ SvStream& operator<<( SvStream& rOStm, const IMapObject& rObj )
     rOStm << rObj.GetVersion();
     rOStm << ( (UINT16) eEncoding );
 
-    const ByteString aRelURL( INetURLObject::AbsToRel( rObj.aURL, INetURLObject::WAS_ENCODED,
-                                                       INetURLObject::DECODE_UNAMBIGUOUS ), eEncoding );
+    String sURL(INetURLObject::AbsToRel(rObj.aURL,
+        INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS));
+    ByteString aRelURL( sURL, eEncoding );
     rOStm.WriteByteString( aRelURL );
     rOStm.WriteByteString( ByteString( rObj.aDescription, eEncoding ) );
     rOStm << rObj.bActive;
