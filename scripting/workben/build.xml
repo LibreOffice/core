@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-01-07 15:28:05 $
+#   last change: $Author: dfoster $ $Date: 2003-01-21 15:13:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,18 +89,29 @@
   </path>
 
   <!-- ===================== Set up build conditionals ========================= -->
-  <target name="build.conditions">
+  <target name="product.test">
+      <condition property="noproext">
+            <equals arg1="$${env.PROEXT}" arg2="${env.PROEXT}"/>
+      </condition>
+  </target>
+  <target name="nonproduct.set" if="noproext">
+      <property name="proext" value=""/>
+  </target>
+  <target name="product.set" unless="noproext">
+      <property name="proext" value="${env.PROEXT}"/>
+  </target>
+  <target name="build.conditions" depends="product.test,nonproduct.set,product.set">
       <condition property="win9.build">
-            <available file="${prj}/wntmsci9${env.PROEXT}"/>
+            <available file="${prj}/wntmsci9${proext}"/>
       </condition>
       <condition property="win7.build">
-            <available file="${prj}/wntmsci9${env.PROEXT}"/>
+            <available file="${prj}/wntmsci9${proext}"/>
       </condition>
       <condition property="linx86.build">
-            <available file="${prj}/unxlngi4${env.PROEXT}"/>
+            <available file="${prj}/unxlngi4${proext}"/>
       </condition>
       <condition property="solsparc.build">
-            <available file="${prj}/unxsols3${env.PROEXT}"/>
+            <available file="${prj}/unxsols3${proext}"/>
       </condition>
       <!-- <condition property="openoffice.build">
       </condition> -->
