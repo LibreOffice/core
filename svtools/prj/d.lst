@@ -181,6 +181,8 @@ hedabu: ..\source\uno\imgprod.hxx %_DEST%\inc%_EXT%\svtools\imgprod.hxx
 hedabu: ..\inc\itemprop.hxx %_DEST%\inc%_EXT%\svtools\itemprop.hxx
 hedabu: ..\inc\itempro3.hxx %_DEST%\inc%_EXT%\svtools\itempro3.hxx
 hedabu: ..\inc\strcrypt.hxx %_DEST%\inc%_EXT%\svtools\strcrypt.hxx
+hedabu: ..\inc\addresstemplate.hxx %_DEST%\inc%_EXT%\svtools\addresstemplate.hxx
+hedabu: ..\inc\genericunodialog.hxx %_DEST%\inc%_EXT%\svtools\genericunodialog.hxx
 
 hedabu: ..\inc\imap.hxx %_DEST%\inc%_EXT%\svtools\imap.hxx
 hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
