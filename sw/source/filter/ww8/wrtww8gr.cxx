@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-28 12:15:07 $
+ *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,12 +494,12 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
 
 void SwWW8WrGrf::Insert( const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly )
 {
-    aNds.Insert( (VoidPtr)pNd, aNds.Count() );
-    aFlys.Insert( (VoidPtr)pFly, aFlys.Count() );
+    UINT16 nWidth;
+    UINT16 nHeight;
     if( rWrt.nFlyWidth > 0 && rWrt.nFlyHeight > 0 )
     {
-        aWid.Insert( (UINT16)rWrt.nFlyWidth, aWid.Count() ); // hier steht die ware Groesse
-        aHei.Insert( (UINT16)rWrt.nFlyHeight, aHei.Count() ); // naemlich im uebergeordneten Frame
+        nWidth = (UINT16)rWrt.nFlyWidth;
+        nHeight = (UINT16)rWrt.nFlyHeight;
     }
     else
     {
@@ -515,9 +515,11 @@ void SwWW8WrGrf::Insert( const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly )
             aGrTwipSz = pNd->GetTwipSize();
         }
 
-        aWid.Insert( (UINT16)aGrTwipSz.Width(), aWid.Count() );
-        aHei.Insert( (UINT16)aGrTwipSz.Height(), aHei.Count() );
+        nWidth = (UINT16)aGrTwipSz.Width();
+        nHeight = (UINT16)aGrTwipSz.Height();
     }
+
+    maDetails.push_back(GraphicDetails(pNd, pFly, nWidth, nHeight));
 }
 
 void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
@@ -870,23 +872,22 @@ void SwWW8WrGrf::Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
 // hierfuer nur mit GetFPos() sequentiell die Positionen.
 void SwWW8WrGrf::Write()
 {
-    nIdx = 0;       // fuers anschliessende Abfragen
     SvStream& rStrm = *rWrt.pDataStrm;
-    for( USHORT i = 0; i < aNds.Count(); i++ )
+    myiter aEnd = maDetails.end();
+    for (myiter aIter = maDetails.begin(); aIter != aEnd; ++aIter)
     {
-        const SwNoTxtNode* pNd = (const SwNoTxtNode*)aNds[i];
+        const SwNoTxtNode* pNd = aIter->mpNd;
 
         UINT32 nPos = rStrm.Tell();                 // auf 4 Bytes alignen
         if( nPos & 0x3 )
             SwWW8Writer::FillCount( rStrm, 4 - ( nPos & 0x3 ) );
 
         bool bDuplicated = false;
-        for( USHORT nI = 0; nI < i; nI++ )
+        for (myiter aIter2 = maDetails.begin(); aIter2 != aIter; ++aIter2)
         {
-            if ( (pNd == (const SwNoTxtNode*)aNds[nI]) && aWid[i] == aWid[nI]
-                && aHei[i] == aHei[nI] )
+            if (*aIter2 == *aIter)
             {
-                aPos.Insert( aPos[nI], aPos.Count() );  // Pos merken
+                aIter->mnPos = aIter2->mnPos;
                 bDuplicated = true;
                 break;
             }
@@ -894,9 +895,8 @@ void SwWW8WrGrf::Write()
 
         if (!bDuplicated)
         {
-            aPos.Insert( rStrm.Tell(), aPos.Count() );  // Pos merken
-            Write1Grf( rStrm, pNd, (const SwFlyFrmFmt*)aFlys[i], aWid[i],
-                aHei[i] );
+            aIter->mnPos = rStrm.Tell();
+            Write1Grf(rStrm, pNd, aIter->mpFly, aIter->mnWid, aIter->mnHei);
         }
     }
 }

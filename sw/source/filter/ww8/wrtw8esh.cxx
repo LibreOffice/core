@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-14 14:24:31 $
+ *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #endif
 
 #define _SVSTDARR_ULONGSSORT
+#define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
 #ifndef _SV_CVTGRF_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 13:54:59 $
+ *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,6 @@
 #include <tools/gen.hxx>
 #endif
 #ifndef _SVSTDARR_HXX
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 #endif
@@ -792,17 +790,34 @@ public:
     bool Write(SwWW8Writer& rWrt);
 };
 
+class GraphicDetails
+{
+public:
+    const SwNoTxtNode* mpNd;    // Positionen der SwGrfNodes und SwOleNodes
+    const SwFlyFrmFmt* mpFly;   // Umgebende FlyFrms dazu
+    ULONG mnPos;        // FilePos der Grafiken
+    UINT16 mnWid;       // Breite der Grafiken
+    UINT16 mnHei;       // Hoehe der Grafiken
+    GraphicDetails(const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly,
+        UINT16 nWid, UINT16 nHei)
+    : mpNd(pNd), mpFly(pFly), mnPos(0), mnWid(nWid), mnHei(nHei)
+    {}
+
+    bool operator==(const GraphicDetails& rIn) const
+    {
+        return
+           ((mpNd == rIn.mpNd) && (mnWid == rIn.mnWid) && (mnHei == rIn.mnHei));
+    }
+};
+
 // class SwWW8WrGrf sammelt Grafiken und gibt sie aus
 class SwWW8WrGrf
 {
 private:
     SwWW8Writer& rWrt;  // SwWW8Writer fuer Zugriff auf die Vars
-    SvPtrarr aNds;      // Positionen der SwGrfNodes und SwOleNodes
-    SvPtrarr aFlys;     // Umgebende FlyFrms dazu
-    SvULongs aPos;      // FilePos der Grafiken
-    SvUShorts aWid;     // Breite der Grafiken
-    SvUShorts aHei;     // Hoehe der Grafiken
-    USHORT nIdx;        // Index in File-Positionen
+    std::vector<GraphicDetails> maDetails;
+    typedef std::vector<GraphicDetails>::iterator myiter;
+    USHORT mnIdx;       // Index in File-Positionen
 
     void Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
         const SwFlyFrmFmt* pFly, UINT16 mm, UINT16 nWidth, UINT16 nHeight );
@@ -815,13 +830,11 @@ private:
     SwWW8WrGrf(const SwWW8WrGrf&);
     SwWW8WrGrf& operator=(const SwWW8WrGrf&);
 public:
-    SwWW8WrGrf( SwWW8Writer& rW )
-        : rWrt( rW ), aNds( 4, 4 ), aFlys( 4, 4 ), aPos( 4, 4 ),
-          aWid( 4, 4 ), aHei( 4, 4 )
-    {}
-    void Insert( const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly );
+    SwWW8WrGrf(SwWW8Writer& rW) : rWrt(rW), mnIdx(0) {}
+    void Insert(const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly);
     void Write();
-    ULONG GetFPos() { return ( nIdx < aNds.Count() ) ? aPos[nIdx++] : 0; }
+    ULONG GetFPos()
+        { return (mnIdx < maDetails.size()) ? maDetails[mnIdx++].mnPos : 0; }
 };
 
 // The class WW8_AttrIter is a helper class to build the Fkp.chpx. This

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:55 $
+ *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
+
+#define _SVSTDARR_BOOLS
+#include <svtools/svstdarr.hxx>
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
