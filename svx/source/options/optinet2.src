@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-22 21:15:21 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 12:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1363,9 +1363,8 @@ TabPage RID_SVXPAGE_INET_SEARCH
 
 #define GB_SCRIPT_EXEC_X    6
 #define GB_SCRIPT_EXEC_Y    3
-#define GB_SCRIPTING_X      6
-#define GB_SCRIPTING_Y      68
-#define GB_JAVA_Y           113
+#define FL_HYPERLINKS_Y     106
+#define GB_JAVA_Y           130
 
 TabPage RID_SVXPAGE_INET_SCRIPTING
 {
@@ -1426,7 +1425,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FT_EXEC_MACRO
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 12 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 13 ) ;
         Size = MAP_APPFONT ( 53 , 8 ) ;
         Text = "~Makro ausführen" ;
         Text [ English ] = "~Run macro" ;
@@ -1459,7 +1458,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         DropDown = TRUE ;
         StringList =
         {
-            < "Nie" ; > ;
+            < "Niemals" ; > ;
             < "Gemäß Pfadliste" ; > ;
             < "Immer" ; > ;
         };
@@ -1469,132 +1468,132 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
             < "According to path list" ; > ;
             < "Always" ; > ;
         };
-    StringList [ language_user1 ] =
-    {
-         < "Nie" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Immer" ; > ;
-    };
-    StringList [ english_us ] =
-    {
-         < "Never" ; > ;
-        < "According to path list" ; > ;
-        < "Always" ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-         < "Nunca" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Sempre" ; > ;
-    };
-    StringList [ russian ] =
-    {
-         < "Íèêîãäà" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Âñåãäà" ; > ;
-    };
-    StringList [ greek ] =
-    {
-         < "ÐïôÝ" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "ÐÜíôá" ; > ;
-    };
-    StringList [ dutch ] =
-    {
-         < "Nooit" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Altijd" ; > ;
-    };
-    StringList [ french ] =
-    {
-         < "Jamais" ; > ;
-        < "Selon la liste des chemins" ; > ;
-        < "Toujours" ; > ;
-    };
-    StringList [ spanish ] =
-    {
-         < "Nunca" ; > ;
-        < "Según la lista de rutas" ; > ;
-        < "Siempre" ; > ;
-    };
-    StringList [ finnish ] =
-    {
-         < "Ei koskaan" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Aina" ; > ;
-    };
-    StringList [ italian ] =
-    {
-         < "Mai" ; > ;
-        < "Conforme all'elenco percorsi" ; > ;
-        < "Sempre" ; > ;
-    };
-    StringList [ danish ] =
-    {
-         < "Aldrig" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Altid" ; > ;
-    };
-    StringList [ swedish ] =
-    {
-         < "Aldrig" ; > ;
-        < "Enligt sökvägslista" ; > ;
-        < "Alltid" ; > ;
-    };
-    StringList [ polish ] =
-    {
-         < "Nie" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Zawsze" ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-         < "Nie" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Immer" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-         < "å®Ÿè¡Œã—ãªã„" ; > ;
-        < "ãƒ‘ã‚¹ã®ãƒªã‚¹ãƒˆã©ãŠã‚Šã«" ; > ;
-        < "å¸¸ã«å®Ÿè¡Œã™ã‚‹" ; > ;
-    };
-    StringList [ korean ] =
-    {
-         < "ì ˆëŒ€ ì—†ìŒ" ; > ;
-        < "ê²½ë¡œ ëª©ë¡ì— ì˜ê±°" ; > ;
-        < "í•­ìƒ" ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-         < "ä»Žä¸" ; > ;
-        < "ä¾ç…§è·¯å¾„åˆ—å•" ; > ;
-        < "è‡ªåŠ¨" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-         < "å¾žä¸" ; > ;
-        < "ä¾ç…§è·¯ç¶“æ¸…å–®" ; > ;
-        < "è‡ªå‹•" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-         < "Hiçbir zaman" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Her zaman" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-         < "ÈÊÇÊÇð" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "ÏÇÆãÇð" ; > ;
-    };
-    StringList [ catalan ] =
-    {
-         < "Nie" ; > ;
-        < "Gemäß Pfadliste" ; > ;
-        < "Sempre" ; > ;
-    };
+        StringList [ language_user1 ] =
+        {
+             < "Nie" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Immer" ; > ;
+        };
+        StringList [ english_us ] =
+        {
+             < "Never" ; > ;
+            < "According to path list" ; > ;
+            < "Always" ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+             < "Nunca" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Sempre" ; > ;
+        };
+        StringList [ russian ] =
+        {
+             < "Íèêîãäà" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Âñåãäà" ; > ;
+        };
+        StringList [ greek ] =
+        {
+             < "ÐïôÝ" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "ÐÜíôá" ; > ;
+        };
+        StringList [ dutch ] =
+        {
+             < "Nooit" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Altijd" ; > ;
+        };
+        StringList [ french ] =
+        {
+             < "Jamais" ; > ;
+            < "Selon la liste des chemins" ; > ;
+            < "Toujours" ; > ;
+        };
+        StringList [ spanish ] =
+        {
+             < "Nunca" ; > ;
+            < "Según la lista de rutas" ; > ;
+            < "Siempre" ; > ;
+        };
+        StringList [ finnish ] =
+        {
+             < "Ei koskaan" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Aina" ; > ;
+        };
+        StringList [ italian ] =
+        {
+             < "Mai" ; > ;
+            < "Conforme all'elenco percorsi" ; > ;
+            < "Sempre" ; > ;
+        };
+        StringList [ danish ] =
+        {
+             < "Aldrig" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Altid" ; > ;
+        };
+        StringList [ swedish ] =
+        {
+             < "Aldrig" ; > ;
+            < "Enligt sökvägslista" ; > ;
+            < "Alltid" ; > ;
+        };
+        StringList [ polish ] =
+        {
+             < "Nie" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Zawsze" ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+             < "Nie" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Immer" ; > ;
+        };
+        StringList [ japanese ] =
+        {
+             < "å®Ÿè¡Œã—ãªã„" ; > ;
+            < "ãƒ‘ã‚¹ã®ãƒªã‚¹ãƒˆã©ãŠã‚Šã«" ; > ;
+            < "å¸¸ã«å®Ÿè¡Œã™ã‚‹" ; > ;
+        };
+        StringList [ korean ] =
+        {
+             < "ì ˆëŒ€ ì—†ìŒ" ; > ;
+            < "ê²½ë¡œ ëª©ë¡ì— ì˜ê±°" ; > ;
+            < "í•­ìƒ" ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
+             < "ä»Žä¸" ; > ;
+            < "ä¾ç…§è·¯å¾„åˆ—å•" ; > ;
+            < "è‡ªåŠ¨" ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
+             < "å¾žä¸" ; > ;
+            < "ä¾ç…§è·¯ç¶“æ¸…å–®" ; > ;
+            < "è‡ªå‹•" ; > ;
+        };
+        StringList [ turkish ] =
+        {
+             < "Hiçbir zaman" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Her zaman" ; > ;
+        };
+        StringList [ arabic ] =
+        {
+             < "ÈÊÇÊÇð" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "ÏÇÆãÇð" ; > ;
+        };
+        StringList [ catalan ] =
+        {
+             < "Nie" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Sempre" ; > ;
+        };
     };
     CheckBox CB_CONFIRM
     {
@@ -1625,7 +1624,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     CheckBox CB_WARNING
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 41 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 40 ) ;
         Size = MAP_APPFONT ( 176 , 10 ) ;
         Text = "~Vor Ausführung immer warnen" ;
         Text [ English ] = "Show ~warning before running macro" ;
@@ -1652,7 +1651,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FT_PATH_LIST
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 56 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 55 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Pfa~dliste" ;
         Text [ English ] = "~Path list" ;
@@ -1679,14 +1678,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     ListBox LB_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 55 ) ;
-        Size = MAP_APPFONT ( 129 , 34 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 53 ) ;
+        Size = MAP_APPFONT ( 119 , 28 ) ;
         Border = TRUE ;
         Sort = TRUE ;
     };
     PushButton PB_SCRIPT_DELETE
     {
-        Pos = MAP_APPFONT ( 198 , GB_SCRIPT_EXEC_Y + 55 ) ;
+        Pos = MAP_APPFONT ( 188 , GB_SCRIPT_EXEC_Y + 53 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Löschen" ;
         Text [ English ] = "~Delete" ;
@@ -1714,7 +1713,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     PushButton PB_SCRIPT_DEFAULT
     {
-        Pos = MAP_APPFONT ( 198 , GB_SCRIPT_EXEC_Y + 72 ) ;
+        Pos = MAP_APPFONT ( 188 , GB_SCRIPT_EXEC_Y + 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
         Text [ English ] = "De~fault" ;
@@ -1742,7 +1741,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FT_NEW_PATH
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 94 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 89 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "N~euer Pfad" ;
         Text [ English ] = "New pa~th" ;
@@ -1769,13 +1768,13 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     Edit ED_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 93 ) ;
-        Size = MAP_APPFONT ( 129 , 12 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 88 ) ;
+        Size = MAP_APPFONT ( 119 , 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_SCRIPT_INSERT
     {
-        Pos = MAP_APPFONT ( 198 , GB_SCRIPT_EXEC_Y + 93 ) ;
+        Pos = MAP_APPFONT ( 188 , GB_SCRIPT_EXEC_Y + 87 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "H~inzufügen" ;
         Text [ English ] = "~Add" ;
@@ -1801,10 +1800,43 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ catalan ] = "~Añadir";
         Text[ finnish ] = "~Lisää";
     };
+    FixedLine FL_HYPERLINKS
+    {
+        Pos = MAP_APPFONT ( 6 , FL_HYPERLINKS_Y ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text = "Hyperlinks" ;
+        Text[ english_us ] = "Hyperlinks";
+    };
+    FixedText FT_HYPERLINKS
+    {
+        Pos = MAP_APPFONT ( 12 , FL_HYPERLINKS_Y + 12 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text = "H~yperlinks öffnen" ;
+        Text [ english_us ] = "Open h~yperlinks" ;
+    };
+    ListBox LB_HYPERLINKS
+    {
+        Pos = MAP_APPFONT ( 66 , FL_HYPERLINKS_Y + 10 ) ;
+        Size = MAP_APPFONT ( 90 , 48 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Niemals" ; > ;
+            < "Mit Sicherheitsüberprüfung" ; > ;
+            < "Immer" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Never" ; > ;
+            < "With security check" ; > ;
+            < "Always" ; > ;
+        };
+    };
     FixedLine FL_JAVA
     {
         Pos = MAP_APPFONT ( 6 , GB_JAVA_Y ) ;
-        Size = MAP_APPFONT ( 168, 8 ) ;
+        Size = MAP_APPFONT ( 179, 8 ) ;
         Text = "Java" ;
         Text [ English ] = "Java" ;
         Text[ english_us ] = "Java";
@@ -1831,7 +1863,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     CheckBox CB_J_ENABLE
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "~freischalten" ;
         Text [ English ] = "~Enable" ;
         Text [ english_us ] = "~Enable" ;
@@ -1858,8 +1890,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     CheckBox CB_J_SECURITY
     {
-        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 24 ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 11 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Sicherhei~tsüberprüfungen";
         Text [ English ] = "Enable ~security checks";
         Text [ english_us ] = "~Security checks";
@@ -1886,8 +1918,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FT_NETACCESS
     {
-        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 39 ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 26 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Netzz~ugriff" ;
         Text [ English ] = "~Netaccess" ;
         Text [ english_us ] = "Net ~access" ;
@@ -1914,8 +1946,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     ListBox LB_NETACCESS
     {
-        Pos = MAP_APPFONT ( 102 , GB_JAVA_Y + 37 ) ;
-        Size = MAP_APPFONT ( 72 , 48 ) ;
+        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 24 ) ;
+        Size = MAP_APPFONT ( 66 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -2059,8 +2091,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FT_CLASSPATH
     {
-        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 54 ) ;
-        Size = MAP_APPFONT ( 61 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 41 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~ClassPath" ;
         Text [ English ] = "~ClassPath" ;
         Text [ english_us ] = "~ClassPath" ;
@@ -2087,26 +2119,27 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     Edit ED_CLASSPATH
     {
-        Pos = MAP_APPFONT ( 76 , GB_JAVA_Y + 52 ) ;
-        Size = MAP_APPFONT ( 81 , 12 ) ;
+        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 39 ) ;
+        Size = MAP_APPFONT ( 66 , 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_CLASSPATH
     {
-        Pos = MAP_APPFONT ( 160 , GB_JAVA_Y + 51 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Text = "~...";
+        Pos = MAP_APPFONT ( 135 , GB_JAVA_Y + 38 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Durchsuchen...";
+        Text [ english_us ] = "~Browse..." ;
     };
     FixedLine FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 175 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 4 , 54 ) ;
+        Pos = MAP_APPFONT ( 188 , GB_JAVA_Y + 11 ) ;
+        Size = MAP_APPFONT ( 2 , 52 ) ;
         Vert = TRUE;
     };
     FixedLine GB_EXECUTE
     {
-        Pos = MAP_APPFONT ( 180 , GB_JAVA_Y ) ;
-        Size = MAP_APPFONT ( 74 , 8 ) ;
+        Pos = MAP_APPFONT ( 193 , GB_JAVA_Y ) ;
+        Size = MAP_APPFONT ( 61 , 8 ) ;
         Text = "Freischalten" ;
         Text [ English ] = "Enable" ;
         Text [ english_us ] = "E~nable" ;
@@ -2133,8 +2166,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     CheckBox CB_EXECUTE_PLUGINS
     {
-        Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Pos = MAP_APPFONT ( 197 , GB_JAVA_Y + 11 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "~PlugIns" ;
         Text [ English ] = "Pl~ugIns" ;
         Text [ english_us ] = "Plug-ins" ;
@@ -2161,8 +2194,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     CheckBox CB_EXECUTE_APPLETS
     {
-        Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 24 ) ;
-        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Pos = MAP_APPFONT ( 197 , GB_JAVA_Y + 24 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "~Applets" ;
         Text [ English ] = "App~lets" ;
         Text[ english_us ] = "Applets";
