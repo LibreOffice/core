@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 10:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,18 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 template< class S >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * ) SAL_THROW( () );
+
+/** Gets the meta type of IDL sequence.
+    THE GIVEN ELEMENT TYPE MUST BE THE SAME AS THE CPP_UNO TYPE OF THE TEMPLATE ARGUMENT!
+    This function has been introduced, because one cannot get the (templated) cppu type out
+    of C++ array types.  Array types have special getCppuArrayTypeN<>() functions.
+    <br>
+    @param rElementType element type of sequence
+    @return type of IDL sequence
+*/
+template< class S >
+inline const ::com::sun::star::uno::Type &
+SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType ) SAL_THROW( () );
 
 /** Gets the meta type of IDL <b>sequence< char ></b>.
     This function has been introduced due to ambiguities with unsigned short.

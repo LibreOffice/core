@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 10:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,21 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * ) SAL_THROW( 
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType(
             (::com::sun::star::uno::Sequence< S >::ElementType *)0 );
+        ::typelib_static_sequence_type_init(
+            & ::com::sun::star::uno::Sequence< S >::s_pType,
+            rElementType.getTypeLibType() );
+    }
+    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
+        & ::com::sun::star::uno::Sequence< S >::s_pType );
+}
+
+// generic sequence template for given element type (e.g. C++ arrays)
+template< class S >
+inline const ::com::sun::star::uno::Type &
+SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType ) SAL_THROW( () )
+{
+    if (! ::com::sun::star::uno::Sequence< S >::s_pType)
+    {
         ::typelib_static_sequence_type_init(
             & ::com::sun::star::uno::Sequence< S >::s_pType,
             rElementType.getTypeLibType() );
