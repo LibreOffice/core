@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:07:53 $
+ *  last change: $Author: pl $ $Date: 2002-02-28 17:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,8 +479,8 @@ ModalDialog RID_PADIALOG
     CancelButton RID_PA_BTN_CANCEL
     {
         DefButton = TRUE;
-        Pos = MAP_APPFONT( 200, 150 );
-        Size = MAP_APPFONT( 50, 12 );
+        Pos = MAP_APPFONT( 190, 150 );
+        Size = MAP_APPFONT( 60, 12 );
         Text = "Schlieﬂen";
         Text [ english ] = "Close";
         Text[ english_us ] = "Close";
@@ -535,7 +535,7 @@ ModalDialog RID_PADIALOG
     ListBox RID_PA_LB_DEV
     {
         Pos = MAP_APPFONT( 12, 15 );
-        Size = MAP_APPFONT( 176, 80 );
+        Size = MAP_APPFONT( 168, 80 );
         Border = TRUE;
         Sort = TRUE;
     };
@@ -669,8 +669,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_BTN_CONF
     {
-        Pos = MAP_APPFONT( 200, 15 );
-        Size = MAP_APPFONT( 50, 12 );
+        Pos = MAP_APPFONT( 190, 15 );
+        Size = MAP_APPFONT( 60, 12 );
         Text = "~Eigenschaften...";
         Text [english] = "~Properties...";
         Text[ english_us ] = "Properties...";
@@ -696,8 +696,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_BTN_RENAME
     {
-        Pos = MAP_APPFONT( 200, 32 );
-        Size = MAP_APPFONT( 50, 12 );
+        Pos = MAP_APPFONT( 190, 32 );
+        Size = MAP_APPFONT( 60, 12 );
         Text = "~Umbenennen...";
         Text [english] = "~Rename...";
         Text[ english_us ] = "R~ename...";
@@ -723,8 +723,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_BTN_STD
     {
-        Pos = MAP_APPFONT( 200, 49 );
-        Size = MAP_APPFONT( 50, 12 );
+        Pos = MAP_APPFONT( 190, 49 );
+        Size = MAP_APPFONT( 60, 12 );
         Text = "~Standard";
         Text [english] = "~Default";
         Text[ language_user1 ] = "EM30.3.01 this refers to the Default Printer";
@@ -751,8 +751,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_BTN_DEL
     {
-        Pos = MAP_APPFONT( 200, 66 );
-        Size = MAP_APPFONT( 50, 12 );
+        Pos = MAP_APPFONT( 190, 66 );
+        Size = MAP_APPFONT( 60, 12 );
         Text = "Ent~fernen...";
         Text [english] = "~Remove...";
         Text[ english_us ] = "Remo~ve...";
@@ -778,8 +778,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_TESTPAGE
     {
-        Pos = MAP_APPFONT( 200, 83 );
-        Size = MAP_APPFONT( 50, 12 );
+        Pos = MAP_APPFONT( 190, 83 );
+        Size = MAP_APPFONT( 60, 12 );
         Text = "~Testseite";
         Text [english] = "~Test page";
         Text[ english_us ] = "Test ~Page";
@@ -806,7 +806,7 @@ ModalDialog RID_PADIALOG
 
     PushButton RID_PA_BTN_FONTS
     {
-        Pos = MAP_APPFONT( 70, 150 );
+        Pos = MAP_APPFONT( 80, 150 );
         Size = MAP_APPFONT( 50, 12 );
         Text = "S~chriften...";
         Text [english] = "~Fonts...";
@@ -834,7 +834,7 @@ ModalDialog RID_PADIALOG
     PushButton RID_PA_BTN_ADD
     {
         Pos = MAP_APPFONT( 5, 150 );
-        Size = MAP_APPFONT( 60, 12 );
+        Size = MAP_APPFONT( 70, 12 );
         Text = "~Neuer Drucker...";
         Text [english] = "~Add printer...";
         Text[ english_us ] = "New Printer...";
