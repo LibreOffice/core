@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:39:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,30 +71,15 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(GUI)" != "MAC"
 CFLAGS+=-DDG_DLL
-.ELSE
-CFLAGS+=-D DG_DLL
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
-.IF "$(header)" == ""
-
-CXXFILES = \
-        insctrl.cxx		\
-        zoomctrl.cxx    \
-        pszctrl.cxx		\
-        selctrl.cxx		\
-        modctrl.cxx		\
-        $(PROJECTPCHSOURCE).cxx
-
-SRCFILES = \
+SRS1NAME=$(TARGET)
+SRC1FILES = \
         stbctrls.src
 
 SLOFILES=	\
@@ -103,8 +88,6 @@ SLOFILES=	\
         $(SLO)$/pszctrl.obj	\
         $(SLO)$/selctrl.obj	\
         $(SLO)$/modctrl.obj
-
-.ENDIF
 
 HXX1TARGET=stbctrls
 HXX1EXT=   hxx
