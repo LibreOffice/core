@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmfwk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:51:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include "rtl/bootstrap.hxx"
 #include "sal/types.h"
 #include "sal/config.h"
-#include "external/boost/scoped_array.hpp"
+#include "boost/scoped_array.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
