@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:06:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,14 @@ namespace sdr
         void ObjectContact::ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const
         {
             // nothing to do here in the default version
+        }
+
+        // #i42815#
+        // Get info if given Rectangle is visible in this view
+        sal_Bool ObjectContact::IsAreaVisible(const Rectangle& rRectangle) const
+        {
+            // always visible in default version
+            return sal_True;
         }
 
         // Take some action when new objects are inserted. This is triggered from
