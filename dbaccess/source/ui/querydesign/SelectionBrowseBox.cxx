@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:49:11 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,13 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                 }
 
                 ::connectivity::OSQLParseNode* pColumnRef = pChild->getChild(0);
+                if (
+                        pColumnRef->count() == 3 &&
+                        SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
+                        SQL_ISPUNCTUATION(pColumnRef->getChild(2),")")
+                    )
+                    pColumnRef = pColumnRef->getChild(1);
+
                 if ( SQL_ISRULE(pColumnRef,column_ref) ) // we found a valid column name or more column names
                 {
                     // look if we can find the corresponding table
@@ -803,7 +810,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                     // and the function is different to count
                     clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
                 }
-                else // no column, but may be a function or a calculation
+                else
                 {
                     // first check if we have a aggregate function and only a function
                     if ( SQL_ISRULE(pColumnRef,general_set_fct) )
@@ -815,18 +822,24 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                             aSelEntry->SetFunction(sLocalizedFunctionName);
                             sal_uInt32 nFunCount = pColumnRef->count() - 1;
                             sal_Int32 nFunctionType = FKT_AGGREGATE;
+                            sal_Bool bQuote = sal_False;
                             // may be there exists only one parameter which is a column, fill all information into our fields
                             if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
                                 bError = fillColumnRef(pColumnRef->getChild(3),xMetaData,aSelEntry,_bListAction);
                             else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
                                 bError = fillColumnRef(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),::rtl::OUString(),xMetaData,aSelEntry,_bListAction);
                             else
+                            {
                                 nFunctionType |= FKT_NUMERIC;
+                                bQuote = sal_True;
+                                aSelEntry->SetDataType(DataType::DOUBLE);
+                                aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
+                            }
 
                             // now parse the parameters
                             ::rtl::OUString sParameters;
                             for(sal_uInt32 i = 2; i < nFunCount; ++i) // we only want to parse the parameters of the function
-                                pColumnRef->getChild(i)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,sal_False);
+                                pColumnRef->getChild(i)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,bQuote);
 
                             aSelEntry->SetFunctionType(nFunctionType);
                             aSelEntry->SetField(sParameters);
@@ -882,7 +895,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         ::rtl::OUString sOldAlias = aSelEntry->GetAlias();
                         aSelEntry->SetAlias(::rtl::OUString());
 
-                        sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC;
+                        sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
                         aSelEntry->SetFunctionType(nNewFunctionType);
 
 
@@ -902,13 +915,14 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                                                     xMetaData,
                                                     &pController->getParser()->getContext(),
                                                     sal_True,
-                                                    sal_False);
+                                                    sal_True);
                         // get the type out of the funtion name
                         sal_Int32 nDataType = DataType::DOUBLE;
                         aSelEntry->SetDataType(nDataType);
                         aSelEntry->SetField(aColumns);
                         aSelEntry->SetFieldType(TAB_NORMAL_FIELD);
                         aSelEntry->SetTabWindow(NULL);
+                        aSelEntry->SetAlias(::rtl::OUString());
                         aSelEntry->SetFieldAlias(sColumnAlias);
                         aSelEntry->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
 
