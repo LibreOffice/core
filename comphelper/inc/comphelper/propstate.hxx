@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propstate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:00:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,18 @@
 #ifndef _CPPUHELPER_PROPTYPEHLP_HXX
 #include <cppuhelper/proptypehlp.hxx>
 #endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
 #endif
@@ -89,34 +101,56 @@ namespace comphelper
 {
 //.........................................................................
 
-//==================================================================
-//= OPropertyStateHelper
-//==================================================================
-/// helper class for implementing property states
-class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper
-                            ,public ::com::sun::star::beans::XPropertyState
-{
-public:
-    OPropertyStateHelper(::cppu::OBroadcastHelper& rBHelper):OPropertySetHelper(rBHelper) { }
+    //==================================================================
+    //= OPropertyStateHelper
+    //==================================================================
+    /// helper class for implementing property states
+    class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper
+                                                    ,public ::com::sun::star::beans::XPropertyState
+    {
+    public:
+        OPropertyStateHelper(::cppu::OBroadcastHelper& rBHelper):OPropertySetHelper(rBHelper) { }
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& aType) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& aType) throw(::com::sun::star::uno::RuntimeException);
 
-// XPropertyState
-    virtual ::com::sun::star::beans::PropertyState SAL_CALL                     getPropertyState(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL   getPropertyStates(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL                                           setPropertyToDefault(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL                                 getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    // XPropertyState
+        virtual ::com::sun::star::beans::PropertyState SAL_CALL
+            getPropertyState(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL
+            getPropertyStates(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL
+            setPropertyToDefault(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL
+            getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-// access via handle
-    virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
-    virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+    // access via handle
+        virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
+        virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
+        virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
-protected:
-    void firePropertyChange(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aNewValue, const ::com::sun::star::uno::Any& aOldValue);
+    protected:
+        void firePropertyChange(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aNewValue, const ::com::sun::star::uno::Any& aOldValue);
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-};
+    protected:
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    };
+
+    //==================================================================
+    //= OPropertyStateHelper
+    //==================================================================
+    class COMPHELPER_DLLPUBLIC OStatefulPropertySet  :public ::cppu::OWeakObject
+                                ,public ::com::sun::star::lang::XTypeProvider
+                                ,public OMutexAndBroadcastHelper    // order matters: before OPropertyStateHelper/OPropertySetHelper
+                                ,public OPropertyStateHelper
+    {
+    protected:
+        OStatefulPropertySet();
+        virtual ~OStatefulPropertySet();
+
+    protected:
+        DECLARE_XINTERFACE();
+        DECLARE_XTYPEPROVIDER();
+    };
 
 //.........................................................................
 }   // namespace comphelper
