@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:04:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ ModalDialog GRID_DIALOG
         Text[ italian ] = "Imposta";
         Text[ danish ] = "Definer";
         Text[ swedish ] = "Definiera";
-        Text[ polish ] = "Osad�";
-        Text[ portuguese_brazilian ] = "Set";
+        Text[ polish ] = "Ustaw";
+        Text[ portuguese_brazilian ] = "Definir";
         Text[ japanese ] = "設定";
         Text[ korean ] = "설정";
         Text[ chinese_simplified ] = "设定";
@@ -114,6 +114,9 @@ ModalDialog GRID_DIALOG
         Text[ catalan ] = "Defineix";
         Text[ finnish ] = "M��rit�";
         Text[ thai ] = "ตั้งค่า";
+        Text[ czech ] = "Nastavit";
+        Text[ hebrew ] = "Setzen";
+        Text[ hindi ] = "सेट्ट करो";
     };
     Bitmap GRID_DIALOG_HANDLE_BMP
     {
@@ -133,8 +136,8 @@ ModalDialog GRID_DIALOG
         Text[ italian ] = "Lineare crescente";
         Text[ danish ] = "Line�r stigende";
         Text[ swedish ] = "Linj�rt stigande";
-        Text[ polish ] = "Wzrastaj�ce linearnie";
-        Text[ portuguese_brazilian ] = "Linear ascending";
+        Text[ polish ] = "Rosn�ce liniowo";
+        Text[ portuguese_brazilian ] = "Linear crescente";
         Text[ japanese ] = "まっすぐに上昇";
         Text[ korean ] = "오름차순 선형";
         Text[ chinese_simplified ] = "线性上升";
@@ -144,6 +147,9 @@ ModalDialog GRID_DIALOG
         Text[ catalan ] = "Ascensi� lineal";
         Text[ finnish ] = "Lineaarinen nouseva";
         Text[ thai ] = "จากน้อยไปมากแบบเส้นตรง";
+        Text[ czech ] = "Lineárně stoupající";
+        Text[ hebrew ] = "Linear steigend";
+        Text[ hindi ] = "संकुचित आरोहण क्रम";
     };
     String RESET_TYPE_LINEAR_DESCENDING
     {
@@ -159,8 +165,8 @@ ModalDialog GRID_DIALOG
         Text[ italian ] = "Lineare descrescente";
         Text[ danish ] = "Line�r faldende";
         Text[ swedish ] = "Linj�rt fallande";
-        Text[ polish ] = "Spadaj�ce linearnie";
-        Text[ portuguese_brazilian ] = "Linear descending";
+        Text[ polish ] = "Malej�ce liniowo";
+        Text[ portuguese_brazilian ] = "Linear decrescente";
         Text[ japanese ] = "まっすぐに下降";
         Text[ korean ] = "내림차순 선형";
         Text[ chinese_simplified ] = "线性下降";
@@ -170,6 +176,9 @@ ModalDialog GRID_DIALOG
         Text[ catalan ] = "Descens lineal";
         Text[ finnish ] = "Lineaarinen laskeva";
         Text[ thai ] = "จากมากไปน้อยแบบเส้นตรง";
+        Text[ czech ] = "Lineárně klesající";
+        Text[ hebrew ] = "Linear fallend";
+        Text[ hindi ] = "संकुचित अवरोहण";
     };
     String RESET_TYPE_RESET
     {
@@ -186,7 +195,7 @@ ModalDialog GRID_DIALOG
         Text[ danish ] = "Originalv�rdier";
         Text[ swedish ] = "Originalv�rden";
         Text[ polish ] = "Warto�ci oryginalne";
-        Text[ portuguese_brazilian ] = "Original values";
+        Text[ portuguese_brazilian ] = "Valores originais";
         Text[ japanese ] = "オリジナル値";
         Text[ korean ] = "원래값";
         Text[ chinese_simplified ] = "原始数值";
@@ -196,6 +205,9 @@ ModalDialog GRID_DIALOG
         Text[ catalan ] = "Valors originals";
         Text[ finnish ] = "Alkuper�iset arvot";
         Text[ thai ] = "ค่าเดิม";
+        Text[ czech ] = "Původní hodnoty";
+        Text[ hebrew ] = "Originalwerte";
+        Text[ hindi ] = "यथार्थ मूल्य";
     };
     String RESET_TYPE_EXPONENTIAL
     {
@@ -212,7 +224,7 @@ ModalDialog GRID_DIALOG
         Text[ danish ] = "Eksponentiel v�kst";
         Text[ swedish ] = "Exponentiellt v�xande";
         Text[ polish ] = "Rosn�ce wyk�adniczo";
-        Text[ portuguese_brazilian ] = "Exponential raise";
+        Text[ portuguese_brazilian ] = "Exponencial crescente";
         Text[ japanese ] = "急激に増やす";
         Text[ korean ] = "오름 지수";
         Text[ chinese_simplified ] = "指数型增长";
@@ -222,8 +234,21 @@ ModalDialog GRID_DIALOG
         Text[ catalan ] = "Increment exponencial";
         Text[ finnish ] = "Eksponentiaalinen lis�ys";
         Text[ thai ] = "เพิ่มขึ้นแบบยกกำลัง";
+        Text[ czech ] = "Exponenciálně rostoucí";
+        Text[ hebrew ] = "Exponentiell wachsend";
+        Text[ hindi ] = "ऐक्स्पोनेश्यल प्रकार से बढना";
     };
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
