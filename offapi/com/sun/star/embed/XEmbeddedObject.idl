@@ -1,0 +1,252 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XEmbeddedObject.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:25:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XEmbeddedObject_idl__
+#define __com_sun_star_embed_XEmbeddedObject_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XEmbeddedClient_idl__
+#include <com/sun/star/embed/XEmbeddedClient.idl>
+#endif
+
+#ifndef __com_sun_star_datatransfer_XTransferable_idl__
+#include <com/sun/star/datatransfer/XTransferable.idl>
+#endif
+
+#ifndef __com_sun_star_embed_UnreachableStateException_idl__
+#include <com/sun/star/embed/UnreachableStateException.idl>
+#endif
+
+#ifndef __com_sun_star_embed_WrongStateException_idl__
+#include <com/sun/star/embed/WrongStateException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//=============================================================================
+/** represents common functionality for embedded objects
+ */
+interface XEmbeddedObject: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+    /** Changes the state of the object to the requested one.
+
+        @param nNewState
+            specifies the new state, can take values from
+            <type scope="com::sun::star::embed">EmbedStates</type> constant set
+
+        @throws com::sun::star::embed::UnreachableStateException
+            the specified state can not be reached
+
+        @throws com::sun::star::embed::WrongStateException
+            in case object is in invalid state
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void changeState( [in] long nNewState )
+        raises( ::com::sun::star::embed::UnreachableStateException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Return supported states for the object
+
+        @returns
+            the sequence of states the object can be set to
+
+        @throws com::sun::star::embed::WrongStateException
+            in case object is in invalid state
+     */
+    sequence< long > getReachableStates()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Return the current state of the object
+
+        @returns
+            the current state of the object
+
+        @throws com::sun::star::embed::WrongStateException
+            in case object is in invalid state
+     */
+    long getCurrentState()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Let object perform an action referenced by nVerbID.
+
+        @param nVerbID
+            specifies an action to perform, can take values from <type>EmbedVerbs</type>
+
+        @thrown ::com::sun::star::lang::IllegalArgumentException
+            the verb is not supported
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state to call the function
+
+        @throws com::sun::star::embed::UnreachableStateException
+            the state, required by the verb, can not be reached
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void doVerb( [in] long nVerbID )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::embed::UnreachableStateException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Return supported verbs for the object
+
+        @returns
+            the sequence of verbs the object supports
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state to call the function
+     */
+    sequence< long > getSupportedVerbs()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Sets a connection to the container client
+
+        @param xClient
+            provides a reference to a client implementation
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    void setClientSite( [in] XEmbeddedClient xClient )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Provides access to the internal link to the container client
+
+        @returns
+            a reference to related container client if any is set
+
+        @throws com::sun::star::embed::WrongStateException
+     */
+    XEmbeddedClient getClientSite()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Updates object's representations
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state to call the function
+
+        @throws com::sun::star::uno::Exception
+            in case problems detected
+     */
+    void update()
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Specifies how often the object's representation should be updated
+
+        @param nMode
+            the new update mode
+            can take values from EmbeddedUpdateModes
+
+        @throws ::com::sun::star::embed::WrongStateException
+     */
+    void setUpdateMode( [in] long nMode )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Retrieves the status of the object.
+
+        @param nAspect
+            the aspect specifying the form of object representation
+
+        @return
+            the value specifying the status of the object for specified aspect
+            can take values from EmbedMisc constant set
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    hyper getStatus( [in] hyper nAspect )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
