@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-31 19:59:11 $
+ *  last change: $Author: ssa $ $Date: 2001-11-01 09:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,6 +1294,10 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
         }
         SetWindowPlacement( maFrameData.mhWnd, &aPlacement );
     }
+
+    if( !(nPosSize & SWP_NOMOVE) )
+        maFrameData.mbDefPos = FALSE; // window was positioned
+
 }
 
 // -----------------------------------------------------------------------
