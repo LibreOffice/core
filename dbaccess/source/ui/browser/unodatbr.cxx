@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:29:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3735,7 +3735,8 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" )));
+            xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/browserobjectbar" )));
+            loadSubToolbar(xLayoutManager);
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
         }
