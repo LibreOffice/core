@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-12 17:27:25 $
+ *  last change: $Author: dvo $ $Date: 2001-09-13 11:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ SwXMLImport::SwXMLImport(
 }
 #endif
 
-SwXMLImport::~SwXMLImport()
+SwXMLImport::~SwXMLImport() throw ()
 {
     delete pDocElemTokenMap;
     delete pTableElemTokenMap;

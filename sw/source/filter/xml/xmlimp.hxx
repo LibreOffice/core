@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-12 17:27:25 $
+ *  last change: $Author: dvo $ $Date: 2001-09-13 11:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ public:
                    SvStorage *pPkg );
 #endif
 
-    ~SwXMLImport();
+    ~SwXMLImport() throw();
 
     void         setTextInsertMode(
                      const ::com::sun::star::uno::Reference<
