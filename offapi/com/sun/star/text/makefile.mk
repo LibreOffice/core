@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: os $ $Date: 2000-11-17 09:28:41 $
+#   last change: $Author: cp $ $Date: 2000-11-20 10:13:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,7 +177,6 @@ IDLFILES=\
     XAutoTextGroup.idl\
     XBookmarkInsertTool.idl\
     XBookmarksSupplier.idl\
-    XBreakIterator.idl\
     XChapterNumberingSupplier.idl\
     XDefaultNumberingProvider.idl\
     XDependentTextField.idl\
