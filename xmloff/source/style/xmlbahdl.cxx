@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:26:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,55 @@ sal_Bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 
     return bRet;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLDoublePercentPropHdl
+//
+
+sal_Bool XMLDoublePercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    double fValue = 1.0;
+
+    if( rStrImpValue.indexOf( (sal_Unicode)'%' ) == -1 )
+    {
+        fValue = rStrImpValue.toDouble();
+    }
+    else
+    {
+        sal_Int32 nValue = 0;
+        bRet = rUnitConverter.convertPercent( nValue, rStrImpValue );
+        fValue = ((double)nValue) / 100.0;
+    }
+    rValue <<= fValue;
+
+    return bRet;
+}
+
+sal_Bool XMLDoublePercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    double fValue;
+
+    if( rValue >>= fValue )
+    {
+        fValue *= 100.0;
+        if( fValue > 0 ) fValue += 0.5; else    fValue -= 0.5;
+
+        sal_Int32 nValue = (sal_Int32)fValue;
+
+        OUStringBuffer aOut;
+         rUnitConverter.convertPercent( aOut, nValue );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
