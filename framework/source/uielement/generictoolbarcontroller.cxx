@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:54:10 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ static sal_Bool isEnumCommand( const rtl::OUString& rCommand )
     INetURLObject aURL( rCommand );
 
     if (( aURL.GetProtocol() == INET_PROT_UNO ) &&
-        ( aURL.GetURLPath().Search( '.' ) != STRING_NOTFOUND ))
+        ( aURL.GetURLPath().indexOf( '.' ) != -1))
         return sal_True;
 
     return sal_False;
