@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sw_SwAccessibleTableCellView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:03:12 $ 
+'*  last change:$Date: 2003-05-27 12:20:04 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -93,7 +93,7 @@ On Error Goto ErrHndl
 
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot,105)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TABLE_CELL)
     Out.Log("Implementation Name: "+oObj.getImplementationName())
     multiSelection = true
 
