@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:14:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,13 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     else
         mpVirDev = NULL;
     if ( !mpVirDev )
-        GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
+    {
+        // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
+        throw ::com::sun::star::uno::RuntimeException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not create system bitmap!" ) ),
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+        //GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
+    }
 
     mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
     mnOutWidth      = nDX;
