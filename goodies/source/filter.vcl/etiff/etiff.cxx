@@ -2,9 +2,9 @@
  *
  *  $RCSfile: etiff.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 13:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/config.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
+#include <svtools/FilterConfigItem.hxx>
 
 #define NewSubfileType              254
 #define ImageWidth                  256
@@ -153,8 +153,8 @@ public:
                         ~TIFFWriter();
 
     BOOL                WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
-                                  PFilterCallback pCallback, void* pCallerdata,
-                                  Config* pOptionsConfig );
+                                    PFilterCallback pCallback, void* pCallerdata,
+                                        FilterConfigItem* pConfigItem );
 };
 
 // ------------------------------------------------------------------------
@@ -182,7 +182,7 @@ TIFFWriter::~TIFFWriter()
 
 BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF,
                       PFilterCallback pCallback, void* pCallerdata,
-                          Config* pOptionsConfig )
+                          FilterConfigItem* pConfigItem )
 {
     ULONG*  pDummy = new ULONG; delete pDummy; // damit unter OS/2
                                                // das richtige (Tools-)new
@@ -626,9 +626,9 @@ void TIFFWriter::EndCompression()
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                PFilterCallback pCallback, void* pCallerData,
-                                               Config* pOptionsConfig, BOOL )
+                                               FilterConfigItem* pConfigItem, BOOL )
 {
-    return TIFFWriter().WriteTIFF( rGraphic, rStream, pCallback, pCallerData, pOptionsConfig );
+    return TIFFWriter().WriteTIFF( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
 
