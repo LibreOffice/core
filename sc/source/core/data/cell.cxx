@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:59:52 $
+ *  last change: $Author: nn $ $Date: 2001-12-12 21:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,6 +1145,11 @@ void ScFormulaCell::CompileXML()
         SetTextWidth( TEXTWIDTH_DIRTY );
         SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
+
+    //  Same as in Load: after loading, it must be known if ocMacro is in any formula
+    //  (for macro warning, CompileXML is called at the end of loading XML file)
+    if ( !pDocument->GetHasMacroFunc() && pCode->HasOpCodeRPN( ocMacro ) )
+        pDocument->SetHasMacroFunc( TRUE );
 }
 
 
