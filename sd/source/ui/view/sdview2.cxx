@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:41:39 $
+ *  last change: $Author: dl $ $Date: 2001-04-18 13:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,9 +625,9 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
                             bIsPresTarget = pPage->GetPresObjList()->GetPos( pPickObj ) != LIST_ENTRY_NOTFOUND;
                     }
 
-                    if( bHasPickObj && ( !pPickObj->ISA( SdrGrafObj ) || bGraphic || bMtf || bBitmap ||
-                          ( bXFillExchange && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) ) ||
-                          ( ( nAction == DND_ACTION_MOVE ) && !bIsPresTarget ) ) )
+                    if( bHasPickObj && !bIsPresTarget &&
+                        ( !pPickObj->ISA( SdrGrafObj ) || bGraphic || bMtf || bBitmap ||
+                          ( bXFillExchange && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) ) ) )
                     {
 
                         if( !pDropMarker )
