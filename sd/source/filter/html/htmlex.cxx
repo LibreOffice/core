@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:57:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 11:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,8 +587,8 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
             String aTmp( aStr );
             if(aTmp.Len())
             {
-                USHORT nPos = aTmp.Search( '%' );
-                if(nPos != -1)
+                xub_StrLen nPos = aTmp.Search( '%' );
+                if(nPos != STRING_NOTFOUND)
                     aTmp.Erase(nPos,1);
                 m_nCompression = (INT16)aTmp.ToInt32();
             }
