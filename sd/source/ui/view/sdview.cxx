@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:19:42 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,6 +480,10 @@ SdrEndTextEditKind SdView::EndTextEdit(BOOL bDontDeleteReally)
         {
             SdrTextObj* pTextObj = ( (FuText*) pFunc)->GetTextObj();
             BOOL bDefaultTextRestored = ( (FuText*) pFunc)->RestoreDefaultText();
+            // Tell the text function that the text object is not
+            // edited anymore and must not be accessed.
+            static_cast<FuText*>(pFunc)->TextEditingHasEnded(pTextObj);
+
             eKind = FmFormView::EndTextEdit(bDontDeleteReally);
 
             if( bDefaultTextRestored )
