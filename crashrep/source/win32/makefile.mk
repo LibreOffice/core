@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2004-07-30 16:24:34 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:17:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ STDLIB1=\
     comdlg32.lib\
     advapi32.lib\
     wsock32.lib\
+    shell32.lib\
     dbghelp.lib
 
 APP1NOSVRES=$(RES)$/$(TARGET).res
