@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 13:40:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include <svx/acorrcfg.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
