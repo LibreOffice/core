@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:23 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 class SfxObjectFactory;
 class SfxFilterMatcher;
 class LoadEnvironment_Impl;
+class SfxMedium;
+
 namespace com
 {
     namespace sun
@@ -135,25 +137,14 @@ namespace com
 #define SEQUENCE ::com::sun::star::uno::Sequence
 #define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
 
-class SfxFilterDetect_Impl : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XExtendedFilterDetection,
-        ::com::sun::star::lang::XInitialization, ::com::sun::star::lang::XServiceInfo >
-{
-    String                  aFilterName;
-public:
-    SFX_DECL_XSERVICEINFO
-                            SfxFilterDetect_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
-    virtual ::rtl::OUString SAL_CALL detect( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-                throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-};
-
-class SfxFrameLoader : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XFrameLoader, ::com::sun::star::lang::XInitialization  >
+class SfxFrameLoader : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XFrameLoader, ::com::sun::star::lang::XInitialization, ::com::sun::star::frame::XExtendedFilterDetection  >
 {
     REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
     REFERENCE < ::com::sun::star::frame::XLoadEventListener > xListener;
     LoadEnvironment_Impl*   pLoader;
     SfxFilterMatcher*       pMatcher;
     String                  aFilterName;
+    SfxMedium*              pMedium;
 
     DECL_LINK(              LoadDone_Impl, void* );
 
@@ -176,6 +167,9 @@ public:
     // XInitialization
     virtual void SAL_CALL   initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
                 throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XExtendedFilterDetect
+    virtual ::rtl::OUString SAL_CALL detect( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
     virtual SfxObjectFactory&   GetFactory()=0;
