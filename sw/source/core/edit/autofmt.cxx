@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:03:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,8 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
+
+#include <svx/acorrcfg.hxx>
 
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
@@ -1994,7 +1993,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
 
     SwAutoCorrDoc aACorrDoc( *pEditShell, aDelPam );
-    SvxAutoCorrect* pATst = OFF_APP()->GetAutoCorrect();
+    SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
     SwTxtFrmInfo aFInfo( 0 );
 
