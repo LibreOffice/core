@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 14:21:10 $
+ *  last change: $Author: er $ $Date: 2001-03-14 14:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 
 #include <svtools/undo.hxx>
 #include <unotools/textsearch.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/collatorwrapper.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 
@@ -545,9 +547,9 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
         aString+=aUser;
         aString+='\t';
 
-        aString+=aInter.GetDate(aDateTime);
+        aString+=ScGlobal::pLocaleData->getDate(aDateTime);
         aString+=' ';
-        aString+=aInter.GetTime(aDateTime);
+        aString+=ScGlobal::pLocaleData->getTime(aDateTime);
         aString+='\t';
         bIsGenerated=FALSE;
     }
@@ -724,9 +726,9 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
         {
             aString+=aUser;
             aString+='\t';
-            aString+=aInter.GetDate(aDateTime);
+            aString+=ScGlobal::pLocaleData->getDate(aDateTime);
             aString+=' ';
-            aString+=aInter.GetTime(aDateTime);
+            aString+=ScGlobal::pLocaleData->getTime(aDateTime);
             aString+='\t';
         }
         else
@@ -838,9 +840,9 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
         aString+=aUser;
         aString+='\t';
 
-        aString+=aInter.GetDate(aDateTime);
+        aString+=ScGlobal::pLocaleData->getDate(aDateTime);
         aString+=' ';
-        aString+=aInter.GetTime(aDateTime);
+        aString+=ScGlobal::pLocaleData->getTime(aDateTime);
         aString+='\t';
     }
     else
@@ -2268,9 +2270,8 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
             if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
                 nLeftKind == SV_ITEM_ID_LBOXSTRING )
             {
-                const International& rInter = GetpApp()->GetAppInternational();
-
-                eCompare=rInter.Compare( ((SvLBoxString*)pLeftItem)->GetText(),
+                eCompare= (StringCompare) ScGlobal::pCaseCollator->compareString(
+                                        ((SvLBoxString*)pLeftItem)->GetText(),
                                         ((SvLBoxString*)pRightItem)->GetText());
 
                 if(eCompare==COMPARE_EQUAL) eCompare=COMPARE_LESS;
