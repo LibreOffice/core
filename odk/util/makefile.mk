@@ -14,9 +14,7 @@ zipit .SETDIR=$(DESTDIR)$/.. .PHONY:
         +zip -ur $(ODKNAME).zip $(ODKNAME)
     .ELIF "$(GUI)"=="UNX"
 # 		tar does not properly support update
-        +tar cvf $(ODKNAME).tar $(ODKNAME)
-        +-$(RM) $(ODKNAME).tar.gz
-        gzip $(ODKNAME).tar
+        +tar cf - $(ODKNAME) | gzip - > $(ODKNAME).tar.gz
     .ENDIF
 
 

@@ -1,7 +1,8 @@
 ODKNAME=odk$(UPD)
 
 DESTDIR=$(OUT)$/bin$/$(ODKNAME)
-DESTDIRIDL=$(DESTDIR)$/idl$/
+DESTDIRIDL=$(DESTDIR)$/idl
+DESTDIRSETTINGS=$(DESTDIR)$/settings
 DESTDIREXAMPLES=$(DESTDIR)$/examples$/cpp
 
 UDKZIPPATH=$(SOLARBINDIR)
@@ -14,21 +15,30 @@ IDLOUT=$(SOLARIDLDIR)
 MY_COPY=$(GNUCOPY) -u
 MY_COPY_RECURSIVE=$(GNUCOPY) -urf
 
-
 .IF "$(GUI)"=="WNT"
 #--------------------
 # WNT ONLY
 #--------------------
-DESTDIRBIN=$(DESTDIR)$/bin$/windows
 MY_DELETE_RECURSIVE=del /sxyf
 MY_DIRCMP=dircmp -r
-REMOVE_READONLY=attrib -r
+MY_TEXTCOPY=$(GNUCOPY)
 .ELSE
 #--------------------
 # UNX ONLY
 #--------------------
-DESTDIRBIN=$(DESTDIR)$/bin$/solsparc
 MY_DELETE_RECURSIVE=rm -rf
 MY_DIRCMP=dircmp 
-REMOVE_READONLY=chmod +w
+MY_TEXTCOPY= tr -d "\015"
+MY_TEXTCOPY_SOURCEPRE=<
+MY_TEXTCOPY_TARGETPRE=>
+.ENDIF
+
+.IF "$(OS)$(CPU)"=="SOLARISS"
+DESTDIRBIN=$(DESTDIR)$/bin$/solsparc
+.ELIF "$(OS)$(CPU)"=="SOLARISI"
+DESTDIRBIN=$(DESTDIR)$/bin$/solia
+.ELIF "$(OS)"=="LINUX"
+DESTDIRBIN=$(DESTDIR)$/bin$/linux
+.ELIF "$(OS)"=="WNT"
+DESTDIRBIN=$(DESTDIR)$/bin$/windows
 .ENDIF
