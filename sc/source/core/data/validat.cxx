@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 17:28:31 $
+ *  last change: $Author: nn $ $Date: 2001-01-16 17:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,9 @@ void ScValidationData::Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) con
 
 BOOL ScValidationData::IsEmpty() const
 {
-    return eDataMode == SC_VALID_ANY && !bShowInput && !bShowInput;
+    String aEmpty;
+    ScValidationData aDefault( SC_VALID_ANY, SC_COND_EQUAL, aEmpty, aEmpty, GetDocument(), ScAddress() );
+    return EqualEntries( aDefault );
 }
 
 BOOL ScValidationData::EqualEntries( const ScValidationData& r ) const
