@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdPageLinkTargets.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:28 $
+ *  last change:$Date: 2003-05-27 13:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -99,7 +100,8 @@ public class SdPageLinkTargets extends TestCase {
     */
     protected void initialize(TestParameters Param, PrintWriter log) {
        // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a draw document" );
@@ -142,7 +144,8 @@ public class SdPageLinkTargets extends TestCase {
             UnoRuntime.queryInterface(XLinkTargetSupplier.class, the_page);
         XInterface oObj = oLTS.getLinks();
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)Param.getMSF());
         log.println( "inserting some Shapes" );
         XShapes oShapes = (XShapes)
             UnoRuntime.queryInterface(XShapes.class,the_page);
