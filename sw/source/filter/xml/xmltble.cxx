@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 15:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                     aAny = xCellPropertySet->getPropertyValue(sIsProtected);
                     if (*(sal_Bool*)aAny.getValue())
                     {
-                        AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_protect,
+                        AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_protected,
                                            sXML_true );
                     }
                 }

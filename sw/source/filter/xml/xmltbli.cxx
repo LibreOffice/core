@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 15:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,8 +523,11 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                     bHasValue = sal_True;
                 }
             }
-            else if (aLocalName.equalsAsciiL(sXML_protect,
-                                             sizeof(sXML_protect)-1))
+            else if (aLocalName.equalsAsciiL(sXML_protected,
+                                             sizeof(sXML_protected)-1) ||
+                     // for backwards compatibility with SRC629 (and before)
+                     aLocalName.equalsAsciiL(sXML_protect,
+                                             sizeof(sXML_protect)-1) )
             {
                 sal_Bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, rValue))
