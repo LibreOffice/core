@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:07 $
+ *  last change: $Author: aw $ $Date: 2001-02-07 13:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3281,7 +3281,6 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
             aFavoriteItemSet.ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
 
             // set ItemSet
-//          aCtlPreview.Set3DAttributes(aFavoriteItemSet);
             BOOL bOldUpdate(bUpdate);
             bUpdate = FALSE;
 
@@ -3290,6 +3289,10 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
                 SfxItemSet aNewItemSet(*mpRemember2DAttributes);
                 SfxWhichIter aIter(aFavoriteItemSet);
                 sal_uInt16 nWhich(aIter.FirstWhich());
+
+                // #83024# remember original distance and focus
+                sal_uInt32 nDVal = ((const Svx3DDistanceItem&)aNewItemSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+                sal_uInt32 nFVal = ((const Svx3DFocalLengthItem&)aNewItemSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 
                 while(nWhich)
                 {
@@ -3304,6 +3307,10 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
                     nWhich = aIter.NextWhich();
                 }
 
+                // #83024# restore original distance and focus
+                aNewItemSet.Put(Svx3DDistanceItem(nDVal));
+                aNewItemSet.Put(Svx3DFocalLengthItem(nFVal));
+
                 Update(aNewItemSet);
             }
             else
@@ -3312,39 +3319,6 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
             }
 
             bUpdate = bOldUpdate;
-
-
-//          SfxItemSet* pSet;
-//          if( aBtnOnly3D.IsChecked())
-//          {
-//              // Normale (nicht-3D-) Attribute an der View
-//              pSet = new SfxItemSet(
-//                  pModel->GetItemPool(),
-//                  SDRATTR_SHADOW,     SDRATTR_SHADOW,
-//                  SDRATTR_3D_FIRST,   SDRATTR_3D_LAST,
-//                  0, 0);
-//          }
-//          else
-//          {
-//              // Alle Attribute an der View
-//              pSet = new SfxItemSet(pModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
-//          }
-//
-//          // Eingeschraenktes Set produzieren und zuweisen
-//          pSet->Put( a3DView.Get3DAttributes(), FALSE );
-//
-//          // #61783# Remove distance and focus from prototypes
-//          pSet->ClearItem(SDRATTR_3DSCENE_DISTANCE);
-//          pSet->ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
-//
-//          aCtlPreview.Set3DAttributes( *pSet );
-//
-//          BOOL bOldUpdate = bUpdate;
-//          bUpdate = FALSE;
-//          Update( *pSet );
-//          bUpdate = bOldUpdate;
-//
-//          delete pSet;
         }
     }
     return( 0L );
