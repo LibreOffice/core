@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
+ *  last change: $Author: thb $ $Date: 2002-06-06 14:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,9 @@ namespace accessibility
         // checks all children for visibility, throws away invisible ones
         void UpdateVisibleChildren();
 
+        // check all children for changes in positíon and size
+        void UpdateVisibleData();
+
     private:
 
         // syntactic sugar for FireEvent
@@ -275,8 +278,6 @@ namespace accessibility
 
         // are we in edit mode?
         sal_Bool IsActive() const throw (uno::RuntimeException);
-
-        void UpdateVisibleData();
 
         // calls SetSelection on the forwarder and updates maLastSelection
         // cache. Caution: calls StateChangeEvent and sets object into
@@ -333,7 +334,7 @@ namespace accessibility
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl( const uno::Reference< XAccessible >& rInterface ) :
         maOffset(0,0),
         mxFrontEnd( rInterface ),
-        maLastSelection( 0,0,0,0 ),
+        maLastSelection( EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND ),
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
         mnStartIndex( 0 ),
@@ -551,27 +552,30 @@ namespace accessibility
         {
             // notify all affected paragraphs (TODO: may be suboptimal,
             // since some paragraphs might stay selected)
+            if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
+            {
 #ifdef NOTIFY_SELECTIONS
-            UnSetChildrenState( maLastSelection.nStartPara,
-                                maLastSelection.nEndPara+1,
-                                AccessibleStateType::SELECTED);
-            maParaManager.FireEvent( maLastSelection.nStartPara,
-                                     maLastSelection.nEndPara+1,
-                                     AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
+                UnSetChildrenState( maLastSelection.nStartPara,
+                                    maLastSelection.nEndPara+1,
+                                    AccessibleStateType::SELECTED);
+                maParaManager.FireEvent( maLastSelection.nStartPara,
+                                         maLastSelection.nEndPara+1,
+                                         AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
 #endif
 
-            // Did the caret move from one paragraph to another?
-            if( maLastSelection.nEndPara != rSelection.nEndPara )
-            {
-                maParaManager.FireEvent( maLastSelection.nEndPara,
-                                         maLastSelection.nEndPara+1,
-                                         AccessibleEventId::ACCESSIBLE_CARET_EVENT,
-                                         uno::makeAny(static_cast<sal_Int32>(-1)),
-                                         uno::makeAny(maLastSelection.nEndPos) );
+                // Did the caret move from one paragraph to another?
+                if( maLastSelection.nEndPara != rSelection.nEndPara )
+                {
+                    maParaManager.FireEvent( maLastSelection.nEndPara,
+                                             maLastSelection.nEndPara+1,
+                                             AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                             uno::makeAny(static_cast<sal_Int32>(-1)),
+                                             uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
 
-                UnSetChildrenState( maLastSelection.nEndPara,
-                                    maLastSelection.nEndPara+1,
-                                    AccessibleStateType::FOCUSED );
+                    UnSetChildrenState( maLastSelection.nEndPara,
+                                        maLastSelection.nEndPara+1,
+                                        AccessibleStateType::FOCUSED );
+                }
             }
 
 #ifdef NOTIFY_SELECTIONS
@@ -583,17 +587,28 @@ namespace accessibility
                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
 #endif
 
+            uno::Any aOldCursor;
+
+            if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
+                aOldCursor <<= static_cast<sal_Int32>(maLastSelection.nEndPos);
+            else
+                aOldCursor <<= static_cast<sal_Int32>(-1);
+
             maParaManager.FireEvent( rSelection.nEndPara,
                                      rSelection.nEndPara+1,
                                      AccessibleEventId::ACCESSIBLE_CARET_EVENT,
-                                     uno::makeAny(rSelection.nEndPos),
-                                     uno::makeAny(maLastSelection.nEndPos) );
+                                     uno::makeAny(static_cast<sal_Int32>(rSelection.nEndPos)),
+                                     aOldCursor );
 
             DBG_ASSERT( !mbThisHasFocus && mbGroupHasFocus, "AccessibleTextHelper_Impl::UpdateSelection: editing, but no focus set" );
 
-            SetChildrenState( rSelection.nEndPara,
-                              rSelection.nEndPara+1,
-                              AccessibleStateType::FOCUSED );
+            // Did the caret move from one paragraph to another?
+            if( maLastSelection.nEndPara != rSelection.nEndPara )
+            {
+                SetChildrenState( rSelection.nEndPara,
+                                  rSelection.nEndPara+1,
+                                  AccessibleStateType::FOCUSED );
+            }
 
             maLastSelection = rSelection;
         }
@@ -665,6 +680,7 @@ namespace accessibility
 
         // in all cases, check visibility afterwards.
         UpdateVisibleChildren();
+        UpdateVisibleData();
     }
 
     void AccessibleTextHelper_Impl::UpdateVisibleChildren()
@@ -715,9 +731,15 @@ namespace accessibility
 
                     mnLastVisibleChild = nCurrPara;
 
-                    GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
-                                                                               mxFrontEnd, GetEditSource(), nCurrPara ).first ),
-                                      AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                    // child not yet created?
+                    accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
+                    if( aChild.second.Width == 0 &&
+                        aChild.second.Height == 0 )
+                    {
+                        GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
+                                                                                   mxFrontEnd, GetEditSource(), nCurrPara ).first ),
+                                          AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                    }
                 }
                 else
                 {
@@ -794,8 +816,6 @@ namespace accessibility
 #ifdef DBG_UTIL
     void AccessibleTextHelper_Impl::CheckInvariants() const
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
         if( !mxFrontEnd.is() )
             DBG_ERROR( "AccessibleTextHelper: no frontend" );
 
@@ -959,6 +979,9 @@ namespace accessibility
                             DBG_ERROR("AccessibleTextHelper_Impl::NotifyHdl: Invalid move ranges");
                         }
 #endif
+                        // in all cases, check visibility afterwards.
+                        UpdateVisibleChildren();
+
                         break;
                     }
 
@@ -976,9 +999,6 @@ namespace accessibility
                         catch( const uno::Exception& ) {}
                         break;
                 }
-
-                // in all cases, check visibility afterwards.
-                UpdateVisibleChildren();
             }
             else if( pTextHint )
             {
@@ -1000,6 +1020,8 @@ namespace accessibility
 
                     case TEXT_HINT_PARAINSERTED:
                     {
+                        sal_Int32 nOldNumParas( maParaManager.GetNum() );
+
                         // resize child vector to the current child count
                         maParaManager.SetNum( nParas );
 
@@ -1008,7 +1030,7 @@ namespace accessibility
                         if( pTextHint->GetValue() == EE_PARA_ALL )
                             nFirst = 0; // all paragraphs
 
-                        if( nFirst < nParas && nLast < nParas )
+                        if( nFirst < nOldNumParas && nFirst < nParas && nLast < nParas )
                         {
                             // since we have no "paragraph index
                             // changed" event on UAA, remove
@@ -1122,7 +1144,8 @@ namespace accessibility
                         UnSetChildrenState( AccessibleStateType::EDITABLE );
                         UnSetChildrenState( AccessibleStateType::ACTIVE );
                         UnSetChildrenState( AccessibleStateType::SELECTED );
-                        maLastSelection = ESelection();
+                        maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND,
+                                                      EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND);
                         break;
                 }
             }
@@ -1441,10 +1464,12 @@ namespace accessibility
         mpImpl->CheckInvariants();
 
         mpImpl->UpdateVisibleChildren();
+        mpImpl->UpdateVisibleData();
 
         mpImpl->CheckInvariants();
 #else
         mpImpl->UpdateVisibleChildren();
+        mpImpl->UpdateVisibleData();
 #endif
     }
 

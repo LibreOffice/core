@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
+ *  last change: $Author: thb $ $Date: 2002-06-06 14:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ namespace accessibility
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
-            GotPropertyEvent( uno::makeAny( nStateId), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
         }
     }
 
@@ -561,7 +561,7 @@ namespace accessibility
             pStateSet->contains(nStateId) )
         {
             pStateSet->RemoveState( nStateId );
-            LostPropertyEvent( uno::makeAny( nStateId), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            LostPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
         }
     }
 
@@ -666,7 +666,10 @@ namespace accessibility
         // (writer takes first sentence here, but that's not supported
         // from EditEngine)
         // throws if defunc
-        ::rtl::OUString aLine = getTextAtIndex(0, AccessibleTextType::LINE);
+        ::rtl::OUString aLine;
+
+        if( getCharacterCount() )
+            aLine = getTextAtIndex(0, AccessibleTextType::LINE);
 
         // Get the string from the resource for the specified id.
         String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION ) );
