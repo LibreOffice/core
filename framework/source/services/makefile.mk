@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-10 13:22:56 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:33:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,17 +76,18 @@ BOOTSTRAP_SERVICE=	FALSE
 
 SLOFILES=			\
                     $(SLO)$/documentlist.obj                        \
-                         $(SLO)$/desktop.obj								\
-                         $(SLO)$/frame.obj								\
-                         $(SLO)$/urltransformer.obj						\
-                         $(SLO)$/mediatypedetectionhelper.obj			\
-                         $(SLO)$/documentproperties.obj					\
-                         $(SLO)$/substitutepathvars.obj					\
+                    $(SLO)$/desktop.obj								\
+                    $(SLO)$/frame.obj								\
+                    $(SLO)$/urltransformer.obj						\
+                    $(SLO)$/mediatypedetectionhelper.obj			\
+                    $(SLO)$/documentproperties.obj					\
+                    $(SLO)$/substitutepathvars.obj					\
                     $(SLO)$/pathsettings.obj                        \
                     $(SLO)$/backingcomp.obj							\
                     $(SLO)$/dispatchhelper.obj                      \
-                    $(SLO)$/license.obj                      \
-                    $(SLO)$/modulemanager.obj
+                    $(SLO)$/license.obj                      		\
+                    $(SLO)$/modulemanager.obj                       \
+                    $(SLO)$/autorecovery.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=          \
