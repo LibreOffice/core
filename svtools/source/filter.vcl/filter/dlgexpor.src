@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:09:10 $
+ *  last change: $Author: vg $ $Date: 2001-07-24 20:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ ModalDialog DLG_EXPORT_PIX
         Text [ spanish ] = "Resolución del color" ;
         Text [ french ] = "Résolution couleur" ;
         Text [ dutch ] = "Kleurdichtheid" ;
-        Text[ chinese_simplified ] = "ÑÕÉ«·Ö±æÂÊ";
+        Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
         Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
         Text[ polish ] = "Rozdzielczoœæ kolorów";
         Text[ japanese ] = "F‚Ì‰ğ‘œ“x";
-        Text[ chinese_traditional ] = "?¦â¸ÑªR«×";
+        Text[ chinese_traditional ] = "±m¦â¸ÑªR«×";
         Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
         Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
         Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
@@ -858,6 +858,7 @@ ModalDialog DLG_EXPORT_VEC
         TabStop = TRUE ;
     };
 };
+
 
 
 
