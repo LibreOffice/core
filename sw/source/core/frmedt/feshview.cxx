@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:47:48 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,10 @@
 #include "txtfrm.hxx"
 #include "txatbase.hxx"
 #include "mdiexp.hxx"                   // fuer Update der Statuszeile bei drag
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 #define SCROLLVAL 75
 
@@ -410,8 +414,10 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
     if( pOld )
     {
         SwFrm* pNew = pOld;
-        SwFmt *pFmt = ::FindFrmFmt( pObj );
-        SwFmtAnchor aAnch( pFmt->GetAnchor() );
+        // --> OD 2004-07-16 #i28701#
+        SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+        SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+        SwFmtAnchor aAnch( rFmt.GetAnchor() );
         RndStdIds nAnchorId = aAnch.GetAnchorId();
         if ( FLY_IN_CNTNT == nAnchorId )
             return sal_False;
@@ -524,10 +530,11 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                     Point aBest;
                     for( i = 0; (USHORT)i<pPage->GetSortedObjs()->Count(); ++i )
                     {
-                        SdrObject *pO = (*pPage->GetSortedObjs())[i];
-                        if( pO->ISA(SwVirtFlyDrawObj) )
+                        SwAnchoredObject* pAnchoredObj =
+                                                (*pPage->GetSortedObjs())[i];
+                        if( pAnchoredObj->ISA(SwFlyFrm) )
                         {
-                            SwFlyFrm* pTmp=((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                            SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(pAnchoredObj);
                             if( pTmp == pOld )
                                 bOld = sal_True;
                             else
@@ -600,12 +607,19 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
         if( bRet )
         {
             StartAllAction();
-            pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
-            if ( nAnchorId == FLY_AUTO_CNTNT && pFly && pFly->IsFlyAtCntFrm() )
-            {
-                // OD 11.11.2003 #i22341#
-                static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
-            }
+            rFmt.GetDoc()->SetAttr( aAnch, rFmt );
+            // --> OD 2004-06-24 #i28701# - no call of method
+            // <CheckCharRectAndTopOfLine()> for to-character anchored
+            // Writer fly frame needed. This method call can cause a
+            // format of the anchor frame, which is no longer intended.
+                    // Instead clear the anchor character rectangle and
+                    // the top of line values for all to-character anchored objects.
+//            if ( nAnchorId == FLY_AUTO_CNTNT && pFly && pFly->IsFlyAtCntFrm() )
+//            {
+//                // OD 11.11.2003 #i22341#
+//                static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
+//            }
+            pAnchoredObj->ClearCharRectAndTopOfLine();
             EndAllAction();
         }
     }
@@ -860,7 +874,8 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 
         if( pFly )
         {
-            pFly->GetAnchorFrm()->Calc();
+            // --> OD 2004-06-11 #i28701# - no format here
+//            pFly->GetAnchorFrm()->Calc();
             SwCntntFrm *pCFrm = pFly->ContainsCntnt();
             if ( pCFrm )
             {
@@ -935,16 +950,14 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             aRect = GetBoundRect( pO );
         }
 
-        USHORT nCount = pPage->GetSortedObjs() ? pPage->GetSortedObjs()->Count() : 0;
-        for ( USHORT i = 0; i < nCount; ++i )
+        sal_uInt32 nCount = pPage->GetSortedObjs() ? pPage->GetSortedObjs()->Count() : 0;
+        for ( sal_uInt32 i = 0; i < nCount; ++i )
         {
-            SdrObject *pO = (*pPage->GetSortedObjs())[i];
-            if ( !pO->ISA(SwVirtFlyDrawObj) )
+            SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
+            if ( !pAnchoredObj->ISA(SwFlyFrm) )
                 continue;
 
-            SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
-
-            SwFlyFrm *pAct = pObj->GetFlyFrm();
+            SwFlyFrm* pAct = static_cast<SwFlyFrm*>(pAnchoredObj);
             SwRect aTmpCalcPnt( pAct->Prt() );
             aTmpCalcPnt += pAct->Frm().Pos();
             if ( aRect.IsOver( aTmpCalcPnt ) )
@@ -2534,7 +2547,8 @@ static BYTE __READONLY_DATA aChkArr[ 4 ] = {
             }
             else
             {
-                pFrm->GetAnchorFrm()->Calc();
+                // --> OD 2004-06-11 #i28701# - no format here
+//                pFrm->GetAnchorFrm()->Calc();
                 SwCntntFrm *pCFrm = pFrm->ContainsCntnt();
                 if ( pCFrm )
                 {
