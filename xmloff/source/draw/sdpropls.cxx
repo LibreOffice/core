@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-15 13:52:24 $
+ *  last change: $Author: dvo $ $Date: 2001-06-25 18:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "TextContourFrame",               XML_NAMESPACE_DRAW, sXML_fit_to_contour,        XML_TYPE_BOOL, 0 },
     { "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   sXML_max_height,            XML_TYPE_MEASURE, 0 },
     { "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   sXML_max_width,             XML_TYPE_MEASURE, 0 },
-    { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE, 0 },
+    { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },
     { "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   sXML_min_width,             XML_TYPE_MEASURE, 0 },
     { "TextUpperDistance",              XML_NAMESPACE_FO,   sXML_padding_top,           XML_TYPE_MEASURE, 0 },
     { "TextLowerDistance",              XML_NAMESPACE_FO,   sXML_padding_bottom,        XML_TYPE_MEASURE, 0 },
