@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-14 13:53:16 $
+ *  last change: $Author: sj $ $Date: 2002-10-15 16:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,9 +473,10 @@ struct XForm
 
 struct SaveStruct
 {
-    sal_uInt32          nBkMode;
-    long                nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
-    long                nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
+    sal_uInt32          nBkMode, nMapMode, nGfxMode;
+    sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
+    sal_Int32           nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
+
     WinMtfLineStyle     aLineStyle;
     WinMtfFillStyle     aFillStyle;
 
@@ -589,10 +590,12 @@ class WinMtfOutput
         sal_uInt32          mnGfxMode;
         sal_uInt32          mnMapMode;
         XForm               maXForm;
-        long                mnDevOrgX, mnDevOrgY;
-        long                mnDevWidth, mnDevHeight;
-        long                mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
-        long                mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
+        sal_Int32           mnDevOrgX, mnDevOrgY;
+        sal_Int32           mnDevWidth, mnDevHeight;
+        sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
+        sal_Int32           mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
+
+        sal_Int32           mnRefExtX, mnRefExtY;       // Reference Device for mapmode MM_TEXT
 
 
         GDIMetaFile*        mpGDIMetaFile;
@@ -621,6 +624,8 @@ class WinMtfOutput
         void                SetWinOrgOffset( INT32 nX, INT32 nY );
         void                SetWinExt( const Size& rSize );
         void                ScaleWinExt( double fX, double fY );
+
+        void                SetRefExt( const Size& rSize );
 
         void                SetMapMode( sal_uInt32 mnMapMode );
         void                SetWorldTransform( const XForm& rXForm );

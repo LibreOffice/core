@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-14 13:53:17 $
+ *  last change: $Author: sj $ $Date: 2002-10-15 16:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,14 +400,24 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
-            fX2 -= mnWinOrgX;
-            fY2 -= mnWinOrgY;
-            fX2 /= mnWinExtX;
-            fY2 /= mnWinExtY;
-            fX2 *= mnDevWidth;
-            fY2 *= mnDevHeight;
-            fX2 += mnDevOrgX;
-            fY2 += mnDevOrgY;
+            if ( ( mnMapMode == MM_TEXT ) && mnRefExtX && mnRefExtY )
+            {
+                fX2 *= mnDevWidth;
+                fY2 *= mnDevHeight;
+                fX2 /= mnRefExtX;
+                fY2 /= mnRefExtY;
+            }
+            else
+            {
+                fX2 -= mnWinOrgX;
+                fY2 -= mnWinOrgY;
+                fX2 /= mnWinExtX;
+                fY2 /= mnWinExtY;
+                fX2 *= mnDevWidth;
+                fY2 *= mnDevHeight;
+                fX2 += mnDevOrgX;
+                fY2 += mnDevOrgY;
+            }
         }
         return Point( FRound( fX2 ), FRound( fY2 ) );
     }
@@ -430,10 +440,20 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
-            fWidth /= mnWinExtX;
-            fHeight /= mnWinExtY;
-            fWidth *= mnDevWidth;
-            fHeight *= mnDevHeight;
+            if ( ( mnMapMode == MM_TEXT ) && mnRefExtX && mnRefExtY )
+            {
+                fWidth *= mnDevWidth;
+                fHeight *= mnDevHeight;
+                fWidth /= mnRefExtX;
+                fHeight /= mnRefExtY;
+            }
+            else
+            {
+                fWidth /= mnWinExtX;
+                fHeight /= mnWinExtY;
+                fWidth *= mnDevWidth;
+                fHeight *= mnDevHeight;
+            }
         }
         return Size( FRound( fWidth ), FRound( fHeight ) );
     }
@@ -776,7 +796,9 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     meRasterOp          ( ROP_OVERPAINT ),
     meLatestRasterOp    ( ROP_INVERT ),
     mnEntrys            ( 16 ),
-    mnGfxMode           ( GM_COMPATIBLE )
+    mnGfxMode           ( GM_COMPATIBLE ),
+    mnRefExtX           ( 0 ),
+    mnRefExtY           ( 0 )
 {
     mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  // The original clipregion has to be on top
     maFont.SetCharSet( gsl_getSystemTextEncoding() );                   // of the stack so it can always be restored
@@ -1687,6 +1709,14 @@ void WinMtfOutput::ScaleWinExt( double fX, double fY )
 
 //-----------------------------------------------------------------------------------
 
+void WinMtfOutput::SetRefExt( const Size& rSize )
+{
+    mnRefExtX = rSize.Width();
+    mnRefExtY = rSize.Height();
+}
+
+//-----------------------------------------------------------------------------------
+
 void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
 {
     mnMapMode = nMapMode;
@@ -1792,6 +1822,8 @@ void WinMtfOutput::Push()                       // !! to be able to access the o
     pSave->aFont = maFont;
     pSave->aTextColor = maTextColor;
     pSave->nTextAlign = mnTextAlign;
+    pSave->nMapMode = mnMapMode;
+    pSave->nGfxMode = mnGfxMode;
     pSave->nBkMode = mnBkMode;
     pSave->aBkColor = maBkColor;
 
@@ -1830,6 +1862,8 @@ void WinMtfOutput::Pop()
         maTextColor = pSave->aTextColor;
         mnTextAlign = pSave->nTextAlign;
         mnBkMode = pSave->nBkMode;
+        mnGfxMode = pSave->nGfxMode;
+        mnMapMode = pSave->nMapMode;
         maBkColor = pSave->aBkColor;
 
         maActPos = pSave->aActPos;

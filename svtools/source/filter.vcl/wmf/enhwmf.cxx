@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-14 13:53:17 $
+ *  last change: $Author: sj $ $Date: 2002-10-15 16:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,8 +1258,11 @@ BOOL EnhWMFReader::ReadHeader()
     pOut->SetDevExt( aPlaceableBound.GetSize() );
     pOut->SetWinOrg( Point( FRound( ( (double) aPlaceableBound.Left() * nPixX ) / ( nMillX * 100.0 ) ),
                                 FRound( ( (double) aPlaceableBound.Top() * nPixY ) / ( nMillY * 100.0 ) ) ) );
-    pOut->SetWinExt( Size( FRound( ( (double) aPlaceableBound.GetWidth() * nPixX ) / ( nMillX * 100.0 ) ),
-                                FRound( ( (double) aPlaceableBound.GetHeight() * nPixY ) / ( nMillY * 100.0 ) ) ) );
+    Size aRefSize( FRound( ( (double)aPlaceableBound.GetWidth() * nPixX ) / ( nMillX * 100.0 ) ),
+                            FRound( ( (double) aPlaceableBound.GetHeight() * nPixY ) / ( nMillY * 100.0 ) ) );
+    // set the ReferenceDevice which is necessary for mapmode MM_TEXT
+    pOut->SetRefExt( aRefSize );
+    pOut->SetWinExt( aRefSize );
     pWMF->Seek( nStartPos + nHeaderSize );
     return TRUE;
 }
