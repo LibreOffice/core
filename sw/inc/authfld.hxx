@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 12:27:25 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@ class SwAuthorityFieldType : public SwFieldType
     SwAuthDataArr*  m_pDataArr;
     SvLongs*        m_pSequArr;
     SortKeyArr*     m_pSortKeyArr;
-    char            m_cPrefix;
-    char            m_cSuffix;
+    sal_Unicode     m_cPrefix;
+    sal_Unicode     m_cSuffix;
     BOOL            m_bIsSequence :1;
     BOOL            m_bSortByDocument :1;
 
@@ -162,13 +162,13 @@ public:
     BOOL                IsSequence() const      {return m_bIsSequence;}
     void                SetSequence(BOOL bSet)  {m_bIsSequence = bSet;}
 
-    void                SetPreSuffix(char cPre, char cSuf)
+    void                SetPreSuffix( sal_Unicode cPre, sal_Unicode cSuf)
                             {
                                 m_cPrefix = cPre;
                                 m_cSuffix = cSuf;
                             }
-    char                GetPrefix() const { return m_cPrefix;}
-    char                GetSuffix() const { return m_cSuffix;}
+    sal_Unicode         GetPrefix() const { return m_cPrefix;}
+    sal_Unicode         GetSuffix() const { return m_cSuffix;}
 
     BOOL                IsSortByDocument() const {return m_bSortByDocument;}
     void                SetSortByDocument(BOOL bSet) {m_bSortByDocument = bSet;}
