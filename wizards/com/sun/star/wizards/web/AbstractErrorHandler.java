@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AbstractErrorHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:10:41 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ public abstract class AbstractErrorHandler implements ErrorHandler {
     }
 
     /**
-     *
+     * @deprecated
      * @param message
      * @param errorType
      * @return true if the ok/yes button is clicked, false otherwise.
@@ -129,15 +129,28 @@ public abstract class AbstractErrorHandler implements ErrorHandler {
 
     /**
      * display a message
+     * @deprecated
      * @param xmsf
      * @param message the message to display
      * @param errorType an int constant from the ErrorHandler interface.
      * @return
      */
     public static boolean showMessage(XMultiServiceFactory xmsf, XWindowPeer peer, String message, int errorType) {
-        int b = SystemDialog.showMessageBox(xmsf,peer, getServiceNameFor(errorType),
-        getAttributeFor(errorType),message);
+        String serviceName = getServiceNameFor(errorType);
+        int attribute = getAttributeFor(errorType);
+        int b = SystemDialog.showMessageBox(xmsf,peer, serviceName, attribute ,message);
         return b == getTrueFor(errorType);
+    }
+
+
+    public static boolean showMessage(XMultiServiceFactory xmsf, XWindowPeer peer,
+            String message,
+            String dialogtype,
+            int buttons,
+            int defaultButton,
+            int returnTrueOn ) {
+        int b = SystemDialog.showMessageBox(xmsf,peer, dialogtype, defaultButton + buttons ,message);
+        return b == returnTrueOn;
     }
 
     /**
@@ -203,7 +216,7 @@ public abstract class AbstractErrorHandler implements ErrorHandler {
     }
 
     /**
-     *
+     * @deprecated
      * @param errorType
      * @return the uno service name for each error type
      */
