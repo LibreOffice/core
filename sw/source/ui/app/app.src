@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:03:17 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1717,7 +1717,7 @@ String STR_DLLNOTFOUND
     TEXT[ dutch ] = "Filter niet gevonden.";
     TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½É¸Ñ¡¡£";
     TEXT[ greek ] = "Äåí âñİèçêå ôï ößëôñï.";
-    TEXT[ korean ] = "ÇÊÅÍ°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    TEXT[ korean ] = "ÇÊÅÍ¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
     TEXT[ turkish ] = "Filtre bulunamadı.";
     TEXT[ language_user1 ] = " ";
 };
@@ -2068,7 +2068,7 @@ String STR_STATSTR_W4WWRITE
     Text[ dutch ] = "Document wordt geëxporteerd...";
     Text[ chinese_simplified ] = "Êä³öÎÄµµ...";
     Text[ greek ] = "ÅîáãùãŞ åããñÜöïõ...";
-    Text[ korean ] = "¹®¼­ º¸³»±â...";
+    Text[ korean ] = "¹®¼­ ³»º¸³»±â...";
     Text[ turkish ] = "Belge dışa aktarılıyor...";
     Text[ language_user1 ] = " ";
 };
@@ -2098,7 +2098,7 @@ String STR_STATSTR_SWGREAD
     Text[ dutch ] = "Document wordt gemaakt...";
     Text[ chinese_simplified ] = "×°ÔØÎÄµµ...";
     Text[ greek ] = "Ôï İããñáöï öïñôşíåôáé...";
-    Text[ korean ] = "¹®¼­ ·Îµù...";
+    Text[ korean ] = "¹®¼­ ·Îµå Áß...";
     Text[ turkish ] = "Belge yükleniyor...";
 };
 
@@ -2375,14 +2375,14 @@ String STR_STATSTR_SPELL
     Text [ danish ] = "Stavekontrol..." ;
     Text [ portuguese_brazilian ] = "Rechtschreibprüfung..." ;
     Text [ portuguese ] = "Verificação ortográfica..." ;
-    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é...";
+    Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é...";
     Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè...";
     Text[ polish ] = "Sprawdzanie pisowni...";
     Text[ japanese ] = "•¶ÍZ³...";
-    Text[ chinese_traditional ] = "«÷¦r...";
+    Text[ chinese_traditional ] = "«÷¼gÀË¬d...";
     Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí...";
     Text[ dutch ] = "Bezig met spellingcontrole...";
-    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é...";
+    Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é...";
     Text[ greek ] = "¸ëåã÷ïò ïñèïãñáößáò...";
     Text[ korean ] = "¸ÂÃã¹ı °Ë»ç...";
     Text[ turkish ] = "Yazım denetimi...";
@@ -2901,7 +2901,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ dutch ] = "Actuele sjabloon  ";
     Text[ chinese_simplified ] = "µ±Ç°µÄÑùÊ½£º ";
     Text[ greek ] = "Ôñİ÷ùí ğñüôõğï:  ";
-    Text[ korean ] = "ÇöÀç ÅÛÇÃ¸´: ";
+    Text[ korean ] = "ÇöÀç ¼­½ÄÆÄÀÏ: ";
     Text[ turkish ] = "Yürürlükteki biçim: ";
     Text[ language_user1 ] = " ";
 };
