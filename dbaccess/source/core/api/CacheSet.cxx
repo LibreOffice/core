@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 15:45:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,12 @@
  ************************************************************************/
 #ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
@@ -394,7 +400,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
         aSql += aCondition;
     }
     else
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATE_MISSING_CONDITION),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
