@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:54:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,9 +517,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_CONFIGACCEL:
         case SID_CONFIGEVENT:
         {
-            Window *pParent = GetTopWindow();
             SfxItemSet aSet( GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
-            SfxConfigDialog *pDlg = new SfxConfigDialog( pParent, &aSet, pViewFrame );
+            SfxConfigDialog *pDlg = new SfxConfigDialog( NULL, &aSet, pViewFrame );
 
             switch ( rReq.GetSlot() )
             {
