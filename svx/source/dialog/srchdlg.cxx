@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-04 07:58:27 $
+ *  last change: $Author: mba $ $Date: 2002-06-04 11:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,13 +505,13 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     // Attribut-Sets nur einmal im Ctor() besorgen
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     const SvxSetItem* pSrchSetItem =
-        (const SvxSetItem*) rBindings.ExecuteSynchron( FID_SEARCH_SEARCHSET, ppArgs, 0L );
+        (const SvxSetItem*) rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SFX_CALLMODE_SLOT, ppArgs );
 
     if ( pSrchSetItem )
         InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
     const SvxSetItem* pReplSetItem =
-        (const SvxSetItem*)rBindings.ExecuteSynchron( FID_SEARCH_REPLACESET, ppArgs, 0L );
+        (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SFX_CALLMODE_SLOT, ppArgs );
 
     if ( pReplSetItem )
         InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -523,7 +523,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     pOptionsController =
         new SvxSearchController( SID_SEARCH_OPTIONS, rBindings, *this );
     rBindings.LeaveRegistrations();
-    rBindings.ExecuteSynchron( FID_SEARCH_ON, ppArgs, 0L );
+    rBindings.GetDispatcher()->Execute( FID_SEARCH_ON, SFX_CALLMODE_SLOT, ppArgs );
     pImpl->aSelectionTimer.Start();
 
 
@@ -584,8 +584,8 @@ BOOL SvxSearchDialog::Close()
     aOpt.SetUseAsianOptions         ( aJapOptionsCB           .IsChecked() );
 
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
-    rBindings.ExecuteSynchron( FID_SEARCH_OFF, ppArgs, 0L );
-    rBindings.ExecuteSynchron( SID_SEARCH_DLG, ppArgs, 0L );
+    rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SFX_CALLMODE_SLOT, ppArgs );
+    rBindings.Execute( SID_SEARCH_DLG );
     return TRUE;
 }
 
@@ -820,13 +820,13 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
                 // Attribut-Sets besorgen, wenn noch nicht geschehen
                 const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
                 const SvxSetItem* pSrchSetItem =
-                (const SvxSetItem*)rBindings.ExecuteSynchron( FID_SEARCH_SEARCHSET, ppArgs, 0L );
+                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SFX_CALLMODE_SLOT, ppArgs );
 
                 if ( pSrchSetItem )
                     InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
                 const SvxSetItem* pReplSetItem =
-                (const SvxSetItem*)rBindings.ExecuteSynchron( FID_SEARCH_REPLACESET, ppArgs, 0L );
+                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SFX_CALLMODE_SLOT, ppArgs );
 
                 if ( pReplSetItem )
                     InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -2172,7 +2172,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
     nModifyFlag = 0;
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
-    rBindings.ExecuteSynchron( SID_SEARCH_ITEM, ppArgs, 0L );
+    rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SFX_CALLMODE_SLOT, ppArgs );
 }
 
 // class SvxSearchDialogWrapper ------------------------------------------
