@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:45:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String RID_STR_STANDARD
     Text[ czech ] = "Výchozí";
     Text[ hebrew ] = "‮ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति";
+    Text[ slovak ] = "Východzie";
 };
 String RID_STR_PROPPAGE_DEFAULT
 {
@@ -122,6 +123,7 @@ String RID_STR_PROPPAGE_DEFAULT
     Text[ czech ] = "Obecné";
     Text[ hebrew ] = "‮כללי‬";
     Text[ hindi ] = "सामान्य";
+    Text[ slovak ] = "Všeobecné";
 };
 String RID_STR_PROPPAGE_DATA
 {
@@ -152,6 +154,7 @@ String RID_STR_PROPPAGE_DATA
     Text[ czech ] = "Data";
     Text[ hebrew ] = "Daten";
     Text[ hindi ] = "ड़ॉटा";
+    Text[ slovak ] = "Dáta";
 };
 String RID_STR_BOOL
 {
@@ -182,11 +185,21 @@ String RID_STR_BOOL
     Text[ czech ] = "Ne;Ano";
     Text[ hebrew ] = "Nein;Ja";
     Text[ hindi ] = "नहीं;हाँ";
+    Text[ slovak ] = "Nie;Áno";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20.26.1  2003/06/12 11:10:06  gh
+ *  final Merge RC
+ *
+ *  Revision 1.20  2003/04/29 17:45:46  hr
+ *  INTEGRATION: CWS mergem8 (1.18.2.1.26); FILE MERGED
+ *  2003/04/29 08:35:45 gh 1.18.2.1.26.3: final merge for Beta2
+ *  2003/04/16 18:53:50 gh 1.18.2.1.26.2: RESYNC: (1.18.2.1-1.19); FILE MERGED
+ *  2003/04/14 14:46:46 gh 1.18.2.1.26.1: merging all languages
+ *
  *  Revision 1.18.2.1.26.3  2003/04/29 08:35:45  gh
  *  final merge for Beta2
  *
@@ -267,6 +280,8 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
+
 
 
 
