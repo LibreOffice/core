@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:04:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,8 @@ SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDocPos )
 // SwTableFmlUpdate wird verschickt, wenn sich die Tabelle neu berechnen soll
 SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
     : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
-    pTbl( pNewTbl ), pHistory( 0 ), eFlags( TBL_CALC ),
-    nSplitLine( USHRT_MAX )
+    pTbl( pNewTbl ), pHistory( 0 ), nSplitLine( USHRT_MAX ),
+    eFlags( TBL_CALC )
 {
     DATA.pDelTbl = 0;
     bModified = bBehindSplitLine = FALSE;
@@ -174,16 +174,16 @@ SwAutoFmtGetDocNode::SwAutoFmtGetDocNode( const SwNodes* pNds )
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    pTheChgdSet( &rTheSet ),
+    bDelSet( FALSE ),
     pChgSet( &rSet ),
-    bDelSet( FALSE )
+    pTheChgdSet( &rTheSet )
 {}
 
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSetChg& rChgSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    pTheChgdSet( rChgSet.pTheChgdSet ),
-    bDelSet( TRUE )
+    bDelSet( TRUE ),
+    pTheChgdSet( rChgSet.pTheChgdSet )
 {
     pChgSet = new SwAttrSet( *rChgSet.pChgSet );
 }
