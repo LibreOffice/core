@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:27:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1790,6 +1790,7 @@ public:
     // returne dieses.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt,
                     const sal_Bool bBefore, const sal_uInt16 nId, const sal_uInt32 nIdx,
+                    const String& rCharacterStyle,
                     const sal_Bool bCpyBrd = sal_True );
     SwFlyFrmFmt* InsertDrawLabel( const String &rTxt, const sal_uInt16 nId,
                                   SdrObject& rObj );
