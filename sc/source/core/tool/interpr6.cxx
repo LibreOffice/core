@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: nn $ $Date: 2001-01-05 18:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ double ScInterpreter::GetGammaDist(double x, double alpha, double beta)
     double a = ( z - 0.5 ) * log(z) - z + c;
     double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
                d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
-    double g = exp(a+b) / den;
+    // double g = exp(a+b) / den;
 
     double sum = 1.0 / dgamma;
     double term = 1.0 / dgamma;
@@ -136,11 +136,12 @@ double ScInterpreter::GetGammaDist(double x, double alpha, double beta)
         if ( ai > cutoff )
         {
             double t = sum;
-            return pow( dx, dgamma ) * exp( -dx ) * t / g;
+            // return pow( dx, dgamma ) * exp( -dx ) * t / g;
+            return exp( dgamma * log(dx) - dx - a - b ) * t * den;
         }
     }
 
-    DBG_ERROR("GetGammaDist bricht nicht ab");
+//  DBG_ERROR("GetGammaDist bricht nicht ab");
 
     return 1.0;     // should not happen ...
 }
