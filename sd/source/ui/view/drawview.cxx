@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-23 07:52:22 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 09:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,20 +436,47 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                             DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
 
                             SfxItemSet aTempSet( pSheet->GetItemSet() );
-                            aTempSet.Put( rSet );
-                            aTempSet.ClearInvalidItems();
 
-                            if( nLevel > 1 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
-                                // Kein SvxNumBulletItem in Gliederungsebenen 2 bis 9!
-                                aTempSet.ClearItem( EE_PARA_NUMBULLET );
+                            if( nLevel > 1 )
+                            {
+                                // for all levels over 1, clear all items that will be
+                                // hard set to level 1
+                                SfxWhichIter aWhichIter(rSet);
+                                sal_uInt16 nWhich(aWhichIter.FirstWhich());
+                                while( nWhich )
+                                {
+                                    if( SFX_ITEM_ON == rSet.GetItemState( nWhich ) )
+                                        aTempSet.ClearItem( nWhich );
+                                    nWhich = aWhichIter.NextWhich();
+                                }
+
+                            }
+                            else
+                            {
+                                // put the items hard into level one
+                                aTempSet.Put( rSet );
+                            }
+
+                            aTempSet.ClearInvalidItems();
 
                             // Undo-Action
                             StyleSheetUndoAction* pAction = new StyleSheetUndoAction(pDoc, pSheet, &aTempSet);
                             pDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                            pSheet->GetItemSet().Put(aTempSet);
+                            pSheet->GetItemSet().Set(aTempSet,false);
                             pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
+
+                        // remove all hard set items from shape that are now set in style
+                        SfxWhichIter aWhichIter(rSet);
+                        sal_uInt16 nWhich(aWhichIter.FirstWhich());
+                        while( nWhich )
+                        {
+                            if( SFX_ITEM_ON == rSet.GetItemState( nWhich ) )
+                                pObject->ClearItem( nWhich );
+                            nWhich = aWhichIter.NextWhich();
+                        }
+
                         bOk = TRUE;
                     }
                 }
