@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:12:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ void SlideSorterView::CompleteRedraw (
     // it remember the request for a redraw.  The overlay is hidden during
     // this call and restored afterwards so that its XOR painting works
     // properly.
-    GetOverlay().HideAndSave();
+    GetOverlay().HideAndSave(ViewOverlay::OPT_PAINT);
     View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
     GetOverlay().Restore();
 }
