@@ -224,4 +224,11 @@ UDK_3.1 {
     global:
 ?getCaughtException@cppu@@YA?AVAny@uno@star@sun@com@@XZ;
 ??0OPropertySetHelper@cppu@@QAE@AAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@_N@Z;
+??0BootstrapException@cppu@@QAE@XZ;
+??0BootstrapException@cppu@@QAE@ABVOUString@rtl@@@Z;
+??0BootstrapException@cppu@@QAE@ABV01@@Z;
+??1BootstrapException@cppu@@UAE@XZ;
+??4BootstrapException@cppu@@QAEAAV01@ABV01@@Z;
+?getMessage@BootstrapException@cppu@@QBEABVOUString@rtl@@XZ;
+?bootstrap@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@XZ;
 } UDK_3_0_0;
