@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.10 $
+#	$Revision: 1.11 $
 #
-#	last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
+#	last change: $Author: rt $ $Date: 2004-01-05 11:27:48 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -76,6 +76,7 @@ TARGET=win
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/accel.obj		\
+            $(SLO)$/abstdlg.obj		\
             $(SLO)$/accmgr.obj		\
             $(SLO)$/brdwin.obj		\
             $(SLO)$/btndlg.obj		\
@@ -149,3 +150,17 @@ EXCEPTIONSFILES=					\
 .INCLUDE :	target.mk
 
 .INCLUDE :	$(PRJ)$/util$/target.pmk
+
+$(INCCOM)$/cuilib.hxx: makefile.mk
+.IF "$(GUI)"=="UNX"
+    $(RM) $@
+    +echo \#define DLL_NAME \"libcui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE
+.IF "$(USE_SHELL)"!="4nt"
+    +echo \#define DLL_NAME \"cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE          # "$(USE_SHELL)"!="4nt"
+    +echo #define DLL_NAME "cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF          # "$(USE_SHELL)"!="4nt"
+.ENDIF
+
+$(SLO)$/abstdlg.obj : $(INCCOM)$/cuilib.hxx
