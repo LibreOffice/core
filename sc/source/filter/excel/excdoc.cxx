@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:22:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,8 +400,8 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
             rBSRecList.Append( pBS );
         }
 
-        // COUNTRY always Germany
-        Add( new ExcDummy8_Country );
+        // COUNTRY - in BIFF8 in workbook globals
+        Add( new XclExpCountry( rRoot ) );
         // SUPBOOK, XCT, CRN, EXTERNNAME, EXTERNSHEET
         Add( new XclExpRefRecord( rRoot.GetLinkManager() ) );
         // NAME
@@ -559,6 +559,8 @@ void ExcTable::FillAsTable( void )
         // GUTS (count & size of outline icons)
         Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
         Add( new ExcDummy_02c );
+        // COUNTRY - in BIFF5/7 in every worksheet
+        Add( new XclExpCountry( rRoot ) );
         Add( new XclExpWsbool( rR ) );
         Add( new XclExpPagebreaks( rR, nScTab, xlPBHorizontal ) );
         Add( new XclExpPagebreaks( rR, nScTab, xlPBVertical ) );
