@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:24:11 $
+ *  last change: $Author: as $ $Date: 2001-04-24 07:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@
 #include <rtl/ustring>
 #endif
 
-#define ENABLE_GENERATEFILTERCACHE
 #ifdef ENABLE_GENERATEFILTERCACHE
     #ifndef _RTL_USTRBUF_HXX_
     #include <rtl/ustrbuf.hxx>
