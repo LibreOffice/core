@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgelem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-16 14:08:34 $
+ *  last change: $Author: mba $ $Date: 2001-02-05 18:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,6 @@
 class StgIo;
 class SvStream;
 class String;
-
-struct ClsId
-{
-    INT32   n1;
-    INT16   n2, n3;
-    UINT8   n4, n5, n6, n7, n8, n9, n10, n11;
-};
 
 SvStream& operator>>( SvStream&, ClsId& );
 SvStream& operator<<( SvStream&, const ClsId& );
