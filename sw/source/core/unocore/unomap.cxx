@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-20 12:36:10 $
+ *  last change: $Author: tl $ $Date: 2002-06-24 11:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,6 +1178,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), WID_ALT_TEXT,        CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_PRIMARY_KEY), WID_PRIMARY_KEY,  CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_SECONDARY_KEY), WID_SECONDARY_KEY,  CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_TEXT_READING), WID_TEXT_READING, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_PRIMARY_KEY_READING), WID_PRIMARY_KEY_READING, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_SECONDARY_KEY_READING), WID_SECONDARY_KEY_READING, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_MAIN_ENTRY), WID_MAIN_ENTRY,     CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0}

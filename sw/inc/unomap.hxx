@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 13:01:14 $
+ *  last change: $Author: tl $ $Date: 2002-06-24 11:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,6 @@
 #define WID_MAIN_ENTRY                          1007
 #define WID_CREATE_FROM_CHAPTER                 1008
 #define WID_CREATE_FROM_LABELS                  1009
-#define WID_PROTECTED                           1000
 #define WID_USE_ALPHABETICAL_SEPARATORS         1010
 #define WID_USE_KEY_AS_ENTRY                    1011
 #define WID_USE_COMBINED_ENTRIES                1012
@@ -224,6 +223,7 @@
 #define WID_CREATE_FROM_GRAPHIC_OBJECTS         1028
 #define WID_CREATE_FROM_EMBEDDED_OBJECTS        1029
 #define WID_CREATE_FROM_STAR_MATH               1030
+#define WID_PROTECTED                           1031
 
 #define WID_CREATE_FROM_STAR_CHART              1032
 #define WID_CREATE_FROM_STAR_CALC               1033
@@ -251,6 +251,9 @@
 #define WID_IDX_LOCALE                          1055
 #define WID_IDX_SORT_ALGORITHM                  1056
 #define WID_IDX_NAME                            1057
+#define WID_TEXT_READING                        1058
+#define WID_PRIMARY_KEY_READING                 1059
+#define WID_SECONDARY_KEY_READING               1060
 
 //text document
 #define WID_DOC_CHAR_COUNT                      1000
