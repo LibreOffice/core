@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: nf $ $Date: 2003-08-05 13:24:46 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,6 +1324,21 @@ String RID_STR_HIDDEN_CLASSNAME
 {
     Text = "HiddenControl" ;
 };
+
+String RID_STR_CLASSNAME_SCROLLBAR
+{
+    Text = "Bildlaufleiste" ;
+    Text [ english ] = "Scrollbar" ;
+    Text [ english_us ] = "Scrollbar" ;
+};
+
+String RID_STR_CLASSNAME_SPINBUTTON
+{
+    Text = "Drehfeld" ;
+    Text [ english ] = "SpinButton" ;
+    Text [ english_us ] = "SpinButton" ;
+};
+
 String RID_STR_CONTROL
 {
     Text = "Kontrollelement" ;
@@ -3528,37 +3543,6 @@ String RID_STR_SHOWTHOUSANDSEP
     Text[ hindi ] = "सहस्र आलगानेवाला";
     Text[ slovak ] = "Oddeľovač tisícok";
 };
-String RID_STR_HARDLINEBREAKS
-{
-    Text = "Harter Zeilenumbruch" ;
-    Text [ English ] = "Hard line breaks" ;
-    Text [ portuguese ] = "Quebra de linha manual" ;
-    Text [ english_us ] = "Manual line break" ;
-    Text [ portuguese_brazilian ] = "Quebra de linha manual" ;
-    Text [ swedish ] = "H�rd radbrytning" ;
-    Text [ danish ] = "H�rdt linjeskift" ;
-    Text [ italian ] = "Interruzione di riga fissa" ;
-    Text [ spanish ] = "Salto de l�nea manual" ;
-    Text [ french ] = "Retour � la ligne direct" ;
-    Text [ dutch ] = "Vast regeleinde" ;
-    Text[ chinese_simplified ] = "手动换行";
-    Text[ russian ] = "������� ������";
-    Text[ polish ] = "R�czny podzia� wiersza";
-    Text[ japanese ] = "ハード改行";
-    Text[ chinese_traditional ] = "手動換行";
-    Text[ greek ] = "������ ������ �������";
-    Text[ korean ] = "수동으로 줄 바꿈";
-    Text[ arabic ] = "���� ���� ����";
-    Text[ turkish ] = "Kullan�c� tan�ml� sat�r sonu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salt de l�nia manual";
-    Text[ finnish ] = "N�yt� rivinvaihto";
-    Text[ thai ] = "แบ่งบรรทัดโดยตรง";
-    Text[ czech ] = "Ruční zalomení řádku";
-    Text[ hebrew ] = "‮שובר שורה ידני‬";
-    Text[ hindi ] = "मान्युवल रेखा की खण्डन";
-    Text[ slovak ] = "Ručné zalomenie riadku";
-};
 String RID_STR_PRINTABLE
 {
     Text = "Drucken" ;
@@ -4396,6 +4380,18 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ hebrew ] = "‮פקד בטבלה ‬";
     Text[ hindi ] = "सारणी नियंत्रण  ";
     Text[ slovak ] = "Prvok tabuľky ";
+};
+String RID_STR_PROPTITLE_SCROLLBAR
+{
+    Text = "Bildlaufleiste" ;
+    Text [ english ] = "Scroll bar" ;
+    Text [ english_us ] = "Scroll bar" ;
+};
+String RID_STR_PROPTITLE_SPINBUTTON
+{
+    Text = "Drehfeld" ;
+    Text [ english ] = "Spin Button" ;
+    Text [ english_us ] = "Spin Button" ;
 };
 String RID_STR_PROPTITLE_MULTISELECT
 {
