@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:38:04 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -149,6 +153,12 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 
 #ifndef _NDNOTXT_HXX
@@ -226,6 +236,31 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         *pTwipWidth = nWidth;
     if( pTwipHeight )
         *pTwipHeight = nHeight;
+}
+
+static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObject >& xObj,
+                                    sal_Int64 nAspect,
+                                    const Size& aVisSize,
+                                    const MapUnit& aUnit )
+{
+    if( xObj.is() )
+    {
+        // convert the visual area to the objects units
+        MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+        Size aObjVisSize = OutputDevice::LogicToLogic( aVisSize, aUnit, aObjUnit );
+        awt::Size aSz;
+        aSz.Width = aObjVisSize.Width();
+        aSz.Height = aObjVisSize.Height();
+
+        try
+        {
+            xObj->setVisualAreaSize( nAspect, aSz );
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ASSERT( "Couldn't set visual area of the object!\n" );
+        }
+    }
 }
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
@@ -371,18 +406,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
                 if ( xObj.is() )
                 {
-                    // TODO/LEAN: created object should be in running state
-                    svt::EmbeddedObjectRef::TryRunningState( xObj );
-                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                    aVisArea.SetSize( aTwipSize );
-                    aVisArea = OutputDevice::LogicToLogic(
-                                aVisArea, MAP_TWIP, aUnit );
-                    awt::Size aSz;
-                    aSz.Width = aVisArea.GetSize().Width();
-                    aSz.Height = aVisArea.GetSize().Height();
-
                     //TODO/LATER: is it enough to only set the VisAreaSize?
-                    xObj->setVisualAreaSize( nAspect, aSz );
+                    lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
                 }
 
                 pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(), xObj, &aItemSet );
@@ -496,6 +521,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     sal_Int32 nDrawAspect = 0;
     const XMLPropStyleContext *pStyle = 0;
+    sal_Bool bHasSizeProps = sal_False;
     if( rStyleName.getLength() )
     {
         pStyle = FindAutoFrameStyle( rStyleName );
@@ -539,6 +565,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                             sal_Int32 nVal = 0;
                             rProp.maValue >>= nVal;
                             aVisArea.setWidth( nVal );
+                            bHasSizeProps = sal_True;
                         }
                         break;
                     case CTF_OLE_VIS_AREA_HEIGHT:
@@ -546,6 +573,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                             sal_Int32 nVal = 0;
                             rProp.maValue >>= nVal;
                             aVisArea.setHeight( nVal );
+                            bHasSizeProps = sal_True;
                         }
                         break;
                     case CTF_OLE_DRAW_ASPECT:
@@ -559,15 +587,15 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         }
     }
 
-    Reference < embed::XEmbeddedObject > xObj = pDoc->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( aObjName );
-    if( xObj.is() )
+    if ( bHasSizeProps )
     {
-        //TODO/LATER: VisArea/Aspect in flat XML format not in object
-        //SvEmbeddedInfoObject * pEmbed = PTR_CAST(SvEmbeddedInfoObject, pInfo );
-        //pEmbed->SetInfoVisArea( aVisArea );
-        //if( nDrawAspect )
-        //    pEmbed->SetInfoViewAspect( (UINT32)nDrawAspect );
+        Reference < embed::XEmbeddedObject > xObj =
+                    pDoc->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( aObjName );
+        if( xObj.is() )
+            lcl_setObjectVisualArea( xObj, ( nDrawAspect ? nDrawAspect : embed::Aspects::MSOLE_CONTENT ),
+                                     aVisArea.GetSize(), MAP_100TH_MM );
     }
+
     return xPropSet;
 }
 
@@ -619,14 +647,23 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
         aMediaDescriptor[0].Name = ::rtl::OUString::createFromAscii( "URL" );
         aMediaDescriptor[0].Value <<= ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
+        {
+            uno::Reference< task::XInteractionHandler > xInteraction =
+                                        pDoc->GetDocShell()->GetMedium()->GetInteractionHandler();
+            if ( xInteraction.is() )
+            {
+                aMediaDescriptor.realloc( 2 );
+                aMediaDescriptor[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+                aMediaDescriptor[1].Value <<= xInteraction;
+            }
+        }
 
         uno::Reference < embed::XEmbeddedObject > xObj(
             xFactory->createInstanceLink(
                 xStorage, aName, aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
             uno::UNO_QUERY_THROW );
 
-        // freshly created objects should be in running state
-        if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                             xObj,
