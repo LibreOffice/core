@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:02:31 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@
             QuickHelpText[ chinese_simplified ] = "New user defined index";\
             QuickHelpText[ chinese_traditional ] = "∑sºW¶€≠q•ÿø˝";\
             QuickHelpText[ arabic ] = "›Â—” ÃœÌœ „⁄—› „‰ ﬁ»· «·„” Œœ„";\
+            QuickHelpText[ turkish ] = "Neues benutzerdefiniertes Verzeichnis";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
