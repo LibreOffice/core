@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: os $ $Date: 2001-07-06 07:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,12 +637,12 @@ IMPL_LINK( SvxGrfCropPage, OrigSizeHdl, PushButton *, EMPTYARG )
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    long nWidth = aOrigSize.Width() +
-        lcl_GetValue( aLeftMF, eUnit ) +
+    long nWidth = aOrigSize.Width() -
+        lcl_GetValue( aLeftMF, eUnit ) -
         lcl_GetValue( aRightMF, eUnit );
     aWidthMF.SetValue( aWidthMF.Normalize( nWidth ), eUnit );
-    long nHeight = aOrigSize.Height() +
-        lcl_GetValue( aTopMF, eUnit ) +
+    long nHeight = aOrigSize.Height() -
+        lcl_GetValue( aTopMF, eUnit ) -
         lcl_GetValue( aBottomMF, eUnit );
     aHeightMF.SetValue( aHeightMF.Normalize( nHeight ), eUnit );
     aWidthZoomMF.SetValue(100);
