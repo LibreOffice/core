@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:49:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ String RID_KEEP_PASSWORD
     Text[ czech ] = "Zapamatovat heslo do konce sezení";
     Text[ hebrew ] = "‮לזכור סיסמה רק עד ליציאה מהתוכנית‬";
     Text[ hindi ] = "कूटशब्द को कार्य-काल के अंत तक ~स्मरण में रखो";
+    Text[ slovak ] = "~Zapamätať heslo do konca sedenia";
 };
 
 String RID_SAVE_PASSWORD
@@ -127,6 +128,7 @@ String RID_SAVE_PASSWORD
     Text[ czech ] = "Zapamatovat heslo";
     Text[ hebrew ] = "‮לזכור סיסמה‬";
     Text[ hindi ] = "कूटशब्द ~स्मरण करो";
+    Text[ slovak ] = "~Zapamätať heslo";
 };
 
 Resource RID_UUI_ERRHDL
@@ -159,6 +161,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operace spuštěná na $(ARG1) byla přerušena";
         Text[ hebrew ] = "‮הפעולה שבוצע על $(ARG1) בוטלה.‬";
         Text[ hindi ] = "$(ARG1) में चलाया हुआ कार्य अधूरा रह गया";
+        Text[ slovak ] = "Operácia spustená na $(ARG1) bola prerušená";
     };
 
     String (ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK)
@@ -189,6 +192,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Přístup k $(ARG1) byl odepřen";
         Text[ hebrew ] = "‮אין הרשאות גישה ל $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) केलिए प्रवेश निषेधित है";
+        Text[ slovak ] = "Prístup k $(ARG1) bol odoprený";
     };
 
     String (ERRCODE_UUI_IO_ALREADYEXISTS & ERRCODE_RES_MASK)
@@ -219,6 +223,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) již existuje";
         Text[ hebrew ] = "‮$(ARG1) כבר קיים‬";
         Text[ hindi ] = "$(ARG1) पहिले से ही अस्तित्व में है";
+        Text[ slovak ] = "$(ARG1) už existuje";
     };
 
     String (ERRCODE_UUI_IO_TARGETALREADYEXISTS & ERRCODE_RES_MASK)
@@ -249,6 +254,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Cíl již existuje";
         Text[ hebrew ] = "Ziel existiert bereits";
         Text[ hindi ] = "Target already exists";
+        Text[ slovak ] = "Cieľ už existuje";
     };
 
     String (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK)
@@ -279,6 +285,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Data z $(ARG1) mají nesprávný kontrolní součet";
         Text[ hebrew ] = "‮סכום הביקורת של הנתונים מ-$(ARG1) שגוי‬";
         Text[ hindi ] = "$(ARG1) में से डॉटा का चेकसम गलत है";
+        Text[ slovak ] = "Dáta z $(ARG1) majú nesprávny kontrolný súčet";
     };
 
     String (ERRCODE_UUI_IO_CANTCREATE & ERRCODE_RES_MASK)
@@ -309,6 +316,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nelze vytvořit objekt $(ARG1) v adresáři $(ARG2)";
         Text[ hebrew ] = "‮לא ניתן ליצור את העצם $(ARG1) בספריה $(ARG2)‬";
         Text[ hindi ] = "$(ARG2) डैरक्टरी में $(ARG1) वस्तु को उत्पन्न नहीं कर सकते है";
+        Text[ slovak ] = "Objekt $(ARG1) nemôže byť vytvorený v adresári $(ARG2)";
     };
 
     String (ERRCODE_UUI_IO_CANTREAD & ERRCODE_RES_MASK)
@@ -339,6 +347,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nelze přečíst data $(ARG1)";
         Text[ hebrew ] = "‮לא ניתן לקרוא את הנתונים של $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) का ड़ॉटा को नहीं पढ़ सकते है";
+        Text[ slovak ] = "Dáta z $(ARG1) nemožno prečítať";
     };
 
     String (ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK)
@@ -369,6 +378,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operace seek na $(ARG1) nemohla být provedena";
         Text[ hebrew ] = "‮לא ניתן לבצע פעולת חיפוש seek בקובץ $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) में सीक कार्य-संपादन नहीं कर सकते है";
+        Text[ slovak ] = "Operácia seek na $(ARG1) nemohla byť uskutočnená";
     };
 
     String (ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK)
@@ -399,6 +409,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operace tell na $(ARG1) nemohla být provedena";
         Text[ hebrew ] = "‮לא ניתן לבצע פעולת המיקום tell בקובץ $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) में टेल कार्य-संपादन नहीं कर सकते है";
+        Text[ slovak ] = "Operácia tell na $(ARG1) nemohla byť uskutočnená";
     };
 
     String (ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK)
@@ -429,6 +440,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nelze zapsat data $(ARG1)";
         Text[ hebrew ] = "‮לא ניתן לכתוב את הנתונים עבור $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) केलिए ड़ॉटा को नहीं लिख सकते है";
+        Text[ slovak ] = "Dáta z $(ARG1) nemohli byť zapísané";
     };
 
     String (ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK)
@@ -443,7 +455,7 @@ Resource RID_UUI_ERRHDL
         Text[ french ] = "Op�ration impossible : $(ARG1) est le r�pertoire actif.";
         Text[ spanish ] = "Acci�n imposible: $(ARG1) es el directorio actual";
         Text[ finnish ] = "Toiminto mahdoton: $(ARG1) on nykyinen hakemisto.";
-        Text[ italian ] = "L'operazione non � ammessa: $(ARG1) � la cartella corrente";
+        Text[ italian ] = "L'operazione non � ammessa: $(ARG1) � la cartella attiva";
         Text[ danish ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ swedish ] = "�tg�rd om�jlig: $(ARG1) �r den aktuella katalogen";
         Text[ polish ] = "Nie mo�na wykona� akcji: $(ARG1) jest katalogiem bie��cym";
@@ -459,6 +471,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Neproveditelná akce: $(ARG1) je současným adresářem";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה: $(ARG1) היא הספריה הנוכחית‬";
         Text[ hindi ] = "कार्य असंभव: $(ARG1) वर्तमान डैरक्टरी है";
+        Text[ slovak ] = "Neuskutočniteľná akcia: $(ARG1) je súčasným adresárom";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY & ERRCODE_RES_MASK)
@@ -489,6 +502,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) není připraven";
         Text[ hebrew ] = "‮$(ARG1) אינו מוכן‬";
         Text[ hindi ] = "$(ARG1) तैयार नहीं है";
+        Text[ slovak ] = "$(ARG1) nie je pripravený";
     };
 
     String (ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK)
@@ -519,6 +533,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Neproveditelná akce: $(ARG1) a $(ARG2) jsou různá zařízení";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה כי $(ARG1) ו $(ARG2) נמצאים על כוננים שונים‬";
         Text[ hindi ] = "कार्य असंभव: $(ARG1) और $(ARG2) अलग अलग साधन है (ड्रइव्स)";
+        Text[ slovak ] = "Neuskutočniteľná akcia: $(ARG1) a $(ARG2) sú rôzne zariadenia";
     };
 
     String (ERRCODE_UUI_IO_GENERAL & ERRCODE_RES_MASK)
@@ -549,6 +564,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Obecná chyba vstupu/výstupu př přístupu k $(ARG1)";
         Text[ hebrew ] = "‮שגיאת קלט-פלט לא מפורטת בעת גישה ל $(ARG1)‬";
         Text[ hindi ] = "$(ARG1)";
+        Text[ slovak ] = "Všeobecná chyba vstupu/výstupu pri prístupe k $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK)
@@ -579,6 +595,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Byl proveden neplatný pokus o přístup k $(ARG1)";
         Text[ hebrew ] = "‮ארע נסיון גישה בצורה שגויה ל $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) को प्रवेश करने केलिए अमान्य रीति का प्रयास किया गया है";
+        Text[ slovak ] = "Bol uskutočnený neplatný pokus o prístup k $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK)
@@ -609,6 +626,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) obsahuje neplatné znaky";
         Text[ hebrew ] = "‮$(ARG1) מכיל תווים לא חוקיים‬";
         Text[ hindi ] = "$(ARG1) में अमान्य अक्षरें है";
+        Text[ slovak ] = "$(ARG1) obsahuje neplatné znaky";
     };
 
     String (ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK)
@@ -639,6 +657,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Zařízení (mechanika) $(ARG1) je neplatné";
         Text[ hebrew ] = "‮הכונן $(ARG1) אינו חוקי‬";
         Text[ hindi ] = "साधन (ड्रइव) $(ARG1) अमान्य है";
+        Text[ slovak ] = "Zariadenie (mechanika) $(ARG1) je neplatné(-á)";
     };
 
     String (ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK)
@@ -669,6 +688,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Data z $(ARG1) mají neplatnou délku";
         Text[ hebrew ] = "‮אורך הנתונים מ $(ARG1) אינו חוקי‬";
         Text[ hindi ] = "$(ARG1) का ड़ॉटा का विस्तार अमान्य है";
+        Text[ slovak ] = "Dáta z $(ARG1) majú neplatnú dĺžku";
     };
 
     String (ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK)
@@ -699,6 +719,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operace na $(ARG1) byla spuštěna s neplatným parametrem";
         Text[ hebrew ] = "‮הפעולה על $(ARG1) הותחלה עם פרמטר לא חוקי‬";
         Text[ hindi ] = "$(ARG1) में अमान्य पैरामीटर सहित कार्य को प्रारंभ किया गया है";
+        Text[ slovak ] = "Operácia na $(ARG1) bola spustená s neplatným parametrom";
     };
 
     String (ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK)
@@ -729,6 +750,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operaci nelze provést, protože $(ARG1) obsahuje zástupné znaky";
         Text[ hebrew ] = "‮ כולל תווי כוכביות‬$(ARG1)‮לא ניתן לבצע את הפעולה כי ‬";
         Text[ hindi ] = "$(ARG1) में वैल्डकार्ड रहने के कारण कार्य-संपादन नहीं कर सकते है";
+        Text[ slovak ] = "Operáciu nie je možné uskutočniť, pretože $(ARG1) obsahuje zástupné znaky";
     };
 
     String (ERRCODE_UUI_IO_LOCKVIOLATION & ERRCODE_RES_MASK)
@@ -759,6 +781,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Chyba při sdíleném přístupu k $(ARG1).";
         Text[ hebrew ] = "‮שגיאה בעת גישה משותפת ל $(ARG1).‬";
         Text[ hindi ] = "$(ARG1) को भागी प्रवेश के समय गलती ।";
+        Text[ slovak ] = "Chyba pri zdieľanom prístupe k $(ARG1).";
     };
 
     String (ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK)
@@ -789,6 +812,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) obsahuje špatně umístěné znaky";
         Text[ hebrew ] = "‮$(ARG1) מכיל תווים שלא במקום הנכון‬";
         Text[ hindi ] = "$(ARG1) में अस्थान में रखा हुआ अक्षरें है";
+        Text[ slovak ] = "$(ARG1) obsahuje zle umiestnené znaky";
     };
 
     String (ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK)
@@ -819,6 +843,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Název $(ARG1) obsahuje příliš mnoho znaků";
         Text[ hebrew ] = "‮השם $(ARG1) מכיל תווים רבות מדי‬";
         Text[ hindi ] = "$(ARG1) नाम में बहुत अधिक अक्षरें है";
+        Text[ slovak ] = "Názov $(ARG1) obsahuje príliš mnoho znakov";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTS & ERRCODE_RES_MASK)
@@ -849,6 +874,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) neexistuje";
         Text[ hebrew ] = "‮$(ARG1) אינו קיים‬";
         Text[ hindi ] = "$(ARG1) अस्तित्व में नहीं है ";
+        Text[ slovak ] = "$(ARG1) neexistuje";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTSPATH & ERRCODE_RES_MASK)
@@ -879,6 +905,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Cesta $(ARG1) neexistuje";
         Text[ hebrew ] = "‮מסלול הספריות $(ARG1) אינו קיים‬";
         Text[ hindi ] = "$(ARG1) मार्ग अस्तित्व में नहीं है";
+        Text[ slovak ] = "Cesta $(ARG1) neexistuje";
     };
 
     String (ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK)
@@ -909,6 +936,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operace na $(ARG1) není v tomto operačním systému podporována";
         Text[ hebrew ] = "‮הפעולה על $(ARG1) אינה נתמכת במערכת הפעלה זו.‬";
         Text[ hindi ] = "इस ओपरेटिंग सिस्टम में $(ARG1) केलिए कार्य समर्थित नहीं है";
+        Text[ slovak ] = "Operácia na $(ARG1) nieje v tomto operačnom systéme podporovaná";
     };
 
     String (ERRCODE_UUI_IO_NOTADIRECTORY & ERRCODE_RES_MASK)
@@ -939,6 +967,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) není adresářem";
         Text[ hebrew ] = "‮$(ARG1) אינו ספריה‬";
         Text[ hindi ] = "$(ARG1) डैरक्टरी नहीं है";
+        Text[ slovak ] = "$(ARG1) nie je adresár";
     };
 
     String (ERRCODE_UUI_IO_NOTAFILE & ERRCODE_RES_MASK)
@@ -969,6 +998,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) není souborem";
         Text[ hebrew ] = "‮$(ARG1) אינו קובץ‬";
         Text[ hindi ] = "$(ARG1) is not a file";
+        Text[ slovak ] = "$(ARG1) nie je súbor";
     };
 
     String (ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK)
@@ -999,6 +1029,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Na zařízení $(ARG1) již není volné místo";
         Text[ hebrew ] = "‮לא נשאר מקום על כונן $(ARG1)‬";
         Text[ hindi ] = "$(ARG1) साधन में अभी ओर जगह नहीं बचा है";
+        Text[ slovak ] = "Na zariadení $(ARG1) už nie je voľné miesto";
     };
 
     String (ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK)
@@ -1029,6 +1060,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operaci na $(ARG1) nelze provést, protože je již otevřeno příliš mnoho souborů";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה על $(ARG1) כי יותר מידי קבצים כבר פתוחים‬";
         Text[ hindi ] = "पहिले से ही बहुत अधिक संख्या में फाइलें खुला रखने के कारण $(ARG1) में कोई कार्य-संपादन नहीं कर सकते है ";
+        Text[ slovak ] = "Operáciu na $(ARG1) nie je možné uskutočniť, pretože je otvorené príliš mnoho súborov";
     };
 
     String (ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK)
@@ -1059,6 +1091,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operaci na $(ARG1) nelze provést, protože již není dostupná žádná paměť";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה על $(ARG1) כי אין מספיק זכרון‬";
         Text[ hindi ] = "अप्राप्य मेमरी के कारण $(ARG1) में कोई कार्य-संपादन नहीं कर सकते है ";
+        Text[ slovak ] = "Operáciu na $(ARG1) nemožno uskutočniť, pretože už nie je dostupná žiadna pamäť";
     };
 
     String (ERRCODE_UUI_IO_PENDING & ERRCODE_RES_MASK)
@@ -1089,6 +1122,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Operace na $(ARG1) nemůže pokračovat, protože data ještě čekají na zpracování.";
         Text[ hebrew ] = "‮לא ניתן לבצע את הפעולה על $(ARG1) כי נתונים נוספים עומדים בתור‬";
         Text[ hindi ] = "बहुत अधिक विचाराधीन ड़ॉटा के कारण $(ARG1) में कार्य को जारी नहीं रख सकते है";
+        Text[ slovak ] = "Operácia na $(ARG1) nemôže pokračovať, pretože dáta ešte čakajú na spracovanie.";
     };
 
     String (ERRCODE_UUI_IO_RECURSIVE & ERRCODE_RES_MASK)
@@ -1119,6 +1153,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) nelze zkopírovat do sebe sama";
         Text[ hebrew ] = "‮לא ניתן להעתיק את $(ARG1) לתוך עצמו‬";
         Text[ hindi ] = "$(ARG1) का प्रतिलिपि उसमें ही नहीं बना सकते है";
+        Text[ slovak ] = "$(ARG1) nemožno skopírovať do seba samého";
     };
 
     String (ERRCODE_UUI_IO_UNKNOWN & ERRCODE_RES_MASK)
@@ -1149,6 +1184,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Neznámá chyba vstupu/výstupu při přístupu k $(ARG1)";
         Text[ hebrew ] = "‮שגיאת קלט-פלט בלתי ידועה בעת גישה ל-$(ARG1)‬";
         Text[ hindi ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ slovak ] = "Neznáma chyba vstupu/výstupu pri prístupe k $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK)
@@ -1179,6 +1215,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) je chráněno proti zápisu";
         Text[ hebrew ] = "‮$(ARG1) מוגן מפני כתיבה‬";
         Text[ hindi ] = "$(ARG1) लिखने से सुरक्षित है";
+        Text[ slovak ] = "$(ARG1) je chránený proti zápisu";
     };
 
     String (ERRCODE_UUI_IO_WRONGFORMAT & ERRCODE_RES_MASK)
@@ -1209,6 +1246,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) není ve správném formátu";
         Text[ hebrew ] = "‮ הצורה של $(ARG1) אינה הנכונה‬";
         Text[ hindi ] = "$(ARG1) का रचना गलत है";
+        Text[ slovak ] = "$(ARG1) nie je v správnom formáte";
     };
 
     String (ERRCODE_UUI_IO_WRONGVERSION & ERRCODE_RES_MASK)
@@ -1239,6 +1277,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Verze $(ARG1) není správná";
         Text[ hebrew ] = "‮הגרסה של $(ARG1) אינה נכונה‬";
         Text[ hindi ] = "$(ARG1) का आवर्तन गलत है";
+        Text[ slovak ] = "Verzia $(ARG1) nie je správna";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTS_VOLUME & ERRCODE_RES_MASK)
@@ -1269,6 +1308,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Zařízení $(ARG1) neexistuje";
         Text[ hebrew ] = "‮כונן $(ARG1) לא קיים‬";
         Text[ hindi ] = "ड्रइव $(ARG1) अस्तित्व में नहीं है";
+        Text[ slovak ] = "Zariadenie $(ARG1) neexistuje";
     };
 
     String (ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK)
@@ -1299,6 +1339,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Složka $(ARG1) neexistuje";
         Text[ hebrew ] = "‮תקיית $(ARG1) לא קיימת‬";
         Text[ hindi ] = "$(ARG1) कोष्ठ अस्तित्व में नहीं है";
+        Text[ slovak ] = "Priečinok $(ARG1) neexistuje";
     };
 
     String (ERRCODE_UUI_WRONGJAVA & ERRCODE_RES_MASK)
@@ -1329,6 +1370,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nainstalovaná verze Javy není podporována";
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת אינה נתמכת‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन समर्थित नहीं है";
+        Text[ slovak ] = "Nainštalovaná verzia Javy nie je podporovaná";
     };
 
     String (ERRCODE_UUI_WRONGJAVA_VERSION & ERRCODE_RES_MASK)
@@ -1359,6 +1401,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nainstalovaná verze Javy $(ARG1) není podporována";
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת $(ARG1) אינה נתמכת‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन $(ARG1) समर्थित नहीं है";
+        Text[ slovak ] = "Nainštalovaná verzia Javy $(ARG1) nie je podporovaná";
     };
     String (ERRCODE_UUI_WRONGJAVA_MIN & ERRCODE_RES_MASK)
     {
@@ -1388,6 +1431,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nainstalovaná verze Javy není podporována, je vyžadována nejméně verze $(ARG1)";
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת אינה נתמכת. נדרשת לפחות גרסה $(ARG1)‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन समर्थित नहीं है, कम से कम $(ARG1) आवर्तन की ज़रूरत है";
+        Text[ slovak ] = "Nainštalovaná verzia Javy nie je podporovaná, je vyžadovaná najmenej verzia $(ARG1)";
     };
 
     String (ERRCODE_UUI_WRONGJAVA_VERSION_MIN & ERRCODE_RES_MASK)
@@ -1418,6 +1462,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Nainstalovaná verze Javy $(ARG1) není podporována, je vyžadována nejméně verze $(ARG2)";
         Text[ hebrew ] = "‮גרסאת הג'אווה המותקנת $(ARG1) אינה נתמכת. נדרשת לפחות גרסה $(ARG2)‬";
         Text[ hindi ] = "प्रतिष्ठापित Java आवर्तन $(ARG1) समर्थित नहीं है, कम से कम $(ARG2) आवर्तन की ज़रूरत है";
+        Text[ slovak ] = "Nainštalovaná verzia Javy $(ARG1) nie je podporovaná, je vyžadovaná najmenej verzia $(ARG2)";
     };
 
     String (ERRCODE_UUI_BADPARTNERSHIP & ERRCODE_RES_MASK)
@@ -1448,6 +1493,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Data spojená s tímto svazkem jsou poškozená.";
         Text[ hebrew ] = "‮הנתונים המקושרים לשותפות משובשים.‬";
         Text[ hindi ] = "सम्बन्धित सहकारिता ड़ॉटा दूषित हो गया है";
+        Text[ slovak ] = "Dáta priradené k tomuto zväzku sú poškodené.";
     };
 
     String (ERRCODE_UUI_BADPARTNERSHIP_NAME & ERRCODE_RES_MASK)
@@ -1478,6 +1524,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Data spojená se svazkem $(ARG1) jsou poškozená.";
         Text[ hebrew ] = "‮הנתונים המקושרים לשותפות $(ARG1) משובשים.‬";
         Text[ hindi ] = "सम्बन्धित सहकारिता ड़ॉटा $(ARG1) दूषित हो गया है";
+        Text[ slovak ] = "Dáta priradené k zväzku $(ARG1) sú poškodené.";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_VOLUME & ERRCODE_RES_MASK)
@@ -1508,6 +1555,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Svazek $(ARG1) není připraven";
         Text[ hebrew ] = "‮הכונן $(ARG1) אינו מוכן‬";
         Text[ hindi ] = "राशि $(ARG1) तैयार नहीं है";
+        Text[ slovak ] = "Oddiel $(ARG1) nie je pripravený";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_REMOVABLE & ERRCODE_RES_MASK)
@@ -1538,6 +1586,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "$(ARG1) není připraven; prosím vložte úložné médium";
         Text[ hebrew ] = "‮$(ARG1) אינו מוכן. נא להכניס מדית איחסון‬";
         Text[ hindi ] = "$(ARG1) तैयार नहीं है; कृपया संग्रह मीडियम को भरिए";
+        Text[ slovak ] = "$(ARG1) nie je pripravený; prosím vložte úložné médium";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE & ERRCODE_RES_MASK)
@@ -1568,6 +1617,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Svazek $(ARG1) není připraven; prosím vložte úložné médium";
         Text[ hebrew ] = "‮הכונן $(ARG1) אינו מוכן. נא להכניס מדית איחסון‬";
         Text[ hindi ] = "राशि $(ARG1) तैयार नहीं है; कृपया संग्रह मीडियम को भरिए";
+        Text[ slovak ] = "Oddiel $(ARG1) nie je pripravený; prosím vložte úložné médium";
     };
 
     String (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK)
@@ -1598,6 +1648,7 @@ Resource RID_UUI_ERRHDL
         Text[ czech ] = "Prosím vložte disk $(ARG1)";
         Text[ hebrew ] = "‮נא להכניס דיסק $(ARG1)‬";
         Text[ hindi ] = "कृपया $(ARG1) डिस्क् को भरिए ";
+        Text[ slovak ] = "Prosím vložte disk $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_CANTCREATE_NONAME & ERRCODE_RES_MASK)
@@ -1605,26 +1656,29 @@ Resource RID_UUI_ERRHDL
         Text = "Das Objekt kann im Verzeichnis $(ARG1) nicht angelegt werden";
         Text[english] = "The object could not be created in directory $(ARG1)";
         Text[ english_us ] = "The object cannot be created in directory $(ARG1)";
-        Text[ portuguese ] = "Imposs�vel criar o objecto no direct�rio $(ARG1).";
-        Text[ russian ] = "���������� ������� ������ � �������� $(ARG1)";
-        Text[ greek ] = "The object could not be created in directory $(ARG1)";
-        Text[ dutch ] = "Het object kan niet in directory $(ARG1) worden gemaakt";
+        Text[ portuguese ] = "Imposs�vel criar o objecto no direct�rio $(ARG2).";
+        Text[ russian ] = "���������� ������� ������ � �������� $(ARG2)";
+        Text[ greek ] = "The object could not be created in directory $(ARG2)";
+        Text[ dutch ] = "Het object kan niet in directory $(ARG2) worden gemaakt";
         Text[ french ] = "Impossible de cr�er l'objet dans le r�pertoire $(ARG1) !";
         Text[ spanish ] = "El objeto no se puede crear en el directorio $(ARG1).";
-        Text[ finnish ] = "Kohdetta ei voi luoda hakemistoon $(ARG1).";
+        Text[ finnish ] = "Kohdetta ei voi luoda hakemistoon $(ARG2).";
         Text[ italian ] = "Impossibile creare l'oggetto nella cartella $(ARG1)";
-        Text[ danish ] = "Objektet kan ikke oprettes i biblioteket $(ARG1)";
+        Text[ danish ] = "Objektet kan ikke oprettes i biblioteket $(ARG2)";
         Text[ swedish ] = "Det g�r inte att skapa objektet i katalogen $(ARG1).";
-        Text[ polish ] = "Utworzenie obiektu w katalogu $(ARG1) nie jest mo�liwe";
-        Text[ portuguese_brazilian ] = "The object could not be created in directory $(ARG1)";
+        Text[ polish ] = "Utworzenie obiektu w katalogu $(ARG2) nie jest mo�liwe";
+        Text[ portuguese_brazilian ] = "N�o foi poss�vel criar o objeto no diret�rio $(ARG2).";
         Text[ japanese ] = "オブジェクトはディレクトリ $(ARG1) に格納できません。";
         Text[ korean ] = "개체는 디렉토리 $(ARG2)에서 만들 수 없습니다.";
         Text[ chinese_simplified ] = "无法在目录 $(ARG1) 内建立此对象。";
         Text[ chinese_traditional ] = "無法在目錄 $(ARG1) 之内建立物件";
-        Text[ turkish ] = "The object could not be created in directory $(ARG1)";
-        Text[ arabic ] = "The object could not be created in directory $(ARG1)";
-        Text[ catalan ] = "L'objecte no es pot crear en el directori $(ARG1)";
+        Text[ turkish ] = "'$(ARG2)' dizini i�inde bu nesne olu�turulam�yor.";
+        Text[ arabic ] = "The object could not be created in directory $(ARG2)";
+        Text[ catalan ] = "L'objecte no es pot crear en el directori $(ARG2)";
         Text[ thai ] = "The object cannot be created in directory $(ARG1)";
+        Text[ czech ] = "Nelze vytvořit objekt v adresáři $(ARG2)";
+        Text[ hebrew ] = "‮לא ניתן ליצור את העצם בספרית $(ARG2)‬";
+        Text[ slovak ] = "Nie je možné vytvoriť objekt v adresári $(ARG2)";
     };
 
     String (ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE & ERRCODE_RES_MASK)
@@ -1655,6 +1709,7 @@ Resource RID_UUI_ERRHDL
         Text[ hebrew ] = "%PRODUCTNAME kann das Überschreiben von Dateien unter dem verwendeten Übertragungsprotokoll nicht verhindern. Möchten Sie trotzdem fortfahren";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway";
         Text[ hindi ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway?";
+        Text[ slovak ] = "%PRODUCTNAME nemôže zabrániť prepisovaniu súborov pri tomto prenosovom protokole. Chcete pokračovať?";
     };
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE & ERRCODE_RES_MASK)
@@ -1685,6 +1740,7 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese_brazilian ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ thai ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
         Text[ hindi ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
+        Text[ slovak ] = "Súbor '$(ARG1)' je porušený a preto nemohol byť otvorený. Má %PRODUCTNAME súbor opraviť?";
     };
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR & ERRCODE_RES_MASK)
@@ -1715,9 +1771,12 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese_brazilian ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ thai ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
         Text[ hindi ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
+        Text[ slovak ] = "Súbor '$(ARG1)' nemohol byť opravený a preto ani nemohol byť otvorený.";
     };
 
 };
+
+
 
 
 
