@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:06 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 12:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,17 +208,6 @@ jni_Bridge::jni_Bridge(
           m_java_env( java_env ),
           m_registered_java2uno( register_java2uno )
 {
-    OSL_ASSERT( JNI_FALSE == sal_False );
-    OSL_ASSERT( JNI_TRUE == sal_True );
-    OSL_ASSERT( sizeof (jboolean) == sizeof (sal_Bool) );
-    OSL_ASSERT( sizeof (jchar) == sizeof (sal_Unicode) );
-    OSL_ASSERT( sizeof (jdouble) == sizeof (double) );
-    OSL_ASSERT( sizeof (jfloat) == sizeof (float) );
-    OSL_ASSERT( sizeof (jbyte) == sizeof (sal_Int8) );
-    OSL_ASSERT( sizeof (jshort) == sizeof (sal_Int16) );
-    OSL_ASSERT( sizeof (jint) == sizeof (sal_Int32) );
-    OSL_ASSERT( sizeof (jlong) == sizeof (sal_Int64) );
-
     OSL_ASSERT( 0 != m_java_env && 0 != m_uno_env );
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
     (*m_java_env->acquire)( m_java_env );
@@ -415,35 +404,54 @@ void SAL_CALL uno_ext_getMapping(
         *ppMapping = 0;
     }
 
-    OUString const & from_env_typename = *reinterpret_cast< OUString const * >(
-        &pFrom->pTypeName );
-    OUString const & to_env_typename = *reinterpret_cast< OUString const * >(
-        &pTo->pTypeName );
-
-    uno_Mapping * mapping = 0;
-
-    if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ) &&
-        to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+    OSL_ASSERT( JNI_FALSE == sal_False );
+    OSL_ASSERT( JNI_TRUE == sal_True );
+    OSL_ASSERT( sizeof (jboolean) == sizeof (sal_Bool) );
+    OSL_ASSERT( sizeof (jchar) == sizeof (sal_Unicode) );
+    OSL_ASSERT( sizeof (jdouble) == sizeof (double) );
+    OSL_ASSERT( sizeof (jfloat) == sizeof (float) );
+    OSL_ASSERT( sizeof (jbyte) == sizeof (sal_Int8) );
+    OSL_ASSERT( sizeof (jshort) == sizeof (sal_Int16) );
+    OSL_ASSERT( sizeof (jint) == sizeof (sal_Int32) );
+    OSL_ASSERT( sizeof (jlong) == sizeof (sal_Int64) );
+    if ((JNI_FALSE == sal_False) &&
+        (JNI_TRUE == sal_True) &&
+        (sizeof (jboolean) == sizeof (sal_Bool)) &&
+        (sizeof (jchar) == sizeof (sal_Unicode)) &&
+        (sizeof (jdouble) == sizeof (double)) &&
+        (sizeof (jfloat) == sizeof (float)) &&
+        (sizeof (jbyte) == sizeof (sal_Int8)) &&
+        (sizeof (jshort) == sizeof (sal_Int16)) &&
+        (sizeof (jint) == sizeof (sal_Int32)) &&
+        (sizeof (jlong) == sizeof (sal_Int64)))
     {
-        jni_Bridge * bridge = new jni_Bridge(
-            pFrom, pTo->pExtEnv, true ); // ref count = 1
-        mapping = &bridge->m_java2uno;
-        uno_registerMapping(
-            &mapping, jni_Bridge_free,
-            pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
-    }
-    else if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ) &&
-             to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ))
-    {
-        jni_Bridge * bridge = new jni_Bridge(
-            pTo, pFrom->pExtEnv, false ); // ref count = 1
-        mapping = &bridge->m_uno2java;
-        uno_registerMapping(
-            &mapping, jni_Bridge_free,
-            (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
-    }
+        OUString const & from_env_typename = *reinterpret_cast< OUString const * >(
+            &pFrom->pTypeName );
+        OUString const & to_env_typename = *reinterpret_cast< OUString const * >(
+            &pTo->pTypeName );
 
-    *ppMapping = mapping;
+        uno_Mapping * mapping = 0;
+
+        if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ) &&
+            to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+        {
+            jni_Bridge * bridge = new jni_Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
+            mapping = &bridge->m_java2uno;
+            uno_registerMapping(
+                &mapping, jni_Bridge_free,
+                pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
+        }
+        else if (from_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ) &&
+                 to_env_typename.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_JAVA) ))
+        {
+            jni_Bridge * bridge = new jni_Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
+            mapping = &bridge->m_uno2java;
+            uno_registerMapping(
+                &mapping, jni_Bridge_free,
+                (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
+        }
+        *ppMapping = mapping;
+    }
 }
 //##################################################################################################
 sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
