@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-20 09:05:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ void AppWin::Reload()
 
 // Datei laden
 
-void AppWin::Load( const String& aName )
+BOOL AppWin::Load( const String& aName )
 {
     SkipReload();
     BOOL bErr;
@@ -488,7 +488,22 @@ void AppWin::Load( const String& aName )
 //      return;
     bErr = !pDataEdit->Load( aName );
     if( bErr )
-        ErrorBox( this, ResId( IDS_READERROR ) ).Execute();
+    {
+        ErrorBox aBox( this, ResId( IDS_READERROR ) );
+        String aMsg = aBox.GetMessText();
+        aMsg.AppendAscii("\n\"");
+        aMsg.Append( aName );
+        aMsg.AppendAscii("\"");
+        if ( pFrame->IsAutoRun() )
+        {
+            printf( "%s\n", ByteString( aMsg, osl_getThreadTextEncoding() ).GetBuffer() );
+        }
+        else
+        {
+            aBox.SetMessText( aMsg );
+            aBox.Execute();
+        }
+    }
     else
     {
         DirEntry aEntry( aName );
@@ -499,6 +514,7 @@ void AppWin::Load( const String& aName )
         bHasFile = TRUE;
     }
     SkipReload( FALSE );
+    return !bErr;
 }
 
 // Datei speichern
