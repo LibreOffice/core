@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:03:46 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include "miscdlgs.hrc"
 
@@ -3999,7 +3998,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text [ danish ] = "~Øverste række" ;
         Text [ portuguese_brazilian ] = "~Cabeçalho" ;
         Text [ portuguese ] = "~Cabeçalho" ;
-        Text[ chinese_simplified ] = "ä¸Šè¡Œ(~T)";
+        Text[ chinese_simplified ] = "é¦–è¡Œ";
         Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
         Text[ polish ] = "N~ag³ówek";
         Text[ japanese ] = "ä¸Šç«¯è¡Œ(~T)";
@@ -4071,7 +4070,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text [ danish ] = "~Nederste række" ;
         Text [ portuguese ] = "~Rodapé" ;
         Text [ portuguese_brazilian ] = "~Rodapé" ;
-        Text[ chinese_simplified ] = "ä¸‹è¡Œ(~B)";
+        Text[ chinese_simplified ] = "æœ«è¡Œ";
         Text[ russian ] = "Íèæíèé êîëîíòèòóë";
         Text[ polish ] = "~Stopka";
         Text[ japanese ] = "æœ€ä¸‹è¡Œ(~B)";
@@ -4161,7 +4160,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text [ danish ] = "Opret navn ud fra" ;
         Text [ portuguese_brazilian ] = "Criar nomes a partir de" ;
         Text [ portuguese ] = "Criar nomes a partir de" ;
-        Text[ chinese_simplified ] = "åˆ›å»ºåç§°ä»";
+        Text[ chinese_simplified ] = "åˆ›å»ºåç§°æ¥æº";
         Text[ russian ] = "Ñîçäàòü èìÿ èç";
         Text[ polish ] = "Utwórz nazwê z";
         Text[ japanese ] = "é©ç”¨ã™ã‚‹åå‰ã®ä½ç½®";
@@ -4235,7 +4234,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text [ danish ] = "Indsæt navn" ;
         Text [ portuguese ] = "Inserir nomes" ;
         Text [ portuguese_brazilian ] = "Colar nome" ;
-        Text[ chinese_simplified ] = "ç²˜è´´åç§°";
+        Text[ chinese_simplified ] = "æ’å…¥åç§°";
         Text[ russian ] = "Âñòàâèòü èìÿ";
         Text[ polish ] = "Wklej nazwê";
         Text[ japanese ] = "åå‰ã®æŒ¿å…¥";
