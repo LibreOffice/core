@@ -161,6 +161,10 @@ sub get_feature_level
         $level = "200";             # deselected in default installation, base is 100
     }
 
+    # special handling for Java and Ada
+
+    if ( $onefeature->{'Name'} =~ /java/i || $onefeature->{'Name'} =~ /adabas/i ) { $level = $level + 40; }
+
     return $level
 }
 
