@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: jbu $ $Date: 2001-05-29 13:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ typedef enum {
 } oslConditionResult;
 
 /** Creates a condition.
+    The condition is in the reset-state.
     @returns 0 if condition could not be created.
 */
 oslCondition SAL_CALL osl_createCondition(void);
