@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecverify.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     nIdOfSignatureElementCollector =
-        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_PRI_BEFOREMODIFY, sal_False);
+        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_BEFOREMODIFY, sal_False);
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
@@ -306,7 +306,7 @@ void XSecController::collectToVerify( const rtl::OUString& referenceId )
                     }
 
                     sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
-                        cssxc::sax::ElementMarkPriority_PRI_BEFOREMODIFY, sal_False );
+                        cssxc::sax::ElementMarkPriority_BEFOREMODIFY, sal_False );
 
                     cssu::Reference<cssxc::sax::XReferenceResolvedBroadcaster> xReferenceResolvedBroadcaster
                         (m_xSAXEventKeeper,
