@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 08:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,8 +1652,14 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         DeactivateAggregate( tpColumnName );
         DeactivateAggregate( tpType );
         m_pPreviousType = NULL;
+        //////////////////////////////////////////////////////////////////////
+        // Zeiger des gespeicherten Focus zuruecksetzen
+        pLastFocusWindow = NULL;
+        ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         return;
     }
+
+    ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
     const OTypeInfo* pFieldType = NULL;
     if( pFieldDescr )
