@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OInnerGroupInfoAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:37:02 $
+ *  last change:$Date: 2003-12-11 11:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import util.utils;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -104,6 +105,7 @@ public class OInnerGroupInfoAccess extends TestCase {
         nodepath.State = PropertyState.DEFAULT_VALUE;
         nodeArgs[0] = nodepath;
 
+        XNameReplace updateAccess = null;
         try {
             XInterface Provider = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
                                                      .createInstance("com.sun.star.comp.configuration.ConfigurationProvider");
@@ -123,6 +125,13 @@ public class OInnerGroupInfoAccess extends TestCase {
             String[] theNames = names.getElementNames();
 
             log.println("Contains " + theNames.length + " elements");
+
+            // create a changeable view on the element for XContainer interface
+            names = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, pMSF.createInstanceWithArguments(
+                                "com.sun.star.configuration.ConfigurationUpdateAccess", nodeArgs));
+            updateAccess = (XNameReplace) UnoRuntime.queryInterface(XNameReplace.class,
+                                names.getByName(names.getElementNames()[0]));
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
         }
@@ -144,6 +153,11 @@ public class OInnerGroupInfoAccess extends TestCase {
 
         tEnv.addObjRelation("PropertyNames", pNames);
         tEnv.addObjRelation("PropertyTypes", pTypes);
+
+        tEnv.addObjRelation("XContainer.Container", updateAccess);
+        // create an unlikely value for "HelpTipSeconds"
+        tEnv.addObjRelation("XContainer.NewValue", new Short((short)300000));
+        tEnv.addObjRelation("XContainer.ElementName", pNames[1]);
 
         tEnv.addObjRelation("ElementName", "AutoDetectSystemHC");
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OInnerGroupUpdateAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:37:14 $
+ *  last change:$Date: 2003-12-11 11:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import util.utils;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -152,8 +153,14 @@ public class OInnerGroupUpdateAccess extends TestCase {
 
         tEnv.addObjRelation("expectedName", "IsSelectionInReadonly");
         tEnv.addObjRelation("HierachicalName", "/org.openoffice.Office");
-        tEnv.addObjRelation("INSTANCE1", new Short((short) 3));
+
+        Short val = new Short((short)3);
+        tEnv.addObjRelation("INSTANCE1", val);
         tEnv.addObjRelation("NAMEREPLACE", pNames[1]);
+        tEnv.addObjRelation("XContainer.NewValue", val);
+        tEnv.addObjRelation("XContainer.ElementName", pNames[1]);
+        tEnv.addObjRelation("XContainer.Container", (XNameReplace)
+                        UnoRuntime.queryInterface(XNameReplace.class, oObj));
         tEnv.addObjRelation("NoSetName", "OInnerGroupInfoAccess");
 
         return tEnv;
