@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFormsCollection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:42:56 $
+ *  last change:$Date: 2003-09-08 11:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,23 +58,24 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
-import com.sun.star.container.XNameContainer;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.form.XForm;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.DrawTools;
 import util.FormTools;
+
+import com.sun.star.container.XNameContainer;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 
 /**
 * Test for object which is represented by service
@@ -117,18 +118,26 @@ public class OFormsCollection extends TestCase {
     /**
     * Creates Drawing document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-        log.println( "creating a draw document" );
-        xDrawDoc = DrawTools.createDrawDoc( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        log.println("creating a draw document");
+        xDrawDoc = DrawTools.createDrawDoc(((XMultiServiceFactory) tParam.getMSF()));
     }
 
     /**
     * Disposes drawing document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xDrawDoc " );
-        xDrawDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xDrawDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xDrawDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     /**
@@ -148,55 +157,59 @@ public class OFormsCollection extends TestCase {
     *   names. In case of forms' collection forms can have equal names.</li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
-        XForm oForm = null;
         XDrawPage oDP = null;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
 
-        oDP = DrawTools.getDrawPage(xDrawDoc,0);
+        oDP = DrawTools.getDrawPage(xDrawDoc, 0);
 
-        (DrawTools.getShapes(oDP)).add(FormTools.createControlShape(
-                            xDrawDoc,2000,1500,1000,1000,"CheckBox"));
-        (DrawTools.getShapes(oDP)).add(FormTools.createControlShape(
-                            xDrawDoc,3000,4500,15000,1000,"CommandButton"));
-        (DrawTools.getShapes(oDP)).add(FormTools.createControlShape(
-                            xDrawDoc,5000,3500,7500,5000,"TextField"));
+        (DrawTools.getShapes(oDP))
+            .add(FormTools.createControlShape(xDrawDoc, 2000, 1500, 1000, 1000,
+                                              "CheckBox"));
+        (DrawTools.getShapes(oDP))
+            .add(FormTools.createControlShape(xDrawDoc, 3000, 4500, 15000,
+                                              1000, "CommandButton"));
+        (DrawTools.getShapes(oDP))
+            .add(FormTools.createControlShape(xDrawDoc, 5000, 3500, 7500, 5000,
+                                              "TextField"));
 
         oObj = FormTools.getForms(oDP);
         FormTools.insertForm(xDrawDoc, (XNameContainer) oObj, "SecondForm");
 
+        log.println("creating a new environment for drawpage object");
 
-        log.println( "creating a new environment for drawpage object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
 
         // INSTANCEn : _XNameContainer; _XNameReplace
-        log.println( "adding INSTANCEn as obj relation to environment" );
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface
-            (XComponent.class, xDrawDoc);
-        int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
-        for (int n = 1; n < (THRCNT+1) ;n++ ) {
-            log.println( "adding INSTANCE" + n
-                +" as obj relation to environment" );
+        log.println("adding INSTANCEn as obj relation to environment");
+
+        XComponent xComp = (XComponent) UnoRuntime.queryInterface(
+                                   XComponent.class, xDrawDoc);
+        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
+
+        for (int n = 1; n < (THRCNT + 1); n++) {
+            log.println("adding INSTANCE" + n +
+                        " as obj relation to environment");
             tEnv.addObjRelation("INSTANCE" + n,
-                FormTools.createControl(xComp,"Form"));
+                                FormTools.createControl(xComp, "Form"));
         }
+
 
         // adding indicator that this collection can have duplicate
         // elements with the same names for XNameContainer test.
-        tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object()) ;
+        tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object());
 
-        tEnv.addObjRelation("INSTANCE", FormTools.createControl(xComp,"Form"));
-        tEnv.addObjRelation("INSTANCE2", FormTools.createControl(xComp,"Form"));
+        tEnv.addObjRelation("INSTANCE", FormTools.createControl(xComp, "Form"));
+        tEnv.addObjRelation("INSTANCE2",
+                            FormTools.createControl(xComp, "Form"));
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class OFormsCollection
-
+} // finish class OFormsCollection

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OGridControlModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:43:06 $
+ *  last change:$Date: 2003-09-08 11:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,26 +58,29 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XNameContainer;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.form.XGridColumnFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+import java.util.Comparator;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.FormTools;
 import util.SOfficeFactory;
-import java.util.Comparator;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.form.XGridColumnFactory;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 
 /**
 * Test for object which is represented by service
@@ -162,29 +165,38 @@ import com.sun.star.container.XNamed;
 * @see ifc.container._XContainer
 */
 public class OGridControlModel extends TestCase {
-
     XComponent xDrawDoc = null;
 
     /**
     * Creates Drawing document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
 
-        log.println( "creating a draw document" );
+        log.println("creating a draw document");
+
         try {
             xDrawDoc = SOF.createDrawDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create Draw document", e) ;
+            throw new StatusException("Can't create Draw document", e);
         }
     }
 
     /**
     * Disposes drawing document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xDrawDoc " );
-        xDrawDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xDrawDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xDrawDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     /**
@@ -208,8 +220,8 @@ public class OGridControlModel extends TestCase {
     *      {@link ifc.container._XContainer} : a column instance. </li>
     * </ul>
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
         XInterface oInstance = null;
         XPropertySet aControl = null;
@@ -218,103 +230,112 @@ public class OGridControlModel extends TestCase {
         XPropertySet aControl4 = null;
         XGridColumnFactory columns = null;
 
+
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
-
+        log.println("creating a test environment");
 
         //get GridControlModel
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
         String objName = "Grid";
-        XControlShape shape = FormTools.insertControlShape
-            (xDrawDoc, 5000, 7000, 2000, 2000, "GridControl") ;
-        oObj = shape.getControl() ;
+        XControlShape shape = FormTools.insertControlShape(xDrawDoc, 5000,
+                                                           7000, 2000, 2000,
+                                                           "GridControl");
+        oObj = shape.getControl();
 
-        log.println( "creating a new environment for drawpage object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for drawpage object");
 
-        try{
-            columns = (XGridColumnFactory) UnoRuntime.queryInterface
-                (XGridColumnFactory.class,oObj);
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        try {
+            columns = (XGridColumnFactory) UnoRuntime.queryInterface(
+                              XGridColumnFactory.class, oObj);
             aControl = columns.createColumn("TextField");
             aControl2 = columns.createColumn("DateField");
             aControl3 = columns.createColumn("TextField");
             aControl4 = columns.createColumn("TextField");
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             // Some exception occures.FAILED
-            log.println( "!!! Couldn't create instance : "+ e );
-            throw new StatusException("Can't create column instances.", e) ;
+            log.println("!!! Couldn't create instance : " + e);
+            throw new StatusException("Can't create column instances.", e);
         }
 
-        XNameContainer aContainer = (XNameContainer)
-                        UnoRuntime.queryInterface(XNameContainer.class,oObj);
+        XNameContainer aContainer = (XNameContainer) UnoRuntime.queryInterface(
+                                            XNameContainer.class, oObj);
 
         try {
-            aContainer.insertByName("First",aControl);
-            aContainer.insertByName("Second",aControl2);
+            aContainer.insertByName("First", aControl);
+            aContainer.insertByName("Second", aControl2);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("!!! Could't insert column Instance");
             e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e) ;
+            throw new StatusException("Can't insert columns", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("!!! Could't insert column Instance");
             e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e) ;
+            throw new StatusException("Can't insert columns", e);
         } catch (com.sun.star.container.ElementExistException e) {
             log.println("!!! Could't insert column Instance");
             e.printStackTrace(log);
-            throw new StatusException("Can't insert columns", e) ;
+            throw new StatusException("Can't insert columns", e);
         }
 
+
         //Relations for XSelectionSupplier
-        tEnv.addObjRelation("Selections", new Object[] {
-            aControl, aControl2});
-        tEnv.addObjRelation("Comparer", new Comparator() {
+        tEnv.addObjRelation("Selections", new Object[] { aControl, aControl2 });
+        tEnv.addObjRelation("Comparer",
+                            new Comparator() {
             public int compare(Object o1, Object o2) {
-                XNamed named1 = (XNamed)
-                    UnoRuntime.queryInterface(XNamed.class, o1);
-                XNamed named2 = (XNamed)
-                    UnoRuntime.queryInterface(XNamed.class, o2);
+                XNamed named1 = (XNamed) UnoRuntime.queryInterface(
+                                        XNamed.class, o1);
+                XNamed named2 = (XNamed) UnoRuntime.queryInterface(
+                                        XNamed.class, o2);
+
                 if (named1.getName().equals(named2.getName())) {
                     return 0;
                 }
+
                 return -1;
             }
-            public boolean equals(Object obj) {
-             return compare(this, obj) == 0;
-            } });
 
-        int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+            public boolean equals(Object obj) {
+                return compare(this, obj) == 0;
+            }
+        });
+
+        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
+
 
         // INSTANCEn : _XNameContainer; _XNameReplace
-        log.println( "adding INSTANCEn as obj relation to environment" );
+        log.println("adding INSTANCEn as obj relation to environment");
 
         try {
-            for (int n = 1; n < (3*THRCNT+1) ;n++ ) {
-                log.println( "adding INSTANCE" + n
-                    +" as obj relation to environment" );
+            for (int n = 1; n < (3 * THRCNT + 1); n++) {
+                log.println("adding INSTANCE" + n +
+                            " as obj relation to environment");
                 oInstance = columns.createColumn("TextField");
                 tEnv.addObjRelation("INSTANCE" + n, oInstance);
             }
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create 'INSTANCEn' relations", e) ;
+            e.printStackTrace(log);
+            throw new StatusException("Can't create 'INSTANCEn' relations", e);
         }
 
-        // adding relation for XNameContainer
-        tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object()) ;
 
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
+        // adding relation for XNameContainer
+        tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object());
+
+        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
+                            objName);
+
 
         // adding relation for XContainer
-        tEnv.addObjRelation("INSTANCE", aControl3) ;
-        tEnv.addObjRelation("INSTANCE2", aControl4) ;
+        tEnv.addObjRelation("INSTANCE", aControl3);
+        tEnv.addObjRelation("INSTANCE2", aControl4);
+
 
         //adding ObjRelation for XPersistObject
         tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class OGridControlModel
-
+} // finish class OGridControlModel
