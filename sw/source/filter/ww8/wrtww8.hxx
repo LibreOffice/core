@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:53:55 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,8 +357,8 @@ public:
     bool Append( SwWW8Writer&, WW8_CP nCp, const SwFrmFmt& rFmt,
         const Point& rNdTopLeft );
     int size() { return maDrawObjs.size(); };
-    const ::std::vector<DrawObj> &GetObjArr() const { return maDrawObjs; }
-    void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, INT32 nThick );
+    std::vector<DrawObj> &GetObjArr() { return maDrawObjs; }
+    void SetShapeDetails(DrawObj &rShape, UINT32 nId, INT32 nThick );
     virtual ~PlcDrawObj();
 private:
     //No copying
