@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: mh $ $Date: 2001-03-08 16:31:39 $
+#   last change: $Author: armin $ $Date: 2001-03-09 11:51:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,20 +192,20 @@ $(OBJ)$/%.obj : %.c
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.c
+    $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.c
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.c
+    $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-    @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
+    @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
     @+echo.
 .IF "$(COM)"=="GCC"
-    $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c
+    $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c
 .ELSE
     +-@echo Cflags: $(CFLAGS)
-    $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
+    $(CC) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
 .ENDIF
     $(SEMADEBUG)
 .ENDIF
@@ -215,13 +215,13 @@ $(OBJ)$/%.obj : $(MISCX)$/%.c
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISCX)$/$*.c
+    $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISCX)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
     @+if exist $@ $(RM) /q $@ >& nul
-    @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
+    @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
     @+echo.
-    $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
+    $(CC) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
     $(SEMADEBUG)
 .ENDIF
 
@@ -230,16 +230,16 @@ $(SLO)$/%.obj : $(MISCX)$/%.c
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISCX)$/$*.c
+    $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISCX)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
     @+if exist $@ $(RM) /q $@ >& nul
-    @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
+    @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
     @+echo.
 .IF "$(COM)"=="GCC"
-    $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c 
+    $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c 
 .ELSE
-    $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
+    $(CC) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
 .ENDIF
     $(SEMADEBUG)
 .ENDIF
@@ -249,14 +249,14 @@ $(SLO)$/%.obj : %.c
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.c
+    $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
     @+if exist $@ $(RM) /q $@ >& nul
 .IF "$(COM)"=="GCC"
-       $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
+       $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
 .ELSE
-       $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c )
+       $(CC) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c )
 .ENDIF
 .ENDIF
 
@@ -266,10 +266,10 @@ $(OBJ)$/%.obj : %.m
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TEST)"!=""
-    $(objc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.m
+    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.m
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.m
+    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.m
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE		"$(OS)"=="MACOSX"
@@ -282,7 +282,7 @@ $(OBJ)$/%.obj : $(MISCX)$/%.m
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISCX)$/$*.m
+    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISCX)$/$*.m
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C files is available for this platform"
@@ -294,7 +294,7 @@ $(SLO)$/%.obj : $(MISCX)$/%.m
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISCX)$/$*.m
+    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISCX)$/$*.m
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C files is available for this platform"
@@ -306,7 +306,7 @@ $(SLO)$/%.obj : %.m
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(OBJCFLAGS) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.m
+    $(objc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(OBJCFLAGS) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.m
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C files is available for this platform"
