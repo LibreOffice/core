@@ -6771,3 +6771,14 @@ __CTA3?AVDisposedException@lang@star@sun@com@@
 ?set@?$Reference@VXPluginInstance@mozilla@star@sun@com@@@uno@star@sun@com@@QAAEPAVXPluginInstance@mozilla@345@@Z
 ?set@?$Reference@VXTypeDetection@document@star@sun@com@@@uno@star@sun@com@@QAAEPAVXTypeDetection@document@345@@Z
 ?Execute@FileDialogHelper@sfx2@@QAEKAAPAVSfxItemSet@@AAVString@@@Z
+??0?$ImplHelperBase1@VXStatusListener@frame@star@sun@com@@@cppu@@QAE@XZ
+??0?$ImplHelperBase1@VXStarBasicModuleInfo@script@star@sun@com@@@cppu@@QAE@XZ
+??_B?1???s_aCD@?$ImplHelper1@VXSeekable@io@star@sun@com@@@$D@@9@51
+?s_aCD@?$ImplHelper1@VXSeekable@io@star@sun@com@@@$E
+?s_aCD@?$ImplHelper1@VXSeekable@io@star@sun@com@@@cppu@@0UClassData1@2@A
+??0?$ImplHelperBase2@VXInputStream@io@star@sun@com@@VXSeekable@2345@@cppu@@QAE@XZ
+??0SvxMacro@@QAE@ABVString@@0W4ScriptType@@@Z
+??4PropertyValue@beans@star@sun@com@@QAEAAU01234@ABU01234@@Z
+??_3uno@star@sun@com@@YAXAAVAny@0123@ABV?$Sequence@UPropertyValue@beans@star@sun@com@@@0123@@Z
+?clear@?$ClearableGuard@VMutex@osl@@@osl@@QAEXXZ
+?compareToAscii@OUString@rtl@@QBEJPBD@Z
