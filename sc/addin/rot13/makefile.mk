@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 18:03:18 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:23:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,15 +87,18 @@ SLOFILES= \
 SHL1TARGET= rot$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= irot
 SHL1OBJS=   $(SLO)$/x$(TARGET).obj
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS=     gdi32.lib advapi32.lib comdlg32.lib \
                  uuid.lib ole32.lib shell32.lib winspool.lib
 .IF "$(GVER)" == "W40"
 SHL1STDLIBS=    $(SHL1STDLIBS) comctl32.lib
-.ENDIF
-.ENDIF
+.ENDIF # W40
+.ENDIF # WNT
 
 # --- Targets -------------------------------------------------------
 
@@ -113,7 +116,7 @@ $(MISC)$/cl2c.pl: ..$/util$/cl2c.pl
 .ELSE
     @+$(COPY) ..$/util$/cl2c.pl $@
 .ENDIF
-    
+
 # convert C++ //... comments to C /*...*/ comments without affecting http://...
 $(INCCOM)$/xlang.h : $(SOLARINCDIR)$/tools$/lang.hxx
     @+$(SED) -e "s#\([ \t]\)//\(.*\)#\1/*\2 */#" -e "s#^//\(.*\)#/*\1 */#" $(SOLARINCDIR)$/tools$/lang.hxx >$@
@@ -130,28 +133,4 @@ $(MISC)$/rot.lst : \
 .ELSE
     @+echo $(<:+"\n":s/ //) > $@
 .ENDIF
-
-# --- Def-File ---
-
-# ------------------------------------------------------------------
-# Windows DEF File
-# ------------------------------------------------------------------
-
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)>$@
-    @echo DESCRIPTION 'Rot13 StarCalc Addin DLL'>>$@
-    @echo DATA        READ WRITE NONSHARED>>$@
-    @echo EXPORTS>>$@
-    @echo     GetFunctionCount>>$@
-    @echo     GetFunctionData>>$@
-    @echo     GetParameterDescription>>$@
-    @echo     SetLanguage >>$@
-    @echo     Rot13>>$@
-
-.ENDIF
-
 
