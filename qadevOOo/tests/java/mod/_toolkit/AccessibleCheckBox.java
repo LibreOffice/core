@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCheckBox.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-04-28 11:21:05 $
+ *  last change: $Date: 2003-05-22 13:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,8 @@ public class AccessibleCheckBox extends TestCase {
 
         tEnv.addObjRelation("EditOnly",
                     "This method isn't supported in this component");
+
+        tEnv.addObjRelation("LimitedBounds", "yes");
 
         return tEnv;
 
