@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:01:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@ private:
     bool mbPageHit;
 
     /// This flag indicates whether the selection rectangle is visible.
+    bool mbRectangleSelection;
+
+    /// The rectangle of the mouse drag selection.
+    Rectangle maDragSelectionRectangle;
     bool mbDragSelection;
 
     /// Box of the insert marker in model coordinates.
@@ -140,6 +144,8 @@ private:
     Sound* mpSound;
     class ShowingEffectInfo;
     ShowingEffectInfo* mpShowingEffectInfo;
+
+    model::PageDescriptor* mpRangeSelectionAnchor;
 
 
     /** Show the effect of the specified page.
@@ -172,6 +178,62 @@ private:
             forward.  When it is zero then ignore the call.
     */
     void GotoNextPage (int nOffset);
+
+    void ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent);
+
+    // What follows are a couple of helper methods that are used by
+    // ProcessMouseEvent().
+
+    /// Select the specified page and set the selection anchor.
+    void SelectHitPage (model::PageDescriptor& rDescriptor);
+    /// Deselect the specified page.
+    void DeselectHitPage (model::PageDescriptor& rDescriptor);
+    /// Deselect all pages.
+    void DeselectAllPages (void);
+
+    /** for a possibly following mouse motion by starting the drag timer
+        that after a short time of pressed but un-moved mouse starts a drag
+        operation.
+    */
+    void PrepareMouseMotion (const Point& aMouseModelPosition);
+
+    /** Set the current page of the main view to the one specified by the
+        given descriptor.
+    */
+    void SetCurrentPage (model::PageDescriptor& rDescriptor);
+    /** Select all pages between and including the selection anchor and the
+        specified page.
+    */
+    void RangeSelect (model::PageDescriptor& rDescriptor);
+
+    /** Start a rectangle selection at the given position.
+    */
+    void StartRectangleSelection (const Point& aMouseModelPosition);
+
+    /** Update the rectangle selection so that the given position becomes
+        the new second point of the selection rectangle.
+    */
+    void UpdateRectangleSelection (const Point& aMouseModelPosition);
+
+    /** Select all pages that lie completly in the selection rectangle.
+    */
+    void ProcessRectangleSelection (bool bToggleSelection);
+
+
+    /** Create a substitution display of the currently selected pages and
+        use the given position as the anchor point.
+    */
+    void CreateSubstitution (const Point& rMouseModelPosition);
+
+    /** Move the substitution display by the distance the mouse has
+        travelled since the last call to this method or to
+        CreateSubstitution().  The given point becomes the new anchor.
+    */
+    void UpdateSubstitution (const Point& rMouseModelPosition);
+
+    /** Move the substitution display of the currently selected pages.
+    */
+    void MoveSubstitution (void);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
