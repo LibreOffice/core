@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:18:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-22 10:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ void ViewShell::Init (void)
     OSL_ASSERT (pViewShell!=NULL);
 
     if (mpImpl->mbIsMainViewShell)
-        GetViewShellBase().UpdateController();
+        GetViewShellBase().UpdateController(GetController());
 
     mpImpl->mbIsInitialized = true;
 }
