@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:14 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 14:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             ODriver();
-            ~ODriver(){}
+            virtual ~ODriver();
 
             virtual void* getOdbcFunction(sal_Int32 _nIndex)  const;
             // OComponentHelper

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:28 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 14:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,9 @@ void SAL_CALL ODriver::acquire() throw(::com::sun::star::uno::RuntimeException)
 void SAL_CALL ODriver::release() throw(::com::sun::star::uno::RuntimeException)
 {
     ODriver_BASE::release();
+}
+ODriver::~ODriver()
+{
 }
 // -----------------------------------------------------------------------------
 void* ODriver::getOdbcFunction(sal_Int32 _nIndex) const

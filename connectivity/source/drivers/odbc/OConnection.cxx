@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 14:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          m_bUseCatalog(sal_False),
                          m_bUseOldDateFormat(sal_False)
 {
+    m_pDriver->acquire();
     ModuleContext::AddRef();
 }
 //-----------------------------------------------------------------------------
@@ -127,6 +128,8 @@ OConnection::~OConnection()
 {
     if(!isClosed(  ))
         close();
+    m_pDriver->release();
+    m_pDriver = NULL;
     ModuleContext::ReleaseRef();
 }
 //-----------------------------------------------------------------------------
@@ -137,6 +140,7 @@ void SAL_CALL OConnection::release() throw(RuntimeException)
 // -----------------------------------------------------------------------------
 void* OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
 {
+    OSL_ENSURE(m_pDriver,"OConnection::getOdbcFunction: m_pDriver is null!");
     return m_pDriver->getOdbcFunction(_nIndex);
 }
 //-----------------------------------------------------------------------------
