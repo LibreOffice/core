@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:45:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_STATECHANGEINPROGRESSEXCEPTION_HPP_
+#include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #endif
 
 #include <svtools/embedhlp.hxx>
@@ -878,6 +881,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 {
     SfxErrorContext aEc( ERRCTX_SO_DOVERB, m_pViewSh->GetWindow(), RID_SO_ERRCTX );
     ErrCode nError = ERRCODE_NONE;
+
     if ( m_pImp->m_xObject.is() )
     {
         sal_Bool bSaveCopyAs = sal_False;
@@ -931,6 +935,11 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                     }
                 }
             }
+            catch ( embed::StateChangeInProgressException& )
+            {
+                // TODO/LATER: it would be nice to be able to provide the current target state outside
+                nError = ERRCODE_SO_CANNOT_DOVERB_NOW;
+            }
             catch ( uno::Exception& )
             {
                 nError = ERRCODE_SO_GENERALERROR;
@@ -941,6 +950,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
     if( nError )
         ErrorHandler::HandleError( nError );
+
     return nError;
 }
 
