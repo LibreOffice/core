@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-08 11:03:18 $
+ *  last change: $Author: obr $ $Date: 2002-10-10 09:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,14 @@ bool ImplInitAccessBridge()
 {
     bool bSuccess = true;
     bool bErrorMessage = (FALSE != vcl::SettingsConfigItem::get()->IsValidConfigMgr());
+
+    // No error messages when env var is set ..
+    static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
+    if( pEnv && *pEnv )
+    {
+        bErrorMessage = false;
+    }
+
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mxAccessBridge.is() )
     {
