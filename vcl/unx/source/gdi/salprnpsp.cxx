@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-14 13:31:24 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 16:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,6 +823,17 @@ BOOL SalPrinter::StartJob(
 
     // get the job data
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, maPrinterData.m_aJobData );
+    maPrinterData.m_aJobData.m_nCopies = nCopies;
+    // update jobsetup data
+    // this is necessary because copies are currently only set in StartJob
+    void* pNewDriverData = NULL;
+    int nNewDriverDataBytes = NULL;
+    if( maPrinterData.m_aJobData.getStreamBuffer( pNewDriverData, nNewDriverDataBytes ) )
+    {
+        delete pJobSetup->mpDriverData;
+        pJobSetup->mpDriverData     = (unsigned char*)pNewDriverData;
+        pJobSetup->mnDriverDataLen  = nNewDriverDataBytes;
+    }
 
     // check wether this printer is configured as fax
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( maPrinterData.m_aJobData.m_aPrinterName ) );
@@ -859,7 +870,6 @@ BOOL SalPrinter::StartJob(
             break;
         }
     }
-
     return maPrinterData.m_aPrintJob.StartJob( maPrinterData.m_aTmpFile.Len() ? maPrinterData.m_aTmpFile : maPrinterData.m_aFileName, rJobName, rAppName, maPrinterData.m_aJobData ) ? TRUE : FALSE;
 }
 
