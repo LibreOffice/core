@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-17 15:17:12 $
+ *  last change: $Author: dl $ $Date: 2001-10-24 07:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2154,7 +2154,9 @@ void SdrModel::AfterRead()
     }
 
 #ifndef SVX_LIGHT
-    if( pPersist )
+    // Investigation of bMyPool to check if it's allowed to delete the OLE objects.
+    // If bMyPool == FALSE it's not allowed (Writer)
+    if( pPersist && bMyPool )
     {
         SvInfoObjectMemberList* pList = (SvInfoObjectMemberList*) pPersist->GetObjectList();
 
