@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:39:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,6 +1433,16 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     case XML_TYPE_BORDER_MODEL:
         pHdl = new XMLNamedBoolPropertyHdl( xmloff::token::XML_COLLAPSING,
                                             xmloff::token::XML_SEPARATING );
+        break;
+    case XML_TYPE_TEXT_LINE_MODE:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                                    ::xmloff::token::XML_SKIP_WHITE_SPACE,
+                                    ::xmloff::token::XML_CONTINUOUS);
+        break;
+    case XML_TYPE_TEXT_KEEP:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                                    ::xmloff::token::XML_ALWAYS,
+                                    ::xmloff::token::XML_AUTO);
         break;
     }
 
