@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:08:12 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 19:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ private:
                                 BOOL bRepCol, ScPreviewLocationData& rLocationData );
     void            LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY,
                                 BOOL bRepRow, ScPreviewLocationData& rLocationData );
-    void            PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nStartY,
+    void            PrintHF( long nPageNo, BOOL bHeader, long nStartY,
                                     BOOL bDoPrint, ScPreviewLocationData* pLocationData );
 
     long            PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData );

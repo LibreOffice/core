@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 19:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,8 @@ protected:
 private:
     ScPreviewShell* mpViewShell;
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxTable;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxHeader;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxFooter;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 19:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 
 
 class Window;
+class String;
 class Point;
 class Rectangle;
 class ScAddress;
@@ -138,12 +139,15 @@ public:
     void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow );
     void    AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol );
     void    AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow, BOOL bRepRow );
-    void    AddHeaderFooter( const Rectangle& rRect );
+    void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader );
     void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
     void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
 
     //  Get info on visible columns/rows in the visible area
     void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
+
+    BOOL    GetHeaderPosition( Rectangle& rHeaderRect ) const;
+    BOOL    GetFooterPosition( Rectangle& rFooterRect ) const;
 
     //  Check if any cells (including column/row headers) are in the visible area
     BOOL    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
