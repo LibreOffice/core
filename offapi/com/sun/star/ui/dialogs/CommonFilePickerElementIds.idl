@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonFilePickerElementIds.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:18:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com { module sun { module star { module ui { module dialogs {
 
  */
 
-constants CommonFilePickerElementIds
+published constants CommonFilePickerElementIds
 {
     //---------------------------------------------------------------------
     /** The control id of the OK button.
