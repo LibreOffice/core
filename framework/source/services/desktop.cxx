@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: as $ $Date: 2002-07-09 13:05:51 $
+ *  last change: $Author: mav $ $Date: 2002-07-17 14:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,8 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_CONFIGITEMAPIMODE_HPP_
-#include <com/sun/star/document/ConfigItemAPIMode.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -927,8 +927,8 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         if( !aAnalyzer.existArgument( E_MACROEXECUTIONMODE ) )
             aAnalyzer.setArgument( E_MACROEXECUTIONMODE, css::document::MacroExecMode::NEVER_EXECUTE );
 
-        if( !aAnalyzer.existArgument( E_UPDATEDOCFROMTEMP ) )
-            aAnalyzer.setArgument( E_UPDATEDOCFROMTEMP, css::document::ConfigItemAPIMode::VALUE_NO );
+        if( !aAnalyzer.existArgument( E_UPDATEDOCMODE ) )
+            aAnalyzer.setArgument( E_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE );
 
         // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
         // And we must do it before we call dispatch!
