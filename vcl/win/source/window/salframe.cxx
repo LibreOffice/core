@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:30:22 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,9 +732,9 @@ static USHORT aImplTranslateKeyTab[KEY_TAB_SIZE] =
     KEY_9,                // VK_NUMPAD9                      105
     KEY_MULTIPLY,         // VK_MULTIPLY                     106
     KEY_ADD,              // VK_ADD                          107
-    KEY_COMMA,            // VK_SEPARATOR                    108
+    KEY_DECIMAL,          // VK_SEPARATOR                    108
     KEY_SUBTRACT,         // VK_SUBTRACT                     109
-    KEY_POINT,            // VK_DECIMAL                      110
+    KEY_DECIMAL,          // VK_DECIMAL                      110
     KEY_DIVIDE,           // VK_DIVIDE                       111
     KEY_F1,               // VK_F1                           112
     KEY_F2,               // VK_F2                           113
