@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsViewOverlay.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:12:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ public:
     virtual void Hide (void);
     void Toggle (void);
     bool IsShowing (void);
+    ViewOverlay& GetViewOverlay (void);
 
 protected:
     ::osl::Mutex maMutex;
@@ -263,16 +264,17 @@ public:
 
     void Paint (void);
 
-    /** The overlay type describes how an overlay is painted.  That can be
+    /** The overlay paint type describes how an overlay is painted.  That can be
         either by using XOR operation or by doing a regular paint.
     */
     enum OverlayPaintType { OPT_ALL, OPT_XOR, OPT_PAINT };
 
-    /** As a preparation for a scrolling--or some other kind of action that
-        changes the map mode of a window--this method saves the current
-        state of all overlays so that the next call to Restore() can restore
-        them.  After that it hides the overlays so they do not corrupt the
-        window during the scrolling does.
+    /** As a preparation for draw operations that are not caused by the
+        overlays this method saves the current state of all overlays so that
+        the next call to Restore() can restore them.  After that it hides
+        the overlays so they do not interfere with the drawing operations.
+        @param eType
+            This parameter specifies what overlays to hide.
     */
     void HideAndSave (OverlayPaintType eType = OPT_ALL);
 
