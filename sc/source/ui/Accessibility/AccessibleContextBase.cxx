@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -99,25 +102,32 @@ using namespace ::drafts::com::sun::star::accessibility;
 //=====  internal  ============================================================
 
 ScAccessibleContextBase::ScAccessibleContextBase(
-        const uno::Reference<XAccessible>& rxParent,
-        const sal_Int16 aRole)
-    :
+                                                 const uno::Reference<XAccessible>& rxParent,
+                                                 const sal_Int16 aRole)
+                                                 :
     maRole(aRole),
     mxParent(rxParent),
     mpEventListeners(NULL),
     mpFocusListeners(NULL)
 {
-    if (rxParent.is())
-    {
-        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (rxParent->getAccessibleContext(), uno::UNO_QUERY);
-        if (xBroadcaster.is())
-            xBroadcaster->addEventListener(this);
-    }
 }
 
 
 ScAccessibleContextBase::~ScAccessibleContextBase(void)
 {
+}
+
+void ScAccessibleContextBase::Init()
+{
+    // hold reference to make sure that the destructor is not called
+    uno::Reference< XAccessibleContext > xOwnContext(this);
+
+    if (mxParent.is())
+    {
+        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addEventListener(this);
+    }
 }
 
 void ScAccessibleContextBase::SetDefunc()
@@ -173,9 +183,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    Rectangle aBounds(GetBoundingBox());
-    return !((rPoint.X < aBounds.getX()) || (rPoint.X > (aBounds.getX() + aBounds.getWidth())) ||
-            (rPoint.Y < aBounds.getY()) || (rPoint.Y > (aBounds.getY() + aBounds.getHeight())));
+    return GetBoundingBox().IsInside(VCLPoint(rPoint));
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAt(
@@ -190,46 +198,28 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    Rectangle aCoreBounds(GetBoundingBox());
-    awt::Rectangle aBounds;
-    aBounds.X = aCoreBounds.getX();
-    aBounds.Y = aCoreBounds.getY();
-    aBounds.Width = aCoreBounds.getWidth();
-    aBounds.Height = aCoreBounds.getHeight();
-    return aBounds;
+    return AWTRectangle(GetBoundingBox());
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    awt::Point aLocation;
-    Rectangle aRect(GetBoundingBox());
-    aLocation.X = aRect.getX();
-    aLocation.Y = aRect.getY();
-    return aLocation;
+    return AWTPoint(GetBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    awt::Point aPoint;
-    Rectangle aRect(GetBoundingBoxOnScreen());
-    aPoint.X = aRect.getX();
-    aPoint.Y = aRect.getY();
-    return aPoint;
+    return AWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    awt::Size aSize;
-    Rectangle aRect(GetBoundingBox());
-    aSize.Width = aRect.getWidth();
-    aSize.Height = aRect.getHeight();
-    return aSize;
+    return AWTSize(GetBoundingBox().GetSize());
 }
 
 sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
@@ -240,13 +230,9 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
     uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
     if (xParentComponent.is())
     {
-        awt::Rectangle aParentBounds(xParentComponent->getBounds());
-        awt::Rectangle aBounds(getBounds());
-        Rectangle aCoreParentBounds(aParentBounds.X, aParentBounds.Y,
-            aParentBounds.X + aParentBounds.Width, aParentBounds.Y + aParentBounds.Height);
-        Rectangle aCoreBounds(aBounds.X, aBounds.Y,
-            aBounds.X + aBounds.Width, aBounds.Y + aBounds.Height);
-        bShowing = aCoreBounds.IsOver(aCoreParentBounds);
+        Rectangle aParentBounds(VCLRectangle(xParentComponent->getBounds()));
+        Rectangle aBounds(VCLRectangle(getBounds()));
+        bShowing = aBounds.IsOver(aParentBounds);
     }
     return bShowing;
 }
@@ -267,9 +253,9 @@ void SAL_CALL ScAccessibleContextBase::addFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
     if (xListener.is())
     {
+        ScUnoGuard aGuard;
         if (!mpFocusListeners)
             mpFocusListeners = new cppu::OInterfaceContainerHelper(maListenerMutex);
         mpFocusListeners->addInterface(xListener);
@@ -346,8 +332,7 @@ sal_Int32 SAL_CALL
                 uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
                 if (xChild.is())
                 {
-                    uno::Reference<XAccessibleContext> xChildContext = xChild->getAccessibleContext();
-                    if (xChildContext == (XAccessibleContext*)this)
+                    if (xChild.get() == this)
                         nIndex = i;
                 }
             }
@@ -448,9 +433,9 @@ void SAL_CALL
            const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
     if (xListener.is())
     {
+        ScUnoGuard aGuard;
         if (!mpEventListeners)
             mpEventListeners = new cppu::OInterfaceContainerHelper(maListenerMutex);
         mpEventListeners->addInterface(xListener);
@@ -592,11 +577,20 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
             const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
             if (pInterfaces)
             {
-                for (sal_uInt32 i = 0; i < nLength; i++)
+                for (sal_uInt32 i = 0; i < nLength; ++i, ++pInterfaces)
                 {
-                    uno::Reference<XAccessibleEventListener> xListener(pInterfaces[i], uno::UNO_QUERY);
+                    uno::Reference<XAccessibleEventListener> xListener = static_cast< XAccessibleEventListener* >(pInterfaces->get());
                     if (xListener.is())
-                        xListener->notifyEvent(rEvent);
+                    {
+                        try
+                        {
+                            xListener->notifyEvent(rEvent);
+                        }
+                        catch (uno::RuntimeException)
+                        {
+                            DBG_ERROR("a object is gone without to remove from Broadcaster");
+                        }
+                    }
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const sal_Int16 aRole);
 
+    virtual void Init();
     virtual void SetDefunc();
 protected:
     virtual ~ScAccessibleContextBase(void);
