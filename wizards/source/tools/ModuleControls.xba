@@ -149,6 +149,7 @@ Dim oRuntimeDialog as Object
 	If IsMissing(oLibContainer ) then
 		oLibContainer = DialogLibraries
 	End If
+	oLibContainer.LoadLibrary(LibName)
 	oLib = oLibContainer.GetByName(Libname)
 	oLibDialog = oLib.GetByName(DialogName)
 	oRuntimeDialog = CreateUnoDialog(oLibDialog)
