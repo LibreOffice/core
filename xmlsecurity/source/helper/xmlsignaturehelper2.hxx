@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-16 15:58:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,11 +106,11 @@ public:
         com::sun::star::xml::sax::XDocumentHandler > xNextHandler);
 
     // com::sun::star::xml::crypto::sax::XSignatureCreationResultListener
-    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureCreationResult creationResult )
+    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus creationResult )
         throw (com::sun::star::uno::RuntimeException);
 
     // com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener
-    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureVerifyResult verifyResult )
+    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus verifyResult )
         throw (com::sun::star::uno::RuntimeException);
 
     // com::sun::star::xml::sax::XDocumentHandler
