@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:44:06 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,13 +417,12 @@
 #define HID_EVT_RELOADING                       (HID_FORMS_START + 330)
 #define HID_EVT_UNLOADING                       (HID_FORMS_START + 331)
 #define HID_EVT_ADJUSTMENTVALUECHANGED          (HID_FORMS_START + 332)
-
-#define HID_PROP_TOGGLE                         (HID_FORMS_START +  195)
-#define HID_PROP_FOCUSONCLICK                   (HID_FORMS_START +  196)
-#define HID_PROP_HIDEINACTIVESELECTION          (HID_FORMS_START +  197)
-#define HID_PROP_VISUALEFFECT                   (HID_FORMS_START +  198)
-#define HID_PROP_BORDERCOLOR                    (HID_FORMS_START +  199)
-#define UID_PROP_DLG_BORDERCOLOR                (HID_FORMS_START +  200)
-#define HID_PROP_IMAGEPOSITION                  (HID_FORMS_START +  200)
+#define HID_PROP_TOGGLE                         (HID_FORMS_START + 333)
+#define HID_PROP_FOCUSONCLICK                   (HID_FORMS_START + 334)
+#define HID_PROP_HIDEINACTIVESELECTION          (HID_FORMS_START + 335)
+#define HID_PROP_VISUALEFFECT                   (HID_FORMS_START + 336)
+#define HID_PROP_BORDERCOLOR                    (HID_FORMS_START + 337)
+#define UID_PROP_DLG_BORDERCOLOR                (HID_FORMS_START + 338)
+#define HID_PROP_IMAGEPOSITION                  (HID_FORMS_START + 339)
 
 #endif
