@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:42:18 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
+using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::beans::PropertyValue;
 using namespace ::com::sun::star::accessibility;
 
@@ -667,39 +668,50 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextRange( sal_Int32 nStartIndex, sal
     return OUString( maBuffer.getStr() + nStartIndex, nEndIndex - nStartIndex );
 }
 
-OUString SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-        throw( IndexOutOfBoundsException, RuntimeException )
+TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
+        throw( IndexOutOfBoundsException, IllegalArgumentException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
-    if( nIndex == implGetTextLength() )
-        return OUString();
+
+    TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
+
+    if( (nIndex == implGetTextLength()) && (nTextType != AccessibleTextType::LINE) )
+        return aResult;
+
     ensureValidIndex( nIndex );
 
-    OUStringBuffer aText;
+    OUStringBuffer aResultText;     // will be assigned to aResult.SegmentText below
     sal_Int32 nRulerPos = lcl_GetRulerPos( nIndex );
 
     switch( nTextType )
     {
         // single character
         case AccessibleTextType::CHARACTER:
-            aText.append( maBuffer.charAt( nIndex ) );
+        {
+            aResult.SegmentStart = nIndex;
+            aResultText.append( maBuffer.charAt( nIndex ) );
+        }
         break;
 
         // entire number or single dot/line
         case AccessibleTextType::WORD:
         case AccessibleTextType::GLYPH:
+            aResult.SegmentStart = nIndex;
             if( nRulerPos % 10 )
-                aText.append( maBuffer.charAt( nIndex ) );
+                aResultText.append( maBuffer.charAt( nIndex ) );
             else
-                aText.append( nRulerPos );
+                aResultText.append( nRulerPos );    // string representation of sal_Int32!!!
         break;
 
         // entire text
         case AccessibleTextType::SENTENCE:
         case AccessibleTextType::PARAGRAPH:
         case AccessibleTextType::LINE:
-            aText.append( maBuffer.getStr(), implGetTextLength() );
+            aResult.SegmentStart = 0;
+            aResultText.append( maBuffer.getStr(), implGetTextLength() );
         break;
 
         // equal-formatted text
@@ -707,24 +719,31 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal_In
         {
             sal_Int32 nFirstIndex = implGetFirstEqualFormatted( nIndex );
             sal_Int32 nLastIndex = implGetLastEqualFormatted( nIndex );
-            aText.append( maBuffer.getStr() + nFirstIndex, nLastIndex - nFirstIndex + 1 );
+            aResult.SegmentStart = nFirstIndex;
+            aResultText.append( maBuffer.getStr() + nFirstIndex, nLastIndex - nFirstIndex + 1 );
         }
         break;
 
         default:
             throw RuntimeException();
     }
-    return aText.makeStringAndClear();
+
+    aResult.SegmentText = aResultText.makeStringAndClear();
+    aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
+    return aResult;
 }
 
-OUString SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-        throw( IndexOutOfBoundsException, RuntimeException )
+TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType )
+        throw( IndexOutOfBoundsException, IllegalArgumentException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
 
-    OUString aText;
+    TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
+
     sal_Int32 nRulerPos = lcl_GetRulerPos( nIndex );
 
     switch( nTextType )
@@ -732,23 +751,23 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex, sa
         // single character
         case AccessibleTextType::CHARACTER:
             if( nIndex > 0 )
-                aText = getTextAtIndex( nIndex - 1, nTextType );
-            // else empty string
+                aResult = getTextAtIndex( nIndex - 1, nTextType );
+            // else empty
         break;
 
         // entire number or single dot/line
         case AccessibleTextType::WORD:
         case AccessibleTextType::GLYPH:
             if( nRulerPos > 0 )
-                aText = getTextAtIndex( lcl_GetApiPos( nRulerPos - 1 ), nTextType );
-            // else empty string
+                aResult = getTextAtIndex( lcl_GetApiPos( nRulerPos - 1 ), nTextType );
+            // else empty
         break;
 
         // entire text
         case AccessibleTextType::SENTENCE:
         case AccessibleTextType::PARAGRAPH:
         case AccessibleTextType::LINE:
-            // empty string
+            // empty
         break;
 
         // equal-formatted text
@@ -756,25 +775,28 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex, sa
         {
             sal_Int32 nFirstIndex = implGetFirstEqualFormatted( nIndex );
             if( nFirstIndex > 0 )
-                aText = getTextAtIndex( nFirstIndex - 1, nTextType );
-            // else empty string
+                aResult = getTextAtIndex( nFirstIndex - 1, nTextType );
+            // else empty
         }
         break;
 
         default:
             throw RuntimeException();
     }
-    return aText;
+    return aResult;
 }
 
-OUString SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-        throw( IndexOutOfBoundsException, RuntimeException )
+TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType )
+        throw( IndexOutOfBoundsException, IllegalArgumentException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
 
-    OUString aText;
+    TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
+
     sal_Int32 nRulerPos = lcl_GetRulerPos( nIndex );
     sal_Int32 nLastValid = implGetTextLength();
 
@@ -783,23 +805,23 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex, sa
         // single character
         case AccessibleTextType::CHARACTER:
             if( nIndex < nLastValid )
-                aText = getTextAtIndex( nIndex + 1, nTextType );
-            // else empty string
+                aResult = getTextAtIndex( nIndex + 1, nTextType );
+            // else empty
         break;
 
         // entire number or single dot/line
         case AccessibleTextType::WORD:
         case AccessibleTextType::GLYPH:
             if( nRulerPos < implGetRuler().GetPosCount() )
-                aText = getTextAtIndex( lcl_GetApiPos( nRulerPos + 1 ), nTextType );
-            // else empty string
+                aResult = getTextAtIndex( lcl_GetApiPos( nRulerPos + 1 ), nTextType );
+            // else empty
         break;
 
         // entire text
         case AccessibleTextType::SENTENCE:
         case AccessibleTextType::PARAGRAPH:
         case AccessibleTextType::LINE:
-            // empty string
+            // empty
         break;
 
         // equal-formatted text
@@ -807,15 +829,15 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex, sa
         {
             sal_Int32 nLastIndex = implGetLastEqualFormatted( nIndex );
             if( nLastIndex < nLastValid )
-                aText = getTextAtIndex( nLastIndex + 1, nTextType );
-            // else empty string
+                aResult = getTextAtIndex( nLastIndex + 1, nTextType );
+            // else empty
         }
         break;
 
         default:
             throw RuntimeException();
     }
-    return aText;
+    return aResult;
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
@@ -1291,7 +1313,7 @@ void SAL_CALL ScAccessibleCsvGrid::clearAccessibleSelection() throw( RuntimeExce
     implGetGrid().SelectAll( false );
 }
 
-void SAL_CALL ScAccessibleCsvGrid::selectAllAccessible() throw( RuntimeException )
+void SAL_CALL ScAccessibleCsvGrid::selectAllAccessibleChildren() throw( RuntimeException )
 {
     selectAccessibleChild( 0 );
 }
