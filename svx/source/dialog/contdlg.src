@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:27:38 $
+ *  last change: $Author: cl $ $Date: 2002-07-31 14:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text = "Zuweisen" ;
                 Text [ ENGLISH ] = "Apply" ;
                 Text [ english_us ] = "Apply" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "apply.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ portuguese ] = "Aplicar" ;
                 Text [ portuguese_brazilian ] = "Zuweisen" ;
                 Text [ swedish ] = "Tilldela" ;
@@ -130,11 +125,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Workplace" ;
                 Text [ english_us ] = "Workspace" ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "scarb.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ portuguese ] = "¡rea de ajuste" ;
                 Text [ portuguese_brazilian ] = "Arbeitsbereich" ;
                 Text [ swedish ] = "ArbetsomrÂde" ;
@@ -168,11 +158,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Selection" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10128.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Selectie" ;
                 Text [ english_us ] = "Select" ;
                 Text [ italian ] = "Selezione" ;
@@ -182,8 +167,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ danish ] = "Marker" ;
                 Text [ portuguese ] = "SelecÁ„o" ;
                 Text [ portuguese_brazilian ] = "Auswahl" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Objekte ausw‰hlen : Objekte auswıhlen */
-                Text[ chinese_simplified ] = "—°‘Ò";
+                Text[ chinese_simplified ] = "ÈÄâÊã©";
                 Text[ russian ] = "¬˚‰ÂÎÂÌËÂ";
                 Text[ polish ] = "Zaznacz";
                 Text[ japanese ] = "ëIë";
@@ -204,11 +188,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Rectangle" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10104.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Rechthoek" ;
                 Text [ english_us ] = "Rectangle" ;
                 Text [ italian ] = "Rettangolo" ;
@@ -239,11 +218,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Ellipse" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10110.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Ellips" ;
                 Text [ english_us ] = "Ellipse" ;
                 Text [ italian ] = "Ellisse" ;
@@ -274,11 +248,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Polygon" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10117.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Polygon" ;
                 Text [ italian ] = "Poligono" ;
                 Text [ spanish ] = "PolÌgono" ;
@@ -339,12 +308,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ spanish ] = "Modificar puntos" ;
                 Text [ english_us ] = "Edit Points" ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10126.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-                Text[ chinese_simplified ] = "±‡º≠Ω”µ„";
+                Text[ chinese_simplified ] = "ÁºñËæëÊé•ÁÇπ";
                 Text[ russian ] = "œ‡‚Í‡ ÚÓ˜ÂÍ";
                 Text[ polish ] = "Edytuj punkty";
                 Text[ japanese ] = "êßå‰ì_ÇÃï“èW";
@@ -375,12 +339,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ english_us ] = "Move Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10121.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-                Text[ chinese_simplified ] = "“∆∂ØΩ”µ„";
+                Text[ chinese_simplified ] = "ÁßªÂä®Êé•ÁÇπ";
                 Text[ russian ] = "œÂÂÏÂÒÚËÚ¸ ÚÓ˜ÍË";
                 Text[ polish ] = "PrzesuÒ punkty";
                 Text[ japanese ] = "êßå‰ì_ÇÃà⁄ìÆ";
@@ -396,8 +355,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_POLYINSERT ;
                 HelpId = HID_CONTDLG_POLYINSERT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte einf¸gen : Punkte einf≥gen */
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte einf¸gen : Punkte einf≥gen */
                 Text = "Punkte einf¸gen" ;
                 Text [ ENGLISH ] = "Insert Points" ;
                 Text [ norwegian ] = "Insert Points" ;
@@ -413,13 +370,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ english_us ] = "Insert Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10119.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-                /* ### ACHTUNG: Neuer Text in Resource? Neue Punkte einf¸gen oder anh‰ngen : Neue Punkte einf≥gen oder anhıngen */
-                Text[ chinese_simplified ] = "≤Â»ÎΩ”µ„";
+                Text[ chinese_simplified ] = "ÊèíÂÖ•Êé•ÁÇπ";
                 Text[ russian ] = "¬ÒÚ‡‚ËÚ¸ ÚÓ˜ÍË";
                 Text[ polish ] = "Wstaw punkty";
                 Text[ japanese ] = "êßå‰ì_ÇÃë}ì¸";
@@ -435,8 +386,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_POLYDELETE ;
                 HelpId = HID_CONTDLG_POLYDELETE ;
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte lˆschen : Punkte l˜schen */
-                /* ### ACHTUNG: Neuer Text in Resource? Punkte lˆschen : Punkte l˜schen */
                 Text = "Punkte lˆschen" ;
                 Text [ ENGLISH ] = "Delete Points" ;
                 Text [ norwegian ] = "Delete Points" ;
@@ -450,13 +399,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ dutch ] = "Punten verwijderen" ;
                 Text [ spanish ] = "Eliminar puntos" ;
                 Text [ english_us ] = "Delete Points" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10120.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-                /* ### ACHTUNG: Neuer Text in Resource? Markierte Punkte lˆschen : Markierte Punkte l˜schen */
-                Text[ chinese_simplified ] = "…æ≥˝Ω”µ„";
+                Text[ chinese_simplified ] = "Âà†Èô§Êé•ÁÇπ";
                 Text[ russian ] = "”‰‡ÎËÚ¸ ÚÓ˜ÍË";
                 Text[ polish ] = "UsuÒ punkty";
                 Text[ japanese ] = "êßå‰ì_ÇÃçÌèú";
@@ -476,16 +419,9 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_AUTOCONTOUR ;
                 HelpId = HID_CONTDLG_AUTOCONTOUR ;
-                /* ### ACHTUNG: Neuer Text in Resource? AutoKontur : Autokontur */
-                /* ### ACHTUNG: Neuer Text in Resource? AutoKontur : Autokontur */
                 Text = "AutoKontur" ;
                 Text [ ENGLISH ] = "Auto contour" ;
                 Text [ english_us ] = "AutoContour" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "scautoko.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ portuguese ] = "AutoContorno" ;
                 Text [ portuguese_brazilian ] = "Autokontur" ;
                 Text [ swedish ] = "AutoKontur" ;
@@ -515,12 +451,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_UNDO ;
                 HelpId = HID_CONTDLG_UNDO ;
-
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc05701.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
 
                 Text = "R¸ckg‰ngig " ;
                 Text [ English ] = "Undo " ;
@@ -552,11 +482,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Identifier = TBI_REDO ;
                 HelpId = HID_CONTDLG_REDO ;
 
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc05700.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
 
                 Text = "Wiederherstellen " ;
                 Text [ English ] = "Redo " ;
@@ -590,11 +515,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ ENGLISH ] = "Eyedropper" ;
                 Text [ english_us ] = "Eyedropper" ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ portuguese ] = "Pipeta" ;
                 Text [ portuguese_brazilian ] = "Pipette" ;
                 Text [ swedish ] = "Pipett" ;
@@ -702,12 +622,44 @@ FloatingWindow RID_SVXDLG_CONTOUR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editor de contornos";
     Text[ finnish ] = "ƒ‰riviivaeditori";
+    Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç‡πÄ‡∏™‡πâ‡∏ô‡πÅ‡∏™‡∏î‡∏á‡∏£‡∏π‡∏õ‡∏£‡πà‡∏≤‡∏á";
+
+#define CONTOURDLG_IDLIST \
+        IdList =            \
+        {                   \
+            TBI_APPLY ; \
+            TBI_WORKPLACE ; \
+            TBI_SELECT ;    \
+            TBI_RECT ;  \
+            TBI_CIRCLE ;    \
+            TBI_POLY ;  \
+            TBI_POLYEDIT ;  \
+            TBI_POLYMOVE ;  \
+            TBI_POLYINSERT ; \
+            TBI_POLYDELETE ;    \
+            TBI_AUTOCONTOUR ;   \
+            TBI_UNDO ;  \
+            TBI_REDO ;  \
+            TBI_PIPETTE ; \
+        };                 \
+        IdCount = { 14 ; };
+
+    ImageList CD_IMAPDLG
+    {
+        ImageBitmap = Bitmap { File = "cd_imagelist.bmp" ; };
+        MaskColor = Color { Red = 0xc000; Green = 0xc000; Blue = 0xc000; } ;
+        CONTOURDLG_IDLIST
+    };
+    ImageList CDH_IMAPDLG
+    {
+        ImageBitmap = Bitmap { File = "cdh_imagelist.bmp" ; };
+        MaskColor = Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; } ;
+        CONTOURDLG_IDLIST
+    };
 };
 /******************************************************************************/
 String STR_CONTOURDLG_MODIFY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Kontur wurde ge‰ndert.\nSollen die ƒnderungen ¸bernommen werden? : Die Kontur wurde geındert.\nSollen die énderungen ≥bernommen werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Die Kontur wurde ge‰ndert.\nSollen die ƒnderungen ¸bernommen werden? : Die Kontur wurde geındert.\nSollen die énderungen ≥bernommen werden? */
     Text = "Die Kontur wurde ge‰ndert.\nSollen die ƒnderungen ¸bernommen werden?" ;
     Text [ English ] = "The contour has been modified.\nDo you want to take your changes?" ;
     Text [ english_us ] = "The contour has been modified.\nDo you want to save the changes?" ;
@@ -734,8 +686,6 @@ String STR_CONTOURDLG_MODIFY
 };
 String STR_CONTOURDLG_NEWPIPETTE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Mˆchten Sie eine neue Kontur erzeugen? : M˜chten Sie eine neue Kontur erzeugen? */
-    /* ### ACHTUNG: Neuer Text in Resource? Mˆchten Sie eine neue Kontur erzeugen? : M˜chten Sie eine neue Kontur erzeugen? */
     Text = "Mˆchten Sie eine neue Kontur erzeugen?" ;
     Text [ English ] = "Do you want to create a new contour?" ;
     Text [ english_us ] = "Do you want to create a new contour?" ;
@@ -762,8 +712,6 @@ String STR_CONTOURDLG_NEWPIPETTE
 };
 String STR_CONTOURDLG_WORKPLACE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Das Setzen eines neuen Arbeitsbereiches\nf¸hrt zu einem Lˆschen der Kontur.\nMˆchten sie wirklich fortfahren? : Das Setzen eines neuen Arbeitsbereiches\nf≥hrt zu einem L˜schen der Kontur.\nM˜chten sie wirklich fortfahren? */
-    /* ### ACHTUNG: Neuer Text in Resource? Das Setzen eines neuen Arbeitsbereiches\nf¸hrt zu einem Lˆschen der Kontur.\nMˆchten sie wirklich fortfahren? : Das Setzen eines neuen Arbeitsbereiches\nf≥hrt zu einem L˜schen der Kontur.\nM˜chten sie wirklich fortfahren? */
     Text = "Das Setzen eines neuen Arbeitsbereiches\nf¸hrt zu einem Lˆschen der Kontur.\nMˆchten sie wirklich fortfahren?" ;
     Text [ English ] = "Setting a new working area will\ncause a removal of the contour.\nDo you really want to continue?" ;
     Text [ english_us ] = "Setting a new workspace will\ncause the contour to be deleted.\nAre you sure you want to continue?" ;
@@ -790,8 +738,6 @@ String STR_CONTOURDLG_WORKPLACE
 };
 String STR_CONTOURDLG_LINKED
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Diese Grafik ist mit dem Dokument verkn¸pft. Mˆchten Sie die Verkn¸pfung aufheben, um die Grafik zu bearbeiten? : Diese Grafik ist mit dem Dokument verkn≥pft. M˜chten Sie die Verkn≥pfung aufheben, um die Grafik zu bearbeiten? */
-    /* ### ACHTUNG: Neuer Text in Resource? Diese Grafik ist mit dem Dokument verkn¸pft. Mˆchten Sie die Verkn¸pfung aufheben, um die Grafik zu bearbeiten? : Diese Grafik ist mit dem Dokument verkn≥pft. M˜chten Sie die Verkn≥pfung aufheben, um die Grafik zu bearbeiten? */
     Text = "Diese Grafik ist mit dem Dokument verkn¸pft. Mˆchten Sie die Verkn¸pfung aufheben, um die Grafik zu bearbeiten?" ;
     Text [ English ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
     Text [ norwegian ] = "Dette er +++linked grafikk. ÿnsker du Â +++unlink the graphic for Â redigere?" ;

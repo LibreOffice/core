@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-05 14:55:33 $
+ *  last change: $Author: cl $ $Date: 2002-07-31 14:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,8 +445,12 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *pBindings, SfxChildWindow *
         nGrfChanged         ( 0UL ),
         pCheckObj           ( NULL ),
         bExecState          ( FALSE ),
-        bGraphicLinked      ( FALSE )
+        bGraphicLinked      ( FALSE ),
+        maImageList         ( SVX_RES( CD_IMAPDLG ) ),
+        maImageListH        ( SVX_RES( CDH_IMAPDLG ) )
 {
+    ApplyImageList();
+
     FreeResource();
 
     SvxContourDlg::SetSuperClass( *this );
@@ -817,6 +821,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
         {
             pTbx->CheckItem( nNewItemId, TRUE );
             aContourWnd.SetObjKind( OBJ_CIRC );
+
         }
         break;
 
@@ -1168,6 +1173,23 @@ IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
     pWnd->SetWorkplaceMode( FALSE );
 
     return 0L;
+}
+
+void SvxSuperContourDlg::ApplyImageList()
+{
+    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+
+    ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
+
+    aTbx1.SetImageList( rImgLst );
+}
+
+void SvxSuperContourDlg::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxFloatingWindow::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageList();
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-05 14:55:34 $
+ *  last change: $Author: cl $ $Date: 2002-07-31 14:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@ class SvxSuperContourDlg : public SvxContourDlg
     BOOL                bWorkplaceMode;
     BOOL                bUpdateGraphicLinked;
     BOOL                bGraphicLinked;
+    ImageList           maImageList;
+    ImageList           maImageListH;
 
     virtual void        Resize();
     virtual BOOL        Close();
@@ -148,6 +150,14 @@ public:
     void                Update( const Graphic& rGraphic, BOOL bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL,
                                 void* pEditingObj = NULL );
+
+    /** switches the toolbox images depending on the actuall high contrast display mode state */
+    void                ApplyImageList();
+
+    /** virtual method from Window is used to detect change in high contrast display mode
+        to switch the toolbox images */
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+
 };
 
 
