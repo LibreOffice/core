@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:23:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,38 +624,9 @@ ToolBox RID_DRAW_GRAF_TOOLBOX
 
 String RID_DRAW_VIEWER_TOOLBOX
 {
-    TEXT = "Funktionsleiste (Lesemodus)" ;
-    TEXT [ english ] = "Function Bar (viewing mode)" ;
-    Text [ dutch ] = "Werkbalk" ;
-    Text [ english_us ] = "Function Bar (viewing mode)" ;
-    Text [ italian ] = "Barra delle funzioni (modo visualizzazione)" ;
-    Text [ spanish ] = "Barra de funciones (modo vista)" ;
-    Text [ french ] = "Barre de fonctions (mode visualisation)" ;
-    Text [ swedish ] = "Funktionslist (visningsl�ge)" ;
-    Text [ danish ] = "Funktionslinje (visningstilstand)" ;
-    Text [ portuguese_brazilian ] = "Barra de fun��es" ;
-    Text [ portuguese ] = "Barra de fun��es" ;
-    Text[ chinese_simplified ] = "功能栏(视图模式)";
-    Text[ russian ] = "������ �������";
-    Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "ファンクションバー（表示モード）";
-    Text[ chinese_traditional ] = "功能列(檢視模式)";
-    Text[ arabic ] = "���� ������";
-    Text[ dutch ] = "Werkbalk";
-    Text[ chinese_simplified ] = "功能栏(视图模式)";
-    Text[ greek ] = "������ �����������";
-    Text[ korean ] = "기능 모음 (보기 모드)";
-    Text[ turkish ] = "Fonksiyon �ubu�u";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de funcions";
-    Text[ finnish ] = "Toimintorivi";
-    Text[ thai ] = "แถบฟังก์ชั่น";
-    Text[ czech ] = "Panel funkcí";
-    Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
-    Text[ hindi ] = "फंक्शन् पट्टी";
-    Text[ slovak ] = "Panel funkcií (mód náhľadu)";
-    Text[ hungarian ] = "Műveletek eszköztár (nézeti mód)";
-    Text[ slovenian ] = "Funkcijska vrstica (ogledovalni način)";
+    Text [ de ] = "Funktionsleiste (Lesemodus)" ;
+    Text [ en-US ] = "Function Bar (viewing mode)" ;
+    Text [ x-comment ] = " ";
 };
 
 ToolBox RID_DRAW_VIEWER_TOOLBOX
@@ -744,38 +715,9 @@ ToolBox RID_DRAW_VIEWER_TOOLBOX
 
 String RID_GRAPHIC_VIEWER_TOOLBOX
 {
-    TEXT = "Funktionsleiste (Lesemodus)" ;
-    TEXT [ english ] = "Function Bar (viewing mode)" ;
-    Text [ dutch ] = "Werkbalk" ;
-    Text [ english_us ] = "Function Bar (viewing mode)" ;
-    Text [ italian ] = "Barra delle funzioni (modo visualizzazione)" ;
-    Text [ spanish ] = "Barra de funciones (modo vista)" ;
-    Text [ french ] = "Barre de fonctions (mode visualisation)" ;
-    Text [ swedish ] = "Funktionslist (visningsl�ge)" ;
-    Text [ danish ] = "Funktionslinje (visningstilstand)" ;
-    Text [ portuguese_brazilian ] = "Barra de fun��es" ;
-    Text [ portuguese ] = "Barra de fun��es" ;
-    Text[ chinese_simplified ] = "功能栏(视图模式)";
-    Text[ russian ] = "������ �������";
-    Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "ファンクションバー（表示モード）";
-    Text[ chinese_traditional ] = "功能列(檢視模式)";
-    Text[ arabic ] = "���� ������";
-    Text[ dutch ] = "Werkbalk";
-    Text[ chinese_simplified ] = "功能栏(视图模式)";
-    Text[ greek ] = "������ �����������";
-    Text[ korean ] = "기능 모음 (보기 모드)";
-    Text[ turkish ] = "��lev �ubu�u";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de funcions";
-    Text[ finnish ] = "Toimintorivi";
-    Text[ thai ] = "แถบฟังก์ชั่น";
-    Text[ czech ] = "Panel funkcí";
-    Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
-    Text[ hindi ] = "फंक्शन् पट्टी";
-    Text[ slovak ] = "Panel funkcií (mód náhľadu)";
-    Text[ hungarian ] = "Műveletek eszköztár (nézeti mód)";
-    Text[ slovenian ] = "Funkcijska vrstica (ogledovalni način)";
+    Text [ de ] = "Funktionsleiste (Lesemodus)" ;
+    Text [ en-US ] = "Function Bar (viewing mode)" ;
+    Text [ x-comment ] = " ";
 };
 
 ToolBox RID_GRAPHIC_VIEWER_TOOLBOX
