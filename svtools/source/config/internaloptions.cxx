@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-13 16:36:26 $
+ *  last change: $Author: mba $ $Date: 2001-07-12 09:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ class SvtInternalOptions_Impl : public ConfigItem
 //*****************************************************************************************************************
 SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_INTERNAL     )
+    :   ConfigItem          ( ROOTNODE_INTERNAL, CONFIG_MODE_IMMEDIATE_UPDATE )
     // Init member then.
     ,   m_bSlotCFG          ( DEFAULT_SLOTCFG       )
     ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL )
