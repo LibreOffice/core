@@ -2,9 +2,9 @@
  *
  *  $RCSfile: psputil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-20 15:37:37 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ WritePS (osl::File* pFile, const sal_Char* pString)
     sal_uInt64 nInLength = rtl_str_getLength (pString);
     sal_uInt64 nOutLength = 0;
 
-    if (nInLength > 0)
+    if (nInLength > 0 && pFile)
         pFile->write (pString, nInLength, nOutLength);
 
     return nInLength == nOutLength;
@@ -204,7 +204,7 @@ WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength)
 {
     sal_uInt64 nOutLength = 0;
 
-    if (nInLength > 0)
+    if (nInLength > 0 && pFile)
         pFile->write (pString, nInLength, nOutLength);
 
     return nInLength == nOutLength;
@@ -216,7 +216,7 @@ WritePS (osl::File* pFile, const rtl::OString &rString)
     sal_uInt64 nInLength = rString.getLength();
     sal_uInt64 nOutLength = 0;
 
-    if (nInLength > 0)
+    if (nInLength > 0 && pFile)
         pFile->write (rString, nInLength, nOutLength);
 
     return nInLength == nOutLength;
