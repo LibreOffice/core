@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:47:00 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ ModalDialog RID_SCDLG_ASCII
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 321 , 225 ) ;
+    Size = MAP_APPFONT ( 320 , 247 ) ;
     Text = "Textimport" ;
     Text [ ENGLISH ] = "Text import" ;
     Text [ DANISH ] = "Tekstimport" ;
@@ -78,10 +78,10 @@ ModalDialog RID_SCDLG_ASCII
     Text [ SWEDISH ] = "Textimport" ;
     Text [ PORTUGUESE ] = "Importar texto" ;
     Moveable = TRUE ;
-    GroupBox GB_WIDTH
+    FixedLine FL_WIDTH
     {
-        Pos = MAP_APPFONT ( 6 , 113 ) ;
-        Size = MAP_APPFONT ( 255 , 110 ) ;
+        Pos = MAP_APPFONT ( 6 , 132 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Felder" ;
         Text [ ENGLISH ] = "Field width" ;
         Text [ DANISH ] = "Felter" ;
@@ -110,45 +110,22 @@ ModalDialog RID_SCDLG_ASCII
     };
     FixedText FT_TYPE
     {
-        Pos = MAP_APPFONT ( 148 , 124 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "T~yp" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ DANISH ] = "Type" ;
-        Text [ ENGLISH_US ] = "T~ype" ;
-        Text [ SPANISH ] = "T~ipo" ;
-        Text [ FRENCH ] = "Type" ;
-        Text [ ITALIAN ] = "Tipo" ;
-        Text [ DUTCH ] = "T~ype" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Typ" ;
-        Text [ SWEDISH ] = "T~yp" ;
-        Text [ PORTUGUESE ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ÀàÐÍ(~Y)";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "À²Ìß(~Y)";
-        Text[ chinese_traditional ] = "Ãþ«¬(~Y)";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ dutch ] = "T~ype";
-        Text[ chinese_simplified ] = "ÀàÐÍ(~Y)";
-        Text[ greek ] = "Ôý~ðïò";
-        Text[ korean ] = "À¯Çü(~Y)";
-        Text[ turkish ] = "T~ip";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "T~ipo";
-        Text[ finnish ] = "~Tyyppi";
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "Spaltent~yp" ;
+        Text [ ENGLISH ] = "Column t~ype" ;
     };
     ListBox LB_TYPE1
     {
-        Pos = MAP_APPFONT ( 190 , 121 ) ;
-        Size = MAP_APPFONT ( 57 , 68 ) ;
+        Pos = MAP_APPFONT ( 76 , 143 ) ;
+        Size = MAP_APPFONT ( 60 , 68 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    GroupBox GB_SEPOPT
+    FixedLine FL_SEPOPT
     {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
-        Size = MAP_APPFONT ( 255 , 75 ) ;
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Trennoptionen" ;
         Text [ ENGLISH ] = "Field separation" ;
         Text [ DANISH ] = "Separatorindstillinger" ;
@@ -177,8 +154,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     RadioButton RB_FIXED
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 243 , 10 ) ;
         Text = "~Feste Breite" ;
         Text [ ENGLISH ] = "Fixed width" ;
         Text [ DANISH ] = "Fast bredde" ;
@@ -208,8 +185,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     RadioButton RB_SEPARATED
     {
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 243 , 10 ) ;
         Text = "~Getrennt" ;
         Text [ ENGLISH ] = "Separated" ;
         Text [ DANISH ] = "Delt" ;
@@ -240,8 +217,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 46 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Z~eichensatz" ;
         Text [ ENGLISH ] = "Charset" ;
         Text [ DANISH ] = "Tegnsæt" ;
@@ -270,16 +247,16 @@ ModalDialog RID_SCDLG_ASCII
     };
     ListBox LB_CHARSET
     {
-        Pos = MAP_APPFONT ( 59 , 13 ) ;
-        Size = MAP_APPFONT ( 115 , 61 ) ;
+        Pos = MAP_APPFONT ( 76 , 14 ) ;
+        Size = MAP_APPFONT ( 130 , 61 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE;
     };
-    GroupBox GB_FIELDOPT
+    FixedLine FL_FIELDOPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 255 , 29 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Import" ;
         Text [ ENGLISH ] = "Import" ;
         Text [ english_us ] = "Import" ;
@@ -308,8 +285,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     FixedText FT_TEXTSEP
     {
-        Pos = MAP_APPFONT ( 176 , 95 ) ;
-        Size = MAP_APPFONT ( 46 , 10 ) ;
+        Pos = MAP_APPFONT ( 164 , 114 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Te~xttrenner" ;
         Text [ ENGLISH ] = "Text Separator" ;
         Text [ DANISH ] = "Tekstseparator" ;
@@ -338,27 +315,27 @@ ModalDialog RID_SCDLG_ASCII
     };
     ComboBox CB_TEXTSEP
     {
-        Pos = MAP_APPFONT ( 222 , 93 ) ;
-        Size = MAP_APPFONT ( 25 , 94 ) ;
+        Pos = MAP_APPFONT ( 218 , 112 ) ;
+        Size = MAP_APPFONT ( 37 , 94 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 267 , 6 ) ;
+        Pos = MAP_APPFONT ( 264 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 267 , 23 ) ;
+        Pos = MAP_APPFONT ( 264 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 267 , 43 ) ;
+        Pos = MAP_APPFONT ( 264 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
@@ -420,8 +397,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_TAB
     {
-        Pos = MAP_APPFONT ( 30 , 69 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 20 , 86 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "~Tabulator" ;
         Text [ ENGLISH ] = "Tab" ;
         TabStop = TRUE ;
@@ -451,8 +428,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_SEMICOLON
     {
-        Pos = MAP_APPFONT ( 30 , 80 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 20 , 99 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "~Semikolon" ;
         Text [ ENGLISH ] = "Semicolon" ;
         TabStop = TRUE ;
@@ -482,10 +459,10 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_COMMA
     {
-        Pos = MAP_APPFONT ( 109 , 69 ) ;
-        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Pos = MAP_APPFONT ( 92 , 86 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "~Komma" ;
-        Text [ ENGLISH ] = "Tab" ;
+        Text [ ENGLISH ] = "~Comma" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Comma" ;
         Text [ portuguese_brazilian ] = "~Komma" ;
@@ -513,8 +490,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_SPACE
     {
-        Pos = MAP_APPFONT ( 109 , 80 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 92 , 99 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
         Text = "~Leerzeichen" ;
         Text [ ENGLISH ] = "Space" ;
         TabStop = TRUE ;
@@ -544,8 +521,8 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_OTHER
     {
-        Pos = MAP_APPFONT ( 180 , 69 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 164 , 86 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Andere" ;
         Text [ ENGLISH ] = "Other" ;
         TabStop = TRUE ;
@@ -576,15 +553,15 @@ ModalDialog RID_SCDLG_ASCII
     Edit ED_OTHER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 222 , 68 ) ;
-        Size = MAP_APPFONT ( 14 , 10 ) ;
+        Pos = MAP_APPFONT ( 218 , 84 ) ;
+        Size = MAP_APPFONT ( 37 , 12 ) ;
         TabStop = TRUE ;
-        MaxTextLength = 1 ;
+        MaxTextLength = 10 ;
     };
     FixedText FT_AT_ROW
     {
-        Pos = MAP_APPFONT ( 182 , 14 ) ;
-        Size = MAP_APPFONT ( 43 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Ab ~Zeile" ;
         Text [ ENGLISH ] = "At Row" ;
         Text [ english_us ] = "From ro~w" ;
@@ -615,8 +592,8 @@ ModalDialog RID_SCDLG_ASCII
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 226 , 13 ) ;
-        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Pos = MAP_APPFONT ( 76 , 30 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -626,25 +603,25 @@ ModalDialog RID_SCDLG_ASCII
     {
         HelpId = HID_SC_ASCII_TABCTR ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 141 ) ;
-        Size = MAP_APPFONT ( 235 , 68 ) ;
+        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Size = MAP_APPFONT ( 235 , 72 ) ;
     };
     ScrollBar SB_COLUMN
     {
-        Pos = MAP_APPFONT ( 12 , 210 ) ;
-        Size = MAP_APPFONT ( 235 , 9 ) ;
+        Pos = MAP_APPFONT ( 12 , 231 ) ;
+        Size = MAP_APPFONT ( 235 , 8 ) ;
         HScroll = TRUE ;
     };
     ScrollBar SB_ROW
     {
-        Pos = MAP_APPFONT ( 247 , 150 ) ;
-        Size = MAP_APPFONT ( 10 , 59 ) ;
+        Pos = MAP_APPFONT ( 247 , 159 ) ;
+        Size = MAP_APPFONT ( 8 , 72 ) ;
         VScroll = TRUE ;
     };
     CheckBox CB_ASONCE
     {
-        Pos = MAP_APPFONT ( 30 , 95 ) ;
-        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Pos = MAP_APPFONT ( 20 , 114 ) ;
+        Size = MAP_APPFONT ( 138 , 10 ) ;
         Text = "Fel~dtrenner zusammenfassen" ;
         Text [ ENGLISH ] = "Treat delimiters as one" ;
         TabStop = TRUE ;

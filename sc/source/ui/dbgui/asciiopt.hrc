@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,12 @@
 #define RB_FIXED 2
 #define FT_CHARSET 3
 #define LB_CHARSET 4
-#define GB_SEPOPT 5
+#define FL_SEPOPT 5
 #define FT_FIELDSEP 6
 #define CB_FIELDSEP 7
 #define FT_TEXTSEP 8
 #define CB_TEXTSEP 9
-#define GB_FIELDOPT 10
+#define FL_FIELDOPT 10
 #define FT_WIDTH 11
 #define FT_TYPE 12
 #define FT_PREVIEW 13
@@ -89,7 +89,7 @@
 #define FT_PREVIEW2 27
 #define FT_PREVIEW3 28
 #define SB_COLUMN 29
-#define GB_WIDTH 30
+#define FL_WIDTH 30
 #define BTN_OK 31
 #define BTN_CANCEL 32
 #define BTN_HELP 33

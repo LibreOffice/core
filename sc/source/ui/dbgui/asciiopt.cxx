@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-19 13:40:01 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,16 +532,16 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
         aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
         bCharSetSystem  ( FALSE ),
-        aGbSepOpt   ( this, ScResId( GB_SEPOPT ) ),
+        aFlSepOpt   ( this, ScResId( FL_SEPOPT ) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
-        aGbFieldOpt ( this, ScResId( GB_FIELDOPT ) ),
+        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
         aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
         aFtType     ( this, ScResId( FT_TYPE ) ),
         aLbType     ( this, ScResId( LB_TYPE1 ) ),
         aScrollbar  ( this, ScResId( SB_COLUMN ) ),
         aVScroll    ( this, ScResId( SB_ROW ) ),
-        aGbWidth    ( this, ScResId( GB_WIDTH ) ),
+        aFlWidth    ( this, ScResId( FL_WIDTH ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
@@ -996,7 +996,7 @@ void ScImportAsciiDlg::DelimitedPreview()
     if(aCkbSpace.IsChecked())       aSeps+=' ';
     if(aCkbOther.IsChecked())
     {
-        aSeps+=aEdOther.GetText().GetChar(0);
+        aSeps+=aEdOther.GetText();
     }
     BOOL bMerge = FALSE;
     if(aCkbAsOnce.IsChecked()) bMerge=TRUE;
@@ -1339,7 +1339,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
         if(aCkbSpace.IsChecked())       aSeps+=' ';
         if(aCkbOther.IsChecked())
         {
-            aSeps+=aEdOther.GetText().GetChar(0);
+            aSeps+=aEdOther.GetText();
         }
         rOpt.SetMergeSeps(aCkbAsOnce.IsChecked());
         rOpt.SetFieldSeps( aSeps );

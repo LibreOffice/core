@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
         aFtCells        ( this, ScResId( FT_CELLS ) ),
         aFtPagesLbl     ( this, ScResId( FT_PAGES_LBL ) ),
         aFtPages        ( this, ScResId( FT_PAGES ) ),
-        aGbInfo         ( this, ScResId( GB_INFO ) )
+        aFlInfo         ( this, ScResId( FL_INFO ) )
 {
     ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
     ScDocStat   aDocStat;
@@ -100,9 +100,9 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
     if ( pDocSh )
         pDocSh->GetDocStat( aDocStat );
 
-    String aInfo = aGbInfo.GetText();
+    String aInfo = aFlInfo.GetText();
     aInfo += aDocStat.aDocName;
-    aGbInfo     .SetText( aInfo );
+    aFlInfo     .SetText( aInfo );
     aFtTables   .SetText( String::CreateFromInt32( aDocStat.nTableCount ) );
     aFtCells    .SetText( String::CreateFromInt32( aDocStat.nCellCount ) );
     aFtPages    .SetText( String::CreateFromInt32( aDocStat.nPageCount ) );
