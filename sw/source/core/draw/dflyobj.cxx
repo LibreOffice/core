@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-20 16:25:19 $
+ *  last change: $Author: ama $ $Date: 2002-01-21 09:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,13 +502,10 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         long lYDiff = aNewPos.Y() - aOldPos.Y();
 #ifdef VERTICAL_LAYOUT
         if( bVert )
+            lXDiff -= GetFlyFrm()->Frm().Width();
+        if( GetFlyFrm()->GetAnchor()->IsVertical() )
         {
-            if( !bRev )
-            {
-                lXDiff = -lXDiff;
-                lXDiff += GetFlyFrm()->Frm().Width();
-            }
-            lXDiff += rVert.GetPos();
+            lXDiff -= rVert.GetPos();
             lYDiff += rHori.GetPos();
         }
         else
