@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergechildwindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 11:48:12 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,22 +109,6 @@ public:
 
     SFX_DECL_CHILDWINDOW( SwMailMergeChildWindow );
 };
-
-/*-- 01.07.2004 08:01:29---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/*class SwSendMailChildWindow : public SfxChildWindow
-{
-public:
-    SwSendMailChildWindow( Window* ,
-                    USHORT nId,
-                    SfxBindings*,
-                    SfxChildWinInfo*  );
-
-    SFX_DECL_CHILDWINDOW( SwSendMailChildWindow );
-    SwSendMailDialog*   GetMailDialog();
-    virtual sal_Bool    QueryClose();
-};*/
 
 #endif
 
