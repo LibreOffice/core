@@ -66,7 +66,7 @@
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="33" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34673" dlg:value="cmdCancel">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:Euro.Common.CancelTask?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdHelp" dlg:tab-index="34" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:tag="34674" dlg:value="cmdHelp" dlg:button-type="help"/>
+  <dlg:button dlg:id="cmdHelp" dlg:tab-index="34" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdHelp" dlg:button-type="help"/>
   <dlg:button dlg:id="cmdBack" dlg:tab-index="35" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34675" dlg:value="cmdBack">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:Euro.AutoPilotRun.PreviousStep?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
