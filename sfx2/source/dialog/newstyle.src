@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:48:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,66 +69,17 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 177 , 112 ) ;
-    Text = "Vorlage erzeugen" ;
-    Text [ ENGLISH ] = "Create template" ;
-    Text [ norwegian ] = "Lag mal" ;
-    Text [ italian ] = "Crea modello" ;
-    Text [ portuguese_brazilian ] = "Criar estilo" ;
-    Text [ portuguese ] = "Criar estilo" ;
-    Text [ finnish ] = "Luo tyyli" ;
-    Text [ danish ] = "Opret typografi" ;
-    Text [ french ] = "Création d'un style" ;
-    Text [ swedish ] = "Skapa formatmall" ;
-    Text [ dutch ] = "Opmaakprofiel maken" ;
-    Text [ spanish ] = "Crear estilo" ;
-    Text [ english_us ] = "Create Style" ;
-    Text[ chinese_simplified ] = "ç”Ÿæˆæ ·å¼";
-    Text[ russian ] = "Íîâûé ñòèëü";
-    Text[ polish ] = "Utwórz styl";
-    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®ä½œæˆ";
-    Text[ chinese_traditional ] = "è£½ä½œæ¨£å¼";
-    Text[ arabic ] = "ÅäÔÇÁ äãØ";
-    Text[ greek ] = "Äçìéïõñãßá ğñïôığïõ";
-    Text[ korean ] = "ìŠ¤íƒ€ì¼ ë§Œë“¤ê¸°";
-    Text[ turkish ] = "Biçim oluştur";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crea un estil";
+    Text [ de ] = "Vorlage erzeugen" ;
+    Text [ en-US ] = "Create Style" ;
+    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedLine FL_COL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 109 , 8 ) ;
-        Text = "Vorlagenname" ;
-        Text [ ENGLISH ] = "Template name" ;
-        Text [ norwegian ] = "Navn på mal" ;
-        Text [ italian ] = "Nome modello" ;
-        Text [ portuguese_brazilian ] = "Nome do estilo" ;
-        Text [ portuguese ] = "Nome do estilo" ;
-        Text [ finnish ] = "Tyylin nimi" ;
-        Text [ danish ] = "Typografinavn" ;
-        Text [ french ] = "Nom du style" ;
-        Text [ swedish ] = "Formatmallens namn" ;
-        Text [ dutch ] = "Naam opmaakprofiel" ;
-        Text [ spanish ] = "Nombre del estilo" ;
-        Text [ english_us ] = "Style name" ;
-        Text[ chinese_simplified ] = "æ ·å¼åç§°";
-        Text[ russian ] = "Íàçâàíèå ñòèëÿ";
-        Text[ polish ] = "Nazwa stylu";
-        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«å";
-        Text[ chinese_traditional ] = "æ¨£å¼åç¨±";
-        Text[ arabic ] = "ÇÓã ÇáäãØ";
-        Text[ greek ] = "¼íïìá óôõë";
-        Text[ korean ] = "ìŠ¤íƒ€ì¼ ì´ë¦„";
-        Text[ turkish ] = "Biçem adı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom de l'estil";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸¥à¸±à¸à¸©à¸“à¸°";
-        Text[ czech ] = "NÃ¡zev stylu";
-        Text[ hebrew ] = "â€®×©× ×¡×’× ×•×Ÿâ€¬";
-        Text[ hindi ] = "à¤¶à¥ˆà¤²à¥€ à¤•à¤¾ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡zov Å¡tÃ½lu";
-        Text[ hungarian ] = "StÃ­lusnÃ©v";
-        Text[ slovenian ] = "Ime sloga";
+        Text [ de ] = "Vorlagenname" ;
+        Text [ en-US ] = "Style name" ;
+        Text [ x-comment ] = " ";
     };
     ComboBox LB_COL
     {
@@ -154,45 +105,10 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     {
         Buttons = WB_YES_NO ;
         DefButton = WB_DEF_NO ;
-        Message = "Vorlage existiert bereits. Überschreiben?" ;
-        Message [ ENGLISH ] = "Template already exists. Overwrite?" ;
-        Message [ norwegian ] = "Malen finnes allerede. Skriv over?" ;
-        Message [ italian ] = "Il modello esiste già. Volete sovrascriverlo?" ;
-        Message [ portuguese_brazilian ] = "O estilo já existe. Deseja substituí-lo?" ;
-        Message [ portuguese ] = "O modelo já existe. Deseja substituí-lo?" ;
-        Message [ finnish ] = "Tyyli on jo olemassa. Korvataanko?" ;
-        Message [ danish ] = "Typografien findes allerede. Skal den overskrives?" ;
-        Message [ french ] = "Ce style existe déjà. Voulez-vous le remplacer ?" ;
-        Message [ swedish ] = "Formatmallen finns redan. Skriva över?" ;
-        Message [ dutch ] = "Dit opmaakprofiel bestaat reeds. Overschrijven?" ;
-        Message [ spanish ] = "El estilo ya existe. ¿Desea sobrescribirlo?" ;
-        Message [ english_us ] = "Style already exists. Overwrite?" ;
-        Message[ chinese_simplified ] = "æ ·å¼å·²ç»å­˜åœ¨ã€‚è¦æ”¹å†™ï¼Ÿ";
-        Message[ russian ] = "Ñòèëü óæå ñóùåñòâóåò. Ïåğåïèñàòü?";
-        Message[ polish ] = "Styl ju¿ istnieje. Czy go zast¹piæ?";
-        Message[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
-        Message[ chinese_traditional ] = "æ¨£å¼å·²ç¶“å­˜åœ¨ã€‚è¦è¦†å¯«ï¼Ÿ";
-        Message[ arabic ] = "åĞÇ ÇáäãØ ãæÌæÏ ãÓÈŞÇğ. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
-        Message[ greek ] = "Ôï ğñüôõğï õğÜñ÷åé Şäç. Íá äéáãñáöåß;";
-        Message[ korean ] = "ì´ ìŠ¤íƒ€ì¼ì€ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤. ê²¹ì³ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
-        Message[ turkish ] = "Biçim mevcut durumda. Üzerine yazılsın mı?";
-        Message[ language_user1 ] = " ";
-        Message[ catalan ] = "L'estil ja existeix. Voleu sobreescriure'l?";
-        Message[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§  à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸šà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-        Message[ czech ] = "Styl jiÅ¾ existuje. PÅ™epsat?";
-        Message[ hebrew ] = "â€®×”×¡×’× ×•×Ÿ ×›×‘×¨ ×§×™×™×. ×”×× ×œ×”×—×œ×™×¤×•?â€¬";
-        Message[ hindi ] = "à¤¶à¥ˆà¤²à¥€ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ à¥¤ à¤“à¤µà¤°à¤°à¤‡à¤Ÿà¥ à¤•à¤°à¤¨à¤¾ à¤¹à¥ˆ?";
-        Message[ slovak ] = "Å tÃ½l uÅ¾ existuje. PrepÃ­saÅ¥?";
-        Message[ hungarian ] = "A stÃ­lus mÃ¡r lÃ©tezik. FelÃ¼lÃ­rja?";
-        Message[ slovenian ] = "Slog Å¾e obstaja. Ali ga Å¾elite prepisati?";
+        Message [ de ] = "Vorlage existiert bereits. Überschreiben?" ;
+        Message [ en-US ] = "Style already exists. Overwrite?" ;
+        Message [ x-comment ] = " ";
     };
-    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸¥à¸±à¸à¸©à¸“à¸°";
-    Text[ czech ] = "VytvoÅ™it styl";
-    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¡×’× ×•×Ÿâ€¬";
-    Text[ hindi ] = "à¤¶à¥ˆà¤²à¥€ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VytvoriÅ¥ Å¡tÃ½l";
-    Text[ hungarian ] = "StÃ­lus lÃ©trehozÃ¡sa";
-    Text[ slovenian ] = "Ustvari slog";
 };
 
 
