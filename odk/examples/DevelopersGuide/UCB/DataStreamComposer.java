@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataStreamComposer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:04:48 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,7 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
 // base classes
 import com.sun.star.ucb.*;
 import com.sun.star.io.XInputStream;
@@ -227,7 +226,7 @@ public class DataStreamComposer {
         System.out.println(
             "Usage   : DataStreamComposer -connect=socket,host=...,port=... -url=... -srcURL=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt -srcURL=<workdir>/data-<uniquepostfix>" );
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt -srcURL=<workdir>/resource-<uniquepostfix>" );
         System.out.println(
             "\nExample : -url=file:///temp/my.txt -srcURL=file:///temp/src.txt " );
     }
