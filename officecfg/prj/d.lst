@@ -26,6 +26,10 @@ mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\TypeDetection
 ..\%__SRC%\misc\registry\data\org\openoffice\Office\UI\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\UI
 ..\%__SRC%\misc\registry\data\org\openoffice\ucb\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
 
+mkdir: %_DEST%\xml%_EXT%\registry\spool
+
+..\%__SRC%\misc\registry\spool\*.xcu %_DEST%\xml%_EXT%\registry\spool
+
 mkdir: %_DEST%\pck%_EXT%
 
 ..\%__SRC%\misc\*.properties %_DEST%\pck%_EXT%
