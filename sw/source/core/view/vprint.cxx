@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2002-10-18 13:20:08 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
+#ifndef _SFX_PRNMON_HXX
+#include <sfx2/prnmon.hxx>
+#endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
@@ -96,7 +99,6 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-
 
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
@@ -808,14 +810,19 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
         // HACK, damit die Anzeige sich nicht verschluckt.
         const XubString aTmp( SW_RES( STR_STATSTR_PRINT ) );
         pProgress->SetText( aTmp );
-        lcl_SetState( *pProgress, 1, nStatMax, pStr, nMergeAct, nMergeCnt, 0, 1 );
+        lcl_SetState( *pProgress, 1, nStatMax, pStr, nMergeAct, nMergeCnt, 0,
+                      1 );
+        pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
+
+        aAction.SetProgress(pProgress);
     }
 
     pLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
     {
-        if ( bPrtJob && !pPrt->IsJobActive() )
+        if ( (bPrtJob && !pPrt->IsJobActive()) || Imp()->IsStopPrt())
             break;
+
 
         if( pProgress )
         {
@@ -826,7 +833,8 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
             pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
         }
 
-        if ( bPrtJob && !pPrt->IsJobActive() )
+        if ( bPrtJob && !pPrt->IsJobActive() ||
+             Imp()->IsStopPrt())
             break;
         pPage->Calc();
         SwRect aOldVis( VisArea() );
@@ -836,11 +844,18 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
         aAction.SetPaint( FALSE );
         aAction.SetWaitAllowed( FALSE );
         aAction.SetReschedule( TRUE );
+
         aAction.Action();
+
         aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
         SwPaintQueue::Repaint();
     }
+    if (pProgress)
+    {
+        aAction.SetProgress(NULL);
+    }
+
     pLayout->EndAllAction();
 }
 
@@ -859,6 +874,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     BOOL bStartJob = FALSE;
 
     BOOL bSelection = rOptions.bPrintSelection;
@@ -1006,6 +1022,9 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
         //Shell zurueckgesetzt wird.
 
     SET_CURR_SHELL( pShell );
+    Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopPrt);
+    ((SfxPrintProgress &) rProgress).SetCancelHdl(aLnk);
+
 
     //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
     if( pOpt->IsReadonly() )
@@ -1056,7 +1075,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
     pShell->CalcPagesForPrint( (USHORT)aPages.Max(), &rProgress, pStr,
                                 nMergeAct, nMergeCnt );
 
-    if( pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive() )
+    if( !  pShell->Imp()->IsStopPrt() &&
+        (pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive()) )
     {
         BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
@@ -1226,6 +1246,11 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                             bStop = TRUE;
                             break;
                         }
+                    }
+                    else if (pShell->Imp()->IsStopPrt())
+                    {
+                        bStop = TRUE;
+                        break;
                     }
 
                     ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
@@ -1655,6 +1680,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2002/10/18 13:20:08  ama
+      Fix #104331#: Print it again, sam
+
       Revision 1.11  2002/09/09 12:07:41  tl
       #102510# XRenderable (PDF) export for selection implemented
 
