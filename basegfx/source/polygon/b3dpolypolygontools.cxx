@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include <basegfx/numeric/ftools.hxx>
 #endif
 
+#include <numeric>
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
@@ -107,12 +109,20 @@ namespace basegfx
         ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
         {
             ::basegfx::B3DPolyPolygon aRetval;
-            const sal_uInt32 nPolygonCount(rCandidate.count());
 
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            if(0.0 == fFullDashDotLen && raDashDotArray.size())
             {
-                ::basegfx::B3DPolygon aCandidate = rCandidate.getB3DPolygon(a);
-                aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
+                // calculate fFullDashDotLen from raDashDotArray
+                fFullDashDotLen = ::std::accumulate(raDashDotArray.begin(), raDashDotArray.end(), 0.0);
+            }
+
+            if(rCandidate.count() && fFullDashDotLen > 0.0)
+            {
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    ::basegfx::B3DPolygon aCandidate = rCandidate.getB3DPolygon(a);
+                    aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
+                }
             }
 
             return aRetval;
