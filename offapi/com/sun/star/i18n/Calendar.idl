@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Calendar.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-11-08 17:40:50 $
+ *  last change: $Author: er $ $Date: 2000-11-20 19:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ struct Calendar
     sequence< CalendarItem >    Months;
     /// the possible eras, see also <type>CalendarItem</type>
     sequence< CalendarItem >    Eras;
-    /// tthe name of the day the week is starting with
+    /// the ID of the day the week is starting with
     string                      StartOfWeek;
     /// how many days must reside in the first week of a year
     short                       MinimumNumberOfDaysForFirstWeek;
