@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 12:44:53 $
+ *  last change: $Author: mba $ $Date: 2002-05-21 07:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,11 +128,11 @@ enum FontPitch
 
 struct SvxFont
 {
-    String      StyleName   MID_FONTSTYLE;
-    FontPitch   Pitch       MID_FONTPITCH;
-    CharSet     CharSet     MID_CHARSET;
-    FontFamily  Family      MID_FONTFAMILY;
-    String      FamilyName  MID_FONTFAMILYNAME;
+    String      StyleName   MID_FONT_STYLE_NAME;
+    FontPitch   Pitch       MID_FONT_PITCH;         // INT16
+    CharSet     CharSet     MID_FONT_CHAR_SET;      // INT16
+    FontFamily  Family      MID_FONT_FAMILY;        // INT16
+    String      FamilyName  MID_FONT_FAMILY_NAME;
 };
 item SvxFont SvxFontItem;
 
@@ -283,22 +283,20 @@ item SvxShadowLocation SvxShadowLocationItem;
 
 struct SvxBrush
 {
-    BrushStyle  Style           MID_BRUSHSTYLE;
-    BOOL        Transparent     MID_TRANSPARENT;
-    UINT32      BackColor       MID_BG_COLOR;
-    UINT32      FillColor       MID_FG_COLOR;
-    String      GrfFilename     MID_FILENAME;
-    String      GrfFiltername   MID_FILTERNAME;
-    UINT16      GrfPosition     MID_POSITION;
+    BOOL        Transparent     MID_GRAPHIC_TRANSPARENT;
+    INT32       BackColor       MID_BACK_COLOR;
+    String      URL             MID_GRAPHIC_URL;
+    String      Filtername      MID_GRAPHIC_FILTER;
+    UINT16      Position        MID_GRAPHIC_POSITION;
 };
 item SvxBrush SvxBrushItem;
 
 //-------------------------------------------------------------------------
-
+// No Query/PutValue methods implemented!
 struct SvxCharSetColor
 {
-    CharSet     CharSet         MID_CHARSET;
-    UINT32      Color           MID_FG_COLOR;
+    CharSet     CharSet         MID_CHARSET;    // ???
+    UINT32      Color           MID_FG_COLOR;   // ???
 };
 item SvxCharSetColor SvxCharSetColorItem;
 
@@ -312,16 +310,19 @@ item BOOL           SvxContourItem;
 
 struct SvxEscapement
 {
-    INT16       Escapement      MID_ESCAPEMENT;
-    BYTE        RelativeSize    MID_PROPORTIONAL;
+    INT16       Escapement      MID_ESC;
+    BYTE        Height          MID_ESC_HEIGHT;
+    BOOL        Auto            MID_AUTO_ESC;
 };
 item SvxEscapement SvxEscapementItem;
 
 //-------------------------------------------------------------------------
+// Only one value is returned but no MID is used in implementation
 
 struct SvxFmtBreak
 {
-    UINT16      Break       MID_BREAKxxx;
+    SvxBreak    BreakBefore     MID_BREAK_BEFORE;   // This define exists, maybe used!
+    SvxBreak    BreakAfter      MID_BREAK_AFTER;    // This define exists, maybe used!
 }
 item SvxFmtBreak SvxFmtBreakItem;
 
@@ -332,8 +333,9 @@ item BOOL SvxFmtSplitItem;
 
 struct SvxFontHeight
 {
-    UINT32      Size        MID_HEIGHT;
-    BYTE        Prop        MID_PROPORTIONAL;
+    float       Height      MID_FONTHEIGHT;         // may be converted to INT32
+    INT16       Prop        MID_FONTHEIGHT_PROP;
+    float       Diff        MID_FONTHEIGHT_DIFF;    // may be converted to INT32
 };
 item SvxFontHeight SvxFontHeightItem;
 
@@ -341,11 +343,10 @@ item SvxFontHeight SvxFontHeightItem;
 
 struct SvxHyphenZone
 {
-    BOOL        Hyphen      MID_HYPHEN;
-    BOOL        PageEnd     MID_PAGEEND;
-    BYTE        MinLead     MID_MINLEAD;
-    BYTE        MinTrail    MID_MINTRAIL;
-    BYTE        MaxHyphens  MID_MAXHYPHENS;
+    BOOL        Hyphen      MID_IS_HYPHEN;
+    INT16       MinLead     MID_HYPHEN_MIN_LEAD;
+    INT16       MinTrail    MID_HYPHEN_MIN_TRAIL;
+    INT16       MaxHyphens  MID_HYPHEN_MAX_HYPHENS;
 };
 item SvxHyphenZone SvxHyphenZoneItem;
 
@@ -354,13 +355,14 @@ item SvxHyphenZone SvxHyphenZoneItem;
 item INT16 SvxKerningItem;
 
 //-------------------------------------------------------------------------
+// No Query/PutValue methods implemented!
 
 struct SvxLine
 {
-    UINT32      LineFGColor     MID_FG_COLOR;
-    UINT16      LineOutWidth    MID_OUTER_WIDTH;
-    UINT16      LineInWidth     MID_INNER_WIDTH;
-    UINT16      LineDistance    MID_DISTANCE;
+    UINT32      LineFGColor     MID_FG_COLOR;       // ???
+    UINT16      LineOutWidth    MID_OUTER_WIDTH;    // ???
+    UINT16      LineInWidth     MID_INNER_WIDTH;    // ???
+    UINT16      LineDistance    MID_DISTANCE;       // ???
 };
 item SvxLine SvxLineItem;
 
@@ -368,9 +370,14 @@ item SvxLine SvxLineItem;
 
 struct SvxLRSpace
 {
-    UINT16      LeftMargin      MID_LEFT_MARGIN;        // % or direct
-    INT16       IndentFirstLine MID_FIRSTLINE_OFFSET;   // % or direct
-    UINT16      RightMargin     MID_RIGHT_MARGIN;       // % or direct
+    INT32       LeftMargin          MID_L_MARGIN;               // % or direct
+    INT32       TextLeftMargin      MID_TXT_LMARGIN
+    INT32       RightMargin         MID_R_MARGIN;               // % or direct
+    INT16       LeftRelMargin       MID_L_REL_MARGIN;
+    INT16       RightRelMargin      MID_R_REL_MARGIN;
+    INT32       FirstLineIndent     MID_FIRST_LINE_INDENT;      // % or direct
+    INT32       FirstLineRelIdent   MID_FIRST_LINE_REL_INDENT;
+    BOOL        AutoFirst           MID_FIRST_AUTO;
 };
 item SvxLRSpace SvxLRSpaceItem;
 
@@ -378,13 +385,11 @@ item SvxLRSpace SvxLRSpaceItem;
 
 item UINT16 SvxLanguageItem;
 
+// Very interesting, a uno struct is used as a return value for QueryValue!
+// How could this be expressed in IDL syntax??
 struct SvxLineSpacing
 {
-    SvxLineSpace        LineSpace       MID_LINESPACE;
-    UINT16              LineHeight      MID_HEIGHT;
-    UINT16              PropLineHeight  MID_PROPORTIONAL;   // % or direct
-    SvxInterLineSpace   InterLineSpace  MID_INTER_LINESPACE;
-    INT16               InterSpace      MID_INTER_SPACE;
+    SvxLineSpace        LineSpace   MID_LS_FIXED;   // ????
 };
 item SvxLineSpacing SvxLineSpacingItem;
 
@@ -399,10 +404,9 @@ item BYTE SvxOrphansItem;
 
 struct SvxPage
 {
-    String              DescName        MID_DESCNAMExxx;
-    BOOL                Landscape       MID_LANDSCAPE;
-    UINT16              Use             MID_USExxx;
-    SvxNumType          NumType         MID_NUMTYPExxx;
+    BOOL                Landscape       MID_PAGE_ORIENTATION;
+    INT16               Layout          MID_PAGE_LAYOUT;
+    INT16               NumType         MID_PAGE_NUMTYPE;
 };
 item SvxPage SvxPageItem;
 
@@ -411,13 +415,14 @@ item SvxPage SvxPageItem;
 item String SvxPageModelItem;
 
 //-------------------------------------------------------------------------
+// No Query/PutValue methods implemented!
 
 struct SvxPagePosSize
 {
-    INT32               XPos            MID_X;
-    INT32               YPos            MID_Y;
-    INT32               Width           MID_WIDTH;
-    INT32               Height          MID_HEIGHT;
+    INT32               XPos            MID_X;          // ???
+    INT32               YPos            MID_Y;          // ???
+    INT32               Width           MID_WIDTH;      // ???
+    INT32               Height          MID_HEIGHT;     // ???
 };
 item SvxPagePosSize SvxPagePosSizeItem;
 
@@ -442,45 +447,50 @@ item String     SvxProtectItem;
 item BOOL       SvxShadowedItem;
 
 //-------------------------------------------------------------------------
+// No Query/PutValue methods implemented!
 
 struct SvxSearch
 {
-    BOOL        Backward        MID_SEARCH_BACKWARD;
-    BOOL        InSelection     MID_SEARCH_INSELECTION;
-    BOOL        CaseSensitive   MID_SEARCH_CASESENSITIVE;
-    BOOL        RegExp          MID_SEARCH_REGEXPR;
-    BOOL        WordOnly        MID_SEARCH_WORDONLY;
-    UINT16      Mode            MID_SEARCH_MODE;
-    UINT16      Order           MID_SEARCH_ORDER;
-    BOOL        AllTables       MID_SEARCH_ALLTABLES;
-    BOOL        Similarity      MID_SEARCH_LEV_ON;
-    BOOL        Relaxed         MID_SEARCH_LEV_RELAXED;
-    UINT16      Other           MID_SEARCH_LEV_OTHER;
-    UINT16      Shorter         MID_SEARCH_LEV_SHORTER;
-    UINT16      Longer          MID_SEARCH_LEV_LONGER;
-    BOOL        Pattern         MID_SEARCH_PATTERN;
+    BOOL        Backward        MID_SEARCH_BACKWARD;        // ???
+    BOOL        InSelection     MID_SEARCH_INSELECTION;     // ???
+    BOOL        CaseSensitive   MID_SEARCH_CASESENSITIVE;   // ???
+    BOOL        RegExp          MID_SEARCH_REGEXPR;         // ???
+    BOOL        WordOnly        MID_SEARCH_WORDONLY;        // ???
+    UINT16      Mode            MID_SEARCH_MODE;            // ???
+    UINT16      Order           MID_SEARCH_ORDER;           // ???
+    BOOL        AllTables       MID_SEARCH_ALLTABLES;       // ???
+    BOOL        Similarity      MID_SEARCH_LEV_ON;          // ???
+    BOOL        Relaxed         MID_SEARCH_LEV_RELAXED;     // ???
+    UINT16      Other           MID_SEARCH_LEV_OTHER;       // ???
+    UINT16      Shorter         MID_SEARCH_LEV_SHORTER;     // ???
+    UINT16      Longer          MID_SEARCH_LEV_LONGER;      // ???
+    BOOL        Pattern         MID_SEARCH_PATTERN;         // ???
 };
 item SvxSearch SvxSearchItem;
 
 //-------------------------------------------------------------------------
 
+// Very interesting, a uno struct is used as a return value for QueryValue!
+// How could this be expressed in IDL syntax??
 struct SvxShadow
 {
-    SvxShadowLocation   ShadowLocation      MID_LOCATION;
-    UINT16              ShadowWidth         MID_WIDTH;
-    BrushStyle          ShadowStyle         MID_BRUSHSTYLE;
-    BOOL                ShadowTransparent   MID_TRANSPARENT;
-    UINT32              ShadowBackColor     MID_BG_COLOR;
-    UINT32              ShadowFillColor     MID_FG_COLOR;
+    SvxShadowLocation   ShadowLocation      MID_LOCATION;       // ???
+    UINT16              ShadowWidth         MID_WIDTH;          // ???
+    BrushStyle          ShadowStyle         MID_BRUSHSTYLE;     // ???
+    BOOL                ShadowTransparent   MID_TRANSPARENT;    // ???
+    UINT32              ShadowBackColor     MID_BG_COLOR;       // ???
+    UINT32              ShadowFillColor     MID_FG_COLOR;       // ???
 };
 item SvxShadow SvxShadowItem;
 
 //-------------------------------------------------------------------------
 
+// Very interesting, a uno struct is used as a return value for QueryValue!
+// How could this be expressed in IDL syntax??
 struct SvxSize
 {
-    UINT32              Width           MID_WIDTH;
-    UINT32              Height          MID_HEIGHT;
+    UINT32              Width           MID_WIDTH;      // ???
+    UINT32              Height          MID_HEIGHT;     // ???
 };
 item SvxSize SvxSizeItem;
 
@@ -488,8 +498,10 @@ item SvxSize SvxSizeItem;
 
 struct SvxULSpace
 {
-    UINT16              TopMargin           MID_UPPER;  // % or direct
-    UINT16              BottomMargin        MID_LOWER;  // % or direct
+    INT32               TopMargin       MID_UP_MARGIN;  // % or direct
+    INT32               BottomMargin    MID_LO_MARGIN;  // % or direct
+    INT16               TopRelMargin    MID_UP_REL_MARGIN;
+    INT16               BottomRelMargin MID_LO_REL_MARGIN;
 };
 item SvxULSpace SvxULSpaceItem
 
@@ -629,19 +641,21 @@ item SvxCellOrientationEnum SvxOrientationItem;
 
 //-------------------------------------------------------------------------
 
+// No Query/PutValue methods implemented!
 struct SvxLongLRSpace
 {
-    INT32           Left        MID_LEFT;
-    INT32           Right       MID_RIGHT;
+    INT32           Left        MID_LEFT;   // ???
+    INT32           Right       MID_RIGHT;  // ???
 };
 item SvxLongLRSpace SvxLongLRSpaceItem;
 
 //-------------------------------------------------------------------------
 
+// No Query/PutValue methods implemented!
 struct SvxLongULSpace
 {
-    INT32           Upper       MID_UPPER;
-    INT32           Lower       MID_LOWER;
+    INT32           Upper       MID_UPPER;  // ???
+    INT32           Lower       MID_LOWER;  // ???
 };
 item SvxLongULSpace SvxLongULSpaceItem;
 
@@ -675,6 +689,8 @@ struct Address
     String  Title           MID_ADR_TITLE;
     String  ZIPCode         MID_ADR_ZIPCODE;
     String  State           MID_ADR_STATE;
+    String  FathersName     MID_ADR_FATHERSNAME;
+    String  Apartment       MID_ADR_APARTMENT;
 };
 item Address SvxAddressItem;
 
@@ -748,10 +764,11 @@ shell _TabStop_Dummy
 item String SvxBoxItem;
 item String SvxBoxInfoItem;
 
+// No Query/PutValue methods implemented!
 struct SvxPageSize
 {
-    UINT32  PageWidth           MID_WIDTH;
-    UINT32  PageHeight          MID_HEIGHT;
+    UINT32  PageWidth           MID_WIDTH;  // ???
+    UINT32  PageHeight          MID_HEIGHT; // ???
 };
 item SvxPageSize SvxPageSizeItem;
 
@@ -763,6 +780,7 @@ struct SwPageSize
 };
 item SwPageSize SwPageSizeItem;
 /* umdefiniertes ShadowItem fuer das Shadow-Interface */
+// Please look at ShadowItem!!!
 struct SwShadow
 {
     SvxShadowLocation   Location        MID_LOCATION;
@@ -782,13 +800,14 @@ item UINT32 SvxObjectItem;
 item String SdrTextFitToSizeTypeItem;
 item String SvxClipboardFmtItem;
 item String SfxStringListItem;
+
+// Returns always FALSE on QueryValue and SetValue! Looks
+// like it must be implemented.
 struct FmFormInfo
 {
-    INT32 Pos MID_POS ;
-    INT32 Count MID_COUNT ;
-    BOOL ReadOnly MID_READONLY ;
+    INT32 Pos MID_POS ;                 // ???
+    INT32 Count MID_COUNT ;             // ???
+    BOOL ReadOnly MID_READONLY ;        // ???
 } ;
 
 item FmFormInfo FmFormInfoItem ;
-
-
