@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:56:27 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,13 +266,13 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             aURL.Append( pHatchingList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-            if ( aURL.getBase().Len() > 18 )
+            if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
 
             if( *pPageType == PT_HATCH && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -823,13 +823,13 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
                     String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-                    if ( aURL.getBase().Len() > 18 )
+                    if ( aURL.getBase().getLength() > 18 )
                     {
-                        aString += aURL.getBase().Copy( 0, 15 );
+                        aString += String(aURL.getBase()).Copy( 0, 15 );
                         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
                     }
                     else
-                        aString += aURL.getBase();
+                        aString += String(aURL.getBase());
 
                     // Flag fuer gewechselt setzen
                     *pnHatchingListState |= CT_CHANGED;
@@ -874,7 +874,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
     {
         aFile.Append( pHatchingList->GetName() );
 
-        if( !aFile.getExtension().Len() )
+        if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soh" ) ) );
     }
 
@@ -897,13 +897,13 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
             String aString( SVX_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-            if ( aURL.getBase().Len() > 18 )
+            if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
 
             // Flag fuer gespeichert setzen
             *pnHatchingListState |= CT_SAVED;
