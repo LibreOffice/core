@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-05 13:35:01 $
+ *  last change: $Author: ssa $ $Date: 2002-04-08 16:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,12 +833,18 @@ void Window::ImplSetFrameParent( const Window* pParent )
         Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
         while( pFrameWindow )
         {
-            if( pFrameWindow->mpRealParent == this  || pFrameWindow->mpParent == this )
+            if( pFrameWindow->mpClientWindow == this || pFrameWindow->mpRealParent == this  || pFrameWindow->mpParent == this )
             {
                 DBG_ASSERT( mpFrame != pFrameWindow->mpFrame, "SetFrameParent to own" );
                 DBG_ASSERT( mpFrame, "no frame" );
 
-                pFrameWindow->SetFrameParent( pParent );
+#ifndef REMOTE_APPSERVER
+                SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
+                mpFrame->SetParent( pParentFrame );
+#else
+                RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;
+                mpFrame->SetParent( pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
+#endif
             }
             pFrameWindow = pFrameWindow->mpFrameData->mpNextFrame;
         }
@@ -850,19 +856,6 @@ void Window::ImplSetFrameParent( const Window* pParent )
         pChild->ImplSetFrameParent( pParent );
         pChild = pChild->mpNext;
     }
-}
-
-// -----------------------------------------------------------------------
-
-void Window::SetFrameParent( const Window* pParent )
-{
-#ifndef REMOTE_APPSERVER
-        SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
-        mpFrame->SetParent( pParentFrame );
-#else
-        RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;
-        mpFrame->SetParent( pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
-#endif
 }
 
 // -----------------------------------------------------------------------
