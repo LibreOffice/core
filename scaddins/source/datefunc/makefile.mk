@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.3 2001-03-02 07:16:57 pluby Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.4 2001-03-20 15:05:42 kz Exp $
 #
-#     $Date: 2001-03-02 07:16:57 $
-#     $Author: pluby $
-#     $Revision: 1.3 $
+#     $Date: 2001-03-20 15:05:42 $
+#     $Author: kz $
+#     $Revision: 1.4 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -130,7 +130,7 @@ DEF1EXPORTFILE=exports.dxp
 .INCLUDE : target.mk
 
 $(BIN)$/dateadd.rdb: $(ALLIDLFILES)
-    +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
+    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dateadd.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:45 $
+ *  last change: $Author: kz $ $Date: 2001-03-20 15:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ module addin
     /**
      * Interface with date functions.
      */
-    [ uik(20D2C191-648C-11d4-9F8D0050-04D75D79), ident("XDateFunctions", 1.0) ]
     interface XDateFunctions : com::sun::star::uno::XInterface
     {
         /// calculates the number of weeks between two dates.
