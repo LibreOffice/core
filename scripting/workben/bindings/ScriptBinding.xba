@@ -59,7 +59,7 @@ function ExecuteKeyBinding()
 	PopulateScriptList()
 	CreateAllKeyBindings()
 	PopulateTopLevelKeyBindingList()
-	PopulateKeyBindingList( 1, 11, true )
+	PopulateKeyBindingList( 1, 11 )
 	bindingDialog.execute()
 end function
 
@@ -70,7 +70,7 @@ function ExecuteMenuBinding()
 	ReadXMLToArray( &quot;Menu&quot; )
 	PopulateScriptList()
 	PopulateMenuCombo()
-	PopulateSubMenuList( 1, true, false )
+	PopulateSubMenuList( 1 )
 	MenuLabelBoxListener()
 	bindingDialog.execute()	
 end function
@@ -203,6 +203,7 @@ function ReadXMLToArray( bindingType as string )
 					end if				
 					scriptName = scriptName + ExtractKeyCodeFromXMLLine( xmlline )
 					scriptNames( scriptCount ) = scriptName
+				&apos;	msgbox( &quot;scriptNames( scriptCount ) &quot; + scriptCount + &quot; &quot; + scriptNames( scriptCount ) )
 					scriptLinePosition( scriptCount ) = lineCount
 					scriptCount = scriptCount + 1
 				end if
@@ -390,6 +391,7 @@ function RemoveScriptNameAndPosition( keyComboPosition )
 	
 	for n = 1 to scriptCount
 		scriptNames( n ) = updatedScriptNames( n )
+		&apos;msgbox( &quot;scriptNames( &quot;+n+&quot; ) &quot; + scriptNames( n ) )
 	next n
 end function
 
@@ -428,7 +430,7 @@ function PopulateMenuCombo()
 end function
 
 
-function PopulateSubMenuList( menuItemPosition as integer, firstPopulation as boolean, additionalBinding as boolean )
+function PopulateSubMenuList( menuItemPosition as integer )
 	redim subMenuItems( 100 ) as string
 	redim subMenuItemLinePosition( 100 ) as integer
 	dim lineNumber as integer
@@ -484,15 +486,15 @@ function PopulateSubMenuList( menuItemPosition as integer, firstPopulation as bo
 		subMenuList.addItem( subMenuItems( n ), n - 1 )
 	next n
 
-	if( firstPopulation ) then
-		subMenuList.selectItemPos( 0, true )
-	else
-		if( additionalBinding ) then
-			subMenuList.selectItemPos( currentPosition + 1, true )
-		else
+	&apos;if( firstPopulation ) then
+	&apos;	subMenuList.selectItemPos( 0, true )
+	&apos;else
+	&apos;	if( additionalBinding ) then
+	&apos;		subMenuList.selectItemPos( currentPosition + 1, true )
+	&apos;	else
 			subMenuList.selectItemPos( currentPosition, true )
-		end if
-	end if
+	&apos;	end if
+	&apos;end if
 	
 	SubMenuListListener()
 end function
@@ -515,7 +517,7 @@ function PopulateTopLevelKeyBindingList()
 end function
 
 
-function PopulateKeyBindingList( startPosition as integer, endPosition as integer, firstPopulation as boolean )
+function PopulateKeyBindingList( startPosition as integer, endPosition as integer )
 	dim formattedKeyBinding( 47 ) as string
 	counter = 1
 	
@@ -546,11 +548,11 @@ function PopulateKeyBindingList( startPosition as integer, endPosition as intege
 		keyList.addItem( formattedKeyBinding( n ), n - 1 )
 	next n
 
-	if( firstPopulation ) then	
-		keyList.selectItemPos( 0, true )
-	else
+	&apos;if( firstPopulation ) then	
+	&apos;	keyList.selectItemPos( 0, true )
+	&apos;else
 		keyList.selectItemPos( currentPosition, true )
-	end if
+	&apos;end if
 
 	KeyListListener()
 end function
@@ -774,7 +776,7 @@ end function
 
 
 &apos;Populates the SubMenuList with the appropriate menu items from the Top-level menu selected from the combo box
-function MenuComboListener( firstPopulation as boolean, additionalBinding as boolean )
+function MenuComboListener()
 	combo = bindingDialog.getControl( &quot;MenuCombo&quot; ) 
 	newToplevelMenu = combo.text
 	counter = 0
@@ -782,30 +784,30 @@ function MenuComboListener( firstPopulation as boolean, additionalBinding as boo
 		counter = counter + 1
 	loop while not( newToplevelMenu = menuItems( counter ) )
 	
-	PopulateSubMenuList( counter, firstPopulation, additionalBinding )
+	PopulateSubMenuList( counter )
 end function
 
 
 &apos;Populates the KeyList with the appropriate key combos from the Top-level key group selected from the combo box
-function KeyComboListener( firstPopulation as boolean )
+function KeyComboListener()
 	combo = bindingDialog.getControl( &quot;KeyCombo&quot; ) 
 	itemSelected = combo.text
 
 	select case itemSelected
 	case &quot;SHIFT + CONTROL + F keys&quot;
-		PopulateKeyBindingList( 1, 11, firstPopulation )
+		PopulateKeyBindingList( 1, 11 )
 	case &quot;SHIFT + CONTROL + digits&quot;
-		PopulateKeyBindingList( 12, 21, firstPopulation )
+		PopulateKeyBindingList( 12, 21 )
 	case &quot;SHIFT + CONTROL + letters&quot;
-		PopulateKeyBindingList( 22, 47, firstPopulation )
+		PopulateKeyBindingList( 22, 47 )
 	case &quot;CONTROL + F keys&quot;
-		PopulateKeyBindingList( 48, 58, firstPopulation )
+		PopulateKeyBindingList( 48, 58 )
 	case &quot;CONTROL + digits&quot;
-		PopulateKeyBindingList( 59, 68, firstPopulation )
+		PopulateKeyBindingList( 59, 68 )
 	case &quot;CONTROL + letters&quot;
-		PopulateKeyBindingList( 69, 94, firstPopulation )
+		PopulateKeyBindingList( 69, 94 )
 	case &quot;SHIFT + F keys&quot;
-		PopulateKeyBindingList( 95, 105, firstPopulation )
+		PopulateKeyBindingList( 95, 105 )
 	case else
 		msgbox &quot;Error&quot;
 	end select
@@ -860,7 +862,7 @@ function MenuDeleteButton()
 	loop while not( newToplevelMenu = menuItems( counter ) )
 	UpdateTopLevelMenus( counter + 1, false )	
 	
-	MenuComboListener( false, false )
+	MenuComboListener()
 end function
 
 
@@ -886,7 +888,7 @@ function MenuNewButton()
 	
 	AddNewMenuBinding( script, newMenuLabel, linePos )
 	
-	MenuComboListener( false, true )
+	MenuComboListener()
 end function
 
 
@@ -917,7 +919,7 @@ function KeyNewButton()
 	
 	AddNewKeyBinding( script, HasShiftKey( keyCombo ), HasControlKey( keyCombo ), ExtractKeyFromCombo( keyCombo ) ) 
 
-	KeyComboListener( false )
+	KeyComboListener()
 end function
 
 
@@ -932,12 +934,14 @@ function KeyDeleteButton()
 	end if
 	
 	for n = 1 to scriptCount
+		&apos;msgbox( &quot;keyCombo &quot; + keyCombo + &quot; scriptNames( &quot;+n+&quot; ) &quot; + scriptNames( n ) + &quot; &quot; + strcomp( keyCombo, scriptNames( n ) ) )
 		if strcomp( keyCombo, scriptNames( n ) ) = 0 then
 			keyComboPosition = n
 			exit for
 		end if
 	next n
-
+	&apos;msgbox( &quot;keyComboPosition &quot; + keyComboPosition )
+	
 	linePosition = scriptLinePosition( keyComboPosition )
 	&apos;msgbox( &quot;Key delete line pos &quot; + linePosition )
 
@@ -947,7 +951,7 @@ function KeyDeleteButton()
 	RemoveBinding( linePosition )
 	
 	script = ExtractScriptIdFromXMLLine( xmlFile( linePosition ) )
-	KeyComboListener( false )
+	KeyComboListener()
 end function
 
 
