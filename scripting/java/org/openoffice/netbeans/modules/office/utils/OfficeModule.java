@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeModule.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:46:29 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ import org.openide.WizardDescriptor;
 import org.openide.NotifyDescriptor;
 import org.openide.modules.ModuleInstall;
 
-import com.sun.star.script.framework.browse.XMLParserFactory;
+import com.sun.star.script.framework.container.XMLParserFactory;
 import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.netbeans.modules.office.wizard.InstallationPathDescriptor;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
