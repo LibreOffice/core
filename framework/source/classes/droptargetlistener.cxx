@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ void SAL_CALL DropTargetListener::drop( const css::datatransfer::dnd::DropTarget
             if ( !bFormatFound && aHelper.GetString( SOT_FORMAT_FILE, aFilePath ) )
                 implts_OpenFile( aFilePath );
         }
+        dtde.Context->dropComplete( css::datatransfer::dnd::DNDConstants::ACTION_NONE != nAction );
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
