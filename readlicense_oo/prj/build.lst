@@ -1,2 +1,3 @@
 ro  readlicense_oo :   solenv NULL
 ro  readlicense_oo			usr1 - all ro_root NULL
+ro  readlicense_oo\docs\readme			nmake - all ro_readme NULL
