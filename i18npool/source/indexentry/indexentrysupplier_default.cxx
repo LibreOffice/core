@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-18 22:29:26 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 08:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
     if (result == 0)
         return collator->compareString( getEntry(IndexEntry1, PhoneticEntry1, rLocale1),
                         getEntry(IndexEntry2, PhoneticEntry2, rLocale2));
-    return 0;
+    return result;
 }
 
 OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexCharacter( const OUString& rIndexEntry,
