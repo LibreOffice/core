@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListBox.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-02-14 12:31:28 $
+ *  last change: $Date: 2003-02-28 14:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ public class AccessibleListBox extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot);
+        //at.printAccessibleTree(log, xRoot);
 
         // obtaining 'Close' button
         oObj = at.getAccessibleObjectForRole
@@ -202,8 +202,8 @@ public class AccessibleListBox extends TestCase {
             throw new StatusException("Can't switch to required tab", e);
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST,
-            "", "com.sun.star.comp.toolkit.AccessibleListBox");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,
+            "", "com.sun.star.comp.toolkit.AccessibleList");
         Object list = at.getAccessibleObjectForRole(at.SearchedAccessible,
             AccessibleRole.LIST);
 
