@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphconvert.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-02 14:34:02 $
+ *  last change: $Author: mav $ $Date: 2003-12-03 13:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,13 @@ sal_Bool ConvertBufferForFlavor( void* pBuf,
 
             // TODO: Extend format list
              if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"" ) )
-                nFormat = GFF_WMF;
+                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "WMF" ) );
               else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" ) )
-                nFormat = GFF_EMF;
+                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "EMF" ) );
               else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Bitmap\"" ) )
-                nFormat = GFF_BMP;
+                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "BMP" ) );
             else if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
-                nFormat = GFF_JPG;
+                nFormat = aGrFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( "PNG" ) );
                 // nFormat = GFF_PNG;
 
             if ( nFormat != GRFILTER_FORMAT_DONTKNOW )
