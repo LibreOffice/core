@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:32:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-26 09:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
+            USHORT nFound=0;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
@@ -385,14 +386,16 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
-                        if ( !pItem->PutValue( rProp.Value, nSubId ) )
-                        {
+                        if ( pItem->PutValue( rProp.Value, nSubId ) )
+                            nFound++;
 #ifdef DBG_UTIL
+                        else
+                        {
                             ByteString aStr( "Property not convertable: ");
                             aStr += pSlot->pUnoName;
                             DBG_ERROR( aStr.GetBuffer() );
-#endif
                         }
+#endif
                         break;
                     }
                 }
@@ -408,7 +411,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
             }
 
-// Comment out: Make sure we can convert incomplete items, talked with MBA
+            // at least one part of the complex item must be present; other parts can have default values
             if ( nFound > 0 )
                 rSet.Put( *pItem );
         }
