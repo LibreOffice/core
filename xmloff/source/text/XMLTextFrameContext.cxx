@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     xPropSet( rPropSet )
 {
     OUString sD, sPoints, sViewBox;
+    sal_Bool bPixelWidth = sal_False, bPixelHeight = sal_False;
+    sal_Bool bAuto = sal_False;
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
 
@@ -287,25 +289,35 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
                 sPoints = rValue;
             break;
         case XML_TOK_TEXT_CONTOUR_WIDTH:
-            GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+            if( GetImport().GetMM100UnitConverter().convertMeasurePx( nWidth,
+                                                                      rValue) )
+                bPixelWidth = sal_True;
+            else
+                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
                                                                 rValue);
             break;
         case XML_TOK_TEXT_CONTOUR_HEIGHT:
-            GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-                                                                rValue);
+            if( GetImport().GetMM100UnitConverter().convertMeasurePx( nHeight,
+                                                                rValue) )
+                bPixelHeight = sal_True;
+            else
+                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+                                                                    rValue);
+            break;
+        case XML_TOK_TEXT_CONTOUR_AUTO:
+            bAuto = rValue.equalsAsciiL( sXML_true, sizeof(sXML_true)-1 );
             break;
         }
     }
-#if SUPD < 628
-    // HACK!!!!
-    delete (SvXMLTokenMap *)&rTokenMap;
-#endif
 
     OUString sContourPolyPolygon(
             RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon") );
-    if( rPropSet->getPropertySetInfo()->hasPropertyByName(
+    Reference < XPropertySetInfo > xPropSetInfo =
+        rPropSet->getPropertySetInfo();
+    if( xPropSetInfo->hasPropertyByName(
                                                     sContourPolyPolygon ) &&
-        nWidth > 0 && nHeight > 0 && (bPath ? sD : sPoints).getLength() )
+        nWidth > 0 && nHeight > 0 && bPixelWidth == bPixelHeight &&
+        (bPath ? sD : sPoints).getLength() )
     {
         awt::Point aPoint( 0,  0 );
         awt::Size aSize( nWidth, nHeight );
@@ -325,7 +337,23 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             aAny <<= aPoints.GetPointSequenceSequence();
         }
 
+        OUString sIsPixelContour(
+                RTL_CONSTASCII_USTRINGPARAM("IsPixelContour") );
         xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
+
+        if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
+        {
+            aAny.setValue( &bPixelWidth, ::getBooleanCppuType() );
+            xPropSet->setPropertyValue( sIsPixelContour, aAny );
+        }
+
+        OUString sIsAutomaticContour(
+                RTL_CONSTASCII_USTRINGPARAM("IsAutomaticContour") );
+        if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
+        {
+            aAny.setValue( &bAuto, ::getBooleanCppuType() );
+            xPropSet->setPropertyValue( sIsAutomaticContour, aAny );
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 09:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,6 +1352,7 @@ XML_CONSTASCII_ACTION( sXML_radar, "radar" );
 XML_CONSTASCII_ACTION( sXML_random, "random" );
 XML_CONSTASCII_ACTION( sXML_range_address, "range-address");
 XML_CONSTASCII_ACTION( sXML_range_usable_as, "range-usable-as");
+XML_CONSTASCII_ACTION( sXML_recreate_on_edit , "recreate-on-edit" );
 XML_CONSTASCII_ACTION( sXML_rect , "rect" );
 XML_CONSTASCII_ACTION( sXML_red , "red" );
 XML_CONSTASCII_ACTION( sXML_ref_name, "ref-name" );

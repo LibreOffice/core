@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,6 +495,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
     { XML_NAMESPACE_SVG, sXML_viewBox,  XML_TOK_TEXT_CONTOUR_VIEWBOX    },
     { XML_NAMESPACE_SVG, sXML_d,        XML_TOK_TEXT_CONTOUR_D          },
     { XML_NAMESPACE_DRAW,sXML_points,   XML_TOK_TEXT_CONTOUR_POINTS     },
+    { XML_NAMESPACE_DRAW,sXML_recreate_on_edit, XML_TOK_TEXT_CONTOUR_AUTO   },
     XML_TOKEN_MAP_END
 };
 

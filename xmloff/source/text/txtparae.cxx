@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-30 13:37:27 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,6 +722,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark")),
     sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
     sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")),
+    sIsPixelContour(RTL_CONSTASCII_USTRINGPARAM("IsPixelContour")),
+    sIsAutomaticContour(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticContour")),
     sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
     sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
     sRedline(RTL_CONSTASCII_USTRINGPARAM("Redline")),
@@ -1922,18 +1924,45 @@ void XMLTextParagraphExport::exportContour(
         return;
 
     awt::Point aPoint( 0, 0 );
-    awt::Size aSize;
-    aAny = rPropSet->getPropertyValue( sActualSize );
-    aAny >>= aSize;
+    awt::Size aSize( 0, 0 );
+    sal_Int32 nPolygons = aSourcePolyPolygon.getLength();
+    const PointSequence *pPolygons = aSourcePolyPolygon.getConstArray();
+    while( nPolygons-- )
+    {
+        sal_Int32 nPoints = pPolygons->getLength();
+        const awt::Point *pPoints = pPolygons->getConstArray();
+        while( nPoints-- )
+        {
+            if( aSize.Width < pPoints->X )
+                aSize.Width = pPoints->X;
+            if( aSize.Height < pPoints->Y )
+                aSize.Height = pPoints->Y;
+            pPoints++;
+        }
+        pPolygons++;
+    }
+
+    sal_Bool bPixel = sal_False;
+    if( rPropSetInfo->hasPropertyByName( sIsPixelContour ) )
+    {
+        aAny = rPropSet->getPropertyValue( sIsPixelContour );
+        bPixel = *(sal_Bool *)aAny.getValue();
+    }
 
     // svg: width
     OUStringBuffer aStringBuffer( 10 );
-    GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Width);
+    if( bPixel )
+        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, aSize.Width);
+    else
+        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Width);
     GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_width,
                               aStringBuffer.makeStringAndClear() );
 
     // svg: height
-    GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Height);
+    if( bPixel )
+        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, aSize.Height);
+    else
+        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Height);
     GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_height,
                               aStringBuffer.makeStringAndClear() );
 
@@ -1985,6 +2014,15 @@ void XMLTextParagraphExport::exportContour(
                                       aSvgDElement.GetExportString());
             pElem = sXML_contour_path;
         }
+    }
+
+    if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
+    {
+        aAny = rPropSet->getPropertyValue( sIsAutomaticContour );
+        if( *(sal_Bool *)aAny.getValue() )
+            GetExport().AddAttributeASCII( XML_NAMESPACE_DRAW,
+                                            sXML_recreate_on_edit,
+                                             sXML_true );
     }
 
     // write object now
