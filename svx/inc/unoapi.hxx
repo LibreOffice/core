@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-11 13:43:33 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,5 +143,5 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::An
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
 void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw();
 
-#endif _SVX_UNOAPI_HXX_
+#endif // _SVX_UNOAPI_HXX_
 
