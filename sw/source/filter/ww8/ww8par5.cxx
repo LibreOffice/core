@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:50:36 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2111,7 +2111,6 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     pNewSection = rDoc.Insert( *pPaM, aSection, 0 ,FALSE);
 
     const SwSectionNode* pSectionNode = pNewSection->GetFmt()->GetSectionNode();
-    pBehindSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
 
     pPaM->GetPoint()->nNode = pSectionNode->GetIndex()+1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0 );

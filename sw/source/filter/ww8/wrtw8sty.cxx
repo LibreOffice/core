@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,10 +929,10 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp,
 }
 
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
-                               const SwNode& rNd, ULONG nLnNumRestartNo )
+    const SwNode& rNd, const SwSectionFmt* pSectionFmt, ULONG nLnNumRestartNo )
 {
     aCps.Insert( nStartCp, aCps.Count() );
-    WW8_SepInfo aI( rPD.GetPageDesc(), 0, nLnNumRestartNo );
+    WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo );
     aI.nPgRestartNo = rPD.GetNumOffset();
     aI.pPDNd = &rNd;
     aSects.Insert( aI, aSects.Count() );
@@ -1237,6 +1237,16 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
             //  gueltiger Pointer -> Section beginnt,
             //  0xfff -> Section wird beendet
             nBreakCode = 0;         // fortlaufender Abschnitt
+
+            if (rSepInfo.pPDNd && rSepInfo.pPDNd->IsCntntNode())
+            {
+                if (!(SwWW8Writer::NoPageBreakSection(
+                    &rSepInfo.pPDNd->GetCntntNode()->GetSwAttrSet())))
+                {
+                    nBreakCode = 2;
+                }
+            }
+
             if( (SwSectionFmt*)0xFFFFFFFF != rSepInfo.pSectionFmt )
             {
                 // Itemset erzeugen, das das PgDesk-AttrSet beerbt:
@@ -1246,7 +1256,8 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
                 SfxItemSet aSet( *pPdSet->GetPool(), pPdSet->GetRanges() );
                 aSet.SetParent( pPdSet );
 
-                // am Nachkommen NUR  die Spaltigkeit gemaess Sect-Attr. umsetzen
+                // am Nachkommen NUR  die Spaltigkeit gemaess Sect-Attr.
+                // umsetzen
                 aSet.Put( rSepInfo.pSectionFmt->GetAttr( RES_COL ) );
 
                 // und raus damit ins WW-File

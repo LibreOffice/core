@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@
 #ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
 #endif
-#ifndef _SVX_HYZNITEM_HXX //autogen
+#ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
 #endif
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
@@ -1068,8 +1068,8 @@ void SwWW8ImplReader::SetUseOn( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
     }
 }
 
-void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM,
-    const SwFmtCol* pCol )
+void SwWW8ImplReader::InsertSectionWithWithoutCols(SwPaM& rMyPaM,
+    const SwFmtCol* pCol)
 {
     // if this Node is not empty create a new Node befor inserting the Section
     const SwPosition* pPos  = rMyPaM.GetPoint();
@@ -1106,21 +1106,36 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM,
         aSet.Put( SwFmtEndAtTxtEnd( FTNEND_ATTXTEND ));
 
     pNewSection = rDoc.Insert( rMyPaM, aSection, &aSet );
-    ASSERT( !pBehindSection, "pBehindSection ungleich Null! why Recursion?");
 
     // set PaM into first Node of the new Section
-    const SwSectionNode* pSectionNode =
-        pNewSection->GetFmt()->GetSectionNode();
+    const SwSectionNode* pSectionNode = pNewSection->GetFmt()->GetSectionNode();
     ASSERT( pSectionNode, "Kein Inhalt vorbereitet." );
 
-    pBehindSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
-
-    rMyPaM.GetPoint()->nNode =
-        pSectionNode->GetIndex()+1;
-    rMyPaM.GetPoint()->nContent.Assign(
-        rMyPaM.GetCntntNode(), 0 );
+    rMyPaM.GetPoint()->nNode = pSectionNode->GetIndex()+1;
+    rMyPaM.GetPoint()->nContent.Assign(rMyPaM.GetCntntNode(), 0);
 }
 
+BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
+{
+    // Might we have to close a section first?
+    BOOL bSectionWasJustClosed = pNewSection && nTxtPos;
+    if( bSectionWasJustClosed )
+    {
+        // remove preceeding Node
+        // if a  0x0d  came immediately before
+        if( 0 == pPaM->GetPoint()->nContent.GetIndex() )
+            JoinNode( pPaM );
+        // set PaM behind section
+        const SwSectionNode* pSectionNode = pNewSection->GetFmt()->
+            GetSectionNode();
+        SwNodeIndex aPref(*pSectionNode->EndOfSectionNode(), 1);
+        pPaM->GetPoint()->nNode = aPref;
+        pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+
+        DELETEZ( pLastPgDeskIdx );
+    }
+    return bSectionWasJustClosed;
+}
 
 
 // Bei jedem Abschnittswechsel ( auch am Anfang eines Dokuments ) wird
@@ -1137,22 +1152,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
     BYTE nLastSectionCorrIhdt      = nCorrIhdt;
     BOOL bLastSectionHadATitlePage = bSectionHasATitlePage;
 
-    // Might we have to close a section first?
-    BOOL bSectionWasJustClosed = pBehindSection && nTxtPos;
-    if( bSectionWasJustClosed )
-    {
-        // remove preceeding Node
-        // if a  0x0d  came immediately before
-        if( 0 == pPaM->GetPoint()->nContent.GetIndex() )
-            JoinNode( pPaM );
-        // set PaM behind section
-        pPaM->GetPoint()->nNode = *pBehindSection;
-        pPaM->GetPoint()->nContent.Assign(
-            pPaM->GetCntntNode(), 0 );
-
-        DELETEZ( pBehindSection );
-        DELETEZ( pLastPgDeskIdx );
-    }
+    BOOL bSectionWasJustClosed = MustCloseSection(nTxtPos);
 
     SwPageDesc* pOldPageDesc = pPageDesc;
     SwPageDesc* pPageDesc1   = 0;
@@ -1370,6 +1370,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
 
             // zu ignorierende Attribute sammeln
             SvUShortsSort aIgnore(9, 1);
+            BOOL bEqual = FALSE;
             if( bContinuousBreak )
             {
                 /*
@@ -1397,24 +1398,27 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                     136, 137, 138, 139, 142, 144, 145, 147, 152, 154, 155,
                     158, 160
                 };
-                static USHORT __READONLY_DATA aVer8Ids[16] =
+                static USHORT __READONLY_DATA aVer8Ids[20] =
                 {
                     //sortiert!
                     0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3229,
                     0x500B, 0x5015, 0x501B, 0x5026, 0x703A, 0x900C, 0x9016,
-                    0xF203, 0xF204
+                    0x9023, 0x9024, 0xB017, 0xB018, 0xF203, 0xF204
                 };
                 if( bVer67 )
-                    aIgnore.Insert(aVer67Ids, 13);
+                    aIgnore.Insert(aVer67Ids, sizeof(aVer67Ids)/sizeof(USHORT));
                 else
-                    aIgnore.Insert(aVer8Ids, 16);
-            }
+                    aIgnore.Insert(aVer8Ids, sizeof(aVer8Ids)/sizeof(USHORT));
 
-            // nachschauen, ob die nicht zu ignor. Attr. gleich sind
-            BOOL bEqual = (bSectionHasATitlePage == bLastSectionHadATitlePage)
+                bEqual = TRUE;
+            }
+            else
+            {
+                bEqual = (bSectionHasATitlePage == bLastSectionHadATitlePage)
                           && (nCorrIhdt == nLastSectionCorrIhdt)
                           && (nCorrIhdt == (nCorrIhdt & nJustCopyHdFt))
                           && (nNfcPgn   == nLastNfcPgn);
+            }
 
             if (bEqual) //Give continious breaks leniency.
             {
@@ -1431,7 +1435,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                 sections could have margins independant of the host page, like
                 tables or graphics.
                 */
-                pOldPageDesc = pOldPageDesc->GetFollow();
+                pOldPageDesc = pOldPageDesc ? pOldPageDesc->GetFollow() : 0;
                 if (bSectionHasATitlePage)
                 {
                     bSectionHasATitlePage = 0;
@@ -1481,9 +1485,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                     */
                     if( bNew )
                     {
-                        if( 0 <= pPaM->GetPoint()->nContent.GetIndex() )
-                            AppendTxtNode(*pPaM->GetPoint());
-
                         if( pPageDesc )
                             rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
                         else
@@ -1504,9 +1505,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
         {
             if ((nBreakCode > 1) && bMustHaveBreak)
             {
-                if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
-                    AppendTxtNode(*pPaM->GetPoint());
-
                 if( pPageDesc )
                     rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-19 11:04:55 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2203,7 +2203,7 @@ ULONG SwWW8Writer::StoreDoc()
         // Hole evtl. Pagedesc des 1. Nodes
         if( pSet && SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC,TRUE,&pI)
             && ((SwFmtPageDesc*)pI)->GetPageDesc() )
-            pSepx->AppendSep( 0, *(SwFmtPageDesc*)pI, *pNd, nRstLnNum );
+            pSepx->AppendSep( 0, *(SwFmtPageDesc*)pI, *pNd, pFmt, nRstLnNum );
         else
             pSepx->AppendSep( 0, pAktPageDesc, pFmt, nRstLnNum );
     }

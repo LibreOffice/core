@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,12 +403,15 @@ BOOL WW8_WrPlcDrawObj::Append( SwWW8Writer& rWrt, WW8_CP nCp,
 void WW8_WrPlcDrawObj::SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId,
     INT32 nThick )
 {
-    const VoidPtr p = (void*)&rFmt;
-    USHORT nPos = aCntnt.GetPos( p );
-    if( USHRT_MAX != nPos )
+    const VoidPtr p = (const VoidPtr)&rFmt;
+    USHORT nTotal = aCntnt.Count();
+    for (USHORT nI=0;nI<nTotal;++nI)
     {
-        aShapeIds[ nPos ] = nId;
-        aThick[ nPos ] = nThick;
+        if (aCntnt[nI] == p)
+        {
+            aShapeIds[nI] = nId;
+            aThick[nI] = nThick;
+        }
     }
 }
 

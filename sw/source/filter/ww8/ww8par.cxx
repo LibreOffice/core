@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-21 14:41:21 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,14 +189,14 @@
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>           // ReadFilterFlags
 #endif
-#ifndef _FMTCLDS_HXX //autogen
+#ifndef _FMTCLDS_HXX
 #include <fmtclds.hxx>
-#endif
-#ifndef _SECTION_HXX
-#include <section.hxx>
 #endif
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
+#endif
+#ifndef _SECTION_HXX
+#include <section.hxx>
 #endif
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
@@ -871,6 +871,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bInHyperlink    = pRdr->bInHyperlink;
     bPgSecBreak     = pRdr->bPgSecBreak;
     bVerticalEnviron = pRdr->bVerticalEnviron;
+    bWasParaEnd = pRdr->bWasParaEnd;
     nAktColl        = pRdr->nAktColl;
     nNoAttrScan     = pRdr->pSBase->GetNoAttrScan();
 
@@ -922,6 +923,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bAnl          = bAnl;
     pRdr->bInHyperlink  = bInHyperlink;
     pRdr->bVerticalEnviron = bVerticalEnviron;
+    pRdr->bWasParaEnd = bWasParaEnd;
     pRdr->bPgSecBreak   = bPgSecBreak;
     pRdr->nAktColl      = nAktColl;
     pRdr->pSBase->SetNoAttrScan( nNoAttrScan );
@@ -1054,7 +1056,7 @@ long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
 
     // insert Section to get this Ft-/End-Note at the end of the section,
     // when there is no open section at the moment
-       if( bFtEdOk && pLastPgDeskIdx && !pBehindSection )
+       if( bFtEdOk && pLastPgDeskIdx && !pNewSection)
     {
         const SwNodeIndex aOrgLastPgDeskIdx( *pLastPgDeskIdx );
 
@@ -1891,11 +1893,26 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
             if (!nTable)
             {
                 bPgSecBreak = TRUE;
-                // new behavior: insert additional node only WHEN the
-                // Pagebreak ( #74468# )   is in a NODE that is NOT EMPTY
-                if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
+                pCtrlStck->KillUnlockedAttrs(*pPaM->GetPoint());
+                /*
+                #74468#
+                If its a 0x0c without a paragraph end before it, act like a
+                paragraph end, but nevertheless, numbering (and perhaps other
+                similiar constructs) do not exist on the para.
+                */
+                if (!bWasParaEnd)
+                {
                     bRet = TRUE;
-                pCtrlStck->KillUnlockedAttrs( *pPaM->GetPoint() );
+                    if (0 >= pPaM->GetPoint()->nContent.GetIndex())
+                    {
+                        if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
+                        {
+                            pTxtNode->SwCntntNode::SetAttr(
+                                *GetDfltAttr(RES_PARATR_NUMRULE));
+                            pTxtNode->UpdateNum(SwNodeNum(NO_NUMBERING));
+                        }
+                    }
+                }
             }
             break;
         case 0x1e:
@@ -2171,6 +2188,7 @@ BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
     BOOL bStartLine = TRUE;
     short nCrCount = 0;
 
+    bWasParaEnd = FALSE;
     nAktColl    =  0;
     pAktItemSet =  0;
     nCharFmt    = -1;
@@ -2216,7 +2234,7 @@ BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
         if( l>= nStartCp + nTextLen )
             break;
 
-        bStartLine = ReadChars( l, nNext, nStartCp+nTextLen, nCpOfs );
+        bStartLine = bWasParaEnd = ReadChars(l, nNext, nStartCp+nTextLen, nCpOfs);
 
         if( bStartLine ) // Zeilenende
         {
@@ -2324,6 +2342,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     bRestartLnNumPerSection = FALSE;
     bInHyperlink = FALSE;
     bVerticalEnviron = FALSE;
+    bWasParaEnd = FALSE;
     nProgress = 0;
     nHdTextHeight = nFtTextHeight = 0;
     nPgWidth = lA4Width;
@@ -2333,7 +2352,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pTableDesc = 0;
     pNumRule = 0;
     pNumOlst = 0;
-    pBehindSection = 0;
     pNewSection    = 0;
     pNode_FLY_AT_CNTNT = 0;
     pDrawFmt = 0;
@@ -2378,6 +2396,15 @@ void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
 ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 {
     ULONG nErrRet = 0;
+
+    if (bNew)
+    {
+        //Needed to unlock last node so that we can delete it without
+        //giving writer a fit. Necessary for deleting the para after
+        //a section. i.e. see section cleanup at the end of this method
+        rPaM.GetBound( TRUE ).nContent.Assign( 0, 0 );
+        rPaM.GetBound( FALSE ).nContent.Assign( 0, 0 );
+    }
 
     if( bNew && pStg && !pGloss)
         ReadDocInfo();
@@ -2665,7 +2692,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             }
             else //ordinary case
             {
-                ReadText( 0, pWwFib->ccpText, MAN_MAINTEXT );
+                ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
             }
 
             ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
@@ -2877,17 +2904,13 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
         pDataStream = 0;
         pTableStream = 0;
     }
-    DELETEZ( pBehindSection );
+
     if (!pGloss)
         DELETEZ( pWwFib );
     DeleteCtrlStk();
     DELETEZ(pFontSrcCharSets);
     DeleteAnchorStk();
     DeleteRefStk();
-
-    // set NoBallanced flag on last inserted section
-    if( pNewSection )
-        pNewSection->GetFmt()->SetAttr( SwFmtNoBalancedColumns( TRUE ) );
 
     aRelNumRule.SetNumRelSpaces( rDoc );
     if( !bNew && !nErrRet && aSttNdIdx.GetIndex() )
@@ -2899,11 +2922,30 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
     UpdateFields();
 
-    DELETEZ( pPaM );
     // delete the pam before the call for hide all redlines (Bug 73683)
     if( bNew )
         rDoc.SetRedlineMode( eMode );
 
+    // set NoBallanced flag on last inserted section and remove the trailing
+    // para that inserting the section pushed after the PaM
+    if (pNewSection)
+    {
+        SwSectionFmt *pFmt = pNewSection->GetFmt();
+        pFmt->SetAttr(SwFmtNoBalancedColumns(TRUE));
+        if (bNew)
+        {
+            //See the setup at the beginning of this method for the necessary
+            //node unlocking that makes deleting the final para a safe
+            //operation
+            pPaM->SetMark();
+            SwNodeIndex aPref(*pFmt->GetSectionNode()->EndOfSectionNode(), 1);
+            pPaM->GetPoint()->nNode = aPref;
+            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+
+            rDoc.DeleteAndJoin(*pPaM);
+        }
+    }
+    DELETEZ(pPaM);
     return nErrRet;
 }
 
@@ -3035,6 +3077,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 
     if( !nErrRet )
         nErrRet = LoadDoc1( rPaM ,pGloss);
+
     return nErrRet;                 // return Errorcode
 }
 

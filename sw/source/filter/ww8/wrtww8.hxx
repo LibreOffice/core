@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ public:
                     ULONG nLnNumRestartNo = 0 );
     void AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPd,
                     const SwNode& rNd,
+                    const SwSectionFmt* pSectionFmt,
                     ULONG nLnNumRestartNo );
     void Finish( WW8_CP nEndCp ) { aCps.Insert( nEndCp, aCps.Count() ); }
     void SetNum( const SwTxtNode* pNumNd );
@@ -556,6 +557,8 @@ public:
     // fuer WW8SaveData
     SwPaM* GetEndPaM()              { return pOrigPam; }
     void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
+
+    static BOOL NoPageBreakSection(const SfxItemSet *pSet);
 };
 
 class WW8_WrPlcSubDoc   // Doppel-Plc fuer Foot-/Endnotes und Postits

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 13:58:52 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,19 +489,25 @@ void SwWW8Writer::Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd )
             ((SwFmtPageDesc*)pItem)->GetRegisteredIn() )
         {
             // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur
-            // in WW8Writer::pSepx mit der entsprechenden Position eingetragen.
-            // Das Aufbauen und die Ausgabe der am PageDesc haengenden Attribute
-            // und Kopf/Fusszeilen passiert nach dem Haupttext und seinen Attributen.
+            // in WW8Writer::pSepx mit der entsprechenden Position
+            // eingetragen.  Das Aufbauen und die Ausgabe der am PageDesc
+            // haengenden Attribute und Kopf/Fusszeilen passiert nach dem
+            // Haupttext und seinen Attributen.
             const SwFmtPageDesc& rPgDesc = *(SwFmtPageDesc*)pItem;
             pAktPageDesc = rPgDesc.GetPageDesc();
             if( pAktPageDesc )
             {
                 ULONG nFcPos = ReplaceCr( 0x0c ); // Page/Section-Break
 
+                const SwSectionFmt *pFmt=0;
+                const SwSectionNode* pSect = rNd.FindSectionNode();
+                if (pSect && CONTENT_SECTION == pSect->GetSection().GetType())
+                    pFmt = pSect->GetSection().GetFmt();
+
                 // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
                 // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
                 if( nFcPos )
-                    pSepx->AppendSep( Fc2Cp( nFcPos ), rPgDesc, rNd,
+                    pSepx->AppendSep( Fc2Cp( nFcPos ), rPgDesc, rNd, pFmt,
                                       ((SwFmtLineNumber&)rSet.Get(
                                             RES_LINENUMBER )).GetStartValue());
             }
@@ -833,7 +839,7 @@ static Writer& OutWW8_SvxAutoKern( Writer& rWrt, const SfxPoolItem& rHt )
         rWrtWW8.InsUInt16( 0x484B );
     else
         rWrtWW8.pO->Insert( 107, rWrtWW8.pO->Count() );
-    rWrtWW8.pO->Insert( rAttr.GetValue() ? 1 : 0, rWrtWW8.pO->Count() );
+    rWrtWW8.InsUInt16( rAttr.GetValue() ? 1 : 0 );
     return rWrt;
 }
 
@@ -2691,23 +2697,62 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
     // Bug #49917#
     ASSERT( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
 
-    ULONG nRetPos = 0, nPos = Strm().Tell();
-    Strm().SeekRel( IsUnicode() ? -2 : -1 );
-    BYTE nC1;
-    Strm().Read( &nC1, 1 );
-    if( nC1 == 0x0d )               // CR ?
+    BOOL bReplaced = FALSE;
+    SvStream& rStrm = Strm();
+    ULONG nRetPos = 0, nPos = rStrm.Tell();
+    BYTE nBCode=0;
+    UINT16 nUCode=0;
+    //If there is at least two characters already output
+    if (nPos - (IsUnicode() ? 2 : 1) >= ULONG(pFib->fcMin))
     {
-        Strm().SeekRel( -1 );       // CR hinter Zeile
-        Strm().Write( &nChar, 1 );  // durch nChar ersetzen
-        nRetPos = nPos;
+        rStrm.SeekRel(IsUnicode() ? -2 : -1);
+        if (IsUnicode())
+            rStrm >> nUCode;
+        else
+        {
+            rStrm >> nUCode;
+            nUCode = nBCode;
+        }
+        //If the last char was a cr
+        if (nUCode == 0x0d)             // CR ?
+        {
+            if ((nChar == 0x0c) &&
+                (nPos - (IsUnicode() ? 4 : 2) >= ULONG(pFib->fcMin)))
+            {
+                rStrm.SeekRel( IsUnicode() ? -4 : -2 );
+                if (IsUnicode())
+                    rStrm >> nUCode;
+                else
+                {
+                    rStrm >> nUCode;
+                    nUCode = nBCode;
+                }
+            }
+            else
+            {
+                rStrm.SeekRel( IsUnicode() ? -2 : -1 );
+                nUCode = 0x0;
+            }
+            //And the para is not of len 0, then replace this cr with the mark
+            if (nUCode == 0x0d)
+                bReplaced=FALSE;
+            else
+            {
+                bReplaced=TRUE;
+                WriteChar(nChar);
+                nRetPos = nPos;
+            }
+        }
+        rStrm.Seek( nPos );
     }
-    Strm().Seek( nPos );
+    else
+        bReplaced = TRUE;
 
-    if( 0x7 == nC1 )                        // at end of TableRow ?
+    if (!bReplaced)
     {
         // then write as normal char
-        WriteChar( nChar );
-        nRetPos = Strm().Tell();
+        WriteChar(nChar);
+        nRetPos = rStrm.Tell();
     }
 #ifdef PRODUCT
     else

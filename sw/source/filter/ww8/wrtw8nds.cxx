@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,6 +1694,18 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     return rWrt;
 }
 
+BOOL SwWW8Writer::NoPageBreakSection(const SfxItemSet* pSet)
+{
+    BOOL bRet=FALSE;
+    const SfxPoolItem* pI;
+    if( pSet && (
+        ( SFX_ITEM_ON != pSet->GetItemState( RES_PAGEDESC, TRUE, &pI )
+            || 0 == ((SwFmtPageDesc*)pI)->GetPageDesc() ) &&
+        ( SFX_ITEM_ON != pSet->GetItemState( RES_BREAK, TRUE, &pI )
+            || SVX_BREAK_NONE == ((SvxFmtBreakItem*)pI)->GetBreak() )))
+        bRet = TRUE;
+    return bRet;
+}
 
 /*  */
 
@@ -1722,12 +1734,7 @@ Writer& OutWW8_SwSectionNode( Writer& rWrt, SwSectionNode& rSectionNode )
         else
             pSet = 0;
 
-        const SfxPoolItem* pI;
-        if( pSet && (
-            ( SFX_ITEM_ON != pSet->GetItemState( RES_PAGEDESC, TRUE, &pI )
-                || 0 == ((SwFmtPageDesc*)pI)->GetPageDesc() ) ||
-            ( SFX_ITEM_ON != pSet->GetItemState( RES_BREAK, TRUE, &pI )
-                || SVX_BREAK_NONE == ((SvxFmtBreakItem*)pI)->GetBreak() )))
+        if( pSet && SwWW8Writer::NoPageBreakSection(pSet))
             pSet = 0;
 
         if( !pSet )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-21 14:41:21 $
+ *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,7 @@ class WW8ReaderSave
     WW8FlyPara* pWFlyPara;
     WW8SwFlyPara* pSFlyPara;
     WW8TabDesc* pTableDesc;
+    int nTable;
     USHORT nAktColl;
     USHORT nNoAttrScan;
     sal_Unicode cSymbol;
@@ -420,8 +421,8 @@ class WW8ReaderSave
     BOOL bAnl           : 1;
     BOOL bInHyperlink : 1;
     BOOL bPgSecBreak : 1;
-    BOOL bVerticalEnviron :1;
-    int nTable;
+    BOOL bVerticalEnviron : 1;
+    BOOL bWasParaEnd : 1;
 public:
     WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
     void Restore( SwWW8ImplReader* pRdr );
@@ -634,7 +635,6 @@ friend class WW8FormulaControl;
 
     SwNumRule* pNumRule;        // fuer Nummerierung / Aufzaehlungen im Text
     WW8_OLST* pNumOlst;         // Gliederung im Text
-    SwNodeIndex* pBehindSection;// Node-Index zum Zuruecksetzen des PaM nach einem Bereich
     SwSection*   pNewSection;   // last Section that was inserted into the doc
 
     SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
@@ -773,6 +773,7 @@ friend class WW8FormulaControl;
     BOOL bInHyperlink;      // Sonderfall zum einlesen eines 0x01
                                    // siehe: SwWW8ImplReader::Read_F_Hyperlink()
     BOOL bVerticalEnviron;
+    BOOL bWasParaEnd;
 
     // praktische Hilfsvariablen:
     BOOL bVer67;            // ( (6 == nVersion) || (7 == nVersion) );
@@ -820,6 +821,7 @@ friend class WW8FormulaControl;
     void SetUseOn(SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1, BYTE nHdFt);
     void InsertSectionWithWithoutCols( SwPaM& rMyPaM, const SwFmtCol* pCol );
     void CreateSep( const long nTxtPos, BOOL bMustHaveBreak );
+    BOOL MustCloseSection(long nTxtPos);
 
     void CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
                            SwPageDesc* pNewPageDesc, BYTE nCode );
