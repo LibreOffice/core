@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuspell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:18:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,13 @@ FuSpell::~FuSpell()
 void FuSpell::StartSpelling()
 {
     // Get current main view shell.
-    pViewShell = ::sd::ViewShellBase::GetMainViewShell (
-        pDocSh->GetViewShell()->GetViewFrame());
-
-    if( pViewShell )
+    ViewShellBase* pBase (ViewShellBase::GetViewShellBase (
+        pDocSh->GetViewShell()->GetViewFrame()));
+    if (pBase != NULL)
+        pViewShell = pBase->GetMainViewShell ();
+    else
+        pViewShell = NULL;
+    if (pViewShell != NULL)
     {
         if ( pSdOutliner && pViewShell->ISA(DrawViewShell) && !bOwnOutliner )
         {
