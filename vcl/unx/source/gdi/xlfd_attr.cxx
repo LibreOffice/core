@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:10:40 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,8 @@ Attribute::TagFeature( unsigned short nFeature )
         if (strcmp(mpName, "helvetica") == 0)
             mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_HQ);
         else
-        if (strcmp(mpName, "lucidux sans") == 0)
+        if (   (strcmp(mpName, "lucidux sans") == 0)
+            || (strcmp(mpName, "luxi sans")    == 0))
             mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_MQ | XLFD_FEATURE_LQ);
         else
         if (strcmp(mpName, "charter") == 0)
