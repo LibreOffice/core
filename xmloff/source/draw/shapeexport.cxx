@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:54:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,9 +572,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( aShapeInfo.msStyleName.getLength() != 0 )
     {
         if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, aShapeInfo.msStyleName);
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, rExport.EncodeStyleName( aShapeInfo.msStyleName) );
         else
-            rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, aShapeInfo.msStyleName);
+            rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, rExport.EncodeStyleName( aShapeInfo.msStyleName) );
     }
 
     // ------------------
@@ -582,7 +582,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // ------------------
     if( aShapeInfo.msTextStyleName.getLength() != 0 )
     {
-        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName);
+        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName );
     }
 
     // --------------------------
@@ -1142,7 +1142,7 @@ void XMLShapeExport::ExportGraphicDefaults()
                 aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper );
 
                 // write graphic family styles
-                aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                aStEx.exportStyleFamily("graphics", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
         catch( lang::ServiceNotRegisteredException& )
