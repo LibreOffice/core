@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-16 13:54:21 $
+ *  last change: $Author: kz $ $Date: 2002-08-20 20:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ String STR_SSO_REQUEST
     Text[ japanese ] = "ユーザー名とパスワードを入力してください。";
     Text[ korean ] = "사용자 이름과 암호를 입력해주십시오. ";
     Text[ chinese_simplified ] = "请输入您的使用名和密码。";
-    Text[ chinese_traditional ] = "請鍵入您的使用者名稱及密碼。";
+    Text[ chinese_traditional ] = "請鍵入您的使用名及密碼。";
     Text[ turkish ] = "Please enter you Single Signon username and password. ";
     Text[ arabic ] = "Please enter you Single Signon username and password. ";
     Text[ catalan ] = "Please enter you Single Signon username and password. ";
