@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:32:09 $
+#   last change: $Author: obo $ $Date: 2005-03-15 11:26:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ SLOFILES =  \
 
 EXCEPTIONSFILES= \
         $(SLO)$/srcview.obj \
+        $(SLO)$/swcli.obj  \
         $(SLO)$/uivwimp.obj \
         $(SLO)$/viewling.obj
 
