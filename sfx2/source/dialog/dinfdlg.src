@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 05:27:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_DOCINFODESC
         Text [ ENGLISH ] = "~Title" ;
         Text [ norwegian ] = "~Tittel" ;
         Text [ italian ] = "~Titolo" ;
-        Text [ portuguese_brazilian ] = "~T¡tulo" ;
+        Text [ portuguese_brazilian ] = "~T?tulo" ;
         Text [ portuguese ] = "~Título" ;
         Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Titel" ;
@@ -198,7 +198,7 @@ TabPage TP_DOCINFODESC
         Text [ ENGLISH ] = "~Description" ;
         Text [ norwegian ] = "~Description" ;
         Text [ italian ] = "~Descrizione" ;
-        Text [ portuguese_brazilian ] = "~DescriçÆo" ;
+        Text [ portuguese_brazilian ] = "~Descri??o" ;
         Text [ portuguese ] = "~Descrição" ;
         Text [ finnish ] = "~Huomautus" ;
         Text [ danish ] = "Beskrivelse" ;
@@ -294,7 +294,7 @@ TabPage TP_DOCINFODOC
         Text = "~Schreibgeschützt" ;
         Text [ ENGLISH ] = "~Readonly" ;
         Text [ english_us ] = "~Read-only" ;
-        Text [ portuguese_brazilian ] = "~Schreibgeschützt" ;
+        Text [ portuguese_brazilian ] = "~Schreibgesch?zt" ;
         Text [ swedish ] = "~Skrivskyddat" ;
         Text [ danish ] = "Skrivebeskyttet" ;
         Text [ italian ] = "~Sola lettura" ;
@@ -361,7 +361,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Grootte:" ;
         Text [ swedish ] = "Storlek:" ;
         Text [ danish ] = "Størrelse:" ;
-        Text [ portuguese_brazilian ] = "Größe:" ;
+        Text [ portuguese_brazilian ] = "Gr?e:" ;
         Text [ portuguese ] = "Tamanho:" ;
         Text[ chinese_simplified ] = "´óÐ¡£º";
         Text[ russian ] = "Ðàçìåð:";
@@ -466,7 +466,7 @@ TabPage TP_DOCINFODOC
         Text [ dutch ] = "Gewijzigd op:" ;
         Text [ swedish ] = "Ändrat:" ;
         Text [ danish ] = "Ændret den:" ;
-        Text [ portuguese_brazilian ] = "Geändert am:" ;
+        Text [ portuguese_brazilian ] = "Ge?ndert am:" ;
         Text [ portuguese ] = "Alterado em:" ;
         Text[ chinese_simplified ] = "¸ü¸ÄµÄÈÕÆÚ£º";
         Text[ russian ] = "Èçìåíåíî:";
@@ -493,7 +493,7 @@ TabPage TP_DOCINFODOC
         Text = "Version:" ;
         Text [ ENGLISH ] = "Version:" ;
         Text [ english_us ] = "Version:" ;
-        Text [ portuguese_brazilian ] = "N£mero do documento:" ;
+        Text [ portuguese_brazilian ] = "N?mero do documento:" ;
         Text [ swedish ] = "Version:" ;
         Text [ danish ] = "Version:" ;
         Text [ italian ] = "Versione:" ;
@@ -941,7 +941,7 @@ TabDialog SID_DOCINFO
     Text [ portuguese ] = "Propriedades de " ;
     Text[ chinese_simplified ] = "ÊôÐÔ£º ";
     Text[ russian ] = "Ñâîéñòâà ";
-    Text[ polish ] = "W³aœciwoœci   ";
+    Text[ polish ] = "W³a?ciwo?ci   ";
     Text[ japanese ] = "ÌßÛÊßÃ¨ ";
     Text[ chinese_traditional ] = "ÄÝ©Ê¡G ";
     TabControl 1
@@ -1010,7 +1010,7 @@ TabDialog SID_DOCINFO
                 Text [ English ] = "User" ;
                 Text [ norwegian ] = "User" ;
                 Text [ italian ] = "Utente" ;
-                Text [ portuguese_brazilian ] = "Usu rio" ;
+                Text [ portuguese_brazilian ] = "Usu?rio" ;
                 Text [ portuguese ] = "Utilizador" ;
                 Text [ finnish ] = "Käyttäjän määrittämä" ;
                 Text [ danish ] = "Bruger" ;
