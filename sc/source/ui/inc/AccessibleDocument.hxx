@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 11:42:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include "viewdata.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
@@ -104,7 +104,7 @@ namespace utl
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::ImplHelper2< ::drafts::com::sun::star::accessibility::XAccessibleSelection,
+typedef cppu::ImplHelper2< ::com::sun::star::accessibility::XAccessibleSelection,
                             ::com::sun::star::view::XSelectionChangeListener >
                     ScAccessibleDocumentImpl;
 
@@ -117,7 +117,7 @@ public:
     //=====  internal  ========================================================
     ScAccessibleDocument(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScSplitPos eSplitPos);
 
@@ -147,8 +147,8 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
-        SAL_CALL getAccessibleAt(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -163,14 +163,14 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(long nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -199,13 +199,13 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        deselectSelectedAccessibleChild( sal_Int32 nChildIndex )
+        deselectAccessibleChild( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException);
 
@@ -314,7 +314,7 @@ public:
     utl::AccessibleRelationSetHelper* GetRelationSet(const ScAddress* pAddress) const;
 
     ::com::sun::star::uno::Reference
-        < ::drafts::com::sun::star::accessibility::XAccessible >
+        < ::com::sun::star::accessibility::XAccessible >
         GetAccessibleSpreadsheet();
 
 protected:
@@ -342,7 +342,7 @@ private:
     ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
     ScChildrenShapes* mpChildrenShapes;
     ScAccessibleEditObject* mpTempAccEdit;
-    com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> mxTempAcc;
+    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> mxTempAcc;
     Rectangle maVisArea;
     sal_Bool mbCompleteSheetSelected;
 
@@ -356,13 +356,13 @@ private:
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
-    void AddChild(const com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
-    void RemoveChild(const com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
+    void AddChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
+    void RemoveChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
 
     rtl::OUString GetCurrentCellName() const;
     rtl::OUString GetCurrentCellDescription() const;
