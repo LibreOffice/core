@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+ *  last change: $Author: th $ $Date: 2000-12-05 19:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@ String::String( const ResId& rResId )
                           RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
                           RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                           RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
+        ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
+        if ( pImplResHookProc )
+            pImplResHookProc( aWString );
         InitStringRes( aWString );
 
         USHORT nSize = sizeof( RSHEADER_TYPE ) + nStringLen + 1;
@@ -191,6 +194,10 @@ UniString::UniString( const ResId& rResId )
         nSize += nSize % 2;
         pResMgr->Increment( nSize );
     }
+
+    ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
+    if ( pImplResHookProc )
+        pImplResHookProc( *this );
 }
 
 // =======================================================================

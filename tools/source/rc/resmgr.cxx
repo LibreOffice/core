@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-01 14:51:30 $
+ *  last change: $Author: th $ $Date: 2000-12-05 19:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,10 @@ static int __LOADONCALLAPI Search( const void * nTypeAndId, const void * pSecond
 #ifdef S390
 }
 #endif
+
+// =======================================================================
+
+static ResHookProc pImplResHookProc = 0;
 
 // =======================================================================
 
@@ -1002,6 +1006,8 @@ USHORT ResMgr::GetString( UniString& rStr, const BYTE* pStr )
                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                        RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
+    if ( pImplResHookProc )
+        pImplResHookProc( aString );
     rStr = aString;
     return GetStringSize( pStr );
 }
@@ -1332,6 +1338,20 @@ UniString ResMgr::ReadString()
     UniString aRet;
     Increment( GetString( aRet, (const BYTE*)GetClass() ) );
     return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void ResMgr::SetReadStringHook( ResHookProc pProc )
+{
+    pImplResHookProc = pProc;
+}
+
+// -----------------------------------------------------------------------
+
+ResHookProc ResMgr::GetReadStringHook()
+{
+    return pImplResHookProc;
 }
 
 // =======================================================================
