@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentBase.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:39:51 $
+ *  last change: $Author: jl $ $Date: 2002-04-16 15:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,19 +89,21 @@ public class ComponentBase extends WeakBase implements XComponent
     /** Override to perform extra clean-up work. Provided for subclasses. It is
         called during dispose()
      */
-    public void disposing()
+    protected void disposing()
     {
     }
+    /** Override to become notified right before the disposing action is performed.
+     */
+    protected void inDispose()
+    {
+    }
+
 
     /** Method of XComponent. It is called by the owning client when the component is not needed
      *  anymore. The registered listeners are notified that this method has been called.
      */
     public void dispose()
     {
-        //Assuming that listener release references to this object during the
-        // disposing call then it might happen that this object is being unreferenced
-        // which leads to be gc'ed and the notification might be interrupted.
-        ComponentBase selfRef= this;
         // Determine in a thread-safe way if this is the first call to this method.
         // Only then we proceed with the notification of event listeners.
         // It is an error to call this method more then once.
@@ -119,6 +121,7 @@ public class ComponentBase extends WeakBase implements XComponent
         // a synchronized method which uses the same object.
         if (bDoDispose)
         {
+            inDispose();
             listenerContainer.disposeAndClear(new EventObject(this));
             //notify subclasses that disposing is in progress
             disposing();
@@ -130,7 +133,6 @@ public class ComponentBase extends WeakBase implements XComponent
             if (DEBUG)
                 System.out.println("OComponentHelper::dispose() - dispose called twice" );
         }
-        selfRef= null;
     }
 
     /** Method of XComponent.
