@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:14:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,11 +1330,16 @@ sal_uInt16 XclExpLinkManagerImpl::FindXti( sal_uInt16 nXclFirst, sal_uInt16 nXcl
 
 void XclExpLinkManagerImpl::StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 )
 {
-    if( !rRef1.IsTabDeleted() && !rRef2.IsTabDeleted() )
-        for( SCTAB nScTab = rRef1.nTab, nLastScTab = rRef2.nTab; nScTab <= nLastScTab; ++nScTab )
+    if( !rRef1.IsDeleted() && !rRef2.IsDeleted() && (rRef1.nTab >= 0) && (rRef2.nTab >= 0) )
+    {
+        SCTAB nFirstScTab = static_cast< SCTAB >( rRef1.nTab );
+        SCTAB nLastScTab = static_cast< SCTAB >( rRef2.nTab );
+        for( SCTAB nScTab = nFirstScTab; nScTab <= nLastScTab; ++nScTab )
             if( GetTabInfo().IsExternalTab( nScTab ) )
                 maSBBuffer.StoreCellRange( ScRange(
-                    rRef1.nCol, rRef1.nRow, nScTab, rRef2.nCol, rRef2.nRow, nScTab ) );
+                    static_cast< SCCOL >( rRef1.nCol ), static_cast< SCROW >( rRef1.nRow ), nScTab,
+                    static_cast< SCCOL >( rRef2.nCol ), static_cast< SCROW >( rRef2.nRow ), nScTab ) );
+    }
 }
 
 void XclExpLinkManagerImpl::InsertAddIn( sal_uInt16& rnXti, sal_uInt16& rnExtName, const String& rName )
@@ -1416,9 +1421,9 @@ void XclExpLinkManager::StoreCell( const SingleRefData& rRef )
     mpImpl->StoreCellRange( rRef, rRef );
 }
 
-void XclExpLinkManager::StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 )
+void XclExpLinkManager::StoreCellRange( const ComplRefData& rRef )
 {
-    mpImpl->StoreCellRange( rRef1, rRef2 );
+    mpImpl->StoreCellRange( rRef.Ref1, rRef.Ref2 );
 }
 
 void XclExpLinkManager::InsertAddIn( sal_uInt16& rnXti, sal_uInt16& rnExtName, const String& rName )
