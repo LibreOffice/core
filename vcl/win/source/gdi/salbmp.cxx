@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-28 13:13:55 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,14 @@
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#ifndef _SV_SALBMP_H
+#include <salbmp.h>
 #endif
 #include <string.h>
 
@@ -98,11 +98,11 @@ inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
                  ( rByte &= 0x0f, rByte |= ( cIndex << 4 ) );
 }
 
-// -------------
-// - SalBitmap -
-// -------------
+// ----------------
+// - WinSalBitmap -
+// ----------------
 
-SalBitmap::SalBitmap() :
+WinSalBitmap::WinSalBitmap() :
         mhDIB       ( 0 ),
         mhDDB       ( 0 ),
         mnBitCount  ( 0 )
@@ -111,16 +111,16 @@ SalBitmap::SalBitmap() :
 
 // ------------------------------------------------------------------
 
-SalBitmap::~SalBitmap()
+WinSalBitmap::~WinSalBitmap()
 {
     Destroy();
 }
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( HANDLE hBitmap, BOOL bDIB, BOOL bCopyHandle )
+bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
 {
-    BOOL bRet = TRUE;
+    bool bRet = TRUE;
 
     if( bDIB )
         mhDIB = (HGLOBAL) ( bCopyHandle ? ImplCopyDIBOrDDB( hBitmap, TRUE ) : hBitmap );
@@ -169,9 +169,9 @@ BOOL SalBitmap::Create( HANDLE hBitmap, BOOL bDIB, BOOL bCopyHandle )
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
+bool WinSalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
 {
-    BOOL bRet = FALSE;
+    bool bRet = FALSE;
 
     mhDIB = ImplCreateDIB( rSize, nBitCount, rPal );
 
@@ -187,9 +187,10 @@ BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBitmap )
+bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
 {
-    BOOL bRet = FALSE;
+    bool bRet = FALSE;
+    const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
     if ( rSalBitmap.mhDIB || rSalBitmap.mhDDB )
     {
@@ -215,15 +216,18 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBitmap )
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
+bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 {
-    BOOL bRet = FALSE;
+    bool bRet = FALSE;
+
+    const WinSalBitmap& rSalBmp = static_cast<const WinSalBitmap&>(rSSalBmp);
+    WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
 
     if( rSalBmp.mhDIB )
     {
         PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( rSalBmp.mhDIB );
         PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
-        HDC                 hDC  = pGraphics->maGraphicsData.mhDC;
+        HDC                 hDC  = pGraphics->mhDC;
         HBITMAP             hNewDDB;
         BITMAP              aDDBInfo;
         PBYTE               pBits = (PBYTE) pBI + *(DWORD*) pBI +
@@ -265,9 +269,11 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
+bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, USHORT nNewBitCount )
 {
-    BOOL bRet = FALSE;
+    bool bRet = FALSE;
+
+    const WinSalBitmap& rSalBmp = static_cast<const WinSalBitmap&>(rSSalBmp);
 
     if( rSalBmp.mhDDB )
     {
@@ -315,7 +321,7 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 
 // ------------------------------------------------------------------
 
-void SalBitmap::Destroy()
+void WinSalBitmap::Destroy()
 {
     if( mhDIB )
         GlobalFree( mhDIB );
@@ -328,7 +334,7 @@ void SalBitmap::Destroy()
 
 // ------------------------------------------------------------------
 
-USHORT SalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
+USHORT WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 {
     USHORT nColors = 0;
 
@@ -358,7 +364,7 @@ USHORT SalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 
 // ------------------------------------------------------------------
 
-HGLOBAL SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const BitmapPalette& rPal )
+HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const BitmapPalette& rPal )
 {
     DBG_ASSERT( nBits == 1 || nBits == 4 || nBits == 8 || nBits == 24, "Unsupported BitCount!" );
 
@@ -405,7 +411,7 @@ HGLOBAL SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const BitmapP
 
 // ------------------------------------------------------------------
 
-HANDLE SalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, BOOL bDIB )
+HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 {
     HANDLE  hCopy = 0;
 
@@ -451,7 +457,7 @@ HANDLE SalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, BOOL bDIB )
 
 // ------------------------------------------------------------------
 
-BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
+BitmapBuffer* WinSalBitmap::AcquireBuffer( bool bReadOnly )
 {
     BitmapBuffer* pBuffer = NULL;
 
@@ -550,7 +556,7 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
 // ------------------------------------------------------------------
 
-void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
+void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
     if( pBuffer )
     {
@@ -574,8 +580,8 @@ void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
 
 // ------------------------------------------------------------------
 
-void SalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
-                                     const Size& rSizePixel, BOOL bRLE4 )
+void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
+                                     const Size& rSizePixel, bool bRLE4 )
 {
     HPBYTE          pRLE = (HPBYTE) pSrcBuf;
     HPBYTE          pDIB = (HPBYTE) pDstBuf;
@@ -587,7 +593,7 @@ void SalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
     ULONG           nX = 0;
     ULONG           i;
     BYTE            cTmp;
-    BOOL            bEndDecoding = FALSE;
+    bool            bEndDecoding = FALSE;
 
     if( pRLE && pDIB )
     {
