@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:16:53 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
@@ -179,6 +178,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             // we need to disable the drag option on the tail of a note
             // object. Also, disable the ability to use the circular
             // drag of a note object.
+            bool bDrag = false;
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
@@ -187,25 +187,22 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     // move using the valid caption handles for note text box.
                     if(pHdl && (pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC))
-                    {
-                        aDragTimer.Start();
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                        bReturn = TRUE;
-                    }
+                        bDrag = true;
                     // move the complete note box.
                     else if(!pHdl)
-                    {
-                        aDragTimer.Start();
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                        bReturn = TRUE;
-                    }
+                        bDrag = true;
                 }
                 else
-                {
-                    aDragTimer.Start();
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                    bReturn = TRUE;
-                }
+                    bDrag = true;   // different object
+            }
+            else
+                bDrag = true;       // several objects
+
+            if ( bDrag )
+            {
+                aDragTimer.Start();
+                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                bReturn = TRUE;
             }
         }
         else
