@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:04:14 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "IF";
         Text[ hebrew ] = "WENN";
         Text[ hindi ] = "IF";
+        Text[ slovak ] = "IF";
     };
     String SC_OPCODE_CHOSE
     {
@@ -128,6 +129,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CHOOSE";
         Text[ hebrew ] = "WAHL";
         Text[ hindi ] = "CHOOSE";
+        Text[ slovak ] = "CHOOSE";
     };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
@@ -177,6 +179,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "AND";
         Text[ hebrew ] = "UND";
         Text[ hindi ] = "AND";
+        Text[ slovak ] = "AND";
     };
     String SC_OPCODE_OR
     {
@@ -210,6 +213,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "OR";
         Text[ hebrew ] = "ODER";
         Text[ hindi ] = "OR";
+        Text[ slovak ] = "OR";
     };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
     String SC_OPCODE_UNION { Text = ";" ; };
@@ -246,6 +250,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NOT";
         Text[ hebrew ] = "NICHT";
         Text[ hindi ] = "NOT";
+        Text[ slovak ] = "NOT";
     };
     String SC_OPCODE_NEG
     {
@@ -275,6 +280,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NEG";
         Text[ hebrew ] = "NEG";
         Text[ hindi ] = "NEG";
+        Text[ slovak ] = "NEG";
     };
     String SC_OPCODE_NEG_SUB { Text = "-" ; };
     String SC_OPCODE_PI
@@ -310,6 +316,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PI";
         Text[ hebrew ] = "PI";
         Text[ hindi ] = "PI";
+        Text[ slovak ] = "PI";
     };
     String SC_OPCODE_RANDOM
     {
@@ -343,6 +350,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "RAND";
         Text[ hebrew ] = "ZUFALLSZAHL";
         Text[ hindi ] = "RAND";
+        Text[ slovak ] = "RAND";
     };
     String SC_OPCODE_TRUE
     {
@@ -376,6 +384,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TRUE";
         Text[ hebrew ] = "WAHR";
         Text[ hindi ] = "TRUE";
+        Text[ slovak ] = "TRUE";
     };
     String SC_OPCODE_FALSE
     {
@@ -409,6 +418,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FALSE";
         Text[ hebrew ] = "FALSCH";
         Text[ hindi ] = "FALSE";
+        Text[ slovak ] = "FALSE";
     };
     String SC_OPCODE_GET_ACT_DATE
     {
@@ -442,6 +452,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TODAY";
         Text[ hebrew ] = "HEUTE";
         Text[ hindi ] = "TODAY";
+        Text[ slovak ] = "TODAY";
     };
     String SC_OPCODE_GET_ACT_TIME
     {
@@ -475,6 +486,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NOW";
         Text[ hebrew ] = "JETZT";
         Text[ hindi ] = "NOW";
+        Text[ slovak ] = "NOW";
     };
     String SC_OPCODE_NO_VALUE
     {
@@ -508,6 +520,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NA";
         Text[ hebrew ] = "NV";
         Text[ hindi ] = "NA";
+        Text[ slovak ] = "NA";
     };
     String SC_OPCODE_CURRENT
     {
@@ -541,6 +554,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CURRENT";
         Text[ hebrew ] = "AKTUELL";
         Text[ hindi ] = "CURRENT";
+        Text[ slovak ] = "CURRENT";
     };
     String SC_OPCODE_DEG
     {
@@ -574,6 +588,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DEGREES";
         Text[ hebrew ] = "DEG";
         Text[ hindi ] = "DEGREES";
+        Text[ slovak ] = "DEGREES";
     };
     String SC_OPCODE_RAD
     {
@@ -607,6 +622,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "RADIANS";
         Text[ hebrew ] = "RAD";
         Text[ hindi ] = "RADIANS";
+        Text[ slovak ] = "RADIANS";
     };
     String SC_OPCODE_SIN
     {
@@ -640,6 +656,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SIN";
         Text[ hebrew ] = "SIN";
         Text[ hindi ] = "SIN";
+        Text[ slovak ] = "SIN";
     };
     String SC_OPCODE_COS
     {
@@ -669,6 +686,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COS";
         Text[ hebrew ] = "COS";
         Text[ hindi ] = "COS";
+        Text[ slovak ] = "COS";
     };
     String SC_OPCODE_TAN
     {
@@ -698,6 +716,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TAN";
         Text[ hebrew ] = "TAN";
         Text[ hindi ] = "TAN";
+        Text[ slovak ] = "TAN";
     };
     String SC_OPCODE_COT
     {
@@ -727,6 +746,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COT";
         Text[ hebrew ] = "COT";
         Text[ hindi ] = "COT";
+        Text[ slovak ] = "COT";
     };
     String SC_OPCODE_ARC_SIN
     {
@@ -760,6 +780,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ASIN";
         Text[ hebrew ] = "ARCSIN";
         Text[ hindi ] = "ASIN";
+        Text[ slovak ] = "ASIN";
     };
     String SC_OPCODE_ARC_COS
     {
@@ -793,6 +814,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ACOS";
         Text[ hebrew ] = "ARCCOS";
         Text[ hindi ] = "ACOS";
+        Text[ slovak ] = "ACOS";
     };
     String SC_OPCODE_ARC_TAN
     {
@@ -826,6 +848,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ATAN";
         Text[ hebrew ] = "ARCTAN";
         Text[ hindi ] = "ATAN";
+        Text[ slovak ] = "ATAN";
     };
     String SC_OPCODE_ARC_COT
     {
@@ -859,6 +882,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ACOT";
         Text[ hebrew ] = "ARCCOT";
         Text[ hindi ] = "ACOT";
+        Text[ slovak ] = "ACOT";
     };
     String SC_OPCODE_SIN_HYP
     {
@@ -892,6 +916,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SINH";
         Text[ hebrew ] = "SINHYP";
         Text[ hindi ] = "SINH";
+        Text[ slovak ] = "SINH";
     };
     String SC_OPCODE_COS_HYP
     {
@@ -925,6 +950,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COSH";
         Text[ hebrew ] = "COSHYP";
         Text[ hindi ] = "COSH";
+        Text[ slovak ] = "COSH";
     };
     String SC_OPCODE_TAN_HYP
     {
@@ -958,6 +984,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TANH";
         Text[ hebrew ] = "TANHYP";
         Text[ hindi ] = "TANH";
+        Text[ slovak ] = "TANH";
     };
     String SC_OPCODE_COT_HYP
     {
@@ -991,6 +1018,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COTH";
         Text[ hebrew ] = "COTHYP";
         Text[ hindi ] = "COTH";
+        Text[ slovak ] = "COTH";
     };
     String SC_OPCODE_ARC_SIN_HYP
     {
@@ -1024,6 +1052,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ASINH";
         Text[ hebrew ] = "ARCSINHYP";
         Text[ hindi ] = "ASINH";
+        Text[ slovak ] = "ASINH";
     };
     String SC_OPCODE_ARC_COS_HYP
     {
@@ -1057,6 +1086,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ACOSH";
         Text[ hebrew ] = "ARCCOSHYP";
         Text[ hindi ] = "ACOSH";
+        Text[ slovak ] = "ACOSH";
     };
     String SC_OPCODE_ARC_TAN_HYP
     {
@@ -1090,6 +1120,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ATANH";
         Text[ hebrew ] = "ARCTANHYP";
         Text[ hindi ] = "ATANH";
+        Text[ slovak ] = "ATANH";
     };
     String SC_OPCODE_ARC_COT_HYP
     {
@@ -1123,6 +1154,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ACOTH";
         Text[ hebrew ] = "ARCCOTHYP";
         Text[ hindi ] = "ACOTH";
+        Text[ slovak ] = "ACOTH";
     };
     String SC_OPCODE_EXP
     {
@@ -1152,6 +1184,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "EXP";
         Text[ hebrew ] = "EXP";
         Text[ hindi ] = "EXP";
+        Text[ slovak ] = "EXP";
     };
     String SC_OPCODE_LN
     {
@@ -1181,6 +1214,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LN";
         Text[ hebrew ] = "LN";
         Text[ hindi ] = "LN";
+        Text[ slovak ] = "LN";
     };
     String SC_OPCODE_SQRT
     {
@@ -1214,6 +1248,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SQRT";
         Text[ hebrew ] = "WURZEL";
         Text[ hindi ] = "SQRT";
+        Text[ slovak ] = "SQRT";
     };
     String SC_OPCODE_FACT
     {
@@ -1247,6 +1282,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FACT";
         Text[ hebrew ] = "FAKULTÄT";
         Text[ hindi ] = "FACT";
+        Text[ slovak ] = "FACT";
     };
     String SC_OPCODE_GET_YEAR
     {
@@ -1280,6 +1316,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "YEAR";
         Text[ hebrew ] = "JAHR";
         Text[ hindi ] = "YEAR";
+        Text[ slovak ] = "YEAR";
     };
     String SC_OPCODE_GET_MONTH
     {
@@ -1313,6 +1350,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MONTH";
         Text[ hebrew ] = "MONAT";
         Text[ hindi ] = "MONTH";
+        Text[ slovak ] = "MONTH";
     };
     String SC_OPCODE_GET_DAY
     {
@@ -1346,6 +1384,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DAY";
         Text[ hebrew ] = "TAG";
         Text[ hindi ] = "DAY";
+        Text[ slovak ] = "DAY";
     };
     String SC_OPCODE_GET_HOUR
     {
@@ -1379,6 +1418,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "HOUR";
         Text[ hebrew ] = "STUNDE";
         Text[ hindi ] = "HOUR";
+        Text[ slovak ] = "HOUR";
     };
     String SC_OPCODE_GET_MIN
     {
@@ -1412,6 +1452,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MINUTE";
         Text[ hebrew ] = "MINUTE";
         Text[ hindi ] = "MINUTE";
+        Text[ slovak ] = "MINUTE";
     };
     String SC_OPCODE_GET_SEC
     {
@@ -1445,6 +1486,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SECOND";
         Text[ hebrew ] = "SEKUNDE";
         Text[ hindi ] = "SECOND";
+        Text[ slovak ] = "SECOND";
     };
     String SC_OPCODE_PLUS_MINUS
     {
@@ -1478,6 +1520,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SIGN";
         Text[ hebrew ] = "VORZEICHEN";
         Text[ hindi ] = "SIGN";
+        Text[ slovak ] = "SIGN";
     };
     String SC_OPCODE_ABS
     {
@@ -1511,6 +1554,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ABS";
         Text[ hebrew ] = "ABS";
         Text[ hindi ] = "ABS";
+        Text[ slovak ] = "ABS";
     };
     String SC_OPCODE_INT
     {
@@ -1544,6 +1588,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "INT";
         Text[ hebrew ] = "GANZZAHL";
         Text[ hindi ] = "INT";
+        Text[ slovak ] = "INT";
     };
     String SC_OPCODE_PHI
     {
@@ -1573,6 +1618,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PHI";
         Text[ hebrew ] = "PHI";
         Text[ hindi ] = "PHI";
+        Text[ slovak ] = "PHI";
     };
     String SC_OPCODE_GAUSS
     {
@@ -1602,6 +1648,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GAUSS";
         Text[ hebrew ] = "GAUSS";
         Text[ hindi ] = "GAUSS";
+        Text[ slovak ] = "GAUSS";
     };
     String SC_OPCODE_IS_EMPTY
     {
@@ -1635,6 +1682,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISBLANK";
         Text[ hebrew ] = "ISTLEER";
         Text[ hindi ] = "ISBLANK";
+        Text[ slovak ] = "ISBLANK";
     };
     String SC_OPCODE_IS_STRING
     {
@@ -1668,6 +1716,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISTEXT";
         Text[ hebrew ] = "ISTTEXT";
         Text[ hindi ] = "ISTEXT";
+        Text[ slovak ] = "ISTEXT";
     };
     String SC_OPCODE_IS_NON_STRING
     {
@@ -1701,6 +1750,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISNONTEXT";
         Text[ hebrew ] = "ISTKTEXT";
         Text[ hindi ] = "ISNONTEXT";
+        Text[ slovak ] = "ISNONTEXT";
     };
     String SC_OPCODE_IS_LOGICAL
     {
@@ -1734,6 +1784,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISLOGICAL";
         Text[ hebrew ] = "ISTLOG";
         Text[ hindi ] = "ISLOGICAL";
+        Text[ slovak ] = "ISLOGICAL";
     };
     String SC_OPCODE_TYPE
     {
@@ -1767,6 +1818,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TYPE";
         Text[ hebrew ] = "TYP";
         Text[ hindi ] = "TYPE";
+        Text[ slovak ] = "TYPE";
     };
     String SC_OPCODE_CELL
     {
@@ -1796,6 +1848,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CELL";
         Text[ hebrew ] = "ZELLE";
         Text[ hindi ] = "CELL";
+        Text[ slovak ] = "CELL";
     };
     String SC_OPCODE_IS_REF
     {
@@ -1829,6 +1882,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISREF";
         Text[ hebrew ] = "ISTBEZUG";
         Text[ hindi ] = "ISREF";
+        Text[ slovak ] = "ISREF";
     };
     String SC_OPCODE_IS_VALUE
     {
@@ -1862,6 +1916,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISNUMBER";
         Text[ hebrew ] = "ISTZAHL";
         Text[ hindi ] = "ISNUMBER";
+        Text[ slovak ] = "ISNUMBER";
     };
     String SC_OPCODE_IS_FORMULA
     {
@@ -1895,6 +1950,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISFORMULA";
         Text[ hebrew ] = "ISTFORMEL";
         Text[ hindi ] = "ISFORMULA";
+        Text[ slovak ] = "ISFORMULA";
     };
     String SC_OPCODE_IS_NV
     {
@@ -1928,6 +1984,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISNA";
         Text[ hebrew ] = "ISTNV";
         Text[ hindi ] = "ISNA";
+        Text[ slovak ] = "ISNA";
     };
     String SC_OPCODE_IS_ERR
     {
@@ -1961,6 +2018,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISERR";
         Text[ hebrew ] = "ISTFEHL";
         Text[ hindi ] = "ISERR";
+        Text[ slovak ] = "ISERR";
     };
     String SC_OPCODE_IS_ERROR
     {
@@ -1994,6 +2052,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISERROR";
         Text[ hebrew ] = "ISTFEHLER";
         Text[ hindi ] = "ISERROR";
+        Text[ slovak ] = "ISERROR";
     };
     String SC_OPCODE_IS_EVEN
     {
@@ -2027,6 +2086,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISEVEN";
         Text[ hebrew ] = "ISTGERADE";
         Text[ hindi ] = "ISEVEN";
+        Text[ slovak ] = "ISEVEN";
     };
     String SC_OPCODE_IS_ODD
     {
@@ -2060,6 +2120,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISODD";
         Text[ hebrew ] = "ISTUNGERADE";
         Text[ hindi ] = "ISODD";
+        Text[ slovak ] = "ISODD";
     };
     String SC_OPCODE_N
     {
@@ -2093,6 +2154,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "N";
         Text[ hebrew ] = "N";
         Text[ hindi ] = "N";
+        Text[ slovak ] = "N";
     };
     String SC_OPCODE_GET_DATE_VALUE
     {
@@ -2126,6 +2188,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DATEVALUE";
         Text[ hebrew ] = "DATWERT";
         Text[ hindi ] = "DATEVALUE";
+        Text[ slovak ] = "DATEVALUE";
     };
     String SC_OPCODE_GET_TIME_VALUE
     {
@@ -2159,6 +2222,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TIMEVALUE";
         Text[ hebrew ] = "ZEITWERT";
         Text[ hindi ] = "TIMEVALUE";
+        Text[ slovak ] = "TIMEVALUE";
     };
     String SC_OPCODE_CODE
     {
@@ -2192,6 +2256,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CODE";
         Text[ hebrew ] = "CODE";
         Text[ hindi ] = "CODE";
+        Text[ slovak ] = "CODE";
     };
     String SC_OPCODE_TRIM
     {
@@ -2225,6 +2290,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TRIM";
         Text[ hebrew ] = "GLÄTTEN";
         Text[ hindi ] = "TRIM";
+        Text[ slovak ] = "TRIM";
     };
     String SC_OPCODE_UPPER
     {
@@ -2258,6 +2324,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "UPPER";
         Text[ hebrew ] = "GROSS";
         Text[ hindi ] = "UPPER";
+        Text[ slovak ] = "UPPER";
     };
     String SC_OPCODE_PROPPER
     {
@@ -2291,6 +2358,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PROPER";
         Text[ hebrew ] = "GROSS2";
         Text[ hindi ] = "PROPER";
+        Text[ slovak ] = "PROPER";
     };
     String SC_OPCODE_LOWER
     {
@@ -2324,6 +2392,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LOWER";
         Text[ hebrew ] = "KLEIN";
         Text[ hindi ] = "LOWER";
+        Text[ slovak ] = "LOWER";
     };
     String SC_OPCODE_LEN
     {
@@ -2357,6 +2426,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LEN";
         Text[ hebrew ] = "LÄNGE";
         Text[ hindi ] = "LEN";
+        Text[ slovak ] = "LEN";
     };
     String SC_OPCODE_T
     {
@@ -2386,6 +2456,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "T";
         Text[ hebrew ] = "T";
         Text[ hindi ] = "T";
+        Text[ slovak ] = "T";
     };
     String SC_OPCODE_VALUE
     {
@@ -2419,6 +2490,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "VALUE";
         Text[ hebrew ] = "WERT";
         Text[ hindi ] = "VALUE";
+        Text[ slovak ] = "VALUE";
     };
     String SC_OPCODE_CLEAN
     {
@@ -2452,6 +2524,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CLEAN";
         Text[ hebrew ] = "SÄUBERN";
         Text[ hindi ] = "CLEAN";
+        Text[ slovak ] = "CLEAN";
     };
     String SC_OPCODE_CHAR
     {
@@ -2485,6 +2558,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CHAR";
         Text[ hebrew ] = "ZEICHEN";
         Text[ hindi ] = "CHAR";
+        Text[ slovak ] = "CHAR";
     };
     String SC_OPCODE_LOG10
     {
@@ -2514,6 +2588,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LOG10";
         Text[ hebrew ] = "LOG10";
         Text[ hindi ] = "LOG10";
+        Text[ slovak ] = "LOG10";
     };
     String SC_OPCODE_EVEN
     {
@@ -2547,6 +2622,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "EVEN";
         Text[ hebrew ] = "GERADE";
         Text[ hindi ] = "EVEN";
+        Text[ slovak ] = "EVEN";
     };
     String SC_OPCODE_ODD
     {
@@ -2580,6 +2656,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ODD";
         Text[ hebrew ] = "UNGERADE";
         Text[ hindi ] = "ODD";
+        Text[ slovak ] = "ODD";
     };
     String SC_OPCODE_STD_NORM_DIST
     {
@@ -2613,6 +2690,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NORMSDIST";
         Text[ hebrew ] = "STANDNORMVERT";
         Text[ hindi ] = "NORMSDIST";
+        Text[ slovak ] = "NORMSDIST";
     };
     String SC_OPCODE_FISHER
     {
@@ -2642,6 +2720,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FISHER";
         Text[ hebrew ] = "FISHER";
         Text[ hindi ] = "FISHER";
+        Text[ slovak ] = "FISHER";
     };
     String SC_OPCODE_FISHER_INV
     {
@@ -2675,6 +2754,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FISHERINV";
         Text[ hebrew ] = "FISHERINV";
         Text[ hindi ] = "FISHERINV";
+        Text[ slovak ] = "FISHERINV";
     };
     String SC_OPCODE_S_NORM_INV
     {
@@ -2708,6 +2788,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NORMSINV";
         Text[ hebrew ] = "STANDNORMINV";
         Text[ hindi ] = "NORMSINV";
+        Text[ slovak ] = "NORMSINV";
     };
     String SC_OPCODE_GAMMA_LN
     {
@@ -2741,6 +2822,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GAMMALN";
         Text[ hebrew ] = "GAMMALN";
         Text[ hindi ] = "GAMMALN";
+        Text[ slovak ] = "GAMMALN";
     };
     String SC_OPCODE_ERROR_TYPE
     {
@@ -2774,6 +2856,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ERRORTYPE";
         Text[ hebrew ] = "FEHLERTYP";
         Text[ hindi ] = "ERRORTYPE";
+        Text[ slovak ] = "ERRORTYPE";
     };
     String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // ?? Text klein, dt. & engl. gemischt ??
     String SC_OPCODE_FORMULA
@@ -2805,6 +2888,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FORMULA";
         Text[ hebrew ] = "FORMEL";
         Text[ hindi ] = "FORMULA";
+        Text[ slovak ] = "FORMULA";
     };
     String SC_OPCODE_ARABIC
     {
@@ -2834,6 +2918,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ARABIC";
         Text[ hebrew ] = "ARABISCH";
         Text[ hindi ] = "ARABIC";
+        Text[ slovak ] = "ARABIC";
     };
     String SC_OPCODE_ARC_TAN_2
     {
@@ -2867,6 +2952,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ATAN2";
         Text[ hebrew ] = "ARCTAN2";
         Text[ hindi ] = "ATAN2";
+        Text[ slovak ] = "ATAN2";
     };
     String SC_OPCODE_CEIL
     {
@@ -2900,6 +2986,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CEILING";
         Text[ hebrew ] = "OBERGRENZE";
         Text[ hindi ] = "CEILING";
+        Text[ slovak ] = "CEILING";
     };
     String SC_OPCODE_FLOOR
     {
@@ -2933,6 +3020,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FLOOR";
         Text[ hebrew ] = "UNTERGRENZE";
         Text[ hindi ] = "FLOOR";
+        Text[ slovak ] = "FLOOR";
     };
     String SC_OPCODE_ROUND
     {
@@ -2966,6 +3054,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ROUND";
         Text[ hebrew ] = "RUNDEN";
         Text[ hindi ] = "ROUND";
+        Text[ slovak ] = "ROUND";
     };
     String SC_OPCODE_ROUND_UP
     {
@@ -2999,6 +3088,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ROUNDUP";
         Text[ hebrew ] = "AUFRUNDEN";
         Text[ hindi ] = "ROUNDUP";
+        Text[ slovak ] = "ROUNDUP";
     };
     String SC_OPCODE_ROUND_DOWN
     {
@@ -3032,6 +3122,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ROUNDDOWN";
         Text[ hebrew ] = "ABRUNDEN";
         Text[ hindi ] = "ROUNDDOWN";
+        Text[ slovak ] = "ROUNDDOWN";
     };
     String SC_OPCODE_TRUNC
     {
@@ -3065,6 +3156,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TRUNC";
         Text[ hebrew ] = "KÜRZEN";
         Text[ hindi ] = "TRUNC";
+        Text[ slovak ] = "TRUNC";
     };
     String SC_OPCODE_LOG
     {
@@ -3094,6 +3186,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LOG";
         Text[ hebrew ] = "LOG";
         Text[ hindi ] = "LOG";
+        Text[ slovak ] = "LOG";
     };
     String SC_OPCODE_POWER
     {
@@ -3127,6 +3220,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "POWER";
         Text[ hebrew ] = "POTENZ";
         Text[ hindi ] = "POWER";
+        Text[ slovak ] = "POWER";
     };
     String SC_OPCODE_GGT
     {
@@ -3160,6 +3254,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GCD";
         Text[ hebrew ] = "GGT";
         Text[ hindi ] = "GCD";
+        Text[ slovak ] = "GCD";
     };
     String SC_OPCODE_KGV
     {
@@ -3193,6 +3288,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LCM";
         Text[ hebrew ] = "KGV";
         Text[ hindi ] = "LCM";
+        Text[ slovak ] = "LCM";
     };
     String SC_OPCODE_MOD
     {
@@ -3226,6 +3322,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MOD";
         Text[ hebrew ] = "REST";
         Text[ hindi ] = "MOD";
+        Text[ slovak ] = "MOD";
     };
     String SC_OPCODE_SUM_PRODUCT
     {
@@ -3259,6 +3356,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUMPRODUCT";
         Text[ hebrew ] = "SUMMENPRODUKT";
         Text[ hindi ] = "SUMPRODUCT";
+        Text[ slovak ] = "SUMPRODUCT";
     };
     String SC_OPCODE_SUM_SQ
     {
@@ -3292,6 +3390,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUMSQ";
         Text[ hebrew ] = "QUADRATESUMME";
         Text[ hindi ] = "SUMSQ";
+        Text[ slovak ] = "SUMSQ";
     };
     String SC_OPCODE_SUM_X2MY2
     {
@@ -3325,6 +3424,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUMX2MY2";
         Text[ hebrew ] = "SUMMEX2MY2";
         Text[ hindi ] = "SUMX2MY2";
+        Text[ slovak ] = "SUMX2MY2";
     };
     String SC_OPCODE_SUM_X2DY2
     {
@@ -3358,6 +3458,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUMX2PY2";
         Text[ hebrew ] = "SUMMEX2PY2";
         Text[ hindi ] = "SUMX2PY2";
+        Text[ slovak ] = "SUMX2PY2";
     };
     String SC_OPCODE_SUM_XMY2
     {
@@ -3391,6 +3492,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUMXMY2";
         Text[ hebrew ] = "SUMMEXMY2";
         Text[ hindi ] = "SUMXMY2";
+        Text[ slovak ] = "SUMXMY2";
     };
     String SC_OPCODE_GET_DATE
     {
@@ -3424,6 +3526,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DATE";
         Text[ hebrew ] = "‮תאריך‬";
         Text[ hindi ] = "DATE";
+        Text[ slovak ] = "DATE";
     };
     String SC_OPCODE_GET_TIME
     {
@@ -3457,6 +3560,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TIME";
         Text[ hebrew ] = "ZEIT";
         Text[ hindi ] = "TIME";
+        Text[ slovak ] = "TIME";
     };
     String SC_OPCODE_GET_DIFF_DATE
     {
@@ -3490,6 +3594,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DAYS";
         Text[ hebrew ] = "TAGE";
         Text[ hindi ] = "DAYS";
+        Text[ slovak ] = "DAYS";
     };
     String SC_OPCODE_GET_DIFF_DATE_360
     {
@@ -3523,6 +3628,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DAYS360";
         Text[ hebrew ] = "TAGE360";
         Text[ hindi ] = "DAYS360";
+        Text[ slovak ] = "DAYS360";
     };
     String SC_OPCODE_MIN
     {
@@ -3556,6 +3662,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MIN";
         Text[ hebrew ] = "MIN";
         Text[ hindi ] = "MIN";
+        Text[ slovak ] = "MIN";
     };
     String SC_OPCODE_MIN_A
     {
@@ -3589,6 +3696,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MINA";
         Text[ hebrew ] = "MINA";
         Text[ hindi ] = "MINA";
+        Text[ slovak ] = "MINA";
     };
     String SC_OPCODE_MAX
     {
@@ -3622,6 +3730,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MAX";
         Text[ hebrew ] = "MAX";
         Text[ hindi ] = "MAX";
+        Text[ slovak ] = "MAX";
     };
     String SC_OPCODE_MAX_A
     {
@@ -3655,6 +3764,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MAXA";
         Text[ hebrew ] = "MAXA";
         Text[ hindi ] = "MAXA";
+        Text[ slovak ] = "MAXA";
     };
     String SC_OPCODE_SUM
     {
@@ -3688,6 +3798,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUM";
         Text[ hebrew ] = "SUMME";
         Text[ hindi ] = "SUM";
+        Text[ slovak ] = "SUM";
     };
     String SC_OPCODE_PRODUCT
     {
@@ -3721,6 +3832,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PRODUCT";
         Text[ hebrew ] = "PRODUKT";
         Text[ hindi ] = "PRODUCT";
+        Text[ slovak ] = "PRODUCT";
     };
     String SC_OPCODE_AVERAGE
     {
@@ -3754,6 +3866,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "AVERAGE";
         Text[ hebrew ] = "MITTELWERT";
         Text[ hindi ] = "AVERAGE";
+        Text[ slovak ] = "AVERAGE";
     };
     String SC_OPCODE_AVERAGE_A
     {
@@ -3787,6 +3900,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "AVERAGEA";
         Text[ hebrew ] = "MITTELWERTA";
         Text[ hindi ] = "AVERAGEA";
+        Text[ slovak ] = "AVERAGEA";
     };
     String SC_OPCODE_COUNT
     {
@@ -3820,6 +3934,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COUNT";
         Text[ hebrew ] = "ANZAHL";
         Text[ hindi ] = "COUNT";
+        Text[ slovak ] = "COUNT";
     };
     String SC_OPCODE_COUNT_2
     {
@@ -3853,6 +3968,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COUNTA";
         Text[ hebrew ] = "ANZAHL2";
         Text[ hindi ] = "COUNTA";
+        Text[ slovak ] = "COUNTA";
     };
     String SC_OPCODE_NBW
     {
@@ -3886,6 +4002,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NPV";
         Text[ hebrew ] = "NBW";
         Text[ hindi ] = "NPV";
+        Text[ slovak ] = "NPV";
     };
     String SC_OPCODE_IKV
     {
@@ -3919,6 +4036,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "IRR";
         Text[ hebrew ] = "IKV";
         Text[ hindi ] = "IRR";
+        Text[ slovak ] = "IRR";
     };
     String SC_OPCODE_MIRR
     {
@@ -3948,6 +4066,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MIRR";
         Text[ hebrew ] = "QIKV";
         Text[ hindi ] = "MIRR";
+        Text[ slovak ] = "MIRR";
     };
     String SC_OPCODE_ISPMT
     {
@@ -3977,6 +4096,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ISPMT";
         Text[ hebrew ] = "ISPMT";
         Text[ hindi ] = "ISPMT";
+        Text[ slovak ] = "ISPMT";
     };
     String SC_OPCODE_VAR
     {
@@ -4010,6 +4130,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "VAR";
         Text[ hebrew ] = "VARIANZ";
         Text[ hindi ] = "VAR";
+        Text[ slovak ] = "VAR";
     };
     String SC_OPCODE_VAR_A
     {
@@ -4043,6 +4164,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "VARA";
         Text[ hebrew ] = "VARIANZA";
         Text[ hindi ] = "VARA";
+        Text[ slovak ] = "VARA";
     };
     String SC_OPCODE_VAR_P
     {
@@ -4076,6 +4198,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "VARP";
         Text[ hebrew ] = "VARIANZEN";
         Text[ hindi ] = "VARP";
+        Text[ slovak ] = "VARP";
     };
     String SC_OPCODE_VAR_P_A
     {
@@ -4109,6 +4232,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "VARPA";
         Text[ hebrew ] = "VARIANZENA";
         Text[ hindi ] = "VARPA";
+        Text[ slovak ] = "VARPA";
     };
     String SC_OPCODE_ST_DEV
     {
@@ -4142,6 +4266,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "STDEV";
         Text[ hebrew ] = "STABW";
         Text[ hindi ] = "STDEV";
+        Text[ slovak ] = "STDEV";
     };
     String SC_OPCODE_ST_DEV_A
     {
@@ -4175,6 +4300,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "STDEVA";
         Text[ hebrew ] = "STABWA";
         Text[ hindi ] = "STDEVA";
+        Text[ slovak ] = "STDEVA";
     };
     String SC_OPCODE_ST_DEV_P
     {
@@ -4208,6 +4334,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "STDEVP";
         Text[ hebrew ] = "STABWN";
         Text[ hindi ] = "STDEVP";
+        Text[ slovak ] = "STDEVP";
     };
     String SC_OPCODE_ST_DEV_P_A
     {
@@ -4241,6 +4368,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "STDEVPA";
         Text[ hebrew ] = "STABWNA";
         Text[ hindi ] = "STDEVPA";
+        Text[ slovak ] = "STDEVPA";
     };
     String SC_OPCODE_B
     {
@@ -4270,6 +4398,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "B";
         Text[ hebrew ] = "B";
         Text[ hindi ] = "B";
+        Text[ slovak ] = "B";
     };
     String SC_OPCODE_NORM_DIST
     {
@@ -4303,6 +4432,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NORMDIST";
         Text[ hebrew ] = "NORMVERT";
         Text[ hindi ] = "NORMDIST";
+        Text[ slovak ] = "NORMDIST";
     };
     String SC_OPCODE_EXP_DIST
     {
@@ -4336,6 +4466,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "EXPONDIST";
         Text[ hebrew ] = "EXPONVERT";
         Text[ hindi ] = "EXPONDIST";
+        Text[ slovak ] = "EXPONDIST";
     };
     String SC_OPCODE_BINOM_DIST
     {
@@ -4369,6 +4500,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "BINOMDIST";
         Text[ hebrew ] = "BINOMVERT";
         Text[ hindi ] = "BINOMDIST";
+        Text[ slovak ] = "BINOMDIST";
     };
     String SC_OPCODE_POISSON_DIST
     {
@@ -4402,6 +4534,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "POISSON";
         Text[ hebrew ] = "POISSON";
         Text[ hindi ] = "POISSON";
+        Text[ slovak ] = "POISSON";
     };
     String SC_OPCODE_KOMBIN
     {
@@ -4435,6 +4568,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COMBIN";
         Text[ hebrew ] = "KOMBINATIONEN";
         Text[ hindi ] = "COMBIN";
+        Text[ slovak ] = "COMBIN";
     };
     String SC_OPCODE_KOMBIN_2
     {
@@ -4468,6 +4602,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COMBINA";
         Text[ hebrew ] = "KOMBINATIONEN2";
         Text[ hindi ] = "COMBINA";
+        Text[ slovak ] = "COMBINA";
     };
     String SC_OPCODE_VARIATIONEN
     {
@@ -4501,6 +4636,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PERMUT";
         Text[ hebrew ] = "VARIATIONEN";
         Text[ hindi ] = "PERMUT";
+        Text[ slovak ] = "PERMUT";
     };
     String SC_OPCODE_VARIATIONEN_2
     {
@@ -4534,6 +4670,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PERMUTATIONA";
         Text[ hebrew ] = "VARIATIONEN2";
         Text[ hindi ] = "PERMUTATIONA";
+        Text[ slovak ] = "PERMUTATIONA";
     };
     String SC_OPCODE_BW
     {
@@ -4567,6 +4704,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PV";
         Text[ hebrew ] = "BW";
         Text[ hindi ] = "PV";
+        Text[ slovak ] = "PV";
     };
     String SC_OPCODE_DIA
     {
@@ -4600,6 +4738,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SYD";
         Text[ hebrew ] = "DIA";
         Text[ hindi ] = "SYD";
+        Text[ slovak ] = "SYD";
     };
     String SC_OPCODE_GDA
     {
@@ -4633,6 +4772,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DDB";
         Text[ hebrew ] = "GDA";
         Text[ hindi ] = "DDB";
+        Text[ slovak ] = "DDB";
     };
     String SC_OPCODE_GDA_2
     {
@@ -4666,6 +4806,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DB";
         Text[ hebrew ] = "GDA2";
         Text[ hindi ] = "DB";
+        Text[ slovak ] = "DB";
     };
     String SC_OPCODE_VBD
     {
@@ -4699,6 +4840,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "VDB";
         Text[ hebrew ] = "VDB";
         Text[ hindi ] = "VDB";
+        Text[ slovak ] = "VDB";
     };
     String SC_OPCODE_LAUFZ
     {
@@ -4732,6 +4874,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DURATION";
         Text[ hebrew ] = "LAUFZEIT";
         Text[ hindi ] = "DURATION";
+        Text[ slovak ] = "DURATION";
     };
     String SC_OPCODE_LIA
     {
@@ -4765,6 +4908,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SLN";
         Text[ hebrew ] = "LIA";
         Text[ hindi ] = "SLN";
+        Text[ slovak ] = "SLN";
     };
     String SC_OPCODE_RMZ
     {
@@ -4798,6 +4942,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PMT";
         Text[ hebrew ] = "RMZ";
         Text[ hindi ] = "PMT";
+        Text[ slovak ] = "PMT";
     };
     String SC_OPCODE_COLUMNS
     {
@@ -4831,6 +4976,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COLUMNS";
         Text[ hebrew ] = "SPALTEN";
         Text[ hindi ] = "COLUMNS";
+        Text[ slovak ] = "COLUMNS";
     };
     String SC_OPCODE_ROWS
     {
@@ -4864,6 +5010,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ROWS";
         Text[ hebrew ] = "ZEILEN";
         Text[ hindi ] = "ROWS";
+        Text[ slovak ] = "ROWS";
     };
     String SC_OPCODE_TABLES
     {
@@ -4896,6 +5043,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SHEETS";
         Text[ hebrew ] = "TABELLEN";
         Text[ hindi ] = "SHEETS";
+        Text[ slovak ] = "SHEETS";
     };
     String SC_OPCODE_COLUMN
     {
@@ -4929,6 +5077,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COLUMN";
         Text[ hebrew ] = "SPALTE";
         Text[ hindi ] = "COLUMN";
+        Text[ slovak ] = "COLUMN";
     };
     String SC_OPCODE_ROW
     {
@@ -4962,6 +5111,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ROW";
         Text[ hebrew ] = "ZEILE";
         Text[ hindi ] = "ROW";
+        Text[ slovak ] = "ROW";
     };
     String SC_OPCODE_TABLE
     {
@@ -4994,6 +5144,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SHEET";
         Text[ hebrew ] = "TABELLE";
         Text[ hindi ] = "SHEET";
+        Text[ slovak ] = "SHEET";
     };
     String SC_OPCODE_ZGZ
     {
@@ -5026,6 +5177,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "RRI";
         Text[ hebrew ] = "ZGZ";
         Text[ hindi ] = "RRI";
+        Text[ slovak ] = "RRI";
     };
     String SC_OPCODE_ZW
     {
@@ -5059,6 +5211,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FV";
         Text[ hebrew ] = "ZW";
         Text[ hindi ] = "FV";
+        Text[ slovak ] = "FV";
     };
     String SC_OPCODE_ZZR
     {
@@ -5092,6 +5245,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NPER";
         Text[ hebrew ] = "ZZR";
         Text[ hindi ] = "NPER";
+        Text[ slovak ] = "NPER";
     };
     String SC_OPCODE_ZINS
     {
@@ -5125,6 +5279,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "RATE";
         Text[ hebrew ] = "ZINS";
         Text[ hindi ] = "RATE";
+        Text[ slovak ] = "RATE";
     };
     String SC_OPCODE_ZINS_Z
     {
@@ -5158,6 +5313,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "IPMT";
         Text[ hebrew ] = "ZINSZ";
         Text[ hindi ] = "IPMT";
+        Text[ slovak ] = "IPMT";
     };
     String SC_OPCODE_KAPZ
     {
@@ -5191,6 +5347,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PPMT";
         Text[ hebrew ] = "KAPZ";
         Text[ hindi ] = "PPMT";
+        Text[ slovak ] = "PPMT";
     };
     String SC_OPCODE_KUM_ZINS_Z
     {
@@ -5224,6 +5381,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CUMIPMT";
         Text[ hebrew ] = "KUMZINSZ";
         Text[ hindi ] = "CUMIPMT";
+        Text[ slovak ] = "CUMIPMT";
     };
     String SC_OPCODE_KUM_KAP_Z
     {
@@ -5257,6 +5415,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CUMPRINC";
         Text[ hebrew ] = "KUMKAPITAL";
         Text[ hindi ] = "CUMPRINC";
+        Text[ slovak ] = "CUMPRINC";
     };
     String SC_OPCODE_EFFEKTIV
     {
@@ -5290,6 +5449,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "EFFECTIVE";
         Text[ hebrew ] = "EFFEKTIV";
         Text[ hindi ] = "EFFECTIVE";
+        Text[ slovak ] = "EFFECTIVE";
     };
     String SC_OPCODE_NOMINAL
     {
@@ -5323,6 +5483,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NOMINAL";
         Text[ hebrew ] = "NOMINAL";
         Text[ hindi ] = "NOMINAL";
+        Text[ slovak ] = "NOMINAL";
     };
     String SC_OPCODE_SUB_TOTAL
     {
@@ -5356,6 +5517,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUBTOTAL";
         Text[ hebrew ] = "TEILERGEBNIS";
         Text[ hindi ] = "SUBTOTAL";
+        Text[ slovak ] = "SUBTOTAL";
     };
     String SC_OPCODE_DB_SUM
     {
@@ -5389,6 +5551,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DSUM";
         Text[ hebrew ] = "DBSUMME";
         Text[ hindi ] = "DSUM";
+        Text[ slovak ] = "DSUM";
     };
     String SC_OPCODE_DB_COUNT
     {
@@ -5422,6 +5585,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DCOUNT";
         Text[ hebrew ] = "DBANZAHL";
         Text[ hindi ] = "DCOUNT";
+        Text[ slovak ] = "DCOUNT";
     };
     String SC_OPCODE_DB_COUNT_2
     {
@@ -5455,6 +5619,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DCOUNTA";
         Text[ hebrew ] = "DBANZAHL2";
         Text[ hindi ] = "DCOUNTA";
+        Text[ slovak ] = "DCOUNTA";
     };
     String SC_OPCODE_DB_AVERAGE
     {
@@ -5488,6 +5653,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DAVERAGE";
         Text[ hebrew ] = "DBMITTELWERT";
         Text[ hindi ] = "DAVERAGE";
+        Text[ slovak ] = "DAVERAGE";
     };
     String SC_OPCODE_DB_GET
     {
@@ -5521,6 +5687,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DGET";
         Text[ hebrew ] = "DBAUSZUG";
         Text[ hindi ] = "DGET";
+        Text[ slovak ] = "DGET";
     };
     String SC_OPCODE_DB_MAX
     {
@@ -5554,6 +5721,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DMAX";
         Text[ hebrew ] = "DBMAX";
         Text[ hindi ] = "DMAX";
+        Text[ slovak ] = "DMAX";
     };
     String SC_OPCODE_DB_MIN
     {
@@ -5587,6 +5755,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DMIN";
         Text[ hebrew ] = "DBMIN";
         Text[ hindi ] = "DMIN";
+        Text[ slovak ] = "DMIN";
     };
     String SC_OPCODE_DB_PRODUCT
     {
@@ -5620,6 +5789,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DPRODUCT";
         Text[ hebrew ] = "DBPRODUKT";
         Text[ hindi ] = "DPRODUCT";
+        Text[ slovak ] = "DPRODUCT";
     };
     String SC_OPCODE_DB_STD_DEV
     {
@@ -5653,6 +5823,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DSTDEV";
         Text[ hebrew ] = "DBSTDABW";
         Text[ hindi ] = "DSTDEV";
+        Text[ slovak ] = "DSTDEV";
     };
     String SC_OPCODE_DB_STD_DEV_P
     {
@@ -5686,6 +5857,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DSTDEVP";
         Text[ hebrew ] = "DBSTDABWN";
         Text[ hindi ] = "DSTDEVP";
+        Text[ slovak ] = "DSTDEVP";
     };
     String SC_OPCODE_DB_VAR
     {
@@ -5719,6 +5891,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DVAR";
         Text[ hebrew ] = "DBVARIANZ";
         Text[ hindi ] = "DVAR";
+        Text[ slovak ] = "DVAR";
     };
     String SC_OPCODE_DB_VAR_P
     {
@@ -5752,6 +5925,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DVARP";
         Text[ hebrew ] = "DBVARIANZEN";
         Text[ hindi ] = "DVARP";
+        Text[ slovak ] = "DVARP";
     };
     String SC_OPCODE_INDIRECT
     {
@@ -5785,6 +5959,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "INDIRECT";
         Text[ hebrew ] = "INDIREKT";
         Text[ hindi ] = "INDIRECT";
+        Text[ slovak ] = "INDIRECT";
     };
     String SC_OPCODE_ADRESS
     {
@@ -5818,6 +5993,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ADDRESS";
         Text[ hebrew ] = "ADRESSE";
         Text[ hindi ] = "ADDRESS";
+        Text[ slovak ] = "ADDRESS";
     };
     String SC_OPCODE_MATCH
     {
@@ -5851,6 +6027,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MATCH";
         Text[ hebrew ] = "VERGLEICH";
         Text[ hindi ] = "MATCH";
+        Text[ slovak ] = "MATCH";
     };
     String SC_OPCODE_COUNT_EMPTY_CELLS
     {
@@ -5884,6 +6061,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COUNTBLANK";
         Text[ hebrew ] = "ANZAHLLEEREZELLEN";
         Text[ hindi ] = "COUNTBLANK";
+        Text[ slovak ] = "COUNTBLANK";
     };
     String SC_OPCODE_COUNT_IF
     {
@@ -5917,6 +6095,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COUNTIF";
         Text[ hebrew ] = "ZÄHLENWENN";
         Text[ hindi ] = "COUNTIF";
+        Text[ slovak ] = "COUNTIF";
     };
     String SC_OPCODE_SUM_IF
     {
@@ -5950,6 +6129,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUMIF";
         Text[ hebrew ] = "SUMMEWENN";
         Text[ hindi ] = "SUMIF";
+        Text[ slovak ] = "SUMIF";
     };
     String SC_OPCODE_LOOKUP
     {
@@ -5983,6 +6163,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LOOKUP";
         Text[ hebrew ] = "VERWEIS";
         Text[ hindi ] = "LOOKUP";
+        Text[ slovak ] = "LOOKUP";
     };
     String SC_OPCODE_V_LOOKUP
     {
@@ -6016,6 +6197,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "VLOOKUP";
         Text[ hebrew ] = "SVERWEIS";
         Text[ hindi ] = "VLOOKUP";
+        Text[ slovak ] = "VLOOKUP";
     };
     String SC_OPCODE_H_LOOKUP
     {
@@ -6049,6 +6231,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "HLOOKUP";
         Text[ hebrew ] = "WVERWEIS";
         Text[ hindi ] = "HLOOKUP";
+        Text[ slovak ] = "HLOOKUP";
     };
     String SC_OPCODE_MULTI_AREA
     {
@@ -6082,6 +6265,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MULTIRANGE";
         Text[ hebrew ] = "MULTIBEREICH";
         Text[ hindi ] = "MULTIRANGE";
+        Text[ slovak ] = "MULTIRANGE";
     };
     String SC_OPCODE_OFFSET
     {
@@ -6115,6 +6299,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "OFFSET";
         Text[ hebrew ] = "VERSCHIEBUNG";
         Text[ hindi ] = "OFFSET";
+        Text[ slovak ] = "OFFSET";
     };
     String SC_OPCODE_INDEX
     {
@@ -6149,6 +6334,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "INDEX";
         Text[ hebrew ] = "INDEX";
         Text[ hindi ] = "INDEX";
+        Text[ slovak ] = "INDEX";
     };
     String SC_OPCODE_AREAS
     {
@@ -6182,6 +6368,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "AREAS";
         Text[ hebrew ] = "BEREICHE";
         Text[ hindi ] = "AREAS";
+        Text[ slovak ] = "AREAS";
     };
     String SC_OPCODE_CURRENCY
     {
@@ -6215,6 +6402,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DOLLAR";
         Text[ hebrew ] = "DM";
         Text[ hindi ] = "DOLLAR";
+        Text[ slovak ] = "DOLLAR";
     };
     String SC_OPCODE_REPLACE
     {
@@ -6248,6 +6436,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "REPLACE";
         Text[ hebrew ] = "ERSETZEN";
         Text[ hindi ] = "REPLACE";
+        Text[ slovak ] = "REPLACE";
     };
     String SC_OPCODE_FIXED
     {
@@ -6281,6 +6470,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FIXED";
         Text[ hebrew ] = "FEST";
         Text[ hindi ] = "FIXED";
+        Text[ slovak ] = "FIXED";
     };
     String SC_OPCODE_FIND
     {
@@ -6314,6 +6504,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FIND";
         Text[ hebrew ] = "FINDEN";
         Text[ hindi ] = "FIND";
+        Text[ slovak ] = "FIND";
     };
     String SC_OPCODE_EXACT
     {
@@ -6347,6 +6538,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "EXACT";
         Text[ hebrew ] = "IDENTISCH";
         Text[ hindi ] = "EXACT";
+        Text[ slovak ] = "EXACT";
     };
     String SC_OPCODE_LEFT
     {
@@ -6380,6 +6572,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LEFT";
         Text[ hebrew ] = "LINKS";
         Text[ hindi ] = "LEFT";
+        Text[ slovak ] = "LEFT";
     };
     String SC_OPCODE_RIGHT
     {
@@ -6413,6 +6606,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "RIGHT";
         Text[ hebrew ] = "RECHTS";
         Text[ hindi ] = "RIGHT";
+        Text[ slovak ] = "RIGHT";
     };
     String SC_OPCODE_SEARCH
     {
@@ -6446,6 +6640,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SEARCH";
         Text[ hebrew ] = "SUCHEN";
         Text[ hindi ] = "SEARCH";
+        Text[ slovak ] = "SEARCH";
     };
     String SC_OPCODE_MID
     {
@@ -6479,6 +6674,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MID";
         Text[ hebrew ] = "TEIL";
         Text[ hindi ] = "MID";
+        Text[ slovak ] = "MID";
     };
     String SC_OPCODE_TEXT
     {
@@ -6512,6 +6708,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TEXT";
         Text[ hebrew ] = "TEXT";
         Text[ hindi ] = "TEXT";
+        Text[ slovak ] = "TEXT";
     };
     String SC_OPCODE_SUBSTITUTE
     {
@@ -6545,6 +6742,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SUBSTITUTE";
         Text[ hebrew ] = "WECHSELN";
         Text[ hindi ] = "SUBSTITUTE";
+        Text[ slovak ] = "SUBSTITUTE";
     };
     String SC_OPCODE_REPT
     {
@@ -6578,6 +6776,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "REPT";
         Text[ hebrew ] = "WIEDERHOLEN";
         Text[ hindi ] = "REPT";
+        Text[ slovak ] = "REPT";
     };
     String SC_OPCODE_CONCAT
     {
@@ -6611,6 +6810,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CONCATENATE";
         Text[ hebrew ] = "VERKETTEN";
         Text[ hindi ] = "CONCATENATE";
+        Text[ slovak ] = "CONCATENATE";
     };
     String SC_OPCODE_MAT_VALUE
     {
@@ -6644,6 +6844,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MVALUE";
         Text[ hebrew ] = "MWERT";
         Text[ hindi ] = "MVALUE";
+        Text[ slovak ] = "MVALUE";
     };
     String SC_OPCODE_MAT_DET
     {
@@ -6677,6 +6878,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MDETERM";
         Text[ hebrew ] = "MDET";
         Text[ hindi ] = "MDETERM";
+        Text[ slovak ] = "MDETERM";
     };
     String SC_OPCODE_MAT_INV
     {
@@ -6710,6 +6912,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MINVERSE";
         Text[ hebrew ] = "MINV";
         Text[ hindi ] = "MINVERSE";
+        Text[ slovak ] = "MINVERSE";
     };
     String SC_OPCODE_MAT_MULT
     {
@@ -6743,6 +6946,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MMULT";
         Text[ hebrew ] = "MMULT";
         Text[ hindi ] = "MMULT";
+        Text[ slovak ] = "MMULT";
     };
     String SC_OPCODE_MAT_TRANS
     {
@@ -6776,6 +6980,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TRANSPOSE";
         Text[ hebrew ] = "MTRANS";
         Text[ hindi ] = "TRANSPOSE";
+        Text[ slovak ] = "TRANSPOSE";
     };
     String SC_OPCODE_MATRIX_UNIT
     {
@@ -6809,6 +7014,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MUNIT";
         Text[ hebrew ] = "EINHEITSMATRIX";
         Text[ hindi ] = "MUNIT";
+        Text[ slovak ] = "MUNIT";
     };
     String SC_OPCODE_BACK_SOLVER
     {
@@ -6842,6 +7048,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GOALSEEK";
         Text[ hebrew ] = "ZIELWERTSUCHE";
         Text[ hindi ] = "GOALSEEK";
+        Text[ slovak ] = "GOALSEEK";
     };
     String SC_OPCODE_HYP_GEOM_DIST
     {
@@ -6875,6 +7082,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "HYPGEOMDIST";
         Text[ hebrew ] = "HYPGEOMVERT";
         Text[ hindi ] = "HYPGEOMDIST";
+        Text[ slovak ] = "HYPGEOMDIST";
     };
     String SC_OPCODE_LOG_NORM_DIST
     {
@@ -6908,6 +7116,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LOGNORMDIST";
         Text[ hebrew ] = "LOGNORMVERT";
         Text[ hindi ] = "LOGNORMDIST";
+        Text[ slovak ] = "LOGNORMDIST";
     };
     String SC_OPCODE_T_DIST
     {
@@ -6941,6 +7150,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TDIST";
         Text[ hebrew ] = "TVERT";
         Text[ hindi ] = "TDIST";
+        Text[ slovak ] = "TDIST";
     };
     String SC_OPCODE_F_DIST
     {
@@ -6974,6 +7184,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FDIST";
         Text[ hebrew ] = "FVERT";
         Text[ hindi ] = "FDIST";
+        Text[ slovak ] = "FDIST";
     };
     String SC_OPCODE_CHI_DIST
     {
@@ -7007,6 +7218,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CHIDIST";
         Text[ hebrew ] = "CHIVERT";
         Text[ hindi ] = "CHIDIST";
+        Text[ slovak ] = "CHIDIST";
     };
     String SC_OPCODE_WEIBULL
     {
@@ -7040,6 +7252,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "WEIBULL";
         Text[ hebrew ] = "WEIBULL";
         Text[ hindi ] = "WEIBULL";
+        Text[ slovak ] = "WEIBULL";
     };
     String SC_OPCODE_NEG_BINOM_VERT
     {
@@ -7073,6 +7286,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NEGBINOMDIST";
         Text[ hebrew ] = "NEGBINOMVERT";
         Text[ hindi ] = "NEGBINOMDIST";
+        Text[ slovak ] = "NEGBINOMDIST";
     };
     String SC_OPCODE_KRIT_BINOM
     {
@@ -7106,6 +7320,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CRITBINOM";
         Text[ hebrew ] = "KRITBINOM";
         Text[ hindi ] = "CRITBINOM";
+        Text[ slovak ] = "CRITBINOM";
     };
     String SC_OPCODE_KURT
     {
@@ -7139,6 +7354,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "KURT";
         Text[ hebrew ] = "KURT";
         Text[ hindi ] = "KURT";
+        Text[ slovak ] = "KURT";
     };
     String SC_OPCODE_HAR_MEAN
     {
@@ -7172,6 +7388,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "HARMEAN";
         Text[ hebrew ] = "HARMITTEL";
         Text[ hindi ] = "HARMEAN";
+        Text[ slovak ] = "HARMEAN";
     };
     String SC_OPCODE_GEO_MEAN
     {
@@ -7205,6 +7422,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GEOMEAN";
         Text[ hebrew ] = "GEOMITTEL";
         Text[ hindi ] = "GEOMEAN";
+        Text[ slovak ] = "GEOMEAN";
     };
     String SC_OPCODE_STANDARD
     {
@@ -7238,6 +7456,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "STANDARDIZE";
         Text[ hebrew ] = "STANDARDISIERUNG";
         Text[ hindi ] = "STANDARDIZE";
+        Text[ slovak ] = "STANDARDIZE";
     };
     String SC_OPCODE_AVE_DEV
     {
@@ -7271,6 +7490,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "AVEDEV";
         Text[ hebrew ] = "MITTELABW";
         Text[ hindi ] = "AVEDEV";
+        Text[ slovak ] = "AVEDEV";
     };
     String SC_OPCODE_SCHIEFE
     {
@@ -7304,6 +7524,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SKEW";
         Text[ hebrew ] = "SCHIEFE";
         Text[ hindi ] = "SKEW";
+        Text[ slovak ] = "SKEW";
     };
     String SC_OPCODE_DEV_SQ
     {
@@ -7337,6 +7558,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DEVSQ";
         Text[ hebrew ] = "SUMQUADABW";
         Text[ hindi ] = "DEVSQ";
+        Text[ slovak ] = "DEVSQ";
     };
     String SC_OPCODE_MEDIAN
     {
@@ -7370,6 +7592,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MEDIAN";
         Text[ hebrew ] = "MEDIAN";
         Text[ hindi ] = "MEDIAN";
+        Text[ slovak ] = "MEDIAN";
     };
     String SC_OPCODE_MODAL_VALUE
     {
@@ -7403,6 +7626,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MODE";
         Text[ hebrew ] = "MODALWERT";
         Text[ hindi ] = "MODE";
+        Text[ slovak ] = "MODE";
     };
     String SC_OPCODE_Z_TEST
     {
@@ -7436,6 +7660,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ZTEST";
         Text[ hebrew ] = "GTEST";
         Text[ hindi ] = "ZTEST";
+        Text[ slovak ] = "ZTEST";
     };
     String SC_OPCODE_T_TEST
     {
@@ -7469,6 +7694,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TTEST";
         Text[ hebrew ] = "TTEST";
         Text[ hindi ] = "TTEST";
+        Text[ slovak ] = "TTEST";
     };
     String SC_OPCODE_RANK
     {
@@ -7502,6 +7728,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "RANK";
         Text[ hebrew ] = "RANG";
         Text[ hindi ] = "RANK";
+        Text[ slovak ] = "RANK";
     };
     String SC_OPCODE_PERCENTILE
     {
@@ -7535,6 +7762,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PERCENTILE";
         Text[ hebrew ] = "QUANTIL";
         Text[ hindi ] = "PERCENTILE";
+        Text[ slovak ] = "PERCENTILE";
     };
     String SC_OPCODE_PERCENT_RANK
     {
@@ -7568,6 +7796,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PERCENTRANK";
         Text[ hebrew ] = "QUANTILSRANG";
         Text[ hindi ] = "PERCENTRANK";
+        Text[ slovak ] = "PERCENTRANK";
     };
     String SC_OPCODE_LARGE
     {
@@ -7601,6 +7830,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LARGE";
         Text[ hebrew ] = "KGRÖSSTE";
         Text[ hindi ] = "LARGE";
+        Text[ slovak ] = "LARGE";
     };
     String SC_OPCODE_SMALL
     {
@@ -7634,6 +7864,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SMALL";
         Text[ hebrew ] = "KKLEINSTE";
         Text[ hindi ] = "SMALL";
+        Text[ slovak ] = "SMALL";
     };
     String SC_OPCODE_FREQUENCY
     {
@@ -7667,6 +7898,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FREQUENCY";
         Text[ hebrew ] = "HÄUFIGKEIT";
         Text[ hindi ] = "FREQUENCY";
+        Text[ slovak ] = "FREQUENCY";
     };
     String SC_OPCODE_QUARTILE
     {
@@ -7700,6 +7932,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "QUARTILE";
         Text[ hebrew ] = "QUARTILE";
         Text[ hindi ] = "QUARTILE";
+        Text[ slovak ] = "QUARTILE";
     };
     String SC_OPCODE_NORM_INV
     {
@@ -7733,6 +7966,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "NORMINV";
         Text[ hebrew ] = "NORMINV";
         Text[ hindi ] = "NORMINV";
+        Text[ slovak ] = "NORMINV";
     };
     String SC_OPCODE_CONFIDENCE
     {
@@ -7766,6 +8000,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CONFIDENCE";
         Text[ hebrew ] = "KONFIDENZ";
         Text[ hindi ] = "CONFIDENCE";
+        Text[ slovak ] = "CONFIDENCE";
     };
     String SC_OPCODE_F_TEST
     {
@@ -7799,6 +8034,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FTEST";
         Text[ hebrew ] = "FTEST";
         Text[ hindi ] = "FTEST";
+        Text[ slovak ] = "FTEST";
     };
     String SC_OPCODE_TRIM_MEAN
     {
@@ -7832,6 +8068,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TRIMMEAN";
         Text[ hebrew ] = "GESTUTZTMITTEL";
         Text[ hindi ] = "TRIMMEAN";
+        Text[ slovak ] = "TRIMMEAN";
     };
     String SC_OPCODE_PROB
     {
@@ -7865,6 +8102,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PROB";
         Text[ hebrew ] = "WAHRSCHBEREICH";
         Text[ hindi ] = "PROB";
+        Text[ slovak ] = "PROB";
     };
     String SC_OPCODE_CORREL
     {
@@ -7898,6 +8136,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CORREL";
         Text[ hebrew ] = "KORREL";
         Text[ hindi ] = "CORREL";
+        Text[ slovak ] = "CORREL";
     };
     String SC_OPCODE_COVAR
     {
@@ -7931,6 +8170,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "COVAR";
         Text[ hebrew ] = "KOVAR";
         Text[ hindi ] = "COVAR";
+        Text[ slovak ] = "COVAR";
     };
     String SC_OPCODE_PEARSON
     {
@@ -7964,6 +8204,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "PEARSON";
         Text[ hebrew ] = "PEARSON";
         Text[ hindi ] = "PEARSON";
+        Text[ slovak ] = "PEARSON";
     };
     String SC_OPCODE_RSQ
     {
@@ -7997,6 +8238,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "RSQ";
         Text[ hebrew ] = "BESTIMMTHEITSMASS";
         Text[ hindi ] = "RSQ";
+        Text[ slovak ] = "RSQ";
     };
     String SC_OPCODE_STEYX
     {
@@ -8030,6 +8272,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "STEYX";
         Text[ hebrew ] = "STFEHLERYX";
         Text[ hindi ] = "STEYX";
+        Text[ slovak ] = "STEYX";
     };
     String SC_OPCODE_SLOPE
     {
@@ -8063,6 +8306,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "SLOPE";
         Text[ hebrew ] = "STEIGUNG";
         Text[ hindi ] = "SLOPE";
+        Text[ slovak ] = "SLOPE";
     };
     String SC_OPCODE_INTERCEPT
     {
@@ -8096,6 +8340,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "INTERCEPT";
         Text[ hebrew ] = "ACHSENABSCHNITT";
         Text[ hindi ] = "INTERCEPT";
+        Text[ slovak ] = "INTERCEPT";
     };
     String SC_OPCODE_TREND
     {
@@ -8129,6 +8374,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TREND";
         Text[ hebrew ] = "TREND";
         Text[ hindi ] = "TREND";
+        Text[ slovak ] = "TREND";
     };
     String SC_OPCODE_GROWTH
     {
@@ -8162,6 +8408,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GROWTH";
         Text[ hebrew ] = "VARIATION";
         Text[ hindi ] = "GROWTH";
+        Text[ slovak ] = "GROWTH";
     };
     String SC_OPCODE_RGP
     {
@@ -8195,6 +8442,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LINEST";
         Text[ hebrew ] = "RGP";
         Text[ hindi ] = "LINEST";
+        Text[ slovak ] = "LINEST";
     };
     String SC_OPCODE_RKP
     {
@@ -8228,6 +8476,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LOGEST";
         Text[ hebrew ] = "RKP";
         Text[ hindi ] = "LOGEST";
+        Text[ slovak ] = "LOGEST";
     };
     String SC_OPCODE_FORECAST
     {
@@ -8261,6 +8510,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FORECAST";
         Text[ hebrew ] = "SCHÄTZER";
         Text[ hindi ] = "FORECAST";
+        Text[ slovak ] = "FORECAST";
     };
     String SC_OPCODE_CHI_INV
     {
@@ -8294,6 +8544,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CHIINV";
         Text[ hebrew ] = "CHIINV";
         Text[ hindi ] = "CHIINV";
+        Text[ slovak ] = "CHIINV";
     };
     String SC_OPCODE_GAMMA_DIST
     {
@@ -8327,6 +8578,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GAMMADIST";
         Text[ hebrew ] = "GAMMAVERT";
         Text[ hindi ] = "GAMMADIST";
+        Text[ slovak ] = "GAMMADIST";
     };
     String SC_OPCODE_GAMMA_INV
     {
@@ -8360,6 +8612,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "GAMMAINV";
         Text[ hebrew ] = "GAMMAINV";
         Text[ hindi ] = "GAMMAINV";
+        Text[ slovak ] = "GAMMAINV";
     };
     String SC_OPCODE_T_INV
     {
@@ -8393,6 +8646,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "TINV";
         Text[ hebrew ] = "TINV";
         Text[ hindi ] = "TINV";
+        Text[ slovak ] = "TINV";
     };
     String SC_OPCODE_F_INV
     {
@@ -8426,6 +8680,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "FINV";
         Text[ hebrew ] = "FINV";
         Text[ hindi ] = "FINV";
+        Text[ slovak ] = "FINV";
     };
     String SC_OPCODE_CHI_TEST
     {
@@ -8459,6 +8714,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CHITEST";
         Text[ hebrew ] = "CHITEST";
         Text[ hindi ] = "CHITEST";
+        Text[ slovak ] = "CHITEST";
     };
     String SC_OPCODE_LOG_INV
     {
@@ -8492,6 +8748,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "LOGINV";
         Text[ hebrew ] = "LOGINV";
         Text[ hindi ] = "LOGINV";
+        Text[ slovak ] = "LOGINV";
     };
     String SC_OPCODE_TABLE_OP
     {
@@ -8525,6 +8782,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "MULTIPLE.OPERATIONS";
         Text[ hebrew ] = "MEHRFACHOPERATION";
         Text[ hindi ] = "MULTIPLE.OPERATIONS";
+        Text[ slovak ] = "MULTIPLE.OPERATIONS";
     };
     String SC_OPCODE_BETA_DIST
     {
@@ -8558,6 +8816,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "BETADIST";
         Text[ hebrew ] = "BETAVERT";
         Text[ hindi ] = "BETADIST";
+        Text[ slovak ] = "BETADIST";
     };
     String SC_OPCODE_BETA_INV
     {
@@ -8591,6 +8850,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "BETAINV";
         Text[ hebrew ] = "BETAINV";
         Text[ hindi ] = "BETAINV";
+        Text[ slovak ] = "BETAINV";
     };
     String SC_OPCODE_WEEK
     {
@@ -8624,6 +8884,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "WEEKNUM";
         Text[ hebrew ] = "KALENDERWOCHE";
         Text[ hindi ] = "WEEKNUM";
+        Text[ slovak ] = "WEEKNUM";
     };
     String SC_OPCODE_EASTERSUNDAY
     {
@@ -8656,6 +8917,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "EASTERSUNDAY";
         Text[ hebrew ] = "OSTERSONNTAG";
         Text[ hindi ] = "EASTERSUNDAY";
+        Text[ slovak ] = "EASTERSUNDAY";
     };
     String SC_OPCODE_GET_DAY_OF_WEEK
     {
@@ -8689,6 +8951,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "WEEKDAY";
         Text[ hebrew ] = "WOCHENTAG";
         Text[ hindi ] = "WEEKDAY";
+        Text[ slovak ] = "WEEKDAY";
     };
     String SC_OPCODE_NO_NAME
     {
@@ -8722,6 +8985,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "#NAME!";
         Text[ hebrew ] = "#NAME!";
         Text[ hindi ] = "#NAME!";
+        Text[ slovak ] = "#NAME!";
     };
     String SC_OPCODE_STYLE
     {
@@ -8755,6 +9019,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "STYLE";
         Text[ hebrew ] = "VORLAGE";
         Text[ hindi ] = "STYLE";
+        Text[ slovak ] = "STYLE";
     };
     String SC_OPCODE_DDE
     {
@@ -8784,6 +9049,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DDE";
         Text[ hebrew ] = "DDE";
         Text[ hindi ] = "DDE";
+        Text[ slovak ] = "DDE";
     };
     String SC_OPCODE_BASE
     {
@@ -8816,6 +9082,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "BASE";
         Text[ hebrew ] = "BASIS";
         Text[ hindi ] = "BASE";
+        Text[ slovak ] = "BASE";
     };
     String SC_OPCODE_DECIMAL
     {
@@ -8848,6 +9115,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "DECIMAL";
         Text[ hebrew ] = "DEZIMAL";
         Text[ hindi ] = "DECIMAL";
+        Text[ slovak ] = "DECIMAL";
     };
     String SC_OPCODE_CONVERT
     {
@@ -8880,6 +9148,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "CONVERT";
         Text[ hebrew ] = "UMRECHNEN";
         Text[ hindi ] = "CONVERT";
+        Text[ slovak ] = "CONVERT";
     };
     String SC_OPCODE_ROMAN
     {
@@ -8909,6 +9178,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ czech ] = "ROMAN";
         Text[ hebrew ] = "RÖMISCH";
         Text[ hindi ] = "ROMAN";
+        Text[ slovak ] = "ROMAN";
     };
 };
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
@@ -9205,6 +9475,8 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };
+
+
 
 
 
