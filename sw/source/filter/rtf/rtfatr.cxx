@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:59:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,9 +1496,9 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
         else
             aMergedSet.Put(rNdSet);
-
-        OutRTF_SfxItemSet(rRTFWrt, aMergedSet, bDeep);
     }
+
+    OutRTF_SfxItemSet(rRTFWrt, aMergedSet, bDeep);
 
     rRTFWrt.pFlyFmt = pSaveFmt;
 
