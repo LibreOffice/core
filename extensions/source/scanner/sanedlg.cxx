@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-07 13:19:04 $
+ *  last change: $Author: pl $ $Date: 2002-03-28 16:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@ void SaneDlg::InitFields()
         "preview"
     };
 
+    mbDragEnable = TRUE;
     maReslBox.Clear();
     maMinTopLeft = Point( 0, 0 );
     maMaxBottomRight = Point( PREVIEW_WIDTH,  PREVIEW_HEIGHT );
@@ -341,7 +342,37 @@ void SaneDlg::InitFields()
             pField->Enable( TRUE );
         }
         else
+        {
+            mbDragEnable = FALSE;
+            pField->SetMin( 0 );
+            switch( i ) {
+                case 0:
+                    maMinTopLeft.X() = 0;
+                    maTopLeft.X() = 0;
+                    pField->SetMax( PREVIEW_WIDTH );
+                    pField->SetValue( 0 );
+                    break;
+                case 1:
+                    maMinTopLeft.Y() = 0;
+                    maTopLeft.Y() = 0;
+                    pField->SetMax( PREVIEW_HEIGHT );
+                    pField->SetValue( 0 );
+                    break;
+                case 2:
+                    maMaxBottomRight.X() = PREVIEW_WIDTH;
+                    maBottomRight.X() = PREVIEW_WIDTH;
+                    pField->SetMax( PREVIEW_WIDTH );
+                    pField->SetValue( PREVIEW_WIDTH );
+                    break;
+                case 3:
+                    maMaxBottomRight.Y() = PREVIEW_HEIGHT;
+                    maBottomRight.Y() = PREVIEW_HEIGHT;
+                    pField->SetMax( PREVIEW_HEIGHT );
+                    pField->SetValue( PREVIEW_HEIGHT );
+                    break;
+            }
             pField->Enable( FALSE );
+        }
     }
     maTopLeft = GetPixelPos( maTopLeft );
     maBottomRight = GetPixelPos( maBottomRight );
@@ -703,10 +734,30 @@ void SaneDlg::AcquirePreview()
     SetAdjustedNumericalValue( "resolution", fResl );
     maReslBox.SetValue( (ULONG)fResl );
 
-    maPreviewRect = Rectangle( maTopLeft,
-                               Size( maBottomRight.X() - maTopLeft.X(),
-                                     maBottomRight.Y() - maTopLeft.Y() )
-                               );
+    if( mbDragEnable )
+        maPreviewRect = Rectangle( maTopLeft,
+                                   Size( maBottomRight.X() - maTopLeft.X(),
+                                         maBottomRight.Y() - maTopLeft.Y() )
+                                   );
+    else
+    {
+        Size aBMSize( maPreviewBitmap.GetSizePixel() );
+        if( aBMSize.Width() > aBMSize.Height() )
+        {
+            int nVHeight = (maBottomRight.X() - maTopLeft.X()) * aBMSize.Height() / aBMSize.Width();
+            maPreviewRect = Rectangle( Point( maTopLeft.X(), ( maTopLeft.Y() + maBottomRight.Y() )/2 - nVHeight/2 ),
+                                       Size( maBottomRight.X() - maTopLeft.X(),
+                                             nVHeight ) );
+        }
+        else
+        {
+            int nVWidth = (maBottomRight.Y() - maTopLeft.Y()) * aBMSize.Width() / aBMSize.Height();
+            maPreviewRect = Rectangle( Point( ( maTopLeft.X() + maBottomRight.X() )/2 - nVWidth/2, maTopLeft.Y() ),
+                                       Size( nVWidth,
+                                             maBottomRight.Y() - maTopLeft.Y() ) );
+        }
+    }
+
     Paint( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
 }
 
@@ -909,7 +960,7 @@ void SaneDlg::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aMousePixel = rMEvt.GetPosPixel();
 
-    if( ! mbIsDragging )
+    if( ! mbIsDragging  && mbDragEnable )
     {
         int nMiddleX = ( maBottomRight.X() - maTopLeft.X() ) / 2 - RECT_SIZE_PIX/2 + maTopLeft.X();
         int nMiddleY = ( maBottomRight.Y() - maTopLeft.Y() ) / 2 - RECT_SIZE_PIX/2 + maTopLeft.Y();
@@ -1029,6 +1080,9 @@ void SaneDlg::DrawDrag()
 {
     static Point aLastUL, aLastBR;
 
+    if( ! mbDragEnable )
+        return;
+
     RasterOp eROP = GetRasterOp();
     SetRasterOp( ROP_INVERT );
     SetMapMode( MapMode( MAP_PIXEL ) );
@@ -1081,6 +1135,9 @@ Point SaneDlg::GetLogicPos( const Point& rIn )
 
 void SaneDlg::UpdateScanArea( BOOL bSend )
 {
+    if( ! mbDragEnable )
+        return;
+
     Point aUL = GetLogicPos( maTopLeft );
     Point aBR = GetLogicPos( maBottomRight );
 

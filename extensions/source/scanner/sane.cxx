@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-27 13:50:55 $
+ *  last change: $Author: pl $ $Date: 2002-03-28 16:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include <cstdarg>
+#include <cmath>
 #include <tools/stream.hxx>
 #include <sane.hxx>
 #include <dlfcn.h>
@@ -598,6 +599,35 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
     if( ! maHandle )
         return FALSE;
 
+    int nWidthMM    = 0;
+    int nHeightMM   = 0;
+    double fTLx, fTLy, fBRx, fBRy, fResl = 0.0;
+    int nOption;
+    if( ( nOption = GetOptionByName( "tl-x" ) ) != -1   &&
+        GetOptionValue( nOption, fTLx, 0 )              &&
+        GetOptionUnit( nOption ) == SANE_UNIT_MM )
+    {
+        if( ( nOption = GetOptionByName( "br-x" ) ) != -1   &&
+            GetOptionValue( nOption, fBRx, 0 )              &&
+            GetOptionUnit( nOption ) == SANE_UNIT_MM )
+        {
+            nWidthMM = (int)fabs(fBRx - fTLx);
+        }
+    }
+    if( ( nOption = GetOptionByName( "tl-y" ) ) != -1   &&
+        GetOptionValue( nOption, fTLy, 0 )              &&
+        GetOptionUnit( nOption ) == SANE_UNIT_MM )
+    {
+        if( ( nOption = GetOptionByName( "br-y" ) ) != -1   &&
+            GetOptionValue( nOption, fBRy, 0 )              &&
+            GetOptionUnit( nOption ) == SANE_UNIT_MM )
+        {
+            nHeightMM = (int)fabs(fBRy - fTLy);
+        }
+    }
+    if( ( nOption = GetOptionByName( "resolution" ) ) != -1 )
+        GetOptionValue( nOption, fResl );
+
     BYTE* pBuffer = NULL;
 
     SANE_Status nStatus = SANE_STATUS_GOOD;
@@ -749,12 +779,22 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
             UINT32 nHeight = (UINT32) (nFrameLength / aParams.bytes_per_line);
             if( ! bWidthSet )
             {
+                if( ! fResl )
+                    fResl = 300; // if all else fails that's a good guess
+                if( ! nWidthMM )
+                    nWidthMM = (int)(((double)nWidth / fResl) * 25.4);
+                if( ! nHeightMM )
+                    nHeightMM = (int)(((double)nHeight / fResl) * 25.4);
 #ifdef DEBUG
-                fprintf( stderr, "set dimensions to %d, %d\n", nWidth, nHeight );
+                fprintf( stderr, "set dimensions to (%d, %d) Pixel, (%d, %d) mm, resolution is %lg\n", nWidth, nHeight, nWidthMM, nHeightMM, fResl );
 #endif
+
                 aConverter.Seek( 18 );
-                aConverter << nWidth;
-                aConverter << nHeight;
+                aConverter << (UINT32)nWidth;
+                aConverter << (UINT32)nHeight;
+                aConverter.Seek( 38 );
+                aConverter << (UINT32)(1000*nWidth/nWidthMM);
+                aConverter << (UINT32)(1000*nHeight/nHeightMM);
                 bWidthSet = TRUE;
             }
             aConverter.Seek(60);

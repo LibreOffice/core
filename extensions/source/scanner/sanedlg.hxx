@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 14:09:25 $
+ *  last change: $Author: pl $ $Date: 2002-03-28 16:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ private:
     Rectangle       maPreviewRect;
     Point           maTopLeft, maBottomRight;
     Point           maMinTopLeft, maMaxBottomRight;
+    BOOL            mbDragEnable;
     BOOL            mbIsDragging;
     int             mnDragMode;
     BOOL            mbDragDrawn;
