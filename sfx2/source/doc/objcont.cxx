@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:03:29 $
+ *  last change: $Author: mba $ $Date: 2001-06-21 15:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1842,7 +1842,7 @@ SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pVie
     if ( GetConfigManager() && pImp->pCfgMgr->HasConfigItem( pId->GetId() ) )
         pCfgMgr = pImp->pCfgMgr;
 
-    SfxMenuBarManager* pMgr = new SfxMenuBarManager( *pId, rBindings, pCfgMgr );
+    SfxMenuBarManager* pMgr = new SfxMenuBarManager( *pId, rBindings, pCfgMgr, pViewFrame->ISA( SfxInPlaceFrame ) );
     return pMgr;
 }
 

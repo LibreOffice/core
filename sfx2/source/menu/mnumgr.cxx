@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
+ *  last change: $Author: mba $ $Date: 2001-06-21 15:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,7 +1104,7 @@ SfxMenuBarManager::SfxMenuBarManager( SfxBindings& rBindings, BOOL bPlugin ) :
 
 // creates a menu-manager and loads it from a resource
 
-SfxMenuBarManager::SfxMenuBarManager( const ResId& rResId, SfxBindings &rBindings, SfxConfigManager* pMgr )
+SfxMenuBarManager::SfxMenuBarManager( const ResId& rResId, SfxBindings &rBindings, SfxConfigManager* pMgr, BOOL bOLE )
     : SfxMenuManager( rResId, rBindings, pMgr, TRUE )
     , pWindow( rBindings.GetSystemWindow() )
     , bDowning( FALSE )
@@ -1119,6 +1119,7 @@ SfxMenuBarManager::SfxMenuBarManager( const ResId& rResId, SfxBindings &rBinding
         aObjMenus[n].pResMgr = NULL;
     }
 
+    SetForceCtrlCreateMode( bOLE );
     Initialize();
 }
 
@@ -1162,6 +1163,7 @@ String SfxMenuBarManager::GetStreamName()
     return String::CreateFromAscii("MenuBar.xml");
 }
 
+/*
 SvStream* SfxMenuBarManager::GetDefaultStream( StreamMode nMode )
 {
     String aUserConfig = SvtPathOptions().GetUserConfigPath();
@@ -1178,6 +1180,7 @@ BOOL SfxMenuBarManager::Load( SvStream& rStream, BOOL bOLEServer )
         Construct_Impl( pSVMenu, FALSE );
     return ( pSVMenu != NULL );
 }
+*/
 
 MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
 {
@@ -1507,7 +1510,15 @@ int SfxMenuBarManager::Load( SotStorage& rStorage )
     if ( xStream->GetError() )
         return SfxConfigItem::ERR_READ;
     else
-        return Load( *xStream, bOLE );
+    {
+        Menu *pSVMenu = LoadMenuBar( *xStream );
+        if ( pSVMenu )
+            Construct_Impl( pSVMenu, FALSE );
+        if ( pSVMenu != NULL )
+            return ERR_OK;
+        else
+            return ERR_READ;
+    }
 }
 
 BOOL SfxMenuBarManager::Store( SotStorage& rStorage )
