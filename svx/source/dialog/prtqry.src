@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:48:57 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,11 @@ String RID_SVXSTR_QRY_PRINT_ALL
     Text[ dutch ] = "~Alles";
     Text[ spanish ] = "~Todo";
     Text[ english_us ] = "~All";
-    Text[ chinese_simplified ] = "È«²¿";
+    Text[ chinese_simplified ] = "È«²¿(~A)";
     Text[ russian ] = "Âñå";
     Text[ polish ] = "Wszystko";
-    Text[ japanese ] = "‚·‚×‚Ä";
-    Text[ chinese_traditional ] = "¥þ³¡";
+    Text[ japanese ] = "‚·‚×‚Ä(~A)";
+    Text[ chinese_traditional ] = "¥þ³¡(~A)";
     Text[ arabic ] = "Çáßá";
     Text[ greek ] = "¼ë~á";
     Text[ korean ] = "ÀüÃ¼(~A)";
@@ -144,11 +144,11 @@ String RID_SVXSTR_QRY_PRINT_SELECTION
     Text[ dutch ] = "~Selectie";
     Text[ spanish ] = "Sele~cción";
     Text[ english_us ] = "~Selection";
-    Text[ chinese_simplified ] = "Ñ¡ÖÐ";
+    Text[ chinese_simplified ] = "Ñ¡ÖÐ(~S)";
     Text[ russian ] = "Âûäåëåíèå";
     Text[ polish ] = "Selekcja";
-    Text[ japanese ] = "‘I‘ð”ÍˆÍ";
-    Text[ chinese_traditional ] = "¿ï¨ú";
+    Text[ japanese ] = "‘I‘ð”ÍˆÍ(~S)";
+    Text[ chinese_traditional ] = "¿ï¨ú(~S)";
     Text[ arabic ] = "ÇáÊÍÏíÏ";
     Text[ greek ] = "ÅðéëïãÞ";
     Text[ korean ] = "¼±ÅÃÇÑ ¹üÀ§(~S)";
