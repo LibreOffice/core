@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 14:23:39 $
+ *  last change: $Author: iha $ $Date: 2002-08-09 13:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,6 +1067,8 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
     SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( rStr, eFam, SFXSTYLEBIT_ALL );
     if( pStyle )
         EnableEdit( !(pStyle->GetMask() & SFXSTYLEBIT_READONLY) );
+    else
+        EnableEdit(FALSE);
 
     if ( pTreeBox )
     {
@@ -1106,7 +1108,10 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
         }
 
         if ( !bSelect )
+        {
             aFmtLb.SelectAll( FALSE );
+            EnableEdit(FALSE);
+        }
     }
 }
 
@@ -1574,6 +1579,8 @@ void SfxCommonTemplateDialog_Impl::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&
                         if( pStyle )
                             EnableEdit(
                                 !(pStyle->GetMask() & SFXSTYLEBIT_READONLY) );
+                        else
+                            EnableEdit(FALSE);
                     }
                 }
                 break;
