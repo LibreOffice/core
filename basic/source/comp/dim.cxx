@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:32:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 14:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <svtools/sbx.hxx>
 #include "sbcomp.hxx"
 #pragma hdrstop
@@ -177,6 +176,10 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                     // In den String-Pool uebernehmen
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
                 }
+                eType = SbxOBJECT;
+                break;
+            case FIXSTRING: // new syntax for complex UNO types
+                rDef.SetTypeId( aGblStrings.Add( aSym ) );
                 eType = SbxOBJECT;
                 break;
             default:
