@@ -2,9 +2,9 @@
  *
  *  $RCSfile: it_explicit.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,12 @@ namespace idl
 
 ExplicitType::ExplicitType( const String &      i_sName,
                             Type_id             i_nXNameRoom,
-                            Ce_id               i_nModuleOfOccurrence )
+                            Ce_id               i_nModuleOfOccurrence,
+                            Type_id             i_nTemplateType )
     :   Named_Type(i_sName),
         nXNameRoom(i_nXNameRoom),
-        nModuleOfOccurrence(i_nModuleOfOccurrence)
+        nModuleOfOccurrence(i_nModuleOfOccurrence),
+        nTemplateType(i_nTemplateType)
 {
 }
 
@@ -119,10 +121,12 @@ ExplicitType::inq_Get_Text( StringVector &      o_module,
     o_name = Name();
 }
 
-
-
+Type_id
+ExplicitType::inq_TemplateParameterType() const
+{
+    return nTemplateType;
+}
 
 
 }   // namespace idl
 }   // namespace ary
-

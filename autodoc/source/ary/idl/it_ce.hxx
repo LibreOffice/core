@@ -2,9 +2,9 @@
  *
  *  $RCSfile: it_ce.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ namespace idl
 
 
 
-
 /** A named @->Type related to its corresponding
      @->CodeEntity.
 */
@@ -89,11 +88,13 @@ class Ce_Type : public Type
 
     // LIFECYCLE
                         Ce_Type(
-                            Ce_id               i_nRelatedCe );
+                            Ce_id               i_nRelatedCe,
+                            Type_id             i_nTemplateType = Type_id(0) );
     virtual             ~Ce_Type();
 
     // INQUIRY
     Ce_id               RelatedCe() const       { return nRelatedCe; }
+    Type_id             TemplateType() const    { return nTemplateType; }
 
   private:
     // Interface RepositoryEntity:
@@ -107,8 +108,11 @@ class Ce_Type : public Type
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const;
+    virtual Type_id     inq_TemplateParameterType() const;
+
     // DATA
     Ce_id               nRelatedCe;
+    Type_id             nTemplateType;
 };
 
 
@@ -118,4 +122,3 @@ class Ce_Type : public Type
 
 
 #endif
-

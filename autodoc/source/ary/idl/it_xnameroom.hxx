@@ -2,9 +2,9 @@
  *
  *  $RCSfile: it_xnameroom.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,12 @@ namespace idl
 {
 
 
-/** A namespace for @->Type s, as they are explicitely written in code.
+/** A namespace for ->Type s, as they are explicitely written in code.
+
+    The search/identification string is usually the local name of
+    the Type. But for templated structs, the search string has this
+    pattern:
+                <LocalName> '<' <StringOfTemplateTypeId>
 */
 class ExplicitNameRoom : public Type
 {
@@ -93,10 +98,15 @@ class ExplicitNameRoom : public Type
     virtual             ~ExplicitNameRoom();
 
     // OPERATIONS
+    /** @param i_sSearchString
+                A local type name  usually.
+                For templated types see class docu.
+        @see ExplicitNameRoom
+    */
     void                Add_Name(
-                            const String &      i_sName,
+                            const String &      i_sSearchString,
                             Type_id             i_nId )
-                            { aImpl.Add_Name(i_sName,i_nId); }
+                            { aImpl.Add_Name(i_sSearchString,i_nId); }
     // INQUIRY
     const String &      Name() const            { return aImpl.Name(); }
     intt                Depth() const           { return aImpl.Depth(); }
@@ -107,9 +117,14 @@ class ExplicitNameRoom : public Type
     bool                IsAbsolute() const      { return Depth() > 0
                                                     ?   (*NameChain_Begin()).empty()
                                                     :   false; }
+    /** @param i_sSearchString
+                A local type name  usually.
+                For templated types see class docu.
+        @see ExplicitNameRoom
+    */
     Type_id             Search_Name(
-                            const String &      i_sName ) const
-                            { return aImpl.Search_Name(i_sName); }
+                            const String &      i_sSearchString ) const
+                            { return aImpl.Search_Name(i_sSearchString); }
 
     StringVector::const_iterator
                         NameChain_Begin() const
@@ -129,7 +144,7 @@ class ExplicitNameRoom : public Type
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const;
-    // Locals
+    // DATA
     NameTreeNode<Type_id>
                         aImpl;
 };
@@ -140,4 +155,3 @@ class ExplicitNameRoom : public Type
 
 
 #endif
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: it_explicit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,15 @@ class ExplicitType : public Named_Type
                         ExplicitType(
                             const String &      i_sName,
                             Type_id             i_nXNameRoom,
-                            Ce_id               i_nModuleOfOccurrence );
+                            Ce_id               i_nModuleOfOccurrence,
+                            Type_id             i_nTemplateType );
     virtual             ~ExplicitType();
 
     // INQUIRY
     Ce_id               ModuleOfOccurrence() const
                                                 { return nModuleOfOccurrence; }
     Type_id             NameRoom() const        { return nXNameRoom; }
+    Type_id             TemplateType() const    { return nTemplateType; }
 
   private:
     // Interface RepositoryEntity:
@@ -110,9 +112,12 @@ class ExplicitType : public Named_Type
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const;
+    virtual Type_id     inq_TemplateParameterType() const;
+
     // DATA
     Type_id             nXNameRoom;             // As written in code.
     Ce_id               nModuleOfOccurrence;
+    Type_id             nTemplateType;
 };
 
 
@@ -122,4 +127,3 @@ class ExplicitType : public Named_Type
 
 
 #endif
-
