@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-12 14:23:24 $
+ *  last change:$Date: 2003-05-15 18:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public class OfficeProvider implements AppProvider {
         if (msf != null) {
             return msf;
         }
-        if (debug) System.out.println("Exception while connecting "+exc);
+        if (debug) System.out.println("Not connected to existing office");
         boolean isExecutable = false;
         boolean isAppKnown = cncstr.indexOf("host=localhost")>0;
         isAppKnown &= !((String) param.get("AppExecutionCommand")).equals("");
@@ -158,8 +158,7 @@ public class OfficeProvider implements AppProvider {
             }
             k++;
         }
-        if (debug && msf==null) System.out.println(
-                                        "Exception while connecting "+exc);
+        if (debug && msf==null) System.out.println("Exception while connecting "+exc);
         return msf;
     }
 
