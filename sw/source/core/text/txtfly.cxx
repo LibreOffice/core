@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-19 09:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,16 +330,22 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             ASSERT( !GetMulti(), "Too much multi" );
             ((SwTxtFormatter*)this)->pMulti = (SwMultiPortion*)pPos;
             SwLineLayout *pLay = &GetMulti()->GetRoot();
-            Point aSt( aStart );
-            if( GetMulti()->HasRotation() )
+            Point aSt( aTmpInf.X(), aStart.Y() );
+
+            if ( GetMulti()->HasBrackets() )
             {
-                aSt.X() = aTmpInf.X();
+                ASSERT( GetMulti()->IsDouble(), "Brackets only for doubles");
+                aSt.X() += ((SwDoubleLinePortion*)GetMulti())->PreWidth();
+            }
+            else if( GetMulti()->HasRotation() )
+            {
                 aSt.Y() += pCurr->GetAscent() - GetMulti()->GetAscent();
                 if( GetMulti()->IsRevers() )
                     aSt.X() += GetMulti()->Width();
                 else
                     aSt.Y() += GetMulti()->Height();
                }
+
             xub_StrLen nStIdx = aTmpInf.GetIdx();
             do
             {

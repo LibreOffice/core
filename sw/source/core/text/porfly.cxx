@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 14:41:17 $
+ *  last change: $Author: fme $ $Date: 2001-04-19 09:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     if( nFlags & SETBASE_ROTATE )
     {
         if( nFlags & SETBASE_REVERSE )
-            aRelPos.X() = -nRelPos;
+            aRelPos.X() = -nRelPos - aBoundRect.Width();
         else
         {
             aRelPos.X() = nRelPos;
