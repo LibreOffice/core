@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-23 17:27:06 $
+ *  last change: $Author: sab $ $Date: 2002-09-25 11:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,8 +264,10 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 {
                     if ( IsXMLToken(sValue, XML_TRUE) )
                         fValue = 1.0;
-                    else
+                    else if ( IsXMLToken(sValue, XML_FALSE) )
                         fValue = 0.0;
+                    else
+                        rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
                     bIsEmpty = sal_False;
                 }
             }
