@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-26 11:57:40 $
+ *  last change: $Author: ok $ $Date: 2001-07-12 13:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ SalI18N_InputContext::~SalI18N_InputContext()
     if (maClientData.aText.pUnicodeBuffer != NULL)
           free(maClientData.aText.pUnicodeBuffer);
     if (maClientData.aText.pCharStyle != NULL)
-        free(maClientData.aText.pUnicodeBuffer);
+        free(maClientData.aText.pCharStyle);
 }
 
 // ----------------------------------------------------------------------------
