@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-02 07:29:44 $
+ *  last change: $Author: mba $ $Date: 2001-10-08 12:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2096,7 +2096,7 @@ SfxMedium::~SfxMedium()
 
     delete pSet;
 
-    if( pImp->bIsTemp && GetPhysicalName().Len() )
+    if( pImp->bIsTemp && aName.Len() )
     {
         String aTemp;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp ))
