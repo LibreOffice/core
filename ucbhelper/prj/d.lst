@@ -23,4 +23,5 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\resultset.hxx %_DEST%\inc%_EXT%\ucbhelper\resultset.hxx
 ..\inc\ucbhelper\resultsetmetadata.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsetmetadata.hxx
 ..\inc\ucbhelper\resultsethelper.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsethelper.hxx
+..\inc\ucbhelper\activedatasink.hxx %_DEST%\inc%_EXT%\ucbhelper\activedatasink.hxx
 ..\version.mk %_DEST%\inc%_EXT%\ucbhelper\version.mk
