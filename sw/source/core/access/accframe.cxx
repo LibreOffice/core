@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 15:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,10 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj,
             else
             {
                 // In any other case the parent is the root frm
-                aParent = pContact->GetAnchor()->FindRootFrm();
+                if( bInPagePreview )
+                    aParent = pContact->GetAnchor()->FindPageFrm();
+                else
+                    aParent = pContact->GetAnchor()->FindRootFrm();
             }
         }
     }
