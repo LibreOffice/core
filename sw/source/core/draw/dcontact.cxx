@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 15:09:29 $
+ *  last change: $Author: jp $ $Date: 2000-12-11 16:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,8 +437,9 @@ void SwDrawContact::_Changed(const SdrObject& rObj, SdrUserCallType eType,
             {
                 if( bNotify )
                     lcl_Notify( this, pOldBoundRect );
-                if( GetAnchor() )
-                    GetFmt()->GetDoc()->DelLayoutFmt( GetFmt() );
+//JP 11.12.2000: don't delete the format pointer - see bug 81755
+//              if( GetAnchor() )
+//                  GetFmt()->GetDoc()->DelLayoutFmt( GetFmt() );
                 DisconnectFromLayout( FALSE );
                 break;
             }
