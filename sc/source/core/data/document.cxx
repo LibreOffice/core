@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 18:59:29 $
+ *  last change: $Author: nn $ $Date: 2001-07-03 09:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3769,6 +3769,17 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
                     << (BYTE) ::GetStoreCharSet( gsl_getSystemTextEncoding() );
         }
 
+        //  Force the default style's name to be "Standard" for all languages in the file.
+        //  This is needed for versions up to 5.1, to find the default pattern's style in
+        //  the UpdateStyleSheet call.
+        //  #89078# this has to be set for the DocPool save, too, so the default style name
+        //  is adjusted for the patterns, or a wrong style would be used if other styles
+        //  match the default style's name after CharacterSet conversion.
+
+        String aFileStdName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD));
+        if ( aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
+            xPoolHelper->GetStylePool()->SetForceStdName( &aFileStdName );
+
         {
             rStream << (USHORT) SCID_DOCPOOL;
             ScWriteHeader aDocPoolHdr( rStream );
@@ -3780,21 +3791,10 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
             ScWriteHeader aStylePoolHdr( rStream );
             xPoolHelper->GetStylePool()->SetSearchMask( SFX_STYLE_FAMILY_ALL );
 
-            //  Um bisherige 5.0 und 5.1 Versionen nicht durcheinander zu bringen,
-            //  muss die Standardvorlage unter dem Namen "Standard" in der Datei
-            //  stehen, weil bei UpdateStyleSheet sonst die Vorlage fuer das
-            //  Default-PatternAttr nicht gefunden wird.
-
-            //! Fuer eine spaetere Dateiversion kann das wegfallen!
-
-            String aFileStdName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD));
-            if ( aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-                xPoolHelper->GetStylePool()->SetForceStdName( &aFileStdName );
-
             xPoolHelper->GetStylePool()->Store( rStream, FALSE );
-
-            xPoolHelper->GetStylePool()->SetForceStdName( NULL );
         }
+
+        xPoolHelper->GetStylePool()->SetForceStdName( NULL );
 
         if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_50 )
         {
