@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:52:19 $
+ *  last change: $Author: oj $ $Date: 2001-01-26 15:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,19 +874,30 @@ sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
         return sal_False;
 
     m_bBeforeFirst = sal_False;
-
     ++m_nPosition;
-    moveWindow();
-    //  readForward();
-
-    OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < m_pMatrix->size(),"Position is behind end()!");
-    m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // -1 because rows start at zero
+    // after we increment the position we have to check if we are already after the last row
     if(m_bRowCountFinal)
     {
         m_bAfterLast    = m_nPosition > m_nRowCount;
         m_bLast         = m_nPosition == m_nRowCount;
         if(m_bAfterLast)
             m_nPosition = 0;//m_nRowCount;
+    }
+    if(!m_bAfterLast)
+    {
+
+        moveWindow();
+        //  readForward();
+
+        OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < m_pMatrix->size(),"Position is behind end()!");
+        m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // -1 because rows start at zero
+        if(m_bRowCountFinal)
+        {
+            m_bAfterLast    = m_nPosition > m_nRowCount;
+            m_bLast         = m_nPosition == m_nRowCount;
+            if(m_bAfterLast)
+                m_nPosition = 0;//m_nRowCount;
+        }
     }
 
     return !m_bAfterLast;
@@ -1706,6 +1717,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.22  2001/01/24 09:52:19  oj
+    #82628# rowset modifications
+
     Revision 1.21  2001/01/22 07:38:24  oj
     #82632# change member
 
