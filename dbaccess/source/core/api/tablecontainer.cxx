@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 08:33:09 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 11:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,7 +897,15 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     if(!m_bInAppend && (Event.Accessor >>= sName) && !hasByName(sName))
     {
         if(!m_xMasterTables.is() || m_xMasterTables->hasByName(sName))
-            insertElement(sName,createObject(sName));
+        {
+            Reference<XNamed> xName = createObject(sName);
+            insertElement(sName,xName);
+            // and notify our listeners
+            ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xName), Any());
+            OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+            while (aListenerLoop.hasMoreElements())
+                static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
+        }
     }
 }
 // -----------------------------------------------------------------------------
