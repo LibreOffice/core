@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:08:36 $
+ *  last change: $Author: os $ $Date: 2001-04-02 08:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
