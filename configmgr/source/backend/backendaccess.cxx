@@ -2,8 +2,8 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.14 $
- *  last change: $Author: vg $ $Date: 2003-05-26 08:03:13 $
+ *  $Revision: 1.15 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
-#endif  INCLUDED_VECTOR
+#endif // INCLUDED_VECTOR
 
 #ifndef _CONFIGMGR_FILEHELPER_HXX_
 #include "filehelper.hxx"
