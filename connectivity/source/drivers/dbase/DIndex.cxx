@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:59:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,7 @@ BOOL ODbaseIndex::CreateImpl()
     m_pFileStream->SetBufferSize(512);
     m_pFileStream->SetFiller('\0');
 
-    // Zun‰chst muﬂ das Ergebnis sortiert sein
+    // Zunaechst muss das Ergebnis sortiert sein
     Reference<XStatement> xStmt;
     Reference<XResultSet> xSet;
     String aName;
