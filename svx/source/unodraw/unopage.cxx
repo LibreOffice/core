@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 14:48:56 $
+ *  last change: $Author: cl $ $Date: 2000-11-01 11:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,38 @@ SvxDrawPage* SvxDrawPage::GetPageForSdrPage( SdrPage* pPage ) throw()
 //----------------------------------------------------------------------
 void SvxDrawPage::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-    if( pSdrHint && pSdrHint->GetKind() == HINT_MODELCLEARED )
+    if( pModel )
     {
-        pModel = NULL;
-        delete pView;
-        pView = NULL;
+        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+        sal_Bool bInvalid = sal_False;
+
+        if( pSdrHint )
+        {
+            switch( pSdrHint->GetKind() )
+            {
+            case HINT_MODELCLEARED:
+                bInvalid = sal_True;
+                break;
+            case HINT_PAGEORDERCHG:
+                {
+                    const SdrPage* pPg=pSdrHint->GetPage();
+                    if( pPg == pPage ) // own page?
+                    {
+                        if(!pPg->IsInserted()) // page removed?
+                            bInvalid = sal_True;
+                    }
+                }
+                break;
+            }
+        }
+
+        if( bInvalid )
+        {
+            pModel = NULL;
+            delete pView;
+            pView = NULL;
+        }
     }
 }
 
