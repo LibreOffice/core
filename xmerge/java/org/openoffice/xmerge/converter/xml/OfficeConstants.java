@@ -96,6 +96,50 @@ public interface OfficeConstants {
     /** Element tag for <i>office:body</i>. */
     public final static String TAG_OFFICE_BODY = "office:body";
 
+ //Adding
+
+    /** Element tag for <i>text:variable-set</i>. */
+    public final static String TAG_TEXT_VARIABLE_SET = "text:variable-set";
+
+  /** Element tag for <i>text:variable-get</i>. */
+    public final static String TAG_TEXT_VARIABLE_GET = "text:variable-get";
+/** Element tag for <i>text:expression</i>. */
+    public final static String TAG_TEXT_EXPRESSION = "text:expression";
+
+/** Element tag for <i>text:user-field-get</i>. */
+    public final static String TAG_TEXT_USER_FIELD_GET = "text:user-field-get";
+
+/** Element tag for <i>text:page-variable-get</i>. */
+    public final static String TAG_TEXT_PAGE_VARIABLE_GET = "text:page-variable-get";
+/** Element tag for <i>text:sequence</i>. */
+    public final static String TAG_TEXT_SEQUENCE = "text:sequence";
+
+     /** Element tag for <i>text:text-input</i>. */
+    public final static String TAG_TEXT_VARIABLE_INPUT = "text:variable-input";
+     /** Element tag for <i>text:time</i>. */
+     public final static String TAG_TEXT_TIME = "text:time";
+
+    /** Element tag for <i>text:page-count</i>. */
+     public final static String TAG_TEXT_PAGE_COUNT = "text:page-count";
+    /** Element tag for <i>text:page-number</i>. */
+     public final static String TAG_TEXT_PAGE_NUMBER = "text:page-number";
+    /** Element tag for <i>text:author-initials</i>. */
+     public final static String TAG_TEXT_AUTHOR_INITIALS = "text:author-initials";
+    /** Element tag for <i>text:subject</i>. */
+     public final static String TAG_TEXT_SUBJECT = "text:subject";
+    /** Element tag for <i>text:title</i>. */
+     public final static String TAG_TEXT_TITLE = "text:title";
+    /** Element tag for <i>text:creation-time</i>. */
+     public final static String TAG_TEXT_CREATION_TIME = "text:creation-time";
+
+    /** Element tag for <i>text:date</i>. */
+     public final static String TAG_TEXT_DATE = "text:date";
+    /** Element tag for <i>text:text-input</i>. */
+     public final static String TAG_TEXT_TEXT_INPUT = "text:text-input";
+
+
+//end adding
+
     /** Element tag for <i>office:font-decls</i>. */
     public final static String TAG_OFFICE_FONT_DECLS = "office:font-decls";
 
