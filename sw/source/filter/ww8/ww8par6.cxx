@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-17 16:45:42 $
+ *  last change: $Author: cmc $ $Date: 2002-01-18 10:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4212,7 +4212,7 @@ void SwWW8ImplReader::Read_Emphasis( USHORT, const BYTE* pData, short nLen )
         //there is use it, if there is not fall back to the currently set one.
         //Only the cjk language setting seems to matter to word, the western
         //one is ignored
-        const BYTE *pLang = pPlcxMan->GetChpPLCF()->HasSprm(0x486E);
+        const BYTE *pLang = pPlcxMan ? pPlcxMan->GetChpPLCF()->HasSprm(0x486E) : 0;
         if (pLang)
             nLang = SVBT16ToShort( pLang );
         else
