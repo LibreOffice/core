@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 11:24:04 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ void __EXPORT ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
 IMPL_LINK( ScTablePage, PageDirHdl, RadioButton*, EMPTYARG )
 {
     ShowImage();
-    return NULL;
+    return 0;
 }
 
 //------------------------------------------------------------------------
@@ -410,7 +410,7 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
     else
         aEdPageNo.Disable();
 
-    return NULL;
+    return 0;
 }
 
 //------------------------------------------------------------------------
@@ -434,7 +434,7 @@ IMPL_LINK( ScTablePage, ScaleHdl, RadioButton*, pBtn )
             aEdScalePageNum.GrabFocus();
     }
 
-    return NULL;
+    return 0;
 }
 
 //========================================================================
