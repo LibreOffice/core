@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmovss.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #pragma hdrstop
 
 #include "unmovss.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "stlsheet.hxx"
 
