@@ -45,12 +45,12 @@
 #endif
 #include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
 #include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
-#include <drafts/com/sun/star/configuration/backend/BackendSetupException.hpp>
-#include <drafts/com/sun/star/configuration/backend/AuthenticationFailedException.hpp>
-#include <drafts/com/sun/star/configuration/backend/InvalidAuthenticationMechanismException.hpp>
-#include <drafts/com/sun/star/configuration/backend/CannotConnectException.hpp>
-#include <drafts/com/sun/star/configuration/backend/BackendAccessException.hpp>
-#include <drafts/com/sun/star/configuration/backend/InsufficientAccessRightsException.hpp>
+#include <com/sun/star/configuration/backend/BackendSetupException.hpp>
+#include <com/sun/star/configuration/backend/AuthenticationFailedException.hpp>
+#include <com/sun/star/configuration/backend/InvalidAuthenticationMechanismException.hpp>
+#include <com/sun/star/configuration/backend/CannotConnectException.hpp>
+#include <com/sun/star/configuration/backend/BackendAccessException.hpp>
+#include <com/sun/star/configuration/backend/InsufficientAccessRightsException.hpp>
 
 // ----------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ namespace beans         = ::com::sun::star::beans;
 namespace util          = ::com::sun::star::util;
 namespace task          = ::com::sun::star::task;
 namespace configuration = ::com::sun::star::configuration;
-namespace backend       = drafts::com::sun::star::configuration::backend;
+namespace backend       = ::com::sun::star::configuration::backend;
 using rtl::OUString;
 using uno::UNO_QUERY;
 using desktop::Desktop;
@@ -73,7 +73,7 @@ static char const OFFLINE_BACKEND_WRAPPER[] = "com.sun.star.configuration.backen
 
 static char const READONLY_ACCESS[]         = "com.sun.star.configuration.ConfigurationAccess";
 static char const UPDATE_ACCESS[]           = "com.sun.star.configuration.ConfigurationUpdateAccess";
-static char const USERDATA_LOCATOR[]        = "com.sun.star.configuration.backend.local.HierarchyBrowser";
+static char const USERDATA_LOCATOR[]        = "com.sun.star.configuration.backend.LocalHierarchyBrowser";
 static char const USERDATA_IMPORTER[]       = "com.sun.star.configuration.backend.LocalDataImporter";
 static char const USERDATA_IMPORTSERVICE[]  = "com.sun.star.configuration.backend.CopyImporter";
 
