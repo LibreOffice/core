@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:12:11 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "dialog.hrc"
 #include "macrconf.hxx"
 #include "sfxdefs.hxx"
+#include "helpid.hrc"
 
 #ifndef _HEADERTABLISTBOX_HXX
 #include "headertablistbox.hxx"
@@ -203,6 +204,7 @@ _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId ) :
     maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN ),
     maHeaderBar( this, WB_BOTTOMBORDER )
 {
+    maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
 }
 
 _HeaderTabListBox::~_HeaderTabListBox()
