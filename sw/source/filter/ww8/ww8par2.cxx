@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
+ *  last change: $Author: cmc $ $Date: 2002-05-10 14:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3207,6 +3207,8 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl( BOOL* pbStyExist, WW8_STD* pStd, cons
         if( pCol )
         {
             *pbStyExist = TRUE;
+            if (pIo->bNew)      //#i3674#
+                pCol->SetOutlineLevel(NO_NUMBERING);
             return pCol;
         }
     }
@@ -3272,7 +3274,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
         pIo->bNoAttrImport = TRUE;
     else
     {
-        if( bStyExist )
+        if (bStyExist)
             pColl->ResetAllAttr();
         pColl->SetAuto( FALSE );            // nach Empfehlung JP
     }                                   // macht die UI aber anders
