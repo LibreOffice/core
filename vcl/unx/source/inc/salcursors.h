@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcursors.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:03:34 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,3 +194,15 @@
 #include "fill_mask.h"
 #include "vertcurs_curs.h"
 #include "vertcurs_mask.h"
+#include "tblsele_curs.h"
+#include "tblsele_mask.h"
+#include "tblsels_curs.h"
+#include "tblsels_mask.h"
+#include "tblselse_curs.h"
+#include "tblselse_mask.h"
+#include "tblselw_curs.h"
+#include "tblselw_mask.h"
+#include "tblselsw_curs.h"
+#include "tblselsw_mask.h"
+#include "paintbrush_curs.h"
+#include "paintbrush_mask.h"
