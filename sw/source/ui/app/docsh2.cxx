@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:26:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -208,18 +207,18 @@
 #ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
 #endif
-#ifndef _DOCSTDLG_HXX
-#include <docstdlg.hxx>     // fuer Dokument Style
-#endif
+//CHINA001 #ifndef _DOCSTDLG_HXX
+//CHINA001 #include <docstdlg.hxx>  // fuer Dokument Style
+//CHINA001 #endif
 #ifndef _FLDWRAP_HXX
 #include <fldwrap.hxx>
 #endif
 #ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
 #endif
-#ifndef _ABSTRACT_HXX
-#include <abstract.hxx>     // SwInsertAbstractDialog
-#endif
+//CHINA001 #ifndef _ABSTRACT_HXX
+//CHINA001 #include <abstract.hxx>      // SwInsertAbstractDialog
+//CHINA001 #endif
 #ifndef _DOCSTYLE_HXX
 #include <docstyle.hxx>
 #endif
@@ -312,7 +311,9 @@
 #include <sfx2/fcontnr.hxx>
 
 #include <sw3io.hxx>
-
+#include "swabstdlg.hxx" //CHINA001
+#include "dialog.hrc" //CHINA001
+#include "swabstdlg.hxx" //CHINA001
 using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -358,8 +359,13 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
         //Nicht fuer SourceView.
         SfxViewShell *pVSh = SfxViewShell::Current();
         if ( pVSh && !pVSh->ISA(SwSrcView) )
-            pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),
-                                                    SwDocStatPage::Create, 0);
+//CHINA001          pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),
+//CHINA001 SwDocStatPage::Create, 0);
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),0);
+        }
     }
     return pDlg;
 }
@@ -1090,7 +1096,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_ABSTRACT_STARIMPRESS:
         case FN_ABSTRACT_NEWDOC:
         {
-            SwInsertAbstractDlg* pDlg = new SwInsertAbstractDlg(0);
+            //CHINA001 SwInsertAbstractDlg* pDlg = new SwInsertAbstractDlg(0);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0,ResId( DLG_INSERT_ABSTRACT ));
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if(RET_OK == pDlg->Execute())
             {
                 BYTE nLevel = pDlg->GetLevel();
