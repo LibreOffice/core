@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:59:13 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:12:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,8 +64,9 @@ PRJ=..
 
 PRJNAME=embeddedobj
 TARGET=embobj
-LIBTARGET=NO
-USE_DEFFILE=TRUE
+#LIBTARGET=NO
+#USE_DEFFILE=TRUE
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------
 
@@ -73,12 +74,9 @@ USE_DEFFILE=TRUE
 
 # --- Files --------------------------------------------------------
 
-SHL1TARGET= $(TARGET)
-
-SHL1IMPLIB= i$(TARGET)
-SHL1OBJS= \
+LIB1OBJFILES= \
         $(SLO)$/miscobj.obj\
-                $(SLO)$/specialobject.obj\
+        $(SLO)$/specialobject.obj\
         $(SLO)$/persistence.obj\
         $(SLO)$/embedobj.obj\
         $(SLO)$/inplaceobj.obj\
@@ -89,8 +87,11 @@ SHL1OBJS= \
         $(SLO)$/convert.obj\
         $(SLO)$/docholder.obj\
         $(SLO)$/confighelper.obj\
-        $(SLO)$/closepreventer.obj\
         $(SLO)$/intercept.obj
+
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+
+SHL1TARGET= $(TARGET)
 
 SHL1STDLIBS=\
     $(SALLIB)\
@@ -98,13 +99,27 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)\
     $(CPPUHELPERLIB)
 
+SHL1DEPN=
+SHL1IMPLIB= i$(TARGET)
+
+SHL1LIBS=	$(LIB1TARGET)
+
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
+DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
+            $(LIB1TARGET)
+
+DEFLIB1NAME=$(TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo CLEAR_THE_FILE	> $@
+    @echo __CT				>>$@
 
