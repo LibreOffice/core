@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 12:50:34 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,12 +151,21 @@ javaFrameworkError getVendorPluginURLs(
     const xmlDocPtr doc,
     const xmlXPathContextPtr  context,
     std::vector<PluginLibrary> * vecPlugins);
+
+
+javaFrameworkError getSupportedVendors(
+    const xmlDocPtr doc,
+    const xmlXPathContextPtr  context,
+    std::vector<rtl::OUString> * vecVendors);
+
 bool isAccessibilitySupportDesired();
+
+
 
 javaFrameworkError getVersionInformation(
     const xmlDocPtr doc,
     const xmlXPathContextPtr context,
-    const rtl::OString & sVendor,
+    const rtl::OUString & sVendor,
     VersionInfo *pVersionInfo);
 
 
