@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
+ *  last change: $Author: mt $ $Date: 2001-10-17 15:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,23 +369,6 @@ public:
 #define CHAR_KANA              0x01
 #define CHAR_PUNCTUATIONLEFT   0x02
 #define CHAR_PUNCTUATIONRIGHT  0x04
-
-// MT 06/2001: For keeping information for CJK compression,
-// I don't thing that this is neccessary....
-// See also GetAsianCompressionCharInfo...
-/*
-struct ExtraCharInfo
-{
-    USHORT  nStartPos;
-    USHORT  nEndPos;
-    BYTE    nType;
-
-    ExtraCharInfo( USHORT nS, USHORT nE, BYTE nT ) { nStartPos = nS; nEndPos = nE; nType = nT;}
-};
-
-SV_DECL_VARARR( ExtraCharInfos, ExtraCharInfo, 0, 1 );
-*/
-
 
 // -------------------------------------------------------------------------
 // struct ExtraPortionInfos

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
+ *  last change: $Author: mt $ $Date: 2001-10-17 15:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,9 +596,6 @@ private:
     USHORT              GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     USHORT              GetScriptType( const EditSelection& rSel ) const;
     BOOL                IsScriptChange( const EditPaM& rPaM ) const;
-
-//    USHORT              GetAsianCompressionCharInfo( const EditPaM& rPaM, USHORT* pEndPos ) const;
-//    USHORT              GetAsianCompressionCharInfo( const EditSelection& rSel ) const;
 
     BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, long* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
