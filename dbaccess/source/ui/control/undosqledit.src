@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-25 20:19:50 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 13:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ String STR_QUERY_UNDO_MODIFYSQLEDIT
     Text[ catalan ] = "Modificar SQL";
     Text[ finnish ] = "SQL modifizieren";
 };
+
 
 
 
