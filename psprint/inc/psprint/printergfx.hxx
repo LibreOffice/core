@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ public:
     { maVirtualStatus.maColor = rColor; }
 
     void            PSUploadPS1Font (sal_Int32 nFontID);
-    void            PSSetFont (rtl::OString& rName,
+    void            PSSetFont (const rtl::OString& rName,
                                rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW)
     { maVirtualStatus.maFont = rName; maVirtualStatus.maEncoding = nEncoding; }
 
@@ -435,6 +435,8 @@ public:
     { return mnTextAngle; }
     sal_Int32       GetFontID () const
     { return mnFontID; }
+    bool            GetFontVertical() const
+    { return mbTextVertical; }
     sal_Int32       GetFontHeight () const
     { return maVirtualStatus.mnTextHeight; }
     sal_Int32       GetFontWidth () const
