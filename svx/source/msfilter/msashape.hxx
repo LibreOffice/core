@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ class SvxMSDffAutoShape
         Color                       ImplGetColorData( const Color& rFillColor, sal_uInt32 nIndex );
         double                      ImplGetValue( sal_uInt16 nIndex, sal_uInt32& nGeometryFlags ) const;
         Point                       GetPoint( const SvxMSDffVertPair&, sal_Bool bScale = sal_True ) const;
+
+        static void                 SwapStartAndEndArrow( SdrObject* pObj );
 
     public :
 
