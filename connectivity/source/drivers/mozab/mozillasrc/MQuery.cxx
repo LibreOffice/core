@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
+ *  last change: $Author: jmarmion $ $Date: 2002-09-26 10:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,21 +428,9 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     rv = generateExpression( this, &m_aExpr, queryExpression );
     NS_ENSURE_SUCCESS( rv, rv );
 
-    // Add every atribute we're interested in to the return properties array.
-    ::std::vector< ::rtl::OUString>::iterator aIterAttr = m_aAttributes.begin();
-    char    **returnProperties = new char* [ m_aAttributes.size() + 2 ];
-
-    PRInt32   count=0;
-    returnProperties[count] = strdup( "card:nsIAbCard");
-    for(aIterAttr, count=1; aIterAttr != m_aAttributes.end();++aIterAttr,++count)
-    {
-        ::std::string aAttrName = MTypeConverter::ouStringToStlString(*aIterAttr);
-        returnProperties[count] = strdup( aAttrName.c_str() );
-#ifdef _DEBUG
-        OSL_TRACE("returnProperties[%d] = %s\n", count, returnProperties[count] );
-#endif
-    }
-    returnProperties[count] = NULL;
+    // Use the nsIAbCard to return the card properties.
+    const char    *returnProperties[] = {"card:nsIAbCard"};
+    PRInt32   count=1;
 
     nsCOMPtr< nsIAbDirectoryQueryArguments > arguments = do_CreateInstance( kAbDirectoryQueryArgumentsCID, &rv);
 
@@ -450,7 +438,7 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     rv = arguments->SetExpression(queryExpression);
     NS_ENSURE_SUCCESS( rv, rv );
 
-    rv = arguments->SetReturnProperties(count, (const char **)returnProperties);
+    rv = arguments->SetReturnProperties(count, returnProperties);
     NS_ENSURE_SUCCESS( rv, rv );
 
     rv = arguments->SetQuerySubDirectories(m_bQuerySubDirs);
@@ -465,10 +453,6 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
 
     rv = m_aQueryDirectory->directory->DoQuery(arguments, m_aQueryHelper, m_nMaxNrOfReturns, -1, &m_aQueryDirectory->contextId);
 
-    for ( sal_Int32 j = 0; returnProperties && returnProperties[j]; j++ ) {
-        free( returnProperties[j] );    // use free for mem allocated with strdup()
-    }
-    delete [] returnProperties;
 
     if (NS_FAILED(rv))  {
         m_aQueryDirectory->contextId = -1;
