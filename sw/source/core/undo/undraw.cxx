@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:45:28 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
         const SdrMarkList* pMarkList = 0;
         ViewShell* pSh = GetRootFrm() ? GetRootFrm()->GetCurrShell() : 0;
         if( pSh && pSh->HasDrawView() )
-            pMarkList = &pSh->GetDrawView()->GetMarkList();
+            pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
         AppendUndo( new SwSdrUndo( pUndo, pMarkList ) );
     }
