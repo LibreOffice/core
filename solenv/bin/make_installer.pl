@@ -1152,7 +1152,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             }
 
                             # Adding child projects to installation dynamically
-                            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($newdir); }
+                            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($newdir, $allvariableshashref); }
 
                             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
                             if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($newdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
@@ -1576,7 +1576,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 my $componenttablename = $languageidtdir . $installer::globals::separator . "Componen.idt";
                 my $componenttable = installer::files::read_file($componenttablename);
 
-                installer::windows::idtglobal::add_childprojects($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesinproductlanguageresolvedarrayref);
+                installer::windows::idtglobal::add_childprojects($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesinproductlanguageresolvedarrayref, $allvariableshashref);
 
                 installer::files::save_file($customactiontablename, $customactiontable);
                 installer::files::save_file($installuitablename, $installuitable);
@@ -1645,7 +1645,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         if ($installer::globals::addchildprojects)
         {
-            installer::windows::msiglobal::copy_child_projects_into_installset($installdir);
+            installer::windows::msiglobal::copy_child_projects_into_installset($installdir, $allvariableshashref);
         }
 
         print "... creating ddf files ...\n";
