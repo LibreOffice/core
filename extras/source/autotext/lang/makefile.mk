@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-04 11:36:36 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 03:54:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,14 +66,13 @@ PRJNAME=extras
 TARGET=autotext
 
 .INCLUDE : settings.mk
-
 .INCLUDE : $(PRJ)$/util$/target.pmk
-
-
 
 ZIP1TARGET      = $(AUTOTEXT_SHARE_TARGET)
 
 ZIP1LIST        = $(LANGDIR)$/standar?.bau $(LANGDIR)$/templat?.bau $(LANGDIR)$/crd*.bau
+
+ZIP2FORCEALLLANG = TRUE
 
 ZIP2TARGET      = $(AUTOCORR_TARGET)
 
