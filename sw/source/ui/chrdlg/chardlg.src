@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-28 13:16:51 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 21:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "í”„ë ˆì„(~T)";
         Text[ turkish ] = "~Frame";
         Text[ catalan ] = "~Frame";
-        Text[ finnish ] = "Kohdekehys";
+        Text[ finnish ] = "~Kohdekehys";
     };
     ComboBox LB_TARGET
     {
@@ -641,7 +641,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "ë°©ë¬¸í•œ ë§í¬(~V)";
         Text[ turkish ] = "~Kullanılmış hyperlink";
         Text[ catalan ] = "Vínculos ~visitados";
-        Text[ finnish ] = "~Käydyt linkit";
+        Text[ finnish ] = "~K?ydyt linkit";
     };
     ListBox LB_VISITED
     {
@@ -680,7 +680,7 @@ TabPage TP_CHAR_URL
         Text[ korean ] = "ë°©ë¬¸í•˜ì§€ ì•Šì€ ë§í¬(~L)";
         Text[ turkish ] = "Kullanıl~mamış hyperlink";
         Text[ catalan ] = "Vínculos no v~isitados";
-        Text[ finnish ] = "~Käymättömät linkit";
+        Text[ finnish ] = "~K?ym?tt??t linkit";
     };
     ListBox LB_NOT_VISITED
     {
@@ -693,6 +693,7 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
 
 
 
