@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:16:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "¿É¼Ç(~O)";
         Text[ turkish ] = "~Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Opciones";
     };
     FixedText TXT_SAMPLE
     {
@@ -168,6 +169,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "¹üÁÖ(~A)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Categoría";
     };
     ComboBox BOX_CATEGORY
     {
@@ -205,6 +207,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "¹øÈ£¸Å±â±â(~N)";
         Text[ turkish ] = "~Numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nu~meración";
     };
     ListBox BOX_FORMAT
     {
@@ -242,6 +245,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "Ä¸¼Ç(~C)";
         Text[ turkish ] = "R~esim yazýsý metni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Texto de etiqueta";
     };
     Edit EDT_TEXT
     {
@@ -279,6 +283,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "À§Ä¡(~P)";
         Text[ turkish ] = "K~onum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Posición";
     };
     ListBox BOX_POS
     {
@@ -315,6 +320,7 @@ ModalDialog DLG_CAPTION
         Text[ arabic ] = "ÊØÈíÞ ÇáÍÏæÏ æÇáÙá";
         Text[ turkish ] = "~Kenarlýk ve gölgeyi kullan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aceptar ~borde y sombra";
     };
     FixedText FT_OBJECT_NAME
     {
@@ -341,6 +347,7 @@ ModalDialog DLG_CAPTION
         Text[ arabic ] = "ÇÓã ÇáßÇÆä";
         Text[ turkish ] = "N~esne adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre del objeto";
     };
     Edit ED_OBJECT_NAME
     {
@@ -377,6 +384,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "¼³Á¤";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Configuración";
     };
     String STR_BEGINNING
     {
@@ -403,6 +411,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "½ÃÀÛ";
         Text[ turkish ] = "Baþta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Al principio";
     };
     String STR_END
     {
@@ -429,6 +438,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "³¡";
         Text[ turkish ] = "Sonda";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Al final";
     };
     String STR_ABOVE
     {
@@ -455,6 +465,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "À§";
         Text[ turkish ] = "Üstte";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encima";
     };
     String STR_CP_BELOW
     {
@@ -481,6 +492,7 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "¾Æ·¡";
         Text[ turkish ] = "Altta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Debajo";
     };
     Text[ chinese_simplified ] = "±êÇ©";
     Text[ russian ] = "Ïîäïèñü";
@@ -492,6 +504,7 @@ ModalDialog DLG_CAPTION
     Text[ korean ] = "Ä¸¼Ç";
     Text[ turkish ] = "Resim yazýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Etiqueta";
 };
 ModalDialog DLG_SEQUENCE_OPTION
 {
@@ -546,6 +559,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ korean ] = "Àåº°·Î  ¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración de capítulos";
     };
     FixedText FT_LEVEL
     {
@@ -572,6 +586,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ korean ] = "¼öÁØ(~L)";
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nivel";
     };
     ListBox LB_LEVEL
     {
@@ -664,6 +679,10 @@ ModalDialog DLG_SEQUENCE_OPTION
     {
              < "Yok" ; > ;
     };
+    StringList [ catalan ] =
+    {
+             < "Ninguna" ; > ;
+    };
     };
     FixedText FT_SEPARATOR
     {
@@ -690,6 +709,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ korean ] = "±¸ºÐÀÚ(~S)";
         Text[ turkish ] = "A~yýrma iþr.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Separador";
     };
     Edit ED_SEPARATOR
     {
@@ -718,5 +738,6 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ korean ] = "¼ýÀÚ¡¡¹üÀ§ ¿É¼Ç";
     Text[ turkish ] = "Numara aralýðý seçenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones de secuencias";
 };
  // ********************************************************************** EOF
