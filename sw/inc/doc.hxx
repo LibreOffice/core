@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:57:48 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #ifndef _SFXSTYLE_HXX //autogen // #116530#
 #include <svtools/style.hxx>
 #endif
+
+#include <hash_map>
+#include <stringhash.hxx>
 
 #include <svtools/embedhlp.hxx>
 
@@ -326,7 +329,6 @@ enum SwMoveFlags
 // forward declartion
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
-
 class SwDoc
 {
     friend class SwReader;    // fuers Undo von Insert(SwDoc)
@@ -421,6 +423,9 @@ class SwDoc
                                         // INetHistory
     SvNumberFormatter *pNumberFormatter;    // NumFormatter fuer die Tabellen/Felder
     SwNumRuleTbl    *pNumRuleTbl;           // Liste aller benannten NumRules
+    // Hash map to find numrules by name
+    mutable std::hash_map<String, SwNumRule *, StringHash> aNumRuleMap;
+
     SwRedlineTbl    *pRedlineTbl;           // Liste aller Redlines
     String          *pAutoFmtRedlnComment;  // Kommentar fuer Redlines, die
                                         // uebers Autoformat eingefuegt werden
@@ -1658,6 +1663,10 @@ public:
     sal_Bool NoNum( const SwPaM& );
         // Loeschen, Splitten der Aufzaehlungsliste
     sal_Bool DelNumRules( const SwPaM& );
+
+    // Invalidates all numrules
+    void InvalidateNumRules();
+
         // Hoch-/Runterstufen
     sal_Bool NumUpDown( const SwPaM&, sal_Bool bDown = sal_True );
         // Bewegt selektierte Absaetze (nicht nur Numerierungen)
@@ -2296,6 +2305,8 @@ public:
     BOOL IsFirstOfNumRule(SwPosition & rPos);
     void IndentNumRule(SwPosition & rPos, short nAmount);
     // <- #i23726#
+
+    void RemoveLeadingChars(const SwPosition & rPos, sal_Unicode sChar);
 };
 
 
