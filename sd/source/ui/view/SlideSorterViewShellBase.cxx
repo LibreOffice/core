@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShellBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:57:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,30 @@ class DrawDocShell;
 
 TYPEINIT1(SlideSorterViewShellBase, ViewShellBase);
 
+// We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
+// new SlideSorterViewShellBase object has been constructed.
+
+/*
 SFX_IMPL_VIEWFACTORY(SlideSorterViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+*/
+SfxViewFactory* SlideSorterViewShellBase::pFactory;
+SfxViewShell* __EXPORT SlideSorterViewShellBase::CreateInstance (
+    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+{
+    SlideSorterViewShellBase* pBase = new SlideSorterViewShellBase(pFrame, pOldView);
+    pBase->LateInit();
+    return pBase;
+}
+void SlideSorterViewShellBase::RegisterFactory( USHORT nPrio )
+{
+    pFactory = new SfxViewFactory(
+        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+    InitFactory();
+}
+void SlideSorterViewShellBase::InitFactory()
 {
     SFX_VIEW_REGISTRATION(DrawDocShell);
 }
@@ -83,10 +106,13 @@ SFX_IMPL_VIEWFACTORY(SlideSorterViewShellBase, SdResId(STR_DEFAULTVIEW))
 
 
 
+
+
+
 SlideSorterViewShellBase::SlideSorterViewShellBase (
     SfxViewFrame* pFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (pFrame, pOldShell, ViewShell::ST_SLIDE)
+    : ViewShellBase (pFrame, pOldShell, ViewShell::ST_SLIDE_SORTER)
 {
 }
 
