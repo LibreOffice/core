@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2000-12-06 16:58:45 $
+ *  last change: $Author: vg $ $Date: 2000-12-20 16:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,12 @@
 // TODO: LastInMap(), UnicodeToMapIndex() and MapIndexToUnicode() should be in Font,
 // we let them mature here though because it is currently the only use
 
-int             FirstInMap( const Font& );
-int             LastInMap( const Font& );
-int             UnicodeToMapIndex( const Font&, sal_Unicode c );
-sal_Unicode     MapIndexToUnicode( const Font&, int );
-bool            ContainsSurrogates( const Font& );
-int             CountGlyphs( const Font& );
+static int          FirstInMap( const Font& );
+static int          LastInMap( const Font& );
+static int          UnicodeToMapIndex( const Font&, sal_Unicode c );
+static sal_Unicode  MapIndexToUnicode( const Font&, int );
+static bool         ContainsSurrogates( const Font& );
+static int          CountGlyphs( const Font& );
 
 #define FIRST_UNICODE   sal_Unicode(0x0020)     /* ASCII space code */
 #define LAST_UNICODE    sal_Unicode(0xFFFD)     /* end of UCS2 */
