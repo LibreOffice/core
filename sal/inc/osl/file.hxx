@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-17 09:43:10 $
+ *  last change: $Author: obr $ $Date: 2001-05-21 08:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,6 @@ class VolumeInfo
 {
     oslVolumeInfo   _aInfo;
     sal_uInt32      _nMask;
-    rtl_uString     *_strFileSystemName;
     VolumeDevice    _aDevice;
 
     /** define copy c'tor and assginment operator privat
@@ -367,9 +366,6 @@ public:
     {
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
         rtl_fillMemory( &_aInfo.uValidFields, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ), 0 );
-        _strFileSystemName=NULL;
-        rtl_uString_new( &_strFileSystemName );
-        _aInfo.pstrFileSystemName = &_strFileSystemName;
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
 
@@ -378,8 +374,8 @@ public:
 
     ~VolumeInfo()
     {
-        if (_strFileSystemName!=NULL)
-            rtl_uString_release(_strFileSystemName);
+        if( _aInfo.ustrFileSystemName )
+            rtl_uString_release( _aInfo.ustrFileSystemName );
     }
 
     /** check if specified fields are valid
@@ -462,7 +458,7 @@ public:
 
     inline ::rtl::OUString getFileSystemName() const
     {
-        return _strFileSystemName;
+        return _aInfo.ustrFileSystemName ? ::rtl::OUString( _aInfo.ustrFileSystemName ) : ::rtl::OUSTring();
     }
 
 
@@ -516,8 +512,6 @@ class FileStatus
 {
     oslFileStatus   _aStatus;
     sal_uInt32      _nMask;
-    rtl_uString     *_strLinkTargetURL;
-    rtl_uString     *_strFileURL;
 
     /** define copy c'tor and assginment operator privat
      */
@@ -547,8 +541,6 @@ public:
     {
         _aStatus.uStructSize = sizeof( oslFileStatus );
         rtl_fillMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ), 0 );
-        _aStatus.pstrLinkTargetURL = &_strLinkTargetURL;
-        _aStatus.pstrFileURL = &_strFileURL;
     }
 
     /** D'tor
@@ -556,12 +548,12 @@ public:
 
     ~FileStatus()
     {
-        if ( _strFileURL )
-            rtl_uString_release( _strFileURL );
-        if ( _strLinkTargetURL )
-            rtl_uString_release( _strLinkTargetURL );
-        if ( _aStatus.strFileName )
-            rtl_uString_release( _aStatus.strFileName );
+        if ( _aStatus.ustrFileURL )
+            rtl_uString_release( _aStatus.ustrFileURL );
+        if ( _aStatus.ustrLinkTargetURL )
+            rtl_uString_release( _aStatus.ustrLinkTargetURL );
+        if ( _aStatus.ustrFileName )
+            rtl_uString_release( _aStatus.ustrFileName );
     }
 
     /** check if specified fields are valid
@@ -632,7 +624,7 @@ public:
 
     inline ::rtl::OUString getFileName() const
     {
-        return _aStatus.strFileName ? ::rtl::OUString(_aStatus.strFileName) : ::rtl::OUString();
+        return _aStatus.ustrFileName ? ::rtl::OUString(_aStatus.ustrFileName) : ::rtl::OUString();
     }
 
     /** @return the file path in UNC notation if this information is valid,
@@ -641,7 +633,7 @@ public:
 
     inline ::rtl::OUString getFileURL() const
     {
-        return _strFileURL ? ::rtl::OUString(_strFileURL) : ::rtl::OUString();
+        return _aStatus.ustrFileURL ? ::rtl::OUString(_aStatus.ustrFileURL) : ::rtl::OUString();
     }
 
     /** @return the file path in host notation if this information is valid,
@@ -650,7 +642,7 @@ public:
 
     inline ::rtl::OUString getLinkTargetURL() const
     {
-        return _strLinkTargetURL ? ::rtl::OUString(_strLinkTargetURL) : ::rtl::OUString();
+        return _aStatus.strLinkTargetURL ? ::rtl::OUString(_aStatus.ustrLinkTargetURL) : ::rtl::OUString();
     }
 
     friend class DirectoryItem;

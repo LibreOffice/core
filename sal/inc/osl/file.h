@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pluby $ $Date: 2001-05-18 19:30:16 $
+ *  last change: $Author: obr $ $Date: 2001-05-21 08:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,14 +393,14 @@ struct _oslFileStatus {
     sal_uInt64  uFileSize;
 /** Case correct name of the file. Should be set to zero before calling <code>osl_getFileStatus</code>
     and released after usage. */
-    rtl_uString *strFileName;
+    rtl_uString *ustrFileName;
 /** Full URL of the file. Should be set to zero before calling <code>osl_getFileStatus</code>
     and released after usage. */
-    rtl_uString **pstrFileURL;
+    rtl_uString *ustrFileURL;
 /** Full URL of the target file if the file itself is a link.
     Should be set to zero before calling <code>osl_getFileStatus</code>
     and released after usage. */
-    rtl_uString **pstrLinkTargetURL;
+    rtl_uString *ustrLinkTargetURL;
 } oslFileStatus;
 
 /** Retrieves information about a single file or directory
@@ -524,7 +524,7 @@ struct _oslVolumeInfo {
     sal_uInt32      uMaxPathLength;
 /** Name of the file system type. Should be set to zero before calling <code>osl_getVolumeInformation</code>
     and released after usage. */
-    rtl_uString     **pstrFileSystemName;
+    rtl_uString     *ustrFileSystemName;
 /** Handle of underlying device */
     oslVolumeDeviceHandle   *pDeviceHandle;
 } oslVolumeInfo;
