@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:31:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ TabDialog DLG_FRM_STD
 TabDialog DLG_FRM_GRF
 {
     SVLook = TRUE ;
-    Text [ de ] = "Grafik" ;
+    Text [ de ] = "Bild" ;
     Text [ en-US ] = "Picture" ;
     Moveable = TRUE ;
     TabControl 1
@@ -178,7 +178,7 @@ TabDialog DLG_FRM_GRF
             {
                 Identifier = TP_GRF_EXT ;
                 PageResID = TP_GRF_EXT ;
-                Text [ de ] = "Grafik" ;
+                Text [ de ] = "Bild" ;
                 Text [ en-US ] = "Picture" ;
             };
             PageItem
