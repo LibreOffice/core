@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 13:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _SFXPTITEM_HXX //autogen
 #include <svtools/ptitem.hxx>
+#endif
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
 #endif
 #ifndef _POLY_HXX //autogen
 #include <vcl/poly.hxx>
@@ -265,6 +268,9 @@
 #endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
+#endif
+#ifndef _SCRPMTCH_HXX
+#include <scrpmtch.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -1838,16 +1844,54 @@ void SwBaseShell::ExecTxtCtrl(SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
 
-    SwWrtShell &rSh = GetShell();
-    if (!pArgs)
-        GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG, FALSE);
-    else
+    if( pArgs)
     {
-        rSh.SetAttr(*pArgs);
-        SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-        if(pColl && pColl->IsAutoUpdateFmt())
-            rSh.AutoUpdatePara(pColl, *pArgs);
+        SwWrtShell &rSh = GetShell();
+        USHORT nWhich = pArgs->GetPool()->GetWhich( rReq.GetSlot() );
+        GetLatinAsianComplexAttr* pGetAttr = 0;
+        switch( nWhich )
+        {
+        case RES_CHRATR_FONT:
+        case RES_CHRATR_FONTSIZE:
+        case RES_CHRATR_POSTURE:
+        case RES_CHRATR_WEIGHT:
+        case RES_CHRATR_LANGUAGE:
+            pGetAttr = new GetLatinAsianComplexAttr( nWhich, rSh );
+            SfxItemSet* pSet = (SfxItemSet*)pGetAttr->GetItemSet(
+                                                    rSh.GetScriptType() );
+            if( pSet )
+            {
+                SfxPoolItem* pNew = pArgs->Get( nWhich ).Clone();
+                SfxItemIter aIter( *pSet );
+                const SfxPoolItem* pItem = aIter.GetCurItem();
+                while( TRUE )
+                {
+                    pNew->SetWhich( pItem->Which() );
+                    pSet->Put( *pNew );
 
+                    if( aIter.IsAtEnd() )
+                        break;
+                    pItem = aIter.NextItem();
+                }
+                delete pNew;
+            }
+            pArgs = pSet;
+            break;
+        }
+
+        if( pArgs )
+        {
+            SwTxtFmtColl* pColl;
+            if( (!(RES_CHRATR_BEGIN <= nWhich && nWhich < RES_CHRATR_END ) ||
+                ( rSh.HasSelection() && rSh.IsSelFullPara() ) ) &&
+                0 != (pColl = rSh.GetCurTxtFmtColl()) &&
+                pColl->IsAutoUpdateFmt() )
+                rSh.AutoUpdatePara( pColl, *pArgs );
+            else
+                rSh.SetAttr( *pArgs );
+
+            delete pGetAttr;
+        }
     }
 }
 
@@ -1855,31 +1899,69 @@ void SwBaseShell::ExecTxtCtrl(SfxRequest& rReq)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwBaseShell::GetTxtCtrlState(SfxItemSet& rSet)
+void SwBaseShell::GetTxtCtrlState( SfxItemSet& rSet )
 {
-    GetShell().GetAttr(rSet);
-/*
-#ifdef UNX
-    // Timing-Probleme: Wenn der Timer ausloest, der u.a. die FontList ermitteln
-    // will, ist die DocShell u.U. (bei langen Startup-Phasen wie z.B. unter
-    // Unix) noch gar nicht angelegt (->SF). In diesem Fall holen wir uns
-    // die FontList einfach vom AppWindow. Ein sp"aterer Timer-Aufruf wird's
-    // dann schon richten.
-    if( !GetView().GetDocShell() )
-    {
-        FontList aFontList(::GetGetpApp()()->GetAppWindow());
-        SvxFontListItem aFontListItem( &aFontList , SID_ATTR_CHAR_FONTLIST );
-        rSet.Put( aFontListItem );
-    }
-    else
-#endif
-    {
-        SvxFontListItem aFontListItem(GetView().GetDocShell()->GetFontList(), SID_ATTR_CHAR_FONTLIST);
-        rSet.Put(aFontListItem);
-    }
+    SwWrtShell &rSh = GetShell();
+    rSh.GetAttr( rSet );
+}
 
-    GetShell().GetAttr(rSet);   // *alle* Textattribute von der Core erfragen
-    */
+void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
+{
+    SwWrtShell &rSh = GetShell();
+    rSh.GetAttr( rSet );
+
+    USHORT nWhich = rSet.GetWhichByPos( 0 );
+    switch( nWhich )
+    {
+    case RES_CHRATR_FONT:
+    case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_POSTURE:
+    case RES_CHRATR_WEIGHT:
+    case RES_CHRATR_LANGUAGE:
+        {
+            GetLatinAsianComplexAttr aGetAttr( nWhich, rSh );
+            const SfxItemSet* pSet = aGetAttr.GetItemSet(
+                                                rSh.GetScriptType(), rSet );
+            if( pSet )
+            {
+                SfxItemIter aIter( *pSet );
+                const SfxPoolItem* pItem = aIter.GetCurItem();
+                SfxPoolItem* pSetItem = 0;
+                while( (SfxPoolItem*)-1 != pSetItem )
+                {
+                    if( !pSetItem )
+                    {
+                        pSetItem = pItem->Clone();
+                        pSetItem->SetWhich( nWhich );
+                    }
+                    else
+                    {
+                        SfxPoolItem* pCmp = pItem->Clone();
+                        pCmp->SetWhich( nWhich );
+                        if( *pSetItem != *pCmp )
+                        {
+                            delete pSetItem;
+                            pSetItem = (SfxPoolItem*)-1;
+                        }
+                        delete pCmp;
+                    }
+                    if( aIter.IsAtEnd() )
+                        break;
+                    pItem = aIter.NextItem();
+                }
+
+                if( (SfxPoolItem*)-1 != pSetItem && 0 != pSetItem )
+                {
+                    rSet.Put( *pSetItem );
+                    delete pSetItem;
+                }
+            }
+        }
+        break;
+
+    default:
+        ASSERT( !this, "wrong Which Id in the set" );
+    }
 }
 
 /*--------------------------------------------------------------------
@@ -2451,6 +2533,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:46  hr
+    initial import
+
     Revision 1.404  2000/09/18 16:06:02  willem.vandorp
     OpenOffice header added.
 
