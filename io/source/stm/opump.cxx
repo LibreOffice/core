@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-20 09:04:37 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 15:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ Pump::~Pump()
 {
     // exit gracefully
     osl_joinWithThread( m_aThread );
-    osl_freeThreadHandle( m_aThread );
+    osl_destroyThread( m_aThread );
 }
 
 void Pump::fireError( list< Reference< XStreamListener > > &aList , Any & exception )

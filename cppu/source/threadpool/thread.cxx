@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-02-20 12:43:51 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 15:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ namespace cppu_threadpool {
     {
         if (m_thread != 0)
         {
-            osl_freeThreadHandle(m_thread);
+            osl_destroyThread(m_thread);
         }
     }
 
