@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-10-26 09:05:41 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,9 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     aInfo.aSize = pWindow->GetSizePixel();
     if ( pWindow->IsSystemWindow() )
         aInfo.aWinState = ((SystemWindow*)pWindow)->GetWindowState();
+    else if ( pWindow->GetType() == RSC_DOCKINGWINDOW && ((DockingWindow*)pWindow)->GetFloatingWindow() )
+        aInfo.aWinState = ((DockingWindow*)pWindow)->GetFloatingWindow()->GetWindowState();
+
     aInfo.bVisible = pImp->bVisible;
     aInfo.nFlags = 0;
     return aInfo;
@@ -354,8 +357,8 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
         aSeq[0].Value >>= aTmp;
 
     String aWinData( aTmp );
-    String aWinState = aWinOpt.GetWindowState();
-    ImplWindowStateFromStr( rInfo.aPos, rInfo.aSize, ByteString( aWinState, RTL_TEXTENCODING_UTF8 ) );
+    rInfo.aWinState = ByteString( String(aWinOpt.GetWindowState()), RTL_TEXTENCODING_UTF8 );
+    //ImplWindowStateFromStr( rInfo.aPos, rInfo.aSize, ByteString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     if ( aWinData.Len() )
     {
