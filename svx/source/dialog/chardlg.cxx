@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-11 05:51:17 $
+ *  last change: $Author: gt $ $Date: 2001-10-22 11:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,8 +620,6 @@ void SvxCharNamePage::UpdatePreview_Impl()
     rCJKFont.SetWeight( aCJKFontInfo.GetWeight() );
     rCJKFont.SetItalic( aCJKFontInfo.GetItalic() );
     rCJKFont.SetSize( aCJKFontInfo.GetSize() );
-
-    SetFontWidthScale( GetItemSet() );
 
     m_aPreviewWin.Invalidate();
     m_aFontTypeFT.SetText( pFontList->GetFontMapText( aFontInfo ) );
