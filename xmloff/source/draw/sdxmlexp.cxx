@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-05 15:44:41 $
+ *  last change: $Author: ka $ $Date: 2000-12-05 17:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2394,7 +2394,7 @@ void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
         {
             aAny = xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")));
             aAny >>= aStr;
-            rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStr );
+            rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, rExp.AddEmbeddedGraphicObject( aStr ) );
 
             aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_simple));
             rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_type, aStr );
