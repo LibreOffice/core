@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 03:05:21 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:50:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,7 @@ EXEC_CLASSPATH_TMP = \
 EXEC_CLASSPATH = \
     $(strip $(subst,!,$(PATH_SEPERATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
-JARFILES = juh.jar jurt.jar ridl.jar sandbox.jar
+JARFILES = juh.jar jurt.jar ridl.jar
 JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/TestAny.class \
     $(CLASSDIR)$/$(PACKAGE)$/TestRemote.class \
