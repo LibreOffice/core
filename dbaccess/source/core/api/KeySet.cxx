@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-16 12:11:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 #ifndef DBACCESS_CORE_API_KEYSET_HXX
 #include "KeySet.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -464,7 +470,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         aSql += sSetValues;
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("No modified Values!"),m_xConnection,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_VALUE_CHANGED),m_xConnection,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
 
     if(sKeyCondition.getLength() || sIndexCondition.getLength())
     {
@@ -488,7 +494,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         aSql += aCondition;
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("No where condition!"),m_xConnection,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_CONDITION_FOR_PK),m_xConnection,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
 
 
     // now create end execute the prepared statement
