@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+
 #ifndef _SFX_TEMPLDLG_HXX //autogen
 #include <sfx2/templdlg.hxx>
 #endif
@@ -86,18 +88,39 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "glob.hrc"
-#include "docshell.hxx"
-#include "grdocsh.hxx"
-#include "drviewsh.hxx"
-#include "grviewsh.hxx"
-#include "animobjs.hxx"
-#include "navichld.hxx"
-#include "prevchld.hxx"
-#include "efctchld.hxx"
-#include "slidchld.hxx"
-//#include "3dchld.hxx"
+#include "sdresid.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
+#ifndef SD_ANIMATION_CHILD_WINDOW_HXX
+#include "AnimationChildWindow.hxx"
+#endif
+#ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
+#include "NavigatorChildWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_EFFECT_CHILD_WINDOW_HXX
+#include "EffectChildWindow.hxx"
+#endif
+#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
+#include "SlideChangeChildWindow.hxx"
+#endif
 
+using namespace sd;
+#define DrawViewShell
+#include "sdslots.hxx"
+#define GraphicViewShell
+#include "sdgslots.hxx"
 
+namespace sd {
 
 #define TABCONTROL_INITIAL_SIZE     500
 
@@ -109,10 +132,8 @@
 
 SFX_DECL_TYPE(13);
 
-#define SdDrawViewShell
-#include "sdslots.hxx"
 
-SFX_IMPL_INTERFACE(SdDrawViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
+SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
 {
     SFX_POPUPMENU_REGISTRATION( SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP) );
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
@@ -130,12 +151,11 @@ SFX_IMPL_INTERFACE(SdDrawViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SdAnimationChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SdPreviewChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SdEffectChildWindow::GetChildWindowId() );
-    //SFX_CHILDWINDOW_REGISTRATION( Sd3DChildWindow::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( AnimationChildWindow::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( EffectChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( Svx3DChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SdSlideChangeChildWindow::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( SlideChangeChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( GalleryChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
@@ -144,20 +164,14 @@ SFX_IMPL_INTERFACE(SdDrawViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
 }
 
-SFX_IMPL_VIEWFACTORY(SdDrawViewShell, SdResId(STR_DEFAULTVIEW) )
-{
-    SFX_VIEW_REGISTRATION(SdDrawDocShell);
-}
 
-TYPEINIT1( SdDrawViewShell, SdViewShell );
+TYPEINIT1( DrawViewShell, ViewShell );
 
 
 // SdGraphicViewShell
 
-#define SdGraphicViewShell
-#include "sdgslots.hxx"
 
-SFX_IMPL_INTERFACE(SdGraphicViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL)) //SOH...
+SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH...
 {
     SFX_POPUPMENU_REGISTRATION( SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP) );
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
@@ -176,7 +190,7 @@ SFX_IMPL_INTERFACE(SdGraphicViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( SdAnimationChildWindow::GetChildWindowId() );
-    /* ? */SFX_CHILDWINDOW_REGISTRATION( SdPreviewChildWindow::GetChildWindowId() );
+    /* ? */SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( SdEffectChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( SdSlideChangeChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( Sd3DChildWindow::GetChildWindowId() );
@@ -189,11 +203,7 @@ SFX_IMPL_INTERFACE(SdGraphicViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
 }
 
-SFX_IMPL_VIEWFACTORY(SdGraphicViewShell, SdResId(STR_DEFAULTVIEW) )
-{
-    SFX_VIEW_REGISTRATION(SdGraphicDocShell);
-}
-
-TYPEINIT1( SdGraphicViewShell, SdDrawViewShell );
+TYPEINIT1( GraphicViewShell, DrawViewShell );
 
 
+} // end of namespace sd
