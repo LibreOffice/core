@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:48:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 12:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,6 +1344,13 @@ StackVar ScInterpreter::GetStackType( BYTE nParam )
 
 BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
 {
+    // Check for a singleton first - no implicit intersection for them.
+    if( rRange.aStart == rRange.aEnd )
+    {
+        rAdr = rRange.aStart;
+        return TRUE;
+    }
+
     BOOL bOk = FALSE;
 
     if ( pJumpMatrix )
