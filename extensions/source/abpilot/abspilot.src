@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-25 20:32:03 $
+ *  last change: $Author: obo $ $Date: 2001-11-01 21:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ polish ] = "%PRODUCTNAME umo�liwia dost�p do danych adresowych istniej�cych ju� w systemie komputera. Utworzone zostanie w tym celu �r�d�o danych programu %PRODUCTNAME, udost�pniaj�ce ksi��ki adresowe u�ytkownika, wy�wietlane w postaci tabel.\n\nW tworzeniu �r�d�a danych pomocny b�dzie niniejszy AutoPilot.";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ japanese ] = "%PRODUCTNAME はｼｽﾃﾑ上の既存のｱﾄﾞﾚｽ帳ﾃﾞｰﾀにｱｸｾｽできます。\nｱﾄﾞﾚｽ帳ﾃﾞｰﾀにｱｸｾｽするには、ﾃｰﾌﾞﾙ形式でｱｸｾｽできる %PRODUCTNAME ﾃﾞｰﾀｿｰｽを作成します。\n\nこのﾃﾞｰﾀｿｰｽの設定をｵｰﾄﾊﾟｲﾛｯﾄがお手伝いします。";
-        Text[ korean ] = "%PRODUCTNAME에서는 사용자의 시스템이 있는 주소 데이터를 액세스할 수 있습니다.\n이 작업을 위해 새 %PRODUCTNAME 데이터 소스가 생성되며, 이 데이터 소스에서 주소 데이터를 테이블로 사용할 수 있습니다.\n\n이 자동 파일럿이 이 데이터 소스의 생성 작업을 지원합니다.";
+        Text[ korean ] = "%PRODUCTNAME에서는 사용자의 시스템이 있는 주소 데이터를 액세스할 수 있습니다.\n이 작업을 위해 새 %PRODUCTNAME 데이터 소스가 생성되며, 이 데이터 소스에서 주소 데이터를 표로 사용할 수 있습니다.\n\n이 자동 파일럿이 이 데이터 소스의 생성 작업을 지원합니다.";
         Text[ chinese_simplified ] = "%PRODUCTNAME 允许您读取系统上现有的通讯簿数据。对此程序会建立一个 %PRODUCTNAME 数据源，这样您的通讯簿便会变成此数据源中的一个工作表以供读取。\n\n自动文档助理会帮助您建立这个数据源。";
         Text[ chinese_traditional ] = "%PRODUCTNAME 向您提供一個存取系統的通訊錄資料的功能。在執行這個功能時會建立一個新的 %PRODUCTNAME 資料源，通訊錄就會變成這個資料庫的一個資料表。\n\n您透過這個自動檔案助理就可以建立這樣的一個資料源。";
         Text[ turkish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
@@ -493,7 +493,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ polish ] = "Podane zewn�trzne �r�d�o danych zawiera kilka zbior�w adres�w.\nNale�y wybra� zbi�r, kt�ry b�dzie g�ownie u�ywany:";
         Text[ portuguese_brazilian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
         Text[ japanese ] = "選択した外部ﾃﾞｰﾀｿｰｽには複数のｱﾄﾞﾚｽ帳ﾃﾞｰﾀが含まれています。\n主に作業に必要なものをその中から選択してください。";
-        Text[ korean ] = "선택한 외부 데이터 소스에 두 개 이상의 주소록(또는 각 테이블)이 들어 있습니다.\n기본으로 사용할 주소록을 선택하십시오:";
+        Text[ korean ] = "선택한 외부 데이터 소스에 두 개 이상의 주소록(또는 각 표)이 들어 있습니다.\n기본으로 사용할 주소록을 선택하십시오:";
         Text[ chinese_simplified ] = "您选定的外部数据源内含有多个地址资料表格。\n请选择一个您经常要使用的表格：";
         Text[ chinese_traditional ] = "已經選取的外來資料源內含多個地址資料(也就是多個資料表格)。\n請選擇其中一個大都會要使用的表格：";
         Text[ turkish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
@@ -524,7 +524,7 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ polish ] = "Wybierz tabel�";
     Text[ portuguese_brazilian ] = "Select Table";
     Text[ japanese ] = "ﾃｰﾌﾞﾙの選択";
-    Text[ korean ] = "테이블 선택";
+    Text[ korean ] = "표 선택";
     Text[ chinese_simplified ] = "选择表格";
     Text[ chinese_traditional ] = "選擇表格";
     Text[ turkish ] = "Select Table";
@@ -572,7 +572,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ polish ] = "Aby m�c zastoswa� dane adresowe w szablonach, program %PRODUCTNAME musi wiedzie�, w jakich polach znajduj� si� okre�lone dane.\n\nMo�na np. zapisa� adresy u�ywane w poczcie elektronicznej w polu \"e-mail\" lub w polu o innej nazwie.\n\nPo klikni�ciu poni�szego przycisku wy�wietlone zostanie nowe okno dialogowe, w kt�rym mo�na dokona� odpowiednich ustawie� �r�d�a danych.";
         Text[ portuguese_brazilian ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ japanese ] = "ｱﾄﾞﾚｽ帳ﾃﾞｰﾀがﾃﾝﾌﾟﾚｰﾄのﾄﾞｷｭﾒﾝﾄにも使用できるように、どのﾌｨｰﾙﾄﾞにどのﾃﾞｰﾀを入力するか %PRODUCTNAME が読み取れるようにしておく必要があります。\n\nたとえば、E-mail ｱﾄﾞﾚｽの名前が「E-Mail」、「EMail」、「EM」、あるいは全く異なった名前で保存されている可能性もあります。\n\n下にあるﾎﾞﾀﾝをｸﾘｯｸすると、ﾃﾞｰﾀｿｰｽの設定に必要なその他のﾀﾞｲｱﾛｸﾞが開かれます。";
-        Text[ korean ] = "서식파일 문서 안에 주소 데이터를 통합하려면 어떤 필드가 어떤 구체적인 데이터를 함유하는지 %PRODUCTNAME에서 어떤 필드에 구체적인 데이터가 포함되는지 알아야 합니다.\n\n예를 들면, E 메일 주소를 \"E-Mail\", \"E-Mail\", \"EM\" 또는 전혀 다른 이름의 필드에 저장했을 수 있습니다.\n\n아래 버튼을 누르면 또 하나의 대화상자가 열립니다. 이 대화상자에서는 데이터 소스에 대해 이 필드 할당을 수행할 수 있습니다.";
+        Text[ korean ] = "서식 파일 문서 안에 주소 데이터를 통합하려면 어떤 필드가 어떤 구체적인 데이터를 포함하는지 %PRODUCTNAME에서 어떤 필드에 구체적인 데이터가 포함되는지 알아야 합니다.\n\n예를 들면, E 메일 주소를 \"E-Mail\", \"E-Mail\", \"EM\" 또는 전혀 다른 이름의 필드에 저장했을 수 있습니다.\n\n아래 버튼을 누르면 또 하나의 대화상자가 열립니다. 이 대화상자에서는 데이터 소스에 대해 이 필드 할당을 수행할 수 있습니다.";
         Text[ chinese_simplified ] = "要在文档样式内正确使用通讯簿数据，就必须让 %PRODUCTNAME 知道哪些字段含有何种数据。\n\n例如，您可以在一个自己设定名称的字段内，或者在一个采用字段名称\"EMail\"，或\"E-Mail\" 或\"EM\"的字段之内保存电子邮件地址。\n\n点击下方的按钮后，就会打开一个提供进行数据源设定的对话框。";
         Text[ chinese_traditional ] = "要在文件樣式之中正確使用通訊錄資料就必須讓 %PRODUCTNAME 知道哪些欄位含有何種資料。\n\n例如，可以在一個自訂名稱的欄位之內或在一個採用欄位名稱<EMail>，或<E-Mail>或<EM>欄位之內儲存電子郵件地址。\n\n按下方的按鈕，就會開啓一個提供設定資料源的對話方塊。";
         Text[ turkish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
@@ -669,7 +669,7 @@ TabPage RID_PAGE_FINAL
         Text[ polish ] = "Podano wszystkie dane wymagane do integracji danych adresowych w programie %PRODUCTNAME.\n\nTeraz nale�y wpisa� jeszcze nazw�, pod kt�r� �r�d�o danych zarejestrowane zostanie w programie %PRODUCTNAME.";
         Text[ portuguese_brazilian ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ japanese ] = "これでお使いのｱﾄﾞﾚｽ帳ﾃﾞｰﾀを %PRODUCTNAME に統合する準備が整いました。\n\n最後に %PRODUCTNAME のﾃﾞｰﾀｿｰｽに登録する名前を入力します。";
-        Text[ korean ] = "이 정보 모두가는 %PRODUCTNAME에 주소 데이터를 통합하는데 필요한 데이터입니다.\n\n이제 %PRODUCTNAME에 데이터 소스를 등록하는데 사용할 이름을 입력하십시오.";
+        Text[ korean ] = "이 정보 모두가는 %PRODUCTNAME에 주소 데이터를 통합하는데 필요한 데이터입니다.\n\n이제 %PRODUCTNAME에 데이터 소스를 등록하는 데 사용할 이름을 입력하십시오.";
         Text[ chinese_simplified ] = "您已经完成所有的 %PRODUCTNAME 整合通讯簿数据的设定。\n\n现在您只需要输入 %PRODUCTNAME 用来登记这个数据源的名称。";
         Text[ chinese_traditional ] = "您已經完成所有必須的 %PRODUCTNAME 整合通訊錄資料的設定。\n\n現在您只需要輸入 %PRODUCTNAME 用來登記和使用這個資料源的名稱。";
         Text[ turkish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
@@ -820,7 +820,7 @@ QueryBox RID_QRY_NOTABLES
     Message[ polish ] = "�r�d�o danych nie zawiera �adnych tabel.\nCzy pomimo tego utworzy� �r�d�o danych adresowych?";
     Message[ portuguese_brazilian ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ japanese ] = "このﾃﾞｰﾀｿｰｽにﾃｰﾌﾞﾙはひとつもありません。\nそれでもｱﾄﾞﾚｽ帳ﾃﾞｰﾀｿｰｽとして設定しますか。";
-    Message[ korean ] = "데이터 소스에 테이블이 들어 있지 않습니다.\n그래도 데이터 소스를 주소 데이터 소스로서 설치하시겠습니까?";
+    Message[ korean ] = "데이터 소스에 표가 들어 있지 않습니다.\n그럼에도 불구하고 데이터 소스를 주소 데이터 소스로서 설치하겠습니까?";
     Message[ chinese_simplified ] = "这个数据源没有包含任何表格。\n您还是要设定该数据源为通讯簿数据源？";
     Message[ chinese_traditional ] = "這個資料源沒有任何的資料表格。\n還是要建立這個通訊錄資料源？";
     Message[ turkish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
@@ -867,7 +867,7 @@ String RID_STR_ADMINDIALOGTITLE
     Text[ french ] = "Cr�ation de la source de donn�es des adresses";
     Text[ spanish ] = "Crear fuente de datos de direcciones";
     Text[ finnish ] = "Create Address Data Source";
-    Text[ italian ] = "Crea indirizzi sorgente dati";
+    Text[ italian ] = "Crea sorgente dati Rubrica";
     Text[ danish ] = "Create Address Data Source";
     Text[ swedish ] = "Skapa adressdatak�lla";
     Text[ polish ] = "Utw�rz �r�d�o danych adresowych";
@@ -982,7 +982,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ polish ] = "Brak przyporz�dkowanych p�l.\nPola mo�na przyporz�dkowa� r�wnie� p�niej,\nwybieraj�c sekwencj� \"Plik - Szablon dokumentu - �r�d�o danych adresowych...\"";
     Text[ portuguese_brazilian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ japanese ] = "現在、ﾌｨｰﾙﾄﾞの割り当てはされていません。\n今すぐに割り当てが決められなければ、あとからでも割り当てできます。\nそのときはﾒﾆｭｰの ﾌｧｲﾙ → ﾄﾞｷｭﾒﾝﾄﾃﾝﾌﾟﾚｰﾄ → ｱﾄﾞﾚｽ帳ｿｰｽ... ｺﾏﾝﾄﾞで実行します。";
-    Text[ korean ] = "현재는 할당된 필드가 없습니다.\n지금 할당하기를 원치 않을 경우 나중에 언제라도\n메뉴 \"파일 - 서직파일 - 주소록 소스 ...\" 메뉴를 사용하여 할당할 수 있습니다.";
+    Text[ korean ] = "현재는 할당된 필드가 없습니다.\n지금 할당하지 않을 경우 나중에 언제라도\n메뉴 \"파일 - 서직파일 - 주소록 소스 ...\" 메뉴를 사용하여 할당할 수 있습니다.";
     Text[ chinese_simplified ] = "至今还未指定任何的字段。\n如果现在不指定字段，也可以以后再做这个设定：\n点击菜单\"文件 - 文档样式 - 通讯簿数据源...\"";
     Text[ chinese_traditional ] = "至今還未指定任何欄位。\n如果現在不指定欄位，也可以以後再做這個設定：\n按功能表<檔案>-<文件樣式>-<通訊錄資料源...>。";
     Text[ turkish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
@@ -1010,7 +1010,7 @@ String RID_STR_ABP_SUCCESS
     Text[ polish ] = "Zewn�trzna ksi��ka adresowa zosta�a zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych mo�na teraz u�ywa� tak jak innego �r�d�a danych.";
     Text[ portuguese_brazilian ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ japanese ] = "外部ｱﾄﾞﾚｽ帳の %PRODUCTNAME への登録は正常に完了しました。\nこれからはｱﾄﾞﾚｽ帳ﾃﾞｰﾀもほかのﾃﾞｰﾀｿｰｽと同じように使用が可能です。";
-    Text[ korean ] = "외부 주소록이 성공적으로 %PRODUCTNAME에 등록되었습니다.\n이제 주소 데이터를 다른 임의의 데이터 소스처럼 액세스할 수 있습니다.";
+    Text[ korean ] = "외부 주소록이 성공적으로 %PRODUCTNAME에 등록되었습니다.\n이제 주소 데이터를 다른 모든 데이터 소스처럼 액세스할 수 있습니다.";
     Text[ chinese_simplified ] = "外来的通讯簿已经成功地登记到 %PRODUCTNAME 里。\n这样，您就能够如同使用任何一个其他的数据源一样随意使用您的通讯簿。";
     Text[ chinese_traditional ] = "%PRODUCTNAME 已經成功地登記這個外來的通訊錄。\n從現在起您就能夠如同使用任何一個其他的資料源一樣方便地使用這個通訊錄。";
     Text[ turkish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
@@ -1028,6 +1028,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/10/25 20:32:03  rt
+ *  Merge SRC641: 25.10.01 - 22:32:24
+ *
  *  Revision 1.21  2001/10/19 21:46:09  kz
  *  Merge SRC641: 10/19/01 - 23:46:27
  *
@@ -1094,6 +1097,7 @@ Bitmap BMP_HEADERIMAGE
  *
  *  Revision 1.0 26.07.01 09:03:45  fs
  ************************************************************************/
+
 
 
 
