@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 16:27:39 $
+ *  last change: $Author: iha $ $Date: 2003-12-08 17:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ void DrawViewWrapper::ReInit()
     this->SetGridVisible(false);
     this->SetGridFront(false);
     this->SetHlplVisible(false);
+    this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
+    //this->SetResizeAtCenter(true);//for interactive resize-dragging: keep the object center fix
 }
 
 DrawViewWrapper::~DrawViewWrapper()
