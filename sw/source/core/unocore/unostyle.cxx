@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-16 12:16:17 $
+ *  last change: $Author: mtg $ $Date: 2001-10-17 12:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,12 @@
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -225,6 +231,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
+using com::sun::star::frame::XModel;
 /******************************************************************************
  *
  ******************************************************************************/
@@ -943,6 +950,8 @@ public:
 
     sal_Bool    SetProperty(const String& rName, Any aVal);
     sal_Bool    GetProperty(const String& rName, Any*& rpAny);
+    void        GetProperty(const OUString &rPropertyName, const Reference < XPropertySet > &rxPropertySet, uno::Any& rAny );
+
 
     const SfxItemPropertyMap*   GetPropertyMap() const {return _pMap;}
 };
@@ -1004,6 +1013,11 @@ sal_Bool SwStyleProperties_Impl::GetProperty(const String& rName, Any*& rpAny )
     if(nPos < nArrLen)
         rpAny = pAnyArr[nPos];
     return nPos < nArrLen;
+}
+
+void SwStyleProperties_Impl::GetProperty( const OUString &rPropertyName, const Reference < XPropertySet > &rxPropertySet, uno::Any & rAny )
+{
+    rAny = rxPropertySet->getPropertyValue( rPropertyName );
 }
 
 /******************************************************************
@@ -1099,27 +1113,67 @@ Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( RuntimeExce
 /*-- 17.12.98 08:26:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXStyle::SwXStyle(SfxStyleFamily eFam, BOOL bConditional) :
-    m_pDoc(0),
+SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, BOOL bConditional) :
+    m_pDoc( pDoc ),
     bIsDescriptor(sal_True),
     bIsConditional(bConditional),
     eFamily(eFam),
     pBasePool(0)
 {
-    sal_uInt16 nMapId = PROPERTY_MAP_CHAR_STYLE;
+    // Register ourselves as a listener to the document (via the page descriptor)
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    // get the property set for the default style data
+    // First get the model
+    Reference < XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
+    // Ask the model for it's family supplier interface
+    Reference < XStyleFamiliesSupplier > xFamilySupplier ( xModel, UNO_QUERY );
+    // Get the style families
+    Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
+
+    Any aAny;
+    sal_uInt16 nMapId;
     switch( eFamily )
     {
-        //case SFX_STYLE_FAMILY_CHAR:   nMapId = PROPERTY_MAP_CHAR_STYLE;       break;
-        case SFX_STYLE_FAMILY_PARA: nMapId = PROPERTY_MAP_PARA_STYLE;       break;
-        case SFX_STYLE_FAMILY_PAGE: nMapId = PROPERTY_MAP_PAGE_STYLE;       break;
-        case SFX_STYLE_FAMILY_FRAME :   nMapId = PROPERTY_MAP_FRAME_STYLE;  break;
-        case SFX_STYLE_FAMILY_PSEUDO:   nMapId = PROPERTY_MAP_NUM_STYLE;    break;
+        case SFX_STYLE_FAMILY_CHAR:
+        {
+            nMapId = PROPERTY_MAP_CHAR_STYLE;
+        }
+        break;
+        case SFX_STYLE_FAMILY_PARA:
+        {
+            nMapId = PROPERTY_MAP_PARA_STYLE;
+            aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ParagraphStyles" ) ) );
+            // Get the Frame family (and keep it for later)
+            aAny >>= mxStyleFamily;
+            aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Standard" ) ) );
+            aAny >>= mxStyleData;
+        }
+        break;
+        case SFX_STYLE_FAMILY_PAGE:
+        {
+            nMapId = PROPERTY_MAP_PAGE_STYLE;
+            aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PageStyles" ) ) );
+            // Get the Frame family (and keep it for later)
+            aAny >>= mxStyleFamily;
+            aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Standard" ) ) );
+            aAny >>= mxStyleData;
+        }
+        break;
+        case SFX_STYLE_FAMILY_FRAME :
+        {
+            nMapId = PROPERTY_MAP_FRAME_STYLE;
+        }
+        break;
+        case SFX_STYLE_FAMILY_PSEUDO:
+        {
+            nMapId = PROPERTY_MAP_NUM_STYLE;
+        }
+        break;
     }
     pPropImpl = new SwStyleProperties_Impl(aSwMapProvider.GetPropertyMap(nMapId));
 }
-/*-- 17.12.98 08:26:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
         SwDoc*  pDoc,   const String& rStyleName) :
     sStyleName(rStyleName),
@@ -1158,6 +1212,16 @@ SwXStyle::~SwXStyle()
 /*-- 17.12.98 08:26:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+void SwXStyle::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+    {
+        m_pDoc = 0;
+        mxStyleData.clear();
+        mxStyleFamily.clear();
+    }
+}
 OUString SwXStyle::getName(void) throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1288,6 +1352,20 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
     else if(bIsDescriptor)
     {
         sParentStyleName = String(sParentStyle);
+        try
+        {
+            Any aAny = mxStyleFamily->getByName ( sParentStyle );
+            aAny >>= mxStyleData;
+        }
+        catch ( container::NoSuchElementException& )
+        {
+        }
+        catch ( WrappedTargetException& )
+        {
+        }
+        catch ( RuntimeException& )
+        {
+        }
     }
     else
         throw RuntimeException();
@@ -1370,6 +1448,9 @@ Reference< XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
 void    SwXStyle::ApplyDescriptorProperties()
 {
     bIsDescriptor = sal_False;
+    mxStyleData.clear();
+    mxStyleFamily.clear();
+
     const SfxItemPropertyMap* pTemp = pPropImpl->GetPropertyMap();
     while(pTemp->nWID)
     {
@@ -1798,6 +1879,8 @@ void SwXStyle::setPropertyValues(
                 WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if ( !m_pDoc )
+        throw RuntimeException();
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
     switch(eFamily)
     {
@@ -2010,6 +2093,8 @@ Sequence< Any > SwXStyle::getPropertyValues(
     const Sequence< OUString >& rPropertyNames ) throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if ( !m_pDoc )
+        throw RuntimeException();
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
     switch(eFamily)
     {
@@ -2049,9 +2134,46 @@ Sequence< Any > SwXStyle::getPropertyValues(
         else if(bIsDescriptor)
         {
             Any *pAny = 0;
-            if( ! pPropImpl->GetProperty ( pNames[nProp], pAny ) )
-                throw RuntimeException();
-            else if ( pAny )
+            pPropImpl->GetProperty ( pNames[nProp], pAny );
+            if( !pAny )
+            {
+                sal_Bool bExcept = sal_False;
+                switch( eFamily )
+                {
+                    case SFX_STYLE_FAMILY_PSEUDO:
+                        bExcept = sal_True;
+                    break;
+                    case SFX_STYLE_FAMILY_PARA:
+                    case SFX_STYLE_FAMILY_PAGE:
+                        pPropImpl->GetProperty ( pNames[nProp], mxStyleData, pRet[ nProp ] );
+                    break;
+                    case SFX_STYLE_FAMILY_CHAR:
+                    case SFX_STYLE_FAMILY_FRAME :
+                    {
+                        if (pMap->nWID >= POOLATTR_BEGIN && pMap->nWID < RES_UNKNOWNATR_END )
+                        {
+                            SwFmt * pFmt;
+                            if ( eFamily == SFX_STYLE_FAMILY_CHAR )
+                                pFmt = m_pDoc->GetDfltCharFmt();
+                            else
+                                pFmt = m_pDoc->GetDfltFrmFmt();
+                            const SwAttrPool * pPool = pFmt->GetAttrSet().GetPool();
+                            const SfxPoolItem & rItem = pPool->GetDefaultItem ( pMap->nWID );
+                            rItem.QueryValue ( pRet[nProp], pMap->nMemberId );
+                        }
+                        else
+                            bExcept = sal_True;
+                    }
+                    break;
+                }
+                if (bExcept )
+                {
+                    RuntimeException aExcept;
+                    aExcept.Message = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "No default value for: " ) ) + pNames[nProp];
+                    throw aExcept;
+                }
+            }
+            else
                 pRet [ nProp ] = *pAny;
         }
         else
@@ -2326,7 +2448,6 @@ Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
                 const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
                 const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
                                                             _pMap, sPropName);
-
                 if ( pMap->nFlags & PropertyAttribute::READONLY)
                     throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -2381,6 +2502,8 @@ void SwXStyle::Invalidate()
     sStyleName.Erase();
     pBasePool = 0;
     m_pDoc = 0;
+    mxStyleData.clear();
+    mxStyleFamily.clear();
 }
 /******************************************************************
  * SwXPageStyle
@@ -2400,7 +2523,7 @@ SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool,
 
  --------------------------------------------------*/
 SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh) :
-    SwXStyle(SFX_STYLE_FAMILY_PAGE),
+    SwXStyle(pDocSh->GetDoc(), SFX_STYLE_FAMILY_PAGE),
     pDocShell(pDocSh)
 {
 }
@@ -2818,9 +2941,10 @@ MakeObject:
         else if(IsDescriptor())
         {
             Any* pAny = 0;
-            if(!GetPropImpl()->GetProperty(pNames[nProp], pAny))
-                throw RuntimeException();
-            else if(pAny)
+            GetPropImpl()->GetProperty(pNames[nProp], pAny);
+            if ( !pAny )
+                GetPropImpl()->GetProperty ( pNames[nProp], mxStyleData, pRet[ nProp ] );
+            else
                 pRet[nProp] = *pAny;
         }
         else
@@ -2897,6 +3021,10 @@ const SwStartNode* SwXPageStyle::GetStartNode(sal_Bool bHeader, sal_Bool bLeft)
         }
     }
     return pRet;
+}
+SwXFrameStyle::SwXFrameStyle ( SwDoc *pDoc )
+: SwXStyle ( pDoc, SFX_STYLE_FAMILY_FRAME, FALSE)
+{
 }
 /* -----------------------------15.12.00 15:45--------------------------------
 
