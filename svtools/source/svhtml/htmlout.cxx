@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-13 08:42:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,27 @@ const sal_Char HTMLOutFuncs::sNewLine = '\012';
 #else
 const sal_Char __FAR_DATA HTMLOutFuncs::sNewLine[] = "\015\012";
 #endif
+
+#define TXTCONV_BUFFER_SIZE 20
+
+HTMLOutContext::HTMLOutContext( rtl_TextEncoding eDestEnc )
+{
+    m_eDestEnc = RTL_TEXTENCODING_DONTKNOW == eDestEnc
+                    ? gsl_getSystemTextEncoding()
+                    : eDestEnc;
+
+    m_hConv = rtl_createUnicodeToTextConverter( eDestEnc );
+    DBG_ASSERT( m_hConv,
+        "HTMLOutContext::HTMLOutContext: no converter for source encoding" );
+    m_hContext = m_hConv ? rtl_createUnicodeToTextContext( m_hConv )
+                     : (rtl_TextToUnicodeContext)1;
+}
+
+HTMLOutContext::~HTMLOutContext()
+{
+    rtl_destroyUnicodeToTextContext( m_hConv, m_hContext );
+    rtl_destroyUnicodeToTextConverter( m_hConv );
+}
 
 const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c )
 {
@@ -366,10 +387,10 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c )
 }
 
 void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
-                            rtl_TextEncoding eDestEnc,
+                            HTMLOutContext& rContext,
                             String *pNonConvertableChars )
 {
-    DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != eDestEnc,
+    DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != rContext.m_eDestEnc,
                     "wrong destination encoding" );
     const sal_Char *pStr = 0;
     switch( c )
@@ -388,33 +409,38 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
         // The new HTML4 entities above 255 are not used for UTF-8,
         // because Netscape 4 does support UTF-8 but does not support
         // these entities.
-        if( c < 256 || RTL_TEXTENCODING_UTF8 != eDestEnc )
+        if( c < 256 || RTL_TEXTENCODING_UTF8 != rContext.m_eDestEnc )
             pStr = lcl_svhtml_GetEntityForChar( c );
         break;
     }
 
+    sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
+    sal_uInt32 nInfo = 0;
+    sal_Size nSrcChars;
+    const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
+                        RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
+                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
+                        RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
     if( pStr )
     {
+        sal_Size nLen = rtl_convertUnicodeToText(
+                            rContext.m_hConv, rContext.m_hContext, &c, 0,
+                            cBuffer, TXTCONV_BUFFER_SIZE,
+                            nFlags|RTL_UNICODETOTEXT_FLAGS_FLUSH,
+                            &nInfo, &nSrcChars );
+        DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
+        sal_Char *pBuffer = cBuffer;
+        while( nLen-- )
+            rDest += *pBuffer++;
         ((rDest += '&') += pStr) += ';';
     }
     else
     {
-        rtl_UnicodeToTextConverter  hConv =
-            rtl_createUnicodeToTextConverter( eDestEnc );
-
-        sal_Char cBuffer[5];
-        sal_uInt32 nInfo = 0;
-        sal_Size nSrcChars;
-        const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
-                                  RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
-                                  RTL_UNICODETOTEXT_FLAGS_FLUSH|
-                                  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
-                                  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
-        sal_Size nLen = rtl_convertUnicodeToText( hConv, 0, &c, 1,
-                                                     cBuffer, 5, nFlags,
+        sal_Size nLen = rtl_convertUnicodeToText( rContext.m_hConv,
+                                                  rContext.m_hContext, &c, 1,
+                                                     cBuffer, TXTCONV_BUFFER_SIZE,
+                                                  nFlags,
                                                   &nInfo, &nSrcChars );
-        rtl_destroyUnicodeToTextConverter( hConv );
-
         if( nLen > 0 && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0 )
         {
             sal_Char *pBuffer = cBuffer;
@@ -426,6 +452,16 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
             // If the character could not be converted to the destination
             // character set, the UNICODE character is exported as character
             // entity.
+            nLen = rtl_convertUnicodeToText(
+                                rContext.m_hConv, rContext.m_hContext, &c, 0,
+                                cBuffer, TXTCONV_BUFFER_SIZE,
+                                nFlags|RTL_UNICODETOTEXT_FLAGS_FLUSH,
+                                &nInfo, &nSrcChars );
+            DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
+            sal_Char *pBuffer = cBuffer;
+            while( nLen-- )
+                rDest += *pBuffer++;
+
             (((rDest += '&') += '#') +=
                     ByteString::CreateFromInt64( (sal_uInt32)c )) += ';';
             if( pNonConvertableChars &&
@@ -435,17 +471,39 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
     }
 }
 
+sal_Bool lcl_FlushToAscii( ByteString& rDest, HTMLOutContext& rContext )
+{
+    sal_Unicode c = 0;
+    sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
+    sal_uInt32 nInfo = 0;
+    sal_Size nSrcChars;
+    const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
+                        RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
+                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
+                        RTL_UNICODETOTEXT_FLAGS_FLUSH|
+                        RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
+    sal_Size nLen = rtl_convertUnicodeToText(
+                        rContext.m_hConv, rContext.m_hContext, &c, 0,
+                        cBuffer, TXTCONV_BUFFER_SIZE, nFlags,
+                        &nInfo, &nSrcChars );
+    DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
+    sal_Bool bRet = nLen > 0;
+    sal_Char *pBuffer = cBuffer;
+    while( nLen-- )
+        rDest += *pBuffer++;
+    return bRet;
+}
+
 void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
                                         ByteString& rDest,
                                         rtl_TextEncoding eDestEnc,
                                          String *pNonConvertableChars )
 {
-    if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
-        eDestEnc = gsl_getSystemTextEncoding();
-
+    HTMLOutContext aContext( eDestEnc );
     for( sal_uInt32 i=0UL, nLen = rSrc.Len(); i < nLen; i++ )
-        lcl_ConvertCharToHTML( rSrc.GetChar( (xub_StrLen)i ), rDest,  eDestEnc,
+        lcl_ConvertCharToHTML( rSrc.GetChar( (xub_StrLen)i ), rDest, aContext,
                                pNonConvertableChars );
+    lcl_FlushToAscii( rDest, aContext );
 }
 
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
@@ -458,14 +516,11 @@ SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
 }
 
 SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
-                                  rtl_TextEncoding eDestEnc,
+                                  HTMLOutContext& rContext,
                                   String *pNonConvertableChars )
 {
-    if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
-        eDestEnc = gsl_getSystemTextEncoding();
-
     ByteString sOut;
-    lcl_ConvertCharToHTML( c, sOut,  eDestEnc, pNonConvertableChars );
+    lcl_ConvertCharToHTML( c, sOut,  rContext, pNonConvertableChars );
     rStream << sOut.GetBuffer();
     return rStream;
 }
@@ -474,9 +529,22 @@ SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const String& rStr,
                                     rtl_TextEncoding eDestEnc,
                                     String *pNonConvertableChars )
 {
-    for( sal_uInt32 n = 0UL; n < rStr.Len(); n++ )
+    HTMLOutContext aContext( eDestEnc );
+    xub_StrLen nLen = rStr.Len();
+    for( xub_StrLen n = 0; n < nLen; n++ )
         HTMLOutFuncs::Out_Char( rStream, rStr.GetChar( (xub_StrLen)n ),
-                                eDestEnc, pNonConvertableChars );
+                                aContext, pNonConvertableChars );
+    HTMLOutFuncs::FlushToAscii( rStream, aContext );
+    return rStream;
+}
+
+SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
+                                       HTMLOutContext& rContext )
+{
+    ByteString sOut;
+    if( lcl_FlushToAscii( sOut, rContext ) )
+        rStream << sOut.GetBuffer();
+
     return rStream;
 }
 
