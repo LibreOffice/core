@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-08 10:37:06 $
+ *  last change: $Author: obo $ $Date: 2000-12-11 23:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,24 @@ TabDialog DLG_PARA
                 Identifier = TP_PARA_ASIAN;
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian Typography";
+                Text[ portuguese ] = "Asian typography";
+                Text[ russian ] = "Asian typography";
+                Text[ greek ] = "Asian typography";
+                Text[ dutch ] = "Asian typography";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "Asian typography";
+                Text[ italian ] = "Asian typography";
+                Text[ danish ] = "Asian typography";
+                Text[ swedish ] = "Asian typography";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ japanese ] = "òaï∂àÛç¸ÇÃëÃçŸ";
+                Text[ korean ] = "æ∆Ω√æ∆ ¿Œº‚√º";
+                Text[ chinese_simplified ] = "÷–»’∫´Œƒ◊÷";
+                Text[ chinese_traditional ] = "§§§È¡˙§Â¶r";
+                Text[ turkish ] = "Asian typography";
+                Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
             };
             PageItem
             {
