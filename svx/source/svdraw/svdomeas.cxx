@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-09 15:47:42 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@
 #include "svdoimp.hxx"
 #endif
 
+#ifndef _SDR_PROPERTIES_MEASUREPROPERTIES_HXX
+#include <svx/sdr/properties/measureproperties.hxx>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
@@ -196,7 +200,7 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
     FieldUnit eMeasureUnit(FUNIT_NONE);
     FieldUnit eModUIUnit(FUNIT_NONE);
 
-    const SfxItemSet& rSet = rObj.GetItemSet();
+    const SfxItemSet& rSet = rObj.GetMergedItemSet();
     bTextRota90 = ((SdrMeasureTextRota90Item&)rSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue();
     eMeasureUnit = ((SdrMeasureUnitItem&)rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
     aMeasureScale = ((SdrMeasureScaleItem&)rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
@@ -306,30 +310,16 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
     }
 }
 
-TYPEINIT1(SdrMeasureObj,SdrTextObj);
+//////////////////////////////////////////////////////////////////////////////
 
-void SdrMeasureObj::ForceDefaultAttr()
+sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
 {
-    SdrTextObj::ForceDefaultAttr();
-
-    //#71958# by default, the show units Bool-Item is set as hard
-    // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
-    // from one application to another
-    ImpForceItemSet();
-    mpObjectItemSet->Put(SdrMeasureShowUnitItem(TRUE));
-
-    XPolygon aXP(4);        //      []
-    aXP[0] = Point(100,0);    // 0,4__[]__2,4
-    aXP[1] = Point(200,400);  //    \    /
-    aXP[2] = Point(0,400);    //     \  /
-    aXP[3] = Point(100,0);    //      \/1,0
-
-    mpObjectItemSet->Put(XLineStartItem(String(), aXP));
-    mpObjectItemSet->Put(XLineStartWidthItem(200));
-    mpObjectItemSet->Put(XLineEndItem(String(), aXP));
-    mpObjectItemSet->Put(XLineEndWidthItem(200));
-    mpObjectItemSet->Put(XLineStyleItem(XLINE_SOLID));
+    return new sdr::properties::MeasureProperties(*this);
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1(SdrMeasureObj,SdrTextObj);
 
 SdrMeasureObj::SdrMeasureObj():
     bTextDirty(FALSE)
@@ -446,7 +436,7 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.aPt1 = aPt1;
     rRec.aPt2 = aPt2;
 
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     rRec.eKind            =((SdrMeasureKindItem&            )rSet.Get(SDRATTR_MEASUREKIND            )).GetValue();
     rRec.eWantTextHPos    =((SdrMeasureTextHPosItem&        )rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
     rRec.eWantTextVPos    =((SdrMeasureTextVPosItem&        )rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
@@ -489,7 +479,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     long nShortLen=0;
     FASTBOOL bPfeileAussen=FALSE;
 
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // Strichstaerke
     rPol.nLineWdt2 = (nLineWdt + 1) / 2;
 
@@ -664,14 +654,15 @@ void SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol, XPolyPolygon& rXPP)
     rXPP.Insert(aXP);
 }
 
-FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrMeasureObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
+    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
+    //// Hidden objects on masterpages, draw nothing
+    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
+    //  return TRUE;
 
     // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
 
     // perepare ItemSet to avoid old XOut line drawing
     SfxItemSet aEmptySet(*rSet.GetPool());
@@ -726,12 +717,14 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
         ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
-    FASTBOOL bOk=TRUE;
+    sal_Bool bOk(sal_True);
     if (bTextDirty) UndirtyText();
-    bOk=SdrTextObj::Paint(rXOut,rInfoRec);
-    if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-        bOk=PaintGluePoints(rXOut,rInfoRec);
-    }
+    bOk = SdrTextObj::DoPaintObject(rXOut, rInfoRec);
+
+    // #110094#-13
+    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
+    //  bOk=PaintGluePoints(rXOut,rInfoRec);
+    //}
 
     return bOk;
 }
@@ -770,7 +763,7 @@ void SdrMeasureObj::UndirtyText() const
             if(GetStyleSheet())
                 rOutliner.SetStyleSheet(0, GetStyleSheet());
 
-            rOutliner.SetParaAttribs(0, GetItemSet());
+            rOutliner.SetParaAttribs(0, GetObjectItemSet());
 
             // casting auf nonconst
             ((SdrMeasureObj*)this)->pOutlinerParaObject=rOutliner.CreateParaObject();
@@ -945,9 +938,10 @@ void SdrMeasureObj::TakeXorPoly(XPolyPolygon& rXPP, FASTBOOL bDetail) const
     ImpCalcXPoly(aMPol,rXPP);
 }
 
-void SdrMeasureObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrMeasureObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 USHORT SdrMeasureObj::GetHdlCount() const
 {
@@ -1014,8 +1008,8 @@ FASTBOOL SdrMeasureObj::MovDrag(SdrDragStat& rDrag) const
 
 FASTBOOL SdrMeasureObj::EndDrag(SdrDragStat& rDrag)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    // #110094#-14 SendRepaintBroadcast();
     ImpMeasureRec* pMR=(ImpMeasureRec*)rDrag.GetUser(); // #48544#
     ImpMeasureRec aRec0;
     ImpTakeAttr(aRec0);
@@ -1033,12 +1027,12 @@ FASTBOOL SdrMeasureObj::EndDrag(SdrDragStat& rDrag)
                 {
                     if(pMR->nHelpline1Len!=aRec0.nHelpline1Len)
                     {
-                        SetItem(SdrMeasureHelpline1LenItem(pMR->nHelpline1Len));
+                        SetObjectItem(SdrMeasureHelpline1LenItem(pMR->nHelpline1Len));
                     }
 
                     if(pMR->nHelpline2Len!=aRec0.nHelpline2Len)
                     {
-                        SetItem(SdrMeasureHelpline2LenItem(pMR->nHelpline2Len));
+                        SetObjectItem(SdrMeasureHelpline2LenItem(pMR->nHelpline2Len));
                     }
 
                     break;
@@ -1049,19 +1043,23 @@ FASTBOOL SdrMeasureObj::EndDrag(SdrDragStat& rDrag)
                 {
                     if (pMR->nLineDist!=aRec0.nLineDist)
                     {
-                        SetItem(SdrMeasureLineDistItem(pMR->nLineDist));
+                        SetObjectItem(SdrMeasureLineDistItem(pMR->nLineDist));
                     }
 
                     if(pMR->bBelowRefEdge!=aRec0.bBelowRefEdge)
                     {
-                        SetItem(SdrMeasureBelowRefEdgeItem(pMR->bBelowRefEdge));
+                        SetObjectItem(SdrMeasureBelowRefEdgeItem(pMR->bBelowRefEdge));
                     }
                 }
             }
         }
     } // switch
     SetRectsDirty();
-    SendRepaintBroadcast();
+
+    // Here is a SetCHanged() missing, object gets changed.
+    SetChanged();
+    BroadcastObjectChange();
+
     if (pMR!=NULL) {
         delete pMR; // #48544#
         rDrag.SetUser(NULL);
@@ -1402,7 +1400,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft, &rOut);
+    ImpLineStyleParameterPack aLineAttr(GetObjectItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft, &rOut);
     ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, bIsLineDraft);
     UINT16 nCount(aTmpPolyPolygon.Count());
     Polygon3D aPoly3D;
@@ -1474,7 +1472,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get local ItemSet
-    SfxItemSet aSet(GetItemSet());
+    SfxItemSet aSet(GetObjectItemSet());
 
     // prepare group
     SdrObjGroup* pGroup = new SdrObjGroup;
@@ -1494,7 +1492,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
 
-        pPath->SetItemSet(aSet);
+        pPath->SetMergedItemSet(aSet);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1516,7 +1514,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
 
-        pPath->SetItemSet(aSet);
+        pPath->SetMergedItemSet(aSet);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1528,7 +1526,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
 
-        pPath->SetItemSet(aSet);
+        pPath->SetMergedItemSet(aSet);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1548,7 +1546,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
 
-        pPath->SetItemSet(aSet);
+        pPath->SetMergedItemSet(aSet);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1560,7 +1558,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
 
-        pPath->SetItemSet(aSet);
+        pPath->SetMergedItemSet(aSet);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
@@ -1575,7 +1573,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
 
-        pPath->SetItemSet(aSet);
+        pPath->SetMergedItemSet(aSet);
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
     }
@@ -1692,87 +1690,6 @@ USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const
     return (USHORT)eRet;
 }
 
-void __EXPORT SdrMeasureObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
-{
-    if (HAS_BASE(SfxStyleSheet,&rBC)) {
-        SfxSimpleHint* pSimple=PTR_CAST(SfxSimpleHint,&rHint);
-        ULONG nId=pSimple==NULL ? 0 : pSimple->GetId();
-
-        if(nId == SFX_HINT_DATACHANGED)
-        {
-            // Alten Bereich invalidieren
-            SendRepaintBroadcast();
-
-            // Text hart aufVeraenderung setzen
-            SetTextDirty();
-        }
-    }
-    SdrTextObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
-}
-
-void SdrMeasureObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    SetTextDirty();
-    SdrTextObj::NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-SfxItemSet* SdrMeasureObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    // include ALL items, 2D and 3D
-    return new SfxItemSet(rPool,
-        // ranges from SdrAttrObj
-        SDRATTR_START, SDRATTRSET_SHADOW,
-        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
-        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-        // measure attributes
-        SDRATTR_MEASURE_FIRST, SDRATTRSET_MEASURE,
-
-        // outliner and end
-        EE_ITEMS_START, EE_ITEMS_END,
-        0, 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-void SdrMeasureObj::ItemSetChanged(const SfxItemSet& rSet)
-{
-    // call parent
-    SdrTextObj::ItemSetChanged(rSet);
-
-    // local changes
-    SetTextDirty();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// pre- and postprocessing for objects for saving
-
-void SdrMeasureObj::PreSave()
-{
-    // call parent
-    SdrTextObj::PreSave();
-
-    // prepare SetItems for storage
-    const SfxItemSet& rSet = GetUnmergedItemSet();
-    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
-    SdrMeasureSetItem aMeasAttr(rSet.GetPool());
-    aMeasAttr.GetItemSet().Put(rSet);
-    aMeasAttr.GetItemSet().SetParent(pParent);
-    mpObjectItemSet->Put(aMeasAttr);
-}
-
-void SdrMeasureObj::PostSave()
-{
-    // call parent
-    SdrTextObj::PostSave();
-
-    // remove SetItems from local itemset
-    mpObjectItemSet->ClearItem(SDRATTRSET_MEASURE);
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrMeasureObj::WriteData(SvStream& rOut) const
@@ -1793,7 +1710,7 @@ void SdrMeasureObj::WriteData(SvStream& rOut) const
 
     if(pPool)
     {
-        const SfxItemSet& rSet = GetUnmergedItemSet();
+        const SfxItemSet& rSet = GetObjectItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_MEASURE));
     }
@@ -1822,7 +1739,7 @@ void SdrMeasureObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         sal_uInt16 nSetID = SDRATTRSET_MEASURE;
         const SdrMeasureSetItem* pMeasAttr = (const SdrMeasureSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
         if(pMeasAttr)
-            SetItemSet(pMeasAttr->GetItemSet());
+            SetObjectItemSet(pMeasAttr->GetItemSet());
     }
     else
     {
