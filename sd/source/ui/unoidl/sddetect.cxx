@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddetect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:33:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ SdFilterDetect::~SdFilterDetect()
                             String aFilterName;
                             if ( pFilter )
                                 aFilterName = pFilter->GetName();
-                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aFilterName );
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
                         }
                         catch( lang::WrappedTargetException& aWrap )
                         {
