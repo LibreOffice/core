@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:41:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1842,14 +1842,14 @@ ModalDialog RID_SCDLG_COL_MAN
         Text [ dutch ] = "Breedte" ;
         Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "Width" ;
-        Text[ chinese_simplified ] = "¿í";
+        Text[ chinese_simplified ] = "¿í¶È";
 
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
         Text[ japanese ] = "•";
-        Text[ chinese_traditional ] = "¼e";
+        Text[ chinese_traditional ] = "¼e«×";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "³Êºñ";
@@ -2094,11 +2094,11 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text [ dutch ] = "Hoogte" ;
         Text [ spanish ] = "Altura" ;
         Text [ english_us ] = "Height" ;
-        Text[ chinese_simplified ] = "¸ß";
+        Text[ chinese_simplified ] = "¸ß¶È";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
         Text[ japanese ] = "‚‚³";
-        Text[ chinese_traditional ] = "°ª";
+        Text[ chinese_traditional ] = "°ª«×";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
         Text[ korean ] = "³ôÀÌ";
@@ -3813,6 +3813,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lähdetietoalue";
 };
+
 
 
 
