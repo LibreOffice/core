@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 14:52:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,12 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
         if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
         {
             SwView *pSwView = SW_MOD()->GetFirstView();
-            while (pSwView)
+
+            //!! since this function may be called within the ctor of
+            //!! SwView (during formatting) where the WrtShell is not yet
+            //!! created, we have to check for the WrtShellPtr to see
+            //!! if it is already availbale
+            while (pSwView && pSwView->GetWrtShellPtr())
             {
                 pSwView->GetWrtShell().ChgHyphenation();
                 pSwView = SW_MOD()->GetNextView( pSwView );
