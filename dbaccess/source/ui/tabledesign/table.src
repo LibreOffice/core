@@ -1,0 +1,1352 @@
+/*************************************************************************
+ *
+ *  $RCSfile: table.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:25:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+
+String STR_TABLEDESIGN_DBFIELDTYPES
+{
+    //Text = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF" ;
+
+    Text [ language_user1 ] = "the sorting of the text doesn't be changed and every type must be translated";
+
+    Text = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF" ;
+    Text [ ENGLISH ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF" ;
+};
+
+String STR_TABLEDESIGN_UNDO_PRIMKEY
+{
+    Text = "Primärschlüssel einfügen/entfernen" ;
+    Text [ english_us ] = "Insert/remove primary key" ;
+    Text [ portuguese_brazilian ] = "Primärschlüssel einfügen/entfernen" ;
+    Text [ swedish ] = "Infoga/ta bort primärnyckel" ;
+    Text [ danish ] = "Indsæt/fjern primærnøgle" ;
+    Text [ italian ] = "Inserisci/elimina la chiave primaria" ;
+    Text [ spanish ] = "Insertar/eliminar llave primaria" ;
+    Text [ french ] = "Insérer/supprimer une clé primaire" ;
+    Text [ dutch ] = "Primaire sleutel invoegen/verwijderen" ;
+    Text [ portuguese ] = "Inserir/remover chave primária" ;
+    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ russian ] = "Âñòàâèòü/óáğàòü ïåğâè÷íûé êëş÷";
+    Text[ polish ] = "Wstaw /Usuñ g³ówny klucz";
+    Text[ japanese ] = "Ìß×²ÏØ°·°‚Ì‘}“ü/íœ";
+    Text[ chinese_traditional ] = "´¡¤J/§R°£¥DÃöÁä¦r";
+    Text[ arabic ] = "ÅÏÑÇÌ/ÍĞİ ÇáãİÊÇÍ ÇáÃÓÇÓí";
+    Text[ dutch ] = "Primaire sleutel invoegen/verwijderen";
+    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ greek ] = "ĞñïóèŞêç/ÄéáãñáöŞ ğñùôåıïí êëåéäéïı";
+    Text[ korean ] = "±âº»Å° »ğÀÔ/»èÁ¦";
+    Text[ turkish ] = "Birinci anahtar ekle/kaldır";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_VALUE_YES
+{
+    Text = "Ja" ;
+    Text [ ENGLISH ] = "Yes" ;
+    Text [ dutch ] = "Ja" ;
+    Text [ english_us ] = "Yes" ;
+    Text [ italian ] = "Sì" ;
+    Text [ spanish ] = "Sí" ;
+    Text [ french ] = "Oui" ;
+    Text [ swedish ] = "Ja" ;
+    Text [ danish ] = "Ja" ;
+    Text [ portuguese_brazilian ] = "Ja" ;
+    Text [ portuguese ] = "Sim" ;
+    Text[ chinese_simplified ] = "ÊÇ";
+    Text[ russian ] = "Äà";
+    Text[ polish ] = "Tak";
+    Text[ japanese ] = "‚Í‚¢";
+    Text[ chinese_traditional ] = "¬O";
+    Text[ arabic ] = "äÚã";
+    Text[ dutch ] = "Ja";
+    Text[ chinese_simplified ] = "ÊÇ";
+    Text[ greek ] = "Íáé";
+    Text[ korean ] = "¿¹";
+    Text[ turkish ] = "Evet";
+    Text[ language_user1 ] = " ";
+};
+String STR_VALUE_NO
+{
+    Text = "Nein" ;
+    Text [ ENGLISH ] = "No" ;
+    Text [ dutch ] = "Nee" ;
+    Text [ english_us ] = "No" ;
+    Text [ italian ] = "No" ;
+    Text [ spanish ] = "No" ;
+    Text [ french ] = "Non" ;
+    Text [ swedish ] = "Nej" ;
+    Text [ danish ] = "Nej" ;
+    Text [ portuguese_brazilian ] = "Nein" ;
+    Text [ portuguese ] = "Não" ;
+    Text[ chinese_simplified ] = "·ñ";
+    Text[ russian ] = "Íåò";
+    Text[ polish ] = "Nie";
+    Text[ japanese ] = "‚¢‚¢‚¦";
+    Text[ chinese_traditional ] = "§_";
+    Text[ arabic ] = "áÇ";
+    Text[ dutch ] = "Nee";
+    Text[ chinese_simplified ] = "·ñ";
+    Text[ greek ] = "¼÷é";
+    Text[ korean ] = "¾Æ´Ï¿À";
+    Text[ turkish ] = "Hayır";
+    Text[ language_user1 ] = " ";
+};
+String STR_VALUE_ASC
+{
+    Text = "Aufsteigend" ;
+    Text [ ENGLISH ] = "Ascending" ;
+    Text [ dutch ] = "Oplopend" ;
+    Text [ english_us ] = "Ascending" ;
+    Text [ italian ] = "Crescente" ;
+    Text [ spanish ] = "Ascendente" ;
+    Text [ french ] = "Croissant" ;
+    Text [ swedish ] = "Stigande" ;
+    Text [ danish ] = "Stigende" ;
+    Text [ portuguese_brazilian ] = "Aufsteigend" ;
+    Text [ portuguese ] = "Ascendente" ;
+    Text[ chinese_simplified ] = "ÏòÉÏ";
+    Text[ russian ] = "Ïî âîçğàñòàíèş";
+    Text[ polish ] = "Rosn¹co";
+    Text[ japanese ] = "¸‡";
+    Text[ chinese_traditional ] = "¦V¤W";
+    Text[ arabic ] = "ÊÕÇÚÏí";
+    Text[ dutch ] = "Oplopend";
+    Text[ chinese_simplified ] = "ÏòÉÏ";
+    Text[ greek ] = "Áıîïõóá";
+    Text[ korean ] = "¿À¸§ Â÷¼ø";
+    Text[ turkish ] = "Artan";
+    Text[ language_user1 ] = " ";
+};
+String STR_VALUE_DESC
+{
+    Text = "Absteigend" ;
+    Text [ ENGLISH ] = "Descending" ;
+    Text [ english_us ] = "Descending" ;
+    Text [ italian ] = "Decrescente" ;
+    Text [ spanish ] = "Descendente" ;
+    Text [ french ] = "Décroissant" ;
+    Text [ dutch ] = "Aflopend" ;
+    Text [ swedish ] = "Fallande" ;
+    Text [ danish ] = "Faldende" ;
+    Text [ portuguese_brazilian ] = "Absteigend" ;
+    Text [ portuguese ] = "Descendente" ;
+    Text[ chinese_simplified ] = "ÏòÏÂ";
+    Text[ russian ] = "Ïî óáûâàíèş";
+    Text[ polish ] = "Malej¹co";
+    Text[ japanese ] = "~‡";
+    Text[ chinese_traditional ] = "¦V¤U";
+    Text[ arabic ] = "ÊäÇÒáí";
+    Text[ dutch ] = "Aflopend";
+    Text[ chinese_simplified ] = "ÏòÏÂ";
+    Text[ greek ] = "Öèßíïõóá";
+    Text[ korean ] = "³»¸²Â÷¼ø";
+    Text[ turkish ] = "Azalan";
+    Text[ language_user1 ] = " ";
+};
+String STR_VALUE_NONE
+{
+    // Bemerkung : sollte auch in anderen Sprachen irgendwie zum Wort 'Wert' passen : Wert - keiner ....
+    Text = "<keiner>" ;
+    Text [ ENGLISH ] = "<keiner>" ;
+    Text[ italian ] = "<senza>";
+    Text[ portuguese_brazilian ] = "<keiner>";
+    Text[ portuguese ] = "<nenhum>";
+    Text[ danish ] = "<ingen>";
+    Text[ french ] = "<aucun(e)>";
+    Text[ swedish ] = "<ingen>";
+    Text[ dutch ] = "<geen>";
+    Text[ spanish ] = "<ninguno>";
+    Text[ english_us ] = "<none>";
+    Text[ chinese_simplified ] = "<ÎŞ>";
+    Text[ russian ] = "<áåç>";
+    Text[ polish ] = "<brak>";
+    Text[ japanese ] = "<‚È‚µ>";
+    Text[ chinese_traditional ] = "<µL>";
+    Text[ arabic ] = "<ÈÏæä>";
+    Text[ dutch ] = "<geen>";
+    Text[ chinese_simplified ] = "<ÎŞ>";
+    Text[ greek ] = "<êáíİíá>";
+    Text[ korean ] = "<¾øÀ½>";
+    Text[ turkish ] = "<yok>";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_TAB_FIELD_NAME
+{
+    Text = "Feldname" ;
+    Text [ ENGLISH ] = "Field name" ;
+    Text [ english_us ] = "Field name" ;
+    Text [ italian ] = "Nome di campo" ;
+    Text [ spanish ] = "Nombre del campo" ;
+    Text [ french ] = "Nom de champ" ;
+    Text [ dutch ] = "Veldnaam" ;
+    Text [ swedish ] = "Fältnamn" ;
+    Text [ danish ] = "Feltnavn" ;
+    Text [ portuguese_brazilian ] = "Feldname" ;
+    Text [ portuguese ] = "Nome do campo" ;
+    Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ";
+    Text[ russian ] = "Èìÿ ïîëÿ";
+    Text[ polish ] = "Nazwa pola";
+    Text[ japanese ] = "Ì¨°ÙÄŞ–¼";
+    Text[ chinese_traditional ] = "Äæ¦ì¦WºÙ";
+    Text[ arabic ] = "ÇÓã ÇáÍŞá";
+    Text[ dutch ] = "Veldnaam";
+    Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ";
+    Text[ greek ] = "¼íïìá ğåäßïõ";
+    Text[ korean ] = "ÇÊµå¸í";
+    Text[ turkish ] = "Alan adı";
+    Text[ language_user1 ] = " ";
+};
+String STR_TAB_FIELD_DATATYPE
+{
+    Text = "Feldtyp" ;
+    Text [ ENGLISH ] = "Field type" ;
+    Text [ english_us ] = "Field type" ;
+    Text [ italian ] = "Tipo di campo" ;
+    Text [ spanish ] = "Tipo de campo" ;
+    Text [ french ] = "Type de champ" ;
+    Text [ dutch ] = "Veldtype" ;
+    Text [ swedish ] = "Fälttyp" ;
+    Text [ danish ] = "Felttype" ;
+    Text [ portuguese_brazilian ] = "Feldtyp" ;
+    Text [ portuguese ] = "Tipo de campo" ;
+    Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ";
+    Text[ russian ] = "Òèï ïîëÿ";
+    Text[ polish ] = "Typ pola";
+    Text[ japanese ] = "Ì¨°ÙÄŞ‚Ìí—Ş";
+    Text[ chinese_traditional ] = "Äæ¦ìÃş«¬";
+    Text[ arabic ] = "äæÚ ÇáÍŞá";
+    Text[ dutch ] = "Veldtype";
+    Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ";
+    Text[ greek ] = "Ôığïò ğåäßïõ";
+    Text[ korean ] = "ÇÊµå Çü½Ä";
+    Text[ turkish ] = "Alan türü";
+    Text[ language_user1 ] = " ";
+};
+String STR_TAB_FIELD_LENGTH
+{
+    Text = "Feldlänge" ;
+    Text [ ENGLISH ] = "Field length" ;
+    Text [ english_us ] = "Field length" ;
+    Text [ italian ] = "Lunghezza di campo" ;
+    Text [ spanish ] = "Longitud de campo" ;
+    Text [ french ] = "Longueur de champ" ;
+    Text [ dutch ] = "Veldlengte" ;
+    Text [ swedish ] = "Fältlängd" ;
+    Text [ danish ] = "Feltlængde" ;
+    Text [ portuguese_brazilian ] = "Feldlänge" ;
+    Text [ portuguese ] = "Comprimento do campo" ;
+    Text[ chinese_simplified ] = "×Ö¶Î³¤¶È";
+    Text[ russian ] = "Äëèíà ïîëÿ";
+    Text[ polish ] = "D³ugoœæ pola";
+    Text[ japanese ] = "Ì¨°ÙÄŞ‚Ì’·‚³";
+    Text[ chinese_traditional ] = "Äæ¦ìªø«×";
+    Text[ arabic ] = "Øæá ÇáÍŞá";
+    Text[ dutch ] = "Veldlengte";
+    Text[ chinese_simplified ] = "×Ö¶Î³¤¶È";
+    Text[ greek ] = "ÌŞêïò ğåäßïõ";
+    Text[ korean ] = "ÇÊµå ±æÀÌ";
+    Text[ turkish ] = "Alan uzunluğu";
+    Text[ language_user1 ] = " ";
+};
+String STR_TAB_FIELD_DESCR
+{
+    Text = "Beschreibung" ;
+    Text [ ENGLISH ] = "Description" ;
+    Text [ english_us ] = "Description" ;
+    Text [ portuguese_brazilian ] = "Beschreibung" ;
+    Text [ swedish ] = "Beskrivning" ;
+    Text [ danish ] = "Beskrivelse" ;
+    Text [ italian ] = "Descrizione" ;
+    Text [ spanish ] = "Descripción" ;
+    Text [ french ] = "Description" ;
+    Text [ dutch ] = "Beschrijving" ;
+    Text [ portuguese ] = "Descrição" ;
+    Text[ chinese_simplified ] = "ËµÃ÷";
+    Text[ russian ] = "Îïèñàíèå";
+    Text[ polish ] = "Opis";
+    Text[ japanese ] = "ŠT—v";
+    Text[ chinese_traditional ] = "´y­z";
+    Text[ arabic ] = "æÕİ";
+    Text[ dutch ] = "Beschrijving";
+    Text[ chinese_simplified ] = "ËµÃ÷";
+    Text[ greek ] = "ĞåñéãñáöŞ";
+    Text[ korean ] = "¼³¸í";
+    Text[ turkish ] = "Tanım";
+    Text[ language_user1 ] = " ";
+};
+String STR_TAB_FIELD_NULLABLE
+{
+    Text = "Eingabe erforderlich" ;
+    Text [ ENGLISH ] = "Input required" ;
+    Text [ dutch ] = "Invoer vereist" ;
+    Text [ english_us ] = "Input required" ;
+    Text [ italian ] = "Digitazione necessaria" ;
+    Text [ spanish ] = "Se requiere entrada" ;
+    Text [ french ] = "Saisie requise" ;
+    Text [ swedish ] = "Indata erfordras" ;
+    Text [ danish ] = "Input kræves" ;
+    Text [ portuguese_brazilian ] = "Eingabe erforderlich" ;
+    Text [ portuguese ] = "Entrada necessária" ;
+    Text[ chinese_simplified ] = "ÒªÇóÊäÈë";
+    Text[ russian ] = "Íåîáõîäèì ââîä";
+    Text[ polish ] = "Wymagany wpis";
+    Text[ japanese ] = "“ü—Í‚ª•K—v‚Å‚·";
+    Text[ chinese_traditional ] = "­n¨D¿é¤J¸ê®Æ";
+    Text[ arabic ] = "ãØáæÈ ÅÏÎÇá";
+    Text[ dutch ] = "Invoer vereist";
+    Text[ chinese_simplified ] = "ÒªÇóÊäÈë";
+    Text[ greek ] = "Áğáéôåßôáé åéóáãùãŞ";
+    Text[ korean ] = "ÀÔ·ÂÀÌ ¿ä±¸µÊ";
+    Text[ turkish ] = "Veri girişi gerekiyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_FIELD_AUTOINCREMENT
+{
+    Text = "~Auto-Wert" ;
+    Text [ ENGLISH ] = "Auto value" ;
+    Text[ italian ] = "Valore automatico";
+    Text[ portuguese_brazilian ] = "Auto value";
+    Text[ portuguese ] = "~Valor automático";
+    Text[ danish ] = "AutoVærdi";
+    Text[ french ] = "A~utoValeur";
+    Text[ swedish ] = "~AutoVärde";
+    Text[ dutch ] = "~AutoWaarde";
+    Text[ spanish ] = "~Valor automático";
+    Text[ english_us ] = "AutoValue";
+    Text[ chinese_simplified ] = "×Ô¶¯ÊıÖµ";
+    Text[ russian ] = "~Àâòîçíà÷åíèå";
+    Text[ polish ] = "Wartoœæ automatyczna";
+    Text[ japanese ] = "©“®’l";
+    Text[ chinese_traditional ] = "¦Û°Ê¼Æ­È";
+    Text[ arabic ] = "Şíã ÊáŞÇÆíÉ";
+    Text[ dutch ] = "~AutoWaarde";
+    Text[ chinese_simplified ] = "×Ô¶¯ÊıÖµ";
+    Text[ greek ] = "ÁõôïÔéìŞ";
+    Text[ korean ] = "ÀÚµ¿°ª";
+    Text[ turkish ] = "~Otomatik değer";
+    Text[ language_user1 ] = " ";
+};
+String STR_TAB_PROPERTIES
+{
+    Text = "Feldeigenschaften" ;
+    Text [ ENGLISH ] = "Field properties" ;
+    Text [ english_us ] = "Field properties" ;
+    Text [ portuguese_brazilian ] = "Feldeigenschaften" ;
+    Text [ swedish ] = "Fältegenskaper" ;
+    Text [ danish ] = "Feltegenskaber" ;
+    Text [ italian ] = "Proprietà di campo" ;
+    Text [ spanish ] = "Propiedades del campo" ;
+    Text [ french ] = "Propriétés du champ" ;
+    Text [ dutch ] = "Veldeigenschappen" ;
+    Text [ portuguese ] = "Propriedades do campo" ;
+    Text[ chinese_simplified ] = "×Ö¶ÎÊôĞÔ";
+    Text[ russian ] = "Ñâîéñòâà ïîëÿ";
+    Text[ polish ] = "W³aœciwoœci pola";
+    Text[ japanese ] = "Ì¨°ÙÄŞ‚ÌÌßÛÊßÃ¨";
+    Text[ chinese_traditional ] = "Äæ¦ìÄİ©Ê";
+    Text[ arabic ] = "ÎÕÇÆÕ ÇáÍŞá";
+    Text[ dutch ] = "Veldeigenschappen";
+    Text[ chinese_simplified ] = "×Ö¶ÎÊôĞÔ";
+    Text[ greek ] = "Éäéüôçôåò ğåäßïõ";
+    Text[ korean ] = "ÇÊµå ¼Ó¼º";
+    Text[ turkish ] = "Alan özellikleri";
+    Text[ language_user1 ] = " ";
+};
+String STR_TABPAGE_GENERAL
+{
+    Text = "Allgemein" ;
+    Text [ ENGLISH ] = "General" ;
+    Text [ english_us ] = "General" ;
+    Text [ portuguese_brazilian ] = "Allgemein" ;
+    Text [ swedish ] = "Allmänt" ;
+    Text [ danish ] = "Generelt" ;
+    Text [ italian ] = "Generale" ;
+    Text [ spanish ] = "General" ;
+    Text [ french ] = "Général" ;
+    Text [ dutch ] = "Algemeen" ;
+    Text [ portuguese ] = "Geral" ;
+    Text[ chinese_simplified ] = "³£¹æ";
+    Text[ russian ] = "Îáùèå";
+    Text[ polish ] = "Ogólne";
+    Text[ japanese ] = "‘S”Ê";
+    Text[ chinese_traditional ] = "¤@¯ë";
+    Text[ arabic ] = "ÚÇã";
+    Text[ dutch ] = "Algemeen";
+    Text[ chinese_simplified ] = "³£¹æ";
+    Text[ greek ] = "ÃåíéêÜ";
+    Text[ korean ] = "ÀÏ¹İ";
+    Text[ turkish ] = "Genel";
+    Text[ language_user1 ] = " ";
+};
+String STR_TAB_TABLE_DESCRIPTION
+{
+    Text = "Beschreibung :" ;
+    Text [ ENGLISH ] = "Description :" ;
+    Text[ english_us ] = "Description :";
+    Text[ portuguese ] = "Descrição:";
+    Text[ greek ] = "ĞåñéãñáöŞ :";
+    Text[ dutch ] = "Omschrijving :";
+    Text[ french ] = "Description :";
+    Text[ spanish ] = "Descripción :";
+    Text[ swedish ] = "Beskrivning :";
+    Text[ russian ] = "Îïèñàíèå :";
+    Text[ italian ] = "Descrizione :";
+    Text[ danish ] = "Beskrivelse :";
+    Text[ polish ] = "Opis :";
+    Text[ portuguese_brazilian ] = "Description :";
+    Text[ japanese ] = "à–¾:";
+    Text[ korean ] = "¼³¸í :";
+    Text[ chinese_simplified ] = "ËµÃ÷£º";
+    Text[ chinese_traditional ] = "´y­z¡G";
+    Text[ arabic ] = "ÇáæÕİ :";
+    Text[ turkish ] = "Tanım :";
+};
+
+String STR_TAB_TABLE_PROPERTIES
+{
+    Text = "Tabelleneigenschaften" ;
+    Text [ ENGLISH ] = "Table properties" ;
+    Text[ english_us ] = "Table properties";
+    Text[ portuguese ] = "Propriedades da tabela";
+    Text[ greek ] = "Éäéüôçôåò ğéíÜêùí";
+    Text[ dutch ] = "Tabeleigenschappen";
+    Text[ french ] = "Propriétés de la table";
+    Text[ spanish ] = "Propiedades de la tabla";
+    Text[ swedish ] = "Tabellegenskaper";
+    Text[ russian ] = "Ñâîéñòâà òàáëèöû";
+    Text[ italian ] = "Proprietà tabella";
+    Text[ danish ] = "Tabelegenskaber";
+    Text[ polish ] = "W³aœciwoœci tabeli";
+    Text[ portuguese_brazilian ] = "Table properties";
+    Text[ japanese ] = "Ã°ÌŞÙ‚ÌÌßÛÊßÃ¨";
+    Text[ korean ] = "Å×ÀÌºí ¼Ó¼º";
+    Text[ chinese_simplified ] = "±í¸ñÊôĞÔ";
+    Text[ chinese_traditional ] = "¤u§@ªíÄİ©Ê";
+    Text[ arabic ] = "ÎÕÇÆÕ ÇáÌÏæá";
+    Text[ turkish ] = "Tablo özellikleri";
+    Text[ language_user1 ] = " ";
+};
+
+Control RID_DB_TAB_EDITOR
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 40 , 12 ) ;
+    TabStop = TRUE ;
+    SvLook = TRUE ;
+    Hide = TRUE ;
+    HelpId = HID_TABDESIGN_BACKGROUND ;
+};
+
+ErrorBox ERR_INVALID_LISTBOX_ENTRY
+{
+    Message = "Der eingegebenen Text ist kein Element der Liste." ;
+    Message [ English ] = "The text entry does not belong to the list" ;
+    Message [ english_us ] = "The text entry is not an element of the list." ;
+    Message [ italian ] = "Il testo digitato non è un elemento della lista." ;
+    Message [ spanish ] = "Este texto no pertenece a la lista." ;
+    Message [ french ] = "Le texte saisi n'est pas un élément de la liste." ;
+    Message [ dutch ] = "De tekstinvoer is geen element van de lijst." ;
+    Message [ swedish ] = "Den inmatade texten är inget element i listan." ;
+    Message [ danish ] = "Den indtastede tekst er ikke et element i listen." ;
+    Message [ portuguese_brazilian ] = "Der eingegebenen Text ist kein Element der Liste." ;
+    Message [ portuguese ] = "O texto digitado não faz parte da lista." ;
+    Message[ chinese_simplified ] = "ÊäÈëµÄÎÄ×Ö²»ÊÇÁĞµ¥Ôª¡£";
+    Message[ russian ] = "Ââåäåííûé òåêñò íå ÿâëÿåòñÿ ıëåìåíòîì ñïèñêà.";
+    Message[ polish ] = "Wprowadzony tekst nie jest elementem listy.";
+    Message[ japanese ] = "“ü—Í‚³‚ê‚½Ã·½Ä‚ÍØ½Ä‚Ì—v‘f‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Message[ chinese_traditional ] = "¿é¤Jªº¤å¦r¤£¬O²M³æ³æ¤¸¡C";
+    Message[ arabic ] = "ÇáäÕ ÇáãõÏÎá áíÓ ãä Öãä ÚäÇÕÑ ÇáŞÇÆãÉ.";
+    Message[ dutch ] = "De tekstinvoer is geen element van de lijst.";
+    Message[ chinese_simplified ] = "ÊäÈëµÄÎÄ×Ö²»ÊÇÁĞµ¥Ôª¡£";
+    Message[ greek ] = "Ôï êåßìåíï ğïõ åéóÜãáôå äåí åßíáé óôïé÷åßï ôçò ëßóôáò.";
+    Message[ korean ] = "ÀÔ·ÂµÈ ÅØ½ºÆ®´Â ¸ñ·ÏÀÇ Ç×¸ñÀÌ ¾Æ´Õ´Ï´Ù.";
+    Message[ turkish ] = "Girilen metin, liste öğesi değil.";
+    Message[ language_user1 ] = " ";
+};
+
+Menu RID_TABLEDESIGNROWPOPUPMENU
+{
+    ItemList =
+    {
+    MenuItem
+    {
+        ITEM_EDIT_CUT
+    };
+    MenuItem
+    {
+        ITEM_EDIT_COPY
+    };
+    MenuItem
+    {
+        ITEM_EDIT_PASTE
+    };
+    MenuItem
+    {
+        ITEM_EDIT_DELETE
+    };
+    MenuItem
+    {
+        Identifier = SID_TABLEDESIGN_INSERTROWS ;
+        HelpID = SID_TABLEDESIGN_INSERTROWS ;
+        Text = "Zeilen einfügen" ;
+        Text [ ENGLISH ] = "Insert rows" ;
+        Text [ english_us ] = "Insert Rows" ;
+        Text [ portuguese_brazilian ] = "Zeilen einfügen" ;
+        Text [ swedish ] = "Infoga rader" ;
+        Text [ danish ] = "Indsæt rækker" ;
+        Text [ italian ] = "Inserisci righe" ;
+        Text [ spanish ] = "Insertar filas" ;
+        Text [ french ] = "Insérer des lignes" ;
+        Text [ dutch ] = "Rijen invoegen" ;
+        Text [ portuguese ] = "Inserir linhas" ;
+        Text[ chinese_simplified ] = "²åÈëĞĞ";
+            Text[ russian ] = "Âñòàâèòü ñòğîêè";
+            Text[ polish ] = "Wstaw wiersze";
+            Text[ japanese ] = "s‚Ì‘}“ü";
+            Text[ chinese_traditional ] = "´¡¤JÄæ";
+            Text[ arabic ] = "ÅÏÑÇÌ Õİæİ";
+            Text[ dutch ] = "Rijen invoegen";
+            Text[ chinese_simplified ] = "²åÈëĞĞ";
+            Text[ greek ] = "ÅéóáãùãŞ ãñáììşí";
+            Text[ korean ] = "Çà »ğÀÔ";
+            Text[ turkish ] = "Satır ekle";
+            Text[ language_user1 ] = " ";
+        };
+    MenuItem
+    {
+        Separator = TRUE ;
+    };
+    MenuItem
+    {
+        Identifier = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
+        HelpID = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
+        Checkable = TRUE ;
+        Text = "Primärschlüssel" ;
+        Text [ ENGLISH ] = "Primary key" ;
+        Text [ english_us ] = "Primary Key" ;
+        Text [ portuguese_brazilian ] = "Primärschlüssel" ;
+        Text [ swedish ] = "Primärnyckel" ;
+        Text [ danish ] = "Primærnøgle" ;
+        Text [ italian ] = "Chiave primaria" ;
+        Text [ spanish ] = "Llave primaria" ;
+        Text [ french ] = "Clé primaire" ;
+        Text [ dutch ] = "Primaire sleutel" ;
+        Text [ portuguese ] = "Chave primária" ;
+        Text[ chinese_simplified ] = "Ö÷¹Ø¼ü×Ö";
+            Text[ russian ] = "Ïåğâè÷íûé êëş÷";
+            Text[ polish ] = "Klucz g³ówny";
+            Text[ japanese ] = "Ìß×²ÏØ°·°";
+            Text[ chinese_traditional ] = "¥DÃöÁä¦r";
+            Text[ arabic ] = "ãİÊÇÍ ÃÓÇÓí";
+            Text[ dutch ] = "Primaire sleutel";
+            Text[ chinese_simplified ] = "Ö÷¹Ø¼ü×Ö";
+            Text[ greek ] = "Ğñùôåıïí êëåéäß";
+            Text[ korean ] = "±âº»Å°";
+            Text[ turkish ] = "Birinci anahtar";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+String STR_TABED_UNDO_CELLMODIFIED
+{
+    Text = "Zelle ändern" ;
+    Text [ english_us ] = "Modify cell" ;
+    Text [ portuguese ] = "Modificar célula" ;
+    Text [ portuguese_brazilian ] = "Zelle ändern" ;
+    Text [ swedish ] = "Ändra cell" ;
+    Text [ danish ] = "Modificer celle" ;
+    Text [ italian ] = "Modifica cella" ;
+    Text [ spanish ] = "Modificar celda" ;
+    Text [ french ] = "Modifier une cellule" ;
+    Text [ dutch ] = "Cel veranderen" ;
+    Text[ chinese_simplified ] = "¸ü¸Äµ¥Ôª¸ñ";
+    Text[ russian ] = "Èçìåíèòü ÿ÷åéêó";
+    Text[ polish ] = "Modyfikuj komórki";
+    Text[ japanese ] = "¾Ù‚Ì•ÏX";
+    Text[ chinese_traditional ] = "­×§ïÀx¦s®æ";
+    Text[ arabic ] = "ÊÛííÑ ÇáÎÇäÉ";
+    Text[ dutch ] = "Cel veranderen";
+    Text[ chinese_simplified ] = "¸ü¸Äµ¥Ôª¸ñ";
+    Text[ greek ] = "Ôñïğïğïßçóç êåëéïı";
+    Text[ korean ] = "¼¿ º¯°æ";
+    Text[ turkish ] = "Hücreyi değiştir";
+    Text[ language_user1 ] = " ";
+};
+String STR_TABED_UNDO_ROWDELETED
+{
+    Text = "Zeile löschen" ;
+    Text [ english_us ] = "Delete row" ;
+    Text [ portuguese_brazilian ] = "Zeile löschen" ;
+    Text [ swedish ] = "Radera rad" ;
+    Text [ danish ] = "Slet række" ;
+    Text [ italian ] = "Elimina riga" ;
+    Text [ spanish ] = "Eliminar fila" ;
+    Text [ french ] = "Supprimer la ligne" ;
+    Text [ dutch ] = "Rij wissen" ;
+    Text [ portuguese ] = "Eliminar linha" ;
+    Text[ chinese_simplified ] = "É¾³ıĞĞ";
+    Text[ russian ] = "Óäàëèòü ñòğîêó";
+    Text[ polish ] = "Usuñ wiersz";
+    Text[ japanese ] = "s‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£Äæ";
+    Text[ arabic ] = "ÍĞİ Õİ";
+    Text[ dutch ] = "Rij wissen";
+    Text[ chinese_simplified ] = "É¾³ıĞĞ";
+    Text[ greek ] = "ÄéáãñáöŞ óôŞëçò";
+    Text[ korean ] = "Çà »èÁ¦";
+    Text[ turkish ] = "Satırı sil";
+    Text[ language_user1 ] = " ";
+};
+String STR_TABED_UNDO_TYPE_CHANGED
+{
+    Text = "Feldtype ändern" ;
+    Text [ ENGLISH ] = "Feldtype ändern" ;
+    Text[ italian ] = "Cambia tipi di campo";
+    Text[ portuguese_brazilian ] = "Feldtype ändern";
+    Text[ portuguese ] = "Modificar tipo de campo";
+    Text[ danish ] = "Modificer felttype";
+    Text[ french ] = "Modifier le type de champ";
+    Text[ swedish ] = "Ändra fälttyp";
+    Text[ dutch ] = "Veldtype veranderen";
+    Text[ spanish ] = "Modificar tipo de campo";
+    Text[ english_us ] = "Modify Field Type";
+    Text[ chinese_simplified ] = "¸ü¸Ä×Ö¶ÎÀàĞÍ";
+    Text[ russian ] = "Èçìåíèòü òèï ïîëÿ";
+    Text[ polish ] = "Zmieñ typ pola";
+    Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß‚Ì•ÏX";
+    Text[ chinese_traditional ] = "ÅÜ§óÃş«¬";
+    Text[ arabic ] = "ÊÛííÑ äæÚ ÇáÍŞá";
+    Text[ dutch ] = "Veldtype veranderen";
+    Text[ chinese_simplified ] = "¸ü¸Ä×Ö¶ÎÀàĞÍ";
+    Text[ greek ] = "ÁëëáãŞ ôığïõ ğåäßïõ";
+    Text[ korean ] = "ÇÊµåÇü½Ä º¯°æ";
+    Text[ turkish ] = "Alan türünü değiştir";
+    Text[ language_user1 ] = " ";
+};
+String STR_TABED_UNDO_ROWINSERTED
+{
+    Text = "Zeile einfügen" ;
+    Text [ english_us ] = "Insert row" ;
+    Text [ portuguese_brazilian ] = "Zeile einfügen" ;
+    Text [ swedish ] = "Infoga rad" ;
+    Text [ danish ] = "Indsæt række" ;
+    Text [ italian ] = "Inserisci riga" ;
+    Text [ spanish ] = "Insertar fila" ;
+    Text [ french ] = "Insérer une ligne" ;
+    Text [ dutch ] = "Rij invoegen" ;
+    Text [ portuguese ] = "Inserir linha" ;
+    Text[ chinese_simplified ] = "²åÈëĞĞ";
+    Text[ russian ] = "Âñòàâèòü ñòğîêó";
+    Text[ polish ] = "Wstaw wiersz";
+    Text[ japanese ] = "s‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤JÄæ";
+    Text[ arabic ] = "ÅÏÑÇÌ Õİ";
+    Text[ dutch ] = "Rij invoegen";
+    Text[ chinese_simplified ] = "²åÈëĞĞ";
+    Text[ greek ] = "ÅéóáãùãŞ ãñáììŞò";
+    Text[ korean ] = "Çà »ğÀÔ";
+    Text[ turkish ] = "Satır ekle";
+    Text[ language_user1 ] = " ";
+};
+String STR_TABED_UNDO_NEWROWINSERTED
+{
+    Text = "Neue Zeile einfügen" ;
+    Text [ english_us ] = "Insert new row" ;
+    Text [ portuguese_brazilian ] = "Neue Zeile einfügen" ;
+    Text [ swedish ] = "Infoga ny rad" ;
+    Text [ danish ] = "Indsæt ny række" ;
+    Text [ italian ] = "Inserisci riga nuova" ;
+    Text [ spanish ] = "Insertar nueva fila" ;
+    Text [ french ] = "Insérer une nouvelle ligne" ;
+    Text [ dutch ] = "Nieuwe cel invoegen" ;
+    Text [ portuguese ] = "Inserir nova célula" ;
+    Text[ chinese_simplified ] = "ĞÂÔöĞĞ";
+    Text[ russian ] = "Âñòàâèòü íîâóş ñòğîêó";
+    Text[ polish ] = "Wstaw nowy wiersz";
+    Text[ japanese ] = "V‚µ‚¢s‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤JÄæ";
+    Text[ arabic ] = "ÅÏÑÇÌ ÓØÑ ÌÏíÏ";
+    Text[ dutch ] = "Nieuwe cel invoegen";
+    Text[ chinese_simplified ] = "ĞÂÔöĞĞ";
+    Text[ greek ] = "ÅéóáãùãŞ íİáò ãñáììŞò";
+    Text[ korean ] = "»õ ÇàÀ» »ğÀÔ";
+    Text[ turkish ] = "Yeni satır ekle";
+    Text[ language_user1 ] = " ";
+};
+String STR_TABED_UNDO_PRIMKEY
+{
+    Text = "Primärschlüssel einfügen/entfernen" ;
+    Text [ english_us ] = "Insert/remove primary key" ;
+    Text [ portuguese_brazilian ] = "Primärschlüssel einfügen/entfernen" ;
+    Text [ swedish ] = "Infoga/ta bort primärnyckel" ;
+    Text [ danish ] = "Indsæt/fjern primærnøgle" ;
+    Text [ italian ] = "Inserisci/elimina la chiave primaria" ;
+    Text [ spanish ] = "Insertar/eliminar llave primaria" ;
+    Text [ french ] = "Insérer/supprimer une clé primaire" ;
+    Text [ dutch ] = "Primaire sleutel invoegen/verwijderen" ;
+    Text [ portuguese ] = "Inserir/remover chave primária" ;
+    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ russian ] = "Âñòàâèòü/óáğàòü ïåğâè÷íûé êëş÷";
+    Text[ polish ] = "Wstaw /Usuñ g³ówny klucz";
+    Text[ japanese ] = "Ìß×²ÏØ°·°‚Ì‘}“ü/íœ";
+    Text[ chinese_traditional ] = "´¡¤J/§R°£¥DÃöÁä¦r";
+    Text[ arabic ] = "ÅÏÑÇÌ/ÍĞİ ÇáãİÊÇÍ ÇáÃÓÇÓí";
+    Text[ dutch ] = "Primaire sleutel invoegen/verwijderen";
+    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ greek ] = "ĞñïóèŞêç/ÄéáãñáöŞ ğñùôåıïí êëåéäéïı";
+    Text[ korean ] = "±âº»Å° »ğÀÔ/»èÁ¦";
+    Text[ turkish ] = "Birinci anahtar ekle/kaldır";
+    Text[ language_user1 ] = " ";
+};
+
+ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 3 , 1 ) ;
+    Size = MAP_APPFONT ( 200 , 14 ) ;
+    OutputSize = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
+    HideWhenDeactivate = TRUE ;
+    HelpId = HID_TLB_TABLEDESIGN ;
+
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_EDITDOC ;
+            HelpId = ID_BROWSER_EDITDOC ;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Bearbeiten" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEDOC ;
+            HelpId = ID_BROWSER_SAVEDOC ;
+            Text = "Speichern" ;
+            Text [ ENGLISH ] = "Save" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_CUT ;
+            HelpId = ID_BROWSER_CUT ;
+            MID_SBA_QRY_CUT
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_COPY ;
+            HelpId = ID_BROWSER_COPY ;
+            MID_SBA_QRY_COPY
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_PASTE ;
+            HelpId = ID_BROWSER_PASTE ;
+            MID_SBA_QRY_PASTE
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_UNDO ;
+            HelpId = ID_BROWSER_UNDO ;
+            Text = "Rückgängig" ;
+            Text [ ENGLISH ] = "Undo" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_REDO ;
+            HelpId = ID_BROWSER_REDO ;
+            Text = "Wiederherstellen" ;
+            Text [ ENGLISH ] = "Redo" ;
+
+        };
+    };
+};
+String STR_DEFAULT_VALUE
+{
+    Text = "~Defaultwert" ;
+    Text [ ENGLISH ] = "Default" ;
+    Text [ english_us ] = "Default" ;
+    Text [ portuguese_brazilian ] = "Defaultwert" ;
+    Text [ swedish ] = "Standardvärde" ;
+    Text [ danish ] = "Standardværdi" ;
+    Text [ italian ] = "~Valore predefinito" ;
+    Text [ spanish ] = "Valor pre~determinado" ;
+    Text [ french ] = "Valeur par défaut" ;
+    Text [ dutch ] = "~Standaardwaarde" ;
+    Text [ portuguese ] = "~Valor padrão" ;
+    Text[ chinese_simplified ] = "Ä¬ÈÏÖµ";
+    Text[ russian ] = "Çíà÷åíèå ïî óìîë÷àíèş";
+    Text[ polish ] = "Wartoœæ domyœlna";
+    Text[ japanese ] = "•W€’l";
+    Text[ chinese_traditional ] = "Àq»{­È";
+    Text[ arabic ] = "ŞíãÉ ÇİÊÑÇÖíÉ";
+    Text[ dutch ] = "~Standaardwaarde";
+    Text[ chinese_simplified ] = "Ä¬ÈÏÖµ";
+    Text[ greek ] = "ÔéìŞ ğñïåğéëïãŞò";
+    Text[ korean ] = "±âº»°ª";
+    Text[ turkish ] = "~Standart değer";
+    Text[ language_user1 ] = " ";
+};
+String STR_FIELD_REQUIRED
+{
+    Text = "~Eingabe erforderlich" ;
+    Text [ ENGLISH ] = "Field required." ;
+    Text [ english_us ] = "Entry required" ;
+    Text [ portuguese_brazilian ] = "Eingabe erforderlich" ;
+    Text [ swedish ] = "Inmatning krävs" ;
+    Text [ danish ] = "Input kræves" ;
+    Text [ italian ] = "Di~gitazione necessaria" ;
+    Text [ spanish ] = "~Entrada requerida" ;
+    Text [ french ] = "Saisie requise" ;
+    Text [ dutch ] = "~Invoer verlangd" ;
+    Text [ portuguese ] = "~Entrada necessária" ;
+    Text[ chinese_simplified ] = "ÒªÇóÊäÈë";
+    Text[ russian ] = "Òğåáóåòñÿ ââîä";
+    Text[ polish ] = "Wymagany wpis";
+    Text[ japanese ] = "“ü—Í‚ª•K—v‚Å‚·";
+    Text[ chinese_traditional ] = "¥²¶·¿é¤J¼ÆÕu";
+    Text[ arabic ] = "ãØáæÈ ÅÏÎÇá";
+    Text[ dutch ] = "~Invoer verlangd";
+    Text[ chinese_simplified ] = "ÒªÇóÊäÈë";
+    Text[ greek ] = "Áğáéôåßôáé åéóáãùãŞ";
+    Text[ korean ] = "ÀÔ·ÂÀÌ ¿ä±¸µÊ";
+    Text[ turkish ] = "~Giriş gerekiyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_TEXT_LENGTH
+{
+    Text = "~Länge" ;
+    Text [ ENGLISH ] = "Length" ;
+    Text [ english_us ] = "Length" ;
+    Text [ portuguese_brazilian ] = "Länge" ;
+    Text [ swedish ] = "Längd" ;
+    Text [ danish ] = "Længde" ;
+    Text [ italian ] = "~Lunghezza" ;
+    Text [ spanish ] = "~Longitud" ;
+    Text [ french ] = "Longueur" ;
+    Text [ dutch ] = "~Lengte" ;
+    Text [ portuguese ] = "~Comprimento" ;
+    Text[ chinese_simplified ] = "³¤¶È";
+    Text[ russian ] = "Äëèíà";
+    Text[ polish ] = "D³ugoœæ";
+    Text[ japanese ] = "’·‚³";
+    Text[ chinese_traditional ] = "ªø«×";
+    Text[ arabic ] = "ÇáØæá";
+    Text[ dutch ] = "~Lengte";
+    Text[ chinese_simplified ] = "³¤¶È";
+    Text[ greek ] = "ÌŞêïò";
+    Text[ korean ] = "±æÀÌ";
+    Text[ turkish ] = "~Uzunluk";
+    Text[ language_user1 ] = " ";
+};
+String STR_NUMERIC_TYPE
+{
+    Text = "~Typ" ;
+    Text [ ENGLISH ] = "Type" ;
+    Text [ english_us ] = "Type" ;
+    Text [ portuguese_brazilian ] = "Typ" ;
+    Text [ swedish ] = "Typ" ;
+    Text [ danish ] = "Type" ;
+    Text [ italian ] = "~Tipo" ;
+    Text [ spanish ] = "Tip~o" ;
+    Text [ french ] = "Type" ;
+    Text [ dutch ] = "~Type" ;
+    Text [ portuguese ] = "~Tipo" ;
+    Text[ chinese_simplified ] = "ÀàĞÍ";
+    Text[ russian ] = "Òèï";
+    Text[ polish ] = "Typ";
+    Text[ japanese ] = "í—Ş";
+    Text[ chinese_traditional ] = "Ãş«¬";
+    Text[ arabic ] = "ÇáäæÚ";
+    Text[ dutch ] = "~Type";
+    Text[ chinese_simplified ] = "ÀàĞÍ";
+    Text[ greek ] = "~Ôığïò";
+    Text[ korean ] = "Çü½Ä";
+    Text[ turkish ] = "~Tip";
+    Text[ language_user1 ] = " ";
+};
+String STR_LENGTH
+{
+    Text = "~Länge" ;
+    Text [ ENGLISH ] = "Length" ;
+    Text [ english_us ] = "Length" ;
+    Text [ portuguese_brazilian ] = "Tamanho" ;
+    Text [ swedish ] = "Längd" ;
+    Text [ danish ] = "Længde" ;
+    Text [ italian ] = "Lun~ghezza" ;
+    Text [ spanish ] = "Ta~maño" ;
+    Text [ french ] = "Longueur" ;
+    Text [ dutch ] = "~Lengte" ;
+    Text [ portuguese ] = "~Comprimento" ;
+    Text[ chinese_simplified ] = "³¤¶È";
+    Text[ russian ] = "Äëèíà";
+    Text[ polish ] = "D³ugoœæ";
+    Text[ japanese ] = "’·‚³";
+    Text[ chinese_traditional ] = "ªø«×";
+    Text[ arabic ] = "ÇáØæá";
+    Text[ dutch ] = "~Lengte";
+    Text[ chinese_simplified ] = "³¤¶È";
+    Text[ greek ] = "ÌŞêïò";
+    Text[ korean ] = "±æÀÌ";
+    Text[ turkish ] = "~Uzunluk";
+    Text[ language_user1 ] = " ";
+};
+String STR_SCALE
+{
+    Text = "~Nachkommastellen" ;
+    Text [ ENGLISH ] = "Scale" ;
+    Text [ english_us ] = "Decimal places" ;
+    Text [ portuguese_brazilian ] = "Nachkommastellen" ;
+    Text [ swedish ] = "Decimalpositio~ner" ;
+    Text [ danish ] = "Antal decimaler" ;
+    Text [ italian ] = "Posizio~ni decimali" ;
+    Text [ spanish ] = "~Decimales" ;
+    Text [ french ] = "Décimales" ;
+    Text [ dutch ] = "~Cijfers achter de komma" ;
+    Text [ portuguese ] = "Casas ~decimais" ;
+    Text[ chinese_simplified ] = "Ğ¡ÊıµãÎ»Êı";
+    Text[ russian ] = "Äğîáíàÿ ÷àñòü";
+    Text[ polish ] = "Miejsca po przecinku";
+    Text[ japanese ] = "¬”“_ˆÈ‰º‚ÌŒ…”";
+    Text[ chinese_traditional ] = "¤p¼ÆÂI¦ì";
+    Text[ arabic ] = "ÇáãäÇÒá ÇáÚÔÑíÉ";
+    Text[ dutch ] = "~Cijfers achter de komma";
+    Text[ chinese_simplified ] = "Ğ¡ÊıµãÎ»Êı";
+    Text[ greek ] = "ÄåêáäéêÜ øçößá";
+    Text[ korean ] = "¼Ò¼öÁ¡ ÀÌÇÏ ÀÚ¸®";
+    Text[ turkish ] = "~Ondalık basamaklar";
+    Text[ language_user1 ] = " ";
+};
+String STR_FORMAT
+{
+    Text = "Format-Beispiel" ;
+    Text [ ENGLISH ] = "Format sample" ;
+    Text[ italian ] = "Esempio di formato";
+    Text[ portuguese_brazilian ] = "Format-Code";
+    Text[ portuguese ] = "Exemplo de formato";
+    Text[ danish ] = "Format eksempel";
+    Text[ french ] = "Exemple de format";
+    Text[ swedish ] = "Format-exempel";
+    Text[ dutch ] = "Opmaakvoorbeeld";
+    Text[ spanish ] = "Ejemplo de formato";
+    Text[ english_us ] = "Format Example";
+    Text[ chinese_simplified ] = "¸ñÊ½-Ê¾·¶";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Ïğèìåğ ôîğìàòà";
+    Text[ polish ] = "Przyk³ad formatu";
+    Text[ japanese ] = "‘®—á";
+    Text[ chinese_traditional ] = "®æ¦¡-¥Ü½d";
+    Text[ arabic ] = "ãËÇá ááÊäÓíŞ";
+    Text[ dutch ] = "Opmaakvoorbeeld";
+    Text[ chinese_simplified ] = "¸ñÊ½-Ê¾·¶";
+    Text[ greek ] = "ĞáñÜäåéãìá ìïñöŞò";
+    Text[ korean ] = "¼­½Ä ¿¹";
+    Text[ turkish ] = "Format örneği";
+};
+String STR_HELP_BOOL_DEFAULT
+{
+    Text = "Wählen Sie einen Wert, der in jedem neu eingefügten Datensatz als Standard erscheinen soll.\nWählen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll." ;
+    Text [ ENGLISH ] = "Wählen Sie einen Wert, der in jedem neu eingefügten Datensatz als Standard erscheinen soll.\nWählen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll." ;
+    Text[ italian ] = "Selezionate un valore da inserire come valore standard in ogni nuovo record di dati.\nSelezionate la sequenza vuota per non impostare nessun valore standard.";
+    Text[ portuguese_brazilian ] = "Wählen Sie einen Wert, der in jedem neu eingefügten Datensatz als Standard erscheinen soll.\nWählen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll.";
+    Text[ portuguese ] = "Seleccione o valor a aparecer como padrão em cada registo de dados introduzido de novo.\nSeleccione a sequência de caracteres vazia, se o campo não tiver que apresentar nenhum valor padrão.";
+    Text[ danish ] = "Vælg en værdi, som skal vises som standard i hver ny datapost.\nVælg den tomme streng, hvis feltet ikke skal have en standardværdi.";
+    Text[ french ] = "Définissez la valeur à saisir comme valeur par défaut dans tout nouvel enregistrement.\\Si un champ ne doit pas adopter cette valeur par défaut, vous y saisirez la chaîne (String) vide.";
+    Text[ swedish ] = "Välj ett värde som skall vara standard i varje ny infogad datapost.\nVälj den tomma stringen ifall om att fältet inte skall ha något standardvärde.";
+    Text[ dutch ] = "Kies een waarde die in iedere nieuw ingevoegd record als standaard moet verschijnen.\nKies een lege string als u niet wilt dat het veld de standaardwaarde krijgt toegewezen.";
+    Text[ spanish ] = "Elija el valor que deba aparecer como estándar en cada registro de datos que se\ninserte de nuevo. Elija el string vacío si el campo no ha de contener tal valor estándar.";
+    Text[ english_us ] = "Select a value that is to appear in all new records as default.\nIf the field is not to have a default value leave it empty.";
+    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÓÃÓÚÃ¿ĞÂÔöÊı¾İÌõÄ¿µÄ±ê×¼ÊıÖµ¡£\nÈç¹û×Ö¶Î²»Ó¦º¬ÓĞÕâ¸ö±ê×¼ÊıÖµ£¬ÄÇÃ´Äú¾ÍÑ¡ÔñÒ»¸ö¿Õ°×µÄ×Ö´®¡£";
+    Text[ russian ] = "Âûáåğèòå çíà÷åíèå, êîòîğîå äîëæíî ïîÿâëÿòüñÿ â êàæäîé âíîâü ââåäåííîé çàïèñè.\nÂûáåğåèòå ïóñòóş ñòğîêó, åñëè ïîëå íå äîëæíî èìåòü òàêîãî ñòàíäàğòíîãî çíà÷åíèÿ.";
+    Text[ polish ] = "Wybierz wartoœæ, która w ka¿dym nowo wstawionym rekordzie bêdzie wartoœci¹ standardow¹.\nWybierz pusty ci¹g, jeœli pole nie powinno mieæ standardowej wartoœci.";
+    Text[ japanese ] = "V‚µÚº°ÄŞ‚É•W€’l‚Æ‚µ‚Ä¦‚³‚ê‚é”’l‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢B\nÌ¨°ÙÄŞ‚É•W€’l‚ğİ’è‚µ‚È‚¢ê‡‚Í‹ó”’‚É‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó¥Î©ó¨C·s¼W¸ê®Æ¶µ¥Øªº¼Ğ·Ç¼Æ­È¡C\n­YÄæ¦ì¤£À³¸Ó§t¦³³o­Ó¼Ğ·Ç¼Æ­È¡A´N¿ï¾Ü¤@­ÓªÅªº¦r¤¸¡C";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáŞíãÉ ÇáÊí íÌÈ Ãä ÊÙåÑ ßŞíãÉ ÇİÊÑÇÖíÉ İí ßá ÓÌá ÌÏíÏ íÊã ÅÏÑÇÌå.\nÅĞÇ ßäÊ ÊÑíÏ ãäÚ ÙåæÑ ãËá åĞå ÇáŞíãÉ ÇáÇİÊÑÇÖíÉ¡ ÇáÑÌÇÁ ÇÎÊíÇÑ ÓáÓáÉ İÇÑÛÉ.";
+    Text[ dutch ] = "Kies een waarde die in iedere nieuw ingevoegd record als standaard moet verschijnen.\nKies een lege string als u niet wilt dat het veld de standaardwaarde krijgt toegewezen.";
+    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÓÃÓÚÃ¿ĞÂÔöÊı¾İÌõÄ¿µÄ±ê×¼ÊıÖµ¡£\nÈç¹û×Ö¶Î²»Ó¦º¬ÓĞÕâ¸ö±ê×¼ÊıÖµ£¬ÄÇÃ´Äú¾ÍÑ¡ÔñÒ»¸ö¿Õ°×µÄ×Ö´®¡£";
+    Text[ greek ] = "Åğéëİîôå ìéá ôéìŞ, ç ïğïßá èá åìöáíßæåôáé ùò ğñïåğéëïãŞ óå êÜèå íİá åããñáöŞ ğïõ èá ğñïóèİóåôå.\nÁí äåí èİëåôå íá ïñßóåôå ìéá ôİôïéá ôéìŞ, áöŞóôå ôï ğåäßï êåíü.";
+    Text[ korean ] = "¸ğµç »õ ·¹ÄÚµå¸¦ À§ÇÑ ÃÊ±â°ªÀ» Á¤ÇÏ½Ê½Ã¿À.\nÇÊµå°¡ ±×·¯ÇÑ ÃÊ±â°ªÀ» °®Áö ¸»¾Æ¾ß ÇÒ °æ¿ì¿¡´Â ºó ¹®ÀÚ¿­À» ¼±ÅÃÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Yeni eklenen her kayıtta standart olarak bulunacak bir değer seçin.\nAlan için bu tür bir standart değer belirlenmeyecekse boş dizilim seçin.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_DEFAULT_VALUE
+{
+    Text = "Geben Sie hier einen Standardwert für das Feld an.\n\nWenn Sie später Daten in die Tabelle eingeben, wird in jedem neuen Datensatz diese Zeichenkette für das aktuelle Feld verwendet. Sie sollte deshalb der weiter unten einzugebenden Zellenformatierung genügen." ;
+    Text [ ENGLISH ] = "Enter a default value for this field." ;
+    Text [ english_us ] = "Enter a default value for this field.\n\nThis character chain, for the field currently selected is entered into each new record when data is entered into the table. It should, therefore, correspond to the cell format that needs to be entered below." ;
+    Text [ portuguese_brazilian ] = "Geben Sie hier einen Standardwert fuer das Feld an." ;
+    Text [ swedish ] = "Ange här ett standardvärde för fältet.\n\nNär Du matar in data i tabellen senare används den här teckensträngen för det aktuella fältet i varje datapost. Den bör därför motsvara cellformateringen som skall matas in nedan." ;
+    Text [ danish ] = "Angiv her en standardværdi for dette felt.\n\nNår du senere indtaster data i denne tabel, bliver denne streng brugt i det aktuelle felt i hver ny datapost. Du bør derfor tage hensyn til den celleformatering der indtastes nedenfor." ;
+    Text [ italian ] = "Specificate qui un valore standard per il campo.\n\nDigitando in seguito dei dati nella tabella, in ogni record di dati nuovo verrà utilizzata questa stringa per il campo attuale. Per questo motivo è necessario che corrisponda al formato della cella da specificare qui di seguito." ;
+    Text [ spanish ] = "Especifique aquí un valor predeterminado para el campo.\n\nSi posteriormente introduce datos en la tabla, en cada registro nuevo se usará esta cadena de carecteres para el campo actual. Por esta razón debe corresponder al formato de celda a introducir más abajo." ;
+    Text [ french ] = "Saisissez une valeur par défaut pour le champ.\n\nIl s'agit de la chaîne de caractères qui sera utilisée dans chaque nouvel enregistrement pour le champ actif lorsque vous saisirez des données dans la table. Elle doit donc correspondre au format de cellule que vous devrez saisir plus bas." ;
+    Text [ dutch ] = "Geef hier een standaardwaarde voor het veld aan.\n\nAls u dan later gegevens invoert in de tabel dan wordt deze tekenreeks in iedere nieuwe record gebruikt voor het actuele veld en moet corresponderen met de hierna te definiëren celopmaak." ;
+    Text [ portuguese ] = "Indique um valor padrão para este campo.\n\nEsta cadeia de caracteres será utilizada para todos os novos registos de dados que introduzir no campo activo da tabela." ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªÕâ¸ö×Ö¶ÎÊäÈëÒ»¸öÄ¬ÈÏÖµ¡£\n\nÈç¹ûÄúÒÔºóÍù±í¸ñÖĞÊäÈëÊı¾İ£¬Ã¿¸öĞÂµÄÊı¾İÌõÄ¿»á²ÉÓÃÕâ¸öÊı¾İ¸ñÊ½¡£Òò´ËÊı¾İ±ØĞë¾ß±¸ÏÂÃæµÄµ¥Ôª¸ñ¸ñÊ½¡£";
+    Text[ russian ] = "Çàäàéòå çíà÷åíèå ïî óìîë÷àíèş äëÿ ıòîãî ïîëÿ.\n\nÅñëè Âû ïîçæå ââåäåòå äàííûå â òàáëèöó, òî äëÿ òåêóùåãî ïîëÿ â êàæäîé íîâîé çàïèñè äàííûõ áóäåò èñïîëüçîâàòüñÿ ıòà ñòğîêà ñèìâîëîâ. Ïîıòîìó îíà äîëæíà ñîîòâåòñòâîâàòü çàäàâàåìîìó âïğåäü ôîğìàòó ÿ÷ååê.";
+    Text[ polish ] = "Proszê podaæ wartoœæ domyœln¹ dla pola.\n\nGdy bêdziesz póŸniej wpisywa³ dane do tabeli, w ka¿dym nowym rekordzie ten ci¹g znaków zostanie u¿yty dla aktualnego pola. Powinien on dlatego odpowiadaæ formatowi komórek, który trzeba wpisaæ ni¿ej.";
+    Text[ japanese ] = "‚±‚±‚ÉÌ¨°ÙÄŞ‚ÌŠî€’l‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B\n\nŒã‚ÅÃ°ÌŞÙ‚ÉÃŞ°À‚ğ“ü—Í‚·‚éÛAŠeX‚ÌV‚µ‚¢Úº°ÄŞ‚É‚ÍAŒ»İ‚ÌÌ¨°ÙÄŞ—p‚Ì•¶š—ñ‚ªg—p‚³‚ê‚Ü‚·B‚Å‚·‚©‚ç‚»‚Ì•¶š—ñ‚ÍAˆÈ‰º‚Åİ’è‚·‚é¾Ù‚Ì‘®‚Æˆê’v‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "½Ğ±z¬°³o­ÓÄæ¦ì¿é¤J¤@­ÓÀq»{­È¡C\n\n¦b³o­ÓÄæ¦ì¤§¤U¿é¤J¨ä¥L¼ÆÕu´N·|±Ä¥Î³o­Ó¼ÆÕuªº®æ¦¡¡C";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÇİÊÑÇÖíÉ áåĞÇ ÇáÍŞá.\n\nÚäÏãÇ ÊŞæã ÈÅÏÎÇá ÈíÇäÇÊ İí ÇáÌÏæá İí æŞÊ áÇÍŞ¡ Óæİ íÊã ÇÓÊÎÏÇã ÓáÓáÉ ÇáÃÍÑİ åĞå İí ßá ÓÌá ÌÏíÏ.áåĞÇ íÌÈ Ãä Êßæä åĞå ÇáÓáÓáÉ ãæÇİíÉ áÊäÓíŞ ÇáÎáÇíÇ ÇáĞí íÌÈ ÅÏÎÇáå ÃÏäÇå.";
+    Text[ dutch ] = "Geef hier een standaardwaarde voor het veld aan.\n\nAls u dan later gegevens invoert in de tabel dan wordt deze tekenreeks in iedere nieuwe record gebruikt voor het actuele veld en moet corresponderen met de hierna te definiëren celopmaak.";
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªÕâ¸ö×Ö¶ÎÊäÈëÒ»¸öÄ¬ÈÏÖµ¡£\n\nÈç¹ûÄúÒÔºóÍù±í¸ñÖĞÊäÈëÊı¾İ£¬Ã¿¸öĞÂµÄÊı¾İÌõÄ¿»á²ÉÓÃÕâ¸öÊı¾İ¸ñÊ½¡£Òò´ËÊı¾İ±ØĞë¾ß±¸ÏÂÃæµÄµ¥Ôª¸ñ¸ñÊ½¡£";
+    Text[ greek ] = "ÅéóÜãåôå ìéá ôéìŞ ğñïåğéëïãŞò ãéá ôï ğåäßï.\n\nÁí èåëŞóåôå áñãüôåñá íá åéóÜãåôå äåäïìİíá óôïí ğßíáêá èá ÷ñçóéìïğïéçèåß áõôŞ ç ôéìŞ ãéá êÜèå íİá åããñáöŞ. Ãéá áõôü ôï ëüãï èá ğñİğåé íá óõìöùíåß ìå ôç ìïñöŞ êåëéïı ğïõ ğñİğåé íá åéóÜãåôå óôç óõíİ÷åéá.";
+    Text[ korean ] = "ÀÌ ÇÊµå¸¦ À§ÇÑ Ç¥ÁØ°ªÀ» ÀÔ·ÂÇÏ½Ê½Ã¿À. \n\n³ªÁß¿¡ Å×ÀÌºí¿¡ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÒ ¶§ »õ ·¹ÄÚµå¿¡´Â ¸ğµÎ ÀÌ ¹®ÀÚ¿­ÀÌ »ç¿ëµÉ °ÍÀÔ´Ï´Ù. ±×·¯¹Ç·Î ¹®ÀÚ¿­Àº ¾Æ·¡ ÀÔ·Â°¡´ÉÇÑ ¼¿ Æ÷¸Ë¿¡ ÀûÇÕÇØ¾ß ÇÕ´Ï´Ù.";
+    Text[ turkish ] = "Alan için bir standart değer girin.\n\nDaha sonra tabloya veri girişi yaptığınızda, her yeni veri kümesinde, yürürlükteki alan için bu dize kullanılır. Dize bu nedenle aşağıda girilmesi gereken hücre formatına uygun olmalıdır.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_FIELD_REQUIRED
+{
+    Text = "Aktivieren Sie diese Option, wenn in diesem Feld keine NULL-Werte erlaubt sind, der Benutzer also immer Daten eingeben muss." ;
+    Text [ ENGLISH ] = "Must this field not contain any entries that are empty?" ;
+    Text [ english_us ] = "Activate this option if this field cannot contain NULL values, i.e. the user must always key in data." ;
+    Text [ portuguese_brazilian ] = "Geben Sie an, ob der Benutzer fuer dieses Feld immer Daten eingeben muß." ;
+    Text [ swedish ] = "Aktivera det här alternativet om inga NULL-värden är tillåtna och användaren alltså alltid måste mata in data." ;
+    Text [ danish ] = "Aktiver denne indstilling når NULL-værdier ikke er tilladt i dette felt, dvs. brugeren altid skal indtaste data." ;
+    Text [ italian ] = "Attivate questa opzione se nel campo non sono ammessi valori ZERO, ossia se l'utente deve sempre inserire dei dati." ;
+    Text [ spanish ] = "Active esta opción si no están permitidos valores null en este campo, es decir, si el usuario debe introducir los datos siempre." ;
+    Text [ french ] = "Activez cette option si ce champ n'accepte aucune valeur NULL et si l'utilisateur doit donc toujours y saisir des données." ;
+    Text [ dutch ] = "Activeer deze optie als in dit veld geen NUL-waarde is toegestaan, d.w.z. dat de gebruiker hier altijd iets moet invullen." ;
+    Text [ portuguese ] = "Active esta opção se não forem permitidos valores ZERO neste campo, tendo o utilizador que introduzir sempre dados." ;
+    Text[ chinese_simplified ] = "Èç¹ûÓÃ»§ÔÚÕâ¸ö×Ö¶ÎÄÚ²»ÔÊĞíÊ¹ÓÃÁãÖµ¶ø±ØĞëÊäÈëÊı¾İ£¬ÇëÄú¼¤»îÕâ¸öÑ¡Ïî¡£";
+    Text[ russian ] = "Àêòèâèğóéòå ıòó îïöèş, åñëè â ıòîì ïîëå íå äîïóñêàşòñÿ çíà÷åíèÿ ÍÓËß, ò.å. ïîëüçîâàòåëü äîëæåí ïîñòîÿííî ââîäèòü â íåãî äàííûå.";
+    Text[ polish ] = "Uaktywnij tê opcjê, jeœli niedozwolone s¹ w tym polu wartoœci ZEROWE, jeœli u¿ytkownik musi zawsze wpisywaæ dane ";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚É¾ŞÛ’l‚ğ”F‚ß‚È‚¢A‚Â‚Ü‚èí‚ÉÕ°»Ş°‚ªÃŞ°À‚ğ“ü—Í‚·‚é•K—v‚ª‚ ‚éê‡‚ÍA‚±‚ÌµÌß¼®İ‚ğ±¸Ã¨ÌŞ‚É‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "³]©w¨Ï¥ÎªÌ¦b³o­ÓÄæ¦ì¤º¤£¥i¥H¿é¤J¹s­È¦Ó¥²¶·¿é¤J¦³®Ä¸ê®Æ¡A±z¥²¶·¿E¬¡³o­Ó¿ï¶µ¡C";
+    Text[ arabic ] = "Şã ÈÊäÔíØ åĞÇ ÇáÎíÇÑ¡ ÅĞÇ ßÇäÊ ÇáŞíã ÇáÎÇáíÉ ããäæÚÉ İí åĞÇ ÇáÍŞá¡ Ãí ÅĞÇ ßÇä Úáì ÇáãÓÊÎÏã ÅÏÎÇá ÈíÇäÇÊ ÏÇÆãÇğ.";
+    Text[ dutch ] = "Activeer deze optie als in dit veld geen NUL-waarde is toegestaan, d.w.z. dat de gebruiker hier altijd iets moet invullen.";
+    Text[ chinese_simplified ] = "Èç¹ûÓÃ»§ÔÚÕâ¸ö×Ö¶ÎÄÚ²»ÔÊĞíÊ¹ÓÃÁãÖµ¶ø±ØĞëÊäÈëÊı¾İ£¬ÇëÄú¼¤»îÕâ¸öÑ¡Ïî¡£";
+    Text[ greek ] = "ÅíåñãïğïéŞóôå áõôŞ ôçí åğéëïãŞ üôáí äåí åğéôñİğïíôáé ÌÇÄÅÍÉÊÅÓ ôéìİò óå áõôü ôï ğåäßï, äçë. üôáí ï ÷ñŞóôçò ğñİğåé ğÜíôá íá åéóÜãåé äåäïìİíá.";
+    Text[ korean ] = "ÀÌ ÇÊµå¿¡ ³Î°ªÀÌ Çã¿ëµÇ¾î ÀÖÁö ¾Ê¾Æ »ç¿ëÀÚ°¡ Ç×»ó µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇØ¾ß ÇÒ °æ¿ì, ÀÌ ¿É¼ÇÀ» ½ÇÇàÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Bu seçeneği, bu alana BOŞ değer girilememesi, yani kullanıcının daima vergi girmek zorunda olması halinde etkinleştiriniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_TEXT_LENGTH
+{
+    Text = "Geben Sie die maximal zulässige Textlänge an." ;
+    Text [ ENGLISH ] = "Enter the maximum of characters in a textfield." ;
+    Text [ english_us ] = "Enter the maximum text length permittted." ;
+    Text [ portuguese_brazilian ] = "Geben Sie die maximal zulaessige Textlänge an." ;
+    Text [ swedish ] = "Ange den maximalt tillåtna textlängden." ;
+    Text [ danish ] = "Angiv den maksimal tilladte tekstlængde." ;
+    Text [ italian ] = "Digitare la lunghezza massima ammessa per il testo." ;
+    Text [ spanish ] = "Especifique la longitud máxima permitida de texto." ;
+    Text [ french ] = "Indiquez la longueur maximum autorisée pour le texte." ;
+    Text [ dutch ] = "Geef de maximaal toelaatbare tekstlengte aan." ;
+    Text [ portuguese ] = "Defina o comprimento máximo permitido para o texto." ;
+    Text[ chinese_simplified ] = "ÇëÉè¶¨ÊäÈëÎÄµÄ×î³¤¶È¡£";
+    Text[ russian ] = "Çàäàéòå ìàêñèìàëüíî äîïóñòèìóş äëèíó òåêñòà.";
+    Text[ polish ] = "Proszê podaæ maksymaln¹ dopuszczaln¹ d³ugoœæ tekstu.";
+    Text[ japanese ] = "‹–‰Â‚·‚é•¶š—ñ‚ÌÅ‚‚Ì’·‚³‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "½Ğ³]©w¿é¤J¤åªº³Ìªø«×¡C";
+    Text[ arabic ] = "Şã ÈÅÏÎÇá ÇáÍÏ ÇáÃŞÕì ãä ÇáÃÍÑİ ÇáãÓãæÍ ÈåÇ İí ÍŞá äÕ.";
+    Text[ dutch ] = "Geef de maximaal toelaatbare tekstlengte aan.";
+    Text[ chinese_simplified ] = "ÇëÉè¶¨ÊäÈëÎÄµÄ×î³¤¶È¡£";
+    Text[ greek ] = "ÅéóáãùãŞ ìİãéóôïõ åğéôñåğüìåíïõ ìŞêïõò êåéìİíïõ.";
+    Text[ korean ] = "ÃÖ´ëÇÑÀ¸·Î Çã¿ëµÈ ÅØ½ºÆ®±æÀÌ¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "İzin verilen azami metin uzunluğunu giriniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_NUMERIC_TYPE
+{
+    Text = "Legen Sie hier fest, welchen Typ die Zahl haben soll." ;
+    Text [ ENGLISH ] = "Enter the number format." ;
+    Text [ english_us ] = "Enter the number format." ;
+    Text [ portuguese_brazilian ] = "Geben Sie den Zahlentyp an." ;
+    Text [ swedish ] = "Definiera typ för talet här." ;
+    Text [ danish ] = "Definer her tallets type." ;
+    Text [ italian ] = "Digitate il tipo di numero." ;
+    Text [ spanish ] = "Especifique aquí el formato numérico." ;
+    Text [ french ] = "Spécifiez le type de nombre." ;
+    Text [ dutch ] = "Geef de getalnotatie aan." ;
+    Text [ portuguese ] = "Defina o formato numérico." ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÉè¶¨Êı×ÖÀàĞÍ¡£";
+    Text[ russian ] = "Çàäàéòå òèï ÷èñëà.";
+    Text[ polish ] = "Tutaj ustal typ liczby.";
+    Text[ japanese ] = "”‚ÌÀ²Ìß‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "½Ğ³]©w¼Æ¦rÃş«¬¡C";
+    Text[ arabic ] = "Şã ÈÊÍÏíÏ äãØ ÇáÑŞã åäÇ.";
+    Text[ dutch ] = "Geef de getalnotatie aan.";
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÉè¶¨Êı×ÖÀàĞÍ¡£";
+    Text[ greek ] = "Êáèïñßóôå ôçí ìïñöŞ ôïõ áñéèìïı.";
+    Text[ korean ] = "¼öÀÇ À¯ÇüÀ» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Rakam tipini belirleyiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_LENGTH
+{
+    Text = "Geben Sie die Länge für Daten in diesem Feld an.\n\nFür Dezimal-Felder ist das die maximale Länge der eingegebenen Zahl, für Binärfelder die Länge des Datenblockes.\nWenn der Wert größer ist als der maximal für diese Datenbank zulässige, wird er entsprechend korrigiert." ;
+    Text [ english_us ] = "Determine the length data can have in this field.\n\nIf decimal fields then the maximum length of the number to be entered, if binary then the length of the data block.\nThe value will be corrected accordingly if it exceeds the maximum for this database." ;
+    Text [ portuguese_brazilian ] = "Geben Sie die Länge dieses Feldtyps an." ;
+    Text [ swedish ] = "Ange längden för data i det här fältet.\n\nFör decimalfält är det den maximala längden på det inmatade talet, för binärfält längden på datablocket.\nOm värdet är större än vad som maximalt är tillåtet för den här databasen, korrigeras det." ;
+    Text [ danish ] = "Angiv længden for data i dette felt.\n\nFor decimalfelter er det tallets maksimale længde, for binærfelter er det datablokkens længde.\nHvis værdien er større en den maksimal tilladte for denne database, bliver den rettet tilsvarende." ;
+    Text [ italian ] = "Digitate la lunghezza di questo tipo di campo.\n\nPer i campi decimali la lunghezza massima ammessa è il numero dato, per i campi binari è la lunghezza del blocco dati.\nSe il valore è maggiore di quello ammesso dal database attuale verrà corretto automaticamente." ;
+    Text [ spanish ] = "Especifique la longitud de los datos en este tipo de campo.\n\nPara campos decimales será la longitud máxima del número introducido; para campos binarios, la longitud del bloque de datos.\nSi el valor fuera mayor que el máximo permitido para esta base de datos, se corregirá correspondientemente." ;
+    Text [ french ] = "Indiquez la longueur pour les données de ce champ.\n\nÀ savoir : pour les champs de type Décimal, la longueur maximale du nombre à saisir et pour les champs de type Binaire la longueur du bloc de données.\nLa valeur sera corrigée automatiquement si elle devait être supérieure au maximum autorisé pour cette base de données." ;
+    Text [ dutch ] = "Geef de lengte van dit veldtype aan.\n\nVoor decimale velden is dit de maximale lengte van het in te vullen getal, voor binaire velden de lengte van het gegevensblok.\nAls het veld langer idan voor deze database maximaal is toegestaan dan wordt de lengte gecorrigeerd." ;
+    Text [ portuguese ] = "Defina o comprimento para os dados deste campo.\n\nPara campos decimais este é o comprimento máximo do número indicado; para campos binários é o comprimento do bloco de dados.\nEste valor será devidamente corrigido se for superior ao máximo permitido para esta base de dados," ;
+    Text[ chinese_simplified ] = "ÇëÄú¸ø¶¨Õâ¸ö×Ö¶ÎÖĞµÄÊı¾İ³¤¶È¡£\n\nÔÚÊ®½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İµÄ×î´ó³¤¶È£¬ÔÚ¶ş½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İ¿éµÄ³¤¶È¡£\nÈç¹ûÕâ¸öÊıÖµ´óÓÚÊı¾İ¿âÔÊĞíµÄ×î´óÖµ£¬ÄÇÃ´Õâ¸öÊıÖµ»á±»ÏàÓ¦µØ¸üÕı¡£";
+    Text[ russian ] = "Çàäàéòå äëèíó äàííûõ äëÿ ıòîãî ïîëÿ.\n\nÄëÿ äåñÿòè÷íûõ ïîëåé - ıòî ìàêñèìàëüíàÿ äëèíà ââåäåííîãî ÷èñëà, äëÿ áèíàğíûõ ïîëåé - ıòî äëèíà áëîêà äàííûõ.\nÅñëè çàäàííîå çíà÷åíèå áóäåò äëèíåå ìàêñèìàëüíî äîïóñòèìîãî äëÿ ıòîé áàçû äàííûõ, òî îíî áóäåò ñîîòâåòñòâåííî èñïğàâëåíî.";
+    Text[ polish ] = "Podaj d³ugoœæ danych w tym polu.\n\nDla pól dziesiêtnych oznacza ona maksymaln¹ d³ugoœæ dla wpisanych liczb, w przypadku pól birarnych okreœla ona d³ugoœæ bloku danych.\nJe¿eli wartoœæ b¹dzie przekraczaæ dopuszczaln¹ dla tego pola wartoœæ maksymaln¹, zostanie ona odpowiednio skorygowana.";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚É“ü‚ê‚éÃŞ°À‚Ì’·‚³‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B\n\n\\i–@Ì¨°ÙÄŞ‚É‚Í“ü—Í‚·‚é”‚ÌÅ‘åŒÀ‚Ì’·‚³A“ñi–@Ì¨°ÙÄŞ‚É‚ÍÃŞ°ÀÌŞÛ¯¸‚Ì’·‚³‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B\n”’l‚ª‚±‚ÌÃŞ°ÀÍŞ°½‚ÌÅ‘åŒÀ‚ğ’´‚¦‚éê‡‚ÍA‚»‚ê‚É‚µ‚½‚ª‚Á‚ÄC³‚³‚ê‚Ü‚·B";
+    Text[ chinese_traditional ] = "½Ğ³]©w³o­ÓÄæ¦ìÃş«¬ªºªø«×¡C\n\n¤Q¶i»sÄæ¦ì«ü©w«ü¿é¤Jªº¼Æ¦rªº³Ìªø«×¡A¤G¤¸Äæ¦ì«ü©w¼ÆÕu¶ôªº³Ìªø«×¡C\n¦pªG¿é¤Jªº¼ÆÕu¶W¹L³]©wªº­S³ò¡Aµ{§Ç´N·|¦Û°Ê­×¥¿¥¦¡C";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá Øæá ÇáÈíÇäÇÊ İí åĞÇ ÇáÍŞá.\n\nÈÇáäÓÈÉ ááÍŞæá ÇáÚÔÑíÉ íßæä åæ ÇáØæá ÇáÃŞÕì ááÑŞã ÇáãõÏÎá¡ ÃãÇ ÈÇáäÓÈÉ ááÍŞæá ÇáËäÇÆíÉ İåæ Øæá ŞÇáÈ ÇáÈíÇäÇÊ.\nÅĞÇ ßÇäÊ ÇáŞíãÉ ÃßÈÑ ãä ÇáÍÏ ÇáÃŞÕì ÇáãÓãæÍ Èå İí ŞÇÚÏÉ ÇáÈíÇäÇÊ åĞå¡ İÓæİ íÊã ÊÕÍíÍåÇ ÈÇáÔßá ÇáãäÇÓÈ.";
+    Text[ dutch ] = "Geef de lengte van dit veldtype aan.\n\nVoor decimale velden is dit de maximale lengte van het in te vullen getal, voor binaire velden de lengte van het gegevensblok.\nAls het veld langer idan voor deze database maximaal is toegestaan dan wordt de lengte gecorrigeerd.";
+    Text[ chinese_simplified ] = "ÇëÄú¸ø¶¨Õâ¸ö×Ö¶ÎÖĞµÄÊı¾İ³¤¶È¡£\n\nÔÚÊ®½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İµÄ×î´ó³¤¶È£¬ÔÚ¶ş½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İ¿éµÄ³¤¶È¡£\nÈç¹ûÕâ¸öÊıÖµ´óÓÚÊı¾İ¿âÔÊĞíµÄ×î´óÖµ£¬ÄÇÃ´Õâ¸öÊıÖµ»á±»ÏàÓ¦µØ¸üÕı¡£";
+    Text[ greek ] = "ÅéóÜãåôå ôï ìŞêïò ôùí äåäïìİíùí ãéá áõôü ôï ğåäßï.\n\nÁõôü ôï ìŞêïò åßíáé ãéá ğåäßá äåêáäéêşí ôï ìİãéóôï ìŞêïò ôïõ åéóçãìİíïõ áñéèìïı, ãéá ğåäßá äõáäéêşí ôï ìŞêïò åíüò ìğëïê åéóáãùãŞò\nÁí ç ôéìŞ åßíáé ìåãáëıôåñç áğü ôçí ìİãéóôç åğéôñåğüìåíç ôéìŞ ãéá áõôŞ ôç âÜóç äåäïìİíùí, èá äéïñèùèåß áíáëüãá.";
+    Text[ korean ] = "ÀÌ ÇÊµåÀÇ µ¥ÀÌÅÍ ±æÀÌ¸¦ ÁöÁ¤ÇÏ½Ê½Ã¿À.\n\n10Áø ÇÊµåÀÇ °æ¿ì¿¡´Â ÀÔ·ÂµÈ ¼öÀÇ ÃÖ´ë ±æÀÌ, ¹ÙÀÌ³Ê¸® ÇÊµåÀÇ °æ¿ì¿¡´Â µ¥ÀÌÅÍ ºí·ÏÀÇ ±æÀÌ¸¦ ÀÔ·ÂÇÕ´Ï´Ù. \n°ªÀÌ ÀÌ µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÃÖ´ëÇÑÀ¸·Î Çã¿ëµÈ °ªº¸´Ù Å©¸é ÀûÀıÈ÷ ¼öÁ¤µË´Ï´Ù.";
+    Text[ turkish ] = "Bu alandaki veri uzunluğunu giriniz.\n\nBu uzunluk, ondalık alanlar için girilen sayının azami uzunluğu, ikili alanlar için ise veri bloğu uzunluğudur.\nSöz konusu değer, bu veritabanı için azami olarak izin verilenden daha büyük olması halinde uygun bir şekilde düzeltilecektir.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_SCALE
+{
+    Text = "Geben Sie an, wie viel Nachkommastellen die Zahlen in diesem Feld enthalten sollen." ;
+    Text [ ENGLISH ] = "Enter the number of decimals." ;
+    Text [ english_us ] = "Specify the number of decimal places permitted in this field." ;
+    Text [ portuguese_brazilian ] = "Geben Sie die Zahl der Nachkommastellen an." ;
+    Text [ swedish ] = "Ange hur många decimaler talen skall innehålla i det här fältet." ;
+    Text [ danish ] = "Angiv her, hvormange decimaler dette felt skal indeholde." ;
+    Text [ italian ] = "Digitate il numero di cifre dopo la virgola." ;
+    Text [ spanish ] = "Especifique el número de decimales que deban contener los números en este campo." ;
+    Text [ french ] = "Veuillez indiquer le nombre de décimales souhaité pour les nombres de ce champ." ;
+    Text [ dutch ] = "Geef het aantal plaatsen achter de komma aan." ;
+    Text [ portuguese ] = "Defina o número de casas decimais para este campo." ;
+    Text[ chinese_simplified ] = "ÇëÎªÕâ¸ö×Ö¶ÎÄÚµÄÊı×ÖÉè¶¨Ğ¡ÊıµãÎ»Êı¡£";
+    Text[ russian ] = "Çàäàéòå êîëè÷åñòâî ÷èñåë, ñòîÿùèõ ïîñëå çàïÿòîé.";
+    Text[ polish ] = "Proszê podaæ liczbê miejsc po przecinku, które dane pole ma zawieraæ.";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Åˆµ‚¤¬”“_ˆÈ‰º‚ÌŒ…”‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "½Ğ³]©w¿é¤JÄæ¦ìªº¤p¼ÆÂI¤§«á¼Æ¦ì¡C";
+    Text[ arabic ] = "Şã ÈÊÍÏíÏ ÚÏÏ ÇáãäÇÒá ÇáÚÔÑíÉ ÇáÊí íÌÈ Ãä ÊÔÊãá ÚáíåÇ ÇáÃÑŞÇã ÇáãæÌæÏÉ İí åĞÇ ÇáÍŞá.";
+    Text[ dutch ] = "Geef het aantal plaatsen achter de komma aan.";
+    Text[ chinese_simplified ] = "ÇëÎªÕâ¸ö×Ö¶ÎÄÚµÄÊı×ÖÉè¶¨Ğ¡ÊıµãÎ»Êı¡£";
+    Text[ greek ] = "Êáèïñßóôå ôï ğëŞèïò ôùí äåêáäéêşí øçößùí ôùí áñéèìşí áõôïı ôïõ ğåäßïõ.";
+    Text[ korean ] = "ÀÌ ÇÊµåÀÇ ¼ıÀÚ°¡ ¼Ò¼öÀÌÇÏ ¸î ÀÚ¸®¸¦ Æ÷ÇÔÇØ¾ß ÇÒÁö Á¤ÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Bu alandaki sayıların sahip olması gereken ondalık basamak sayısını belirleyiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_FORMAT_CODE
+{
+    Text = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons ändern können - formatiert werden würden.";
+    Text[ ENGLISH ] = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons ändern können - formatiert werden würden.";
+    Text[ italian ] = "Qui vedete come è possibile formattare i dati dell'attuale colonna con il formato corrente che potete cambiare con il bottone che si trova qui a fianco.";
+    Text[ portuguese_brazilian ] = "Der Format-Code der aktuellen Spalte. Diese Einstellung k÷nnen Sie nicht direkt, sondern nur mittels des nebenstehenden Buttons õndern.";
+    Text[ portuguese ] = "Aqui pode ver como os dados da coluna actual seriam formatados se utilizasse o formato definido. Para modificar este parâmetro, clique no botão ao lado.";
+    Text[ danish ] = "Her vises, hvorledes den aktuelle kolonnes data vil komme til at se ud med det aktuelt indstillede format (brug knapperne til at ændre formatet).";
+    Text[ french ] = "Vous montre comment les données de la colonne concernée seront formatées si vous utilisez le format sélectionné. Pour modifier ce paramètre, cliquez sur le bouton Modifier situé à côté.";
+    Text[ swedish ] = "Här kan Du se hur data i den aktuella kolumnen skulle formateras med det nu inställda formatet, som Du kan ändra med hjälp av knapparna här bredvid.";
+    Text[ dutch ] = "Hier ziet u hoe de gegevens in de actuele kolom eruit zouden zien met de actueel ingestelde opmaak. Deze instelling kunt u veranderen met de nevenstaande buttons.";
+    Text[ spanish ] = "Aquí puede ver como serían formateados los datos de la columna actual con el formato definido actualmente - que puede modificar con el botón que se encuentra al lado.";
+    Text[ english_us ] = "Here you can see how the data will be displayed with the current format settings (use the buttons nearby to modify the format).";
+    Text[ chinese_simplified ] = "Äú¿´µ½ÄúÄÜ¹»½èÖúÅÔ±ßµÄ°´Å¥À´¸ü¸Äµ±Ç°ÁĞµÄÊı¾İµÄ¸ñÊ½¡£";
+    Text[ russian ] = "Çäåñü Âû ìîæåòå óâèäåòü, êàê äàííûå òåêóùåé êîëîíêè, â òåêóùåì óñòàíîâëåííîì ôîğìàòå, êîòîğûé Âû ìîæåòå èçìåíÿòü ïğè ïîìîùè íàõîäÿùåéñÿ ğÿäîì êíîïêè, ìîãóò ôîğìàòèğîâàòüñÿ.";
+    Text[ polish ] = "Tutaj widaæ, w jaki sposób dane aktualnej kolumny formatowane bêd¹ w ustawionym formacie, kóry mo¿esz zmieniæ za pomoc¹ przycisku znajduj¹cego siê obok.";
+    Text[ japanese ] = "‚±‚±‚Å‚Í¤ì‹Æ’†‚Ì—ñ‚ÌÃŞ°À‚ªİ’è’†‚Ì‘®(‰¡‚ÌÎŞÀİ‚Å•ÏX‰Â”\\)‚É‚æ‚Á‚Ä‚Ç‚Ì‚æ‚¤‚É•Ï‚í‚é‚©‚ğŒ©‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "±z¬İ¨ì¯à°÷«ö¤@¦¸®ÇÃäªº«ö¶s¨ÓÅÜ§ó·í«eªºÄæ¤º¸ê®Æ®æ¦¡¡C";
+    Text[ arabic ] = "íãßäß åäÇ ÑÄíÉ ÇáÊäÓíŞ ÇáĞí Óæİ ÊÙåÑ Èå ÇáÈíÇäÇÊ ÚäÏ ÇÓÊÎÏÇã ÅÚÏÇÏÇÊ ÇáÊäÓíŞ ÇáÍÇáí (íãßäß ÊÛííÑ åĞÇ ÇáÊäÓíŞ ÈæÇÓØÉ ÇáãİÊÇÍ ÇáãÌÇæÑ).";
+    Text[ dutch ] = "Hier ziet u hoe de gegevens in de actuele kolom eruit zouden zien met de actueel ingestelde opmaak. Deze instelling kunt u veranderen met de nevenstaande buttons.";
+    Text[ chinese_simplified ] = "Äú¿´µ½ÄúÄÜ¹»½èÖúÅÔ±ßµÄ°´Å¥À´¸ü¸Äµ±Ç°ÁĞµÄÊı¾İµÄ¸ñÊ½¡£";
+    Text[ greek ] = "Åäş âëİğåôå ôçí ğáñïõóßáóç ôùí äåäïìİíùí ôçò ôñİ÷ïõóáò óôŞëçò ìïñöïğïéçìİíá ìå ôç ôñİ÷ùí ìïñöŞ (×ñçóéìïğïéŞóåôå ôá äéğëáíÜ êïõìğéÜ ãéá ôçí åğéëïãŞ Üëëïõ óôõë).";
+    Text[ korean ] = "¿©±â¿¡¼­ ÇöÀç ¿­ÀÇ µ¥ÀÌÅÍ°¡ ÁöÁ¤µÈ ¼­½Ä(¿·¿¡ ÀÖ´Â ´ÜÃß¸¦ ÀÌ¿ëÇÏ¿© ¼­½ÄÀ» ¹Ù²Ü ¼ö ÀÖÀ½)¿¡ µû¶ó Æ÷¸ËµÇ´Â ¸ğ½ÀÀ» º¼ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Burada, seçili sütundaki verilerin - yandaki düğme ile değiştirebileceğiniz - yürürlükteki ayarlar ile nasıl formatlanacağını görebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_FORMAT_BUTTON
+{
+    Text = "Hiermit können Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
+    Text [ ENGLISH ] = "Hiermit können Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
+    Text[ italian ] = "In questo modo potete determinare la formattazione dei dati della tabella all'uscita.";
+    Text[ portuguese_brazilian ] = "Hiermit können Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
+    Text[ portuguese ] = "Permite-lhe definir o formato para a impressão dos dados da tabela.";
+    Text[ danish ] = "Her kan du definere et outputformat for tabellens data.";
+    Text[ french ] = "Permet de déterminer le format de sortie des données de la table.";
+    Text[ swedish ] = "Här kan Du bestämma hur tabellernas data skall formateras.";
+    Text[ dutch ] = "Hiermee kunt u instellen hoe u de gegevens wilt opmaken.";
+    Text[ spanish ] = "Aquí puede determinar el tipo de formateado para la salida de los datos de la tabla.";
+    Text[ english_us ] = "Here you can determine the output format of the data.";
+    Text[ chinese_simplified ] = "ÄúÄÜ¹»ÔÚ´ËÉè¶¨±í¸ñµÄ´òÓ¡¸ñÊ½¡£";
+    Text[ russian ] = "Çäåñü Âû ìîæåòå îïğåäåëèòü ôîğìàò âûâîäà äàííûõ òàáëèöû.";
+    Text[ polish ] = "Tutaj mo¿esz ustawiæ wyjœciowy format tabeli.";
+    Text[ japanese ] = "Ã°ÌŞÙ‚ÌÃŞ°À‚ğo—Í‚ÌÛ‚É‚Ç‚Ì‚æ‚¤‚È‘®‚É‚·‚é‚©‚ğw’è‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "±z¯à°÷¦b¦¹³]©wªí®æ¼ÆÕuªº¦C¦L®æ¦¡¡C";
+    Text[ arabic ] = "íãßäß åäÇ ÊÍÏíÏ ÊäÓíŞ ÅÎÑÇÌ ÈíÇäÇÊ ÇáÌÏæá.";
+    Text[ dutch ] = "Hiermee kunt u instellen hoe u de gegevens wilt opmaken.";
+    Text[ chinese_simplified ] = "ÄúÄÜ¹»ÔÚ´ËÉè¶¨±í¸ñµÄ´òÓ¡¸ñÊ½¡£";
+    Text[ greek ] = "Åäş İ÷åôå ôç äõíáôüôçôá íá ïñßóåôå ôç ìïñöŞ ôçò åîáãùãŞò ôùí äåäïìİíùí ôïõ ğßíáêá.";
+    Text[ korean ] = "ÀÌ·Î½á Ãâ·Â½Ã Å×ÀÌºíÀÇ Å×ÀÌÅÍ°¡ ¾î¶»°Ô Æ÷¸ËµÇ¾î¾ß ÇÒÁö ¼³Á¤ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Burada tablo verilerinin çıktı formatını belirleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_HELP_AUTOINCREMENT
+{
+    Text = "Wählen Sie, ob dieses Feld Auto-Inkrement-Werte enthalten soll.\n\nSie können in ihm dann keine Daten direkt eingeben, sondern jeder neue Datensatz bekommt automatisch einen eigenen Wert (der sich durch Inkrementieren aus dem des vorigen Datensatzes ergibt) zugewiesen." ;
+    Text [ english_us ] = "Choose if this field should contain AutoIncrement values.\n\nYou can not enter data in fields of this type. An intrinsic value will be assigned to each new record automatically (resulting from the increment of the previous record)." ;
+    Text[ italian ] = "Scegliete se questo campo deve contenere valori automatici d'incremento.\n\nIn questo campo non sarà possibile digitare alcun dato direttamente. Ogni nuovo record di dati riceve automaticamente un valore proprio (che risulta dall'incremento del precedente).";
+    Text[ portuguese_brazilian ] = "Wählen Sie, ob dieses Feld ein Auto-Inkrement-Wert sein soll.\n\nSie können in diese Spalte dann keine Daten direkt eingeben, sondern jeder neue Datensatz bekommt automatisch einen eigenen Wert (der sich aus dem Inkrementieren des vorigen ergibt) zugewiesen.";
+    Text[ portuguese ] = "Indique se este campo deverá conter valores de incremento automático ou não.\n\nNão poderá então introduzir dados directamente nesse campo. Cada novo registo de dados obterá automaticamente um valor próprio (valor este que resulta por incremento do valor anterior).";
+    Text[ danish ] = "Vælg her, om dette felt skal indeholde AutoInkrement-værdier.\n\nDet er da ikke muligt at indtaste data direkte. Hver ny datapost får automatisk tildelt en egen værdi, som genereres ved inkrementering af den forrige datapost.";
+    Text[ french ] = "Décidez si le champ devra recevoir une valeur d'AutoIncrément (ou non).\n\nSi oui, vous ne pourrez pas saisir directement des données dans cette colonne : la valeur de tout nouvel enregistrement lui sera attribuée automatiquement (à savoir la valeur incrémentée à partir du champ de l'enregistrement précédent).";
+    Text[ swedish ] = "Välj om det här fältet skall innehålla Auto-Inkrementvärden.\n\nDu kan i så fall inte mata in några data direkt i fältet, utan varje ny datapost tilldelas automatiskt ett eget värde (vilket bestäms av inkrement från den förra dataposten).";
+    Text[ dutch ] = "U kunt dit veld een auto increment-waarde toewijzen.\n\nIn dat geval kunt u hierin geen gegevens typen, maar iedere nieuwe record krijgt automatisch een eigen waarde toegewezen, die het resultaat is van het incrementeren van de vorige.";
+    Text[ spanish ] = "Defina si este campo ha de ser uno de incremento automático.\n\nEn esta columna no podrá entonces escribir más datos directamente, sino que a cada nuevo registro de datos se le asignará automáticamente un valor propio (el cual resultará de la incrementación del anterior).";
+    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÕâ¸ö×Ö¶ÎÊÇ·ñÓ¦¸Ãº¬ÓĞ×Ô¶¯Ôö¼ÓµÄÊıÖµ¡£\n\nÄú²»ÄÜÖ±½ÓÊäÈëÊı¾İ£¬ÒòÎªÃ¿¸öĞÂÊı¾İ×é»á×Ô¶¯µÃµ½Ò»¸ö×Ô¼ºµÄÊıÖµ(´ÓËüÖ®Ç°µÄÊı¾İ×éÖĞÍ¨¹ıÔöÖµµÃ³ö)¡£";
+    Text[ russian ] = "Ğåøèòå, äîëæíî ëè ıòî ïîëå ñîäåğæàòü àâòîìàòè÷åñêèå çíà÷åíèÿ èíêğåìåíòà.\n\nÒîãäà Âû íå ñìîæåòå íåïîñğåäñòâåííî ââîäèòü â íåãî äàííûå, ïîñêîëüêó êàæäîìó íîâîìó íàáîğó äàííûõ áóäåò àâòîìàòè÷åñêè ïğèñâîåíî ñîáòâåííîå çíà÷åíèå (êîòîğîå ïîëó÷èòñÿ áëàãîäàğÿ èíêğåìåíòèğîâàíèş èç ïğåæíåãî íàáîğà äàííûõ).";
+    Text[ polish ] = "Tutaj mo¿esz okreœliæ, czy to pole ma zawieraæ wartoœæ autoinkrementu.\n\nDo tego pola nie mo¿esz wprowadziæ danych bezpoœrednio, ale ka¿demu rekordowi zostanie przypisana automatycznie w³asna wartoœæ (która wyniknie z inkrementacji poprzedniego rekordu).";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚ğµ°Ä²İ¸ØÒİÄ’l‚Ég—p‚·‚é‚©‚Ç‚¤‚©‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n‚»‚ÌÌ¨°ÙÄŞ‚É‚Í’¼ÚÃŞ°À‚ğ“ü—Í‚·‚é‚±‚Æ‚Í‚Å‚«‚¸AV‚µ‚¢Úº°ÄŞ‚É‚Í‚»‚ê‚¼‚ê‚Ì’l(‘O’iŠK‚ÌÚº°ÄŞ‚©‚ç²İ¸ØÒİÄ‚³‚ê‚½Œ‹‰Ê’l)‚ª©“®“I‚É“ü—Í‚³‚ê‚Ü‚·B";
+    Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü³o­ÓÄæ¦ì¬O§_À³¸Ó§t¦³¦Û°Ê¼W¥[ªº¼Æ­È¡C\n\n±z¤£¯àª½±µ¿é¤J¸ê®Æ¡M¦]¬°¨C­Ó·s¸ê®Æ²Õ·|¦Û°Ê±o¨ì¤@­Ó¦Û¤vªº¼Æ­È(±q¥¦¤§«eªº¸ê®Æ²Õ¤¤³q¹L¼W­È±o¥X)¡C";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ãÇ ÅĞÇ ßäÊ ÊÑíÏ Ãä íÍÊæí åĞÇ ÇáÍŞá Úáì Şíã ĞÇÊ ÊÒÇíÏ ÊáŞÇÆí.\n\nİí åĞå ÇáÍÇáÉ áä íãßäß ÅÏÎÇá ÇáÈíÇäÇÊ İíå ÈÔßá ãÈÇÔÑ¡ Èá Óæİ íÍÕá ßá ÓÌá ÌÏíÏ ÊáŞÇÆíÇ Úáì ŞíãÉ ÎÇÕÉ Èåğ (ÊäÊÌ Úä ÒíÇÏÉ ŞíãÉ ÇáÓÌá ÇáÓÇÈŞ).";
+    Text[ dutch ] = "U kunt dit veld een auto increment-waarde toewijzen.\n\nIn dat geval kunt u hierin geen gegevens typen, maar iedere nieuwe record krijgt automatisch een eigen waarde toegewezen, die het resultaat is van het incrementeren van de vorige.";
+    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÕâ¸ö×Ö¶ÎÊÇ·ñÓ¦¸Ãº¬ÓĞ×Ô¶¯Ôö¼ÓµÄÊıÖµ¡£\n\nÄú²»ÄÜÖ±½ÓÊäÈëÊı¾İ£¬ÒòÎªÃ¿¸öĞÂÊı¾İ×é»á×Ô¶¯µÃµ½Ò»¸ö×Ô¼ºµÄÊıÖµ(´ÓËüÖ®Ç°µÄÊı¾İ×éÖĞÍ¨¹ıÔöÖµµÃ³ö)¡£";
+    Text[ greek ] = "Êáèïñßóôå áí ôï ğåäßï èá ğåñéİ÷åé ôéìİò áõôüìáôçò ğñïóáıîçóçò.\n\nÓôç ğåñßğôùóç áõôŞ äåí èá ìğïñİóåôå íá åéóÜãåôå áğ´åõèåßáò äåäïìİíá óå áõôü ôï ğåäßï, áëëÜ êÜèå íİá åããñáöŞ èá ğáßñíåé áõôïìÜôùò ìéá äéêŞò ôçò ôéìŞ (ç ïğïßá èá ğñïêığôåé áğü ôçí ğñïóáıîçóç ôçò ğñïçãïıìåíçò åããñáöŞò).";
+    Text[ korean ] = "ÀÌ ÇÊµå°¡ ÀÚµ¿Áõ°¡°ªÀ» Æ÷ÇÔÇØ¾ßÇÒ Áö °áÁ¤ÇÏ½Ê½Ã¿À.\n\n±×·± ÇÊµå¿¡´Â µ¥ÀÌÅÍ¸¦ Á÷Á¢ ÀÔ·ÂÇÒ ¼ö ¾øÀ¸¸ç »õ ·¹ÄÚµå´Â ¸ğµÎ ÀÚµ¿ÀûÀ¸·Î °íÀ¯°ª(ÀÌÀüÀÇ ·¹ÄÚµå¸¦ Áõ°¡½ÃÅ´À¸·Î½á ³ª¿À´Â)À» ÁöÁ¤¹Ş°Ô µË´Ï´Ù.";
+    Text[ turkish ] = "Bu alana, otomatik artış değerleri konulup konulmayacağını seçiniz.\n\nBu alana artık doğrudan veri girişi yapamazsınız. Bunun yerine her yeni kayıt için otomatik olarak (bir önceki kaydın artışından oluşan) özel bir değer atanır.";
+    Text[ language_user1 ] = " ";
+};
+PushButton PB_FORMAT
+{
+    TabStop = TRUE ;
+    Text = "..." ;
+    Text [ ENGLISH ] = "..." ;
+    Text[ italian ] = "...";
+    Text[ portuguese_brazilian ] = "Format...";
+    Text[ portuguese ] = "...";
+    Text[ danish ] = "...";
+    Text[ french ] = "...";
+    Text[ swedish ] = "...";
+    Text[ dutch ] = "...";
+    Text[ spanish ] = "...";
+    Text[ english_us ] = "...";
+    Text[ chinese_simplified ] = "...";
+    Text[ russian ] = "...";
+    Text[ polish ] = "...";
+    Text[ japanese ] = "...";
+    Text[ chinese_traditional ] = "...";
+    Text[ arabic ] = "...";
+    Text[ dutch ] = "...";
+    Text[ chinese_simplified ] = "...";
+    Text[ greek ] = "...";
+    Text[ korean ] = "...";
+    Text[ turkish ] = "...";
+    Text[ language_user1 ] = " ";
+};
+String STR_TABLEDESIGN_DUPLICATE_NAME
+{
+    Text = "Die Tabelle kann nicht gespeichert werden, da der Spaltenname \"$column$\" doppelt vergeben wurde.";
+    Text [ english_us ] = "The table can't be saved due to duplicate column name \"$column$\".";
+    Text[ portuguese ] = "Impossível guardar a tabela. O nome da coluna \"$column$\" foi atribuído duas vezes.";
+    Text[ russian ] = "Ñîõğàíèòü òàáëèöó íåâîçìîæíî, ò.ê. èìÿ êîëîíêè \"$column$\" ïğèñâîåíî äâàæäû.";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áğïèŞêåõóç ôïõ ğßíáêá, åğåéäŞ ÷ñçóéìïğïéŞèçêå äıï öïñİò ôï üíïìá óôŞëçò \"$column$\".";
+    Text[ dutch ] = "De tabel kan niet worden opgeslagen daar de kolomnaam \"$column$\" reeds bestaat.";
+    Text[ french ] = "Impossible d'enregistrer la table : le nom de colonne \"$column$\" a été attribué deux fois.";
+    Text[ spanish ] = "No se puede guardar la tabla porque el nombre de columna \"$column$\" está usado dos veces.";
+    Text[ italian ] = "Non è stato possibile memorizzare la tabella in quanto il nome della colonna \"$column$\" è stato già assegnato.";
+    Text[ danish ] = "Det er ikke muligt at gemme tabellen, fordi kolonnenavnet \"$column$\" er blevet tildelt to gange.";
+    Text[ swedish ] = "Tabellen kan inte sparas eftersom kolumnnamnet \"$column$\" har tilldelats dubbelt.";
+    Text[ polish ] = "Tabeli nie mo¿na zapisaæ, poniew¿ nazwa kolumny \"$column$\" zosta³a ju¿ raz nadana.";
+    Text[ portuguese_brazilian ] = "The table can't be saved as the column name \"$column$\" is used twice.";
+    Text[ japanese ] = "—ñ–¼\"$column$\"‚ªd•¡‚µ‚Ä‚¢‚é‚Ì‚ÅÃ°ÌŞÙ‚ğ•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
+    Text[ korean ] = "¿­ÀÇ ÀÌ¸§\"$column$\"ÀÌ Áßº¹µÇ¾î ÁöÁ¤µÇ¾ú±â ¶§¹®¿¡ Å×ÀÌºíÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÒòÎªÖØ¸´Ê¹ÓÃÁËÁĞÃû³Æ\"$column$\"£¬ËùÒÔÎŞ·¨´æÅÌÕâ¸ö±í¸ñ¡£";
+    Text[ chinese_traditional ] = "µLªkÀx¦s³o­Óªí®æ¡A¦]¬°Äæ¦W\"$column$\" ¤w¸g¦s¦b¡C";
+    Text[ arabic ] = "áÇ íãßä ÍİÙ ÇáÌÏæá¡ æĞáß áÇÓÊÎÏÇã ÇÓã ÇáÚãæÏ \"$column$\" ãÑÊíä.";
+    Text[ turkish ] = "\"$column$\" sütun adı daha önce kullanıldığı için tablo kaydedilemiyor.";
+};
+String STR_TBL_COLUMN_IS_KEYCOLUMN
+{
+    Text = "Die Spalten \"$column$\" gehört zum Primärschlüssel. Falls sie gelöscht wird, wird auch der Pirmärschlüssel gelöscht.Wollen Sie sie wirklich löschen?";
+    Text [ english_us ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
+};
+String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
+{
+    Text = "Primärschlüssel betroffen";
+    Text [ english_us ] = "primary key related";
+};
+
+
+
+
+
