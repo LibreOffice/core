@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 07:25:03 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 12:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ class IcnGridMap_Impl;
 
 #define DEFAULT_MAX_VIRT_WIDTH  200
 #define DEFAULT_MAX_VIRT_HEIGHT 200
+
+#define VIEWMODE_MASK   (WB_ICON | WB_SMALLICON | WB_DETAILS)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -464,7 +466,8 @@ public:
                         SvxIconChoiceCtrlEntry* pEntry,
                         USHORT nPaintFlags,
                         OutputDevice* pOut,
-                        const String* pStr = 0 );
+                        const String* pStr = 0,
+                        ::vcl::ControlLayoutData* _pLayoutData = NULL );
 
     // berechnet alle BoundingRects neu, wenn bMustRecalcBoundingRects == TRUE
     void            CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }

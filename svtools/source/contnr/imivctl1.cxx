@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 07:25:04 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 12:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <vcl/controllayout.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -96,8 +99,6 @@
 #include "svmedit.hxx"
 
 #include <algorithm>
-
-#define VIEWMODE_MASK   (WB_ICON | WB_SMALLICON | WB_DETAILS)
 
 #define DD_SCROLL_PIXEL 24
 #define IMPICNVIEW_ACC_RETURN 1
@@ -1893,7 +1894,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(
 
 void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, USHORT nPaintFlags,
-    OutputDevice* pOut, const String* pStr )
+    OutputDevice* pOut, const String* pStr, ::vcl::ControlLayoutData* _pLayoutData )
 {
     if( eItem == IcnViewFieldTypeText )
     {
@@ -1903,25 +1904,33 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
         else
             aText = *pStr;
 
-        if ( pView->AutoFontColor() )
+        if ( _pLayoutData )
         {
-            Color aBkgColor( pOut->GetBackground().GetColor() );
-            Color aFontColor;
-            USHORT nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
-            if ( nColor > 128 )
-                aFontColor.SetColor ( COL_BLACK );
-            else
-                aFontColor.SetColor( COL_WHITE );
-            pOut->SetTextColor( aFontColor );
+            pOut->DrawText( rRect, aText, nCurTextDrawFlags,
+                &_pLayoutData->m_aUnicodeBoundRects, &_pLayoutData->m_aDisplayText );
         }
-
-        pOut->DrawText( rRect, aText, nCurTextDrawFlags );
-
-        if( pEntry->IsFocused() )
+        else
         {
-            Rectangle aRect ( CalcFocusRect( (SvxIconChoiceCtrlEntry*)pEntry ) );
-            /*pView->*/ShowFocus( aRect );
-            DrawFocusRect( pOut );
+            if ( pView->AutoFontColor() )
+            {
+                Color aBkgColor( pOut->GetBackground().GetColor() );
+                Color aFontColor;
+                USHORT nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
+                if ( nColor > 128 )
+                    aFontColor.SetColor ( COL_BLACK );
+                else
+                    aFontColor.SetColor( COL_WHITE );
+                pOut->SetTextColor( aFontColor );
+            }
+
+            pOut->DrawText( rRect, aText, nCurTextDrawFlags );
+
+            if( pEntry->IsFocused() )
+            {
+                Rectangle aRect ( CalcFocusRect( (SvxIconChoiceCtrlEntry*)pEntry ) );
+                /*pView->*/ShowFocus( aRect );
+                DrawFocusRect( pOut );
+            }
         }
     }
     else
