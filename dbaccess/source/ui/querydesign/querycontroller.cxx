@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:57:18 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 14:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.aState = ::cppu::bool2any(!m_bEsacpeProcessing);
             aReturn.bEnabled = m_pSqlIterator != NULL && !m_bDesign;
             break;
-        case ID_REALTION_ADD_RELATION:
+        case ID_RELATION_ADD_RELATION:
             aReturn.bEnabled = m_bEditable && m_bDesign && m_vTableData.size() > 1;
             break;
         case ID_BROWSER_SAVEASDOC:
@@ -389,7 +389,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             if(m_bCreateView && !isModified())
                 closeTask();
             break;
-        case ID_REALTION_ADD_RELATION:
+        case ID_RELATION_ADD_RELATION:
             {
                 OJoinDesignView* pView = getJoinView();
                 if( pView )
@@ -706,7 +706,7 @@ void OQueryController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ChangeDesignMode")] = ID_BROWSER_SQL;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ClearQuery")]       = ID_BROWSER_CLEAR_QUERY;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ExecuteQuery")]     = ID_BROWSER_QUERY_EXECUTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]      = ID_REALTION_ADD_RELATION;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]      = ID_RELATION_ADD_RELATION;
 }
 // -----------------------------------------------------------------------------
 ToolBox* OQueryController::CreateToolBox(Window* _pParent)
