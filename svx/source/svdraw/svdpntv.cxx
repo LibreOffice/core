@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:49:01 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,10 @@ void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCTyp
                 if (bObjChg) {
                     bSomeObjChgdFlag=TRUE;
                     aComeBackTimer.Start();
+
+                    // #i32773#
+                    // Get rid of handles early
+                    // off for testing...// ForceInvalidateMarkHandles();
                 }
             }
             if (eKind==HINT_PAGEORDERCHG) {
@@ -1862,6 +1866,12 @@ void SdrPaintView::SetBufferedOutputAllowed(sal_Bool bNew)
     {
         mbBufferedOutputAllowed = bNew;
     }
+}
+
+// #i32773#
+// empty implementation, nothing known about handles here
+void SdrPaintView::ForceInvalidateMarkHandles()
+{
 }
 
 // eof
