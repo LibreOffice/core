@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configurationhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:39:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //_______________________________________________
 // namespaces
@@ -112,7 +115,7 @@ namespace comphelper{
 // definitions
 
 //-----------------------------------------------
-class ConfigurationHelper
+class COMPHELPER_DLLPUBLIC ConfigurationHelper
 {
     public:
 
