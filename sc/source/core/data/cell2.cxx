@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:43:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,8 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
         case MM_FORMULA :
         case MM_REFERENCE :
         {
-            static USHORT nC, nR;
+            static SCCOL nC;
+            static SCROW nR;
             ScAddress aOrg;
             if ( !GetMatrixOrigin( aOrg ) )
                 return 0;               // dumm gelaufen..
@@ -501,7 +502,8 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                     pFCell->GetMatColsRows( nC, nR );
                     if ( nC == 0 || nR == 0 )
                     {   // aus altem Dokument geladen, neu erzeugen
-                        nC = nR = 1;
+                        nC = 1;
+                        nR = 1;
                         ScAddress aTmpOrg;
                         ScBaseCell* pCell;
                         ScAddress aAdr( aOrg );
@@ -555,8 +557,8 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 }
             }
             // here we are, healthy and clean, somewhere in between
-            short dC = aPos.Col() - aOrg.Col();
-            short dR = aPos.Row() - aOrg.Row();
+            SCsCOL dC = aPos.Col() - aOrg.Col();
+            SCsROW dR = aPos.Row() - aOrg.Row();
             USHORT nEdges = 0;
             if ( dC >= 0 && dR >= 0 && dC < nC && dR < nR )
             {
@@ -655,18 +657,18 @@ BOOL ScFormulaCell::HasColRowName() const
 
 void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
-                                    short nDx, short nDy, short nDz,
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc )
 {
-    USHORT nCol1 = r.aStart.Col();
-    USHORT nRow1 = r.aStart.Row();
-    USHORT nTab1 = r.aStart.Tab();
-    USHORT nCol2 = r.aEnd.Col();
-    USHORT nRow2 = r.aEnd.Row();
-    USHORT nTab2 = r.aEnd.Tab();
-    USHORT nCol = aPos.Col();
-    USHORT nRow = aPos.Row();
-    USHORT nTab = aPos.Tab();
+    SCCOL nCol1 = r.aStart.Col();
+    SCROW nRow1 = r.aStart.Row();
+    SCTAB nTab1 = r.aStart.Tab();
+    SCCOL nCol2 = r.aEnd.Col();
+    SCROW nRow2 = r.aEnd.Row();
+    SCTAB nTab2 = r.aEnd.Tab();
+    SCCOL nCol = aPos.Col();
+    SCROW nRow = aPos.Row();
+    SCTAB nTab = aPos.Tab();
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
     ScAddress aOldPos( aPos );
 //  BOOL bPosChanged = FALSE;           // ob diese Zelle bewegt wurde
@@ -674,13 +676,13 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     if (eUpdateRefMode == URM_INSDEL)
     {
         bIsInsert = (nDx >= 0 && nDy >= 0 && nDz >= 0);
-        if ( nDx && nRow >= nRow1 && nRow <= nRow2 &&
+        if ( nDx > 0 && nRow >= nRow1 && nRow <= nRow2 &&
             nTab >= nTab1 && nTab <= nTab2 )
         {
             if (nCol >= nCol1)
             {
                 nCol += nDx;
-                if ((short) nCol < 0)
+                if ((SCsCOL) nCol < 0)
                     nCol = 0;
                 else if ( nCol > MAXCOL )
                     nCol = MAXCOL;
@@ -688,13 +690,13 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 //              bPosChanged = TRUE;
             }
         }
-        if ( nDy && nCol >= nCol1 && nCol <= nCol2 &&
+        if ( nDy > 0 && nCol >= nCol1 && nCol <= nCol2 &&
             nTab >= nTab1 && nTab <= nTab2 )
         {
             if (nRow >= nRow1)
             {
                 nRow += nDy;
-                if ((short) nRow < 0)
+                if ((SCsROW) nRow < 0)
                     nRow = 0;
                 else if ( nRow > MAXROW )
                     nRow = MAXROW;
@@ -702,14 +704,14 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 //              bPosChanged = TRUE;
             }
         }
-        if ( nDz && nCol >= nCol1 && nCol <= nCol2 &&
+        if ( nDz > 0 && nCol >= nCol1 && nCol <= nCol2 &&
             nRow >= nRow1 && nRow <= nRow2 )
         {
             if (nTab >= nTab1)
             {
-                USHORT nMaxTab = pDocument->GetTableCount() - 1;
+                SCTAB nMaxTab = pDocument->GetTableCount() - 1;
                 nTab += nDz;
-                if ((short) nTab < 0)
+                if ((SCsTAB) nTab < 0)
                     nTab = 0;
                 else if ( nTab > nMaxTab )
                     nTab = nMaxTab;
@@ -944,7 +946,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScFormulaCell::UpdateInsertTab(USHORT nTable)
+void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
 {
     BOOL bPosChanged = ( aPos.Tab() >= nTable ? TRUE : FALSE );
     pCode->Reset();
@@ -978,7 +980,7 @@ void ScFormulaCell::UpdateInsertTab(USHORT nTable)
         aPos.IncTab();
 }
 
-BOOL ScFormulaCell::UpdateDeleteTab(USHORT nTable, BOOL bIsMove)
+BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
 {
     BOOL bChanged = FALSE;
     BOOL bPosChanged = ( aPos.Tab() > nTable ? TRUE : FALSE );
@@ -1017,7 +1019,7 @@ BOOL ScFormulaCell::UpdateDeleteTab(USHORT nTable, BOOL bIsMove)
     return bChanged;
 }
 
-void ScFormulaCell::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos, USHORT nTabNo )
+void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
 {
     pCode->Reset();
     if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
@@ -1046,7 +1048,7 @@ void ScFormulaCell::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos, USHORT nTabNo
         aPos.SetTab( nTabNo );
 }
 
-void ScFormulaCell::UpdateInsertTabAbs(USHORT nTable)
+void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
 {
     if( !pDocument->IsClipOrUndo() )
     {
@@ -1055,12 +1057,12 @@ void ScFormulaCell::UpdateInsertTabAbs(USHORT nTable)
         while( p )
         {
             SingleRefData& rRef1 = p->GetSingleRef();
-            if( !rRef1.IsTabRel() && (short) nTable <= rRef1.nTab )
+            if( !rRef1.IsTabRel() && (SCsTAB) nTable <= rRef1.nTab )
                 rRef1.nTab++;
             if( p->GetType() == svDoubleRef )
             {
                 SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
-                if( !rRef2.IsTabRel() && (short) nTable <= rRef2.nTab )
+                if( !rRef2.IsTabRel() && (SCsTAB) nTable <= rRef2.nTab )
                     rRef2.nTab++;
             }
             p = pCode->GetNextReferenceRPN();
@@ -1068,7 +1070,7 @@ void ScFormulaCell::UpdateInsertTabAbs(USHORT nTable)
     }
 }
 
-BOOL ScFormulaCell::TestTabRefAbs(USHORT nTable)
+BOOL ScFormulaCell::TestTabRefAbs(SCTAB nTable)
 {
     BOOL bRet = FALSE;
     if( !pDocument->IsClipOrUndo() )
@@ -1080,7 +1082,7 @@ BOOL ScFormulaCell::TestTabRefAbs(USHORT nTable)
             SingleRefData& rRef1 = p->GetSingleRef();
             if( !rRef1.IsTabRel() )
             {
-                if( (short) nTable != rRef1.nTab )
+                if( (SCsTAB) nTable != rRef1.nTab )
                     bRet = TRUE;
                 else if (nTable != aPos.Tab())
                     rRef1.nTab = aPos.Tab();
@@ -1090,7 +1092,7 @@ BOOL ScFormulaCell::TestTabRefAbs(USHORT nTable)
                 SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
                 if( !rRef2.IsTabRel() )
                 {
-                    if( (short) nTable != rRef2.nTab )
+                    if( (SCsTAB) nTable != rRef2.nTab )
                         bRet = TRUE;
                     else if (nTable != aPos.Tab())
                         rRef2.nTab = aPos.Tab();
@@ -1130,14 +1132,14 @@ void ScFormulaCell::TransposeReference()
                 INT16 nTemp;
 
                 nTemp = rRef1.nRelCol;
-                rRef1.nRelCol = rRef1.nRelRow;
-                rRef1.nRelRow = nTemp;
+                rRef1.nRelCol = static_cast<SCCOL>(rRef1.nRelRow);
+                rRef1.nRelRow = static_cast<SCROW>(nTemp);
 
                 if ( bDouble )
                 {
                     nTemp = rRef2.nRelCol;
-                    rRef2.nRelCol = rRef2.nRelRow;
-                    rRef2.nRelRow = nTemp;
+                    rRef2.nRelCol = static_cast<SCCOL>(rRef2.nRelRow);
+                    rRef2.nRelRow = static_cast<SCROW>(nTemp);
                 }
 
                 bFound = TRUE;
@@ -1158,15 +1160,15 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     BOOL bPosChanged = FALSE;           // ob diese Zelle bewegt wurde
 
     ScRange aDestRange( rDest, ScAddress(
-                rDest.Col() + rSource.aEnd.Row() - rSource.aStart.Row(),
-                rDest.Row() + rSource.aEnd.Col() - rSource.aStart.Col(),
+                static_cast<SCCOL>(rDest.Col() + rSource.aEnd.Row() - rSource.aStart.Row()),
+                static_cast<SCROW>(rDest.Row() + rSource.aEnd.Col() - rSource.aStart.Col()),
                 rDest.Tab() + rSource.aEnd.Tab() - rSource.aStart.Tab() ) );
     if ( aDestRange.In( aOldPos ) )
     {
         //  Position zurueckrechnen
-        short nRelPosX = aOldPos.Col();
-        short nRelPosY = aOldPos.Row();
-        short nRelPosZ = aOldPos.Tab();
+        SCsCOL nRelPosX = aOldPos.Col();
+        SCsROW nRelPosY = aOldPos.Row();
+        SCsTAB nRelPosZ = aOldPos.Tab();
         ScRefUpdate::DoTranspose( nRelPosX, nRelPosY, nRelPosZ, pDocument, aDestRange, rSource.aStart );
         aOldPos.Set( nRelPosX, nRelPosY, nRelPosZ );
         bPosChanged = TRUE;
@@ -1253,7 +1255,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     delete pOld;
 }
 
-void ScFormulaCell::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY )
+void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
     EndListeningTo( pDocument );
 
