@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 15:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,11 @@
 #ifndef _COM_SUN_STAR_DRAWING_TEXTFITTOSIZETYPE_HPP_
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTADJUST_HPP_
-#include <com/sun/star/drawing/TextAdjust.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_TEXTANIMATIONKIND_HPP_
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
@@ -1740,13 +1743,13 @@ SfxItemPresentation __EXPORT SdrTextVertAdjustItem::GetPresentation(SfxItemPrese
 
 sal_Bool SdrTextVertAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    rVal <<= (drawing::TextAdjust)GetValue();
+    rVal <<= (drawing::TextVerticalAdjust)GetValue();
     return sal_True;
 }
 
 sal_Bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    drawing::TextAdjust eAdj;
+    drawing::TextVerticalAdjust eAdj;
     if(!(rVal >>= eAdj))
         return sal_False;
 
@@ -1784,13 +1787,13 @@ SfxItemPresentation __EXPORT SdrTextHorzAdjustItem::GetPresentation(SfxItemPrese
 
 sal_Bool SdrTextHorzAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    rVal <<= (drawing::TextAdjust)GetValue();
+    rVal <<= (drawing::TextHorizontalAdjust)GetValue();
     return sal_True;
 }
 
 sal_Bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    drawing::TextAdjust eAdj;
+    drawing::TextHorizontalAdjust eAdj;
     if(!(rVal >>= eAdj))
         return sal_False;
 
