@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:58:58 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 13:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,10 +1049,13 @@ void XMLPageNumberImportContext::PrepareField(
     Reference<XPropertySetInfo> xPropertySetInfo(
         xPropertySet->getPropertySetInfo());
 
-    aAny <<= sNumberFormatOK ?
-        SvxXMLListStyleContext::GetNumType(sNumberFormat, sNumberSync) :
-        style::NumberingType::PAGE_DESCRIPTOR;
-    xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+    if (xPropertySetInfo->hasPropertyByName(sPropertyNumberingType))
+    {
+        aAny <<= sNumberFormatOK ?
+            SvxXMLListStyleContext::GetNumType(sNumberFormat, sNumberSync) :
+            style::NumberingType::PAGE_DESCRIPTOR;
+        xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+    }
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyOffset))
     {
