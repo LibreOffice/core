@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdetect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:34:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ SwFilterDetect::~SwFilterDetect()
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
-                    // is broken, but we can not handle it in medium since unpossibility
+                    // is broken, but we can not handle it in medium since impossibility
                     // to create a storage does not _always_ means that the medium is broken
                     aMedium.SetError( aMedium.GetLastStorageCreationState() );
                     if ( xInteraction.is() )
@@ -331,20 +331,25 @@ SwFilterDetect::~SwFilterDetect()
                                 SfxFilterMatcher(String::CreateFromAscii("swriter")).GetFilter4EA( aTypeName ) : 0;
                         String aFilterName;
                         if ( pFilter )
+                        {
                             aFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, &aFilterName );
+                            aTypeName = pFilter->GetTypeName();
+                        }
+
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
                         packages::zip::ZipIOException aZipException;
 
                         // repairing is done only if this type is requested from outside
-                        if ( ( aWrap.TargetException >>= aZipException )
-                          && ( aTypeName.Len() || aPreselectedFilterName.Len() ) )
+                        // we don't do any type detection on broken packages (f.e. because it might be impossible), so any requested
+                        // type will be accepted if the user allows to repair the file
+                        if ( ( aWrap.TargetException >>= aZipException ) && ( aTypeName.Len() || aPreselectedFilterName.Len() ) )
                         {
                             if ( xInteraction.is() )
                             {
-                                // the package is broken one
+                                // the package is a broken one
                                    aDocumentTitle = aMedium.GetURLObject().getName(
                                                             INetURLObject::LAST_SEGMENT,
                                                             true,
@@ -355,9 +360,7 @@ SwFilterDetect::~SwFilterDetect()
                                     // ask the user whether he wants to try to repair
                                     RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
                                     uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
-
                                     xInteraction->handle( xRequest );
-
                                     bRepairAllowed = pRequest->isApproved();
                                 }
 
@@ -367,11 +370,11 @@ SwFilterDetect::~SwFilterDetect()
                                     NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
                                     uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
                                        xInteraction->handle( xRequest );
-
                                     aMedium.SetError( ERRCODE_ABORT );
                                 }
                             }
                             else
+                                // no interaction, error handling as usual
                                 aMedium.SetError( ERRCODE_IO_BROKENPACKAGE );
 
                             if ( !bRepairAllowed )
@@ -393,45 +396,44 @@ SwFilterDetect::~SwFilterDetect()
                 }
             }
             else
-                aMedium.GetInStream();
-
-             if ( aMedium.GetErrorCode() == ERRCODE_NONE )
             {
-                if ( aPreselectedFilterName.Len() )
-                    pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
-                else
-                    pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
-
-                BOOL bTestWriter = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.TextDocument") ||
-                    pFilter->GetServiceName().EqualsAscii("com.sun.star.text.WebDocument");
-                BOOL bTestGlobal = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.GlobalDocument");
-
-                const SfxFilter* pOrigFilter = NULL;
-                if ( !bTestWriter && !bTestGlobal && pFilter )
+                aMedium.GetInStream();
+                if ( aMedium.GetErrorCode() == ERRCODE_NONE )
                 {
-                    // cross filter; now this should be a type detection only, not a filter detection
-                    // we can simulate it by preserving the preselected filter if the type matches
-                    // example: HTML filter for Calc
-                    pOrigFilter = pFilter;
-                    pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
-                    bTestWriter = TRUE;
-                }
+                    if ( aPreselectedFilterName.Len() )
+                        pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
+                    else
+                        pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
 
-                // For own XML formats the following code seems just to duplicate the detection that was done already
-                if ( !bIsStorage )
-                {
+                    BOOL bTestWriter = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.TextDocument") ||
+                        pFilter->GetServiceName().EqualsAscii("com.sun.star.text.WebDocument");
+                    BOOL bTestGlobal = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.GlobalDocument");
+
+                    const SfxFilter* pOrigFilter = NULL;
+                    if ( !bTestWriter && !bTestGlobal && pFilter )
+                    {
+                        // cross filter; now this should be a type detection only, not a filter detection
+                        // we can simulate it by preserving the preselected filter if the type matches
+                        // example: HTML filter for Calc
+                        pOrigFilter = pFilter;
+                        pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
+                        bTestWriter = TRUE;
+                    }
+
                     ULONG nErr = ERRCODE_NONE;
                     if ( pFilter || bTestWriter )
                         nErr = DetectFilter( aMedium, &pFilter );
-                    if ( nErr && bTestGlobal )
-                        nErr = GlobDetectFilter( aMedium, &pFilter );
-
                     if ( nErr != ERRCODE_NONE )
                         pFilter = NULL;
+                    else if ( pOrigFilter && pFilter && pFilter->GetTypeName() == pOrigFilter->GetTypeName() )
+                        // cross filter, see above
+                        pFilter = pOrigFilter;
                 }
 
-                if ( pOrigFilter && pFilter && pFilter->GetTypeName() == pOrigFilter->GetTypeName() )
-                    pFilter = pOrigFilter;
+                if ( pFilter )
+                    aTypeName = pFilter->GetTypeName();
+                else
+                    aTypeName.Erase();
             }
         }
     }
@@ -473,9 +475,7 @@ SwFilterDetect::~SwFilterDetect()
         lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
-
         bOpenAsTemplate = sal_True;
-
         // TODO/LATER: set progress bar that should be used
     }
 
@@ -506,11 +506,6 @@ SwFilterDetect::~SwFilterDetect()
             lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
     }
 
-
-    if ( pFilter )
-        aTypeName = pFilter->GetTypeName();
-    else
-        aTypeName.Erase();
 
     return aTypeName;
 }
