@@ -98,19 +98,19 @@
                     <xsl:value-of select="concat('PT', floor(o:TotalTime div 60), 'H', o:TotalTime mod 60, 'M0S')"/>
                 </xsl:if>
             </meta:editing-duration>
-            <meta:user-defined meta:name="Category">
+            <meta:user-defined meta:name="Category" meta:value-type="string">
                 <xsl:value-of select="o:Category"/>
             </meta:user-defined>
-            <meta:user-defined meta:name="Manager">
+            <meta:user-defined meta:name="Manager" meta:value-type="string">
                 <xsl:value-of select="o:Manager"/>
             </meta:user-defined>
-            <meta:user-defined meta:name="Company">
+            <meta:user-defined meta:name="Company" meta:value-type="string">
                 <xsl:value-of select="o:Company"/>
             </meta:user-defined>
-            <meta:user-defined meta:name="Version">
+            <meta:user-defined meta:name="Version" meta:value-type="string">
                 <xsl:value-of select="o:Version"/>
             </meta:user-defined>
-            <meta:user-defined meta:name="HyperlinkBase">
+            <meta:user-defined meta:name="HyperlinkBase" meta:value-type="string">
                 <xsl:value-of select="o:HyperlinkBase"/>
             </meta:user-defined>
             <xsl:apply-templates select="../o:CustomDocumentProperties"/>
@@ -119,7 +119,7 @@
     </xsl:template>
     <xsl:template match="o:CustomDocumentProperties">
         <xsl:for-each select="node()[@dt:dt]">
-            <meta:user-defined meta:name="{local-name()}">
+            <meta:user-defined meta:name="{local-name()}" meta:value-type="{@dt:dt}">
                 <xsl:value-of select="."/>
             </meta:user-defined>
         </xsl:for-each>
