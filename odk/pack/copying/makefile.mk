@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 09:58:13 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:50:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,30 +81,32 @@ DESTINCDIRLIST={$(subst,$(INCOUT),$(DESTDIRINC) $(INCLUDEDIRLIST))}
 
 COMPONENTLIST = \
     acceptor	\
-    brdgfctr	\
-    connectr	\
-    corefl		\
-    cpld		\
-    defreg		\
+    bridgefac	\
+    connector	\
+    corereflection		\
+    shlibloader		\
+    nestedreg		\
     dynamicloader	\
-    impreg		\
-    insp		\
-    inv		\
-    invadp		\
-    jen		\
+    implreg		\
+    introspection		\
+    invocation		\
+    invocadapt		\
+    javavm		\
     namingservice	\
     proxyfac	\
-    rdbtdp		\
+    regtypeprov		\
     remotebridge	\
-    simreg		\
-    smgr		\
-    stm		\
-    tcv		\
-    tdmgr		\
-    uuresolver
+    simplereg		\
+    servicemgr		\
+    streams		\
+    typeconverter		\
+    typemgr		\
+    uuresolver \
+    javaloader \
+    security
 
 XMLLIST= \
-    $(foreach,c,$(COMPONENTLIST) $(DESTDIRXML)$/$c.xml) \
+    $(foreach,c,$(COMPONENTLIST) $(DESTDIRXML)$/$c.uno.xml) \
     $(DESTDIRXML)$/module-description.dtd
 
 EXELIST = \
