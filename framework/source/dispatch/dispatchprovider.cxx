@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-08-02 13:33:00 $
+ *  last change: $Author: as $ $Date: 2001-08-08 09:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,14 @@
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
-
+/*
+... needed by implts_isLoadableContent() ... but not yet!
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
+#endif
+*/
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -260,6 +265,14 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     // Set default return value if query failed.
     css::uno::Reference< css::frame::XDispatch > xReturn;
 
+    /* HACK */
+    ::rtl::OUString sNewTarget = sTargetFrameName;
+    if( aURL.Complete.compareToAscii( "macro:", 6 ) == 0 )
+    {
+        sNewTarget = DECLARE_ASCII("_self");
+    }
+    /* HACK */
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
 
@@ -275,7 +288,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     {
         // Classify target of this dispatch call to find right dispatch helper!
         // Try to get neccessary informations from tree environment.
-        TargetInfo   aInfo  ( xOwner, sTargetFrameName, nSearchFlags );
+        TargetInfo   aInfo  ( xOwner, sNewTarget, nSearchFlags );
         ETargetClass eResult= TargetFinder::classifyQueryDispatch( aInfo );
         switch( eResult )
         {
@@ -289,7 +302,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                             css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
                                             if( xController.is() == sal_True )
                                             {
-                                                xReturn = xController->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                xReturn = xController->queryDispatch( aURL, sNewTarget, nSearchFlags );
                                             }
                                         }
                                         // If controller has no fun to dispatch these URL - we must search another right dispatcher.
@@ -315,7 +328,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         css::uno::Reference< css::frame::XDispatchProvider > xParent( xOwner->getCreator(), css::uno::UNO_QUERY );
                                         if( xParent.is() == sal_True )
                                         {
-                                            xReturn = xParent->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                            xReturn = xParent->queryDispatch( aURL, sNewTarget, nSearchFlags );
                                         }
                                     }
                                     break;
@@ -331,7 +344,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                             css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
                                             if( xController.is() == sal_True )
                                             {
-                                                xReturn = xController->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                xReturn = xController->queryDispatch( aURL, sNewTarget, nSearchFlags );
                                             }
                                         }
                                     }
@@ -354,7 +367,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
             case E_FLAT_BOTH     :  {
                                         sal_Int32 nNewFlags  =  nSearchFlags                       ;
                                                   nNewFlags &= ~css::frame::FrameSearchFlag::CREATE;
-                                        css::uno::Reference< css::frame::XFrame > xFrame = xOwner->findFrame( sTargetFrameName, nNewFlags );
+                                        css::uno::Reference< css::frame::XFrame > xFrame = xOwner->findFrame( sNewTarget, nNewFlags );
                                         if( xFrame.is() == sal_True )
                                         {
                                             xReturn = css::uno::Reference< css::frame::XDispatchProvider >( xFrame, css::uno::UNO_QUERY )->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
@@ -366,7 +379,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                           )
                                         {
                                             css::uno::Any aParameter;
-                                            aParameter <<= sTargetFrameName;
+                                            aParameter <<= sNewTarget;
                                             xReturn = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, aParameter );
                                         }
                                     }
@@ -585,15 +598,14 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     }
     else
     //-------------------------------------------------------------------------------------------------------------
-    // May be - it's an internal URL ... like "uno/slot/macro"?
+    // May be - it's an internal URL ... like "uno/slot"?
     // But they could be handled by tasks/pluginframes/desktop only.
     // Normal frames don't know it.
     // Supported targets don't know it real too ... but they could ask the global
     // sfx-AppDispatcher!!!
     if(
         ( aURL.Complete.compareToAscii( ".uno"  , 4 ) == 0 ) ||
-        ( aURL.Complete.compareToAscii( "slot:" , 5 ) == 0 ) ||
-        ( aURL.Complete.compareToAscii( "macro:", 6 ) == 0 )
+        ( aURL.Complete.compareToAscii( "slot:" , 5 ) == 0 )
       )
     {
         if(
@@ -763,22 +775,18 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 }
 
 /*-************************************************************************************************************//**
-    @short      check URL for support by our used ucb
+    @short      check URL for support by our used loader or handler
     @descr      If we must return our own dispatch helper implementations (self, blank, create dispatcher!)
-                we should be shure, that URL describe any loadable content. Otherwise slot/macro/uno URLs
+                we should be shure, that URL describe any loadable content. Otherwise slot/uno URLs
                 will be detected ... but there exist nothing to detect!
-
-    @attention  We return True, if ucb isn't available too! Because: may be he isn't installed for local cases ...
-                and loading of document work on OSL functions only. Then we should try to load it without any checks before.
-                It will be fast enough. Faster then "tra to loading with ucb ... and get any failed messages"!!!
 
     @seealso    method queryDispatch()
 
     @param      "aURL", URL which should be "detected"
-    @return     True  , if ucb could handle that OR ISN'T AVAILABLE
+    @return     True  , if somewhere could handle that
                 False , otherwise
 
-    @onerror    We return True.
+    @onerror    We return False.
     @threadsafe yes
 *//*-*************************************************************************************************************/
 sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
@@ -789,36 +797,47 @@ sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL 
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    css::uno::Reference< css::document::XTypeDetection > xDetection( m_xFactory->createInstance( SERVICENAME_TYPEDETECTION ), css::uno::UNO_QUERY );
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    sal_Bool bLoadable = sal_True;
+    sal_Bool bLoadable = sal_False;
 
+    if( xDetection.is() == sal_True )
+    {
+        ::rtl::OUString sTypeName = xDetection->queryTypeByURL( aURL.Complete );
+        bLoadable = (sTypeName.getLength()>0);
+    }
+
+    return bLoadable;
+/*
     // Check some well known protocols before you ask the ucb.
     // Result will be clear ... and we save time!
     if(
-        ( aURL.Protocol.compareToAscii( ".uno"  , 4 ) == 0 ) ||
-        ( aURL.Protocol.compareToAscii( "slot:" , 5 ) == 0 ) ||
-        ( aURL.Protocol.compareToAscii( "macro:", 6 ) == 0 )
+        ( aURL.Complete.compareToAscii( ".uno"  , 4 ) == 0 ) ||
+        ( aURL.Complete.compareToAscii( "slot:" , 5 ) == 0 )
       )
     {
         bLoadable = sal_False;
     }
     else
-    if( aURL.Complete.compareToAscii( "private:factory/", 16 ) == 0 )
+    if(
+        ( aURL.Complete.compareToAscii( "private:factory/", 16 ) == 0 ) ||
+        ( aURL.Complete.compareToAscii( "macro:"          ,  6 ) == 0 )
+      )
     {
         bLoadable = sal_True;
     }
     else
     {
+        // ... and try to find content handler or frame loader
         css::uno::Reference< css::ucb::XContentProviderManager > xUCB( xFactory->createInstance( SERVICENAME_UCBCONTENTBROKER ), css::uno::UNO_QUERY );
         if( xUCB.is() == sal_True )
         {
             bLoadable = xUCB->queryContentProvider( aURL.Complete ).is();
         }
     }
-    return bLoadable;
+*/
 }
 
 /*-************************************************************************************************************//**
