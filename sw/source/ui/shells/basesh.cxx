@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:07:30 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,14 @@
 #ifndef _IMAPDLG_HXX_ //autogen
 #include <svx/imapdlg.hxx>
 #endif
-#ifndef _SFXDISPATCH_HXX //autogen
+#ifndef _SFX_DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
+#endif
+#ifndef _SFX_VIEWFRM_HXX //autogen
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
@@ -98,6 +101,9 @@
 #endif
 #ifndef _SFX_OBJITEM_HXX //autogen
 #include <sfx2/objitem.hxx>
+#endif
+#ifndef _SFX_DISPATCH_HXX //autogen
+#include <sfx2/dispatch.hxx>
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
@@ -915,6 +921,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 }
                 else if(!rSh.IsSelFrmMode() && SGA_FORMAT_SOUND & ((SfxUInt32Item*)pItem)->GetValue())
                 {
+                    const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+                       GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
+/*
                     String sURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
                     String sLabel( pGal->GetURL().getBase() );
                     String sTarget; // empty string!
@@ -929,6 +938,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         InsertURLButton( sURL, sTarget, sLabel );
                     else
                         rSh.InsertURL( SwFmtINetFmt( sURL, sTarget ), sLabel );
+*/
                 }
             }
         }
