@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 11:34:44 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 14:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,13 +688,7 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
 
     if( GetMedium() )
     {
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == GetMedium()->GetItemSet()->GetItemState(
-                SID_LOADENVIRONMENT, FALSE, &pItem ))
-        {
-            aLoadEnv = &((SfxRefItem*)pItem)->GetValue();
-        }
-
+        aLoadEnv = GetMedium()->GetLoadEnvironment();
         if( !bViewCreated && aLoadEnv.Is() )
         {
             ((SfxLoadEnvironment*)&aLoadEnv)->
@@ -720,7 +714,6 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
     rDesc.Add( this );
 
     SvParserState eRet = HTMLParser::CallParser();
-
     return eRet;
 }
 
