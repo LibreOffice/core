@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 07:43:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,13 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_BUTTON_CLICK:
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+                // since we call listeners below, there is a potential that we will be destroyed
+                // in during the listener call. To prevent the resulting crashs, we keep us
+                // alive as long as we're here
+                // #20178# - 2003-10-01 - fs@openoffice.org
+
             if ( maActionListeners.getLength() )
             {
                 ::com::sun::star::awt::ActionEvent aEvent;
@@ -387,7 +394,8 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.ActionCommand = maActionCommand;
                 maActionListeners.actionPerformed( aEvent );
             }
-            break;
+        }
+        break;
 
         default:
             VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
@@ -799,6 +807,12 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         case VCLEVENT_CHECKBOX_TOGGLE:
         {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+                // since we call listeners below, there is a potential that we will be destroyed
+                // in during the listener call. To prevent the resulting crashs, we keep us
+                // alive as long as we're here
+                // #20178# - 2003-10-01 - fs@openoffice.org
+
             CheckBox* pCheckBox = (CheckBox*)GetWindow();
             if ( pCheckBox )
             {
@@ -1034,6 +1048,12 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 
 void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+        // since we call listeners below, there is a potential that we will be destroyed
+        // in during the listener call. To prevent the resulting crashs, we keep us
+        // alive as long as we're here
+        // #20178# - 2003-10-01 - fs@openoffice.org
+
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_BUTTON_CLICK:
@@ -1166,6 +1186,12 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_SPINFIELD_FIRST:
         case VCLEVENT_SPINFIELD_LAST:
         {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+                // since we call listeners below, there is a potential that we will be destroyed
+                // in during the listener call. To prevent the resulting crashs, we keep us
+                // alive as long as we're here
+                // #20178# - 2003-10-01 - fs@openoffice.org
+
             if ( maSpinListeners.getLength() )
             {
                 ::com::sun::star::awt::SpinEvent aEvent;
@@ -1494,15 +1520,16 @@ void VCLXListBox::makeVisible( sal_Int16 nEntry ) throw(::com::sun::star::uno::R
 
 void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+        // since we call listeners below, there is a potential that we will be destroyed
+        // in during the listener call. To prevent the resulting crashs, we keep us
+        // alive as long as we're here
+        // #20178# - 2003-10-01 - fs@openoffice.org
+
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_LISTBOX_SELECT:
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox > xKeepAlive( this );
-                // in the DoubleClickHdl, the object may be destroyed, so we have to ensure
-                // that we stay alive as long as we're herein
-                // 97515 - 04.03.2002 - fs@openoffice.org
-
             ListBox* pListBox = (ListBox*)GetWindow();
 
             if( pListBox )
@@ -2351,6 +2378,13 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_SCROLLBAR_SCROLL:
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+                // since we call listeners below, there is a potential that we will be destroyed
+                // in during the listener call. To prevent the resulting crashs, we keep us
+                // alive as long as we're here
+                // #20178# - 2003-10-01 - fs@openoffice.org
+
             if ( maAdjustmentListeners.getLength() )
             {
                 ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
@@ -2379,7 +2413,8 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     maAdjustmentListeners.adjustmentValueChanged( aEvent );
                 }
             }
-            break;
+        }
+        break;
 
         default:
             VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
@@ -2705,13 +2740,21 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_EDIT_MODIFY:
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+                // since we call listeners below, there is a potential that we will be destroyed
+                // in during the listener call. To prevent the resulting crashs, we keep us
+                // alive as long as we're here
+                // #20178# - 2003-10-01 - fs@openoffice.org
+
             if ( GetTextListeners().getLength() )
             {
                 ::com::sun::star::awt::TextEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 GetTextListeners().textChanged( aEvent );
             }
-            break;
+        }
+        break;
 
         default:
             VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
@@ -2989,6 +3032,12 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
 
 void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+        // since we call listeners below, there is a potential that we will be destroyed
+        // in during the listener call. To prevent the resulting crashs, we keep us
+        // alive as long as we're here
+        // #20178# - 2003-10-01 - fs@openoffice.org
+
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_COMBOBOX_SELECT:
