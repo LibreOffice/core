@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:32:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog DLG_PARA
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Par?grafo" ;
     Text [ portuguese ] = "Parágrafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -95,7 +95,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Paragrafo" ;
-                Text [ portuguese_brazilian ] = "Parágrafo" ;
+                Text [ portuguese_brazilian ] = "Par?grafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennys ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -153,7 +153,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Paragraph Extensions" ;
                 Text [ norwegian ] = "Utvidelse av avsnitt" ;
                 Text [ italian ] = "Flusso di testo" ;
-                Text [ portuguese_brazilian ] = "Extens es de Parágrafo" ;
+                Text [ portuguese_brazilian ] = "Extens es de Par?grafo" ;
                 Text [ portuguese ] = "Fluxo de texto" ;
                 Text [ finnish ] = "Tekstin rivitys" ;
                 Text [ danish ] = "Tekstretning" ;
@@ -235,7 +235,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Tab" ;
                 Text [ norwegian ] = "Tab" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Tabulação" ;
+                Text [ portuguese_brazilian ] = "Tabula??o" ;
                 Text [ portuguese ] = "Tabulação" ;
                 Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
@@ -366,7 +366,7 @@ TabDialog DLG_DRAWPARA
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Par?grafo" ;
     Text [ portuguese ] = "Parágrafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -389,7 +389,7 @@ TabDialog DLG_DRAWPARA
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Rientri e spaziature" ;
-                Text [ portuguese_brazilian ] = "Parágrafo" ;
+                Text [ portuguese_brazilian ] = "Par?grafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennys ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -474,7 +474,7 @@ TabDialog DLG_DRAWPARA
                 Text [ ENGLISH ] = "Tab" ;
                 Text [ norwegian ] = "Tab" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Tabulação" ;
+                Text [ portuguese_brazilian ] = "Tabula??o" ;
                 Text [ portuguese ] = "Tabulação" ;
                 Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
