@@ -474,10 +474,10 @@ UDK_3_0_0 {
         rtl_removeUnloadingListener;
 
         rtl_logfile_trace;
-
+        rtl_tres_create;
+        rtl_tres_destroy;
         osl_getProcessLocale;
         osl_setProcessLocale;
-
     local:
         *;
 };
