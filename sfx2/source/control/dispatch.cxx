@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-03 18:00:36 $
+ *  last change: $Author: mba $ $Date: 2001-08-22 08:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         {
             // bei AutoUpdate sofort updaten; "Pseudoslots" d"urfen nicht
             // Autoupdate sein!
-            if ( bAutoUpdate )
+            if ( bAutoUpdate && pBindings )
             {
                 const SfxSlot* pSlave = rSlot.GetLinkedSlot();
                 if (pSlave)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:03:05 $
+ *  last change: $Author: mba $ $Date: 2001-08-22 08:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         else
             // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
             pDispatcher->Execute( GetId(), nCall );
+
+        if ( !pDispatcher->GetBindings() )
+        {
+            // no bindings, no invalidate!
+            const SfxPoolItem* pState=0;
+            SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
+            StateChanged( GetId(), eState, pState );
+        }
     }
 }
 
