@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ String STR_HUMAN_SWGLOBDOC_NAME
     Text = "Globaldokument" ;
     Text [ English ] = "Global Document" ;
     Text [ english_us ] = "Master Document" ;
-    Text [ portuguese_brazilian ] = "Globaldokument" ;
+    Text [ portuguese_brazilian ] = "Documento Mestre" ;
     Text [ swedish ] = "Samlingsdokument" ;
     Text [ danish ] = "Hoveddokument" ;
     Text [ italian ] = "Documento master" ;
@@ -88,6 +88,9 @@ String STR_HUMAN_SWGLOBDOC_NAME
     Text[ catalan ] = "Document mestre";
     Text[ finnish ] = "Perusasiakirja";
     Text[ thai ] = "เอกสารต้นฉบับ";
+    Text[ czech ] = "Hlavní dokument";
+    Text[ hebrew ] = "‮מסמך אב‬";
+    Text[ hindi ] = "मास्टर लेखपत्र";
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
@@ -107,27 +110,39 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ greek ] = "%PRODUCTNAME 6.0 - ����� �������";
     TEXT[ dutch ] = "%PRODUCTNAME 6.0 Masterdocument";
     TEXT[ french ] = "%PRODUCTNAME 6.0 Document ma�tre";
-    TEXT[ spanish ] = "%PRODUCTNAME 6.0 - Documento maestro";
+    TEXT[ spanish ] = "%PRODUCTNAME 6.0 Documento maestro";
     TEXT[ italian ] = "Documento master %PRODUCTNAME 6.0";
     TEXT[ danish ] = "%PRODUCTNAME 6.0 Hoveddokument";
     TEXT[ swedish ] = "Samlingsdokument %PRODUCTNAME 6.0";
     TEXT[ polish ] = "%PRODUCTNAME 6.0 - Dokument g��wny";
-    TEXT[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ portuguese_brazilian ] = "Documento Mestre %PRODUCTNAME 6.0 ";
     TEXT[ japanese ] = "%PRODUCTNAME 6.0 マスタードキュメント";
     TEXT[ korean ] = "%PRODUCTNAME 6.0 마스터 문서";
     TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 主控文档";
     TEXT[ chinese_traditional ] = "%PRODUCTNAME 6.0 主控文件";
-    TEXT[ turkish ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ turkish ] = "%PRODUCTNAME 6.0 Ana Belge";
     TEXT[ arabic ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ catalan ] = "%PRODUCTNAME 6.0 Document mestre";
     TEXT[ finnish ] = "%PRODUCTNAME 6.0 -perusasiakirja";
     TEXT[ thai ] = "เอกสารต้นฉบับ %PRODUCTNAME 6.0 ";
+    TEXT[ czech ] = "Hlavní dokument %PRODUCTNAME 6.0";
+    TEXT[ hebrew ] = "%PRODUCTNAME 6.0 Global Dokument";
+    TEXT[ hindi ] = "%PRODUCTNAME 6.0 मास्टर लेखपत्र";
 };
 
 #define MN_SW_GLOBAL
 #include "swmn.hrc"
 #define MN_SW_PORTAL
 #include "swmn.hrc"
+
+
+
+
+
+
+
+
+
 
 
 
