@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
+ *  last change: $Author: nn $ $Date: 2001-11-07 15:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,9 +718,7 @@ void ScTabView::AlignToCursor( short nCurX, short nCurY, ScFollowMode eMode,
                 Window* pWin = GetActiveWin();
                 if (pWin)
                 {
-                    aDlgPixel = Rectangle(
-                            pWin->ScreenToOutputPixel( pCare->GetPosPixel() ),
-                            pCare->GetSizePixel() );
+                    aDlgPixel = pCare->GetWindowExtentsRelative( pWin );
                     aWinSize = pWin->GetOutputSizePixel();
                     //  ueberdeckt der Dialog das GridWin?
                     if ( aDlgPixel.Right() >= 0 && aDlgPixel.Left() < aWinSize.Width() )
