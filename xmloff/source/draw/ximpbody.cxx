@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:34:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,8 +212,6 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
-    SetStyle( maStyleName );
-
     // set MasterPage?
     if(maMasterPageName.getLength())
     {
@@ -257,6 +255,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             DBG_ASSERT( bDone, "xmloff::SdXMLDrawPageContext::SdXMLDrawPageContext(), could not find a slide master!" );
         }
     }
+
+    SetStyle( maStyleName );
 
     if( maHREF.getLength() )
     {
