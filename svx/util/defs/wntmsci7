@@ -16779,3 +16779,9 @@ _real@4@40088dc0000000000000
 ?sUNO_service_style_CharacterProperties@@3PBDB
 ?sUNO_service_style_ParagraphProperties@@3PBDB
 ?pSvxUnoNumberingRulesService@@3PADA
+??YVector2D@@QAEAAV0@ABV0@@Z
+?Scalar@Vector2D@@QBENABV1@@Z
+?UpdateBulletRelSize@PPTParagraphObj@@QBEXAAK@Z
+_real@8@3ffd820c49ba5e354000
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXResultSet@sdbc@star@sun@com@@@2345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@J@2345@@Z
