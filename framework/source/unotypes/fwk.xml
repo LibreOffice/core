@@ -160,6 +160,228 @@
         <supported-service> com.sun.star.frame.ProtocolHandler </supported-service>
     </component-description>
 
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.LayoutManager </name>
+        <description>
+            Controls the layout of user interface elements which are part of a frame.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.LayoutManager </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.PopupMenuControllerFactory </name>
+        <description>
+            A factory manager that creates instances of registered popup menu controller.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuControllerFactory </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.FontMenuController </name>
+        <description>
+            A popup menu controller which controls the font popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.FontSizeMenuController </name>
+        <description>
+            A popup menu controller which controls the font size popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.FormatMenuController </name>
+        <description>
+            A popup menu controller which controls the format popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.ObjectMenuController </name>
+        <description>
+            A popup menu controller which controls the object popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.HeaderMenuController </name>
+        <description>
+            A popup menu controller which controls the header popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.FooterMenuController </name>
+        <description>
+            A popup menu controller which controls the footer popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.ControlMenuController </name>
+        <description>
+            A popup menu controller which controls the control popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.UICommandDescription </name>
+        <description>
+            A manager that holds all user interface commands and their description, the menu label
+            of every registered OpenOffice.org module.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.ui.UICommandDescription </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.UIElementFactoryManager </name>
+        <description>
+            A user interface factory manager that controls all registered user interface element factories.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.ui.UIElementFactoryManager </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.ModuleManager </name>
+        <description>
+            Manages the access to OpenOffice.org module specific informations.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.ModuleManager </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.UIConfigurationManager </name>
+        <description>
+            Manages the user interface element settings of a single storage element, like documents or
+            a single user interface configuration file.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.ui.UIConfigurationManager </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier </name>
+        <description>
+            Central manager that provides access to the OpenOffice.org module user interface
+            configuration managers.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.ModuleUIConfigurationManager </name>
+        <description>
+            A single OpenOffice.org module user interface configuration manager. It is responsible to provide
+            access to the user interface element settings of an OpenOffice.org module. Must be obtained from
+            the ModuleUIConfigurationManagerSupplier otherwise it is not correctly initialized.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.ui.ModuleUIConfigurationManager </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.MenuBarFactory </name>
+        <description>
+            Creates menu bars that can be used the user interface configuration API.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.ui.UIElementFactory </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.UIConfigurationManager </name>
+        <description>
+            Manages the user interface element settings of a single storage element, like documents or
+            a single user interface configuration file.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.ui.UIConfigurationManager </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.BackingComp </name>
+        <description>
+            The start module component.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.StartModule </supported-service>
+    </component-description>
+
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  vos         </project-build-dependency>
