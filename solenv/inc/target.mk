@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: nf $ $Date: 2002-02-21 15:49:59 $
+#   last change: $Author: hjs $ $Date: 2002-02-25 13:20:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2189,12 +2189,14 @@ $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg :
     +$(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
+.IF "$(UPDATER)"!=""
 "$(COMPVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
     @echo COMNAME:=$(COMNAME) > $@
     @echo COMID:=$(COMID) >> $@
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $@
     
 .ENDIF			# "$(COMPVERMK)"!=""
+.ENDIF			# "$(UPDATER)"!=""
 
 
 .IF "$(IMGLSTTARGET)"!=""
