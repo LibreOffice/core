@@ -112,20 +112,6 @@ public abstract class DescendantManager extends Component {
                     unoAccessibleContext);
         }
 
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(
-            XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            states.add(AccessibleExtendedState.MANAGES_DESCENDANTS);
-
-            if (multiselectable) {
-                states.add(javax.accessibility.AccessibleState.MULTISELECTABLE);
-            }
-
-            return states;
-        }
-
         /*
         * AccessibleContext
         */

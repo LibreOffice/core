@@ -236,7 +236,7 @@ public class List extends DescendantManager implements javax.accessibility.Acces
         }
     }
 
-    class ListItem implements javax.accessibility.Accessible {
+    class ListItem extends java.awt.Component implements javax.accessibility.Accessible {
 
         protected XAccessible unoAccessible;
 
@@ -379,41 +379,10 @@ public class List extends DescendantManager implements javax.accessibility.Acces
             /** Returns the state set of this object */
             public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
                 try {
-                    javax.accessibility.AccessibleStateSet stateSet = new javax.accessibility.AccessibleStateSet();
-                    // table cells are transient and so neither focusable nor focused
-                    stateSet.add(javax.accessibility.AccessibleState.TRANSIENT);
-
-                    XAccessibleStateSet unoAccessibleStateSet = unoAccessibleContext.getAccessibleStateSet();
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.ENABLED)) {
-                        stateSet.add(javax.accessibility.AccessibleState.ENABLED);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.OPAQUE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.OPAQUE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.RESIZABLE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.RESIZABLE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SHOWING)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SHOWING);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.VISIBLE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.VISIBLE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SINGLE_LINE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SINGLE_LINE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.MULTI_LINE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.MULTI_LINE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SELECTABLE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SELECTABLE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SELECTED)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SELECTED);
-                    }
-                    return stateSet;
+                    return AccessibleStateAdapter.getAccessibleStateSet(ListItem.this,
+                        unoAccessibleContext.getAccessibleStateSet());
                 } catch (com.sun.star.uno.RuntimeException e) {
-                    return null;
+                    return AccessibleStateAdapter.getDefunctStateSet();
                 }
             }
 
