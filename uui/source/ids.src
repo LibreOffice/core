@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-16 13:41:57 $
+ *  last change: $Author: rt $ $Date: 2001-08-17 20:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: sb $ $Date: 2001-08-16 13:41:57 $ $Revision: 1.26 $
+// $Author: rt $ $Date: 2001-08-17 20:06:46 $ $Revision: 1.27 $
 //============================================================================
 
 #define __RSC
@@ -421,7 +421,7 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Aktion unmцglich: $(ARG1) ist das aktuelle Verzeichnis" ;
         Text [ english ] = "Action not allowed: $(ARG1) is the current directory" ;
-        Text[ english_us ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ english_us ] = "Action impossible: $(ARG1) is the current directory";
         Text[ portuguese ] = "Acзгo impossнvel: $(ARG1) й o directуrio activo.";
         Text[ russian ] = "Данная операция невозможна: $(ARG1) является текущей папкой";
         Text[ greek ] = "Action not allowed: $(ARG1) is the current directory";
@@ -473,7 +473,7 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Aktion unmцglich: $(ARG1) und $(ARG2) sind verschiedene Gerдte (Laufwerke)" ;
         Text [ english ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)" ;
-        Text[ english_us ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ english_us ] = "Action impossible: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ portuguese ] = "Acзгo impossнvel: $(ARG1) e $(ARG2) sгo dispositivos diferentes (unidades).";
         Text[ russian ] = "Данная операция невозможна: $(ARG1) и $(ARG2) являются различными устройствами (дисками)";
         Text[ greek ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
@@ -655,7 +655,7 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Die Operation kann nicht ausgefьhrt werden, weil $(ARG1) Wildcards enthдlt";
         Text [ ENGLISH ] = "The operation cannot be run, because $(ARG1) contains wildcards" ;
-        Text[ english_us ] = "The operation cannot be run because $(ARG1) contains wildcards";
+        Text[ english_us ] = "The operation cannot be performed because $(ARG1) contains wildcards";
         Text[ portuguese ] = "Impossнvel executar a operaзгo, porque $(ARG1) contйm wildcards.";
         Text[ russian ] = "Из-за содержащихся в $(ARG1) подстановочных знаков выполнить операцию невозможно";
         Text[ greek ] = "The operation cannot be run, because $(ARG1) contains wildcards";
@@ -1123,23 +1123,23 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Laufwerk $(ARG1) existiert nicht" ;
         Text [ ENGLISH ] = "Volume $(ARG1) does not exist" ;
-        Text[ english_us ] = "Volume $(ARG1) does not exist";
+        Text[ english_us ] = "Drive $(ARG1) does not exist";
         Text[ portuguese ] = "A unidade $(ARG1)nгo existe.";
-        Text[ russian ] = "Volume $(ARG1) does not exist";
+        Text[ russian ] = "Устройство $(ARG1) не существует";
         Text[ greek ] = "Volume $(ARG1) does not exist";
         Text[ dutch ] = "Volume $(ARG1) does not exist";
         Text[ french ] = "L'unitй $(ARG1) n'existe pas.";
         Text[ spanish ] = "No existe la unidad $(ARG1)";
         Text[ finnish ] = "Volume $(ARG1) does not exist";
-        Text[ italian ] = "Volume $(ARG1) does not exist";
+        Text[ italian ] = "Il drive $(ARG1) non esiste";
         Text[ danish ] = "Volume $(ARG1) does not exist";
         Text[ swedish ] = "Volume $(ARG1) does not exist";
         Text[ polish ] = "Volume $(ARG1) does not exist";
         Text[ portuguese_brazilian ] = "Volume $(ARG1) does not exist";
         Text[ japanese ] = "пѕ„пѕћпѕ—пЅІпѕЊпѕћ $(ARG1) гЃЇгЃ‚г‚ЉгЃѕгЃ›г‚“гЂ‚";
         Text[ korean ] = "Volume $(ARG1) does not exist";
-        Text[ chinese_simplified ] = "Volume $(ARG1) does not exist";
-        Text[ chinese_traditional ] = "иґЏиќ¶ $(ARG1) дёЌе­ењЁгЂ‚";
+        Text[ chinese_simplified ] = "зЎ¬з› $(ARG1) дёЌе­ењЁгЂ‚";
+        Text[ chinese_traditional ] = "зЎ¬иќ¶ $(ARG1) дёЌе­ењЁгЂ‚";
         Text[ turkish ] = "Volume $(ARG1) does not exist";
         Text[ arabic ] = "Volume $(ARG1) does not exist";
         Text[ catalan ] = "Volume $(ARG1) does not exist";
@@ -1151,20 +1151,20 @@ Resource RID_UUI_ERRHDL
         Text [ ENGLISH ] = "Folder $(ARG1) does not exist" ;
         Text[ english_us ] = "Folder $(ARG1) does not exist";
         Text[ portuguese ] = "A pasta $(ARG1) nгo existe.";
-        Text[ russian ] = "Folder $(ARG1) does not exist";
+        Text[ russian ] = "Папки $(ARG1) не существует";
         Text[ greek ] = "Folder $(ARG1) does not exist";
         Text[ dutch ] = "Folder $(ARG1) does not exist";
         Text[ french ] = "Le dossier $(ARG1) n'existe pas.";
         Text[ spanish ] = "No existe la carpeta $(ARG1)";
         Text[ finnish ] = "Folder $(ARG1) does not exist";
-        Text[ italian ] = "Folder $(ARG1) does not exist";
+        Text[ italian ] = "La cartella $(ARG1) non esiste";
         Text[ danish ] = "Folder $(ARG1) does not exist";
         Text[ swedish ] = "Folder $(ARG1) does not exist";
         Text[ polish ] = "Folder $(ARG1) does not exist";
         Text[ portuguese_brazilian ] = "Folder $(ARG1) does not exist";
         Text[ japanese ] = "пѕЊпЅ«пѕ™пѕЂпѕћ $(ARG1) гЃЇгЃ‚г‚ЉгЃѕгЃ›г‚“гЂ‚";
         Text[ korean ] = "Folder $(ARG1) does not exist";
-        Text[ chinese_simplified ] = "Folder $(ARG1) does not exist";
+        Text[ chinese_simplified ] = "ж–‡д»¶е¤№ $(ARG1) дёЌе­ењЁгЂ‚";
         Text[ chinese_traditional ] = "иі‡ж–™е¤ѕ $(ARG1) дёЌе­ењЁ";
         Text[ turkish ] = "Folder $(ARG1) does not exist";
         Text[ arabic ] = "Folder $(ARG1) does not exist";
@@ -1206,3 +1206,4 @@ Resource RID_UUI_ERRHDL
         Text[english] = "The data associated with the partnership $(ARG1) are corrupted";
     };
 };
+
