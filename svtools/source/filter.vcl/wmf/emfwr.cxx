@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-04 14:58:42 $
+ *  last change: $Author: sj $ $Date: 2002-07-25 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,13 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm,
 
     // write emf data
     ImplWrite( rMtf );
+
+    ImplBeginRecord( WIN_EMR_EOF );
+    (*mpStm)<< (sal_uInt32)0        // nPalEntries
+            << (sal_uInt32)0x16     // offPalEntries
+            << (sal_uInt32)0x14;    // nSizeLast
+    ImplEndRecord();
+
 
     // write header
     const ULONG nEndPos = mpStm->Tell(); mpStm->Seek( nHeaderPos );
