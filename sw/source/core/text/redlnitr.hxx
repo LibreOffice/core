@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-27 13:33:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-22 11:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ public:
         { if( pFnt ) return _Leave( rFnt, nNew ); return sal_False; }
     short Enter( SwFont& rFnt, xub_StrLen nNew );
     xub_StrLen Next( xub_StrLen nNext );
+    SwFont* GetFont()  { return pFnt; }
 };
 
 class SwRedlineItr

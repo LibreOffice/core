@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-14 12:12:05 $
+ *  last change: $Author: fme $ $Date: 2002-02-22 11:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,9 +444,17 @@ void SwRedlineItr::ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
         return;
 
     if( bChg )
-        rAttrHandler.PushAndChg( rHt, *pFnt );
+    {
+        if ( pExt && pExt->IsOn() )
+            rAttrHandler.PushAndChg( rHt, *pExt->GetFont() );
+        else
+            rAttrHandler.PushAndChg( rHt, *pFnt );
+    }
     else
+    {
+        ASSERT( ! pExt || ! pExt->IsOn(), "Pop of attribute during opened extension" )
         rAttrHandler.PopAndChg( rHt, *pFnt );
+    }
 }
 
 void SwRedlineItr::_Clear( SwFont* pFnt )
