@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-07 14:48:38 $
+ *  last change: $Author: avy $ $Date: 2001-03-14 10:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <svtools/itempool.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
 using namespace ::com::sun::star;
 
 
@@ -134,7 +133,8 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     }
     else
     {
-        throw( datatransfer::UnsupportedFlavorException() );
+        datatransfer::UnsupportedFlavorException aException;
+        throw( aException );
     }
 
     return aAny;
