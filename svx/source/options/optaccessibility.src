@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,26 +77,29 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Sonstige Optionen" ;
         Text [ English ] = "Miscellaneous options" ;
         Text[ english_us ] = "Miscellaneous options";
-        Text[ portuguese ] = "Miscellaneous options";
-        Text[ russian ] = "Miscellaneous options";
+        Text[ portuguese ] = "Outras op��es";
+        Text[ russian ] = "������ ���������";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori opzioni";
         Text[ swedish ] = "�vriga alternativ";
-        Text[ polish ] = "Miscellaneous options";
-        Text[ portuguese_brazilian ] = "Miscellaneous options";
+        Text[ polish ] = "Pozosta�e opcje";
+        Text[ portuguese_brazilian ] = "Miscel�nea de op��es";
         Text[ japanese ] = "その他のオプション";
         Text[ korean ] = "기타 옵션";
-        Text[ turkish ] = "Miscellaneous options";
-        Text[ thai ] = "Miscellaneous options";
-        Text[ greek ] = "Miscellaneous options";
-        Text[ dutch ] = "Miscellaneous options";
+        Text[ turkish ] = "�e�itli �zellikler";
+        Text[ thai ] = "ตัวเลือกเบ็ดเตล็ด";
+        Text[ greek ] = "����� ��������";
+        Text[ dutch ] = "Verdere opties";
         Text[ french ] = "Autres options";
-        Text[ finnish ] = "Miscellaneous options";
-        Text[ danish ] = "Miscellaneous options";
+        Text[ finnish ] = "Sekalaiset valinnat";
+        Text[ danish ] = "Andre indstillinger";
         Text[ chinese_simplified ] = "其他选项";
         Text[ chinese_traditional ] = "其他選項";
-        Text[ arabic ] = "Miscellaneous options";
-        Text[ catalan ] = "Miscellaneous options";
+        Text[ arabic ] = "������ ����";
+        Text[ catalan ] = "Altres opcions";
+        Text[ czech ] = "Různé volby";
+        Text[ hebrew ] = "Sonstige Optionen";
+        Text[ hindi ] = "मिला जुला विकल्प";
     };
     CheckBox CB_ACCESSIBILITY_TOOL
     {
@@ -112,7 +115,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ greek ] = "Support ~assistive technology tools (program restart required)";
         Text[ dutch ] = "Support ~assistive technology tools (program restart required)";
         Text[ french ] = "Support des logiciels d'accessibilit� pour les personnes souffrant d'un handicap (red�marrage du programme requis)";
-        Text[ spanish ] = "~Admisi�n de los programas de accesibilidad adaptados a disminuidos (reiniciar el programa)";
+        Text[ spanish ] = "~Admisi�n de los programas de accesibilidad para personas disminuidas (se requiere el reinicio del programa)";
         Text[ finnish ] = "Support ~assistive technology tools (program restart required)";
         Text[ italian ] = "Supporto per facilitare l'accesso da parte di persone disabili (riavviare il programma)";
         Text[ danish ] = "Support ~assistive technology tools (program restart required)";
@@ -120,13 +123,16 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Support ~assistive technology tools (program restart required)";
         Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
         Text[ japanese ] = "ユーザー補助機能の支援（プログラム再起動が必要）";
-        Text[ korean ] = "자바 보조 기술 도구 지원 (프로그램 재시작 필요)";
+        Text[ korean ] = "내게 필요한 옵션 기능 지원 (프로그램 재시작 필요)";
         Text[ chinese_simplified ] = "支持辅助功能程序(需要重新启动程序)";
         Text[ chinese_traditional ] = "支援協助工具程式(需要重新啓動程式)";
         Text[ turkish ] = "Support ~assistive technology tools (program restart required)";
         Text[ arabic ] = "Support ~assistive technology tools (program restart required)";
         Text[ catalan ] = "Support ~assistive technology tools (program restart required)";
         Text[ thai ] = "Support ~assistive technology tools (program restart required)";
+        Text[ czech ] = "Podpora pro asistenční nástroje (vyžaduje restart programu)";
+        Text[ hebrew ] = "‮תמיכה בכלי טכנולוגיה מסייעים (דורשת אתחול התוכנית)‬";
+        Text[ hindi ] = "Support ~assistive technology tools (program restart required)";
     };
     CheckBox CB_TEXTSELECTION
     {
@@ -151,10 +157,13 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "읽기 전용 텍스트 문서에서 텍스트 선택 커서를 사용";
         Text[ chinese_simplified ] = "受保护的文本文字内使用选中文字的鼠标";
         Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標";
-        Text[ turkish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ turkish ] = "Salt-okunur merin d�k�manlar�nda me~tin se�im imlecini kullan";
         Text[ arabic ] = "Use te~xt selection cursor in read-only text documents";
         Text[ catalan ] = "Use te~xt selection cursor in read-only text documents";
         Text[ thai ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ czech ] = "Použít kurzor výběru textu pro dokumenty pouze pro čtení";
+        Text[ hebrew ] = "‮להשתמש בסמן בחירת טקסט גם במסמכים לקריאה בלבד‬";
+        Text[ hindi ] = "Use te~xt selection cursor in read-only text documents";
     };
     CheckBox CB_SYSTEM_FONT
     {
@@ -180,10 +189,13 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "시스템 글꼴을 사용자 인터페이스용으로 사용";
         Text[ chinese_simplified ] = "采用使用者界面的系统字体";
         Text[ chinese_traditional ] = "採用使用者介面的系統字型";
-        Text[ turkish ] = "Use system ~font for user interface";
+        Text[ turkish ] = "Kullan�c� aray�z� i�in sistem ~yaz�tipini kullan";
         Text[ arabic ] = "Use system ~font for user interface";
         Text[ catalan ] = "Use system ~font for user interface";
         Text[ thai ] = "Use system ~font for user interface";
+        Text[ czech ] = "Použít písmo systému pro uživatelské rozhraní";
+        Text[ hebrew ] = "‮להשתמש בגופן מערכת בממשק המשתמש‬";
+        Text[ hindi ] = "Use system ~font for user interface";
     };
     CheckBox CB_ANIMATED_GRAPHICS
     {
@@ -209,10 +221,13 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "애니메이션된 그림 허용";
         Text[ chinese_simplified ] = "允许动画图形";
         Text[ chinese_traditional ] = "允許動畫圖形";
-        Text[ turkish ] = "Allow animated ~graphics";
+        Text[ turkish ] = "~Hareketli grafiklere izin ver";
         Text[ arabic ] = "Allow animated ~graphics";
         Text[ catalan ] = "Allow animated ~graphics";
         Text[ thai ] = "Allow animated ~graphics";
+        Text[ czech ] = "Povolit animované obrázky";
+        Text[ hebrew ] = "‮לאפשר אנימציה גרפית‬";
+        Text[ hindi ] = "Allow animated ~graphics";
     };
     CheckBox CB_ANIMATED_TEXTS
     {
@@ -238,10 +253,13 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "애니메이션된 텍스트 허용";
         Text[ chinese_simplified ] = "允许动画文字(~T)";
         Text[ chinese_traditional ] = "允許動畫文字";
-        Text[ turkish ] = "Allow animated ~text";
+        Text[ turkish ] = "Oynat�labilen ~metne izin ver";
         Text[ arabic ] = "Allow animated ~text";
         Text[ catalan ] = "Allow animated ~text";
         Text[ thai ] = "Allow animated ~text";
+        Text[ czech ] = "Povolit animovaný text";
+        Text[ hebrew ] = "‮לאפשר אנימציה טקסטואלית‬";
+        Text[ hindi ] = "Allow animated ~text";
     };
     CheckBox CB_TIPHELP
     {
@@ -267,10 +285,13 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "도움말 지속 시간";
         Text[ chinese_simplified ] = "帮助文显示停留";
         Text[ chinese_traditional ] = "說明文顯示停留";
-        Text[ turkish ] = "~Help tips disappear after ";
+        Text[ turkish ] = "~Yard�m ipu�lar� daha sonra kaybolur";
         Text[ arabic ] = "~Help tips disappear after ";
         Text[ catalan ] = "~Help tips disappear after ";
         Text[ thai ] = "~Help tips disappear after ";
+        Text[ czech ] = "Tipy nápovědy zmizí po ";
+        Text[ hebrew ] = "‮כתוביות עזרה נעלמות אחרי‬";
+        Text[ hindi ] = "~Help tips disappear after ";
     };
     NumericField NF_TIPHELP
     {
@@ -292,26 +313,29 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Sekunden" ;
         Text [ ENGLISH ] = "seconds" ;
         Text[ english_us ] = "seconds";
-        Text[ portuguese ] = "seconds";
-        Text[ russian ] = "seconds";
-        Text[ greek ] = "seconds";
-        Text[ dutch ] = "seconds";
+        Text[ portuguese ] = "Segundos";
+        Text[ russian ] = "������(�)";
+        Text[ greek ] = "������������";
+        Text[ dutch ] = "Seconden";
         Text[ french ] = "secondes";
         Text[ spanish ] = "Segundos";
-        Text[ finnish ] = "seconds";
+        Text[ finnish ] = "sekuntia";
         Text[ italian ] = "Secondi";
-        Text[ danish ] = "seconds";
+        Text[ danish ] = "Sekunder";
         Text[ swedish ] = "sekunder";
-        Text[ polish ] = "seconds";
-        Text[ portuguese_brazilian ] = "seconds";
+        Text[ polish ] = "Sekundy";
+        Text[ portuguese_brazilian ] = "segundos";
         Text[ japanese ] = "秒";
         Text[ korean ] = "초";
         Text[ chinese_simplified ] = "秒";
         Text[ chinese_traditional ] = "秒";
-        Text[ turkish ] = "seconds";
-        Text[ arabic ] = "seconds";
+        Text[ turkish ] = "Saniye";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "segons";
         Text[ thai ] = "ชช:นน:วว";
+        Text[ czech ] = "sekundách";
+        Text[ hebrew ] = "‮שניות‬";
+        Text[ hindi ] = "seconds";
     };
     FixedLine FL_HC_OPTIONS
     {
@@ -328,8 +352,8 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Options for high contrast appearance";
         Text[ portuguese_brazilian ] = "Options for high contrast appearance";
         Text[ japanese ] = "高コントラスト表示のオプション";
-        Text[ korean ] = "고대비 표시 형식의 옵션";
-        Text[ turkish ] = "Options for high contrast appearance";
+        Text[ korean ] = "고대비 표시 옵션";
+        Text[ turkish ] = "Y�ksek kar��tl�k g�r�n�m� i�in �zellikler";
         Text[ thai ] = "Options for high contrast appearance";
         Text[ greek ] = "Options for high contrast appearance";
         Text[ dutch ] = "Options for high contrast appearance";
@@ -340,6 +364,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ chinese_traditional ] = "高對比度顯示的選項";
         Text[ arabic ] = "Options for high contrast appearance";
         Text[ catalan ] = "Options for high contrast appearance";
+        Text[ czech ] = "Parametry pro zobrazení s vysokým kontrastem";
+        Text[ hebrew ] = "Optionen für die Kontrastdarstellung";
+        Text[ hindi ] = "Options for high contrast appearance";
     };
     CheckBox CB_AUTO_DETECT_HC
     {
@@ -357,8 +384,8 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Automatically detect high contrast mode of operating system";
         Text[ portuguese_brazilian ] = "Automatically detect high contrast mode of operating system";
         Text[ japanese ] = "オペレーティングシステムの高コントラストモードを自動検出(~D)";
-        Text[ korean ] = "운영 체제의 고대비 모드를 자동으로 추적하기";
-        Text[ turkish ] = "Automatically detect high contrast mode of operating system";
+        Text[ korean ] = "운영 체제의 고대비 모드를 자동으로 추적";
+        Text[ turkish ] = "��letim sistemi i�in otomatik olarak y�ksek z�tl�k modunu ~alg�la";
         Text[ thai ] = "Automatically detect high contrast mode of operating system";
         Text[ greek ] = "Automatically detect high contrast mode of operating system";
         Text[ dutch ] = "Automatically detect high contrast mode of operating system";
@@ -369,6 +396,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ chinese_traditional ] = "自動偵測操作系統的高對比度模式";
         Text[ arabic ] = "Automatically detect high contrast mode of operating system";
         Text[ catalan ] = "Automatically detect high contrast mode of operating system";
+        Text[ czech ] = "Automaticky detekovat, zda je v operačním systému aktivní vysokokontrastní zobrazení";
+        Text[ hebrew ] = "~Kontrastdarstellungsmodus des Betriebssystems automatisch erkennen";
+        Text[ hindi ] = "Automatically ~detect high contrast mode of operating system";
     };
     CheckBox CB_AUTOMATIC_FONT_COLOR
     {
@@ -393,8 +423,14 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "화면 표시용으로 자동 글꼴 색상을 사용 ";
         Text[ chinese_simplified ] = "使用屏幕自动显示的字体颜色";
         Text[ chinese_traditional ] = "將自動字型顏色用於螢幕顯示(~C)";
-        Text[ turkish ] = "Always use automatic font ~color for screen display";
+        Text[ turkish ] = "Ekran g�r�nt�leri i�in otomatik yaz� tipi ~rengi kullan";
         Text[ arabic ] = "Always use automatic font ~color for screen display";
+        Text[ czech ] = "Vždy použít automatickou barvu písma pro obrazovku";
+        Text[ hebrew ] = "‮להשתמש תמיד בצבע גופן אוטומטי בתצוגת המסך‬";
+        Text[ catalan ] = "Use automatic font ~color for screen display";
+        Text[ portuguese_brazilian ] = "Use automatic font ~color for screen display";
+        Text[ thai ] = "Use automatic font ~color for screen display";
+        Text[ hindi ] = "Use automatic font ~color for screen display";
     };
     CheckBox CB_PAGE_PREVIEWS
     {
@@ -411,7 +447,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ french ] = "Couleurs du syst�me dans les aper�us de page";
         Text[ spanish ] = "~Utilizar los colores del sistema en la vista preliminar";
         Text[ finnish ] = "For page ~previews";
-        Text[ italian ] = "Applica i colori di sistema all'anteprima di pagina";
+        Text[ italian ] = "Applica i colori di sistema all'anteprima di stampa";
         Text[ danish ] = "For page ~previews";
         Text[ swedish ] = "An~v�nd systemf�rger f�r f�rhandsgranskning";
         Text[ polish ] = "For page ~previews";
@@ -419,10 +455,29 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "시스템 색상을 페이지 미리 보기용으로 사용";
         Text[ chinese_simplified ] = "使用作业系统预设的页面视图的颜色(~U)";
         Text[ chinese_traditional ] = "將系統顏色用於頁面預覽(~U)";
-        Text[ turkish ] = "For page ~previews";
+        Text[ turkish ] = "~Sayfa �nizlemeleri i�in sistem renklerini kullan";
         Text[ arabic ] = "For page ~previews";
+        Text[ czech ] = "Pro náhledy stránek";
+        Text[ hebrew ] = "‮לתצוגה מקדימה של דפים‬";
+        Text[ catalan ] = "~Use system colors for page previews";
+        Text[ portuguese_brazilian ] = "~Use system colors for page previews";
+        Text[ thai ] = "~Use system colors for page previews";
+        Text[ hindi ] = "~Use system colors for page previews";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
