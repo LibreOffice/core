@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:43:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3060,7 +3060,7 @@ String STR_AL_TITLE_VERT_OUTLINE
     Text[ dutch ] = "Title, vertical text";
     Text[ french ] = "Titre, texte vertical";
     Text[ spanish ] = "Título, texto vertical";
-    Text[ italian ] = "Title, vertical text";
+    Text[ italian ] = "Titolo, testo verticale";
     Text[ danish ] = "Title, vertical text";
     Text[ swedish ] = "Rubrik, vertikal text";
     Text[ polish ] = "Tytu³, tekst w pionie";
@@ -3083,7 +3083,7 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text[ dutch ] = "Title, vertical text, clipart";
     Text[ french ] = "Titre, texte vertical, clipart";
     Text[ spanish ] = "Título, texto vertical, clipart";
-    Text[ italian ] = "Title, vertical text, clipart";
+    Text[ italian ] = "Titolo, testo verticale, clipart";
     Text[ danish ] = "Title, vertical text, clipart";
     Text[ swedish ] = "Rubrik, vertikal text, clipart";
     Text[ polish ] = "Tytu³, tekst w pionie, klipart";
@@ -3106,7 +3106,7 @@ String STR_AL_VERT_TITLE_TEXT_CHART
     Text[ dutch ] = "Vertical title, text, chart";
     Text[ french ] = "Titre vertical, texte, diagramme";
     Text[ spanish ] = "Título vertical, texto, diagrama";
-    Text[ italian ] = "Vertical title, text, chart";
+    Text[ italian ] = "Titolo verticale, testo, diagramma";
     Text[ danish ] = "Vertical title, text, chart";
     Text[ swedish ] = "Vertikal rubrik, text, diagram";
     Text[ polish ] = "Pionowy tytu³, tekst, wykres";
@@ -3129,7 +3129,7 @@ String STR_AL_VERT_TITLE_VERT_OUTLINE
     Text[ dutch ] = "Vertical title, vertical text";
     Text[ french ] = "Titre vertical, texte vertical";
     Text[ spanish ] = "Título vertical, texto vertical";
-    Text[ italian ] = "Vertical title, vertical text";
+    Text[ italian ] = "Titolo verticale, testo verticale";
     Text[ danish ] = "Vertical title, vertical text";
     Text[ swedish ] = "Vertikal rubrik, vertikal text";
     Text[ polish ] = "Pionowy tytu³, tekst w pionie";
