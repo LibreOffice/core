@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dv $ $Date: 2001-06-29 12:44:02 $
+#   last change: $Author: fs $ $Date: 2001-10-01 16:34:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,6 @@ PRJ=..$/..
 
 PRJNAME=sfx2
 TARGET=dialog
-ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 AUTOSEG=true
 
@@ -78,7 +77,13 @@ AUTOSEG=true
 IMGLST_SRS=$(SRS)$/dialog.srs
 BMP_IN=$(PRJ)$/win/res
 
+EXCEPTIONSFILES=\
+        $(SLO)$/filtergrouping.obj	\
+        $(SLO)$/filedlghelper.obj	\
+        $(SLO)$/mailmodel.obj
+
 SLOFILES =\
+        $(EXCEPTIONSFILES)			\
         $(SLO)$/cfg.obj				\
         $(SLO)$/about.obj			\
         $(SLO)$/acccfg.obj			\
@@ -87,11 +92,9 @@ SLOFILES =\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\
         $(SLO)$/eventdlg.obj		\
-        $(SLO)$/filedlghelper.obj	\
         $(SLO)$/intro.obj			\
         $(SLO)$/macropg.obj			\
         $(SLO)$/mailchildwin.obj	\
-        $(SLO)$/mailmodel.obj		\
         $(SLO)$/mailwindow.obj		\
         $(SLO)$/menucfg.obj			\
         $(SLO)$/mgetempl.obj		\
@@ -111,10 +114,6 @@ SLOFILES =\
         $(SLO)$/partwnd.obj			\
         $(SLO)$/versdlg.obj			\
         $(SLO)$/printopt.obj
-
-EXCEPTIONSFILES=\
-        $(SLO)$/filedlghelper.obj	\
-        $(SLO)$/mailmodel.obj
 
 SRCFILES =\
         about.src			\
