@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: sab $ $Date: 2000-11-15 14:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
 }
 
 void PageStyleContext::FillPropertySet(
-            const uno::Reference< beans::XPropertySet > & rPropSet )
+            const uno::Reference<beans::XPropertySet > & rPropSet )
 {
     XMLPropStyleContext::FillPropertySet(rPropSet);
     if (sPageUsage.len())
@@ -220,20 +220,5 @@ void PageStyleContext::FillPropertySet(
         if (aPageUsageHdl.importXML(sPageUsage, aPageUsage, GetImport().GetMM100UnitConverter()))
             rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyleLayout")), aPageUsage);
     }
-}
-
-void PageStyleContext::CreateAndInsert( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::CreateAndInsert( bOverwrite );
-}
-
-void PageStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::CreateAndInsertLate( bOverwrite );
-}
-
-void PageStyleContext::Finish( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::Finish( bOverwrite );
 }
 
