@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: rt $ $Date: 2002-01-23 13:32:41 $
+#   last change: $Author: kso $ $Date: 2002-02-07 11:58:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=so_neon
 NEON_NAME=neon-0.14.0
 
 TARFILE_NAME=$(NEON_NAME)
-PATCH_FILE_NAME=$(NEON_NAME).patch
+PATCH_FILE_NAME=neon.patch
 
 ADDITIONAL_FILES=src$/makefile.mk src$/config.h
 
