@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-16 07:50:24 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 08:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,12 +365,15 @@ class OParameterWrapper
 
     Reference<XPropertySet>     m_xPseudoAggregate;
     Reference<XParameters>      m_xValueDestination;
-    sal_Int32                   m_nIndex;
+    ::std::vector<sal_Int32>    m_aIndexes;
 
 
+protected:
     virtual ~OParameterWrapper();
 public:
-    OParameterWrapper(const Reference<XPropertySet>& _rxColumn, const Reference<XParameters>& _rxAllParameters, sal_Int32 _nIndex);
+    OParameterWrapper(  const Reference<XPropertySet>& _rxColumn,
+                        const Reference<XParameters>& _rxAllParameters,
+                        const ::std::vector<sal_Int32>& _aIndexes);
 
     // UNO
     DECLARE_UNO3_DEFAULTS(OParameterWrapper, OWeakObject);
@@ -399,12 +402,12 @@ protected:
 
 DBG_NAME(OParameterWrapper)
 //------------------------------------------------------------------------------
-OParameterWrapper::OParameterWrapper(const Reference<XPropertySet>& _rxColumn, const Reference<XParameters>& _rxAllParameters, sal_Int32 _nIndex)
+OParameterWrapper::OParameterWrapper(const Reference<XPropertySet>& _rxColumn, const Reference<XParameters>& _rxAllParameters, const ::std::vector<sal_Int32>&  _aIndexes)
     :OPropertySetHelper(m_aBroadcastHelper)
     ,m_aBroadcastHelper(m_aMutex)
     ,m_xPseudoAggregate(_rxColumn)
     ,m_xValueDestination(_rxAllParameters)
-    ,m_nIndex(_nIndex)
+    ,m_aIndexes(_aIndexes)
 {
     DBG_CTOR(OParameterWrapper, NULL);
 }
@@ -422,7 +425,7 @@ Any SAL_CALL OParameterWrapper::queryInterface(const Type& _rType) throw (Runtim
     aReturn = OWeakObject::queryInterface(_rType);
 
     if (!aReturn.hasValue())
-        OPropertySetHelper::queryInterface(_rType);
+        aReturn = OPropertySetHelper::queryInterface(_rType);
 
     return aReturn;
 }
@@ -468,8 +471,7 @@ Sequence<sal_Int8> SAL_CALL OParameterWrapper::getImplementationId() throw(Runti
 //------------------------------------------------------------------------------
 Reference<XPropertySetInfo>  OParameterWrapper::getPropertySetInfo() throw( RuntimeException )
 {
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
+    return createPropertySetInfo( getInfoHelper() );
 }
 
 //------------------------------------------------------------------------------
@@ -515,9 +517,15 @@ void OParameterWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         }
         // TODO : aParamType & nScale can be obtained within the constructor ....
 
+
         try
         {
-            m_xValueDestination->setObjectWithInfo(m_nIndex + 1, rValue, getINT32(aParamType), nScale);
+            sal_Int32 nParamType = DataType::VARCHAR;
+            aParamType >>= nParamType;
+            for(::std::vector<sal_Int32>::iterator aIter = m_aIndexes.begin();aIter != m_aIndexes.end();++aIter )
+            {
+                m_xValueDestination->setObjectWithInfo(*aIter + 1, rValue, nParamType, nScale);
+            }
                 // the index of the parameters is one-based
             m_aValue = rValue;
         }
@@ -567,6 +575,8 @@ public:
 private:
     Parameters      m_aParameters;
 
+protected:
+    virtual ~OParametersImpl(){}
 public:
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OParametersImpl, OParametersImplBase);
@@ -595,7 +605,7 @@ Type SAL_CALL OParametersImpl::getElementType() throw( RuntimeException )
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OParametersImpl::hasElements() throw( RuntimeException )
 {
-    return m_aParameters.size() != 0;
+    return !m_aParameters.empty();
 }
 
 // XIndexAccess
@@ -626,13 +636,13 @@ Reference<XEnumeration>  OParametersImpl::createEnumeration() throw( RuntimeExce
 //=-----------------------------------------------------------------
 //= class which collects all information for parameter filling
 //==================================================================
-DECLARE_STL_USTRINGACCESS_MAP(sal_Int32, MapUString2INT32);
+typedef ::std::multimap< ::rtl::OUString,sal_Int32,::comphelper::UStringLess > MapUString2INT32;
 
 struct OParameterInfoImpl
 {
     sal_Int32                   nCount;                 //  Number of Parameters
     Reference<XSQLQueryComposer>    xComposer;
-    Reference<XNameAccess>          xParamsAsNames;
+    Reference<XIndexAccess>         xParamsAsIndex;
     OParametersImpl*        pParameters;
     MapUString2INT32        aParamMapping;
 
@@ -1309,6 +1319,9 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 
             Reference<XPropertySet>  xSet;
             sal_Int32 nCount = xContainer->getCount();
+            // we know already how many objects should be appended,
+            // so why not allocate the space for them
+            rList.reserve( nCount + rList.capacity() ); // not size()
             for (sal_Int32 i = 0; i < nCount; ++i)
             {
                 xContainer->getByIndex(i) >>= xSet;
@@ -1329,6 +1342,9 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     Reference<XPropertySet>         xComponentSet;
     ::rtl::OUString aPrefix;
 
+    // we know already how many objects should be appended,
+    // so why not allocate the space for them
+    rList.reserve( getCount() );
     for( sal_Int32 nIndex=0; nIndex < getCount(); nIndex++ )
     {
         getByIndex( nIndex ) >>= xComponentSet;
@@ -1530,15 +1546,14 @@ void ODatabaseForm::createParameterInfo()
         return;
 
     Reference<XIndexAccess>  xParamsAsIndicies = xSetParameters->getParameters();
-    Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
     // without parameters return
-    if (!xParamsAsNames.is() || (nParamCount == 0))
+    if ( nParamCount == 0 )
         return;
 
     // now evaluate the parameters
     m_pParameterInfo->nCount = nParamCount;
-    m_pParameterInfo->xParamsAsNames = xParamsAsNames;
+    m_pParameterInfo->xParamsAsIndex = xParamsAsIndicies;
     m_pParameterInfo->pParameters = new OParametersImpl();
     m_pParameterInfo->pParameters->acquire();
     OParametersImpl::Parameters& rParams = m_pParameterInfo->pParameters->getParameters();
@@ -1552,10 +1567,12 @@ void ODatabaseForm::createParameterInfo()
         ::cppu::extractInterface(xParam, xParamsAsIndicies->getByIndex(i));
 
         // remember the param fields
-        rParams.push_back(xParam);
         ::rtl::OUString sName;
         xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
-        rParamMapping[sName] = i;
+        // only append additonal paramters when they are not already in the list
+        if ( rParamMapping.end() == rParamMapping.find(sName) )
+            rParams.push_back(xParam);
+        rParamMapping.insert(MapUString2INT32::value_type(sName, i));
     }
 
     // check for a matching of my param master fields with the parent's columns
@@ -1577,11 +1594,12 @@ void ODatabaseForm::createParameterInfo()
                 {
                     Reference<XPropertySet>  xMasterField, xDetailField;
 
+                    MapUString2INT32::const_iterator aFind;
                     if (xParentCols->hasByName(*pMasterFields) &&
-                        xParamsAsNames->hasByName(*pDetailFields))
+                        (aFind = rParamMapping.find(*pDetailFields)) != rParamMapping.end())
                     {
                         // parameter defined by master slave definition
-                        ::cppu::extractInterface(xDetailField, xParamsAsNames->getByName(*pDetailFields));
+                        ::cppu::extractInterface(xDetailField, xParamsAsIndicies->getByIndex(aFind->second));
 
                         DBG_ASSERT(rParamMapping.find(*pDetailFields) != rParamMapping.end(), "ODatabaseForm::createParameterInfo: invalid XParametersSupplier !");
                             // the mapping was build from the XParametersSupplier interface of the composer, and the
@@ -1603,6 +1621,7 @@ void ODatabaseForm::createParameterInfo()
     if (nParamsLeft)
     {
         Reference<XParameters>  xExecutionParams(m_xAggregate, UNO_QUERY);
+
         ::rtl::OUString sName;
         Reference<XPropertySet>  xParam;
         Reference<XPropertySet>  xWrapper;
@@ -1617,18 +1636,32 @@ void ODatabaseForm::createParameterInfo()
             // (it's no real aggregation of course ...)
 
             // get the position of the parameter
-            sal_Int32 nPos = rParamMapping[sName];
-            if ((sal_Int32)m_aParameterVisited.size() > nPos && m_aParameterVisited[nPos] == true)
+            MapUString2INT32::const_iterator aFind = m_pParameterInfo->aParamMapping.find(sName);
+            if ( aFind != m_pParameterInfo->aParamMapping.end() )
             {
-                // parameter already set from outside
-                OParametersImpl::ParametersIterator aPos = rParams.begin() + j;
-                if (aPos != rParams.end())
-                    rParams.erase(aPos);
-            }
-            else
-            {
-                xWrapper = new OParameterWrapper(xParam, xExecutionParams, rParamMapping[sName]);
-                rParams[j] = xWrapper;
+                ::std::vector<sal_Int32> aPositions;
+                do
+                {
+                    sal_Int32 nPos = aFind->second;
+                    if ((sal_Int32)m_aParameterVisited.size() > nPos && m_aParameterVisited[nPos] == true)
+                    {
+                        // parameter already set from outside
+                        OParametersImpl::ParametersIterator aPos = rParams.begin() + j;
+                        if (aPos != rParams.end())
+                            rParams.erase(aPos);
+                    }
+                    else
+                    {
+                        aPositions.push_back(nPos);
+                    }
+                    ++aFind;
+                }
+                while ( aFind != m_pParameterInfo->aParamMapping.end() );
+                if ( !aPositions.empty() )
+                {
+                    xWrapper = new OParameterWrapper(xParam, xExecutionParams, aPositions);
+                    rParams[j] = xWrapper;
+                }
             }
         }
     }
@@ -1706,27 +1739,34 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
                 for (sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields, ++pDetailFields)
                 {
                     Reference<XPropertySet>  xMasterField, xDetailField;
-                    if (xParentCols->hasByName(*pMasterFields) &&
-                        m_pParameterInfo->xParamsAsNames->hasByName(*pDetailFields))
+                    MapUString2INT32::const_iterator aFind;
+                    if ( xParentCols->hasByName(*pMasterFields) &&
+                        ( aFind = m_pParameterInfo->aParamMapping.find(*pDetailFields)) != m_pParameterInfo->aParamMapping.end() )
                     {
                         // parameter defined by master slave definition
                         ::cppu::extractInterface(xMasterField, xParentCols->getByName(*pMasterFields));
-                        ::cppu::extractInterface(xDetailField, m_pParameterInfo->xParamsAsNames->getByName(*pDetailFields));
-
-                        // get the type of the param
-                        aParamType = xDetailField->getPropertyValue(PROPERTY_FIELDTYPE);
-                        DBG_ASSERT(aParamType.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::fillParameters : invalid parameter field !");
-                        sal_Int32 nScale = 0;
-                        if (hasProperty(PROPERTY_SCALE, xDetailField))
+                        do
                         {
-                            aScale = xDetailField->getPropertyValue(PROPERTY_SCALE);
-                            DBG_ASSERT(aScale.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::fillParameters : invalid parameter field !");
-                            nScale = getINT32(aScale);
+                            m_pParameterInfo->xParamsAsIndex->getByIndex(aFind->second) >>= xDetailField;
+                            OSL_ENSURE(xDetailField.is(),"ParameterField is not valid!");
+
+                            // get the type of the param
+                            aParamType = xDetailField->getPropertyValue(PROPERTY_FIELDTYPE);
+                            DBG_ASSERT(aParamType.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::fillParameters : invalid parameter field !");
+                            sal_Int32 nScale = 0;
+                            if (hasProperty(PROPERTY_SCALE, xDetailField))
+                            {
+                                aScale = xDetailField->getPropertyValue(PROPERTY_SCALE);
+                                DBG_ASSERT(aScale.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::fillParameters : invalid parameter field !");
+                                nScale = getINT32(aScale);
+                            }
+                            // and fill the param value
+                            aValue = xMasterField->getPropertyValue(PROPERTY_VALUE);
+                            // parameters are based at 1
+                            xExecutionParams->setObjectWithInfo(aFind->second + 1, aValue, getINT32(aParamType), nScale);
+                            ++aFind;
                         }
-                        // and fill the param value
-                        aValue = xMasterField->getPropertyValue(PROPERTY_VALUE);
-                        // parameters are based at 1
-                        xExecutionParams->setObjectWithInfo(m_pParameterInfo->aParamMapping[*pDetailFields] + 1, aValue, getINT32(aParamType), nScale);
+                        while ( aFind != m_pParameterInfo->aParamMapping.end() );
                     }
                     else
                         // no column matching so leave the parameter setting
@@ -2445,27 +2485,33 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                         for (pDetailFields; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields)
                         {
                             Reference<XPropertySet>  xMasterField, xField;
-                            if (m_pParameterInfo->xParamsAsNames->hasByName(*pDetailFields))
+                            MapUString2INT32::const_iterator aFind;
+                            if ( (aFind = m_pParameterInfo->aParamMapping.find(*pDetailFields)) != m_pParameterInfo->aParamMapping.end() )
                             {   // we really have a parameter column with this name
                                 Reference< XPropertySet > xParamColumn;
-                                m_pParameterInfo->xParamsAsNames->getByName(*pDetailFields) >>= xParamColumn;
-                                if (xParamColumn.is())
-                                {   // we really really have it :)
-                                    ::rtl::OUString sParamColumnRealName;
-                                    xParamColumn->getPropertyValue(PROPERTY_REALNAME) >>= sParamColumnRealName;
-                                    if (xCols->hasByName(sParamColumnRealName))
-                                    {   // our own columns have a column which's name equals the real name of the param column
-                                        if (xParentCols->hasByName(*pMasterFields))
-                                        {   // and our parent's cols know the master field which is connected to the current detail field
+                                do
+                                {
+                                    m_pParameterInfo->xParamsAsIndex->getByIndex(aFind->second) >>= xParamColumn;
+                                    if (xParamColumn.is())
+                                    {   // we really really have it :)
+                                        ::rtl::OUString sParamColumnRealName;
+                                        xParamColumn->getPropertyValue(PROPERTY_REALNAME) >>= sParamColumnRealName;
+                                        if (xCols->hasByName(sParamColumnRealName))
+                                        {   // our own columns have a column which's name equals the real name of the param column
+                                            if (xParentCols->hasByName(*pMasterFields))
+                                            {   // and our parent's cols know the master field which is connected to the current detail field
 
-                                            // -> transfer the value property
-                                            xParentCols->getByName(*pMasterFields) >>= xMasterField;
-                                            xCols->getByName(sParamColumnRealName) >>= xField;
-                                            if (xField.is() && xMasterField.is())
-                                                xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                                                // -> transfer the value property
+                                                xParentCols->getByName(*pMasterFields) >>= xMasterField;
+                                                xCols->getByName(sParamColumnRealName) >>= xField;
+                                                if (xField.is() && xMasterField.is())
+                                                    xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                                            }
                                         }
                                     }
+                                    ++aFind;
                                 }
+                                while ( aFind != m_pParameterInfo->aParamMapping.end() );
                             }
                         }
                     }
@@ -3926,19 +3972,27 @@ Sequence<sal_Int32> SAL_CALL ODatabaseForm::deleteRows(const Sequence<Any>& rows
 }
 
 // com::sun::star::sdbc::XParameters
+namespace
+{
+    void checkParameters(::std::vector<bool>& _rBoolVector,sal_Int32 _nParameterIndex)
+    {
+        if ((sal_Int32)_rBoolVector.size() < _nParameterIndex)
+        {
+            _rBoolVector.reserve(_rBoolVector.capacity() + _nParameterIndex);
+            for (sal_Int32 i = 0; i < _nParameterIndex; i++)
+                _rBoolVector.push_back(false);
+        }
+        _rBoolVector[_nParameterIndex - 1] = true;
+    }
+}
 //------------------------------------------------------------------------------
 #define PARAMETER_VISITED(method)                                       \
     ::osl::MutexGuard aGuard(m_aMutex);                                 \
-    Reference<XParameters>  xParameters;                \
+    Reference<XParameters>  xParameters;                                \
     if (query_aggregation( m_xAggregate, xParameters))                  \
         xParameters->method;                                            \
                                                                         \
-    if ((sal_Int32)m_aParameterVisited.size() < parameterIndex)                 \
-    {                                                                   \
-        for (sal_Int32 i = 0; i < parameterIndex; i++)                  \
-            m_aParameterVisited.push_back(false);                       \
-    }                                                                   \
-    m_aParameterVisited[parameterIndex - 1] = true
+    checkParameters(m_aParameterVisited,parameterIndex)
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw( SQLException, RuntimeException )
@@ -4155,11 +4209,12 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() t
 sal_Bool SAL_CALL ODatabaseForm::supportsService(const ::rtl::OUString& ServiceName) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pArray = aSupported.getConstArray();
-    for( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray )
-        if( pArray->equals(ServiceName) )
-            return sal_True;
-    return sal_False;
+    const ::rtl::OUString* pSupported = aSupported.getConstArray();
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(ServiceName); ++pSupported)
+        ;
+
+    return pSupported != pEnd;
 }
 
 //==============================================================================
