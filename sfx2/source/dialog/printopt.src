@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-22 08:41:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "Reduce printing data";
         Text[ danish ] = "Reduce printing data";
         Text[ swedish ] = "Reducera utskriftsdata";
-        Text[ polish ] = "Zredukuj dane drukowania";
+        Text[ polish ] = "Zmniejsz iloœæ danych do wydruku";
         Text[ portuguese_brazilian ] = "Reduce printing data";
         Text[ japanese ] = "ˆóüÃŞ°À‚ğŒ¸‚ç‚·";
         Text[ korean ] = "Reduce printing data";
@@ -210,7 +210,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "~Reduce transparency";
         Text[ danish ] = "~Reduce transparency";
         Text[ swedish ] = "~Reducera transparens";
-        Text[ polish ] = "Zredukuj przezroczysto?æ";
+        Text[ polish ] = "Zredukuj przezroczystoœæ";
         Text[ portuguese_brazilian ] = "~Reduce transparency";
         Text[ japanese ] = "“§‰ß«‚ğŒ¸‚ç‚·";
         Text[ korean ] = "~Reduce transparency";
@@ -247,7 +247,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ turkish ] = "Auto~matic";
         Text[ arabic ] = "Auto~matic";
         Text[ catalan ] = "Auto~matic";
-        Text[ finnish ] = "Auto~matisch";
+        Text[ finnish ] = "~Automaattisesti";
     };
     RadioButton RB_REDUCETRANSPARENCY_NONE
     {
@@ -266,7 +266,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "~No transparency";
         Text[ danish ] = "~No transparency";
         Text[ swedish ] = "I~ngen transparens";
-        Text[ polish ] = "Bez przezroczysto?ci";
+        Text[ polish ] = "Bez przezroczystoœci";
         Text[ portuguese_brazilian ] = "~No transparency";
         Text[ japanese ] = "“§‰ß«‚È‚µ(~N)";
         Text[ korean ] = "~No transparency";
@@ -275,7 +275,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ turkish ] = "~No transparency";
         Text[ arabic ] = "~No transparency";
         Text[ catalan ] = "~No transparency";
-        Text[ finnish ] = "~Keine Transparenz";
+        Text[ finnish ] = "~Ei läpikuultavuutta";
     };
 
     // -----------
@@ -364,7 +364,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "Medium ~color";
         Text[ danish ] = "Medium ~color";
         Text[ swedish ] = "~Mellanfärg";
-        Text[ polish ] = "Kolor po?redni";
+        Text[ polish ] = "Kolor poœredni";
         Text[ portuguese_brazilian ] = "Medium ~color";
         Text[ japanese ] = "’†ŠÔF";
         Text[ korean ] = "Medium ~color";
@@ -413,7 +413,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 236, 10 ) ;
         Text = "Gute Druck~qualität" ;
         Text [ ENGLISH ] = "Good ~quality" ;
-        Text[ english_us ] = "Good print ~quality";
+        Text[ english_us ] = "~Good print quality";
         Text[ portuguese ] = "~Boa qualidade de impressão";
         Text[ russian ] = "~Õîğîøåå êà÷åñòâî ïå÷àòè";
         Text[ greek ] = "~Good quality";
@@ -422,8 +422,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ spanish ] = "~Buena calidad de impresión";
         Text[ italian ] = "~Good quality";
         Text[ danish ] = "~Good quality";
-        Text[ swedish ] = "~God utskriftskvalitet";
-        Text[ polish ] = "Wysoka jako?æ wydruku";
+        Text[ swedish ] = "God utskrifts~kvalitet";
+        Text[ polish ] = "Wysoka jakoœæ wydruku";
         Text[ portuguese_brazilian ] = "~Good quality";
         Text[ japanese ] = "‚“x‚Èˆóü•i¿";
         Text[ korean ] = "~Good quality";
@@ -451,7 +451,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "N~ormal quality";
         Text[ danish ] = "N~ormal quality";
         Text[ swedish ] = "N~ormal utskriftskvalitet";
-        Text[ polish ] = "Zwyk³a jako?æ wydruku";
+        Text[ polish ] = "Zwyk³a jakoœæ wydruku";
         Text[ portuguese_brazilian ] = "N~ormal quality";
         Text[ japanese ] = "•W€‚Ìˆóü•i¿";
         Text[ korean ] = "N~ormal quality";
@@ -479,7 +479,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "Reso~lution";
         Text[ danish ] = "Reso~lution";
         Text[ swedish ] = "Uppl~ösning";
-        Text[ polish ] = "Rozdzielczo?æ";
+        Text[ polish ] = "Rozdzielczoœæ";
         Text[ portuguese_brazilian ] = "Reso~lution";
         Text[ japanese ] = "‰ğ‘œ“x";
         Text[ korean ] = "Reso~lution";
@@ -488,7 +488,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ turkish ] = "Reso~lution";
         Text[ arabic ] = "Reso~lution";
         Text[ catalan ] = "Reso~lution";
-        Text[ finnish ] = "Aufl~ösung";
+        Text[ finnish ] = "~Tarkkuus";
     };
     ListBox LB_REDUCEBITMAPS_RESOLUTION
     {
@@ -529,7 +529,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
             < "72 DPI"; 0; > ;
         < "96 DPI"; 0;  > ;
-        < "150 DPI (fax)"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
         < "200 DPI (default)"; 0; > ;
         < "300 DPI"; 0; > ;
         < "600 DPI"; 0; > ;
@@ -545,12 +545,12 @@ TabPage TP_COMMONPRINTOPTIONS
     };
     StringList [ russian ] =
     {
-            < "72 dpi"; 0; > ;
-        < "96 dpi"; 0;  > ;
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0;  > ;
         < "150 dpi (ôàêñ)"; 0; > ;
         < "200 dpi (ïî óìîë÷àíèş)"; 0; > ;
-        < "300 dpi"; 0; > ;
-        < "600 dpi"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
     };
     StringList [ greek ] =
     {
@@ -574,7 +574,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
             < "72 DPI"; 0; > ;
         < "96 DPI"; 0;  > ;
-        < "150 DPI (fax)"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
         < "200 DPI (par défaut)"; 0; > ;
         < "300 DPI"; 0; > ;
         < "600 DPI"; 0; > ;
@@ -608,12 +608,12 @@ TabPage TP_COMMONPRINTOPTIONS
     };
     StringList [ swedish ] =
     {
-            < "72 dpi"; 0; > ;
-        < "96 dpi"; 0;  > ;
-        < "150 dpi (fax)"; 0; > ;
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0;  > ;
+        < "150 DPI (Fax)"; 0; > ;
         < "200 dpi (förinställning)"; 0; > ;
-        < "300 dpi"; 0; > ;
-        < "600 dpi"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
     };
     StringList [ polish ] =
     {
@@ -723,7 +723,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "Include transparent ob~jects";
         Text[ danish ] = "Include transparent ob~jects";
         Text[ swedish ] = "Inkludera transparenta ob~jekt";
-        Text[ polish ] = "£¹cznie z przezroczystymi obiektami";
+        Text[ polish ] = "Do³¹cz przezroczyste obiekty";
         Text[ portuguese_brazilian ] = "Include transparent ob~jects";
         Text[ japanese ] = "“§‰ß«‚Ì‚ ‚éµÌŞ¼Şª¸Ä‚àŠÜ‚Ş";
         Text[ korean ] = "Include transparent ob~jects";
@@ -754,7 +754,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "Con~vert colors to greyscales";
         Text[ danish ] = "Con~vert colors to greyscales";
         Text[ swedish ] = "Om~vandla färger till gråskalor";
-        Text[ polish ] = "Zamieñ kolory na odcienie koloru szarego";
+        Text[ polish ] = "Zamieñ kolory na odcienie szaroœci";
         Text[ portuguese_brazilian ] = "Con~vert colors to greyscales";
         Text[ japanese ] = "F‚ğ¸ŞÚ°½¹°Ù‚É•ÏŠ·‚·‚é";
         Text[ korean ] = "Con~vert colors to greyscales";
@@ -778,7 +778,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text [ italian ] = "Avvertenze di stampa" ;
         Text [ portuguese_brazilian ] = "Advert?ncias" ;
         Text [ portuguese ] = "Advertências" ;
-        Text [ finnish ] = "Drucker-Warnungen" ;
+        Text [ finnish ] = "Tulostinvaroitukset" ;
         Text [ danish ] = "Advarsler" ;
         Text [ french ] = "Avertissements" ;
         Text [ swedish ] = "Skrivarvarningar" ;
@@ -850,7 +850,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ korean ] = "¿ëÁö ¹æÇâ(~O)";
         Text[ turkish ] = "Sayfa duruşu";
         Text[ catalan ] = "Pap~er orientation";
-        Text[ finnish ] = "Papi~erorientierung";
+        Text[ finnish ] = "Paperin ~suunta";
     };
     CheckBox CB_TRANSPARENCY
     {
@@ -869,7 +869,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "~Transparency";
         Text[ danish ] = "~Transparency";
         Text[ swedish ] = "~Transparens";
-        Text[ polish ] = "Przezroczysto?æ";
+        Text[ polish ] = "Przezroczystoœæ";
         Text[ portuguese_brazilian ] = "~Transparency";
         Text[ japanese ] = "“§–¾(~T)";
         Text[ korean ] = "~Transparency";
@@ -878,7 +878,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ turkish ] = "~Transparency";
         Text[ arabic ] = "~Transparency";
         Text[ catalan ] = "~Transparency";
-        Text[ finnish ] = "~Transparenz";
+        Text[ finnish ] = "~Läpinäkyvyys";
     };
 };
 
@@ -925,10 +925,10 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text = "Ihr Dokument enthält transparente Objekte.\nAuf vielen Druckern führt dies zu\nverlängerten Druckzeiten. Soll die Transparenz\nfür diesen Ausdruck ignoriert werden?";
         Text [ english ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
         Text [ english_us ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
-        Text[ russian ] = "Â äàííîì äîêóìåíòå ñîäåğæàòñÿ ïğîçğà÷íûå îáúåêòû.\nÏå÷àòü òàêèõ îáúåêòîâ ìîæåò çàíÿòü íåêîòîğîå\n âğåìÿ. Èãíîğèğîâàòü ïğîçğà÷íîñòü â ïå÷àò";
+        Text[ russian ] = "Â äàííîì äîêóìåíòå ñîäåğæàòñÿ ïğîçğà÷íûå îáúåêòû.\nÏå÷àòü òàêèõ îáúåêòîâ ìîæåò çàíÿòü íåêîòîğîå\n âğåìÿ. Èãíîğèğîâàòü ïğîçğà÷íîñòü â ïå÷àòè?";
         Text[ greek ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
         Text[ danish ] = "Dokumentet indeholder transparente objekter.\nPå nogle printere kan dette føre til længere\nudskrivningstider. Skal transparensinformationerne\nfor udskrivningen ignoreres?";
-        Text[ polish ] = "Dokument zawiera przezroczyste obiekty.\nW przypadku niektórych drukarek wydruk tych obiektów\nmo¿e potrwaæ trochê d³u¿ej. Czy zignorowaæ\ninformacje o przezroczysto?ci?";
+        Text[ polish ] = "Dokument zawiera przezroczyste obiekty.\nW przypadku niektórych drukarek wydruk tych obiektów\nmo¿e potrwaæ trochê d³u¿ej. Czy zignorowaæ\ninformacje o przezroczystoœci?";
         Text[ portuguese_brazilian ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
         Text[ japanese ] = "ÄŞ·­ÒİÄ‚É‚Í“§‰ß«‚Ì‚ ‚éµÌŞ¼Şª¸Ä‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B\n‚»‚Ì‚½‚ß‚ÉÌßØİÀ‚É‚æ‚Á‚Ä‚Í\nˆóü‚ÉŠÔ‚ª‚©‚©‚é‚à‚Ì‚à‚ ‚è‚Ü‚·B“§‰ß«‚ğ\n–³‹‚µ‚Ü‚·‚©B";
         Text[ korean ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
@@ -972,7 +972,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ turkish ] = "~Evet";
         Text[ language_user1 ] = "-";
         Text[ catalan ] = "~Yes";
-        Text[ finnish ] = "~Ja";
+        Text[ finnish ] = "~Kyllä";
     };
     PushButton BTN_PRINTTRANS_NO
     {
@@ -1000,7 +1000,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ turkish ] = "~Hayır";
         Text[ language_user1 ] = "-";
         Text[ catalan ] = "~No";
-        Text[ finnish ] = "~Nein";
+        Text[ finnish ] = "~Ei";
     };
     CancelButton BTN_PRINTTRANS_CANCEL
     {
@@ -1027,7 +1027,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ turkish ] = "~Cancel";
         Text[ arabic ] = "~Cancel";
         Text[ catalan ] = "~Cancel";
-        Text[ finnish ] = "~Abbrechen";
+        Text[ finnish ] = "~Peruuta";
     };
     CheckBox CBX_NOPRINTTRANSWARN
     {
@@ -1058,5 +1058,5 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ finnish ] = "~Diese Warnung nicht mehr anzeigen";
     };
     Text[ catalan ] = "Warning";
-    Text[ finnish ] = "Warnung";
+    Text[ finnish ] = "Varoitus";
 };
