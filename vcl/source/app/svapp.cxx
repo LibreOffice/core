@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-16 14:11:37 $
+ *  last change: $Author: cd $ $Date: 2001-01-31 16:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,13 +1537,11 @@ void* Application::GetRemoteEnvironment()
     ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnection > rConnection,
     const ::rtl::OUString& sObjectName )
 {
-#ifdef REMOTE_APPSERVER
-    static oslInterlockedCount nRvpClientCount = 0;
-#endif
-
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > r;
 
 #ifdef REMOTE_APPSERVER
+    static oslInterlockedCount nRvpClientCount = 0;
+
     if ( sObjectName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.Startup" )))
     {
         if ( osl_incrementInterlockedCount( &nRvpClientCount ) == 1 )
@@ -1558,50 +1556,7 @@ void* Application::GetRemoteEnvironment()
                 xBroadcaster->addStreamListener( new RVPConnectionListener( xBroadcaster ) );
         }
     }
-    else if( sObjectName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )))
-#else
-    if ( sObjectName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )))
 #endif
-    {
-        // wait for the office to start ....
-        while( !Application::IsInExecute() )
-        {
-            TimeValue aTimeValue = { 0, 500000000L }; // 50000000ns=500mS=0.5Sec.
-            osl_waitThread( &aTimeValue );
-        }
-        r = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
-            ::comphelper::getProcessServiceFactory(), ::com::sun::star::uno::UNO_QUERY );
-    }
-    else if ( sObjectName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice.NamingService" )))
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
-        if ( rSMgr.is() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService > rNamingService(
-                rSMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.NamingService" ))),
-                ::com::sun::star::uno::UNO_QUERY );
-
-            if ( rNamingService.is() )
-            {
-                rNamingService->registerObject(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )),
-                    rSMgr );
-                r = rNamingService;
-
-                // wait for the office to start ....
-                while( !Application::IsInExecute() )
-                {
-                    TimeValue aTimeValue = { 0, 500000000L }; // 50000000ns=500mS=0.5Sec.
-                    osl_waitThread( &aTimeValue );
-                }
-            }
-        }
-    }
-#ifdef DEBUG
-    ::rtl::OString tmp = ::rtl::OUStringToOString( sObjectName, RTL_TEXTENCODING_ASCII_US );
-    OSL_TRACE("getInstance %s %i\n", tmp.getStr(), (int)r.is());
-#endif
-
     return r;
 }
 
