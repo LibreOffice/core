@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemholder1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:21:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-25 11:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,22 +72,22 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#include <svtools/moduleoptions.hxx>
-#include <svtools/addxmltostorageoptions.hxx>
-#include <svtools/extendedsecurityoptions.hxx>
-#include <svtools/fontoptions.hxx>
-#include <svtools/helpopt.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/inetoptions.hxx>
-#include <svtools/internaloptions.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/localisationoptions.hxx>
-#include <svtools/menuoptions.hxx>
-#include <svtools/miscopt.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/saveopt.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/startoptions.hxx>
+#include <moduleoptions.hxx>
+#include <addxmltostorageoptions.hxx>
+#include <extendedsecurityoptions.hxx>
+#include <fontoptions.hxx>
+#include <helpopt.hxx>
+#include <historyoptions.hxx>
+#include <inetoptions.hxx>
+#include <internaloptions.hxx>
+#include <languageoptions.hxx>
+#include <localisationoptions.hxx>
+#include <menuoptions.hxx>
+#include <miscopt.hxx>
+#include <moduleoptions.hxx>
+#include <saveopt.hxx>
+#include <securityoptions.hxx>
+#include <startoptions.hxx>
 
 //-----------------------------------------------
 // namespaces
