@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 15:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 #pragma hdrstop
 
-#define __PRIVATE 1
+#define _SOLAR__PRIVATE 1
 
 #include <srchitem.hxx>
 

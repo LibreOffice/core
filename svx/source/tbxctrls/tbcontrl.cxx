@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-15 09:39:52 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 15:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ private:
     const USHORT    theSlotId;
     ValueSet        aColorSet;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
 #endif
 
@@ -326,7 +326,7 @@ private:
     SvxFrmValueSet  aFrameSet;
     ImageList       aImgList;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
 #endif
 
@@ -352,7 +352,7 @@ class SvxLineWindow : public SfxPopupWindow
 private:
     ValueSet        aLineSet;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     void            MakeLineBitmap( USHORT nNo, Bitmap& rBmp,
                                     const Size& rSize, String& rStr );
     DECL_LINK( SelectHdl, void * );

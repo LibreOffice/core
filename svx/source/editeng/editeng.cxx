@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 20:31:13 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 15:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 #include <eeng_pch.hxx>
 
+// #define _SOLAR__PRIVATE 1
 #pragma hdrstop
 
-// #define __PRIVATE 1
 #define USE_SVXFONT
 
 #define _SVSTDARR_USHORTS
