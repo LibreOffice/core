@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyvalueset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-02 10:43:24 $
+ *  last change: $Author: kso $ $Date: 2001-02-02 11:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,39 +228,42 @@ class PropertyValues : public PropertyValuesVector {};
                 {                                                             \
                     /* Value is available as Any. */                          \
                                                                               \
-                    /* Try to convert into native value. */                   \
-                    if ( rValue.aObject >>= aValue )                          \
+                    if ( rValue.aObject.hasValue() )                          \
                     {                                                         \
-                        rValue._member_name_ = aValue;                        \
-                        rValue.nPropsSet |= _type_name_;                      \
-                        m_bWasNull = sal_False;                               \
-                    }                                                         \
-                    else                                                      \
-                    {                                                         \
-                        /* Last chance. Try type converter service... */      \
-                                                                              \
-                        Reference< XTypeConverter > xConverter                \
-                                                        = getTypeConverter(); \
-                        if ( xConverter.is() )                                \
+                        /* Try to convert into native value. */               \
+                        if ( rValue.aObject >>= aValue )                      \
                         {                                                     \
-                            try                                               \
+                            rValue._member_name_ = aValue;                    \
+                            rValue.nPropsSet |= _type_name_;                  \
+                            m_bWasNull = sal_False;                           \
+                        }                                                     \
+                        else                                                  \
+                        {                                                     \
+                            /* Last chance. Try type converter service... */  \
+                                                                              \
+                            Reference< XTypeConverter > xConverter            \
+                                                    = getTypeConverter();     \
+                            if ( xConverter.is() )                            \
                             {                                                 \
-                                Any aConvAny = xConverter->convertTo(         \
-                                                            rValue.aObject,   \
+                                try                                           \
+                                {                                             \
+                                    Any aConvAny = xConverter->convertTo(     \
+                                                             rValue.aObject,      \
                                                             _cppu_type_ );    \
                                                                               \
-                                if ( aConvAny >>= aValue )                    \
-                                {                                             \
-                                    rValue._member_name_ = aValue;            \
-                                    rValue.nPropsSet |= _type_name_;          \
-                                    m_bWasNull = sal_False;                   \
+                                    if ( aConvAny >>= aValue )                \
+                                    {                                         \
+                                        rValue._member_name_ = aValue;        \
+                                        rValue.nPropsSet |= _type_name_;      \
+                                        m_bWasNull = sal_False;               \
+                                    }                                         \
                                 }                                             \
-                            }                                                 \
-                            catch ( IllegalArgumentException )                \
-                            {                                                 \
-                            }                                                 \
-                            catch ( CannotConvertException )                  \
-                            {                                                 \
+                                catch ( IllegalArgumentException )            \
+                                {                                             \
+                                }                                             \
+                                catch ( CannotConvertException )              \
+                                {                                             \
+                                }                                             \
                             }                                                 \
                         }                                                     \
                     }                                                         \
