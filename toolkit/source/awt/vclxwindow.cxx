@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-14 17:23:55 $
+ *  last change: $Author: pb $ $Date: 2002-02-22 08:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,11 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
     }
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::createAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
 }
 
 /*
@@ -1381,7 +1386,7 @@ void VCLXWindow::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::u
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xC( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
     if ( !xC.is() )
     {
-        xC = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+        xC = createAccessibleContext();
         mxAccessibleContext = xC;
     }
 
