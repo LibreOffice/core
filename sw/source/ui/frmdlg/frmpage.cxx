@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-09-09 14:29:23 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     {
         if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
             aAnchorAtFrameRB.Hide();
-        if(!bVerticalChanged && pSh->IsFrmInVertical(bIsInRightToLeft))
+        if(!bVerticalChanged && pSh->IsFrmVertical(TRUE, bIsInRightToLeft))
         {
             String sHLabel = aHorizontalFT.GetText();
             aHorizontalFT.SetText(aVerticalFT.GetText());

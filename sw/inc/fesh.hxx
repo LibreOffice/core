@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 08:12:34 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,8 +342,8 @@ public:
                          SwFrmFmt *pParent = 0 );
     void SetFlyPos( const Point &rAbsPos);
     Point FindAnchorPos( const Point &rAbsPos, BOOL bMoveIt = FALSE );
-    //determines whether the environment of a frame is vertically formatted and right-to-left
-    BOOL IsFrmInVertical(BOOL& bRightToLeft) const;
+    // determines whether a frame or its environment is vertically formatted and right-to-left
+    BOOL IsFrmVertical(BOOL bEnvironment, BOOL& bRightToLeft) const;
 
     SwFrmFmt* GetCurFrmFmt() const; //Wenn Rahmen, dann Rahmenvorlage, sonst 0
     void SetFrmFmt( SwFrmFmt *pFmt, BOOL bKeepOrient = FALSE, Point* pDocPos = 0 ); //Wenn Rahmen, dann Rahmenvorlage setzen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 09:39:57 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,24 +475,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     switch  ( nSlot )
     {
-/*
-    case RES_LR_SPACE:
-    case SID_ATTR_LRSPACE:
-    {
-        if(SFX_ITEM_SET == pArgs->GetItemState(RES_LR_SPACE, FALSE, &pItem))
-        {
-            const  SvxLRSpaceItem* pLR = (const SvxLRSpaceItem*)pItem;
-
-            SvxLongLRSpaceItem aLongLR((long)pLR->GetLeft(),
-                                        (long)pLR->GetRight(),
-                                        SID_ATTR_LONG_LRSPACE);
-            SfxRequest aReq(SID_ATTR_LONG_LRSPACE, SFX_CALLMODE_SLOT, GetPool());
-            aReq.AppendItem(aLongLR);
-            ExecTabWin( aReq );
-        }
-    }
-    break;
-*/
     case SID_ATTR_LONG_LRSPACE:
     {
         SvxLongLRSpaceItem aLongLR( (const SvxLongLRSpaceItem&)rReq.GetArgs()->
@@ -755,11 +737,27 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         {
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
-            long nDeltaX = DOCUMENTBORDER + aLongLR.GetLeft() -
-                        rRect.Left();
-            SwFmtHoriOrient aHoriOrient( pFmt->GetHoriOrient() );
-            aHoriOrient.SetHoriOrient( HORI_NONE );
-            aHoriOrient.SetPos( aHoriOrient.GetPos() + nDeltaX );
+            long nDeltaX = bVerticalWriting ?
+                rRect.Right() + aLongLR.GetRight() - nPageWidth -  DOCUMENTBORDER  :
+                DOCUMENTBORDER + aLongLR.GetLeft() - rRect.Left();
+
+            SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
+                                        RES_VERT_ORIENT, RES_HORI_ORIENT,
+                                        RES_COL, RES_COL, 0 );
+            if(bVerticalWriting)
+            {
+                SwFmtVertOrient aVertOrient(pFmt->GetVertOrient());
+                aVertOrient.SetVertOrient(VERT_NONE);
+                aVertOrient.SetPos(aVertOrient.GetPos() + nDeltaX );
+                aSet.Put( aVertOrient );
+            }
+            else
+            {
+                SwFmtHoriOrient aHoriOrient( pFmt->GetHoriOrient() );
+                aHoriOrient.SetHoriOrient( HORI_NONE );
+                aHoriOrient.SetPos( aHoriOrient.GetPos() + nDeltaX );
+                aSet.Put( aHoriOrient );
+            }
 
             SwFmtFrmSize aSize( pFmt->GetFrmSize() );
             long nOldWidth = (long) aSize.GetWidth();
@@ -775,10 +773,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 aSize.SetWidth( nPageWidth -
                         (aLongLR.GetLeft() + aLongLR.GetRight()));
 
-            SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
-                                        RES_HORI_ORIENT, RES_HORI_ORIENT,
-                                        RES_COL, RES_COL, 0 );
-
             if( nFrmType & FRMTYPE_COLUMN )
             {
                 SwFmtCol aCol(pFmt->GetCol());
@@ -788,7 +782,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
 
             aSet.Put( aSize );
-            aSet.Put( aHoriOrient );
 
             rSh.StartAction();
             rSh.Push();
@@ -836,23 +829,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         }
     }
     break;
-/*
-    case RES_UL_SPACE:
-    case SID_ATTR_ULSPACE:
-    {
-        if(SFX_ITEM_SET == pArgs->GetItemState(RES_UL_SPACE, FALSE, &pItem))
-        {
-            const  SvxULSpaceItem* pUL = (const SvxULSpaceItem*)pItem;
-
-            SvxLongULSpaceItem aLongUL((long)pUL->GetUpper(), (long)pUL->GetLower(),
-                                        SID_ATTR_LONG_ULSPACE);
-            SfxRequest aReq(SID_ATTR_LONG_ULSPACE, SFX_CALLMODE_SLOT, GetPool());
-            aReq.AppendItem(aLongUL);
-            ExecTabWin( aReq );
-        }
-    }
-    break;
-*/
     case SID_ATTR_LONG_ULSPACE:
     {
         SvxLongULSpaceItem aLongULSpace( (const SvxLongULSpaceItem&)rReq.GetArgs()->
@@ -869,10 +845,22 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             const long nHeight = nPageHeight -
                             (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
 
-            SwFmtVertOrient aVertOrient(pFmt->GetVertOrient());
-            aVertOrient.SetVertOrient(VERT_NONE);
-            aVertOrient.SetPos(aVertOrient.GetPos() + nDeltaY );
-
+            SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
+                                        RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
+            if(bVerticalWriting)
+            {
+                SwFmtHoriOrient aHoriOrient(pFmt->GetHoriOrient());
+                aHoriOrient.SetHoriOrient(HORI_NONE);
+                aHoriOrient.SetPos(aHoriOrient.GetPos() + nDeltaY );
+                aSet.Put( aHoriOrient );
+            }
+            else
+            {
+                SwFmtVertOrient aVertOrient(pFmt->GetVertOrient());
+                aVertOrient.SetVertOrient(VERT_NONE);
+                aVertOrient.SetPos(aVertOrient.GetPos() + nDeltaY );
+                aSet.Put( aVertOrient );
+            }
             SwFmtFrmSize aSize(pFmt->GetFrmSize());
             if(aSize.GetHeightPercent())
             {
@@ -884,10 +872,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             else
                 aSize.SetHeight(nHeight );
 
-            SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
-                                        RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
             aSet.Put( aSize );
-            aSet.Put( aVertOrient );
             rSh.SetFlyFrmAttr( aSet );
         }
         else if( nFrmType == FRMTYPE_DRAWOBJ )
@@ -1327,16 +1312,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 if( aRect.Width() )
                 {
-                    if(bVerticalWriting)
-                    {
-                        aLongLR.SetLeft ((long)(aRect.Top() - DOCUMENTBORDER));
-                        aLongLR.SetRight((long)(nPageHeight + DOCUMENTBORDER - aRect.Bottom()));
-                    }
-                    else
-                    {
-                        aLongLR.SetLeft ((long)(aRect.Left() - DOCUMENTBORDER));
-                        aLongLR.SetRight((long)(nPageWidth + DOCUMENTBORDER - aRect.Right()));
-                    }
+                    aLongLR.SetLeft ((long)(aRect.Left() - DOCUMENTBORDER));
+                    aLongLR.SetRight((long)(nPageWidth + DOCUMENTBORDER - aRect.Right()));
                 }
             }
             if( nWhich == SID_ATTR_LONG_LRSPACE )
@@ -1525,8 +1502,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_BORDERS_VERTICAL:
         case SID_RULER_BORDERS:
         {
-            if(!bVerticalWriting && (SID_RULER_BORDERS_VERTICAL == nWhich) ||
-                bVerticalWriting && (SID_RULER_BORDERS) == nWhich )
+            BOOL bRTL;
+            BOOL bFrameSelOrInFrame = (bFrmSelection ||  (nFrmType & ( FRMTYPE_COLUMN  )));
+            BOOL bFrameHasVerticalColumns =  bFrameSelOrInFrame &&
+                rSh.IsFrmVertical(FALSE, bRTL);
+
+            if((SID_RULER_BORDERS_VERTICAL == nWhich) &&
+                    ((!bVerticalWriting && !bFrameSelOrInFrame) || (bFrameSelOrInFrame && !bFrameHasVerticalColumns)) ||
+                (SID_RULER_BORDERS) == nWhich && bVerticalWriting && (!bFrameSelOrInFrame || bFrameHasVerticalColumns))
                 rSet.DisableItem(nWhich);
             else if ( IsTabColFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
@@ -1659,17 +1642,26 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         SvxColumnItem aColItem(nNum);
                         const SwRect &rSizeRect = rSh.GetAnyCurRect(RECT_FLY_PRT_EMBEDDED, pPt);
 
-                        const long lWidth = rSizeRect.Width();
+                        const long lWidth = bFrameHasVerticalColumns ? rSizeRect.Height() : rSizeRect.Width();
                         const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
-                        long nDist2 = (rRect.Width() - lWidth) /2;
+                        long nDist2 = ((bFrameHasVerticalColumns ? rRect.Height() : rRect.Width()) - lWidth) /2;
                         ::lcl_FillSvxColumn(rCol, USHORT(lWidth), aColItem, nDist2);
 
                         SfxItemSet aFrameSet(GetPool(), RES_LR_SPACE, RES_LR_SPACE);
                         rSh.GetFlyFrmAttr( aFrameSet );
 
-                        aColItem.SetLeft ((USHORT)(rRect.Left() - DOCUMENTBORDER ));
-                        aColItem.SetRight((USHORT)(nPageWidth   - rRect.Right() -
+                        if(bFrameHasVerticalColumns)
+                        {
+                            aColItem.SetLeft ((USHORT)(rRect.Top() - DOCUMENTBORDER ));
+                            aColItem.SetRight((USHORT)(nPageHeight  - rRect.Bottom() +
+                                                                        DOCUMENTBORDER ));
+                        }
+                        else
+                        {
+                            aColItem.SetLeft ((USHORT)(rRect.Left() - DOCUMENTBORDER ));
+                            aColItem.SetRight((USHORT)(nPageWidth   - rRect.Right() -
                                                                     DOCUMENTBORDER ));
+                        }
 
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 

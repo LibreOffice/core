@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 13:37:00 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,15 +1039,15 @@ Size SwFEShell::GetGraphicDefaultSize() const
 /* -----------------------------12.08.2002 12:51------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwFEShell::IsFrmInVertical(BOOL& bRTL) const
+BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
 {
     SwFlyFrm *pFly = FindFlyFrm();
     BOOL bVert = FALSE;
     if ( pFly )
     {
         const SwFrm *pFrm = pFly->GetAnchor();
-        bVert = pFrm->IsVertical();
-        bRTL = pFrm->IsRightToLeft();
+        bVert = bEnvironment ? pFrm->IsVertical() : pFly->IsVertical();
+        bRTL = bEnvironment ? pFrm->IsRightToLeft() : pFly->IsRightToLeft();
     }
     else
         bRTL = FALSE;
