@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:48:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,130 +63,64 @@
 #include "selector.hrc"
 
 #define FIXEDTEXT_DIALOG_DESCRIPTION \
-Text = "W√§hlen Sie zuerst die Bibliothek, die das gew√ºnschte Makro enth√§lt. Dann w√§hlen Sie das Makro unter 'Name des Makros'." ; \
-Text [ ENGLISH ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ; \
-Text [ english_us ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;
+Text [ de ] = "W√§hlen Sie zuerst die Bibliothek, die das gew√ºnschte Makro enth√§lt. Dann w√§hlen Sie das Makro unter 'Name des Makros'." ; \
+Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;
 
 String STR_SELECTOR_ADD_COMMANDS
 {
-  TEXT = "Befehle hinzuf√ºgen" ;
-  TEXT [ ENGLISH ] = "Add Commands" ;
-  TEXT [ english_us ] = "Add Commands" ;
+  Text [ de ] = "Befehle hinzuf√ºgen" ;
+  Text [ en-US ] = "Add Commands" ;
 };
 
 String STR_SELECTOR_MACROS
 {
-  TEXT = "%PRODUCTNAME Makros" ;
-  TEXT [ ENGLISH ] = "%PRODUCTNAME Macros" ;
-  TEXT [ english_us ] = "%PRODUCTNAME Macros" ;
+  Text [ de ] = "%PRODUCTNAME Makros" ;
+  Text [ en-US ] = "%PRODUCTNAME Macros" ;
 };
 
 String STR_SELECTOR_CATEGORIES
 {
-    Text = "~Bereich" ;
-    Text [ ENGLISH ] = "~Group" ;
-    Text [ norwegian ] = "~Gruppe" ;
-    Text [ italian ] = "Area" ;
-    Text [ portuguese_brazilian ] = "~Categoria" ;
-    Text [ portuguese ] = "~Categoria" ;
-    Text [ finnish ] = "~Luokka" ;
-    Text [ danish ] = "~Kategori" ;
-    Text [ french ] = "~CatÈgorie" ;
-    Text [ swedish ] = "~Kategori" ;
-    Text [ dutch ] = "~Bereik" ;
-    Text [ spanish ] = "~CategorÌa" ;
-    Text [ english_us ] = "~Category" ;
-    Text[ chinese_simplified ] = "ËåÉÂõ¥(~C)";
-    Text[ russian ] = " ‡ÚÂ„ÓËˇ";
-    Text[ polish ] = "~Kategoria";
-    Text[ japanese ] = "ÁØÑÂõ≤(~C)";
-    Text[ chinese_traditional ] = "ÁØÑÂúç(~C)";
-    Text[ arabic ] = "«·›∆…";
-    Text[ greek ] = "~ ·ÙÁ„ÔÒﬂ·";
-    Text[ korean ] = "ÏòÅÏó≠(~C)";
-    Text[ turkish ] = "Ka~tegori";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Categoria";
-    Text[ thai ] = "~‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó";
-    Text[ czech ] = "Kategorie";
-    Text[ hebrew ] = "‚ÄÆ◊°◊ô◊ï◊ï◊í‚Ä¨";
-    Text[ hindi ] = "~‡§µ‡§∞‡•ç‡§ó";
-    Text[ slovak ] = "~Kateg√≥ria";
-    Text[ hungarian ] = "~Kateg√≥ria";
-    Text[ slovenian ] = "~Kategorija";
+    Text [ de ] = "~Bereich" ;
+    Text [ en-US ] = "~Category" ;
 };
 
 String STR_SELECTOR_COMMANDS
 {
-  TEXT = "Befehle" ;
-  TEXT [ ENGLISH ] = "Commands" ;
-  TEXT [ english_us ] = "Commands" ;
+  Text [ de ] = "Befehle" ;
+  Text [ en-US ] = "Commands" ;
 };
 
 String STR_SELECTOR_ADD
 {
-  TEXT = "Hinzuf√ºgen" ;
-  TEXT [ ENGLISH ] = "Add" ;
-  TEXT [ english_us ] = "Add" ;
+  Text [ de ] = "Hinzuf√ºgen" ;
+  Text [ en-US ] = "Add" ;
 };
 
 String STR_SELECTOR_RUN
 {
-  TEXT = "Ausf√ºhren" ;
-  TEXT [ ENGLISH ] = "Run" ;
-  TEXT [ english_us ] = "Run" ;
+  Text [ de ] = "Ausf√ºhren" ;
+  Text [ en-US ] = "Run" ;
 
 };
 
 String STR_SELECTOR_ADD_COMMANDS_DESCRIPTION
 {
-  TEXT = "Um Befehle einer Symbolleiste hinzuzuf√ºgen, w√§hlen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl direkt auf die gew√ºnschte Symbolleiste. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
-  TEXT [ ENGLISH ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
-  TEXT [ english ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
+  Text [ de ] = "Um Befehle einer Symbolleiste hinzuzuf√ºgen, w√§hlen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl direkt auf die gew√ºnschte Symbolleiste. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
+  Text [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
 };
 
 String STR_BASICMACROS
 {
-    TEXT = "BASIC-Makros" ;
-    TEXT [ ENGLISH ] = "BASIC Macros" ;
-    TEXT [ norwegian ] = "Basis Makroer" ;
-    TEXT [ italian ] = "Macro di BASIC" ;
-    TEXT [ portuguese_brazilian ] = "Macros BASIC" ;
-    TEXT [ portuguese ] = "Macros BASIC" ;
-    TEXT [ finnish ] = "BASIC-makrot" ;
-    TEXT [ danish ] = "BASIC-makroer" ;
-    TEXT [ french ] = "Macros BASIC" ;
-    TEXT [ swedish ] = "BASIC-makron" ;
-    TEXT [ dutch ] = "BASIC-macro's" ;
-    TEXT [ spanish ] = "Macros BASIC" ;
-    TEXT [ english_us ] = "BASIC Macros" ;
-    TEXT[ chinese_simplified ] = "BASIC-ÂÆè";
-    TEXT[ russian ] = "Ã‡ÍÓÒ˚ BASIC";
-    TEXT[ polish ] = "Makra jÍzyka BASIC";
-    TEXT[ japanese ] = "BASIC „Éû„ÇØ„É≠";
-    TEXT[ chinese_traditional ] = "BASIC-Â∑®ÈõÜ";
-    TEXT[ arabic ] = "ÊÕœ«  „«ﬂ—Ê BASIC";
-    TEXT[ greek ] = "Ã·ÍÒÔÂÌÙÔÎﬁ BASIC";
-    TEXT[ korean ] = "BASIC  Îß§ÌÅ¨Î°ú";
-    TEXT[ turkish ] = "BASIC makrolar˝";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Macros del BASIC";
-    TEXT[ thai ] = "BASIC ‡∏°‡∏≤‡πÇ‡∏Ñ‡∏£";
-    TEXT[ czech ] = "Makra BASIC";
-    TEXT[ hebrew ] = "‚ÄÆ◊û◊ê◊ß◊®◊ï◊ê◊ô◊ô◊ù ◊©◊ú ◊ë◊ô◊ô◊°◊ô◊ß‚Ä¨";
-    TEXT[ hindi ] = "BASIC ‡§Æ‡•â‡§ï‡•ç‡§∞‡•ã‡§∏";
-    TEXT[ slovak ] = "Makr√° BASIC";
-    TEXT[ hungarian ] = "BASIC makr√≥k";
-    TEXT[ slovenian ] = "BASIC makri";
+    Text [ de ] = "BASIC-Makros" ;
+    Text [ en-US ] = "BASIC Macros" ;
 };
 
 ModelessDialog RID_DLG_SCRIPTSELECTOR
 {
   OutputSize = TRUE ;
   Size = MAP_APPFONT ( 256 , 233 ) ;
-  Text = "Makro-Selektor" ;
-  Text [ ENGLISH ] = "Macro Selector" ;
-  Text [ english_us ] = "Macro Selector" ;
+  Text [ de ] = "Makro-Selektor" ;
+  Text [ en-US ] = "Macro Selector" ;
   SvLook = TRUE ;
   Moveable = TRUE ;
   Hide = TRUE;
@@ -205,9 +139,8 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Size = MAP_APPFONT ( 83 , 8 ) ;
     Group = TRUE ;
     Left = TRUE ;
-    Text = "Bibliothek" ;
-    Text [ ENGLISH ] = "Library" ;
-    Text [ english_us ] = "Library" ;
+    Text [ de ] = "Bibliothek" ;
+    Text [ en-US ] = "Library" ;
   };
   Control BOX_SELECTOR_CATEGORIES
   {
@@ -222,9 +155,8 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Pos = MAP_APPFONT ( 101 , 62 ) ;
     Size = MAP_APPFONT ( 93 , 8 ) ;
     Left = TRUE ;
-    Text = "Name des Makros" ;
-    Text [ ENGLISH ] = "Macro name" ;
-    Text [ english_us ] = "Macro name" ;
+    Text [ de ] = "Name des Makros" ;
+    Text [ en-US ] = "Macro name" ;
   };
   Control BOX_SELECTOR_COMMANDS
   {
@@ -255,9 +187,8 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Pos = MAP_APPFONT ( 6 , 168 ) ;
     Size = MAP_APPFONT ( 224 , 8 ) ;
     Group = TRUE ;
-    Text = "Beschreibung" ;
-    Text [ ENGLISH ] = "Description" ;
-    Text [ english_us ] = "Description" ;
+    Text [ de ] = "Beschreibung" ;
+    Text [ en-US ] = "Description" ;
   };
   FixedText TXT_SELECTOR_DESCRIPTION
   {
