@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"  xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:output method="xml" indent="no" encoding="UTF-8" version="1.0" standalone="yes"/>
     <xsl:include href="../../common/measure_conversion.xsl"/>
     <xsl:include href="../common/ooo2ms_docpr.xsl"/>
@@ -209,15 +209,15 @@
                     <xsl:when test="count($page) &gt; 0">
                         <xsl:apply-templates select="key('master-page', key( 'slave-style', $page[last()]/@*[name()='text:style-name' or name()='table:style-name'])/@style:master-page-name)"/>
                         <xsl:if test="key( 'slave-style', $page[last()]/@*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number">
-                        <!-- in M$ word the header and footer associate with the w:sectPr, but in StarOffice writer the header and footer associate with the style:master-page -->
-                        <xsl:variable name="pagenumber_start">
-                            <xsl:value-of select=" key( 'slave-style', $page[last()]/@*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number"/>
-                        </xsl:variable>
-                        <xsl:if test=" number($pagenumber_start)  &gt; 0 ">
-                            <w:pgNumType w:start= "{$pagenumber_start}"/>
-                        </xsl:if>
-                        <!-- comment out the below line to enable the header and footer display normally when style:page-number =0  --> 
-                        <!-- w:pgNumType w:start="{key( 'slave-style', $page[last()]/@*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number}"/-->
+                            <!-- in M$ word the header and footer associate with the w:sectPr, but in StarOffice writer the header and footer associate with the style:master-page -->
+                            <xsl:variable name="pagenumber_start">
+                                <xsl:value-of select=" key( 'slave-style', $page[last()]/@*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number"/>
+                            </xsl:variable>
+                            <xsl:if test=" number($pagenumber_start)  &gt; 0 ">
+                                <w:pgNumType w:start="{$pagenumber_start}"/>
+                            </xsl:if>
+                            <!-- comment out the below line to enable the header and footer display normally when style:page-number =0  -->
+                            <!-- w:pgNumType w:start="{key( 'slave-style', $page[last()]/@*[name()='text:style-name' or name()='table:style-name'])/style:paragraph-properties/@style:page-number}"/-->
                         </xsl:if>
                     </xsl:when>
                     <xsl:otherwise>
