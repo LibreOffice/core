@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 11:06:46 $
+ *  last change: $Author: kz $ $Date: 2000-12-07 15:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2632,7 +2632,7 @@ String RID_TT_EXTRAS_NAME
     Text[ polish ] = "E~xtras";
     Text[ portuguese_brazilian ] = "E~xtras";
     Text[ japanese ] = "E~xtras";
-    Text[ korean ] = "별도 추가(~X)";
+    Text[ korean ] = "도구";
     Text[ chinese_simplified ] = "E~xtras";
     Text[ chinese_traditional ] = "E~xtras";
     Text[ arabic ] = "E~xtras";
