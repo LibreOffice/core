@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-02 15:00:39 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,8 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     BOOL            bUserSel;
     // disallow copy-constructor and assignment-operator
 
-    SvxPopupWindowListBox(const& );
-    SvxPopupWindowListBox & operator = (const& );
+    SvxPopupWindowListBox(const int& );
+    SvxPopupWindowListBox & operator = (const int& );
 
     SvxPopupWindowListBox( USHORT nSlotId,
                            ToolBox& rTbx, USHORT nTbxItemId );
