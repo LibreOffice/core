@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:29:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#endif
 
 using namespace ::comphelper;
 using namespace ::connectivity;
@@ -103,6 +106,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
 
 static ::rtl::OUString aEmptyString;
 
@@ -966,20 +970,20 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
      // Sonst einzelne Suchkriterien wie =, !=, ..., LIKE, IS NULL usw. behandeln:
     else if (SQL_ISRULE(pSearchCondition,comparison_predicate) )
     {
-        OSQLPredicateType ePredicateType;
+        sal_Int32 ePredicateType;
         OSQLParseNode *pPrec = pSearchCondition->getChild(1);
         if (pPrec->getNodeType() == SQL_NODE_EQUAL)
-            ePredicateType = SQL_PRED_EQUAL;
+            ePredicateType = SQLFilterOperator::EQUAL;
         else if (pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
-            ePredicateType = SQL_PRED_NOTEQUAL;
+            ePredicateType = SQLFilterOperator::NOT_EQUAL;
         else if (pPrec->getNodeType() == SQL_NODE_LESS)
-            ePredicateType = SQL_PRED_LESS;
+            ePredicateType = SQLFilterOperator::LESS;
         else if (pPrec->getNodeType() == SQL_NODE_LESSEQ)
-            ePredicateType = SQL_PRED_LESSOREQUAL;
+            ePredicateType = SQLFilterOperator::LESS_EQUAL;
         else if (pPrec->getNodeType() == SQL_NODE_GREATEQ)
-            ePredicateType = SQL_PRED_GREATEROREQUAL;
+            ePredicateType = SQLFilterOperator::GREATER_EQUAL;
         else if (pPrec->getNodeType() == SQL_NODE_GREAT)
-            ePredicateType = SQL_PRED_GREATER;
+            ePredicateType = SQLFilterOperator::GREATER;
 
         ::rtl::OUString aValue;
         pSearchCondition->getChild(2)->parseNodeToStr(aValue,m_xDatabaseMetaData,NULL,sal_False,sal_False);
@@ -989,7 +993,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
     }
     else if (SQL_ISRULE(pSearchCondition,like_predicate) /*&& SQL_ISRULE(pSearchCondition->getChild(0),column_ref)*/)
     {
-        OSQLPredicateType ePredicateType;
+        sal_Int32 ePredicateType;
 
         OSL_ENSURE(pSearchCondition->count() >= 4,"OSQLParseTreeIterator: Fehler im Parse Tree");
 
@@ -999,9 +1003,9 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
         OSQLParseNode * pOptEscape      = pSearchCondition->getChild(nCurentPos+1);
 
         if (pSearchCondition->getChild(1)->getTokenID() == SQL_TOKEN_NOT)
-            ePredicateType = SQL_PRED_NOTLIKE;
+            ePredicateType = SQLFilterOperator::NOT_LIKE;
         else
-            ePredicateType = SQL_PRED_LIKE;
+            ePredicateType = SQLFilterOperator::LIKE;
 
         OSL_ENSURE(pNum_value_exp != NULL,"OSQLParseTreeIterator: Fehler im Parse Tree");
         OSL_ENSURE(pOptEscape != NULL,"OSQLParseTreeIterator: Fehler im Parse Tree");
@@ -1031,15 +1035,15 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
     }
     else if (SQL_ISRULE(pSearchCondition,test_for_null) /*&& SQL_ISRULE(pSearchCondition->getChild(0),column_ref)*/)
     {
-        OSQLPredicateType ePredicateType;
+        sal_Int32 ePredicateType;
 
         OSL_ENSURE(pSearchCondition->count() >= 3,"OSQLParseTreeIterator: Fehler im Parse Tree");
         OSL_ENSURE(SQL_ISTOKEN(pSearchCondition->getChild(1),IS),"OSQLParseTreeIterator: Fehler im Parse Tree");
 
         if (SQL_ISTOKEN(pSearchCondition->getChild(2),NOT) )
-            ePredicateType = SQL_PRED_ISNOTNULL;
+            ePredicateType = SQLFilterOperator::NOT_SQLNULL;
         else
-            ePredicateType = SQL_PRED_ISNULL;
+            ePredicateType = SQLFilterOperator::SQLNULL;
 
         ::rtl::OUString aString;
         traverseOnePredicate(pSearchCondition->getChild(0),ePredicateType,aString,sal_True,NULL);
@@ -1047,7 +1051,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
     }
     else if (SQL_ISRULE(pSearchCondition,num_value_exp) || SQL_ISRULE(pSearchCondition,term))
     {
-        OSQLPredicateType ePredicateType = SQL_PRED_EQUAL;
+        sal_Int32 ePredicateType = SQLFilterOperator::EQUAL;
         ::rtl::OUString aString;
         traverseOnePredicate(pSearchCondition->getChild(0),ePredicateType,aString,sal_False,pSearchCondition->getChild(0));
         traverseOnePredicate(pSearchCondition->getChild(2),ePredicateType,aString,sal_False,pSearchCondition->getChild(2));
@@ -1058,7 +1062,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::traverseOnePredicate(
                                 OSQLParseNode * pColumnRef,
-                                OSQLPredicateType ePredicateType,
+                                sal_Int32 ePredicateType,
                                 ::rtl::OUString& rValue,
                                 sal_Bool bCompareNull,
                                 OSQLParseNode * pParseNode)
@@ -1548,7 +1552,7 @@ void OSQLParseTreeIterator::setANDCriteriaPost()
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::setPredicate(const ::rtl::OUString & rColumnName,
                               const ::rtl::OUString & rTableRange,
-                              OSQLPredicateType ePredicateType,
+                              sal_Int32 ePredicateType,
                               const ::rtl::OUString & rValue,
                               const ::rtl::OUString & rParameterName)
 {
