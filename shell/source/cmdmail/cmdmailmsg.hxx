@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailmsg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-26 08:48:55 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,14 @@
 #include <com/sun/star/system/XSimpleMailMessage.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
 //----------------------------------------------------------
 // class declaration
 //----------------------------------------------------------
@@ -87,6 +95,9 @@ class CmdMailMsg :
         ::com::sun::star::system::XSimpleMailMessage,
         ::com::sun::star::container::XNameAccess >
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    m_xContext;
+
     ::rtl::OUString                                   m_aRecipient;
     ::rtl::OUString                                   m_aOriginator;
     ::rtl::OUString                                   m_aSubject;
@@ -97,6 +108,10 @@ class CmdMailMsg :
     ::osl::Mutex m_aMutex;
 
 public:
+    explicit CmdMailMsg(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > const & rContext):
+        m_xContext(rContext) {}
 
     //------------------------------------------------
     // XSimpleMailMessage
