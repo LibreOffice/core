@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: ka $ $Date: 2001-02-02 15:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,22 @@
 #include <salgdi.hxx>
 #endif
 
+#ifdef WIN
+#define __OPENGL_CALL _far _pascal
+#elif defined WNT
+#define __OPENGL_CALL __stdcall
+#else
+#define __OPENGL_CALL
+#endif
+
 // -------------------------------
 // - Additional typedefs for init.
 // -------------------------------
 
-typedef HGLRC   ( *OGLFncCreateContext )( HDC hDC );
-typedef BOOL    ( *OGLFncDeleteContext )( HGLRC hContext );
-typedef HGLRC   ( *OGLFncGetCurrentContext )( VOID );
-typedef void    ( *OGLFncMakeCurrent )( HDC hDC, HGLRC hContext  );
+typedef HGLRC   ( __OPENGL_CALL *OGLFncCreateContext )( HDC hDC );
+typedef BOOL    ( __OPENGL_CALL *OGLFncDeleteContext )( HGLRC hContext );
+typedef HGLRC   ( __OPENGL_CALL *OGLFncGetCurrentContext )( VOID );
+typedef void    ( __OPENGL_CALL *OGLFncMakeCurrent )( HDC hDC, HGLRC hContext  );
 
 // ------------
 // - Lib-Name -
