@@ -24,29 +24,29 @@
                     <value xsi:nil='true'/>
                 </prop>
                 <prop oor:name="Host" oor:type="xs:string">
-                    <info><desc>A name of a host for which the Directory property setting is valid. It is possible to 
-					use the wildcard character '*' which matches none or many characters.</desc></info>
+                    <info><desc>A name of a host for which the Directory property setting is valid. It is possible to use the wildcard character '*' which matches none or many characters.</desc></info>
                     <value xsi:nil='true'/>
                 </prop>
-                <prop oor:name="Domain" oor:type="xs:string">
-                    <info><desc>A name of the domain for which the Directory property variable is valid. It is possible to 
-					use the wildcard character '*' which matches none or many characters.</desc></info>
+                <prop oor:name="DNSDomain" oor:type="xs:string">
+                    <info><desc>The dns domain for which the Directory property variable is valid. It is possible to use the wildcard character '*' which matches none or many characters.</desc></info>
+                    <value xsi:nil='true'/>
+                </prop>
+                <prop oor:name="YPDomain" oor:type="xs:string">
+                    <info><desc>The yellow pages or NIS domain for which the Directory property variable is valid. It is possible to use the wildcard character '*' which matches none or many characters.</desc></info>
+                    <value xsi:nil='true'/>
+                </prop>
+                <prop oor:name="NTDomain" oor:type="xs:string">
+                    <info><desc>The NT domain for which the Directory property variable is valid. It is possible to use the wildcard character '*' which matches none or many characters.</desc></info>
                     <value xsi:nil='true'/>
                 </prop>
             </group> 
         </group> 
         <set oor:name="SharePoint" oor:node-type="SharePointMapping" >
-            <info>
-				<desc>The name of this set is used as the path variable name. It must be defined using only ascii characters and is not
-				case sensitive. It's a placeholder within path settings, can be substituted during runtime with an existing path defined in one of the 
-				defined mappings.</desc>
-			</info> 
+            <info><desc>The name of this set is used as the path variable name. It must be defined using only ascii characters and is evaluated case insenstive! It's a placeholder within path settings, can be substituted during runtime with an existing path defined in one of the defined mappings.</desc></info> 
         </set> 
     </templates>
     <component>
-		<info>
-			<desc>Contains the root of all substitution rules defined in the SharePoints set.</desc>
-		</info>
+		<info><desc>Contains the root of all substitution rules defined in the SharePoints set.</desc></info>
         <set oor:name="SharePoints" oor:node-type="SharePoint">
             <info><desc>A table of SharePoints, which are used as path variables (placeholder) within path settings.</desc></info>
         </set>
