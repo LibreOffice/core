@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:44:37 $
+ *  last change: $Author: os $ $Date: 2001-01-19 15:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,68 +176,8 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 BOOL  SwDocStatPage::FillItemSet(SfxItemSet &rSet)
 {
     // evtl UserData setzen
-
-    String sEd(aWordDelim.GetText());
-    String sDelim;
-    String sChar;
-
-    xub_StrLen i = 0;
-    sal_Unicode c;
-
-    while (i < sEd.Len())
-    {
-        c = sEd.GetChar(i++);
-
-        if (c == '\\')
-        {
-            c = sEd.GetChar(i++);
-
-            switch (c)
-            {
-                case 'n':   sDelim += '\n'; break;
-                case 't':   sDelim += '\t'; break;
-                case '\\':  sDelim += '\\'; break;
-
-                case 'x':
-                {
-                    sal_Unicode nVal, nChar;
-                    BOOL bValidData = TRUE;
-                    xub_StrLen n;
-                    for( n = 0, nChar = 0; n < 2 && i < sEd.Len(); ++n, ++i )
-                    {
-                        if( ((nVal = sEd.GetChar( i )) >= '0') && ( nVal <= '9') )
-                            nVal -= '0';
-                        else if( (nVal >= 'A') && (nVal <= 'F') )
-                            nVal -= 'A' - 10;
-                        else if( (nVal >= 'a') && (nVal <= 'f') )
-                            nVal -= 'a' - 10;
-                        else
-                        {
-                            DBG_ASSERT( !this, "ungueltiger Hex-Wert" );
-                            bValidData = FALSE;
-                            break;
-                        }
-
-                        (nChar <<= 4 ) += nVal;
-                    }
-                    if( bValidData )
-                        sDelim += nChar;
-                    break;
-                }
-
-                default:    // Unbekannt, daher nur Backslash einfuegen
-                    sDelim += '\\';
-                    i--;
-                    break;
-            }
-        }
-        else
-            sDelim += c;
-    }
-
-
-    SW_MOD()->GetModuleConfig()->SetWordDelimiter(sDelim);
-
+    String sEd(SwModuleOptions::ConvertWordDelimiter(aWordDelim.GetText(), TRUE));
+    SW_MOD()->GetModuleConfig()->SetWordDelimiter(sEd);
     return FALSE;
 }
 
@@ -251,32 +191,10 @@ void  SwDocStatPage::Reset(const SfxItemSet &rSet)
     // Im Set befindet sich die DocInfo
     // bei Bedarf UserData auswerten
     String sDelim(SW_MOD()->GetDocStatWordDelim());
-    String sEd;
-    for (xub_StrLen i = 0; i < sDelim.Len(); i++)
-    {
-        sal_Unicode c = sDelim.GetChar(i);
-
-        switch (c)
-        {
-            case '\n':  sEd.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\n")); break;
-            case '\t':  sEd.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\t")); break;
-            case '\\':  sEd.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\\\"));    break;
-
-            default:
-                if( c <= 0x1f || c >= 0x7f )
-                {
-                    sEd.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\\x" ))
-                        += String::CreateFromInt32( c, 16 );
-                }
-                else
-                    sEd += c;
-        }
-    }
+    String sEd(SwModuleOptions::ConvertWordDelimiter(sDelim, FALSE));
     aWordDelim.SetText(sEd);
     aWordDelim.ClearModifyFlag();
 }
-
-
 /*------------------------------------------------------------------------
  Beschreibung:  Aktualisieren / Setzen der Daten
 ------------------------------------------------------------------------*/
@@ -336,6 +254,9 @@ IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, pButton)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/20 14:44:37  jp
+    UpdateDocState without second parameter
+
     Revision 1.1.1.1  2000/09/18 17:14:34  hr
     initial import
 
