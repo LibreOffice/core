@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:40:52 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:39:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,6 @@ SVSDIDEPEND= \
     smath.sdi \
     smslots.sdi \
     $(SVSDIINC)$/starmath.hrc
-
-SRS1NAME=$(TARGET)
-SRC1FILES= \
-    smslots.src
 
 # --- Targets -------------------------------------------------------
 
