@@ -66,6 +66,7 @@ hedabu: ..\inc\adritem.hxx %_DEST%\inc%_EXT%\svx\adritem.hxx
 hedabu: ..\inc\akrnitem.hxx %_DEST%\inc%_EXT%\svx\akrnitem.hxx
 hedabu: ..\inc\algitem.hxx %_DEST%\inc%_EXT%\svx\algitem.hxx
 hedabu: ..\inc\align.hxx %_DEST%\inc%_EXT%\svx\align.hxx
+hedabu: ..\inc\asiancfg.hxx %_DEST%\inc%_EXT%\svx\asiancfg.hxx
 hedabu: ..\inc\simptabl.hxx %_DEST%\inc%_EXT%\svx\simptabl.hxx
 hedabu: ..\inc\ctredlin.hxx %_DEST%\inc%_EXT%\svx\ctredlin.hxx
 hedabu: ..\inc\backgrnd.hxx %_DEST%\inc%_EXT%\svx\backgrnd.hxx
