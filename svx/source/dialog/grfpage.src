@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:29:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¥ª(~L)";
         Text[ arabic ] = "ÇáíÓÇÑ";
         Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "¿ŞÂÊ";
+        Text[ korean ] = "¿ŞÂÊ(~L)";
         Text[ turkish ] = "So~l";
     };
     MetricField MF_LEFT
@@ -168,7 +168,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¥k(~R)";
         Text[ arabic ] = "Çáíãíä";
         Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ";
+        Text[ korean ] = "¿À¸¥ÂÊ(~R)";
         Text[ turkish ] = "S~ağ";
     };
     MetricField MF_RIGHT
@@ -210,7 +210,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¤W(~T)";
         Text[ arabic ] = "ÃÚáì";
         Text[ greek ] = "ĞÜíù";
-        Text[ korean ] = "À§";
+        Text[ korean ] = "À§(~T)";
         Text[ turkish ] = "Ü~st";
     };
     MetricField MF_TOP
@@ -254,7 +254,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¤U(~B)";
         Text[ arabic ] = "ÃÓİá";
         Text[ greek ] = "ÊÜôù";
-        Text[ korean ] = "¾Æ·¡";
+        Text[ korean ] = "¾Æ·¡(~B)";
         Text[ turkish ] = "A~lt";
     };
     MetricField MF_BOTTOM
@@ -296,7 +296,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "«O«ù¤j¤p(~Z)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáÍÌã";
         Text[ greek ] = "Äéá~ôŞñçóç ìåãİèïõò";
-        Text[ korean ] = "Å©±â À¯Áö";
+        Text[ korean ] = "Å©±â À¯Áö(~Z)";
         Text[ turkish ] = "Boyutu kor~u";
     };
     RadioButton RB_ZOOMCONST
@@ -322,7 +322,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "«O«ùÅã¥Ü¤ñ¨Ò(~S)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáãŞíÇÓ";
         Text[ greek ] = "ÄéáôŞñçóç êëß~ìáêáò";
-        Text[ korean ] = "¹èÀ² À¯Áö";
+        Text[ korean ] = "¹èÀ² À¯Áö(~S)";
         Text[ turkish ] = "~Orantıyı koru";
     };
     GroupBox GB_EXAMPLE
@@ -407,7 +407,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¼e(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "G~enişlik";
     };
     MetricField MF_WIDTHZOOM
@@ -455,7 +455,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "°ª(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "³ôÀÌ(~E)";
         Text[ turkish ] = "Y~ükseklik";
     };
     MetricField MF_HEIGHTZOOM
@@ -529,7 +529,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¼e(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "~Genişlik";
     };
     MetricField MF_WIDTH
@@ -575,7 +575,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "°ª«×(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "³ôÀÌ(~E)";
         Text[ turkish ] = "~Yükseklik";
     };
     MetricField MF_HEIGHT
@@ -624,7 +624,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "­ì¥ó¤j¤p(~O)";
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";
         Text[ greek ] = "Áñ÷éêü ìİ~ãåèïò";
-        Text[ korean ] = "¿ø·¡ Å©±â";
+        Text[ korean ] = "¿ø·¡ Å©±â(~O)";
         Text[ turkish ] = "İ~lk boyut";
     };
 };
