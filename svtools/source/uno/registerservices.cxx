@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-26 14:33:06 $
+ *  last change: $Author: fs $ $Date: 2001-12-20 13:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 
+#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -78,12 +80,29 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include <unoiface.hxx>
-#include <imgprod.hxx>
-#include <filepicker.hxx>
-#include <folderpicker.hxx>
+#ifndef _SVT_UNOIFACE_HXX
+#include "unoiface.hxx"
+#endif
+#ifndef _PRODUCE_HXX
+#include "imgprod.hxx"
+#endif
+#ifndef INCLUDED_SVT_FILEPICKER_HXX
+#include "filepicker.hxx"
+#endif
+#ifndef INCLUDED_SVT_FOLDERPICKER_HXX
+#include "folderpicker.hxx"
+#endif
 
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+
+#ifndef SVTOOLS_PRODUCTREGISTRATION_HXX
+#include "productregistration.hxx"
+#endif
+
+#include <algorithm>
+#include <functional>
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) \
@@ -111,6 +130,114 @@ DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 
 IMPL_CREATEINSTANCE( ImageProducer );
 
+namespace svt
+{
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::registry;
+    using namespace ::com::sun::star::lang;
+
+    //--------------------------------------------------------------------
+    struct CreateSubKey : public ::std::unary_function< ::rtl::OUString, void >
+    {
+        const Reference< XRegistryKey >& m_rxParentKey;
+        CreateSubKey( const Reference< XRegistryKey >& _rxParentKey ) : m_rxParentKey( _rxParentKey ) { }
+
+        void operator()( const ::rtl::OUString& _rSubKeyName )
+        {
+            m_rxParentKey->createKey( _rSubKeyName );
+        }
+    };
+
+    //--------------------------------------------------------------------
+    void RegisterImplementation(
+            const Reference< XRegistryKey >& _rxLocation,
+            const ::rtl::OUString& _rImplName,
+            const Sequence< ::rtl::OUString >& _rSupportedServices
+        )
+    {
+        try
+        {
+            ::rtl::OUString sImplKeyName( '/' );
+            sImplKeyName += _rImplName;
+            sImplKeyName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+            Reference< XRegistryKey > xNewKey = _rxLocation->createKey( sImplKeyName );
+
+            OSL_ENSURE( xNewKey.is(), "::RegisterImplementation: invalid new impl key!" );
+            if ( xNewKey.is() )
+            {
+                // create sub keys for all services supported by this implementation
+                ::std::for_each(
+                    _rSupportedServices.getConstArray(),
+                    _rSupportedServices.getConstArray() + _rSupportedServices.getLength(),
+                    CreateSubKey( xNewKey )
+                );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "::RegisterImplementation: caught an exception!" );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    /** helper class for implementing component_getFactory
+    */
+    class FactoryCreator
+    {
+    private:
+        Reference< XMultiServiceFactory >   m_xORB;
+        ::rtl::OUString                     m_sRequestedComponent;
+
+        Reference< XSingleServiceFactory >  m_xCreatedFactory;
+
+    public:
+        // ctor
+        FactoryCreator(
+            const Reference< XMultiServiceFactory >& _rxORB,
+            const ::rtl::OUString& _rRequestedImplName
+        );
+
+        // get the return value, which is the last factory created in one of the tryXXX methods
+        const Reference< XSingleServiceFactory >&
+                    getCreatedFactory( ) const { return m_xCreatedFactory; }
+
+        /** try the given service name, create a single service factory for it if it matches the impl name given
+            in the ctor
+        */
+        sal_Bool    trySingleServiceFactory(
+                        const ::rtl::OUString& _rImplName,
+                        const Sequence< ::rtl::OUString >& _rSupportedServices,
+                        ::cppu::ComponentInstantiation _pComponentCreator
+                    );
+    };
+
+    //--------------------------------------------------------------------
+    FactoryCreator::FactoryCreator( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rRequestedImplName )
+        :m_xORB( _rxORB )
+        ,m_sRequestedComponent( _rRequestedImplName )
+    {
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool FactoryCreator::trySingleServiceFactory( const ::rtl::OUString& _rImplName, const Sequence< ::rtl::OUString >& _rSupportedServices,
+        ::cppu::ComponentInstantiation _pComponentCreator )
+    {
+        OSL_ENSURE( !getCreatedFactory( ).is(), "FactoryCreator::trySingleServiceFactory: already have a factory!" );
+            // aprevious tryXXX returned true if this here fails ....
+        if ( getCreatedFactory( ).is() )
+            return sal_False;
+
+        if ( _rImplName.equals( m_sRequestedComponent ) )
+        {
+            m_xCreatedFactory = ::cppu::createSingleFactory(
+                m_xORB, m_sRequestedComponent, _pComponentCreator, _rSupportedServices
+            );
+        }
+
+        return m_xCreatedFactory.is();
+    }
+}
+
 extern "C"
 {
 
@@ -123,39 +250,39 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 {
     if (_pRegistryKey)
     {
-        ::com::sun::star::registry::XRegistryKey * pRegistryKey = reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( _pRegistryKey );
+        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRegistryKey;
+        xRegistryKey = reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( _pRegistryKey );
         ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > xNewKey;
 
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/SERVICES" ) );
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.FrameLoader" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" ) );
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/Loader" ) );
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xLoaderKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/Loader" ) );
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/Loader" ) );
+        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xLoaderKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/Loader" ) );
         xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii( "Pattern" ) );
         xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii( ".component:Text*" ) );
 
-//      xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/SERVICES" ) );
-//      xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.FrameLoader" ) );
-//      xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" ) );
-//      xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/Loader" ) );
-//      ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xLoaderKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/Loader" ) );
-//      xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii( "Pattern" ) );
-//      xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii( ".component:Text*" ) );
-
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" ) );
 
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/org.openoffice.comp.svt.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/org.openoffice.comp.svt.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" ) );
 
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.awt.ImageProducer/UNO/SERVICES" ) );
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.awt.ImageProducer/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ) );
 
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FilePicker/UNO/SERVICES" ) );
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FilePicker/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" ) );
 
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FolderPicker/UNO/SERVICES" ) );
+        xNewKey = xRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.svtools.FolderPicker/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" ) );
+
+        // the product registration component
+        ::svt::RegisterImplementation(
+            xRegistryKey,
+            ::svt::OProductRegistration::getImplementationName_Static( ),
+            ::svt::OProductRegistration::getSupportedServiceNames_Static( )
+        );
     }
 
     return sal_True;
@@ -167,39 +294,33 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
 
     if ( _pServiceManager )
     {
-        ::com::sun::star::lang::XMultiServiceFactory* pServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
+        xServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
 
-//      if ( rtl_str_compare( sImplementationName, "stardiv.svtools.SvtTextLoader") == 0 )
-//      {
-//          ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(2);
-//          aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "stardiv.one.frame.FrameLoader" );
-//          aServiceNames.getArray()[1] = ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" );
-//          xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvtTextLoader_CreateInstance, aServiceNames );
-//      }
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.ImageProducer") == 0 )
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), ImageProducer_CreateInstance, aServiceNames );
+            xFactory = ::cppu::createSingleFactory( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), ImageProducer_CreateInstance, aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject") == 0 )
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvNumberFormatsSupplierServiceObject_CreateInstance, aServiceNames );
+            xFactory = ::cppu::createSingleFactory( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvNumberFormatsSupplierServiceObject_CreateInstance, aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "org.openoffice.comp.svt.OAddressBookSourceDialogUno") == 0 )
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), svt::OAddressBookSourceDialogUno_CreateInstance, aServiceNames );
+            xFactory = ::cppu::createSingleFactory( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), svt::OAddressBookSourceDialogUno_CreateInstance, aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.FilePicker") == 0 )
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager,
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
                                                     ::rtl::OUString::createFromAscii( sImplementationName ),
                                                     SvtFilePicker::impl_createInstance,
                                                     aServiceNames );
@@ -208,10 +329,24 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager,
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
                                                     ::rtl::OUString::createFromAscii( sImplementationName ),
                                                     SvtFolderPicker::impl_createInstance,
                                                     aServiceNames );
+        }
+        else
+        {
+            // a helper class which could ease the creation and make the following more readable and maintanable
+            // (if it would be used for all services)
+            ::svt::FactoryCreator aCreatorHelper( xServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ) );
+
+            aCreatorHelper.trySingleServiceFactory(
+                ::svt::OProductRegistration::getImplementationName_Static( ),
+                ::svt::OProductRegistration::getSupportedServiceNames_Static( ),
+                ::svt::OProductRegistration::Create
+            );
+
+            xFactory = aCreatorHelper.getCreatedFactory();
         }
 
         if ( xFactory.is() )
