@@ -2,6 +2,7 @@ mkdir: %_DEST%\inc%_EXT%\external\zlib
 
 ..\%__SRC%\inc\zlib.h %_DEST%\inc%_EXT%\external\zlib\zlib.h
 ..\%__SRC%\inc\zconf.h %_DEST%\inc%_EXT%\external\zconf.h
+..\%__SRC%\inc\unzip.h %_DEST%\inc%_EXT%\external\unzip.h
 
 ..\%__SRC%\lib\libzlib.a %_DEST%\lib%_EXT%\libzlib.a
 ..\%__SRC%\slb\zlib.lib %_DEST%\lib%_EXT%\zlib.lib

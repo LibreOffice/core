@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-22 17:26:14 $
+#   last change: $Author: hjs $ $Date: 2002-08-22 12:22:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 OUT2INC= \
     zlib.h \
-    zconf.h
+    zconf.h \
+    contrib$/minizip$/unzip.h
 
 
 
