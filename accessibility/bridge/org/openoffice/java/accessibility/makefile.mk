@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 12:40:39 $
+#   last change: $Author: rt $ $Date: 2003-06-12 08:03:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,15 +71,19 @@ USE_JAVAVER:=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(JAVAVER:s/.//)" >= "140" 
+.IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
+
 JAVADIR = $(OUT)$/misc$/java
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
+    logging$/XAccessibleEventLog.java \
+    logging$/XAccessibleTextLog.java \
     AbstractButton.java \
     AccessibleActionImpl.java \
     AccessibleComponentImpl.java \
     AccessibleEditableTextImpl.java \
     AccessibleExtendedState.java \
+    AccessibleHypertextImpl.java \
     AccessibleIconImpl.java \
     AccessibleKeyBinding.java \
     AccessibleObjectFactory.java \
@@ -119,7 +123,8 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 JARCLASSDIRS            = $(PACKAGE)
-.ENDIF
+
+.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 # --- Targets ------------------------------------------------------
 
@@ -128,23 +133,27 @@ JARCLASSDIRS            = $(PACKAGE)
 # Enable logging in non-product only
 .IF "$(PRODUCT)"!=""
 DEBUGSWITCH = false
+PRODUCTSWITCH = true
 .ELSE
+PRODUCTSWITCH = false
 DEBUGSWITCH = true
 .ENDIF
 
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
-$(JAVADIR)$/$(PACKAGE)$/%.java:
+$(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
     @-+$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE) >& $(NULLDEV) 
     @-+echo package org.openoffice.java.accessibility\; > $@
     @-+echo public class Build { >> $@
     @-+echo public static final boolean DEBUG = $(DEBUGSWITCH)\; >> $@
+    @-+echo public static final boolean PRODUCT = $(PRODUCTSWITCH)\; >> $@
     @-+echo } >> $@
 .ELSE
-$(JAVADIR)$/$(PACKAGE)$/%.java:
+$(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
     @-+$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE) >& $(NULLDEV) 
     @-+echo package org.openoffice.java.accessibility; > $@
     @-+echo public class Build { >> $@
     @-+echo public static final boolean DEBUG = $(DEBUGSWITCH); >> $@
+    @-+echo public static final boolean PRODUCT = $(PRODUCTSWITCH); >> $@
     @-+echo } >> $@
 .ENDIF
 
