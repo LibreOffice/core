@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 18:08:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <svtools/urihelper.hxx>
+#include <sfx2/objsh.hxx>
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -415,9 +416,10 @@ IMPL_LINK( SvxHyperlinkDlg, TBSelectHdl, ToolBox *, pBox )
             if ( !sName.Len() )
                 sName = aUrlCB.GetText();
 
+            String aBase = GetBindings().GetDispatcher()->GetFrame()->GetObjectShell()->GetMedium()->GetBaseURL();
             SfxStringItem aName( SID_BOOKMARK_TITLE, sName );
             SfxStringItem aURL( SID_BOOKMARK_URL,
-                                URIHelper::SmartRelToAbs( aUrlCB.GetText(), FALSE,
+                                URIHelper::SmartRel2Abs( INetURLObject(aBase), aUrlCB.GetText(), URIHelper::GetMaybeFileHdl(), true, false,
                                                           INetURLObject::WAS_ENCODED,
                                                           INetURLObject::DECODE_UNAMBIGUOUS ) );
             GetBindings().GetDispatcher()->Execute(
@@ -666,7 +668,8 @@ void SvxHyperlinkDlg::SendToApp(USHORT nType)
     if ( !sURL.Len() )
         return;
 
-    INetURLObject aObj( URIHelper::SmartRelToAbs( sURL, FALSE,
+    String aBase = GetBindings().GetDispatcher()->GetFrame()->GetObjectShell()->GetMedium()->GetBaseURL();
+    INetURLObject aObj( URIHelper::SmartRel2Abs( INetURLObject(aBase), sURL, URIHelper::GetMaybeFileHdl(), true, false,
                                                   INetURLObject::WAS_ENCODED,
                                                   INetURLObject::DECODE_UNAMBIGUOUS ) );
     sURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
