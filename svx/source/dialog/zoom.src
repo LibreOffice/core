@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 21:07:59 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 11:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,17 +159,17 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ó~ptimo";
     };
-    RadioButton BTN_50
+    RadioButton BTN_200
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~50 %" ;
+        Text = "~200 %" ;
     };
-    RadioButton BTN_75
+    RadioButton BTN_150
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~75 %" ;
+        Text = "15~0 %" ;
     };
     RadioButton BTN_100
     {
@@ -177,17 +177,17 @@ ModalDialog RID_SVXDLG_ZOOM
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~100 %" ;
     };
-    RadioButton BTN_150
+    RadioButton BTN_75
     {
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "15~0 %" ;
+        Text = "~75 %" ;
     };
-    RadioButton BTN_200
+    RadioButton BTN_50
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~200 %" ;
+        Text = "~50 %" ;
     };
     RadioButton BTN_USER
     {
