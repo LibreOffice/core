@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:55:13 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,6 +910,7 @@ namespace
                             else
                             {
                                 aWhereStr += aWork;
+                                aWhereStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
                                 aWhereStr += aCriteria;
                             }
                         }
@@ -1531,7 +1532,7 @@ namespace
             {
                 nPos = pCondition->count()-1;
 
-                sal_uInt32 i = pCondition->count() - 2;
+                sal_Int32 i = static_cast<sal_Int32>(pCondition->count() - 2);
                 switch (pCondition->getChild(i)->getNodeType())
                 {
                     case SQL_NODE_EQUAL:
@@ -2031,7 +2032,7 @@ namespace
                             sal_Int32 nFunctionType = FKT_NONE;
                             ::connectivity::OSQLParseNode* pParamRef = NULL;
                             sal_Int32 nColumnRefPos = pColumnRef->count() - 2;
-                            if ( nColumnRefPos >= 0 && nColumnRefPos < pColumnRef->count() )
+                            if ( nColumnRefPos >= 0 && static_cast<sal_uInt32>(nColumnRefPos) < pColumnRef->count() )
                                 pParamRef = pColumnRef->getChild(nColumnRefPos);
 
                             if (    SQL_ISRULE(pColumnRef,general_set_fct)
