@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 08:36:35 $
+#   last change: $Author: kz $ $Date: 2003-11-18 17:23:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,12 @@ UNOIDLDBFILES= \
     $(UCR)$/cssimage.db\
     $(UCR)$/cssuidialogs.db \
     $(UCR)$/cssui.db \
+    $(UCR)$/cssframe.db \
     $(UCR)$/cssaccessibility.db\
+    $(UCR)$/dcsssprovider.db \
+    $(UCR)$/dcsssbrowse.db \
+    $(UCR)$/dcsssfsecurity.db \
+    $(UCR)$/dcsssfstorage.db \
     $(UCR)$/cssframe.db \
     $(UCR)$/dcssform.db \
     $(UCR)$/dcssformcomp.db \
