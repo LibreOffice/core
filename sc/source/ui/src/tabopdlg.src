@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:15:12 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ ModelessDialog RID_SCDLG_TABOP
     ImageButton RB_FORMULARANGE
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 163 , 14 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 163 , 13 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
         QuickHelpText [ x-comment ] = " ";
@@ -112,8 +112,8 @@ ModelessDialog RID_SCDLG_TABOP
     ImageButton RB_ROWCELL
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 163 , 30 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 163 , 29 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
         QuickHelpText [ x-comment ] = " ";
@@ -136,8 +136,8 @@ ModelessDialog RID_SCDLG_TABOP
     ImageButton RB_COLCELL
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 163 , 46 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 163 , 45 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
         QuickHelpText [ x-comment ] = " ";
