@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.35 $
- *  last change: $Author: pluby $ $Date: 2000-12-24 19:39:13 $
+ *  $Revision: 1.36 $
+ *  last change: $Author: pluby $ $Date: 2000-12-31 19:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,6 +1657,7 @@ void SalGraphics::CopyBits( const SalTwoRect  *pPosAry,
 
                             if ( pSrcBitMap != NULL )
                             {
+                                pSrcGraphics->maGraphicsData.mnMacOSStatus = LockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
                                 ::CopyBits (  pSrcBitMap,
                                               pDstBitMap,
                                              &aSrcRect,
@@ -1664,6 +1665,7 @@ void SalGraphics::CopyBits( const SalTwoRect  *pPosAry,
                                               nCopyMode,
                                               hMaskRgn
                                            );
+                                pSrcGraphics->maGraphicsData.mnMacOSStatus = UnlockPortBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
                             } // if
                         } // if
                         else
