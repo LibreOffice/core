@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:05:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2477,6 +2477,47 @@ Resource RID_GLOBSTR
     {
         Text [ de ] = "Hangul/Hanja Konvertierung";
         Text[ en-US ] = "Hangul/Hanja Conversion";
+    };
+
+    String STR_NAME_INPUT_CELL
+    {
+        Text = "Zelle auswählen";
+        Text[ english_us ] = "Select Cell";
+    };
+    String STR_NAME_INPUT_RANGE
+    {
+        Text = "Bereich auswählen";
+        Text[ english_us ] = "Select Range";
+    };
+    String STR_NAME_INPUT_DBRANGE
+    {
+        Text = "Datenbankbereich auswählen";
+        Text[ english_us ] = "Select Database Range";
+    };
+    String STR_NAME_INPUT_ROW
+    {
+        Text = "Gehe zu Zeile";
+        Text[ english_us ] = "Go To Row";
+    };
+    String STR_NAME_INPUT_SHEET
+    {
+        Text = "Gehe zu Tabelle";
+        Text[ english_us ] = "Go To Sheet";
+    };
+    String STR_NAME_INPUT_DEFINE
+    {
+        Text = "Bereich benennen";
+        Text[ english_us ] = "Define Name for Range";
+    };
+    String STR_NAME_ERROR_SELECTION
+    {
+        Text = "Der ausgewählte Bereich muss rechteckig sein, um ihn benennen zu können.";
+        Text[ english_us ] = "The selection needs to be rectangular in order to name it.";
+    };
+    String STR_NAME_ERROR_NAME
+    {
+        Text = "Sie müssen entweder einen gültigen Zellbezug oder einen gültigen Namen für den ausgewählten Bereich angeben.";
+        Text[ english_us ] = "You must enter a valid reference or type a valid name for the selected range.";
     };
 };
 
