@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:55:02 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog DLG_ENV
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Envelope" ;
     Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori (Envelope)" ;
+    Text [ finnish ] = "Kirjekuori" ;
     Text [ danish ] = "Konvolut" ;
     Text [ french ] = "Enveloppe" ;
     Text [ swedish ] = "Kuvert" ;
@@ -96,7 +96,7 @@ TabDialog DLG_ENV
                 Text [ italian ] = "Busta" ;
                 Text [ portuguese_brazilian ] = "Envelope" ;
                 Text [ portuguese ] = "Envelope" ;
-                Text [ finnish ] = "Kirjekuori (Envelope)" ;
+                Text [ finnish ] = "Kirjekuori" ;
                 Text [ danish ] = "Konvolut" ;
                 Text [ french ] = "Enveloppe" ;
                 Text [ swedish ] = "Kuvert" ;
@@ -142,7 +142,7 @@ TabDialog DLG_ENV
                 Text[ turkish ] = "Renk format˝";
                 Text[ arabic ] = "«· ‰”Ìﬁ";
                 Text[ catalan ] = "Formata";
-                Text[ finnish ] = "Muoto";
+                Text[ finnish ] = "Muotoilu";
                 Text[ thai ] = "‡∏£‡∏π‡∏õ‡πÅ‡∏ö‡∏ö";
             };
             PageItem
@@ -154,7 +154,7 @@ TabDialog DLG_ENV
                 Text [ italian ] = "Stampante" ;
                 Text [ portuguese_brazilian ] = "Impressora" ;
                 Text [ portuguese ] = "Impressora" ;
-                Text [ finnish ] = "Tulostin " ;
+                Text [ finnish ] = "Tulostin" ;
                 Text [ danish ] = "Printer" ;
                 Text [ french ] = "Imprimante" ;
                 Text [ swedish ] = "Skrivare" ;
@@ -193,7 +193,7 @@ TabDialog DLG_ENV
         Text [ spanish ] = "Insertar" ;
         Text [ english_us ] = "~Insert" ;
         Text[ chinese_simplified ] = "ÊèíÂÖ•(~I)";
-        Text[ russian ] = "¬ÒÚ‡‚Í‡";
+        Text[ russian ] = "¬ÒÚ‡‚ËÚ¸";
         Text[ polish ] = "Wstaw";
         Text[ japanese ] = "ÊåøÂÖ•(~I)";
         Text[ chinese_traditional ] = "ÊèíÂÖ•(~I)";
@@ -215,7 +215,7 @@ TabDialog DLG_ENV
         Text [ italian ] = "C~ambia" ;
         Text [ portuguese_brazilian ] = "Mudar" ;
         Text [ portuguese ] = "~Modificar" ;
-        Text [ finnish ] = "~Muokkaa" ;
+        Text [ finnish ] = "~Muuta" ;
         Text [ danish ] = "Modificer" ;
         Text [ french ] = "Modifier" ;
         Text [ swedish ] = "~ƒndra" ;
@@ -223,7 +223,7 @@ TabDialog DLG_ENV
         Text [ spanish ] = "~Modificar" ;
         Text [ english_us ] = "~Modify" ;
         Text[ chinese_simplified ] = "Êõ¥Êîπ(~M)";
-        Text[ russian ] = "»ÁÏÂÌËÚ¸";
+        Text[ russian ] = "œËÏÂÌËÚ¸";
         Text[ polish ] = "Modyfikuj";
         Text[ japanese ] = "Â§âÊõ¥(~M)";
         Text[ chinese_traditional ] = "‰øÆÊîπ(~M)";
@@ -349,7 +349,7 @@ TabPage TP_ENV_ENV
         Text [ french ] = "~Table" ;
         Text [ dutch ] = "~Tabel" ;
         Text [ swedish ] = "~Tabell" ;
-        Text [ danish ] = "Tabel" ;
+        Text [ danish ] = "Tabe~l" ;
         Text [ portuguese_brazilian ] = "Tabelle" ;
         Text [ portuguese ] = "~Tabela" ;
         Text[ chinese_simplified ] = "Ë°®Ê†º";
@@ -477,7 +477,7 @@ String STR_DOC_TITLE
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Envelope" ;
     Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori (Envelope)" ;
+    Text [ finnish ] = "Kirjekuori" ;
     Text [ danish ] = "Konvolut" ;
     Text [ french ] = "Enveloppe" ;
     Text [ swedish ] = "Kuvert" ;
