@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:37:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2891,6 +2891,7 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
                                   nPrfx, sLocalName),
         sPropertyHint(RTL_CONSTASCII_USTRINGPARAM(sAPI_hint)),
         sPropertyMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
+        sPropertyScriptURL(RTL_CONSTASCII_USTRINGPARAM("ScriptURL")),
         sMacro(),
         sDescription(),
         bDescriptionOK(sal_False)
@@ -2954,6 +2955,7 @@ void XMLMacroFieldImportContext::PrepareField(
     // have to look at the name attribute.
     OUString sMacroName;
     OUString sLibraryName;
+    OUString sScriptURL;
 
     if ( xEventContext.Is() )
     {
@@ -2982,6 +2984,11 @@ void XMLMacroFieldImportContext::PrepareField(
             {
                 aValues[i].Value >>= sMacroName;
             }
+            if ( aValues[i].Name.equalsAsciiL( "Script",
+                                               sizeof("Script")-1 ) )
+            {
+                aValues[i].Value >>= sScriptURL;
+            }
         }
     }
     else
@@ -3005,6 +3012,9 @@ void XMLMacroFieldImportContext::PrepareField(
         else
             sMacroName = sMacro;
     }
+
+    aAny <<= sScriptURL;
+    xPropertySet->setPropertyValue(sPropertyScriptURL, aAny);
 
     aAny <<= sMacroName;
     xPropertySet->setPropertyValue(sPropertyMacroName, aAny);
