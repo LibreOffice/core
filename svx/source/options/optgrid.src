@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 14:24:31 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Οπθβÿηΰςό κ ρεςκε";
         Text[ polish ] = "UΏyj siatki zaczepu";
         Text[ japanese ] = "½Ε―Μί–Τ–Ϊ½ΈΨ°έ‚Μg—p(~S)";
-        Text[ chinese_traditional ] = "¨Ο¥ΞΊτ®ζ§¤ΌΠ(~S)";
+        Text[ chinese_traditional ] = "¨Ο¥ΞΊτ®ζ®yΌΠ(~S)";
         Text[ arabic ] = "ΗΣΚΞΟΗγ ΤΘίΙ ΗαΝΘΣ";
         Text[ greek ] = "Χρήση πλέγματος προσκόλλησης";
         Text[ korean ] = "ΈΒΓγ ΄«±έ »ηΏλ(~S)";
@@ -403,7 +403,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Οξ πΰημεπσ ρεςκθ";
         Text[ polish ] = "Ustaw wed³ug rastra";
         Text[ japanese ] = "ΈήΨ―Δή‚Ι‡‚ν‚Ή‚ι(~T)";
-        Text[ chinese_traditional ] = "©MΊτ®ζ§¤ΌΠ¦P¨B(~T)";
+        Text[ chinese_traditional ] = "©MΊτ®ζ®yΌΠ¦P¨B(~T)";
         Text[ arabic ] = "γαΗΖγΙ ΗαΝΜγ ααΤΘίΙ";
         Text[ greek ] = "Προσαρμογή σε πλέγμα";
         Text[ korean ] = "Ε©±βΈ¦ ΄«±έΏ΅ ΈΒΓγ(~Z)";
@@ -458,7 +458,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ chinese_simplified ] = "~Y Φα";
         Text[ russian ] = "Ξρό Y";
         Text[ polish ] = "O Y";
-        Text[ japanese ] = "Y²(~Y)";
+        Text[ japanese ] = "~YΌ΄";
         Text[ chinese_traditional ] = "~Y-¶b";
         Text[ arabic ] = "ΗαγΝζΡ Υ";
         Text[ greek ] = "Άξονας ~Υ";
@@ -549,7 +549,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Ρεςκΰ οπθβÿηκθ";
         Text[ polish ] = "Siatka zaczepu";
         Text[ japanese ] = "½Ε―Μί–Τ–Ϊ½ΈΨ°έ";
-        Text[ chinese_traditional ] = "Ίτ®ζ§¤ΌΠ";
+        Text[ chinese_traditional ] = "Ίτ®ζ®yΌΠ";
         Text[ arabic ] = "ΤΘίΙ ΗαΝΘΣ";
         Text[ greek ] = "Πλέγμα προσκόλλησης";
         Text[ korean ] = "ΈΒΓγ ΄«±έΌ±";
