@@ -202,43 +202,7 @@
 <LC_SEARCH ref="en_US"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
-<DaysOfWeek>
-<Day>
-<DayID>sun</DayID>
-<DefaultAbbrvName>So</DefaultAbbrvName>
-<DefaultFullName>Sonntag</DefaultFullName>
-</Day>
-<Day>
-<DayID>mon</DayID>
-<DefaultAbbrvName>Mo</DefaultAbbrvName>
-<DefaultFullName>Montag</DefaultFullName>
-</Day>
-<Day>
-<DayID>tue</DayID>
-<DefaultAbbrvName>Di</DefaultAbbrvName>
-<DefaultFullName>Dienstag</DefaultFullName>
-</Day>
-<Day>
-<DayID>wed</DayID>
-<DefaultAbbrvName>Mi</DefaultAbbrvName>
-<DefaultFullName>Mittwoch</DefaultFullName>
-</Day>
-<Day>
-<DayID>thu</DayID>
-<DefaultAbbrvName>Do</DefaultAbbrvName>
-<DefaultFullName>Donnerstag</DefaultFullName>
-</Day>
-<Day>
-<DayID>fri</DayID>
-<DefaultAbbrvName>Fr</DefaultAbbrvName>
-<DefaultFullName>Freitag</DefaultFullName>
-</Day>
-<Day>
-<DayID>sat</DayID>
-<DefaultAbbrvName>Sa</DefaultAbbrvName>
-<DefaultFullName>Samstag</DefaultFullName>
-</Day>
-</DaysOfWeek>
+<DaysOfWeek ref="de_DE_gregorian"/>
 <MonthsOfYear>
 <Month>
 <MonthID>jan</MonthID>
