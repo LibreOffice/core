@@ -2,8 +2,6 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.20 $
-#   last change: $Author: hr $ $Date: 2004-11-09 18:32:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,8 +84,6 @@ BEGIN
     $lastminor = "";
     $compiler = "";
     $pro = 0;
-    $rpm = 0;
-    $debian = 0;
     $dounzip = 1;
     $languages_defined_in_productlist = 0;
     $setupscript_defined_in_productlist = 0;
@@ -100,6 +96,7 @@ BEGIN
     $islinuxbuild = 0;
     $islinuxrpmbuild = 0;
     $issolarisbuild = 0;
+    $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
     $unpackpath = "";
@@ -196,10 +193,11 @@ BEGIN
     @selfreglibraries = ();             # to be removed after scp changes, see parameter.pm
     @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca", "gid_File_Lib_Netframework", "gid_File_Lib_Qslnkmsi", "gid_File_Lib_Sdqsmsi", "gid_File_Lib_Shlxtmsi", "gid_File_Lib_Instooofiltmsi"); # to be removed after scp changes, see parameter.pm
     @msiassemblyfiles = ("gid_File_Lib_Cli_Basetypes", "gid_File_Lib_Cli_Types_Assembly", "gid_File_Lib_Cli_Cppuhelper_Assembly", "gid_File_Lib_Cli_Ure_Assembly"); # to be removed after scp changes
-    @msiassemblynamecontent = ("gid_File_Lib_Cli_Basetypes", "cli_basetypes", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Types_Assembly", "cli_types", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Cppuhelper_Assembly", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Ure_Assembly", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");    # to be removed after scp changes
+    @msiassemblynamecontent = ("gid_File_Lib_Cli_Basetypes", "cli_basetypes", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Types_Assembly", "cli_types", "ce2cb7e279207b9e", "1.1.0.0", "gid_File_Lib_Cli_Cppuhelper_Assembly", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Ure_Assembly", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");    # to be removed after scp changes
     @add_unocomponent_libraries = ("gid_File_Lib_Gnomevfs");                # to be removed after scp changes
     @languagepackfeature =();
     $langpackfilename = "Langpack.mlf";
+    $languagenames = "";
 
     @removedirs = ();
 
