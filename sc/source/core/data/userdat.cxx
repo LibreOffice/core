@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userdat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:29:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,39 +676,39 @@ SdrObjUserData* ScDrawObjData::Clone(SdrObject* pObj) const
     return new ScDrawObjData( *this );
 }
 
-void ScDrawObjData::ReadData( SvStream& r )
-{
-    SdrObjUserData::ReadData( r );
+//BFS01void ScDrawObjData::ReadData( SvStream& r )
+//BFS01{
+//BFS01 SdrObjUserData::ReadData( r );
+//BFS01
+//BFS01#if SC_ROWLIMIT_STREAM_ACCESS
+//BFS01#error address types changed!
+//BFS01 USHORT n;
+//BFS01    UINT16 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+//BFS01 r >> nCol1 >> nRow1 >> nTab1
+//BFS01   >> nCol2 >> nRow2 >> nTab2
+//BFS01   >> n;
+//BFS01    aStt.Set( nCol1, nRow1, nTab1);
+//BFS01    aEnd.Set( nCol2, nRow2, nTab2);
+//BFS01 bValidEnd = ((n & 0x0001) != 0);
+//BFS01 bValidStart = ((n & 0x0002) == 0);  // Default (0) = bValidStart fuer alte Dokumente
+//BFS01#endif // SC_ROWLIMIT_STREAM_ACCESS
+//BFS01}
 
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    USHORT n;
-    UINT16 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-    r >> nCol1 >> nRow1 >> nTab1
-      >> nCol2 >> nRow2 >> nTab2
-      >> n;
-    aStt.Set( nCol1, nRow1, nTab1);
-    aEnd.Set( nCol2, nRow2, nTab2);
-    bValidEnd = ((n & 0x0001) != 0);
-    bValidStart = ((n & 0x0002) == 0);  // Default (0) = bValidStart fuer alte Dokumente
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
-
-void ScDrawObjData::WriteData( SvStream& r )
-{
-    SdrObjUserData::WriteData( r );
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
-    USHORT n = 0x0000;
-    if (bValidEnd)    n |= 0x0001;
-    if (!bValidStart) n |= 0x0002;      // Default (0) = bValidStart fuer alte Dokumente
-
-    r << (UINT16) aStt.Col() << (UINT16) aStt.Row() << (UINT16) aStt.Tab()
-      << (UINT16) aEnd.Col() << (UINT16) aEnd.Row() << (UINT16) aEnd.Tab()
-      << n;
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-}
+//BFS01void ScDrawObjData::WriteData( SvStream& r )
+//BFS01{
+//BFS01 SdrObjUserData::WriteData( r );
+//BFS01
+//BFS01#if SC_ROWLIMIT_STREAM_ACCESS
+//BFS01#error address types changed!
+//BFS01 USHORT n = 0x0000;
+//BFS01 if (bValidEnd)    n |= 0x0001;
+//BFS01 if (!bValidStart) n |= 0x0002;      // Default (0) = bValidStart fuer alte Dokumente
+//BFS01
+//BFS01 r << (UINT16) aStt.Col() << (UINT16) aStt.Row() << (UINT16) aStt.Tab()
+//BFS01   << (UINT16) aEnd.Col() << (UINT16) aEnd.Row() << (UINT16) aEnd.Tab()
+//BFS01   << n;
+//BFS01#endif // SC_ROWLIMIT_STREAM_ACCESS
+//BFS01}
 
 //------------------------------------------------------------------------
 
@@ -738,23 +738,23 @@ SdrObjUserData* __EXPORT ScIMapInfo::Clone( SdrObject* pObj ) const
     return new ScIMapInfo( *this );
 }
 
-void __EXPORT ScIMapInfo::WriteData( SvStream& rOStm )
-{
-    SdrObjUserData::WriteData( rOStm );
+//BFS01void __EXPORT ScIMapInfo::WriteData( SvStream& rOStm )
+//BFS01{
+//BFS01 SdrObjUserData::WriteData( rOStm );
+//BFS01
+//BFS01 ScWriteHeader aHdr( rOStm );
+//BFS01
+//BFS01 rOStm << aImageMap;
+//BFS01}
 
-    ScWriteHeader aHdr( rOStm );
-
-    rOStm << aImageMap;
-}
-
-void __EXPORT ScIMapInfo::ReadData( SvStream& rIStm )
-{
-    SdrObjUserData::ReadData( rIStm );
-
-    ScReadHeader aHdr( rIStm );
-
-    rIStm >> aImageMap;
-}
+//BFS01void __EXPORT ScIMapInfo::ReadData( SvStream& rIStm )
+//BFS01{
+//BFS01 SdrObjUserData::ReadData( rIStm );
+//BFS01
+//BFS01 ScReadHeader aHdr( rIStm );
+//BFS01
+//BFS01 rIStm >> aImageMap;
+//BFS01}
 
 
 
