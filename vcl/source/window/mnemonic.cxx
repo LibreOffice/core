@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 16:11:16 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,90 +181,115 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
     BOOL bChanged = FALSE;
     xub_StrLen nLen = aKey.Len();
 
-    // 1) first try the first character of a word
+    BOOL bCJK = FALSE;
+    switch( Application::GetSettings().GetUILanguage() )
+    {
+        case LANGUAGE_JAPANESE:
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_SINGAPORE:
+        case LANGUAGE_CHINESE_MACAU:
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+            bCJK = TRUE;
+            break;
+        default:
+            break;
+    }
+    // #107889# in CJK versions ALL strings (even those that contain latin characters)
+    // will get mnemonics in the form: xyz (M)
+    // thus steps 1) and 2) are skipped for CJK locales
+
     int             nCJK = 0;
     USHORT          nMnemonicIndex;
     sal_Unicode     c;
     xub_StrLen      nIndex = 0;
-    do
+    if( !bCJK )
     {
-        c = aKey.GetChar( nIndex );
-
-        if ( nCJK != 2 )
+        // 1) first try the first character of a word
+        do
         {
-            if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||
-                 ((c >= 0xFF61) && (c <= 0xFFDC)) )
-                nCJK = 1;
-            else if ( ((c >= 0x0030) && (c <= 0x0039)) ||
-                      ((c >= 0x0041) && (c <= 0x005A)) ||
-                      ((c >= 0x0061) && (c <= 0x007A)) ||
-                      ((c >= 0x0370) && (c <= 0x037F)) ||
-                      ((c >= 0x0400) && (c <= 0x04FF)) )
-                nCJK = 2;
-        }
+            c = aKey.GetChar( nIndex );
 
-        nMnemonicIndex = ImplGetMnemonicIndex( c );
-        if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
-        {
-            if ( maMnemonics[nMnemonicIndex] )
+            if ( nCJK != 2 )
             {
-                maMnemonics[nMnemonicIndex] = 0;
-                rKey.Insert( MNEMONIC_CHAR, nIndex );
-                bChanged = TRUE;
-                break;
+                if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
+                    ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
+                    nCJK = 1;
+                else if ( ((c >= 0x0030) && (c <= 0x0039)) || // digits
+                        ((c >= 0x0041) && (c <= 0x005A)) || // latin capitals
+                        ((c >= 0x0061) && (c <= 0x007A)) || // latin small
+                        ((c >= 0x0370) && (c <= 0x037F)) || // greek numeral signs
+                        ((c >= 0x0400) && (c <= 0x04FF)) )  // cyrillic
+                    nCJK = 2;
             }
-        }
 
-        // Search for next word
-        do
-        {
-            nIndex++;
-            c = aKey.GetChar( nIndex );
-            if ( c == ' ' )
-                break;
-        }
-        while ( nIndex < nLen );
-        nIndex++;
-    }
-    while ( nIndex < nLen );
-
-    // 2) search for a unique/uncommon character
-    if ( !bChanged )
-    {
-        USHORT      nBestCount = 0xFFFF;
-        USHORT      nBestMnemonicIndex;
-        xub_StrLen  nBestIndex;
-        nIndex = 0;
-        do
-        {
-            c = aKey.GetChar( nIndex );
             nMnemonicIndex = ImplGetMnemonicIndex( c );
             if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
             {
                 if ( maMnemonics[nMnemonicIndex] )
                 {
-                    if ( maMnemonics[nMnemonicIndex] < nBestCount )
-                    {
-                        nBestCount = maMnemonics[nMnemonicIndex];
-                        nBestIndex = nIndex;
-                        nBestMnemonicIndex = nMnemonicIndex;
-                        if ( nBestCount == 2 )
-                            break;
-                    }
+                    maMnemonics[nMnemonicIndex] = 0;
+                    rKey.Insert( MNEMONIC_CHAR, nIndex );
+                    bChanged = TRUE;
+                    break;
                 }
             }
 
+            // Search for next word
+            do
+            {
+                nIndex++;
+                c = aKey.GetChar( nIndex );
+                if ( c == ' ' )
+                    break;
+            }
+            while ( nIndex < nLen );
             nIndex++;
         }
         while ( nIndex < nLen );
 
-        if ( nBestCount != 0xFFFF )
+        // 2) search for a unique/uncommon character
+        if ( !bChanged )
         {
-            maMnemonics[nBestMnemonicIndex] = 0;
-            rKey.Insert( MNEMONIC_CHAR, nBestIndex );
-            bChanged = TRUE;
+            USHORT      nBestCount = 0xFFFF;
+            USHORT      nBestMnemonicIndex;
+            xub_StrLen  nBestIndex;
+            nIndex = 0;
+            do
+            {
+                c = aKey.GetChar( nIndex );
+                nMnemonicIndex = ImplGetMnemonicIndex( c );
+                if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
+                {
+                    if ( maMnemonics[nMnemonicIndex] )
+                    {
+                        if ( maMnemonics[nMnemonicIndex] < nBestCount )
+                        {
+                            nBestCount = maMnemonics[nMnemonicIndex];
+                            nBestIndex = nIndex;
+                            nBestMnemonicIndex = nMnemonicIndex;
+                            if ( nBestCount == 2 )
+                                break;
+                        }
+                    }
+                }
+
+                nIndex++;
+            }
+            while ( nIndex < nLen );
+
+            if ( nBestCount != 0xFFFF )
+            {
+                maMnemonics[nBestMnemonicIndex] = 0;
+                rKey.Insert( MNEMONIC_CHAR, nBestIndex );
+                bChanged = TRUE;
+            }
         }
     }
+    else
+        nCJK = 1;
 
     // 3) Add English Mnemonic for CJK Text
     if ( !bChanged && (nCJK == 1) && rKey.Len() )
