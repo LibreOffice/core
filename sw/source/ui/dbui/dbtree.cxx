@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
+ *  last change: $Author: os $ $Date: 2001-09-06 13:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,10 +435,12 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     try
                     {
                         Any aTable = xTbls->getByName(sTableName);
-                        Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aTable.getValue();
+                        Reference<XPropertySet> xPropSet;
+                        aTable >>= xPropSet;
                         xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                     }
-                    catch(...){}
+                    catch(Exception&)
+                    {}
                 }
             }
             else
@@ -451,10 +453,12 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     try
                     {
                         Any aQuery = xQueries->getByName(sTableName);
-                        Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aQuery.getValue();
+                        Reference<XPropertySet> xPropSet;
+                        aQuery >>= xPropSet;
                         xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                     }
-                    catch(...){}
+                    catch(Exception&)
+                    {}
                 }
             }
 

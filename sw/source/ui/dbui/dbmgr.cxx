@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2001-09-04 12:40:59 $
+ *  last change: $Author: os $ $Date: 2001-09-06 13:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,8 +355,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
         return FALSE;
     Any aCol = xCols->getByName(rColumnName);
     Reference< XPropertySet > xColumnProps;
-    if(aCol.hasValue())
-        xColumnProps = *(Reference< XPropertySet >*)aCol.getValue();
+    aCol >>= xColumnProps;
 
     SwDBFormatData aFormatData;
     aFormatData.aNullDate = pParam->aNullDate;
@@ -470,8 +469,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
             {
                 Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
                 Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
-                if(aNull.hasValue())
-                    pImpl->pMergeData->aNullDate = *(util::Date*)aNull.getValue();
+                aNull >>= pImpl->pMergeData->aNullDate;
             }
         }
     }
@@ -666,7 +664,8 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 if(!xCols->hasByName(sColumn))
                     return;
                 Any aCol = xCols->getByName(sColumn);
-                Reference< XPropertySet > xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
+                Reference< XPropertySet > xColumnProp;
+                aCol >>= xColumnProp;
                 if(xColumnProp.is())
                 {
                     SwDBFormatData aDBFormat;
@@ -702,7 +701,8 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
             for(long i = 0; i < nLength; i++)
             {
                 Any aCol = xCols->getByName(pColNames[i]);
-                Reference< XPropertySet > xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
+                Reference< XPropertySet > xColumnProp;
+                aCol >>= xColumnProp;
                 SwDBFormatData aDBFormat;
                 sStr += GetDBField( xColumnProp, aDBFormat);
                 if (i < nLength - 1)
@@ -946,7 +946,8 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
         if(!xCols->hasByName(sEMailAddrFld))
             return FALSE;
         Any aCol = xCols->getByName(sEMailAddrFld);
-        Reference< XPropertySet > xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
+        Reference< XPropertySet > xColumnProp;
+        aCol >>= xColumnProp;
 
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
         if (!sSubject.Len())    // Kein leeres Subject wegen Automail (PB)
@@ -1122,7 +1123,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
             if(!xCols->hasByName(sEMailAddrFld))
                 return FALSE;
             Any aCol = xCols->getByName(sEMailAddrFld);
-            xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
+            aCol >>= xColumnProp;
         }
 
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
@@ -1362,7 +1363,8 @@ ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
             Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
             if(aFormats.hasValue())
             {
-                Reference<XNumberFormatsSupplier> xSuppl = *(Reference<util::XNumberFormatsSupplier>*) aFormats.getValue();
+                Reference<XNumberFormatsSupplier> xSuppl;
+                aFormats >>= xSuppl;
                 if(xSuppl.is())
                 {
                     xNumberFormats = xSuppl->getNumberFormats();
@@ -1424,7 +1426,8 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
         if(xCols->hasByName(rColNm))
         {
             Any aCol = xCols->getByName(rColNm);
-            Reference <XPropertySet> xCol = *(Reference <XPropertySet>*)aCol.getValue();
+            Reference <XPropertySet> xCol;
+            aCol >>= xCol;
             Any aType = xCol->getPropertyValue(C2S("Type"));
             aType >>= nRet;
         }
@@ -1484,7 +1487,8 @@ Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(Reference<sdbc
                 try
                 {
                     Any aTable = xTbls->getByName(rTableOrQuery);
-                    Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aTable.getValue();
+                    Reference<XPropertySet> xPropSet;
+                    aTable >>= xPropSet;
                     xRet = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                 }
                 catch(Exception&){}
@@ -1500,7 +1504,8 @@ Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(Reference<sdbc
                 try
                 {
                     Any aQuery = xQueries->getByName(rTableOrQuery);
-                    Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aQuery.getValue();
+                    Reference<XPropertySet> xPropSet;
+                    aQuery >>= xPropSet;
                     xRet = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                 }
                 catch(Exception&){}

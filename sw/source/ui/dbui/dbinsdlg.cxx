@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2001-09-04 12:16:28 $
+ *  last change: $Author: os $ $Date: 2001-09-06 13:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
             if(aFormats.hasValue())
             {
-                Reference<XNumberFormatsSupplier> xSuppl = *(Reference<util::XNumberFormatsSupplier>*) aFormats.getValue();
+                Reference<XNumberFormatsSupplier> xSuppl;
+                aFormats >>= xSuppl;
                 if(xSuppl.is())
                 {
                     xNumberFormats = xSuppl->getNumberFormats(  );
@@ -472,7 +473,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         {
             SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], n );
             Any aCol = xCols->getByName(pColNames[n]);
-            Reference <XPropertySet> xCol = *(Reference <XPropertySet>*)aCol.getValue();
+            Reference <XPropertySet> xCol;
+            aCol >>= xCol;
             Any aType = xCol->getPropertyValue(C2S("Type"));
             sal_Int32 eDataType;
             aType >>= eDataType;
@@ -1462,13 +1464,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
                 if(aFormats.hasValue())
                 {
-                    Reference<XNumberFormatsSupplier> xSuppl = *(Reference<util::XNumberFormatsSupplier>*) aFormats.getValue();
+                    Reference<XNumberFormatsSupplier> xSuppl;
+                    aFormats >>= xSuppl;
                     if(xSuppl.is())
                     {
                         Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
                         Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
-                        if(aNull.hasValue())
-                            aDBFormatData.aNullDate = *(util::Date*)aNull.getValue();
+                        aNull >>= aDBFormatData.aNullDate;
                     }
                 }
             }
@@ -1477,13 +1479,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
                 if(aFormats.hasValue())
                 {
-                    Reference<XNumberFormatsSupplier> xSuppl = *(Reference<util::XNumberFormatsSupplier>*) aFormats.getValue();
+                    Reference<XNumberFormatsSupplier> xSuppl;
+                    aFormats >>= xSuppl;
                     if(xSuppl.is())
                     {
                         Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
                         Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
-                        if(aNull.hasValue())
-                            aDBFormatData.aNullDate = *(util::Date*)aNull.getValue();
+                        aNull >>= aDBFormatData.aNullDate;
                     }
                 }
             }
@@ -1560,8 +1562,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             Reference <XNameAccess> xCols = xColsSupp->getColumns();
                             Any aCol = xCols->getByName(pDBCol->pColInfo->sColumn);
                             Reference< XPropertySet > xColumnProps;
-                            if(aCol.hasValue())
-                                xColumnProps = *(Reference< XPropertySet >*)aCol.getValue();
+                            aCol >>= xColumnProps;
                             pFld->SetExpansion( SwNewDBMgr::GetDBField(
                                                 xColumnProps,
                                                 aDBFormatData,
@@ -1582,8 +1583,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             Reference <XNameAccess> xCols = xColsSupp->getColumns();
                             Any aCol = xCols->getByName(pDBCol->pColInfo->sColumn);
                             Reference< XPropertySet > xColumnProps;
-                            if(aCol.hasValue())
-                                xColumnProps = *(Reference< XPropertySet >*)aCol.getValue();
+                            aCol >>= xColumnProps;
                             sIns = SwNewDBMgr::GetDBField(
                                                 xColumnProps,
                                                 aDBFormatData,
