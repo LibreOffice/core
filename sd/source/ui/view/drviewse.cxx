@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:36:49 $
+ *  last change: $Author: dl $ $Date: 2000-12-14 15:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
                     }
                 }
 
-                if ( !b3DObjMarked &&
+                if ( nMarkCnt > 0 && !b3DObjMarked &&
                      (!pDrView->IsShearAllowed() || !pDrView->IsDistortAllowed()) )
                 {
                     if ( pDrView->IsPresObjSelected() )
