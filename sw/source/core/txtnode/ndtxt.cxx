@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
+ *  last change: $Author: jp $ $Date: 2001-03-01 15:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,11 +896,11 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                 SwRedline* pRedl = rTbl[ i ];
                 if( pRedl->HasMark() )
                 {
-                    if(( this == &pRedl->GetBound(TRUE).nNode.GetNode() ||
-                         this == &pRedl->GetBound(FALSE).nNode.GetNode() ) &&
+                    SwPosition* pEnd = pRedl->End();
+                    if( this == &pEnd->nNode.GetNode() &&
                         *pRedl->GetPoint() != *pRedl->GetMark() &&
-                        aPos.GetIndex() == (pIdx = &pRedl->End()->
-                            nContent)->GetIndex() )
+                        aPos.GetIndex() ==
+                            (pIdx = &pEnd->nContent)->GetIndex() )
                         pIdx->Assign( &aTmpIdxReg, pIdx->GetIndex() );
                 }
                 else if( this == &pRedl->GetPoint()->nNode.GetNode() &&
