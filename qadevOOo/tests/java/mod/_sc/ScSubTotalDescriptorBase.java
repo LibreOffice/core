@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScSubTotalDescriptorBase.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:16:49 $
+ *  last change:$Date: 2003-12-11 12:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,13 @@ import util.SOfficeFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.GeneralFunction;
+import com.sun.star.sheet.SubTotalColumn;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XSubTotalCalculatable;
+import com.sun.star.sheet.XSubTotalDescriptor;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
@@ -166,7 +169,16 @@ public class ScSubTotalDescriptorBase extends TestCase {
         XSubTotalCalculatable xSTC = (XSubTotalCalculatable)
             UnoRuntime.queryInterface(XSubTotalCalculatable.class, oSheet);
 
-        XInterface oObj = xSTC.createSubTotalDescriptor(true);
+        SubTotalColumn[] columns = new SubTotalColumn[1];
+        SubTotalColumn column = new SubTotalColumn();
+        column.Column = 3;
+        column.Function = GeneralFunction.SUM;
+        columns[0] = column;
+
+        XSubTotalDescriptor desc = xSTC.createSubTotalDescriptor(true);
+        desc.addNew(columns, 1);
+
+        XInterface oObj = desc;
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
         return tEnv;
