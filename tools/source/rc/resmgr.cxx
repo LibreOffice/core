@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-22 12:46:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,15 @@
 #include <urlobj.hxx>
 #endif
 
+#ifndef _ISOLANG_HXX
+#include <isolang.hxx>
+#endif
+
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
 #include "simplerm.hxx"
 #endif
+
+#include "isofallback.hxx"
 
 #include <functional>
 #include <algorithm>
@@ -1159,7 +1165,14 @@ void* ResMgr::Increment( USHORT nSize )
     return pClassRes;
 }
 
-// -----------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//
+// method left here for SDK compatibility,
+// used in "framework/source/services/substitutepathvars.cxx"
+//
+// phone numbers no longer in use for resource files
+//
+//---------------------------------------------------------------------------
 
 const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 {
@@ -1340,43 +1353,82 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 // -----------------------------------------------------------------------
 
 ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
-                              LanguageType nType,
+                              ::com::sun::star::lang::Locale aLocale,
                               const UniString* pAppName,
                               const UniString* pResPath )
 {
+    ByteString aLanguage(rtl::OUStringToOString(aLocale.Language, RTL_TEXTENCODING_UTF8));
+//    ByteString aLanguage = aLocale.Language;  // doesn't compile
+
+//    aLanguage = aLocale.Language;             // compiles...
+    //legal shortcut?
+    if ( ! aLocale.Language.equalsIgnoreAsciiCase(aLocale.Country))
+    {
+        aLanguage += "-";
+        aLanguage += ByteString(rtl::OUStringToOString(aLocale.Country, RTL_TEXTENCODING_UTF8));
+    }
+
     // Suchreihenfolge festlegen
-    const sal_Char* pLang[6];
+    ByteString aLang[LOCALE_MAX_FALLBACK + 1];
 
     // Resourcefile suchen
     UniString aName;
     InternalResMgr* pInternalResMgr = NULL;
     int i;
-    for ( i = 0; i < 6; ++i )
-    {
-        pLang[i] = GetLang( nType, i );
 
-        if ( pLang[i] && (i == 0 || pLang[i] != pLang[0]) )
+    aLang[0] = aLanguage;
+
+    for ( i = 0; i < LOCALE_MAX_FALLBACK ; ++i )
+    {
+        if ( aLang[i].Len() != 0 && (i == 0 || aLang[i] != aLang[0]) )
         {
             aName.AssignAscii( pPrefixName );
-            aName.AppendAscii( pLang[i] );
+            aName.AppendAscii( aLang[i].GetBuffer() );
             aName.AppendAscii( ".res" );
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "ResMgr::CreateIso, ISO Language : %s\n", aLanguage.GetBuffer() );
+            fprintf( stderr, "ResMgr::CreateIso, ISO Language : %s\n", pPrefixName );
+            fprintf( stderr, "ResMgr::CreateIso, Prio : %d\n", i );
+#endif
             pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, pAppName, pResPath );
             if ( pInternalResMgr )
                 return new ResMgr( pInternalResMgr );
+
+            aLang[i+1] = aLang[i];
+            GetIsoFallback( aLang[i+1] );
         }
     }
-
-    return SearchCreateResMgr( pPrefixName, nType );
+    return SearchCreateResMgr( pPrefixName, aLocale );
 }
 
 // -----------------------------------------------------------------------
 
 ResMgr* ResMgr::SearchCreateResMgr(
     const sal_Char* pPrefixName,
-    LanguageType& nType )
+    ::com::sun::star::lang::Locale& rLocale )
 {
-    if( nType == LANGUAGE_DONTKNOW )
-        nType = GetSystemUILanguage();
+    ByteString aLanguage;
+    ByteString aCountry;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "ResMgr::SearchCreateLocale, prefix : %s\n", pPrefixName );
+#endif
+
+    if( rLocale.Language.getLength() )
+    {
+        aLanguage = ByteString(rtl::OUStringToOString(rLocale.Language, RTL_TEXTENCODING_UTF8));
+        if( rLocale.Country.getLength() )
+        {
+            aLanguage += "-";
+            aLanguage = ByteString(rtl::OUStringToOString(rLocale.Country, RTL_TEXTENCODING_UTF8));
+            if( rLocale.Variant.getLength() )
+            {
+                aLanguage += "-";
+                aLanguage = ByteString(rtl::OUStringToOString(rLocale.Variant, RTL_TEXTENCODING_UTF8));
+            }
+        }
+    }
+    else
+        aLanguage = ConvertLanguageToIsoByteString( GetSystemUILanguage() );
 
     ::rtl::OUString aRtlUniAppFileName;
     osl_getExecutableFile( &aRtlUniAppFileName.pData );
@@ -1384,64 +1436,82 @@ ResMgr* ResMgr::SearchCreateResMgr(
     ::osl::FileBase::getSystemPathFromFileURL( aRtlUniAppFileName, aRtlAppFileName );
     String aAppFileName( aRtlAppFileName );
 
-    const sal_Char* pLang = GetLang( nType, 0 );
     String aBaseName( String::CreateFromAscii( pPrefixName ) );
     String aName( aBaseName );
-    aName.AppendAscii( pLang ? pLang : "" );
+    aName.AppendAscii( aLanguage.GetBuffer() );
     aName.AppendAscii( ".res" );
 
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "ResMgr::SearchCreateLocale, prefix : %s\n", pPrefixName );
+    fprintf( stderr, "ResMgr::SearchCreateLocale, ISO Language : %s\n", aLanguage.GetBuffer() );
+#endif
     InternalResMgr* pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, &aAppFileName, NULL );
     if ( pInternalResMgr )
+    {
+        rLocale.Language = rtl::OStringToOUString( aLanguage.GetToken( 0, '-' ), RTL_TEXTENCODING_UTF8);
+        rLocale.Country = rtl::OStringToOUString( aLanguage.GetToken( 1, '-' ), RTL_TEXTENCODING_UTF8);
+        rLocale.Variant = rtl::OStringToOUString( aLanguage.GetToken( 2, '-' ), RTL_TEXTENCODING_UTF8);
         return new ResMgr( pInternalResMgr );
+    }
 
-    static const LanguageType aLanguages[] =
+    if ( aLanguage.Len() )
     {
-        LANGUAGE_ENGLISH_US,
-        LANGUAGE_GERMAN,
-        LANGUAGE_FRENCH,
-        LANGUAGE_ITALIAN,
-        LANGUAGE_SPANISH,
-        LANGUAGE_DUTCH,
-        LANGUAGE_SWEDISH,
-        LANGUAGE_TURKISH,
-        LANGUAGE_SWEDISH_FINLAND,
-        LANGUAGE_PORTUGUESE_BRAZILIAN,
-        LANGUAGE_PORTUGUESE,
-        LANGUAGE_POLISH,
-        LANGUAGE_NORWEGIAN,
-        LANGUAGE_NORWEGIAN_NYNORSK,
-        LANGUAGE_NORWEGIAN_BOKMAL,
-        LANGUAGE_FINNISH,
-        LANGUAGE_DUTCH_BELGIAN,
-        LANGUAGE_DANISH,
-        LANGUAGE_CATALAN,
-        LANGUAGE_ESTONIAN,
-        LANGUAGE_CHINESE_SIMPLIFIED,
-        LANGUAGE_CHINESE_TRADITIONAL,
-        LANGUAGE_JAPANESE,
-        LANGUAGE_HUNGARIAN,
-        LANGUAGE_CZECH,
-        LANGUAGE_SLOVENIAN,
-        LANGUAGE_SLOVAK,
-        LANGUAGE_RUSSIAN,
-        LANGUAGE_ARABIC,
-        LANGUAGE_GREEK,
-        LANGUAGE_KOREAN,
-        LANGUAGE_KOREAN_JOHAB,
-        LANGUAGE_THAI,
-        LANGUAGE_HINDI,
-        LANGUAGE_HEBREW
-    };
+        ByteString aTestLang = aLanguage;
+        while ( GetIsoFallback( aTestLang ))
+        {
+            aName = aBaseName;
+            aName.AppendAscii( aTestLang.GetBuffer() );
+            aName.AppendAscii( ".res" );
 
-    for( size_t i = 0; i < sizeof( aLanguages )/sizeof( aLanguages[0] ); ++i )
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "ResMgr::SearchCreateLocale, ISO Language Fallback: %s\n", aTestLang.GetBuffer() );
+#endif
+
+            InternalResMgr* pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, &aAppFileName, NULL );
+            if ( pInternalResMgr )
+            {
+                rLocale.Language = rtl::OStringToOUString( aTestLang.GetToken( 0, '-' ), RTL_TEXTENCODING_UTF8);
+                rLocale.Country = rtl::OStringToOUString( aTestLang.GetToken( 1, '-' ), RTL_TEXTENCODING_UTF8);
+                rLocale.Variant = rtl::OStringToOUString( aTestLang.GetToken( 2, '-' ), RTL_TEXTENCODING_UTF8);
+                return new ResMgr( pInternalResMgr );
+            }
+        }
+    }
+    const IsoLangEntry* pLangEntry;
+    sal_Int32 nIndex = 0;
+    LanguageType nType = 0;
+    ByteString aLang;
+
+    //search any
+    while ( (pLangEntry = GetIsoLangEntry( nIndex )) )
     {
-        nType = aLanguages[i];
-        aName = aBaseName;
-        aName.AppendAscii( GetLang( nType, 0 ) );
-        aName.AppendAscii( ".res" );
-        pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, &aAppFileName, NULL );
-        if ( pInternalResMgr )
-            return new ResMgr( pInternalResMgr );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "ISO Language : %d\n", nIndex );
+        fprintf( stderr, "ISO Language : %d\n", pLangEntry->meLang );
+        fprintf( stderr, "ISO Language : %s\n", ConvertLanguageToIsoByteString( pLangEntry->meLang ).GetBuffer() );
+        fprintf( stderr, "ISO Language : %s\n", pPrefixName );
+#endif
+        aLanguage = pLangEntry->maLangStr;
+        aCountry = pLangEntry->maCountry;
+        aLanguage.Append( "-" );
+        aLanguage.Append( aCountry );
+
+        for( int j = 0; j < 2; j++ )
+        {
+            aName = aBaseName;
+            aName.AppendAscii( aLanguage.GetBuffer() );
+            aName.AppendAscii( ".res" );
+            pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, &aAppFileName, NULL );
+            if ( pInternalResMgr )
+            {
+                rLocale.Language = rtl::OStringToOUString( aLanguage.GetToken( 0, '-' ), RTL_TEXTENCODING_UTF8);
+                rLocale.Country = rtl::OStringToOUString( aLanguage.GetToken( 1, '-' ), RTL_TEXTENCODING_UTF8);
+                rLocale.Variant = rtl::OStringToOUString( aLanguage.GetToken( 2, '-' ), RTL_TEXTENCODING_UTF8);
+                return new ResMgr( pInternalResMgr );
+            }
+            aLanguage = pLangEntry->maLangStr;
+        }
+        nIndex++;
     }
     return NULL;
 }
@@ -1490,23 +1560,30 @@ ResHookProc ResMgr::GetReadStringHook()
 // =======================================================================
 
 SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
-                            LanguageType nType,
+                            const ::com::sun::star::lang::Locale& rLocale,
                             const UniString* pAppName,
                             const UniString* pResPath )
 {
+    ByteString aLanguage(rtl::OUStringToOString(rLocale.Language, RTL_TEXTENCODING_UTF8));
+
+    //legal shortcut?
+    if ( ! rLocale.Language.equalsIgnoreAsciiCase(rLocale.Country))
+    {
+        aLanguage += "-";
+        aLanguage += ByteString(rtl::OUStringToOString(rLocale.Country, RTL_TEXTENCODING_UTF8));
+    }
     // Suchreihenfolge festlegen
-    const sal_Char* pLang[6];
+    ByteString aLang[6];
+    aLang[0] = aLanguage;
 
     // Resourcefile suchen
     UniString aName;
-    for ( int i = 0; i < 6; ++i )
+    for ( int i = 0; i < LOCALE_MAX_FALLBACK; ++i )
     {
-        pLang[i] = ResMgr::GetLang( nType, i );
-
-        if ( pLang[i] && (i == 0 || pLang[i] != pLang[0]) )
+        if ( aLang[i].Len() != 0 && (i == 0 || aLang[i] != aLang[0]) )
         {
             aName.AssignAscii( pPrefixName );
-            aName.AppendAscii( pLang[i] );
+            aName.AppendAscii( aLang[i].GetBuffer() );
             aName.AppendAscii( ".res" );
             m_pResImpl = InternalResMgr::Create( aName, pAppName, pResPath );
             if ( m_pResImpl )
@@ -1514,12 +1591,13 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
                 m_pResImpl->AddRef();
                 break;
             }
+            aLang[i+1] = aLang[i];
+            GetIsoFallback( aLang[i+1] );
         }
     }
 }
 
 // -----------------------------------------------------------------------
-
 SimpleResMgr::~SimpleResMgr()
 {
     if(m_pResImpl)
