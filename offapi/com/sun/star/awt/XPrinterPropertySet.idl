@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrinterPropertySet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,25 +80,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XPrinterPropertySet
 /** represents an extended property set for printer properties.
 
-
-
     <p>All properties are vetoable properties. If you change the properties
-    between <member scope="com::sun::star::awt">XPrinter::startPage</member> and
-    <member scope="com::sun::star::awt">XPrinter::endPage</member>, a
+    between <member scope="com::sun::star::awt">XPrinter::startPage</member>
+    and <member scope="com::sun::star::awt">XPrinter::endPage</member>, a
     <type scope="com::sun::star::beans">PropertyVetoException</type>
-    is thrown.
+    is thrown.</p>
 
-    </p>@see XPrinter
-        @see XInfoPrinter
+    @see XPrinter
+    @see XInfoPrinter
  */
 interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinterPropertySet::setHorizontal
     /** sets the orientation.
      */
     void setHorizontal( [in] boolean bHorizontal )
@@ -107,22 +103,15 @@ interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XPrinterPropertySet::getFormDescriptions
-    /** @returns
-                    descriptions of all available printer forms.
+    /** returns descriptions of all available printer forms.
      */
     sequence<string> getFormDescriptions();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinterPropertySet::selectForm
-    /** sets the form that should used.
+    /** sets the form that should be used.
 
-
-
-        <p>Indirectly a printer is selected.
-
-        </p>
+        <p>Indirectly a printer is selected.</p>
      */
     void selectForm( [in] string aFormDescription )
             raises( com::sun::star::beans::PropertyVetoException,
@@ -130,23 +119,16 @@ interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XPrinterPropertySet::getBinarySetup
-    /** @returns
-                    a binary encoded version of the printer setup.
+    /** returns a binary encoded version of the printer setup.
      */
     sequence<byte> getBinarySetup();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPrinterPropertySet::setBinarySetup
     /** sets the data specific to the printer driver.
 
-
-
         <p>Get this data from the info printer and set the data to the
-        printer.
-
-        </p>
+        printer.</p>
      */
     void setBinarySetup( [in] sequence<byte> data )
             raises( com::sun::star::beans::PropertyVetoException,
