@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-21 09:57:08 $
+ *  last change: $Author: tl $ $Date: 2000-12-22 12:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,15 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
+//#ifndef _RTL_USTRBUF_HXX_
+//#include <rtl/ustrbuf.hxx>
+//#endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-
-#include "misc.hxx"
-#include "defs.hxx"
-#include "lngprops.hxx"
+#ifndef _SVTOOLS_LNGMISC_HXX_
+#include <svtools/lngmisc.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -104,6 +103,12 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
+
+#include "misc.hxx"
+#include "defs.hxx"
+#include "lngprops.hxx"
+#include <hyphdta.hxx>
+
 
 using namespace utl;
 using namespace osl;
@@ -310,82 +315,153 @@ uno::Sequence< INT16 >
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define SOFT_HYPHEN ((sal_Unicode) 0x00AD)
-#define HARD_HYPHEN ((sal_Unicode) 0x2011)
+#define SOFT_HYPHEN     SVT_SOFT_HYPHEN
+#define HARD_HYPHEN     SVT_HARD_HYPHEN
 
 
-inline BOOL IsHyphen( sal_Unicode cChar )
+static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
+        Reference< XHyphenatedWord > &rxHyphWord )
 {
-    return cChar == SOFT_HYPHEN  ||  cChar == HARD_HYPHEN;
+    BOOL bRes = rxHyphWord->isAlternativeSpelling();
+    if (bRes)
+    {
+        OUString aWord( rxHyphWord->getWord() ),
+                 aHyphenatedWord( rxHyphWord->getHyphenatedWord() );
+        INT16   nHyphenationPos     = rxHyphWord->getHyphenationPos(),
+                nHyphenPos          = rxHyphWord->getHyphenPos();
+        const sal_Unicode *pWord    = aWord.getStr(),
+                          *pAltWord = aHyphenatedWord.getStr();
+
+        // at least char changes directly left or right to the hyphen
+        // should(!) be handled properly...
+        //! nHyphenationPos and nHyphenPos differ at most by 1 (see above)
+        //! Beware: eg "Schiffahrt" in German (pre spelling reform)
+        //! proves to be a bit nasty (nChgPosLeft and nChgPosRight overlap
+        //! to an extend.)
+
+        // find first different char from left
+        sal_Int32   nPosL    = 0,
+                    nAltPosL = 0;
+        for (INT16 i = 0 ;  pWord[ nPosL ] == pAltWord[ nAltPosL ];  nPosL++, nAltPosL++, i++)
+        {
+            // restrict changes area beginning to the right to
+            // the char immediately following the hyphen.
+            //! serves to insert the additional "f" in "Schiffahrt" at
+            //! position 5 rather than position 6.
+            if (i >= nHyphenationPos + 1)
+                break;
+        }
+
+        // find first different char from right
+        sal_Int32   nPosR    = aWord.getLength() - 1,
+                    nAltPosR = aHyphenatedWord.getLength() - 1;
+        for ( ;  nPosR >= nPosL  &&  nAltPosR >= nAltPosL
+                    &&  pWord[ nPosR ] == pAltWord[ nAltPosR ];
+                nPosR--, nAltPosR--)
+            ;
+
+        rnChgPos = (INT16) nPosL;
+        rnChgLen = nPosR - nPosL + 1;
+        DBG_ASSERT( rnChgLen >= 0, "nChgLen < 0");
+
+        sal_Int32 nTxtStart = nPosL;
+        sal_Int32 nTxtLen   = nAltPosL - nPosL + 1;
+        rRplc = aHyphenatedWord.copy( nTxtStart, nTxtLen );
+    }
+    return bRes;
 }
 
 
-inline BOOL IsControlChar( sal_Unicode cChar )
+static INT16 GetOrigWordPos( const OUString &rOrigWord, INT16 nHyphenPos )
 {
-    return cChar < (sal_Unicode) ' ';
-}
-
-
-inline BOOL HasHyphens( const OUString &rTxt )
-{
-    return  rTxt.indexOf( SOFT_HYPHEN ) != -1  ||
-            rTxt.indexOf( HARD_HYPHEN ) != -1;
-}
-
-
-INT32 GetNumControlChars( const OUString &rTxt )
-{
-    INT32 nCnt = 0;
-    INT32 nLen = rTxt.getLength();
+    INT32 nLen = rOrigWord.getLength();
+    INT32 nNotSkippedChars = 0;
     for (INT32 i = 0;  i < nLen;  ++i)
     {
-        if (IsControlChar( rTxt[i] ))
-            ++nCnt;
+        sal_Unicode cChar = rOrigWord[i];
+        BOOL bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
+        if (!bSkip)
+            ++nNotSkippedChars;
+        if (nNotSkippedChars > nHyphenPos)
+            break;
     }
-    return nCnt;
+    return i < nLen ? i : -1;
 }
 
 
-BOOL RemoveHyphens( OUString &rTxt )
+INT32 GetPosInWordToCheck( const OUString &rTxt, INT32 nPos )
 {
-    BOOL bModified = FALSE;
-    if (HasHyphens( rTxt ))
+    INT32 nRes = -1;
+    INT32 nLen = rTxt.getLength();
+    if (0 <= nPos  &&  nPos < nLen)
     {
-        String aTmp( rTxt );
-        aTmp.EraseAllChars( SOFT_HYPHEN );
-        aTmp.EraseAllChars( HARD_HYPHEN );
-        rTxt = aTmp;
-        bModified = TRUE;
-    }
-    return bModified;
-}
-
-
-BOOL RemoveControlChars( OUString &rTxt )
-{
-    BOOL bModified = FALSE;
-    INT32 nCtrlChars = GetNumControlChars( rTxt );
-    if (nCtrlChars)
-    {
-        INT32 nLen  = rTxt.getLength();
-        INT32 nSize = nLen - nCtrlChars;
-        OUStringBuffer aBuf( nSize );
-        INT32 nCnt = 0;
-        for (INT32 i = 0;  i < nLen;  ++i)
+        INT32 nSkipped = 0;
+        BOOL bSkip;
+        for (INT32 i = 0;  i <= nPos;  ++i)
         {
             sal_Unicode cChar = rTxt[i];
-            if (!IsControlChar( cChar ))
-            {
-                DBG_ASSERT( nCnt < nSize, "index out of range" );
-                aBuf.setCharAt( nCnt++, cChar );
-            }
+            bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
+            if (bSkip)
+                ++nSkipped;
         }
-        DBG_ASSERT( nCnt == nSize, "wrong size" );
-        rTxt = aBuf.makeStringAndClear();
-        bModified = TRUE;
+        nRes = nPos - nSkipped;
     }
-    return bModified;
+    return nRes;
 }
+
+
+Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
+        const OUString &rOrigWord,
+        Reference< XHyphenatedWord > &rxHyphWord )
+{
+    Reference< XHyphenatedWord > xRes;
+    if (rOrigWord.getLength() && rxHyphWord.is())
+    {
+        INT16    nChgPos = 0,
+                 nChgLen = 0;
+        OUString aRplc;
+        BOOL bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
+
+        OUString aOrigHyphenatedWord;
+        INT16 nOrigHyphenPos = -1;
+        if (!bAltSpelling)
+        {
+#ifdef DEBUG
+            OUString aWord( rxHyphWord->getWord() );
+#endif
+            aOrigHyphenatedWord = rOrigWord;
+            nOrigHyphenPos = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenPos() );
+        }
+        else
+        {
+            OUString aLeft, aRight;
+            INT16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
+            aLeft = rOrigWord.copy( 0, nPos );
+            nPos = GetOrigWordPos( rOrigWord, nChgPos + nChgLen );
+            aRight = rOrigWord.copy( nPos );
+
+            aOrigHyphenatedWord =  aLeft;
+            aOrigHyphenatedWord += aRplc;
+            aOrigHyphenatedWord += aRight;
+
+            nOrigHyphenPos = aLeft.getLength() +
+                                    rxHyphWord->getHyphenPos() - nChgPos;
+        }
+
+        if (nOrigHyphenPos == -1)
+            DBG_ERROR( "failed to get nOrigHyphenPos" );
+        else
+        {
+            INT16 nLang = LocaleToLanguage( rxHyphWord->getLocale() );
+            xRes = new HyphenatedWord(
+                        rxHyphWord->getWord(), nLang, rxHyphWord->getHyphenationPos(),
+                        aOrigHyphenatedWord, nOrigHyphenPos );
+        }
+
+    }
+    return xRes;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 

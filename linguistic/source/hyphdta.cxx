@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdta.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:36 $
+ *  last change: $Author: tl $ $Date: 2000-12-22 12:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
+#ifndef _SVTOOLS_LNGMISC_HXX_
+#include <svtools/lngmisc.hxx>
+#endif
 
 //using namespace utl;
 using namespace osl;
@@ -104,7 +107,10 @@ HyphenatedWord::HyphenatedWord(const OUString &rWord, INT16 nLang, INT16 nHPos,
     nHyphenationPos (nHPos),
     nHyphPos        (nPos)
 {
-    bIsAltSpelling = rWord != rHyphWord;
+    OUString aTmp( rHyphWord );
+    RemoveHyphens( aTmp );
+    RemoveControlChars( aTmp );
+    bIsAltSpelling = rWord != aTmp;
 }
 
 

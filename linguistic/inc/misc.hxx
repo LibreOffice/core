@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-21 09:56:55 $
+ *  last change: $Author: tl $ $Date: 2000-12-22 12:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSEARCHABLEDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATEDWORD_HPP_
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #endif
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
@@ -175,10 +178,13 @@ LanguageType
 
 ///////////////////////////////////////////////////////////////////////////
 
-BOOL        HasHyphens( const rtl::OUString &rTxt );
-INT32       GetNumControlChars( const rtl::OUString &rTxt );
-BOOL        RemoveHyphens( rtl::OUString &rTxt );
-BOOL        RemoveControlChars( rtl::OUString &rTxt );
+INT32       GetPosInWordToCheck( const rtl::OUString &rTxt, INT32 nPos );
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::linguistic2::XHyphenatedWord >
+            RebuildHyphensAndControlChars( const rtl::OUString &rOrigWord,
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XHyphenatedWord > &rxHyphWord );
 
 ///////////////////////////////////////////////////////////////////////////
 
