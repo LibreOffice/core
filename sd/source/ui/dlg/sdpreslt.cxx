@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-18 14:30:41 $
+ *  last change: $Author: dl $ $Date: 2001-05-18 15:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "docshell.hxx"
 #include "viewshel.hxx"
 
+#define DOCUMENT_TOKEN (sal_Unicode('#'))
 
 /*************************************************************************
 |*
@@ -182,16 +183,28 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     short nId = aVS.GetSelectItemId();
     BOOL bLoad = nId > nLayoutCount;
-
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad ) );
+
+    String aLayoutName;
+
+    if( bLoad )
+    {
+        aLayoutName = aName;
+        aLayoutName.Append( DOCUMENT_TOKEN );
+        aLayoutName.Append( *(String*)pLayoutNames->GetObject( nId - 1 ) );
+    }
+    else
+    {
+        aLayoutName = *(String*)pLayoutNames->GetObject( nId - 1 );
+        if( aLayoutName == aStrNone )
+            aLayoutName.Erase(); //  so wird "- keine -" codiert (s.u.)
+    }
+
+    rOutAttrs.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aLayoutName ) );
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_MASTER_PAGE, aCbxMasterPage.IsChecked() ) );
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, aCbxCheckMasters.IsChecked() ) );
-
-    String* pName = (String*)pLayoutNames->GetObject( nId - 1 );
-    if( *pName == aStrNone )
-        pName->Erase(); //  so wird "- keine -" codiert (s.u.)
-    rOutAttrs.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, *pName ) );
 }
+
 
 /*************************************************************************
 |*
@@ -322,11 +335,27 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, p)
                 {
                     SdDrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
 
-                    SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
+/*                  SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
                     pLayoutNames->Insert( new String( aName ), LIST_APPEND );
 
                     Bitmap aBitmap( pTemplDocSh->GetPagePreviewBitmap( pMaster, 90 ) );
                     aVS.InsertItem( (USHORT) pLayoutNames->Count(), aBitmap, aName);
+*/
+                    USHORT nCount = pTemplDoc->GetMasterPageCount();
+
+                    for (USHORT nLayout = 0; nLayout < nCount; nLayout++)
+                    {
+                        SdPage* pMaster = (SdPage*) pTemplDoc->GetMasterPage(nLayout);
+                        if (pMaster->GetPageKind() == PK_STANDARD)
+                        {
+                            String aLayoutName(pMaster->GetLayoutName());
+                            aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
+                            pLayoutNames->Insert(new String(aLayoutName), LIST_APPEND);
+
+                            Bitmap aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90));
+                            aVS.InsertItem((USHORT)pLayoutNames->Count(), aBitmap, aLayoutName);
+                        }
+                    }
                 }
                 else
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-18 14:33:02 $
+ *  last change: $Author: dl $ $Date: 2001-05-18 15:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ TYPEINIT1( FuPresentationLayout, FuPoor );
 
 #define POOL_BUFFER_SIZE        (USHORT)32768
 #define DOCUMENT_BUFFER_SIZE    (USHORT)32768
-
+#define DOCUMENT_TOKEN (sal_Unicode('#'))
 
 /*************************************************************************
 |*
@@ -223,14 +223,17 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
 
         if (bLoad)
         {
-            SdDrawDocument* pTempDoc = pDoc->OpenBookmarkDoc(aFile);
+            String aFileName = aFile.GetToken( 0, DOCUMENT_TOKEN );
+            SdDrawDocument* pTempDoc = pDoc->OpenBookmarkDoc( aFileName );
 
             // #69581: If I chosed the standard-template I got no filename and so I get no
             //         SdDrawDocument-Pointer. But the method SetMasterPage is able to handle
             //         a NULL-pointer as a Standard-template ( look at SdDrawDocument::SetMasterPage )
+            String aLayoutName;
+            if( pTempDoc )
+                aLayoutName = aFile.GetToken( 1, DOCUMENT_TOKEN );
 
-            // Erste MasterPage aus pTempDoc verwenden
-            pDoc->SetMasterPage(nSelectedPage, String(), pTempDoc, bMasterPage, bCheckMasters);
+            pDoc->SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
             pDoc->CloseBookmarkDoc();
         }
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 13:45:13 $
+ *  last change: $Author: dl $ $Date: 2001-05-18 15:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1885,11 +1885,11 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             // Testnamen bilden
             aTest = aName;              // Standard, Standard1, Standard2, ...
             if (nCount > 0)
-                aTest += nCount;
+                aTest += String::CreateFromInt32( nCount );
 
             // gibt's schon eine, die so heisst?
             bNotANewName = FALSE;
-            for (USHORT nMPg = 0; nMPg < nMPgCount; nMPg++)
+            for (USHORT nMPg = 1; nMPg < nMPgCount; nMPg++)
             {
                 const SdrPage* pTest = GetMasterPage(nMPg);
                 String aPageLayoutName(pTest->GetLayoutName());
