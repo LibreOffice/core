@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:29:57 $
+ *  last change: $Author: mba $ $Date: 2000-12-13 12:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
     FileBase::normalizePath( rName, aTmp );
 
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
-    if ( !pBroker )
+    if ( TRUE || !pBroker )
     {
         FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
     }
@@ -158,7 +158,7 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
 {
     rtl::OUString aRet;
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
-    if ( !pBroker )
+    if ( TRUE || !pBroker )
     {
         FileBase::getNormalizedPathFromFileURL( rName, aRet );
     }
