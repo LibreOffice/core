@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:01:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1978,7 +1978,7 @@ IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, pCtr)
             }
         }
     }
-    return NULL;
+    return 0;
 }
 
 void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
