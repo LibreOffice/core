@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:10 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,24 @@ static inline void __defaultConstructElements(
             __defaultConstructStruct(
                 pElements + (nElementSize * nPos),
                 (typelib_CompoundTypeDescription *)pElementTypeDescr );
+        }
+        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
+        break;
+    }
+    case typelib_TypeClass_ARRAY:
+    {
+        typelib_TypeDescription * pElementTypeDescr = 0;
+        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+        sal_Int32 nElementSize = pElementTypeDescr->nSize;
+
+        allocSeq( ppSequence, nElementSize, nAlloc );
+
+        char * pElements = (*ppSequence)->elements;
+        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        {
+            __defaultConstructArray(
+                pElements + (nElementSize * nPos),
+                (typelib_ArrayTypeDescription *)pElementTypeDescr );
         }
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@ namespace cppu
 //#### construction ################################################################################
 //##################################################################################################
 
-
 //--------------------------------------------------------------------------------------------------
 inline void __defaultConstructUnion(
     void * pMem,
@@ -106,6 +105,89 @@ inline void __defaultConstructStruct(
     {
         ::uno_type_constructData( (char *)pMem + pMemberOffsets[nDescr], ppTypeRefs[nDescr] );
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+inline void __defaultConstructArray(
+    void * pMem,
+    typelib_ArrayTypeDescription * pTypeDescr )
+{
+    typelib_TypeDescription * pElementType = NULL;
+    TYPELIB_DANGER_GET( &pElementType, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
+    sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
+    sal_Int32 nElementSize = pElementType->nSize;
+    sal_Int32 i;
+    switch ( pElementType->eTypeClass )
+    {
+    case typelib_TypeClass_CHAR:
+    case typelib_TypeClass_BOOLEAN:
+    case typelib_TypeClass_BYTE:
+    case typelib_TypeClass_SHORT:
+    case typelib_TypeClass_UNSIGNED_SHORT:
+    case typelib_TypeClass_LONG:
+    case typelib_TypeClass_UNSIGNED_LONG:
+    case typelib_TypeClass_HYPER:
+    case typelib_TypeClass_UNSIGNED_HYPER:
+    case typelib_TypeClass_FLOAT:
+    case typelib_TypeClass_DOUBLE:
+    case typelib_TypeClass_INTERFACE:
+        ::rtl_zeroMemory(pMem, nElementSize * nTotalElements);
+        break;
+
+    case typelib_TypeClass_STRING:
+        for (i=0; i < nTotalElements; i++)
+        {
+            rtl_uString** ppElement = (rtl_uString **)pMem + i;
+            *ppElement = 0;
+            RTL_USTRING_NEW( ppElement);
+        }
+        break;
+    case typelib_TypeClass_TYPE:
+        for (i=0; i < nTotalElements; i++)
+        {
+            typelib_TypeDescriptionReference** ppElement = (typelib_TypeDescriptionReference **)pMem + i;
+            *ppElement = __getVoidType();
+        }
+        break;
+    case typelib_TypeClass_ANY:
+        for (i=0; i < nTotalElements; i++)
+        {
+            __CONSTRUCT_EMPTY_ANY( (uno_Any *)pMem + i );
+        }
+        break;
+    case typelib_TypeClass_ENUM:
+        for (i=0; i < nTotalElements; i++)
+        {
+            *((int *)pMem + i) = ((typelib_EnumTypeDescription *)pElementType)->nDefaultEnumValue;
+        }
+        break;
+#ifdef CPPU_ASSERTIONS
+    case typelib_TypeClass_TYPEDEF:
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        break;
+#endif
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+        for (i=0; i < nTotalElements; i++)
+        {
+            __defaultConstructStruct( (sal_Char*)pMem + i * nElementSize, (typelib_CompoundTypeDescription *)pElementType );
+        }
+        break;
+    case typelib_TypeClass_UNION:
+        for (i=0; i < nTotalElements; i++)
+        {
+            __defaultConstructUnion( (sal_Char*)pMem + i * nElementSize, pElementType );
+        }
+        break;
+    case typelib_TypeClass_SEQUENCE:
+        for (i=0; i < nTotalElements; i++)
+        {
+            uno_Sequence** ppElement = (uno_Sequence **)pMem + i;
+            *ppElement = __getEmptySequence();
+        }
+        break;
+    }
+    TYPELIB_DANGER_RELEASE( pElementType );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,6 +263,18 @@ inline void __defaultConstructData(
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             __defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+        }
+        break;
+    case typelib_TypeClass_ARRAY:
+        if (pTypeDescr)
+        {
+            __defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
+        }
+        else
+        {
+            TYPELIB_DANGER_GET( &pTypeDescr, pType );
+            __defaultConstructArray( pMem, (typelib_ArrayTypeDescription *)pTypeDescr );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;

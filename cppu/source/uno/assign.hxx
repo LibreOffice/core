@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,126 @@ inline sal_Bool __assignStruct(
         }
     }
     return sal_True;
+}
+//--------------------------------------------------------------------------------------------------
+inline sal_Bool __assignArray(
+    void * pDest, void * pSource,
+    typelib_ArrayTypeDescription * pTypeDescr,
+    uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+{
+    typelib_TypeDescriptionReference * pElementTypeRef = ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
+    typelib_TypeDescription * pElementTypeDescr = NULL;
+    TYPELIB_DANGER_GET( &pElementTypeDescr, pElementTypeRef );
+    sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
+    sal_Int32 nElementSize = pElementTypeDescr->nSize;
+    sal_Int32 i;
+    sal_Bool bRet = sal_False;
+
+    switch ( pElementTypeRef->eTypeClass )
+    {
+    case typelib_TypeClass_CHAR:
+    case typelib_TypeClass_BOOLEAN:
+    case typelib_TypeClass_BYTE:
+    case typelib_TypeClass_SHORT:
+    case typelib_TypeClass_UNSIGNED_SHORT:
+    case typelib_TypeClass_LONG:
+    case typelib_TypeClass_UNSIGNED_LONG:
+    case typelib_TypeClass_HYPER:
+    case typelib_TypeClass_UNSIGNED_HYPER:
+    case typelib_TypeClass_FLOAT:
+    case typelib_TypeClass_DOUBLE:
+        for (i=0; i < nTotalElements; i++)
+        {
+            ::rtl_copyMemory((sal_Char *)pDest + i * nElementSize,
+                             (sal_Char *)pSource + i * nElementSize,
+                             nElementSize);
+        }
+        bRet = sal_True;
+        break;
+    case typelib_TypeClass_STRING:
+        for (i=0; i < nTotalElements; i++)
+        {
+            ::rtl_uString_assign( (rtl_uString **)pDest + i,
+                                  ((rtl_uString **)pSource)[i] );
+        }
+        bRet = sal_True;
+        break;
+    case typelib_TypeClass_TYPE:
+        for (i=0; i < nTotalElements; i++)
+        {
+            ::typelib_typedescriptionreference_release( *((typelib_TypeDescriptionReference **)pDest + i) );
+            TYPE_ACQUIRE(
+                *((typelib_TypeDescriptionReference **)pDest + i) = *((typelib_TypeDescriptionReference **)pSource + i) );
+
+        }
+        bRet = sal_True;
+        break;
+    case typelib_TypeClass_ANY:
+        for (i=0; i < nTotalElements; i++)
+        {
+            __destructAny( (uno_Any *)pDest + i, release );
+            __copyConstructAny( (uno_Any *)pDest + i, (uno_Any *)pSource + i,
+                                pElementTypeRef, pElementTypeDescr, acquire, 0 );
+        }
+        bRet = sal_True;
+        break;
+    case typelib_TypeClass_ENUM:
+        for (i=0; i < nTotalElements; i++)
+        {
+            *((int *)pDest + i) = *((int *)pSource + i);
+        }
+        bRet = sal_True;
+        break;
+#ifdef CPPU_ASSERTIONS
+    case typelib_TypeClass_TYPEDEF:
+        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        break;
+#endif
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+        for (i=0; i < nTotalElements; i++)
+        {
+            bRet = __assignStruct( (sal_Char *)pDest + i * nElementSize,
+                                   (sal_Char *)pSource + i * nElementSize,
+                                   (typelib_CompoundTypeDescription *)pElementTypeDescr,
+                                   queryInterface, acquire, release );
+            if ( !bRet )
+                break;
+        }
+        bRet = sal_True;
+        break;
+    case typelib_TypeClass_UNION:
+        for (i=0; i < nTotalElements; i++)
+        {
+            __destructUnion( (sal_Char*)pDest + i * nElementSize, pElementTypeDescr, release );
+            __copyConstructUnion( (sal_Char*)pDest + i * nElementSize,
+                                  (sal_Char*)pSource + i * nElementSize,
+                                  pElementTypeDescr, acquire, 0 );
+        }
+        bRet = sal_True;
+        break;
+    case typelib_TypeClass_SEQUENCE:
+        for (i=0; i < nTotalElements; i++)
+        {
+            __destructSequence( *((uno_Sequence **)pDest + i), pElementTypeRef, pElementTypeDescr, release );
+            ::osl_incrementInterlockedCount( &(*((uno_Sequence **)pSource + i))->nRefCount );
+            *((uno_Sequence **)pDest + i) = *((uno_Sequence **)pSource + i);
+        }
+        bRet = sal_True;
+        break;
+    case typelib_TypeClass_INTERFACE:
+        for (i=0; i < nTotalElements; i++)
+        {
+            __assignInterface( (void **)((sal_Char*)pDest + i * nElementSize),
+                               *(void **)((sal_Char*)pSource + i * nElementSize),
+                               acquire, release );
+        }
+        bRet = sal_True;
+        break;
+    }
+
+    TYPELIB_DANGER_RELEASE( pElementTypeDescr );
+    return bRet;
 }
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool __assignData(
@@ -465,6 +585,27 @@ inline sal_Bool __assignData(
                     pTypeDescr = pTypeDescr->pBaseTypeDescription;
                 if (pTypeDescr)
                     bRet = __assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+                TYPELIB_DANGER_RELEASE( pSourceTypeDescr );
+            }
+            return bRet;
+        }
+        return sal_False;
+    case typelib_TypeClass_ARRAY:
+        {
+            sal_Bool bRet = sal_False;
+            if (pSourceTypeDescr)
+            {
+                typelib_ArrayTypeDescription * pTypeDescr =
+                        (typelib_ArrayTypeDescription *)pSourceTypeDescr;
+                bRet = __assignArray( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
+            }
+            else
+            {
+                TYPELIB_DANGER_GET( &pSourceTypeDescr, pSourceType );
+                typelib_ArrayTypeDescription * pTypeDescr =
+                    (typelib_ArrayTypeDescription *)pSourceTypeDescr;
+                if ( pTypeDescr )
+                    bRet = __assignArray( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
                 TYPELIB_DANGER_RELEASE( pSourceTypeDescr );
             }
             return bRet;

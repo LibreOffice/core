@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,27 @@ inline void __destructStruct(
         ::uno_type_destructData(
             (char *)pValue + pMemberOffsets[nDescr], ppTypeRefs[nDescr], release );
     }
+}
+//--------------------------------------------------------------------------------------------------
+inline void __destructArray(
+    void * pValue,
+    typelib_ArrayTypeDescription * pTypeDescr,
+    uno_ReleaseFunc release )
+    throw ()
+{
+    typelib_TypeDescription * pElementType = NULL;
+    TYPELIB_DANGER_GET( &pElementType, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
+    sal_Int32 nElementSize = pElementType->nSize;
+    TYPELIB_DANGER_RELEASE( pElementType );
+
+    sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
+    for(sal_Int32 i=0; i < nTotalElements; i++)
+    {
+        ::uno_type_destructData((sal_Char *)pValue + i * nElementSize,
+            ((typelib_IndirectTypeDescription *)pTypeDescr)->pType, release );
+    }
+
+    typelib_typedescriptionreference_release(((typelib_IndirectTypeDescription *)pTypeDescr)->pType);
 }
 //==================================================================================================
 void destructSequence(
@@ -390,6 +411,18 @@ inline void __destructData(
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             __destructStruct( pValue, (typelib_CompoundTypeDescription *)pTypeDescr, release );
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+        }
+        break;
+    case typelib_TypeClass_ARRAY:
+        if (pTypeDescr)
+        {
+            __destructArray( pValue, (typelib_ArrayTypeDescription *)pTypeDescr, release );
+        }
+        else
+        {
+            TYPELIB_DANGER_GET( &pTypeDescr, pType );
+            __destructArray( pValue, (typelib_ArrayTypeDescription *)pTypeDescr, release );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
