@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:43:26 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,61 +96,6 @@ SmViewShell * SmGetActiveView()
 }
 
 
-////////////////////////////////////////
-
-
-SvStream& operator << (SvStream& rStream, const SmFace& rFont)
-{
-    rStream.WriteByteString(ExportString(rFont.GetName()));
-    rStream << (ULONG)rFont.GetFamily();
-    rStream << (ULONG)GetSOStoreTextEncoding( rFont.GetCharSet() );
-    rStream << (ULONG)rFont.GetWeight();
-    rStream << (ULONG)rFont.GetItalic();
-
-    return rStream;
-}
-
-SvStream& operator >> (SvStream& rStream, SmFace& rFont)
-{
-    ULONG   nData;
-    ByteString  aByteStr;
-
-    rStream.ReadByteString( aByteStr );
-    rFont.SetName( ImportString( aByteStr ) );
-    rStream >> nData;
-    rFont.SetFamily((FontFamily)nData);
-    rStream >> nData;
-    rFont.SetCharSet( GetSOLoadTextEncoding( (rtl_TextEncoding) nData ) );
-    rStream >> nData;
-    rFont.SetWeight((FontWeight)nData);
-    rStream >> nData;
-    rFont.SetItalic((FontItalic)nData);
-
-    return rStream;
-}
-
-void ReadSM20Font(SvStream& rStream, Font& rFont)
-{
-    BOOL    bData;
-    ULONG   nData;
-    ByteString  aByteStr;
-
-    rStream.ReadByteString( aByteStr );
-    rFont.SetName( ImportString( aByteStr ) );
-    rStream >> nData;
-    rFont.SetFamily((FontFamily)nData);
-    rStream >> nData;
-    rFont.SetCharSet( GetSOLoadTextEncoding( (rtl_TextEncoding) nData ) );
-    rStream >> nData;
-    rFont.SetWeight((FontWeight)nData);
-    rStream >> bData;
-    if (bData)
-        rFont.SetItalic(ITALIC_NORMAL);
-    else
-        rFont.SetItalic(ITALIC_NONE);
-}
-
-
 ////////////////////////////////////////////////////////////
 //
 // SmRectCache
@@ -237,155 +182,6 @@ void SmRectCache::Reset()
 {
 }
 
-
-////////////////////////////////////////////////////////////
-
-#define TE_UCS2     "UCS2"
-#define PRE_TE      "<?"
-#define POST_TE     ")>"
-
-
-ByteString ConvertUnknownCharacter(sal_Unicode ch)
-{
-    ByteString aString( RTL_CONSTASCII_STRINGPARAM( PRE_TE TE_UCS2 ) );
-    aString.Append( "(" );
-    aString += ByteString::CreateFromInt32(ch);
-    aString += POST_TE;
-    return aString;
-}
-
-
-const ByteString ExportString( const String& rString )
-{
-    ByteString  aString;
-
-    rtl_TextEncoding nEnc = RTL_TEXTENCODING_MS_1252;
-    for (xub_StrLen i = 0; i < rString.Len(); i++)
-    {
-        sal_Unicode ch = rString.GetChar(i);
-        if ((ch != '\r') && (ch != '\n') && (ch != '\t'))
-        {
-            sal_Char cChar = ByteString::ConvertFromUnicode( ch, nEnc, FALSE );
-            if (cChar == 0)
-                aString += ConvertUnknownCharacter(ch);
-            else
-                aString += cChar;
-        }
-        else
-            aString += (sal_Char) ch;
-    }
-
-    aString.ConvertLineEnd(LINEEND_CRLF);
-    return aString;
-}
-
-#define TEXTENCODINGTAB_LEN     12
-
-static const struct
-{
-    const char         *pText;
-    rtl_TextEncoding    nEnc;
-} aTextEncodingTab[ TEXTENCODINGTAB_LEN ] =
-{
-    { TE_UCS2,        RTL_TEXTENCODING_UCS2 },  // is RTL_TEXTENCODING_UNICODE in 6.0
-    { "DONTKNOW",     RTL_TEXTENCODING_DONTKNOW },
-    { "ANSI",         RTL_TEXTENCODING_MS_1252 },
-    { "MAC",          RTL_TEXTENCODING_APPLE_ROMAN },
-    { "PC437",        RTL_TEXTENCODING_IBM_437 },
-    { "PC850",        RTL_TEXTENCODING_ASCII_US },
-    { "PC860",        RTL_TEXTENCODING_IBM_860 },
-    { "PC861",        RTL_TEXTENCODING_IBM_861 },
-    { "PC863",        RTL_TEXTENCODING_IBM_863 },
-    { "PC865",        RTL_TEXTENCODING_IBM_865 },
-    { "SYSTEM",       RTL_TEXTENCODING_DONTKNOW },
-    { "SYMBOL",       RTL_TEXTENCODING_SYMBOL }
-};
-
-int GetTextEncodingTabIndex( const String &rTxt, xub_StrLen nPos )
-{
-    int nRes = -1;
-    for (int i = 0;  i < TEXTENCODINGTAB_LEN  &&  nRes == -1;  ++i)
-    {
-        if (nPos == rTxt.SearchAscii( aTextEncodingTab[i].pText , nPos ))
-            nRes = i;
-    }
-    return nRes;
-}
-
-const String ImportString( const ByteString& rByteString )
-{
-    String  aString( rByteString, RTL_TEXTENCODING_MS_1252 );
-
-    const xub_StrLen nPreLen  = sizeof( PRE_TE ) - 1;
-    const xub_StrLen nPostLen = sizeof( POST_TE ) - 1;
-
-    xub_StrLen nPreStart = 0;
-    while( STRING_NOTFOUND != ( nPreStart =
-                                    aString.SearchAscii( PRE_TE, nPreStart )) )
-    {
-        if (aString.EqualsAscii( "<?>", nPreStart, 3 ))
-        {
-            nPreStart += 3;   // restart look-up after current found position
-            continue;
-        }
-
-        //
-        // convert 'unknown character' to unicode character
-        //
-        xub_StrLen nTeStart = nPreStart + nPreLen;
-        xub_StrLen nTeLen   = 0;
-        int nIdx = GetTextEncodingTabIndex( aString, nTeStart );
-        DBG_ASSERT( nIdx >= 0, "text-encoding is missing" );
-        rtl_TextEncoding nEnc = RTL_TEXTENCODING_DONTKNOW;
-        if (nIdx >= 0)
-        {
-            nEnc = aTextEncodingTab[ nIdx ].nEnc;
-            nTeLen = strlen( aTextEncodingTab[ nIdx ].pText );
-        }
-        if (RTL_TEXTENCODING_DONTKNOW == nEnc)
-            nEnc = osl_getThreadTextEncoding();
-        //
-        xub_StrLen nNumStart = nTeStart + nTeLen + 1, // +1 because of "("
-                   nReplLen;
-        xub_StrLen nPostStart = aString.SearchAscii( POST_TE, nNumStart );
-        String sRepl;
-        if( STRING_NOTFOUND != nPostStart )
-        {
-            INT32 nCharVal = aString.Copy( nNumStart, nPostStart - nNumStart ).ToInt32();
-            DBG_ASSERT( nCharVal != 0, "String -> Int32 failed ?" );
-            if (RTL_TEXTENCODING_UNICODE == nEnc)
-            {
-                if (nCharVal)
-                    sRepl = (sal_Unicode) nCharVal;
-            }
-            else
-            {
-                DBG_ASSERT( 0 <= nCharVal  &&  nCharVal <= 256,
-                        "character value out of range" );
-                sRepl = ByteString::ConvertToUnicode( nCharVal, nEnc );
-            }
-            DBG_ASSERT( sRepl.Len() || !nCharVal, "conversion failed" );
-            nReplLen = nPostStart + nPostLen - nPreStart;
-        }
-        else
-        {
-            DBG_ERROR( "import error: 'unknown character' delimiter missing" );
-            sRepl.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "<?>" ) );
-            nReplLen = nPreLen;
-        }
-
-        aString.Replace( nPreStart, nReplLen, sRepl );
-        nPreStart += sRepl.Len();
-    }
-
-    // in old 2.0 or 3.0 formulas the strings to be imported do have an
-    // additional '\0' character at the end that gets removed here.
-    if (aString.Len())
-        aString.EraseTrailingChars( '\0' );
-
-    aString.ConvertLineEnd();
-    return aString;
-}
 
 ////////////////////////////////////////////////////////////
 
@@ -492,46 +288,6 @@ void SmPickList::Clear()
 }
 
 
-SvStream& operator << (SvStream& rStream, const SmPickList& rPickList)
-{
-    USHORT      nPos;
-
-    rStream << 'p';
-    rStream << rPickList.nSize;
-    rStream << rPickList.Count();
-
-    for (nPos = 0; nPos < rPickList.Count(); nPos++)
-        rPickList.SaveItem(rStream, rPickList.GetObject(nPos));
-
-    return rStream;
-}
-
-SvStream& operator >> (SvStream& rStream, SmPickList& rPickList)
-{
-    char    cTag;
-    USHORT  nCount, nPos;
-    void   *pItem;
-
-    rPickList.Clear();
-
-    rStream >> cTag;
-    if (cTag == 'p')
-    {
-        rStream >> rPickList.nSize;
-        rStream >> nCount;
-
-        for (nPos = 0; nPos < nCount; nPos++)
-        {
-            pItem = rPickList.CreateItem(String());
-            rPickList.LoadItem(rStream, pItem);
-            rPickList.InsertPtr(nPos, pItem);
-        }
-    }
-
-    return rStream;
-}
-
-
 /**************************************************************************/
 /**************************************************************************/
 
@@ -589,16 +345,6 @@ String SmFontPickList::GetStringItem(void *pItem)
     }
 
     return (aString);
-}
-
-void SmFontPickList::LoadItem(SvStream& rStream, void *pItem)
-{
-    rStream >> *((Font *)pItem);
-}
-
-void SmFontPickList::SaveItem(SvStream& rStream, const void *pItem) const
-{
-    rStream << *(const Font *) pItem;
 }
 
 void SmFontPickList::Insert(const Font &rFont)
