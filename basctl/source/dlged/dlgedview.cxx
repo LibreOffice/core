@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:21:02 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 11:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ void DlgEdView::MarkListHasChanged()
 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
 
     if( pChildWin )
         ((PropBrw*)(pChildWin->GetWindow()))->Update( this );

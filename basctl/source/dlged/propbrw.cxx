@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-08 12:00:58 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 11:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@
 // PropBrwMgr
 //============================================================================
 
-SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_BROWSER)
+SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
 
 //----------------------------------------------------------------------------
 

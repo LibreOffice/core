@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:38:41 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 11:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,8 +873,8 @@ void DlgEditor::ShowProperties()
 {
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_BROWSER ) )
-        pViewFrame->ToggleChildWindow( SID_SHOW_BROWSER );
+    if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) )
+        pViewFrame->ToggleChildWindow( SID_SHOW_PROPERTYBROWSER );
 }
 
 //----------------------------------------------------------------------------
