@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-25 13:35:48 $
+ *  last change: $Author: pb $ $Date: 2001-09-26 09:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define PROPERTY_KEYWORDLIST    DEFINE_CONST_OUSTRING("KeywordList")
 #define PROPERTY_KEYWORDREF     DEFINE_CONST_OUSTRING("KeywordRef")
 #define PROPERTY_ANCHORREF      DEFINE_CONST_OUSTRING("KeywordAnchorForRef")
+#define PROPERTY_TITLEREF       DEFINE_CONST_OUSTRING("KeywordTitleForRef")
 #define PROPERTY_TITLE          DEFINE_CONST_OUSTRING("Title")
 #define HELP_URL                DEFINE_CONST_OUSTRING("vnd.sun.star.help://")
 #define HELP_SEARCH_TAG         DEFINE_CONST_OUSTRING("/?Query=")
@@ -467,7 +468,9 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         aPos.X() += 8;
         aPos.Y() += ( rUDEvt.GetRect().GetHeight() - rUDEvt.GetDevice()->GetTextHeight() ) / 2;
         String aEntry( GetEntry( rUDEvt.GetItemId() ) );
-        aEntry.Erase( aEntry.Search( '[' ) - 1 );
+        USHORT nPos = aEntry.Search( ';' );
+        if ( nPos != STRING_NOTFOUND )
+            aEntry.Erase( 0, nPos + 1 );
         rUDEvt.GetDevice()->DrawText( aPos, aEntry );
     }
     else
@@ -563,11 +566,15 @@ void IndexTabPage_Impl::InitializeIndex()
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aKeywordRefList;
             ::com::sun::star::uno::Any aAny3 = aCnt.getPropertyValue( PROPERTY_ANCHORREF );
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aAnchorRefList;
-            if ( ( aAny1 >>= aKeywordList ) && ( aAny2 >>= aKeywordRefList ) && ( aAny3 >>= aAnchorRefList ) )
+            ::com::sun::star::uno::Any aAny4 = aCnt.getPropertyValue( PROPERTY_TITLEREF );
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aTitleRefList;
+            if ( ( aAny1 >>= aKeywordList ) && ( aAny2 >>= aKeywordRefList ) &&
+                 ( aAny3 >>= aAnchorRefList ) && ( aAny4 >>= aTitleRefList ) )
             {
                 const ::rtl::OUString* pKeywords  = aKeywordList.getConstArray();
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pRefs = aKeywordRefList.getConstArray();
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pAnchorRefs = aAnchorRefList.getConstArray();
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pTitleRefs = aTitleRefList.getConstArray();
                 sal_Int32 i, nCount = aKeywordList.getLength();
                 DBG_ASSERT( aKeywordRefList.getLength() == nCount, "keywordlist and reflist with different length" );
                 DBG_ASSERT( aAnchorRefList.getLength() == nCount, "keywordlist and anchorlist with different length" );
@@ -578,17 +585,25 @@ void IndexTabPage_Impl::InitializeIndex()
                 {
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > aRefList = pRefs[i];
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > aAnchorList = pAnchorRefs[i];
+                    ::com::sun::star::uno::Sequence< ::rtl::OUString > aTitleList = pTitleRefs[i];
                     const ::rtl::OUString* pRef  = aRefList.getConstArray();
                     const ::rtl::OUString* pAnchor  = aAnchorList.getConstArray();
-                    sal_Int32 j, nRefCount = aRefList.getLength(), nAnchorCount = aAnchorList.getLength();
+                    const ::rtl::OUString* pTitles  = aTitleList.getConstArray();
 
+                    sal_Int32 j, nRefCount = aRefList.getLength(), nAnchorCount = aAnchorList.getLength();
                     String aKeywordPair( pKeywords[i] );
                     xub_StrLen nTokenCount = aKeywordPair.GetTokenCount();
+
                     if ( 1 == nTokenCount )
                     {
                         for ( j = 0; j < nRefCount; ++j )
                         {
                             String aKeyword( TRIM( aKeywordPair ) );
+                            if ( j > 0 )
+                            {
+                                aKeyword += DEFINE_CONST_UNICODE(" - ");
+                                aKeyword += String( pTitles[j] );
+                            }
                             while ( aIndexCB.GetEntryPos( aKeyword ) != LISTBOX_ENTRY_NOTFOUND )
                                 aKeyword += ' ';
                             nPos = aIndexCB.InsertEntry( aKeyword );
@@ -615,22 +630,17 @@ void IndexTabPage_Impl::InitializeIndex()
                                 aToken += ' ';
                             aIndexCB.InsertEntry( aToken );
                         }
-                        String aSubIndex( TRIM( aKeywordPair.GetToken( 0, ';', nIdx ) ) );
-                        aSubIndex.Insert( ' ', 0 );
                         for ( j = 0; j < nRefCount; ++j )
                         {
-                            if ( aIndexCB.GetEntryPos( aSubIndex ) != LISTBOX_ENTRY_NOTFOUND )
+                            String aSubIndex( TRIM( aKeywordPair ) );
+                            if ( j > 0 )
                             {
-                                sal_Unicode cChar = aSubIndex.GetChar( aSubIndex.Len() - 1 );
-                                if (  ']' == cChar || ' ' == cChar )
-                                    aSubIndex += ' ';
-                                else
-                                {
-                                    aSubIndex += DEFINE_CONST_UNICODE(" [");
-                                    aSubIndex += aIndex;
-                                    aSubIndex += ']';
-                                }
+                                aSubIndex += DEFINE_CONST_UNICODE(" - ");
+                                aSubIndex += String( pTitles[j] );
                             }
+
+                            while ( aIndexCB.GetEntryPos( aSubIndex ) != LISTBOX_ENTRY_NOTFOUND )
+                                aSubIndex += ' ';
                             nPos = aIndexCB.InsertEntry( aSubIndex );
                             String aData( pRef[j] );
                             String aAnchor = String( pAnchor[j] );
@@ -650,21 +660,8 @@ void IndexTabPage_Impl::InitializeIndex()
             }
         }
     }
-    catch( ::com::sun::star::ucb::ContentCreationException& )
-    {
-        DBG_ERRORFILE( "content creation exception" );
-    }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "command aborted exception" );
-    }
-    catch( ::com::sun::star::uno::RuntimeException& )
-    {
-        DBG_ERRORFILE( "runtime exception" );
-    }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
     }
 
     aIndexCB.SetUpdateMode( TRUE );
