@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 17:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SBASLTID_HRC
 #include <offmgr/sbasltid.hrc>
+#endif
+#ifndef _DBACCESS_SLOTID_HRC_
+#include "dbaccess_slotid.hrc"
 #endif
 
 #define ID_BROWSER_COPY                     SID_COPY
