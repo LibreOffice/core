@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-11 17:24:39 $
+ *  last change: $Author: er $ $Date: 2002-10-18 21:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,8 +344,8 @@ int SAL_CALL main (int argc, char **argv)
 {
 
 
-    if( argc < 5) {
-        printf( "usage : %s <locaLe> <XML inputfile> <destination file> <applicat.rdb location>\n", argv[0] );
+    if( argc < 6) {
+        printf( "usage : %s <locaLe> <XML inputfile> <destination file> <services.rdb location> <types.rdb location>\n", argv[0] );
         exit( 1 );
     }
 
@@ -354,7 +354,8 @@ int SAL_CALL main (int argc, char **argv)
     try
     {
         xSMgr = createRegistryServiceFactory(
-            ::rtl::OUString::createFromAscii(argv[4]) );
+            ::rtl::OUString::createFromAscii(argv[4]),
+            ::rtl::OUString::createFromAscii(argv[5]) );
     }
     catch ( Exception& )
     {
