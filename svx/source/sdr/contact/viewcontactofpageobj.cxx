@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:45:47 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,8 @@ namespace sdr
                 maDisplayInfo.SetPaintInfoRec(rDisplayInfo.GetPaintInfoRec());
                 maDisplayInfo.SetOutputDevice(mpOut);
 
-                // make MasterPages visible
-                maDisplayInfo.SetPagePainting(sal_True);
+                // No need to paint page itself
+                maDisplayInfo.SetPagePainting(sal_False);
             }
         }
 
