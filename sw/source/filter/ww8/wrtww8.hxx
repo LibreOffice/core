@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:55:56 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,25 +339,36 @@ public:
 class DrawObj
 {
 public:
-    WW8_CP mnCp;          // CP-Pos der Verweise
-    UINT32 mnShapeId;     // ShapeId for the SwFrmFmts
-    sw::Frame maCntnt;    // the frame
-    Point maParentPos;    // Points
-    INT32 mnThick;        // Border Thicknesses
-    short mnDirection;    // If BiDi or not
+    WW8_CP mnCp;                // CP-Pos der Verweise
+    UINT32 mnShapeId;           // ShapeId for the SwFrmFmts
+    sw::Frame maCntnt;          // the frame itself
+    Point maParentPos;          // Points
+    INT32 mnThick;              // Border Thicknesses
+    short mnDirection;          // If BiDi or not
+    unsigned int mnHdFtIndex;   // 0 for main text, +1 for each subsequent
+                                // msword hd/ft
 
-    DrawObj(const sw::Frame &rCntnt, WW8_CP nCp, Point aParentPos, short nDir)
+    DrawObj(const sw::Frame &rCntnt, WW8_CP nCp, Point aParentPos, short nDir,
+            unsigned int nHdFtIndex)
         : mnCp(nCp), mnShapeId(0), maCntnt(rCntnt), maParentPos(aParentPos),
-        mnThick(0), mnDirection(nDir) {}
+        mnThick(0), mnDirection(nDir), mnHdFtIndex(nHdFtIndex) {}
+    void SetShapeDetails(UINT32 nId, INT32 nThick);
 private:
     //No assignment
     DrawObj& operator=(const DrawObj&);
 };
 
+typedef std::vector<DrawObj> DrawObjVector;
+typedef DrawObjVector::iterator DrawObjIter;
+typedef DrawObjVector::const_iterator cDrawObjIter;
+
+typedef std::vector<DrawObj *> DrawObjPointerVector;
+typedef DrawObjPointerVector::iterator DrawObjPointerIter;
+
 class PlcDrawObj // PC for DrawObjects and Text-/OLE-/GRF-Boxes
 {
 private:
-    ::std::vector<DrawObj> maDrawObjs;  // vector of drawobjs
+    DrawObjVector maDrawObjs;  // vector of drawobjs
 protected:
     virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
         sal_uInt32 nLen) const = 0;
@@ -368,8 +379,7 @@ public:
     bool Append(SwWW8Writer&, WW8_CP nCp, const sw::Frame& rFmt,
         const Point& rNdTopLeft);
     int size() { return maDrawObjs.size(); };
-    std::vector<DrawObj> &GetObjArr() { return maDrawObjs; }
-    void SetShapeDetails(DrawObj &rShape, UINT32 nId, INT32 nThick );
+    DrawObjVector &GetObjArr() { return maDrawObjs; }
     virtual ~PlcDrawObj();
 private:
     //No copying
@@ -437,6 +447,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
                                 //       in/an dem ein Fly verankert ist
     USHORT nLastFmtId;          // Style of last TxtNode in normal range
     USHORT nUniqueList;         // current number for creating unique list names
+    unsigned int mnHdFtIndex;
 
     virtual ULONG WriteStorage();
 
@@ -630,6 +641,7 @@ public:
     const SfxItemSet* GetCurItemSet() const         { return pISet; }
     void SetCurItemSet( const SfxItemSet* pS )      { pISet = pS; }
 
+    void ExportPoolItemsToCHP(sw::PoolItems &rItems, USHORT nScript);
     void Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt,
         USHORT nScript);
     void Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd);
@@ -641,6 +653,9 @@ public:
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
     WW8_BRC TranslateBorderLine(const SvxBorderLine& pLine,
         USHORT nDist, bool bShadow);
+
+    unsigned int GetHdFtIndex() const { return mnHdFtIndex; }
+    void SetHdFtIndex(unsigned int nHdFtIndex) { mnHdFtIndex = nHdFtIndex; }
 
     static long GetDTTM( const DateTime& rDT );
 
@@ -679,8 +694,8 @@ public:
     USHORT DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,USHORT nVal);
 
     SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
-    bool MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
-        SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, bool bBiDi);
+    bool MiserableRTLFrmFmtHack(long &rLeft, long &rRight,
+        const sw::Frame &rFrmFmt);
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( UINT32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
     void InsAsString16( const String& rStr )
