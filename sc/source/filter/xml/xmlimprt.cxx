@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:30:39 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotTableSourceServiceAttrTokenMap[] 
     { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_SOURCE_SERVICE_ATTR_NAME                },
     { XML_NAMESPACE_TABLE, XML_SOURCE_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_SOURCE_NAME         },
     { XML_NAMESPACE_TABLE, XML_OBJECT_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_OBJECT_NAME         },
-    { XML_NAMESPACE_TABLE, XML_USERNAME,                XML_TOK_SOURCE_SERVICE_ATTR_USERNAME            },
+    { XML_NAMESPACE_TABLE, XML_USER_NAME,               XML_TOK_SOURCE_SERVICE_ATTR_USER_NAME           },
     { XML_NAMESPACE_TABLE, XML_PASSWORT,                XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD            },
     XML_TOKEN_MAP_END
 };
@@ -832,7 +832,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotFieldElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aDataPilotLevelAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, XML_DISPLAY_EMPTY,           XML_TOK_DATA_PILOT_LEVEL_ATTR_DISPLAY_EMPTY         },
+    { XML_NAMESPACE_TABLE, XML_SHOW_EMPTY,              XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY            },
     XML_TOKEN_MAP_END
 };
 
@@ -868,7 +868,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME                 },
     { XML_NAMESPACE_TABLE, XML_DISPLAY,             XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY              },
-    { XML_NAMESPACE_TABLE, XML_DISPLAY_DETAILS,     XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_DETAILS      },
+    { XML_NAMESPACE_TABLE, XML_SHOW_DETAILS,        XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS     },
     XML_TOKEN_MAP_END
 };
 
