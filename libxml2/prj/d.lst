@@ -1,5 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\external\libxml
 ..\%__SRC%\inc\libxml\*.h %_DEST%\inc%_EXT%\external\libxml\*.h
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
