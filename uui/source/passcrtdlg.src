@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
+ *  last change: $Author: obo $ $Date: 2001-10-12 20:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,12 +173,12 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ finnish ] = "Please enter master password";
     Text[ italian ] = "Digitate la password principale";
     Text[ danish ] = "Please enter master password";
-    Text[ swedish ] = "Ange ett huvudl�senord";
-    Text[ polish ] = "Wpisz has�o g��wne";
+    Text[ swedish ] = "Definiera huvudl�senord";
+    Text[ polish ] = "Zdefiniuj has�o g��wne";
     Text[ portuguese_brazilian ] = "Please enter master password";
     Text[ japanese ] = "ﾏｽﾀｰﾊﾟｽﾜｰﾄﾞを入力してください。";
     Text[ korean ] = "마스터 패스워드를 입력하십시오";
-    Text[ chinese_simplified ] = "请输入主密码";
+    Text[ chinese_simplified ] = "指定主密码";
     Text[ chinese_traditional ] = "請輸入主密碼";
     Text[ turkish ] = "Please enter master password";
     Text[ arabic ] = "Please enter master password";
@@ -210,4 +210,5 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ arabic ] = "Passwords are different, please enter again!";
     Text[ catalan ] = "Passwords are different, please enter again!";
 };
+
 
