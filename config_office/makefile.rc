@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: mh $ $Date: 2002-02-21 09:12:12 $
+#   last change: $Author: mh $ $Date: 2002-07-11 12:18:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,8 @@
 #
 #*************************************************************************
 
+TARGET=OpenOffice.org
+MAKEFILERC=true
 
 # 
 # implementation of cvs checkout
@@ -153,7 +155,7 @@ BUILD_SUBDIRS =  \
 	so3 \
 	soltools \
 	sot \
-	so_berkeleydb \
+	berkeleydb \
 	starmath \
 	stoc \
 	store \
@@ -178,10 +180,14 @@ BUILD_SUBDIRS =  \
 	xml2cmp \
 	xmlhelp \
 	xmloff \
-	xmlscript
+	xmlscript \
+	zlib
 
 build_all .SETDIR=instsetoo/prj:
 	@+perl $(SOLARENV)$/bin$/build.pl -all product=full
+
+depend .SETDIR=instsetoo/prj:
+	@+perl $(SOLARENV)$/bin$/build.pl -all product=full depend=t
 
 
 # 
@@ -201,6 +207,10 @@ configure .PHONY SETDIR=config_office :
 
 install .SETDIR=instsetoo/util:
 	dmake product="full"
+
+update: 
+	@echo Updating OpenOffice.org sources
+	@+-echo $(foreach,i,$(BUILD_SUBDIRS) $(shell +cd $i && cvs update))
 
 # experimental composite targets:
 
