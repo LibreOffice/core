@@ -13,6 +13,8 @@ using namespace ::rtl;
 int main( int argc, char *argv[] )
 {
     sal_Int32 nCount = rtl_getAppCommandArgCount();
+
+#ifdef DEBUG
     fprintf( stdout, "rtl-commandargs (%d) real args:%i ", nCount, argc);
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
@@ -22,6 +24,7 @@ int main( int argc, char *argv[] )
         fprintf( stdout, " %s", o.getStr() );
     }
     fprintf( stdout, "\n" );
+#endif
 
     if( nCount == 0 )
     {
@@ -33,11 +36,13 @@ int main( int argc, char *argv[] )
     OUString iniName;
     Bootstrap::get(OUString(RTL_CONSTASCII_USTRINGPARAM("iniName")), iniName, OUString());
 
+#ifdef DEBUG
      if(iniName.getLength())
     {
         OString tmp_iniName = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
         fprintf(stderr, "using ini: %s\n", tmp_iniName.getStr());
     }
+#endif
 
     Bootstrap bootstrap(iniName);
 
@@ -46,21 +51,35 @@ int main( int argc, char *argv[] )
     OUString myDefault( RTL_CONSTASCII_USTRINGPARAM("$Default"));
 
     OUString value;
+    sal_Bool useDefault;
 
-      bootstrap.getFrom( name, value, myDefault );
+    useDefault = bootstrap.getFrom(OUString(RTL_CONSTASCII_USTRINGPARAM("USEDEFAULT")), OUString());
 
-    sal_Bool result = sal_True;
+    sal_Bool result = sal_False;
+    sal_Bool found  = sal_True;
 
-    OUString para(OUString::createFromAscii( argv[1] ));
-    if(para != value)
+    if(useDefault)
+        bootstrap.getFrom(name, value, myDefault);
+
+    else
+        found = bootstrap.getFrom(name, value);
+
+    if(found)
     {
-        OString para_tmp = OUStringToOString(para, RTL_TEXTENCODING_ASCII_US);
-        OString value_tmp = OUStringToOString(value, RTL_TEXTENCODING_ASCII_US);
+        OUString para(OUString::createFromAscii( argv[1] ));
 
-        fprintf(stderr, "para(%s) != value(%s)\n", para_tmp.getStr(), value_tmp.getStr());
+        result = para == value;
 
-        result = sal_False;
+        if(!result)
+        {
+            OString para_tmp = OUStringToOString(para, RTL_TEXTENCODING_ASCII_US);
+            OString value_tmp = OUStringToOString(value, RTL_TEXTENCODING_ASCII_US);
+
+            fprintf(stderr, "para(%s) != value(%s)\n", para_tmp.getStr(), value_tmp.getStr());
+        }
     }
+    else
+        fprintf(stderr, "bootstrap parameter couldn't be found\n");
 
     // test the default case
     name = OUString( RTL_CONSTASCII_USTRINGPARAM( "no_one_has_set_this_name" ) );
