@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-29 12:28:23 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,8 +448,9 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
 // ========================================
 
 SchXMLImport::SchXMLImport( uno::Reference< frame::XModel > xModel,
+                            uno::Reference< com::sun::star::container::XIndexContainer >& rGrfContainer,
                             sal_Bool bLoadDoc, sal_Bool bShowProgress ) :
-        SvXMLImport( xModel )
+        SvXMLImport( xModel, rGrfContainer )
 {
     // get status indicator (if requested)
     if( bShowProgress )

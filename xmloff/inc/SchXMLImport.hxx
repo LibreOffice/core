@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-24 15:39:19 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ protected:
 
 public:
     SchXMLImport( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
+                  com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rGrfContainer,
                   sal_Bool bLoadDoc, sal_Bool bShowProgress );
     virtual ~SchXMLImport();
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:00 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,33 +69,25 @@
 class SvXMLNamespaceMap;
 class SvXMLAttributeList;
 class SvXMLUnitConverter;
+class SvXMLExport;
+class SvXMLImport;
 
 class XMLImageStyle
 {
 public:
-    XMLImageStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & _rHandler,
-                        const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter );
+    XMLImageStyle();
     ~XMLImageStyle();
 
-    sal_Bool exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName );
+    sal_Bool exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport );
+    sal_Bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName, SvXMLImport& rImport );
 
 private:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler;
-    const SvXMLNamespaceMap&  mrNamespaceMap;
-    const SvXMLUnitConverter& rUnitConverter;
 
-    SvXMLAttributeList *pAttrList;
-
-    sal_Bool ImpExportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                           const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                           const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                           const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                           ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName );
-
-    void AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName, const ::rtl::OUString& rStrValue );
-
+    sal_Bool ImpExportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue,
+                           SvXMLExport& rExport );
+    sal_Bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                           ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName,
+                           SvXMLImport& rImport );
 };
 
 #endif // _XMLOFF_IMAGESTYLE_HXX
