@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:15:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,9 @@
 #include <svx/editeng.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/linkmgr.hxx>
+#ifndef _SVDPOOL_HXX
+#include <svx/svdpool.hxx>
+#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
@@ -377,6 +380,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pChangeTrack( NULL ),
         pChangeViewSettings( NULL ),
         pEditEngine( NULL ),
+        pNoteEngine( NULL ),
+        pNoteItemPool( NULL ),
         eLinkMode(LM_UNKNOWN),
         pDPCollection( NULL ),
         pScriptTypeData( NULL ),
@@ -579,6 +584,8 @@ ScDocument::~ScDocument()
     delete pDetOpList;                  // loescht auch die Eintraege
     delete pChangeTrack;
     delete pEditEngine;
+    delete pNoteEngine;
+    delete pNoteItemPool;
     delete pChangeViewSettings;         // und weg damit
 
     delete pDPCollection;
@@ -661,6 +668,30 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
         pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
     }
     return *pEditEngine;
+}
+
+ScNoteEditEngine& ScDocument::GetNoteEngine()
+{
+    if ( !pNoteEngine )
+    {
+        pNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
+        pNoteEngine->SetUpdateMode( FALSE );
+        pNoteEngine->EnableUndo( FALSE );
+        pNoteEngine->SetRefMapMode( MAP_100TH_MM );
+        pNoteEngine->SetForbiddenCharsTable( xForbiddenCharacters );
+                const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
+                SfxItemSet* pEEItemSet = new SfxItemSet( pNoteEngine->GetEmptyItemSet() );
+                ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
+                pNoteEngine->SetDefaults( pEEItemSet );      // edit engine takes ownership
+    }
+    return *pNoteEngine;
+}
+
+SfxItemPool& ScDocument::GetNoteItemPool()
+{
+    if ( !pNoteItemPool )
+        pNoteItemPool = new SfxItemPool( *(static_cast<SfxItemPool*>(SdrObject::GetGlobalDrawObjectItemPool() )));
+    return *pNoteItemPool;
 }
 
 void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
