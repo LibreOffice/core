@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:16:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #include <popmenu.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
@@ -132,7 +132,7 @@ public:
 
     void            SetNumType(SvxNumType eNumType);
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 protected:
     virtual void    Paint( const Rectangle& rRec );
@@ -149,7 +149,7 @@ private:
     EditView*           pEdView;
     ScEditWindowLocation eLocation;
 
-    com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;
 };
 
