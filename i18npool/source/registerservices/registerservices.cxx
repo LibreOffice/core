@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-04-24 17:10:56 $
+ *  last change: $Author: khong $ $Date: 2002-05-13 21:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ eak *  See the License for the specific provisions governing your rights and
 #include <indexentrysupplier.hxx>
 #include <indexentrysupplier_asian.hxx>
 #include <indexentrysupplier_western.hxx>
+#include <indexentrysupplier_complex.hxx>
 #include <indexentrysupplier_default.hxx>
 
 #define CCLASS_ALL
@@ -181,6 +182,10 @@ IMPL_CREATEINSTANCE( IndexEntrySupplier_ko_dict )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_alphanumeric )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_nl_alphanumeric )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_da_alphanumeric )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_ar_alphanumeric )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_he_alphanumeric )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_hi_alphanumeric )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_th_alphanumeric )
 IMPL_CREATEINSTANCE( IndexEntrySupplier_Unicode )
 IMPL_CREATEINSTANCE_MSF( CalendarImpl )
 IMPL_CREATEINSTANCE( Calendar_gregorian )
@@ -367,6 +372,18 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier_alphanumeric",
         "com.sun.star.i18n.IndexEntrySupplier_alphanumeric",
         &IndexEntrySupplier_alphanumeric_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ar_alphanumeric",
+        "com.sun.star.i18n.IndexEntrySupplier_ar_alphanumeric",
+        &IndexEntrySupplier_ar_alphanumeric_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_he_alphanumeric",
+        "com.sun.star.i18n.IndexEntrySupplier_he_alphanumeric",
+        &IndexEntrySupplier_he_alphanumeric_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_hi_alphanumeric",
+        "com.sun.star.i18n.IndexEntrySupplier_hi_alphanumeric",
+        &IndexEntrySupplier_hi_alphanumeric_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_th_alphanumeric",
+        "com.sun.star.i18n.IndexEntrySupplier_th_alphanumeric",
+        &IndexEntrySupplier_th_alphanumeric_CreateInstance },
     {       "com.sun.star.i18n.IndexEntrySupplier_Unicode",
         "com.sun.star.i18n.IndexEntrySupplier_Unicode",
         &IndexEntrySupplier_Unicode_CreateInstance },

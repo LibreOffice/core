@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.8 $
+#*  $Revision: 1.9 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-28 00:31:40 $
+#*  last change: $Author: khong $ $Date: 2002-05-13 21:53:36 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -88,6 +88,7 @@ SLOFILES=   \
             $(SLO)$/indexentrysupplier_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_da_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_nl_alphanumeric.obj \
+            $(SLO)$/indexentrysupplier_complex.obj \
             $(SLO)$/indexentrysupplier_default.obj
 
 
