@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-24 15:09:12 $
+ *  last change: $Author: hro $ $Date: 2001-09-20 15:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,8 @@
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
 
-#define PIPEWINDOWCLASS "__OSL_PIPE_WNDCLASS__"
+#define ACCEPTORPIPEWINDOWCLASS "__OSL_ACCEPTORPIPE_WNDCLASS__"
+#define CLIENTPIPEWINDOWCLASS   "__OSL_CLIENTPIPE_WNDCLASS__"
 #define PIPESYSTEM      "\\\\.\\pipe\\"
 #define PIPEPREFIX    "OSL_PIPE_"
 
@@ -229,17 +230,21 @@ LRESULT CALLBACK __osl_PipeWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lP
 static void SAL_CALL PipeThreadProc(void *pData)
 {
     oslPipe pPipe = (oslPipe)pData;
+    BOOL    fClient = FALSE;
 
-    pPipe->m_SrcWnd = CreateWindow(PIPEWINDOWCLASS, pPipe->m_NameA->buffer,
-                                   WS_OVERLAPPEDWINDOW,
-                                   0, 0, 0, 0,
-                                   (HWND)NULL,        /* no parent */
-                                   (HMENU)NULL,       /* use class menu */
-                                   (HANDLE)GetModuleHandle(NULL),
-                                   (LPSTR)pData);
+    fClient = (pPipe->m_DstWnd != NULL) && IsWindow(pPipe->m_DstWnd);
+    pPipe->m_SrcWnd = CreateWindow(
+        fClient ? CLIENTPIPEWINDOWCLASS : ACCEPTORPIPEWINDOWCLASS ,
+        pPipe->m_NameA->buffer,
+        WS_OVERLAPPEDWINDOW,
+        0, 0, 0, 0,
+        (HWND)NULL,        /* no parent */
+        (HMENU)NULL,       /* use class menu */
+        (HANDLE)GetModuleHandle(NULL),
+        (LPSTR)pData);
 
     /* if we are an accepted pipe, notify creator of new window handle */
-    if ((pPipe->m_DstWnd != NULL) && IsWindow(pPipe->m_DstWnd))
+    if ( fClient )
     {
         COPYDATASTRUCT CopyData;
 
@@ -296,7 +301,19 @@ oslPipe __osl_createPipeImpl()
             Class.hCursor        = NULL;    // this window never shown, so no
             Class.hIcon          = NULL;    // cursor or icon are necessary
             Class.lpszMenuName   = NULL;
-            Class.lpszClassName  = PIPEWINDOWCLASS;
+            Class.lpszClassName  = ACCEPTORPIPEWINDOWCLASS;
+            Class.hbrBackground  = (HBRUSH)(COLOR_WINDOW + 1);
+            Class.hInstance      = GetModuleHandle(NULL);
+            Class.style          = 0;
+            Class.lpfnWndProc    = __osl_PipeWndProc;
+            Class.cbWndExtra     = sizeof(void *);
+            Class.cbClsExtra     = 0;
+
+            OSL_VERIFY(RegisterClass(&Class));
+
+            Class.hIcon          = NULL;    // cursor or icon are necessary
+            Class.lpszMenuName   = NULL;
+            Class.lpszClassName  = CLIENTPIPEWINDOWCLASS;
             Class.hbrBackground  = (HBRUSH)(COLOR_WINDOW + 1);
             Class.hInstance      = GetModuleHandle(NULL);
             Class.style          = 0;
@@ -344,7 +361,10 @@ void __osl_destroyPipeImpl(oslPipe pPipe)
             CloseHandle(pPipe->m_AcceptEvent);
 
             if (osl_decrementInterlockedCount(&nPipes) == 0)
-                UnregisterClass(PIPEWINDOWCLASS, GetModuleHandle(NULL));
+            {
+                UnregisterClass(ACCEPTORPIPEWINDOWCLASS, GetModuleHandle(NULL));
+                UnregisterClass(CLIENTPIPEWINDOWCLASS, GetModuleHandle(NULL));
+            }
         }
 
         if (pPipe->m_Name)
@@ -547,7 +567,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                 OUSTRING_TO_OSTRING_CVTFLAGS);
 
             /* check if pipe already exists */
-            if (FindWindow(PIPEWINDOWCLASS, pPipe->m_NameA->buffer) == NULL)
+            if (FindWindow(ACCEPTORPIPEWINDOWCLASS, pPipe->m_NameA->buffer) == NULL)
             {
                 if (pPipe->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipe))
                 {
@@ -602,7 +622,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                 OUSTRING_TO_OSTRING_CVTFLAGS);
 
             /* next try window emulation */
-            if ((pPipe->m_DstWnd = FindWindow(PIPEWINDOWCLASS, pPipe->m_NameA->buffer)) != NULL)
+            if ((pPipe->m_DstWnd = FindWindow(ACCEPTORPIPEWINDOWCLASS, pPipe->m_NameA->buffer)) != NULL)
             {
                 if (pPipe->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipe))
                 {
