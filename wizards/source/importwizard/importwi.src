@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:20:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,8 @@ String sCloseButton
 
 String sWelcometextLabel1
 {
-    Text [ de ] = "Dieser AutoPilot wandelt Dokumente des alten StarOffice-Formates und Microsoft Office - Dokumente in das neue %PRODUCTNAME XML-Format um.";
-    Text [ en-US ] = "This AutoPilot converts documents in the old StarOffice format and Microsoft Office documents to the new %PRODUCTNAME XML format.";
+    Text [ de ] = "Dieser Assistent wandelt Dokumente des alten StarOffice-Formates und Microsoft Office - Dokumente in das neue %PRODUCTNAME XML-Format um.";
+    Text [ en-US ] = "This wizards converts documents in the old StarOffice format and Microsoft Office documents to the new %PRODUCTNAME XML format.";
 };
 
 String sWelcometextLabel2
@@ -390,14 +390,14 @@ String sConvertError1
 
 String sConvertError2
 {
-    Text [ de ] = "Autopilot abbrechen";
-    Text [ en-US ] = "Cancel AutoPilot";
+    Text [ de ] = "Assistent abbrechen";
+    Text [ en-US ] = "Cancel Wizard";
 };
 
 String sRTErrorDesc
 {
-    Text [ de ] = "Es ist ein unerwarteter Fehler im Autopiloten aufgetreten.";
-    Text [ en-US ] = "An unexpected error has occurred in the AutoPilot.";
+    Text [ de ] = "Es ist ein unerwarteter Fehler im Assistenten aufgetreten.";
+    Text [ en-US ] = "An unexpected error has occurred in the wizard.";
 };
 
 String sRTErrorHeader
