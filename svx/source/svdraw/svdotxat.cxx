@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-04 19:26:29 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 09:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "svdorect.hxx" // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
 #include "svdocapt.hxx" // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
 #include <svdetc.hxx>
+#include "writingmodeitem.hxx"
 
 #ifndef _MyEDITVIEW_HXX
 #include "editview.hxx"
@@ -304,10 +305,14 @@ void SdrTextObj::ItemSetChanged(const SfxItemSet& rSet)
 
 void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
 {
-    if( pNewItem && nWhich == SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT )
+    if( pNewItem && nWhich == SDRATTR_TEXTDIRECTION )
     {
-        if( pOutlinerParaObject )
-            SetVerticalWriting( !( (SfxBoolItem*) pNewItem )->GetValue() );
+        bool bVertical = ( (SvxWritingModeItem*) pNewItem )->GetValue() == com::sun::star::text::WritingMode_TB_RL;
+
+        if( bVertical || pOutlinerParaObject )
+        {
+            SetVerticalWriting( bVertical );
+        }
     }
 
     // #95501# reset to default

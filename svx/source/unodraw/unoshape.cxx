@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-21 11:28:50 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 09:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,16 +1644,6 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             }
             break;
         }
-        case OWN_ATTR_WRITINGMODE:
-        {
-            text::WritingMode eMode;
-            if( pObj && pObj->ISA(SdrTextObj) && (rVal >>= eMode) )
-            {
-                SdrTextObj* pText = (SdrTextObj*)pObj;
-                pText->SetVerticalWriting( eMode == text::WritingMode_TB_RL );
-                return;
-            }
-        }
         case OWN_ATTR_FRAMERECT:
         {
             awt::Rectangle aUnoRect;
@@ -2031,10 +2021,10 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         }
         default:
         {
-            DBG_ASSERT( pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
+            DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
-            sal_Bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST;
+            sal_Bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST && pMap->nWID != SDRATTR_TEXTDIRECTION;
 
             if( pMap->nWID == SDRATTR_ECKENRADIUS )
             {
@@ -2264,16 +2254,6 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                     throw uno::RuntimeException();
 
                 break;
-            }
-            case OWN_ATTR_WRITINGMODE:
-            {
-                if( pObj && pObj->ISA(SdrTextObj) )
-                {
-                    SdrTextObj* pText = (SdrTextObj*)pObj;
-                    text::WritingMode eMode = pText->IsVerticalWriting() ? text::WritingMode_TB_RL : text::WritingMode_LR_TB;
-                    aAny <<= eMode;
-                    break;
-                }
             }
             case OWN_ATTR_ISFONTWORK:
             {
@@ -2545,7 +2525,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             }
             default:
             {
-                DBG_ASSERT( pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
+                DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || (pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST), "Not persist item not handled!" );
                 DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
                 SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 12:12:37 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 09:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
 #include "svdtxhdl.hxx"  // DrawTextToPath
+#include "writingmodeitem.hxx"
 
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
@@ -1776,7 +1777,7 @@ void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
     if( pOutlinerParaObject )
     {
         ImpForceItemSet();
-        mpObjectItemSet->Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !pOutlinerParaObject->IsVertical() ) );
+        mpObjectItemSet->Put( SvxWritingModeItem( pOutlinerParaObject->IsVertical() ? com::sun::star::text::WritingMode_TB_RL : com::sun::star::text::WritingMode_LR_TB ) );
     }
 
     SetTextSizeDirty();
