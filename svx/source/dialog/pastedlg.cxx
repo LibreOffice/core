@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pastedlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:48:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,10 @@
  *
  *
  ************************************************************************/
-/*
-#ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <ole2.h>
-#include <tools/postwin.h>
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
 #endif
-*/
 
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
