@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:48:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,15 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
         pPapPlc->AppendFkpEntry( pStrm->Tell(), pO->Count(), pO->GetData() );
         pO->Remove( 0, pO->Count() );                   // leeren
     }
+}
+
+GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
+{
+    maFly = rOther.maFly;
+    mnPos = rOther.mnPos;
+    mnWid = rOther.mnWid;
+    mnHei = rOther.mnHei;
+    return *this;
 }
 
 void SwWW8WrGrf::Insert(const sw::Frame &rFly)
