@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:26:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 //  Lauftext-Objekt erzeugen?
 
-                const SdrMarkList& rMarkList = pView->GetMarkList();
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if (rMarkList.GetMark(0))
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -459,7 +459,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
             BOOL bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotID);
             if(bVertical)
             {
-                const SdrMarkList& rMarkList = pView->GetMarkList();
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if(rMarkList.GetMark(0))
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -485,12 +485,12 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 //  Modus verlassen bei einzelnem Klick
                 //  (-> fuconstr)
 
-            if ( !pView->HasMarkedObj() )
+            if ( !pView->AreObjectsMarked() )
             {
                 pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
 
                 SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
-                if ( pView->HasMarkedObj() )
+                if ( pView->AreObjectsMarked() )
                     rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                 else
                     rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
@@ -508,7 +508,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
     ForcePointer(&rMEvt);
     pWindow->ReleaseMouse();
 
-    if ( !pView->HasMarkedObj() )
+    if ( !pView->AreObjectsMarked() )
     {
         SdrObject* pObj;
         SdrPageView* pPV;
@@ -688,9 +688,9 @@ void FuText::SelectionHasChanged()
 
     pTextObj = NULL;
 
-    if ( pView->HasMarkedObj() )
+    if ( pView->AreObjectsMarked() )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1)
         {
@@ -765,9 +765,9 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
             pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
     }
 
-    if ( !pObj && pView->HasMarkedObj() )
+    if ( !pObj && pView->AreObjectsMarked() )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
