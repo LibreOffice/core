@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:26:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void SwTxtAdjuster::FormatBlock( )
         }
     }
 
-    const nOldIdx = GetInfo().GetIdx();
+    const int nOldIdx = GetInfo().GetIdx();
     GetInfo().SetIdx( nStart );
     CalcNewBlock( pCurr, pFly );
     GetInfo().SetIdx( nOldIdx );
