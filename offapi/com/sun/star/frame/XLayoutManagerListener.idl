@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLayoutManagerListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 18:16:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,17 @@ module com {  module sun {  module star {  module frame {
     or not.</p>
 
     @see ::com::sun::star::frame::LayoutManager
+    @see ::com::sun::star::frame::LayoutManagerEvents
 
     @since OOo 2.0.0
  */
 interface XLayoutManagerListener : com::sun::star::lang::XEventListener
 {
     //=============================================================================
-    /** is invoked when a layout manager
+    /** is invoked when a layout manager has made a certain operation.
+
+        @param aSource
+            reference to the layout manager which invoked the event.
 
         @param eLayoutEvent
             identifies the layout event that has occured.
@@ -94,7 +98,7 @@ interface XLayoutManagerListener : com::sun::star::lang::XEventListener
             provides additional information about the event. The type
             of info depends on the event.
     */
-    void layoutEvent( [in] short eLayoutEvent, [in] any aInfo );
+    void layoutEvent( [in] com::sun::star::lang::EventObject aSource, [in] short eLayoutEvent, [in] any aInfo );
 };
 
 }; }; }; };
