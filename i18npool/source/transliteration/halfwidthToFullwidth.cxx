@@ -2,9 +2,9 @@
  *
  *  $RCSfile: halfwidthToFullwidth.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:08:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 // prevent internal compiler error with MSVC6SP3
-#include <stl/utility>
+#include <utility>
 
 #include <i18nutil/widthfolding.hxx>
 #define TRANSLITERATION_halfwidthToFullwidth
