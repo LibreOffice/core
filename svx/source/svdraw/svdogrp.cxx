@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:57:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,36 +850,6 @@ const Rectangle& SdrObjGroup::GetSnapRect() const
     }
     return aOutRect;
 }
-
-
-// #110094#-13
-//FASTBOOL SdrObjGroup::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
-//{
-//  FASTBOOL bOk=TRUE;
-    // #110094#
-    // SdrObjList::Paint() removed
-    //if (pSub->GetObjCount()!=0) {
-    //  bOk=pSub->Paint(rXOut,rInfoRec);
-    //}
-    // #110094#
-    // moved to DrawContact objects
-    //else { // ansonsten ist es eine leere Gruppe
-    //  if (!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet(nLayerId)) {
-    //      OutputDevice* pOutDev=rXOut.GetOutDev();
-    //      pOutDev->SetFillInBrush(Brush(BRUSH_NULL));
-    //      pOutDev->SetPen(Color(COL_LIGHTGRAY));
-    //      pOutDev->DrawRect(aOutRect);
-    //  }
-    //}
-
-    // #110094#-13
-    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-    //  bOk=PaintGluePoints(rXOut,rInfoRec);
-    //}
-//
-//  return bOk;
-//}
-
 
 SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
