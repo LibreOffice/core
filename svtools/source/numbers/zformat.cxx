@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-03-19 18:14:23 $
+ *  last change: $Author: er $ $Date: 2001-03-19 18:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,8 +524,6 @@ SvNumberformat::SvNumberformat(String& rString,
                             rString.Insert('0',nPos);
                             nPos++;
                         }
-                        if ( rString.GetChar(nPos) == ']' )
-                            nPos++;
                     }
                     else
                     {
@@ -536,6 +534,13 @@ SvNumberformat::SvNumberformat(String& rString,
                         fLimit1 = fNumber;
                     else
                         fLimit2 = fNumber;
+                    if ( rString.GetChar(nPos) == ']' )
+                        nPos++;
+                    else
+                    {
+                        bCancel = TRUE;             // break for
+                        nCheckPos = nPos;
+                    }
                 }
                 nPosOld = nPos;                     // position before string
             }
