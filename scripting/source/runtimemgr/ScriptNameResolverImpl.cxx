@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:21 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-21 09:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
     Any any;
     OUString docUri;
+    sal_Int32 filesysScriptStorageID;
+    Reference < storage::XScriptStorageManager > xScriptStorageMgr;
     sal_Int32 docSid;
     try
     {
@@ -261,13 +263,11 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
                 ::rtl::OUStringToOString( filesysURL,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         // ask storage manager to create storage
-        sal_Int32 filesysScriptStorageID;
         try
         {
             // need to get the ScriptStorageManager
             Any a = m_xContext->getValueByName(
                     scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
-            Reference < storage::XScriptStorageManager > xScriptStorageMgr;
             if ( sal_False == ( a >>= xScriptStorageMgr ) )
             {
                 OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: failed to get ScriptStorageManager" );
@@ -391,6 +391,26 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
     }
     if ( !resolvedName.is() )
     {
+        if( filesysScriptStorageID >  2 )
+        {
+            // get the filesys storage and dispose of it
+            Reference< XInterface > xScriptStorage =
+                xScriptStorageMgr->getScriptStorage( filesysScriptStorageID );
+            validateXRef( xScriptStorage,
+                          "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
+            Reference< storage::XScriptInfoAccess > xScriptInfoAccess = Reference<
+                storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
+            validateXRef( xScriptInfoAccess,
+            "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptInfoAccess" );
+            Sequence< Reference< storage::XScriptInfo > > results =
+                xScriptInfoAccess->getAllImplementations( );
+            Reference < lang::XEventListener > xEL_ScriptStorageMgr =
+                Reference< lang::XEventListener >
+                    ( xScriptStorageMgr ,UNO_QUERY_THROW );
+            validateXRef( xEL_ScriptStorageMgr, "ScriptNameResolverImpl::resolve: can't get ScriptStorageManager XEventListener interface when trying to dispose of filesystem storage" );
+            lang::EventObject event( results[ 0 ] );
+            xEL_ScriptStorageMgr->disposing( event );
+        }
         throw lang::IllegalArgumentException( OUSTR(
             "ScriptNameResolverImpl::resolve: no script found for uri=" ).concat( scriptURI ),
             Reference< XInterface > (), 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:21 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-21 09:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-
+#include <com/sun/star/lang/EventObject.hpp>
 
 #include "ScriptNameResolverImpl.hxx"
 #include "ScriptRuntimeManager.hxx"
@@ -284,9 +284,8 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                         Reference< XInterface > () );
             }
             validateXRef( xEL_ScriptStorageManager, "Cannot get XEventListener from ScriptStorageManager" );
-            // need to find some way of wrapping this resolvedSid
-            // into an EventObject object
-            // xEL_ScriptStorageManager->disposing( source );
+            lang::EventObject event(resolvedScript);
+            xEL_ScriptStorageManager->disposing( event );
         }
     }
     catch ( lang::IllegalArgumentException & iae )
