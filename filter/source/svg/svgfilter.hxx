@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,11 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
 #endif
+#ifdef SOLAR_JAVA
 #ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
 #include <com/sun/star/document/XImporter.hpp>
 #endif
+#endif // SOLAR_JAVA
 #ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
 #endif
@@ -104,8 +106,14 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifdef SOLAR_JAVA
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
+#endif
+#else // !SOLAR_JAVA
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -152,7 +160,9 @@
 #include <svx/svdxcgv.hxx>
 #include <svx/svdobj.hxx>
 #include <xmloff/xmlexp.hxx>
+#ifdef SOLAR_JAVA
 #include <sj2/jnihelp.hxx>
+#endif
 #include "svgfilter.hxx"
 #include "svgscript.hxx"
 
@@ -244,11 +254,18 @@ struct HashReferenceXInterface
 class SVGFontExport;
 class SVGActionWriter;
 
+#ifdef SOLAR_JAVA
 class SVGFilter : public cppu::WeakImplHelper5 < XFilter,
                                                  XImporter,
                                                  XExporter,
                                                  XInitialization,
                                                  XServiceInfo >
+#else // !SOLAR_JAVA
+class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
+                                                 XExporter,
+                                                 XInitialization,
+                                                 XServiceInfo >
+#endif
 {
     typedef ::std::hash_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
 
@@ -257,14 +274,18 @@ private:
     ObjectMap*                          mpObjects;
     Reference< XMultiServiceFactory >   mxMSF;
     Reference< XComponent >             mxSrcDoc;
+#ifdef SOLAR_JAVA
     Reference< XComponent >             mxDstDoc;
+#endif
     SvXMLElementExport*                 mpSVGDoc;
     SVGExport*                          mpSVGExport;
     SVGFontExport*                      mpSVGFontExport;
     SVGActionWriter*                    mpSVGWriter;
     sal_Bool                            mbPresentation;
 
+#ifdef SOLAR_JAVA
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+#endif
 
     sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
     Reference< XDocumentHandler >       implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
@@ -301,8 +322,10 @@ protected:
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException);
     virtual void SAL_CALL cancel( ) throw (RuntimeException);
 
+#ifdef SOLAR_JAVA
     // XImporter
     virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
+#endif
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
