@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-26 18:23:34 $
+#   last change: $Author: hjs $ $Date: 2001-11-30 13:53:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1346,6 +1346,12 @@ STDLIB=$(STDLIBCUIST)
 STDLIB+=$(LIBSTLPORT)
 STDSHL+=$(LIBSTLPORT)
 .ENDIF			# "$(NO_DEFAULT_STL)"==""
+
+# fill up unresolved symbols not found else where
+.IF "$(FILLUPARC)"!=""
+STDLIB+=$(FILLUPARC)
+STDSHL+=$(FILLUPARC)
+.ENDIF			# "$(FILUPARC)"!=""
 
 .IF "$(DISABLE_JAVA)"==""
 .IF "$(SOLAR_JAVA)"!=""
