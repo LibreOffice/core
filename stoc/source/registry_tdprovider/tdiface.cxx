@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:48:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 08:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,133 +65,38 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#include "registry/reader.hxx"
+#include "registry/version.h"
 
 #include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/reflection/XMethodParameter.hpp>
+#include <com/sun/star/reflection/XParameter.hpp>
 
 #ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
 #endif
+#include "functiondescription.hxx"
+#include "methoddescription.hxx"
 
+#include <memory>
 #include <set>
 
 namespace stoc_rdbtdp
 {
 
 //==================================================================================================
-class MethodParameterImpl : public WeakImplHelper1< XMethodParameter >
-{
-    Reference< XHierarchicalNameAccess > _xTDMgr;
-
-    OUString                        _aName;
-    OUString                        _aTypeName;
-    Reference< XTypeDescription >   _xType;
-
-    sal_Bool                        _bIn;
-    sal_Bool                        _bOut;
-    sal_Int32                       _nPosition;
-
-public:
-    MethodParameterImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                         const OUString & rParamName, const OUString & rParamType,
-                         sal_Bool bIn, sal_Bool bOut, sal_Int32 nPosition )
-        : _xTDMgr( xTDMgr )
-        , _aName( rParamName )
-        , _aTypeName( rParamType )
-        , _bIn( bIn )
-        , _bOut( bOut )
-        , _nPosition( nPosition )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
-    virtual ~MethodParameterImpl();
-
-    // XMethodParameter
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual Reference< XTypeDescription > SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isIn() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isOut() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getPosition() throw(::com::sun::star::uno::RuntimeException);
-};
-
-MethodParameterImpl::~MethodParameterImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
-// XMethodParameter
-//__________________________________________________________________________________________________
-OUString MethodParameterImpl::getName()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _aName;
-}
-//__________________________________________________________________________________________________
-Reference<XTypeDescription > MethodParameterImpl::getType()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (!_xType.is() && _aTypeName.getLength())
-    {
-        try
-        {
-            Reference< XTypeDescription > xType;
-            if (_xTDMgr->getByHierarchicalName( _aTypeName ) >>= xType)
-            {
-                MutexGuard aGuard( getMutex() );
-                if (! _xType.is())
-                    _xType = xType;
-                return _xType;
-            }
-        }
-        catch (NoSuchElementException &)
-        {
-        }
-        // never try again, if no td was found
-        _aTypeName = OUString();
-    }
-    return _xType;
-}
-//__________________________________________________________________________________________________
-sal_Bool MethodParameterImpl::isIn()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _bIn;
-}
-//__________________________________________________________________________________________________
-sal_Bool MethodParameterImpl::isOut()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _bOut;
-}
-//__________________________________________________________________________________________________
-sal_Int32 MethodParameterImpl::getPosition()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _nPosition;
-}
-
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-
-
-//==================================================================================================
 class InterfaceMethodImpl : public WeakImplHelper1< XInterfaceMethodTypeDescription >
 {
+    stoc::registry_tdprovider::MethodDescription _desc;
+
     Reference< XHierarchicalNameAccess >  _xTDMgr;
 
     OUString                              _aTypeName;
-    OUString                              _aMemberName;
 
     OUString                              _aReturnType;
     Reference< XTypeDescription >         _xReturnTD;
-
-    Sequence< sal_Int8 >                  _aBytes;
-    sal_uInt16                            _nMethodIndex;
-    Sequence< Reference< XMethodParameter > > * _pParams;
-    Sequence< Reference< XTypeDescription > > * _pExceptions;
 
     sal_Bool                              _bIsOneWay;
     sal_Int32                             _nPosition;
@@ -205,14 +110,10 @@ public:
                          sal_uInt16 nMethodIndex,
                          sal_Bool bIsOneWay,
                          sal_Int32 nPosition )
-        : _xTDMgr( xTDMgr )
+        : _desc(xTDMgr, rMemberName, rBytes, nMethodIndex)
+        , _xTDMgr( xTDMgr )
         , _aTypeName( rTypeName )
-        , _aMemberName( rMemberName )
         , _aReturnType( rReturnType )
-        , _aBytes( rBytes )
-        , _nMethodIndex( nMethodIndex )
-        , _pParams( 0 )
-        , _pExceptions( 0 )
         , _bIsOneWay( bIsOneWay )
         , _nPosition( nPosition )
         {
@@ -225,7 +126,8 @@ public:
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
     // XInterfaceMemberTypeDescription
-    virtual OUString SAL_CALL getMemberName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMemberName() throw(::com::sun::star::uno::RuntimeException)
+    { return _desc.getName(); }
     virtual sal_Int32 SAL_CALL getPosition() throw(::com::sun::star::uno::RuntimeException);
 
     // XInterfaceMethodTypeDescription
@@ -237,8 +139,6 @@ public:
 //__________________________________________________________________________________________________
 InterfaceMethodImpl::~InterfaceMethodImpl()
 {
-    delete _pParams;
-    delete _pExceptions;
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
@@ -257,12 +157,6 @@ OUString InterfaceMethodImpl::getName()
 }
 
 // XInterfaceMemberTypeDescription
-//__________________________________________________________________________________________________
-OUString InterfaceMethodImpl::getMemberName()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _aMemberName;
-}
 //__________________________________________________________________________________________________
 sal_Int32 InterfaceMethodImpl::getPosition()
     throw(::com::sun::star::uno::RuntimeException)
@@ -306,86 +200,24 @@ sal_Bool InterfaceMethodImpl::isOneway()
 Sequence<Reference<XMethodParameter > > InterfaceMethodImpl::getParameters()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (! _pParams)
-    {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
-
-        sal_uInt16 nParams = (sal_uInt16)aReader.getMethodParamCount( _nMethodIndex );
-        Sequence< Reference< XMethodParameter > > * pTempParams =
-            new Sequence< Reference< XMethodParameter > >( nParams );
-        Reference< XMethodParameter > * pParams = pTempParams->getArray();
-
-        while (nParams--)
-        {
-            RTParamMode eMode = aReader.getMethodParamMode( _nMethodIndex, nParams );
-
-            pParams[nParams] = new MethodParameterImpl(
-                _xTDMgr,
-                aReader.getMethodParamName( _nMethodIndex, nParams ),
-                aReader.getMethodParamType( _nMethodIndex, nParams ).replace( '/', '.' ),
-                (eMode == RT_PARAM_IN || eMode == RT_PARAM_INOUT),
-                (eMode == RT_PARAM_OUT || eMode == RT_PARAM_INOUT),
-                nParams );
-        }
-
-        ClearableMutexGuard aGuard( getMutex() );
-        if (_pParams)
-        {
-            aGuard.clear();
-            delete pTempParams;
-        }
-        else
-        {
-            _pParams = pTempParams;
-        }
+    Sequence< Reference< XParameter > > s1(_desc.getParameters());
+    Sequence< Reference< XMethodParameter > > s2(s1.getLength());
+    for (sal_Int32 i = 0; i < s1.getLength(); ++i) {
+        s2[i] = s1[i].get();
     }
-    return *_pParams;
+    return s2;
 }
 //__________________________________________________________________________________________________
 Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (! _pExceptions)
-    {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
-
-        sal_uInt16 nExc = (sal_uInt16)aReader.getMethodExcCount( _nMethodIndex );
-        Sequence< Reference< XTypeDescription > > * pExceptions =
-            new Sequence< Reference< XTypeDescription > >( nExc );
-        Reference< XTypeDescription > * pExc = pExceptions->getArray();
-
-        while (nExc--)
-        {
-            try
-            {
-                OUString aMethodExcName( aReader.getMethodExcType( _nMethodIndex, nExc ) );
-                _xTDMgr->getByHierarchicalName( aMethodExcName.replace( '/', '.' ) )
-                    >>= pExc[ nExc ];
-            }
-            catch (NoSuchElementException &)
-            {
-            }
-            OSL_ENSURE( pExc[nExc].is(), "### exception type unknown!" );
-        }
-
-        ClearableMutexGuard aGuard( getMutex() );
-        if (_pExceptions)
-        {
-            aGuard.clear();
-            delete pExceptions;
-        }
-        else
-        {
-            _pExceptions = pExceptions;
-        }
+    Sequence< Reference< XCompoundTypeDescription > > s1(
+        _desc.getExceptions());
+    Sequence< Reference< XTypeDescription > > s2(s1.getLength());
+    for (sal_Int32 i = 0; i < s1.getLength(); ++i) {
+        s2[i] = s1[i].get();
     }
-    return *_pExceptions;
+    return s2;
 }
 
 
@@ -395,7 +227,7 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
 
 
 //==================================================================================================
-class InterfaceAttributeImpl : public WeakImplHelper1< XInterfaceAttributeTypeDescription >
+class InterfaceAttributeImpl : public WeakImplHelper1< XInterfaceAttributeTypeDescription2 >
 {
     Reference< XHierarchicalNameAccess >  _xTDMgr;
 
@@ -406,21 +238,34 @@ class InterfaceAttributeImpl : public WeakImplHelper1< XInterfaceAttributeTypeDe
     Reference< XTypeDescription >         _xMemberTD;
 
     sal_Bool                              _bReadOnly;
+    sal_Bool                              _bBound;
     sal_Int32                             _nPosition;
 
+    std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > _getter;
+    std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > _setter;
+
 public:
-    InterfaceAttributeImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                            const OUString & rTypeName,
-                            const OUString & rMemberName,
-                            const OUString & rMemberTypeName,
-                            sal_Bool bReadOnly,
-                            sal_Int32 nPosition )
+    InterfaceAttributeImpl(
+        const Reference< XHierarchicalNameAccess > & xTDMgr,
+        const OUString & rTypeName,
+        const OUString & rMemberName,
+        const OUString & rMemberTypeName,
+        sal_Bool bReadOnly,
+        sal_Bool bBound,
+        std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > &
+            getter,
+        std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > &
+            setter,
+        sal_Int32 nPosition )
         : _xTDMgr( xTDMgr )
         , _aTypeName( rTypeName )
         , _aMemberName( rMemberName )
         , _aMemberTypeName( rMemberTypeName )
         , _bReadOnly( bReadOnly )
+        , _bBound( bBound )
         , _nPosition( nPosition )
+        , _getter( getter )
+        , _setter( setter )
         {
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
@@ -434,9 +279,32 @@ public:
     virtual OUString SAL_CALL getMemberName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getPosition() throw(::com::sun::star::uno::RuntimeException);
 
-    // XInterfaceAttributeTypeDescription
+    // XInterfaceAttributeTypeDescription2
     virtual sal_Bool SAL_CALL isReadOnly() throw(::com::sun::star::uno::RuntimeException);
     virtual Reference< XTypeDescription > SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isBound() throw (RuntimeException)
+    { return _bBound; }
+
+    virtual Sequence< Reference< XCompoundTypeDescription > > SAL_CALL
+    getGetExceptions() throw (RuntimeException)
+    {
+        if (_getter.get() != 0) {
+            return _getter->getExceptions();
+        } else {
+            return Sequence< Reference< XCompoundTypeDescription > >();
+        }
+    }
+
+    virtual Sequence< Reference< XCompoundTypeDescription > > SAL_CALL
+    getSetExceptions() throw (RuntimeException)
+    {
+        if (_setter.get() != 0) {
+            return _setter->getExceptions();
+        } else {
+            return Sequence< Reference< XCompoundTypeDescription > >();
+        }
+    }
 };
 
 InterfaceAttributeImpl::~InterfaceAttributeImpl()
@@ -471,7 +339,7 @@ sal_Int32 InterfaceAttributeImpl::getPosition()
     return _nPosition;
 }
 
-// XInterfaceAttributeTypeDescription
+// XInterfaceAttributeTypeDescription2
 //__________________________________________________________________________________________________
 sal_Bool InterfaceAttributeImpl::isReadOnly()
     throw(::com::sun::star::uno::RuntimeException)
@@ -555,27 +423,20 @@ void BaseOffset::calculate(Reference< XInterfaceTypeDescription2 > const & desc)
 InterfaceTypeDescriptionImpl::InterfaceTypeDescriptionImpl(
     const Reference< XHierarchicalNameAccess > & xTDMgr,
     const OUString & rName, const Sequence< OUString > & rBaseTypes,
-    const RTUik & rUik, const Sequence< sal_Int8 > & rBytes )
+    const Sequence< OUString > & rOptionalBaseTypes,
+    const Sequence< sal_Int8 > & rBytes )
     : _xTDMgr( xTDMgr )
     , _aName( rName )
     , _aBaseTypes( rBaseTypes )
+    , _aOptionalBaseTypes( rOptionalBaseTypes )
     , _aBytes( rBytes )
-    , _pAttributes( 0 )
-    , _pMethods( 0 )
+    , _membersInit( false )
 {
-    // uik
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    _aUik.m_Data1 = rUik.m_Data1;
-    _aUik.m_Data2 = rUik.m_Data2;
-    _aUik.m_Data3 = rUik.m_Data3;
-    _aUik.m_Data4 = rUik.m_Data4;
-    _aUik.m_Data5 = rUik.m_Data5;
 }
 //__________________________________________________________________________________________________
 InterfaceTypeDescriptionImpl::~InterfaceTypeDescriptionImpl()
 {
-    delete _pAttributes;
-    delete _pMethods;
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
@@ -607,144 +468,148 @@ Reference< XTypeDescription > InterfaceTypeDescriptionImpl::getBaseType()
 Uik SAL_CALL InterfaceTypeDescriptionImpl::getUik()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return _aUik;
+    return Uik();
 }
 //__________________________________________________________________________________________________
 Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptionImpl::getMembers()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (! _pMethods)
-    {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
-
-        sal_uInt16 nMethods = (sal_uInt16)aReader.getMethodCount();
-        sal_uInt16 nFields  = (sal_uInt16)aReader.getFieldCount();
-
-        vector< AttributeInit > * pAttributes = new vector< AttributeInit >( nFields );
-        vector< MethodInit > * pMethods       = new vector< MethodInit >( nMethods );
-
-        OUString aInterfaceName( getName() );
-
-        sal_Int32 nBaseOffset = BaseOffset(this).get();
-
-        // all methods
-        while (nMethods--)
-        {
-            OUString aMemberName( aReader.getMethodName( nMethods ) );
-            OUStringBuffer aTypeName( aInterfaceName );
-            aTypeName.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
-            aTypeName.append( aMemberName );
-
-            RTMethodMode eMode = aReader.getMethodMode( nMethods );
-
-            MethodInit & rInit = pMethods->operator[]( nMethods );
-
-            rInit.aTypeName    = aTypeName.makeStringAndClear();
-            rInit.aMemberName  = aMemberName;
-            rInit.aReturnTypeName = aReader.getMethodReturnType( nMethods ).replace( '/', '.' );
-            rInit.nMethodIndex = nMethods;
-            rInit.bOneWay      = (eMode == RT_MODE_ONEWAY || eMode == RT_MODE_ONEWAY_CONST);
-        }
-
-        // all fields
-        while (nFields--)
-        {
-            OUString aMemberName( aReader.getFieldName( nFields ) );
-            OUString aMemberType( aReader.getFieldType( nFields ).replace( '/', '.' ) );
-            OUStringBuffer aTypeName( aInterfaceName );
-            aTypeName.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
-            aTypeName.append( aMemberName );
-
-            AttributeInit & rInit = pAttributes->operator[]( nFields );
-
-            rInit.aTypeName       = aTypeName.makeStringAndClear();
-            rInit.aMemberName     = aMemberName;
-            rInit.aMemberTypeName = aMemberType;
-            rInit.bReadOnly       = (aReader.getFieldAccess( nFields ) == RT_ACCESS_READONLY);
-        }
-
-        ClearableMutexGuard aGuard( getMutex() );
-        if (_pMethods)
-        {
-            aGuard.clear();
-            delete pAttributes;
-            delete pMethods;
-        }
-        else
-        {
-            _nBaseOffset = nBaseOffset;
-            _pAttributes = pAttributes;
-            _pMethods    = pMethods;
-        }
-    }
-
-    // collect members
-    sal_Int32 nAttributes = _pAttributes->size();
-    sal_Int32 nMethods    = _pMethods->size();
-
-    Sequence< Reference< XInterfaceMemberTypeDescription > > aMembers( nAttributes + nMethods );
-    Reference< XInterfaceMemberTypeDescription > * pMembers = aMembers.getArray();
-
-    while (nMethods--)
-    {
-        MethodInit const & rInit = _pMethods->operator[]( nMethods );
-        pMembers[nAttributes+nMethods] = new InterfaceMethodImpl(
-            _xTDMgr, rInit.aTypeName, rInit.aMemberName,
-            rInit.aReturnTypeName, _aBytes, rInit.nMethodIndex,
-            rInit.bOneWay, _nBaseOffset+nAttributes+nMethods );
-    }
-    while (nAttributes--)
-    {
-        AttributeInit const & rInit = _pAttributes->operator[]( nAttributes );
-        pMembers[nAttributes] = new InterfaceAttributeImpl(
-            _xTDMgr, rInit.aTypeName, rInit.aMemberName, rInit.aMemberTypeName,
-            rInit.bReadOnly, _nBaseOffset+nAttributes );
-    }
-
-    return aMembers;
-}
-//__________________________________________________________________________________________________
-Sequence< Reference< XInterfaceTypeDescription2 > > InterfaceTypeDescriptionImpl::getBaseTypes()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (_xBaseTDs.getLength() == 0 && _aBaseTypes.getLength() != 0)
-    {
-        try
-        {
-            Sequence< Reference< XInterfaceTypeDescription2 > > xBaseTDs(
-                _aBaseTypes.getLength());
-            bool bSuccess = true;
-            for (sal_Int32 i = 0; i < _aBaseTypes.getLength(); ++i)
+    osl::MutexGuard guard(getMutex());
+    if (!_membersInit) {
+        _nBaseOffset = BaseOffset(this).get();
+        typereg::Reader reader(
+            _aBytes.getConstArray(), _aBytes.getLength(), false,
+            TYPEREG_VERSION_1);
+        sal_Int32 count = 0;
+        sal_uInt16 methodCount = reader.getMethodCount();
+        {for (sal_uInt16 i = 0; i < methodCount; ++i) {
+            RTMethodMode flags = reader.getMethodFlags(i);
+            if (flags != RT_MODE_ATTRIBUTE_GET
+                && flags != RT_MODE_ATTRIBUTE_SET)
             {
-                if (!(_xTDMgr->getByHierarchicalName( _aBaseTypes[i] )
-                      >>= xBaseTDs[i]))
+                ++count;
+            }
+        }}
+        sal_uInt16 fieldCount = reader.getFieldCount();
+        count += fieldCount;
+        _members.realloc(count);
+        sal_Int32 index = 0;
+        {for (sal_uInt16 i = 0; i < fieldCount; ++i) {
+            rtl::OUString name(reader.getFieldName(i));
+            rtl::OUStringBuffer typeName(getName());
+            typeName.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
+            typeName.append(name);
+            RTFieldAccess flags = reader.getFieldFlags(i);
+            std::auto_ptr< stoc::registry_tdprovider::FunctionDescription >
+                getter;
+            std::auto_ptr< stoc::registry_tdprovider::FunctionDescription >
+                setter;
+            for (sal_uInt16 j = 0; j < methodCount; ++j) {
+                if (reader.getMethodName(j) == name) {
+                    switch (reader.getMethodFlags(j)) {
+                    case RT_MODE_ATTRIBUTE_GET:
+                        OSL_ASSERT(getter.get() == 0);
+                        getter.reset(
+                            new stoc::registry_tdprovider::FunctionDescription(
+                                _xTDMgr, _aBytes, j));
+                        break;
+
+                    case RT_MODE_ATTRIBUTE_SET:
+                        OSL_ASSERT(setter.get() == 0);
+                        setter.reset(
+                            new stoc::registry_tdprovider::FunctionDescription(
+                                _xTDMgr, _aBytes, j));
+                        break;
+                    }
+                }
+            }
+            _members[index] = new InterfaceAttributeImpl(
+                _xTDMgr, typeName.makeStringAndClear(), name,
+                reader.getFieldTypeName(i).replace('/', '.'),
+                (flags & RT_ACCESS_READONLY) != 0,
+                (flags & RT_ACCESS_BOUND) != 0, getter, setter,
+                _nBaseOffset + index);
+            ++index;
+        }}
+        {for (sal_uInt16 i = 0; i < methodCount; ++i) {
+            RTMethodMode flags = reader.getMethodFlags(i);
+            if (flags != RT_MODE_ATTRIBUTE_GET
+                && flags != RT_MODE_ATTRIBUTE_SET)
+            {
+                rtl::OUString name(reader.getMethodName(i));
+                rtl::OUStringBuffer typeName(getName());
+                typeName.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
+                typeName.append(name);
+                _members[index] = new InterfaceMethodImpl(
+                    _xTDMgr, typeName.makeStringAndClear(), name,
+                    reader.getMethodReturnTypeName(i).replace('/', '.'),
+                    _aBytes, i, flags == RT_MODE_ONEWAY, _nBaseOffset + index);
+                ++index;
+            }
+        }}
+        _membersInit = true;
+    }
+    return _members;
+}
+
+Sequence< Reference< XInterfaceTypeDescription2 > >
+InterfaceTypeDescriptionImpl::getBaseTypes() throw (RuntimeException) {
+    MutexGuard guard(getMutex());
+    if (_xBaseTDs.getLength() == 0 && _aBaseTypes.getLength() != 0) {
+        bool success = true;
+        Sequence< Reference< XInterfaceTypeDescription2 > > tds(
+            _aBaseTypes.getLength());
+        try {
+            for (sal_Int32 i = 0; i < _aBaseTypes.getLength(); ++i) {
+                if (!(_xTDMgr->getByHierarchicalName(_aBaseTypes[i])
+                      >>= tds[i]))
                 {
-                    bSuccess = false;
+                    success = false;
                     break;
                 }
             }
-            if (bSuccess)
-            {
-                MutexGuard aGuard( getMutex() );
-                if (_xBaseTDs.getLength() == 0)
-                {
-                    _xBaseTDs = xBaseTDs;
-                }
-                return _xBaseTDs;
-            }
+        } catch (NoSuchElementException &) {
+            success = false;
         }
-        catch (NoSuchElementException &)
-        {
+        if (success) {
+            _xBaseTDs = tds;
+        } else {
+            // Never try again, if TDs were not found:
+            _aBaseTypes.realloc(0);
         }
-        // never try again, if no base tds were found
-        _aBaseTypes.realloc(0);
     }
     return _xBaseTDs;
 }
 
+Sequence< Reference< XInterfaceTypeDescription2 > >
+InterfaceTypeDescriptionImpl::getOptionalBaseTypes() throw (RuntimeException) {
+    MutexGuard guard(getMutex());
+    if (_xOptionalBaseTDs.getLength() == 0
+        && _aOptionalBaseTypes.getLength() != 0)
+    {
+        bool success = true;
+        Sequence< Reference< XInterfaceTypeDescription2 > > tds(
+            _aOptionalBaseTypes.getLength());
+        try {
+            for (sal_Int32 i = 0; i < _aOptionalBaseTypes.getLength(); ++i) {
+                if (!(_xTDMgr->getByHierarchicalName(_aOptionalBaseTypes[i])
+                      >>= tds[i]))
+                {
+                    success = false;
+                    break;
+                }
+            }
+        } catch (NoSuchElementException &) {
+            success = false;
+        }
+        if (success) {
+            _xOptionalBaseTDs = tds;
+        } else {
+            // Never try again, if TDs were not found:
+            _aOptionalBaseTypes.realloc(0);
+        }
+    }
+    return _xOptionalBaseTDs;
 }
 
-
+}
