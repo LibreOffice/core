@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:46:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,7 +871,7 @@ void XclImpWebQuery::ReadParamqry( XclImpStream& rStrm )
     }
 }
 
-void XclImpWebQuery::ReadSxstring( XclImpStream& rStrm )
+void XclImpWebQuery::ReadWqstring( XclImpStream& rStrm )
 {
     maURL.Erase();
     rStrm.AppendUniString( maURL );
@@ -963,11 +963,11 @@ void XclImpWebQueryBuffer::ReadParamqry( XclImpStream& rStrm )
         pQuery->ReadParamqry( rStrm );
 }
 
-void XclImpWebQueryBuffer::ReadSxstring( XclImpStream& rStrm )
+void XclImpWebQueryBuffer::ReadWqstring( XclImpStream& rStrm )
 {
     XclImpWebQuery* pQuery = maWQList.Last();
     if( pQuery )
-        pQuery->ReadSxstring( rStrm );
+        pQuery->ReadWqstring( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqsettings( XclImpStream& rStrm )
