@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionGridControl.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 /** is an extended grid control, which allows the user to customize some of it's user interface's aspects.
 */
-service InteractionGridControl
+published service InteractionGridControl
 {
     service com::sun::star::form::control::GridControl;
 
