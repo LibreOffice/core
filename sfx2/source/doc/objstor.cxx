@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-25 09:57:15 $
+ *  last change: $Author: ab $ $Date: 2001-06-29 10:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,12 +2118,12 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         ULONG nVersion = rMedium.GetFilter()->GetVersion();
         xStor->SetVersion( nVersion );
 
+        // Initialize Basic
+        GetBasicManager();
+
         // Save dialog container
         if( nVersion >= 6200 )
         {
-            // Initialize Basic
-            GetBasicManager();
-
             SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
             if( pDialogCont )
                 pDialogCont->storeLibrariesToStorage( (SotStorage*)(SvStorage*)xStor );
