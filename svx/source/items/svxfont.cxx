@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: sj $ $Date: 2000-10-20 17:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 // include ----------------------------------------------------------------
 
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
@@ -72,6 +69,15 @@
 #endif
 #ifndef _SV_POLY_HXX //autogen
 #include <vcl/poly.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <unolingu.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_KCHARACTERTYPE_HPP_
+#include <com/sun/star/lang/KCharacterType.hpp>
 #endif
 #pragma hdrstop
 
@@ -179,20 +185,21 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
     // Ich muss mir noch die Sprache besorgen
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
-    International aInter( eLng );
+
+    CharClass aCharClass( SvxCreateLocale( eLng ) );
 
     switch( eCaseMap )
     {
         case SVX_CASEMAP_KAPITAELCHEN:
         case SVX_CASEMAP_VERSALIEN:
         {
-            aInter.ToUpper( aTxt );
+            aCharClass.toUpper( aTxt );
             break;
         }
 
         case SVX_CASEMAP_GEMEINE:
         {
-            aInter.ToLower( aTxt );
+            aCharClass.toLower( aTxt );
             break;
         }
         case SVX_CASEMAP_TITEL:
@@ -210,10 +217,8 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
                 {
                     if( bBlank )
                     {
-                        XubString aTemp;
-
-                        aTemp += aTxt.GetChar( i );
-                        aInter.ToUpper( aTemp );
+                        String aTemp( aTxt.GetChar( i ) );
+                        aCharClass.toUpper( aTemp );
                         aTxt.Replace( i, 1, aTemp );
                     }
                     bBlank = FALSE;
@@ -281,14 +286,6 @@ void SvxDoCapitals::Do( const XubString &rTxt, const xub_StrLen nIdx,
  * zerlegt den String in Gross- und Kleinbuchstaben und ruft jeweils die
  * Methode SvxDoCapitals::Do( ) auf.
  *************************************************************************/
-// 4251: Es gibt Zeichen, die Upper _und_ Lower sind (z.B. das Blank).
-// Solche Zweideutigkeiten fuehren ins Chaos, deswegen werden diese
-// Zeichen der Menge Lower zugeordnet !
-
-inline BOOL IsUpperCap( const International &rInter, const xub_Unicode &rChar )
-{
-    return rInter.IsUpper( rChar ) && !rInter.IsLower( rChar );
-}
 
 void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 {
@@ -304,33 +301,51 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
-    const International aInter( eLng );
-    xub_Unicode aChar;
+
+    CharClass   aCharClass( SvxCreateLocale( eLng ) );
+    String      aCharString;
 
     while( nPos < nTxtLen )
     {
         // Erst kommen die Upper-Chars dran
-        aChar = rTxt.GetChar( nPos + nIdx );
-        while( nPos < nTxtLen && IsUpperCap( aInter, aChar ) )
-            aChar = rTxt.GetChar( ++nPos + nIdx );
+        aCharString = rTxt.GetChar( nPos + nIdx );
+
+        // 4251: Es gibt Zeichen, die Upper _und_ Lower sind (z.B. das Blank).
+        // Solche Zweideutigkeiten fuehren ins Chaos, deswegen werden diese
+        // Zeichen der Menge Lower zugeordnet !
+
+        while( nPos < nTxtLen )
+        {
+            sal_Int32 nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
+            if ( nCharacterType & ::com::sun::star::lang::KCharacterType::LOWER )
+                break;
+            if ( ! ( nCharacterType & ::com::sun::star::lang::KCharacterType::UPPER ) )
+                break;
+            aCharString = rTxt.GetChar( ++nPos + nIdx );
+        }
         if( nOldPos != nPos )
         {
             rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, TRUE );
             nOldPos = nPos;
         }
         // Nun werden die Lower-Chars verarbeitet (ohne Blanks)
-        while( nPos < nTxtLen && aInter.IsLower( aChar ) &&
-               CH_BLANK != aChar )
-            aChar = rTxt.GetChar( ++nPos + nIdx );
-
+        while( nPos < nTxtLen )
+        {
+            sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
+            if ( ! ( nCharacterType & ::com::sun::star::lang::KCharacterType::LOWER ) )
+                break;
+            if ( CH_BLANK == aCharString )
+                break;
+            aCharString = rTxt.GetChar( ++nPos + nIdx );
+        }
         if( nOldPos != nPos )
         {
             rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, FALSE );
             nOldPos = nPos;
         }
         // Nun werden die Blanks verarbeitet
-        while( nPos < nTxtLen && CH_BLANK == aChar )
-            aChar = rTxt.GetChar( ++nPos + nIdx );
+        while( nPos < nTxtLen && CH_BLANK == aCharString )
+            aCharString = rTxt.GetChar( ++nPos + nIdx );
 
         if( nOldPos != nPos )
         {
