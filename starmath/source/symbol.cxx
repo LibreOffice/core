@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:03:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,14 +190,6 @@ SmSym& SmSym::operator = (const SmSym& rSymbol)
         pSymSetManager->SetModified(TRUE);
 
     return *this;
-}
-
-void SmSym::SetSymbolName(const String& rName)
-{
-    Name    = rName;
-
-    if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
 }
 
 SvStream& operator << (SvStream& rStream, const SmSym& rSymbol)
@@ -421,13 +413,6 @@ SmSymSetManager_Impl & SmSymSetManager_Impl::operator = ( const SmSymSetManager_
 }
 
 /**************************************************************************/
-
-static osl::Mutex & lcl_GetSymSetMgrMutex()
-{
-    static osl::Mutex   aMutex;
-    return aMutex;
-}
-
 
 void SmSymSetManager::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                               const SfxHint& rHint, const TypeId& rHintType)
