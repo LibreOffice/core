@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:43:11 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 OUString aText;
                 *pValues >>= aText;
                 pDocSh->SetText(aText);
+                pDocSh->SetVisArea( Rectangle( Point(0, 0), pDocSh->GetSize() ) );
             }
             break;
             case HANDLE_FONT_NAME_VARIABLES                :
@@ -1079,5 +1080,21 @@ uno::Reference< uno::XInterface > SAL_CALL SmModel_createInstance(
     SmDLL::Init();
     SfxObjectShell* pShell = new SmDocShell( SFX_CREATE_MODE_STANDARD );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
+}
+
+void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xParent)
+        throw( lang::NoSupportException, uno::RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SfxBaseModel::setParent( xParent );
+    uno::Reference< lang::XUnoTunnel > xParentTunnel( xParent, uno::UNO_QUERY );
+    if ( xParentTunnel.is() )
+    {
+        SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
+        SfxObjectShell* pDoc = (SfxObjectShell*)(sal_Int32)( xParentTunnel->getSomething(
+                                        uno::Sequence< sal_Int8 >( aSfxIdent.GetByteSequence() ) ) );
+        if ( pDoc )
+            GetObjectShell()->OnDocumentPrinterChanged( pDoc->GetDocumentPrinter() );
+    }
 }
 
