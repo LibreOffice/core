@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,21 +485,21 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ norwegian ] = " Adresse " ;
         Text [ italian ] = "Indirizzo " ;
         Text [ portuguese_brazilian ] = "Endereço " ;
-        Text [ portuguese ] = "Endereço " ;
+        Text [ portuguese ] = "  Endereço  " ;
         Text [ finnish ] = " Osoite " ;
-        Text [ danish ] = "Adresse " ;
-        Text [ french ] = "Adresse " ;
-        Text [ swedish ] = "Adress  " ;
-        Text [ dutch ] = "Adres  " ;
-        Text [ spanish ] = "Dirección  " ;
-        Text [ english_us ] = "Address " ;
-        Text[ chinese_simplified ] = "µØÖ· ";
+        Text [ danish ] = " Adresse" ;
+        Text [ french ] = " Adresse" ;
+        Text [ swedish ] = " Adress  " ;
+        Text [ dutch ] = " Adres  " ;
+        Text [ spanish ] = " Dirección" ;
+        Text [ english_us ] = " Address" ;
+        Text[ chinese_simplified ] = " µØÖ·";
         Text[ russian ] = "Ïî÷òîâûé àäğåñ ";
         Text[ polish ] = "Adres ";
-        Text[ japanese ] = "ZŠ ";
-        Text[ chinese_traditional ] = "¦a§} ";
+        Text[ japanese ] = " ZŠ";
+        Text[ chinese_traditional ] = " ¦a§}";
         Text[ arabic ] = "ÇáÚäæÇä ";
-        Text[ greek ] = "Äéåıèõíóç ";
+        Text[ greek ] = " Äéåıèõíóç";
         Text[ korean ] = "ÁÖ¼Ò ";
         Text[ turkish ] = "Adres ";
         Text[ language_user1 ] = " ";
