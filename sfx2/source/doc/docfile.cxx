@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 16:03:11 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 16:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1546,7 +1546,7 @@ void SfxMedium::DownLoad( const Link& aLink )
 {
     SetDoneLink( aLink );
     GetInStream();
-    if ( !aLink.IsSet() )
+    if ( pInStream && !aLink.IsSet() )
     {
         while( !pImp->bDownloadDone )
             Application::Yield();
