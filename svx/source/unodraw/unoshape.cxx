@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-23 15:01:11 $
+ *  last change: $Author: cl $ $Date: 2001-07-23 15:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2072,8 +2072,18 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
 
     const uno::Any* pValues = aValues.getConstArray();
 
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-        setPropertyValue( *pNames++, *pValues++ );
+    try
+    {
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+            setPropertyValue( *pNames++, *pValues++ );
+    }
+    catch( beans::UnknownPropertyException& e )
+    {
+        const OUString aMsg( RTL_CONSTASCII_USTRINGPARAM("UnknownPropertyException"));
+        const uno::Reference< uno::XInterface > xContext;
+
+        throw lang::WrappedTargetException( aMsg, xContext, uno::makeAny(e) );
+    }
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL SvxShape::getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException)
@@ -2084,8 +2094,17 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     uno::Sequence< uno::Any > aRet( nCount );
     uno::Any* pValue = aRet.getArray();;
 
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-        *pValue++ = getPropertyValue( *pNames++ );
+    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++ )
+    {
+        try
+        {
+            *pValue = getPropertyValue( *pNames++ );
+        }
+        catch( uno::Exception& e )
+        {
+            DBG_ERROR( "SvxShape::getPropertyValues, unknown property asked" );
+        }
+    }
 
     return aRet;
 }
