@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-12 14:04:50 $
+ *  last change: $Author: mib $ $Date: 2002-06-28 07:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,6 +1268,7 @@ Reference< XAccessible> SwAccessibleMap::GetContext(
                 ASSERT( xAcc.is(), "unknown shape type" );
                 if( xAcc.is() )
                 {
+                    pAcc->Init();
                     if( aIter != mpShapeMap->end() )
                     {
                         (*aIter).second = xAcc;
