@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+ *  last change: $Author: er $ $Date: 2001-06-11 17:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,19 @@ void Time::MakeTimeFromMS( long nMS )
 
     Time aTime( 0, 0, 0, nMS/10 );
     SetTime( aTime.GetTime() * nSign );
+}
+
+// -----------------------------------------------------------------------
+
+double Time::GetTimeInDays() const
+{
+    short  nSign      = (nTime >= 0) ? +1 : -1;
+    double nHour      = GetHour();
+    double nMin       = GetMin();
+    double nSec       = GetSec();
+    double n100Sec    = Get100Sec();
+
+    return (nHour+(nMin/60)+(nSec/(60*60))+(n100Sec/(60*60*100))) / 24 * nSign;
 }
 
 // -----------------------------------------------------------------------
