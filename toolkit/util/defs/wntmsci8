@@ -15482,3 +15482,8 @@ _TI2?AVbad_alloc@std@@
 ?getTypes@OToolBoxWindowItem@?A0x8e21ac24@@OFI@AA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ
 ?queryInterface@OToolBoxWindowItem@?A0x8e21ac24@@OFM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
 ?release@OToolBoxWindowItem@?A0x8e21ac24@@OFM@AAXXZ
+?acquire@OToolBoxWindowItem@?A0xd08e309e@@OFM@AAXXZ
+?getImplementationId@OToolBoxWindowItem@?A0xd08e309e@@OFI@AA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getTypes@OToolBoxWindowItem@?A0xd08e309e@@OFI@AA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?queryInterface@OToolBoxWindowItem@?A0xd08e309e@@OFM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@OToolBoxWindowItem@?A0xd08e309e@@OFM@AAXXZ
