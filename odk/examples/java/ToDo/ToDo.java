@@ -700,11 +700,8 @@ public class ToDo {
           new Integer( gregoriancalendarStartDate.get( Calendar.DATE ) )
         } );
         Double doubleWorkday = ( Double ) xfunctionaccess.callFunction(
-        "WORKDAY",
-        //"ARBEITSTAG",
+        "com.sun.star.sheet.addin.Analysis.getWorkday",
         new Object[] { doubleDate, new Integer( intDays ), objectHolidays } );
-        //"EOMONTH",
-        //new Object[] { doubleDate, new Integer( intDays ) } );
 
         Double doubleYear = ( Double ) xfunctionaccess.callFunction( "YEAR",
         new Object[] { doubleWorkday } );
