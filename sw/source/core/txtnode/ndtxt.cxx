@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:26:49 $
+ *  last change: $Author: hbrinkm $ $Date: 2004-03-11 14:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2298,7 +2298,7 @@ const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
     return pNdNum;
 }
 
-const SwNumRule* SwTxtNode::GetNumRule() const
+SwNumRule* SwTxtNode::GetNumRule() const
 {
     const SwNumRule* pRet = 0;
     const SfxPoolItem* pItem = GetNoCondAttr( RES_PARATR_NUMRULE, TRUE );

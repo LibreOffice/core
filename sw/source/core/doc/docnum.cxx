@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:24:21 $
+ *  last change: $Author: hbrinkm $ $Date: 2004-03-11 14:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2232,7 +2232,7 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdatePos )
    @param bOutline        TRUE:   update outline numbering
                           FALSE:  update normal numbering
  */
-void SwDoc::UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
+void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos,
                            BOOL bOutline)
 {
     /* If old numbering is activated use the old algorithm. */
@@ -2290,7 +2290,7 @@ void SwDoc::UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
         for (int i = 0; i < MAXLEVEL; i++)
             bInitializedLevels[i] = true;
 
-        aNum = aNumRuleInfo.GetList().GetObject(nUpdatePos)->
+        aNum = *aNumRuleInfo.GetList().GetObject(nUpdatePos)->
             GetNum(bOutline);
 
         nCount = aNum.GetLevelVal()[aNum.GetRealLevel()];
@@ -2298,7 +2298,7 @@ void SwDoc::UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
     }
 
     /* The old level is the level of the first node to process. */
-    SwNodeNum * pNum = aNumRuleInfo.GetList().GetObject(nUpdatePos)->
+    const SwNodeNum * pNum = aNumRuleInfo.GetList().GetObject(nUpdatePos)->
         GetNum();
     BYTE nOldLevel = pNum ? pNum->GetLevel() : 0;
 
@@ -2442,7 +2442,7 @@ void SwDoc::UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
 }
 
 // pre-SRC680-numbering
-void SwDoc::UpdateNumRuleOld( const SwNumRule & rRule, ULONG nUpdPos )
+void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
 {
     SwNumRuleInfo aUpd( rRule.GetName() );
     aUpd.MakeList( *this );
@@ -2452,7 +2452,7 @@ void SwDoc::UpdateNumRuleOld( const SwNumRule & rRule, ULONG nUpdPos )
     else
         aUpd.GetList().SearchKey( nUpdPos, &nUpdPos );
 
-    const SwNumRule* pRule = &rRule;
+    SwNumRule* pRule = &rRule;
 
     if( nUpdPos < aUpd.GetList().Count() )
     {

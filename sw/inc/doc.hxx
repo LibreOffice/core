@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:25:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2004-03-11 14:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,6 @@ class SwDoc
                                     // verwaltet!
     sal_uInt16  nLinkUpdMode;       // UpdateMode fuer Links
     sal_uInt16  nFldUpdMode;        // Mode fuer Felder/Charts automatisch aktualisieren
-
     SwRedlineMode eRedlineMode;     // aktueller Redline Modus
     SwCharCompressType eChrCmprType;    // for ASIAN: compress punctuation/kana
 
@@ -1493,9 +1492,9 @@ public:
     void UpdateNumRule( const String& rName, sal_uInt32 nUpdPos );
     void UpdateNumRule();   // alle invaliden Updaten
     /* -> #111955# */
-    void UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
+    void UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos,
                         BOOL bOutline = FALSE);
-    void UpdateNumRuleOld( const SwNumRule & rRule, ULONG nUpdatePos);
+    void UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdatePos);
     /* <- #111955# */
     void ChgNumRuleFmts( const SwNumRule& rRule );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
