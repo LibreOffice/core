@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 09:58:24 $
+#   last change: $Author: vg $ $Date: 2003-06-10 10:50:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,10 +72,8 @@ TARGET=gendocu
 CPPDOCREFNAME="UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) C/C++ API Reference"
 JAVADOCREFNAME="UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"
 
-IDL_DOCU_INDEX_FILE = $(DESTDIRGENIDLREF)$/module-ix.html
 CPP_DOCU_INDEX_FILE = $(DESTDIRGENCPPREF)$/index.html
 JAVA_DOCU_INDEX_FILE = $(DESTDIRGENJAVAREF)$/index.html
-
 
 JAVA_SRC_DIR=$(MISC)$/java_src
 JAVA_PACKAGES=\
@@ -113,29 +111,15 @@ AUTODOCPARAMS= -lg c++ \
         -p cppuhelper $(INCOUT) -t cppuhelper \
         -p bridges $(INCOUT) -t bridges
 
-JAVADOCPARAMS= -use -splitindex -windowtitle $(TITLE) -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.4.1/docs/api ./java $(JAVA_PACKAGES)
+JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.4.1/docs/api ./java $(JAVA_PACKAGES)
     
 JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
 MY_AUTODOC=$(WRAPCMD) $(SOLARBINDIR)$/autodoc
 
-
-DIRLIST = \
-    $(DESTDIRGENIDLREF) \
-    $(DESTDIRCPPDOCU) \
-    $(DESTDIRGENCPPREF) \
-    $(DESTDIRJAVADOCU) \
-    $(DESTDIRGENJAVAREF)
-
 all: \
-    $(IDL_DOCU_INDEX_FILE) \
     $(CPP_DOCU_INDEX_FILE) \
     $(JAVA_DOCU_INDEX_FILE)
-
-$(IDL_DOCU_INDEX_FILE) : $(IDL_CHAPTER_REFS) $(IDLFILES)
-    +-$(MKDIRHIER) $(@:d)        
-    +$(MY_AUTODOC) -html $(DESTDIRGENIDLREF) -dvgroot ..$/..$/DevelopersGuide -name $(IDLDOCREFNAME) -lg \
-    idl -dvgfile $(IDL_CHAPTER_REFS) -t $(DESTDIRIDL)
 
 $(CPP_DOCU_INDEX_FILE) : $(INCLUDELIST)
     +-$(MKDIRHIER) $(@:d)        
