@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:48:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,8 +286,28 @@ struct SfxToolBoxControl_Impl
     SfxPopupWindow*         mpFloatingWindow;
     SfxPopupWindow*         mpPopupWindow;
     Reference< XUIElement > mxUIElement;
+
+    DECL_LINK( WindowEventListener, VclSimpleEvent* );
 };
 
+IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent )
+{
+    if ( pEvent &&
+         pEvent->ISA( VclWindowEvent ) &&
+         (( pEvent->GetId() == VCLEVENT_WINDOW_MOVE ) ||
+          ( pEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE )))
+    {
+        Window* pWindow( ((VclWindowEvent*)pEvent)->GetWindow() );
+        if (( pWindow == mpFloatingWindow ) &&
+            ( mpPopupWindow != 0 ))
+        {
+            delete mpPopupWindow;
+            mpPopupWindow = 0;
+        }
+    }
+
+    return 1;
+}
 
 //--------------------------------------------------------------------
 
@@ -995,6 +1015,9 @@ IMPL_LINK( SfxToolBoxControl, PopupModeEndHdl, void *, EMPTYARG )
         delete pImpl->mpFloatingWindow;
         pImpl->mpFloatingWindow = pImpl->mpPopupWindow;
         pImpl->mpPopupWindow    = 0;
+        // We also need to know when the user tries to use the
+        // floating window.
+        pImpl->mpFloatingWindow->AddEventListener( LINK( pImpl, SfxToolBoxControl_Impl, WindowEventListener ));
     }
     else
     {
