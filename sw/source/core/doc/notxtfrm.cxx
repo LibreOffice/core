@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 15:41:51 $
+ *  last change: $Author: jp $ $Date: 2001-01-23 20:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,11 +517,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     SwRect aPaintArea( aGrfArea );
     aPaintArea._Intersection( aOrigPaint );
 
-    // Crop und Mirror berechnen.
-    SwRect aPaintGrfArea( aGrfArea );
-    ((SwNoTxtFrm*)this)->GetGrfArea( aPaintGrfArea, &aGrfArea );
-
-    SwRect aNormal( aPaintGrfArea );
+    SwRect aNormal( Frm().Pos() + Prt().Pos(), Prt().SSize() );
     aNormal.Justify(); //Normalisiertes Rechteck fuer die Vergleiche
 
     BOOL bIsOleNode = GetNode()->IsOLENode();
@@ -529,18 +525,8 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     {
         // berechne die 4 zu loeschenden Rechtecke
         if( pSh->GetWin() )
-        {
-            const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();
-            SwRect aTmpRect;
-            if( !pGrfNd || !(
-                pGrfNd->IsTransparent() ||
-                pGrfNd->IsAnimated() ||
-                0 != pGrfNd->GetFrmFmt()->GetTransparencyGrf().GetValue() ))
-                aTmpRect = aNormal;
-
-            ::lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, aTmpRect,
+            ::lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, aNormal,
                             bIsOleNode );
-        }
 
         // in der Schnittmenge vom PaintBereich und der Bitmap liegt
         // der absolut sichtbare Bereich vom Frame
@@ -548,7 +534,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
 
         if ( bClip )
             pOut->IntersectClipRegion( aPaintArea.SVRect() );
-        PaintPicture( pOut, aGrfArea, aPaintGrfArea );
+        PaintPicture( pOut, aGrfArea, aNormal );
     }
     else
         // wenn nicht sichtbar, loesche einfach den angegebenen Bereich
@@ -557,41 +543,6 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
 
     pOut->Pop();
     SfxProgress::LeaveLock();
-}
-
-
-
-
-/*************************************************************************
-|*
-|*    void lcl_CalcRect( Point & aPt, Size & aDim,
-|*                   USHORT nMirror )
-|*
-|*    Beschreibung      Errechne die Position und die Groesse der Grafik im
-|*                      Frame, entsprechen der aktuellen Grafik-Attribute
-|*
-|*    Parameter         Point&  die Position im Frame  ( auch Return-Wert )
-|*                      Size&   die Groesse der Grafik ( auch Return-Wert )
-|*                      MirrorGrf   akt. Spiegelungs-Attribut
-|*    Ersterstellung    JP 04.03.91
-|*    Letzte Aenderung  JP 31.08.94
-|*
-*************************************************************************/
-
-
-void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
-{
-    if( nMirror == RES_MIRROR_GRF_VERT || nMirror == RES_MIRROR_GRF_BOTH )
-    {
-        rPt.X() += rDim.Width() -1;
-        rDim.Width() = -rDim.Width();
-    }
-
-    if( nMirror == RES_MIRROR_GRF_HOR || nMirror == RES_MIRROR_GRF_BOTH )
-    {
-        rPt.Y() += rDim.Height() -1;
-        rDim.Height() = -rDim.Height();
-    }
 }
 
 
@@ -608,8 +559,11 @@ void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
 *************************************************************************/
 
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
-                             BOOL bMirror ) const
+                             BOOL ) const
 {
+    // JP 23.01.2001: currently only used for scaling the contour of graphics!
+    //                  all other is handled by the GraphicObject
+
     //In rRect wird das sichbare Rechteck der Grafik gesteckt.
     //In pOrigRect werden Pos+Size der Gesamtgrafik gesteck.
 
@@ -783,7 +737,8 @@ BOOL SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     Calc();
     SwRect aFrameRect( Frm() );
     rRect = aFrameRect;
-    ((SwNoTxtFrm*)this)->GetGrfArea( rRect );
+    rRect.Pos( Frm().Pos() + Prt().Pos() );
+    rRect.SSize( Prt().SSize() );
 
     rRect.Justify();
 
