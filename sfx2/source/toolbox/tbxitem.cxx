@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:19:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATUS_HPP_
 #include <com/sun/star/frame/status/ItemStatus.hpp>
@@ -111,11 +111,11 @@
 #ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATE_HPP_
 #include <com/sun/star/frame/status/ItemState.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
-#include <drafts/com/sun/star/ui/XUIElementFactory.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
+#include <com/sun/star/ui/XUIElementFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -213,8 +213,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
-using namespace ::drafts::com::sun::star::frame;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
 
 //====================================================================
 
@@ -841,7 +841,7 @@ throw (::com::sun::star::uno::RuntimeException)
         xPersistentWindowStateSupplier = Reference< XNameAccess >(
             xServiceManager->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.ui.WindowStateConfiguration" ))),
+                    "com.sun.star.ui.WindowStateConfiguration" ))),
             UNO_QUERY );
         xWeakPersistentWindowStateSupplier = xPersistentWindowStateSupplier;
     }
@@ -852,7 +852,7 @@ throw (::com::sun::star::uno::RuntimeException)
         xModuleManager = Reference< XModuleManager >(
             xServiceManager->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.frame.ModuleManager" ))),
+                    "com.sun.star.frame.ModuleManager" ))),
             UNO_QUERY );
         xWeakModuleManager = xModuleManager;
     }
@@ -931,7 +931,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
             xUIEementFactory = Reference< XUIElementFactory >(
                 xServiceManager->createInstance(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "drafts.com.sun.star.ui.UIElementFactoryManager" ))),
+                        "com.sun.star.ui.UIElementFactoryManager" ))),
                 UNO_QUERY );
             xWeakUIElementFactory = xUIEementFactory;
         }
