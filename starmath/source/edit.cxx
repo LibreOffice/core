@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-01 10:34:48 $
+ *  last change: $Author: tl $ $Date: 2001-06-15 08:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ void SmEditWindow::Resize()
         pEditView->SetOutputArea(AdjustScrollBars());
         pEditView->ShowCursor();
 
+        DBG_ASSERT( pEditView->GetEditEngine(), "EditEngine missing" );
         const long nMaxVisAreaStart = pEditView->GetEditEngine()->GetTextHeight() -
                                       pEditView->GetOutputArea().GetHeight();
         if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
@@ -599,23 +600,25 @@ void SmEditWindow::LoseFocus()
 
 BOOL SmEditWindow::IsAllSelected() const
 {
-    DBG_ASSERT( pEditView, "NULL pointer" );
-    ESelection eSelection;
-    if (pEditView)
-        eSelection = pEditView->GetSelection();
-
+    BOOL bRes = FALSE;
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
+    DBG_ASSERT( pEditView, "NULL pointer" );
     DBG_ASSERT( pEditEngine, "NULL pointer" );
-    INT32 nParaCnt = pEditEngine->GetParagraphCount();
-    if (!(nParaCnt - 1))
+    if (pEditEngine  &&  pEditView)
     {
-        String Text( pEditEngine->GetText( LINEEND_LF ) );
-        return !eSelection.nStartPos && (eSelection.nEndPos == Text.Len () - 1);
+        ESelection eSelection( pEditView->GetSelection() );
+        INT32 nParaCnt = pEditEngine->GetParagraphCount();
+        if (!(nParaCnt - 1))
+        {
+            String Text( pEditEngine->GetText( LINEEND_LF ) );
+            bRes = !eSelection.nStartPos && (eSelection.nEndPos == Text.Len () - 1);
+        }
+        else
+        {
+            bRes = !eSelection.nStartPara && (eSelection.nEndPara == nParaCnt - 1);
+        }
     }
-    else
-    {
-        return !eSelection.nStartPara && (eSelection.nEndPara == nParaCnt - 1);
-    }
+    return bRes;
 }
 
 void SmEditWindow::SelectAll()
@@ -666,66 +669,72 @@ void SmEditWindow::MarkError(const Point &rPos)
 
 void SmEditWindow::SelNextMark()
 {
-    DBG_ASSERT( pEditView, "NULL pointer" );
-    ESelection eSelection = pEditView->GetSelection();
-    USHORT     Pos        = eSelection.nEndPos;
-    String     aMark (C2S("<?>"));
-    String     aText;
     EditEngine *pEditEngine = GetEditEngine();
+    DBG_ASSERT( pEditView, "NULL pointer" );
     DBG_ASSERT( pEditEngine, "NULL pointer" );
-    USHORT     nCounts    = pEditEngine->GetParagraphCount();
-
-    while (eSelection.nEndPara < nCounts)
+    if (pEditEngine  &&  pEditView)
     {
-        aText = pEditEngine->GetText( eSelection.nEndPara );
-        Pos   = aText.Search(aMark, Pos);
+        ESelection eSelection = pEditView->GetSelection();
+        USHORT     Pos        = eSelection.nEndPos;
+        String     aMark (C2S("<?>"));
+        String     aText;
+        USHORT     nCounts    = pEditEngine->GetParagraphCount();
 
-        if (Pos != STRING_NOTFOUND)
+        while (eSelection.nEndPara < nCounts)
         {
-            pEditView->SetSelection(ESelection (eSelection.nEndPara, Pos, eSelection.nEndPara, Pos + 3));
-            break;
-        }
+            aText = pEditEngine->GetText( eSelection.nEndPara );
+            Pos   = aText.Search(aMark, Pos);
 
-        Pos = 0;
-        eSelection.nEndPara++;
+            if (Pos != STRING_NOTFOUND)
+            {
+                pEditView->SetSelection(ESelection (eSelection.nEndPara, Pos, eSelection.nEndPara, Pos + 3));
+                break;
+            }
+
+            Pos = 0;
+            eSelection.nEndPara++;
+        }
     }
 }
 
 void SmEditWindow::SelPrevMark()
 {
-    DBG_ASSERT( pEditView, "NULL pointer" );
-    ESelection eSelection = pEditView->GetSelection();
-    USHORT     Pos        = STRING_NOTFOUND;
-    xub_StrLen Max        = eSelection.nStartPos;
     EditEngine *pEditEngine = GetEditEngine();
     DBG_ASSERT( pEditEngine, "NULL pointer" );
-    String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
-    String     aMark (C2S("<?>"));
-    USHORT     nCounts    = pEditEngine->GetParagraphCount();
-
-    do
+    DBG_ASSERT( pEditView, "NULL pointer" );
+    if (pEditEngine  &&  pEditView)
     {
-        USHORT Fnd = Text.Search(aMark, 0);
+        ESelection eSelection = pEditView->GetSelection();
+        USHORT     Pos        = STRING_NOTFOUND;
+        xub_StrLen Max        = eSelection.nStartPos;
+        String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
+        String     aMark (C2S("<?>"));
+        USHORT     nCounts    = pEditEngine->GetParagraphCount();
 
-        while ((Fnd < Max) && (Fnd != STRING_NOTFOUND))
+        do
         {
-            Pos = Fnd;
-            Fnd = Text.Search(aMark, Fnd + 1);
-        }
+            USHORT Fnd = Text.Search(aMark, 0);
 
-        if (Pos == STRING_NOTFOUND)
+            while ((Fnd < Max) && (Fnd != STRING_NOTFOUND))
+            {
+                Pos = Fnd;
+                Fnd = Text.Search(aMark, Fnd + 1);
+            }
+
+            if (Pos == STRING_NOTFOUND)
+            {
+                eSelection.nStartPara--;
+                Text = pEditEngine->GetText( eSelection.nStartPara );
+                Max = Text.Len();
+            }
+        }
+        while ((eSelection.nStartPara < nCounts) &&
+            (Pos == STRING_NOTFOUND));
+
+        if (Pos != STRING_NOTFOUND)
         {
-            eSelection.nStartPara--;
-            Text = pEditEngine->GetText( eSelection.nStartPara );
-            Max = Text.Len();
+            pEditView->SetSelection(ESelection (eSelection.nStartPara, Pos, eSelection.nStartPara, Pos + 3));
         }
-    }
-    while ((eSelection.nStartPara < nCounts) &&
-           (Pos == STRING_NOTFOUND));
-
-    if (Pos != STRING_NOTFOUND)
-    {
-        pEditView->SetSelection(ESelection (eSelection.nStartPara, Pos, eSelection.nStartPara, Pos + 3));
     }
 }
 
@@ -769,8 +778,7 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
 BOOL SmEditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
-    DBG_ASSERT( pEditEngine, "NULL pointer" );
-    return pEditEngine->GetTextLen() == 0;
+    return pEditEngine ? pEditEngine->GetTextLen() == 0 : FALSE;
 }
 
 BOOL SmEditWindow::IsSelected() const
