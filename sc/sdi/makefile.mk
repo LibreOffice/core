@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-05 16:21:00 $
+#   last change: $Author: obo $ $Date: 2004-08-12 09:27:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ SVSDIDEPEND= \
     oleobjsh.sdi\
     chartsh.sdi \
     graphsh.sdi \
+    mediash.sdi \
     pgbrksh.sdi \
     scslots.hrc \
     $(INC)$/sc.hrc
