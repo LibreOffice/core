@@ -164,8 +164,10 @@ Dim sPath as String
 Dim InitPath as String
 Dim RefControlName as String
 Dim oUcb as object
-	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	&apos;Note: The following services have to be called in the following order
+        &apos; because otherwise Basic does not remove the FolderDialog Service
 	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	InitPath = ConvertToUrl(oRefModel.Text)
 	If InitPath = &quot;&quot; Then
 		InitPath = GetPathSettings(&quot;Work&quot;)
@@ -191,8 +193,10 @@ Dim InitPath as String
 Dim RefControlName as String
 Dim oUcb as object
 &apos;Dim ListAny(0)
-	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	&apos;Note: The following services have to be called in the following order
+        &apos; because otherwise Basic does not remove the FileDialog Service
 	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	&apos;ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_SIMPLE
 	&apos;oFileDialog.initialize(ListAny())
 	AddFiltersToDialog(FilterNames(), oFileDialog)
@@ -249,7 +253,7 @@ Dim FilterIndex as Integer
 End Function
 
 
-Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)	
+Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)
 Dim i as Integer
 Dim MaxIndex as Integer
 	MaxIndex = Ubound(FilterNames(), 1)
