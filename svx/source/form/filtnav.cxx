@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 14:06:42 $
+ *  last change: $Author: oj $ $Date: 2002-10-01 12:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,7 +1579,17 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 
     return rEvt.mnAction;
 }
-
+// -----------------------------------------------------------------------------
+namespace
+{
+    FmFilterItems*  getTargetItems(SvLBoxEntry* _pTarget)
+    {
+        FmFilterData*   pData = (FmFilterData*)_pTarget->GetUserData();
+        FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems) ? (FmFilterItems*)pData
+                                                          : (FmFilterItems*)((FmFilterItem*)pData)->GetParent();
+        return pTargetItems;
+    }
+}
 //------------------------------------------------------------------------
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -1598,39 +1608,14 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     // search the container where to add the items
-    FmFilterData*   pData = (FmFilterData*)pDropTarget->GetUserData();
-    FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems) ? (FmFilterItems*)pData
-                                                       : (FmFilterItems*)((FmFilterItem*)pData)->GetParent();
+    FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
     SelectAll(sal_False);
     SvLBoxEntry* pEntry = FindEntry(pTargetItems);
     Select(pEntry, sal_True);
     SetCurEntry(pEntry);
 
-    sal_Bool bCopy = DND_ACTION_COPY == rEvt.mnAction;
-    ::std::vector<FmFilterItem*> aItemList = m_aControlExchange->getDraggedEntries();
+    insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
 
-    for (::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin(); i != aItemList.end(); i++)
-    {
-        if ((*i)->GetParent() == pTargetItems)
-            continue;
-        else
-        {
-            FmFilterItem* pFilterItem = pTargetItems->Find((*i)->GetTextComponent());
-            String aText = (*i)->GetText();
-            if (!pFilterItem)
-            {
-                pFilterItem = new FmFilterItem(m_pModel->getORB(),pTargetItems, (*i)->GetFieldName(), aText, (*i)->GetTextComponent());
-                m_pModel->Append(pTargetItems, pFilterItem);
-            }
-
-            if (!bCopy)
-                m_pModel->Remove(*i);
-
-            // now set the text for the new dragged item
-            m_pModel->SetText(pFilterItem, aText);
-        }
-    }
-    m_pModel->CheckIntegrity((FmFormItem*)pTargetItems->GetParent());
     return sal_True;
 }
 
@@ -1774,17 +1759,11 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
     if (pEntry)
         GetModel()->Remove( pEntry );
 }
-
-//------------------------------------------------------------------------------
-void FmFilterNavigator::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+// -----------------------------------------------------------------------------
+FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
 {
-    EndSelection();
-
     // be sure that the data is only used within a only one form!
     FmFormItem* pFirstItem = NULL;
-    SvLBoxEntry* pCurEntry = GetCurEntry();
-
-    m_aControlExchange.prepareDrag();
 
     sal_Bool bHandled = sal_True;
     sal_Bool bFoundSomething = sal_False;
@@ -1805,16 +1784,57 @@ void FmFilterNavigator::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 
             if (bHandled)
             {
-                m_aControlExchange->addSelectedItem(pFilter);
+                _rItemList.push_back(pFilter);
                 bFoundSomething = sal_True;
             }
         }
     }
-    if (!bHandled || !bFoundSomething)
-        return;
+    if ( !bHandled || !bFoundSomething )
+        pFirstItem = NULL;
+    return pFirstItem;
+}
+// -----------------------------------------------------------------------------
+void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy)
+{
+    ::std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
+    for (::std::vector<FmFilterItem*>::const_iterator i = _rFilterList.begin(); i != aEnd; ++i)
+    {
+        if ((*i)->GetParent() == _pTargetItems)
+            continue;
+        else
+        {
+            FmFilterItem* pFilterItem = _pTargetItems->Find((*i)->GetTextComponent());
+            String aText = (*i)->GetText();
+            if (!pFilterItem)
+            {
+                pFilterItem = new FmFilterItem(m_pModel->getORB(),_pTargetItems, (*i)->GetFieldName(), aText, (*i)->GetTextComponent());
+                m_pModel->Append(_pTargetItems, pFilterItem);
+            }
 
-    m_aControlExchange->setFormItem(pFirstItem);
-    m_aControlExchange.startDrag( DND_ACTION_COPYMOVE );
+            if ( !_bCopy )
+                m_pModel->Remove(*i);
+
+            // now set the text for the new dragged item
+            m_pModel->SetText(pFilterItem, aText);
+        }
+    }
+    m_pModel->CheckIntegrity((FmFormItem*)_pTargetItems->GetParent());
+}
+//------------------------------------------------------------------------------
+void FmFilterNavigator::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+{
+    EndSelection();
+
+    // be sure that the data is only used within a only one form!
+    m_aControlExchange.prepareDrag();
+
+    ::std::vector<FmFilterItem*> aItemList;
+    if ( FmFormItem* pFirstItem = getSelectedFilterItems(aItemList) )
+    {
+        m_aControlExchange->setDraggedEntries(aItemList);
+        m_aControlExchange->setFormItem(pFirstItem);
+        m_aControlExchange.startDrag( DND_ACTION_COPYMOVE );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1923,8 +1943,47 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
 //------------------------------------------------------------------------
 void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 {
-    // delete ?
-    if (rKEvt.GetKeyCode().GetCode() == KEY_DELETE && !rKEvt.GetKeyCode().GetModifier())
+    const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
+    if (    rKeyCode.IsMod1()
+        &&  rKeyCode.IsMod2()
+        && !rKeyCode.IsShift()
+        && ( rKeyCode.GetCode() == KEY_UP || rKeyCode.GetCode() == KEY_DOWN )
+        )
+    {
+        ::std::vector<FmFilterItem*> aItemList;
+        if ( FmFormItem* pFirstItem = getSelectedFilterItems(aItemList) )
+        {
+            SvLBoxEntry* pTarget = NULL;
+            if ( rKeyCode.GetCode() == KEY_UP )
+            {
+                SvLBoxEntry* pEntry = FirstSelected();
+                pTarget = Prev(pEntry);
+                // check if the previous entry is a filter, if so get the next prev
+                if ( pTarget && GetChildCount( pTarget ) != 0 )
+                {
+                    pTarget = Prev(pTarget);
+                    // if the entry is still no leaf return
+                    if ( pTarget && GetChildCount( pTarget ) != 0 )
+                        return ;
+                }
+            }
+            else
+            {
+                SvLBoxEntry* pEntry = LastSelected();
+                pTarget = Next(pEntry);
+                // we need the next filter entry
+                while( pTarget && GetChildCount( pTarget ) == 0 && pTarget != Last() )
+                    pTarget = Next(pTarget);
+            }
+
+            if ( pTarget )
+            {
+                insertFilterItem(aItemList,getTargetItems(pTarget));
+                return;
+            }
+        }
+    }
+    else if (rKeyCode.GetCode() == KEY_DELETE && !rKeyCode.GetModifier())
     {
         if (!IsSelected(First()) || GetEntryCount() > 1)
             DeleteSelection();

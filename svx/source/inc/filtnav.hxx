@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:35:35 $
+ *  last change: $Author: oj $ $Date: 2002-10-01 12:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,7 @@ public:
     inline static sal_Bool  hasFormat( const DataFlavorExVector& _rFormats );
 
     const vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
+    void setDraggedEntries(const vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
     FmFormItem* getFormItem() const { return m_pFormItem; }
 
     void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }
@@ -377,6 +378,24 @@ protected:
     DECL_LINK(OnEdited, SvLBoxEntry*);
     DECL_LINK(OnSelect, void*);
     DECL_LINK(OnDropActionTimer, void*);
+
+private:
+    /** returns the first form item and the selected FilterItems in the vector
+        @param  _rItemList
+            Is filled inside. <OUT/>
+        @return
+            The first form item.
+    */
+    FmFormItem* getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList);
+    /* inserts the filter items into the tree model and creates new FilterItems if needed.
+        @param  _rFilterList
+            The items which should be inserted.
+        @param  _pTargetItems
+            The target where to insert the items.
+        @param  _bCopy
+            If <TRUE/> the items will not be removed from the model, otherwise they will.
+    */
+    void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy = sal_False);
 };
 
 //========================================================================
