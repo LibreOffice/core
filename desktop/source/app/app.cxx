@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.169 $
+ *  $Revision: 1.170 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:16:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 11:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include "desktopcontext.hxx"
 #include "exithelper.hxx"
 #include "javainteractionhandler.hxx"
-#include "../migration/wizard.hxx"
 
 #ifndef _COM_SUN_STAR_FRAME_XSESSIONMANAGERLISTENER_HPP_
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -392,7 +391,7 @@ ResMgr* Desktop::GetDesktopResManager()
             as.SetUILanguage(aLanguageType);
             SetSettings(as);
 */
-            LanguageSelection langselect;
+            // LanguageSelection langselect;
             OUString aUILocaleString = LanguageSelection::getLanguageString();
             sal_Int32 nIndex = 0;
             OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
@@ -1492,13 +1491,17 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
         // First Start Wizard
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ FirstStartWizard" );
-        FirstStartWizard fsw(NULL);
-        if (!fsw.Execute()) {
-            Reference< XDesktop > xDesktop( xSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"))),UNO_QUERY);
-            xDesktop.is() && xDesktop->terminate();
-            return;
+        {
+            Reference< XJob > xFirstStartJob( xSMgr->createInstance(
+                DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
+            if (xFirstStartJob.is())
+            {
+                sal_Bool bDone = sal_False;
+                xFirstStartJob->execute(Sequence<NamedValue>()) >>= bDone;
+                if (!bDone) {
+                    return;
+                }
+            }
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
 
@@ -2264,6 +2267,13 @@ String GetURL_Impl( const String& rName )
         return rName;
     }
 
+    // dont touch file urls, those should already be in internal form
+    // they won't get better here (#112849#)
+    if (rName.CompareToAscii("file:" , 5) == COMPARE_EQUAL)
+    {
+        return rName;
+    }
+
     if ( rName.CompareToAscii("service:" , 8) == COMPARE_EQUAL )
     {
         return rName;
@@ -2306,172 +2316,7 @@ String GetURL_Impl( const String& rName )
 
 void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
-    if ( rAppEvent.IsOpenEvent() || rAppEvent.IsPrintEvent() )
-    {
-        String aPrinterName;
-        Reference< XComponentLoader > xDesktop(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                ::com::sun::star::uno::UNO_QUERY );
-
-        // create parameter array
-        sal_Int32 nCount = rAppEvent.IsPrintEvent() ? 5 : 1;
-        Sequence < PropertyValue > aArgs( nCount );
-        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
-
-        if ( rAppEvent.IsPrintEvent() )
-        {
-            aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
-            aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
-            aArgs[3].Name = ::rtl::OUString::createFromAscii("Hidden");
-            aArgs[4].Name = ::rtl::OUString::createFromAscii("Silent");
-        }
-
-        // mark request as user interaction from outside
-        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
-
-        for( sal_uInt16 i=0; i<rAppEvent.GetParamCount(); i++ )
-        {
-            // get file name
-            String aName( rAppEvent.GetParam(i) );
-            ::rtl::OUString aTarget( DEFINE_CONST_UNICODE("_default") );
-
-            // is the parameter a printername ?
-            if( aName.Len()>1 && *aName.GetBuffer()=='@' )
-            {
-                aPrinterName = aName.Copy(1);
-                continue;
-            }
-
-            aName = GetURL_Impl(aName);
-
-            if ( rAppEvent.IsPrintEvent() )
-            {
-                // documents opened for printing are opened readonly because they must be opened as a new document and this
-                // document could be open already
-                aArgs[1].Value <<= sal_True;
-
-                // always open a new document for printing, because it must be disposed afterwards
-                aArgs[2].Value <<= sal_True;
-
-                // printing is done in a hidden view
-                aArgs[3].Value <<= sal_True;
-
-                // load document for printing without user interaction
-                aArgs[4].Value <<= sal_True;
-
-                // hidden documents should never be put into open tasks
-                aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("_blank") );
-            }
-
-            Reference < XPrintable > xDoc;
-            if(
-                ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
-                ( aName.CompareToAscii( "slot:" , 5 ) == COMPARE_EQUAL )  ||
-                ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )  ||
-                ( aName.CompareToAscii( "vnd.sun.star.script", 19 ) == COMPARE_EQUAL )
-              )
-            {
-                URL             aURL ;
-                aURL.Complete = aName;
-
-                Reference < XDispatch >         xDispatcher ;
-                Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
-                Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
-
-                if( xParser.is() == sal_True )
-                    xParser->parseStrict( aURL );
-
-                if( xProvider.is() == sal_True )
-                    xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
-
-                if( xDispatcher.is() == sal_True )
-                {
-                    // We have to be listener to catch errors during dispatching URLs.
-                    // Otherwise it would be possible to have an office running without an open
-                    // window!!
-                    Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
-                    if ( xDisp.is() )
-                        xDisp->dispatchWithNotification( aURL, aArgs, DispatchWatcher::GetDispatchWatcher() );
-                    else
-                        xDispatcher->dispatch( aURL, aArgs );
-                }
-            }
-            else
-            {
-                INetURLObject aObj( aName );
-                if ( aObj.GetProtocol() == INET_PROT_PRIVATE )
-                    aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("_blank") );
-
-                try{
-                    xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
-                }
-                catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
-                {
-                    OUString aMsg = OUString::createFromAscii(
-                        "handle app event IllegalArgumentException while calling loadComponentFromURL: ")
-                        + iae.Message;
-                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
-                }
-                catch (com::sun::star::io::IOException& ioe)
-                {
-                    OUString aMsg = OUString::createFromAscii(
-                        "handle app event IOException while calling loadComponentFromURL: ")
-                        + ioe.Message;
-                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
-                }
-
-                if ( !xDoc.is() )
-                {
-                    // error case
-                    Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
-                    Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
-
-                    if ( !xList->hasElements() )
-                    {
-                        // We don't have any task open so we have to shutdown ourself!!
-                        Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
-                        if ( xDesktop.is() )
-                            xDesktop->terminate();
-                        return;
-                    }
-                }
-            }
-
-            if ( rAppEvent.IsPrintEvent() )
-            {
-                if ( xDoc.is() )
-                {
-                    if ( aPrinterName.Len() )
-                    {
-                        // create the printer
-                        Sequence < PropertyValue > aPrinterArgs( 1 );
-                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
-                        aPrinterArgs[0].Value <<= ::rtl::OUString( aPrinterName );
-                        xDoc->setPrinter( aPrinterArgs );
-                    }
-
-                    // print ( also without user interaction )
-                    Sequence < PropertyValue > aPrinterArgs( 1 );
-                    aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Silent");
-                    aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
-                    xDoc->print( aPrinterArgs );
-                }
-                else
-                {
-                    // place error message here ...
-                }
-
-                // remove the document
-                Reference < XComponent > xComp( xDoc, UNO_QUERY );
-                if ( xComp.is() )
-                    xComp->dispose();
-            }
-        }
-
-        // remove this pending request
-        OfficeIPCThread::RequestsCompleted( 1 );
-    }
-    else if ( rAppEvent.GetEvent() == "APPEAR" && !GetCommandLineArgs()->IsInvisible() )
+    if ( rAppEvent.GetEvent() == "APPEAR" && !GetCommandLineArgs()->IsInvisible() )
     {
         // find active task - the active task is always a visible task
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
