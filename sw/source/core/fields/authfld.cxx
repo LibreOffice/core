@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-04 14:43:50 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
             if(!pTemp->GetRefCount())
             {
                 m_pDataArr->DeleteAndDestroy(j, 1);
+                //re-generate positions of the fields
+                m_pSequArr->Remove(0, m_pSequArr->Count());
             }
             break;
         }
@@ -292,6 +294,8 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
         nRet = (long)(void*)pEntry;
         pEntry->AddRef();
         m_pDataArr->Insert(pEntry, m_pDataArr->Count());
+        //re-generate positions of the fields
+        m_pSequArr->Remove(0, m_pSequArr->Count());
     }
     return nRet;
 }
@@ -493,7 +497,6 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByPosition(USHORT nPos) const
 USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 {
     //find the field in a sorted array of handles,
-    //aHandleArr....
     if(!m_pSequArr->Count())
     {
         SwTOXSortTabBases aSortArr;
@@ -512,40 +515,36 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
                 continue;
             const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
             ULONG nPos = rTxtNode.GetIndex();
-            BOOL bInsert = TRUE;
             if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
                 rTxtNode.GetNodes().IsDocNodes() )
             {
                 SwTOXAuthority* pNew = new SwTOXAuthority( rTxtNode,
                                                             *pFmtFld, aIntl );
-    //          InsertSorted(pNew);
-    //          aSortArr
                 Range aRange(0, aSortArr.Count());
                 for(short i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
                 {
                     SwTOXSortTabBase* pOld = aSortArr[i];
                     if(*pOld == *pNew)
                     {
-                        bInsert = FALSE;
                         //only the first occurence in the document
                         //has to be in the array
                         if(*pOld < *pNew)
                         {
-                            delete pNew;
+                            DELETEZ(pNew);
+                            break;
                         }
                         else
                         {
                             // remove the old content
                             aSortArr.DeleteAndDestroy( i, 1 );
-                            aSortArr.Insert(pNew, i );
+                            continue;
                         }
                     }
-                    if(*pNew < *pOld)
+                    else if(*pNew < *pOld)
                         break;
                 }
-                if(bInsert)
+                if(pNew)
                     aSortArr.Insert(pNew, i );
-                bInsert = TRUE;
             }
         }
 
@@ -559,7 +558,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
         aSortArr.DeleteAndDestroy(0, aSortArr.Count());
     }
     //find nHandle
-    USHORT nRet;
+    USHORT nRet = 0;
     for(USHORT i = 0; i < m_pSequArr->Count(); i++)
     {
         if((*m_pSequArr)[i] == nHandle)
