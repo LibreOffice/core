@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 17:55:57 $
+ *  last change: $Author: dv $ $Date: 2001-03-28 08:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxDocumentTemplateDlg *pDlg = 0;
             SfxErrorContext aEc(ERRCTX_SFX_DOCTEMPLATE,GetTitle());
             SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
-            pTemplates->Construct();
 
             if ( !rReq.GetArgs() )
             {
