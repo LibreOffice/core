@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 12:11:47 $
+ *  last change: $Author: er $ $Date: 2001-09-07 13:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xoutbmp.hxx>
+#ifndef _SVDXCGV_HXX
+#include <svx/svdxcgv.hxx>
+#endif
 #include <so3/ipobj.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -142,51 +145,36 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, USHORT nTab,
             Rectangle aObjRect = pObject->GetBoundRect();
             if ( bAll || aRect.IsInside( aObjRect ) )
             {
-                switch ( pObject->GetObjIdentifier() )
-                {
-                    case OBJ_GRAF:
-                    case OBJ_OLE2:
-                    {
-                        Size aSpace;
-                        ScRange aR = pDoc->GetRange( nTab, aObjRect );
-                        // Rectangle in mm/100
-                        Size aSize( MMToPixel( aObjRect.GetSize() ) );
-                        // If the image is somewhere in a merged range we must
-                        // move the anchor to the upper left (THE span cell).
-                        pDoc->ExtendOverlapped( aR );
-                        USHORT nCol1 = aR.aStart.Col();
-                        USHORT nRow1 = aR.aStart.Row();
-                        USHORT nCol2 = aR.aEnd.Col();
-                        USHORT nRow2 = aR.aEnd.Row();
-                        // alle Zellen unter der Grafik leer?
-                        BOOL bInCell = (pDoc->GetEmptyLinesInBlock(
-                            nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
-                            == (nRow2 - nRow1));    // rows-1 !
-                        if ( bInCell )
-                        {   // Spacing innerhalb der Span-Cell
-                            Rectangle aCellRect = pDoc->GetMMRect(
-                                nCol1, nRow1, nCol2, nRow2, nTab );
-                            aSpace = MMToPixel( Size(
-                                aCellRect.GetWidth() - aObjRect.GetWidth(),
-                                aCellRect.GetHeight() - aObjRect.GetHeight() ));
-                            aSpace.Width() += (nCol2-nCol1) * (nCellSpacing+1);
-                            aSpace.Height() += (nRow2-nRow1) * (nCellSpacing+1);
-                            aSpace.Width() /= 2;
-                            aSpace.Height() /= 2;
-                        }
-                        ScHTMLGraphEntry* pE = new ScHTMLGraphEntry( pObject,
-                            aR, aSize, bInCell, aSpace );
-                        aGraphList.Insert( pE, LIST_APPEND );
-                    }
-                    break;
-                    default:
-                        DBG_ERRORFILE( "FillGraphList: no OBJ_GRAF, no OBJ_OLE2, can't write" );
-                        // #90610# need enhancement from drawing layer group to
-                        // get a metafile for any object.
-                        // Then do the above also for all drawing objects and
-                        // in WriteGraphEntry get metafile of drawing object
-                        // and write image.
+                Size aSpace;
+                ScRange aR = pDoc->GetRange( nTab, aObjRect );
+                // Rectangle in mm/100
+                Size aSize( MMToPixel( aObjRect.GetSize() ) );
+                // If the image is somewhere in a merged range we must
+                // move the anchor to the upper left (THE span cell).
+                pDoc->ExtendOverlapped( aR );
+                USHORT nCol1 = aR.aStart.Col();
+                USHORT nRow1 = aR.aStart.Row();
+                USHORT nCol2 = aR.aEnd.Col();
+                USHORT nRow2 = aR.aEnd.Row();
+                // All cells empty under object?
+                BOOL bInCell = (pDoc->GetEmptyLinesInBlock(
+                    nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
+                    == (nRow2 - nRow1));    // rows-1 !
+                if ( bInCell )
+                {   // Spacing in spanning cell
+                    Rectangle aCellRect = pDoc->GetMMRect(
+                        nCol1, nRow1, nCol2, nRow2, nTab );
+                    aSpace = MMToPixel( Size(
+                        aCellRect.GetWidth() - aObjRect.GetWidth(),
+                        aCellRect.GetHeight() - aObjRect.GetHeight() ));
+                    aSpace.Width() += (nCol2-nCol1) * (nCellSpacing+1);
+                    aSpace.Height() += (nRow2-nRow1) * (nCellSpacing+1);
+                    aSpace.Width() /= 2;
+                    aSpace.Height() /= 2;
                 }
+                ScHTMLGraphEntry* pE = new ScHTMLGraphEntry( pObject,
+                    aR, aSize, bInCell, aSpace );
+                aGraphList.Insert( pE, LIST_APPEND );
             }
             pObject = aIter.Next();
         }
@@ -249,6 +237,14 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             }
         }
         break;
+        default:
+        {
+            Graphic aGraph( SdrExchangeView::GetObjGraphic(
+                pDoc->GetDrawLayer(), pObject ) );
+            String aLinkName;
+            WriteImage( aLinkName, aGraph, aOpt );
+            pE->bWritten = TRUE;
+        }
     }
 }
 
