@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-01 11:58:41 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 15:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,8 @@ Sequence< OUString > GetPathPropertyNames()
         "Bitmap",           // PATH_BITMAP
         "Config",           // PATH_CONFIG
 #if SUPD < 615
-        "Database",         // PATH_DATABASE
+        //"Database",           // PATH_DATABASE
+        "Temp",             // PATH_DATABASE
 #endif
         "Dictionary",       // PATH_DICTIONARY
         "Favorite",         // PATH_FAVORITES
@@ -318,7 +319,8 @@ Sequence< OUString > GetPathPropertyNames()
         "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
 #if SUPD < 615
-        "Trash",            // PATH_TRASH
+        //"Trash",          // PATH_TRASH
+        "Temp",             // PATH_TRASH
 #endif
         "UserConfig",       // PATH_USERCONFIG
         "UserDictionary",   // PATH_USERDICTIONARY
@@ -882,7 +884,7 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_BITMAP:           aTempStr = OUString( m_aBitmapPath );           break;
             case SvtPathOptions::PATH_CONFIG:           aTempStr = OUString( m_aConfigPath );           break;
 #if SUPD < 615
-            case SvtPathOptions::PATH_DATABASE:                                                         break;
+            case SvtPathOptions::PATH_DATABASE:         aTempStr = OUString( m_aTempPath );             break;
 #endif
             case SvtPathOptions::PATH_DICTIONARY:       aTempStr = OUString( m_aDictionaryPath );       break;
             case SvtPathOptions::PATH_FAVORITES:        aTempStr = OUString( m_aFavoritesPath );        break;
@@ -896,7 +898,7 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
             case SvtPathOptions::PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
 #if SUPD < 615
-            case SvtPathOptions::PATH_TRASH:                                                            break;
+            case SvtPathOptions::PATH_TRASH:            aTempStr = OUString( m_aTempPath );             break;
 #endif
             case SvtPathOptions::PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
             case SvtPathOptions::PATH_USERDICTIONARY:   aTempStr = OUString( m_aUserDictionaryPath );   break;
