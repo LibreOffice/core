@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-23 10:45:21 $
+ *  last change: $Author: dv $ $Date: 2001-06-11 10:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 
-#ifndef  _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#endif
 #ifndef  _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
 #endif
@@ -138,6 +135,9 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
 
 
 #include "sfxresid.hxx"
@@ -659,10 +659,8 @@ sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
             setProperty( aLink, aAdditionalProp, makeAny( rType ) );
             bAddedEntry = sal_True;
         }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "CommandAbortedException" );
-        }
+        catch( Exception& )
+        {}
     }
     return bAddedEntry;
 }
@@ -711,13 +709,13 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
             aParent.insertNewContent( aType, aNames, aValues, rNewFolder );
             bCreatedFolder = sal_True;
         }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "createFolder(): Could not create new folder" );
-        }
         catch( RuntimeException& )
         {
             DBG_ERRORFILE( "createFolder(): got runtime exception" );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "createFolder(): Could not create new folder" );
         }
     }
     else if ( bCreateParent )
@@ -748,7 +746,6 @@ sal_Bool SfxDocTplService_Impl::removeContent( Content& rContent )
         rContent.executeCommand( aCmd, aArg );
         bRemoved = sal_True;
     }
-    catch ( CommandAbortedException& ) {}
     catch ( RuntimeException& ) {}
     catch ( Exception& ) {}
 
@@ -799,7 +796,6 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
         rContent.setPropertyValue( rPropName, rPropValue );
         bPropertySet = sal_True;
     }
-    catch ( CommandAbortedException& ) {}
     catch ( RuntimeException& ) {}
     catch ( Exception& ) {}
 
@@ -829,7 +825,6 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
         rPropValue = rContent.getPropertyValue( rPropName );
         bGotProperty = sal_True;
     }
-    catch ( CommandAbortedException& ) {}
     catch ( RuntimeException& ) {}
     catch ( Exception& ) {}
 
@@ -1234,8 +1229,6 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     }
     catch ( ContentCreationException& )
     { return FALSE; }
-    catch ( CommandAbortedException& )
-    { return FALSE; }
     catch ( Exception& )
     { return FALSE; }
 
@@ -1610,10 +1603,6 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     {
         DBG_ERRORFILE( "addHierGroup: ContentCreationException" );
     }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "addHierGroup: CommandAbortedException" );
-    }
     catch ( Exception& ) {}
 
     if ( xResultSet.is() )
@@ -1649,10 +1638,6 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                 pData = pGroup->addEntry( aTitle, aTargetDir, aType, aHierURL );
                 pData->setUpdateType( bUpdateType );
             }
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
         }
         catch ( Exception& ) {}
     }
@@ -1696,10 +1681,6 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aContent.createCursor( aProps, eInclude );
     }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
     catch ( Exception& ) {}
 
     if ( xResultSet.is() )
@@ -1723,10 +1704,6 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
 
                 pGroup->addEntry( aTitle, aTargetURL, aType, aHierURL );
             }
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
         }
         catch ( Exception& ) {}
     }
@@ -1754,10 +1731,6 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
         ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
         xResultSet = rContent.createCursor( aProps, eInclude );
     }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
     catch ( Exception& ) {}
 
     if ( xResultSet.is() )
@@ -1777,10 +1750,6 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
                 else
                     addFsysGroup( rList, aTitle, aTargetURL );
             }
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
         }
         catch ( Exception& ) {}
     }

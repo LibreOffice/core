@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-23 10:41:53 $
+ *  last change: $Author: dv $ $Date: 2001-06-11 10:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,8 +1145,6 @@ BOOL SfxDocumentTemplates::CopyTo
     }
     catch ( ContentCreationException& )
     { return FALSE; }
-    catch ( CommandAbortedException& )
-    { return FALSE; }
     catch ( Exception& )
     { return FALSE; }
 
@@ -2162,10 +2160,6 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = rContent.createCursor( aProps, eInclude );
     }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
     catch ( Exception& ) {}
 
     if ( xResultSet.is() )
@@ -2183,10 +2177,6 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
                 pRegion->AddEntry( aTitle, aTargetDir );
             }
         }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
-        }
         catch ( Exception& ) {}
     }
 }
@@ -2202,10 +2192,6 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
     {
         ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
         xResultSet = rTemplRoot.createCursor( aProps, eInclude );
-    }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
     }
     catch ( Exception& ) {}
 
@@ -2226,10 +2212,6 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 
                 AddRegion( aTitle, aContent );
             }
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
         }
         catch ( Exception& ) {}
     }
@@ -2301,10 +2283,6 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = rTargetFolder.createCursor( aProps, eInclude );
     }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
     catch ( Exception& ) {}
 
     if ( xResultSet.is() )
@@ -2336,10 +2314,6 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
                     pRegion->AddEntry( aTitle, aId );
                 }
             }
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
         }
         catch ( Exception& ) {}
     }
@@ -2497,7 +2471,6 @@ sal_Bool getTextProperty_Impl( Content& rContent,
 
         bGotProperty = sal_True;
     }
-    catch ( CommandAbortedException& ) {}
     catch ( RuntimeException& ) {}
     catch ( Exception& ) {}
 
