@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:00:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ portuguese ] = "Separador" ;
         TEXT [ finnish ] = "Erota teksti kohdasta" ;
         TEXT [ danish ] = "Separatorer i tekst" ;
-        TEXT [ french ] = "Séparateur" ;
+        TEXT [ french ] = "Séparateur dans le texte" ;
         TEXT [ swedish ] = "Skiljetecken i text" ;
         TEXT [ dutch ] = "Scheidingsteken in tekst" ;
         TEXT [ spanish ] = "Delimitador en texto" ;
@@ -425,7 +425,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ portuguese ] = "Converter texto em tabela" ;
         TEXT [ finnish ] = "Muunna teksti taulukoksi" ;
         TEXT [ danish ] = "Konverter tekst til tabel" ;
-        TEXT [ french ] = "Convertir texte en tableau" ;
+        TEXT [ french ] = "Conversion de texte en tableau" ;
         TEXT [ swedish ] = "Omvandla text till tabell" ;
         TEXT [ dutch ] = "Tekst naar tabel converteren" ;
         TEXT [ spanish ] = "Convertir texto en tabla" ;
@@ -504,4 +504,5 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Convertir tabla en texto";
 };
+
 
