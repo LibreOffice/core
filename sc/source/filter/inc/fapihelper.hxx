@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fapihelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:02:07 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,6 @@
 
 #define CSS                     ::com::sun::star
 #define PROPNAME( constascii )  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( constascii ) )
-
-/** Expands to a temporary ::rtl::OUString. */
-#define CREATE_OUSTRING( text ) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( text ) )
-
 
 // Set properties =============================================================
 
