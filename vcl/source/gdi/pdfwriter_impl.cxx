@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:57:19 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4959,7 +4959,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     bool bABold = false;
     // artificial bold necessary ?
     if( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meWeight <= WEIGHT_MEDIUM &&
-        m_aCurrentPDFState.m_aFont.GetWeight() > WEIGHT_MEDIUM )
+        m_pReferenceDevice->mpFontEntry->maFontSelData.meWeight > WEIGHT_MEDIUM )
     {
         if( ! bPop )
             aLine.append( "q " );
