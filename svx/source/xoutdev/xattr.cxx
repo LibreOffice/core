@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-10 12:29:05 $
+ *  last change: $Author: cl $ $Date: 2001-11-01 13:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,6 +1020,10 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         aXDash.SetDashes(aLineDash.Dashes);
         aXDash.SetDashLen(aLineDash.DashLen);
         aXDash.SetDistance(aLineDash.Distance);
+
+        if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
+            aXDash.SetDots(1);
+
         SetValue( aXDash );
     }
 
