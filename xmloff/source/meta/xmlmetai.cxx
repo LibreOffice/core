@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-24 15:22:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@ enum SfxXMLMetaElemTokens
     XML_TOK_META_TITLE,
     XML_TOK_META_DESCRIPTION,
     XML_TOK_META_SUBJECT,
-    XML_TOK_META_KEYWORDS,
     XML_TOK_META_KEYWORD,
     XML_TOK_META_INITIALCREATOR,
     XML_TOK_META_CREATIONDATE,
@@ -164,15 +163,12 @@ enum SfxXMLMetaElemTokens
     XML_TOK_META_ELEM_END = XML_TOK_UNKNOWN
 };
 
-// XML_TOK_META_KEYWORD is not in map,
-// handled in SfxXMLMetaElementContext::CreateChildContext
-
 static __FAR_DATA SvXMLTokenMapEntry aMetaElemTokenMap[] =
 {
     { XML_NAMESPACE_DC,     XML_TITLE,             XML_TOK_META_TITLE },
     { XML_NAMESPACE_DC,     XML_DESCRIPTION,       XML_TOK_META_DESCRIPTION },
     { XML_NAMESPACE_DC,     XML_SUBJECT,           XML_TOK_META_SUBJECT },
-    { XML_NAMESPACE_META,   XML_KEYWORDS,          XML_TOK_META_KEYWORDS },
+    { XML_NAMESPACE_META,   XML_KEYWORD,           XML_TOK_META_KEYWORD },
     { XML_NAMESPACE_META,   XML_INITIAL_CREATOR,   XML_TOK_META_INITIALCREATOR },
     { XML_NAMESPACE_META,   XML_CREATION_DATE,     XML_TOK_META_CREATIONDATE },
     { XML_NAMESPACE_DC,     XML_CREATOR,           XML_TOK_META_CREATOR },
@@ -578,23 +574,8 @@ SvXMLImportContext* SfxXMLMetaElementContext::CreateChildContext( sal_uInt16 nPr
                                      const rtl::OUString& rLName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = NULL;
-
-    if ( nElementType == XML_TOK_META_KEYWORDS &&
-         nPrefix == XML_NAMESPACE_META &&
-         IsXMLToken(rLName, XML_KEYWORD) )
-    {
-        //  <office:keyword> inside of <office:keywords>
-        pContext = new SfxXMLMetaElementContext( GetImport(), nPrefix, rLName,
-                                    xAttrList, rParent, XML_TOK_META_KEYWORD );
-    }
-
-    if ( !pContext )
-    {
-        //  default context to ignore unknown elements
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-    }
-    return pContext;
+    //  default context to ignore unknown elements
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void SfxXMLMetaElementContext::EndElement()
@@ -704,9 +685,6 @@ void SfxXMLMetaElementContext::EndElement()
                 aPropAny <<= (sal_Int32) aTime.GetTime();
                 xInfoProp->setPropertyValue( ::rtl::OUString::createFromAscii(PROP_EDITINGDURATION), aPropAny );
             }
-            break;
-        case XML_TOK_META_KEYWORDS:
-            //  nothing to do, keywords are handled in XML_TOK_META_KEYWORD
             break;
         case XML_TOK_META_TEMPLATE:
         case XML_TOK_META_AUTORELOAD:
