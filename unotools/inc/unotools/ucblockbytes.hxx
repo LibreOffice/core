@@ -21,46 +21,39 @@
 
 namespace utl
 {
+SV_DECL_REF( UcbLockBytes );
 
-class UCB_Link_Helper : public SvRefBase
+class UcbLockBytesHandler : public SvRefBase
 {
-    ::vos::OMutex   maMutex;
-
-    Link            maDoneLink;
-    Link            maDataAvailLink;
-    Link            maCancelLink;
-
-    BOOL            mbSet;
-
-                    ~UCB_Link_Helper(){;}
+    sal_Bool        m_bActive;
 public:
-                    UCB_Link_Helper()
-                    { mbSet = FALSE;}
+    enum LoadHandlerItem
+    {
+        BEFOREWAIT,
+        AFTERWAIT,
+        DATA_AVAILABLE,
+        DONE,
+        CANCEL
+    };
 
-    void            SetDoneLink( const Link& rLink );
-    void            SetDataAvailLink( const Link& rLink );
-    void            SetCancelLink( const Link& rLink );
+                    UcbLockBytesHandler()
+                        : m_bActive( sal_True )
+                    {}
 
-    void            Done( ErrCode nError );
-    void            DataAvail();
-    void            Cancel();
-
-    void            Clear();
+    virtual void    Handle( LoadHandlerItem nWhich, UcbLockBytesRef xLockBytes ) = 0;
+    void            Activate( BOOL bActivate = sal_True ) { m_bActive = bActivate; }
+    sal_Bool        IsActive() const { return m_bActive; }
 };
 
-SV_DECL_IMPL_REF( UCB_Link_Helper )
+SV_DECL_IMPL_REF( UcbLockBytesHandler )
 
 #define NS_UNO ::com::sun::star::uno
 #define NS_IO ::com::sun::star::io
 #define NS_UCB ::com::sun::star::ucb
 
-SV_DECL_REF( UcbLockBytes )
-
-
 class CommandThread_Impl;
 class UcbLockBytes : public virtual SvLockBytes
 {
-    UCB_Link_HelperRef      m_aLinkList;
     vos::OCondition         m_aInitialized;
     vos::OCondition         m_aTerminated;
     vos::OMutex             m_aMutex;
@@ -71,6 +64,7 @@ class UcbLockBytes : public virtual SvLockBytes
 
     NS_UNO::Reference < NS_IO::XInputStream > m_xInputStream;
     CommandThread_Impl*     m_pCommandThread;
+    UcbLockBytesHandlerRef  m_xHandler;
 
     sal_uInt32              m_nRead;
     sal_uInt32              m_nSize;
@@ -82,15 +76,14 @@ class UcbLockBytes : public virtual SvLockBytes
 
     DECL_LINK(              DataAvailHdl, void * );
 
+                            UcbLockBytes( UcbLockBytesHandler* pHandler );
 protected:
     virtual                 ~UcbLockBytes (void);
 
 public:
 
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent, UCB_Link_HelperRef xLinkList );
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent, UCB_Link_HelperRef xLinkList );
-
-                            UcbLockBytes( UCB_Link_HelperRef xLink );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent, UcbLockBytesHandler* pHandler=0 );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent, UcbLockBytesHandler* pHandler=0 );
 
     // SvLockBytes
     virtual void            SetSynchronMode (BOOL bSynchron);

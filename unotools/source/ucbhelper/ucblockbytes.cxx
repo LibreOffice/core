@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-16 16:22:17 $
+ *  last change: $Author: mba $ $Date: 2000-10-18 13:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ public:
     ::ucb::Content*                         m_pContent;
     OpenCommandArgument2                    m_aArgument;
     UcbLockBytesRef                         m_xLockBytes;
-    UCB_Link_HelperRef                      m_xLink;
+    UcbLockBytesHandlerRef                  m_xHandler;
     sal_Bool                                m_bCanceled : 1;
     sal_Bool                                m_bRunning  : 1;
     sal_Bool                                m_bSimple   : 1;
@@ -301,7 +301,7 @@ public:
                                         const OpenCommandArgument2& rArg,
                                         Reference < XInteractionHandler > xInteract,
                                         Reference < XProgressHandler > xProgress,
-                                        UCB_Link_HelperRef xLink );
+                                        UcbLockBytesHandlerRef xRef );
 
                     CommandThread_Impl( UcbLockBytesRef xLockBytes )
                         : m_xLockBytes( xLockBytes )
@@ -323,13 +323,13 @@ CommandThread_Impl::CommandThread_Impl( UcbLockBytesRef xLockBytes,
                     const OpenCommandArgument2& rArg,
                     Reference < XInteractionHandler > xInteract,
                     Reference < XProgressHandler > xProgress,
-                    UCB_Link_HelperRef xLink )
+                    UcbLockBytesHandlerRef xRef )
     : m_xInteract( xInteract )
     , m_xContent( xContent )
     , m_xProgress( xProgress )
     , m_xLockBytes( xLockBytes )
+    , m_xHandler( xRef )
     , m_aArgument( rArg )
-    , m_xLink( xLink )
     , m_bCanceled( sal_False )
     , m_bRunning( sal_False )
     , m_bSimple( sal_False )
@@ -391,8 +391,8 @@ void CommandThread_Impl::run()
 
         if ( bAborted || bException )
         {
-            if( m_xLink.Is() )
-                m_xLink->Cancel();
+            if( m_xHandler.Is() )
+                m_xHandler->Handle( UcbLockBytesHandler::CANCEL, m_xLockBytes );
 
             Reference < XInputStream > aDummy;
             Reference < XActiveDataSink > ::query(m_aArgument.Sink)->setInputStream( aDummy );
@@ -426,7 +426,7 @@ void CommandThread_Impl::Cancel()
 }
 
 //----------------------------------------------------------------------------
-UcbLockBytes::UcbLockBytes( UCB_Link_HelperRef xLink )
+UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_xInputStream (NULL)
     , m_pCommandThread( NULL )
     , m_bTerminated  (sal_False)
@@ -434,7 +434,7 @@ UcbLockBytes::UcbLockBytes( UCB_Link_HelperRef xLink )
     , m_bDontClose( sal_False )
     , m_nRead (0)
     , m_nSize (0)
-    , m_aLinkList( xLink )
+    , m_xHandler( pHandler )
     , m_nError( ERRCODE_NONE )
 {
 }
@@ -460,10 +460,7 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
     bRet = m_xInputStream.is();
     aGuard.clear();
 
-    if ( GetError() == ERRCODE_NONE && !rxInputStream.is() )
-        SetError( ERRCODE_IO_NOTEXISTS );
-
-    if ( m_bStreamValid )
+    if ( m_bStreamValid && m_xInputStream.is() )
         m_aInitialized.set();
 
     return bRet;
@@ -495,7 +492,8 @@ void UcbLockBytes::terminate_Impl()
     if ( GetError() == ERRCODE_NONE && !xStream.is() )
         SetError( ERRCODE_IO_NOTEXISTS );
 
-    m_aLinkList->Done( GetError() );
+    if ( m_xHandler.Is() )
+        m_xHandler->Handle( UcbLockBytesHandler::DONE, this );
 }
 
 //----------------------------------------------------------------------------
@@ -508,15 +506,20 @@ void UcbLockBytes::SetSynchronMode (BOOL bSynchron)
 ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *pRead) const
 {
     if ( IsSynchronMode() )
-        SAL_CONST_CAST(UcbLockBytes*,this)->m_aInitialized.wait();
+    {
+        UcbLockBytes* pThis = const_cast < UcbLockBytes* >( this );
+        if ( m_xHandler.Is() )
+            m_xHandler->Handle( UcbLockBytesHandler::BEFOREWAIT, pThis );
+        pThis->m_aInitialized.wait();
+        if ( m_xHandler.Is() )
+            m_xHandler->Handle( UcbLockBytesHandler::AFTERWAIT, pThis );
+    }
 
     Reference<XInputStream> xStream = getInputStream_Impl();
 
     if ( !xStream.is() )
     {
-        if ( GetError() )
-            return GetError();
-        else if ( m_bTerminated )
+        if ( m_bTerminated )
             return ERRCODE_IO_CANTREAD;
         else
             return ERRCODE_IO_PENDING;
@@ -592,7 +595,14 @@ ErrCode UcbLockBytes::SetSize (ULONG)
 ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 {
     if ( IsSynchronMode() )
-        SAL_CONST_CAST(UcbLockBytes*,this)->m_aInitialized.wait();
+    {
+        UcbLockBytes* pThis = const_cast < UcbLockBytes* >( this );
+        if ( m_xHandler.Is() )
+            m_xHandler->Handle( UcbLockBytesHandler::BEFOREWAIT, pThis );
+        pThis->m_aInitialized.wait();
+        if ( m_xHandler.Is() )
+            m_xHandler->Handle( UcbLockBytesHandler::AFTERWAIT, pThis );
+    }
 
     if (!pStat)
         return ERRCODE_IO_INVALIDPARAMETER;
@@ -600,12 +610,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     Reference<XInputStream> xStream = getInputStream_Impl();
 
     if (!xStream.is())
-    {
-        if ( GetError() )
-            return GetError();
-        else
-            return ERRCODE_IO_INVALIDACCESS;
-    }
+        return ERRCODE_IO_INVALIDACCESS;
 
     Reference<XSeekable> xSeekable (xStream, UNO_QUERY);
     if (!xSeekable.is())
@@ -642,8 +647,8 @@ void UcbLockBytes::Cancel()
 //----------------------------------------------------------------------------
 IMPL_LINK( UcbLockBytes, DataAvailHdl, void*, EMPTYARG )
 {
-    if ( hasInputStream_Impl() )
-        m_aLinkList->DataAvail();
+    if ( hasInputStream_Impl() && m_xHandler.Is() )
+        m_xHandler->Handle( UcbLockBytesHandler::DATA_AVAILABLE, this );
 
     return 0;
 }
@@ -711,7 +716,7 @@ UcbTaskEnvironment::UcbTaskEnvironment( const Reference< XInteractionHandler >& 
 {
 }
 
-UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent > xContent, UCB_Link_HelperRef xLink )
+UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent > xContent, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
         return NULL;;
@@ -732,7 +737,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent >
 
     OpenCommandArgument2 aArgument;
     String aCmd( RTL_CONSTASCII_USTRINGPARAM( "Open" ) );
-    UcbLockBytesRef xLockBytes = new UcbLockBytes( xLink );
+    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     Reference < XActiveDataSink > xSink = new UcbDataSink_Impl( xLockBytes );
     aArgument.Sink = xSink;
     aArgument.Mode = OpenMode::DOCUMENT;
@@ -741,20 +746,19 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent >
     Reference< XProgressHandler >    xProgressHdl = pProgressHdl;
     pProgressHdl->SetProgressLink( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
 
-    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, xLink );
+    CommandThread_Impl* pThread = new CommandThread_Impl( xLockBytes, xContent, aArgument, xInteractionHandler, xProgressHdl, pHandler );
     xLockBytes->setCommandThread_Impl( pThread );
     pThread->create();
     return xLockBytes;
 }
 
-UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream > xInputStream,
-                                                 UCB_Link_HelperRef xLink )
+UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream > xInputStream, UcbLockBytesHandler* pHandler )
 {
     if( !xInputStream.is() )
         return NULL;;
 
     String aCmd( RTL_CONSTASCII_USTRINGPARAM( "Open" ) );
-    UcbLockBytesRef xLockBytes = new UcbLockBytes( xLink );
+    UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     Reference < XActiveDataSink > xSink = new UcbDataSink_Impl( xLockBytes );
 
     xLockBytes->setDontClose_Impl();
@@ -765,70 +769,6 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     CommandThread_Impl *pThread = new CommandThread_Impl( xLockBytes );
     pThread->create();
     return xLockBytes;
-}
-
-void UCB_Link_Helper::SetDoneLink( const Link& rLink )
-{
-    ::vos::OGuard aGuard( maMutex );
-    mbSet = TRUE;
-    maDoneLink = rLink;
-}
-
-//----------------------------------------------------------------------------
-void UCB_Link_Helper::SetDataAvailLink( const Link& rLink )
-{
-    ::vos::OGuard aGuard( maMutex );
-    mbSet = TRUE;
-    maDataAvailLink = rLink;
-}
-
-//----------------------------------------------------------------------------
-void UCB_Link_Helper::SetCancelLink( const Link& rLink )
-{
-    ::vos::OGuard aGuard( maMutex );
-    mbSet = TRUE;
-    maCancelLink = rLink;
-}
-
-//----------------------------------------------------------------------------
-void UCB_Link_Helper::Done( ErrCode nError )
-{
-    ::vos::OGuard aGuard( maMutex );
-
-    if ( maDoneLink.IsSet() )
-        maDoneLink.Call( (void*) nError );
-}
-
-//----------------------------------------------------------------------------
-void UCB_Link_Helper::DataAvail()
-{
-    ::vos::OGuard aGuard( maMutex );
-
-    if ( maDataAvailLink.IsSet() )
-        maDataAvailLink.Call( 0 );
-}
-
-//----------------------------------------------------------------------------
-void UCB_Link_Helper::Cancel()
-{
-    ::vos::OGuard aGuard( maMutex );
-
-    if ( maCancelLink.IsSet() )
-        maCancelLink.Call( 0 );
-}
-
-//----------------------------------------------------------------------------
-void UCB_Link_Helper::Clear()
-{
-    ::vos::OGuard aGuard( maMutex );
-
-    if ( mbSet )
-    {
-        maDoneLink = Link();
-        maDataAvailLink = Link();
-        maCancelLink = Link();
-        mbSet = FALSE;
-    }
 }
 
 };
