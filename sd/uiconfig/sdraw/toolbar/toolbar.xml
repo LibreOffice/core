@@ -4,6 +4,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="helpid:10128" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="helpid:10102" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:helpid="helpid:27173" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="helpid:10104" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="helpid:10110" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:helpid="helpid:10398" toolbar:text="" toolbar:style="radio" />
@@ -11,6 +12,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:helpid="helpid:10401" toolbar:text="" toolbar:style="radio dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox" toolbar:helpid="helpid:27028" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:helpid=".uno:ArrowsToolbox" toolbar:text="" toolbar:style="radio dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox" toolbar:helpid="helpid:27295" toolbar:text="" toolbar:style="radio dropdown" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="helpid:11002" toolbar:text="" toolbar:style="radio dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="helpid:11003" toolbar:text="" toolbar:style="radio dropdown" />
