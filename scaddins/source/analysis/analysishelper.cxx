@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-11 10:09:35 $
+ *  last change: $Author: gt $ $Date: 2001-05-11 11:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1935,6 +1935,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
         case '-':   // imag part follows
         case '+':
             {
+            double      r = f;
             if( IsImagUnit( pStr[ 1 ] ) )
             {
                 if( pStr[ 2 ] == 0 )
@@ -1946,7 +1947,6 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
             }
             else if( ParseDouble( pStr, f ) && IsImagUnit( *pStr ) )
             {
-                double      r = f;
                 pStr++;
                 if( *pStr == 0 )
                 {
@@ -2078,7 +2078,9 @@ void Complex::Div( const Complex& z ) THROWDEF_RTE_IAE
 
 void Complex::Exp( void )
 {
-    Mult( exp( r ) );
+    double  fE = exp( r );
+    r = fE * cos( i );
+    i = fE * sin( i );
 }
 
 
