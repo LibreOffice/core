@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-20 21:23:39 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 17:40:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ CFLAGS+=-Od
 
 SRS1NAME=appl
 SRC1FILES =  \
-        app.src sfx.src image.src newhelp.src
+        app.src image.src newhelp.src
 
 SRS2NAME=sfx
 SRC2FILES =  \
