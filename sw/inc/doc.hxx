@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:57:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,11 +689,13 @@ public:
     const SwLayouter* GetLayouter() const { return pLayouter; }
     void SetLayouter( SwLayouter* pNew )  { pLayouter = pNew; }
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface >
+    // used for spell checking and text conversion
+    ::com::sun::star::uno::Any
             Spell( SwPaM&, ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 > &,
-                   sal_uInt16* pPageCnt, sal_uInt16* pPageSt ) const;
+                   sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
+                   sal_Bool bIsConversion = sal_False ) const;
+
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >
             Hyphenate( SwPaM *pPam, const Point &rCrsrPos,
