@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-12 17:57:59 $
+#   last change: $Author: rt $ $Date: 2005-01-31 09:07:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,8 @@ SLOFILES =  \
         $(SLO)$/graphsh.obj	\
         $(SLO)$/mediash.obj
 
+EXCEPTIONSFILES= \
+        $(SLO)$/fuins2.obj
 
 NOOPTFILES=\
     $(SLO)$/fusel.obj
