@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:12:24 $
+ *  last change: $Author: dr $ $Date: 2002-10-29 11:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
             < "Max" ; Default ; > ;
             < "Min" ; Default ; > ;
             < "Produkt" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 7 : Anzahl (nur Zahlen)*/
             < "Anzahl (nur Zahlen)" ; Default ; > ;
             < "StAbw (Stichprobe)" ; Default ; > ;
             < "StAbwN (Grundgesamtheit)" ; Default ; > ;
@@ -176,13 +175,13 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         };
         StringList [ finnish ] =
         {
-            < "Summa" ; Default ; > ;
-            < "Laske" ; Default ; > ;
+            < "Sum" ; Default ; > ;
+            < "Lukumäärä" ; Default ; > ;
             < "Keskiarvo" ; Default ; > ;
             < "Enint" ; Default ; > ;
             < "Väh" ; Default ; > ;
             < "Tuote" ; Default ; > ;
-            < "Määrä (vain numerot)" ; Default ; > ;
+            < "Lukumäärä (vain numerot)" ; Default ; > ;
             < "StDev (otos)" ; Default ; > ;
             < "StDevP (populaatio)" ; Default ; > ;
             < "Var (otos)" ; Default ; > ;
@@ -252,7 +251,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
             < "Máx" ; Default ; > ;
             < "Mín" ; Default ; > ;
             < "Producto" ; Default ; > ;
-            < "Cantidad (solo números)" ; Default ; > ;
+            < "Cantidad (sólo números)" ; Default ; > ;
             < "DesvEst (Muestra)" ; Default ; > ;
             < "DesvEstP (Población)" ; Default ; > ;
             < "Varianza (Muestra)" ; Default ; > ;
@@ -274,17 +273,17 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         };
     StringList [ chinese_simplified ] =
     {
-            < "×Ü¼Æ" ; Default ; > ;
-        < "¼ÆÊı" ; Default ; > ;
-        < "Æ½¾ùÊı" ; Default ; > ;
-        < "×î´ó" ; Default ; > ;
-        < "×îĞ¡" ; Default ; > ;
-        < "³Ë»ı" ; Default ; > ;
-        < "¼ÆÊı(Ö»ÊÇÊı×Ö)" ; Default ; > ;
-        < "±ê×¼Æ«²î(³éÑù)" ; Default ; > ;
-        < "±ê×¼Æ«²î(È«²¿»ùÊı)" ; Default ; > ;
-        < "·½²î(³éÑù)" ; Default ; > ;
-        < "·½²î(È«²¿»ùÊı)" ; Default ; > ;
+            < "æ€»è®¡" ; Default ; > ;
+        < "æ•°ç›®" ; Default ; > ;
+        < "å¹³å‡æ•°" ; Default ; > ;
+        < "æœ€å¤§" ; Default ; > ;
+        < "æœ€å°" ; Default ; > ;
+        < "ä¹˜ç§¯" ; Default ; > ;
+        < "æ•°ç›®(åªæ˜¯æ•°å­—)" ; Default ; > ;
+        < "æ ‡å‡†åå·®(æŠ½æ ·)" ; Default ; > ;
+        < "æ ‡å‡†åå·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
+        < "æ–¹å·®(æŠ½æ ·)" ; Default ; > ;
+        < "æ–¹å·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -316,31 +315,31 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     StringList [ japanese ] =
     {
-            < "‡Œv" ; Default ; > ;
-        < "‘”" ; Default ; > ;
-        < "•½‹Ï’l" ; Default ; > ;
-        < "Å‘å’l" ; Default ; > ;
-        < "Å¬’l" ; Default ; > ;
-        < "Ï" ; Default ; > ;
-        < "‘”(”’l‚Ì‚İ)" ; Default ; > ;
-        < "StDev •W€•Î·(•W–{)" ; Default ; > ;
-        < "StDevP •W€•Î·(•êW’c)" ; Default ; > ;
-        < "•ªU(•W–{)" ; Default ; > ;
-        < "•ªU(•êW’c)" ; Default ; > ;
+            < "åˆè¨ˆ" ; Default ; > ;
+        < "ç·æ•°" ; Default ; > ;
+        < "å¹³å‡å€¤" ; Default ; > ;
+        < "æœ€å¤§å€¤" ; Default ; > ;
+        < "æœ€å°å€¤" ; Default ; > ;
+        < "ç©" ; Default ; > ;
+        < "ç·æ•°(æ•°å€¤ã®ã¿)" ; Default ; > ;
+        < "StDev æ¨™æº–åå·®(æ¨™æœ¬)" ; Default ; > ;
+        < "StDevP æ¨™æº–åå·®(æ¯é›†å›£)" ; Default ; > ;
+        < "åˆ†æ•£(æ¨™æœ¬)" ; Default ; > ;
+        < "åˆ†æ•£(æ¯é›†å›£)" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¤p­p" ; Default ; > ;
-        < "­p¼Æ" ; Default ; > ;
-        < "¥­§¡­È" ; Default ; > ;
-        < "³Ì¤j" ; Default ; > ;
-        < "³Ì¤p" ; Default ; > ;
-        < "­¼¿n" ; Default ; > ;
-        < "¼Æ¥Ø(¥u¬O¼Æ¦r)" ; Default ; > ;
-        < "¼Ğ·Ç°¾®t(©â¼Ë)" ; Default ; > ;
-        < "¼Ğ·Ç°¾®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
-        < "¤è®t(©â¼Ë)" ; Default ; > ;
-        < "¤è®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
+            < "å°è¨ˆ" ; Default ; > ;
+        < "æ•¸ç›®" ; Default ; > ;
+        < "å¹³å‡å€¼" ; Default ; > ;
+        < "æœ€å¤§" ; Default ; > ;
+        < "æœ€å°" ; Default ; > ;
+        < "ä¹˜ç©" ; Default ; > ;
+        < "æ•¸ç›®(åªæ˜¯æ•¸å­—)" ; Default ; > ;
+        < "æ¨™æº–åå·®(æŠ½æ¨£)" ; Default ; > ;
+        < "æ¨™æº–åå·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
+        < "æ–¹å·®(æŠ½æ¨£)" ; Default ; > ;
+        < "æ–¹å·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -372,17 +371,17 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     StringList [ korean ] =
     {
-            < "ÇÕ°è" ; Default ; > ;
-        < "¼ö" ; Default ; > ;
-        < "Æò±Õ" ; Default ; > ;
-        < "ÃÖ´ë" ; Default ; > ;
-        < "ÃÖ¼Ò" ; Default ; > ;
-        < "°ö" ; Default ; > ;
-        < "¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
-        < "StDev (»ùÇÃ)" ; Default ; > ;
-        < "StDevP (¸ğÁı´Ü)" ; Default ; > ;
-        < "ºĞ»ê (»ùÇÃ)" ; Default ; > ;
-        < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
+            < "í•©ê³„" ; Default ; > ;
+        < "ê°’" ; Default ; > ;
+        < "í‰ê· " ; Default ; > ;
+        < "ìµœëŒ€" ; Default ; > ;
+        < "ìµœì†Œ" ; Default ; > ;
+        < "ê³±" ; Default ; > ;
+        < "ìˆ˜(ìˆ«ìë§Œ)" ; Default ; > ;
+        < "StDev(ìƒ˜í”Œ)" ; Default ; > ;
+        < "StDevP(ëª¨ì§‘ë‹¨)" ; Default ; > ;
+        < "ë¶„ì‚°(ìƒ˜í”Œ)" ; Default ; > ;
+        < "ë¶„ì‚°(ëª¨ì§‘ë‹¨)" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -415,16 +414,30 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     StringList [ catalan ] =
     {
             < "Suma" ; Default ; > ;
-        < "Cantidad" ; Default ; > ;
-        < "Promedio" ; Default ; > ;
-        < "Máx" ; Default ; > ;
-        < "Mín" ; Default ; > ;
-        < "Producto" ; Default ; > ;
-        < "Cantidad (solo números)" ; Default ; > ;
-        < "DesvEst (Muestra)" ; Default ; > ;
-        < "DesvEstP (Población)" ; Default ; > ;
-        < "Varianza (Muestra)" ; Default ; > ;
-        < "VarP (Población)" ; Default ; > ;
+        < "Compta" ; Default ; > ;
+        < "Mitjana" ; Default ; > ;
+        < "Màx." ; Default ; > ;
+        < "Mín." ; Default ; > ;
+        < "Producte" ; Default ; > ;
+        < "Compta (nomé?s els nombres)" ; Default ; > ;
+        < "StDev (mostra)" ; Default ; > ;
+        < "StDevP (població)" ; Default ; > ;
+        < "Var (mostra)" ; Default ; > ;
+        < "VarP (població)" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¸œà¸¥à¸£à¸§à¸¡" ; Default ; > ;
+        < "à¸™à¸±à¸š" ; Default ; > ;
+        < "à¹€à¸‰à¸¥à¸µà¹ˆà¸¢" ; Default ; > ;
+        < "à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
+        < "à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
+        < "à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œ" ; Default ; > ;
+        < "à¸™à¸±à¸š (à¸ˆà¸³à¸™à¸§à¸™à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™)" ; Default ; > ;
+        < "StDev (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
+        < "StDevP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
+        < "Var (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
+        < "VarP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
     };
     };
     Edit ED_DATA_AREA
@@ -459,17 +472,18 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "k¬";
-        QuickHelpText[ chinese_simplified ] = "×îĞ¡/×î´ó";
-        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ japanese ] = "ç¸®å°";
+        QuickHelpText[ chinese_simplified ] = "æœ€å°/æœ€å¤§";
+        QuickHelpText[ chinese_traditional ] = "ç¸®å°";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò";
+        QuickHelpText[ korean ] = "ì¶•ì†Œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ catalan ] = "Redueix";
+        QuickHelpText[ finnish ] = "Kutista";
+        QuickHelpText[ thai ] = "Shrink";
     };
     ImageButton RB_DEST_AREA
     {
@@ -489,17 +503,18 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "k¬";
-        QuickHelpText[ chinese_simplified ] = "×îĞ¡/×î´ó";
-        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ japanese ] = "ç¸®å°";
+        QuickHelpText[ chinese_simplified ] = "æœ€å°/æœ€å¤§";
+        QuickHelpText[ chinese_traditional ] = "ç¸®å°";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò";
+        QuickHelpText[ korean ] = "ì¶•ì†Œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ catalan ] = "Redueix";
+        QuickHelpText[ finnish ] = "Kutista";
+        QuickHelpText[ thai ] = "Shrink";
     };
     ListBox LB_DATA_AREA
     {
@@ -542,17 +557,18 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ dutch ] = "Be~rekeningsvoorschrift" ;
         Text [ spanish ] = "~Instrucción de cálculo" ;
         Text [ english_us ] = "~Function" ;
-        Text[ chinese_simplified ] = "¼ÆËã¹æÔò(~F)";
+        Text[ chinese_simplified ] = "è®¡ç®—è§„åˆ™(~F)";
         Text[ russian ] = "Èíñòğóêöèÿ ïî âû÷èñëåíèÿì";
         Text[ polish ] = "Instrukcja obliczania";
-        Text[ japanese ] = "ŒvZ•û–@(~F)";
-        Text[ chinese_traditional ] = "­pºâ³W«h(~F)";
+        Text[ japanese ] = "è¨ˆç®—æ–¹æ³•(~F)";
+        Text[ chinese_traditional ] = "è¨ˆç®—è¦å‰‡(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "±â´É(~F)";
+        Text[ korean ] = "ê¸°ëŠ¥(~F)";
         Text[ turkish ] = "Fonksi~yon";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Instrucción de cálculo";
+        Text[ catalan ] = "~Funció";
+        Text[ thai ] = "~à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
     };
     FixedText FT_CONSAREAS
     {
@@ -569,19 +585,20 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ french ] = "Plages de ~consolidation" ;
         Text [ swedish ] = "~Konsolideringsområden" ;
         Text [ dutch ] = "~Consolideringsbereik" ;
-        Text [ spanish ] = "~Áreas de consolidación" ;
+        Text [ spanish ] = "Áreas de consolidación" ;
         Text [ english_us ] = "~Consolidation areas" ;
-        Text[ chinese_simplified ] = "ºÏ²¢¼ÆËãÇøÓò(~C)";
+        Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—åŒºåŸŸ(~C)";
         Text[ russian ] = "Îáëàñòè êîíñîëèäàöèè";
         Text[ polish ] = "Obszary konsolidacji";
-        Text[ japanese ] = "“‡”ÍˆÍ(~C)";
-        Text[ chinese_traditional ] = "¦X¨Ö­pºâ°Ï°ì(~C)";
+        Text[ japanese ] = "çµ±åˆç¯„å›²(~C)";
+        Text[ chinese_traditional ] = "åˆä½µè¨ˆç®—å€åŸŸ(~C)";
         Text[ arabic ] = "äØÇŞÇÊ ÇáÏãÌ";
         Text[ greek ] = "Ğå~ñéï÷İò åíïğïßçóçò";
-        Text[ korean ] = "ÅëÇÕ ¿µ¿ª(~C)";
+        Text[ korean ] = "í†µí•© ì˜ì—­(~C)";
         Text[ turkish ] = "Bir~leştirme aralıkları";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Áreas de consolidación";
+        Text[ catalan ] = "Àrees de ~consolidació";
+        Text[ thai ] = "~à¸£à¸§à¸šà¸£à¸§à¸¡à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
     };
     FixedText FT_DATA_AREA
     {
@@ -595,22 +612,23 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "~Área dos dados fonte" ;
         Text [ finnish ] = "~Lähdetietoalue" ;
         Text [ danish ] = "Kildedataområde" ;
-        Text [ french ] = "~Plage de données source" ;
+        Text [ french ] = "Plage de données source" ;
         Text [ swedish ] = "Källdata~område" ;
         Text [ dutch ] = "~Brongegevensbereik" ;
         Text [ spanish ] = "~Área de datos fuente" ;
         Text [ english_us ] = "~Source data area" ;
-        Text[ chinese_simplified ] = "Ô´Êı¾İÇøÓò(~S)";
+        Text[ chinese_simplified ] = "æºæ•°æ®åŒºåŸŸ(~S)";
         Text[ russian ] = "Îáëàñòü èñõîäíûõ äàííûõ";
         Text[ polish ] = "Obszar danych Ÿród³a";
-        Text[ japanese ] = "¿°½ÃŞ°À”ÍˆÍ(~S)";
-        Text[ chinese_traditional ] = "·½¸ê®Æ°Ï°ì(~S)";
+        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ç¯„å›²(~S)";
+        Text[ chinese_traditional ] = "æºè³‡æ–™å€åŸŸ(~S)";
         Text[ arabic ] = "äØÇŞ ÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Ğåñéï÷Ş ğñïİëåõóçò äåäïìİíùí";
-        Text[ korean ] = "¼Ò½º µ¥ÀÌÅÍ ¿µ¿ª(~S)";
+        Text[ korean ] = "ì†ŒìŠ¤ ë°ì´í„° ì˜ì—­(~S)";
         Text[ turkish ] = "Kaynak veri a~ralıkları";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Área de datos fuente";
+        Text[ catalan ] = "F~ont de l'àrea de dades";
+        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹~à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     FixedText FT_DEST_AREA
     {
@@ -624,28 +642,29 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "~Resultado a partir de" ;
         Text [ finnish ] = "~Kopioi tulokset kohteeseen" ;
         Text [ danish ] = "Resultat-output fra" ;
-        Text [ french ] = "~Résultat à partir de" ;
+        Text [ french ] = "Destination" ;
         Text [ swedish ] = "Resul~tat vid" ;
         Text [ dutch ] = "Re~sultaat weergeven vanaf" ;
         Text [ spanish ] = "Re~sultado a partir de" ;
         Text [ english_us ] = "Copy results ~to" ;
-        Text[ chinese_simplified ] = "¸´ÖÆ½á¹ûµ½(~T)";
+        Text[ chinese_simplified ] = "å¤åˆ¶ç»“æœåˆ°(~T)";
         Text[ russian ] = "Íà÷àòü ñ";
         Text[ polish ] = "Kopiuj wynik od";
-        Text[ japanese ] = "Œ‹‰Ê“\\‚è•t‚¯æ(~T)";
-        Text[ chinese_traditional ] = "½Æ»sµ²ªG¨ì(~T)";
+        Text[ japanese ] = "çµæœè²¼ã‚Šä»˜ã‘å…ˆ(~T)";
+        Text[ chinese_traditional ] = "è¤‡è£½çµæœåˆ°(~T)";
         Text[ arabic ] = "äÓÎ ÇáäÊÇÆÌ Åáì";
         Text[ greek ] = "ÅìöÜíéóç áğïôåëåóìÜôùí áğü";
-        Text[ korean ] = "¿¡ °á°ú¸¦ º¹»ç(~T)";
+        Text[ korean ] = "ê²°ê³¼ë¥¼ ë³µì‚¬í•˜ëŠ” ìœ„ì¹˜(~T)";
         Text[ turkish ] = "Sonuc~un gösterileceği yer";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Re~sultado a partir de";
+        Text[ catalan ] = "Co~pia els resultats a";
+        Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸à¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œà¹„~à¸›à¸¢à¸±à¸‡";
     };
     CheckBox BTN_BYROW
     {
         Pos = MAP_APPFONT ( 12 , 165 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "Ze~ilenbeschriftung" ;
+        Text = "Ze~ilenbeschriftungen" ;
         Text [ ENGLISH ] = "by ro~ws" ;
         Text [ norwegian ] = "etter ra~der" ;
         Text [ italian ] = "Dicitura righe" ;
@@ -656,27 +675,27 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ french ] = "É~tiquette de ligne" ;
         Text [ swedish ] = "Ra~detikett" ;
         Text [ dutch ] = "~Rijkoppen" ;
-        Text [ spanish ] = "Etiqueta ~de filas" ;
+        Text [ spanish ] = "Títulos ~de fila" ;
         Text [ english_us ] = "~Row labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ĞĞÊı¾İ±êÖ¾(~R)";
+        Text[ chinese_simplified ] = "è¡Œæ•°æ®æ ‡å¿—(~R)";
         Text[ russian ] = "ïîäïèñè ñòğîê";
         Text[ polish ] = "Etykiety wierszy";
-        Text[ japanese ] = "¶’[—ñ(~R)";
-        Text[ chinese_traditional ] = "¦C¼ĞÃD(~R)";
+        Text[ japanese ] = "å·¦ç«¯åˆ—(~R)";
+        Text[ chinese_traditional ] = "åˆ—æ¨™é¡Œ(~R)";
         Text[ arabic ] = "ÚäÇæíä ÇáÕİæİ";
         Text[ greek ] = "ÅğéãñáöŞ ãñáììŞò";
-        Text[ korean ] = "Çà ¶óº§(~R)";
+        Text[ korean ] = "ì²« í–‰(~R)";
         Text[ turkish ] = "Sa~tır etiketleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Etiqueta ~de filas";
+        Text[ catalan ] = "Eti~quetes de fila";
+        Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¹~à¸–à¸§";
     };
     CheckBox BTN_BYCOL
     {
         Pos = MAP_APPFONT ( 12 , 179 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? S~paltenköpfen : S~paltenk÷pfen */
-        Text = "S~paltenköpfen" ;
+        Text = "S~paltenbeschriftungen" ;
         Text [ ENGLISH ] = "by colum~ns" ;
         Text [ norwegian ] = "etter kolonn~er" ;
         Text [ italian ] = "~Intestazioni colonne" ;
@@ -684,23 +703,24 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "~Cabeçalhos de colunas" ;
         Text [ finnish ] = "~Sarakeotsikot" ;
         Text [ danish ] = "Kolonneoverskrifter" ;
-        Text [ french ] = "En-têtes de ~colonnes" ;
+        Text [ french ] = "En-têtes de colonne" ;
         Text [ swedish ] = "Kolum~nhuvuden" ;
         Text [ dutch ] = "~Kolomkoppen" ;
-        Text [ spanish ] = "Títulos de ~columnas" ;
+        Text [ spanish ] = "Títulos de ~columna" ;
         Text [ english_us ] = "C~olumn headers" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÁĞ±êÌâ(~O)";
+        Text[ chinese_simplified ] = "åˆ—æ ‡é¢˜(~O)";
         Text[ russian ] = "íàçâàíèş ñòîëáöîâ";
         Text[ polish ] = "Nag³ówki kolumn";
-        Text[ japanese ] = "ã’[s(~O)";
-        Text[ chinese_traditional ] = "Äæ¼ĞÃD(~O)";
+        Text[ japanese ] = "ä¸Šç«¯è¡Œ(~O)";
+        Text[ chinese_traditional ] = "æ¬„æ¨™é¡Œ(~O)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÚãÏÉ";
         Text[ greek ] = "Êåöáëßäåò óôçëşí";
-        Text[ korean ] = "¿­ ¸Ó¸®±Û(~O)";
+        Text[ korean ] = "ì™¼ìª½ ì²« ì—´(~O)";
         Text[ turkish ] = "S~ütun başlıkları";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Títulos de ~columnas";
+        Text[ catalan ] = "Capçaleres de c~olumna";
+        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸„~à¸­à¸¥à¸±à¸¡à¸ à¹Œ";
     };
     FixedLine FL_CONSBY
     {
@@ -712,24 +732,25 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Consolida per" ;
         Text [ portuguese_brazilian ] = "Consolidar por" ;
         Text [ portuguese ] = "Consolidar por" ;
-        Text [ finnish ] = "Yhdistelyperuste" ;
+        Text [ finnish ] = "Yhdistä" ;
         Text [ danish ] = "Konsolider efter" ;
         Text [ french ] = "Consolider par" ;
         Text [ swedish ] = "Konsolidera efter" ;
         Text [ dutch ] = "Consolideren naar" ;
         Text [ spanish ] = "Consolidar según" ;
         Text [ english_us ] = "Consolidate by" ;
-        Text[ chinese_simplified ] = "ºÏ²¢°´ÕÕ";
+        Text[ chinese_simplified ] = "åˆå¹¶æŒ‰ç…§";
         Text[ russian ] = "Êîíñîëèäèğîâàòü ïî";
         Text[ polish ] = "Konsoliduj wed³ug";
-        Text[ japanese ] = "“‡‚ÌŠî€";
-        Text[ chinese_traditional ] = "¦X¨Ö«ö·Ó";
+        Text[ japanese ] = "çµ±åˆã®åŸºæº–";
+        Text[ chinese_traditional ] = "åˆä½µæŒ‰ç…§";
         Text[ arabic ] = "ÏãÌ Åáì";
         Text[ greek ] = "Åíïğïßçóç ùò ğñïò";
-        Text[ korean ] = "·Î ÅëÇÕ";
+        Text[ korean ] = "í†µí•© ìœ„ì¹˜";
         Text[ turkish ] = "Birleştirme ölçütü";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Consolidar según";
+        Text[ catalan ] = "Consolida segons";
+        Text[ thai ] = "à¸£à¸§à¸šà¸£à¸§à¸¡à¹‚à¸”à¸¢";
     };
     FixedLine FL_SEP
     {
@@ -752,18 +773,19 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ french ] = "Options" ;
         Text [ dutch ] = "Opties" ;
         Text [ portuguese ] = "Opções" ;
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
         Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "¿É¼Ç";
+        Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     CheckBox BTN_REFS
     {
@@ -783,17 +805,18 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ spanish ] = "~Vincular con datos fuente" ;
         Text [ english_us ] = "~Link to source data" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ºÍÔ´Êı¾İÁ¬½Ó(~L)";
+        Text[ chinese_simplified ] = "å’Œæºæ•°æ®è¿æ¥(~L)";
         Text[ russian ] = "Ñâÿçàòü ñ èñõîäíûìè äàííûìè";
         Text[ polish ] = "Utwórz ³¹cze z danymi Ÿród³a";
-        Text[ japanese ] = "¿°½ÃŞ°À‚ÖØİ¸‚·‚é(~L)";
-        Text[ chinese_traditional ] = "©M·½¸ê®Æ³sµ²(~L)";
+        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ã¸ãƒªãƒ³ã‚¯ã™ã‚‹(~L)";
+        Text[ chinese_traditional ] = "å’Œæºè³‡æ–™é€£çµ(~L)";
         Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Óıíäåóç ìå äåäïìİíá ğñïİëåõóçò";
-        Text[ korean ] = "¼Ò½º µ¥ÀÌÅÍ¿¡ ¿¬°á(~L)";
+        Text[ korean ] = "ì†ŒìŠ¤ ë°ì´í„°ì— ì—°ê²°(~L)";
         Text[ turkish ] = "Kaynak verilerine ~bağla";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Vincular con datos fuente";
+        Text[ catalan ] = "En~llaç a la font de dades";
+        Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸›à¸¢à¸±à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     OKButton BTN_OK
     {
@@ -826,7 +849,6 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Pos = MAP_APPFONT ( 224 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "~Remove" ;
         Text [ norwegian ] = "~Fjern" ;
@@ -835,29 +857,29 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "R~adera" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ spanish ] = "~Eliminar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 224 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
         Text = "Hinzu~fügen" ;
         Text [ ENGLISH ] = "~Add" ;
         Text [ norwegian ] = "Leg~g til" ;
@@ -866,38 +888,36 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ spanish ] = "~Añadir" ;
         Text [ english_us ] = "~Add" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "Dodaj";
-        Text[ japanese ] = "’Ç‰Á(~A)";
-        Text[ chinese_traditional ] = "·s¼W(~A)";
+        Text[ japanese ] = "è¿½åŠ (~A)";
+        Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "Ğñïó~èŞêç";
-        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir";
+        Text[ catalan ] = "~Afegeix";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
     };
-    Text[ chinese_simplified ] = "ºÏ²¢¼ÆËã";
+    Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—";
     Text[ russian ] = "Êîíñîëèäèğîâàòü";
     Text[ polish ] = "Konsoliduj";
-    Text[ japanese ] = "“‡";
-    Text[ chinese_traditional ] = "¦X¨Ö­pºâ";
+    Text[ japanese ] = "çµ±åˆ";
+    Text[ chinese_traditional ] = "åˆä½µè¨ˆç®—";
     Text[ arabic ] = "ÏãÌ";
     Text[ greek ] = "Åíïğïßçóç";
-    Text[ korean ] = "ÅëÇÕ";
+    Text[ korean ] = "í†µí•©";
     Text[ turkish ] = "Birleştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Consolidar";
+    Text[ catalan ] = "Consolida";
+    Text[ thai ] = "à¸£à¸§à¸šà¸£à¸§à¸¡";
 };
-
-
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:27:36 $
+ *  last change: $Author: dr $ $Date: 2002-10-29 11:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@ ModalDialog RID_SCDLG_DELCELL
     HelpId = FID_DELETE_CELL ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 70 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Zellen lˆschen : Zellen l˜schen */
     Text = "Zellen lˆschen" ;
     Text [ ENGLISH ] = "Delete Cells" ;
     Text [ norwegian ] = "Delete Cells" ;
@@ -107,7 +106,6 @@ ModalDialog RID_SCDLG_DELCELL
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Spalten lˆschen : Ganze ~Spalten l˜schen */
         Text = "Ganze ~Spalten lˆschen" ;
         Text [ ENGLISH ] = "Delete ~columns" ;
         Text [ norwegian ] = "Delete ~columns" ;
@@ -139,7 +137,6 @@ ModalDialog RID_SCDLG_DELCELL
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Zeilen lˆschen : Ganze ~Zeilen l˜schen */
         Text = "Ganze ~Zeilen lˆschen" ;
         Text [ ENGLISH ] = "Delete ~rows" ;
         Text [ norwegian ] = "Delete ~rows" ;
@@ -278,7 +275,6 @@ ModalDialog RID_SCDLG_INSCELL
     HelpId = FID_INS_CELL ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 70 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Zellen einf¸gen : Zellen einf≥gen */
     Text = "Zellen einf¸gen" ;
     Text [ ENGLISH ] = "Insert Cells" ;
     Text [ norwegian ] = "Insert Cells" ;
@@ -317,7 +313,6 @@ ModalDialog RID_SCDLG_INSCELL
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Spalten einf¸gen : Ganze ~Spalten einf≥gen */
         Text = "Ganze ~Spalten einf¸gen" ;
         Text [ ENGLISH ] = "Insert ~columns" ;
         Text [ norwegian ] = "Insert ~columns" ;
@@ -349,7 +344,6 @@ ModalDialog RID_SCDLG_INSCELL
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Zeilen einf¸gen : Ganze ~Zeilen einf≥gen */
         Text = "Ganze ~Zeilen einf¸gen" ;
         Text [ ENGLISH ] = "Insert ~rows" ;
         Text [ norwegian ] = "Insert ~rows" ;
@@ -494,7 +488,6 @@ ModalDialog RID_SCDLG_DELCONT
     HelpId = SID_DELETE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 130 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Inhalte lˆschen : Inhalte l˜schen */
     Text = "Inhalte lˆschen" ;
     Text [ ENGLISH ] = "Delete Contents" ;
     Text [ norwegian ] = "Delete Contents" ;
@@ -533,7 +526,6 @@ ModalDialog RID_SCDLG_DELCONT
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Alles lˆschen : ~Alles l˜schen */
         Text = "~Alles lˆschen" ;
         Text [ ENGLISH ] = "Delete ~All" ;
         Text [ norwegian ] = "Delete ~All" ;
@@ -828,7 +820,6 @@ ModalDialog RID_SCDLG_INSCONT
     HelpId = FID_INS_CELL_CONTENTS ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 187 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Inhalte einf¸gen : Inhalte einf≥gen */
     Text = "Inhalte einf¸gen" ;
     Text [ ENGLISH ] = "Insert Contents" ;
     Text [ norwegian ] = "Insert Contents" ;
@@ -867,7 +858,6 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Alles einf¸gen : ~Alles einf≥gen */
         Text = "~Alles einf¸gen" ;
         Text [ ENGLISH ] = "Insert a~ll" ;
         Text [ norwegian ] = "Insert a~ll" ;
@@ -1315,7 +1305,6 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 12 , 141 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Leerzellen ¸berspringen : ~Leerzellen ≥berspringen */
         Text = "~Leerzellen ¸berspringen" ;
         Text [ ENGLISH ] = "~Skip empty cells" ;
         Text [ dutch ] = "~Lege cellen overspringen" ;
@@ -1374,7 +1363,6 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 12 , 169 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Verkn¸~pfen : Verkn≥~pfen */
         Text = "Verkn¸~pfen" ;
         Text [ ENGLISH ] = "Lin~k" ;
         Text [ dutch ] = "~Koppelen" ;
@@ -1650,7 +1638,6 @@ ModalDialog RID_SCDLG_MOVETAB
     {
         Pos = MAP_APPFONT ( 6 , 35 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ei~nf¸gen vor : Ei~nf≥gen vor */
         Text = "Ei~nf¸gen vor" ;
         Text [ ENGLISH ] = "I~nsert before" ;
         Text [ norwegian ] = "I~nsert before" ;
@@ -2540,7 +2527,6 @@ ModalDialog RID_SCDLG_FILLSERIES
     HelpId = FID_FILL_SERIES ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 290 , 122 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Reihe f¸llen : Reihe f≥llen */
     Text = "Reihe f¸llen" ;
     Text [ ENGLISH ] = "Fill Series" ;
     Text [ norwegian ] = "Fill Series" ;
@@ -2961,7 +2947,6 @@ ModalDialog RID_SCDLG_FILLSERIES
     {
         Pos = MAP_APPFONT ( 78 , 56 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Auto-Aus~f¸llen : Auto-Aus~f≥llen */
         Text = "Auto-Aus~f¸llen" ;
         Text [ ENGLISH ] = "~Autofill" ;
         Text [ norwegian ] = "~Autofill" ;
@@ -3141,7 +3126,6 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     String STR_VALERR
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltiger Wert : Ung≥ltiger Wert */
         Text = "Ung¸ltiger Wert" ;
         Text [ ENGLISH ] = "Invalid value" ;
         Text [ norwegian ] = "Invalid value" ;
@@ -3309,7 +3293,6 @@ ModalDialog RID_SCDLG_GROUP
     };
     String STR_GROUP
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Aktivieren f¸r : Aktivieren f≥r */
         Text = "Aktivieren f¸r" ;
         Text [ ENGLISH ] = "Activate on" ;
         Text [ norwegian ] = "Activate on" ;
@@ -3338,7 +3321,6 @@ ModalDialog RID_SCDLG_GROUP
     };
     String STR_UNGROUP
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Aufheben f¸r : Aufheben f≥r */
         Text = "Aufheben f¸r" ;
         Text [ ENGLISH ] = "Deactivate on" ;
         Text [ norwegian ] = "Deactivate on" ;
@@ -3457,7 +3439,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Kopfzeile" ;
+        Text = "~Oberer Zeile" ;
         Text [ ENGLISH ] = "First row" ;
         Text [ dutch ] = "~Koptekst" ;
         Text [ english_us ] = "H~eader" ;
@@ -3517,8 +3499,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fuﬂzeile : ~Fuòzeile */
-        Text = "~Fuﬂzeile" ;
+        Text = "~Unterer Zeile" ;
         Text [ ENGLISH ] = "Last row" ;
         Text [ dutch ] = "~Voettekst" ;
         Text [ english_us ] = "~Footer" ;
@@ -3658,7 +3639,6 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 156 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Namen einf¸gen : Namen einf≥gen */
         Text = "Namen einf¸gen" ;
         Text [ ENGLISH ] = "Paste name" ;
         Text [ dutch ] = "Naam invoegen" ;
@@ -3742,7 +3722,6 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ finnish ] = "Liit‰ ~luettelo";
         Text[ thai ] = "‡∏ß‡∏≤‡∏á~‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£";
     };
-    /* ### ACHTUNG: Neuer Text in Resource? Namen einf¸gen : Namen einf≥gen */
     Text = "Namen einf¸gen" ;
     Text [ ENGLISH ] = "Paste Name" ;
     Text [ english_us ] = "Paste Name" ;
@@ -3913,7 +3892,6 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Pos = MAP_APPFONT ( 135 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    /* ### ACHTUNG: Neuer Text in Resource? Quelldatenbereich ‰ndern : Quelldatenbereich ındern */
     Text = "Quelldatenbereich ‰ndern" ;
     Text [ ENGLISH ] = "Change Chart Data" ;
     Text [ ENGLISH_US ] = "Change Source Data Range" ;
@@ -3939,3 +3917,4 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ finnish ] = "Vaihda l‰hdetietoalue";
     Text[ thai ] = "‡πÄ‡∏õ‡∏•‡∏µ‡πà‡∏¢‡∏ô‡∏ä‡πà‡∏ß‡∏á‡πÅ‡∏´‡∏•‡πà‡∏á‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
 };
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:51:53 $
+ *  last change: $Author: dr $ $Date: 2002-10-29 11:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text [ italian ] = "Definisci area database" ;
     Text [ portuguese_brazilian ] = "Definir Base de Dados" ;
     Text [ portuguese ] = "Definir base de dados" ;
-    Text [ finnish ] = "M??rit? tietokannan alue" ;
+    Text [ finnish ] = "Määritä tietokannan alue" ;
     Text [ danish ] = "Definer database" ;
     Text [ french ] = "Définition d'une plage de base de données" ;
     Text [ swedish ] = "Definiera databasområde" ;
@@ -92,9 +92,9 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "Nome" ;
         Text [ portuguese_brazilian ] = "Nomear" ;
         Text [ portuguese ] = "~Nome" ;
-        Text [ finnish ] = "Nimi" ;
-        Text [ danish ] = "Navn" ;
-        Text [ french ] = "~Nom" ;
+        Text [ finnish ] = "Ni~mi" ;
+        Text [ danish ] = "~Navn" ;
+        Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "~Naam" ;
         Text [ spanish ] = "Nombre" ;
@@ -109,7 +109,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ì´ë¦„(~M)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre";
+        Text[ catalan ] = "Nom";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
     };
     ComboBox ED_NAME
     {
@@ -128,9 +129,9 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "Area" ;
         Text [ portuguese_brazilian ] = "Remente a" ;
         Text [ portuguese ] = "~Área" ;
-        Text [ finnish ] = "Alue" ;
-        Text [ danish ] = "Område" ;
-        Text [ french ] = "~Plage" ;
+        Text [ finnish ] = "~Alue" ;
+        Text [ danish ] = "~Område" ;
+        Text [ french ] = "Plage" ;
         Text [ swedish ] = "~Område" ;
         Text [ dutch ] = "~Bereik" ;
         Text [ spanish ] = "Área" ;
@@ -145,7 +146,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ë²”ìœ„(~R)";
         Text[ turkish ] = "Aralık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Área";
+        Text[ catalan ] = "Àrea";
+        Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡";
     };
     Edit ED_DBAREA
     {
@@ -180,8 +182,9 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText[ korean ] = "ì¶•ì†Œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ catalan ] = "Redueix";
+        QuickHelpText[ finnish ] = "Kutista";
+        QuickHelpText[ thai ] = "Shrink";
     };
     FixedLine FL_OPTIONS
     {
@@ -202,29 +205,29 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
         Text[ chinese_traditional ] = "é¸é …";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
         Text[ greek ] = "Åğéëïãİò";
         Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     CheckBox BTN_HEADER
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? enthält ~Spaltenköpfe : enthõlt ~Spaltenk÷pfe */
-        Text = "enthält ~Spaltenköpfe" ;
+        Text = "enthält ~Spaltenbeschriftungen" ;
         Text [ ENGLISH ] = "Contains column ~headers" ;
         Text [ norwegian ] = "includes columnheaders" ;
         Text [ italian ] = "Contiene intestazioni colonne" ;
         Text [ portuguese_brazilian ] = "inclui cabe?alhos da coluna" ;
         Text [ portuguese ] = "Incluir ~cabeçalhos de colunas" ;
-        Text [ finnish ] = "~Sis?lt?? sarakkeen otsikot" ;
+        Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
         Text [ french ] = "En-têtes de colonnes inclus" ;
         Text [ swedish ] = "Innehåller ~kolumnhuvuden" ;
@@ -242,14 +245,14 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ì—´ ë¨¸ë¦¬ê¸€ í¬í•¨(~N)";
         Text[ turkish ] = "Sütun başlıkları ~içeriyor";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contiene títulos de ~columnas";
+        Text[ catalan ] = "Co~nté capçaleres de columna";
+        Text[ thai ] = "~à¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     CheckBox BTN_SIZE
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen/löschen : Zellen ~einf³gen/l÷schen */
         Text = "Zellen ~einfügen/löschen" ;
         Text [ ENGLISH ] = "Insert or delete cells" ;
         TabStop = TRUE ;
@@ -265,15 +268,16 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_simplified ] = "æ’å…¥/åˆ é™¤å•å…ƒæ ¼(~C)";
         Text[ russian ] = "Âñòàâèòü/óäàëèòü ÿ÷åéêè";
         Text[ polish ] = "Wstaw/usuñ komórki";
-        Text[ japanese ] = "ï½¾ï¾™ã®æŒ¿å…¥/å‰Šé™¤(~C)";
+        Text[ japanese ] = "ã‚»ãƒ«ã®æŒ¿å…¥/å‰Šé™¤(~C)";
         Text[ chinese_traditional ] = "æ’å…¥/åˆªé™¤å„²å­˜æ ¼(~C)";
         Text[ arabic ] = "ÅÏÑÇÌ/ÍĞİ ÎáÇíÇ";
         Text[ greek ] = "ĞñïóèŞêç/ÄéáãñáöŞ êåëéşí";
         Text[ korean ] = "ì…€ ì‚½ì…ï¼ì‚­ì œ(~C)";
         Text[ turkish ] = "Hücre ~ekle/sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Insertar o eliminar celdas";
-        Text[ finnish ] = "~Lis?? tai poista soluja";
+        Text[ catalan ] = "Insereix o suprimeix ~cel.les";
+        Text[ finnish ] = "~Lisää tai poista soluja";
+        Text[ thai ] = "à¹à¸—à¸£à¸à¸«à¸£à¸·à¸­à¸¥à¸šà¹€~à¸‹à¸¥à¸¥à¹Œ";
     };
     CheckBox BTN_FORMAT
     {
@@ -286,7 +290,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ english_us ] = "Keep ~formatting" ;
         Text [ portuguese_brazilian ] = "Formatierung ~beibehalten" ;
         Text [ swedish ] = "Behåll ~formatering" ;
-        Text [ danish ] = "Bevar formatering" ;
+        Text [ danish ] = "Bevar ~formatering" ;
         Text [ italian ] = "~Mantieni formattazione" ;
         Text [ spanish ] = "Co~nservar formato" ;
         Text [ french ] = "Conserver le ~formatage" ;
@@ -299,11 +303,12 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "ä¿ç•™æ ¼å¼(~F)";
         Text[ arabic ] = "ÇáÅÈŞÇÁ Úáì ÇáÊäÓíŞ";
         Text[ greek ] = "ÄéáôŞñçóç ìïñ~öïğïßçóçò";
-        Text[ korean ] = "í¬ë§·íŒ… ì‹¤í–‰(~F)";
+        Text[ korean ] = "ì„œì‹ ì§€ì • ì‹¤í–‰(~F)";
         Text[ turkish ] = "Formatlamayı ~koru";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~nservar formato";
-        Text[ finnish ] = "~S?ilyt? muotoilu";
+        Text[ catalan ] = "Conserva el ~formatatge";
+        Text[ finnish ] = "~Säilytä muotoilu";
+        Text[ thai ] = "à¹€à¸à¹‡à¸šà¸à¸²à¸£~à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     CheckBox BTN_STRIPDATA
     {
@@ -325,15 +330,16 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_simplified ] = "ä¸å­˜ç›˜è¾“å…¥çš„æ•°æ®(~I)";
         Text[ russian ] = "Âíåøíèå äàííûå íå ñîõğàíÿòü";
         Text[ polish ] = "Nie zapisuj importowanych danych";
-        Text[ japanese ] = "ï½²ï¾ï¾ï¾Ÿï½°ï¾„ã—ãŸï¾ƒï¾ï½°ï¾€ã‚’ä¿å­˜ã—ãªã„(~I)";
+        Text[ japanese ] = "ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ã—ãªã„(~I)";
         Text[ chinese_traditional ] = "ä¸å„²å­˜åŒ¯å…¥çš„è³‡æ–™(~I)";
         Text[ arabic ] = "ÚÏã ÍİÙ ÇáÈíÇäÇÊ ÇáãÓÊæÑÏÉ";
         Text[ greek ] = "Íá ìçí áğïèçêåõôïıí å~éóáãüìåíá äåäïìİíá";
         Text[ korean ] = "ê°€ì ¸ì˜¨ ë°ì´í„° ì €ì¥ ì•ŠìŒ(~I)";
         Text[ turkish ] = "~İçe aktarılan verileri kaydetme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N~o guardar datos importados";
-        Text[ finnish ] = "~?l? tallenna tuotuja tietoja";
+        Text[ catalan ] = "No desis les dades ~importades";
+        Text[ finnish ] = "~Älä tallenna tuotuja tietoja";
+        Text[ thai ] = "à¸­à¸¢à¹ˆà¸²à¸šà¸±à¸™à¸—à¸¶à¸à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆ~à¸™à¸³à¹€à¸‚à¹‰à¸²";
     };
     FixedText FT_SOURCE
     {
@@ -354,15 +360,16 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_simplified ] = "æ¥æºï¼š";
         Text[ russian ] = "Èñòî÷íèê:";
         Text[ polish ] = "ród³o:";
-        Text[ japanese ] = "ï½¿ï½°ï½½:";
+        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹:";
         Text[ chinese_traditional ] = "è³‡æ–™æºï¼š";
         Text[ arabic ] = "ÇáãÕÏÑ:";
         Text[ greek ] = "Ğñïİëåõóç:";
         Text[ korean ] = "ì†ŒìŠ¤:";
         Text[ turkish ] = "Kaynak:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fuente:";
-        Text[ finnish ] = "L?hde:";
+        Text[ catalan ] = "Font:";
+        Text[ finnish ] = "Lähde:";
+        Text[ thai ] = "à¸—à¸µà¹ˆà¸¡à¸²:";
     };
     FixedText FT_OPERATIONS
     {
@@ -390,8 +397,9 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ì‘ë™:";
         Text[ turkish ] = "İşlemler:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Operaciones:";
+        Text[ catalan ] = "Operacions:";
         Text[ finnish ] = "Toiminnot:";
+        Text[ thai ] = "à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£:";
     };
     OKButton BTN_OK
     {
@@ -409,16 +417,15 @@ ModelessDialog RID_SCDLG_DBNAMES
     {
         Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text = "Hin~zufügen" ;
         Text [ ENGLISH ] = "~Add" ;
         Text [ norwegian ] = "Leg~g til" ;
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lis??" ;
-        Text [ danish ] = "Tilføj" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ finnish ] = "~Lisää" ;
+        Text [ danish ] = "Til~føj" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "Lägg ~till" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ spanish ] = "~Añadir" ;
@@ -435,13 +442,13 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ì‚½ì…(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir";
+        Text[ catalan ] = "~Afegeix";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
     };
     PushButton BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "~Remove" ;
         Text [ norwegian ] = "~Fjern" ;
@@ -450,7 +457,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ spanish ] = "~Eliminar" ;
@@ -466,7 +473,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     HelpButton BTN_HELP
     {
@@ -484,16 +492,15 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     String STR_ADD
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text = "Hinzu~fügen" ;
         Text [ ENGLISH ] = "~Add" ;
         Text [ norwegian ] = "Leg~g til" ;
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lis??" ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ spanish ] = "~Añadir" ;
@@ -508,11 +515,11 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir";
+        Text[ catalan ] = "~Afegeix";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
     };
     String STR_MODIFY
     {
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
         Text = "~Ändern" ;
         Text [ ENGLISH ] = "~Modify" ;
         Text [ norwegian ] = "~Modify" ;
@@ -521,7 +528,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Modificer" ;
-        Text [ french ] = "~Modifier" ;
+        Text [ french ] = "Modifier" ;
         Text [ swedish ] = "~Ändra" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "~Modificar" ;
@@ -533,14 +540,14 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "è®Šæ›´(~O)";
         Text[ arabic ] = "ÊÚÏíá";
         Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "ë³€ê²½(~O)";
+        Text[ korean ] = "ìˆ˜ì •(~O)";
         Text[ turkish ] = "~Değiştir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar";
+        Text[ catalan ] = "M~odifica";
+        Text[ thai ] = "à¸”à¸±à¸”à¹~à¸›à¸¥à¸‡";
     };
     String STR_DB_INVALID
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Bereich : Ung³ltiger Bereich */
         Text = "Ungültiger Bereich" ;
         Text [ ENGLISH ] = "Invalid range" ;
         Text [ portuguese ] = "Área não válida" ;
@@ -562,31 +569,21 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ìœ íš¨í•˜ì§€ ì•Šì€ ë²”ìœ„";
         Text[ turkish ] = "Geçersiz aralık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Área no válida";
+        Text[ catalan ] = "L'àrea no és vàlida";
         Text[ finnish ] = "Virheellinen alue";
+        Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
     };
     Text[ chinese_simplified ] = "å®šä¹‰æ•°æ®åº“åŒºåŸŸ";
     Text[ russian ] = "Çàäàòü îáëàñòü áàçû äàííûõ";
     Text[ polish ] = "Zdefiniuj obszar bazy danych";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ç¯„å›²ã®æŒ‡å®š";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ç¯„å›²ã®æŒ‡å®š";
     Text[ chinese_traditional ] = "å®šç¾©è³‡æ–™åº«å€åŸŸ";
     Text[ arabic ] = "ÊÚÑíİ äØÇŞ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ greek ] = "Êáèïñéóìüò ğåñéï÷Şò âÜóçò äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì˜ì—­ ì •ì˜";
     Text[ turkish ] = "Veritabanı aralığını belirle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Definir área de base de datos";
+    Text[ catalan ] = "Defineix l'àrea de la base de dades";
+    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
