@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-05 11:33:15 $
+ *  last change: $Author: dl $ $Date: 2001-05-21 10:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #include <svx/svxids.hrc>
 #include <svx/grafctrl.hxx>
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 
 #include "sddll.hxx"
 #include "grdocsh.hxx"
@@ -105,13 +108,21 @@ SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
 
     Size aSize = aTbx.CalcWindowSizePixel();
     aTbx.SetPosSizePixel( Point(), aSize );
+
+    if ( aSdResIdWin.GetId() == RID_TEXT )
+    {
+        SvtCJKOptions aCJKOptions;
+        if( !aCJKOptions.IsVerticalTextEnabled() )
+            aSize.Height() /= 2;
+    }
+
     SetOutputSizePixel( aSize );
 }
 
 
 /*-------------------------------------------------------------------------*/
 
-__EXPORT SdPopupWindowTbx::~SdPopupWindowTbx()
+SdPopupWindowTbx::~SdPopupWindowTbx()
 {
 }
 
@@ -131,6 +142,18 @@ SfxPopupWindow* SdPopupWindowTbx::Clone() const
 
 void SdPopupWindowTbx::Update()
 {
+    Size aSize = aTbx.CalcWindowSizePixel();
+    aTbx.SetPosSizePixel( Point(), aSize );
+
+    if ( aSdResIdWin.GetId() == RID_TEXT )
+    {
+        SvtCJKOptions aCJKOptions;
+        if( !aCJKOptions.IsVerticalTextEnabled() )
+            aSize.Height() /= 2;
+    }
+
+    SetOutputSizePixel( aSize );
+
     ToolBox *pBox = &aTbx.GetToolBox();
     aTbx.Activate( pBox );
     aTbx.Deactivate( pBox );
@@ -170,7 +193,7 @@ SdTbxControl::SdTbxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
 
 /*-------------------------------------------------------------------------*/
 
-SfxPopupWindowType __EXPORT SdTbxControl::GetPopupWindowType() const
+SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
 {
     return( SFX_POPUPWINDOW_ONTIMEOUT );
 }
@@ -183,7 +206,7 @@ SfxPopupWindowType __EXPORT SdTbxControl::GetPopupWindowType() const
 |*
 \************************************************************************/
 
-SfxPopupWindow* __EXPORT SdTbxControl::CreatePopupWindow()
+SfxPopupWindow* SdTbxControl::CreatePopupWindow()
 {
     SdPopupWindowTbx *pWin = NULL;
 
@@ -297,7 +320,7 @@ SfxPopupWindow* __EXPORT SdTbxControl::CreatePopupWindow()
 
 /*-------------------------------------------------------------------------*/
 
-void __EXPORT SdTbxControl::StateChanged( USHORT nSId,
+void SdTbxControl::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
