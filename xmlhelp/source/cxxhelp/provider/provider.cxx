@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2002-05-31 10:31:38 $
+ *  last change: $Author: vg $ $Date: 2002-06-05 09:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< X
 
 void SAL_CALL
 ContentProvider::dispose()
+    throw ( com::sun::star::uno::RuntimeException)
 {
     if(m_xContainer.is())
     {
