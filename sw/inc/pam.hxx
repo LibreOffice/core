@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:03:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ typedef SwMoveFnCollection* SwMoveFn;
 extern SwMoveFn fnMoveForward, fnMoveBackward;
 
 typedef FASTBOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
-extern SwGoInDoc fnGoDoc, fnGoSection, fnGoNode, fnGoCntnt, fnGoCntntCells;
+extern SwGoInDoc fnGoDoc, fnGoSection, fnGoNode, fnGoCntnt, fnGoCntntCells, fnGoCntntSkipHidden, fnGoCntntCellsSkipHidden;
 
 void _InitPam();
 
