@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 13:05:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,14 +156,14 @@ void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xText
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
-    SwXTextCursor* pCursor = 0;
+    OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
 
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                 SwXTextRange::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                OTextCursorHelper::getUnoTunnelId());
     }
 
     SwDoc* pDc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ?
