@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uuid.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-04 16:14:41 $
+ *  last change: $Author: svesik $ $Date: 2000-12-06 10:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,8 @@ void SAL_CALL rtl_createNamedUuid(
 #ifdef SAL_W32
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 1000
 #elif LINUX
+#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
+#elif NETBSD
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #elif FREEBSD
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
