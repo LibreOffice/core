@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:57:14 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SV_WAITOBJ_HXX //autogen wg. WaitObject
 #include <vcl/waitobj.hxx>
 #endif
@@ -217,8 +216,8 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
 BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWindow > & xComponent,
                                                 BibDataManager* pDataManager)
     :xWindow( xComponent )
-    ,pDatMan( pDataManager )
     ,m_xDatMan( pDataManager )
+    ,pDatMan( pDataManager )
     ,pBibMod(NULL)
 {
     Window* pParent = VCLUnoHelper::GetWindow( xWindow );
