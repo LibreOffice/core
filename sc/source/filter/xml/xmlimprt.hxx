@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:59:54 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,15 +580,7 @@ enum ScXMLDataPilotFieldAttrTokens
     XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION,
     XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION,
     XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_IS_GROUP_FIELD,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_GROUP_SOURCE_FIELD_NAME,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_DATE_START,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_DATE_END,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_START,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_END,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_STEP,
-    XML_TOK_DATA_PILOT_FIELD_ATTR_GROUP_PART
+    XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY
 };
 
 enum ScXMLDataPilotFieldElemTokens
