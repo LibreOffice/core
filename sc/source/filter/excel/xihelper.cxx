@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:35:37 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,17 +658,15 @@ void XclImpUrlHelper::DecodeUrl(
                     case EXC_URL_PARENTDIR:
                         rUrl.AppendAscii( "..\\" );
                     break;
-                    case EXC_URL_MACVOLUME:
+                    case EXC_URL_RAW:
                     {
                         if( *(pChar + 1) )
                         {
-                            xub_StrLen nVolLen = *++pChar;
-                            for( xub_StrLen nChar = 0; (nChar < nVolLen) && *(pChar + 1); ++nChar )
+                            xub_StrLen nLen = *++pChar;
+                            for( xub_StrLen nChar = 0; (nChar < nLen) && *(pChar + 1); ++nChar )
                                 rUrl.Append( *++pChar );
-                            rUrl.Append( ':' );
+//                            rUrl.Append( ':' );
                         }
-                        else
-                            rUrl.AppendAscii( "<ERROR IN MAC-LONG-VOLUME>" );
                     }
                     break;
                     case '[':
