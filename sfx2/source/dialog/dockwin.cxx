@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2001-11-28 11:23:58 $
+ *  last change: $Author: mba $ $Date: 2001-11-29 17:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,9 @@ void SfxDockingWindow::ToggleFloatingMode()
         SetAlignment(SFX_ALIGN_NOALIGNMENT);
         if ( pImp->aWinState.Len() )
             GetFloatingWindow()->SetWindowState( pImp->aWinState );
+        else
+            GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
+
         if ( pImp->bSplitable && !pImp->bEndDocked )
             // Wenn das Fenster vorher in einem SplitWindow lag, kommt von
             // Sv kein Show
@@ -628,6 +631,16 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     }
 
     pImp->aSplitSize = GetOutputSizePixel();
+    if ( !GetFloatingSize().Width() )
+    {
+        Size aMinSize( GetMinOutputSizePixel() );
+        SetFloatingSize( pImp->aSplitSize );
+        if ( pImp->aSplitSize.Width() < aMinSize.Width() )
+            pImp->aSplitSize.Width() = aMinSize.Width();
+        if ( pImp->aSplitSize.Height() < aMinSize.Height() )
+            pImp->aSplitSize.Height() = aMinSize.Height();
+    }
+
     if ( pInfo->aWinState.Len() && pInfo->aExtraString.Len() )
     {
         // get information about alignment, split size and position in SplitWindow
