@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-22 16:08:08 $
+ *  last change: $Author: os $ $Date: 2002-10-21 15:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2199,7 +2199,7 @@ void SwRootFrm::UnoRemoveAllActions()
     if ( pSh )
         do
         {
-
+            DBG_ASSERT(!pSh->GetRestoreActions(), "Restore action count is already set!")
             BOOL bCrsr = pSh->ISA( SwCrsrShell );
             BOOL bFE = pSh->ISA( SwFEShell );
             USHORT nRestore = 0;
