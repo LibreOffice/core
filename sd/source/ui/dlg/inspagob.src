@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text = "~Nicht verwendete Hintergrundseiten lцschen" ;
         Text [ ENGLISH ] = "~Remove not used master pages" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "~Remove unused background pages";
+        Text[ english_us ] = "Delete unused backg~rounds";
         Text[ portuguese ] = "~Eliminar pбginas de fundo nгo utilizadas";
         Text[ russian ] = "Удалять неиспользованные страницы фона";
         Text[ dutch ] = "~Niet-gebruikte achtergrondpagina's wissen";
