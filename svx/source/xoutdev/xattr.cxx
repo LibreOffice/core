@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-10 09:25:10 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,7 +1254,7 @@ SfxItemPresentation XLineWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper * pIntl
 )   const
 {
     switch ( ePres )
@@ -1265,7 +1265,7 @@ SfxItemPresentation XLineWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit);
+                                    eCoreUnit, ePresUnit, pIntl);
             rText += SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
     }
@@ -2438,7 +2438,7 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper * pIntl
 )   const
 {
     switch ( ePres )
@@ -2449,7 +2449,7 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit);
+                                    eCoreUnit, ePresUnit, pIntl);
             rText += SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
     }
@@ -2544,7 +2544,7 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -2555,7 +2555,7 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
-                                    eCoreUnit, ePresUnit);
+                                    eCoreUnit, ePresUnit, pIntl);
             rText += SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
     }
