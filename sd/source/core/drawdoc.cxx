@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 09:09:41 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 11:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1829,6 +1829,7 @@ uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
 {
     uno::Reference< uno::XInterface > xModel;
 
+#ifndef SVX_LIGHT
     try
     {
         xModel = pDocSh->GetModel();
@@ -1836,6 +1837,7 @@ uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
     catch( uno::RuntimeException& e )
     {
     }
+#endif
 
     return xModel;
 }
