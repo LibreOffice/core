@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-14 13:09:49 $
+ *  last change: $Author: mt $ $Date: 2002-08-15 14:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,7 +887,7 @@ Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, BOOL bSpecial )
     return aEditCursor;
 }
 
-Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial )
+Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bPreferPortionStart )
 {
     DBG_ASSERT( IsFormatted(), "GetEditCursor: Nicht formatiert" );
 
@@ -933,7 +933,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial )
     aEditCursor.Bottom() = nY-1;
 
     // innerhalb der Zeile suchen....
-    long nX = ImpGetXPos( rPaM.GetPara(), pLine, rPaM.GetIndex() );
+    long nX = ImpGetXPos( rPaM.GetPara(), pLine, rPaM.GetIndex(), bPreferPortionStart );
     aEditCursor.Left() = aEditCursor.Right() = nX;
     return aEditCursor;
 }
@@ -980,7 +980,10 @@ long TextEngine::ImpGetXPos( ULONG nPara, TextLine* pLine, USHORT nIndex, BOOL b
                               ( !IsRightToLeft() && pNextPortion->IsRightToLeft() ) ||
                               ( IsRightToLeft() && !pNextPortion->IsRightToLeft() ) ) )
                     {
-                        nX += pNextPortion->GetWidth();
+//                        nX += pNextPortion->GetWidth();
+                        // End of the tab portion, use start of next for cursor pos
+                        DBG_ASSERT( !bPreferPortionStart, "ImpGetXPos - How can we this tab portion here???" );
+                        nX = ImpGetXPos( nPara, pLine, nIndex, TRUE );
                     }
 
                 }
@@ -1005,8 +1008,9 @@ long TextEngine::ImpGetXPos( ULONG nPara, TextLine* pLine, USHORT nIndex, BOOL b
     }
     else // if ( nIndex == pLine->GetStart() )
     {
-        if ( ( !IsRightToLeft() && pPortion->IsRightToLeft() ) ||
-             ( IsRightToLeft() && !pPortion->IsRightToLeft() ) )
+        if ( ( pPortion->GetKind() != PORTIONKIND_TAB ) &&
+                ( ( !IsRightToLeft() && pPortion->IsRightToLeft() ) ||
+                ( IsRightToLeft() && !pPortion->IsRightToLeft() ) ) )
         {
             nX += nPortionTextWidth;
         }

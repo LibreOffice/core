@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-14 13:09:49 $
+ *  last change: $Author: mt $ $Date: 2002-08-15 14:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,12 +741,6 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             break;
             default:
             {
-//              #if defined( DEBUG ) && !defined( PRODUCT )
-//                    if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
-//                    {
-//                        mpTextEngine->SetRightToLeft( !mpTextEngine->IsRightToLeft() );
-//                    }
-//              #endif
                 if ( TextEngine::IsSimpleCharInput( rKeyEvent ) )
                 {
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
@@ -1622,8 +1616,27 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
         TextNode* pNode = mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
         if ( pNode->GetText().Len() && ( aPaM.GetIndex() < pNode->GetText().Len() ) )
         {
-            long nWidth = (long)mpTextEngine->CalcTextWidth( aPaM.GetPara(), aPaM.GetIndex(), 1 );
-            aEditCursor.Right() += nWidth;
+            // If we are behind a portion, and the next portion has other direction, we must change position...
+            aEditCursor.Left() = aEditCursor.Right() = mpTextEngine->GetEditCursor( aPaM, FALSE, TRUE ).Left();
+
+            TEParaPortion* pParaPortion = mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
+
+            USHORT nTextPortionStart = 0;
+            USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, TRUE );
+            TETextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
+            {
+                if ( mpTextEngine->IsRightToLeft() )
+                {
+
+                }
+                aEditCursor.Right() += pTextPortion->GetWidth();
+            }
+            else
+            {
+                TextPaM aNext = CursorRight( TextPaM( aPaM.GetPara(), aPaM.GetIndex() ), (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+                aEditCursor.Right() = mpTextEngine->GetEditCursor( aNext, TRUE ).Left();
+            }
         }
     }
 
@@ -1690,7 +1703,14 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
             Scroll( -(aNewStartPos.X() - maStartDocPos.X()), -(aNewStartPos.Y() - maStartDocPos.Y()) );
     }
 
-    Point aPoint( GetWindowPos( aEditCursor.TopLeft() ) );
+    if ( aEditCursor.Right() < aEditCursor.Left() )
+    {
+        long n = aEditCursor.Left();
+        aEditCursor.Left() = aEditCursor.Right();
+        aEditCursor.Right() = n;
+    }
+
+    Point aPoint( GetWindowPos( !mpTextEngine->IsRightToLeft() ? aEditCursor.TopLeft() : aEditCursor.TopRight() ) );
     mpCursor->SetPos( aPoint );
     mpCursor->SetSize( aEditCursor.GetSize() );
     if ( bForceVisCursor && mbCursorEnabled )
