@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandButton.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 19:46:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
 //=============================================================================
 
-/** specifies the a control model for a clickable button which is part of a form
+/** specifies the control model for a clickable button which is part of a form
     component hierarchy.
 
     @see ImageButton
