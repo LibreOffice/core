@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:48:09 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 16:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
 
     String sTmp(GetText());
     aNewNameED.SetText(xNamed->getName());
+    aNewNameED.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
     sTmp += String(xNamed->getName());
     SetText(sTmp);
 
