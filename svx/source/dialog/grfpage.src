@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "Bredde" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ french ] = "La~rgeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
         Text [ spanish ] = "A~ncho" ;
@@ -172,8 +172,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ portuguese ] = "A~ltura" ;
         Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "Højde" ;
-        Text [ french ] = "~Haut." ;
-        Text [ swedish ] = "H~öjd" ;
+        Text [ french ] = "Hau~teur" ;
+        Text [ swedish ] = "Höj~d" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "H~eight" ;
@@ -289,7 +289,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ portuguese ] = "A~ltura" ;
         Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "Højde" ;
-        Text [ french ] = "~Haut." ;
+        Text [ french ] = "~Hauteur" ;
         Text [ swedish ] = "H~öjd" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
@@ -333,9 +333,9 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "Crop" ;
         Text [ italian ] = "Taglia" ;
         Text [ spanish ] = "Recortar" ;
-        Text [ french ] = "Recadrer" ;
+        Text [ french ] = "Rogner" ;
         Text [ dutch ] = "Knippen" ;
-        Text [ swedish ] = "Skär till" ;
+        Text [ swedish ] = "Beskär" ;
         Text [ danish ] = "Beskær" ;
         Text [ portuguese_brazilian ] = "Zuschneiden" ;
         Text [ portuguese ] = "Recortar" ;
@@ -359,7 +359,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "~Left" ;
         Text [ italian ] = "~Sinistra" ;
         Text [ spanish ] = "~Izquierda" ;
-        Text [ french ] = "~À gauche" ;
+        Text [ french ] = "À ~gauche" ;
         Text [ swedish ] = "~Vänster" ;
         Text [ danish ] = "Venstre" ;
         Text [ portuguese_brazilian ] = "~Links" ;
@@ -402,9 +402,9 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "~Right" ;
         Text [ italian ] = "Destra" ;
         Text [ spanish ] = "~Derecha" ;
-        Text [ french ] = "~À droite" ;
+        Text [ french ] = "À ~droite" ;
         Text [ dutch ] = "~Rechts" ;
-        Text [ swedish ] = "~Höger" ;
+        Text [ swedish ] = "Höge~r" ;
         Text [ danish ] = "Højre" ;
         Text [ portuguese_brazilian ] = "Rechts" ;
         Text [ portuguese ] = "~Direita" ;
@@ -444,14 +444,14 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "~Top" ;
         Text [ italian ] = "Sopra" ;
         Text [ spanish ] = "~Arriba" ;
-        Text [ french ] = "~En haut" ;
+        Text [ french ] = "En h~aut" ;
         Text [ dutch ] = "~Boven" ;
-        Text [ swedish ] = "~Överst" ;
+        Text [ swedish ] = "~Uppe" ;
         Text [ danish ] = "Øverst" ;
         Text [ portuguese_brazilian ] = "Oben" ;
-        Text [ portuguese ] = "Em cima" ;
+        Text [ portuguese ] = "Em ~cima" ;
         Text[ chinese_simplified ] = "ÉÏ(~T)";
-        Text[ russian ] = "Ââåğõó";
+        Text[ russian ] = "Ñâåğõó";
         Text[ polish ] = "Na górze";
         Text[ japanese ] = "ã(~T)";
         Text[ chinese_traditional ] = "¤W(~T)";
@@ -490,12 +490,12 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ italian ] = "Sotto" ;
         Text [ spanish ] = "A~bajo" ;
         Text [ french ] = "En ~bas" ;
-        Text [ swedish ] = "~Nederst" ;
+        Text [ swedish ] = "~Nere" ;
         Text [ danish ] = "Nederst" ;
-        Text [ portuguese ] = "Em baixo" ;
+        Text [ portuguese ] = "Em ~baixo" ;
         Text [ portuguese_brazilian ] = "Unten" ;
         Text[ chinese_simplified ] = "ÏÂ(~B)";
-        Text[ russian ] = "Âíèçó";
+        Text[ russian ] = "Ñíèçó";
         Text[ polish ] = "Na dole";
         Text[ japanese ] = "‰º(~B)";
         Text[ chinese_traditional ] = "¤U(~B)";
@@ -531,7 +531,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ italian ] = "Mantieni dimensione" ;
         Text [ spanish ] = "~Mantener el tamaño" ;
         Text [ french ] = "Même ~taille" ;
-        Text [ dutch ] = "M~et behoud v. grootte" ;
+        Text [ dutch ] = "M~et behoud van grootte" ;
         Text [ swedish ] = "Bibehåll s~torlek" ;
         Text [ danish ] = "Bevar størrelse" ;
         Text [ portuguese_brazilian ] = "Größe beibehalten" ;
@@ -542,7 +542,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ japanese ] = "»²½Ş•Û(~Z)";
         Text[ chinese_traditional ] = "«O«ù¤j¤p(~Z)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáÍÌã";
-        Text[ greek ] = "ÄéáôŞñçóç ìåãİèïõò";
+        Text[ greek ] = "Äéá~ôŞñçóç ìåãİèïõò";
         Text[ korean ] = "Å©±â À¯Áö(~Z)";
         Text[ turkish ] = "Boyutu kor~u";
     };
@@ -556,7 +556,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "Keep ~scale" ;
         Text [ italian ] = "Mantieni scala" ;
         Text [ spanish ] = "Mantener la ~escala" ;
-        Text [ french ] = "Même ~échelle" ;
+        Text [ french ] = "Même é~chelle" ;
         Text [ dutch ] = "~Met behoud van schaal" ;
         Text [ swedish ] = "Bibehåll s~kala" ;
         Text [ danish ] = "Bevar målestok" ;
@@ -568,7 +568,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ japanese ] = "½¹°Ù•Û(~S)";
         Text[ chinese_traditional ] = "«O«ùÅã¥Ü¤ñ¨Ò(~S)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáãŞíÇÓ";
-        Text[ greek ] = "ÄéáôŞñçóç êëßìáêáò";
+        Text[ greek ] = "ÄéáôŞñçóç êëß~ìáêáò";
         Text[ korean ] = "ºñÀ² À¯Áö(~S)";
         Text[ turkish ] = "~Orantıyı koru";
     };
@@ -631,7 +631,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ japanese ] = "Œ³‚Ì»²½Ş(~O)";
         Text[ chinese_traditional ] = "­ì¥ó¤j¤p(~O)";
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";
-        Text[ greek ] = "Áñ÷éêü ìİãåèïò";
+        Text[ greek ] = "Áñ÷éêü ìİ~ãåèïò";
         Text[ korean ] = "¿ø·¡ Å©±â(~O)";
         Text[ turkish ] = "İ~lk boyut";
     };
