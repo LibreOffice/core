@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-29 13:33:43 $
+ *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,13 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        TextContentAnchorType eATyp ) :
+        TextContentAnchorType eATyp,
+           Reference < XTextContent> *pTxtCntnt,
+        TextContentAnchorType *pAnchrType ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     eAnchorType( eATyp ),
+    pTextContent( pTxtCntnt ),
+    pAnchorType( pAnchrType ),
     bMap( sal_False )
 {
     OUString sShow;
@@ -164,22 +168,29 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
+    XMLTextFrameContext *pTextFrameContext = 0;
 
     if( XML_NAMESPACE_DRAW == nPrefix &&
         rLocalName.equalsAsciiL( sXML_text_box, sizeof(sXML_text_box)-1 ) )
-        pContext = new XMLTextFrameContext( GetImport(), nPrefix,
+        pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                             rLocalName, xAttrList,
                                             eAnchorType,
                                             XML_TEXT_FRAME_TEXTBOX);
     else if( XML_NAMESPACE_DRAW == nPrefix &&
         rLocalName.equalsAsciiL( sXML_image, sizeof(sXML_image)-1 ) )
-        pContext = new XMLTextFrameContext( GetImport(), nPrefix,
+        pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                             rLocalName, xAttrList,
                                             eAnchorType,
                                             XML_TEXT_FRAME_GRAPHIC );
-    if( pContext )
-        ((XMLTextFrameContext *)pContext)->
-                SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
+    if( pTextFrameContext )
+    {
+        pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
+        if( pAnchorType )
+            *pAnchorType = pTextFrameContext->GetAnchorType();
+        if( pTextContent )
+            *pTextContent = pTextFrameContext->GetTextContent();
+        pContext = pTextFrameContext;
+    }
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 

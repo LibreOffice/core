@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:09:50 $
+ *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,16 @@
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP
+#include <com/sun/star/text/XTextFrame.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
 #endif
 
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextCursor; }
+    namespace text { class XTextCursor; class XTextFrame; }
     namespace beans { class XPropertySet; }
 } } }
 
@@ -82,6 +85,9 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
     ::rtl::OUString              sName;
     ::rtl::OUString              sTargetFrameName;
     ::com::sun::star::text::TextContentAnchorType eAnchorType;
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::text::XTextContent> *pTextContent;
+    ::com::sun::star::text::TextContentAnchorType *pAnchorType;
     sal_Bool                    bMap;
 
 public:
@@ -93,7 +99,10 @@ public:
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            ::com::sun::star::text::TextContentAnchorType eAnchorType );
+            ::com::sun::star::text::TextContentAnchorType eAnchorType,
+            ::com::sun::star::uno::Reference <
+                ::com::sun::star::text::XTextContent> *pTxtCntnt = 0 ,
+            ::com::sun::star::text::TextContentAnchorType *pAnchrType = 0 );
     virtual ~XMLTextFrameHyperlinkContext();
 
     virtual void EndElement();
@@ -102,6 +111,7 @@ public:
                 const ::rtl::OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
 };
 
 

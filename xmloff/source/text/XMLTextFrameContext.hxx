@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
+ *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 namespace com { namespace sun { namespace star {
-    namespace text { class XTextCursor; }
+    namespace text { class XTextCursor; class XTextContent; }
     namespace beans { class XPropertySet; }
 } } }
 
@@ -114,6 +114,7 @@ class XMLTextFrameContext : public SvXMLImportContext
 
     ::rtl::OUString sDesc;
     sal_uInt16 nType;
+    ::com::sun::star::text::TextContentAnchorType   eAnchorType;
     ParamMap aParamMap;
 
 public:
@@ -140,6 +141,11 @@ public:
                        const ::rtl::OUString& rName,
                        const ::rtl::OUString& rTargetFrameName,
                        sal_Bool bMap );
+
+    ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
+
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::text::XTextContent > GetTextContent() const;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-10 09:07:23 $
+ *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,7 @@ XMLTextFrameContext::XMLTextFrameContext(
         TextContentAnchorType eATyp,
         sal_uInt16 nNewType ) :
     nType( nNewType ),
+    eAnchorType( eATyp ),
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sWidth(RTL_CONSTASCII_USTRINGPARAM("Width")),
     sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth")),
@@ -389,7 +390,6 @@ XMLTextFrameContext::XMLTextFrameContext(
     sal_Int16   nRelHeight = 0;
     sal_Bool    bMayScript = sal_False;
 
-    TextContentAnchorType   eAnchorType = eATyp;
 
     sal_Bool    bMinHeight = sal_False;
     sal_Bool    bSyncWidth = sal_False;
@@ -948,3 +948,7 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
     }
 }
 
+Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
+{
+    return Reference < XTextContent >( xPropSet, UNO_QUERY );
+}

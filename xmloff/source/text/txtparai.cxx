@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
+ *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include <svtools/svarray.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-//#include <com/sun/star/text/XText.hpp>
+#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
+#include <com/sun/star/text/XTextFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -157,6 +157,7 @@ using namespace ::com::sun::star::drawing;
 #define XML_HINT_HYPERLINK 3
 #define XML_HINT_RUBY 4
 #define XML_HINT_INDEX_MARK 5
+#define XML_HINT_TEXT_FRAME 6
 
 
 class XMLHint_Impl
@@ -337,6 +338,36 @@ public:
     const OUString& GetTextStyleName() const { return sTextStyleName; }
     void AppendText( const OUString& s ) { sText += s; }
     const OUString& GetText() const { return sText; }
+};
+
+class XMLTextFrameHint_Impl : public XMLHint_Impl
+{
+    Reference < XTextContent > xTextContent;
+    TextContentAnchorType eAnchorType;
+
+public:
+
+    XMLTextFrameHint_Impl( const Reference < XTextContent > & rTxtCntnt,
+                              const Reference < XTextRange > & rPos ) :
+        XMLHint_Impl( XML_HINT_TEXT_FRAME, rPos, rPos ),
+        xTextContent( rTxtCntnt ),
+        eAnchorType( TextContentAnchorType_AT_CHARACTER )
+    {
+    }
+
+    XMLTextFrameHint_Impl( const Reference < XTextRange > & rPos ) :
+        XMLHint_Impl( XML_HINT_TEXT_FRAME, rPos, rPos ),
+        eAnchorType( TextContentAnchorType_AS_CHARACTER )
+    {
+    }
+
+    virtual ~XMLTextFrameHint_Impl() {}
+
+    Reference < XTextContent >& GetTextContentRef() { return xTextContent; }
+    TextContentAnchorType& GetAnchorTypeRef() { return eAnchorType; }
+
+    Reference < XTextContent > GetTextContent() const { return xTextContent; }
+    sal_Bool IsBoundAtChar() const { return TextContentAnchorType_AT_CHARACTER == eAnchorType; }
 };
 
 typedef XMLHint_Impl *XMLHint_ImplPtr;
@@ -1469,6 +1500,8 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         sal_Bool& rIgnoreLeadingSpace )
 {
     SvXMLImportContext *pContext = 0;
+    sal_Bool bInsertTextFrame = sal_False;
+    sal_uInt16 nTextFrameType = 0;
 
     sal_Bool bObjectOLE = sal_False;
     switch( nToken )
@@ -1577,71 +1610,50 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_TEXTBOX:
-        if( XMLTextImportHelper::HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) ||
-              rImport.GetTextImport()->IsInHeaderFooter() )
-        {
-            pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
-                                                TextContentAnchorType_AS_CHARACTER,
-                                                XML_TEXT_FRAME_TEXTBOX );
-        }
-        else
-        {
-            Reference < XShapes > xShapes;
-            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
-                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
-        }
+        bInsertTextFrame = sal_True;
+        nTextFrameType = XML_TEXT_FRAME_TEXTBOX;
         break;
 
     case XML_TOK_TEXT_IMAGE:
-        if( XMLTextImportHelper::HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) ||
-              rImport.GetTextImport()->IsInHeaderFooter() )
-        {
-            pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
-                                                TextContentAnchorType_AS_CHARACTER,
-                                                XML_TEXT_FRAME_GRAPHIC );
-        }
-        else
-        {
-            Reference < XShapes > xShapes;
-            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
-                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
-        }
+        bInsertTextFrame = sal_True;
+        nTextFrameType = XML_TEXT_FRAME_GRAPHIC;
         break;
     case XML_TOK_TEXT_APPLET:
-        pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                            rLocalName, xAttrList,
-                                            TextContentAnchorType_AS_CHARACTER,
-                                            XML_TEXT_FRAME_APPLET );
+        bInsertTextFrame = sal_True;
+        nTextFrameType = XML_TEXT_FRAME_APPLET;
         break;
     case XML_TOK_TEXT_FLOATING_FRAME:
-        pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                            rLocalName, xAttrList,
-                                            TextContentAnchorType_AS_CHARACTER,
-                                            XML_TEXT_FRAME_FLOATING_FRAME );
+        bInsertTextFrame = sal_True;
+        nTextFrameType = XML_TEXT_FRAME_FLOATING_FRAME;
         break;
     case XML_TOK_TEXT_PLUGIN:
-        pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                            rLocalName, xAttrList,
-                                            TextContentAnchorType_AS_CHARACTER,
-                                            XML_TEXT_FRAME_PLUGIN );
+        bInsertTextFrame = sal_True;
+        nTextFrameType = XML_TEXT_FRAME_PLUGIN;
         break;
 
     case XML_TOK_TEXT_OBJECT_OLE:
-        bObjectOLE = sal_True;
+        bInsertTextFrame = sal_True;
+        nTextFrameType = XML_TEXT_FRAME_OBJECT_OLE;
     case XML_TOK_TEXT_OBJECT:
-        pContext = new XMLTextFrameContext( rImport, nPrefix,
-                            rLocalName, xAttrList,
-                            TextContentAnchorType_AS_CHARACTER,
-                            bObjectOLE ? XML_TEXT_FRAME_OBJECT
-                                       : XML_TEXT_FRAME_OBJECT_OLE );
+        bInsertTextFrame = sal_True;
+        nTextFrameType = XML_TEXT_FRAME_OBJECT;
         break;
 
     case XML_TOK_DRAW_A:
-        pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
-                                            rLocalName, xAttrList,
-                                            TextContentAnchorType_AS_CHARACTER );
+        {
+            Reference < XTextRange > xAnchorPos =
+                rImport.GetTextImport()->GetCursor()->getStart();
+            XMLTextFrameHint_Impl *pHint =
+                new XMLTextFrameHint_Impl( xAnchorPos );
+            XMLTextFrameHyperlinkContext *pLinkContext =
+                new XMLTextFrameHyperlinkContext( rImport, nPrefix,
+                                        rLocalName, xAttrList,
+                                        TextContentAnchorType_AS_CHARACTER,
+                                        &pHint->GetTextContentRef(),
+                                        &pHint->GetAnchorTypeRef() );
+            rHints.Insert( pHint, rHints.Count() );
+            pContext = pLinkContext;
+        }
         break;
 
     case XML_TOK_TEXT_TOC_MARK:
@@ -1705,6 +1717,36 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             // ignore unknown content
             pContext =
                 new SvXMLImportContext( rImport, nPrefix, rLocalName );
+        }
+    }
+
+    if( bInsertTextFrame )
+    {
+        if( XMLTextImportHelper::HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) ||
+              rImport.GetTextImport()->IsInHeaderFooter() )
+        {
+            Reference < XTextRange > xAnchorPos =
+                rImport.GetTextImport()->GetCursor()->getStart();
+            XMLTextFrameContext *pTextFrameContext =
+                new XMLTextFrameContext( rImport, nPrefix,
+                                         rLocalName, xAttrList,
+                                         TextContentAnchorType_AS_CHARACTER,
+                                         nTextFrameType );
+            if( TextContentAnchorType_AT_CHARACTER ==
+                    pTextFrameContext->GetAnchorType() &&
+                pTextFrameContext->GetTextContent().is() )
+            {
+                rHints.Insert( new XMLTextFrameHint_Impl(
+                    pTextFrameContext->GetTextContent(), xAnchorPos ),
+                    rHints.Count() );
+            }
+            pContext = pTextFrameContext;
+        }
+        else
+        {
+            Reference < XShapes > xShapes;
+            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
         }
     }
 
@@ -1881,6 +1923,17 @@ XMLParaContext::~XMLParaContext()
                     Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
                     xTxtImport->GetText()->insertTextContent(
                         xRange, xContent, sal_True );
+                }
+                break;
+            case XML_HINT_TEXT_FRAME:
+                {
+                    const XMLTextFrameHint_Impl *pFHint =
+                        (const XMLTextFrameHint_Impl *)pHint;
+                    if( pFHint->IsBoundAtChar() )
+                    {
+                        Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
+                        pFHint->GetTextContent()->attach( xRange );
+                    }
                 }
                 break;
             default:
