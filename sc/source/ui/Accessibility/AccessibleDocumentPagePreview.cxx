@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1755,13 +1755,15 @@ uno::Sequence<sal_Int8> SAL_CALL
 ::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    return rtl::OUString(String(ScResId(STR_ACC_PREVIEWDOC_DESCR)));
+    rtl::OUString sDescription = String(ScResId(STR_ACC_PREVIEWDOC_DESCR));
+    return sDescription;
 }
 
 ::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    return rtl::OUString (String(ScResId(STR_ACC_PREVIEWDOC_NAME)));
+    rtl::OUString sName = String(ScResId(STR_ACC_PREVIEWDOC_NAME));
+    return sName;
 }
 
 Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,12 +340,13 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const throw (uno::Runt
 
 rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException)
 {
-    return rtl::OUString(String(ScResId(STR_ACC_HEADERCELL_DESCR)));
+    rtl::OUString sDescription = String(ScResId(STR_ACC_HEADERCELL_DESCR));
+    return sDescription;
 }
 
 rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(uno::RuntimeException)
 {
-    rtl::OUString sName(String(ScResId(STR_ACC_HEADERCELL_NAME)));
+    rtl::OUString sName = String(ScResId(STR_ACC_HEADERCELL_NAME));
 
     if ( mbColumnHeader )
     {

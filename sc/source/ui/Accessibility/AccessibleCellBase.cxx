@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:52 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ sal_Int32
     ScAccessibleCellBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sDescription( String(ScResId(STR_ACC_CELL_DESCR)) );
+    rtl::OUString sDescription = String(ScResId(STR_ACC_CELL_DESCR));
 
     return sDescription;
 }

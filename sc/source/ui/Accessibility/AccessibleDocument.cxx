@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 09:22:47 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1924,7 +1924,8 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
     ScAccessibleDocument::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    return rtl::OUString(String(ScResId(STR_ACC_DOC_DESCR)));
+    rtl::OUString sDescription = String(ScResId(STR_ACC_DOC_DESCR));
+    return sDescription;
 }
 
 ::rtl::OUString SAL_CALL
@@ -1933,7 +1934,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    rtl::OUString sName(String(ScResId(STR_ACC_DOC_NAME)));
+    rtl::OUString sName = String(ScResId(STR_ACC_DOC_NAME));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += rtl::OUString::valueOf(nNumber);
     return sName;
