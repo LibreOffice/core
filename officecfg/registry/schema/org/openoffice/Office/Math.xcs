@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Math.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 				<desc xml:lang="th">Lists properties for describing a font.</desc>
 				<desc xml:lang="hi-IN">Lists properties for describing a font.</desc>
 				<desc xml:lang="x-comment">Lists properties for describing a font.</desc>
+				<desc xml:lang="hu">Lists properties for describing a font.</desc>
+				<desc xml:lang="sk">Lists properties for describing a font.</desc>
+				<desc xml:lang="sl">Lists properties for describing a font.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
@@ -120,6 +123,9 @@
 					<desc xml:lang="th">Specifies the font name.</desc>
 					<desc xml:lang="hi-IN">Specifies the font name.</desc>
 					<desc xml:lang="x-comment">Specifies the font name.</desc>
+					<desc xml:lang="hu">Specifies the font name.</desc>
+					<desc xml:lang="sk">Specifies the font name.</desc>
+					<desc xml:lang="sl">Specifies the font name.</desc>
 				</info>
 			</prop>
 			<prop oor:name="CharSet" oor:type="xs:short">
@@ -149,6 +155,9 @@
 					<desc xml:lang="th">Specifies the character set for a font.</desc>
 					<desc xml:lang="hi-IN">Specifies the character set for a font.</desc>
 					<desc xml:lang="x-comment">Specifies the character set for a font.</desc>
+					<desc xml:lang="hu">Specifies the character set for a font.</desc>
+					<desc xml:lang="sk">Specifies the character set for a font.</desc>
+					<desc xml:lang="sl">Specifies the character set for a font.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Family" oor:type="xs:short">
@@ -178,13 +187,16 @@
 					<desc xml:lang="th">Specifies the font family.</desc>
 					<desc xml:lang="hi-IN">Specifies the font family.</desc>
 					<desc xml:lang="x-comment">Specifies the font family.</desc>
+					<desc xml:lang="hu">Specifies the font family.</desc>
+					<desc xml:lang="sk">Specifies the font family.</desc>
+					<desc xml:lang="sl">Specifies the font family.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">not known</desc>
 							<desc xml:lang="el">not known</desc>
-							<desc xml:lang="nl">not known</desc>
+							<desc xml:lang="nl">onbekend</desc>
 							<desc xml:lang="fr">not known</desc>
 							<desc xml:lang="fi">not known</desc>
 							<desc xml:lang="cs">not known</desc>
@@ -208,13 +220,15 @@
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
 							<desc xml:lang="sk">not known</desc>
+							<desc xml:lang="hu">not known</desc>
+							<desc xml:lang="sl">not known</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">decorative</desc>
 							<desc xml:lang="el">decorative</desc>
-							<desc xml:lang="nl">decorative</desc>
+							<desc xml:lang="nl">decoratief</desc>
 							<desc xml:lang="fr">decorative</desc>
 							<desc xml:lang="fi">decorative</desc>
 							<desc xml:lang="cs">decorative</desc>
@@ -238,6 +252,8 @@
 							<desc xml:lang="hi-IN">decorative</desc>
 							<desc xml:lang="x-comment">decorative</desc>
 							<desc xml:lang="sk">decorative</desc>
+							<desc xml:lang="hu">decorative</desc>
+							<desc xml:lang="sl">decorative</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -268,6 +284,8 @@
 							<desc xml:lang="hi-IN">modern</desc>
 							<desc xml:lang="x-comment">modern</desc>
 							<desc xml:lang="sk">modern</desc>
+							<desc xml:lang="hu">modern</desc>
+							<desc xml:lang="sl">modern</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -298,6 +316,8 @@
 							<desc xml:lang="hi-IN">roman</desc>
 							<desc xml:lang="x-comment">roman</desc>
 							<desc xml:lang="sk">roman</desc>
+							<desc xml:lang="hu">roman</desc>
+							<desc xml:lang="sl">roman</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -328,13 +348,15 @@
 							<desc xml:lang="hi-IN">स्क्रिप्ट्</desc>
 							<desc xml:lang="x-comment">script</desc>
 							<desc xml:lang="sk">Skript</desc>
+							<desc xml:lang="hu">script</desc>
+							<desc xml:lang="sl">script</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
 						<info>
 							<desc xml:lang="en-US">swiss</desc>
 							<desc xml:lang="el">swiss</desc>
-							<desc xml:lang="nl">swiss</desc>
+							<desc xml:lang="nl">zwitsers</desc>
 							<desc xml:lang="fr">swiss</desc>
 							<desc xml:lang="fi">swiss</desc>
 							<desc xml:lang="cs">swiss</desc>
@@ -358,6 +380,8 @@
 							<desc xml:lang="hi-IN">swiss</desc>
 							<desc xml:lang="x-comment">swiss</desc>
 							<desc xml:lang="sk">swiss</desc>
+							<desc xml:lang="hu">swiss</desc>
+							<desc xml:lang="sl">swiss</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
@@ -388,6 +412,8 @@
 							<desc xml:lang="hi-IN">सिस्टम</desc>
 							<desc xml:lang="x-comment">system</desc>
 							<desc xml:lang="sk">system</desc>
+							<desc xml:lang="hu">system</desc>
+							<desc xml:lang="sl">system</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -419,13 +445,16 @@
 					<desc xml:lang="th">Specifies the pitch of a font.</desc>
 					<desc xml:lang="hi-IN">Specifies the pitch of a font.</desc>
 					<desc xml:lang="x-comment">Specifies the pitch of a font.</desc>
+					<desc xml:lang="hu">Specifies the pitch of a font.</desc>
+					<desc xml:lang="sk">Specifies the pitch of a font.</desc>
+					<desc xml:lang="sl">Specifies the pitch of a font.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">not known</desc>
 							<desc xml:lang="el">not known</desc>
-							<desc xml:lang="nl">not known</desc>
+							<desc xml:lang="nl">onbekend</desc>
 							<desc xml:lang="fr">not known</desc>
 							<desc xml:lang="fi">not known</desc>
 							<desc xml:lang="cs">not known</desc>
@@ -449,6 +478,8 @@
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
 							<desc xml:lang="sk">not known</desc>
+							<desc xml:lang="hu">not known</desc>
+							<desc xml:lang="sl">not known</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -479,13 +510,15 @@
 							<desc xml:lang="hi-IN">स्थिर</desc>
 							<desc xml:lang="x-comment">fixed</desc>
 							<desc xml:lang="sk">Písmo s nemennou šírkou</desc>
+							<desc xml:lang="hu">fixed</desc>
+							<desc xml:lang="sl">fixed</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">variable</desc>
 							<desc xml:lang="el">Μεταβλητή</desc>
-							<desc xml:lang="nl">Variabele</desc>
+							<desc xml:lang="nl">variabel</desc>
 							<desc xml:lang="fr">variable</desc>
 							<desc xml:lang="fi">Muuttuja</desc>
 							<desc xml:lang="cs">Proměnný</desc>
@@ -509,6 +542,8 @@
 							<desc xml:lang="hi-IN">परिवर्ती</desc>
 							<desc xml:lang="x-comment">variable</desc>
 							<desc xml:lang="sk">Premenný</desc>
+							<desc xml:lang="hu">variable</desc>
+							<desc xml:lang="sl">variable</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -540,13 +575,16 @@
 					<desc xml:lang="th">Specifies the weight of a font.</desc>
 					<desc xml:lang="hi-IN">Specifies the weight of a font.</desc>
 					<desc xml:lang="x-comment">Specifies the weight of a font.</desc>
+					<desc xml:lang="hu">Specifies the weight of a font.</desc>
+					<desc xml:lang="sk">Specifies the weight of a font.</desc>
+					<desc xml:lang="sl">Specifies the weight of a font.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">not known</desc>
 							<desc xml:lang="el">not known</desc>
-							<desc xml:lang="nl">not known</desc>
+							<desc xml:lang="nl">onbekend</desc>
 							<desc xml:lang="fr">not known</desc>
 							<desc xml:lang="fi">not known</desc>
 							<desc xml:lang="cs">not known</desc>
@@ -570,6 +608,8 @@
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
 							<desc xml:lang="sk">not known</desc>
+							<desc xml:lang="hu">not known</desc>
+							<desc xml:lang="sl">not known</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -600,13 +640,15 @@
 							<desc xml:lang="hi-IN">पतला</desc>
 							<desc xml:lang="x-comment">thin</desc>
 							<desc xml:lang="sk">Úzke</desc>
+							<desc xml:lang="hu">thin</desc>
+							<desc xml:lang="sl">thin</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">ultra light</desc>
 							<desc xml:lang="el">ultra light</desc>
-							<desc xml:lang="nl">ultra light</desc>
+							<desc xml:lang="nl">extra licht</desc>
 							<desc xml:lang="fr">ultra light</desc>
 							<desc xml:lang="fi">ultra light</desc>
 							<desc xml:lang="cs">ultra light</desc>
@@ -630,6 +672,8 @@
 							<desc xml:lang="hi-IN">ultra light</desc>
 							<desc xml:lang="x-comment">ultra light</desc>
 							<desc xml:lang="sk">ultra light</desc>
+							<desc xml:lang="hu">ultra light</desc>
+							<desc xml:lang="sl">ultra light</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -660,6 +704,8 @@
 							<desc xml:lang="hi-IN">हल्का</desc>
 							<desc xml:lang="x-comment">light</desc>
 							<desc xml:lang="sk">Svetlé</desc>
+							<desc xml:lang="hu">light</desc>
+							<desc xml:lang="sl">light</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -690,13 +736,15 @@
 							<desc xml:lang="hi-IN">आधा हल्का</desc>
 							<desc xml:lang="x-comment">semi light</desc>
 							<desc xml:lang="sk">stredne jemné</desc>
+							<desc xml:lang="hu">semi light</desc>
+							<desc xml:lang="sl">semi light</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
 						<info>
 							<desc xml:lang="en-US">normal</desc>
 							<desc xml:lang="el">κανονικά</desc>
-							<desc xml:lang="nl">~Normal</desc>
+							<desc xml:lang="nl">normaal</desc>
 							<desc xml:lang="fr">~Normal</desc>
 							<desc xml:lang="fi">tavallinen</desc>
 							<desc xml:lang="cs">Běžný</desc>
@@ -720,13 +768,15 @@
 							<desc xml:lang="hi-IN">सामान्य</desc>
 							<desc xml:lang="x-comment">normal</desc>
 							<desc xml:lang="sk">normal</desc>
+							<desc xml:lang="hu">normal</desc>
+							<desc xml:lang="sl">normal</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
 						<info>
 							<desc xml:lang="en-US">medium</desc>
 							<desc xml:lang="el">μεσαίο</desc>
-							<desc xml:lang="nl">~Medium</desc>
+							<desc xml:lang="nl">gemiddeld</desc>
 							<desc xml:lang="fr">Moyen</desc>
 							<desc xml:lang="fi">normaali</desc>
 							<desc xml:lang="cs">Střední</desc>
@@ -750,6 +800,8 @@
 							<desc xml:lang="hi-IN">मीडियम</desc>
 							<desc xml:lang="x-comment">medium</desc>
 							<desc xml:lang="sk">Médium</desc>
+							<desc xml:lang="hu">medium</desc>
+							<desc xml:lang="sl">medium</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="7">
@@ -780,13 +832,15 @@
 							<desc xml:lang="hi-IN">आधा मोटा</desc>
 							<desc xml:lang="x-comment">semi bold</desc>
 							<desc xml:lang="sk">stredne tučné</desc>
+							<desc xml:lang="hu">semi bold</desc>
+							<desc xml:lang="sl">semi bold</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="8">
 						<info>
 							<desc xml:lang="en-US">bold</desc>
 							<desc xml:lang="el">Έντ~ονο</desc>
-							<desc xml:lang="nl">~Vet</desc>
+							<desc xml:lang="nl">vet</desc>
 							<desc xml:lang="fr">~Gras</desc>
 							<desc xml:lang="fi">Lihavointi</desc>
 							<desc xml:lang="cs">Tučné</desc>
@@ -810,6 +864,8 @@
 							<desc xml:lang="hi-IN">बोल्ड्</desc>
 							<desc xml:lang="x-comment">bold</desc>
 							<desc xml:lang="sk">Tučné</desc>
+							<desc xml:lang="hu">bold</desc>
+							<desc xml:lang="sl">bold</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="9">
@@ -840,6 +896,8 @@
 							<desc xml:lang="hi-IN">अत्यन्त मोटा</desc>
 							<desc xml:lang="x-comment">ultra bold</desc>
 							<desc xml:lang="sk">veľmi tučné</desc>
+							<desc xml:lang="hu">ultra bold</desc>
+							<desc xml:lang="sl">ultra bold</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="10">
@@ -870,6 +928,8 @@
 							<desc xml:lang="hi-IN">काला</desc>
 							<desc xml:lang="x-comment">black</desc>
 							<desc xml:lang="sk">Čierna</desc>
+							<desc xml:lang="hu">black</desc>
+							<desc xml:lang="sl">black</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -901,13 +961,16 @@
 					<desc xml:lang="th">Specifies the font italics.</desc>
 					<desc xml:lang="hi-IN">Specifies the font italics.</desc>
 					<desc xml:lang="x-comment">Specifies the font italics.</desc>
+					<desc xml:lang="hu">Specifies the font italics.</desc>
+					<desc xml:lang="sk">Specifies the font italics.</desc>
+					<desc xml:lang="sl">Specifies the font italics.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">not slanted</desc>
 							<desc xml:lang="el">not slanted</desc>
-							<desc xml:lang="nl">not slanted</desc>
+							<desc xml:lang="nl">niet hellend</desc>
 							<desc xml:lang="fr">not slanted</desc>
 							<desc xml:lang="fi">not slanted</desc>
 							<desc xml:lang="cs">not slanted</desc>
@@ -931,6 +994,8 @@
 							<desc xml:lang="hi-IN">not slanted</desc>
 							<desc xml:lang="x-comment">not slanted</desc>
 							<desc xml:lang="sk">not slanted</desc>
+							<desc xml:lang="hu">not slanted</desc>
+							<desc xml:lang="sl">not slanted</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -961,13 +1026,15 @@
 							<desc xml:lang="hi-IN">तिर्यक</desc>
 							<desc xml:lang="x-comment">oblique</desc>
 							<desc xml:lang="sk">Šikmé</desc>
+							<desc xml:lang="hu">oblique</desc>
+							<desc xml:lang="sl">oblique</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">normal</desc>
 							<desc xml:lang="el">κανονικά</desc>
-							<desc xml:lang="nl">~Normal</desc>
+							<desc xml:lang="nl">normaal</desc>
 							<desc xml:lang="fr">~Normal</desc>
 							<desc xml:lang="fi">tavallinen</desc>
 							<desc xml:lang="cs">Běžný</desc>
@@ -991,13 +1058,15 @@
 							<desc xml:lang="hi-IN">सामान्य</desc>
 							<desc xml:lang="x-comment">normal</desc>
 							<desc xml:lang="sk">normal</desc>
+							<desc xml:lang="hu">normal</desc>
+							<desc xml:lang="sl">normal</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
 						<info>
 							<desc xml:lang="en-US">not known</desc>
 							<desc xml:lang="el">not known</desc>
-							<desc xml:lang="nl">not known</desc>
+							<desc xml:lang="nl">onbekend</desc>
 							<desc xml:lang="fr">not known</desc>
 							<desc xml:lang="fi">not known</desc>
 							<desc xml:lang="cs">not known</desc>
@@ -1021,6 +1090,8 @@
 							<desc xml:lang="hi-IN">not known</desc>
 							<desc xml:lang="x-comment">not known</desc>
 							<desc xml:lang="sk">not known</desc>
+							<desc xml:lang="hu">not known</desc>
+							<desc xml:lang="sl">not known</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1053,6 +1124,9 @@
 				<desc xml:lang="th">Contains settings for defining a user- or predefined symbol.</desc>
 				<desc xml:lang="hi-IN">Contains settings for defining a user- or predefined symbol.</desc>
 				<desc xml:lang="x-comment">Contains settings for defining a user- or predefined symbol.</desc>
+				<desc xml:lang="hu">Contains settings for defining a user- or predefined symbol.</desc>
+				<desc xml:lang="sk">Contains settings for defining a user- or predefined symbol.</desc>
+				<desc xml:lang="sl">Contains settings for defining a user- or predefined symbol.</desc>
 			</info>
 			<prop oor:name="Char" oor:type="xs:int">
 				<info>
@@ -1081,6 +1155,9 @@
 					<desc xml:lang="th">Specifies the character value of the symbol.</desc>
 					<desc xml:lang="hi-IN">Specifies the character value of the symbol.</desc>
 					<desc xml:lang="x-comment">Specifies the character value of the symbol.</desc>
+					<desc xml:lang="hu">Specifies the character value of the symbol.</desc>
+					<desc xml:lang="sk">Specifies the character value of the symbol.</desc>
+					<desc xml:lang="sl">Specifies the character value of the symbol.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Set" oor:type="xs:string">
@@ -1110,6 +1187,9 @@
 					<desc xml:lang="th">Specifies the symbol set containing the symbol.</desc>
 					<desc xml:lang="hi-IN">Specifies the symbol set containing the symbol.</desc>
 					<desc xml:lang="x-comment">Specifies the symbol set containing the symbol.</desc>
+					<desc xml:lang="hu">Specifies the symbol set containing the symbol.</desc>
+					<desc xml:lang="sk">Specifies the symbol set containing the symbol.</desc>
+					<desc xml:lang="sl">Specifies the symbol set containing the symbol.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Predefined" oor:type="xs:boolean">
@@ -1139,6 +1219,9 @@
 					<desc xml:lang="th">Specifies if a symbol is predefined or user-defined.</desc>
 					<desc xml:lang="hi-IN">Specifies if a symbol is predefined or user-defined.</desc>
 					<desc xml:lang="x-comment">Specifies if a symbol is predefined or user-defined.</desc>
+					<desc xml:lang="hu">Specifies if a symbol is predefined or user-defined.</desc>
+					<desc xml:lang="sk">Specifies if a symbol is predefined or user-defined.</desc>
+					<desc xml:lang="sl">Specifies if a symbol is predefined or user-defined.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1169,6 +1252,9 @@
 					<desc xml:lang="th">Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
 					<desc xml:lang="hi-IN">Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
 					<desc xml:lang="x-comment">Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
+					<desc xml:lang="hu">Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
+					<desc xml:lang="sk">Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
+					<desc xml:lang="sl">Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
 				</info>
 			</prop>
 		</group>
@@ -1201,6 +1287,9 @@
 				<desc xml:lang="th">Contains settings for printing.</desc>
 				<desc xml:lang="hi-IN">Contains settings for printing.</desc>
 				<desc xml:lang="x-comment">Contains settings for printing.</desc>
+				<desc xml:lang="hu">Contains settings for printing.</desc>
+				<desc xml:lang="sk">Contains settings for printing.</desc>
+				<desc xml:lang="sl">Contains settings for printing.</desc>
 			</info>
 			<prop oor:name="Title" oor:type="xs:boolean">
 				<!-- OldPath: Math/Print -->
@@ -1233,9 +1322,12 @@
 						<desc xml:lang="th">Specifies if the title (filename) is printed.</desc>
 						<desc xml:lang="hi-IN">Specifies if the title (filename) is printed.</desc>
 						<desc xml:lang="x-comment">Specifies if the title (filename) is printed.</desc>
+						<desc xml:lang="hu">Specifies if the title (filename) is printed.</desc>
+						<desc xml:lang="sk">Specifies if the title (filename) is printed.</desc>
+						<desc xml:lang="sl">Specifies if the title (filename) is printed.</desc>
 					<label xml:lang="en-US">Title row</label>
 					<label xml:lang="el">Title row</label>
-					<label xml:lang="nl">Title row</label>
+					<label xml:lang="nl">Titelrij</label>
 					<label xml:lang="fr">Title row</label>
 					<label xml:lang="fi">Title row</label>
 					<label xml:lang="cs">Title row</label>
@@ -1258,6 +1350,9 @@
 					<label xml:lang="th">Title row</label>
 					<label xml:lang="hi-IN">Title row</label>
 					<label xml:lang="x-comment">Title row</label>
+					<label xml:lang="hu">Title row</label>
+					<label xml:lang="sk">Title row</label>
+					<label xml:lang="sl">Title row</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1292,9 +1387,12 @@
 						<desc xml:lang="th">Specifies if the formula text is printed.</desc>
 						<desc xml:lang="hi-IN">Specifies if the formula text is printed.</desc>
 						<desc xml:lang="x-comment">Specifies if the formula text is printed.</desc>
+						<desc xml:lang="hu">Specifies if the formula text is printed.</desc>
+						<desc xml:lang="sk">Specifies if the formula text is printed.</desc>
+						<desc xml:lang="sl">Specifies if the formula text is printed.</desc>
 					<label xml:lang="en-US">Formula text</label>
 					<label xml:lang="el">Formula text</label>
-					<label xml:lang="nl">Formula text</label>
+					<label xml:lang="nl">Formuletekst</label>
 					<label xml:lang="fr">Formula text</label>
 					<label xml:lang="fi">Formula text</label>
 					<label xml:lang="cs">Formula text</label>
@@ -1317,6 +1415,9 @@
 					<label xml:lang="th">Formula text</label>
 					<label xml:lang="hi-IN">Formula text</label>
 					<label xml:lang="x-comment">Formula text</label>
+					<label xml:lang="hu">Formula text</label>
+					<label xml:lang="sk">Formula text</label>
+					<label xml:lang="sl">Formula text</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1351,6 +1452,9 @@
 						<desc xml:lang="th">Specifies if a border is drawn around the formula.</desc>
 						<desc xml:lang="hi-IN">Specifies if a border is drawn around the formula.</desc>
 						<desc xml:lang="x-comment">Specifies if a border is drawn around the formula.</desc>
+						<desc xml:lang="hu">Specifies if a border is drawn around the formula.</desc>
+						<desc xml:lang="sk">Specifies if a border is drawn around the formula.</desc>
+						<desc xml:lang="sl">Specifies if a border is drawn around the formula.</desc>
 					<label xml:lang="en-US">Border</label>
 					<label xml:lang="el">Περίγραμμα</label>
 					<label xml:lang="nl">Kader</label>
@@ -1377,6 +1481,8 @@
 					<label xml:lang="hi-IN">किनारा</label>
 					<label xml:lang="x-comment">Border</label>
 					<label xml:lang="sk">Okraj</label>
+					<label xml:lang="hu">Border</label>
+					<label xml:lang="sl">Border</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1411,9 +1517,12 @@
 						<desc xml:lang="th">Defines the size used when printing the formula.</desc>
 						<desc xml:lang="hi-IN">Defines the size used when printing the formula.</desc>
 						<desc xml:lang="x-comment">Defines the size used when printing the formula.</desc>
+						<desc xml:lang="hu">Defines the size used when printing the formula.</desc>
+						<desc xml:lang="sk">Defines the size used when printing the formula.</desc>
+						<desc xml:lang="sl">Defines the size used when printing the formula.</desc>
 					<label xml:lang="en-US">Print Size</label>
 					<label xml:lang="el">Print Size</label>
-					<label xml:lang="nl">Print Size</label>
+					<label xml:lang="nl">Afdrukgrootte</label>
 					<label xml:lang="fr">Print Size</label>
 					<label xml:lang="fi">Print Size</label>
 					<label xml:lang="cs">Print Size</label>
@@ -1436,6 +1545,9 @@
 					<label xml:lang="th">Print Size</label>
 					<label xml:lang="hi-IN">Print Size</label>
 					<label xml:lang="x-comment">Print Size</label>
+					<label xml:lang="hu">Print Size</label>
+					<label xml:lang="sk">Print Size</label>
+					<label xml:lang="sl">Print Size</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -1466,13 +1578,15 @@
 							<desc xml:lang="hi-IN">यथार्थ परिमाण</desc>
 							<desc xml:lang="x-comment">Original size</desc>
 							<desc xml:lang="sk">Pôvodná veľkosť</desc>
+							<desc xml:lang="hu">Original size</desc>
+							<desc xml:lang="sl">Original size</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">Adapt to paper size</desc>
 							<desc xml:lang="el">Adapt to paper size</desc>
-							<desc xml:lang="nl">Adapt to paper size</desc>
+							<desc xml:lang="nl">Aanpassen aan papierformaat</desc>
 							<desc xml:lang="fr">Adapt to paper size</desc>
 							<desc xml:lang="fi">Adapt to paper size</desc>
 							<desc xml:lang="cs">Adapt to paper size</desc>
@@ -1496,13 +1610,15 @@
 							<desc xml:lang="hi-IN">Adapt to paper size</desc>
 							<desc xml:lang="x-comment">Adapt to paper size</desc>
 							<desc xml:lang="sk">Adapt to paper size</desc>
+							<desc xml:lang="hu">Adapt to paper size</desc>
+							<desc xml:lang="sl">Adapt to paper size</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">Define zoom factor</desc>
 							<desc xml:lang="el">Define zoom factor</desc>
-							<desc xml:lang="nl">Define zoom factor</desc>
+							<desc xml:lang="nl">Zoomfactor definiëren</desc>
 							<desc xml:lang="fr">Define zoom factor</desc>
 							<desc xml:lang="fi">Define zoom factor</desc>
 							<desc xml:lang="cs">Define zoom factor</desc>
@@ -1526,6 +1642,8 @@
 							<desc xml:lang="hi-IN">Define zoom factor</desc>
 							<desc xml:lang="x-comment">Define zoom factor</desc>
 							<desc xml:lang="sk">Define zoom factor</desc>
+							<desc xml:lang="hu">Define zoom factor</desc>
+							<desc xml:lang="sl">Define zoom factor</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1562,9 +1680,12 @@
 						<desc xml:lang="th">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
 						<desc xml:lang="hi-IN">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
 						<desc xml:lang="x-comment">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
+						<desc xml:lang="hu">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
+						<desc xml:lang="sk">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
+						<desc xml:lang="sl">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
 					<label xml:lang="en-US">Zoom factor</label>
 					<label xml:lang="el">Συντελεστής εστίασης</label>
-					<label xml:lang="nl">Zoom factor</label>
+					<label xml:lang="nl">Zoomfactor</label>
 					<label xml:lang="fr">Facteur</label>
 					<label xml:lang="fi">Zoom factor</label>
 					<label xml:lang="cs">Faktor zvětšení</label>
@@ -1588,6 +1709,8 @@
 					<label xml:lang="hi-IN">झूम फॉक्टर</label>
 					<label xml:lang="x-comment">Zoom factor</label>
 					<label xml:lang="sk">Faktor zväčšenia</label>
+					<label xml:lang="hu">Zoom factor</label>
+					<label xml:lang="sl">Zoom factor</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="10">
@@ -1618,6 +1741,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="400">
@@ -1648,6 +1773,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed.</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1681,6 +1808,9 @@
 				<desc xml:lang="th">Contains miscellaneous settings.</desc>
 				<desc xml:lang="hi-IN">Contains miscellaneous settings.</desc>
 				<desc xml:lang="x-comment">Contains miscellaneous settings.</desc>
+				<desc xml:lang="hu">Contains miscellaneous settings.</desc>
+				<desc xml:lang="sk">Contains miscellaneous settings.</desc>
+				<desc xml:lang="sl">Contains miscellaneous settings.</desc>
 			</info>
 			<prop oor:name="NoSymbolsWarning" oor:type="xs:boolean">
 				<!-- OldPath: Math/Misc -->
@@ -1714,6 +1844,9 @@
 						<desc xml:lang="th">Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
 						<desc xml:lang="hi-IN">Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
 						<desc xml:lang="x-comment">Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
+						<desc xml:lang="hu">Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
+						<desc xml:lang="sk">Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
+						<desc xml:lang="sl">Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
 					<label xml:lang="en-US">Missing symbols warning.</label>
 					<label xml:lang="el">Missing symbols warning.</label>
 					<label xml:lang="nl">Missing symbols warning.</label>
@@ -1739,6 +1872,9 @@
 					<label xml:lang="th">Missing symbols warning.</label>
 					<label xml:lang="hi-IN">Missing symbols warning.</label>
 					<label xml:lang="x-comment">Missing symbols warning.</label>
+					<label xml:lang="hu">Missing symbols warning.</label>
+					<label xml:lang="sk">Missing symbols warning.</label>
+					<label xml:lang="sl">Missing symbols warning.</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1773,9 +1909,12 @@
 						<desc xml:lang="th">Ignores spacing symbols at the end of a line.</desc>
 						<desc xml:lang="hi-IN">Ignores spacing symbols at the end of a line.</desc>
 						<desc xml:lang="x-comment">Ignores spacing symbols at the end of a line.</desc>
+						<desc xml:lang="hu">Ignores spacing symbols at the end of a line.</desc>
+						<desc xml:lang="sk">Ignores spacing symbols at the end of a line.</desc>
+						<desc xml:lang="sl">Ignores spacing symbols at the end of a line.</desc>
 					<label xml:lang="en-US">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="el">Ignore ~ and &apos; at the end of the line</label>
-					<label xml:lang="nl">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="nl">Negeer ~ en &apos; aan het einde van de regel</label>
 					<label xml:lang="fr">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="fi">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="cs">Ignore ~ and &apos; at the end of the line</label>
@@ -1798,6 +1937,9 @@
 					<label xml:lang="th">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="hi-IN">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="x-comment">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="hu">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="sk">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="sl">Ignore ~ and &apos; at the end of the line</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1829,6 +1971,9 @@
 				<desc xml:lang="th">Contains view settings.</desc>
 				<desc xml:lang="hi-IN">Contains view settings.</desc>
 				<desc xml:lang="x-comment">Contains view settings.</desc>
+				<desc xml:lang="hu">Contains view settings.</desc>
+				<desc xml:lang="sk">Contains view settings.</desc>
+				<desc xml:lang="sl">Contains view settings.</desc>
 			</info>
 			<prop oor:name="ToolboxVisible" oor:type="xs:boolean">
 				<!-- OldPath: Math/View -->
@@ -1861,9 +2006,12 @@
 						<desc xml:lang="th">Toggles the visibility of the ToolBox (Selection Box).</desc>
 						<desc xml:lang="hi-IN">Toggles the visibility of the ToolBox (Selection Box).</desc>
 						<desc xml:lang="x-comment">Toggles the visibility of the ToolBox (Selection Box).</desc>
+						<desc xml:lang="hu">Toggles the visibility of the ToolBox (Selection Box).</desc>
+						<desc xml:lang="sk">Toggles the visibility of the ToolBox (Selection Box).</desc>
+						<desc xml:lang="sl">Toggles the visibility of the ToolBox (Selection Box).</desc>
 					<label xml:lang="en-US">Show Tool Box</label>
 					<label xml:lang="el">Show Tool Box</label>
-					<label xml:lang="nl">Show Tool Box</label>
+					<label xml:lang="nl">Toon Werktuigenvak</label>
 					<label xml:lang="fr">Show Tool Box</label>
 					<label xml:lang="fi">Show Tool Box</label>
 					<label xml:lang="cs">Show Tool Box</label>
@@ -1886,6 +2034,9 @@
 					<label xml:lang="th">Show Tool Box</label>
 					<label xml:lang="hi-IN">Show Tool Box</label>
 					<label xml:lang="x-comment">Show Tool Box</label>
+					<label xml:lang="hu">Show Tool Box</label>
+					<label xml:lang="sk">Show Tool Box</label>
+					<label xml:lang="sl">Show Tool Box</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1920,9 +2071,12 @@
 						<desc xml:lang="th">Automatically updates the display of the formula after the text has changed.</desc>
 						<desc xml:lang="hi-IN">Automatically updates the display of the formula after the text has changed.</desc>
 						<desc xml:lang="x-comment">Automatically updates the display of the formula after the text has changed.</desc>
+						<desc xml:lang="hu">Automatically updates the display of the formula after the text has changed.</desc>
+						<desc xml:lang="sk">Automatically updates the display of the formula after the text has changed.</desc>
+						<desc xml:lang="sl">Automatically updates the display of the formula after the text has changed.</desc>
 					<label xml:lang="en-US">Update display automatically</label>
 					<label xml:lang="el">Update display automatically</label>
-					<label xml:lang="nl">Update display automatically</label>
+					<label xml:lang="nl">Weergave automatisch bijwerken</label>
 					<label xml:lang="fr">Update display automatically</label>
 					<label xml:lang="fi">Update display automatically</label>
 					<label xml:lang="cs">Update display automatically</label>
@@ -1945,6 +2099,9 @@
 					<label xml:lang="th">Update display automatically</label>
 					<label xml:lang="hi-IN">Update display automatically</label>
 					<label xml:lang="x-comment">Update display automatically</label>
+					<label xml:lang="hu">Update display automatically</label>
+					<label xml:lang="sk">Update display automatically</label>
+					<label xml:lang="sl">Update display automatically</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1979,9 +2136,12 @@
 						<desc xml:lang="th">Toggles the visibility of the FormulaCursor.</desc>
 						<desc xml:lang="hi-IN">Toggles the visibility of the FormulaCursor.</desc>
 						<desc xml:lang="x-comment">Toggles the visibility of the FormulaCursor.</desc>
+						<desc xml:lang="hu">Toggles the visibility of the FormulaCursor.</desc>
+						<desc xml:lang="sk">Toggles the visibility of the FormulaCursor.</desc>
+						<desc xml:lang="sl">Toggles the visibility of the FormulaCursor.</desc>
 					<label xml:lang="en-US">Show Formula Cursor</label>
 					<label xml:lang="el">Show Formula Cursor</label>
-					<label xml:lang="nl">Show Formula Cursor</label>
+					<label xml:lang="nl">Formulecursor tonen</label>
 					<label xml:lang="fr">Show Formula Cursor</label>
 					<label xml:lang="fi">Show Formula Cursor</label>
 					<label xml:lang="cs">Show Formula Cursor</label>
@@ -2004,6 +2164,9 @@
 					<label xml:lang="th">Show Formula Cursor</label>
 					<label xml:lang="hi-IN">Show Formula Cursor</label>
 					<label xml:lang="x-comment">Show Formula Cursor</label>
+					<label xml:lang="hu">Show Formula Cursor</label>
+					<label xml:lang="sk">Show Formula Cursor</label>
+					<label xml:lang="sl">Show Formula Cursor</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -2035,6 +2198,9 @@
 				<desc xml:lang="th">Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
 				<desc xml:lang="hi-IN">Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
 				<desc xml:lang="x-comment">Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
+				<desc xml:lang="hu">Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
+				<desc xml:lang="sk">Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
+				<desc xml:lang="sl">Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
 			</info>
 		</set>
 		<group oor:name="StandardFormat">
@@ -2064,6 +2230,9 @@
 				<desc xml:lang="th">Defines the default format settings for formulas.</desc>
 				<desc xml:lang="hi-IN">Defines the default format settings for formulas.</desc>
 				<desc xml:lang="x-comment">Defines the default format settings for formulas.</desc>
+				<desc xml:lang="hu">Defines the default format settings for formulas.</desc>
+				<desc xml:lang="sk">Defines the default format settings for formulas.</desc>
+				<desc xml:lang="sl">Defines the default format settings for formulas.</desc>
 			</info>
 			<prop oor:name="Textmode" oor:type="xs:boolean">
 				<!-- OldPath: Math/StandardFormat -->
@@ -2096,6 +2265,9 @@
 						<desc xml:lang="th">Displays some expressions in a compact form.</desc>
 						<desc xml:lang="hi-IN">Displays some expressions in a compact form.</desc>
 						<desc xml:lang="x-comment">Displays some expressions in a compact form.</desc>
+						<desc xml:lang="hu">Displays some expressions in a compact form.</desc>
+						<desc xml:lang="sk">Displays some expressions in a compact form.</desc>
+						<desc xml:lang="sl">Displays some expressions in a compact form.</desc>
 					<label xml:lang="en-US">Textmode</label>
 					<label xml:lang="el">Κατάσταση κειμένου</label>
 					<label xml:lang="nl">Tekstmodus</label>
@@ -2121,6 +2293,9 @@
 					<label xml:lang="th">โหมดข้อความ</label>
 					<label xml:lang="hi-IN">टेक्स्ट् प्रकार</label>
 					<label xml:lang="x-comment">Textmode</label>
+					<label xml:lang="hu">Textmode</label>
+					<label xml:lang="sk">Textmode</label>
+					<label xml:lang="sl">Textmode</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2155,9 +2330,12 @@
 						<desc xml:lang="th">Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
 						<desc xml:lang="hi-IN">Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
 						<desc xml:lang="x-comment">Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
+						<desc xml:lang="hu">Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
+						<desc xml:lang="sk">Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
+						<desc xml:lang="sl">Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
 					<label xml:lang="en-US">Scale normal brackets</label>
 					<label xml:lang="el">Scale normal brackets</label>
-					<label xml:lang="nl">Scale normal brackets</label>
+					<label xml:lang="nl">Normale haken schalen</label>
 					<label xml:lang="fr">Scale normal brackets</label>
 					<label xml:lang="fi">Scale normal brackets</label>
 					<label xml:lang="cs">Scale normal brackets</label>
@@ -2180,6 +2358,9 @@
 					<label xml:lang="th">Scale normal brackets</label>
 					<label xml:lang="hi-IN">Scale normal brackets</label>
 					<label xml:lang="x-comment">Scale normal brackets</label>
+					<label xml:lang="hu">Scale normal brackets</label>
+					<label xml:lang="sk">Scale normal brackets</label>
+					<label xml:lang="sl">Scale normal brackets</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2214,9 +2395,12 @@
 						<desc xml:lang="th">Specifies the default horizontal alignment for the formula.</desc>
 						<desc xml:lang="hi-IN">Specifies the default horizontal alignment for the formula.</desc>
 						<desc xml:lang="x-comment">Specifies the default horizontal alignment for the formula.</desc>
+						<desc xml:lang="hu">Specifies the default horizontal alignment for the formula.</desc>
+						<desc xml:lang="sk">Specifies the default horizontal alignment for the formula.</desc>
+						<desc xml:lang="sl">Specifies the default horizontal alignment for the formula.</desc>
 					<label xml:lang="en-US">Horizontal alignment</label>
 					<label xml:lang="el">Horizontal alignment</label>
-					<label xml:lang="nl">Horizontal alignment</label>
+					<label xml:lang="nl">Horizontale uitlijning</label>
 					<label xml:lang="fr">Horizontal alignment</label>
 					<label xml:lang="fi">Horizontal alignment</label>
 					<label xml:lang="cs">Horizontal alignment</label>
@@ -2239,6 +2423,9 @@
 					<label xml:lang="th">Horizontal alignment</label>
 					<label xml:lang="hi-IN">Horizontal alignment</label>
 					<label xml:lang="x-comment">Horizontal alignment</label>
+					<label xml:lang="hu">Horizontal alignment</label>
+					<label xml:lang="sk">Horizontal alignment</label>
+					<label xml:lang="sl">Horizontal alignment</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -2269,13 +2456,15 @@
 							<desc xml:lang="hi-IN">बायाँ</desc>
 							<desc xml:lang="x-comment">left</desc>
 							<desc xml:lang="sk">vľavo</desc>
+							<desc xml:lang="hu">left</desc>
+							<desc xml:lang="sl">left</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">centered</desc>
 							<desc xml:lang="el">Κεντραρισμένα ως προς τη γραμμή</desc>
-							<desc xml:lang="nl">op de lijn gecentreerd</desc>
+							<desc xml:lang="nl">gecentreerd</desc>
 							<desc xml:lang="fr">Milieu</desc>
 							<desc xml:lang="fi">keskitetty</desc>
 							<desc xml:lang="cs">vystředěno</desc>
@@ -2299,6 +2488,8 @@
 							<desc xml:lang="hi-IN">केन्द्रित</desc>
 							<desc xml:lang="x-comment">centered</desc>
 							<desc xml:lang="sk">Na stred</desc>
+							<desc xml:lang="hu">centered</desc>
+							<desc xml:lang="sl">centered</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -2329,6 +2520,8 @@
 							<desc xml:lang="hi-IN">दाहिना</desc>
 							<desc xml:lang="x-comment">right</desc>
 							<desc xml:lang="sk">vpravo</desc>
+							<desc xml:lang="hu">right</desc>
+							<desc xml:lang="sl">right</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -2365,9 +2558,12 @@
 						<desc xml:lang="th">Specifies the reference base size. [UNIT=Pts]</desc>
 						<desc xml:lang="hi-IN">Specifies the reference base size. [UNIT=Pts]</desc>
 						<desc xml:lang="x-comment">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="hu">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="sk">Specifies the reference base size. [UNIT=Pts]</desc>
+						<desc xml:lang="sl">Specifies the reference base size. [UNIT=Pts]</desc>
 					<label xml:lang="en-US">Base size</label>
 					<label xml:lang="el">Base size</label>
-					<label xml:lang="nl">Base size</label>
+					<label xml:lang="nl">Basisgrootte</label>
 					<label xml:lang="fr">Base size</label>
 					<label xml:lang="fi">Base size</label>
 					<label xml:lang="cs">Base size</label>
@@ -2390,6 +2586,9 @@
 					<label xml:lang="th">Base size</label>
 					<label xml:lang="hi-IN">Base size</label>
 					<label xml:lang="x-comment">Base size</label>
+					<label xml:lang="hu">Base size</label>
+					<label xml:lang="sk">Base size</label>
+					<label xml:lang="sl">Base size</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="4">
@@ -2420,6 +2619,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="127">
@@ -2450,6 +2651,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2486,9 +2689,12 @@
 						<desc xml:lang="th">Specifies the text size relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="hi-IN">Specifies the text size relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="x-comment">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hu">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sk">Specifies the text size relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sl">Specifies the text size relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Text size</label>
 					<label xml:lang="el">Text size</label>
-					<label xml:lang="nl">Text size</label>
+					<label xml:lang="nl">Tekstgrootte</label>
 					<label xml:lang="fr">Text size</label>
 					<label xml:lang="fi">Text size</label>
 					<label xml:lang="cs">Text size</label>
@@ -2511,6 +2717,9 @@
 					<label xml:lang="th">Text size</label>
 					<label xml:lang="hi-IN">Text size</label>
 					<label xml:lang="x-comment">Text size</label>
+					<label xml:lang="hu">Text size</label>
+					<label xml:lang="sk">Text size</label>
+					<label xml:lang="sl">Text size</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="5">
@@ -2541,6 +2750,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2571,6 +2782,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2607,9 +2820,12 @@
 						<desc xml:lang="th">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="hi-IN">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="x-comment">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hu">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sk">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sl">Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Index size</label>
 					<label xml:lang="el">Index size</label>
-					<label xml:lang="nl">Index size</label>
+					<label xml:lang="nl">Indexgrootte</label>
 					<label xml:lang="fr">Index size</label>
 					<label xml:lang="fi">Index size</label>
 					<label xml:lang="cs">Index size</label>
@@ -2632,6 +2848,9 @@
 					<label xml:lang="th">Index size</label>
 					<label xml:lang="hi-IN">Index size</label>
 					<label xml:lang="x-comment">Index size</label>
+					<label xml:lang="hu">Index size</label>
+					<label xml:lang="sk">Index size</label>
+					<label xml:lang="sl">Index size</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="5">
@@ -2662,6 +2881,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2692,6 +2913,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2728,9 +2951,12 @@
 						<desc xml:lang="th">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="hi-IN">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="x-comment">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hu">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sk">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sl">Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Function size</label>
 					<label xml:lang="el">Function size</label>
-					<label xml:lang="nl">Function size</label>
+					<label xml:lang="nl">Functiegrootte</label>
 					<label xml:lang="fr">Function size</label>
 					<label xml:lang="fi">Function size</label>
 					<label xml:lang="cs">Function size</label>
@@ -2753,6 +2979,9 @@
 					<label xml:lang="th">Function size</label>
 					<label xml:lang="hi-IN">Function size</label>
 					<label xml:lang="x-comment">Function size</label>
+					<label xml:lang="hu">Function size</label>
+					<label xml:lang="sk">Function size</label>
+					<label xml:lang="sl">Function size</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="5">
@@ -2783,6 +3012,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2813,6 +3044,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2849,9 +3082,12 @@
 						<desc xml:lang="th">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="hi-IN">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="x-comment">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hu">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sk">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sl">Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Operator size</label>
 					<label xml:lang="el">Operator size</label>
-					<label xml:lang="nl">Operator size</label>
+					<label xml:lang="nl">Operatorgrootte</label>
 					<label xml:lang="fr">Operator size</label>
 					<label xml:lang="fi">Operator size</label>
 					<label xml:lang="cs">Operator size</label>
@@ -2874,6 +3110,9 @@
 					<label xml:lang="th">Operator size</label>
 					<label xml:lang="hi-IN">Operator size</label>
 					<label xml:lang="x-comment">Operator size</label>
+					<label xml:lang="hu">Operator size</label>
+					<label xml:lang="sk">Operator size</label>
+					<label xml:lang="sl">Operator size</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="5">
@@ -2904,6 +3143,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -2934,6 +3175,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2970,9 +3213,12 @@
 						<desc xml:lang="th">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="hi-IN">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
 						<desc xml:lang="x-comment">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="hu">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sk">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
+						<desc xml:lang="sl">Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
 					<label xml:lang="en-US">Limits size</label>
 					<label xml:lang="el">Limits size</label>
-					<label xml:lang="nl">Limits size</label>
+					<label xml:lang="nl">Limietengrootte</label>
 					<label xml:lang="fr">Limits size</label>
 					<label xml:lang="fi">Limits size</label>
 					<label xml:lang="cs">Limits size</label>
@@ -2995,6 +3241,9 @@
 					<label xml:lang="th">Limits size</label>
 					<label xml:lang="hi-IN">Limits size</label>
 					<label xml:lang="x-comment">Limits size</label>
+					<label xml:lang="hu">Limits size</label>
+					<label xml:lang="sk">Limits size</label>
+					<label xml:lang="sl">Limits size</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="5">
@@ -3025,6 +3274,8 @@
 							<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
 							<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="hu">Specifies the minimum value allowed (must be positive)</desc>
+							<desc xml:lang="sl">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
@@ -3055,6 +3306,8 @@
 							<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 							<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 							<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+							<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+							<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -3091,9 +3344,12 @@
 						<desc xml:lang="th">Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="hi-IN">Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="x-comment">Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="hu">Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sk">Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sl">Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
 					<label xml:lang="en-US">Variable Font name</label>
 					<label xml:lang="el">Variable Font name</label>
-					<label xml:lang="nl">Variable Font name</label>
+					<label xml:lang="nl">Lettertype voor variabelen</label>
 					<label xml:lang="fr">Variable Font name</label>
 					<label xml:lang="fi">Variable Font name</label>
 					<label xml:lang="cs">Variable Font name</label>
@@ -3116,6 +3372,9 @@
 					<label xml:lang="th">Variable Font name</label>
 					<label xml:lang="hi-IN">Variable Font name</label>
 					<label xml:lang="x-comment">Variable Font name</label>
+					<label xml:lang="hu">Variable Font name</label>
+					<label xml:lang="sk">Variable Font name</label>
+					<label xml:lang="sl">Variable Font name</label>
 				</info>
 				<value/>
 			</prop>
@@ -3150,9 +3409,12 @@
 						<desc xml:lang="th">Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="hi-IN">Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="x-comment">Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="hu">Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sk">Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sl">Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
 					<label xml:lang="en-US">Function Font name</label>
 					<label xml:lang="el">Function Font name</label>
-					<label xml:lang="nl">Function Font name</label>
+					<label xml:lang="nl">Lettertype voor functies</label>
 					<label xml:lang="fr">Function Font name</label>
 					<label xml:lang="fi">Function Font name</label>
 					<label xml:lang="cs">Function Font name</label>
@@ -3175,6 +3437,9 @@
 					<label xml:lang="th">Function Font name</label>
 					<label xml:lang="hi-IN">Function Font name</label>
 					<label xml:lang="x-comment">Function Font name</label>
+					<label xml:lang="hu">Function Font name</label>
+					<label xml:lang="sk">Function Font name</label>
+					<label xml:lang="sl">Function Font name</label>
 				</info>
 				<value/>
 			</prop>
@@ -3209,9 +3474,12 @@
 						<desc xml:lang="th">Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="hi-IN">Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="x-comment">Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="hu">Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sk">Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sl">Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
 					<label xml:lang="en-US">Number Font name</label>
 					<label xml:lang="el">Number Font name</label>
-					<label xml:lang="nl">Number Font name</label>
+					<label xml:lang="nl">Lettertype voor getallen</label>
 					<label xml:lang="fr">Number Font name</label>
 					<label xml:lang="fi">Number Font name</label>
 					<label xml:lang="cs">Number Font name</label>
@@ -3234,6 +3502,9 @@
 					<label xml:lang="th">Number Font name</label>
 					<label xml:lang="hi-IN">Number Font name</label>
 					<label xml:lang="x-comment">Number Font name</label>
+					<label xml:lang="hu">Number Font name</label>
+					<label xml:lang="sk">Number Font name</label>
+					<label xml:lang="sl">Number Font name</label>
 				</info>
 				<value/>
 			</prop>
@@ -3268,9 +3539,12 @@
 						<desc xml:lang="th">Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="hi-IN">Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="x-comment">Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="hu">Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sk">Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sl">Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
 					<label xml:lang="en-US">Text Font name</label>
 					<label xml:lang="el">Text Font name</label>
-					<label xml:lang="nl">Text Font name</label>
+					<label xml:lang="nl">Lettertype voor tekst</label>
 					<label xml:lang="fr">Text Font name</label>
 					<label xml:lang="fi">Text Font name</label>
 					<label xml:lang="cs">Text Font name</label>
@@ -3293,6 +3567,9 @@
 					<label xml:lang="th">Text Font name</label>
 					<label xml:lang="hi-IN">Text Font name</label>
 					<label xml:lang="x-comment">Text Font name</label>
+					<label xml:lang="hu">Text Font name</label>
+					<label xml:lang="sk">Text Font name</label>
+					<label xml:lang="sl">Text Font name</label>
 				</info>
 				<value/>
 			</prop>
@@ -3327,9 +3604,12 @@
 						<desc xml:lang="th">Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="hi-IN">Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="x-comment">Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="hu">Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sk">Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sl">Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
 					<label xml:lang="en-US">Sans Font name</label>
 					<label xml:lang="el">Sans Font name</label>
-					<label xml:lang="nl">Sans Font name</label>
+					<label xml:lang="nl">Lettertype schreefloos</label>
 					<label xml:lang="fr">Sans Font name</label>
 					<label xml:lang="fi">Sans Font name</label>
 					<label xml:lang="cs">Sans Font name</label>
@@ -3352,6 +3632,9 @@
 					<label xml:lang="th">Sans Font name</label>
 					<label xml:lang="hi-IN">Sans Font name</label>
 					<label xml:lang="x-comment">Sans Font name</label>
+					<label xml:lang="hu">Sans Font name</label>
+					<label xml:lang="sk">Sans Font name</label>
+					<label xml:lang="sl">Sans Font name</label>
 				</info>
 				<value/>
 			</prop>
@@ -3386,9 +3669,12 @@
 						<desc xml:lang="th">Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="hi-IN">Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="x-comment">Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="hu">Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sk">Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sl">Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
 					<label xml:lang="en-US">Serif Font name</label>
 					<label xml:lang="el">Serif Font name</label>
-					<label xml:lang="nl">Serif Font name</label>
+					<label xml:lang="nl">Lettertype met schreef</label>
 					<label xml:lang="fr">Serif Font name</label>
 					<label xml:lang="fi">Serif Font name</label>
 					<label xml:lang="cs">Serif Font name</label>
@@ -3411,6 +3697,9 @@
 					<label xml:lang="th">Serif Font name</label>
 					<label xml:lang="hi-IN">Serif Font name</label>
 					<label xml:lang="x-comment">Serif Font name</label>
+					<label xml:lang="hu">Serif Font name</label>
+					<label xml:lang="sk">Serif Font name</label>
+					<label xml:lang="sl">Serif Font name</label>
 				</info>
 				<value/>
 			</prop>
@@ -3445,9 +3734,12 @@
 						<desc xml:lang="th">Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="hi-IN">Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
 						<desc xml:lang="x-comment">Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="hu">Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sk">Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
+						<desc xml:lang="sl">Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
 					<label xml:lang="en-US">Fixed Font name</label>
 					<label xml:lang="el">Fixed Font name</label>
-					<label xml:lang="nl">Fixed Font name</label>
+					<label xml:lang="nl">Lettertype niet-prop.</label>
 					<label xml:lang="fr">Fixed Font name</label>
 					<label xml:lang="fi">Fixed Font name</label>
 					<label xml:lang="cs">Fixed Font name</label>
@@ -3470,6 +3762,9 @@
 					<label xml:lang="th">Fixed Font name</label>
 					<label xml:lang="hi-IN">Fixed Font name</label>
 					<label xml:lang="x-comment">Fixed Font name</label>
+					<label xml:lang="hu">Fixed Font name</label>
+					<label xml:lang="sk">Fixed Font name</label>
+					<label xml:lang="sl">Fixed Font name</label>
 				</info>
 				<value/>
 			</prop>
@@ -3500,6 +3795,9 @@
 					<desc xml:lang="th">Specifies the distance settings used for formatting a formula.</desc>
 					<desc xml:lang="hi-IN">Specifies the distance settings used for formatting a formula.</desc>
 					<desc xml:lang="x-comment">Specifies the distance settings used for formatting a formula.</desc>
+					<desc xml:lang="hu">Specifies the distance settings used for formatting a formula.</desc>
+					<desc xml:lang="sk">Specifies the distance settings used for formatting a formula.</desc>
+					<desc xml:lang="sl">Specifies the distance settings used for formatting a formula.</desc>
 				</info>
 				<prop oor:name="Horizontal" oor:type="xs:short">
 					<!-- OldPath: Math/StandardFormat -->
@@ -3532,9 +3830,12 @@
 							<desc xml:lang="th">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
 						<label xml:lang="en-US">Horizontal distance</label>
 						<label xml:lang="el">Horizontal distance</label>
-						<label xml:lang="nl">Horizontal distance</label>
+						<label xml:lang="nl">Horizontale afstand</label>
 						<label xml:lang="fr">Horizontal distance</label>
 						<label xml:lang="fi">Horizontal distance</label>
 						<label xml:lang="cs">Horizontal distance</label>
@@ -3557,6 +3858,9 @@
 						<label xml:lang="th">Horizontal distance</label>
 						<label xml:lang="hi-IN">Horizontal distance</label>
 						<label xml:lang="x-comment">Horizontal distance</label>
+						<label xml:lang="hu">Horizontal distance</label>
+						<label xml:lang="sk">Horizontal distance</label>
+						<label xml:lang="sl">Horizontal distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -3587,6 +3891,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="200">
@@ -3617,6 +3923,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3653,9 +3961,12 @@
 							<desc xml:lang="th">Specifies the vertical distance of different lines. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance of different lines. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance of different lines. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance of different lines. [UNIT=%]</desc>
 						<label xml:lang="en-US">Vertical distance</label>
 						<label xml:lang="el">Vertical distance</label>
-						<label xml:lang="nl">Vertical distance</label>
+						<label xml:lang="nl">Verticale afstand</label>
 						<label xml:lang="fr">Vertical distance</label>
 						<label xml:lang="fi">Vertical distance</label>
 						<label xml:lang="cs">Vertical distance</label>
@@ -3678,6 +3989,9 @@
 						<label xml:lang="th">Vertical distance</label>
 						<label xml:lang="hi-IN">Vertical distance</label>
 						<label xml:lang="x-comment">Vertical distance</label>
+						<label xml:lang="hu">Vertical distance</label>
+						<label xml:lang="sk">Vertical distance</label>
+						<label xml:lang="sl">Vertical distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -3708,6 +4022,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="200">
@@ -3738,6 +4054,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3774,9 +4092,12 @@
 							<desc xml:lang="th">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance to root symbol</label>
 						<label xml:lang="el">Distance to root symbol</label>
-						<label xml:lang="nl">Distance to root symbol</label>
+						<label xml:lang="nl">Afstand tot wortelsymbool</label>
 						<label xml:lang="fr">Distance to root symbol</label>
 						<label xml:lang="fi">Distance to root symbol</label>
 						<label xml:lang="cs">Distance to root symbol</label>
@@ -3799,6 +4120,9 @@
 						<label xml:lang="th">Distance to root symbol</label>
 						<label xml:lang="hi-IN">Distance to root symbol</label>
 						<label xml:lang="x-comment">Distance to root symbol</label>
+						<label xml:lang="hu">Distance to root symbol</label>
+						<label xml:lang="sk">Distance to root symbol</label>
+						<label xml:lang="sl">Distance to root symbol</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -3829,6 +4153,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -3859,6 +4185,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3895,9 +4223,12 @@
 							<desc xml:lang="th">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Subscript distance</label>
 						<label xml:lang="el">Subscript distance</label>
-						<label xml:lang="nl">Subscript distance</label>
+						<label xml:lang="nl">afstand subscript</label>
 						<label xml:lang="fr">Subscript distance</label>
 						<label xml:lang="fi">Subscript distance</label>
 						<label xml:lang="cs">Subscript distance</label>
@@ -3920,6 +4251,9 @@
 						<label xml:lang="th">Subscript distance</label>
 						<label xml:lang="hi-IN">Subscript distance</label>
 						<label xml:lang="x-comment">Subscript distance</label>
+						<label xml:lang="hu">Subscript distance</label>
+						<label xml:lang="sk">Subscript distance</label>
+						<label xml:lang="sl">Subscript distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -3950,6 +4284,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -3980,6 +4316,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4016,6 +4354,9 @@
 							<desc xml:lang="th">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Superscript distance</label>
 						<label xml:lang="el">Superscript distance</label>
 						<label xml:lang="nl">Superscript distance</label>
@@ -4041,6 +4382,9 @@
 						<label xml:lang="th">Superscript distance</label>
 						<label xml:lang="hi-IN">Superscript distance</label>
 						<label xml:lang="x-comment">Superscript distance</label>
+						<label xml:lang="hu">Superscript distance</label>
+						<label xml:lang="sk">Superscript distance</label>
+						<label xml:lang="sl">Superscript distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4071,6 +4415,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4101,6 +4447,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4137,9 +4485,12 @@
 							<desc xml:lang="th">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
 						<label xml:lang="en-US">Lower limit distance</label>
 						<label xml:lang="el">Lower limit distance</label>
-						<label xml:lang="nl">Lower limit distance</label>
+						<label xml:lang="nl">Afstand onderste limiet</label>
 						<label xml:lang="fr">Lower limit distance</label>
 						<label xml:lang="fi">Lower limit distance</label>
 						<label xml:lang="cs">Lower limit distance</label>
@@ -4162,6 +4513,9 @@
 						<label xml:lang="th">Lower limit distance</label>
 						<label xml:lang="hi-IN">Lower limit distance</label>
 						<label xml:lang="x-comment">Lower limit distance</label>
+						<label xml:lang="hu">Lower limit distance</label>
+						<label xml:lang="sk">Lower limit distance</label>
+						<label xml:lang="sl">Lower limit distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4192,6 +4546,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4222,6 +4578,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4258,9 +4616,12 @@
 							<desc xml:lang="th">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
 						<label xml:lang="en-US">Upper limit distance</label>
 						<label xml:lang="el">Upper limit distance</label>
-						<label xml:lang="nl">Upper limit distance</label>
+						<label xml:lang="nl">Afstand bovenste limiet</label>
 						<label xml:lang="fr">Upper limit distance</label>
 						<label xml:lang="fi">Upper limit distance</label>
 						<label xml:lang="cs">Upper limit distance</label>
@@ -4283,6 +4644,9 @@
 						<label xml:lang="th">Upper limit distance</label>
 						<label xml:lang="hi-IN">Upper limit distance</label>
 						<label xml:lang="x-comment">Upper limit distance</label>
+						<label xml:lang="hu">Upper limit distance</label>
+						<label xml:lang="sk">Upper limit distance</label>
+						<label xml:lang="sl">Upper limit distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4313,6 +4677,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4343,6 +4709,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4379,9 +4747,12 @@
 							<desc xml:lang="th">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
 						<label xml:lang="en-US">Oversize of large operator</label>
 						<label xml:lang="el">Oversize of large operator</label>
-						<label xml:lang="nl">Oversize of large operator</label>
+						<label xml:lang="nl">Meergrootte van grote operator</label>
 						<label xml:lang="fr">Oversize of large operator</label>
 						<label xml:lang="fi">Oversize of large operator</label>
 						<label xml:lang="cs">Oversize of large operator</label>
@@ -4404,6 +4775,9 @@
 						<label xml:lang="th">Oversize of large operator</label>
 						<label xml:lang="hi-IN">Oversize of large operator</label>
 						<label xml:lang="x-comment">Oversize of large operator</label>
+						<label xml:lang="hu">Oversize of large operator</label>
+						<label xml:lang="sk">Oversize of large operator</label>
+						<label xml:lang="sl">Oversize of large operator</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4434,6 +4808,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4464,6 +4840,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4477,7 +4855,7 @@
 						<author>TL</author>
 						<desc xml:lang="en-US">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 							<desc xml:lang="el">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="nl">Specificeert de afstand tussen de grote operator en het argument ervan. [Eenheid=%]</desc>
 							<desc xml:lang="fr">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 							<desc xml:lang="fi">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 							<desc xml:lang="cs">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
@@ -4500,9 +4878,12 @@
 							<desc xml:lang="th">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance to large operator</label>
 						<label xml:lang="el">Distance to large operator</label>
-						<label xml:lang="nl">Distance to large operator</label>
+						<label xml:lang="nl">Afstand tot grote operator</label>
 						<label xml:lang="fr">Distance to large operator</label>
 						<label xml:lang="fi">Distance to large operator</label>
 						<label xml:lang="cs">Distance to large operator</label>
@@ -4525,6 +4906,9 @@
 						<label xml:lang="th">Distance to large operator</label>
 						<label xml:lang="hi-IN">Distance to large operator</label>
 						<label xml:lang="x-comment">Distance to large operator</label>
+						<label xml:lang="hu">Distance to large operator</label>
+						<label xml:lang="sk">Distance to large operator</label>
+						<label xml:lang="sl">Distance to large operator</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4555,6 +4939,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4585,6 +4971,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4621,9 +5009,12 @@
 							<desc xml:lang="th">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
 						<label xml:lang="en-US">Numerator distance</label>
 						<label xml:lang="el">Numerator distance</label>
-						<label xml:lang="nl">Numerator distance</label>
+						<label xml:lang="nl">Afstand teller</label>
 						<label xml:lang="fr">Numerator distance</label>
 						<label xml:lang="fi">Numerator distance</label>
 						<label xml:lang="cs">Numerator distance</label>
@@ -4646,6 +5037,9 @@
 						<label xml:lang="th">Numerator distance</label>
 						<label xml:lang="hi-IN">Numerator distance</label>
 						<label xml:lang="x-comment">Numerator distance</label>
+						<label xml:lang="hu">Numerator distance</label>
+						<label xml:lang="sk">Numerator distance</label>
+						<label xml:lang="sl">Numerator distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4676,6 +5070,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4706,6 +5102,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4742,9 +5140,12 @@
 							<desc xml:lang="th">Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
 						<label xml:lang="en-US">Denominator distance</label>
 						<label xml:lang="el">Denominator distance</label>
-						<label xml:lang="nl">Denominator distance</label>
+						<label xml:lang="nl">Afstand noemer</label>
 						<label xml:lang="fr">Denominator distance</label>
 						<label xml:lang="fi">Denominator distance</label>
 						<label xml:lang="cs">Denominator distance</label>
@@ -4767,6 +5168,9 @@
 						<label xml:lang="th">Denominator distance</label>
 						<label xml:lang="hi-IN">Denominator distance</label>
 						<label xml:lang="x-comment">Denominator distance</label>
+						<label xml:lang="hu">Denominator distance</label>
+						<label xml:lang="sk">Denominator distance</label>
+						<label xml:lang="sl">Denominator distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4797,6 +5201,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4827,6 +5233,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4863,9 +5271,12 @@
 							<desc xml:lang="th">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
 						<label xml:lang="en-US">Fraction overlength</label>
 						<label xml:lang="el">Fraction overlength</label>
-						<label xml:lang="nl">Fraction overlength</label>
+						<label xml:lang="nl">Meerlengte breukstreep</label>
 						<label xml:lang="fr">Fraction overlength</label>
 						<label xml:lang="fi">Fraction overlength</label>
 						<label xml:lang="cs">Fraction overlength</label>
@@ -4888,6 +5299,9 @@
 						<label xml:lang="th">Fraction overlength</label>
 						<label xml:lang="hi-IN">Fraction overlength</label>
 						<label xml:lang="x-comment">Fraction overlength</label>
+						<label xml:lang="hu">Fraction overlength</label>
+						<label xml:lang="sk">Fraction overlength</label>
+						<label xml:lang="sl">Fraction overlength</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -4918,6 +5332,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -4948,6 +5364,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -4984,9 +5402,12 @@
 							<desc xml:lang="th">Specifies the stroke width of the fraction separator [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the stroke width of the fraction separator [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the stroke width of the fraction separator [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the stroke width of the fraction separator [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the stroke width of the fraction separator [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the stroke width of the fraction separator [UNIT=%]</desc>
 						<label xml:lang="en-US">Fraction strokewidth</label>
 						<label xml:lang="el">Fraction strokewidth</label>
-						<label xml:lang="nl">Fraction strokewidth</label>
+						<label xml:lang="nl">Lengte breukstreep</label>
 						<label xml:lang="fr">Fraction strokewidth</label>
 						<label xml:lang="fi">Fraction strokewidth</label>
 						<label xml:lang="cs">Fraction strokewidth</label>
@@ -5009,6 +5430,9 @@
 						<label xml:lang="th">Fraction strokewidth</label>
 						<label xml:lang="hi-IN">Fraction strokewidth</label>
 						<label xml:lang="x-comment">Fraction strokewidth</label>
+						<label xml:lang="hu">Fraction strokewidth</label>
+						<label xml:lang="sk">Fraction strokewidth</label>
+						<label xml:lang="sl">Fraction strokewidth</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="1">
@@ -5039,6 +5463,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed (must be positive)</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed (must be positive)</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed (must be positive)</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed (must be positive)</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed (must be positive)</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5069,6 +5495,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5105,9 +5533,12 @@
 							<desc xml:lang="th">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Bracket oversize</label>
 						<label xml:lang="el">Bracket oversize</label>
-						<label xml:lang="nl">Bracket oversize</label>
+						<label xml:lang="nl">Meergrootte haak</label>
 						<label xml:lang="fr">Bracket oversize</label>
 						<label xml:lang="fi">Bracket oversize</label>
 						<label xml:lang="cs">Bracket oversize</label>
@@ -5130,6 +5561,9 @@
 						<label xml:lang="th">Bracket oversize</label>
 						<label xml:lang="hi-IN">Bracket oversize</label>
 						<label xml:lang="x-comment">Bracket oversize</label>
+						<label xml:lang="hu">Bracket oversize</label>
+						<label xml:lang="sk">Bracket oversize</label>
+						<label xml:lang="sl">Bracket oversize</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -5160,6 +5594,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5190,6 +5626,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5226,9 +5664,12 @@
 							<desc xml:lang="th">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
 						<label xml:lang="en-US">Bracket distance</label>
 						<label xml:lang="el">Bracket distance</label>
-						<label xml:lang="nl">Bracket distance</label>
+						<label xml:lang="nl">Afstand haak</label>
 						<label xml:lang="fr">Bracket distance</label>
 						<label xml:lang="fi">Bracket distance</label>
 						<label xml:lang="cs">Bracket distance</label>
@@ -5251,6 +5692,9 @@
 						<label xml:lang="th">Bracket distance</label>
 						<label xml:lang="hi-IN">Bracket distance</label>
 						<label xml:lang="x-comment">Bracket distance</label>
+						<label xml:lang="hu">Bracket distance</label>
+						<label xml:lang="sk">Bracket distance</label>
+						<label xml:lang="sl">Bracket distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -5281,6 +5725,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5311,6 +5757,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5347,9 +5795,12 @@
 							<desc xml:lang="th">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
 						<label xml:lang="en-US">Normal bracket oversize</label>
 						<label xml:lang="el">Normal bracket oversize</label>
-						<label xml:lang="nl">Normal bracket oversize</label>
+						<label xml:lang="nl">Meergrootte normale haak</label>
 						<label xml:lang="fr">Normal bracket oversize</label>
 						<label xml:lang="fi">Normal bracket oversize</label>
 						<label xml:lang="cs">Normal bracket oversize</label>
@@ -5372,6 +5823,9 @@
 						<label xml:lang="th">Normal bracket oversize</label>
 						<label xml:lang="hi-IN">Normal bracket oversize</label>
 						<label xml:lang="x-comment">Normal bracket oversize</label>
+						<label xml:lang="hu">Normal bracket oversize</label>
+						<label xml:lang="sk">Normal bracket oversize</label>
+						<label xml:lang="sl">Normal bracket oversize</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -5402,6 +5856,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5432,6 +5888,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5468,9 +5926,12 @@
 							<desc xml:lang="th">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
 						<label xml:lang="en-US">Matrix row distance</label>
 						<label xml:lang="el">Matrix row distance</label>
-						<label xml:lang="nl">Matrix row distance</label>
+						<label xml:lang="nl">Afstand matrixrij</label>
 						<label xml:lang="fr">Matrix row distance</label>
 						<label xml:lang="fi">Matrix row distance</label>
 						<label xml:lang="cs">Matrix row distance</label>
@@ -5493,6 +5954,9 @@
 						<label xml:lang="th">Matrix row distance</label>
 						<label xml:lang="hi-IN">Matrix row distance</label>
 						<label xml:lang="x-comment">Matrix row distance</label>
+						<label xml:lang="hu">Matrix row distance</label>
+						<label xml:lang="sk">Matrix row distance</label>
+						<label xml:lang="sl">Matrix row distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -5523,6 +5987,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="300">
@@ -5553,6 +6019,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5589,9 +6057,12 @@
 							<desc xml:lang="th">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
 						<label xml:lang="en-US">Matrix column distance</label>
 						<label xml:lang="el">Matrix column distance</label>
-						<label xml:lang="nl">Matrix column distance</label>
+						<label xml:lang="nl">afstand matrixkolom</label>
 						<label xml:lang="fr">Matrix column distance</label>
 						<label xml:lang="fi">Matrix column distance</label>
 						<label xml:lang="cs">Matrix column distance</label>
@@ -5614,6 +6085,9 @@
 						<label xml:lang="th">Matrix column distance</label>
 						<label xml:lang="hi-IN">Matrix column distance</label>
 						<label xml:lang="x-comment">Matrix column distance</label>
+						<label xml:lang="hu">Matrix column distance</label>
+						<label xml:lang="sk">Matrix column distance</label>
+						<label xml:lang="sl">Matrix column distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -5644,6 +6118,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="300">
@@ -5674,6 +6150,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5710,9 +6188,12 @@
 							<desc xml:lang="th">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the distance between the attribute and its base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance to attribute</label>
 						<label xml:lang="el">Distance to attribute</label>
-						<label xml:lang="nl">Distance to attribute</label>
+						<label xml:lang="nl">Afstand tot attribuut</label>
 						<label xml:lang="fr">Distance to attribute</label>
 						<label xml:lang="fi">Distance to attribute</label>
 						<label xml:lang="cs">Distance to attribute</label>
@@ -5735,6 +6216,9 @@
 						<label xml:lang="th">Distance to attribute</label>
 						<label xml:lang="hi-IN">Distance to attribute</label>
 						<label xml:lang="x-comment">Distance to attribute</label>
+						<label xml:lang="hu">Distance to attribute</label>
+						<label xml:lang="sk">Distance to attribute</label>
+						<label xml:lang="sl">Distance to attribute</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -5765,6 +6249,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5795,6 +6281,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5831,9 +6319,12 @@
 							<desc xml:lang="th">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
 							<desc xml:lang="x-comment">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="hu">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="sk">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
+							<desc xml:lang="sl">Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance between attributes</label>
 						<label xml:lang="el">Distance between attributes</label>
-						<label xml:lang="nl">Distance between attributes</label>
+						<label xml:lang="nl">Afstand tussen attributen</label>
 						<label xml:lang="fr">Distance between attributes</label>
 						<label xml:lang="fi">Distance between attributes</label>
 						<label xml:lang="cs">Distance between attributes</label>
@@ -5856,6 +6347,9 @@
 						<label xml:lang="th">Distance between attributes</label>
 						<label xml:lang="hi-IN">Distance between attributes</label>
 						<label xml:lang="x-comment">Distance between attributes</label>
+						<label xml:lang="hu">Distance between attributes</label>
+						<label xml:lang="sk">Distance between attributes</label>
+						<label xml:lang="sl">Distance between attributes</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -5886,6 +6380,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
@@ -5916,6 +6412,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -5952,9 +6450,12 @@
 							<desc xml:lang="th">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="x-comment">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hu">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sk">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sl">Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Left margin</label>
 						<label xml:lang="el">Αριστερό περιθώριο</label>
-						<label xml:lang="nl">Linker rand</label>
+						<label xml:lang="nl">Linker marge</label>
 						<label xml:lang="fr">Marge gauche</label>
 						<label xml:lang="fi">Vasen marginaali</label>
 						<label xml:lang="cs">Levý okraj</label>
@@ -5978,6 +6479,8 @@
 						<label xml:lang="hi-IN">बायाँ पृष्ठ-प्रान्त</label>
 						<label xml:lang="x-comment">Left margin</label>
 						<label xml:lang="sk">Ľavý okraj</label>
+						<label xml:lang="hu">Left margin</label>
+						<label xml:lang="sl">Left margin</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -6008,6 +6511,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -6038,6 +6543,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -6074,9 +6581,12 @@
 							<desc xml:lang="th">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="x-comment">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hu">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sk">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sl">Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Right margin</label>
 						<label xml:lang="el">Δεξιό περιθώριο</label>
-						<label xml:lang="nl">Rechter rand</label>
+						<label xml:lang="nl">Rechter marge</label>
 						<label xml:lang="fr">Marge droite</label>
 						<label xml:lang="fi">Oikea marginaali</label>
 						<label xml:lang="cs">Pravý okraj</label>
@@ -6100,6 +6610,8 @@
 						<label xml:lang="hi-IN">दाहिना पृष्ठ-प्रान्त</label>
 						<label xml:lang="x-comment">Right margin</label>
 						<label xml:lang="sk">Pravý okraj</label>
+						<label xml:lang="hu">Right margin</label>
+						<label xml:lang="sl">Right margin</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -6130,6 +6642,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -6160,6 +6674,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -6196,6 +6712,9 @@
 							<desc xml:lang="th">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="x-comment">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hu">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sk">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sl">Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Top margin</label>
 						<label xml:lang="el">Άνω περιθώριο</label>
 						<label xml:lang="nl">Bovenmarge</label>
@@ -6222,6 +6741,8 @@
 						<label xml:lang="hi-IN">ऊपरी पृष्ठ-प्रान्त</label>
 						<label xml:lang="x-comment">Top margin</label>
 						<label xml:lang="sk">Horný okraj</label>
+						<label xml:lang="hu">Top margin</label>
+						<label xml:lang="sl">Top margin</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -6252,6 +6773,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -6282,6 +6805,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -6318,9 +6843,12 @@
 							<desc xml:lang="th">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="x-comment">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="hu">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sk">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="sl">Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US">Bottom margin</label>
 						<label xml:lang="el">Bottom margin</label>
-						<label xml:lang="nl">Bottom margin</label>
+						<label xml:lang="nl">Ondermarge</label>
 						<label xml:lang="fr">Bottom margin</label>
 						<label xml:lang="fi">Bottom margin</label>
 						<label xml:lang="cs">Bottom margin</label>
@@ -6343,6 +6871,9 @@
 						<label xml:lang="th">Bottom margin</label>
 						<label xml:lang="hi-IN">Bottom margin</label>
 						<label xml:lang="x-comment">Bottom margin</label>
+						<label xml:lang="hu">Bottom margin</label>
+						<label xml:lang="sk">Bottom margin</label>
+						<label xml:lang="sl">Bottom margin</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -6373,6 +6904,8 @@
 								<desc xml:lang="hi-IN">Specifies the minimum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the minimum value allowed</desc>
 								<desc xml:lang="sk">Specifies the minimum value allowed</desc>
+								<desc xml:lang="hu">Specifies the minimum value allowed</desc>
+								<desc xml:lang="sl">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
@@ -6403,6 +6936,8 @@
 								<desc xml:lang="hi-IN">Specifies the maximum value allowed</desc>
 								<desc xml:lang="x-comment">Specifies the maximum value allowed</desc>
 								<desc xml:lang="sk">Specifies the maximum value allowed</desc>
+								<desc xml:lang="hu">Specifies the maximum value allowed</desc>
+								<desc xml:lang="sl">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -6437,10 +6972,14 @@
 				<desc xml:lang="th">Lists the defined symbols.</desc>
 				<desc xml:lang="hi-IN">Lists the defined symbols.</desc>
 				<desc xml:lang="x-comment">Lists the defined symbols.</desc>
+				<desc xml:lang="hu">Lists the defined symbols.</desc>
+				<desc xml:lang="sk">Lists the defined symbols.</desc>
+				<desc xml:lang="sl">Lists the defined symbols.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
