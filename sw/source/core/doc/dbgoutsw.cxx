@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:12:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ static const String lcl_dbg_out(const SfxItemSet & rSet)
 {
     SfxItemIter aIter(rSet);
     const SfxPoolItem * pItem;
-    bool bFirst;
+    bool bFirst = true;
     String aStr = String("[ ", RTL_TEXTENCODING_ASCII_US);
 
     while (! aIter.IsAtEnd())
@@ -548,6 +548,7 @@ BOOL lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
         (*((String *) pArgs)) += lcl_dbg_out(*pNode);
         (*((String *) pArgs)) += String("\n", RTL_TEXTENCODING_ASCII_US);
     }
+    return TRUE;
 }
 
 static String lcl_dbg_out(SwNodes & rNodes)
