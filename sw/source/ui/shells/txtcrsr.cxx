@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-08-06 14:38:04 $
+ *  last change: $Author: os $ $Date: 2002-08-26 14:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,13 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_SELECTION, TRUE, &pItem))
             bSelect = ((const SfxBoolItem *)pItem)->GetValue();
     }
+    switch(rReq.GetSlot())
+    {
+        case FN_CHAR_LEFT_SEL:  rReq.SetSlot( FN_CHAR_LEFT );  bSelect = TRUE; break;
+        case FN_CHAR_RIGHT_SEL: rReq.SetSlot( FN_CHAR_RIGHT ); bSelect = TRUE; break;
+        case FN_LINE_UP_SEL:    rReq.SetSlot( FN_LINE_UP );    bSelect = TRUE; break;
+        case FN_LINE_DOWN_SEL:  rReq.SetSlot( FN_LINE_DOWN );  bSelect = TRUE; break;
+    }
 
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
             GetView().GetViewFrame()->GetBindings().GetRecorder();
@@ -147,14 +154,10 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     {
         switch(nSlot)
         {
-        case FN_CHAR_LEFT_SEL:
-        case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS, (FN_CHAR_LEFT_SEL == nSlot) || bSelect, 1, FALSE ); break;
-        case FN_CHAR_RIGHT_SEL:
-        case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, (FN_CHAR_RIGHT_SEL == nSlot)|| bSelect, 1, FALSE ); break;
-        case FN_LINE_UP_SEL:
-        case FN_LINE_UP:    rSh.Up   ( FN_LINE_UP_SEL == nSlot, 1 ); break;
-        case FN_LINE_DOWN_SEL:
-        case FN_LINE_DOWN:  rSh.Down ( FN_LINE_DOWN_SEL == nSlot, 1 ); break;
+        case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS,  bSelect, 1, FALSE ); break;
+        case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, FALSE ); break;
+        case FN_LINE_UP:    rSh.Up   ( bSelect, 1 ); break;
+        case FN_LINE_DOWN:  rSh.Down ( bSelect, 1 ); break;
         default:            ASSERT(FALSE, falscher Dispatcher); return;
         }
     }
