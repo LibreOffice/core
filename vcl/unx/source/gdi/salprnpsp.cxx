@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-19 18:08:49 $
+ *  last change: $Author: pl $ $Date: 2002-11-20 09:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,7 @@ void SalInfoPrinter::InitPaperFormats()
 
 int SalInfoPrinter::GetLandscapeAngle()
 {
-    return -900;
+    return 900;
 }
 
 // -----------------------------------------------------------------------
