@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:09:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,9 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                         //  Writing direction: not as pool default because the default for cells
                         //  must remain FRMDIR_ENVIRONMENT, and each page style's setting is
                         //  supposed to be saved in the file format.
-                        //  The page default may be read from a configuration item later.
-                        SvxFrameDirection eDirection = FRMDIR_HORI_LEFT_TOP;
+                        //  The page default depends on the system language.
+                        SvxFrameDirection eDirection = ScGlobal::IsSystemRTL() ?
+                                        FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
                         pSet->Put( SvxFrameDirectionItem( eDirection ), ATTR_WRITINGDIR );
 
                         rPool.SetPoolDefaultItem( aPageItem );
