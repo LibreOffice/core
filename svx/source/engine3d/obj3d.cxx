@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:06:42 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2666,16 +2666,6 @@ const Matrix4D& E3dCompoundObject::GetFullTransform()
             aFullTfMatrix *= GetParentObj()->GetFullTransform();
 
         bTfHasChanged = FALSE;
-
-        // THB: Temporary fix for SJ's flipping problem
-        // TODO: Clarify with AW
-        // Check whether matrix mirrors
-        const bool bIsPositive( aFullTfMatrix.Determinant() >= 0.0 );
-        if( bIsPositive != bFullTfIsPositive )
-        {
-            bGeometryValid = FALSE; // force geometry recreation, which then takes care of flipping
-            bFullTfIsPositive = bIsPositive;
-        }
     }
     return aFullTfMatrix;
 }
@@ -3391,7 +3381,11 @@ void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3
                         // EIndeutige Bitmap, benutze diese
                         aBmpEx = BitmapEx((((const XFillBitmapItem&) (rSet.Get(XATTR_FILLBITMAP))).GetValue()).GetBitmap());
                     }
-                    else
+
+                    // #i29168#
+                    // The received Bitmap may still be empty (see bug), so the fix needs
+                    // his own if, it is not enough to use the else-tree
+                    if(aBmpEx.IsEmpty())
                     {
                         // Keine eindeutige Bitmap. benutze default
                         //
@@ -4003,42 +3997,53 @@ void E3dCompoundObject::DrawObjectWireframe(ExtOutputDevice& rXOut)
 |*
 \************************************************************************/
 
-// #78972#
-void E3dCompoundObject::ImpCompleteLinePolygon(PolyPolygon3D& rLinePolyPoly,
-    sal_uInt16 nPolysPerRun, BOOL bClosed)
+// #i28528#
+PolyPolygon3D E3dCompoundObject::ImpCompleteLinePolygon(const PolyPolygon3D& rLinePolyPoly, sal_uInt16 nPolysPerRun, sal_Bool bClosed)
 {
+    PolyPolygon3D aRetval;
+
     if(rLinePolyPoly.Count() && nPolysPerRun)
     {
         // get number of layers
         sal_uInt16 nLayers(rLinePolyPoly.Count() / nPolysPerRun);
-        sal_uInt16 a, b, c;
 
         // add vertical Polygons if at least two horizontal ones exist
         if(nLayers > 1)
         {
-            for(a = 0; a < nPolysPerRun; a++)
+            for(sal_uInt16 a(0); a < nPolysPerRun; a++)
             {
                 const sal_uInt16 nPntCnt = rLinePolyPoly[a].GetPointCount();
 
-                for(b = 0; b < nPntCnt; b++)
+                for(sal_uInt16 b(0); b < nPntCnt; b++)
                 {
                     Polygon3D aNewVerPoly(bClosed ? nLayers + 1 : nLayers);
 
-                    for(c = 0; c < nLayers; c++)
+                    for(sal_uInt16 c(0); c < nLayers; c++)
+                    {
                         aNewVerPoly[c] = rLinePolyPoly[(c * nPolysPerRun) + a][b];
+                    }
 
                     // evtl. set first point again to close polygon
                     if(bClosed)
                         aNewVerPoly[aNewVerPoly.GetPointCount()] = aNewVerPoly[0];
 
                     // insert
-                    rLinePolyPoly.Insert(aNewVerPoly);
+                    aRetval.Insert(aNewVerPoly);
                 }
             }
         }
+    }
 
+    return aRetval;
+}
+
+// #i28528#
+void E3dCompoundObject::ImpCorrectLinePolygon(PolyPolygon3D& rLinePolyPoly, sal_uInt16 nPolysPerRun)
+{
+    if(rLinePolyPoly.Count() && nPolysPerRun)
+    {
         // open closed polygons
-        for(a = 0; a < rLinePolyPoly.Count(); a++)
+        for(sal_uInt16 a(0); a < rLinePolyPoly.Count(); a++)
         {
             if(rLinePolyPoly[a].IsClosed())
             {
@@ -4073,13 +4078,19 @@ void E3dCompoundObject::ImpCreateSegment(
     BOOL bCreateNormals,
     BOOL bCharacterExtrude,             // FALSE=exakt, TRUE=ohne Ueberschneidungen
     BOOL bRotateTexture90,              // Textur der Seitenflaechen um 90 Grad kippen
-    PolyPolygon3D* pLineGeometry        // For creation of line geometry
+    // #i28528#
+    PolyPolygon3D* pLineGeometryFront,  // For creation of line geometry front parts
+    PolyPolygon3D* pLineGeometryBack,   // For creation of line geometry back parts
+    PolyPolygon3D* pLineGeometry        // For creation of line geometry in-betweens
     )
 {
     PolyPolygon3D aNormalsLeft, aNormalsRight;
     AddInBetweenNormals(rFront, rBack, aNormalsLeft, bSmoothLeft);
     AddInBetweenNormals(rFront, rBack, aNormalsRight, bSmoothRight);
     Vector3D aOffset = rBack.GetMiddle() - rFront.GetMiddle();
+
+    // #i28528#
+    sal_Bool bTakeCareOfLineGeometry(pLineGeometryFront != 0L || pLineGeometryBack != 0L || pLineGeometry != 0L);
 
     // Ausnahmen: Nicht geschlossen
     if(!rFront.IsClosed())
@@ -4147,11 +4158,21 @@ void E3dCompoundObject::ImpCreateSegment(
             bRotateTexture90);
 
         // #78972#
-        if(pLineGeometry)
+        if(bTakeCareOfLineGeometry)
         {
-            pLineGeometry->Insert(rFront);
+            if(bCreateFront)
+            {
+                if(pLineGeometryFront) pLineGeometryFront->Insert(rFront);
+            }
+            else
+            {
+                if(pLineGeometry) pLineGeometry->Insert(rFront);
+            }
+
             if(bCreateBack)
-                pLineGeometry->Insert(rBack);
+            {
+                if(pLineGeometryBack) pLineGeometryBack->Insert(rBack);
+            }
         }
     }
     else
@@ -4397,15 +4418,26 @@ void E3dCompoundObject::ImpCreateSegment(
             bRotateTexture90);
 
         // #78972#
-        if(pLineGeometry)
+        if(bTakeCareOfLineGeometry)
         {
             if(bCreateFront)
-                pLineGeometry->Insert(aOuterFront);
-            pLineGeometry->Insert(aLocalFront);
-            if(bCreateBack)
             {
-                pLineGeometry->Insert(aLocalBack);
-                pLineGeometry->Insert(aOuterBack);
+                if(pLineGeometryFront) pLineGeometryFront->Insert(aOuterFront);
+            }
+
+            if(bCreateFront)
+            {
+                if(pLineGeometryFront) pLineGeometryFront->Insert(aLocalFront);
+            }
+            else
+            {
+                if(pLineGeometry) pLineGeometry->Insert(aLocalFront);
+            }
+
+            if(bCreateBack && pLineGeometryBack)
+            {
+                pLineGeometryBack->Insert(aLocalBack);
+                pLineGeometryBack->Insert(aOuterBack);
             }
         }
     }
