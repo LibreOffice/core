@@ -35,6 +35,7 @@ import javax.swing.event.*;
 */
 public class AccessibilityTree
     extends JTree
+    implements TreeExpansionListener, TreeWillExpandListener
 {
     /** Create a new accessibility tree.  Use the specified message display
         for displaying messages and the specified canvas to draw the
@@ -62,7 +63,31 @@ public class AccessibilityTree
         //        maTreeModel.addTreeModelListener( new TextUpdateListener() );
 
         addMouseListener (new MouseListener (this));
+
+        // Listen to expansions and collapses to change the mouse cursor.
+        addTreeWillExpandListener (this);
+        addTreeExpansionListener (this);
     }
+
+    // Change cursor during expansions to show the user that this is a
+    // lengthy operation.
+    public void treeWillExpand (TreeExpansionEvent e)
+    {
+        setCursor (new Cursor (Cursor.WAIT_CURSOR));
+    }
+    public void treeWillCollapse (TreeExpansionEvent e)
+    {
+        setCursor (new Cursor (Cursor.WAIT_CURSOR));
+    }
+    public void treeExpanded (TreeExpansionEvent e)
+    {
+        setCursor (new Cursor (Cursor.DEFAULT_CURSOR));
+    }
+    public void treeCollapsed (TreeExpansionEvent e)
+    {
+        setCursor (new Cursor (Cursor.DEFAULT_CURSOR));
+    }
+
 
 
     public void SetCanvas (Canvas aCanvas)
