@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-29 15:23:10 $
+ *  last change: $Author: vg $ $Date: 2002-05-31 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
                     xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
                 if ( xDisp.is() )
                 {
-                    ::com::sun::star::uno::Sequence <::com::sun::star::beans::PropertyValue > aArgs(1);
+                    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
                     ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
                     pArg[0].Name = rtl::OUString::createFromAscii("Referer");
                     pArg[0].Value <<= ::rtl::OUString( mpObjShell->GetMedium()->GetName() );
