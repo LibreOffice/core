@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 15:01:56 $
+ *  last change: $Author: os $ $Date: 2002-03-27 08:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     ImageList IL_PRE_BITMAPS
     {
-        ImageBitmap = Bitmap { File = "preview.bmp" ; };
+        ImageBitmap = Bitmap { File = "pr_eview.bmp" ; };
         MaskColor = STD_MASKCOLOR ;
         IdList =
         {
@@ -616,7 +616,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     ImageList IL_SDW_BITMAPS
     {
-        ImageBitmap = Bitmap { File = "shadow.bmp" ; };
+        ImageBitmap = Bitmap { File = "sh_adow.bmp" ; };
         MaskColor = STD_MASKCOLOR ;
         IdList =
         {

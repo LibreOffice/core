@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:19:40 $
+ *  last change: $Author: os $ $Date: 2002-03-27 08:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     ImageList IL_ICON
     {
-        ImageBitmap = Bitmap { File = "numfmt.bmp" ; };
+        ImageBitmap = Bitmap { File = "nu_mfmt.bmp" ; };
         MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
         IdList =
         {

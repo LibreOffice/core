@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gt $ $Date: 2002-01-31 11:15:57 $
+ *  last change: $Author: os $ $Date: 2002-03-27 08:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,7 +1001,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     ImageList IL_LOCK_BMPS
     {
-        ImageBitmap = Bitmap { File = "lockmode.bmp" ; };
+        ImageBitmap = Bitmap { File = "lo_ckmode.bmp" ; };
         MaskColor = IL_LOCK_MCOL ;
         IdList =
         {
