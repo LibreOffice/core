@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 11:49:02 $
+ *  last change: $Author: mba $ $Date: 2001-09-18 15:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
         case INET_PROT_SLOT :
         {
             URL aTargetURL;
+            aTargetURL.Complete = aURL;
+            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+            xTrans->parseStrict( aTargetURL );
+
             SfxViewFrame* pViewFrame = NULL;
             Reference < XController > xController;
             if ( rFrame.is() )
@@ -107,10 +111,6 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
             Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
             if ( xProvider.is() )
             {
-                aTargetURL.Complete = aURL;
-                Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-                xTrans->parseStrict( aTargetURL );
-
                 Reference < XDispatch > xDisp = xProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
                 if ( xDisp.is() )
                 {
