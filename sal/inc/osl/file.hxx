@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-17 17:21:06 $
+ *  last change: $Author: obr $ $Date: 2001-09-19 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,6 +695,7 @@ public:
      E_NOENT        No such file or directory<br>
      E_ACCES        permission denied<P>
      E_ISDIR        Is a directory<p>
+     E_AGAIN        A write lock could not be established<p>
 
      These errorcodes can (eventually) be returned:<p>
      E_NOTDIR       Not a directory<br>
