@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-30 20:24:37 $
+ *  last change: $Author: os $ $Date: 2001-09-11 11:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9488,6 +9488,21 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ turkish ] = "Hyperlink'i düzenle";
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkkiä";
+};
+SfxSlotInfo FN_SECTION_APPENDNODE
+{
+    SlotName = "Absatz an Bereich anfügen";
+    SlotName [ english ] =  "Append paragraph to section";
+};
+SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
+{
+    SlotName = "Zahlenerkennung";
+    SlotName [ english ] =  "Number recognition";
+};
+SfxSlotInfo FN_UPDATE_CHARTS
+{
+    SlotName = "Diagramme aktualisieren";
+    SlotName [ english ] =  "Update Charts";
 };
 
 

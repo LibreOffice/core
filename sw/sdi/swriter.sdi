@@ -5802,7 +5802,7 @@ SfxBoolItem TableNumberRecognition FN_SET_MODOPT_TBLNUMFMT
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
+    GroupId = GID_TABLE;
 ]
 
 //--------------------------------------------------------------------------
