@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 07:50:55 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,13 @@ namespace dbaui
         @return the corresponding com::sun::star::awt::TextAlign
     */
     sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment);
+
+    /** maps com::sun::star::awt::TextAlign to SvxCellHorJustify
+        @param com::sun::star::awt::TextAlign& _nAlignment
+        @return the corresponding SvxCellHorJustify
+    */
+    SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment);
+
     /** fill a column with ui data of a field description
         @param  _rxColumn   the column which should be filled
         @param  _pFieldDesc the source of the data

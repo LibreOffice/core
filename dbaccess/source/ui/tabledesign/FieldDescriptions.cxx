@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:02 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace dbaui;
@@ -210,7 +213,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
         if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
             SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
-            SetHorJustify((SvxCellHorJustify)::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ALIGN)));
+            SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT16(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
             SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:05 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,7 +1068,7 @@ void OTableController::loadData()
                 //  pActFieldDescr->SetPrimaryKey(pPrimary->GetValue());
                 pActFieldDescr->SetDescription(sDescription);
                 pActFieldDescr->SetAutoIncrement(bIsAutoIncrement);
-                pActFieldDescr->SetHorJustify((SvxCellHorJustify)nAlign);
+                pActFieldDescr->SetHorJustify(dbaui::mapTextJustify(nAlign));
                 pActFieldDescr->SetCurrency(bIsCurrency);
 
                 //////////////////////////////////////////////////////////////////////

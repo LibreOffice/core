@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:18:58 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,20 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
     return nAlignment;
 }
 // -----------------------------------------------------------------------------
+SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
+{
+    SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_LEFT;
+    switch (_nAlignment)
+    {
+        case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
+        case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
+        case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
+        default:
+            OSL_ENSURE(0,"Invalid TextAlign!");
+    }
+    return eJustify;
+}
+// -----------------------------------------------------------------------------
 void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
 {
     if ( _pFieldDesc->GetFormatKey() != NumberFormat::UNDEFINED && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY) )
@@ -828,14 +842,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
             SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
             Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
             if (aAlignment.hasValue())
-                switch (::comphelper::getINT16(aAlignment))
-                {
-                    case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
-                    case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
-                    case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
-                    default:
-                        OSL_ENSURE(0,"Invalid TextAlign!");
-                }
+                eJustify = dbaui::mapTextJustify(::comphelper::getINT16(aAlignment));
             sal_Int32  nFormatKey = 0;
             if ( bHasFormat )
                 nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
