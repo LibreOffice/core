@@ -187,6 +187,7 @@ sub create_directories
     else
     {
         if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $path = $path . $installer::globals::product . "_languagepack" . $installer::globals::separator; }
+        elsif ( $installer::globals::patch ) { $path = $path . $installer::globals::product . "_patch" . $installer::globals::separator; }
         else { $path = $path . $installer::globals::product . $installer::globals::separator; }
 
         create_directory($path);
