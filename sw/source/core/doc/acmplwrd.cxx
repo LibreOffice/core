@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 14:35:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,54 +397,6 @@ BOOL SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
                 memmove( ppData+1, ppData, nInsPos * sizeof( void* ) );
                 *ppData = pNew;
             }
-        }
-    }
-    return bRet;
-}
-
-BOOL SwAutoCompleteWord::RemoveWord( const String& rWord )
-{
-    BOOL bRet = FALSE;
-    USHORT nPos;
-    const StringPtr pStr = (StringPtr)&rWord;
-    if( !bLockWordLst && aWordLst.Seek_Entry( pStr, &nPos ))
-    {
-        void* pDel = aWordLst[ nPos ];
-        aWordLst.Remove(nPos);
-
-        nPos = aLRULst.GetPos( pDel );
-        ASSERT( USHRT_MAX != nPos, "String nicht gefunden" );
-        aLRULst.Remove( nPos );
-        delete (SwAutoCompleteString*)pDel;
-
-    }
-    return bRet;
-}
-
-BOOL SwAutoCompleteWord::SearchWord( const String& rWord, USHORT* pFndPos ) const
-{
-    const StringPtr pStr = (StringPtr)&rWord;
-    return aWordLst.Seek_Entry( pStr, pFndPos );
-}
-
-
-BOOL SwAutoCompleteWord::SetToTop( const String& rWord )
-{
-    BOOL bRet = FALSE;
-    USHORT nPos;
-    const StringPtr pStr = (StringPtr)&rWord;
-    if( !bLockWordLst && aWordLst.Seek_Entry( pStr, &nPos ))
-    {
-        bRet = TRUE;
-        void* pTop = aWordLst[ nPos ];
-
-        nPos = aLRULst.GetPos( pTop );
-        ASSERT( USHRT_MAX != nPos, "String nicht gefunden" );
-        if( nPos )
-        {
-            void** ppData = (void**)aLRULst.GetData();
-            memmove( ppData+1, ppData, nPos * sizeof( void* ) );
-            *ppData = pTop;
         }
     }
     return bRet;
