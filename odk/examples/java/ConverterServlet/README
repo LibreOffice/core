@@ -1,22 +1,38 @@
 Servlet for converting documents
+================================
+
+Build preparation:
+==================
+In the file "ConverterServlet.html", search for the following line:
+<form action="http://localhost:8080/conversion/servlet/ConverterServlet" method=post enctype="multipart/form-data">
+Replace the existing IP address (localhost) with your intended IP address.
 
 Installation instructions:
-- If no web server is available you should install your favourite web server.
-- Download the servlet support Java archive (cos.jar) from 
-  http://www.servlets.com/cos/index.html and copy the file to the directory 
-  <OFFICE_HOME>/program/classes. Also make these classes known to your web server.
-- Make sure the Servlet API is in the classpath of your web server. You can 
-  download the Servlet API from http://java.sun.com/products/servlet/index.html . 
-  Also, you must copy the file "servlet.jar" to the directory <OFFICE_HOME>/program/classes.
-- Use your GNU make (http://www.gnu.org) to build the servlet class.
-- Make the servlet class known to your web server.
+==========================
+1. If no web server is available you should install your favourite web server.
+   The example was tested with a Tomcat 4.1 server (http://jakarta.apache.org/tomcat/)
+2. Download the servlet support Java archive (cos.jar) from 
+   http://www.servlets.com/cos/index.html and copy the file to the directory 
+   <OFFICE_HOME>/program/classes. If you don't use the created WAR (WAR = simple web archive file, it 
+   is similar to a normal Jar file) file, please make these classes also known to your web server.
+3. You need also the Servlet API (servlet.jar). The Tomcat server comes with this Servlet API. Please
+   copy the file "servlet.jar" to the directory <OFFICE_HOME>/program/classes.
+   If you don't use the Tomcat server, make sure that the Servlet API is in the classpath of your web 
+   server. You can download the Servlet API from http://java.sun.com/products/servlet/index.html . 
+4. Use your GNU make (http://www.gnu.org) to build the servlet class.
+5. Make the servlet class known to your web server.
+   The example creates also a WAR file which can be easy deployed in a Tomcat server.
+   5.1 Browse the 'Tomcat Web Application Manager'
+   5.2 Navigate into the section 'Upload a WAR file to install'
+   5.3 Browse to your generated WAR file and select it
+   5.4 install it
 
+  
 Converting documents with the servlet:
-- In the file "ConverterServlet.html", search for the following line:
-  <form action="http://127.0.0.1:8100/servlet/ConverterServlet" method=post enctype="multipart/form-data">
-  Replace the existing IP address with your intended IP address.
-- Open the file "ConverterServlet.html" in your web browser and select a file,
-  a type to convert the file to, and the extension for the converted file.
-- Press the button. The document will be uploaded to the server, converted and
-  pushed back to the client. Your browser will open a dialog for saving the
-  converted document.
+======================================
+1. Browse your web server "http://<your_ip>/conversion/ConverterServlet.html" or
+   open the file "ConverterServlet.html" in your web browser and select a file.
+2. Select a type to convert the file to, and the extension for the converted file.
+3. Press the button. The document will be uploaded to the server, converted and
+   pushed back to the client. Your browser will open a dialog for saving the
+   converted document.
