@@ -5,7 +5,10 @@ Release: 1
 Group: Office
 License: LGPL, SISSL
 AutoReqProv: no
-Requires: openofficeorg-core01, suse-release
+# /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
+Requires: openofficeorg-core01, /etc/SuSE-release
+# .. but not for Sun JDS
+Conflicts: SunDesktopVersion
 %define _unpackaged_files_terminate_build 0
 %description 
 OpenOffice.org desktop integration
