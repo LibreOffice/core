@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:29:42 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
+#endif
 #include <svx/boxitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/sizeitem.hxx>
@@ -883,6 +886,12 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                     break;
             case    OST_Drawing:
                     {
+                        if( !pExtrusionBarShell )
+                        {
+                            pExtrusionBarShell = new svx::ExtrusionBar( this );
+                        }
+                        AddSubShell(  *pExtrusionBarShell );
+
                         if ( !pDrawShell )
                         {
                             pDocSh->MakeDrawLayer();
@@ -1542,6 +1551,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     nCurRefDlgId(0),            \
     pNavSettings(NULL),         \
     aTarget( this ),            \
+    pExtrusionBarShell(NULL),   \
     pAccessibilityBroadcaster(NULL)
 
 
@@ -1809,6 +1819,7 @@ __EXPORT ScTabViewShell::~ScTabViewShell()
     //  #54104# alles auf NULL, falls aus dem TabView-dtor noch darauf zugegriffen wird
     //! (soll eigentlich nicht !??!?!)
 
+    DELETEZ(pExtrusionBarShell);
     DELETEZ(pCellShell);
     DELETEZ(pPageBreakShell);
     DELETEZ(pDrawShell);
