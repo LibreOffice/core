@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdservice.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:47 $
+ *  last change: $Author: vg $ $Date: 2002-11-11 11:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ ServiceTypeDescriptionImpl::getOptionalInterfaces()
 // virtual
 Sequence< PropertyDescription > SAL_CALL
 ServiceTypeDescriptionImpl::getProperties()
+    throw ( RuntimeException )
 {
     if ( !_pProps )
     {
