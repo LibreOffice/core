@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:50:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,21 +85,17 @@ namespace func_provider
 
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
 {
-    OSL_TRACE("ActiveMSPList::ActiveMSPList) - ctor");
     userDirString = ::rtl::OUString::createFromAscii("user");
     shareDirString =  ::rtl::OUString::createFromAscii("share");
 }
 
 ActiveMSPList::~ActiveMSPList()
 {
-    OSL_TRACE("ActiveMSPList::ActiveMSPList) - dtor");
 }
 
 Reference< provider::XScriptProvider >
 ActiveMSPList::createNewMSP( const ::rtl::OUString& context ) throw( RuntimeException )
 {
-    OSL_TRACE("ActiveMSPList::createNewMSP() context [%s]",
-        ::rtl::OUStringToOString( context , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("com.sun.star.script.provider.MasterScriptProvider");
     Sequence< Any > args(1);
     args[ 0 ] <<= context;
@@ -122,7 +118,6 @@ ActiveMSPList::getActiveProviders()
 
     for ( Msp_hash::iterator h_it = m_hMsps.begin(); h_it != h_itEnd; ++h_it )
     {
-        OSL_TRACE("Adding application browsenode index [ %d ]", count );
         children[ count++ ] =  h_it->second;
     }
 
@@ -131,7 +126,6 @@ ActiveMSPList::getActiveProviders()
 
     for ( Model_map::iterator m_it = m_mModels.begin(); m_it != m_itEnd; ++m_it )
     {
-        OSL_TRACE("Adding document browsenode index [ %d ]", count  );
         children[ count++ ] = m_it->second;
     }
     return children;
@@ -145,7 +139,6 @@ ActiveMSPList::createMSP( const Any& aContext )
     Reference< provider::XScriptProvider > msp;
     if (  ! ( aContext.getValueType() == ::getCppuType((const ::rtl::OUString* ) NULL ) ) )
     {
-        OSL_TRACE("ActiveMSPList::createMSP() for model");
         Reference< frame::XModel> xModel( aContext, UNO_QUERY );
         if ( xModel.is() )
         {
@@ -229,9 +222,6 @@ void
 ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
                const Reference< provider::XScriptProvider >& msp )
 {
-    OSL_TRACE("ActiveMSPList::addActiveMSP() for %s",
-                ::rtl::OUStringToOString( xModel->getURL(),
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     ::osl::MutexGuard guard( m_mutex );
     Model_map::const_iterator itr = m_mModels.find( xModel );
     if ( itr == m_mModels.end() )
@@ -250,15 +240,7 @@ ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
         }
         catch ( RuntimeException& e )
         {
-            OSL_TRACE("ActiveMSPList::addActiveMSP() failed to add self as listener: %s",
-                ::rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-    }
-
-    else
-    {
-        OSL_TRACE("ActiveMSPList::addActiveMSP() model for document exists already in map" );
     }
 }
 
@@ -268,7 +250,6 @@ ActiveMSPList::disposing( const ::com::sun::star::lang::EventObject& Source )
 throw ( ::com::sun::star::uno::RuntimeException )
 
 {
-    OSL_TRACE("ActiveMSPList::disposing() ");
     Reference< frame::XModel > xModel;
     try
     {
@@ -276,33 +257,23 @@ throw ( ::com::sun::star::uno::RuntimeException )
         xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY );
         if ( xModel.is() )
         {
-            OSL_TRACE("ActiveMSPList::disposing() model is valid");
-
             ::osl::MutexGuard guard( m_mutex );
             Model_map::const_iterator itr = m_mModels.find( xModel );
             if ( itr != m_mModels.end() )
             {
-                OSL_TRACE("ActiveMSPList::disposing()  model for doc %s exists in map",
-                     ::rtl::OUStringToOString( xModel->getURL(),
-                         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 m_mModels.erase( xModel );
             }
-        }
-        else
-        {
-            OSL_TRACE("ActiveMSPList::disposing() doc model invalid or unknown" );
         }
     }
     catch ( RuntimeException& e )
     {
-        // if we get an exception here, there is not much we can do
-        // about it can't throw as it will screw up the model that is calling dispose
+        // if we get an exception here, there is not much we can do about
+        // it can't throw as it will screw up the model that is calling dispose
         ::rtl::OUString message =
-            OUSTR(
-                "ActiveMSPList::disposing: document invalid model." );
+            OUSTR( "ActiveMSPList::disposing: document invalid model." );
         message = message.concat( e.Message );
         OSL_TRACE( ::rtl::OUStringToOString( message,
-                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 }
 
