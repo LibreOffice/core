@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 12:42:18 $
+ *  last change: $Author: mba $ $Date: 2001-10-12 11:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
+#include <com/sun/star/mozilla/XPluginInstance.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -317,7 +321,16 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         // He could do nothing then ... but it doesnt perform, if we try it!
                                         if( implts_isLoadableContent( aURL ) == sal_True )
                                         {
-                                            xReturn = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER );
+                        css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
+                        css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
+                        css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
+                        if ( xPlug.is() )
+                        {
+                        css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
+                        xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                        }
+                        else
+                                                xReturn = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER );
                                         }
                                     }
                                     break;
