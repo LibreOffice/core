@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-05 12:41:10 $
+ *  last change: $Author: pb $ $Date: 2002-09-23 13:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,7 @@ public:
     void                SetFactory( const String& rFactory );
     void                SetHelpURL( const String& rURL );
     void                DoAction( USHORT nActionId );
+    void                CloseWindow();
 
     void                UpdateToolbox();
     inline void         OpenKeyword( const String& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
