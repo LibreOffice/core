@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:09:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,15 @@ class SwTxtNode;
 
 extern char __FAR_DATA sOutlineStr[];   // SWG-Filter
 
-BYTE GetRealLevel( const BYTE nLvl );
+BYTE SW_DLLPUBLIC GetRealLevel( const BYTE nLvl );
 
-BOOL IsNum( BYTE nLvl );
+BOOL SW_DLLPUBLIC IsNum( BYTE nLvl );
 
-BOOL IsShowNum( BYTE nLvl );
+BOOL SW_DLLPUBLIC IsShowNum( BYTE nLvl );
 
-void SetNoNum( BYTE * nLvl, BOOL nVal = TRUE );
+void SW_DLLPUBLIC SetNoNum( BYTE * nLvl, BOOL nVal = TRUE );
+
+void SW_DLLPUBLIC SetLevel( BYTE * nLvl, BYTE nNewLvl);
 
 const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
 
@@ -334,7 +336,6 @@ class SW_DLLPUBLIC SwNodeNum
     BOOL bStartNum;                     // Numerierung neu starten
     BOOL bContNum;                      // #111955#
                                         // TRUE -> in continuous numbering
-
 public:
     SwNodeNum( BYTE nLevel = NO_NUMBERING, USHORT nSetVal = USHRT_MAX );
     SwNodeNum& operator=( const SwNodeNum& rCpy );
@@ -342,7 +343,7 @@ public:
     BOOL operator==( const SwNodeNum& ) const;
 
     BYTE GetLevel() const                   { return nMyLevel; }
-    void SetLevel( BYTE nVal )              { nMyLevel = nVal; }
+    void SetLevel( BYTE nVal )              { ::SetLevel(&nMyLevel, nVal); }
 
     BOOL IsStart() const                    { return bStartNum; }
     void SetStart( BOOL bFlag = TRUE )      { bStartNum = bFlag; }
