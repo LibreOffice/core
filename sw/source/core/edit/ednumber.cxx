@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:43:56 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 10:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ BOOL SwEditShell::IsFirstOfNumRule() const
     SwPaM * pCrsr = GetCrsr();
     if (pCrsr->GetNext() == pCrsr)
     {
-        bResult = IsFirstOfNumRule(*pCrsr->GetPoint());
+        bResult = IsFirstOfNumRule(*pCrsr);
     }
 
     return bResult;
