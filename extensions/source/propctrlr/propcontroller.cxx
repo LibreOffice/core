@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 08:37:11 $
+ *  last change: $Author: fs $ $Date: 2001-03-22 10:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,9 +652,6 @@ namespace pcr
     {
         try
         {
-            // stop inspecting the old object
-            stopIntrospection();
-
             if (haveView())
             {
                 // hide the property box so that it does not flicker
@@ -662,6 +659,9 @@ namespace pcr
                 // clear the property box
                 getPropertyBox()->ClearAll();
             }
+
+            // stop inspecting the old object
+            stopIntrospection();
 
             // TODO: notify the listeners that our object has been reset (to NULL, for the moment)
             // external instances may want to adjust the title to this new situation
@@ -970,6 +970,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/20 08:37:11  fs
+ *  #85148# when inspecting the control, care for a NULL access
+ *
  *  Revision 1.10  2001/03/15 09:02:28  fs
  *  cppuhelper/extract -> comphelper/extract
  *
