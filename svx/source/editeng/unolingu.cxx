@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 13:38:24 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 #pragma hdrstop
 
+#ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
-
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#endif
 
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
@@ -74,9 +74,13 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -89,6 +93,31 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XAVAILABLELOCALES_HPP_
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
+#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
+#include <com/sun/star/ucb/XContentAccess.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_XSORTEDDYNAMICRESULTSETFACTORY_HPP_
+#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_NUMBEREDSORTINGINFO_HPP_
+#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
+#include <com/sun/star/ucb/XContentAccess.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
 #include <comphelper/processfactory.hxx>
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -101,6 +130,22 @@
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
 #endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+#ifndef  _UCBHELPER_COMMANDENVIRONMENT_HXX
+#include <ucbhelper/commandenvironment.hxx>
+#endif
+#ifndef  _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -118,6 +163,7 @@
 
 using namespace ::rtl;
 using namespace ::comphelper;
+using namespace ::linguistic;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
@@ -126,7 +172,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
 
-#define A2OU(x) OUString::createFromAscii(x)
+#define CSS com::sun::star
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -182,7 +228,7 @@ Sequence< OUString > lcl_RemoveMissingEntries(
 
 
 Sequence< OUString > lcl_GetLastFoundSvcs(
-        SvtLinguConfigItem &rCfg,
+        SvtLinguConfig &rCfg,
         const OUString &rLastFoundList ,
         const Locale &rAvailLocale )
 {
@@ -271,22 +317,29 @@ Sequence< OUString > lcl_MergeSeq(
 ///////////////////////////////////////////////////////////////////////////
 
 // static member initialization
-BOOL SvxLinguConfigUpdate::bUpdated = FALSE;
+INT16 SvxLinguConfigUpdate::nNeedUpdating = -1;
+INT32 SvxLinguConfigUpdate::nCurrentDataFilesChangedCheckValue = -1;
 
 void SvxLinguConfigUpdate::UpdateAll()
 {
-    if (!IsUpdated())
+    RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll" );
+
+    if (IsNeedUpdateAll())
     {
+        RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::UpdateAll - updating..." );
+
+        DBG_ASSERT( nNeedUpdating == 1, "SvxLinguConfigUpdate::UpdateAll already updated!" );
+
         Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
         DBG_ASSERT( xLngSvcMgr.is(), "service manager missing")
         if (!xLngSvcMgr.is())
             return;
 
-        SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
+        SvtLinguConfig aCfg;
 
         const sal_Char * apServices[3]      =  { SN_THESAURUS,         SN_SPELLCHECKER,            SN_HYPHENATOR };
-        const sal_Char * apActiveLists[3]    =  { "ThesaurusList",      "SpellCheckerList",         "HyphenatorList" };
-        const sal_Char * apLastFoundLists[3] =  { "LastFoundThesauri",  "LastFoundSpellCheckers",   "LastFoundHyphenators" };
+        const sal_Char * apActiveLists[3]    =  { "ServiceManager/ThesaurusList",      "ServiceManager/SpellCheckerList",         "ServiceManager/HyphenatorList" };
+        const sal_Char * apLastFoundLists[3] =  { "ServiceManager/LastFoundThesauri",  "ServiceManager/LastFoundSpellCheckers",   "ServiceManager/LastFoundHyphenators" };
 
         for (int k = 0;  k < 3;  ++k)
         {
@@ -379,8 +432,186 @@ void SvxLinguConfigUpdate::UpdateAll()
             DBG_ASSERT( bRes, "failed to set LastFound list" );
         }
 
-        bUpdated = TRUE;
+        nNeedUpdating = 0;
+
+        DBG_ASSERT( nCurrentDataFilesChangedCheckValue != -1, "SvxLinguConfigUpdate::UpdateAll DataFilesChangedCheckValue not yet calculated!" );
+        Any aAny;
+        aAny <<= nCurrentDataFilesChangedCheckValue;
+        aCfg.SetProperty( A2OU( "DataFilesChangedCheckValue" ), aAny );
     }
+}
+
+
+static void StringUpdateHashValue( INT32 &h, const String &rString )
+{
+    INT32 /*h,*/ nLen;
+    /*h =*/ nLen = rString.Len();
+    const sal_Unicode *pStr = rString.GetBuffer();
+
+    if ( nLen < 16 )
+        while ( nLen-- > 0 )
+            h = (h*37) + *(pStr++);
+    else
+    {
+        sal_Int32               nSkip;
+        const sal_Unicode* pEndStr = pStr+nLen-5;
+
+        /* only sample some characters */
+        /* the first 3, some characters between, and the last 5 */
+        h = (h*39) + *(pStr++);
+        h = (h*39) + *(pStr++);
+        h = (h*39) + *(pStr++);
+
+        nSkip = nLen / nLen < 32 ? 4 : 8;
+        nLen -= 8;
+        while ( nLen > 0 )
+        {
+            h = (h*39) + ( *pStr );
+            pStr += nSkip;
+            nLen -= nSkip;
+        }
+
+        h = (h*39) + *(pEndStr++);
+        h = (h*39) + *(pEndStr++);
+        h = (h*39) + *(pEndStr++);
+        h = (h*39) + *(pEndStr++);
+        h = (h*39) + *(pEndStr++);
+    }
+    //return h;
+}
+
+
+INT32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
+{
+    RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue" );
+
+    // list of directories to scan for changed/new/deleted files
+    // 0: regular SO dictionary path
+    // 1: regular OOo dictionary path
+    String aDirectories[2];
+    aDirectories[0] = linguistic::GetFileURL( SvtPathOptions::PATH_LINGUISTIC, String::CreateFromAscii( "x" ) );
+    aDirectories[1] = linguistic::GetFileURL( SvtPathOptions::PATH_LINGUISTIC, String::CreateFromAscii( "ooo" ) );
+    aDirectories[0].Erase( aDirectories[0].Len() - 2, 2 );
+
+    INT32 nHashVal = 0;
+    for (int i = 0;  i < 2;  ++i )
+    {
+        const String rURL = aDirectories[i];
+
+        if( !utl::UCBContentHelper::IsFolder( rURL ) )
+            continue;
+
+        INetURLObject aFolderObj( rURL );
+        DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
+        try
+        {
+            Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+
+            ::ucb::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
+                          new ::ucb::CommandEnvironment( Reference< task::XInteractionHandler >(),
+                                                         Reference< CSS::ucb::XProgressHandler >() ) );
+            Reference< sdbc::XResultSet > xResultSet;
+            Sequence< OUString > aProps(3);
+            OUString* pProps = aProps.getArray();
+            pProps[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+            pProps[1] = OUString::createFromAscii( "Size" );
+            pProps[2] = OUString::createFromAscii( "DateModified" );
+
+            try
+            {
+                Reference< CSS::ucb::XDynamicResultSet > xDynResultSet;
+                ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_DOCUMENTS_ONLY;
+                xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
+
+                Reference < CSS::ucb::XAnyCompareFactory > xCompare;
+                Reference < CSS::ucb::XSortedDynamicResultSetFactory > xSRSFac(
+                    xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory") ) ), UNO_QUERY );
+
+                uno::Sequence< CSS::ucb::NumberedSortingInfo > aSortInfo( 2 );
+                CSS::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
+                pInfo[ 0 ].ColumnIndex = 3;
+                pInfo[ 0 ].Ascending   = sal_False;
+                pInfo[ 1 ].ColumnIndex = 1;
+                pInfo[ 1 ].Ascending   = sal_True;
+
+                Reference< CSS::ucb::XDynamicResultSet > xDynamicResultSet;
+                xDynamicResultSet =
+                        xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xCompare );
+
+                if (xDynamicResultSet.is())
+                    xResultSet = xDynamicResultSet->getStaticResultSet();
+            }
+            catch( uno::Exception& )
+            {
+            }
+
+            if (xResultSet.is())
+            {
+                Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
+                Reference< CSS::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+
+                try
+                {
+                    while (xResultSet->next())
+                    {
+                        String   aTitle     = xRow->getString(1);
+                        sal_Int64 nSize     = xRow->getLong(2);
+                        util::DateTime aDT  = xRow->getTimestamp(3);
+
+                        String aDateTime( String::CreateFromInt32( aDT.Day ) );
+                        aDateTime.Append( (sal_Unicode) '.' );
+                        aDateTime += String::CreateFromInt32( aDT.Month );
+                        aDateTime.Append( (sal_Unicode) '.' );
+                        aDateTime += String::CreateFromInt32( aDT.Year );
+                        aDateTime.Append( (sal_Unicode) ' ' );
+                        aDateTime += String::CreateFromInt32( aDT.Hours );
+                        aDateTime.Append( (sal_Unicode) ':' );
+                        aDateTime += String::CreateFromInt32( aDT.Minutes );
+                        aDateTime.Append( (sal_Unicode) '_' );
+                        aDateTime += String::CreateFromInt32( aDT.Seconds );
+
+                        String aSize( String::CreateFromInt64( nSize ) );
+
+                        StringUpdateHashValue( nHashVal, aTitle );
+                        StringUpdateHashValue( nHashVal, aSize );
+                        StringUpdateHashValue( nHashVal, aDateTime );
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+    }
+
+    return nHashVal;
+}
+
+
+BOOL SvxLinguConfigUpdate::IsNeedUpdateAll()
+{
+    RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::IsNeedUpdateAll" );
+    if (nNeedUpdating == -1)    // need to check if updating is necessary
+    {
+        // calculate hash value for current data files
+        nCurrentDataFilesChangedCheckValue = CalcDataFilesChangedCheckValue();
+
+        // compare hash value and check value to see if anything has changed
+        // and thus the configuration needs to be updated
+        SvtLinguOptions aLinguOpt;
+        SvtLinguConfig aCfg;
+        aCfg.GetOptions( aLinguOpt );
+        nNeedUpdating = (nCurrentDataFilesChangedCheckValue == aLinguOpt.nDataFilesChangedCheckValue) ? 0 : 1;
+    }
+    DBG_ASSERT( nNeedUpdating != -1,
+            "need for linguistic configuration update should have been already checked." );
+
+    return nNeedUpdating == 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -435,8 +666,8 @@ void ThesDummy_Impl::GetCfgLocales()
 {
     if (!pLocaleSeq)
     {
-        SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
-        String  aNode( A2OU( "ThesaurusList" ) );
+        SvtLinguConfig aCfg;
+        String  aNode( A2OU( "ServiceManager/ThesaurusList" ) );
         Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
         const OUString *pNodeNames = aNodeNames.getConstArray();
         INT32 nLen = aNodeNames.getLength();
@@ -454,7 +685,7 @@ void ThesDummy_Impl::GetCfgLocales()
 void ThesDummy_Impl::GetThes_Impl()
 {
     // update configuration before accessing the service
-    if (!SvxLinguConfigUpdate::IsUpdated())
+    if (SvxLinguConfigUpdate::IsNeedUpdateAll())
         SvxLinguConfigUpdate::UpdateAll();
 
     if (!xThes.is())
@@ -476,11 +707,11 @@ uno::Sequence< lang::Locale > SAL_CALL
         ThesDummy_Impl::getLocales()
             throw(uno::RuntimeException)
 {
-    if (SvxLinguConfigUpdate::IsUpdated())
+    if (!SvxLinguConfigUpdate::IsNeedUpdateAll())   // configuration already update and thus lingu DLL's already loaded ?
         GetThes_Impl();
     if (xThes.is())
         return xThes->getLocales();
-    else if (!pLocaleSeq)
+    else if (!pLocaleSeq)       // if not already loaded save startup time by avoiding loading them now
         GetCfgLocales();
     return *pLocaleSeq;
 }
@@ -490,11 +721,12 @@ sal_Bool SAL_CALL
         ThesDummy_Impl::hasLocale( const lang::Locale& rLocale )
             throw(uno::RuntimeException)
 {
-    if (SvxLinguConfigUpdate::IsUpdated())
+    if (!SvxLinguConfigUpdate::IsNeedUpdateAll())   // configuration already update and thus lingu DLL's already loaded ?
         GetThes_Impl();
     if (xThes.is())
         return xThes->hasLocale( rLocale );
-    else if (!pLocaleSeq)
+    else if (!pLocaleSeq)       // if not already loaded save startup time by avoiding loading them now
+        GetCfgLocales();
         GetCfgLocales();
     BOOL bFound = FALSE;
     INT32 nLen = pLocaleSeq->getLength();
@@ -568,7 +800,7 @@ public:
 void SpellDummy_Impl::GetSpell_Impl()
 {
     // update configuration before accessing the service
-    if (!SvxLinguConfigUpdate::IsUpdated())
+    if (SvxLinguConfigUpdate::IsNeedUpdateAll())
         SvxLinguConfigUpdate::UpdateAll();
 
     if (!xSpell.is())
@@ -687,7 +919,7 @@ public:
 void HyphDummy_Impl::GetHyph_Impl()
 {
     // update configuration before accessing the service
-    if (!SvxLinguConfigUpdate::IsUpdated())
+    if (SvxLinguConfigUpdate::IsNeedUpdateAll())
         SvxLinguConfigUpdate::UpdateAll();
 
     if (!xHyph.is())
