@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 10:31:35 $
+ *  last change: $Author: kso $ $Date: 2000-12-04 10:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,7 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
   m_aUri( rUri ),
   m_aProps( rProps ),
   m_eState( PERSISTENT ),
-  m_pProvider( pProvider ),
-  m_bDirty( sal_False )
+  m_pProvider( pProvider )
 {
 }
 
@@ -275,8 +274,7 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
   m_xPackage( Package ),
   m_aUri( rUri ),
   m_eState( TRANSIENT ),
-  m_pProvider( pProvider ),
-  m_bDirty( sal_False )
+  m_pProvider( pProvider )
 {
     if ( Info.Type.compareToAscii( PACKAGE_FOLDER_CONTENT_TYPE ) == 0 )
     {
@@ -1838,7 +1836,6 @@ sal_Bool Content::renameData( const Reference< XContentIdentifier >& xOldId,
         // No success indicator!? No return value / exceptions specified.
         xNamed->setName( aNewURI.getName() );
 
-        m_bDirty = sal_True;
         return sal_True;
     }
     catch ( NoSuchElementException & )
@@ -1902,7 +1899,6 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             }
 
             xParentContainer->insertByName( m_aProps.aTitle, makeAny( xNew ) );
-            m_bDirty = sal_True;
         }
         catch ( RuntimeException & )
         {
@@ -1953,7 +1949,6 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 
         xPropSet->setPropertyValue( OUString::createFromAscii( "MediaType" ),
                                     makeAny( m_aProps.aMediaType ) );
-        m_bDirty = sal_True;
 
         //////////////////////////////////////////////////////////////////
         // Store data stream...
@@ -1972,7 +1967,6 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             }
 
             xSink->setInputStream( xStream );
-            m_bDirty = sal_True;
         }
 
         return sal_True;
@@ -2027,7 +2021,6 @@ sal_Bool Content::removeData()
         }
 
         xContainer->removeByName( m_aUri.getName() );
-        m_bDirty = sal_True;
         return sal_True;
     }
     catch ( NoSuchElementException & )
@@ -2048,9 +2041,6 @@ sal_Bool Content::flushData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-//    if ( !m_bDirty )
-//        return sal_True;
-
     // Note: XChangesBatch is only implemented by the package itself, not
     //       by the single entries. Maybe this has to change...
 
@@ -2069,7 +2059,6 @@ sal_Bool Content::flushData()
     try
     {
         xBatch->commitChanges();
-        m_bDirty = sal_False;
         return sal_True;
     }
     catch ( WrappedTargetException & )

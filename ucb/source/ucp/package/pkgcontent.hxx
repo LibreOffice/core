@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 10:42:10 $
+ *  last change: $Author: kso $ $Date: 2000-12-04 10:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ class Content : public ::ucb::ContentImplHelper,
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >    m_xPackage;
     ContentProvider*        m_pProvider;
-    sal_Bool                m_bDirty;
 
 private:
     Content( const com::sun::star::uno::Reference<
