@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:05:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1580,7 +1580,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             fN *= pDesc->Scaling;
             nNormalSpacing = (sal_Int16)( fN + 0.5 );
         }
-        if ( bFirstParagraph && ( nLineSpacing > nNormalSpacing ) )
+        if ( !mbFontIndependentLineSpacing && bFirstParagraph && ( nLineSpacing > nNormalSpacing ) )    // sj: i28747, no replacement for fixed linespacing
         {
             nLineSpacing = nNormalSpacing;
             nPropertyFlags |= 0x00001000;
@@ -4142,6 +4142,8 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
         }
         mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
     }
+    else
+        bRet = sal_False;
     return bRet;
 }
 
@@ -4254,7 +4256,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             pTmp = new SvMemoryStream( 0x200, 0x200 );
                         ImplWriteClickAction( *pTmp, eCa, bMediaClickAction );
                     }
-                    mpPptEscherEx->EnterGroup( &maRect, pTmp );
+                    sal_uInt32 nShapeId = mpPptEscherEx->EnterGroup( &maRect, pTmp );
+                    aSolverContainer.AddShape( mXShape, nShapeId );
                     delete pTmp;
                 }
             }
