@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:51:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,7 +793,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         {
             // create a metafile for all shapes
             VirtualDevice   aOut;
-            ExtOutputDevice aXOut( &aOut );
+            XOutputDevice aXOut( &aOut );
 
             // calculate bound rect for all shapes
             Rectangle aBound;
