@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,7 @@
 #include <functional>
 #define INCLUDED_FUNCTIONAL
 #endif
-#ifndef INCLUDED_HASH_SET
 #include <hash_set>
-#define INCLUDED_HASH_SET
-#endif
 #ifndef INCLUDED_SET
 #include <set>
 #define INCLUDED_SET
