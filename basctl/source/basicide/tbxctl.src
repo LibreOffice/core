@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 22:05:21 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 17:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ToolBox RID_TOOLBOX
             Text[ russian ] = "Κνξοκΰ κξμΰνδϋ";
             Text[ polish ] = "Przycisk komendy";
             Text[ japanese ] = "ΊΟέΔήΞήΐέ";
-            Text[ chinese_traditional ] = "©R¥O«φ¶s";
+            Text[ chinese_traditional ] = "«ό¥O«φ¶s";
             Text[ arabic ] = "ÒΡ ΓγΡ";
             Text[ greek ] = "Πεδίο εντολής";
             Text[ korean ] = "Έν·Ι ΉφΖ°";
@@ -278,7 +278,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "FrameControl";
             Text[ japanese ] = "ΜΪ°ΡΊέΔΫ°Ω";
             Text[ chinese_traditional ] = "°T®Ψ±±¨ξ¶µ";
-            Text[ arabic ] = "ΪδΥΡ ΚΝίγ ΕΨΗΡ";
+            Text[ arabic ] = "FrameControl";
             Text[ greek ] = "Στοιχείου ελέγχου πλαισίου";
             Text[ korean ] = "ΗΑ·ΉΐΣ ΔΑΖ®·Ρ";
             Text[ turkish ] = "FrameControl";
