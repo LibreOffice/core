@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:44:44 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-#ifndef _SVEDIT_HXX
-#include <svtools/svmedit.hxx>
+#ifndef _SVTOOLS_SVMEDIT2_HXX
+#include <svtools/svmedit2.hxx>
 #endif
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
@@ -109,14 +109,19 @@
 
 #define RECOVERY_CMDPART_PROTOCOL                       ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:")
 
-#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE              ::rtl::OUString::createFromAscii("/doEmergencySave")
-#define RECOVERY_CMDPART_DO_RECOVERY                    ::rtl::OUString::createFromAscii("/doAutoRecovery" )
-#define RECOVERY_CMDPART_DO_CRASHREPORT                 ::rtl::OUString::createFromAscii("/doCrashReport"  )
+#define RECOVERY_CMDPART_DO_PREPARE_EMERGENCY_SAVE      ::rtl::OUString::createFromAscii("/doPrepareEmergencySave"  )
+#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE              ::rtl::OUString::createFromAscii("/doEmergencySave"         )
+#define RECOVERY_CMDPART_DO_RECOVERY                    ::rtl::OUString::createFromAscii("/doAutoRecovery"          )
+#define RECOVERY_CMDPART_DO_CRASHREPORT                 ::rtl::OUString::createFromAscii("/doCrashReport"           )
+#define RECOVERY_CMDPART_DO_ENTRY_BACKUP                ::rtl::OUString::createFromAscii("/doEntryBackup"           )
+#define RECOVERY_CMDPART_DO_ENTRY_CLEANUP               ::rtl::OUString::createFromAscii("/doEntryCleanUp"          )
 
-#define RECOVERY_CMD_DO_EMERGENCY_SAVE                  ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEmergencySave")
-#define RECOVERY_CMD_DO_RECOVERY                        ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doAutoRecovery" )
-#define RECOVERY_CMD_DO_CRASHREPORT                     ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doCrashReport"  )
-#define RECOVERY_CMD_DO_FAILURE_SAVE                    ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doFailureSave"  )
+#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE          ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doPrepareEmergencySave")
+#define RECOVERY_CMD_DO_EMERGENCY_SAVE                  ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEmergencySave"       )
+#define RECOVERY_CMD_DO_RECOVERY                        ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doAutoRecovery"        )
+#define RECOVERY_CMD_DO_CRASHREPORT                     ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doCrashReport"         )
+#define RECOVERY_CMD_DO_ENTRY_BACKUP                    ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEntryBackup"         )
+#define RECOVERY_CMD_DO_ENTRY_CLEANUP                   ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEntryCleanUp"        )
 
 #define SERVICENAME_PROGRESSFACTORY                     ::rtl::OUString::createFromAscii("com.sun.star.task.StatusIndicatorFactory")
 #define SERVICENAME_URLTRANSFORMER                      ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer"        )
@@ -127,7 +132,22 @@
 #define PROP_PARENTWINDOW                               ::rtl::OUString::createFromAscii("Window"           )
 #define PROP_STATUSINDICATOR                            ::rtl::OUString::createFromAscii("StatusIndicator"  )
 #define PROP_DISPATCHASYNCHRON                          ::rtl::OUString::createFromAscii("DispatchAsynchron")
-#define PROP_FAILUREPATH                                ::rtl::OUString::createFromAscii("FailurePath"      )
+#define PROP_SAVEPATH                                   ::rtl::OUString::createFromAscii("SavePath"         )
+#define PROP_ENTRYID                                    ::rtl::OUString::createFromAscii("EntryID"          )
+#define PROP_ALLOWPARENTSHOW                            ::rtl::OUString::createFromAscii("AllowParentShow"  )
+
+#define STATEPROP_ID                                    ::rtl::OUString::createFromAscii("ID"           )
+#define STATEPROP_STATE                                 ::rtl::OUString::createFromAscii("DocumentState")
+#define STATEPROP_ORGURL                                ::rtl::OUString::createFromAscii("OriginalURL"  )
+#define STATEPROP_TEMPURL                               ::rtl::OUString::createFromAscii("TempURL"      )
+#define STATEPROP_FACTORYURL                            ::rtl::OUString::createFromAscii("FactoryURL"   )
+#define STATEPROP_TEMPLATEURL                           ::rtl::OUString::createFromAscii("TemplateURL"  )
+#define STATEPROP_TITLE                                 ::rtl::OUString::createFromAscii("Title"        )
+#define STATEPROP_MODULE                                ::rtl::OUString::createFromAscii("Module"       )
+
+#define RECOVERY_OPERATIONSTATE_START                   ::rtl::OUString::createFromAscii("start" )
+#define RECOVERY_OPERATIONSTATE_STOP                    ::rtl::OUString::createFromAscii("stop"  )
+#define RECOVERY_OPERATIONSTATE_UPDATE                  ::rtl::OUString::createFromAscii("update")
 
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                        1
@@ -190,11 +210,26 @@ struct TURLInfo
 {
     public:
 
+    /// unique ID, which is specified by the underlying autorecovery core!
+    sal_Int32 ID;
+
     /// the full qualified document URL
-    ::rtl::OUString URL;
+    ::rtl::OUString OrgURL;
+
+    /// the full qualified URL of the temp. file (if it's exists)
+    ::rtl::OUString TempURL;
+
+    /// a may be existing factory URL (e.g. for untitled documents)
+    ::rtl::OUString FactoryURL;
+
+    /// may be the document base on a template file !?
+    ::rtl::OUString TemplateURL;
 
     /// the pure file name, without path, disc etcpp.
     ::rtl::OUString DisplayName;
+
+    /// the application module, where this document was loaded
+    ::rtl::OUString Module;
 
     /// state info as e.g. VALID, CORRUPTED, NON EXISTING ...
     sal_Int32 DocState;
@@ -207,6 +242,14 @@ struct TURLInfo
 
     /// high contrast icon
     Image HCImage;
+
+    public:
+
+    TURLInfo()
+        : ID           (-1                 )
+        , DocState     (E_UNKNOWN          )
+        , RecoveryState(E_NOT_RECOVERED_YET)
+    {}
 };
 
 //===============================================
@@ -256,13 +299,23 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
         /// TODO
         IRecoveryUpdateListener* m_pListener;
 
+        /** @short  knows the reason, why we listen on our internal m_xRealCore
+                    member.
+
+            @descr  Because we listen for different operations
+                    on the core dispatch implementation, we must know,
+                    which URL we have to use for deregistration!
+         */
+        sal_Bool m_bListenForSaving;
+
     //-------------------------------------------
     // native interface
     public:
 
         //---------------------------------------
         /** @short  TODO */
-        RecoveryCore(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        RecoveryCore(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR         ,
+                           sal_Bool                                                bUsedForSaving);
 
         //---------------------------------------
         /** @short  TODO */
@@ -278,11 +331,13 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        virtual sal_Bool existsFailureURLs();
-
-        //---------------------------------------
-        /** @short  TODO */
-        virtual void storeFailureURLsTo(const ::rtl::OUString& sPath);
+        virtual sal_Bool existsBrokenTempEntries();
+        virtual sal_Bool existsNonRecoveredEntries();
+        static sal_Bool isBrokenTempEntry(const TURLInfo& rInfo);
+        virtual void saveBrokenTempEntries(const ::rtl::OUString& sSaveDir);
+        virtual void saveAllTempEntries(const ::rtl::OUString& sSaveDir);
+        virtual void forgetBrokenTempEntries();
+        virtual void forgetAllRecoveryEntries();
 
         //---------------------------------------
         /** @short  TODO */
@@ -294,6 +349,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
+        virtual void doEmergencySavePrepare();
         virtual void doEmergencySave();
         virtual void doRecovery();
 
@@ -318,8 +374,14 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
     private:
 
         //---------------------------------------
-        /** @short  TODO */
+        /** @short  starts listening on the internal EmergencySave/AutoRecovery core.
+         */
         void impl_startListening();
+
+        //---------------------------------------
+        /** @short  stop listening on the internal EmergencySave/AutoRecovery core.
+         */
+        void impl_stopListening();
 
         //---------------------------------------
         /** @short  TODO */
@@ -468,6 +530,7 @@ class SaveDialog : public IExtendedTabPage
 
         Window          m_aTitleWin;
         FixedText       m_aTitleFT;
+        FixedLine       m_aTitleFL;
         FixedText       m_aDescrFT;
         FixedText       m_aFileListFT;
         ListBox         m_aFileListLB;
@@ -645,19 +708,36 @@ class RecoveryDialog : public IExtendedTabPage
     private:
         Window          m_aTitleWin;
         FixedText       m_aTitleFT;
+        FixedLine       m_aTitleFL;
         FixedText       m_aDescrFT;
         FixedText       m_aProgressFT;
         Window          m_aProgrParent;
         FixedText       m_aFileListFT;
         RecovDocList    m_aFileListLB;
         FixedLine       m_aBottomFL;
-        PushButton      m_aPrevBtn;
         PushButton      m_aNextBtn;
         CancelButton    m_aCancelBtn;
+        String          m_aNextStr;
 
         PushButton*     m_pDefButton;
         RecoveryCore*   m_pCore;
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
+        enum ERecoveryState
+        {
+            E_RECOVERY_PREPARED,            // dialog started ... recovery prepared
+            E_RECOVERY_IN_PROGRESS,         // recovery core still in progress
+            E_RECOVERY_CORE_DONE,           // recovery core finished it's task
+            E_RECOVERY_DONE,                // user clicked "next" button
+            E_RECOVERY_CANCELED,            // user clicked "cancel" button
+            E_RECOVERY_CANCELED_BEFORE,     // user clicked "cancel" button before recovery was started
+            E_RECOVERY_CANCELED_AFTERWARDS, // user clicked "cancel" button after reovery was finished
+            E_RECOVERY_HANDLED              // the recovery wizard page was shown already ... and will be shown now again ...
+        };
+        sal_Int32 m_eRecoveryState;
+        sal_Bool  m_bWaitForUser;
+        sal_Bool  m_bWaitForCore;
+        sal_Bool  m_bUserDecideNext;
+        sal_Bool  m_bWasRecoveryStarted;
 
     //-------------------------------------------
     // member
@@ -710,13 +790,17 @@ class BrokenRecoveryDialog : public ModalDialog
         FixedText       m_aDescrFT;
         FixedText       m_aFileListFT;
         ListBox         m_aFileListLB;
-        PushButton      m_aSaveBtn;
+        FixedText       m_aSaveDirFT;
+        Edit            m_aSaveDirED;
+        PushButton      m_aSaveDirBtn;
         FixedLine       m_aBottomFL;
         OKButton        m_aOkBtn;
         CancelButton    m_aCancelBtn;
 
         ::rtl::OUString m_sSavePath;
         RecoveryCore*   m_pCore;
+        sal_Bool        m_bBeforeRecovery;
+        sal_Bool        m_bExecutionNeeded;
 
     //-------------------------------------------
     // interface
@@ -724,8 +808,9 @@ class BrokenRecoveryDialog : public ModalDialog
 
         //---------------------------------------
         /** @short TODO */
-        BrokenRecoveryDialog(Window*       pParent,
-                             RecoveryCore* pCore  );
+        BrokenRecoveryDialog(Window*       pParent        ,
+                             RecoveryCore* pCore          ,
+                             sal_Bool      bBeforeRecovery);
 
         //---------------------------------------
         /** @short TODO */
@@ -733,11 +818,19 @@ class BrokenRecoveryDialog : public ModalDialog
 
         //---------------------------------------
         /** @short TODO */
-        virtual void refresh();
+        virtual sal_Bool isExecutionNeeded();
+
+        //---------------------------------------
+        /** @short TODO */
+        virtual ::rtl::OUString getSaveDirURL();
 
     //-------------------------------------------
     // helper
     private:
+
+        //---------------------------------------
+        /** @short TODO */
+        void impl_refresh();
 
         //---------------------------------------
         /** @short TODO */
@@ -746,6 +839,14 @@ class BrokenRecoveryDialog : public ModalDialog
         //---------------------------------------
         /** @short TODO */
         DECL_LINK(OkButtonHdl, void*);
+
+        //---------------------------------------
+        /** @short TODO */
+        DECL_LINK(CancelButtonHdl, void*);
+
+        //---------------------------------------
+        /** @short TODO */
+        void impl_askForSavePath();
 };
 
 
@@ -755,6 +856,7 @@ class BrokenRecoveryDialog : public ModalDialog
         private:
             Window              maTitleWin;
             FixedText           maTitleFT;
+            FixedLine           maTitleFL;
             FixedText           maDescrFT;
 
             FixedLine           maBottomFL;
@@ -796,17 +898,28 @@ class BrokenRecoveryDialog : public ModalDialog
             String              maBody;
         };
 
+        class ErrorDescriptionEdit : public MultiLineEdit
+        {
+        private:
+                        DECL_LINK( ModifyHdl, void* );
+
+        public:
+                        ErrorDescriptionEdit( Window* pParent, const ResId& rResId );
+            virtual     ~ErrorDescriptionEdit();
+        };
+
         class ErrorRepSendDialog : public IExtendedTabPage
         {
         private:
             Window              maTitleWin;
             FixedText           maTitleFT;
+            FixedLine           maTitleFL;
             FixedText           maDescrFT;
 
             FixedText           maDocTypeFT;
             Edit                maDocTypeED;
             FixedText           maUsingFT;
-            MultiLineEdit       maUsingML;
+            ErrorDescriptionEdit maUsingML;
             PushButton          maShowRepBtn;
             PushButton          maOptBtn;
             CheckBox            maContactCB;
@@ -877,7 +990,7 @@ class BrokenRecoveryDialog : public ModalDialog
             virtual             ~ErrorRepOptionsDialog();
         };
 
-        class ErrorRepEdit : public MultiLineEdit
+        class ErrorRepEdit : public ExtMultiLineEdit
         {
         public:
                         ErrorRepEdit( Window* pParent, const ResId& rResId );
