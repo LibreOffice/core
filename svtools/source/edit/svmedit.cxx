@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:53:02 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,6 +731,8 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 
     mpExtTextEngine = new ExtTextEngine;
     mpExtTextEngine->SetMaxTextLen( STRING_MAXLEN );
+    if( pParent->GetStyle() & WB_BORDER )
+        mpExtTextEngine->SetLeftMargin( 2 );
     mpExtTextEngine->SetLocale( GetSettings().GetLocale() );
     mpExtTextView = new ExtTextView( mpExtTextEngine, this );
     mpExtTextEngine->InsertView( mpExtTextView );
