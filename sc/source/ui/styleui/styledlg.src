@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:39:42 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ polish ] = "Efekt czcionki";
                 Text[ portuguese_brazilian ] = "Character Extension";
                 Text[ japanese ] = "Ì«İÄŒø‰Ê";
-                Text[ korean ] = "¹®ÀÚ È®Àå";
+                Text[ korean ] = "±Û²Ã¡¡È¿°ú";
                 Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
                 Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Character Extension";
@@ -212,7 +212,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
-                Text[ korean ] = "Asian typography";
+                Text[ korean ] = "¾Æ½Ã¾Æ¡¡Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
@@ -362,7 +362,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ chinese_traditional ] = "­¶­±";
                 Text[ arabic ] = "ÕİÍÉ";
                 Text[ greek ] = "Óåëßäá";
-                Text[ korean ] = "ÆäÀÌÁö";
+                Text[ korean ] = "ÂÊ";
                 Text[ turkish ] = "Sayfa";
                 Text[ language_user1 ] = " ";
             };
@@ -389,7 +389,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ chinese_traditional ] = "Ãä®Ø";
                 Text[ arabic ] = "ÇáÍÏæÏ";
                 Text[ greek ] = "Ğåñßãñáììá";
-                Text[ korean ] = "°æ°è¼±";
+                Text[ korean ] = "¿Ü°û¼±";
                 Text[ turkish ] = "Kenarlık";
                 Text[ language_user1 ] = " ";
             };
@@ -510,7 +510,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
     Text[ arabic ] = "äãØ ÕİÍÉ";
     Text[ greek ] = "Ğñüôõğï óåëßäáò";
-    Text[ korean ] = "ÆäÀÌÁö À¯Çü";
+    Text[ korean ] = "ÂÊ À¯Çü";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
 };
