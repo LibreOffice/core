@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-23 15:41:57 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,7 +1011,7 @@ String RID_STR_HARDLINEBREAKS
     Text [ french ] = "Renvoi à la ligne forcé" ;
     Text [ dutch ] = "Vast regeleinde" ;
     Text[ chinese_simplified ] = "æ‰‹åŠ¨æ¢è¡Œ";
-    Text[ russian ] = "Æåñòêèé ğàçğûâ ñòğîêè";
+    Text[ russian ] = "Æåñòêèé ğàçğûâ ñòğîê";
     Text[ polish ] = "Twardy podzia³ wiersza";
     Text[ japanese ] = "ï¾Šï½°ï¾„ï¾æ”¹è¡Œ";
     Text[ chinese_traditional ] = "æ‰‹å‹•æ›åˆ—";
@@ -4175,7 +4175,7 @@ String RID_STR_EVENTS
     Text[ chinese_simplified ] = "äº‹ä»¶";
     Text[ russian ] = "Ñîáûòèÿ";
     Text[ polish ] = "Wydarzenia";
-    Text[ japanese ] = "å®Ÿè¡Œå¥‘æ©Ÿ";
+    Text[ japanese ] = "ï½²ï¾ï¾ï¾ï¾„";
     Text[ chinese_traditional ] = "å‹•ä½œ";
     Text[ greek ] = "Ãåãïíüôá";
     Text[ korean ] = "ì´ë²¤íŠ¸";
@@ -4674,7 +4674,7 @@ String RID_STR_EVT_ADJUSTMENTVALUECHANGED
     Text[ swedish ] = "Vid justering";
     Text[ polish ] = "W trakcie justowania";
     Text[ portuguese_brazilian ] = "On adjust";
-    Text[ japanese ] = "On adjust";
+    Text[ japanese ] = "èª¿æ•´ä¸­";
     Text[ korean ] = "On adjust";
     Text[ chinese_simplified ] = "åœ¨è°ƒæ•´æ—¶";
     Text[ chinese_traditional ] = "åœ¨èª¿æ•´æ™‚";
@@ -4686,35 +4686,158 @@ String RID_STR_DATE
 {
     Text = "Datum" ;
     Text [ ENGLISH ] = "Date" ;
+    Text[ english_us ] = "Date";
+    Text[ portuguese ] = "Date";
+    Text[ russian ] = "Date";
+    Text[ greek ] = "Date";
+    Text[ dutch ] = "Date";
+    Text[ french ] = "Date";
+    Text[ spanish ] = "Fecha";
+    Text[ finnish ] = "Date";
+    Text[ italian ] = "Date";
+    Text[ danish ] = "Date";
+    Text[ swedish ] = "Datum";
+    Text[ polish ] = "Date";
+    Text[ portuguese_brazilian ] = "Date";
+    Text[ japanese ] = "æ—¥ä»˜";
+    Text[ korean ] = "Date";
+    Text[ chinese_simplified ] = "æ—¥æœŸ";
+    Text[ chinese_traditional ] = "æ—¥æœŸ";
+    Text[ turkish ] = "Date";
+    Text[ arabic ] = "Date";
+    Text[ catalan ] = "Date";
 };
 String RID_STR_STATE
 {
     Text = "Status" ;
     Text [ ENGLISH ] = "State" ;
+    Text[ english_us ] = "State";
+    Text[ portuguese ] = "State";
+    Text[ russian ] = "State";
+    Text[ greek ] = "State";
+    Text[ dutch ] = "State";
+    Text[ french ] = "Statut";
+    Text[ spanish ] = "Estado";
+    Text[ finnish ] = "State";
+    Text[ italian ] = "State";
+    Text[ danish ] = "State";
+    Text[ swedish ] = "Status";
+    Text[ polish ] = "State";
+    Text[ portuguese_brazilian ] = "State";
+    Text[ japanese ] = "çŠ¶æ…‹";
+    Text[ korean ] = "State";
+    Text[ chinese_simplified ] = "çŠ¶æ€";
+    Text[ chinese_traditional ] = "ç‹€æ…‹";
+    Text[ turkish ] = "State";
+    Text[ arabic ] = "State";
+    Text[ catalan ] = "State";
 };
 String RID_STR_TIME
 {
     Text = "Zeit" ;
     Text [ ENGLISH ] = "Time" ;
+    Text[ english_us ] = "Time";
+    Text[ portuguese ] = "Time";
+    Text[ russian ] = "Time";
+    Text[ greek ] = "Time";
+    Text[ dutch ] = "Time";
+    Text[ french ] = "Heure";
+    Text[ spanish ] = "Hora";
+    Text[ finnish ] = "Time";
+    Text[ italian ] = "Time";
+    Text[ danish ] = "Time";
+    Text[ swedish ] = "Tid";
+    Text[ polish ] = "Time";
+    Text[ portuguese_brazilian ] = "Time";
+    Text[ japanese ] = "æ™‚åˆ»";
+    Text[ korean ] = "Time";
+    Text[ chinese_simplified ] = "æ—¶é—´";
+    Text[ chinese_traditional ] = "æ™‚é–“";
+    Text[ turkish ] = "Time";
+    Text[ arabic ] = "Time";
+    Text[ catalan ] = "Time";
 };
 String RID_STR_SCALEIMAGE
 {
     Text = "Skalieren" ;
     Text [ ENGLISH ] = "Scaling" ;
+    Text[ english_us ] = "Scale";
+    Text[ portuguese ] = "Scaling";
+    Text[ russian ] = "Scaling";
+    Text[ greek ] = "Scaling";
+    Text[ dutch ] = "Scaling";
+    Text[ french ] = "Échelle";
+    Text[ spanish ] = "Escala";
+    Text[ finnish ] = "Scaling";
+    Text[ italian ] = "Scaling";
+    Text[ danish ] = "Scaling";
+    Text[ swedish ] = "Skala";
+    Text[ polish ] = "Scaling";
+    Text[ portuguese_brazilian ] = "Scaling";
+    Text[ japanese ] = "å€ç‡";
+    Text[ korean ] = "Scaling";
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
+    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
+    Text[ turkish ] = "Scaling";
+    Text[ arabic ] = "Scaling";
+    Text[ catalan ] = "Scaling";
 };
 String RID_STR_PUSHBUTTONTYPE
 {
     Text = "Art der Schaltfläche" ;
     Text [ ENGLISH ] = "Button type" ;
+    Text[ english_us ] = "Button type";
+    Text[ portuguese ] = "Button type";
+    Text[ russian ] = "Button type";
+    Text[ greek ] = "Button type";
+    Text[ dutch ] = "Button type";
+    Text[ french ] = "Type de bouton";
+    Text[ spanish ] = "Tipo de botón";
+    Text[ finnish ] = "Button type";
+    Text[ italian ] = "Button type";
+    Text[ danish ] = "Button type";
+    Text[ swedish ] = "Typ av kommandoknapp";
+    Text[ polish ] = "Button type";
+    Text[ portuguese_brazilian ] = "Button type";
+    Text[ japanese ] = "ï¾ï¾ï¾€ï¾ã®ç¨®é¡";
+    Text[ korean ] = "Button type";
+    Text[ chinese_simplified ] = "æŒ‰é’®ç±»å‹";
+    Text[ chinese_traditional ] = "æŒ‰éˆ•é¡å‹";
+    Text[ turkish ] = "Button type";
+    Text[ arabic ] = "Button type";
+    Text[ catalan ] = "Button type";
 };
 String RID_STR_ENUM_PUSHBUTTONTYPE
 {
     Text = "Standard;OK;Abbrechen;Hilfe" ;
     Text [ ENGLISH ] = "Standard;OK;Cancel;Help" ;
+    Text[ english_us ] = "Standard;OK;Cancel;Help";
+    Text[ portuguese ] = "Standard;OK;Cancel;Help";
+    Text[ russian ] = "Standard;OK;Cancel;Help";
+    Text[ greek ] = "Standard;OK;Cancel;Help";
+    Text[ dutch ] = "Standard;OK;Cancel;Help";
+    Text[ french ] = "Standard;OK;Cancel;Help";
+    Text[ spanish ] = "Predeterminado;Aceptar;Cancelar;Ayuda";
+    Text[ finnish ] = "Standard;OK;Cancel;Help";
+    Text[ italian ] = "Standard;OK;Cancel;Help";
+    Text[ danish ] = "Standard;OK;Cancel;Help";
+    Text[ swedish ] = "Standard;OK;Cancel;Help";
+    Text[ polish ] = "Standard;OK;Cancel;Help";
+    Text[ portuguese_brazilian ] = "Standard;OK;Cancel;Help";
+    Text[ japanese ] = "æ¨™æº–;OK;ï½·ï½¬ï¾ï½¾ï¾™;ï¾ï¾™ï¾Œï¾Ÿ";
+    Text[ korean ] = "Standard;OK;Cancel;Help";
+    Text[ chinese_simplified ] = "æ ‡å‡†;ç¡®å®š;å–æ¶ˆ;å¸®åŠ©";
+    Text[ chinese_traditional ] = "æ¨™æº–;ç¢ºå®š;å–æ¶ˆ;èª¬æ˜";
+    Text[ turkish ] = "Standard;OK;Cancel;Help";
+    Text[ arabic ] = "Standard;OK;Cancel;Help";
+    Text[ catalan ] = "Standard;OK;Cancel;Help";
 };
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/10/23 15:41:57  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.30  2001/10/22 20:45:25  vg
  *  Merge SRC641: 22.10.01 - 22:45:46
  *
@@ -4808,6 +4931,7 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
 
