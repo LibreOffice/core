@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-12 12:05:16 $
+#   last change: $Author: vg $ $Date: 2005-03-10 17:48:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,11 @@ TARGET=so_xmlsec1
 
 # --- Files --------------------------------------------------------
 
-XMLSEC1VERSION=1.2.4
+XMLSEC1VERSION=1.2.6
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
-
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
+
 ADDITIONAL_FILES= \
     include$/xmlsec$/nss$/akmngr.h \
     include$/xmlsec$/nss$/ciphers.h \
@@ -86,43 +86,42 @@ ADDITIONAL_FILES= \
     src$/nss$/keytrans.c \
     src$/nss$/keywrapers.c \
     src$/nss$/tokens.c \
-    src$/nss$/makefile.mk \
-    src$/makefile.mk \
-    src$/xmlsec.map \
-    src$/nss$/xmlsec-nss.map \
-    config.h \
-    src$/mscrypto$/makefile.mk \
-    src$/mscrypto$/xmlsec-mscrypto.map
+    libxml2-config
 
 .IF "$(GUI)"=="WNT"
 CRYPTOLIB=mscrypto
 #CRYPTOLIB=nss
+#BASEINC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla$/nspr;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla$/nss;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/external
+#BASELIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 .ELSE
 CRYPTOLIB=nss
 .ENDIF
 
-.IF "$(CRYPTOLIB)" == "nss"
-
-MOZ_INC:=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
-MOZ_LIB:=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
-NSS_INC:=$(MOZ_INC)$/nss
-NSPR_INC:=$(MOZ_INC)$/nspr
-
-SOLARINC += \
--I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla \
--I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla/nspr \
--I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla/nss
-
-.EXPORT : SOLARINC
-
+.IF "$(OS)"=="WNT"
+CONFIGURE_DIR=win32
+CONFIGURE_ACTION=cscript configure.js
+CONFIGURE_FLAGS=crypto=$(CRYPTOLIB) xslt=no iconv=no static=no include=$(BASEINC) lib=$(BASELIB)
+BUILD_ACTION=nmake
+BUILD_DIR=$(CONFIGURE_DIR)
+.ELSE
+CONFIGURE_DIR=
+CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --enable-pkgconfig=no
+BUILD_ACTION=$(GNUMAKE)
+BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
-BUILD_ACTION=dmake subdmake=true $(MFLAGS) $(MAKEFILE) $(CALLMACROS) && \
-    cd $(CRYPTOLIB) && dmake subdmake=true $(MFLAGS) $(MAKEFILE) $(CALLMACROS) && cd ..
-BUILD_DIR=src
 
 OUTDIR2INC=include$/xmlsec 
 
+.IF "$(OS)"=="MACOSX"
+OUT2LIB+=src$/.libs$/libxmlsec1.*.dylib src$/nss$/.libs$/libxmlsec1-nss.*.dylib 
+.ELIF "$(OS)"=="WNT"
+OUT2LIB+=win32$/binaries$/*.lib
+OUT2BIN+=win32$/binaries$/*.dll
+.ELSE
+OUT2LIB+=src$/.libs$/libxmlsec1.so* src$/nss$/.libs$/libxmlsec1-nss.so*
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
