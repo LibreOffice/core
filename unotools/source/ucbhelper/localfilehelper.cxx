@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:40:14 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 08:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,9 +202,9 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
-            DBG_ERRORFILE( "createCursor: CommandAbortedException" );
+//          DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ... )
+        catch( Exception& e )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -232,7 +232,7 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
             }
         }
     }
-    catch( ... )
+    catch( Exception& e )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
