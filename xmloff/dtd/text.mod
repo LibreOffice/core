@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.35 2001-08-09 13:22:49 dvo Exp $
+	$Id: text.mod,v 1.36 2001-11-30 18:53:15 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -1120,6 +1120,7 @@ indices, and there may be only one text:index-title element.
 							   (text:deletion, text:insertion?) | 
                                text:format-change) >
 <!ATTLIST text:changed-region text:id ID #REQUIRED>
+<!ATTLIST text:changed-region text:merge-last-paragraph %boolean; "true">
 
 <!ELEMENT text:insertion (office:change-info, %sectionText;)>
 <!ELEMENT text:deletion (office:change-info, %sectionText;)>
