@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-29 07:10:35 $
+ *  last change: $Author: os $ $Date: 2001-12-03 11:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,78 +1358,100 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     Text [ dutch ] = "Scripting" ;
                                     #define GB_SCRIPT_EXEC_X 6
                                     #define GB_SCRIPT_EXEC_Y 3
-    FixedLine GB_SCRIPT_EXEC
+                                    #define GB_SCRIPTING_X 6
+                                    #define GB_SCRIPTING_Y 68
+    FixedLine GB_STARBASIC
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X , GB_SCRIPT_EXEC_Y ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "%PRODUCTNAME Basic-Scripte ausführen von" ;
-        Text [ English ] = "Execute %PRODUCTNAME Basic Scripts from" ;
-        Text [ english_us ] = "Execute %PRODUCTNAME Basic Scripts from" ;
-        Text [ portuguese_brazilian ] = "Star Basic-Scripts ausf?ren von" ;
-        Text [ swedish ] = "Utför %PRODUCTNAME Basic-skript från" ;
-        Text [ danish ] = "Udfør %PRODUCTNAME Basic-scripter fra" ;
-        Text [ italian ] = "Esegui script %PRODUCTNAME Basic da" ;
-        Text [ spanish ] = "Ejecutar Scripts de %PRODUCTNAME Basic desde" ;
-        Text [ french ] = "Exécuter les scripts %PRODUCTNAME Basic de" ;
-        Text [ dutch ] = "%PRODUCTNAME Basic-scripts uitvoeren van" ;
-        Text [ portuguese ] = "Executar scripts do%PRODUCTNAME Basic de" ;
-        Text[ chinese_simplified ] = "Ö´ĞĞ %PRODUCTNAME Basic ½Å±¾Î»ÖÃ";
-        Text[ russian ] = "Âûïîëíèòü ñêğèïòû %PRODUCTNAME Basic èç";
-        Text[ polish ] = "Wykonaj skrypty %PRODUCTNAME Basic z";
-        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ‚ÌÀsŒó•â";
-        Text[ chinese_traditional ] = "°õ¦æ %PRODUCTNAME Basic ©R¥O½Zªº¦ì¸m";
-        Text[ arabic ] = "ÊäİíĞ äÕæÕ ÈÑãÌíÉ %PRODUCTNAME Basic ãä";
-        Text[ greek ] = "Åêôİëåóç ôùí äåóìşí åíİñãåéáò ôïõ %PRODUCTNAME Basic áğü";
-        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ® ½ÇÇà";
-        Text[ turkish ] = "%PRODUCTNAME Basic script'leri şuradan yürüt:";
+        Text = "%PRODUCTNAME Basic-Script" ;
+        Text [ English ] = "%PRODUCTNAME Basic Script" ;
+        Text [ english_us ] = "%PRODUCTNAME Basic Script" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Script" ;
+        Text [ swedish ] = "%PRODUCTNAME Basic-skript" ;
+        Text [ danish ] = "%PRODUCTNAME Basic-Script" ;
+        Text [ italian ] = "Script %PRODUCTNAME Basic" ;
+        Text [ spanish ] = "Script %PRODUCTNAME Basic" ;
+        Text [ french ] = "Script %PRODUCTNAME Basic" ;
+        Text [ dutch ] = "%PRODUCTNAME Basic-Script" ;
+        Text [ portuguese ] = "Script %PRODUCTNAME Basic" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Basic ½Å±¾";
+        Text[ russian ] = "Ñêğèïò %PRODUCTNAME Basic";
+        Text[ polish ] = "Skrypt %PRODUCTNAME Basic";
+        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Basic ©R¥O½Z";
+        Text[ arabic ] = "%PRODUCTNAME Basic äÕ ÈÑãÌí";
+        Text[ greek ] = "%PRODUCTNAME Basic Script";
+        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®";
+        Text[ turkish ] = "%PRODUCTNAME Basic Script";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ejecutar Scripts de %PRODUCTNAME Basic desde";
-        Text[ finnish ] = "%PRODUCTNAME Basic-Scripte ausführen von";
+        Text[ catalan ] = "Script %PRODUCTNAME Basic";
+        Text[ finnish ] = "%PRODUCTNAME Basic-Script";
     };
-    Edit ED_SCRIPT_EXEC
+    FixedText FT_EXEC_MACRO
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 11 ) ;
-        Size = MAP_APPFONT ( 186 , 12 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 12 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text = "~Makro ausführen" ;
+        Text [ English ] = "~Run macro" ;
+    };
+    ListBox LB_EXEC_MACRO
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 50 , GB_SCRIPT_EXEC_Y + 11 ) ;
+        Size = MAP_APPFONT ( 100 , 48 ) ;
         Border = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Nie" ; > ;
+            < "Gemäß Pfadliste" ; > ;
+            < "Immer" ; > ;
+        };
+        StringList [ English ] =
+        {
+            < "Never" ; > ;
+            < "According to path list" ; > ;
+            < "Always" ; > ;
+        };
+    };
+    CheckBox CB_CONFIRM
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 56 , GB_SCRIPT_EXEC_Y + 27 ) ;
+        Size = MAP_APPFONT ( 160 , 10 ) ;
+        Text = "~Nachfragen bei anderen Dokumentquellen" ;
+        Text [ English ] = "C~onfirm in case of other document sources" ;
+    };
+    CheckBox CB_WARNING
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 56 , GB_SCRIPT_EXEC_Y + 41 ) ;
+        Size = MAP_APPFONT ( 160 , 10 ) ;
+        Text = "~Vor Ausführung immer warnen" ;
+        Text [ English ] = "Show ~warning before running macro" ;
+    };
+    FixedText FT_PATH_LIST
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 56 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text = "~Pfadliste" ;
+        Text [ English ] = "~Path list" ;
     };
     ListBox LB_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 8 , GB_SCRIPT_EXEC_Y + 25 ) ;
-        Size = MAP_APPFONT ( 184 , 34 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 50 , GB_SCRIPT_EXEC_Y + 55 ) ;
+        Size = MAP_APPFONT ( 139 , 34 ) ;
         Border = TRUE ;
         Sort = TRUE ;
     };
-    PushButton PB_SCRIPT_INSERT
+    FixedText FT_NEW_PATH
     {
-        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 11 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "H~inzufügen" ;
-        Text [ English ] = "A~dd" ;
-        Text [ english_us ] = "~Add" ;
-        Text [ portuguese_brazilian ] = "H~inzuf?en" ;
-        Text [ swedish ] = "Lägg t~ill" ;
-        Text [ danish ] = "Tilføj" ;
-        Text [ italian ] = "~Aggiungi" ;
-        Text [ spanish ] = "~Añadir" ;
-        Text [ french ] = "~Ajouter" ;
-        Text [ dutch ] = "Toe~voegen" ;
-        Text [ portuguese ] = "A~dicionar" ;
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
-        Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "Dodaj";
-        Text[ japanese ] = "’Ç‰Á(~A)";
-        Text[ chinese_traditional ] = "·s¼W(~A)";
-        Text[ arabic ] = "ÅÖÇİÉ";
-        Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡(~A)";
-        Text[ turkish ] = "Ekle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir";
-        Text[ finnish ] = "~Lisää";
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 94 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text = "N~euer Pfad" ;
+        Text [ English ] = "New pa~th" ;
     };
     PushButton PB_SCRIPT_DELETE
     {
-        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 28 ) ;
+        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 55 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Löschen" ;
         Text [ English ] = "~Delete" ;
@@ -1457,11 +1479,11 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     PushButton PB_SCRIPT_DEFAULT
     {
-        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 45 ) ;
+        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 72 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
-        Text [ English ] = "D~efault" ;
-        Text [ english_us ] = "D~efault" ;
+        Text [ English ] = "De~fault" ;
+        Text [ english_us ] = "De~fault" ;
         Text [ portuguese_brazilian ] = "S~tandard" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
@@ -1483,211 +1505,41 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
     };
-                                    #define GB_SCRIPTING_X 6
-                                    #define GB_SCRIPTING_Y 68
-    FixedLine GB_STARBASIC
+    Edit ED_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X , GB_SCRIPTING_Y ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "%PRODUCTNAME Basic-Script" ;
-        Text [ English ] = "%PRODUCTNAME Basic Script" ;
-        Text [ english_us ] = "%PRODUCTNAME Basic Script" ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Script" ;
-        Text [ swedish ] = "%PRODUCTNAME Basic-skript" ;
-        Text [ danish ] = "%PRODUCTNAME Basic-Script" ;
-        Text [ italian ] = "Script %PRODUCTNAME Basic" ;
-        Text [ spanish ] = "Script %PRODUCTNAME Basic" ;
-        Text [ french ] = "Script %PRODUCTNAME Basic" ;
-        Text [ dutch ] = "%PRODUCTNAME Basic-Script" ;
-        Text [ portuguese ] = "Script %PRODUCTNAME Basic" ;
-        Text[ chinese_simplified ] = "%PRODUCTNAME Basic ½Å±¾";
-        Text[ russian ] = "Ñêğèïò %PRODUCTNAME Basic";
-        Text[ polish ] = "Skrypt %PRODUCTNAME Basic";
-        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ";
-        Text[ chinese_traditional ] = "%PRODUCTNAME Basic ©R¥O½Z";
-        Text[ arabic ] = "%PRODUCTNAME Basic äÕ ÈÑãÌí";
-        Text[ greek ] = "%PRODUCTNAME Basic Script";
-        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®";
-        Text[ turkish ] = "%PRODUCTNAME Basic Script";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Script %PRODUCTNAME Basic";
-        Text[ finnish ] = "%PRODUCTNAME Basic-Script";
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 50 , GB_SCRIPT_EXEC_Y + 93 ) ;
+        Size = MAP_APPFONT ( 139 , 12 ) ;
+        Border = TRUE ;
     };
-    RadioButton RBT_STARBASIC_LIST
+    PushButton PB_SCRIPT_INSERT
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 11 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~gemäß Liste" ;
-        Text [ English ] = "like ~list" ;
-        Text [ english_us ] = "~From list" ;
-        Text [ portuguese_brazilian ] = "~gem?? Liste" ;
-        Text [ swedish ] = "enli~gt lista" ;
-        Text [ danish ] = "fra listen" ;
-        Text [ italian ] = "Come da ~lista" ;
-        Text [ spanish ] = "Según ~lista" ;
-        Text [ french ] = "~D'après la liste" ;
-        Text [ dutch ] = "~overeenkomstig lijst" ;
-        Text [ portuguese ] = "~conforme lista" ;
-        Text[ chinese_simplified ] = "°´ÁĞ±í(~F)";
-        Text[ russian ] = "Ñîãëàñíî ñïèñêà";
-        Text[ polish ] = "Wed³ug listy";
-        Text[ japanese ] = "Ø½Ä‚©‚ç(~F)";
-        Text[ chinese_traditional ] = "«ö·Ó²M³æ(~F)";
-        Text[ arabic ] = "ÍÓÈ ÇáŞÇÆãÉ";
-        Text[ greek ] = "Óıìöùíá ìå ëßóôá";
-        Text[ korean ] = "¸ñ·Ï¿¡ µû¶ó(~F)";
-        Text[ turkish ] = "Listeye göre";
+        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 93 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "H~inzufügen" ;
+        Text [ English ] = "~Add" ;
+        Text [ english_us ] = "~Add" ;
+        Text [ portuguese_brazilian ] = "H~inzuf?en" ;
+        Text [ swedish ] = "Lägg t~ill" ;
+        Text [ danish ] = "Tilføj" ;
+        Text [ italian ] = "~Aggiungi" ;
+        Text [ spanish ] = "~Añadir" ;
+        Text [ french ] = "~Ajouter" ;
+        Text [ dutch ] = "Toe~voegen" ;
+        Text [ portuguese ] = "A~dicionar" ;
+        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ russian ] = "Äîáàâèòü";
+        Text[ polish ] = "Dodaj";
+        Text[ japanese ] = "’Ç‰Á(~A)";
+        Text[ chinese_traditional ] = "·s¼W(~A)";
+        Text[ arabic ] = "ÅÖÇİÉ";
+        Text[ greek ] = "ĞñïóèŞêç";
+        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Según ~lista";
-        Text[ finnish ] = "~Luettelosta";
+        Text[ catalan ] = "~Añadir";
+        Text[ finnish ] = "~Lisää";
     };
-    RadioButton RBT_STARBASIC_ALWAYS
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 23 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "i~mmer ausführen" ;
-        Text [ English ] = "execute ~always" ;
-        Text [ english_us ] = "Always e~xecute" ;
-        Text [ portuguese_brazilian ] = "~immer  ausf?ren" ;
-        Text [ swedish ] = "utför ~alltid" ;
-        Text [ danish ] = "udfør altid" ;
-        Text [ italian ] = "Esegui ~sempre" ;
-        Text [ spanish ] = "Ejecutar s~iempre" ;
-        Text [ french ] = "Toujours ~exécuter" ;
-        Text [ dutch ] = "~altijd uitvoeren" ;
-        Text [ portuguese ] = "~Executar sempre" ;
-        Text[ chinese_simplified ] = "×Ô¶¯Ö´ĞĞ(~X)";
-        Text[ russian ] = "Âûïîëíÿòü âñåãäà";
-        Text[ polish ] = "Wykonuj zawsze";
-        Text[ japanese ] = "í‚ÉÀs(~X)";
-        Text[ chinese_traditional ] = "¦Û°Ê°õ¦æ(~X)";
-        Text[ arabic ] = "ÇáÊäİíĞ ÏÇÆãÇğ";
-        Text[ greek ] = "ğÜíôá åêôİëåóç";
-        Text[ korean ] = "Ç×»ó ¼öÇà(~X)";
-        Text[ turkish ] = "Her zaman yürüt";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ejecutar s~iempre";
-        Text[ finnish ] = "~Suorita aina";
-    };
-    RadioButton RBT_STARBASIC_NEVER
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 35 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~nie ausführen" ;
-        Text [ English ] = "execute ~never" ;
-        Text [ english_us ] = "Ne~ver execute" ;
-        Text [ portuguese_brazilian ] = "~nie  ausf?ren" ;
-        Text [ swedish ] = "utför al~drig" ;
-        Text [ danish ] = "udfør aldrig" ;
-        Text [ italian ] = "Esegui ~mai" ;
-        Text [ spanish ] = "~No ejecutar nunca" ;
-        Text [ french ] = "Ne ~jamais exécuter" ;
-        Text [ dutch ] = "~nooit uitvoeren" ;
-        Text [ portuguese ] = "~Não executar nunca" ;
-        Text[ chinese_simplified ] = "²»Ö´ĞĞ(~V)";
-        Text[ russian ] = "Íèêîãäà";
-        Text[ polish ] = "Nie wykonuj nigdy";
-        Text[ japanese ] = "Às‚µ‚È‚¢(~V)";
-        Text[ chinese_traditional ] = "¤£°õ¦æ(~V)";
-        Text[ arabic ] = "ÚÏã ÇáÊäİíĞ äåÇÆíÇğ";
-        Text[ greek ] = "íá ìçí åêôåëåóôåß ğïôİ";
-        Text[ korean ] = "Àı´ë ½ÇÇà¾ÊÀ½(~V)";
-        Text[ turkish ] = "Hiç yürütme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~No ejecutar nunca";
-        Text[ finnish ] = "~Älä suorita koskaan";
-    };
-    FixedText FI_STARBASIC_DISCRIPTION_ALWAYS
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 100 , GB_SCRIPTING_Y + 11 ) ;
-        Size = MAP_APPFONT ( 145 , 30 ) ;
-        WordBreak = TRUE ;
-        Hide = TRUE ;
-        Text = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
-        Text [ English ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!" ;
-        Text [ english_us ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without being checked." ;
-        Text [ portuguese_brazilian ] = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne ?berpr?ung ausgef?rt!" ;
-        Text [ swedish ] = "OBS: %PRODUCTNAME Basic-skript från Internet utförs utan kontroll!" ;
-        Text [ danish ] = "BEMÆRK: %PRODUCTNAME Basic-scripter fra Internettet bliver udført uden kontrol!" ;
-        Text [ italian ] = "ATTENZIONE: gli script %PRODUCTNAME Basic di Internet vengono eseguiti senza un controllo!" ;
-        Text [ spanish ] = "ADVERTENCIA: ¡Los scripts de %PRODUCTNAME Basic en Internet son ejecutados sin consultar!" ;
-        Text [ french ] = "ATTENTION : Les scripts %PRODUCTNAME Basic provenant de l'Internet seront exécutés sans vérification !" ;
-        Text [ dutch ] = "PAS OP: %PRODUCTNAME Basic scripts uit Internet worden zonder controle uitgevoerd." ;
-        Text [ portuguese ] = "ATENÇÃO: os scripts do %PRODUCTNAME Basic da Internet serão executados sem verificação!" ;
-        Text[ chinese_simplified ] = "×¢Òâ£º¹ú¼Ê»¥ÁªÍø´«µİµÄ %PRODUCTNAME Basic ½Å±¾²»ĞèÊ¹ÓÃÕß¼ì²é¾Í»áÖ±½Ó×Ô¶¯Ö´ĞĞ£¡";
-        Text[ russian ] = "ÂÍÈÌÀÍÈÅ: Ñêğèïòû %PRODUCTNAME Basic èç Èíòåğíåòà âûïîëíÿşòñÿ áåç ïğîâåğêè!";
-        Text[ polish ] = "UWAGA: Skrypty %PRODUCTNAME Basic z Internetu bêd¹ wykonywane bez potwierdzenia!";
-        Text[ japanese ] = "’ˆÓ: ²İÀ°È¯Ä‚©‚ç‚Ì %PRODUCTNAME Basic ½¸ØÌßÄ‚ÍAŠm”F‚È‚µ‚ÅÀs‚µ‚Ü‚·B";
-        Text[ chinese_traditional ] = "µù·N¡GInternet ¶Ç»¼ªº %PRODUCTNAME Basic ©R¥O½Z¤£»İ¨Ï¥ÎªÌ»{µı´N·|¦Û°Ê°õ¦æ¡I";
-        Text[ arabic ] = "ÊÍĞíÑ: ÓíÊã ÊäİíĞ äÕ ÈÑãÌí %PRODUCTNAME Basic ãä ÇáÅäÊÑäÊ ÈÏæä ÅÌÑÇÁ İÍÕ!";
-        Text[ greek ] = "ĞÑÏÓÏ×Ç: Ïé äİóìåò åíåñãåéşí ôïõ %PRODUCTNAME Basic áğü ôï Internet èá åêôåëïıíôáé ÷ùñßò íá åëåã÷èïıí!";
-        Text[ korean ] = "ÁÖÀÇ: ÀÎÅÍ³İÀ¸·ÎºÎÅÍÀÇ %PRODUCTNAME Basic-½ºÅ©¸³Æ®´Â °Ë»ç¾øÀÌ ½ÇÇàµË´Ï´Ù!";
-        Text[ turkish ] = "Dikkat: İnternetten alınan %PRODUCTNAME Basic script'leri kontrol edilmeden yürütülecek!";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ADVERTENCIA: ¡Los scripts de %PRODUCTNAME Basic en Internet son ejecutados sin consultar!";
-        Text[ finnish ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!";
-    };
-    FixedText FI_STARBASIC_DISCRIPTION_LIST
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 100 , GB_SCRIPTING_Y + 11 ) ;
-        Size = MAP_APPFONT ( 145 , 30 ) ;
-        WordBreak = TRUE ;
-        Hide = TRUE ;
-        Text = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
-        Text [ English ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list." ;
-        Text [ english_us ] = "%PRODUCTNAME Basic scripts will only be executed from directories in the list." ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgef?rt." ;
-        Text [ swedish ] = "%PRODUCTNAME Basic-skript utförs bara från kataloger i listan." ;
-        Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver kun udført fra biblioteker i listen." ;
-        Text [ italian ] = "Gli Script di %PRODUCTNAME Basic vengono eseguiti solo dalle cartelle dell'elenco." ;
-        Text [ spanish ] = "Los scripts %PRODUCTNAME Basic se ejecutarán sólo a partir de los directorios de la lista." ;
-        Text [ french ] = "Les scripts %PRODUCTNAME Basic seront exécutés seulement à partir des répertoires de la liste." ;
-        Text [ dutch ] = "%PRODUCTNAME Basic-scripts worden alleen uitgevoerd vanuit mappen uit de lijst." ;
-        Text [ portuguese ] = "Os scripts do %PRODUCTNAME Basic são apenas executados a partir de directórios da lista." ;
-        Text[ chinese_simplified ] = "Ö»Ö´ĞĞÁĞ±í¼ÇÂ¼ÖĞµÄ %PRODUCTNAME Basic ½Å±¾¡£";
-        Text[ russian ] = "Ñêğèïòû %PRODUCTNAME Basic âûïîëíÿşòñÿ òîëüêî èç êàòàëîãîâ ñïèñêà.";
-        Text[ polish ] = "Skrypty %PRODUCTNAME Basic wykonane bêd¹ tylko z katalogów list.";
-        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ‚ÍAØ½Ä‚É‚ ‚éÃŞ¨Ú¸ÄØ‚©‚ç‚Å‚µ‚©Às‚µ‚Ü‚¹‚ñB@";
-        Text[ chinese_traditional ] = "¶È°õ¦æ²M³æ¤§¤¤ªº %PRODUCTNAME Basic ©R¥O½Z¡C";
-        Text[ arabic ] = "ÓíÊã ÊäİíĞ äÕæÕ ÈÑãÌíÉ %PRODUCTNAME Basic ãä ÇáÏáÇÆá ÇáãæÌæÏÉ İí ÇáŞÇÆãÉ İŞØ.";
-        Text[ greek ] = "Ïé äİóìåò åíåñãåéşí ôïõ %PRODUCTNAME Basic èá åêôåëïıíôáé ìüíï áğü ôïõò êáôáëüãïõò ğïõ ğåñéİ÷ïíôáé óôçí ëßóôá.";
-        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®´Â ¸ñ·ÏÀÇ µğ·ºÅä¸®·ÎºÎÅÍ¸¸ ½ÇÇàµË´Ï´Ù.";
-        Text[ turkish ] = "%PRODUCTNAME Basic script'leri yalnızca listedeki dizinlerden yürütülecek.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Los scripts %PRODUCTNAME Basic se ejecutarán sólo a partir de los directorios de la lista.";
-        Text[ finnish ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list.";
-    };
-    FixedText FI_STARBASIC_DISCRIPTION_NEVER
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 100 , GB_SCRIPTING_Y + 11 ) ;
-        Size = MAP_APPFONT ( 145 , 30 ) ;
-        WordBreak = TRUE ;
-        Hide = TRUE ;
-        Text = "Es werden keine %PRODUCTNAME Basic-Scripte ausgeführt." ;
-        Text [ English ] = "%PRODUCTNAME Basic scripts won't be executed." ;
-        Text [ english_us ] = "No %PRODUCTNAME Basic scripts will be executed." ;
-        Text [ portuguese_brazilian ] = "Es werden kein %PRODUCTNAME Basic-Scripte ausgef?rt." ;
-        Text [ swedish ] = "Inga %PRODUCTNAME Basic-skript utförs." ;
-        Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver ikke udført." ;
-        Text [ italian ] = "Gli Script %PRODUCTNAME Basic non vengono eseguiti." ;
-        Text [ spanish ] = "No se ejecutan ningún script de %PRODUCTNAME Basic." ;
-        Text [ french ] = "Aucun script %PRODUCTNAME Basic ne sera exécuté." ;
-        Text [ dutch ] = "Er worden geen %PRODUCTNAME Basic-scripts uitgevoerd." ;
-        Text [ portuguese ] = "Os scripts do %PRODUCTNAME Basic não serão executados." ;
-        Text[ chinese_simplified ] = "²»Ö´ĞĞ %PRODUCTNAME Basic ½Å±¾¡£";
-        Text[ russian ] = "Ñêğèïòû %PRODUCTNAME Basic âûïîëíåíû íå áóäóò.";
-        Text[ polish ] = "Skrypty %PRODUCTNAME Basic nie bêd¹ wykonywane.";
-        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ‚ÍÀs‚µ‚Ü‚¹‚ñB";
-        Text[ chinese_traditional ] = "¤£°õ¦æ %PRODUCTNAME Basic ©R¥O½Z¡C";
-        Text[ arabic ] = "áä íÊã ÊäİíĞ äÕæÕ ÈÑãÌíÉ %PRODUCTNAME Basic.";
-        Text[ greek ] = "Äåí èá åêôåëïıíôáé äİóìåò åíåñãåéşí ôïõ %PRODUCTNAME Basic.";
-        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®´Â ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.";
-        Text[ turkish ] = "%PRODUCTNAME Basic script'leri yürütülmeyecek.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No se ejecutan ningún script de %PRODUCTNAME Basic.";
-        Text[ finnish ] = "%PRODUCTNAME Basic scripts won't be executed.";
-    };
-#define GB_JAVA_Y 119
+#define GB_JAVA_Y 113
     FixedLine FL_JAVA
     {
         Pos = MAP_APPFONT ( 6 , GB_JAVA_Y ) ;
@@ -1777,7 +1629,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 42 , 10 ) ;
         Text = "Netzz~ugriff" ;
         Text [ English ] = "~Netaccess" ;
-        Text [ english_us ] = "Net ~access" ;
+        Text [ english_us ] = "~Net access" ;
         Text [ italian ] = "Accesso rete" ;
         Text [ spanish ] = "Acce~so a la red" ;
         Text [ french ] = "Accès réseau" ;
@@ -1994,25 +1846,25 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( 180 , GB_JAVA_Y ) ;
         Size = MAP_APPFONT ( 74 , 8 ) ;
-        Text = "F~reischalten" ;
-        Text [ English ] = "~enable" ;
-        Text [ english_us ] = "E~nable" ;
+        Text = "Freischalten" ;
+        Text [ English ] = "Enable" ;
+        Text [ english_us ] = "Enable" ;
         Text [ portuguese_brazilian ] = "Ausf?ren" ;
-        Text [ swedish ] = "F~rige" ;
+        Text [ swedish ] = "Frige" ;
         Text [ danish ] = "PlugIns" ;
-        Text [ italian ] = "A~bilita" ;
+        Text [ italian ] = "Abilita" ;
         Text [ spanish ] = "Validar" ;
         Text [ french ] = "Valider" ;
         Text [ dutch ] = "PlugIns" ;
-        Text [ portuguese ] = "~Activar" ;
-        Text[ chinese_simplified ] = "¿ª·Å(~N)";
+        Text [ portuguese ] = "Activar" ;
+        Text[ chinese_simplified ] = "¿ª·Å";
         Text[ russian ] = "Ğàçáëîêèğîâàòü";
         Text[ polish ] = "Aktywacja";
-        Text[ japanese ] = "g—p‚·‚é(~N)";
-        Text[ chinese_traditional ] = "±Ò¥Î(~N)";
+        Text[ japanese ] = "g—p‚·‚é";
+        Text[ chinese_traditional ] = "±Ò¥Î";
         Text[ arabic ] = "Plug-Ins";
         Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
-        Text[ korean ] = "»ç¿ë °¡´É(~N)";
+        Text[ korean ] = "»ç¿ë °¡´É";
         Text[ turkish ] = "Plug-In";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plug-ins";
@@ -2022,9 +1874,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 11 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text = "~PlugIns" ;
-        Text [ English ] = "PlugIns" ;
-        Text [ english_us ] = "Plug-ins" ;
+        Text = "Pl~ugIns" ;
+        Text [ English ] = "Pl~ugIns" ;
+        Text [ english_us ] = "Pl~ug-ins" ;
         Text [ portuguese_brazilian ] = "~Plugins" ;
         Text [ swedish ] = "~Plug-ins" ;
         Text [ danish ] = "aktiver" ;
@@ -2050,9 +1902,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 24 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text = "~Applets" ;
-        Text [ English ] = "Applets" ;
-        Text[ english_us ] = "Applets";
+        Text = "App~lets" ;
+        Text [ English ] = "App~lets" ;
+        Text[ english_us ] = "App~lets";
         Text[ portuguese ] = "~Applets";
         Text[ russian ] = "Àïïëåòû";
         Text[ greek ] = "Ìéêñïåöáñìïãİò";
