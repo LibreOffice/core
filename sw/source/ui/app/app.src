@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:41:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ String STR_PRINT_MERGE_MACRO
     Text [ portuguese ] = "Imprimir cartas em série" ;
     Text[ chinese_simplified ] = "´òÓ¡ÓÊ¼şºÏ²¢";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Ïå÷àòü ñëèÿíèÿ";
+    Text[ russian ] = "Ïå÷àòü öèğêóëÿğíîãî ïèñüìà";
     Text[ polish ] = "Drukuj listy seryjne";
     Text[ japanese ] = "·‚µ‚İˆóü";
     Text[ chinese_traditional ] = "¦X¨Ö¦C¦L";
@@ -131,7 +131,7 @@ String STR_PAGE_COUNT_MACRO
     Text[ dutch ] = "Wijziging van het aantal pagina's";
     Text[ chinese_simplified ] = "¸ü¸ÄÒ³Êı";
     Text[ greek ] = "Äéüñèùóç ğëŞèïõò óåëéäşí";
-    Text[ korean ] = "ÆäÀÌÁö Ä«¿îÆ® º¯°æ";
+    Text[ korean ] = "ÂÊ ¼ö¡¡º¯°æ";
     Text[ turkish ] = "Sayfa sayısının değiştirilmesi";
     Text[ language_user1 ] = " ";
 };
@@ -722,14 +722,14 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "ÀÚµ¿" ; SFXSTYLEBIT_AUTO ; > ;
-            < "ÀüÃ¼ À¯Çü" ; SFXSTYLEBIT_ALL ; > ;
-            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "¸ğµç À¯Çü" ; SFXSTYLEBIT_ALL ; > ;
+            < "»ç¿ëµÈ¡¡À¯Çü." ; SFXSTYLEBIT_USED ; > ;
             < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
             < "ÅØ½ºÆ® À¯Çü" ; SWSTYLEBIT_TEXT ; > ;
             < "Àå À¯Çü" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "¸®½ºÆ® À¯Çü" ; SWSTYLEBIT_LIST ; > ;
+            < "¸ñ·Ï À¯Çü" ; SWSTYLEBIT_LIST ; > ;
             < "»öÀÎ À¯Çü" ; SWSTYLEBIT_IDX ; > ;
-            < "Æ¯º° Áö¿ª À¯Çü" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Æ¯¼ö±¸¿ª À¯Çü" ; SWSTYLEBIT_EXTRA ; > ;
             < "HTML À¯Çü" ; SWSTYLEBIT_HTML ; > ;
             < "Á¶°ÇÀû À¯Çü" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
@@ -877,7 +877,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "g—p‚µ‚½½À²Ù" ; SFXSTYLEBIT_USED ; > ;
             < "Õ°»Ş°’è‹`‚Ì½À²Ù" ; SFXSTYLEBIT_USERDEF ; > ;
         };
-        Text[ chinese_traditional ] = "¤å¦r¼Ë¦¡";
+        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
             FilterList [ chinese_traditional ] =
         {
             < "¥ş³¡" ; SFXSTYLEBIT_ALL ; > ;
@@ -916,7 +916,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
-            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "»ç¿ëµÈ¡¡À¯Çü" ; SFXSTYLEBIT_USED ; > ;
             < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Karakter biçimi";
@@ -1094,7 +1094,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
-            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "»ç¿ëµÈ¡¡À¯Çü" ; SFXSTYLEBIT_USED ; > ;
             < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Çerçeve biçimi";
@@ -1195,7 +1195,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             FilterList [ chinese_simplified ] =
         {
             < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
-            < "Ê¹ÓÃÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
             < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ language_user1 ] =
@@ -1231,7 +1231,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ chinese_traditional ] =
         {
             < "¥ş³¡" ; SFXSTYLEBIT_ALL ; > ;
-            < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
+            < "¨Ï¥Îªº¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
             < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ russian ] = "Ñòèëè ñòğàíèöû";
@@ -1257,11 +1257,11 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ chinese_simplified ] =
         {
             < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
-            < "Ê¹ÓÃÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
             < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ greek ] = "Ğñüôõğá óåëéäşí";
-            Text[ korean ] = "ÆäÀÌÁö À¯Çü";
+            Text[ korean ] = "ÂÊ À¯Çü";
             FilterList [ greek ] =
         {
             < "¼ëá" ; SFXSTYLEBIT_ALL ; > ;
@@ -1270,8 +1270,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ korean ] =
         {
-            < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
-            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "¸ğµÎ" ; SFXSTYLEBIT_ALL ; > ;
+            < "»ç¿ëµÈ¡¡À¯Çü" ; SFXSTYLEBIT_USED ; > ;
             < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Sayfa biçimi";
@@ -1416,7 +1416,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "¨Ï¥Îªº¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
             < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
         };
-        Text[ arabic ] = "ÃäãÇØ ÇáÊÑŞíã";
+        Text[ arabic ] = "ÃäãÇØ ÊÑŞíã";
             FilterList [ arabic ] =
         {
             < "Çáßá" ; SFXSTYLEBIT_ALL ; > ;
@@ -1438,7 +1438,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ greek ] = "Óôõë áñßèìçóçò";
-            Text[ korean ] = "¹øÈ£ ¸Å±â±â À¯Çü";
+            Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
             FilterList [ greek ] =
         {
             < "¼ëá" ; SFXSTYLEBIT_ALL ; > ;
@@ -1447,8 +1447,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ korean ] =
         {
-            < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
-            < "À¯Çü Àû¿ë" ; SFXSTYLEBIT_USED ; > ;
+            < "¸ğµÎ" ; SFXSTYLEBIT_ALL ; > ;
+            < "»ç¿ëµÈ¡¡À¯Çü" ; SFXSTYLEBIT_USED ; > ;
             < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Numaralama biçimi";
@@ -1578,7 +1578,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ dutch ] = "%PRODUCTNAME 3.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 ÎÄ±¾";
     Text[ greek ] = "Êåßìåíï (%PRODUCTNAME 3.0)";
-    Text[ korean ] = "ÅØ½ºÆ® (%PRODUCTNAME 3.0)";
+    Text[ korean ] = "%PRODUCTNAME 3.0 Text ";
     Text[ turkish ] = "%PRODUCTNAME 3.0 metni";
     Text[ language_user1 ] = " ";
 };
@@ -1606,7 +1606,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ dutch ] = "%PRODUCTNAME 4.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ÎÄ±¾";
     Text[ greek ] = "Êåßìåíï (%PRODUCTNAME 4.0)";
-    Text[ korean ] = "ÅØ½ºÆ® (%PRODUCTNAME 4.0)";
+    Text[ korean ] = "%PRODUCTNAME 4.0¡¡Text ";
     Text[ turkish ] = "%PRODUCTNAME 4.0 metni";
 };
 
@@ -1625,13 +1625,13 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text [ portuguese ] = "Texto (%PRODUCTNAME 5.0)" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ÎÄ±¾";
     Text[ russian ] = "Òåêñò â %PRODUCTNAME 5.0";
-    Text[ polish ] = "Tekst %PRODUCTNAME 5.0";
+    Text[ polish ] = "%PRODUCTNAME 5.0 - Tekst";
     Text[ japanese ] = "%PRODUCTNAME 5.0 Ã·½Ä";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤å¦r¤å¥ó";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤å¦r";
     Text[ arabic ] = "äÕ ãä %PRODUCTNAME 5.0";
     Text[ dutch ] = "%PRODUCTNAME 5.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ÎÄ±¾";
-    Text[ greek ] = "Êåßìåíï (%PRODUCTNAME 5.0)";
+    Text[ greek ] = "Êåßìåíï %PRODUCTNAME 5.0";
     Text[ korean ] = "ÅØ½ºÆ® (%PRODUCTNAME 5.0)";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ language_user1 ] = " ";
@@ -1640,6 +1640,24 @@ String STR_WRITER_DOCUMENT_FULLTYPE
 {
     Text = "%PRODUCTNAME 6.0 Text" ;
     Text [ English ] = "StarOffice 6.0 Text" ;
+    Text[ english_us ] = "Text (%PRODUCTNAME 5.0)";
+    Text[ portuguese ] = "Texto (%PRODUCTNAME 5.0)";
+    Text[ russian ] = "Òåêñò â %PRODUCTNAME 5.0";
+    Text[ greek ] = "Êåßìåíï (%PRODUCTNAME 5.0)";
+    Text[ dutch ] = "%PRODUCTNAME 5.0 Tekst";
+    Text[ french ] = "%PRODUCTNAME 5.0 Texte";
+    Text[ spanish ] = "%PRODUCTNAME 5.0 Texto";
+    Text[ italian ] = "Testo %PRODUCTNAME 5.0";
+    Text[ danish ] = "%PRODUCTNAME 4.0 tekst";
+    Text[ swedish ] = "%PRODUCTNAME 5.0 text";
+    Text[ polish ] = "Tekst %PRODUCTNAME 5.0";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 Ã·½Ä";
+    Text[ korean ] = "%PRODUCTNAME 5.0¡¡Text ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ÎÄ±¾";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤å¦r¤å¥ó";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
+    Text[ arabic ] = "äÕ ãä %PRODUCTNAME 5.0";
 };
 
 
@@ -1694,7 +1712,7 @@ String STR_CANTCREATE
     TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
     TEXT[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÎÄµµ";
     TEXT[ greek ] = "Äåí åßíáé äõíáôŞ ç äçìéïõñãßá ôïõ åããñÜöïõ.";
-    TEXT[ korean ] = "¹®¼­¸¦ ¸¸µé ¼ö ¾ø½À´Ï´Ù.";
+    TEXT[ korean ] = "¹®¼­¸¦ ¸¸µé ¼ö ¾ø¾ú½À´Ï´Ù.";
     TEXT[ turkish ] = "Belge oluşturulamadı.";
     TEXT[ language_user1 ] = " ";
 };
@@ -2162,7 +2180,7 @@ String STR_STATSTR_REFORMAT
     TEXT[ dutch ] = "Bezig met nieuwe opmaak...";
     TEXT[ chinese_simplified ] = "ÖØĞÂÖÆ×÷ÎÄµµ¸ñÊ½...";
     TEXT[ greek ] = "Ìïñöïğïßçóç åê íİïõ ôïõ åããñÜöïõ...";
-    TEXT[ korean ] = "ÆäÀÌÁö ¸Å±â±â...";
+    TEXT[ korean ] = "¹®¼­¡¡´Ù½Ã¡¡Æ÷¸ËÆÃ...";
     TEXT[ turkish ] = "Belge yeniden formatlanıyor...";
 };
 
@@ -2191,7 +2209,7 @@ String STR_STATSTR_AUTOFORMAT
     TEXT[ dutch ] = "Bezig met automatisch opmaken...";
     TEXT[ chinese_simplified ] = "ÎÄµµ×Ô¶¯¸ñÊ½»¯...";
     TEXT[ greek ] = "Áõôüìáôç ìïñöïğïßçóç ôïõ åããñÜöïõ...";
-    TEXT[ korean ] = "ÀÚµ¿ ¹®¼­ ¼­½Ä ¼³Á¤...";
+    TEXT[ korean ] = "¹®¼­¡¡ÀÚµ¿Æ÷¸ËÆÃ...";
     TEXT[ turkish ] = "Otomatik belge formatlama...";
 };
 
@@ -2214,7 +2232,7 @@ String STR_STATSTR_IMPGRF
     Text[ russian ] = "Èìïîğò ãğàôèêè...";
     Text[ polish ] = "Importowanie grafiki...";
     Text[ japanese ] = "}‚Ì²İÎß°Ä’†...";
-    Text[ chinese_traditional ] = "¥¿¦b¶×¤J¹Ï¤ù...";
+    Text[ chinese_traditional ] = "¥¿¦b¶×¤J¹Ï§Î...";
     Text[ arabic ] = "ÌÇÑí ÇÓÊíÑÇÏ ÇáÑÓã...";
     Text[ dutch ] = "Afbeelding wordt geïmporteerd...";
     Text[ chinese_simplified ] = "ÊäÈëÍ¼ĞÎ...";
@@ -2278,7 +2296,7 @@ String STR_STATSTR_FORMAT
     Text[ dutch ] = "Bezig met opmaken...";
     Text[ chinese_simplified ] = "¸ñÊ½»¯...";
     Text[ greek ] = "Ìïñöïğïßçóç...";
-    Text[ korean ] = "¼­½Ä ¼³Á¤...";
+    Text[ korean ] = "Æ÷¸ËÆÃ...";
     Text[ turkish ] = "Formatlanıyor...";
 };
 
@@ -2411,7 +2429,7 @@ String STR_STATSTR_HYPHEN
     Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ...";
     Text[ polish ] = "Dzielenie wyrazów";
     Text[ japanese ] = "Ê²ÌÈ°¼®İ...";
-    Text[ chinese_traditional ] = "³s±µ²Å...";
+    Text[ chinese_traditional ] = "³s¦r²Å...";
     Text[ arabic ] = "İÕá ÇáãŞÇØÚ...";
     Text[ dutch ] = "Woordafbreking...";
     Text[ chinese_simplified ] = "Á¬×Ö·û...";
@@ -2471,7 +2489,7 @@ String STR_STATSTR_TOX_UPDATE
     Text[ dutch ] = "Index wordt geactualiseerd...";
     Text[ chinese_simplified ] = "¸üĞÂË÷Òı...";
     Text[ greek ] = "Åíçìİñùóç êáôáëüãïõ...";
-    Text[ korean ] = "»öÀÎ ¾÷ µ¥ÀÌÆ®...";
+    Text[ korean ] = "»öÀÎ ¾÷µ¥ÀÌÆ®...";
     Text[ turkish ] = "Dizin güncelleniyor...";
 };
 
@@ -2551,7 +2569,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message[ russian ] = "İòîìó äåéñòâèş íåîáõîäèìî äëÿ îòìåíû ñëèøêîì ìíîãî ïàìÿòè.\nÂû õîòèòå îòêëş÷èòü îòìåíó?";
     Message[ polish ] = "Cofniêcie tej akcji wymaga du¿ej iloœci pamiêci.\nCzy chcesz przerwaæ cofniêcie?";
     Message[ japanese ] = "‚±‚Ìì‹Æ‚Í¤Œ³‚É–ß‚·‚½‚ß‚É”ñí‚É‘½‚­‚ÌÒÓØ‚ª•K—v‚Å‚·B\nŒ³‚É–ß‚·‚±‚Æ‚ğæ‚è‚â‚ß‚Ü‚·‚©?";
-    Message[ chinese_traditional ] = "´_­ì¥\\¯à»İ­n«Ü¦hªº°O¾ĞÅé¡C\n±z­n¥¢¬¡´_­ì¥\\¯à¡H";
+    Message[ chinese_traditional ] = "´_­ì¥\\¯à»İ­n«Ü¦hªº°O¾ĞÅé¡C\n±z­nÃö³¬´_­ì¥\\¯à¡H";
     Message[ arabic ] = "ÇáÊÑÇÌÚ Úä åĞÇ ÇáÅÌÑÇÁ íÊØáÈ ĞÇßÑÉ ßÈíÑÉ ÌÏÇğ.\nåá ÊÑíÏ ÅáÛÇÁ ÇáÊÑÇÌÚ¿";
     Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?";
     Message[ chinese_simplified ] = "³·ÏûÃüÁî¹¦ÄÜĞèÒªºÜ¶àµÄÄÚ´æ¡£\nÄúÒªÊ§»î³·ÏûÃüÁî¹¦ÄÜÂğ£¿";
@@ -2619,7 +2637,7 @@ String STR_GRAPHIC_DEFNAME
     TEXT[ russian ] = "Ğèñóíîê";
     TEXT[ polish ] = "Grafika";
     TEXT[ japanese ] = "}";
-    TEXT[ chinese_traditional ] = "¹Ï¤ù";
+    TEXT[ chinese_traditional ] = "¹Ï§Î";
     TEXT[ arabic ] = "ÕæÑÉ";
     TEXT[ dutch ] = "Afbeelding";
     TEXT[ chinese_simplified ] = "Í¼ĞÎ";
@@ -2738,7 +2756,7 @@ String STR_NUMRULE_DEFNAME
     Text[ dutch ] = "Nummering";
     Text[ chinese_simplified ] = "±àºÅ";
     Text[ greek ] = "Áñßèìçóç";
-    Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+    Text[ korean ] = "¹øÈ£¸Å±â±â";
     Text[ turkish ] = "Numaralama";
     Text[ language_user1 ] = " ";
 };
@@ -2764,7 +2782,7 @@ String STR_EMPTYPAGE
     Text[ dutch ] = "Lege pagina";
     Text[ chinese_simplified ] = "¿Õ°×Ò³Ãæ";
     Text[ greek ] = "êåíŞ óåëßäá";
-    Text[ korean ] = "ºó ÆäÀÌÁö";
+    Text[ korean ] = "ºó ÂÊ";
     Text[ turkish ] = "Boş sayfa";
     Text[ language_user1 ] = " ";
 };
@@ -2933,7 +2951,7 @@ String STR_PAGEOFFSET
     Text[ dutch ] = "Paginanummer  ";
     Text[ chinese_simplified ] = "Ò³Âë£º ";
     Text[ greek ] = "Áñéèìüò óåëßäáò: ";
-    Text[ korean ] = "ÆäÀÌÁö ¹øÈ£: ";
+    Text[ korean ] = "ÂÊ ¹øÈ£: ";
     Text[ turkish ] = "Sayfa numarası: ";
     Text[ language_user1 ] = " ";
 };
@@ -2961,7 +2979,7 @@ String STR_PAGEBREAK
     Text[ dutch ] = "Einde voor nieuwe pagina";
     Text[ chinese_simplified ] = "ÔÚĞÂÒ»Ò³Ö®Ç°»»Ò³";
     Text[ greek ] = "ÁëëáãŞ ğñéí áğü íİá óåëßäá";
-    Text[ korean ] = "»õ ÆäÀÌÁö ¾Õ¿¡¼­ Áß´Ü";
+    Text[ korean ] = "»õ ÂÊ ¾Õ¿¡¼­ ³ª´©±â";
     Text[ turkish ] = "Yeni sayfa öncesi kesme";
     Text[ language_user1 ] = " ";
 };
@@ -2983,7 +3001,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ polish ] = "nieznany";
     Text[ portuguese_brazilian ] = "unknown";
     Text[ japanese ] = "•s–¾";
-    Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö  ¾ÊÀº";
+    Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö  ¾ÊÀ½";
     Text[ chinese_simplified ] = "²»Ã÷";
     Text[ chinese_traditional ] = "¤£©ú";
     Text[ turkish ] = "unknown";
