@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XToolbarController.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:20:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XToolbarController_idl__
+#define __com_sun_star_frame_XToolbarController_idl__
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+#ifndef __com_sun_star_awt_KeyModifier_idl__
+#include <com/sun/star/awt/KeyModifier.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** is an abstract service for a component which offers a more complex user interface
+    to users within a toolbar.
+
+    <p>
+    A generic toolbar function is represented as a button which has a state
+    (enabled,disabled and selected, not selected). A toolbar controller can be added to a
+    toolbar and provide information or functions with a more sophisticated user interface.<br/>
+    A typical example for toolbar controller is a font chooser on a toolbar. It provides
+    all available fonts in a dropdown box and shows the current chosen font.
+    <p>
+
+    @see com::sun::star::frame::XDispatchProvider
+ */
+interface XToolbarController : com::sun::star::uno::XInterface
+{
+    //=============================================================================
+    /** provides a function to execute the command which is bound to the toolbar controller.
+
+        @param
+            a combination of <type scope="com::sun::star::awt">KeyModifier</type> value that represent
+            the current state of the modifier keys.
+
+        <p>
+        This function is usally called by a toolbar implementation when a user clicked on a toolbar button
+        or pressed enter on the keyboard when the item has the input focus.
+        </p>
+    */
+    void execute( [in] short KeyModifier );
+
+    //=============================================================================
+    /** notifies a component that a single click has been made on the toolbar item.
+    */
+    void click();
+
+    //=============================================================================
+    /** notifies a component that a double click has been made on the toolbar item.
+    */
+    void doubleClick();
+
+    //=============================================================================
+    /** requests to create a popup window for additional functions.
+
+        @return
+            a <type scope="com::sun::star::awt">XWindow</type> which provides additional functions
+            to the user. The reference must be empty if component does not want to provide a separate
+            window.
+    */
+    com::sun::star::awt::XWindow createPopupWindow();
+
+    //=============================================================================
+    /** requests to create an item window which can be added to the toolbar.
+
+        @param Parent
+            a <type scope="com::sun::star::awt">XWindow</type> which must be used as a parent
+            for the requested item window.
+
+        @return
+            a <type scope="com::sun::star::awt">XWindow</type> which can be added to a toolbar.
+            The reference must be empty if a component does not want to provide an item window.
+    */
+    com::sun::star::awt::XWindow createItemWindow( [in] com::sun::star::awt::XWindow Parent );
+};
+
+}; }; }; };
+
+#endif
