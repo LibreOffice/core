@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-06-16 10:48:18 $
+dnl * Date: $Date: 2004-06-17 11:58:30 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.64 $ )
+AC_REVISION( $Revision: 1.65 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1934,7 +1934,6 @@ else
      ANT="`pwd`"/"`basename "$a_script"`"
      cd "$a_cwd"
   done
-
   AC_MSG_CHECKING([if $ANT works])
 cat > conftest.java << EOF
     public class conftest {
