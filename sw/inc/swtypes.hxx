@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-26 13:12:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ const USHORT lNumIndent = 567 / 2;
 const short lNumFirstLineOffset = -567 / 2;
 
 // Anzahl der SystemField-Types vom SwDoc
-#define INIT_FLDTYPES   31
+#define INIT_FLDTYPES   32
 // Anzahl der vordefinierten Seq-Feldtypen. Es handelt sich dabei
 // immer um die letzen Felder vor INIT_FLDTYPES
 #define INIT_SEQ_FLDTYPES   4
