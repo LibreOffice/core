@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:19:09 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,15 +363,6 @@ static BYTE ReadBSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, BYTE nDefaultVal )
     return nVal;
 }
 
-static short ReadULSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, short nDefaultVal )
-{
-    const BYTE* pS = pSep->HasSprm( nId );          // sprm da ?
-    short nVal = ( pS ) ? SVBT16ToShort( pS ) : nDefaultVal;
-    if( nVal < 0 )      // < 0 bedeutet: nicht verschieben, wenns nicht passt
-        nVal = -nVal;
-    return nVal;
-}
-
 void wwSection::SetDirection()
 {
     //sprmSTextFlow
@@ -527,7 +518,7 @@ void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
 }
 
 bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
-    sal_uInt32 nNettoWidth)
+    sal_uInt32 nNettoWidth) const
 {
     //sprmSCcolumns - Anzahl der Spalten - 1
     sal_Int16 nCols = rSection.NoCols();
@@ -616,7 +607,7 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
 }
 
 void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
-    const wwSection &rSection, bool bIgnoreCols)
+    const wwSection &rSection, bool bIgnoreCols) const
 {
     // 1. Orientierung
     rInPageDesc.SetLandscape(rSection.IsLandScape());
@@ -631,10 +622,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
         SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight()));
 
     if (!bIgnoreCols)
-    {
-        SetCols(rFmt, rSection, rSection.GetPageWidth() -
-            rSection.GetPageLeft() - rSection.GetPageRight());
-    }
+        SetCols(rFmt, rSection, rSection.GetTextAreaWidth());
 }
 
 void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const
@@ -707,7 +695,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
 }
 
 void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
-    wwSectionManager::wwULSpaceData& rData)
+    wwSectionManager::wwULSpaceData& rData) const
 {
     sal_Int32 nWWUp = rSection.maSep.dyaTop;
     sal_Int32 nWWLo = rSection.maSep.dyaBottom;
@@ -769,19 +757,29 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
 }
 
 void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
-    wwSectionManager::wwULSpaceData& rData)
+    wwSectionManager::wwULSpaceData& rData, const wwSection &rSection) const
 {
     if (rData.bHasHeader)               // ... und Header-Lower setzen
     {
         //Kopfzeilenhoehe minimal sezten
         if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
         {
-            pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
             SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
-            aHdUL.SetLower(writer_cast<USHORT>(rData.nSwHLo - MM50));
+            if (!rSection.IsFixedHeightHeader())    //normal
+            {
+                pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
+                aHdUL.SetLower(writer_cast<USHORT>(rData.nSwHLo - MM50));
+                pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                    RES_HEADER_FOOTER_EAT_SPACING, true));
+            }
+            else
+            {
+                pHdFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo));
+                aHdUL.SetLower(0);
+                pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                    RES_HEADER_FOOTER_EAT_SPACING, false));
+            }
             pHdFmt->SetAttr(aHdUL);
-            pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
-                RES_HEADER_FOOTER_EAT_SPACING, true));
         }
     }
 
@@ -789,12 +787,22 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
     {
         if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
         {
-            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
             SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
-            aFtUL.SetUpper(writer_cast<USHORT>(rData.nSwFUp - MM50));
+            if (!rSection.IsFixedHeightFooter())    //normal
+            {
+                pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
+                aFtUL.SetUpper(writer_cast<USHORT>(rData.nSwFUp - MM50));
+                pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                    RES_HEADER_FOOTER_EAT_SPACING, true));
+            }
+            else
+            {
+                pFtFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp));
+                aFtUL.SetUpper(0);
+                pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                    RES_HEADER_FOOTER_EAT_SPACING, false));
+            }
             pFtFmt->SetAttr(aFtUL);
-            pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
-                RES_HEADER_FOOTER_EAT_SPACING, true));
         }
     }
 
@@ -859,8 +867,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
         pFmt->SetAttr(aLR);
     }
 
-    SetCols(*pFmt, rSection, rSection.GetPageWidth() -
-        rSection.GetPageLeft() - rSection.GetPageRight());
+    SetCols(*pFmt, rSection, rSection.GetTextAreaWidth());
 
     //Set the columns to be UnBalanced if compatability option is set
     if (mrReader.pWDop->fNoColumnBalance  )
@@ -926,7 +933,7 @@ wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode),
 }
 
 void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
-    SwPageDesc &rPageDesc)
+    SwPageDesc &rPageDesc) const
 {
     // Seitennummernformat speichern
     static const SvxExtNumType aNumTyp[5] =
@@ -1082,16 +1089,16 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     static const USHORT nLef[] = { MM_250, 1800 };
     static const USHORT nRig[] = { MM_250, 1800 };
 
-    aNewSection.maSep.dxaLeft = ReadULSprm( pSep, pIds[3], nLef[nLIdx]);
-    aNewSection.maSep.dxaRight = ReadULSprm( pSep, pIds[4], nRig[nLIdx]);
+    aNewSection.maSep.dxaLeft = ReadUSprm( pSep, pIds[3], nLef[nLIdx]);
+    aNewSection.maSep.dxaRight = ReadUSprm( pSep, pIds[4], nRig[nLIdx]);
 
     //#110175# 2pages in 1sheet hackery ?
     if (aNewSection.maSep.dmOrientPage == 2)
         std::swap(aNewSection.maSep.dxaLeft, aNewSection.maSep.dxaRight);
 
-    aNewSection.maSep.dzaGutter = ReadULSprm( pSep, pIds[5], 0);
+    aNewSection.maSep.dzaGutter = ReadUSprm( pSep, pIds[5], 0);
 
-    aNewSection.maSep.fRTLGutter = !bVer67 ? ReadULSprm( pSep, 0x322A, 0 ) : 0;
+    aNewSection.maSep.fRTLGutter = !bVer67 ? ReadUSprm( pSep, 0x322A, 0 ) : 0;
 
     // Page Number Restarts - sprmSFPgnRestart
     aNewSection.maSep.fPgnRestart = ReadBSprm(pSep, (bVer67 ? 150 : 0x3011), 0);
@@ -1140,16 +1147,16 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
 
     pIds = bVer67 ? aVer67Ids2 : aVer8Ids2;
 
-    aNewSection.maSep.dyaTop = ReadULSprm( pSep, pIds[0], nTop[nLIdx] );
-    aNewSection.maSep.dyaBottom = ReadULSprm( pSep, pIds[1], nBot[nLIdx] );
-    aNewSection.maSep.dyaHdrTop = ReadULSprm( pSep, pIds[2], 720 );
-    aNewSection.maSep.dyaHdrBottom = ReadULSprm( pSep, pIds[3], 720 );
+    aNewSection.maSep.dyaTop = ReadSprm( pSep, pIds[0], nTop[nLIdx] );
+    aNewSection.maSep.dyaBottom = ReadSprm( pSep, pIds[1], nBot[nLIdx] );
+    aNewSection.maSep.dyaHdrTop = ReadUSprm( pSep, pIds[2], 720 );
+    aNewSection.maSep.dyaHdrBottom = ReadUSprm( pSep, pIds[3], 720 );
 
     if (!bVer67)
     {
-        aNewSection.maSep.wTextFlow = ReadULSprm(pSep, 0x5033, 0);
-        aNewSection.maSep.clm = ReadULSprm( pSep, 0x5032, 0 );
-        aNewSection.maSep.dyaLinePitch = ReadULSprm(pSep, 0x9031, 360);
+        aNewSection.maSep.wTextFlow = ReadUSprm(pSep, 0x5033, 0);
+        aNewSection.maSep.clm = ReadUSprm( pSep, 0x5032, 0 );
+        aNewSection.maSep.dyaLinePitch = ReadUSprm(pSep, 0x9031, 360);
         if (const BYTE* pS = pSep->HasSprm(0x7030))
             aNewSection.maSep.dxtCharSpace = SVBT32ToLong(pS);
 
@@ -1729,7 +1736,7 @@ inline bool SetValSprm( INT16* pVar, const WW8RStyle* pStyle, USHORT nId )
 #i1930 revealed that sprm 0x360D as used in tables can affect the frame
 around the table. Its full structure is not fully understood as yet.
 */
-void WW8FlyPara::ApplyTabPos(WW8_TablePos *pTabPos)
+void WW8FlyPara::ApplyTabPos(const WW8_TablePos *pTabPos)
 {
     if (pTabPos)
     {
@@ -2247,21 +2254,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     const WW8_PIC& rPic, long nWidth, long nHeight )
     : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
-    if (!rReader.mbNewDoc)
-        Reader::ResetFrmFmtAttrs( *this );  // Abstand/Umrandung raus
-
-    Put( SvxLRSpaceItem() ); //inline writer ole2 objects start with 0.2cm l/r
-    SwFmtAnchor aAnchor( FLY_IN_CNTNT );
-
-    aAnchor.SetAnchor( pPaM->GetPoint() );
-    Put( aAnchor );
-
-    //The horizontal default is on the baseline, the vertical is centered
-    //around the character center it appears
-    if (rReader.maSectionManager.CurrentSectionIsVertical())
-        Put(SwFmtVertOrient(0, VERT_CHAR_CENTER,REL_CHAR));
-    else
-        Put(SwFmtVertOrient(0, VERT_TOP, FRAME));
+    Init(rReader, pPaM);
 
     Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
 
@@ -2288,9 +2281,33 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         + aSizeArray[WW8_BOT]) );
 }
 
-WW8DupProperties::WW8DupProperties(SwDoc &rDoc,
-    SwWW8FltControlStack *pStk) :
-    pCtrlStck(pStk),
+WW8FlySet::WW8FlySet(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
+    : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
+{
+    Init(rReader, pPaM);
+}
+
+void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
+{
+    if (!rReader.mbNewDoc)
+        Reader::ResetFrmFmtAttrs(*this);  // Abstand/Umrandung raus
+
+    Put(SvxLRSpaceItem()); //inline writer ole2 objects start with 0.2cm l/r
+    SwFmtAnchor aAnchor(FLY_IN_CNTNT);
+
+    aAnchor.SetAnchor(pPaM->GetPoint());
+    Put(aAnchor);
+
+    //The horizontal default is on the baseline, the vertical is centered
+    //around the character center it appears
+    if (rReader.maSectionManager.CurrentSectionIsVertical())
+        Put(SwFmtVertOrient(0, VERT_CHAR_CENTER,REL_CHAR));
+    else
+        Put(SwFmtVertOrient(0, VERT_TOP, FRAME));
+}
+
+WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
+    : pCtrlStck(pStk),
     aChrSet(rDoc.GetAttrPool(), RES_CHRATR_BEGIN, RES_CHRATR_END - 1 ),
     aParSet(rDoc.GetAttrPool(), RES_PARATR_BEGIN, RES_PARATR_END - 1 )
 {
@@ -2417,7 +2434,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
 }
 
 WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
-    WW8_TablePos *pTabPos)
+    const WW8_TablePos *pTabPos)
 {
     WW8FlyPara *pRet = 0;
     ASSERT(rApo.HasFrame() || pTabPos,
@@ -2456,15 +2473,14 @@ bool SwWW8ImplReader::IsDropCap()
 }
 
 bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
-    WW8_TablePos *pTabPos)
+    const WW8_TablePos *pTabPos)
 {
     if (!(pWFlyPara = ConstructApo(rApo, pTabPos)))
         return false;
 
-    pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara,
-        maSectionManager.GetPageLeft(),
-        (maSectionManager.GetPageWidth() - maSectionManager.GetPageRight() -
-         maSectionManager.GetPageLeft()), nIniFlyDx, nIniFlyDy );
+    pSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pWFlyPara,
+        maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
+        nIniFlyDx, nIniFlyDy);
 
     // If this paragraph is a Dropcap set the flag and we will deal with it later
     if (IsDropCap())
@@ -2656,7 +2672,7 @@ void SwWW8ImplReader::StopApo()
 
 // TestSameApo() beantwortet die Frage, ob es dasselbe APO oder ein neues ist
 bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
-    WW8_TablePos *pTabPos)
+    const WW8_TablePos *pTabPos)
 {
     if( !pWFlyPara )
     {
