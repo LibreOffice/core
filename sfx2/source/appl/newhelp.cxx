@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-07 18:08:09 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 09:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ using namespace com::sun::star::ucb;
 #define HELPWIN_CONFIGNAME      String(DEFINE_CONST_UNICODE("OfficeHelp"))
 #define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
 #define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
+#define HELP_URL                ::rtl::OUString(DEFINE_CONST_UNICODE("vnd.sun.star.help://"))
 
 // class ContentTabPage_Impl ---------------------------------------------
 
@@ -194,7 +195,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
     try
     {
-        ::rtl::OUString aURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
+        ::rtl::OUString aURL( HELP_URL );
         aURL += aFactory;
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
@@ -443,17 +444,16 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 
 void SfxHelpIndexWindow_Impl::Initialize()
 {
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetFolderContentProperties( DEFINE_CONST_UNICODE("vnd.sun.star.help://"), sal_False );
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( HELP_URL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     UINT32 i, nCount = aFactories.getLength();
     for ( i = 0; i < nCount; ++i )
     {
         String aRow( pFacs[i] );
-        String aTitle, aSize, aDate, aURL;
+        String aTitle, aType, aURL;
         xub_StrLen nIdx = 0;
         aTitle = aRow.GetToken( 0, '\t', nIdx );
-        aSize = aRow.GetToken( 0, '\t', nIdx );
-        aDate = aRow.GetToken( 0, '\t', nIdx );
+        aType = aRow.GetToken( 0, '\t', nIdx );
         aURL = aRow.GetToken( 0, '\t', nIdx );
         aActiveLB.InsertEntry( aTitle );
     }
@@ -468,7 +468,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
 
     switch ( nId )
     {
-        case 1:
+        case HELP_INDEX_PAGE_CONTENTS:
         {
             if ( !pCPage )
                 pCPage = new ContentTabPage_Impl( &aTabCtrl );
@@ -476,7 +476,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
             break;
         }
 
-        case 2:
+        case HELP_INDEX_PAGE_INDEX:
         {
             if ( !pIPage )
                 pIPage = new IndexTabPage_Impl( &aTabCtrl );
@@ -484,7 +484,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
             break;
         }
 
-        case 3:
+        case HELP_INDEX_PAGE_SEARCH:
         {
             if ( !pSPage )
                 pSPage = new SearchTabPage_Impl( &aTabCtrl );
@@ -558,21 +558,22 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( Window* pParent ) :
 
     SetBackground( Wallpaper( Color( COL_WHITE ) ) );
 
-    aToolBox.InsertItem( TBI_INDEX, Image( SfxResId(IMG_HELP_TOOLBOX_INDEX) ) );
-    aToolBox.SetQuickHelpText( TBI_INDEX, DEFINE_CONST_UNICODE("Index") );
-    aToolBox.InsertItem( TBI_START, Image( SfxResId(IMG_HELP_TOOLBOX_START) ) );
-    aToolBox.SetQuickHelpText( TBI_START, DEFINE_CONST_UNICODE("Start") );
-    aToolBox.InsertItem( TBI_BACKWARD, Image( SfxResId(IMG_HELP_TOOLBOX_PREV) ) );
-    aToolBox.SetQuickHelpText( TBI_BACKWARD, DEFINE_CONST_UNICODE("Prev") );
-    aToolBox.InsertItem( TBI_FORWARD, Image( SfxResId(IMG_HELP_TOOLBOX_NEXT) ) );
-    aToolBox.SetQuickHelpText( TBI_FORWARD, DEFINE_CONST_UNICODE("Next") );
-    aToolBox.InsertItem( TBI_CONTEXT, Image( SfxResId(IMG_HELP_TOOLBOX_CONTEXT) ) );
-    aToolBox.SetQuickHelpText( TBI_CONTEXT, DEFINE_CONST_UNICODE("Context") );
-    aToolBox.InsertItem( TBI_PRINT, Image( SfxResId(IMG_HELP_TOOLBOX_PRINT) ) );
-    aToolBox.SetQuickHelpText( TBI_PRINT, DEFINE_CONST_UNICODE("Print") );
+    aToolBox.InsertItem( TBI_INDEX, Image( SfxResId( IMG_HELP_TOOLBOX_INDEX ) ) );
+    aToolBox.SetQuickHelpText( TBI_INDEX, String( SfxResId( STR_HELP_BUTTON_INDEX ) ) );
+    aToolBox.InsertItem( TBI_START, Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
+    aToolBox.SetQuickHelpText( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
+    aToolBox.InsertItem( TBI_BACKWARD, Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
+    aToolBox.SetQuickHelpText( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
+    aToolBox.InsertItem( TBI_FORWARD, Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
+    aToolBox.SetQuickHelpText( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
+/*! aToolBox.InsertItem( TBI_CONTEXT, Image( SfxResId(IMG_HELP_TOOLBOX_CONTEXT) ) );
+    aToolBox.SetQuickHelpText( TBI_CONTEXT, DEFINE_CONST_UNICODE("Context") );*/
+    aToolBox.InsertItem( TBI_PRINT, Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
+    aToolBox.SetQuickHelpText( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
 
     Size aSize = aToolBox.CalcWindowSizePixel();
     aToolBox.SetSizePixel( aSize );
+    aToolBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aToolBox.Show();
 }
 
@@ -746,7 +747,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
             case TBI_START :
             {
                 URL aURL;
-                aURL.Complete = DEFINE_CONST_UNICODE("vnd.sun.com.help://");
+                aURL.Complete = HELP_URL;
                 aURL.Complete += pIndexWin->GetFactory();
                 aURL.Complete += DEFINE_CONST_UNICODE("/start");
                 String aTarget( DEFINE_CONST_UNICODE("_self") );
@@ -805,7 +806,9 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
     if ( pData )
     {
         URL aURL;
-        aURL.Complete = DEFINE_CONST_UNICODE("vnd.sun.star.help://swriter/");
+        aURL.Complete = HELP_URL;
+        aURL.Complete += pIndexWin->GetFactory();
+        aURL.Complete += ::rtl::OUString( '/' );
         aURL.Complete += *pData;
         Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
         if ( xDisp.is() )
@@ -817,8 +820,9 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
 
 // -----------------------------------------------------------------------
 
-SfxHelpWindow_Impl::SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
-        Window* pParent, WinBits nBits ) :
+SfxHelpWindow_Impl::SfxHelpWindow_Impl(
+    const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
+    Window* pParent, WinBits nBits ) :
 
     SplitWindow( pParent, nBits | WB_3DLOOK ),
 
