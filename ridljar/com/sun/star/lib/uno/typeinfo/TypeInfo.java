@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-12-07 17:11:38 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@ public class TypeInfo
     public static final int ANY         = 0x00000040;
     public static final int INTERFACE   = 0x00000080;
 
+    /**
+       Marks an extended attribute of an interface type as bound.
+
+       @since UDK 3.2
+     */
+    public static final int BOUND = 0x00000100;
+
     protected int       m_flags;
     protected String    m_name;
 
@@ -107,5 +114,3 @@ public class TypeInfo
         return (m_flags & TypeInfo.INTERFACE) != 0;
     }
 }
-
-
