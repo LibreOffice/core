@@ -830,7 +830,7 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="beta"/>
-    <supported-service/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
@@ -848,7 +848,7 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="beta"/>
-    <supported-service/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
@@ -866,7 +866,7 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="beta"/>
-    <supported-service/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
@@ -884,7 +884,7 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="beta"/>
-    <supported-service/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
@@ -902,7 +902,7 @@
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
     <language>c++</language>
     <status value="beta"/>
-    <supported-service/>
+    <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
