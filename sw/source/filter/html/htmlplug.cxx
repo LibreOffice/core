@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-01 13:28:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,7 +1186,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         const XubString& rURL = pApplet->GetCodeBase();
         if( rURL.Len() )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             String sTmp( INetURLObject::GetBaseURL() );
 #endif
             String sCodeBase( INetURLObject::AbsToRel(rURL,
