@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-02 09:40:26 $
+ *  last change: $Author: dvo $ $Date: 2002-08-02 10:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,8 @@ Reference<XTextCursor> SwXRedlineText::createTextCursor(void)
     }
     if( pContentNode != NULL )
         pUnoCursor->GetPoint()->nContent.Assign( pContentNode, 0 );
-    if( pUnoCursor->GetNode()->FindStartNode() != GetStartNode() )
+    if( pUnoCursor->GetNode()->FindSttNodeByType( SwNormalStartNode ) !=
+                                                               GetStartNode() )
     {
         // We have gone too far and have left our own redline. This means that
         // no content node outside of a table could be found, and therefore we
