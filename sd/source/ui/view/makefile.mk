@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-16 14:35:50 $
+#   last change: $Author: obo $ $Date: 2004-01-20 12:51:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,9 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES= \
-        $(SLO)$/sdoutl.obj  \
+
+EXCEPTIONSFILES=				\
+        $(SLO)$/Outliner.obj	\
         $(SLO)$/drviews1.obj \
         $(SLO)$/drviews8.obj \
         $(SLO)$/drviewsa.obj \
@@ -132,20 +133,27 @@ SLOFILES =	\
         $(SLO)$/showview.obj \
         $(SLO)$/showwin.obj	\
         $(SLO)$/bmcache.obj	\
-        $(SLO)$/drstdob.obj	\
-        $(SLO)$/grstdob.obj	\
         $(SLO)$/drbezob.obj	\
         $(SLO)$/drglueob.obj	\
         $(SLO)$/drtxtob.obj	\
         $(SLO)$/drtxtob1.obj	\
         $(SLO)$/sdruler.obj	\
-        $(SLO)$/sdoutl.obj  \
-        $(SLO)$/SdOutlinerIterator.obj \
         $(SLO)$/frmview.obj	\
         $(SLO)$/clview.obj  \
         $(SLO)$/zoomlist.obj	\
         $(SLO)$/unmodpg.obj	\
-        $(SLO)$/drgrfob.obj \
+        $(SLO)$/DrawObjectBar.obj				\
+        $(SLO)$/GraphicObjectBar.obj			\
+        $(SLO)$/GraphicViewShellBase.obj		\
+        $(SLO)$/ImpressObjectBar.obj			\
+        $(SLO)$/ObjectBarManager.obj			\
+        $(SLO)$/Outliner.obj					\
+        $(SLO)$/OutlinerIterator.obj			\
+        $(SLO)$/OutlineViewShellBase.obj		\
+        $(SLO)$/PresentationViewShellBase.obj	\
+        $(SLO)$/PrintManager.obj				\
+        $(SLO)$/SubShellManager.obj				\
+        $(SLO)$/ViewShellBase.obj				\
         $(SLO)$/WindowUpdater.obj
 
 
