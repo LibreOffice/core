@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:57:02 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@
 #ifndef _BIB_TOOLBAR_HXX
 #include "toolbar.hxx"
 #endif
+#include "toolbar.hrc"
 #ifndef _BIBCONFIG_HXX
 #include "bibconfig.hxx"
 #endif
@@ -315,7 +316,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
         xConn = Reference< XConnection > (*(Reference< XInterface > *)xFormProps->getPropertyValue(C2U("ActiveConnection")).getValue(), UNO_QUERY);
         if (!xConn.is())
         {
-            DBG_ERROR("no active connection")
+            DBG_WARNING("no active connection")
         }
     }
     catch(Exception& e )
@@ -1206,6 +1207,8 @@ rtl::OUString BibDataManager::getActiveDataTable()
 //------------------------------------------------------------------------
 void BibDataManager::setFilter(const rtl::OUString& rQuery)
 {
+    if(!m_xParser.is())
+        return;
     try
     {
         m_xParser->setFilter(rQuery);
@@ -1341,6 +1344,10 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
             aActiveDataTable = pTableNames[0];
             aVal <<= aActiveDataTable;
             aPropertySet->setPropertyValue(C2U("Command"), aVal);
+            aPropertySet->setPropertyValue(C2U("CommandType"), makeAny(CommandType::TABLE));
+            //Caching for Performance
+            aVal <<= (sal_Int32)50;
+            aPropertySet->setPropertyValue(C2U("FetchSize"), aVal);
             rtl::OUString aString(C2U("SELECT * FROM "));
             // quote the table name which may contain catalog.schema.table
             Reference<XDatabaseMetaData> xMetaData(xConnection->getMetaData(),UNO_QUERY);
@@ -1367,6 +1374,7 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
             pToolbar->statusChanged( aEvent );
         }
 
+        updateGridModel();
         load();
     }
 }
@@ -1898,6 +1906,14 @@ rtl::OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
     delete pDlg;
     return uRet;
 }
+/*-- 18.05.2004 15:20:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void BibDataManager::DispatchDBChangeDialog()
+{
+    if(pToolbar)
+        pToolbar->SendDispatch(TBC_BT_CHANGESOURCE, Sequence< PropertyValue >());
+}
 /* -----------------06.12.99 15:11-------------------
 
  --------------------------------------------------*/
@@ -1961,4 +1977,27 @@ void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
         m_pInterceptorHelper = new BibInterceptorHelper( pBibBeamer, m_xFormDispatch);
     if( m_pInterceptorHelper )
         m_pInterceptorHelper->acquire();
+}
+
+/*-- 18.05.2004 17:04:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool BibDataManager::HasActiveConnection()const
+{
+    sal_Bool bRet = sal_False;
+    Reference< XPropertySet >   xPrSet( m_xForm, UNO_QUERY );
+    if( xPrSet.is() )
+    {
+        Reference< XComponent >  xConnection;
+        xPrSet->getPropertyValue(C2U("ActiveConnection")) >>= xConnection;
+        bRet = xConnection.is();
+    }
+    return bRet;
+}
+/*-- 04.06.2004 14:37:29---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool BibDataManager::HasActiveConnection()
+{
+    return getConnection( m_xForm ).is();
 }
