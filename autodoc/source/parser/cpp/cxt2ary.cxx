@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cxt2ary.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:45:56 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,13 @@ DYN StringVector *
 ContextForAry::do_Get_CurTemplateParameters()
 {
     return pFileScopeInfo->pCurTemplateParameters.Release();
+}
+
+void
+ContextForAry::do_Close_OpenTemplate()
+{
+    if (pFileScopeInfo->pCurTemplateParameters)
+        delete pFileScopeInfo->pCurTemplateParameters.Release();
 }
 
 void
