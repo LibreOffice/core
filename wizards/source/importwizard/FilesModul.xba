@@ -97,7 +97,7 @@ Dim oTask as Object
 Dim oModel as Object
 Dim oTaskController as Object
 Dim MaxFileIndex as Integer
-
+	bConversionIsRunnig = True
 	AbsTemplateFound = 0
 	AbsDocuFound = 0
 	For i = 0 To ApplCount-1
@@ -116,18 +116,16 @@ Dim MaxFileIndex as Integer
 	TotFound = AbsTemplateFound + AbsDocuFound
 	CreateLogDocument(OpenProperties())
 	If TotFound &gt; 0 Then
-		bCallCancelMsg = True
 		InitializeProgressPage(ImportDialog)
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
 		MaxFileIndex = Ubound(FilesList(),1)
 		For i = 0 To MaxFileIndex
-			bDoSave = True
 			If bCancelTask Then
-				If CancelTask() Then
-					Exit Sub
-				End If
+				bConversionIsRunnig = False
+				Exit Sub
 			End if
+			bDoSave = True
 			sFullName = FilesList(i,0)
 			CurFiltername =	GetFilterName(FilesList(i,1), sFilterName(), sExtension, FilterIndex)
 			ApplIndex = FilesList(i,2)
@@ -167,9 +165,8 @@ Dim MaxFileIndex as Integer
 							&apos; In the FileProperty-Bean this is already default
 							bDoSave = True
 						Case 2 	&apos; Abort
-							bCallCancelMsg = False
-							Exit For
-&apos;							Call CancelTask()
+							CancelTask(False)
+							bDoSave = False
 						Case 7 	&apos; No
 							bDoSave = False
 					End Select
@@ -204,7 +201,7 @@ Dim MaxFileIndex as Integer
 	ImportDialog.cbCancel.Label = sCloseButton
 	ImportDialog.cbGoOn.Label = sReady
 	ImportDialog.cbGoOn.Enabled = True
-	bCallCancelMsg = False
+	bConversionIsRunnig = False
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader

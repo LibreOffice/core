@@ -11,12 +11,12 @@ Public ImportDialogArea as Object
 Public bSetFonts as Boolean
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
-Public bCallCancelMsg as Boolean
+Public bConversionIsRunnig as Boolean
 
 Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	bSetFonts = False
-	bCallCancelMsg = False
+	bConversionIsRunnig = False
 	If bSetFonts Then
 		BasicLibraries.LoadLibrary(&quot;Translater&quot;)
 		GetFontNames()
@@ -63,7 +63,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
-	bCallCancelMsg = False
+	bConversionIsRunnig = False
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 1
@@ -103,7 +103,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
-	bCallCancelMsg = False
+	bConversionIsRunnig = False
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 4
@@ -129,28 +129,25 @@ RTError:
 End Sub
 
 
-Sub CancelButton()
-	If bCallCancelMsg Then
-		&apos; Conversion is already running
-		CancelTask()
-&apos;		ImportDialog.cbCancel.Enabled = False
-&apos;		bCancelTask = True
+Sub CancelTask(Optional bCloseDialog)
+	If bConversionIsRunnig Then
+		If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
+			If IsMissing(bDontCloseDialog) Then
+				ImportDialogArea.EndExecute
+			Else
+				If bCloseDialog Then
+					ImportDialogArea.EndExecute
+				End If
+			End If
+			bCancelTask = True
+		Else
+			bCancelTask = False
+			ImportDialog.cbCancel.Enabled = True
+		End If
 	Else
-		ImportDialogArea.EndExecute()
+		ImportDialogArea.EndExecute()	
 	End If
 End Sub
-
-
-Function CancelTask()
-	If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
-		ImportDialogArea.EndExecute		&apos;Visible = False 
-&apos;		CancelTask = True
-	Else
-		bCancelTask = False
-		ImportDialog.cbCancel.Enabled = True
-		CancelTask = False
-	End If
-End Function
 
 
 

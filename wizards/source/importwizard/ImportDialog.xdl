@@ -29,7 +29,7 @@
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.PrevStep"/>
   </dlg:button>
   <dlg:button dlg:id="cbCancel" dlg:tab-index="18" dlg:left="6" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34572" dlg:value="cbCancel">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.CancelButton"/>
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.CancelTask"/>
   </dlg:button>
   <dlg:button dlg:id="cbHelp" dlg:tab-index="19" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="14" dlg:tag="34571" dlg:help-url="HID:34571" dlg:value="cbHelp">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Recursive.ShowHelperDialog"/>
