@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 13:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,8 +293,8 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
             {
                 // office:styles inside office:document
                 pContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
-                break;
             }
+            break;
         }
         case XML_TOK_DOC_AUTOSTYLES:
         {
