@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 08:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
+#endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -183,8 +186,9 @@ void OQueryContainerWindow::initialize(const Reference<XFrame>& _xFrame)
     Reference < XFrames > xFrames = xSup->getFrames();
     xFrames->append( m_xBeamer );
 }
+
 // -----------------------------------------------------------------------------
-void OQueryContainerWindow::hideBeamer()
+void OQueryContainerWindow::disposingPreview()
 {
     // here I know that we will be destroyed from the frame
     m_pBeamer = NULL;
@@ -204,7 +208,7 @@ long OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify(rNEvt);
 }
 // -----------------------------------------------------------------------------
-void OQueryContainerWindow::showBeamer(const Reference<XFrame>& _xFrame)
+void OQueryContainerWindow::showPreview(const Reference<XFrame>& _xFrame)
 {
     if(!m_pBeamer)
     {
@@ -212,17 +216,13 @@ void OQueryContainerWindow::showBeamer(const Reference<XFrame>& _xFrame)
         m_xBeamer = Reference<XFrame>(m_pView->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY);
         OSL_ENSURE(m_xBeamer.is(),"No frame created!");
         m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
-        m_xBeamer->setName(::rtl::OUString::createFromAscii("_beamer"));
+        m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
 
         // append our frame
         Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
         Reference < XFrames > xFrames = xSup->getFrames();
         xFrames->append( m_xBeamer );
-//  }
-//
-//
-//  if(!m_pBeamer->IsVisible())
-//  {
+
         Size aSize = GetOutputSizePixel();
         Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
 

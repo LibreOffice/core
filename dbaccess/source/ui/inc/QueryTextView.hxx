@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 11:18:49 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 08:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,14 @@ namespace dbaui
         virtual void        Resize();
         virtual long        PreNotify( NotifyEvent& rNEvt );
 
-        void showBeamer(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
-        void hideBeamer();
+        // show the beamer
+        void    showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+            // called when the beamer has been disposed
+        void    disposingPreview();
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                getPreviewFrame() const { return m_xBeamer; }
+
         void initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
         OQueryViewSwitch* getView() { return m_pView; }
         void switchView();
