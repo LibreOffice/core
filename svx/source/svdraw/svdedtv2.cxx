@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2002-07-01 14:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,6 +1200,14 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
         SdrPathObj* pPath=new SdrPathObj(eKind,aXPP);
         // Attribute des untersten Objekts
         ImpCopyAttributes(pAttrObj,pPath);
+
+        // #100408# If LineStyle is XLINE_NONE force to XLINE_SOLID to make visible.
+        const XLineStyle eLineStyle = ((const XLineStyleItem&)pPath->GetItem(XATTR_LINESTYLE)).GetValue();
+        if(XLINE_NONE == eLineStyle)
+        {
+            pPath->SetItem(XLineStyleItem(XLINE_SOLID));
+        }
+
         SdrInsertReason aReason(SDRREASON_VIEWCALL,pAttrObj);
         pInsOL->InsertObject(pPath,nInsPos,&aReason);
         AddUndo(new SdrUndoNewObj(*pPath)); // Insert durch New ersetzt - Joe, 31-08-1995
