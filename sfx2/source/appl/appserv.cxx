@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-10 05:41:33 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 14:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,15 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -424,6 +433,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
+        case SID_SYNCHRONIZE :
+        {
+            Reference < ::com::sun::star::frame::XDispatch > xDisp ( comphelper::getProcessServiceFactory()->
+                    createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.syncaccess.ui.Dispatch" ) ) ), UNO_QUERY );
+            if ( xDisp.is() )
+                xDisp->dispatch( ::com::sun::star::util::URL(), 0 );
+            break;
+        }
+
         case SID_LOAD_LIBRARY:
         case SID_UNLOAD_LIBRARY:
         case SID_REMOVE_LIBRARY:
@@ -454,6 +472,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_QUITAPP:
         case SID_EXITANDRETURN:
         {
+            // protect against reentrant calls
             if ( pAppData_Impl->bInQuit )
                 return;
 
@@ -468,12 +487,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            // prepare documents for closing
+            // block reentrant calls
+            pAppData_Impl->bInQuit = TRUE;
             Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-            BOOL bQuit = xDesktop->terminate();
+
+            // if terminate() failed, pAppData_Impl->bInQuit will now be FALSE, allowing further calls of SID_QUITAPP
+            pAppData_Impl->bInQuit = xDesktop->terminate();
 
             // Returnwert setzten, ggf. terminieren
-            rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), bQuit));
+            rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), pAppData_Impl->bInQuit));
             return;
         }
 
@@ -766,6 +788,16 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
         {
             switch(nWhich)
             {
+                case SID_SYNCHRONIZE :
+                {
+                    Reference < XContentEnumerationAccess > xMgr( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+                    Reference < XEnumeration > xEnum =
+                            xMgr->createContentEnumeration( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.syncaccess.ui.Dispatch" ) ) );
+                    if ( !xEnum.is() || !xEnum->hasMoreElements() )
+                        rSet.DisableItem(nWhich);
+                    break;
+                }
+
                 case SID_EXITANDRETURN:
                 case SID_QUITAPP:
                 {

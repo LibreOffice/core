@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 14:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,6 @@ BOOL SfxApplication::QueryExit_Impl()
 
 {
     StoreConfig();
-    pAppData_Impl->bInQuit = TRUE;
     BOOL bQuit = TRUE;
 
     // laufen noch Drucker?
@@ -191,7 +190,6 @@ BOOL SfxApplication::QueryExit_Impl()
             // da das Canceln asynchron ist, Quit erstmal wieder verlassen
             GetDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
             DBG_TRACE( "QueryExit => FALSE (printing)" );
-            pAppData_Impl->bInQuit = FALSE;
             return FALSE;
         }
     }
@@ -228,7 +226,6 @@ BOOL SfxApplication::QueryExit_Impl()
         pAppData_Impl->bOLEResize = TRUE;
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
-        pAppData_Impl->bInQuit = FALSE;
         DBG_TRACE( "QueryExit => FALSE (in use)" );
         return FALSE;
     }
