@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2004-05-13 12:31:01 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,7 +1490,7 @@ void SwTextShell::ChangeHeaderOrFooter(
 {
     SwWrtShell& rSh = GetShell();
     rSh.StartAllAction();
-    rSh.StartUndo( 0 );
+    rSh.StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
     BOOL bExecute = TRUE;
     BOOL bCrsrSet = FALSE;
     for( USHORT nFrom = 0, nTo = rSh.GetPageDescCnt();
@@ -1543,7 +1543,7 @@ void SwTextShell::ChangeHeaderOrFooter(
             }
         }
     }
-    rSh.EndUndo( 0 );
+    rSh.EndUndo( UNDO_HEADER_FOOTER ); // #i7983#
     rSh.EndAllAction();
 }
 
