@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
+ *  last change: $Author: aw $ $Date: 2001-02-01 12:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,11 @@ SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
 void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // Add, set Style and properties from base shape
-    AddShape("com.sun.star.drawing.PolyLineShape");
+    if(mbClosed)
+        AddShape("com.sun.star.drawing.PolyPolygonShape");
+    else
+        AddShape("com.sun.star.drawing.PolyLineShape");
+
     if( mxShape.is() )
     {
         SetStyle();
@@ -810,7 +814,8 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             if(maPoints.getLength() && maViewBox.getLength())
             {
                 SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-                SdXMLImExPointsElement aPoints(maPoints, aViewBox, maPosition, maSize, GetImport().GetMM100UnitConverter());
+                SdXMLImExPointsElement aPoints(maPoints, aViewBox, maPosition, maSize,
+                    GetImport().GetMM100UnitConverter());
 
                 uno::Any aAny;
                 aAny <<= aPoints.GetPointSequenceSequence();
