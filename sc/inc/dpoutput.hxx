@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 14:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ private:
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataResult> > aData;
+    BOOL                    bResultsError;
     String                  aDataDescription;
     UINT32*                 pColNumFmt;
     UINT32*                 pRowNumFmt;
@@ -125,6 +126,7 @@ private:
     long                    nRowFmtCount;
 
     BOOL                    bSizesValid;
+    BOOL                    bSizeOverflow;
     long                    nColCount;
     long                    nRowCount;
     long                    nHeaderSize;
@@ -156,6 +158,7 @@ public:
 
     void            Output();           //! Refresh?
     ScRange         GetOutputRange();
+    BOOL            HasError();         // range overflow or exception from source
 
     void            GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
     long            GetHeaderDim( const ScAddress& rPos );

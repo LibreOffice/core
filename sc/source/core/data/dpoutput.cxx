@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     aStartPos( rPos ),
     bDoFilter( bFilter ),
     bSizesValid( FALSE ),
+    bSizeOverflow( FALSE ),
+    bResultsError( FALSE ),
     pColNumFmt( NULL ),
     pRowNumFmt( NULL ),
     nColFmtCount( 0 ),
@@ -444,7 +446,14 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
 
         //  get data results:
 
-        aData = xResult->getResults();
+        try
+        {
+            aData = xResult->getResults();
+        }
+        catch (uno::RuntimeException&)
+        {
+            bResultsError = TRUE;
+        }
     }
 
     // get "DataDescription" property (may be missing in external sources)
@@ -479,7 +488,7 @@ ScDPOutput::~ScDPOutput()
 void ScDPOutput::SetPosition( const ScAddress& rPos )
 {
     aStartPos = rPos;
-    bSizesValid = FALSE;
+    bSizesValid = bSizeOverflow = FALSE;
 }
 
 void ScDPOutput::DataCell( USHORT nCol, USHORT nRow, USHORT nTab, const sheet::DataResult& rData )
@@ -595,11 +604,16 @@ void ScDPOutput::CalcSizes()
         nHeaderSize = 1;            // one row for field names
 
         //  calculate output positions and sizes
-        //! check for overflow
 
         long nPageSize = 0;     //! use page fields!
         if ( bDoFilter )
             nPageSize = 2;      //  filter button in page field row
+
+        if ( aStartPos.Col() + nRowFieldCount + nColCount - 1 > MAXCOL ||
+             aStartPos.Row() + nPageSize + nHeaderSize + nColFieldCount + nRowCount > MAXROW )
+        {
+            bSizeOverflow = TRUE;
+        }
 
         nTabStartCol = aStartPos.Col();
         nTabStartRow = aStartPos.Row() + (USHORT)nPageSize;         // below page fields
@@ -622,6 +636,8 @@ void ScDPOutput::Output()
     //  calculate output positions and sizes
 
     CalcSizes();
+    if ( bSizeOverflow || bResultsError )   // does output area exceed sheet limits?
+        return;                             // nothing
 
     //  clear whole (new) output area
     //! when modifying table, clear old area
@@ -754,6 +770,13 @@ ScRange ScDPOutput::GetOutputRange()
 
     USHORT nTab = aStartPos.Tab();
     return ScRange( aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
+}
+
+BOOL ScDPOutput::HasError()
+{
+    CalcSizes();
+
+    return bSizeOverflow || bResultsError;
 }
 
 //
