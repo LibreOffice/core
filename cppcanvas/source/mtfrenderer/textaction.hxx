@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,14 @@
 #include <drafts/com/sun/star/rendering/TextDirection.hpp>
 #endif
 
-#include "action.hxx"
+#ifndef _COMPHELPER_OPTIONALVALUE_HXX
+#include <comphelper/optionalvalue.hxx>
+#endif
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
 class Point;
@@ -86,6 +93,7 @@ class Point;
 namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XCanvasFont;
+    class  XTextLayout;
 } } } } }
 
 /* Definition of internal::LineAction class */
@@ -99,32 +107,43 @@ namespace cppcanvas
         class TextAction : public Action
         {
         public:
-            TextAction( const ::Point&          rStartPoint,
-                        const ::rtl::OUString&  rText,
-                        sal_Int32               nStartPos,
-                        sal_Int32               nLen,
-                        const CanvasSharedPtr&  rCanvas,
-                        const OutDevState&      rState      );
-            TextAction( const ::Point&                              rStartPoint,
-                        const ::rtl::OUString&                      rText,
-                        sal_Int32                                   nStartPos,
-                        sal_Int32                                   nLen,
-                        ::com::sun::star::uno::Sequence< double >   aOffsets,
-                        const CanvasSharedPtr&                      rCanvas,
-                        const OutDevState&                          rState      );
+            TextAction( const ::Point&                                                  rStartPoint,
+                        const ::rtl::OUString&                                          rText,
+                        sal_Int32                                                       nStartPos,
+                        sal_Int32                                                       nLen,
+                        const CanvasSharedPtr&                                          rCanvas,
+                        const OutDevState&                                              rState,
+                        const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform );
+            TextAction( const ::Point&                                                  rStartPoint,
+                        const ::rtl::OUString&                                          rText,
+                        sal_Int32                                                       nStartPos,
+                        sal_Int32                                                       nLen,
+                        ::com::sun::star::uno::Sequence< double >                       aOffsets,
+                        const CanvasSharedPtr&                                          rCanvas,
+                        const OutDevState&                                              rState,
+                        const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform      );
             virtual ~TextAction();
 
-            virtual bool render() const;
+            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
 
         private:
             // default: disabled copy/assignment
             TextAction(const TextAction&);
             TextAction& operator = ( const TextAction& );
 
-            void init( const ::Point& rStartPoint, const OutDevState& rState );
+            void init( const ::Point&                                                   rStartPoint,
+                       const OutDevState&                                               rState,
+                       const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&    rTextTransform );
+
+            // TODO(P2): This is potentially a real mass object (every character might be
+            // a separate TextAction), thus, make it as lightweight as possible. For
+            // example, share common RenderState among several TextActions, use maOffsets
+            // for the translation.
 
             ::com::sun::star::uno::Reference<
                 ::drafts::com::sun::star::rendering::XCanvasFont >  mxFont;
+            ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::rendering::XTextLayout >  mxTextLayout;
             ::drafts::com::sun::star::rendering::StringContext      maStringContext;
             ::com::sun::star::uno::Sequence< double >               maOffsets;
             CanvasSharedPtr                                         mpCanvas;
