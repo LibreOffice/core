@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextimplcontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:13:15 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,9 @@ namespace frm
 
         void    SetReadOnly( bool _bReadOnly );
         bool    IsReadOnly() const;
+
+        void    SetHideInactiveSelection( bool _bHide );
+        bool    GetHideInactiveSelection() const;
 
         /// draws the control onto a given output device
         void    Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags );

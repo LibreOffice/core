@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextimplcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:13:04 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,9 +700,21 @@ namespace frm
     //--------------------------------------------------------------------
     void RichTextControlImpl::SetBackgroundColor( const Color& _rColor )
     {
-    Wallpaper aWallpaper( _rColor );
+        Wallpaper aWallpaper( _rColor );
         m_pAntiImpl->SetBackground( aWallpaper );
         m_pViewport->SetBackground( aWallpaper );
+    }
+
+    //--------------------------------------------------------------------
+    void RichTextControlImpl::SetHideInactiveSelection( bool _bHide )
+    {
+        m_pViewport->SetHideInactiveSelection( _bHide );
+    }
+
+    //--------------------------------------------------------------------
+    bool RichTextControlImpl::GetHideInactiveSelection() const
+    {
+        return m_pViewport->GetHideInactiveSelection( );
     }
 
 //........................................................................
