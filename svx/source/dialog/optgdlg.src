@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:10:57 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2834,7 +2834,7 @@ TabPage OFA_TP_LANGUAGES
         Text[ portuguese_brazilian ] = "Idiomas de layout complexo";
         Text[ japanese ] = "è¤‡åˆæ–‡å­—è¨€èª(C~TL)";
         Text[ korean ] = "ë³µí•© ë¬¸ì ì–¸ì–´(CTL)(~T)";
-        Text[ chinese_simplified ] = "å¤æ‚çš„æ–‡å­—ç‰ˆå¼(~T)";
+        Text[ chinese_simplified ] = "CTL";
         Text[ chinese_traditional ] = "è¤‡é›œçš„æ–‡å­—ç‰ˆå¼(~T)";
         Text[ turkish ] = "Karmaşık betikler";
         Text[ arabic ] = "áÛÇÊ äÕæÕ ÈÑãÌíÉ ãÚŞÏÉ";
@@ -3086,7 +3086,7 @@ TabPage OFA_TP_HELPERPROG
         Text[ swedish ] = "Välj ett ~standardprogram för e-post";
         Text[ japanese ] = "æ¨™æº– E-mail ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®é¸æŠ(~S)";
         Text[ korean ] = "ê¸°ë³¸ ì „ì ë©”ì¼ í”„ë¡œê·¸ë¨ ì„ íƒ(~S)";
-        Text[ chinese_simplified ] = "é€‰æ‹©ä¸€ä¸ªæ ‡å‡†ç”µå­é‚®ä»¶(~S)";
+        Text[ chinese_simplified ] = "æ–‡æ¡£å½“ä½œç”µå­é‚®ä»¶å‘é€æ—¶ç”¨";
         Text[ chinese_traditional ] = "é¸æ“‡ä¸€å€‹æ¨™æº–é›»å­éƒµä»¶ç¨‹å¼(~S)";
         Text[ portuguese ] = "Enviar documento como mensagem com";
         Text[ russian ] = "Îòïğàâèòü äîêóìåíò ïî ıëåêòğîííîé ïî÷òå ñ ïîìîùüş";
@@ -3278,7 +3278,7 @@ TabPage OFA_TP_HELPERPROG
         Text[ swedish ] = "Sök~väg";
         Text[ japanese ] = "ãƒ‘ã‚¹(~P)";
         Text[ korean ] = "ê²½ë¡œ(~P)";
-        Text[ chinese_simplified ] = "è·¯å¾„(~P)";
+        Text[ chinese_simplified ] = "è·¯å¾„";
         Text[ chinese_traditional ] = "è·¯å¾‘(~P)";
         Text[ portuguese ] = "~Outros";
         Text[ russian ] = "Äğóãèå";
