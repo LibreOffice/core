@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:16:47 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:15:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,6 @@ JAVAFILES := \
     TestMessage.java \
     TestReceiver.java \
     TestWorkAt.java
-JARFILES := ridl.jar sandbox.jar
+JARFILES := ridl.jar
 
 .INCLUDE: javaunittest.mk
