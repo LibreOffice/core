@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:10:46 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
         {
             // Convert the IDataObject to a XTransferable
             m_currentData= m_aDataConverter.createTransferableFromDataObj(
-                                            m_serviceFactory, pDataObj);
+                                            m_serviceFactory, IDataObjectPtr(pDataObj));
         }
 
         //<-- TRA
