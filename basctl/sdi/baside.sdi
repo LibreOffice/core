@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:42:25 $
+ *  last change: $Author: os $ $Date: 2003-09-26 07:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,18 +422,6 @@ shell BasicIDEShell
     ]
 
     SID_DIALOG_TESTMODE
-    [
-        ExecMethod      = ExecuteDialog;
-        StateMethod     = GetState;
-    ]
-
-    SID_SHOW_HIDDEN
-    [
-        ExecMethod      = ExecuteDialog;
-        StateMethod     = GetState;
-    ]
-
-    SID_SHOW_FORMS
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
