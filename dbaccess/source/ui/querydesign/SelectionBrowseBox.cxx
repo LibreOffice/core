@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2272,5 +2272,30 @@ void OSelectionBrowseBox::DeactivateCell(sal_Bool _bUpdate)
     m_bWasEditing = sal_True;
     EditBrowseBox::DeactivateCell(_bUpdate);
     m_bWasEditing = sal_False;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OSelectionBrowseBox::GetRowDescription( sal_Int32 _nRow ) const
+{
+    String  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
+
+    // ab BROW_CRIT2_ROW werden alle Zeilen mit "oder" angegeben
+    xub_StrLen nToken = (xub_StrLen) (_nRow >= GetBrowseRow(BROW_CRIT2_ROW))
+                                ?
+            xub_StrLen(BROW_CRIT2_ROW) : xub_StrLen(GetRealRow(_nRow));
+    return ::rtl::OUString(aLabel.GetToken(nToken));
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OSelectionBrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition) const
+{
+    ::rtl::OUString sRetText;
+    switch( _eObjType )
+    {
+        case ::svt::BBTYPE_ROWHEADERCELL:
+            sRetText = GetRowDescription(_nPosition);
+            break;
+        default:
+            sRetText = EditBrowseBox::GetAccessibleDescription(_eObjType,_nPosition);
+    }
+    return sRetText;
 }
 // -----------------------------------------------------------------------------

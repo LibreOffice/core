@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:47:27 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,24 @@ namespace dbaui
                 the text out of the cell
         */
         virtual String              GetCellText(long _nRow, USHORT _nColId) const;
+
+        /** returns the description of the row.
+            @param  _nRow
+                The row number.
+            @return
+                The header text of the specified row.
+        */
+        virtual ::rtl::OUString     GetRowDescription( sal_Int32 _nRow ) const;
+
+        /** return the name of the specified object.
+            @param  eObjType
+                The type to ask for
+            @param  _nPosition
+                The position of a tablecell (index position), header bar  colum/row cell
+            @return
+                The name of the specified object.
+        */
+        virtual ::rtl::OUString     GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
     protected:
         virtual sal_Bool            SeekRow( long nRow );
