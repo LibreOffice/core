@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ chinese_traditional ] = "§@ͺΜ";
         Text[ arabic ] = "ΗαγΔαέ";
         Text[ greek ] = "Συντάκτης";
-        Text[ korean ] = "ΐΫΌΊΐΞ";
+        Text[ korean ] = "ΐΫΌΊΐΪ";
         Text[ turkish ] = "Yazan";
     };
     FixedText FT_LASTEDIT
@@ -236,7 +236,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ chinese_traditional ] = "§@ͺΜ(~A)";
         Text[ arabic ] = "ΗαγΔαέ";
         Text[ greek ] = "Συντάκτης";
-        Text[ korean ] = "ΐΫΌΊΐΞ(~A)";
+        Text[ korean ] = "ΐΫΌΊΐΪ";
         Text[ turkish ] = "~Yazan";
     };
      // lokale Strings
