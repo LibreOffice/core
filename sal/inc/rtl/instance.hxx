@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instance.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:14:07 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ public:
             p = m_pInstance;
             if (!p)
             {
-                p = aInstCtor(data);
+                p = aInstCtor(aData);
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 m_pInstance = p;
             }
