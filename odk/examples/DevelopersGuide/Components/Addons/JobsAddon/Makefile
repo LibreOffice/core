@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:20:37 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:11:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -51,12 +51,12 @@ include $(SETTINGS)/dk.mk
 COMPONENT_NAME=AsyncJob
 OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
 OUT_COMP_MISC=$(OUT_MISC)/$(COMPONENT_NAME)
-COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
+COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
 COMPONENT_JAR_NAME=$(COMPONENT_NAME).uno.jar
 COMPONENT_JAR=$(OUT_CLASS)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
-
+COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT_NAME)/META-INF/manifest.xml
 REGISTERFLAG=$(OUT_COMP_MISC)$(PS)java_$(COMPONENT_NAME)_register_component.flag
 
 JAVAFILES  = AsyncJob.java
@@ -81,22 +81,39 @@ $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
+# rule for component jar file
 $(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) Addons.xcu Jobs.xcu
+# rule for component package manifest
+$(OUT_COMP_CLASS)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_MISC))
-	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_MISC))
-	$(COPY) Addons.xcu $(subst /,$(PS),$(OUT_COMP_MISC))
-	$(COPY) Jobs.xcu $(subst /,$(PS),$(OUT_COMP_MISC))
-	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && $(SDK_JAR) cvfM ../../bin/$(@F) $(^F)
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Addons.xcu$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Jobs.xcu$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+# rule for component package file
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) Addons.xcu Jobs.xcu $(COMPONENT_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_ZIP) ../bin/$(@F) $(<F)
+	$(SDK_ZIP) -u $@ Addons.xcu Jobs.xcu
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
