@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 10:52:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,7 +815,7 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
     aOrigArray.Insert( &rDocFmts, 0 );
 
     rSh.StartAllAction();
-    rSh.StartUndo( UNDO_CHGSECTION );
+    rSh.StartUndo();
     rSh.ResetSelect( 0,FALSE );
     SvLBoxEntry* pEntry = aTree.First();
 
@@ -872,7 +872,7 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
     //              sonst kann es ScrollFehler geben.
     EndDialog(RET_OK);
 
-    rSh.EndUndo( UNDO_CHGSECTION );
+    rSh.EndUndo();
     rSh.EndAllAction();
 
     return 0;
