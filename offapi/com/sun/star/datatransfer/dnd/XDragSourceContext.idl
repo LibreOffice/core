@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceContext.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-29 10:38:15 $
+ *  last change: $Author: pl $ $Date: 2001-02-09 13:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,32 +99,31 @@ interface XDragSourceContext: com::sun::star::uno::XInterface
     /** this method sets the current drag Cursor.
 
         <p>This method should only be called to set an other cursor than the
-        default one for drag action currently selected by the user.</p>
+        default one for drag action currently selected by the user.
+        Invalid cursor Ids will be ignored.</p>
 
         @param cursorId
         the id the drag source returned when registering the cursor.
     */
 
-    void setCursor( [in] long cursorId )
-        raises( com::sun::star::lang::IllegalArgumentException );
+    [oneway] void setCursor( [in] long cursorId );
 
     //-------------------------------------------------------------------------
     /** this method sets the current drag Image.
 
         @param dragImage
         the id the drag source returned when registering the image (0 = none).
+        Invalid Ids will be ignored.
     */
 
-    void setImage( [in] long imageId )
-        raises( com::sun::star::lang::IllegalArgumentException );
-
+    [oneway] void setImage( [in] long imageId );
 
     //-------------------------------------------------------------------------
     /** this method notifies the context that the Transferable's DataFlavors
         have changed.
     */
 
-    void transferablesFlavorsChanged();
+    [oneway] void transferablesFlavorsChanged();
 };
 
 //=============================================================================

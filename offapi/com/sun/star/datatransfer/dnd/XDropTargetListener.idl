@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
+ *  last change: $Author: pl $ $Date: 2001-02-09 13:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,14 @@ interface XDropTargetListener: com::sun::star::lang::XEventListener
     //-------------------------------------------------------------------------
     /** the drag operation has terminated with a drop on this DropTarget.
 
-        <p> NOTE: this method can not be oneway ! </p>
+        <p> NOTE: this method should not be oneway. The implentation
+        has to wait anyway until dropComplete on the <type>XDropTargetDropContext</type>
+        is called before releasing the data for the drop operation. This
+        should occur before returning form drop in a normal flow of operation.
+        Also the implementor of XDropTargetListener should not assume
+        the <type>DropTargetDropEvent</type> to be meaningful after returning
+        from the <member>XDropTargetListener::drop</member> method.
+        </p>
 
         @param dtde
         the DropTargetDropEvent
