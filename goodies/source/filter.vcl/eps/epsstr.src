@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:17:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ String KEY_VERSION_CHECK
     Text[ ENGLISH ] = "Attention: It was not possible to save all imported EPS graphics in level1,"
             "because some of them already attend to a higher level !";
     Text[ italian ] = "Attenzione: non θ stato possibile salvare tutte le immagini EPS importate nel livello1\nin quanto ne esistono alcune in un livello superiore!";
-    Text[ portuguese_brazilian ] = "Achtung: Es konnten nicht alle importierte EPS-Grafiken in Level1 abgespeichert werden,\nda einige in einem hφherem Level vorliegen !";
+    Text[ portuguese_brazilian ] = "Achtung: Es konnten nicht alle importierte EPS-Grafiken in Level1 abgespeichert werden,\nda einige in einem h?erem Level vorliegen !";
     Text[ portuguese ] = "Atenηγo: foi impossνvel guardar todas as imagens EPS importadas no nνvel 1,\numa vez que algumas se encontram num nνvel superior!";
     Text[ danish ] = "Advarsel: Det var ikke muligt at gemme alle importerede EPS-billeder pε niveau1,\nfordi nogle foreligger pε et hψjere niveau !";
     Text[ french ] = "Attention : Les graphiques EPS importιs n'ont pas tous pu κtre enregistrιs au niveau1\ncar certains d'entre eux sont d'un niveau supιrieur !";
@@ -103,7 +103,7 @@ String KEY_VERSION_CHECK
     Text[ russian ] = "Βνθμΰνθε! Ρξυπΰνθςό βρε θμοξπςθπξβΰννϋε θηξαπΰζενθÿ EPS νΰ σπξβνε 1 νεβξημξζνξ,\nςΰκ κΰκ νεκξςξπϋε θη νθυ νΰυξδÿςρÿ νΰ αξλεε βϋρξκξμ σπξβνε!";
     Text[ polish ] = "Uwaga: Nie wszystkie importowane grafiki EPS mog³y zostaζ zapisane na poziomie1, \nponiewaΏ niektσre znajdujΉ siκ na wyΏszym poziomie!";
     Text[ japanese ] = "’Σ: ²έΞί°Δ‚³‚κ‚½ EPS ‰ζ‘‚Μ‚Ά‚­‚Β‚©‚ΝAκ‚Βγ‚ΜΪΝήΩ‚Ι‚ ‚θ\n‚Ι‚·‚Χ‚Δ‚πΪΝήΩ‚Pi”[‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
-    Text[ greek ] = "Προσοχή: Δεν ήταν δυνατόν να γίνει αποθήκευση όλων των εισηγμένων γραφικών EPS,\nεπειδή μερικά από αυτά υπάρχουν σε μορφή υψηλότερου επιπέδου!";
+    Text[ greek ] = "Προσοχή: Δεν ήταν δυνατόν να γίνει αποθήκευση όλων των εισηγμένων γραφικών EPS,\nεπειδή μερικά από αυτά υπάρχουν σε μορφή υψηλότερου επιπέδο?";
     Text[ korean ] = "ΑΦΐΗ: ΐΟΊΞ΅΅±Χ·΅ΗΘΐΜ΅΅»σΐ§ ·ΉΊ§Ώ΅ ΐΦ±β ¶§Ή®Ώ΅\n°΅Α®ΏΒ EPS ±Χ·΅ΗΘΐ» ·ΉΊ§1Ώ΅ ΈπµΞ ΐϊΐεΗΟΑφ΄Β ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ chinese_traditional ] = "µω·N΅GµLªk±N©Ò¦³ªΊ¶Χ¤JΉΟ§Ξ¥H level 1 ΐx¦s΅M\n¦]¬°¤@¨ΗΉΟ§Ξ°ª©σ level 1 ΅I";
     Text[ arabic ] = "ΚΝΠνΡ: ΚΪΠΡ ΝέΩ ία ΥζΡ EPS ΗαγΣΚζΡΟΙ έν ΗαγΣΚζμ 1΅\nαΚζΗΜΟ ΘΪΦ γδεΗ έν γΣΚζμ ΓΪαμ!";
