@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 16:01:38 $
+ *  last change: $Author: fme $ $Date: 2001-12-19 12:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,17 +262,14 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
 #ifdef VERTICAL_LAYOUT
     SWRECTFN ( pFrm )
-    SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
+    const SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
+    const SwTwips nFrmMaxY = (pFrm->*fnRect->fnGetPrtBottom)();
 
-    if ( bVert )
-    {
-        // adjust nUpperMaxY for vertical frames
-        nUpperMaxY = pFrm->Frm().Top() + pFrm->Frm().Left() +
-                     pFrm->Frm().Width() - nUpperMaxY;
-        pFrm->SwapWidthAndHeight();
-    }
+    // nMaxY is an absolute value
+    SwTwips nMaxY = bVert ?
+                    Max( nFrmMaxY, nUpperMaxY ) :
+                    Min( nFrmMaxY, nUpperMaxY );
 
-    SwTwips nMaxY = Min( pFrm->Frm().Top() + pFrm->Prt().Bottom(), nUpperMaxY );
 #else
     SwTwips nUpperMaxY = pTmpFrm->Frm().Top() + pTmpFrm->Prt().Bottom();
     SwTwips nMaxY = Min( pFrm->Frm().Top() + pFrm->Prt().Bottom(), nUpperMaxY );
@@ -280,13 +277,44 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
     sal_Bool bRet = sal_False;
 
+#ifdef VERTICAL_LAYOUT
+    if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
+#else
     if ( pFrm->IsEmpty() || !pFrm->Prt().Height() )
+#endif
     {
         Point aPnt1 = pFrm->Frm().Pos() + pFrm->Prt().Pos();
         SwTxtNode* pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
         short nFirstOffset;
         pTxtNd->GetFirstLineOfsWithNum( nFirstOffset );
 
+#ifdef VERTICAL_LAYOUT
+        Point aPnt2;
+        if ( bVert )
+        {
+            if( nFirstOffset > 0 )
+                aPnt1.Y() += nFirstOffset;
+
+            if ( aPnt1.X() < nMaxY )
+                aPnt1.X() = nMaxY;
+            aPnt2.X() = aPnt1.X() + pFrm->Prt().Width();
+            aPnt2.Y() = aPnt1.Y();
+            if( aPnt2.X() < nMaxY )
+                aPnt2.X() = nMaxY;
+        }
+        else
+        {
+            if( nFirstOffset > 0 )
+                aPnt1.X() += nFirstOffset;
+
+            if( aPnt1.Y() > nMaxY )
+                aPnt1.Y() = nMaxY;
+            aPnt2.X() = aPnt1.X();
+            aPnt2.Y() = aPnt1.Y() + pFrm->Prt().Height();
+            if( aPnt2.Y() > nMaxY )
+                aPnt2.Y() = nMaxY;
+        }
+#else
         if( nFirstOffset > 0 )
             aPnt1.X() += nFirstOffset;
         if( aPnt1.Y() > nMaxY )
@@ -294,13 +322,9 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         Point aPnt2( aPnt1.X(), aPnt1.Y() + pFrm->Prt().Height() );
         if( aPnt2.Y() > nMaxY )
             aPnt2.Y() = nMaxY;
+#endif
 
         rOrig = SwRect( aPnt1, aPnt2 );
-
-#ifdef VERTICAL_LAYOUT
-        if ( bVert )
-            pFrm->SwitchHorizontalToVertical( rOrig );
-#endif
 
         if ( pCMS )
         {
@@ -317,15 +341,12 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     else
     {
         if( !pFrm->HasPara() )
+            return sal_False;
+
 #ifdef VERTICAL_LAYOUT
-        {
-            if ( bVert )
-                pFrm->SwapWidthAndHeight();
-            return sal_False;
-        }
-#else
-            return sal_False;
+        SwFrmSwapper aSwapper( pFrm, sal_True );
 #endif
+
         sal_Bool bGoOn = sal_True;
         xub_StrLen nOffset = rPos.nContent.GetIndex();
         xub_StrLen nNextOfst;
@@ -381,6 +402,21 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     {
         SwPageFrm *pPage = pFrm->FindPageFrm();
         ASSERT( pPage, "Text esaped from page?" );
+#ifdef VERTICAL_LAYOUT
+        const SwTwips nOrigTop = (rOrig.*fnRect->fnGetTop)();
+        const SwTwips nPageTop = (pPage->Frm().*fnRect->fnGetTop)();
+        const SwTwips nPageBott = (pPage->Frm().*fnRect->fnGetBottom)();
+
+        // Following situation: if the frame is in an invalid sectionframe,
+        // it's possible that the frame is outside the page. If we restrict
+        // the cursor position to the page area, we enforce the formatting
+        // of the page, of the section frame and the frame himself.
+        if( (*fnRect->fnYDiff)( nPageTop, nOrigTop ) > 0 )
+            (rOrig.*fnRect->fnSetTop)( nPageTop );
+
+        if ( (*fnRect->fnYDiff)( nOrigTop, nPageBott ) > 0 )
+            (rOrig.*fnRect->fnSetTop)( nPageBott );
+#else
         if( rOrig.Top() < pPage->Frm().Top() ||
             rOrig.Top() > pPage->Frm().Bottom() )
         {
@@ -394,12 +430,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             if( rOrig.Top() > nBott )
                 rOrig.Pos().Y() = nBott;
         }
-    }
-
-#ifdef VERTICAL_LAYOUT
-    if ( bVert )
-        pFrm->SwapWidthAndHeight();
 #endif
+    }
 
     return bRet;
 }
@@ -423,17 +455,52 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
 
     pFrm->GetFormatted();
     const SwFrm* pTmpFrm = (SwFrm*)pFrm->GetUpper();
+
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pTmpFrm )
+    SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
+
+    // nMaxY is in absolute value
+    SwTwips nMaxY = bVert ?
+                    Max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) :
+                    Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
+
+    if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
+#else
     SwTwips nUpperMaxY = pTmpFrm->Frm().Top() + pTmpFrm->Prt().Bottom();
     SwTwips nMaxY = Min( pFrm->Frm().Top() + pFrm->Prt().Bottom(), nUpperMaxY );
 
     if ( pFrm->IsEmpty() || !pFrm->Prt().Height() )
+#endif
     {
         Point aPnt1 = pFrm->Frm().Pos() + pFrm->Prt().Pos();
+#ifdef VERTICAL_LAYOUT
+        Point aPnt2;
+        if ( bVert )
+        {
+            if ( aPnt1.X() < nMaxY )
+                aPnt1.X() = nMaxY;
+            aPnt2.X() = aPnt1.X() + pFrm->Prt().Width();
+            aPnt2.Y() = aPnt1.Y();
+            if( aPnt2.X() < nMaxY )
+                aPnt2.X() = nMaxY;
+        }
+        else
+        {
+            if( aPnt1.Y() > nMaxY )
+                aPnt1.Y() = nMaxY;
+            aPnt2.X() = aPnt1.X();
+            aPnt2.Y() = aPnt1.Y() + pFrm->Prt().Height();
+            if( aPnt2.Y() > nMaxY )
+                aPnt2.Y() = nMaxY;
+        }
+#else
         if( aPnt1.Y() > nMaxY )
             aPnt1.Y() = nMaxY;
         Point aPnt2( aPnt1.X(), aPnt1.Y() + pFrm->Prt().Height() );
         if( aPnt2.Y() > nMaxY )
             aPnt2.Y() = nMaxY;
+#endif
         rOrig = SwRect( aPnt1, aPnt2 );
         return sal_True;
     }
@@ -441,6 +508,12 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     {
         if( !pFrm->HasPara() )
             return sal_False;
+
+#ifdef VERTICAL_LAYOUT
+        SwFrmSwapper aSwapper( pFrm, sal_True );
+        nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
+#endif
+
         SwTxtSizeInfo aInf( pFrm );
         SwTxtCursor aLine( pFrm, &aInf );
         SwCrsrMoveState aTmpState( MV_SETONLYTEXT );
