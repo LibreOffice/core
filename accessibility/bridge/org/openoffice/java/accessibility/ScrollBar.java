@@ -68,13 +68,6 @@ import com.sun.star.accessibility.*;
  */
 public class ScrollBar extends Component implements SwingConstants, javax.accessibility.Accessible {
 
-    private int orientation = HORIZONTAL;
-
-    public ScrollBar(XAccessible xAccessible, XAccessibleContext xAccessibleContext, int orientation) {
-        super(xAccessible, xAccessibleContext);
-        this.orientation = orientation;
-    }
-
     public ScrollBar(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
     }
@@ -100,24 +93,6 @@ public class ScrollBar extends Component implements SwingConstants, javax.access
             if (unoAccessibleAction != null) {
                 actionCount = unoAccessibleAction.getAccessibleActionCount();
             }
-        }
-
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            switch (orientation) {
-                case HORIZONTAL:
-                    states.add(AccessibleState.HORIZONTAL);
-                    break;
-                case VERTICAL:
-                    states.add(AccessibleState.VERTICAL);
-                    break;
-                default:
-                    break;
-            }
-
-            return states;
         }
 
         /*

@@ -69,13 +69,6 @@ import javax.swing.SwingConstants;
  */
 public class Separator extends Component implements SwingConstants,
     javax.accessibility.Accessible {
-    private int orientation = HORIZONTAL;
-
-    public Separator(XAccessible xAccessible, XAccessibleContext xAccessibleContext, int orientation) {
-        super(xAccessible, xAccessibleContext);
-        this.orientation = orientation;
-        setFocusable(false);
-    }
 
     public Separator(XAccessible xAccessible,
         XAccessibleContext xAccessibleContext) {
@@ -94,29 +87,6 @@ public class Separator extends Component implements SwingConstants,
         */
         protected AccessibleSeparator() {
             super();
-        }
-
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(
-            XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            switch (orientation) {
-                case HORIZONTAL:
-                    states.add(AccessibleState.HORIZONTAL);
-
-                    break;
-
-                case VERTICAL:
-                    states.add(AccessibleState.VERTICAL);
-
-                    break;
-
-                default:
-                    break;
-            }
-
-            return states;
         }
 
         /*
