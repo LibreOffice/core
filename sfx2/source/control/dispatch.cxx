@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:35:08 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,16 +931,17 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI )
 
         if ( pImp->pFrame && !pImp->pFrame->IsA(TYPE(SfxInPlaceFrame)) )
         {
-            SfxWorkWindow *pWorkWin = pSfxApp->GetWorkWindow_Impl(pImp->pFrame);
-            for (sal_uInt16 n=0; n<pImp->aChildWins.Count();)
+            SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
+            if ( pWorkWin )
             {
-                SfxChildWindow *pWin =
-                        pWorkWin->GetChildWindow_Impl(
-                            (sal_uInt16) ( pImp->aChildWins[n] & 0xFFFF ) );
-                if (!pWin || pWin && pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT)
-                    pImp->aChildWins.Remove(n);
-                else
-                    n++;
+                for (sal_uInt16 n=0; n<pImp->aChildWins.Count();)
+                {
+                    SfxChildWindow *pWin = pWorkWin->GetChildWindow_Impl( (sal_uInt16) ( pImp->aChildWins[n] & 0xFFFF ) );
+                    if (!pWin || pWin && pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT)
+                        pImp->aChildWins.Remove(n);
+                    else
+                        n++;
+                }
             }
         }
     }
@@ -1629,7 +1630,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     sal_Bool bUpdate = bForce;
     while ( pDisp && pDisp->pImp->pFrame )
     {
-        SfxWorkWindow *pWork = pSfxApp->GetWorkWindow_Impl( pDisp->pImp->pFrame );
+        SfxWorkWindow *pWork = pDisp->pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
         SfxDispatcher *pAct = pWork->GetBindings().GetDispatcher_Impl();
         if ( pAct == pDisp || pAct == this )
         {
@@ -1672,7 +1673,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     }
 
     // Environment
-    SfxWorkWindow *pWorkWin = pSfxApp->GetWorkWindow_Impl(pImp->pFrame);
+    SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
 
     // der SfxInternalFrame oder SfxTopViewFrame, zu dem ich geh"ore
     SfxViewFrame *pAct =
@@ -1702,7 +1703,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     SfxDispatcher *pDispat = this;
     while ( pDispat )
     {
-        SfxWorkWindow *pWork = pSfxApp->GetWorkWindow_Impl(pDispat->pImp->pFrame);
+        SfxWorkWindow *pWork = pDispat->pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
         SfxDispatcher *pAct = pWork->GetBindings().GetDispatcher_Impl();
         if ( pAct == pDispat || pAct == this )
         {
@@ -1830,7 +1831,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
 {
     sal_uInt32 nHelpId = 0L;
     SfxApplication *pSfxApp = SFX_APP();
-    SfxWorkWindow *pWorkWin = pSfxApp->GetWorkWindow_Impl( pImp->pFrame );
+    SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
     sal_Bool bIsActive = sal_False;
     sal_Bool bIsTaskActive = sal_False;
     SfxDispatcher *pActDispat = pWorkWin->GetBindings().GetDispatcher_Impl();
@@ -2761,12 +2762,8 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId,
         nShLevel = rDisp.pImp->aStack.Count();
     }
 
-    Window *pWindow = pWin ? pWin :
-            SFX_APP()->GetWorkWindow_Impl( rDisp.pImp->pFrame )->GetWindow();
-
-    for ( pSh = rDisp.GetShell(nShLevel);
-          pSh;
-          ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
+    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
+    for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
         if ( ( nConfigId == 0 && rResId.GetId() ) ||
@@ -2832,12 +2829,8 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId
         nShLevel = rDisp.pImp->aStack.Count();
     }
 
-    Window *pWindow = pWin ? pWin :
-            SFX_APP()->GetWorkWindow_Impl( rDisp.pImp->pFrame )->GetWindow();
-
-    for ( pSh = rDisp.GetShell(nShLevel);
-          pSh;
-          ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
+    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
+    for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
 
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
@@ -2871,9 +2864,7 @@ void SfxDispatcher::ExecutePopup( const ResId &rId
 */
 
 {
-    Window *pWindow = pWin ? pWin :
-                SFX_APP()->GetWorkWindow_Impl( pImp->pFrame )->GetWindow();
-
+    Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
     SfxPopupMenuManager aPop( rId, *GetBindings() );
     aPop.AddClipboardFunctions();
     aPop.Initialize();
@@ -2989,7 +2980,7 @@ void SfxDispatcher::ShowObjectBar(sal_uInt16 nId, SfxShell *pShell) const
 
         if ( nOldId != aResId.GetId() && pImp->bUpdated )
         {
-            SfxWorkWindow *pWorkWin = SFX_APP()->GetWorkWindow_Impl(pImp->pFrame);
+            SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
             pWorkWin->SetObjectBar_Impl( nPos, aResId, pIFace, pName );
             pWorkWin->UpdateObjectBars_Impl();
         }
@@ -3138,10 +3129,11 @@ sal_Bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
     sal_uInt16 nShellCount = pImp->aStack.Count();
     if ( nShell < nShellCount )
     {
-        if( nShell == nShellCount - 1 )
-            return pImp->aStack.Bottom()->ISA( SfxModule ) ?
-                sal_False : pImp->bReadOnly;
-        else return pImp->bReadOnly;
+        SfxShell* pShell = pImp->aStack.Top( nShell );
+        if( pShell->ISA( SfxModule ) || pShell->ISA( SfxApplication ) )
+            return sal_False;
+        else
+            return pImp->bReadOnly;
     }
     else if ( pImp->pParent )
         return pImp->pParent->IsReadOnlyShell_Impl( nShell - nShellCount );
