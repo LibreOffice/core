@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:44:37 $
+ *  last change: $Author: ab $ $Date: 2001-11-07 18:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,7 +708,8 @@ BasicManager* SfxApplication::GetBasicManager()
         pBasicCont->setBasicManager( pBasicManager );
 
         // Dialog container
-        SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer();
+        SotStorage* pStor = NULL;
+        SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( pStor );
         pDialogCont->acquire(); // Hold via UNO
         Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
         pImp->pDialogLibContainer = pDialogCont;
