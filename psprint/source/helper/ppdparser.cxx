@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:08:39 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 namespace psp { class PPDKey; }
 
 namespace  _STL {
-struct hash< const psp::PPDKey* >
+template<> struct hash< const psp::PPDKey* >
 {
     size_t operator()( const psp::PPDKey * pKey) const
     { return (size_t)pKey; }
