@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 14:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,12 @@
 #ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
 #endif
+#ifndef __SGI_STL_LIST
+#include <list>
+#endif
+#ifndef __SGI_STL_HASH_MAP
+#include <hash_map>
+#endif
 
 #ifndef _SWTABLE_HXX
 #include "swtable.hxx"
@@ -139,6 +145,9 @@
 #ifndef _SWDDETBL_HXX
 #include "swddetbl.hxx"
 #endif
+#ifndef _NDOLE_HXX
+#include <ndole.hxx>
+#endif
 
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>  // for cTokenSeperator
@@ -164,6 +173,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 using ::com::sun::star::table::XCell;
 
@@ -296,9 +306,9 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                     */
                 }
 #endif
-                nCPos = nWidth;
+                nCPos = (sal_uInt16)nWidth;
 #ifndef PRODUCT
-                SwXMLTableColumn_Impl aCol( nWidth );
+                SwXMLTableColumn_Impl aCol( (sal_uInt16)nWidth );
                 ASSERT( aCols.Seek_Entry(&aCol), "couldn't find last column" );
                 ASSERT( SwXMLTableColumn_Impl(nCheckPos) ==
                                             SwXMLTableColumn_Impl(nCPos),
@@ -418,14 +428,14 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
 void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
                                   const OUString& rNamePrefix,
-                                  sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bTop )
+                                  sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
 {
     rBuffer.append( rNamePrefix );
     rBuffer.append( (sal_Unicode)'.' );
     if( bTop )
     {
         String sTmp;
-        lcl_GetTblBoxColStr( nCol, sTmp );
+        lcl_GetTblBoxColStr( (sal_uInt16)nCol, sTmp );
         rBuffer.append( sTmp );
     }
     else
@@ -645,7 +655,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     nColAbsWidth += (nBaseWidth/2UL);
                     nColAbsWidth /= nBaseWidth;
                 }
-                pColumn->SetWidthOpt( nColAbsWidth, sal_False );
+                pColumn->SetWidthOpt( (sal_uInt16)nColAbsWidth, sal_False );
             }
 
             sal_uInt32 nExpPos = 0;
@@ -699,7 +709,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             if( nBox < nBoxes-1U )
                 nCPos += (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
             else
-                nCPos = pLines->GetWidth();
+                nCPos = (sal_uInt16)pLines->GetWidth();
 
 
             // Und ihren Index
@@ -915,7 +925,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             if( nBox < nBoxes-1U )
                 nCPos += (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
             else
-                nCPos = rLines.GetWidth();
+                nCPos = (sal_uInt16)rLines.GetWidth();
 
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 14:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _XMLOFF_I18NMAP_HXX
+#include <xmloff/i18nmap.hxx>
 #endif
 
 #ifndef _SVX_PROTITEM_HXX
@@ -1308,7 +1311,11 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
             sTblName = aName;
     }
     if( !sTblName.Len() )
+    {
         sTblName = pDoc->GetUniqueTblName();
+        GetImport().GetTextImport()
+            ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTblName );
+    }
 
     Reference< XTextTable > xTable;
     const SwXTextTable *pXTable = 0;
