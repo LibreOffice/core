@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:16:02 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ File gid_File_Pythonmsi_Dll
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pythonmsi.dll";
-    Styles = (PACKED);
+    Styles = (PACKED, BINARYTABLE);
 End
 
 #endif
