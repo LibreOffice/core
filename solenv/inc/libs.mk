@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
+#   last change: $Author: rt $ $Date: 2001-08-20 11:20:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -175,6 +175,7 @@ SFX2LIB=-lsfx$(UPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(UPD)$(DLLPOSTFIX)
 SFXDEBUGLIB=
 FWELIB=-lfwe$(UPD)$(DLLPOSTFIX)
+FWILIB=-lfwi$(UPD)$(DLLPOSTFIX)
 SVXLIB=-lsvx$(UPD)$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(UPD)$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
@@ -280,6 +281,7 @@ SVLIBDEPEND=$(L)$/sv.lib
 SFX2LIB=$(LIBPRE) sfx.lib
 SFXLIB=$(SFX2LIB)
 FWELIB=$(LIBPRE) ifwe.lib
+FWILIB=$(LIBPRE) ifwi.lib
 BTSTRPLIB=$(LIBPRE) bootstrp.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
