@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 10:36:52 $
+ *  last change: $Author: tbe $ $Date: 2001-09-28 14:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@
 #define RID_STR_ORIENTATION                 ( RID_FORMBROWSER_START + 179 )
 #define RID_STR_ENUM_ORIENTATION            ( RID_FORMBROWSER_START + 180 )
 #define RID_STR_ENUM_SIDE_ALIGN             ( RID_FORMBROWSER_START + 181 )
+#define RID_STR_EVT_ADJUSTMENTVALUECHANGED  ( RID_FORMBROWSER_START + 182 )
 
 // -----------------------------------------------------------------------
 // - dialogs
@@ -284,6 +285,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/06/06 10:36:52  fs
+ *  #86837# +RID_STR_ENUM_SIDE_ALIGN
+ *
  *  Revision 1.9  2001/05/02 12:42:58  tbe
  *  added scrollbar properties
  *
