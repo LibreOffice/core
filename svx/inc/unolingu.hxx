@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:12:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #include <com/sun/star/linguistic2/XDictionary1.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class LinguMgrExitLstnr;
 
 class Window;
@@ -133,7 +137,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-class LinguMgr
+class SVX_DLLPUBLIC LinguMgr
 {
     friend class LinguMgrExitLstnr;
 
@@ -233,22 +237,22 @@ inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
 }
 
 
-SvxAlternativeSpelling SvxGetAltSpelling(
+SVX_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > & rHyphWord );
 
 
 ///////////////////////////////////////////////////////////////////////////
 
-class SvxDicListChgClamp
+class SVX_DLLPUBLIC SvxDicListChgClamp
 {
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
 
     // disallow access to copy-constructor and assignment-operator
-    SvxDicListChgClamp(const SvxDicListChgClamp &);
-    SvxDicListChgClamp & operator = (const SvxDicListChgClamp &);
+    SVX_DLLPRIVATE SvxDicListChgClamp(const SvxDicListChgClamp &);
+    SVX_DLLPRIVATE SvxDicListChgClamp & operator = (const SvxDicListChgClamp &);
 
 public:
     SvxDicListChgClamp( ::com::sun::star::uno::Reference<
@@ -259,49 +263,49 @@ public:
 ///////////////////////////////////////////////////////////////////////////
 
 //TL:TODO: remove those functions or make them inline
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > SvxGetSpellChecker();
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XHyphenator >    SvxGetHyphenator();
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XThesaurus >     SvxGetThesaurus();
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionaryList > SvxGetDictionaryList();
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         SvxGetLinguPropertySet();
 //TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary1 >   SvxGetOrCreatePosDic(
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XDictionaryList >  xDicList );
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary1 >   SvxGetIgnoreAllList();
-::com::sun::star::uno::Reference<
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary1 >   SvxGetChangeAllList();
 
 ///////////////////////////////////////////////////////////////////////////
 // misc functions
 //
 
-LanguageType                        SvxLocaleToLanguage(
+SVX_DLLPUBLIC LanguageType                      SvxLocaleToLanguage(
         const ::com::sun::star::lang::Locale& rLocale );
-::com::sun::star::lang::Locale&     SvxLanguageToLocale(
+SVX_DLLPUBLIC ::com::sun::star::lang::Locale&   SvxLanguageToLocale(
         ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
-::com::sun::star::lang::Locale      SvxCreateLocale( LanguageType eLang );
+SVX_DLLPUBLIC ::com::sun::star::lang::Locale        SvxCreateLocale( LanguageType eLang );
 
-String  SvxGetDictionaryURL(const String &rDicName,
+SVX_DLLPUBLIC String    SvxGetDictionaryURL(const String &rDicName,
                             sal_Bool bIsUserDic = sal_True);
 
 
-sal_uInt8    SvxAddEntryToDic(
+SVX_DLLPUBLIC sal_uInt8    SvxAddEntryToDic(
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >  &rxDic,
     const ::rtl::OUString &rWord, sal_Bool bIsNeg,
     const ::rtl::OUString &rRplcTxt, sal_Int16 nRplcLang,
     sal_Bool bStripDot = sal_True );
-short   SvxDicError( Window *pParent, sal_Int16 nError );
+SVX_DLLPUBLIC short SvxDicError( Window *pParent, sal_Int16 nError );
 
-sal_Bool    SvxSaveDictionaries(
+SVX_DLLPUBLIC sal_Bool  SvxSaveDictionaries(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryList >  &xDicList );
 
