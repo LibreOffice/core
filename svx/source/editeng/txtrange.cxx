@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:30:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,14 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
 /*************************************************************************
 |*
 |*    TextRanger::TextRanger()
@@ -108,9 +116,9 @@ TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
     pPoly = new PolyPolygon( nCount );
     for( USHORT i = 0; i < nCount; ++i )
     {
-        Polygon aTmp = XOutCreatePolygon( rXPoly[ i ], NULL, 100 );
-        nPointCount += aTmp.GetSize();
-        pPoly->Insert( aTmp, i );
+        ::basegfx::B2DPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByAngle(rXPoly[ i ].getB2DPolygon()));
+        nPointCount += (sal_Int32)aCandidate.count();
+        pPoly->Insert( Polygon(aCandidate), i );
     }
     if( pXLine )
     {
@@ -118,9 +126,9 @@ TextRanger::TextRanger( const XPolyPolygon& rXPoly, const XPolyPolygon* pXLine,
         pLine = new PolyPolygon();
         for( USHORT i = 0; i < nCount; ++i )
         {
-            Polygon aTmp = XOutCreatePolygon( (*pXLine)[ i ], NULL, 100 );
-            nPointCount += aTmp.GetSize();
-            pLine->Insert( aTmp, i );
+            ::basegfx::B2DPolygon aCandidate(::basegfx::tools::adaptiveSubdivideByAngle((*pXLine)[ i ].getB2DPolygon()));
+            nPointCount += (sal_Int32)aCandidate.count();
+            pLine->Insert( Polygon(aCandidate), i );
         }
     }
     else
