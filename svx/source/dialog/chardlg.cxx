@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-30 15:12:45 $
+ *  last change: $Author: pb $ $Date: 2000-11-30 15:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5080,6 +5080,30 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
 
 BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
 {
-    return FALSE;
+    const SfxItemSet& rOldSet = GetItemSet();
+    BOOL bModified = FALSE, bChanged = TRUE;
+    USHORT nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
+    const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_CHAR_TWO_LINES );
+    sal_Bool bOn = m_aTwoLinesBtn.IsChecked();
+    sal_Unicode cStart = bOn ? m_aStartBracketLB.GetSelectEntry().GetChar(0) : 0;
+    sal_Unicode cEnd = bOn ? m_aEndBracketLB.GetSelectEntry().GetChar(0) : 0;
+
+    if ( pOld )
+    {
+        const SvxTwoLinesItem& rItem = *( (const SvxTwoLinesItem*)pOld );
+        if ( rItem.GetValue() ==  bOn &&
+             ( !bOn || ( rItem.GetStartBracket() == cStart && rItem.GetEndBracket() == cEnd ) ) )
+            bChanged = FALSE;
+    }
+
+    if ( bChanged )
+    {
+        rSet.Put( SvxTwoLinesItem( bOn, cStart, cEnd ) );
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    return bModified;
 }
 
