@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale version="1.2" >
+<LC_INFO>
+<Language>
+<LangID>ms</LangID>
+<DefaultName>Bahasa Melayu</DefaultName>
+</Language>
+<Country>
+<CountryID>MY</CountryID>
+<DefaultName>Malaysia</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE unoid="generic">
+<Separators>
+<DateSeparator>/</DateSeparator>
+<ThousandSeparator>,</ThousandSeparator>
+<DecimalSeparator>.</DecimalSeparator>
+<TimeSeparator>:</TimeSeparator>
+<Time100SecSeparator>.</Time100SecSeparator>
+<ListSeparator>;</ListSeparator>
+<LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
+<LongDateDaySeparator>, </LongDateDaySeparator>
+<LongDateMonthSeparator> </LongDateMonthSeparator>
+<LongDateYearSeparator> </LongDateYearSeparator>
+</Separators>
+<Markers>
+<QuotationStart>‘</QuotationStart>
+<QuotationEnd>’</QuotationEnd>
+<DoubleQuotationStart>“</DoubleQuotationStart>
+<DoubleQuotationEnd>”</DoubleQuotationEnd>
+</Markers>
+<TimeAM>AM</TimeAM>
+<TimePM>PM</TimePM>
+<MeasurementSystem>Metric</MeasurementSystem>
+</LC_CTYPE>
+<LC_FORMAT ref="en_US" replaceTo="[$RM-43e]"/>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="en_US"/>
+<LC_CALENDAR>
+<Calendar unoid="gregorian" default="true">
+<DaysOfWeek>
+<Day>
+<DayID>sun</DayID>
+<DefaultAbbrvName>Aha</DefaultAbbrvName>
+<DefaultFullName>Ahad</DefaultFullName>
+</Day>
+<Day>
+<DayID>mon</DayID>
+<DefaultAbbrvName>Isn</DefaultAbbrvName>
+<DefaultFullName>Isnin</DefaultFullName>
+</Day>
+<Day>
+<DayID>tue</DayID>
+<DefaultAbbrvName>Sel</DefaultAbbrvName>
+<DefaultFullName>Selasa</DefaultFullName>
+</Day>
+<Day>
+<DayID>wed</DayID>
+<DefaultAbbrvName>Rab</DefaultAbbrvName>
+<DefaultFullName>Rabu</DefaultFullName>
+</Day>
+<Day>
+<DayID>thu</DayID>
+<DefaultAbbrvName>Kha</DefaultAbbrvName>
+<DefaultFullName>Khamis</DefaultFullName>
+</Day>
+<Day>
+<DayID>fri</DayID>
+<DefaultAbbrvName>Jum</DefaultAbbrvName>
+<DefaultFullName>Jumaat</DefaultFullName>
+</Day>
+<Day>
+<DayID>sat</DayID>
+<DefaultAbbrvName>Sab</DefaultAbbrvName>
+<DefaultFullName>Sabtu</DefaultFullName>
+</Day>
+</DaysOfWeek>
+<MonthsOfYear>
+<Month>
+<MonthID>jan</MonthID>
+<DefaultAbbrvName>Jan</DefaultAbbrvName>
+<DefaultFullName>Januari</DefaultFullName>
+</Month>
+<Month>
+<MonthID>feb</MonthID>
+<DefaultAbbrvName>Feb</DefaultAbbrvName>
+<DefaultFullName>Februari</DefaultFullName>
+</Month>
+<Month>
+<MonthID>mar</MonthID>
+<DefaultAbbrvName>Mac</DefaultAbbrvName>
+<DefaultFullName>Mac</DefaultFullName>
+</Month>
+<Month>
+<MonthID>apr</MonthID>
+<DefaultAbbrvName>Apr</DefaultAbbrvName>
+<DefaultFullName>April</DefaultFullName>
+</Month>
+<Month>
+<MonthID>may</MonthID>
+<DefaultAbbrvName>Mei</DefaultAbbrvName>
+<DefaultFullName>Mei</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jun</MonthID>
+<DefaultAbbrvName>Jun</DefaultAbbrvName>
+<DefaultFullName>Jun</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jul</MonthID>
+<DefaultAbbrvName>Jul</DefaultAbbrvName>
+<DefaultFullName>Julai</DefaultFullName>
+</Month>
+<Month>
+<MonthID>aug</MonthID>
+<DefaultAbbrvName>Ogos</DefaultAbbrvName>
+<DefaultFullName>Ogos</DefaultFullName>
+</Month>
+<Month>
+<MonthID>sep</MonthID>
+<DefaultAbbrvName>Sept</DefaultAbbrvName>
+<DefaultFullName>September</DefaultFullName>
+</Month>
+<Month>
+<MonthID>oct</MonthID>
+<DefaultAbbrvName>Okt</DefaultAbbrvName>
+<DefaultFullName>Oktober</DefaultFullName>
+</Month>
+<Month>
+<MonthID>nov</MonthID>
+<DefaultAbbrvName>Nov</DefaultAbbrvName>
+<DefaultFullName>November</DefaultFullName>
+</Month>
+<Month>
+<MonthID>dec</MonthID>
+<DefaultAbbrvName>Dis</DefaultAbbrvName>
+<DefaultFullName>Disember</DefaultFullName>
+</Month>
+</MonthsOfYear>
+<Eras>
+<Era>
+<EraID>bc</EraID>
+<DefaultAbbrvName>BC</DefaultAbbrvName>
+<DefaultFullName>BC</DefaultFullName>
+</Era>
+<Era>
+<EraID>ad</EraID>
+<DefaultAbbrvName>AD</DefaultAbbrvName>
+<DefaultFullName>AD</DefaultFullName>
+</Era>
+</Eras>
+<StartDayOfWeek><DayID>sun</DayID></StartDayOfWeek>
+<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+</Calendar>
+</LC_CALENDAR>
+<LC_CURRENCY>
+<Currency default="true" usedInCompatibleFormatCodes="true">
+<CurrencyID>ringgit</CurrencyID>
+<CurrencySymbol>RM</CurrencySymbol>
+<BankSymbol>MYR</BankSymbol>
+<CurrencyName>Ringgit Malaysia</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+</LC_CURRENCY>
+<LC_TRANSLITERATION ref="en_US"/>
+<LC_MISC>
+<ReservedWords>
+<trueWord>true</trueWord>
+<falseWord>false</falseWord>
+<quarter1Word>suku pertama</quarter1Word>
+<quarter2Word>suku kedua</quarter2Word>
+<quarter3Word>suku ketiga</quarter3Word>
+<quarter4Word>suku keempat</quarter4Word>
+<aboveWord>atas</aboveWord>
+<belowWord>bawah</belowWord>
+<quarter1Abbreviation>S1</quarter1Abbreviation>
+<quarter2Abbreviation>S2</quarter2Abbreviation>
+<quarter3Abbreviation>S3</quarter3Abbreviation>
+<quarter4Abbreviation>S4</quarter4Abbreviation>
+</ReservedWords>
+</LC_MISC>
+<LC_NumberingLevel ref="en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
