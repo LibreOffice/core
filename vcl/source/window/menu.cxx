@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:30:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
