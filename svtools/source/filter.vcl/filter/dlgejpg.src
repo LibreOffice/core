@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:06:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ korean ] = "È­Áú";
         Text[ turkish ] = "Kalite";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Calidad";
     };
     FixedText FI_DESCR
     {
@@ -150,6 +151,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ korean ] = "0: ÃÖ¼Ò ¼º´É\n100: ÃÖ´ë ¼º´É";
         Text[ turkish ] = "0: asg. kalite\n100: azm. kalite";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "0: mín. calidad\n100: máx. calidad";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -190,6 +192,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
         Text[ turkish ] = "Renk çözünürlüðü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resolución del color";
     };
     RadioButton RB_GRAY
     {
@@ -219,6 +222,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ korean ] = "È¸»öµµ";
         Text[ turkish ] = "Gri tonlama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Escala de grises";
     };
     RadioButton RB_RGB
     {
@@ -248,6 +252,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ korean ] = "Æ®·ç ÄÃ·¯";
         Text[ turkish ] = "Gerçek renkler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Colores reales";
     };
     Text [ portuguese_brazilian ] = "JPEG Optionen" ;
     Text [ portuguese ] = "Opções JPEG" ;
@@ -263,4 +268,5 @@ ModalDialog DLG_EXPORT_JPG
     Text[ korean ] = "JPEG ¿É¼Ç";
     Text[ turkish ] = "JPEG seçenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones JPEG";
 };
