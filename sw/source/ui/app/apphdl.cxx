@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 11:55:20 $
+ *  last change: $Author: os $ $Date: 2000-10-19 08:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,11 +306,14 @@ using namespace ::com::sun::star;
 #include "itemdef.hxx"
 #include <svx/svxslots.hxx>
 #include "swslots.hxx"
-
+#ifndef _CFGID_H
+#include <cfgid.h>
+#endif
 
 SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxHyperlinkDlgWrapper::GetChildWindowId());
+    SFX_STATUSBAR_REGISTRATION(SW_RES(CFG_STATUSBAR));
 }
 
 /*------------------------------------------------------------------------
