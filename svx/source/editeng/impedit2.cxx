@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 13:13:53 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3398,5 +3398,18 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, BOOL bRight )
         pEditView->pImpEditView->DrawSelection();
         pEditView->pImpEditView->ShowCursor( FALSE, TRUE );
     }
+}
+
+vos::ORef<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable( BOOL bGetInternal ) const
+{
+    vos::ORef<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
+    if ( !xF.isValid() && bGetInternal )
+        xF = EE_DLL()->GetGlobalData()->GetForbiddenCharsTable();
+    return xF;
+}
+
+void ImpEditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+{
+    EE_DLL()->GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }
 

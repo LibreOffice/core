@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 13:11:44 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,11 @@
 #include <scriptspaceitem.hxx>
 #include <charscaleitem.hxx>
 
+#include <forbiddencharacterstable.hxx>
+
 #include <unotools/localedatawrapper.hxx>
+
+#include <unolingu.hxx>
 
 #include <textconv.hxx>
 
@@ -1570,11 +1574,9 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
     i18n::LineBreakUserOptions aUserOptions;
 
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    LocaleDataWrapper aWrapper( xMSF, aLocale );
-    i18n::ForbiddenCharacters aForbidden = aWrapper.getForbiddenCharacters();
-    aUserOptions.forbiddenBeginCharacters = aForbidden.beginLine;
-    aUserOptions.forbiddenEndCharacters = aForbidden.endLine;
+    const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( SvxLocaleToLanguage( aLocale ), TRUE );
+    aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
+    aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
     aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
     aUserOptions.allowPunctuationOutsideMargin = FALSE; // ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
     aUserOptions.allowHyphenateEnglish = FALSE;

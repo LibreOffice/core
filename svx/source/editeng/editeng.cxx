@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-05 16:24:58 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1748,6 +1748,19 @@ void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetHyphenator( xHyph );
 }
+
+void EditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetForbiddenCharsTable( xForbiddenChars );
+}
+
+vos::ORef<SvxForbiddenCharactersTable> EditEngine::GetForbiddenCharsTable() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetForbiddenCharsTable( FALSE );
+}
+
 
 void EditEngine::SetDefaultLanguage( LanguageType eLang )
 {

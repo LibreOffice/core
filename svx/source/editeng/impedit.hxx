@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-08 09:27:41 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
+#include <vos/ref.hxx>
+
 DBG_NAMEEX( EditView );
 DBG_NAMEEX( EditEngine );
 
@@ -134,6 +136,8 @@ class SvxSearchItem;
 class SvxLRSpaceItem;
 class TextRanger;
 class SvKeyValueIterator;
+class SvxForbiddenCharactersTable;
+
 
 enum ExchangeType { EXCHANGE_CLIPBOARD, EXCHANGE_DRAGSERVER };
 
@@ -426,6 +430,8 @@ private:
     Timer               aStatusTimer;
     Link                aStatusHdlLink;
     Link                aImportHdl;
+
+    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
 
 
     // ================================================================
@@ -805,6 +811,8 @@ public:
 
     void                TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
 
+    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
+    void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
 };
 
 inline long ImpEditEngine::LogicToTwips( long n )

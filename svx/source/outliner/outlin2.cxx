@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 20:30:34 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 18:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #ifndef _SV_MAPMOD_HXX
 #include <vcl/mapmod.hxx>
 #endif
+
+#include <forbiddencharacterstable.hxx>
 
 #define _OUTLINER_CXX
 
@@ -515,6 +517,19 @@ Reference< XSpellChecker1 > Outliner::GetSpeller()
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetSpeller();
 }
+
+void Outliner::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetForbiddenCharsTable( xForbiddenChars );
+}
+
+vos::ORef<SvxForbiddenCharactersTable> Outliner::GetForbiddenCharsTable() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->GetForbiddenCharsTable();
+}
+
 
 Reference< XHyphenator > Outliner::GetHyphenator() const
 {
