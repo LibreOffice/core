@@ -3,9 +3,9 @@
  *
  *  $RCSfile: data_val.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:49:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@
 		</xsl:if>
 
         <xsl:call-template name="checkModule"/>
+        <xsl:call-template name="checkDuplicates"/>
 
 		<xsl:choose>
 			<!-- look for matching templates in other components -->
@@ -222,7 +223,36 @@
 		</xsl:if>
 
         <xsl:call-template name="checkModule"/>
+        <xsl:call-template name="checkDuplicates"/>
 		
+        <xsl:apply-templates />				
+	</xsl:template>
+
+<!-- ****************************************** -->
+<!-- * value									*** -->
+<!-- ****************************************** -->
+	<xsl:template match="value">
+        <xsl:call-template name="checkModule"/>
+
+        <xsl:if test="@install:module">
+            <xsl:variable name = "path">
+                <xsl:call-template name="collectPath"/>
+            </xsl:variable>
+            <xsl:variable name = "module" select="@install:module"/>
+
+            <xsl:if test="@oor:lang">
+                <xsl:message terminate="yes">ERROR: Value in property '<xsl:value-of select="$path"/>' has module and locale!</xsl:message>
+            </xsl:if>
+            <xsl:if test="following-sibling::value[@install:module=$module]">
+                <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has multiple values for module <xsl:value-of select="$module"/>!</xsl:message>
+            </xsl:if>
+            <xsl:if test="../value[not(@install:module)]">
+                <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has values both with and without module. This is currently not supported. Please contact jb@openoffice.org, if you need this!</xsl:message>
+            </xsl:if>
+            <xsl:if test="not(preceding-sibling::value/@install:module)">
+                <xsl:message>ATTENTION: Property '<xsl:value-of select="$path"/>' has different values for different modules. Make sure the modules are mutually exclusive!</xsl:message>
+            </xsl:if>
+        </xsl:if>
 	</xsl:template>
 
 <!-- ****************************************** -->
@@ -261,6 +291,21 @@
         </xsl:choose>
 
         <xsl:call-template name="checkModule"/>
+        <xsl:call-template name="checkDuplicates"/>
+	</xsl:template>
+
+
+<!-- ************************************* -->
+<!-- * checkDuplicates  			   *** -->
+<!-- ************************************* -->
+	<xsl:template name="checkDuplicates">
+        <xsl:variable name="item-name" select="@oor:name"/>
+		<xsl:if test="following-sibling::*[@oor:name = $item-name]">
+            <xsl:variable name = "path">
+                <xsl:call-template name="collectPath"/>
+            </xsl:variable>
+			<xsl:message terminate="yes">ERROR: Duplicate node/prop '<xsl:value-of select="$path"/>'!</xsl:message>
+		</xsl:if>			
 	</xsl:template>
 
 
