@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSingleServiceFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:55 $
+ *  last change:$Date: 2003-09-08 10:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.lang;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
 
 
 /**
