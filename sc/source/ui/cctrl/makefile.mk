@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 15:36:30 $
+#   last change: $Author: hr $ $Date: 2004-08-03 11:35:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,9 +80,10 @@ PROJECTPCHSOURCE=..$/pch$/ui_pch
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/popmenu.obj \
-        $(SLO)$/tbinsert.obj \
-        $(SLO)$/cbuttonw.obj
+        $(SLO)$/popmenu.obj		\
+        $(SLO)$/tbinsert.obj	\
+        $(SLO)$/cbuttonw.obj	\
+        $(SLO)$/editfield.obj
 
 # --- Tagets -------------------------------------------------------
 
