@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 12:23:39 $
+#   last change: $Author: hr $ $Date: 2004-06-21 16:03:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ TARGETOBJS=   $(OBJ)$/app.obj					\
             $(OBJ)$/ssoinit.obj				\
             $(OBJ)$/configinit.obj				\
             $(OBJ)$/javainteractionhandler.obj	\
-            $(OBJ)$/testtool.obj			\
             $(OBJ)$/checkinstall.obj		\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
