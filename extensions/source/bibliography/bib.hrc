@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:02:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #define RID_BIB_TOOLBAR             (RID_BIB_CONTROLS+ 1)
 #define RID_TOOLBAR_IMGLIST         (RID_BIB_CONTROLS+ 2)
 #define RID_TOOLBAR_IMGLIST_HC      (RID_BIB_CONTROLS+ 3)
+#define RID_TOOLBAR_BIGIMGLIST      (RID_BIB_CONTROLS+ 4)
+#define RID_TOOLBAR_BIGIMGLIST_HC   (RID_BIB_CONTROLS+ 5)
 
 //Menu(100)
 #define RID_BIB_MENU                (RID_BIB_CONTROLS + 100)
