@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:47:31 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1515,7 +1515,7 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
                 DBG_ERROR( "Doc->Insert(Str) failed." );
 
             SwXTextCursor::SelectPam(aNewCrsr, sal_True);
-            aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS);
+            aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
         }
         _CreateNewBookmark(aNewCrsr);
         pDoc->EndUndo(UNDO_INSERT);
@@ -2480,7 +2480,7 @@ void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
             ASSERT( sal_False, "Doc->Insert(Str) failed." )
         }
         SwXTextCursor::SelectPam(rCrsr, sal_True);
-        rCrsr.Left(nTxtLen, CRSR_SKIP_CHARS);
+        rCrsr.Left(nTxtLen, CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     pDoc->EndUndo(UNDO_INSERT);
 }
@@ -2561,7 +2561,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
                 do
                 {
                     FillFrame(*pUnoCrsr);
-                    pUnoCrsr->Right(1, CRSR_SKIP_CHARS);
+                    pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
                 }
                 while(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark());
             }
