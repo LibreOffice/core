@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-07 21:29:31 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,7 +548,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ chinese_traditional ] = "æŸ¥è©¢";
     Text[ turkish ] = "Queries";
     Text[ arabic ] = "ÇÓÊİÓÇÑÇÊ";
-    Text[ finnish ] = "Abfragen";
+    Text[ finnish ] = "Kyselyt";
     Text[ catalan ] = "Consultes";
 };
 
@@ -574,7 +574,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ chinese_traditional ] = "è¡¨æ ¼";
     Text[ turkish ] = "Tables";
     Text[ arabic ] = "Tables";
-    Text[ finnish ] = "Laskentataulukot";
+    Text[ finnish ] = "Taulukot";
     Text[ catalan ] = "Taules";
 };
 
@@ -627,7 +627,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "ç®¡ç†è³‡æ–™æº(~D)..."; \
     Text[ turkish ] = "administrate ~data sources ..."; \
     Text[ arabic ] = "ÅÏÇÑÉ ãÕÇÏÑ ÇáÈíÇäÇÊ..."; \
-    Text[ finnish ] = "~Datenquellen verwalten ...";    \
+    Text[ finnish ] = "~Tietolähteiden hallinta";   \
     Text[ catalan ] = "Administra les fonts de ~dades..."; \
     Text[ catalan ] = "Administra les fonts de ~dades...";
 
@@ -680,7 +680,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "çµæŸé€£ç·š(~N)";   \
     Text[ turkish ] = "~close connection";  \
     Text[ arabic ] = "ŞØÚ ÇáÇÊÕÇá"; \
-    Text[ finnish ] = "Verbindung s~chließen";  \
+    Text[ finnish ] = "Katkaise ~yhteys";   \
     Text[ catalan ] = "Desco~nnecta";           \
     Text[ catalan ] = "Desco~nnecta";
 
@@ -707,7 +707,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "é‡æ–°é€£ç·š(~R)";   \
     Text[ turkish ] = "~refresh connection";    \
     Text[ arabic ] = "ÊÍÏíË ÇáÇÊÕÇá";   \
-    Text[ finnish ] = "Verbindung e~rneuern";   \
+    Text[ finnish ] = "~Päivitä yhteys";    \
     Text[ catalan ] = "~Refresca la connexió";  \
     Text[ catalan ] = "~Refresca la connexió";
 
@@ -837,7 +837,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ chinese_traditional ] = "è¤‡è£½æŸ¥è©¢(~O)";
             Text[ turkish ] = "c~opy query";
             Text[ arabic ] = "äÓÎ ÇáÇÓÊİÓÇÑ";
-            Text[ finnish ] = "Abfrage ~kopieren";
+            Text[ finnish ] = "K~opioi kysely";
             Text[ catalan ] = "C~opia la consulta";
         };
         MenuItem
@@ -909,7 +909,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ chinese_traditional ] = "è¤‡è£½è¡¨æ ¼(~O)";
             Text[ turkish ] = "c~opy table";
             Text[ arabic ] = "äÓÎ ÇáÌÏæá";
-            Text[ finnish ] = "Tabelle ~kopieren";
+            Text[ finnish ] = "K~opioi taulukko";
             Text[ catalan ] = "C~opia la taula";
         };
         MenuItem
@@ -925,7 +925,7 @@ Menu MENU_BROWSER_TABLECONTEXT
                 Text[ dutch ] = "Tabel ~invoegen...";
                 Text[ french ] = "~Insérer une table...";
                 Text[ spanish ] = "~Insertar tabla";
-                Text[ finnish ] = "Tabelle e~infügen";
+                Text[ finnish ] = "~Lisää taulukko";
                 Text[ italian ] = "~Inserisci tabella...";
                 Text[ danish ] = "~insert table";
                 Text[ swedish ] = "Kl~istra in tabell...";
@@ -967,7 +967,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ chinese_traditional ] = "é—œè¯è¨­è¨ˆ(~A)";
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
-            Text[ finnish ] = "Relatio~nenentwurf";
+            Text[ finnish ] = "~Suhteen rakenne";
             Text[ catalan ] = "Disseny de la rel~ació";
         };
     };
@@ -999,7 +999,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ dutch ] = "Beeld ~kopiëren";
                 Text[ french ] = "C~opier la vue";
                 Text[ spanish ] = "Copiar ~visualización";
-                Text[ finnish ] = "C~opy View";
+                Text[ finnish ] = "K~opioi näkymä";
                 Text[ italian ] = "Copia vista";
                 Text[ danish ] = "C~opy View";
                 Text[ swedish ] = "~Kopiera vy";
@@ -1026,7 +1026,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ dutch ] = "~Beeld invoegen";
                 Text[ french ] = "~Insérer une vue";
                 Text[ spanish ] = "~Insertar visualización";
-                Text[ finnish ] = "~Insert View";
+                Text[ finnish ] = "~Lisää näkymä";
                 Text[ italian ] = "~Inserisci vista";
                 Text[ danish ] = "~Insert View";
                 Text[ swedish ] = "Kl~istra in vy";
@@ -1068,7 +1068,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ chinese_traditional ] = "é—œè¯è¨­è¨ˆ(~A)";
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
-            Text[ finnish ] = "Rel~ation Design";
+            Text[ finnish ] = "~Suhteen rakenne";
                 Text[ catalan ] = "Disseny de la rel~ació";
             };
     };
@@ -1123,7 +1123,7 @@ String STR_QUERY_DELETE_QUERY
     Text[ chinese_traditional ] = "è¦åˆªé™¤é€™å€‹æŸ¥è©¢<$name$>?";
     Text[ turkish ] = "Do you want to delete the query '%1'?";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '$name$'?";
-    Text[ finnish ] = "Soll die Abfrage '$name$' gelöscht werden?";
+    Text[ finnish ] = "Haluatko poistaa kyselyn $name$?";
     Text[ catalan ] = "Voleu suprimir la consulta '$name$'?";
 };
 
@@ -1149,7 +1149,7 @@ String STR_QUERY_DELETE_TABLE
     Text[ chinese_traditional ] = "è¦åˆªé™¤è¡¨æ ¼<%1>?";
     Text[ turkish ] = "Do you want to delete the table '%1'?";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÌÏæá '%1'¿";
-    Text[ finnish ] = "Soll die Tabelle '%1' gelöscht werden?";
+    Text[ finnish ] = "Haluatko poistaa taulukon %1?";
     Text[ catalan ] = "Voleu eliminar la taula '%1'?";
 };
 
@@ -1176,7 +1176,7 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ chinese_traditional ] = "é€™å€‹æŸ¥è©¢å·²ç¶“å­˜åœ¨ã€‚è¦åˆªé™¤å®ƒï¼Ÿ";
     Message[ turkish ] = "The query already exists. Do you want to delete the query?";
     Message[ arabic ] = "åĞÇ ÇáÇÓÊİÓÇÑ ãæÌæÏ ÈÇáİÚá. åá ÊÑíÏ ÍĞİå¿";
-    Message[ finnish ] = "Die Abfrage existiert bereits. Soll sie gelöscht werden?";
+    Message[ finnish ] = "Kysely on jo olemassa. Haluatko poistaa sen?";
     Message[ catalan ] = "La consulta ja existeix. Voleu suprimir-la?";
 };
 
@@ -1203,7 +1203,7 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ chinese_traditional ] = "å’Œè³‡æ–™åº«çš„é€£ç·šå·²ç¶“é—œé–‰ã€‚è¦é‡æ–°é€£ç·šï¼Ÿ";
     Message[ turkish ] = "The connection to the database was lost! Reconnect";
     Message[ arabic ] = "İõŞÏ ÇáÇÊÕÇá ÈŞÇÚÏÉ ÇáÈíÇäÇÊ. åá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá ãÑÉ ÃÎÑì¿";
-    Message[ finnish ] = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?";
+    Message[ finnish ] = "Tietokantayhteys katkesi. Haluatko muodostaa yhteyden uudelleen?";
     Message[ catalan ] = "S'ha perdut la connexió amb la base de dades. Voleu tornar a connectar?";
 };
 
@@ -1229,7 +1229,7 @@ String STR_OPENTABLES_WARNINGS
     Text[ chinese_traditional ] = "ç™¼å‡ºä¸€å€‹è­¦å‘Šã€‚";
     Text[ turkish ] = "Warnings encountered.";
     Text[ arabic ] = "ÍÏËÊ ÊÍĞíÑÇÊ.";
-    Text[ finnish ] = "Warnungen aufgetreten.";
+    Text[ finnish ] = "Varoituksia havaittu";
     Text[ catalan ] = "S'han trobat advertiments";
 };
 
@@ -1255,7 +1255,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ chinese_traditional ] = "åœ¨å­˜å–è¡¨æ ¼æ™‚ç™¼å‡ºè³‡æ–™åº«é€£ç·šçš„è­¦å‘Šã€‚";
     Text[ turkish ] = "While retrieving the tables, warnings were provided by the connection.";
     Text[ arabic ] = "Êã ÊÈáíÛ ÊÍĞíÑÇÊ ãä ÇÊÕÇá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÃËäÇÁ ãÍÇæáÉ ÇÓÊÑÏÇÏ ÇáÌÏÇæá.";
-    Text[ finnish ] = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
+    Text[ finnish ] = "Tietokantayhteys palautti varoituksia taulukoita noudettaessa.";
     Text[ catalan ] = "La connexió amb la base de dades ha generat advertiments en recuperar les taules";
 };
 
@@ -1281,7 +1281,7 @@ String STR_CONNECTING_DATASOURCE
     Text[ chinese_traditional ] = "é€£ç·šåˆ°<$name$>...";
     Text[ turkish ] = "connecting to \"$name$\" ...";
     Text[ arabic ] = "connecting to \"$name$\" ...";
-    Text[ finnish ] = "Verbindungsaufbau zu \"$name$\" ...";
+    Text[ finnish ] = "Yhdistetään kohteeseen $name$";
     Text[ catalan ] = "S'està establint la connexió amb \"$name$\" ...";
 };
 
@@ -1307,7 +1307,7 @@ String STR_LOADING_QUERY
     Text[ chinese_traditional ] = "è¼‰å…¥æŸ¥è©¢ $name$ ...";
     Text[ turkish ] = "loading query $name$ ...";
     Text[ arabic ] = "loading query $name$ ...";
-    Text[ finnish ] = "lade Abfrage $name$ ...";
+    Text[ finnish ] = "Ladataan kysely $name$ ";
     Text[ catalan ] = "S'està carregant la consulta $name$ ...";
 };
 
@@ -1333,7 +1333,7 @@ String STR_LOADING_TABLE
     Text[ chinese_traditional ] = "è¼‰å…¥è¡¨æ ¼ $name$ ...";
     Text[ turkish ] = "loading table $name$ ...";
     Text[ arabic ] = "loading table $name$ ...";
-    Text[ finnish ] = "lade Tabelle $name$ ...";
+    Text[ finnish ] = "Ladataan taulukko $name$ ";
     Text[ catalan ] = "S'està carregant la taula $name$ ...";
 };
 
@@ -1453,6 +1453,7 @@ Menu RID_MENU_REFRESH_DATA
             };
     };
 };
+
 
 
 
