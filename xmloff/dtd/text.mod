@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.51 2002-06-11 14:59:33 dvo Exp $
+	$Id: text.mod,v 1.52 2002-09-30 09:33:38 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -190,8 +190,8 @@
 
 <!ATTLIST text:ordered-list text:continue-numbering %boolean; "false">
 
-<!ELEMENT text:list-header (text:p)+>
-<!ELEMENT text:list-item (text:p|text:ordered-list|text:unordered-list)+>
+<!ELEMENT text:list-header (text:p|text:h)+>
+<!ELEMENT text:list-item (text:p|text:h|text:ordered-list|text:unordered-list)+>
 
 <!ATTLIST text:list-item text:restart-numbering %boolean; "false">
 <!ATTLIST text:list-item text:start-value %positiveInteger; #IMPLIED>

@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.77 2002-09-04 14:02:51 cl Exp $
+	$Id: drawing.mod,v 1.78 2002-09-30 09:33:39 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -216,6 +216,7 @@
 <!ELEMENT draw:g ( office:events?, (%shapes;)* ) >
 <!ATTLIST draw:g svg:y %coordinate; #IMPLIED>
 <!ATTLIST draw:g %draw-transform; >
+<!ATTLIST draw:g draw:name %string; #IMPLIED>
 <!ATTLIST draw:g %draw-style-name; >
 <!ATTLIST draw:g %zindex;>
 <!ATTLIST draw:g %draw-end-position; >
@@ -569,6 +570,7 @@
 
 <!-- image -->
 <!ELEMENT draw:image (office:binary-data?,office:events?,draw:image-map?,svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ATTLIST draw:image %draw-transform; >
 <!ATTLIST draw:image %draw-style-name;>
 <!ATTLIST draw:image draw:name %string; #IMPLIED>
 <!ATTLIST draw:image xlink:href %uriReference; #IMPLIED>
