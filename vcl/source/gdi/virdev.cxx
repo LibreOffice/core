@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-18 07:12:09 $
+ *  last change: $Author: hdu $ $Date: 2001-05-23 12:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,9 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
     mbScreenComp    = TRUE;
+
+    if( mnBitCount < 8 )
+        SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
 
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
         mbScreenComp = FALSE;
