@@ -255,6 +255,18 @@
     </component-description>
 
     <component-description>
+        <author> Duncan Foster </author>
+        <name> com.sun.star.comp.framework.MacrosMenuController </name>
+        <description>
+            A popup menu controller which controls the scripts/macros popup menu.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="draft"/>
+        <supported-service> drafts.com.sun.star.frame.PopupMenuController </supported-service>
+    </component-description>
+
+    <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.UICommandDescription </name>
         <description>
