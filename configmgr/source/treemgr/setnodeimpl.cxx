@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 11:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,7 +695,7 @@ ElementTreeHolder TreeSetNodeImpl::makeAdditionalElement(TemplateProvider const&
             CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
                                         nDepth, getElementTemplate(), aTemplateProvider );
 
-            implMakeElement(aCollector.create(*pTreeNode));
+            return implMakeElement(aCollector.create(*pTreeNode));
         }
     }
     else
