@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 11:53:53 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ SfxSlotInfo FN_ABSTRACT_NEWDOC
     SlotName[ korean ] = "√ﬂªÛ¿∏∑Œ∫Œ≈Õ¿« πÆº≠";
     SlotName[ turkish ] = "Belge ˆzeti Á˝kar";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Documento desde extracto";
 };
 SfxSlotInfo FN_ABSTRACT_STARIMPRESS
 {
@@ -113,6 +114,7 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ korean ] = "√ﬂªÛ¿∏∑Œ∫Œ≈Õ¿« «¡∏Æ¡®≈◊¿Ãº«";
     SlotName[ turkish ] = "Sunu ˆzeti Á˝kar";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "PresentaciÛn desde extracto";
 };
 SfxSlotInfo FN_ADD_UNKNOWN
 {
@@ -139,6 +141,7 @@ SfxSlotInfo FN_ADD_UNKNOWN
     SlotName[ korean ] = "æÀ∑¡¡Æ°°¿÷¡ˆ°°æ ¿∫ ¥‹æÓ √ﬂ∞°";
     SlotName[ turkish ] = "Bilinmeyen sˆzc¸kler ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Aceptar palabras desconocidas";
 };
 SfxSlotInfo FN_AUTO_CORRECT
 {
@@ -165,6 +168,7 @@ SfxSlotInfo FN_AUTO_CORRECT
     SlotName[ korean ] = "¿⁄µø∞Ìƒß";
     SlotName[ turkish ] = "Otomatik d¸zeltme";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "AutoCorrecciÛn";
 };
 SfxSlotInfo FN_AUTO_CORRECT_DLG
 {
@@ -191,6 +195,7 @@ SfxSlotInfo FN_AUTO_CORRECT_DLG
     SlotName[ korean ] = "¿⁄µø∞Ìƒß ∆Ì¡˝";
     SlotName[ turkish ] = "Otomatik d¸zelt dosyas˝n˝ d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar AutoCorrecciÛn";
 };
 SfxSlotInfo FN_AUTOFORMAT_APPLY
 {
@@ -217,6 +222,7 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
     SlotName[ korean ] = "¿⁄µøº≠Ωƒ£≠ø…º« ¿˚øÎ";
     SlotName[ turkish ] = "Otomatik formatlama seÁeneklerini uygula";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Aplicar opciones AutoFormato";
 };
 SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
@@ -242,6 +248,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ korean ] = "¿⁄µøº≠Ωƒ";
     SlotName[ turkish ] = "Otomatik formatlama";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "AutoFormato";
 };
 SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
 {
@@ -268,6 +275,7 @@ SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
     SlotName[ korean ] = "¿⁄µøº≠Ωƒ£≠ø…º«°°¿˚øÎ∞˙ ∫Ø∞Ê°°»Æ¿Œ";
     SlotName[ turkish ] = "Otomatik formatlama seÁeneklerini uygula ve dei˛iklikleri onayla";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "AutoFormato-Aplicar opciones y confirmar modificaciones";
 };
 SfxSlotInfo FN_BACKSPACE
 {
@@ -294,6 +302,7 @@ SfxSlotInfo FN_BACKSPACE
     SlotName[ greek ] = "Backspace";
     SlotName[ korean ] = "πÈ Ω∫∆‰¿ÃΩ∫";
     SlotName[ turkish ] = "Geri al";
+    SlotName[ catalan ] = "Retroceder";
 };
 SfxSlotInfo FN_CALC_TABLE
 {
@@ -320,6 +329,7 @@ SfxSlotInfo FN_CALC_TABLE
     SlotName[ greek ] = "’ÔÎÔ„ÈÛÏ¸Ú ﬂÌ·Í·";
     SlotName[ korean ] = "«• ∞ËªÍ";
     SlotName[ turkish ] = "Tabloyu hesapla";
+    SlotName[ catalan ] = "Calcular tabla";
 };
 SfxSlotInfo FN_CALCULATE
 {
@@ -346,6 +356,7 @@ SfxSlotInfo FN_CALCULATE
     SlotName[ korean ] = "º±≈√ ∞ËªÍ";
     SlotName[ turkish ] = "SeÁimi hesapla";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Calcular selecciÛn";
 };
 SfxSlotInfo FN_CHANGE_DBFIELD
 {
@@ -372,6 +383,7 @@ SfxSlotInfo FN_CHANGE_DBFIELD
     SlotName[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ ºˆ¡§";
     SlotName[ turkish ] = "Veritaban˝n˝ d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Modificar base de datos";
 };
 SfxSlotInfo FN_CHANGE_PAGENUM
 {
@@ -398,6 +410,7 @@ SfxSlotInfo FN_CHANGE_PAGENUM
     SlotName[ korean ] = "¬  π¯»£";
     SlotName[ turkish ] = "Sayfa numaras˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "N˙mero de p·gina";
 };
 SfxSlotInfo FN_CHAR_LEFT
 {
@@ -424,6 +437,7 @@ SfxSlotInfo FN_CHAR_LEFT
     SlotName[ korean ] = "πÆ¿⁄ øﬁ¬ ";
     SlotName[ turkish ] = "Soldaki karakter";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Car·cter a la izquierda";
 };
 SfxSlotInfo FN_CHAR_LEFT_SEL
 {
@@ -450,6 +464,7 @@ SfxSlotInfo FN_CHAR_LEFT_SEL
     SlotName[ korean ] = "πÆ¿⁄ øﬁ¬  º±≈√";
     SlotName[ turkish ] = "Soldaki karakteri seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar car·cter a la izquierda";
 };
 SfxSlotInfo FN_CHAR_RIGHT
 {
@@ -476,6 +491,7 @@ SfxSlotInfo FN_CHAR_RIGHT
     SlotName[ korean ] = "πÆ¿⁄°°ø¿∏•¬ ";
     SlotName[ turkish ] = "Sadaki karakter";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Car·cter a la derecha";
 };
 SfxSlotInfo FN_CHAR_RIGHT_SEL
 {
@@ -502,6 +518,7 @@ SfxSlotInfo FN_CHAR_RIGHT_SEL
     SlotName[ korean ] = "πÆ¿⁄ ø¿∏•¬  º±≈√";
     SlotName[ turkish ] = "Sadaki karakteri seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar car·cter a la derecha";
 };
 SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
 {
@@ -528,6 +545,7 @@ SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
     SlotName[ korean ] = "¥Ÿ¿Ω «¡∑π¿”¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki ÁerÁeveye git";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al marco siguiente";
 };
 SfxSlotInfo FN_CONVERT_TEXT_TABLE
 {
@@ -554,6 +572,7 @@ SfxSlotInfo FN_CONVERT_TEXT_TABLE
     SlotName[ korean ] = "«•/≈ÿΩ∫∆Æ ∫Ø»Ø";
     SlotName[ turkish ] = "Tablo/metin dˆn¸˛t¸r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "ConvertirTabla/Texto";
 };
 SfxSlotInfo FN_DEC_INDENT_OFFSET
 {
@@ -580,6 +599,7 @@ SfxSlotInfo FN_DEC_INDENT_OFFSET
     SlotName[ korean ] = "µÈø©æ≤±‚£¨ ∞™∏∏≈≠  ¡Ÿ¿”";
     SlotName[ turkish ] = "Girintiyi k¸Á¸lt";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Disminuir sangrÌa en";
 };
 SfxSlotInfo FN_DELETE_BACK_LINE
 {
@@ -606,6 +626,7 @@ SfxSlotInfo FN_DELETE_BACK_LINE
     SlotName[ korean ] = "«‡  Ω√¿€∫Œ∫–±Ó¡ˆ  ªË¡¶";
     SlotName[ turkish ] = "Sat˝r ba˛˝na kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el comienzo de la lÌnea";
 };
 SfxSlotInfo FN_DELETE_BACK_PARA
 {
@@ -632,6 +653,7 @@ SfxSlotInfo FN_DELETE_BACK_PARA
     SlotName[ korean ] = "¥‹∂Ù Ω√¿€∫Œ∫–±Ó¡ˆ ªË¡¶";
     SlotName[ turkish ] = "Paragraf ba˛˝na kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el comienzo del p·rrafo";
 };
 SfxSlotInfo FN_DELETE_BACK_SENT
 {
@@ -658,6 +680,7 @@ SfxSlotInfo FN_DELETE_BACK_SENT
     SlotName[ korean ] = "πÆ¿Â Ω√¿€∫Œ∫–±Ó¡ˆ ªË¡¶";
     SlotName[ turkish ] = "C¸mle ba˛˝na kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el comienzo de la frase";
 };
 SfxSlotInfo FN_DELETE_BACK_WORD
 {
@@ -684,6 +707,7 @@ SfxSlotInfo FN_DELETE_BACK_WORD
     SlotName[ korean ] = "¥‹æÓ Ω√¿€∫Œ∫–±Ó¡ˆ ªË¡¶";
     SlotName[ turkish ] = "Sˆzc¸k ba˛˝na kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el comienzo de la palabra";
 };
 SfxSlotInfo FN_DELETE_LINE
 {
@@ -710,6 +734,7 @@ SfxSlotInfo FN_DELETE_LINE
     SlotName[ korean ] = "«‡ ≥°±Ó¡ˆ ªË¡¶";
     SlotName[ turkish ] = "Sat˝r sonuna kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el final de la lÌnea";
 };
 SfxSlotInfo FN_DELETE_PARA
 {
@@ -736,6 +761,7 @@ SfxSlotInfo FN_DELETE_PARA
     SlotName[ korean ] = "¥‹∂Ù ≥°±Ó¡ˆ ªË¡¶";
     SlotName[ turkish ] = "Paragraf sonuna kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el final del p·rrafo";
 };
 SfxSlotInfo FN_DELETE_SENT
 {
@@ -762,6 +788,7 @@ SfxSlotInfo FN_DELETE_SENT
     SlotName[ korean ] = "πÆ¿Â ≥°±Ó¡ˆ ªË¡¶";
     SlotName[ turkish ] = "C¸mle sonuna kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el final de la frase";
 };
 SfxSlotInfo FN_DELETE_WHOLE_LINE
 {
@@ -788,6 +815,7 @@ SfxSlotInfo FN_DELETE_WHOLE_LINE
     SlotName[ korean ] = "«‡ ªË¡¶";
     SlotName[ turkish ] = "Sat˝r˝ sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar lÌnea";
 };
 SfxSlotInfo FN_DELETE_WORD
 {
@@ -814,6 +842,7 @@ SfxSlotInfo FN_DELETE_WORD
     SlotName[ korean ] = "¥‹æÓ ≥°±Ó¡ˆ ªË¡¶";
     SlotName[ turkish ] = "Sˆzc¸k sonuna kadar sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar hasta el final de la palabra";
 };
 SfxSlotInfo FN_DRAW_WRAP_DLG
 {
@@ -840,6 +869,7 @@ SfxSlotInfo FN_DRAW_WRAP_DLG
     SlotName[ korean ] = "≈ÿΩ∫∆Æ πËƒ°";
     SlotName[ turkish ] = "Metin da˝l˝m˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ajuste de texto";
 };
 SfxSlotInfo FN_DRAWTEXT_ATTR_DLG
 {
@@ -866,6 +896,7 @@ SfxSlotInfo FN_DRAWTEXT_ATTR_DLG
     SlotName[ korean ] = "≈ÿΩ∫∆Æ º”º∫";
     SlotName[ turkish ] = "Metin ˆznitelikleri";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Atributos de texto";
 };
 SfxSlotInfo FN_EDIT_FIELD
 {
@@ -892,6 +923,7 @@ SfxSlotInfo FN_EDIT_FIELD
     SlotName[ korean ] = "« µÂ∏Ì∑…";
     SlotName[ turkish ] = "Alan ˆesi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "CÛdigo de campo";
 };
 SfxSlotInfo FN_EDIT_FOOTNOTE
 {
@@ -918,6 +950,7 @@ SfxSlotInfo FN_EDIT_FOOTNOTE
     SlotName[ korean ] = "∞¢¡÷";
     SlotName[ turkish ] = "Dipnot";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Nota al pie";
 };
 SfxSlotInfo FN_EDIT_FORMULA
 {
@@ -944,6 +977,7 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ korean ] = "ºˆΩƒ ª¿‘";
     SlotName[ turkish ] = "Form¸l ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar fÛrmula";
 };
 SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
 {
@@ -960,7 +994,7 @@ SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
     SlotName[ swedish ] = "Fˆrteckningspost";
     SlotName[ polish ] = "Wpis w indeksie";
     SlotName[ portuguese_brazilian ] = "EditIndexEntry";
-    SlotName[ japanese ] = "ñ⁄éü•çıà¯çÄñ⁄";
+    SlotName[ japanese ] = "ñ⁄éüÇ∆çıà¯ÇÃçÄñ⁄";
     SlotName[ chinese_simplified ] = "ƒø¬ºÃıƒø";
     SlotName[ chinese_traditional ] = "•ÿø˝±¯•ÿ";
     SlotName[ arabic ] = "≈œŒ«· ›Â—”Ì";
@@ -970,6 +1004,7 @@ SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
     SlotName[ korean ] = "ªˆ¿Œ «◊∏Ò";
     SlotName[ turkish ] = "Dizin giri˛i";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Entrada del Ìndice";
 };
 SfxSlotInfo FN_EDIT_LINK_DLG
 {
@@ -986,7 +1021,7 @@ SfxSlotInfo FN_EDIT_LINK_DLG
     SlotName[ swedish ] = "L‰nkar";
     SlotName[ polish ] = "£πcza";
     SlotName[ portuguese_brazilian ] = "EditLink";
-    SlotName[ japanese ] = "ÿ›∏ÇÃê›íË";
+    SlotName[ japanese ] = "ÿ›∏";
     SlotName[ chinese_simplified ] = "¡¥Ω”";
     SlotName[ chinese_traditional ] = "±∂Æ|";
     SlotName[ arabic ] = "„Ê«ﬁ⁄ „— »ÿ…";
@@ -996,6 +1031,7 @@ SfxSlotInfo FN_EDIT_LINK_DLG
     SlotName[ greek ] = "”ıÌ‰›ÛÂÈÚ";
     SlotName[ korean ] = "ø¨∞·";
     SlotName[ turkish ] = "Balant˝lar";
+    SlotName[ catalan ] = "VÌnculos";
 };
 SfxSlotInfo FN_EDIT_REGION
 {
@@ -1022,6 +1058,7 @@ SfxSlotInfo FN_EDIT_REGION
     SlotName[ korean ] = "π¸¿ß";
     SlotName[ turkish ] = "Bˆl¸m";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Areas";
 };
 SfxSlotInfo FN_END_DOC_DIRECT
 {
@@ -1048,6 +1085,7 @@ SfxSlotInfo FN_END_DOC_DIRECT
     SlotName[ greek ] = "¡ ÂıËÂﬂ·Ú ÒÔÚ ÙÔ Ù›ÎÔÚ ÙÔı Â„„Ò‹ˆÔı";
     SlotName[ korean ] = "πÆº≠≥°ø° πŸ∑Œ";
     SlotName[ turkish ] = "Dorudan belge sonuna";
+    SlotName[ catalan ] = "Final del documento";
 };
 SfxSlotInfo FN_END_OF_COLUMN
 {
@@ -1074,6 +1112,7 @@ SfxSlotInfo FN_END_OF_COLUMN
     SlotName[ korean ] = "ø≠ ≥°¿∏∑Œ";
     SlotName[ turkish ] = "S¸tun sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final de la columna";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT
 {
@@ -1100,6 +1139,7 @@ SfxSlotInfo FN_END_OF_DOCUMENT
     SlotName[ korean ] = "πÆº≠ ≥°¿∏∑Œ";
     SlotName[ turkish ] = "Belge sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final del documento";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT_SEL
 {
@@ -1126,6 +1166,7 @@ SfxSlotInfo FN_END_OF_DOCUMENT_SEL
     SlotName[ korean ] = "πÆº≠ ≥°±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Belge sonuna kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el final del documento";
 };
 SfxSlotInfo FN_END_OF_LINE
 {
@@ -1152,6 +1193,7 @@ SfxSlotInfo FN_END_OF_LINE
     SlotName[ korean ] = "«‡ ≥°¿∏∑Œ";
     SlotName[ turkish ] = "Sat˝r sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final de la lÌnea";
 };
 SfxSlotInfo FN_END_OF_LINE_SEL
 {
@@ -1178,6 +1220,7 @@ SfxSlotInfo FN_END_OF_LINE_SEL
     SlotName[ korean ] = "«‡ ≥°±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sat˝r sonuna kadara seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el final de la lÌnea";
 };
 SfxSlotInfo FN_END_OF_NEXT_COLUMN
 {
@@ -1204,6 +1247,7 @@ SfxSlotInfo FN_END_OF_NEXT_COLUMN
     SlotName[ korean ] = "¥Ÿ¿Ω ø≠¿« ≥°¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki s¸tun sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final de la columna siguiente";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE
 {
@@ -1230,6 +1274,7 @@ SfxSlotInfo FN_END_OF_NEXT_PAGE
     SlotName[ korean ] = "¥Ÿ¿Ω ¬ ¿« ≥°¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki sayfan˝n sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final de la p·gina siguiente";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE_SEL
 {
@@ -1256,6 +1301,7 @@ SfxSlotInfo FN_END_OF_NEXT_PAGE_SEL
     SlotName[ korean ] = "¥Ÿ¿Ω ¬  ≥°±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sonraki sayfan˝n sonuna kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el final de la p·gina siguiente";
 };
 SfxSlotInfo FN_END_OF_PAGE
 {
@@ -1282,6 +1328,7 @@ SfxSlotInfo FN_END_OF_PAGE
     SlotName[ korean ] = "¬ ¿« ≥°¿∏∑Œ";
     SlotName[ turkish ] = "Sayfa sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final de la p·gina";
 };
 SfxSlotInfo FN_END_OF_PAGE_SEL
 {
@@ -1308,6 +1355,7 @@ SfxSlotInfo FN_END_OF_PAGE_SEL
     SlotName[ korean ] = "¬  ≥°±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sayfa sonuna kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el final de la p·gina";
 };
 SfxSlotInfo FN_END_OF_PARA
 {
@@ -1334,6 +1382,7 @@ SfxSlotInfo FN_END_OF_PARA
     SlotName[ korean ] = "¥‹∂Ù¿« ≥°¿∏∑Œ";
     SlotName[ turkish ] = "Paragraf sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final del p·rrafo";
 };
 SfxSlotInfo FN_END_OF_PARA_SEL
 {
@@ -1360,6 +1409,7 @@ SfxSlotInfo FN_END_OF_PARA_SEL
     SlotName[ korean ] = "¥‹∂Ù¿« ≥°±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Paragraf sonuna kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta final del p·rrafo";
 };
 SfxSlotInfo FN_END_OF_PREV_COLUMN
 {
@@ -1386,6 +1436,7 @@ SfxSlotInfo FN_END_OF_PREV_COLUMN
     SlotName[ korean ] = "¿Ã¿¸ ø≠∑Œ";
     SlotName[ turkish ] = "÷nceki s¸tuna";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la columna anterior";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE
 {
@@ -1412,6 +1463,7 @@ SfxSlotInfo FN_END_OF_PREV_PAGE
     SlotName[ korean ] = "¿Ã¿¸ ¬  ≥°¿∏∑Œ";
     SlotName[ turkish ] = "÷neki sayfan˝n sonuna";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final de la p·gina anterior";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE_SEL
 {
@@ -1438,6 +1490,7 @@ SfxSlotInfo FN_END_OF_PREV_PAGE_SEL
     SlotName[ korean ] = "¿Ã¿¸ ¬  ≥°±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "÷nceki sayfan˝n sonuna kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el final de la p·gina anterior";
 };
 SfxSlotInfo FN_END_TABLE
 {
@@ -1464,6 +1517,7 @@ SfxSlotInfo FN_END_TABLE
     SlotName[ korean ] = "«• ≥°¿∏∑Œ";
     SlotName[ turkish ] = "Tablo sonu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al final de la tabla";
 };
 SfxSlotInfo FN_ENVELOP
 {
@@ -1490,6 +1544,7 @@ SfxSlotInfo FN_ENVELOP
     SlotName[ korean ] = "∆Ì¡ˆ∫¿≈ı ª¿‘";
     SlotName[ turkish ] = "Zarf ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar sobre";
 };
 SfxSlotInfo FN_ESCAPE
 {
@@ -1516,6 +1571,7 @@ SfxSlotInfo FN_ESCAPE
     SlotName[ korean ] = "√Îº“";
     SlotName[ turkish ] = "›ptal";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Cancelar";
 };
 SfxSlotInfo FN_EXECUTE_MACROFIELD
 {
@@ -1542,6 +1598,7 @@ SfxSlotInfo FN_EXECUTE_MACROFIELD
     SlotName[ korean ] = "∏≈≈©∑Œ « µÂ Ω««‡";
     SlotName[ turkish ] = "Makro alan˝n˝ Áal˝˛t˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ejecutar Campo de macro";
 };
 SfxSlotInfo FN_EXPAND_GLOSSARY
 {
@@ -1568,6 +1625,7 @@ SfxSlotInfo FN_EXPAND_GLOSSARY
     SlotName[ korean ] = "¿⁄µø≈ÿΩ∫∆Æ£≠¿‘∑¬°°Ω««‡";
     SlotName[ turkish ] = "Otomatik metin giri˛ini uygula";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ejecutar entrada AutoTexto";
 };
 SfxSlotInfo FN_FLIP_HORZ_GRAFIC
 {
@@ -1594,6 +1652,7 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ korean ] = "ºˆ∆Ú¿∏∑Œ ¥Îƒ™";
     SlotName[ turkish ] = "Yatay yans˝t";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Reflejar horizontal";
 };
 SfxSlotInfo FN_FLIP_VERT_GRAFIC
 {
@@ -1620,6 +1679,7 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ greek ] = "œÒÈÊ¸ÌÙÈ· ·Ì·ÛÙÒÔˆﬁ";
     SlotName[ korean ] = "ºˆ¡˜¿∏∑Œ ¥Îƒ™";
     SlotName[ turkish ] = "Dikey yans˝t";
+    SlotName[ catalan ] = "Reflejar verticalmente";
 };
 SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
 {
@@ -1646,6 +1706,7 @@ SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
     SlotName[ korean ] = "∞¢¡÷£Ø∞Ì¡§";
     SlotName[ turkish ] = "Dipnot/sabitleyici";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la nota al pie/Ancla";
 };
 SfxSlotInfo FN_FORMAT_BACKGROUND_DLG
 {
@@ -1672,6 +1733,7 @@ SfxSlotInfo FN_FORMAT_BACKGROUND_DLG
     SlotName[ korean ] = "πË∞Ê";
     SlotName[ turkish ] = "Artalan";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Fondo";
 };
 SfxSlotInfo FN_FORMAT_BORDER_DLG
 {
@@ -1698,6 +1760,7 @@ SfxSlotInfo FN_FORMAT_BORDER_DLG
     SlotName[ korean ] = "ø‹∞˚º±";
     SlotName[ turkish ] = "Kenarl˝k";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Borde";
 };
 SfxSlotInfo FN_FORMAT_DROPCAPS
 {
@@ -1724,6 +1787,7 @@ SfxSlotInfo FN_FORMAT_DROPCAPS
     SlotName[ greek ] = "¡Ò˜ﬂ„Ò·ÏÏ·";
     SlotName[ korean ] = "∏”∏Æ±€¿⁄";
     SlotName[ turkish ] = "Ba˛harfler";
+    SlotName[ catalan ] = "Iniciales";
 };
 SfxSlotInfo FN_FORMAT_FOOTNOTE_DLG
 {
@@ -1750,6 +1814,7 @@ SfxSlotInfo FN_FORMAT_FOOTNOTE_DLG
     SlotName[ korean ] = "∞¢¡÷";
     SlotName[ turkish ] = "Dipnot";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Notas al pie";
 };
 SfxSlotInfo FN_FORMAT_FRAME_DLG
 {
@@ -1776,6 +1841,7 @@ SfxSlotInfo FN_FORMAT_FRAME_DLG
     SlotName[ korean ] = "«¡∑π¿” µÓ∑œ¡§∫∏";
     SlotName[ turkish ] = "«erÁeve ˆzellikleri";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Propiedades del marco";
 };
 SfxSlotInfo FN_FORMAT_GRAFIC_DLG
 {
@@ -1802,6 +1868,7 @@ SfxSlotInfo FN_FORMAT_GRAFIC_DLG
     SlotName[ korean ] = "±◊∑°«» ∆Ì¡˝";
     SlotName[ turkish ] = "Grafik d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar imagen";
 };
 SfxSlotInfo FN_FORMAT_PAGE_COLUMN_DLG
 {
@@ -1828,6 +1895,7 @@ SfxSlotInfo FN_FORMAT_PAGE_COLUMN_DLG
     SlotName[ korean ] = "¬  ø≠";
     SlotName[ turkish ] = "Sayfa s¸tunlar˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Columnas de la p·gina";
 };
 SfxSlotInfo FN_FORMAT_PAGE_DLG
 {
@@ -1854,6 +1922,7 @@ SfxSlotInfo FN_FORMAT_PAGE_DLG
     SlotName[ korean ] = "¬  º≥¡§";
     SlotName[ turkish ] = "Sayfa yap˝s˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "ConfiguraciÛn de p·gina";
 };
 SfxSlotInfo FN_FORMAT_RESET
 {
@@ -1880,6 +1949,7 @@ SfxSlotInfo FN_FORMAT_RESET
     SlotName[ greek ] = "≈·Ì·ˆÔÒ‹ È‰ÈÔÙﬁÙ˘Ì ˜·Ò·ÍÙﬁÒ˘Ì";
     SlotName[ korean ] = "±€≤√ º”º∫ ø¯∑°¥Î∑Œ";
     SlotName[ turkish ] = "Yaz˝tipi ˆznitelikleri";
+    SlotName[ catalan ] = "Restablecer fuentes";
 };
 SfxSlotInfo FN_FORMAT_TABLE_DLG
 {
@@ -1906,6 +1976,7 @@ SfxSlotInfo FN_FORMAT_TABLE_DLG
     SlotName[ korean ] = "«• ∆Ì¡˝";
     SlotName[ turkish ] = "Tablo d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar tabla";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
 {
@@ -1932,6 +2003,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
     SlotName[ korean ] = "ºˆ∆Ú¿∏∑Œ ∞°øÓµ• ∏¬√„ ";
     SlotName[ turkish ] = "Yatay ortala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Centrar horizontalmente";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
 {
@@ -1958,6 +2030,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
     SlotName[ korean ] = "øﬁ¬  ∏¬√„";
     SlotName[ turkish ] = "Sola hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear a la izquierda";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
 {
@@ -1984,6 +2057,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
     SlotName[ korean ] = "ø¿∏•¬  ∏¬√„";
     SlotName[ turkish ] = "Saa hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear a la derecha";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
 {
@@ -2010,6 +2084,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
     SlotName[ korean ] = "æ∆∑° ∏¬√„";
     SlotName[ turkish ] = "A˛a˝ hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear abajo";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
 {
@@ -2036,6 +2111,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
     SlotName[ korean ] = "ºˆ¡˜¿∏∑Œ ∞°øÓµ• ∏¬√„";
     SlotName[ turkish ] = "Dikey ortaya hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear al centro vertical";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
 {
@@ -2062,6 +2138,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
     SlotName[ korean ] = "πÆ¿⁄ø°º≠ æ∆∑° ∏¬√„";
     SlotName[ turkish ] = "Karakterin alt kenar˝ ile hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear debajo del car·cter";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
 {
@@ -2088,6 +2165,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
     SlotName[ korean ] = "πÆ¿⁄ø°º≠ ºˆ¡˜¿∏∑Œ ∞°øÓµ• ∏¬√„";
     SlotName[ turkish ] = "Karaktere gˆre dikey ortalayarak hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear al centro vertical del car·cter";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
 {
@@ -2114,6 +2192,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
     SlotName[ korean ] = "πÆ¿⁄ø°º≠ ¿ß ∏¬√„";
     SlotName[ turkish ] = "Karakterin ¸st kenar˝ ile hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear encima del car·cter";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 {
@@ -2140,6 +2219,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
     SlotName[ korean ] = "«‡ø°º≠  æ∆∑°  ∏¬√„";
     SlotName[ turkish ] = "Sat˝r˝n alt kenar˝ ile hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear debajo de la lÌnea";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
 {
@@ -2166,6 +2246,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
     SlotName[ korean ] = "«‡ø°º≠ ºˆ¡˜¿∏∑Œ ∞°øÓµ• ∏¬√„";
     SlotName[ turkish ] = "Sat˝ra gˆre dikey ortalayarak hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear centro vertical lÌnea";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
 {
@@ -2192,6 +2273,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
     SlotName[ korean ] = "«‡ø°º≠ ¿ß ∏¬√„";
     SlotName[ turkish ] = "Sat˝r˝n ¸st kenar˝ ile hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear encima de la lÌnea";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
 {
@@ -2218,6 +2300,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
     SlotName[ korean ] = "¿ß ∏¬√„";
     SlotName[ turkish ] = "Yukar˝ hizala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Alinear arriba";
 };
 SfxSlotInfo FN_FRAME_CHAIN
 {
@@ -2244,6 +2327,7 @@ SfxSlotInfo FN_FRAME_CHAIN
     SlotName[ korean ] = " ø¨∞·";
     SlotName[ turkish ] = "Bala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Vincular marcos";
 };
 SfxSlotInfo FN_FRAME_DOWN
 {
@@ -2270,6 +2354,7 @@ SfxSlotInfo FN_FRAME_DOWN
     SlotName[ korean ] = "µ⁄∑Œ";
     SlotName[ turkish ] = "Geriye gˆnder";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Hacia atr·s";
 };
 SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
 {
@@ -2296,6 +2381,7 @@ SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
     SlotName[ korean ] = "¬¶ºˆ ¬ ø°º≠ ¥Îƒ™";
     SlotName[ turkish ] = "«ift numaral˝ sayfalarda yans˝t";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Reflejar objeto en p·ginas pares";
 };
 SfxSlotInfo FN_FRAME_NOWRAP
 {
@@ -2322,6 +2408,7 @@ SfxSlotInfo FN_FRAME_NOWRAP
     SlotName[ korean ] = "πÆ¿⁄ø≠°°πËƒ°£¨æ ¿Ω";
     SlotName[ turkish ] = "Metin da˝l˝m˝ kapal˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desactivar Ajuste";
 };
 SfxSlotInfo FN_FRAME_TO_ANCHOR
 {
@@ -2348,6 +2435,7 @@ SfxSlotInfo FN_FRAME_TO_ANCHOR
     SlotName[ korean ] = "ƒøº≠ ∞Ì¡§ º≥¡§";
     SlotName[ turkish ] = "›mleci, sabitleyici ¸zerine yerle˛tir";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Colocar cursor sobre ancla";
 };
 SfxSlotInfo FN_FRAME_UNCHAIN
 {
@@ -2374,6 +2462,7 @@ SfxSlotInfo FN_FRAME_UNCHAIN
     SlotName[ korean ] = "ø¨∞·°°¡ﬂ¥‹";
     SlotName[ turkish ] = "Balamay˝ Áˆz";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar vÌnculo";
 };
 SfxSlotInfo FN_FRAME_UP
 {
@@ -2400,6 +2489,7 @@ SfxSlotInfo FN_FRAME_UP
     SlotName[ korean ] = "æ’¿∏∑Œ";
     SlotName[ turkish ] = "÷ne al";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Hacia adelante";
 };
 SfxSlotInfo FN_FRAME_WRAP
 {
@@ -2426,6 +2516,7 @@ SfxSlotInfo FN_FRAME_WRAP
     SlotName[ korean ] = "πÆ¿⁄ø≠°°πËƒ°£¨¿˚øÎ";
     SlotName[ turkish ] = "Metin da˝l˝m˝ aÁ˝k";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar Ajuste";
 };
 SfxSlotInfo FN_FRAME_WRAP_CONTOUR
 {
@@ -2452,6 +2543,7 @@ SfxSlotInfo FN_FRAME_WRAP_CONTOUR
     SlotName[ korean ] = "¿±∞˚ º¯»Ø ¿˚øÎ";
     SlotName[ turkish ] = "Kontur aÁ˝k";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Contorno";
 };
 SfxSlotInfo FN_FRAME_WRAP_IDEAL
 {
@@ -2478,6 +2570,7 @@ SfxSlotInfo FN_FRAME_WRAP_IDEAL
     SlotName[ greek ] = "ƒıÌ·ÏÈÍﬁ ·Ì·‰ﬂÎ˘ÛÁ";
     SlotName[ korean ] = "πÆ¿⁄ø≠°°πËƒ°£¨√÷¿˚";
     SlotName[ turkish ] = "Dinamik metin da˝l˝m˝";
+    SlotName[ catalan ] = "Ajuste din·mico";
 };
 SfxSlotInfo FN_FRAME_WRAP_LEFT
 {
@@ -2504,6 +2597,7 @@ SfxSlotInfo FN_FRAME_WRAP_LEFT
     SlotName[ korean ] = "πÆ¿⁄ø≠°°πËƒ°£¨ øﬁ¬ ";
     SlotName[ turkish ] = "Sol metin da˝l˝m˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ajuste izquierda";
 };
 SfxSlotInfo FN_FRAME_WRAP_RIGHT
 {
@@ -2530,6 +2624,7 @@ SfxSlotInfo FN_FRAME_WRAP_RIGHT
     SlotName[ korean ] = "πÆ¿⁄ø≠°°πËƒ°£¨ø¿∏•¬ ";
     SlotName[ turkish ] = "Sa metin da˝l˝m˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ajuste derecha";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU
 {
@@ -2556,6 +2651,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU
     SlotName[ korean ] = "πÆ¿Â»Â∏£±‚";
     SlotName[ turkish ] = "Metin arkas˝na gˆnder";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Continuo";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
 {
@@ -2582,6 +2678,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
     SlotName[ korean ] = "πÆ¿Â»Â∏£±‚, ≈ı∏Ì";
     SlotName[ turkish ] = "Metin arkas˝na gˆnder (saydam)";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Continuo transparente";
 };
 SfxSlotInfo FN_GLOSSARY_DLG
 {
@@ -2608,6 +2705,7 @@ SfxSlotInfo FN_GLOSSARY_DLG
     SlotName[ korean ] = "¿⁄µø≈ÿΩ∫∆Æ ∆Ì¡˝";
     SlotName[ turkish ] = "Otomatik metni d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar AutoTexto";
 };
 SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
 {
@@ -2634,6 +2732,7 @@ SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
     SlotName[ korean ] = "¥Ÿ¿Ω ¿‘∑¬« µÂ∑Œ";
     SlotName[ turkish ] = "Sonraki giri˛ alan˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al campo de entrada siguiente";
 };
 SfxSlotInfo FN_GOTO_NEXT_MARK
 {
@@ -2660,6 +2759,7 @@ SfxSlotInfo FN_GOTO_NEXT_MARK
     SlotName[ korean ] = "¥Ÿ¿Ω «√∑π¿ÃΩ∫»¶¥ı∑Œ";
     SlotName[ turkish ] = "Sonraki genel arama karakteri";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comodÌn siguiente";
 };
 SfxSlotInfo FN_GOTO_NEXT_OBJ
 {
@@ -2686,6 +2786,7 @@ SfxSlotInfo FN_GOTO_NEXT_OBJ
     SlotName[ korean ] = "¥Ÿ¿Ω ∞≥√º∑Œ";
     SlotName[ turkish ] = "Sonraki nesne";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al objeto siguiente";
 };
 SfxSlotInfo FN_GOTO_NEXT_REGION
 {
@@ -2712,6 +2813,7 @@ SfxSlotInfo FN_GOTO_NEXT_REGION
     SlotName[ korean ] = "¥Ÿ¿Ω ±∏ø™¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki bˆl¸m";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "A la ·rea siguiente";
 };
 SfxSlotInfo FN_GOTO_PREV_INPUTFLD
 {
@@ -2738,6 +2840,7 @@ SfxSlotInfo FN_GOTO_PREV_INPUTFLD
     SlotName[ korean ] = "¿Ã¿¸ ¿‘∑¬« µÂ∑Œ";
     SlotName[ turkish ] = "÷nceki giri˛ alan˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al campo de entrada anterior";
 };
 SfxSlotInfo FN_GOTO_PREV_MARK
 {
@@ -2764,6 +2867,7 @@ SfxSlotInfo FN_GOTO_PREV_MARK
     SlotName[ korean ] = "¿Ã¿¸  «√∑π¿ÃΩ∫»¶¥ı∑Œ";
     SlotName[ turkish ] = "÷nceki  genel arama karakteri";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comodÌn anterior";
 };
 SfxSlotInfo FN_GOTO_PREV_OBJ
 {
@@ -2790,6 +2894,7 @@ SfxSlotInfo FN_GOTO_PREV_OBJ
     SlotName[ korean ] = "¿Ã¿¸ ∞≥√º∑Œ";
     SlotName[ turkish ] = "÷nceki nesne";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al objeto anterior";
 };
 SfxSlotInfo FN_GOTO_PREV_REGION
 {
@@ -2816,6 +2921,7 @@ SfxSlotInfo FN_GOTO_PREV_REGION
     SlotName[ korean ] = "¿Ã¿¸ ±∏ø™¿∏∑Œ";
     SlotName[ turkish ] = "÷nceki alan";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al ·rea anterior";
 };
 SfxSlotInfo FN_GOTO_REFERENCE
 {
@@ -2842,6 +2948,7 @@ SfxSlotInfo FN_GOTO_REFERENCE
     SlotName[ korean ] = "¬¸¡∂∑Œ";
     SlotName[ turkish ] = "Referans";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la referencia";
 };
 SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
 {
@@ -2868,6 +2975,7 @@ SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     SlotName[ greek ] = "¡Ì·ÛÙÒÔˆﬁ „Ò·ˆÈÍÔ˝ ÛÙÈÚ ‹ÒÙÈÂÚ ÛÂÎﬂ‰ÂÚ";
     SlotName[ korean ] = "¬¶ºˆ ¬ ªÛ¿« ±◊∑°«» ¥Îƒ™";
     SlotName[ turkish ] = "Grafii Áift say˝l˝ sayfalarda yans˝t";
+    SlotName[ catalan ] = "Reflejar imagen en las p·ginas pares";
 };
 SfxSlotInfo FN_GROW_FONT_SIZE
 {
@@ -2894,6 +3002,7 @@ SfxSlotInfo FN_GROW_FONT_SIZE
     SlotName[ korean ] = "±€≤√ ≈©∞‘";
     SlotName[ turkish ] = "K¸r¸kteri b¸y¸t";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Aumentar fuente";
 };
 SfxSlotInfo FN_HSCROLLBAR
 {
@@ -2920,6 +3029,7 @@ SfxSlotInfo FN_HSCROLLBAR
     SlotName[ korean ] = "ºˆ∆Ú Ω∫≈©∑—";
     SlotName[ turkish ] = "Yatay kayd˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desplazamiento Horizontal";
 };
 SfxSlotInfo FN_HYPHENATE_OPT_DLG
 {
@@ -2946,6 +3056,7 @@ SfxSlotInfo FN_HYPHENATE_OPT_DLG
     SlotName[ korean ] = "«œ¿Ã«¬";
     SlotName[ turkish ] = "Heceleme";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "SeparaciÛn sil·bica";
 };
 SfxSlotInfo FN_IDX_MARK_TO_IDX
 {
@@ -2962,7 +3073,7 @@ SfxSlotInfo FN_IDX_MARK_TO_IDX
     SlotName[ swedish ] = "Indexm‰rke till index";
     SlotName[ polish ] = "Znacznik indeksu do indeksu";
     SlotName[ portuguese_brazilian ] = "IndexMarkToIndex";
-    SlotName[ japanese ] = "ñ⁄éü•çıà¯çÄñ⁄Çñ⁄éü•çıà¯Ç÷";
+    SlotName[ japanese ] = "ñ⁄éüÇ∆çıà¯ÇÃçÄñ⁄Çñ⁄éüÇ∆çıà¯Ç÷";
     SlotName[ chinese_simplified ] = "÷∏œÚÀ˜“˝µƒÀ˜“˝±Íº«";
     SlotName[ chinese_traditional ] = "´¸¶VØ¡§ﬁ™∫Ø¡§ﬁº–∞O";
     SlotName[ arabic ] = "⁄·«„… «·›Â—” ≈·Ï «·›Â—”";
@@ -2972,6 +3083,7 @@ SfxSlotInfo FN_IDX_MARK_TO_IDX
     SlotName[ korean ] = "ªˆ¿Œø° ªˆ¿Œ ∏∂≈©";
     SlotName[ turkish ] = "Dizin iÁin dizin i˛areti";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Marca de Ìndice al Ìndice";
 };
 SfxSlotInfo FN_INC_INDENT_OFFSET
 {
@@ -2998,6 +3110,7 @@ SfxSlotInfo FN_INC_INDENT_OFFSET
     SlotName[ korean ] = "µÈø©æ≤±‚ ∞™ ≥Ù¿”";
     SlotName[ turkish ] = "Girintiyi b¸y¸t";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Incrementar sangrÌa en";
 };
 SfxSlotInfo FN_INSERT_BOOKMARK
 {
@@ -3024,6 +3137,7 @@ SfxSlotInfo FN_INSERT_BOOKMARK
     SlotName[ korean ] = "√•∞•«« ª¿‘";
     SlotName[ turkish ] = "Metin i˛areti ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar marca";
 };
 SfxSlotInfo FN_INSERT_BREAK
 {
@@ -3050,6 +3164,7 @@ SfxSlotInfo FN_INSERT_BREAK
     SlotName[ korean ] = "¥‹∂Ù ª¿‘";
     SlotName[ turkish ] = "Paragraf ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar p·rrafo";
 };
 SfxSlotInfo FN_INSERT_BREAK_DLG
 {
@@ -3076,6 +3191,7 @@ SfxSlotInfo FN_INSERT_BREAK_DLG
     SlotName[ korean ] = "ºˆµø ≥™¥©±‚ ª¿‘";
     SlotName[ turkish ] = "Man¸el kesme ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar un salto manual";
 };
 SfxSlotInfo FN_INSERT_CAPTION
 {
@@ -3102,6 +3218,7 @@ SfxSlotInfo FN_INSERT_CAPTION
     SlotName[ korean ] = "ƒ∏º« ª¿‘";
     SlotName[ turkish ] = "Resim yaz˝s˝ ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar etiqueta";
 };
 SfxSlotInfo FN_INSERT_COLUMN_BREAK
 {
@@ -3128,6 +3245,7 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ korean ] = "ø≠ ≥™¥©±‚ ª¿‘";
     SlotName[ turkish ] = "S¸tun sonu ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar cambio de columnas";
 };
 SfxSlotInfo FN_INSERT_CTRL
 {
@@ -3154,6 +3272,7 @@ SfxSlotInfo FN_INSERT_CTRL
     SlotName[ korean ] = "ª¿‘";
     SlotName[ turkish ] = "Ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar";
 };
 SfxSlotInfo FN_INSERT_ENDNOTE
 {
@@ -3180,6 +3299,7 @@ SfxSlotInfo FN_INSERT_ENDNOTE
     SlotName[ korean ] = "πÃ¡÷ ¡˜¡¢ ª¿‘";
     SlotName[ turkish ] = "Sonnotu dorudan ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar nota final directamente";
 };
 SfxSlotInfo FN_INSERT_FIELD
 {
@@ -3206,6 +3326,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ korean ] = "« µÂ ª¿‘";
     SlotName[ turkish ] = "Alan ˆesi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar cÛdigo de campo";
 };
 SfxSlotInfo FN_INSERT_FIELD_CTRL
 {
@@ -3232,6 +3353,7 @@ SfxSlotInfo FN_INSERT_FIELD_CTRL
     SlotName[ korean ] = "« µÂ∏Ì∑… ª¿‘";
     SlotName[ turkish ] = "Alan ˆeleri ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar cÛdigos de campo";
 };
 SfxSlotInfo FN_INSERT_FLD_AUTHOR
 {
@@ -3258,6 +3380,7 @@ SfxSlotInfo FN_INSERT_FLD_AUTHOR
     SlotName[ korean ] = "∏∏µÁ¿Ã « µÂ ª¿‘";
     SlotName[ turkish ] = "Yazan ad˝ alan˝ ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar campo para autor";
 };
 SfxSlotInfo FN_INSERT_FLD_DATE
 {
@@ -3284,6 +3407,7 @@ SfxSlotInfo FN_INSERT_FLD_DATE
     SlotName[ korean ] = "≥Ø¬• ª¿‘";
     SlotName[ turkish ] = "Tarih ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar fecha";
 };
 SfxSlotInfo FN_INSERT_FLD_PGCOUNT
 {
@@ -3310,6 +3434,7 @@ SfxSlotInfo FN_INSERT_FLD_PGCOUNT
     SlotName[ korean ] = "¬  ºˆ ª¿‘";
     SlotName[ turkish ] = "Sayfa say˝s˝ ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar contador de p·ginas";
 };
 SfxSlotInfo FN_INSERT_FLD_PGNUMBER
 {
@@ -3336,6 +3461,7 @@ SfxSlotInfo FN_INSERT_FLD_PGNUMBER
     SlotName[ korean ] = "¬  π¯»£ ª¿‘";
     SlotName[ turkish ] = "Sayfa numaras˝ ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar n˙mero de p·gina";
 };
 SfxSlotInfo FN_INSERT_FLD_TIME
 {
@@ -3362,6 +3488,7 @@ SfxSlotInfo FN_INSERT_FLD_TIME
     SlotName[ korean ] = "Ω√∞£ ª¿‘";
     SlotName[ turkish ] = "Saat ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar hora";
 };
 SfxSlotInfo FN_INSERT_FLD_TITLE
 {
@@ -3388,6 +3515,7 @@ SfxSlotInfo FN_INSERT_FLD_TITLE
     SlotName[ korean ] = "πÆº≠ ¡¶∏Ò ª¿‘";
     SlotName[ turkish ] = "Belge ba˛l˝˝ ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar tÌtulo de documento";
 };
 SfxSlotInfo FN_INSERT_FLD_TOPIC
 {
@@ -3414,6 +3542,7 @@ SfxSlotInfo FN_INSERT_FLD_TOPIC
     SlotName[ korean ] = "¡÷¡¶ ª¿‘";
     SlotName[ turkish ] = "Konu ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar tema";
 };
 SfxSlotInfo FN_INSERT_FOOTER
 {
@@ -3440,6 +3569,7 @@ SfxSlotInfo FN_INSERT_FOOTER
     SlotName[ korean ] = "πŸ¥⁄±€ ª¿‘";
     SlotName[ turkish ] = "Altbilgi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar pie de p·gina";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE
 {
@@ -3466,6 +3596,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE
     SlotName[ korean ] = "∞¢¡÷ ¡˜¡¢ ª¿‘";
     SlotName[ turkish ] = "Dipnotu dorudan ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar nota al pie, directo";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
 {
@@ -3492,6 +3623,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
     SlotName[ korean ] = "∞¢¡÷ ª¿‘";
     SlotName[ turkish ] = "Dipnot ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar nota al pie";
 };
 SfxSlotInfo FN_INSERT_FRAME
 {
@@ -3518,6 +3650,7 @@ SfxSlotInfo FN_INSERT_FRAME
     SlotName[ korean ] = "«¡∑π¿” ª¿‘";
     SlotName[ turkish ] = "«erÁeve ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar marco";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
 {
@@ -3541,6 +3674,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ chinese_traditional ] = "§‚∞ ¥°§J≥ÊƒÊ§Â¶rÆÿ°C";
     SlotName[ turkish ] = "Insert single column frame manually";
     SlotName[ arabic ] = "≈œ—«Ã ﬂ«œ— Ì ﬂÊ‰ „‰ ⁄„Êœ Ê«Õœ ÌœÊÌ«";
+    SlotName[ catalan ] = "Insertar manualmente marco de una columna";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT
 {
@@ -3567,6 +3701,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT
     SlotName[ korean ] = "«¡∑π¿” ºˆµø ª¿‘";
     SlotName[ turkish ] = "«erÁeveyi manuel olarak ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar marco manualmente";
 };
 SfxSlotInfo FN_INSERT_HARD_SPACE
 {
@@ -3593,6 +3728,7 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ korean ] = "∫∏»£µ» ∞¯πÈ ª¿‘";
     SlotName[ turkish ] = "Bˆl¸nemez bo˛luk ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar espacio protegido";
 };
 SfxSlotInfo FN_INSERT_HARDHYPHEN
 {
@@ -3619,6 +3755,7 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ korean ] = "∞Ì¡§ «œ¿Ã«¬ ª¿‘";
     SlotName[ turkish ] = "Bˆl¸nemez tire ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar guiÛn protegido";
 };
 SfxSlotInfo FN_INSERT_HEADER
 {
@@ -3645,6 +3782,7 @@ SfxSlotInfo FN_INSERT_HEADER
     SlotName[ korean ] = "∏”∏Æ±€ ª¿‘";
     SlotName[ turkish ] = "‹stbilgi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar encabezamiento";
 };
 SfxSlotInfo FN_INSERT_HRULER
 {
@@ -3671,6 +3809,7 @@ SfxSlotInfo FN_INSERT_HRULER
     SlotName[ korean ] = "ºˆ∆Ú º± ª¿‘";
     SlotName[ turkish ] = "Yatay ay˝rma Áizgisi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar lÌneas horizontales";
 };
 SfxSlotInfo FN_INSERT_HYPERLINK
 {
@@ -3696,6 +3835,7 @@ SfxSlotInfo FN_INSERT_HYPERLINK
     SlotName[ greek ] = "≈ÈÛ·„˘„ﬁ ıÂÒÛ˝Ì‰ÂÛÁÚ";
     SlotName[ korean ] = "«œ¿Ã∆€∏µ≈© ª¿‘";
     SlotName[ turkish ] = "Hyperlink ekle";
+    SlotName[ catalan ] = "Insertar hiperenlace";
 };
 SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
 {
@@ -3712,7 +3852,7 @@ SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
     SlotName[ swedish ] = "Infoga indexmarkering";
     SlotName[ polish ] = "Wstaw znacznik indeksu";
     SlotName[ portuguese_brazilian ] = "InsertIndexEntry";
-    SlotName[ japanese ] = "ñ⁄éüÅEçıà¯çÄñ⁄ÇÃìoò^";
+    SlotName[ japanese ] = "ñ⁄éüÇ∆çıà¯ÇÃçÄñ⁄ìoò^";
     SlotName[ chinese_simplified ] = "≤Â»ÎÀ˜“˝±Íº«";
     SlotName[ chinese_traditional ] = "¥°§JØ¡§ﬁøÔ®˙";
     SlotName[ arabic ] = "≈œ—«Ã  ÕœÌœ ›Â—”Ì";
@@ -3722,6 +3862,7 @@ SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
     SlotName[ korean ] = "ªˆ¿Œ ∏∂≈© ª¿‘";
     SlotName[ turkish ] = "Dizin belirteci ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar marca en el Ìndice";
 };
 SfxSlotInfo FN_INSERT_LINEBREAK
 {
@@ -3748,6 +3889,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ korean ] = "ºˆµø ∞≥«‡ ª¿‘";
     SlotName[ turkish ] = "Man¸el sat˝r sonu ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar salto de lÌnea manual";
 };
 SfxSlotInfo FN_INSERT_OBJ_CTRL
 {
@@ -3774,6 +3916,7 @@ SfxSlotInfo FN_INSERT_OBJ_CTRL
     SlotName[ korean ] = "∞≥√º ª¿‘";
     SlotName[ turkish ] = "Nesne ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar objetos";
 };
 SfxSlotInfo FN_INSERT_OBJECT_DLG
 {
@@ -3800,6 +3943,7 @@ SfxSlotInfo FN_INSERT_OBJECT_DLG
     SlotName[ korean ] = "¥Ÿ∏• ∞≥√º ª¿‘";
     SlotName[ turkish ] = "Ba˛ka nesne ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar otros objetos";
 };
 SfxSlotInfo FN_INSERT_PAGEBREAK
 {
@@ -3826,6 +3970,7 @@ SfxSlotInfo FN_INSERT_PAGEBREAK
     SlotName[ korean ] = "ºˆµø°°¬  ±∏∫– ª¿‘";
     SlotName[ turkish ] = "Man¸el sayfa sonu ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar un salto de p·gina manual";
 };
 SfxSlotInfo FN_INSERT_PAGEFOOTER
 {
@@ -3852,6 +3997,7 @@ SfxSlotInfo FN_INSERT_PAGEFOOTER
     SlotName[ korean ] = "πŸ¥⁄±€ ª¿‘";
     SlotName[ turkish ] = "Altbilgi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar pie de p·gina";
 };
 SfxSlotInfo FN_INSERT_PAGEHEADER
 {
@@ -3878,6 +4024,7 @@ SfxSlotInfo FN_INSERT_PAGEHEADER
     SlotName[ korean ] = "∏”∏Æ±€ ª¿‘";
     SlotName[ turkish ] = "‹stbilgi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar encabezamiento";
 };
 SfxSlotInfo FN_INSERT_REF_FIELD
 {
@@ -3904,6 +4051,7 @@ SfxSlotInfo FN_INSERT_REF_FIELD
     SlotName[ korean ] = "ªÛ»£¬¸¡∂ ª¿‘";
     SlotName[ turkish ] = "«apraz ba˛vuru alan˝ ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar campo referencia";
 };
 SfxSlotInfo FN_INSERT_REGION
 {
@@ -3930,6 +4078,7 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ korean ] = "±∏ø™ ª¿‘";
     SlotName[ turkish ] = "Bˆl¸m ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar ·rea";
 };
 SfxSlotInfo FN_INSERT_SMA
 {
@@ -3956,6 +4105,7 @@ SfxSlotInfo FN_INSERT_SMA
     SlotName[ korean ] = "%PRODUCTNAME Math  ∞≥√º ª¿‘";
     SlotName[ turkish ] = "StarMath nesnesi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar objeto %PRODUCTNAME Math";
 };
 SfxSlotInfo FN_INSERT_SOFT_HYPHEN
 {
@@ -3982,6 +4132,7 @@ SfxSlotInfo FN_INSERT_SOFT_HYPHEN
     SlotName[ korean ] = "¿”¿«¿« «œ¿Ã«¬ ª¿‘";
     SlotName[ turkish ] = "Tire ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar guiÛn opcional";
 };
 SfxSlotInfo FN_INSERT_SYMBOL
 {
@@ -4008,6 +4159,7 @@ SfxSlotInfo FN_INSERT_SYMBOL
     SlotName[ korean ] = "∆ØºˆπÆ¿⁄ ª¿‘ ";
     SlotName[ turkish ] = "÷zel karakter ekle ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar sÌmbolo ";
 };
 SfxSlotInfo FN_INSERT_TABLE
 {
@@ -4034,6 +4186,7 @@ SfxSlotInfo FN_INSERT_TABLE
     SlotName[ korean ] = "«•°°ª¿‘";
     SlotName[ turkish ] = "Tablo ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar tabla";
 };
 SfxSlotInfo FN_JAVAEDIT
 {
@@ -4060,6 +4213,7 @@ SfxSlotInfo FN_JAVAEDIT
     SlotName[ korean ] = "Ω∫≈©∏≥∆Æ ª¿‘";
     SlotName[ turkish ] = "Komut dizisi ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar script";
 };
 SfxSlotInfo FN_LABEL
 {
@@ -4086,6 +4240,7 @@ SfxSlotInfo FN_LABEL
     SlotName[ korean ] = "∂Û∫ß ª¿‘";
     SlotName[ turkish ] = "Etiket ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar etiquetas";
 };
 SfxSlotInfo FN_BUSINESS_CARD
 {
@@ -4110,6 +4265,7 @@ SfxSlotInfo FN_BUSINESS_CARD
     SlotName[ arabic ] = "≈œ—«Ã »ÿ«ﬁ«  «·“Ì«—…";
     SlotName[ turkish ] = "Kartvizit ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar tarjetas de visita";
 };
 SfxSlotInfo FN_LINE_DOWN
 {
@@ -4136,6 +4292,7 @@ SfxSlotInfo FN_LINE_DOWN
     SlotName[ korean ] = "æ∆∑°°°«‡¿∏∑Œ";
     SlotName[ turkish ] = "Alttaki sat˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la lÌnea de abajo";
 };
 SfxSlotInfo FN_LINE_DOWN_SEL
 {
@@ -4162,6 +4319,7 @@ SfxSlotInfo FN_LINE_DOWN_SEL
     SlotName[ korean ] = "æ∆∑°°°«‡±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Alttaki sat˝ra kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta la lÌnea de abajo";
 };
 SfxSlotInfo FN_LINE_NUMBERING_DLG
 {
@@ -4188,6 +4346,7 @@ SfxSlotInfo FN_LINE_NUMBERING_DLG
     SlotName[ korean ] = "«‡ π¯»£∏≈±‚±‚ º≥¡§";
     SlotName[ turkish ] = "Sat˝r numaralar˝n˝ ayarla";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Definir numeraciÛn de lÌneas";
 };
 SfxSlotInfo FN_LINE_UP
 {
@@ -4214,6 +4373,7 @@ SfxSlotInfo FN_LINE_UP
     SlotName[ korean ] = "¿ß°°«‡¿∏∑Œ";
     SlotName[ turkish ] = "‹sttteki sat˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la lÌnea de arriba";
 };
 SfxSlotInfo FN_LINE_UP_SEL
 {
@@ -4240,6 +4400,7 @@ SfxSlotInfo FN_LINE_UP_SEL
     SlotName[ korean ] = "¿ß°°«‡±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "‹stteki sat˝ra kadar ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta lÌnea de arriba";
 };
 SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
 {
@@ -4266,6 +4427,7 @@ SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
     SlotName[ korean ] = "¬ ¿∏∑Œ";
     SlotName[ turkish ] = "Sayfa";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la p·gina";
 };
 SfxSlotInfo FN_NEW_GLOBAL_DOC
 {
@@ -4292,6 +4454,7 @@ SfxSlotInfo FN_NEW_GLOBAL_DOC
     SlotName[ korean ] = "∏∂Ω∫≈Õ°°πÆº≠ ∏∏µÈ±‚";
     SlotName[ turkish ] = "Ana belge";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Crear un documento maestro";
 };
 SfxSlotInfo FN_NEW_HTML_DOC
 {
@@ -4318,6 +4481,7 @@ SfxSlotInfo FN_NEW_HTML_DOC
     SlotName[ korean ] = "HTML πÆº≠ ∏∏µÈ±‚";
     SlotName[ turkish ] = "HTML belgesi olu˛tur";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Crear documento HTML";
 };
 SfxSlotInfo FN_NEXT_BOOKMARK
 {
@@ -4344,6 +4508,7 @@ SfxSlotInfo FN_NEXT_BOOKMARK
     SlotName[ korean ] = "¥Ÿ¿Ω √•∞•««∑Œ";
     SlotName[ turkish ] = "Sonraki metin belirteci";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la marca siguiente";
 };
 SfxSlotInfo FN_NEXT_FOOTNOTE
 {
@@ -4370,6 +4535,7 @@ SfxSlotInfo FN_NEXT_FOOTNOTE
     SlotName[ korean ] = "¥Ÿ¿Ω ∞¢¡÷∑Œ";
     SlotName[ turkish ] = "Sonraki altbilgi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la nota al pie siguiente";
 };
 SfxSlotInfo FN_NEXT_PARA
 {
@@ -4396,6 +4562,7 @@ SfxSlotInfo FN_NEXT_PARA
     SlotName[ korean ] = "¥Ÿ¿Ω ¥‹∂Ù¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki paragraf";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al p·rrafo siguiente";
 };
 SfxSlotInfo FN_NEXT_SENT
 {
@@ -4422,6 +4589,7 @@ SfxSlotInfo FN_NEXT_SENT
     SlotName[ korean ] = "¥Ÿ¿Ω πÆ¿Â¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki c¸mle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir  la oraciÛn siguiente";
 };
 SfxSlotInfo FN_NEXT_SENT_SEL
 {
@@ -4448,6 +4616,7 @@ SfxSlotInfo FN_NEXT_SENT_SEL
     SlotName[ korean ] = "¥Ÿ¿Ω πÆ¿Â±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sonraki c¸mleye kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta frase siguiente";
 };
 SfxSlotInfo FN_NEXT_TABLE
 {
@@ -4474,6 +4643,7 @@ SfxSlotInfo FN_NEXT_TABLE
     SlotName[ korean ] = "¥Ÿ¿Ω «•∑Œ";
     SlotName[ turkish ] = "Sonraki tablo";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la tabla siguiente";
 };
 SfxSlotInfo FN_NEXT_TBLFML
 {
@@ -4500,6 +4670,7 @@ SfxSlotInfo FN_NEXT_TBLFML
     SlotName[ korean ] = "¥Ÿ¿Ω «• æÁΩƒ¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki tablo formul¸";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la prÛxima fÛrmula";
 };
 SfxSlotInfo FN_NEXT_TBLFML_ERR
 {
@@ -4526,6 +4697,7 @@ SfxSlotInfo FN_NEXT_TBLFML_ERR
     SlotName[ korean ] = "∆≤∏∞, ¥Ÿ¿Ω «• æÁΩƒ¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki hatal˝ tablo formul¸";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a fÛrmula errÛnea siguiente";
 };
 SfxSlotInfo FN_NEXT_TOXMARK
 {
@@ -4542,7 +4714,7 @@ SfxSlotInfo FN_NEXT_TOXMARK
     SlotName[ swedish ] = "Till n‰sta indexmarkering";
     SlotName[ polish ] = "Przejdü do nastÍpnego znacznika indeksu";
     SlotName[ portuguese_brazilian ] = "GotoNextIndexMark";
-    SlotName[ japanese ] = "éüÇÃñ⁄éüÅEçıà¯çÄñ⁄Ç÷";
+    SlotName[ japanese ] = "éüÇÃñ⁄éüÇ∆çıà¯ÇÃçÄñ⁄Ç÷";
     SlotName[ chinese_simplified ] = "◊™µΩœ¬“ª∏ˆÀ˜“˝±Íº«";
     SlotName[ chinese_traditional ] = "¬‡®Ï§U§@≠”Ø¡§ﬁº–∞O";
     SlotName[ arabic ] = "≈·Ï «· ÕœÌœ «·›Â—”Ì «· «·Ì";
@@ -4552,6 +4724,7 @@ SfxSlotInfo FN_NEXT_TOXMARK
     SlotName[ korean ] = "¥Ÿ¿Ω ªˆ¿Œ ∏∂≈©«•Ω√∑Œ";
     SlotName[ turkish ] = "Sonraki dizin i˛areti";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la marca de Ìndice siguiente";
 };
 SfxSlotInfo FN_NEXT_WORD
 {
@@ -4578,6 +4751,7 @@ SfxSlotInfo FN_NEXT_WORD
     SlotName[ korean ] = "ø¿∏•¬ °°¥‹æÓ∑Œ";
     SlotName[ turkish ] = "Sadaki sˆzc¸k";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la derecha de la palabra";
 };
 SfxSlotInfo FN_NEXT_WORD_SEL
 {
@@ -4604,6 +4778,7 @@ SfxSlotInfo FN_NEXT_WORD_SEL
     SlotName[ korean ] = "ø¿∏•¬ °°¥‹æÓ±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sadaki sˆzc¸e kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el final de la palabra";
 };
 SfxSlotInfo FN_NUM_BULLET_DOWN
 {
@@ -4630,6 +4805,7 @@ SfxSlotInfo FN_NUM_BULLET_DOWN
     SlotName[ korean ] = "«— ºˆ¡ÿ æ∆∑°∑Œ";
     SlotName[ turkish ] = "Bir d¸zey a˛a˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Bajar un nivel";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
 {
@@ -4656,6 +4832,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
     SlotName[ korean ] = "æ∆∑°∑Œ ¿Ãµø";
     SlotName[ turkish ] = "A˛a˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desplazar hacia abajo";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEUP
 {
@@ -4682,6 +4859,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEUP
     SlotName[ korean ] = "¿ß∑Œ ¿Ãµø";
     SlotName[ turkish ] = "Yukar˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desplazar hacia arriba";
 };
 SfxSlotInfo FN_NUM_BULLET_NEXT
 {
@@ -4708,6 +4886,7 @@ SfxSlotInfo FN_NUM_BULLET_NEXT
     SlotName[ korean ] = "∞∞¿∫ ºˆ¡ÿ¿« ¥Ÿ¿Ω ¥‹∂Ù¿∏∑Œ";
     SlotName[ turkish ] = "Ayn˝ d¸zeyde bulunan sonraki paragraf";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Al p·rrafo siguiente del mismo nivel";
 };
 SfxSlotInfo FN_NUM_BULLET_NONUM
 {
@@ -4734,6 +4913,7 @@ SfxSlotInfo FN_NUM_BULLET_NONUM
     SlotName[ korean ] = "π¯»£æ¯¿Ã «◊∏Ò ª¿‘";
     SlotName[ turkish ] = "Numaras˝z giri˛ ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar entrada sin n˙mero";
 };
 SfxSlotInfo FN_NUM_BULLET_OFF
 {
@@ -4760,6 +4940,7 @@ SfxSlotInfo FN_NUM_BULLET_OFF
     SlotName[ korean ] = "π¯»£∏≈±‚±‚ «ÿ¡¶";
     SlotName[ turkish ] = "Numaralama kapal˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desactivar numeraciÛn";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
 {
@@ -4786,6 +4967,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
     SlotName[ korean ] = "æ∆∑°∑Œ, æ∆∑°¡° ∆˜«‘";
     SlotName[ turkish ] = "Alt noktalar˝ ile a˛a˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Bajar un nivel con subniveles";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
 {
@@ -4812,6 +4994,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
     SlotName[ korean ] = "æ∆∑°∑Œ ¿Ãµø, æ∆∑°¡° ∆˜«‘";
     SlotName[ turkish ] = "Alt noktalar˝ ile a˛a˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desplazar hacia abajo con subniveles";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
 {
@@ -4838,6 +5021,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
     SlotName[ korean ] = "¿ß∑Œ ¿Ãµø, æ∆∑°¡° ∆˜«‘";
     SlotName[ turkish ] = "Alt noktalar˝ ile yukar˝ya ta˛˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desplazar hacia arriba con subniveles";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
 {
@@ -4864,6 +5048,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
     SlotName[ korean ] = "¿ß∑Œ, æ∆∑°¡° ∆˜«‘";
     SlotName[ turkish ] = "Alt noktalar˝ ile yukar˝ya ta˛˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Subir un nivel con subniveles";
 };
 SfxSlotInfo FN_NUM_BULLET_PREV
 {
@@ -4890,6 +5075,7 @@ SfxSlotInfo FN_NUM_BULLET_PREV
     SlotName[ korean ] = "∞∞¿∫ ºˆ¡ÿ¿« ¿Ã¿¸ ¥‹∂Ù¿∏∑Œ";
     SlotName[ turkish ] = "Ayn˝ d¸zeyde bulunan ˆnceki paragraf";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Al p·rrafo anterior del mismo nivel";
 };
 SfxSlotInfo FN_NUM_BULLET_UP
 {
@@ -4916,6 +5102,7 @@ SfxSlotInfo FN_NUM_BULLET_UP
     SlotName[ korean ] = "«— ºˆ¡ÿ ¿ß∑Œ";
     SlotName[ turkish ] = "Bir d¸zey yukar˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Subir un nivel";
 };
 SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
 {
@@ -4942,6 +5129,7 @@ SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
     SlotName[ korean ] = "º˝¿⁄∆˜∏À ∆Ì¡˝";
     SlotName[ turkish ] = "Say˝ format˝n˝ d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar formato de n˙meros";
 };
 SfxSlotInfo FN_NUM_OR_NONUM
 {
@@ -4968,6 +5156,7 @@ SfxSlotInfo FN_NUM_OR_NONUM
     SlotName[ korean ] = "π¯»£∏≈±‚±‚ ¿˚øÎ/«ÿ¡¶";
     SlotName[ turkish ] = "Numaralama aÁ˝k/kapal˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar/Desact. NumeraciÛn";
 };
 SfxSlotInfo FN_NUMBER_BULLETS
 {
@@ -4994,6 +5183,7 @@ SfxSlotInfo FN_NUMBER_BULLETS
     SlotName[ korean ] = "π¯»£∏≈±‚±‚ ∆Ì¡˝";
     SlotName[ turkish ] = "Numaralamay˝ d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar numeraciÛn";
 };
 SfxSlotInfo FN_NUMBER_CURRENCY
 {
@@ -5020,6 +5210,7 @@ SfxSlotInfo FN_NUMBER_CURRENCY
     SlotName[ korean ] = "º˝¿⁄∆˜∏À: »≠∆Û";
     SlotName[ turkish ] = "Say˝ format˝: Para birimi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Formato numÈrico: Moneda";
 };
 SfxSlotInfo FN_NUMBER_DATE
 {
@@ -5046,6 +5237,7 @@ SfxSlotInfo FN_NUMBER_DATE
     SlotName[ korean ] = "º˝¿⁄∆˜∏À : ≥Ø¬•";
     SlotName[ turkish ] = "Say˝ format˝: Tarih";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Formato numÈrico : Fecha";
 };
 SfxSlotInfo FN_NUMBER_NEWSTART
 {
@@ -5072,6 +5264,7 @@ SfxSlotInfo FN_NUMBER_NEWSTART
     SlotName[ korean ] = "π¯»£∏≈±‚±‚ ¥ŸΩ√ Ω√¿€";
     SlotName[ turkish ] = "Numaralamay˝ yeniden ba˛lat";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Reiniciar numeraciÛn";
 };
 SfxSlotInfo FN_NUMBER_PERCENT
 {
@@ -5098,6 +5291,7 @@ SfxSlotInfo FN_NUMBER_PERCENT
     SlotName[ korean ] = "º˝¿⁄∆˜∏À£∫ πÈ∫–¿≤";
     SlotName[ turkish ] = "Say˝ format˝: Y¸zde";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Formato numÈrico: Porciento";
 };
 SfxSlotInfo FN_NUMBER_SCIENTIFIC
 {
@@ -5124,6 +5318,7 @@ SfxSlotInfo FN_NUMBER_SCIENTIFIC
     SlotName[ korean ] = "º˝¿⁄ º≠Ωƒ: ¡ˆºˆ";
     SlotName[ turkish ] = "Say˝ format˝: ‹stel";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Formato numÈrico: Exponencial";
 };
 SfxSlotInfo FN_NUMBER_STANDARD
 {
@@ -5150,6 +5345,7 @@ SfxSlotInfo FN_NUMBER_STANDARD
     SlotName[ greek ] = "ÃÔÒˆﬁ ·ÒÈËÏÔ˝: √ÂÌÈÍﬁ";
     SlotName[ korean ] = "º˝¿⁄∆˜∏À: «•¡ÿ";
     SlotName[ turkish ] = "Say˝ format˝: Standart";
+    SlotName[ catalan ] = "Formato numÈrico: Est·ndar";
 };
 SfxSlotInfo FN_NUMBER_TIME
 {
@@ -5176,6 +5372,7 @@ SfxSlotInfo FN_NUMBER_TIME
     SlotName[ korean ] = "º˝¿⁄∆˜∏À: Ω√∞£";
     SlotName[ turkish ] = "Say˝ format˝: Saat";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Formato numÈrico: Hora";
 };
 SfxSlotInfo FN_NUMBER_TWODEC
 {
@@ -5202,6 +5399,7 @@ SfxSlotInfo FN_NUMBER_TWODEC
     SlotName[ greek ] = "ÃÔÒˆﬁ ·ÒÈËÏÔ˝: ƒÂÍ·‰ÈÍﬁ";
     SlotName[ korean ] = "º˝¿⁄∆˜∏À: º“ºˆ";
     SlotName[ turkish ] = "Say˝ format˝: Ondal˝k";
+    SlotName[ catalan ] = "Formato numÈrico: Decimal";
 };
 SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
 {
@@ -5211,7 +5409,7 @@ SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
     SlotName[ portuguese ] = "NumeraÁ„o de capÌtulos";
     SlotName[ russian ] = "ÕÛÏÂ‡ˆËˇ „Î‡‚";
     SlotName[ dutch ] = "Hoofdstuknummering";
-    SlotName[ french ] = "NumÈrotation de chapitres";
+    SlotName[ french ] = "NumÈrotation des chapitres";
     SlotName[ spanish ] = "NumeraciÛn de capÌtulos";
     SlotName[ italian ] = "Numerazione capitolo";
     SlotName[ danish ] = "Kapitelnummerering";
@@ -5228,6 +5426,7 @@ SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
     SlotName[ korean ] = "¿Â π¯»£∏≈±‚±‚";
     SlotName[ turkish ] = "Bˆl¸m numaralamas˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "NumeraciÛn de capÌtulos";
 };
 SfxSlotInfo FN_OPTIMIZE_TABLE
 {
@@ -5254,15 +5453,16 @@ SfxSlotInfo FN_OPTIMIZE_TABLE
     SlotName[ korean ] = "√÷¿˚»≠";
     SlotName[ turkish ] = "Optimum";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Optimar";
 };
 SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
 {
     SlotName = "Gliederung zum Clipboard";
     SlotName [ english ] =  "Gliederung zum Clipboard";
     SlotName[ english_us ] = "Outline to Clipboard";
-    SlotName[ portuguese ] = "Esquema para  ¡rea de TransferÍncia";
+    SlotName[ portuguese ] = "Esquema em ·rea de transferÍncia";
     SlotName[ russian ] = "—ÚÛÍÚÛ‡ ·ÛÙÂ‡ Ó·ÏÂÌ‡";
-    SlotName[ dutch ] = "Overzicht naar clipboard";
+    SlotName[ dutch ] = "Overzicht naar Klembord";
     SlotName[ french ] = "Plan vers le presse-papiers";
     SlotName[ spanish ] = "Esquema al portapapeles";
     SlotName[ italian ] = "Struttura negli appunti";
@@ -5274,12 +5474,13 @@ SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
     SlotName[ chinese_simplified ] = "¥Û∏ŸÀÕ÷¡ºÙÃ˘∞Â";
     SlotName[ chinese_traditional ] = "§j∫ı∞eµπ∞≈∂K√Ø";
     SlotName[ arabic ] = "«· ﬁ”Ì„ ≈·Ï «·Õ«›Ÿ…";
-    SlotName[ dutch ] = "Overzicht naar clipboard";
+    SlotName[ dutch ] = "Overzicht naar Klembord";
     SlotName[ chinese_simplified ] = "¥Û∏ŸÀÕ÷¡ºÙÃ˘∞Â";
     SlotName[ greek ] = "ƒÈ‹ÒËÒ˘ÛÁ ÒÔÚ ÙÔ Ò¸˜ÂÈÒÔ";
     SlotName[ korean ] = "≈¨∏≥∫∏µÂ¿«°°¥Ÿ¥‹∞Ë";
     SlotName[ turkish ] = "Anahatlar˝ panoya gˆnder";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Esquema al portapapeles";
 };
 SfxSlotInfo FN_OUTLINE_TO_IMPRESS
 {
@@ -5306,6 +5507,7 @@ SfxSlotInfo FN_OUTLINE_TO_IMPRESS
     SlotName[ korean ] = "«¡∏Æ¡®≈◊¿Ãº«°°¥Ÿ¥‹∞Ë";
     SlotName[ turkish ] = "Anahatlar˝ sunuya aktar";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Esquema para presentaciÛn";
 };
 SfxSlotInfo FN_PAGE_STYLE_SET_COLS
 {
@@ -5332,6 +5534,7 @@ SfxSlotInfo FN_PAGE_STYLE_SET_COLS
     SlotName[ korean ] = "¬  ¿Ø«¸: ø≠";
     SlotName[ turkish ] = "Sayfa biÁimi: S¸tunlar";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Estilo de p·gina: Columnas";
 };
 SfxSlotInfo FN_PAGEDOWN
 {
@@ -5358,6 +5561,7 @@ SfxSlotInfo FN_PAGEDOWN
     SlotName[ korean ] = "¥Ÿ¿Ω ¬ ";
     SlotName[ turkish ] = "Sonraki sayfa";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "P·gina siguiente";
 };
 SfxSlotInfo FN_PAGEDOWN_SEL
 {
@@ -5384,6 +5588,7 @@ SfxSlotInfo FN_PAGEDOWN_SEL
     SlotName[ korean ] = "¥Ÿ¿Ω ¬ ±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sonraki sayfaya kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta la p·gina siguiente";
 };
 SfxSlotInfo FN_PAGEUP
 {
@@ -5410,6 +5615,7 @@ SfxSlotInfo FN_PAGEUP
     SlotName[ korean ] = "¿Ã¿¸ ¬ ";
     SlotName[ turkish ] = "÷nceki sayfa";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "P·gina anterior";
 };
 SfxSlotInfo FN_PAGEUP_SEL
 {
@@ -5436,6 +5642,7 @@ SfxSlotInfo FN_PAGEUP_SEL
     SlotName[ korean ] = "¿Ã¿¸ ¬ ±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "÷nceki sayfaya kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta la p·gina anterior";
 };
 SfxSlotInfo FN_PASTESPECIAL
 {
@@ -5462,6 +5669,7 @@ SfxSlotInfo FN_PASTESPECIAL
     SlotName[ korean ] = "º±≈√«œø© ∫Ÿø©≥÷±‚";
     SlotName[ turkish ] = "÷zel yap˝˛t˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Pegado especial";
 };
 SfxSlotInfo FN_POSTIT
 {
@@ -5488,6 +5696,7 @@ SfxSlotInfo FN_POSTIT
     SlotName[ korean ] = "∏ﬁ∏ ª¿‘";
     SlotName[ turkish ] = "Not ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar nota";
 };
 SfxSlotInfo FN_PREV_BOOKMARK
 {
@@ -5514,6 +5723,7 @@ SfxSlotInfo FN_PREV_BOOKMARK
     SlotName[ korean ] = "¿Ã¿¸ √•∞•««∑Œ";
     SlotName[ turkish ] = "÷nceki metin belirteci";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la marca anterior";
 };
 SfxSlotInfo FN_PREV_FOOTNOTE
 {
@@ -5540,6 +5750,7 @@ SfxSlotInfo FN_PREV_FOOTNOTE
     SlotName[ korean ] = "¿Ã¿¸ ∞¢¡÷∑Œ";
     SlotName[ turkish ] = "÷nceki dipnot";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la nota al pie anterior";
 };
 SfxSlotInfo FN_PREV_PARA
 {
@@ -5566,6 +5777,7 @@ SfxSlotInfo FN_PREV_PARA
     SlotName[ korean ] = "¿Ã¿¸ ¥‹∂Ù¿∏∑Œ";
     SlotName[ turkish ] = "÷nceki paragraf";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al p·rrafo anterior";
 };
 SfxSlotInfo FN_PREV_SENT
 {
@@ -5592,6 +5804,7 @@ SfxSlotInfo FN_PREV_SENT
     SlotName[ korean ] = "¿Ã¿¸ πÆ¿Â¿∏∑Œ";
     SlotName[ turkish ] = "÷nceki c¸mle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a frase anterior";
 };
 SfxSlotInfo FN_PREV_SENT_SEL
 {
@@ -5618,6 +5831,7 @@ SfxSlotInfo FN_PREV_SENT_SEL
     SlotName[ korean ] = "¿Ã¿¸ πÆ¿Â±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "÷nceki c¸mleye kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta la oraciÛn anterior";
 };
 SfxSlotInfo FN_PREV_TABLE
 {
@@ -5644,6 +5858,7 @@ SfxSlotInfo FN_PREV_TABLE
     SlotName[ korean ] = "¿Ã¿¸ «•∑Œ";
     SlotName[ turkish ] = "÷nceki tablo";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la tabla anterior";
 };
 SfxSlotInfo FN_PREV_TBLFML
 {
@@ -5670,6 +5885,7 @@ SfxSlotInfo FN_PREV_TBLFML
     SlotName[ korean ] = "¿Ã¿¸ «• æÁΩƒ¿∏∑Œ";
     SlotName[ turkish ] = "÷nceki tablo formul¸";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la fÛrmula anterior";
 };
 SfxSlotInfo FN_PREV_TBLFML_ERR
 {
@@ -5696,6 +5912,7 @@ SfxSlotInfo FN_PREV_TBLFML_ERR
     SlotName[ korean ] = "∆≤∏∞ ¿Ã¿¸ «• æÁΩƒ¿∏∑Œ";
     SlotName[ turkish ] = "÷nceki hatal˝ tablo formul¸";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a fÛrmula errÛnea anterior";
 };
 SfxSlotInfo FN_PREV_TOXMARK
 {
@@ -5712,7 +5929,7 @@ SfxSlotInfo FN_PREV_TOXMARK
     SlotName[ swedish ] = "Till fˆregÂende indexmarkering";
     SlotName[ polish ] = "Przejdü do poprzedniego znacznika indeksu";
     SlotName[ portuguese_brazilian ] = "GotoPrevIndexMark";
-    SlotName[ japanese ] = "ëOÇÃñ⁄éüÅEçıà¯çÄñ⁄Ç÷";
+    SlotName[ japanese ] = "ëOÇÃñ⁄éüÇ∆çıà¯ÇÃçÄñ⁄Ç÷";
     SlotName[ chinese_simplified ] = "◊™µΩ…œ“ª∏ˆÀ˜“˝±Íº«";
     SlotName[ chinese_traditional ] = "¬‡®Ï§W§@≠”Ø¡§ﬁº–∞O";
     SlotName[ arabic ] = "≈·Ï «· ÕœÌœ «·›Â—”Ì «·”«»ﬁ";
@@ -5722,6 +5939,7 @@ SfxSlotInfo FN_PREV_TOXMARK
     SlotName[ korean ] = "¿Ã¿¸ ªˆ¿Œ ∏∂≈©«•Ω√∑Œ";
     SlotName[ turkish ] = "÷nceki dizin i˛areti";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la marca de Ìndice anterior";
 };
 SfxSlotInfo FN_PREV_WORD
 {
@@ -5748,6 +5966,7 @@ SfxSlotInfo FN_PREV_WORD
     SlotName[ korean ] = "¥‹æÓ øﬁ¬ ¿∏∑Œ";
     SlotName[ turkish ] = "Soldaki sˆzc¸k";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir a la palabra izquierda";
 };
 SfxSlotInfo FN_PREV_WORD_SEL
 {
@@ -5774,6 +5993,7 @@ SfxSlotInfo FN_PREV_WORD_SEL
     SlotName[ greek ] = "≈ÈÎÔ„ﬁ ›˘Ú ÙÁÌ Î›ÓÁ ·ÒÈÛÙÂÒ‹";
     SlotName[ korean ] = "¥‹æÓ°°øﬁ¬ ±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Soldaki sˆzc¸e kadar seÁ";
+    SlotName[ catalan ] = "Seleccionar hasta el comienzo de la palabra";
 };
 SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
 {
@@ -5784,7 +6004,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ russian ] = "œ‡‡ÏÂÚ˚ ÔÂ˜‡ÚË";
     SlotName[ dutch ] = "Printopties afdrukvoorbeeld";
     SlotName[ french ] = "Options d'impression : aperÁu";
-    SlotName[ spanish ] = "Opciones de impresiÛn";
+    SlotName[ spanish ] = "Opciones de impresiÛn Vista preliminar";
     SlotName[ italian ] = "Opzioni di stampa";
     SlotName[ danish ] = "Udskriftsindstillinger sidevisning";
     SlotName[ swedish ] = "Utskriftsalternativ fˆrhandsgranskning";
@@ -5800,6 +6020,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ greek ] = "≈ÈÎÔ„›Ú ÂÍÙ˝˘ÛÁÚ/–ÒÔÂÈÛÍ¸ÁÛÁ ÛÂÎﬂ‰·Ú";
     SlotName[ korean ] = "¿Œº‚ ø…º«, ¬  ∫∏±‚";
     SlotName[ turkish ] = "Sayfa gˆr¸n¸m¸ yazd˝rma seÁenekleri";
+    SlotName[ catalan ] = "Opciones de impresiÛn";
 };
 SfxSlotInfo FN_PREVIEW_ZOOM
 {
@@ -5823,6 +6044,7 @@ SfxSlotInfo FN_PREVIEW_ZOOM
     SlotName[ chinese_traditional ] = "≈„•‹§Ò®“ ≠∂≠±µ¯πœ";
     SlotName[ turkish ] = "Yak˝nla˛t˝r";
     SlotName[ arabic ] = " ﬂ»Ì— Ê ’€Ì— „⁄«Ì‰… «·’›Õ…";
+    SlotName[ catalan ] = "Escala previsualizaciÛn";
 };
 SfxSlotInfo FN_PRINT_LAYOUT
 {
@@ -5849,6 +6071,7 @@ SfxSlotInfo FN_PRINT_LAYOUT
     SlotName[ korean ] = "¿Œº‚ ∑π¿Ãæ∆øÙ ¿˚øÎ/∫Ò¿˚øÎ";
     SlotName[ turkish ] = "Yazd˝rma d¸zeni aÁ˝k/kapal˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "DiseÒo de ImpresiÛn";
 };
 SfxSlotInfo FN_PRINT_PAGEPREVIEW
 {
@@ -5875,6 +6098,7 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ korean ] = "¬  ∫∏±‚, ¿Œº‚";
     SlotName[ turkish ] = "Sayfa gˆr¸n¸m¸n¸ yazd˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Imprimir previsualizaciÛn";
 };
 SfxSlotInfo FN_QRY
 {
@@ -5901,6 +6125,7 @@ SfxSlotInfo FN_QRY
     SlotName[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ ∞¸∏Æ¿⁄ »£√‚";
     SlotName[ turkish ] = "Veritaban˝ yˆneticisini Áal˝˛t˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar administrador de bases de datos";
 };
 SfxSlotInfo FN_QRY_MERGE
 {
@@ -5927,6 +6152,7 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ korean ] = "Ω√∏ÆæÛ°°«¡∏∞∆Æ ¡ÿ∫Ò";
     SlotName[ turkish ] = "Standart mektup yazd˝rmay˝ haz˝rla";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Preparar impresiÛn en serie";
 };
 SfxSlotInfo FN_REDLINE_ACCEPT
 {
@@ -5953,6 +6179,7 @@ SfxSlotInfo FN_REDLINE_ACCEPT
     SlotName[ korean ] = "∫Ø∞ÊªÁ«◊ ºˆ∂Ù ∂«¥¬ ∞≈∫Œ";
     SlotName[ turkish ] = "Dei˛iklikleri kabul ya da reddet";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Aceptar modificaciones o rechazarlas";
 };
 SfxSlotInfo FN_REDLINE_COMMENT
 {
@@ -5979,6 +6206,7 @@ SfxSlotInfo FN_REDLINE_COMMENT
     SlotName[ korean ] = "¡÷ºÆ ª¿‘";
     SlotName[ turkish ] = "AÁ˝klama ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar comentario";
 };
 SfxSlotInfo FN_REDLINE_ON
 {
@@ -6005,6 +6233,7 @@ SfxSlotInfo FN_REDLINE_ON
     SlotName[ korean ] = "ºˆ¡§∫∏øœ ¿˚øÎ";
     SlotName[ turkish ] = "Redaksiyonu Áal˝˛t˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar modificaciones";
 };
 SfxSlotInfo FN_REDLINE_PROTECT
 {
@@ -6012,6 +6241,24 @@ SfxSlotInfo FN_REDLINE_PROTECT
     SlotName [ english ] =  "Protect changes trace mode";
     SlotName[ english_us ] = "Protect changes trace mode";
     SlotName[ language_user1 ] = " ";
+    SlotName[ portuguese ] = "Proteger histÛrico das modificaÁıes";
+    SlotName[ russian ] = "Protect changes trace mode";
+    SlotName[ greek ] = "Protect changes trace mode";
+    SlotName[ dutch ] = "Registratie van wijzigingen beveiligen";
+    SlotName[ french ] = "Protect changes trace mode";
+    SlotName[ spanish ] = "Proteger grabaciÛn de las modificaciones";
+    SlotName[ italian ] = "Protect changes trace mode";
+    SlotName[ danish ] = "Protect changes trace mode";
+    SlotName[ swedish ] = "Skydda registrering av ‰ndringar";
+    SlotName[ polish ] = "ChroÒ úlad zmian";
+    SlotName[ portuguese_brazilian ] = "Protect changes trace mode";
+    SlotName[ japanese ] = "Protect changes trace mode";
+    SlotName[ korean ] = "Protect changes trace mode";
+    SlotName[ chinese_simplified ] = "Protect changes trace mode";
+    SlotName[ chinese_traditional ] = "Protect changes trace mode";
+    SlotName[ turkish ] = "Protect changes trace mode";
+    SlotName[ arabic ] = "Protect changes trace mode";
+    SlotName[ catalan ] = "Protect changes trace mode";
 };
 SfxSlotInfo FN_REDLINE_SHOW
 {
@@ -6038,6 +6285,7 @@ SfxSlotInfo FN_REDLINE_SHOW
     SlotName[ korean ] = "ºˆ¡§∫∏øœ ≥™≈∏≥ª±‚";
     SlotName[ turkish ] = "Redaksiyonu gˆr¸nt¸le";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Mostrar modificaciones";
 };
 SfxSlotInfo FN_REFRESH_VIEW
 {
@@ -6064,6 +6312,7 @@ SfxSlotInfo FN_REFRESH_VIEW
     SlotName[ korean ] = "∫π±∏ ∫∏±‚";
     SlotName[ turkish ] = "Gˆr¸n¸m¸ geri getir";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Restablecer visualizaciÛn";
 };
 SfxSlotInfo FN_REPAGINATE
 {
@@ -6090,6 +6339,7 @@ SfxSlotInfo FN_REPAGINATE
     SlotName[ korean ] = "¥ŸΩ√°°∆˜∏À«œ±‚";
     SlotName[ turkish ] = "Yeniden formatla";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Reformatear";
 };
 SfxSlotInfo FN_REPEAT_SEARCH
 {
@@ -6116,6 +6366,7 @@ SfxSlotInfo FN_REPEAT_SEARCH
     SlotName[ korean ] = "√£±‚ π›∫π";
     SlotName[ turkish ] = "Yeniden bul";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Repetir b˙squeda";
 };
 SfxSlotInfo FN_RULER
 {
@@ -6142,6 +6393,7 @@ SfxSlotInfo FN_RULER
     SlotName[ korean ] = "¥´±›¿⁄  ≥™≈∏≥ª±‚£Øº˚±‚±‚";
     SlotName[ turkish ] = "Cetveli gˆr¸nt¸le/gizle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Regla";
 };
 SfxSlotInfo FN_SELECT_PARA
 {
@@ -6168,6 +6420,7 @@ SfxSlotInfo FN_SELECT_PARA
     SlotName[ korean ] = "¥‹∂Ù º±≈√";
     SlotName[ turkish ] = "Paragraf seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar p·rrafo";
 };
 SfxSlotInfo FN_SELECT_WORD
 {
@@ -6194,6 +6447,7 @@ SfxSlotInfo FN_SELECT_WORD
     SlotName[ korean ] = "¥‹æÓ º±≈√";
     SlotName[ turkish ] = "Sˆzc¸k seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar palabra";
 };
 SfxSlotInfo FN_SET_ADD_MODE
 {
@@ -6220,6 +6474,7 @@ SfxSlotInfo FN_SET_ADD_MODE
     SlotName[ korean ] = "¥Ÿ¡ﬂº±≈√ ¿€µø";
     SlotName[ turkish ] = "«oklu seÁim aÁ˝k";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar selecciÛn m˙ltiple";
 };
 SfxSlotInfo FN_SET_EXT_MODE
 {
@@ -6246,6 +6501,7 @@ SfxSlotInfo FN_SET_EXT_MODE
     SlotName[ korean ] = "»Æ¿Âµ» º±≈√ ¿€µø";
     SlotName[ turkish ] = "Ayr˝nt˝l˝ seÁim aÁ˝k";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar SelecciÛn Extendida";
 };
 SfxSlotInfo FN_SET_PAGE_STYLE
 {
@@ -6272,6 +6528,7 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ korean ] = "¬  ¿Ø«¸ ¿˚øÎ";
     SlotName[ turkish ] = "Sayfa biÁimi uygula";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Aplicar estilo de p·gina";
 };
 SfxSlotInfo FN_SET_SUB_SCRIPT
 {
@@ -6298,6 +6555,7 @@ SfxSlotInfo FN_SET_SUB_SCRIPT
     SlotName[ korean ] = "æ∆∑° √∑¿⁄";
     SlotName[ turkish ] = "Alt simge";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "SubÌndice";
 };
 SfxSlotInfo FN_SET_SUPER_SCRIPT
 {
@@ -6324,6 +6582,7 @@ SfxSlotInfo FN_SET_SUPER_SCRIPT
     SlotName[ korean ] = "¿≠ √∑¿⁄";
     SlotName[ turkish ] = "‹st simge";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "SuperÌndice";
 };
 SfxSlotInfo FN_SHADOWCURSOR
 {
@@ -6350,6 +6609,7 @@ SfxSlotInfo FN_SHADOWCURSOR
     SlotName[ korean ] = "¡˜¡¢ ƒøº≠ ¿€µø/«ÿ¡¶";
     SlotName[ turkish ] = "Serbest imleÁ aÁ˝k/kapal˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar/desactivar cursor directo";
 };
 SfxSlotInfo FN_SHIFT_BACKSPACE
 {
@@ -6376,6 +6636,7 @@ SfxSlotInfo FN_SHIFT_BACKSPACE
     SlotName[ korean ] = "πÈ Ω∫∆‰¿ÃΩ∫";
     SlotName[ turkish ] = "Geri al";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Retroceso";
 };
 SfxSlotInfo FN_SHOW_FOUR_PAGES
 {
@@ -6402,6 +6663,7 @@ SfxSlotInfo FN_SHOW_FOUR_PAGES
     SlotName[ korean ] = "¬  πÃ∏Æ∫∏±‚: 4 ¬ ";
     SlotName[ turkish ] = "Sayfa ˆn izleme: Dˆrt sayfa";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Vista preliminar: cuatro p·ginas";
 };
 SfxSlotInfo FN_SHOW_TWO_PAGES
 {
@@ -6428,6 +6690,7 @@ SfxSlotInfo FN_SHOW_TWO_PAGES
     SlotName[ korean ] = "¬  πÃ∏Æ∫∏±‚: 2 ¬ ";
     SlotName[ turkish ] = "Sayfa ˆnizleme: ›ki sayfa";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Vista preliminar: dos p·ginas";
 };
 SfxSlotInfo FN_SHRINK_FONT_SIZE
 {
@@ -6454,6 +6717,7 @@ SfxSlotInfo FN_SHRINK_FONT_SIZE
     SlotName[ korean ] = "πÆ¿⁄≈©±‚ ¡Ÿ¿Ã±‚";
     SlotName[ turkish ] = "Yaz˝tipini k¸Á¸lt";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Reducir fuente";
 };
 SfxSlotInfo FN_SORTING_DLG
 {
@@ -6480,6 +6744,7 @@ SfxSlotInfo FN_SORTING_DLG
     SlotName[ korean ] = "¡§∑ƒ";
     SlotName[ turkish ] = "S˝rala";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ordenar";
 };
 SfxSlotInfo FN_SOURCEVIEW
 {
@@ -6506,6 +6771,7 @@ SfxSlotInfo FN_SOURCEVIEW
     SlotName[ korean ] = "HTML º“Ω∫≈ÿΩ∫∆Æ ∫∏¿Ã±‚";
     SlotName[ turkish ] = "HTML kaynak kodunu gˆr¸nt¸le";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Mostrar texto fuente HTML";
 };
 SfxSlotInfo FN_SPELLING_DLG
 {
@@ -6532,6 +6798,7 @@ SfxSlotInfo FN_SPELLING_DLG
     SlotName[ korean ] = "∏¬√„π˝";
     SlotName[ turkish ] = "Yaz˝m";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "RevisiÛn ortogr·fica";
 };
 SfxSlotInfo FN_START_DOC_DIRECT
 {
@@ -6558,6 +6825,7 @@ SfxSlotInfo FN_START_DOC_DIRECT
     SlotName[ korean ] = "πÆº≠ Ω√¿€∫Œ∫–¿∏∑Œ πŸ∑Œ";
     SlotName[ turkish ] = "Dorudan belgenin ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Directo al comienzo del documento";
 };
 SfxSlotInfo FN_START_OF_COLUMN
 {
@@ -6584,6 +6852,7 @@ SfxSlotInfo FN_START_OF_COLUMN
     SlotName[ korean ] = "ø≠ Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "S¸tun ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de la columna";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT
 {
@@ -6610,6 +6879,7 @@ SfxSlotInfo FN_START_OF_DOCUMENT
     SlotName[ korean ] = "πÆº≠ Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "Belgenin ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Al comienzo del documento";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT_SEL
 {
@@ -6636,6 +6906,7 @@ SfxSlotInfo FN_START_OF_DOCUMENT_SEL
     SlotName[ korean ] = "πÆº≠ Ω√¿€∫Œ∫–±Ó¡ˆ°°º±≈√";
     SlotName[ turkish ] = "Belgenin ba˛lang˝c˝na kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el comienzo del documento";
 };
 SfxSlotInfo FN_START_OF_LINE
 {
@@ -6662,6 +6933,7 @@ SfxSlotInfo FN_START_OF_LINE
     SlotName[ korean ] = "«‡ Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "Sat˝r ba˛˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de la lÌnea";
 };
 SfxSlotInfo FN_START_OF_LINE_SEL
 {
@@ -6688,6 +6960,7 @@ SfxSlotInfo FN_START_OF_LINE_SEL
     SlotName[ korean ] = "«‡ Ω√¿€∫Œ∫–±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sat˝r ba˛˝na kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el comienzo de la lÌnea";
 };
 SfxSlotInfo FN_START_OF_NEXT_COLUMN
 {
@@ -6714,6 +6987,7 @@ SfxSlotInfo FN_START_OF_NEXT_COLUMN
     SlotName[ korean ] = "¥Ÿ¿Ω ø≠ Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki s¸tunun ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de la columna siguiente ";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE
 {
@@ -6740,6 +7014,7 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE
     SlotName[ korean ] = "¥Ÿ¿Ω ¬  Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "Sonraki sayfan˝n ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de la p·gina siguiente";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
 {
@@ -6766,6 +7041,7 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
     SlotName[ korean ] = "¥Ÿ¿Ω ¬  Ω√¿€∫Œ∫–±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sonraki sayfan˝n ba˛lang˝c˝na kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta comienzo de la p·gina siguiente";
 };
 SfxSlotInfo FN_START_OF_PAGE
 {
@@ -6792,6 +7068,7 @@ SfxSlotInfo FN_START_OF_PAGE
     SlotName[ korean ] = "¬  Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "Sayfa ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de la p·gina";
 };
 SfxSlotInfo FN_START_OF_PAGE_SEL
 {
@@ -6818,6 +7095,7 @@ SfxSlotInfo FN_START_OF_PAGE_SEL
     SlotName[ korean ] = "¬  Ω√¿€∫Œ∫–±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Sayfan˝n ba˛lang˝c˝na kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el comienzo de la p·gina";
 };
 SfxSlotInfo FN_START_OF_PARA
 {
@@ -6844,6 +7122,7 @@ SfxSlotInfo FN_START_OF_PARA
     SlotName[ korean ] = "¥‹∂Ù Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "Paragraf ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo del p·rrafo";
 };
 SfxSlotInfo FN_START_OF_PARA_SEL
 {
@@ -6870,6 +7149,7 @@ SfxSlotInfo FN_START_OF_PARA_SEL
     SlotName[ korean ] = "¥‹∂Ù Ω√¿€∫Œ∫–±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "Paragraf ba˛lang˝c˝na kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el comienzo del p·rrafo";
 };
 SfxSlotInfo FN_START_OF_PREV_COLUMN
 {
@@ -6896,6 +7176,7 @@ SfxSlotInfo FN_START_OF_PREV_COLUMN
     SlotName[ korean ] = "¿Ã¿¸ ø≠ Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "÷nceki s¸tunun ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de la columna anterior";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE
 {
@@ -6922,6 +7203,7 @@ SfxSlotInfo FN_START_OF_PREV_PAGE
     SlotName[ korean ] = "¿Ã¿¸ ¬  Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "÷nceki sayfan˝n ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de p·gina anterior";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
 {
@@ -6948,6 +7230,7 @@ SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
     SlotName[ korean ] = "¿Ã¿¸ ¬  Ω√¿€∫Œ∫–±Ó¡ˆ º±≈√";
     SlotName[ turkish ] = "÷nceki sayfan˝n ba˛lang˝c˝na kadar seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar hasta el comienzo de la p·gina anterior";
 };
 SfxSlotInfo FN_START_TABLE
 {
@@ -6974,6 +7257,7 @@ SfxSlotInfo FN_START_TABLE
     SlotName[ korean ] = "«• Ω√¿€∫Œ∫–¿∏∑Œ";
     SlotName[ turkish ] = "Tablo ba˛lang˝c˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al comienzo de la tabla";
 };
 SfxSlotInfo FN_STAT_HYPERLINKS
 {
@@ -7000,6 +7284,7 @@ SfxSlotInfo FN_STAT_HYPERLINKS
     SlotName[ korean ] = "«œ¿Ã∆€∏µ≈© »∞º∫»≠";
     SlotName[ turkish ] = "Hyperlink'ler etkin";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Activar Hiperenlaces";
 };
 SfxSlotInfo FN_STAT_PAGE
 {
@@ -7026,6 +7311,7 @@ SfxSlotInfo FN_STAT_PAGE
     SlotName[ korean ] = "¬  π¯»£";
     SlotName[ turkish ] = "Sayfa numaras˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "N˙mero de p·gina";
 };
 SfxSlotInfo FN_STAT_SELMODE
 {
@@ -7052,6 +7338,7 @@ SfxSlotInfo FN_STAT_SELMODE
     SlotName[ korean ] = "º±≈√ ∏µÂ";
     SlotName[ turkish ] = "SeÁim kipi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Modo SelecciÛn";
 };
 SfxSlotInfo FN_STAT_TEMPLATE
 {
@@ -7078,6 +7365,7 @@ SfxSlotInfo FN_STAT_TEMPLATE
     SlotName[ korean ] = "¬  ¿Ø«¸";
     SlotName[ turkish ] = "Sayfa biÁimi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Estilo de p·gina";
 };
 SfxSlotInfo FN_TABLE_ADJUST_CELLS
 {
@@ -7104,6 +7392,7 @@ SfxSlotInfo FN_TABLE_ADJUST_CELLS
     SlotName[ korean ] = "√÷¿˚ ø≠ ≥ ∫Ò";
     SlotName[ turkish ] = "En uygun s¸tun geni˛lii";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ancho Ûptimo de columnas";
 };
 SfxSlotInfo FN_TABLE_AUTOSUM
 {
@@ -7127,6 +7416,7 @@ SfxSlotInfo FN_TABLE_AUTOSUM
     SlotName[ chinese_traditional ] = "§p≠p";
     SlotName[ turkish ] = "Sum";
     SlotName[ arabic ] = "«·„Ã„Ê⁄";
+    SlotName[ catalan ] = "Suma";
 };
 SfxSlotInfo FN_TABLE_BALANCE_CELLS
 {
@@ -7153,6 +7443,7 @@ SfxSlotInfo FN_TABLE_BALANCE_CELLS
     SlotName[ korean ] = "ø≠ ∞£∞› ¿œ¡§«œ∞‘";
     SlotName[ turkish ] = "S¸tunlar˝ geni˛liklerini e˛itle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ordenar columnas";
 };
 SfxSlotInfo FN_TABLE_BALANCE_ROWS
 {
@@ -7179,6 +7470,7 @@ SfxSlotInfo FN_TABLE_BALANCE_ROWS
     SlotName[ korean ] = "«‡ ∞£∞› ¿œ¡§«œ∞‘";
     SlotName[ turkish ] = "Sat˝r y¸ksekliklerini e˛itle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ordenar filas";
 };
 SfxSlotInfo FN_TABLE_DELETE_COL
 {
@@ -7205,6 +7497,7 @@ SfxSlotInfo FN_TABLE_DELETE_COL
     SlotName[ korean ] = "ø≠ ªË¡¶";
     SlotName[ turkish ] = "S¸tunu sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar columna";
 };
 SfxSlotInfo FN_TABLE_DELETE_ROW
 {
@@ -7231,6 +7524,7 @@ SfxSlotInfo FN_TABLE_DELETE_ROW
     SlotName[ korean ] = "«‡ ªË¡¶";
     SlotName[ turkish ] = "Sat˝r˝ sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar fila";
 };
 SfxSlotInfo FN_TABLE_INSERT_COL
 {
@@ -7257,6 +7551,7 @@ SfxSlotInfo FN_TABLE_INSERT_COL
     SlotName[ korean ] = "ø≠ ª¿‘";
     SlotName[ turkish ] = "S¸tun ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar columna";
 };
 SfxSlotInfo FN_TABLE_INSERT_ROW
 {
@@ -7283,6 +7578,7 @@ SfxSlotInfo FN_TABLE_INSERT_ROW
     SlotName[ korean ] = "«‡°°ª¿‘";
     SlotName[ turkish ] = "Sat˝r ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar fila";
 };
 SfxSlotInfo FN_TABLE_MERGE_CELLS
 {
@@ -7309,6 +7605,7 @@ SfxSlotInfo FN_TABLE_MERGE_CELLS
     SlotName[ korean ] = "ºø ∫¥«’";
     SlotName[ turkish ] = "H¸creleri birle˛tir";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Unir celdas";
 };
 SfxSlotInfo FN_TABLE_MERGE_TABLE
 {
@@ -7335,6 +7632,7 @@ SfxSlotInfo FN_TABLE_MERGE_TABLE
     SlotName[ korean ] = "«• ∫¥«’";
     SlotName[ turkish ] = "Tabloyu birle˛tir";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Unir tabla";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX
 {
@@ -7361,6 +7659,7 @@ SfxSlotInfo FN_TABLE_MODE_FIX
     SlotName[ korean ] = "«•:∞Ì¡§";
     SlotName[ turkish ] = "Tablo: Sabit";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Tabla: fija";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX_PROP
 {
@@ -7387,6 +7686,7 @@ SfxSlotInfo FN_TABLE_MODE_FIX_PROP
     SlotName[ korean ] = "«•: ∞Ì¡§,∫Ò∑ ";
     SlotName[ turkish ] = "Tablo: Sabit, orant˝l˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Tabla: fija, proporcional";
 };
 SfxSlotInfo FN_TABLE_MODE_VARIABLE
 {
@@ -7413,6 +7713,7 @@ SfxSlotInfo FN_TABLE_MODE_VARIABLE
     SlotName[ korean ] = "«•:∫Øºˆ";
     SlotName[ turkish ] = "Tablo: Dei˛ken";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Tabla: variable";
 };
 SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
 {
@@ -7439,6 +7740,7 @@ SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
     SlotName[ korean ] = "√÷¿˚ «‡ ≥Ù¿Ã";
     SlotName[ turkish ] = "En uygun sat˝r y¸kseklii";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Altura Ûptima de filas";
 };
 SfxSlotInfo FN_TABLE_SELECT_ALL
 {
@@ -7465,6 +7767,7 @@ SfxSlotInfo FN_TABLE_SELECT_ALL
     SlotName[ korean ] = "«• º±≈√";
     SlotName[ turkish ] = "Tablo seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar tabla";
 };
 SfxSlotInfo FN_TABLE_SELECT_COL
 {
@@ -7491,6 +7794,7 @@ SfxSlotInfo FN_TABLE_SELECT_COL
     SlotName[ korean ] = "ø≠ º±≈√";
     SlotName[ turkish ] = "S¸tun seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Seleccionar columna";
 };
 SfxSlotInfo FN_TABLE_SELECT_ROW
 {
@@ -7517,6 +7821,7 @@ SfxSlotInfo FN_TABLE_SELECT_ROW
     SlotName[ korean ] = "«‡ º±≈√";
     SlotName[ turkish ] = "Sat˝r seÁ";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Selecionar fila";
 };
 SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
 {
@@ -7543,6 +7848,7 @@ SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
     SlotName[ korean ] = "ºø ∫∏»£";
     SlotName[ turkish ] = "H¸creyi koru";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Proteger celda";
 };
 SfxSlotInfo FN_TABLE_SET_ROW_HEIGHT
 {
@@ -7569,6 +7875,7 @@ SfxSlotInfo FN_TABLE_SET_ROW_HEIGHT
     SlotName[ korean ] = "«‡ ≥Ù¿Ã";
     SlotName[ turkish ] = "Sat˝r y¸kseklii";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Altura de fila";
 };
 SfxSlotInfo FN_TABLE_SPLIT_CELLS
 {
@@ -7595,6 +7902,7 @@ SfxSlotInfo FN_TABLE_SPLIT_CELLS
     SlotName[ korean ] = "ºø ≥™¥©±‚";
     SlotName[ turkish ] = "H¸creyi bˆl";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Dividir celdas";
 };
 SfxSlotInfo FN_TABLE_SPLIT_TABLE
 {
@@ -7621,6 +7929,7 @@ SfxSlotInfo FN_TABLE_SPLIT_TABLE
     SlotName[ korean ] = "«• ≥™¥©±‚";
     SlotName[ turkish ] = "Tabloyu bˆl";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Dividir tabla";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
 {
@@ -7647,6 +7956,7 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
     SlotName[ korean ] = "«•°°∫∏»£ «ÿ¡¶";
     SlotName[ turkish ] = "Tablo korumas˝n˝ kald˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desproteger tabla";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY_CELLS
 {
@@ -7673,6 +7983,7 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY_CELLS
     SlotName[ korean ] = "ºø ∫∏»£ «ÿ¡¶";
     SlotName[ turkish ] = "H¸cre korumas˝n˝ kald˝r";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desproteger celdas";
 };
 SfxSlotInfo FN_TABLE_VERT_BOTTOM
 {
@@ -7699,6 +8010,7 @@ SfxSlotInfo FN_TABLE_VERT_BOTTOM
     SlotName[ korean ] = "æ∆∑°";
     SlotName[ turkish ] = "Altta";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Abajo";
 };
 SfxSlotInfo FN_TABLE_VERT_CENTER
 {
@@ -7725,6 +8037,7 @@ SfxSlotInfo FN_TABLE_VERT_CENTER
     SlotName[ korean ] = "∞°øÓµ• (ºˆ¡˜ )";
     SlotName[ turkish ] = "Ortalanm˝˛ (dikey)";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Centrado (vertical)";
 };
 SfxSlotInfo FN_TABLE_VERT_NONE
 {
@@ -7751,6 +8064,7 @@ SfxSlotInfo FN_TABLE_VERT_NONE
     SlotName[ korean ] = "¿ß";
     SlotName[ turkish ] = "‹stte";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Arriba";
 };
 SfxSlotInfo FN_THESAURUS_DLG
 {
@@ -7777,6 +8091,7 @@ SfxSlotInfo FN_THESAURUS_DLG
     SlotName[ korean ] = "µø¿«æÓ ªÁ¿¸";
     SlotName[ turkish ] = "E˛anlaml˝lar";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "SinÛnimos";
 };
 SfxSlotInfo FN_TO_FOOTER
 {
@@ -7803,6 +8118,7 @@ SfxSlotInfo FN_TO_FOOTER
     SlotName[ korean ] = "πŸ¥⁄±€∑Œ";
     SlotName[ turkish ] = "Altbilgi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al pie de p·gina";
 };
 SfxSlotInfo FN_TO_HEADER
 {
@@ -7829,6 +8145,7 @@ SfxSlotInfo FN_TO_HEADER
     SlotName[ korean ] = "∏”∏Æ±€∑Œ";
     SlotName[ turkish ] = "‹stbilgi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ir al encabezamiento";
 };
 SfxSlotInfo FN_TOOL_ANKER
 {
@@ -7855,6 +8172,7 @@ SfxSlotInfo FN_TOOL_ANKER
     SlotName[ korean ] = "∞Ì¡§¿ßƒ° ∫Ø∞Ê";
     SlotName[ turkish ] = "Sabitleme t¸r¸n¸ dei˛tir";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Cambiar ancla";
 };
 SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
@@ -7881,6 +8199,7 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName[ korean ] = "πÆ¿⁄ø° ¿ßƒ°∞Ì¡§";
     SlotName[ turkish ] = "Karaktere sabitle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anclar al car·cter";
 };
 SfxSlotInfo FN_TOOL_ANKER_CHAR
 {
@@ -7907,6 +8226,7 @@ SfxSlotInfo FN_TOOL_ANKER_CHAR
     SlotName[ korean ] = "πÆ¿⁄ø° ¿ßƒ°∞Ì¡§";
     SlotName[ turkish ] = "Karaktere sabitle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anclar al car·cter";
 };
 SfxSlotInfo FN_TOOL_ANKER_FRAME
 {
@@ -7933,6 +8253,7 @@ SfxSlotInfo FN_TOOL_ANKER_FRAME
     SlotName[ korean ] = "«¡∑π¿”ø° ¿ßƒ°∞Ì¡§";
     SlotName[ turkish ] = "«erÁeveye sabitle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anclar al marco";
 };
 SfxSlotInfo FN_TOOL_ANKER_PAGE
 {
@@ -7959,6 +8280,7 @@ SfxSlotInfo FN_TOOL_ANKER_PAGE
     SlotName[ korean ] = "¬  ¿ßƒ°∞Ì¡§";
     SlotName[ turkish ] = "Sayfaya sabitle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anclar a la p·gina";
 };
 SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
 {
@@ -7985,6 +8307,7 @@ SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
     SlotName[ korean ] = "¥‹∂Ùø° ¿ßƒ°∞Ì¡§";
     SlotName[ turkish ] = "Paragrafa sabitle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anclar en el p·rrafo";
 };
 SfxSlotInfo FN_TOOL_GROUP
 {
@@ -8011,6 +8334,7 @@ SfxSlotInfo FN_TOOL_GROUP
     SlotName[ korean ] = "±◊∑Ï";
     SlotName[ turkish ] = "Grup";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Agrupar";
 };
 SfxSlotInfo FN_TOOL_HIERARCHIE
 {
@@ -8037,6 +8361,7 @@ SfxSlotInfo FN_TOOL_HIERARCHIE
     SlotName[ korean ] = "¿ßƒ° ∫Ø∞Ê";
     SlotName[ turkish ] = "Konum dei˛tir";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Cambiar posiciÛn";
 };
 SfxSlotInfo FN_TOOL_HMIRROR
 {
@@ -8063,6 +8388,7 @@ SfxSlotInfo FN_TOOL_HMIRROR
     SlotName[ korean ] = "ºˆ∆Ú ¥Îƒ™";
     SlotName[ turkish ] = "Yatay yans˝t";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Reflejar horizontalmente";
 };
 SfxSlotInfo FN_TOOL_UNGROUP
 {
@@ -8089,6 +8415,7 @@ SfxSlotInfo FN_TOOL_UNGROUP
     SlotName[ korean ] = "±◊∑Ï «ÿ√º";
     SlotName[ turkish ] = "Grubu Áˆz";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Desagrupar";
 };
 SfxSlotInfo FN_TOOL_VMIRROR
 {
@@ -8115,6 +8442,7 @@ SfxSlotInfo FN_TOOL_VMIRROR
     SlotName[ korean ] = "ºˆ¡˜ ¥Îƒ™";
     SlotName[ turkish ] = "Dikey yans˝t";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Reflejar verticalmente";
 };
 SfxSlotInfo FN_UNDERLINE_DOUBLE
 {
@@ -8141,6 +8469,7 @@ SfxSlotInfo FN_UNDERLINE_DOUBLE
     SlotName[ korean ] = "¿Ã¡ﬂ πÿ¡Ÿ";
     SlotName[ turkish ] = "«ift Áizgi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Subrayado doble";
 };
 SfxSlotInfo FN_UPDATE_ALL
 {
@@ -8157,7 +8486,7 @@ SfxSlotInfo FN_UPDATE_ALL
     SlotName[ swedish ] = "Uppdatera allt";
     SlotName[ polish ] = "Aktualizuj wszystko";
     SlotName[ portuguese_brazilian ] = "UpdateAll";
-    SlotName[ japanese ] = "Ç∑Ç◊ÇƒÇçXêV";
+    SlotName[ japanese ] = "Ç∑Ç◊ÇƒçXêV";
     SlotName[ chinese_simplified ] = "»´≤ø∏¸–¬";
     SlotName[ chinese_traditional ] = "•˛≥°ßÛ∑s";
     SlotName[ arabic ] = " ÕœÌÀ «·ﬂ·";
@@ -8167,6 +8496,7 @@ SfxSlotInfo FN_UPDATE_ALL
     SlotName[ korean ] = "∏µŒ æ˜µ•¿Ã∆Æ";
     SlotName[ turkish ] = "T¸m¸n¸ g¸ncelle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Actualizar todo";
 };
 SfxSlotInfo FN_UPDATE_ALL_LINKS
 {
@@ -8193,6 +8523,7 @@ SfxSlotInfo FN_UPDATE_ALL_LINKS
     SlotName[ korean ] = "∏µÁ ø¨∞· æ˜µ•¿Ã∆Æ";
     SlotName[ turkish ] = "Balant˝lar˝ g¸ncelle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Actualizar vÌnculos";
 };
 SfxSlotInfo FN_UPDATE_CUR_TOX
 {
@@ -8219,6 +8550,7 @@ SfxSlotInfo FN_UPDATE_CUR_TOX
     SlotName[ korean ] = "ªˆ¿Œ æ˜µ•¿Ã∆Æ";
     SlotName[ turkish ] = "Dizini g¸ncelle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Actualizar Ìndice";
 };
 SfxSlotInfo FN_EDIT_CURRENT_TOX
 {
@@ -8236,13 +8568,14 @@ SfxSlotInfo FN_EDIT_CURRENT_TOX
     SlotName[ danish ] = "Rediger indeks";
     SlotName[ polish ] = "Edytuj indeks";
     SlotName[ portuguese_brazilian ] = "Edit index";
-    SlotName[ japanese ] = "ñ⁄éü•çıà¯ÇÃï“èW";
+    SlotName[ japanese ] = "ñ⁄éü•Ç∆çıà¯ÇÃï“èW";
     SlotName[ korean ] = "ªˆ¿Œ ∆Ì¡˝";
     SlotName[ chinese_simplified ] = "±‡º≠ƒø¬º";
     SlotName[ chinese_traditional ] = "ΩsøË•ÿø˝";
     SlotName[ arabic ] = " Õ—Ì— ›Â—”";
     SlotName[ turkish ] = "Dizini d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar Ìndice";
 };
 SfxSlotInfo FN_UPDATE_FIELDS
 {
@@ -8269,6 +8602,7 @@ SfxSlotInfo FN_UPDATE_FIELDS
     SlotName[ korean ] = "« µÂ æ˜µ•¿Ã∆Æ";
     SlotName[ turkish ] = "Alanlar˝ g¸ncelle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Actualizar campos";
 };
 SfxSlotInfo FN_UPDATE_INPUTFIELDS
 {
@@ -8295,6 +8629,7 @@ SfxSlotInfo FN_UPDATE_INPUTFIELDS
     SlotName[ korean ] = "¿‘∑¬« µÂ æ˜µ•¿Ã∆Æ";
     SlotName[ turkish ] = "Giri˛ alanlar˝n˝ g¸ncelle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Actualizar campos para entradas";
 };
 SfxSlotInfo FN_UPDATE_TOX
 {
@@ -8321,6 +8656,7 @@ SfxSlotInfo FN_UPDATE_TOX
     SlotName[ korean ] = "ªˆ¿Œ æ˜µ•¿Ã∆Æ";
     SlotName[ turkish ] = "Dizinleri g¸ncelle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Actualizar Ìndices";
 };
 SfxSlotInfo FN_VIEW_BOUNDS
 {
@@ -8347,6 +8683,7 @@ SfxSlotInfo FN_VIEW_BOUNDS
     SlotName[ korean ] = "≈ÿΩ∫∆Æ ∞Ê∞Ëº±";
     SlotName[ turkish ] = "Metin s˝n˝rlar˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "LÌmites del texto";
 };
 SfxSlotInfo FN_VIEW_FIELDNAME
 {
@@ -8373,6 +8710,7 @@ SfxSlotInfo FN_VIEW_FIELDNAME
     SlotName[ korean ] = "« µÂ ¿Ã∏ß ≥™≈∏≥ª±‚/º˚±‚±‚";
     SlotName[ turkish ] = "Alan adlar˝n˝ gˆr¸nt¸le/gizle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Mostrar/ocultar nombre de campos";
 };
 SfxSlotInfo FN_VIEW_FIELDS
 {
@@ -8399,6 +8737,7 @@ SfxSlotInfo FN_VIEW_FIELDS
     SlotName[ korean ] = "« µÂ∏Ì∑…";
     SlotName[ turkish ] = "Alan ˆeleri";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Campos";
 };
 SfxSlotInfo FN_VIEW_GRAPHIC
 {
@@ -8422,6 +8761,7 @@ SfxSlotInfo FN_VIEW_GRAPHIC
     SlotName[ chinese_traditional ] = "≈„•‹©Œ¡Ù§JπœßŒ";
     SlotName[ turkish ] = "Grafik";
     SlotName[ arabic ] = "≈ŸÂ«—/≈Œ›«¡ «·’Ê—…";
+    SlotName[ catalan ] = "Imagen";
 };
 SfxSlotInfo FN_VIEW_HIDDEN_PARA
 {
@@ -8431,7 +8771,7 @@ SfxSlotInfo FN_VIEW_HIDDEN_PARA
     SlotName[ portuguese ] = "Par·grafos ocultos";
     SlotName[ russian ] = "—Í˚Ú˚Â ‡·Á‡ˆ˚";
     SlotName[ dutch ] = "Verborgen alinea¥s";
-    SlotName[ french ] = "Afficher paragraphes masquÈs";
+    SlotName[ french ] = "Paragraphes masquÈs";
     SlotName[ spanish ] = "P·rrafos ocultos";
     SlotName[ italian ] = "Paragrafi nascosti";
     SlotName[ danish ] = "Skjulte afsnit";
@@ -8448,6 +8788,7 @@ SfxSlotInfo FN_VIEW_HIDDEN_PARA
     SlotName[ korean ] = "º˚∞‹¡¯ ¥‹∂Ù";
     SlotName[ turkish ] = "Gizli paragraflar";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "P·rrafos ocultos";
 };
 SfxSlotInfo FN_VIEW_MARKS
 {
@@ -8474,6 +8815,7 @@ SfxSlotInfo FN_VIEW_MARKS
     SlotName[ korean ] = "∏∂ƒø";
     SlotName[ turkish ] = "BelirteÁler";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Marcas";
 };
 SfxSlotInfo FN_VIEW_META_CHARS
 {
@@ -8497,6 +8839,7 @@ SfxSlotInfo FN_VIEW_META_CHARS
     SlotName[ chinese_traditional ] = "≈„•‹©Œ¡Ù§J±±®Ó≤≈∏π";
     SlotName[ turkish ] = "Denetim karakterleri";
     SlotName[ arabic ] = "≈ŸÂ«—/≈Œ›«¡ «·√Õ—› «· Ì ·«  ıÿ»⁄";
+    SlotName[ catalan ] = "Caracteres no imprimibles";
 };
 SfxSlotInfo FN_VIEW_TABLEGRID
 {
@@ -8523,6 +8866,7 @@ SfxSlotInfo FN_VIEW_TABLEGRID
     SlotName[ korean ] = "«• ∞Ê∞Ëº±";
     SlotName[ turkish ] = "Tablo s˝n˝rlar˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "LÌmites de la tabla";
 };
 SfxSlotInfo FN_VLINEAL
 {
@@ -8549,6 +8893,7 @@ SfxSlotInfo FN_VLINEAL
     SlotName[ korean ] = "ºˆ¡˜ ¥´±›¿⁄";
     SlotName[ turkish ] = "Dikey cetvel";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Regla vertical";
 };
 SfxSlotInfo FN_VSCROLLBAR
 {
@@ -8575,6 +8920,7 @@ SfxSlotInfo FN_VSCROLLBAR
     SlotName[ korean ] = "ºˆ¡˜ Ω∫≈©∑— πŸ";
     SlotName[ turkish ] = "Dikey kayd˝rma Áubuu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Barra de desplazamiento vertical";
 };
 SfxSlotInfo FN_WRAP_ANCHOR_ONLY
 {
@@ -8601,6 +8947,7 @@ SfxSlotInfo FN_WRAP_ANCHOR_ONLY
     SlotName[ korean ] = "πÆ¿⁄ø≠°°πËƒ°£¨√π ¥‹∂Ù";
     SlotName[ turkish ] = "›lk paragrafta metin da˝l˝m˝";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Ajuste del primer p·rrafo";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
 {
@@ -8627,6 +8974,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
     SlotName[ korean ] = "πÆ¿⁄πË∞Ê";
     SlotName[ turkish ] = "Vurgu";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Fondo de car·cter";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 {
@@ -8653,6 +9001,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     SlotName[ korean ] = "πÆ¿⁄πË∞Ê£≠√§øÏ±‚";
     SlotName[ turkish ] = "Vurgu renk doldurma";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Fondo de car·cter";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
 {
@@ -8679,6 +9028,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
     SlotName[ korean ] = "±€≤√ªˆ£≠√§øÏ±‚";
     SlotName[ turkish ] = "Yaz˝tipi rengi doldurma";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Color de relleno del car·cter";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR2
 {
@@ -8705,6 +9055,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR2
     SlotName[ korean ] = "±€≤√ ªˆ";
     SlotName[ turkish ] = "Yaz˝tipi rengi";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Color del car·cter";
 };
 SfxSlotInfo SID_TEMPLATE_LOAD
 {
@@ -8731,6 +9082,7 @@ SfxSlotInfo SID_TEMPLATE_LOAD
     SlotName[ korean ] = "¿Ø«¸ ∑ŒµÂ";
     SlotName[ turkish ] = "ﬁablonlar˝ y¸kle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Cargar estilos";
 };
 SfxSlotInfo FN_INSERT_COLUMN_SECTION
 {
@@ -8755,6 +9107,7 @@ SfxSlotInfo FN_INSERT_COLUMN_SECTION
     SlotName[ arabic ] = "≈œ—«Ã ‰ÿ«ﬁ";
     SlotName[ turkish ] = "Bˆl¸m ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar ·rea";
 };
 SfxSlotInfo FN_FORMAT_COLUMN
 {
@@ -8779,6 +9132,7 @@ SfxSlotInfo FN_FORMAT_COLUMN
     SlotName[ arabic ] = "√⁄„œ…";
     SlotName[ turkish ] = "S¸tun";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Columnas";
 };
 SfxSlotInfo FN_INSERT_MULTI_TOX
 {
@@ -8798,12 +9152,13 @@ SfxSlotInfo FN_INSERT_MULTI_TOX
     SlotName[ danish ] = "IndsÊt indeks";
     SlotName[ polish ] = "Wstaw indeks";
     SlotName[ portuguese_brazilian ] = "Insert Table of";
-    SlotName[ japanese ] = "ñ⁄éü•çıà¯ÇÃë}ì¸";
+    SlotName[ japanese ] = "ñ⁄éüÇ∆çıà¯ÇÃë}ì¸";
     SlotName[ korean ] = "ªˆ¿Œª¿‘";
     SlotName[ chinese_simplified ] = "≤Â»Îƒø¬º";
     SlotName[ chinese_traditional ] = "¥°§J•ÿø˝";
     SlotName[ arabic ] = "≈œ—«Ã ›Â—”";
     SlotName[ turkish ] = "Dizin ekle";
+    SlotName[ catalan ] = "Insertar Ìndice";
 };
 SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
 {
@@ -8828,6 +9183,7 @@ SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
     SlotName[ arabic ] = "≈œ—«Ã ≈œŒ«· ›Ì ›Â—” «·„—«Ã⁄";
     SlotName[ turkish ] = "KaynakÁa giri˛i ekle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Insertar entrada de bibliografÌa";
 };
 
 SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
@@ -8853,6 +9209,7 @@ SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
     SlotName[ arabic ] = " Õ—Ì— ≈œŒ«· ›Ì ›Â—” «·„—«Ã⁄";
     SlotName[ turkish ] = "KaynakÁa giri˛ini d¸zenle";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Editar entrada de bibliografÌa";
 };
 
 SfxSlotInfo FN_REMOVE_CUR_TOX
@@ -8878,6 +9235,7 @@ SfxSlotInfo FN_REMOVE_CUR_TOX
     SlotName[ arabic ] = "Õ–› «·›Â—”";
     SlotName[ turkish ] = "Dizini sil";
     SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Eliminar Ìndice";
 };
 SfxSlotInfo FN_EDIT_HYPERLINK
 {
@@ -8901,6 +9259,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ chinese_traditional ] = "ΩsøË∂W≥sµ≤";
     SlotName[ arabic ] = " Õ—Ì— «·«— »«ÿ «· ‘⁄»Ì";
     SlotName[ turkish ] = "Hyperlink'i d¸zenle";
+    SlotName[ catalan ] = "Editar hiperenlace";
 };
 
 
