@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-12 10:02:34 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 07:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ IMPL_LINK( ListBox, ImplSelectHdl, void*, EMPTYARG )
         mpImplWin->Invalidate();
     }
 
-    if ( mpImplLB->IsSelectionChanged() || ( bPopup && !IsMultiSelectionEnabled() ) )
+    if ( ( !IsTravelSelect() || mpImplLB->IsSelectionChanged() ) || ( bPopup && !IsMultiSelectionEnabled() ) )
         Select();
 
     return 1;
