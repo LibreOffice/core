@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 12:59:36 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:54:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,28 @@ SHL1STDLIBS= \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(SALLIB)
+
+SHL2TARGET= smd$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB= smdimp
+SHL2VERSIONMAP= sm.map
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=		$(SHL2TARGET)
+
+SHL2STDLIBS= \
+            $(SFX2LIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB) \
+            $(VCLLIB) \
+            $(TOOLSLIB) \
+            $(UCBHELPERLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(SALLIB)
+
+SHL2DEPN=	makefile.mk
+SHL2VERSIONMAP= smd.map
+SHL2OBJS=   $(SLO)$/smdetect.obj \
+        $(SLO)$/detreg.obj
 
 SHL1DEPN=	makefile.mk
 SHL1LIBS=   $(SLB)$/starmath.lib
