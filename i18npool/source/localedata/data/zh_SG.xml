@@ -243,6 +243,7 @@
 </LC_FORMAT>
 <LC_COLLATION ref="zh_CN"/>
 <LC_SEARCH ref="zh_CN"/>
+<LC_INDEX ref="zh_CN"/>
 <LC_CALENDAR ref="zh_CN"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
