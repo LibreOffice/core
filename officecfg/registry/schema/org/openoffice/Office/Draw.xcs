@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:33:59 $
+ *  last change: $Author: nf $ $Date: 2003-07-14 08:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1555,31 +1555,31 @@
 						<desc xml:lang="th">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="hi-IN">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="x-comment">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
-					<label xml:lang="en-US">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="el">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="nl">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="fr">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="fi">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="cs">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="da">Don&amp;apos;t distort objects in curve</label>
+					<label xml:lang="en-US">Don&apos;t distort objects in curve</label>
+					<label xml:lang="el">Don&apos;t distort objects in curve</label>
+					<label xml:lang="nl">Don&apos;t distort objects in curve</label>
+					<label xml:lang="fr">Don&apos;t distort objects in curve</label>
+					<label xml:lang="fi">Don&apos;t distort objects in curve</label>
+					<label xml:lang="cs">Don&apos;t distort objects in curve</label>
+					<label xml:lang="da">Don&apos;t distort objects in curve</label>
 					<label xml:lang="zh-CN">设定成圆形：不变形</label>
-					<label xml:lang="zh-TW">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="ar">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="he">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="ca">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="pt">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="ru">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="es">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="it">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="sv">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="pl">Don&amp;apos;t distort objects in curve</label>
+					<label xml:lang="zh-TW">Don&apos;t distort objects in curve</label>
+					<label xml:lang="ar">Don&apos;t distort objects in curve</label>
+					<label xml:lang="he">Don&apos;t distort objects in curve</label>
+					<label xml:lang="ca">Don&apos;t distort objects in curve</label>
+					<label xml:lang="pt">Don&apos;t distort objects in curve</label>
+					<label xml:lang="ru">Don&apos;t distort objects in curve</label>
+					<label xml:lang="es">Don&apos;t distort objects in curve</label>
+					<label xml:lang="it">Don&apos;t distort objects in curve</label>
+					<label xml:lang="sv">Don&apos;t distort objects in curve</label>
+					<label xml:lang="pl">Don&apos;t distort objects in curve</label>
 					<label xml:lang="pt-BR">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="ja">円形にする、ゆがめない</label>
-					<label xml:lang="ko">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="tr">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="th">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="hi-IN">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="x-comment">Don&amp;apos;t distort objects in curve</label>
+					<label xml:lang="ko">Don&apos;t distort objects in curve</label>
+					<label xml:lang="tr">Don&apos;t distort objects in curve</label>
+					<label xml:lang="th">Don&apos;t distort objects in curve</label>
+					<label xml:lang="hi-IN">Don&apos;t distort objects in curve</label>
+					<label xml:lang="x-comment">Don&apos;t distort objects in curve</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2582,10 +2582,10 @@
 					<!-- UIHints: Tools - Options - Draw - Other - [Section] Compatibility -->
 					<info>
 						<author>AF</author>
-						<desc xml:lang="en-US">Indicates whether to use printer independent 
-                        metrics for document formatting (2) or to use metrics derived from the 
-                        current printer (1).  Refer to com::sun::star::document::PrinterIndependentLayout 
-                        for valid values.</desc> 
+						<desc xml:lang="en-US">Indicates whether to use printer independent
+                        metrics for document formatting (2) or to use metrics derived from the
+                        current printer (1).  Refer to com::sun::star::document::PrinterIndependentLayout
+                        for valid values.</desc>
 						<label xml:lang="en-US">Use printer independent metrics for document formatting</label>
 					</info>
 					<value>2</value>
