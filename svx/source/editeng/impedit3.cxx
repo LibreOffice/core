@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 18:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3501,7 +3501,7 @@ Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
     if ( !xBI.is() )
     {
         Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
+        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );
