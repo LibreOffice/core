@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 09:58:21 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@ IMPL_LINK( SvxLineBox, DelayHdl_Impl, Timer *, pTimer )
 
 void SvxLineBox::Select()
 {
+    // Call the parent's Select() member to trigger accessibility events.
+    LineLB::Select();
+
     if ( !IsTravelSelect() )
     {
         XLineStyle eXLS;
