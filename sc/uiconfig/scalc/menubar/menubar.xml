@@ -129,6 +129,7 @@
             <menu:menuitem menu:id=".uno:InsertRows" menu:helpid="26267" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertColumns" menu:helpid="26268" menu:label="" />
             <menu:menuitem menu:id=".uno:Insert" menu:helpid="26269" menu:label="" />
+            <menu:menuitem menu:id=".uno:InsertSheetFromFile" menu:helpid="26275" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertExternalDataSource" menu:helpid="26085" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertSymbol" menu:helpid="10503" menu:label="" />
             <menu:menuitem menu:id=".uno:HyperlinkDialog" menu:helpid="5678" menu:label="" />
