@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 13:40:59 $
+ *  last change: $Author: mt $ $Date: 2001-01-25 16:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,10 @@ void MyApp::Main()
     uno::Reference< beans::XPropertySet > xDlgPSet( xC, uno::UNO_QUERY );
     aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test-Dialog" ) );
     xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aValue );
+    aValue <<= (sal_Int32) 600;
+    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
+    aValue <<= (sal_Int32) 200;
+    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
 
     // Create a Dialog
     uno::Reference< awt::XControl > xDlg( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), uno::UNO_QUERY );
@@ -251,7 +255,7 @@ void MyApp::Main()
     aValue <<= (sal_Int32) 20;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
 
-//  xDlg->createPeer( xToolkit, NULL );
+    xDlg->createPeer( xToolkit, NULL );
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
     xD->execute();
 
