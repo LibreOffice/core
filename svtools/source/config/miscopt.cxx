@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:22:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ using namespace ::utl                   ;
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star;
 
 //_________________________________________________________________________________________________________________
 //  const
@@ -184,6 +185,12 @@ class SvtMiscOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
+
+        /** loads required data from the configuration. It's called in the constructor to
+         read all entries and form ::Notify to re-read changed settings
+
+         */
+        void Load( const Sequence< OUString >& rPropertyNames );
 
         /*-****************************************************************************************************//**
             @short      write changes to configuration
@@ -268,6 +275,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
+    Load( seqNames );
     Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
 
     // Safe impossible cases.
@@ -327,6 +335,63 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
         delete aList.Remove(n);
 }
 
+/*-- 25.02.2005 13:22:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
+                const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
+{
+    for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
+    {
+        if( aInternalPropertyNames[nProp] == rCompare )
+            return nProp;
+    }
+    return -1;
+}
+
+void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
+{
+    const uno::Sequence< ::rtl::OUString> aInternalPropertyNames( GetPropertyNames());
+    Sequence< Any > seqValues = GetProperties( rPropertyNames  );
+
+    // Safe impossible cases.
+    // We need values from ALL configuration keys.
+    // Follow assignment use order of values in relation to our list of key names!
+    DBG_ASSERT( !(rPropertyNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nI miss some values of configuration keys!\n" );
+
+    // Copy values from list in right order to ouer internal member.
+    sal_Int32 nPropertyCount = seqValues.getLength();
+    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    {
+        // Safe impossible cases.
+        // Check any for valid value.
+        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nInvalid property value detected!\n" );
+        switch( lcl_MapPropertyName(rPropertyNames[nProperty], aInternalPropertyNames) )
+        {
+            case PROPERTYHANDLE_PLUGINSENABLED      :   {
+                                                            if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_SYMBOLSET           :   {
+                                                            if( !(seqValues[nProperty] >>= m_nSymbolSet) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
+                                                            if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
+                                                            if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                        }
+                                                    break;
+        }
+    }
+}
+
 void SvtMiscOptions_Impl::AddListener( const Link& rLink )
 {
     aList.Insert( new Link( rLink ) );
@@ -375,46 +440,9 @@ void SvtMiscOptions_Impl::SetPluginsEnabled( sal_Bool bEnable )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
+void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
 {
-    // Use given list of updated properties to get his values from configuration directly!
-    Sequence< Any > seqValues = GetProperties( seqPropertyNames );
-    // Safe impossible cases.
-    // We need values from ALL notified configuration keys.
-    DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtMiscOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
-
-    // Step over list of property names and get right value from coreesponding value list to set it on internal members!
-    sal_Int32 nCount = seqPropertyNames.getLength();
-    for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
-    {
-        switch( nProperty )
-        {
-            case PROPERTYHANDLE_PLUGINSENABLED      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_SYMBOLSET           :   {
-                                                            if( !(seqValues[nProperty] >>= m_nSymbolSet) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
-                                                            if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
-                                                            }
-                                                    break;
-            default:
-                DBG_ERROR( "SvtMiscOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
-                break;
-        }
-    }
-
+    Load( rPropertyNames );
     CallListeners();
 }
 
