@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:34:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,8 @@ void ImportExcel8::Note( void )
 
     aIn >> nRow >> nCol >> nFlags >> nId;
 
-    USHORT nScTab = GetCurrScTab();
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCTAB nScTab = GetCurrScTab();
+    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
     {
         if( nId )
         {
@@ -250,11 +250,11 @@ void ImportExcel8::Note( void )
                     bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
                     ScPostIt aNote( pString->GetText() );
                     aNote.SetShown( bVisible );
-                    GetDoc().SetNote( nCol, nRow, nScTab, aNote );
+                    GetDoc().SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nScTab, aNote );
                     if( bVisible )
                     {
                         ScDocument* pDoc = GetDocPtr();
-                        ScDetectiveFunc( pDoc, nScTab ).ShowComment( nCol, nRow, TRUE );
+                        ScDetectiveFunc( pDoc, nScTab ).ShowComment( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), TRUE );
                     }
                 }
             }
@@ -299,7 +299,7 @@ void ImportExcel8::Dconref( void )
         aUrl.Erase();
     }
     ScfTools::ConvertToScSheetName( aTabName );
-    pCurrPivotCache->SetSource( nC1, nR1, nC2, nR2, aUrl, aTabName, bSelf );
+    pCurrPivotCache->SetSource( static_cast<SCCOL>(nC1), static_cast<SCROW>(nR1), static_cast<SCCOL>(nC2), static_cast<SCROW>(nR2), aUrl, aTabName, bSelf );
 }
 
 
@@ -333,7 +333,7 @@ void ImportExcel8::Boundsheet( void )
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
         pD->SetVisible( nBdshtTab, FALSE );
     else if( nFirstVisTab == 0xFFFF )
-        nFirstVisTab = nBdshtTab;       // first visible for WINDOW2 import
+        nFirstVisTab = static_cast<sal_uInt16>(nBdshtTab);       // first visible for WINDOW2 import
 
     pD->RenameTab( nBdshtTab, aName );
     nBdshtTab++;
@@ -367,15 +367,15 @@ void ImportExcel8::Cellmerging( void )
     while( nCount-- )
     {
         aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-        bTabTruncated |= (nRow1 > MAXROW) || (nRow2 > MAXROW) || (nCol1 > MAXCOL) || (nCol2 > MAXCOL);
-        if( (nRow1 <= MAXROW) && (nCol1 <= MAXCOL) )
+        bTabTruncated |= (nRow1 > static_cast<sal_uInt16>(MAXROW)) || (nRow2 > static_cast<sal_uInt16>(MAXROW)) || (nCol1 > static_cast<sal_uInt16>(MAXCOL)) || (nCol2 > static_cast<sal_uInt16>(MAXCOL));
+        if( (nRow1 <= static_cast<sal_uInt16>(MAXROW)) && (nCol1 <= static_cast<sal_uInt16>(MAXCOL)) )
         {
-            nRow2 = Min( nRow2, static_cast< UINT16 >( MAXROW ) );
-            nCol2 = Min( nCol2, static_cast< UINT16 >( MAXCOL ) );
-            GetXFIndexBuffer().SetMerge( nCol1, nRow1, nCol2, nRow2 );
+            nRow2 = Min( nRow2, static_cast<sal_uInt16>( MAXROW ) );
+            nCol2 = Min( nCol2, static_cast<sal_uInt16>( MAXCOL ) );
+            GetXFIndexBuffer().SetMerge( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1), static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2) );
         }
         else
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow1 > MAXROW ? nRow1 : nRow2, MAXROW);
+            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow1 > static_cast<sal_uInt16>(MAXROW) ? nRow1 : nRow2, MAXROW);
     }
 }
 
@@ -405,15 +405,15 @@ void ImportExcel8::Labelsst( void )
 
     aIn >> nRow >> nCol >> nXF >> nSst;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
     {
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
         ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF );
         if( pCell )
-            GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+            GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow) );
     }
     else
     {
@@ -430,7 +430,7 @@ void ImportExcel8::Rstring( void )
     UINT16 nRow, nCol, nXF;
     aIn >> nRow >> nCol >> nXF;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
     {
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
@@ -441,9 +441,9 @@ void ImportExcel8::Rstring( void )
 
         ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
         if( pCell )
-            GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+            GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow) );
     }
     else
     {
@@ -460,16 +460,16 @@ void ImportExcel8::Label( void )
     UINT16  nRow, nCol, nXF;
     aIn >> nRow >> nCol >> nXF;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
     {
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
         XclImpString aString( maStrm );
         ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
         if( pCell )
-            GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+            GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow) );
 
     }
     else
@@ -512,15 +512,15 @@ void ImportExcel8::Dimensions( void )
 
     if( nRowLast > MAXROW )
         nRowLast = MAXROW;
-    if( nColLast > MAXCOL )
-        nColLast = MAXCOL;
+    if( nColLast > static_cast<sal_uInt16>(MAXCOL) )
+        nColLast = static_cast<sal_uInt16>(MAXCOL);
     if( nRowFirst > nRowLast )
         nRowFirst = nRowLast;
     if( nColFirst > nColLast )
         nColFirst = nColLast;
 
     pColRowBuff->SetDimension(
-        ScRange( nColFirst, ( UINT16 ) nRowFirst, GetCurrScTab(), nColLast, ( UINT16 ) nRowLast, GetCurrScTab() ) );
+        ScRange( static_cast<SCCOL>(nColFirst), static_cast<SCROW>(nRowFirst), GetCurrScTab(), static_cast<SCCOL>(nColLast), static_cast<SCROW>(nRowLast), GetCurrScTab() ) );
 }
 
 
@@ -617,9 +617,9 @@ void ImportExcel8::ApplyEscherObjects()
                             {
                                 if( const XclEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
                                 {
-                                    bool bSkipObj = aPivotTabList.IsInPivotRange( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
+                                    bool bSkipObj = aPivotTabList.IsInPivotRange( static_cast<SCCOL>(pAnchor->mnLCol), static_cast<SCROW>(pAnchor->mnTRow), pAnchor->mnScTab );
                                     if( !bSkipObj && pExcRoot->pAutoFilterBuffer )
-                                        bSkipObj = pExcRoot->pAutoFilterBuffer->HasDropDown( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
+                                        bSkipObj = pExcRoot->pAutoFilterBuffer->HasDropDown( static_cast<SCCOL>(pAnchor->mnLCol), static_cast<SCROW>(pAnchor->mnTRow), pAnchor->mnScTab );
                                     if( bSkipObj )
                                         pEscherObj->SetSkip();
                                 }
@@ -645,7 +645,7 @@ void ImportExcel8::EndAllChartObjects( void )
 
 void ImportExcel8::SXView( void )
 {
-    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8)GetCurrScTab() );
+    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, GetCurrScTab() );
     aPivotTabList.Append( pCurrPivTab );
 }
 
@@ -827,7 +827,7 @@ void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
 void XclImpAutoFilterData::SetCellAttribs()
 {
     bHasDropDown = TRUE;
-    for ( UINT16 nCol = StartCol(); nCol <= EndCol(); nCol++ )
+    for ( SCCOL nCol = StartCol(); nCol <= EndCol(); nCol++ )
     {
         INT16 nFlag = ((ScMergeFlagAttr*) pExcRoot->pDoc->
             GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ))->GetValue();
@@ -858,7 +858,7 @@ void XclImpAutoFilterData::InsertQueryParam()
     }
 }
 
-BOOL XclImpAutoFilterData::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab ) const
+BOOL XclImpAutoFilterData::HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     return (bHasDropDown && (StartCol() <= nCol) && (nCol <= EndCol()) &&
             (nRow == StartRow()) && (nTab == Tab()));
@@ -874,7 +874,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     BOOL            bTopOfTop10 = TRUEBOOL( nFlags & EXC_AFFLAG_TOP10TOP );
     BOOL            bPercent    = TRUEBOOL( nFlags & EXC_AFFLAG_TOP10PERC );
     UINT16          nCntOfTop10 = nFlags >> 7;
-    UINT16          nCount      = aParam.GetEntryCount();
+    SCSIZE          nCount      = aParam.GetEntryCount();
 
     if( bTop10 )
     {
@@ -883,7 +883,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
             aEntry.bDoQuery = TRUE;
             aEntry.bQueryByString = TRUE;
-            aEntry.nField = StartCol() + nCol;
+            aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
             aEntry.eOp = bTopOfTop10 ?
                 (bPercent ? SC_TOPPERC : SC_TOPVAL) : (bPercent ? SC_BOTPERC : SC_BOTVAL);
             aEntry.eConnect = SC_AND;
@@ -980,7 +980,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                 {
                     aEntry.bDoQuery = TRUE;
                     aEntry.bQueryByString = TRUE;
-                    aEntry.nField = StartCol() + nCol;
+                    aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
                     aEntry.eConnect = nE ? eConn : SC_AND;
                     nFirstEmpty++;
                 }
@@ -1024,7 +1024,7 @@ void XclImpAutoFilterData::Apply( const BOOL bUseUnNamed )
         InsertQueryParam();
 
         BYTE nFlags;
-        for( UINT16 nRow = StartRow(); nRow <= EndRow(); nRow++ )
+        for( SCROW nRow = StartRow(); nRow <= EndRow(); nRow++ )
         {
             nFlags = pExcRoot->pDoc->GetRowFlags( nRow, Tab() );
             if( nFlags & CR_HIDDEN )
@@ -1130,7 +1130,7 @@ void XclImpAutoFilterBuffer::Apply()
         pData->Apply(UseUnNamed());
 }
 
-XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( UINT16 nTab )
+XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )
 {
     for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
         if( pData->Tab() == nTab )
@@ -1138,7 +1138,7 @@ XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( UINT16 nTab )
     return NULL;
 }
 
-BOOL XclImpAutoFilterBuffer::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab )
+BOOL XclImpAutoFilterBuffer::HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
         if( pData->HasDropDown( nCol, nRow, nTab ) )
