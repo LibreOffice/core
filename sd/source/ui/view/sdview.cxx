@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
+ *  last change: $Author: dl $ $Date: 2001-02-08 10:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,7 @@ BOOL SdView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         // UndoManager an der obersten Shell (SdDrawTextObjectBar) setzen
         Outliner* pOL = GetTextEditOutliner();
         SfxUndoManager& rUndoMgr = pOL->GetUndoManager();
+        rUndoMgr.Clear();
         SdViewShell* pViewShell = pDocSh->GetViewShell();
         DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
         if (pViewShell)
