@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:59:52 $
+ *  last change: $Author: er $ $Date: 2001-11-27 15:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,7 +959,8 @@ void ScFormulaCell::UpdateInsertTab(USHORT nTable)
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.MoveRelWrap();
             aComp2.UpdateInsertTab( nTable, FALSE );
-            // 13.05.96 16:30  warum DeleteTab nach InsertTab ?!?
+            // If the shared formula contained a named range/formula containing
+            // an absolute reference to a sheet, those have to be readjusted.
             aComp2.UpdateDeleteTab( nTable, FALSE, TRUE, bChanged );
             bCompile = TRUE;
         }
@@ -992,7 +993,8 @@ BOOL ScFormulaCell::UpdateDeleteTab(USHORT nTable, BOOL bIsMove)
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
             aComp2.UpdateDeleteTab( nTable, FALSE, FALSE, bChanged );
-            // 13.05.96 16:30  warum InsertTab nach DeleteTab ?!?
+            // If the shared formula contained a named range/formula containing
+            // an absolute reference to a sheet, those have to be readjusted.
             aComp2.UpdateInsertTab( nTable,TRUE );
             // bChanged kann beim letzten UpdateDeleteTab zurueckgesetzt worden sein
             bChanged = TRUE;
