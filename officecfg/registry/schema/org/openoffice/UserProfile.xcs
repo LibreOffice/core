@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:28:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 				<desc xml:lang="it">Contains user-related information, such as name and address.</desc>
 				<desc xml:lang="sv">Contains user-related information, such as name and address.</desc>
 				<desc xml:lang="pl">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="pt-BR">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="ja">Contains user-related information, such as name and address.</desc>
+				<desc xml:lang="pt-BR">Contém informações relacionadas ao usuário, tal como nome e endereço.</desc>
+				<desc xml:lang="ja">名前や住所など、ユーザーに関連する情報が含まれます。</desc>
 				<desc xml:lang="ko">Contains user-related information, such as name and address.</desc>
 				<desc xml:lang="tr">Contains user-related information, such as name and address.</desc>
 				<desc xml:lang="th">Contains user-related information, such as name and address.</desc>
@@ -118,8 +118,8 @@
 					<desc xml:lang="it">Specifies the name of the user&apos;s company.</desc>
 					<desc xml:lang="sv">Specifies the name of the user&apos;s company.</desc>
 					<desc xml:lang="pl">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="ja">Specifies the name of the user&apos;s company.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome da empresa do usuário.</desc>
+					<desc xml:lang="ja">ユーザーの会社名を指定します。</desc>
 					<desc xml:lang="ko">Specifies the name of the user&apos;s company.</desc>
 					<desc xml:lang="tr">Specifies the name of the user&apos;s company.</desc>
 					<desc xml:lang="th">Specifies the name of the user&apos;s company.</desc>
@@ -153,8 +153,8 @@
 					<desc xml:lang="it">Specifies the first name of the user.</desc>
 					<desc xml:lang="sv">Specifies the first name of the user.</desc>
 					<desc xml:lang="pl">Specifies the first name of the user.</desc>
-					<desc xml:lang="pt-BR">Specifies the first name of the user.</desc>
-					<desc xml:lang="ja">Specifies the first name of the user.</desc>
+					<desc xml:lang="pt-BR">Especifica o primeiro nome do usuário.</desc>
+					<desc xml:lang="ja">ユーザーの名を指定します。</desc>
 					<desc xml:lang="ko">Specifies the first name of the user.</desc>
 					<desc xml:lang="tr">Specifies the first name of the user.</desc>
 					<desc xml:lang="th">Specifies the first name of the user.</desc>
@@ -188,8 +188,8 @@
 					<desc xml:lang="it">Specifies the last name of the user.</desc>
 					<desc xml:lang="sv">Specifies the last name of the user.</desc>
 					<desc xml:lang="pl">Specifies the last name of the user.</desc>
-					<desc xml:lang="pt-BR">Specifies the last name of the user.</desc>
-					<desc xml:lang="ja">Specifies the last name of the user.</desc>
+					<desc xml:lang="pt-BR">Especifica o sobrenome do usuário.</desc>
+					<desc xml:lang="ja">ユーザーの姓を指定します。</desc>
 					<desc xml:lang="ko">Specifies the last name of the user.</desc>
 					<desc xml:lang="tr">Specifies the last name of the user.</desc>
 					<desc xml:lang="th">Specifies the last name of the user.</desc>
@@ -223,8 +223,8 @@
 					<desc xml:lang="it">Specifies the user&apos;s initials.</desc>
 					<desc xml:lang="sv">Specifies the user&apos;s initials.</desc>
 					<desc xml:lang="pl">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="pt-BR">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="ja">Specifies the user&apos;s initials.</desc>
+					<desc xml:lang="pt-BR">Especifica as iniciais do usuário.</desc>
+					<desc xml:lang="ja">ユーザーのイニシャルを指定します。</desc>
 					<desc xml:lang="ko">Specifies the user&apos;s initials.</desc>
 					<desc xml:lang="tr">Specifies the user&apos;s initials.</desc>
 					<desc xml:lang="th">Specifies the user&apos;s initials.</desc>
@@ -258,8 +258,8 @@
 					<desc xml:lang="it">Specifies the street where the use lives.</desc>
 					<desc xml:lang="sv">Specifies the street where the use lives.</desc>
 					<desc xml:lang="pl">Specifies the street where the use lives.</desc>
-					<desc xml:lang="pt-BR">Specifies the street where the use lives.</desc>
-					<desc xml:lang="ja">Specifies the street where the use lives.</desc>
+					<desc xml:lang="pt-BR">Especifica a rua onde o usuário vive</desc>
+					<desc xml:lang="ja">ユーザーの住所の番地を指定します。</desc>
 					<desc xml:lang="ko">Specifies the street where the use lives.</desc>
 					<desc xml:lang="tr">Specifies the street where the use lives.</desc>
 					<desc xml:lang="th">Specifies the street where the use lives.</desc>
@@ -293,8 +293,8 @@
 					<desc xml:lang="it">Specifies the city where the user lives.</desc>
 					<desc xml:lang="sv">Specifies the city where the user lives.</desc>
 					<desc xml:lang="pl">Specifies the city where the user lives.</desc>
-					<desc xml:lang="pt-BR">Specifies the city where the user lives.</desc>
-					<desc xml:lang="ja">Specifies the city where the user lives.</desc>
+					<desc xml:lang="pt-BR">Especifica a cidade onde o usuário vive</desc>
+					<desc xml:lang="ja">ユーザーの住所の市町村を指定します。</desc>
 					<desc xml:lang="ko">Specifies the city where the user lives.</desc>
 					<desc xml:lang="tr">Specifies the city where the user lives.</desc>
 					<desc xml:lang="th">Specifies the city where the user lives.</desc>
@@ -328,8 +328,8 @@
 					<desc xml:lang="it">Specifies the state where the user lives.</desc>
 					<desc xml:lang="sv">Specifies the state where the user lives.</desc>
 					<desc xml:lang="pl">Specifies the state where the user lives.</desc>
-					<desc xml:lang="pt-BR">Specifies the state where the user lives.</desc>
-					<desc xml:lang="ja">Specifies the state where the user lives.</desc>
+					<desc xml:lang="pt-BR">Especifica o estado onde o usuário vive</desc>
+					<desc xml:lang="ja">ユーザーの住所の州を指定します。</desc>
 					<desc xml:lang="ko">Specifies the state where the user lives.</desc>
 					<desc xml:lang="tr">Specifies the state where the user lives.</desc>
 					<desc xml:lang="th">Specifies the state where the user lives.</desc>
@@ -363,8 +363,8 @@
 					<desc xml:lang="it">Specifies the user&apos;s ZIP-code.</desc>
 					<desc xml:lang="sv">Specifies the user&apos;s ZIP-code.</desc>
 					<desc xml:lang="pl">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="pt-BR">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="ja">Specifies the user&apos;s ZIP-code.</desc>
+					<desc xml:lang="pt-BR">Especifica o CEP do usuário</desc>
+					<desc xml:lang="ja">ユーザーの郵便番号を指定します。</desc>
 					<desc xml:lang="ko">Specifies the user&apos;s ZIP-code.</desc>
 					<desc xml:lang="tr">Specifies the user&apos;s ZIP-code.</desc>
 					<desc xml:lang="th">Specifies the user&apos;s ZIP-code.</desc>
@@ -398,8 +398,8 @@
 					<desc xml:lang="it">Specifies the country where the user lives.</desc>
 					<desc xml:lang="sv">Specifies the country where the user lives.</desc>
 					<desc xml:lang="pl">Specifies the country where the user lives.</desc>
-					<desc xml:lang="pt-BR">Specifies the country where the user lives.</desc>
-					<desc xml:lang="ja">Specifies the country where the user lives.</desc>
+					<desc xml:lang="pt-BR">Especifica o país onde o usuário vive</desc>
+					<desc xml:lang="ja">ユーザーの住所の国名を指定します。</desc>
 					<desc xml:lang="ko">Specifies the country where the user lives.</desc>
 					<desc xml:lang="tr">Specifies the country where the user lives.</desc>
 					<desc xml:lang="th">Specifies the country where the user lives.</desc>
@@ -433,8 +433,8 @@
 					<desc xml:lang="it">Specifies the user&apos;s title.</desc>
 					<desc xml:lang="sv">Specifies the user&apos;s title.</desc>
 					<desc xml:lang="pl">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="pt-BR">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="ja">Specifies the user&apos;s title.</desc>
+					<desc xml:lang="pt-BR">Especifica o título do usuário</desc>
+					<desc xml:lang="ja">ユーザーの肩書きを指定します。</desc>
 					<desc xml:lang="ko">Specifies the user&apos;s title.</desc>
 					<desc xml:lang="tr">Specifies the user&apos;s title.</desc>
 					<desc xml:lang="th">Specifies the user&apos;s title.</desc>
@@ -468,8 +468,8 @@
 					<desc xml:lang="it">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 					<desc xml:lang="sv">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 					<desc xml:lang="pl">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="pt-BR">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="ja">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
+					<desc xml:lang="pt-BR">Especifica o cargo do usuário. Este campo só permanece para que haja compatibilidade com versões anteriores. Ele não está definido para ldap orgPerson.</desc>
+					<desc xml:lang="ja">ユーザーの部署を指定します。このフィールドは、下位互換性のためにのみ存在します。LDAP orgPerson に対して定義されていません。</desc>
 					<desc xml:lang="ko">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 					<desc xml:lang="tr">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 					<desc xml:lang="th">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
@@ -503,8 +503,8 @@
 					<desc xml:lang="it">Specifies the user&apos;s private telephone number.</desc>
 					<desc xml:lang="sv">Specifies the user&apos;s private telephone number.</desc>
 					<desc xml:lang="pl">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="pt-BR">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="ja">Specifies the user&apos;s private telephone number.</desc>
+					<desc xml:lang="pt-BR">Especifica o número de telefone pessoal do usuário.</desc>
+					<desc xml:lang="ja">ユーザーの私用の電話番号を指定します。</desc>
 					<desc xml:lang="ko">Specifies the user&apos;s private telephone number.</desc>
 					<desc xml:lang="tr">Specifies the user&apos;s private telephone number.</desc>
 					<desc xml:lang="th">Specifies the user&apos;s private telephone number.</desc>
@@ -538,8 +538,8 @@
 					<desc xml:lang="it">Specifies the user&apos;s telephone number at work.</desc>
 					<desc xml:lang="sv">Specifies the user&apos;s telephone number at work.</desc>
 					<desc xml:lang="pl">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="pt-BR">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="ja">Specifies the user&apos;s telephone number at work.</desc>
+					<desc xml:lang="pt-BR">Especifica o número de telefone comercial do usuário.</desc>
+					<desc xml:lang="ja">ユーザーの仕事用の電話番号を指定します。</desc>
 					<desc xml:lang="ko">Specifies the user&apos;s telephone number at work.</desc>
 					<desc xml:lang="tr">Specifies the user&apos;s telephone number at work.</desc>
 					<desc xml:lang="th">Specifies the user&apos;s telephone number at work.</desc>
@@ -573,8 +573,8 @@
 					<desc xml:lang="it">Specifies the user&apos;s fax number.</desc>
 					<desc xml:lang="sv">Specifies the user&apos;s fax number.</desc>
 					<desc xml:lang="pl">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="pt-BR">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="ja">Specifies the user&apos;s fax number.</desc>
+					<desc xml:lang="pt-BR">Especifica o número de fax do usuário.</desc>
+					<desc xml:lang="ja">ユーザーの Fax 番号を指定します。</desc>
 					<desc xml:lang="ko">Specifies the user&apos;s fax number.</desc>
 					<desc xml:lang="tr">Specifies the user&apos;s fax number.</desc>
 					<desc xml:lang="th">Specifies the user&apos;s fax number.</desc>
@@ -608,8 +608,8 @@
 					<desc xml:lang="it">Specifies the user&apos;s e-mail address.</desc>
 					<desc xml:lang="sv">Specifies the user&apos;s e-mail address.</desc>
 					<desc xml:lang="pl">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="pt-BR">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="ja">Specifies the user&apos;s e-mail address.</desc>
+					<desc xml:lang="pt-BR">Especifica o e-mail do usuário.</desc>
+					<desc xml:lang="ja">ユーザーの E-mail アドレスを指定します。</desc>
 					<desc xml:lang="ko">Specifies the user&apos;s e-mail address.</desc>
 					<desc xml:lang="tr">Specifies the user&apos;s e-mail address.</desc>
 					<desc xml:lang="th">Specifies the user&apos;s e-mail address.</desc>
@@ -643,8 +643,8 @@
 					<desc xml:lang="it">This field is kept for backwards compatibility.</desc>
 					<desc xml:lang="sv">This field is kept for backwards compatibility.</desc>
 					<desc xml:lang="pl">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="pt-BR">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="ja">This field is kept for backwards compatibility.</desc>
+					<desc xml:lang="pt-BR">Este campo é mantido para compatibilidade com versões anteriores.</desc>
+					<desc xml:lang="ja">下位互換性のためにのみ存続しているフィールドです。</desc>
 					<desc xml:lang="ko">This field is kept for backwards compatibility.</desc>
 					<desc xml:lang="tr">This field is kept for backwards compatibility.</desc>
 					<desc xml:lang="th">This field is kept for backwards compatibility.</desc>
@@ -656,6 +656,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
