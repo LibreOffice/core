@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:32:09 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
     {
         Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( this );
-        SfxMediumList*  pMedList = SFX_APP()->InsertDocumentsDialog( 0, SwDocShell::Factory());
+        SfxMediumList*  pMedList = SFX_APP()->InsertDocumentsDialog( 0, String::CreateFromAscii("swriter"));
         if(pMedList)
         {
             aFileNames.realloc(pMedList->Count());
