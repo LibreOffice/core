@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:08:00 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 12:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,13 +194,13 @@ OEditControl::~OEditControl()
 
 // XChangeBroadcaster
 //------------------------------------------------------------------------------
-void OEditControl::addChangeListener(const Reference<XChangeListener>& l)
+void OEditControl::addChangeListener(const Reference<XChangeListener>& l) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aChangeListeners.addInterface( l );
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::removeChangeListener(const Reference<XChangeListener>& l)
+void OEditControl::removeChangeListener(const Reference<XChangeListener>& l) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aChangeListeners.removeInterface( l );
 }
@@ -236,7 +236,7 @@ void OEditControl::disposing(const EventObject& Source) throw( RuntimeException 
 
 // XFocusListener
 //------------------------------------------------------------------------------
-void OEditControl::focusGained( const FocusEvent& e )
+void OEditControl::focusGained( const FocusEvent& e ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
@@ -244,7 +244,7 @@ void OEditControl::focusGained( const FocusEvent& e )
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::focusLost( const FocusEvent& e )
+void OEditControl::focusLost( const FocusEvent& e ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
@@ -262,7 +262,7 @@ void OEditControl::focusLost( const FocusEvent& e )
 
 // XKeyListener
 //------------------------------------------------------------------------------
-void OEditControl::keyPressed(const KeyEvent& e)
+void OEditControl::keyPressed(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
@@ -319,7 +319,7 @@ void OEditControl::keyPressed(const KeyEvent& e)
 }
 
 //------------------------------------------------------------------------------
-void OEditControl::keyReleased(const KeyEvent& e)
+void OEditControl::keyReleased(const KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -394,7 +394,7 @@ void OEditModel::disposing()
 
 // XPersistObject
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEditModel::getServiceName()
+::rtl::OUString SAL_CALL OEditModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_EDIT;  // old (non-sun) name for compatibility !
 }
@@ -450,7 +450,7 @@ void OEditModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     Any aCurrentText;
     // bin ich gerade loaded und habe dazu zeitweilig die MaxTextLen umgesetzt ?
@@ -479,7 +479,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 }
 
 //------------------------------------------------------------------------------
-void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OEditBaseModel::read(_rxInStream);
 
