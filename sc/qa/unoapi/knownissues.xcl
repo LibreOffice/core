@@ -9,25 +9,11 @@ sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAcces
 sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleEventBroadcaster
 sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleContext
 
-### 111172 ###
-sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleEditableText
-sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleSelection
-sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleText
-sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleComponent
-sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleEventBroadcaster
-sc.AccessibleEditableTextPara_PreviewNote::com::sun::star::accessibility::XAccessibleContext
-
 ### 111635 ###
 sc.AccessibleEditableTextPara_PreviewCell::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### 114126 ###
 sc.AccessibleEditableTextPara_HeaderFooter::com::sun::star::accessibility::XAccessibleEditableText
-
-### 114134 ###
-sc.ScDrawPageObj::com::sun::star::drawing::XShapeGrouper
-
-### 114181 ###
-sc.ScNamedRangesObj::com::sun::star::sheet::XNamedRanges
 
 ### 114207 ###
 sc.ScTableSheetObj::com::sun::star::sheet::XCellRangeData
@@ -44,10 +30,6 @@ sc.ScPageObj::com::sun::star::drawing::XShapeGrouper
 
 ### 114501 ###
 sc.ScCellRangesObj::com::sun::star::container::XNameReplace
-
-### 114504 ###
-sc.ScAccessiblePreviewCell::com::sun::star::accessibility::XAccessibleComponent
-sc.ScAccessiblePreviewHeaderCell::com::sun::star::accessibility::XAccessibleComponent
 
 ### 88202 ###
 sc.ScCellTextCursor::com::sun::star::text::XTextRange
@@ -67,47 +49,21 @@ sc.ScModelObj::com::sun::star::document::XEventBroadcaster
 
 ### i22941 ###
 sc.ScAccessibleCsvCell::com::sun::star::accessibility::XAccessibleText
-sc.ScAccessibleCsvCell::com::sun::star::accessibility::XAccessibleComponent
-sc.ScAccessibleCsvCell::com::sun::star::accessibility::XAccessibleContext
 sc.ScAccessibleCsvGrid::com::sun::star::accessibility::XAccessibleTable
 sc.ScAccessibleCsvRuler::com::sun::star::accessibility::XAccessibleText
 
 ### i22948 ###
 sc.ScAreaLinkObj::com::sun::star::util::XRefreshable
 
-### i22951 ###
-sc.ScDataPilotTableObj::com::sun::star::sheet::XDataPilotTable
-
-### i22953 ###
-sc.ScHeaderFooterTextObj::com::sun::star::text::Text
-
 ### i22973 ###
-sc.ScModelObj::com::sun::star::util::XProtectable
 sc.ScModelObj::com::sun::star::view::XPrintJobBroadcaster
-sc.ScModelObj::com::sun::star::document::XViewDataSupplier
-sc.ScModelObj::com::sun::star::sheet::XConsolidatable
-sc.ScModelObj::com::sun::star::sheet::XCalculatable
-sc.ScModelObj::com::sun::star::document::XDocumentInfoSupplier
-sc.ScModelObj::com::sun::star::sheet::XDocumentAuditing
-sc.ScModelObj::com::sun::star::sheet::XGoalSeek
-sc.ScTableSheetObj::com::sun::star::util::XProtectable
+sc.ScModelObj::com::sun::star::document::XEventBroadcaster
 
 ### i23086 ###
-sc.ScTableSheetObj::com::sun::star::drawing::XDrawPageSupplier
-sc.ScTableSheetObj::com::sun::star::sheet::XSheetOutline
 sc.ScTableSheetObj::com::sun::star::sheet::XPrintAreas
-sc.ScTableSheetObj::com::sun::star::sheet::XSheetAuditing
-sc.ScTableSheetObj::com::sun::star::sheet::XScenario
-sc.ScTableSheetObj::com::sun::star::sheet::XSheetLinkable
-
-### i23094 ###
-sc.ScTableSheetObj::com::sun::star::util::XSearchable
 
 ### i23111 ###
 sc.ScTabViewObj::com::sun::star::sheet::XRangeSelection
-
-### i23155 ###
-sc.ScTabViewObj::com::sun::star::view::XControlAccess
 
 ### i23199 ###
 sc.ScTabViewObj::com::sun::star::view::XSelectionSupplier
@@ -120,15 +76,52 @@ sc.ScAutoFormatsObj::com::sun::star::container::XNameReplace
 sc.ScStyleFamilyObj::com::sun::star::container::XNameReplace
 sc.ScTableSheetsObj::com::sun::star::container::XNameReplace
 
-### i26072 ###
-sc.ScAccessibleDocument::com::sun::star::accessibility::XAccessibleSelection
+### i27523 ###
+sc.AccessibleEditableTextPara_PreviewCell::com::sun::star::accessibility::XAccessibleText
+
+### i30805 ###
+sc.ScDataPilotFieldObj::com::sun::star::beans::XPropertySet
+
+### i30807 ###
+sc.ScIndexEnumeration_TableRowsEnumeration::com::sun::star::container::XEnumeration
+
+### i30808 ###
+sc.ScTableRowsObj::com::sun::star::container::XIndexAccess
+
+### i31378 ###
+sc.ScDocumentConfiguration::com::sun::star::document::Settings
+
+### i33747 ###
+sc.ScTableRowObj::com::sun::star::table::TableRow
+
+### i33869 ###
+sc.ScHeaderFooterTextObj::com::sun::star::text::XTextRangeMover
+
+### i34456 ###
+sc.ScModelObj::com::sun::star::view::XPrintJobBroadcaster
+
+### i34878 ###
+sc.ScTableSheetObj::com::sun::star::sheet::XPrintAreas::getTitleColumns()
+sc.ScTableSheetObj::com::sun::star::sheet::XPrintAreas::getTitleRows()
+
+### i38676 ###
+sc.ScTableSheetObj::com::sun::star::sheet::XCellSeries
 
 ### i39210 ###
 sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
-sc.ScDataPilotFieldObj::com::sun::star::beans::XPropertySet
 
 ### i39212 ###
 sc.ScDataPilotItemObj::com::sun::star::sheet::DataPilotItem
 
-### i38676 ###
-sc.ScTableSheetObj::com::sun::star::sheet::XCellSeries
+### i41543 ###
+sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
+
+### i41544 ###
+sc.ScDataPilotItemObj::com::sun::star::sheet::DataPilotItem
+
+### i42542 ###
+sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
+
+### i43931 ###
+sc.XMLImporter::com::sun::star::xml::sax::XDocumentHandler
+sc.XMLContentImporter::com::sun::star::xml::sax::XDocumentHandler
