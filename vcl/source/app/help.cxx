@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-29 17:38:25 $
+ *  last change: $Author: ssa $ $Date: 2001-10-30 10:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,6 +617,9 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     Size        aSz = pHelpWin->GetSizePixel();
     Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
     aPos = pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( aPos );
+    // get mouse screen coords
+    Point mPos( pHelpWin->GetParent()->GetPointerPosPixel() );
+    mPos = pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( mPos );
 
     if ( nHelpWinStyle == HELPWINSTYLE_QUICK )
     {
@@ -634,8 +637,6 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     {
         // If it's the mouse position, move the window slightly
         // so the mouse pointer does not cover it
-        Point mPos( pHelpWin->GetParent()->GetPointerPosPixel() );
-        mPos = pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( mPos );
         if ( aPos == mPos )
         {
             aPos.X() += 12;
@@ -690,6 +691,20 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
         aPos.Y() = aScreenRect.Top();
     else if ( ( aPos.Y() + aSz.Height() ) > aScreenRect.Bottom() )
         aPos.Y() = aScreenRect.Bottom() - aSz.Height();
+
+    // the popup must not appear under the mouse
+    // otherwise it would directly be closed due to a focus change...
+    Rectangle aHelpRect( aPos, aSz );
+    if( aHelpRect.IsInside( mPos ) )
+    {
+        Point delta(2,2);
+        Point pSize( aSz.Width(), aSz.Height() );
+        Point pTest( mPos - pSize - delta );
+        if( pTest.X() > aScreenRect.Left() &&  pTest.Y() > aScreenRect.Top() )
+            aPos = pTest;
+        else
+            aPos = mPos + delta;
+    }
 
     aPos = pHelpWin->GetParent()->AbsoluteScreenToOutputPixel( aPos );
     pHelpWin->SetPosPixel( aPos );
