@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:44:28 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 15:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #endif
 //CHINA001 #include <svx/numpages.hxx>
 #include <svx/numitem.hxx>
-#include <svx/tabstpge.hxx>
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
@@ -289,14 +288,14 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     {
         SvtCJKOptions aCJKOptions;
         if( aCJKOptions.IsAsianTypographyEnabled() && (ePO != PO_BACKGROUND ) )
-            AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+            AddTabPage( RID_SVXPAGE_PARA_ASIAN );
         else
             RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
 
         if( ePO != PO_BACKGROUND )
         {
-            AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,0);
-            AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
+            AddTabPage( RID_SVXPAGE_TABULATOR );
         }
         else
         {
