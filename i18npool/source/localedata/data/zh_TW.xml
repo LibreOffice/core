@@ -554,6 +554,10 @@
 <quarter4Word>第4季</quarter4Word>
 <aboveWord>上面</aboveWord>
 <belowWord>下面</belowWord>
+<quarter1Abbreviation>1季</quarter1Abbreviation>
+<quarter2Abbreviation>2季</quarter2Abbreviation>
+<quarter3Abbreviation>3季</quarter3Abbreviation>
+<quarter4Abbreviation>4季</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>
