@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:45:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _CODEMAKER_REGISTRY_HXX_
 #include    <codemaker/registry.hxx>
 #endif
-
-RegistryTypeReaderLoader & getRegistryTypeReaderLoader();
-
 
 typedef ::std::list< Registry* >    RegistryList;
 
