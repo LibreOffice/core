@@ -30,7 +30,7 @@ USE_APP1DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -57,7 +57,7 @@ APP1LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP1RES) \
     $(APP1ICON) $(APP1DEPN) $(USE_APP1DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -73,6 +73,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(STDLIB) $(STDLIB1)` \
     $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -81,16 +82,20 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
+.IF "$(STLPORT4)"!="NO_STLPORT4"
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF
 .ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
@@ -244,7 +249,7 @@ USE_APP2DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -271,7 +276,7 @@ APP2LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP2RES) \
     $(APP2ICON) $(APP2DEPN) $(USE_APP2DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -287,6 +292,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(STDLIB) $(STDLIB2)` \
     $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -295,12 +301,14 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -458,7 +466,7 @@ USE_APP3DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -485,7 +493,7 @@ APP3LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP3RES) \
     $(APP3ICON) $(APP3DEPN) $(USE_APP3DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -501,6 +509,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(STDLIB) $(STDLIB3)` \
     $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -509,12 +518,14 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -672,7 +683,7 @@ USE_APP4DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -699,7 +710,7 @@ APP4LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP4RES) \
     $(APP4ICON) $(APP4DEPN) $(USE_APP4DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -715,6 +726,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(STDLIB) $(STDLIB4)` \
     $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -723,12 +735,14 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -886,7 +900,7 @@ USE_APP5DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -913,7 +927,7 @@ APP5LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP5RES) \
     $(APP5ICON) $(APP5DEPN) $(USE_APP5DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -929,6 +943,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(STDLIB) $(STDLIB5)` \
     $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -937,12 +952,14 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -1100,7 +1117,7 @@ USE_APP6DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -1127,7 +1144,7 @@ APP6LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP6RES) \
     $(APP6ICON) $(APP6DEPN) $(USE_APP6DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -1143,6 +1160,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(STDLIB) $(STDLIB6)` \
     $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1151,12 +1169,14 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -1314,7 +1334,7 @@ USE_APP7DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -1341,7 +1361,7 @@ APP7LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP7RES) \
     $(APP7ICON) $(APP7DEPN) $(USE_APP7DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -1357,6 +1377,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(STDLIB) $(STDLIB7)` \
     $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1365,12 +1386,14 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -1528,7 +1551,7 @@ USE_APP8DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -1555,7 +1578,7 @@ APP8LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP8RES) \
     $(APP8ICON) $(APP8DEPN) $(USE_APP8DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -1571,6 +1594,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(STDLIB) $(STDLIB8)` \
     $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1579,12 +1603,14 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -1742,7 +1768,7 @@ USE_APP9DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -1769,7 +1795,7 @@ APP9LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP9RES) \
     $(APP9ICON) $(APP9DEPN) $(USE_APP9DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -1785,6 +1811,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(STDLIB) $(STDLIB9)` \
     $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1793,12 +1820,14 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
@@ -1956,7 +1985,7 @@ USE_APP10DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -1983,7 +2012,7 @@ APP10LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP10RES) \
     $(APP10ICON) $(APP10DEPN) $(USE_APP10DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -1999,6 +2028,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(STDLIB) $(STDLIB10)` \
     $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -2007,12 +2037,14 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
