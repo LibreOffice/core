@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: oj $ $Date: 2002-03-26 09:20:37 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:02:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ TARGET=uicontrols
 
 # ... resource files ............................
 
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         TableGrantCtrl.src	\
         undosqledit.src		\
         tabletree.src		\
