@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:55:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ spanish ] = "Eliminar párrafos vacíos" ;
         Text [ french ] = "Supprimer les paragraphes vides" ;
         Text [ dutch ] = "Lege alinea´s verwijderen" ;
-        Text [ portuguese_brazilian ] = "Leere Absätze entfernen" ;
+        Text [ portuguese_brazilian ] = "Leere Abs?tze entfernen" ;
         Text [ portuguese ] = "Remover parágrafos vazios" ;
         Text[ chinese_simplified ] = "É¾³ı¿Õ°×¶ÎÂä";
         Text[ russian ] = "Óäàëèòü ïóñòûå àáçàöû";
@@ -126,7 +126,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ ENGLISH ] = "REplace two Capital Letters at the WOrd beginning" ;
         Text [ norwegian ] = "ERstatt to Store Bokstaver i begynnelsen av ORd" ;
         Text [ italian ] = "COrreggi la doppia MAiuscola ad inizio PArola" ;
-        Text [ portuguese_brazilian ] = "SUbstituir duas Letras Maiosculas no in¡cio da Palavra" ;
+        Text [ portuguese_brazilian ] = "SUbstituir duas Letras Maiosculas no in?cio da Palavra" ;
         Text [ portuguese ] = "COrrigir duas maiúsculas no INício da palavra" ;
         Text [ finnish ] = "Korjaa KAksi ISoa ALkukirjainta" ;
         Text [ danish ] = "REt andet bogstav i ORd til lille" ;
@@ -154,7 +154,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ ENGLISH ] = "Start each Sentence with a Capital Letter" ;
         Text [ norwegian ] = "Begynn hver Setning med Stor Bokstav" ;
         Text [ italian ] = "Inizia ogni frase con la maiuscola" ;
-        Text [ portuguese_brazilian ] = "Iniciar cada Sentença com uma Letra Maioscula" ;
+        Text [ portuguese_brazilian ] = "Iniciar cada Senten?a com uma Letra Maioscula" ;
         Text [ portuguese ] = "Iniciar todas as frases com uma letra maiúscula" ;
         Text [ finnish ] = "Muuta virkkeen ensimmäinen kirjain isoksi kirjaimeksi" ;
         Text [ danish ] = "Første bogstav i sætninger med stort" ;
@@ -181,7 +181,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ ENGLISH ] = "Replace \"Standard\" Quotes by %1typographical%2 Quotes" ;
         Text [ norwegian ] = "Erstatt \"Standard\" +++Quotes med %1typografiske%2 +++Quotes" ;
         Text [ italian ] = "Sostituisci virgolette \"Standard\" con virgolette %1tipografiche%2" ;
-        Text [ portuguese_brazilian ] = "Substituir Citaçäes\"Padrao\" por Citaçäes \\%1typogr ficoal\\%2" ;
+        Text [ portuguese_brazilian ] = "Substituir Cita??es\"Padrao\" por Cita??es \\%1typogr?ficoal\\%2" ;
         Text [ portuguese ] = "Substituir aspas \"padrão\" por aspas %1tipográficas%2" ;
         Text [ finnish ] = "Korvaa \"tavalliset\" lainausmerkit %1mukautetuilla%2 lainausmerkeillä" ;
         Text [ danish ] = "Erstat \"lige\" anførselstegn med %1typografiske%2" ;
@@ -268,7 +268,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ english_us ] = "Automatic _underline_";
         Text[ chinese_simplified ] = "×Ô¶¯_ÏÂ»®Ïß_";
         Text[ russian ] = "Àâòîìàòè÷åñêîå _ïîä÷åğêèâàíèå_";
-        Text[ polish ] = "Automatyczne _podkreœlenie_";
+        Text[ polish ] = "Automatyczne _podkre?lenie_";
         Text[ japanese ] = "©“®_‰ºü_";
         Text[ chinese_traditional ] = "¦Û°Ê¥[©³½u";
         Text[ arabic ] = "_ÎØ ÊÍÊí_ ÊáŞÇÆíÇğ";
@@ -315,7 +315,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ italian ] = "Sostituisci 1/2 ... con ½" ;
         Text [ spanish ] = "Reemplazar 1/2 ... por ½ ..." ;
         Text [ dutch ] = "1/2 ... vervangen door ½ ..." ;
-        Text [ portuguese_brazilian ] = "1/2 ... gegen ½ ... ersetzen" ;
+        Text [ portuguese_brazilian ] = "1/2 ... gegen ? ... ersetzen" ;
         Text [ french ] = "Remplacer 1/2 ... par ½ ..." ;
         Text [ portuguese ] = "Substituir 1/2 ... por ½ ..." ;
         Text[ chinese_simplified ] = "ÓÃ ?... ¸üÌæ 1/2 ...";
@@ -372,7 +372,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese ] = "Substituir hífens" ;
         Text[ chinese_simplified ] = "¸üÌæÆÆÕÛºÅ";
         Text[ russian ] = "Çàìåíèòü òèğå";
-        Text[ polish ] = "Zamieniaj myœlniki";
+        Text[ polish ] = "Zamieniaj my?lniki";
         Text[ japanese ] = "ÀŞ¯¼­‚É’uŠ·";
         Text[ chinese_traditional ] = "¥N´À¯}§é¸¹";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÔõÑóØ";
@@ -667,7 +667,7 @@ String STR_EVENT_START_INS_GLOSSARY
     TEXT[ danish ] = "Inden input af AutoTekst";
     TEXT[ swedish ] = "Innan AutoText infogas";
     TEXT[ polish ] = "Wstaw przed autotekstem";
-    TEXT[ portuguese_brazilian ] = "Vor AutoText einfügen";
+    TEXT[ portuguese_brazilian ] = "Vor AutoText einf?en";
     TEXT[ japanese ] = "“ü—Íx‰‡‚ğ‘}“ü‚·‚é‘O";
     TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ Àü¿¡";
     TEXT[ chinese_simplified ] = "ÔÚ²åÈë×Ô¶¯Í¼ÎÄ¼¯Ö®Ç°";
@@ -694,7 +694,7 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ danish ] = "Efter input af AutoTekst";
     TEXT[ swedish ] = "När AutoText har infogats";
     TEXT[ polish ] = "Wstaw za autotekstem";
-    TEXT[ portuguese_brazilian ] = "Nach AutoText einfügen";
+    TEXT[ portuguese_brazilian ] = "Nach AutoText einf?en";
     TEXT[ japanese ] = "“ü—Íx‰‡‚ğ‘}“ü‚µ‚½Œã";
     TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ ÈÄ¿¡";
     TEXT[ chinese_simplified ] = "ÔÚ²åÈë×Ô¶¯Í¼ÎÄ¼¯Ö®ºó";
@@ -718,7 +718,7 @@ String STR_EVENT_MOUSEOVER_OBJECT
     Text [ swedish ] = "Mus över objekt" ;
     Text [ danish ] = "Mus over objekt" ;
     Text [ portuguese ] = "Rato sobre objecto" ;
-    Text [ portuguese_brazilian ] = "Maus über Objekt" ;
+    Text [ portuguese_brazilian ] = "Maus ?er Objekt" ;
     Text[ chinese_simplified ] = "ÖÃÊó±êÓÚ¶ÔÏóÖ®ÉÏ";
     Text[ russian ] = "Ìûøü íàä îáúåêòîì";
     Text[ polish ] = "Mysz nad obiektem";
@@ -745,7 +745,7 @@ String STR_EVENT_MOUSECLICK_OBJECT
     Text [ swedish ] = "Utför hyperlänk" ;
     Text [ danish ] = "Udfør hyperlink" ;
     Text [ portuguese ] = "Activar hiperligação" ;
-    Text [ portuguese_brazilian ] = "Hyperlink auslösen" ;
+    Text [ portuguese_brazilian ] = "Hyperlink ausl?en" ;
     Text[ chinese_simplified ] = "Æô¶¯³¬Á´½Ó";
     Text[ russian ] = "Âûïîëíèòü ãèïåğññûëêó";
     Text[ polish ] = "Wykonaj hiper³¹cze";
@@ -772,7 +772,7 @@ String STR_EVENT_MOUSEOUT_OBJECT
     Text [ spanish ] = "El ratón abandona el objeto" ;
     Text [ french ] = "Souris quitte l'objet" ;
     Text [ portuguese ] = "Rato abandona objecto" ;
-    Text [ portuguese_brazilian ] = "Maus verläßt Objekt" ;
+    Text [ portuguese_brazilian ] = "Maus verl??t Objekt" ;
     Text[ chinese_simplified ] = "Êó±êÀë¿ª¶ÔÏó";
     Text[ russian ] = "Ìûøü âíå îáúåêòà";
     Text[ polish ] = "Mysz opuszcza obiekt";
@@ -801,7 +801,7 @@ String STR_EVENT_IMAGE_LOAD
     Text [ portuguese_brazilian ] = "Grafik laden erfolgreich" ;
     Text[ chinese_simplified ] = "×°ÈëÍ¼ĞÎ³É¹¦";
     Text[ russian ] = "Óñïåøíàÿ çàãğóçêà ãğàôèêè ";
-    Text[ polish ] = "Pomyœlne za³adowanie grafiki";
+    Text[ polish ] = "Pomy?lne za³adowanie grafiki";
     Text[ japanese ] = "}‚Ì“Ç‚İ‚İŠ®—¹";
     Text[ chinese_traditional ] = "¸ü¤J¹Ï§Î¦¨¥\\";
     Text[ arabic ] = "ÊÍãíá ÇáÕæÑÉ ÈäÌÇÍ";
@@ -923,7 +923,7 @@ String STR_EVENT_FRM_RESIZE
     TEXT [ English ] = "Resize Frane" ;
     Text [ portuguese ] = "Redimensionar moldura" ;
     Text [ english_us ] = "Resize frame" ;
-    Text [ portuguese_brazilian ] = "Rahmengröße verändern" ;
+    Text [ portuguese_brazilian ] = "Rahmengr?e ver?ndern" ;
     Text [ swedish ] = "Ändra ramstorlek" ;
     Text [ danish ] = "Modificer rammestørrelse" ;
     Text [ italian ] = "Cambia dimensione cornice" ;
@@ -958,7 +958,7 @@ String STR_EVENT_FRM_MOVE
     Text [ dutch ] = "Kader verplaatsen" ;
     Text[ chinese_simplified ] = "ÒÆ¶¯¿ò";
     Text[ russian ] = "Ïåğåìåñòèòü ğàìêó";
-    Text[ polish ] = "Przenieœ ramkê";
+    Text[ polish ] = "Przenie? ramkê";
     Text[ japanese ] = "˜g‚ÌˆÚ“®";
     Text[ chinese_traditional ] = "²¾°Ê®Ø";
     Text[ arabic ] = "ÅÒÇÍÉ ÇáßÇÏÑ";
@@ -982,7 +982,7 @@ String STR_CONTENT_TYPE_OUTLINE
     Text [ swedish ] = "Överskrifter" ;
     Text [ danish ] = "Overskrifter" ;
     Text [ portuguese ] = "Títulos" ;
-    Text [ portuguese_brazilian ] = "Überschriften" ;
+    Text [ portuguese_brazilian ] = "?berschriften" ;
     Text[ chinese_simplified ] = "±êÌâ";
     Text[ russian ] = "Çàãîëîâêè";
     Text[ polish ] = "Tytu³y";
@@ -1295,7 +1295,7 @@ String STR_CONTENT_TYPE_SINGLE_OUTLINE
     Text [ swedish ] = "Överskrift" ;
     Text [ danish ] = "Overskrift" ;
     Text [ portuguese ] = "Título" ;
-    Text [ portuguese_brazilian ] = "Überschrift" ;
+    Text [ portuguese_brazilian ] = "?berschrift" ;
     Text[ chinese_simplified ] = "±êÌâ";
     Text[ russian ] = "Çàãîëîâîê";
     Text[ polish ] = "Tytu³";
@@ -1529,7 +1529,7 @@ String STR_CONTENT_TYPE_SINGLE_INDEX
     Text [ swedish ] = "Förteckning" ;
     Text [ danish ] = "Indeks" ;
     Text [ portuguese ] = "Índice" ;
-    Text [ portuguese_brazilian ] = "Verzeichniß" ;
+    Text [ portuguese_brazilian ] = "Verzeichni?" ;
     Text[ chinese_simplified ] = "Ä¿Â¼";
     Text[ russian ] = "Óêàçàòåëü";
     Text[ polish ] = "Indeks";
@@ -1735,7 +1735,7 @@ String STR_HYPH_TITLE
     Text[ italian ] = "Sillabazione";
     Text[ danish ] = "Orddeling";
     Text[ swedish ] = "Avstavning";
-    Text[ polish ] = "Dzielenie wyrazów na sylaby";
+    Text[ polish ] = "Dzielenie wyrazów";
     Text[ portuguese_brazilian ] = "Hyphenation";
     Text[ japanese ] = "Ê²ÌÈ°¼®İ";
     Text[ korean ] = "ÇÏÀÌÇÂ ³Ö±â";
