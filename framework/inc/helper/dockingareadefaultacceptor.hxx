@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockingareadefaultacceptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:34:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XDOCKINGAREAACCEPTOR_HPP_
-#include <drafts/com/sun/star/ui/XDockingAreaAcceptor.hpp>
+#ifndef _COM_SUN_STAR_UI_XDOCKINGAREAACCEPTOR_HPP_
+#include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -124,7 +124,7 @@ namespace framework{
 
 
 class DockingAreaDefaultAcceptor    :   public css::lang::XTypeProvider                             ,
-                                        public ::drafts::com::sun::star::ui::XDockingAreaAcceptor   ,
+                                        public ::com::sun::star::ui::XDockingAreaAcceptor   ,
                                         private ThreadHelpBase                                      ,
                                         public ::cppu::OWeakObject
 {
