@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScViewPaneObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-12-11 12:13:56 $
+ *  last change:$Date: 2004-01-05 19:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public class ScViewPaneObj extends TestCase {
         log.println("disposing xSpreadsheetDocument");
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     /**
