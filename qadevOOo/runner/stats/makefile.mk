@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2003-02-05 16:40:13 $
+#   last change: $Date: 2003-03-25 15:34:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,8 @@ JAVAFILES =	\
             SimpleOutProducer.java	\
             SimpleFileOutProducer.java	\
             SimpleLogWriter.java    \
-            Summarizer.java
+            Summarizer.java \
+            InternalLogWriter.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
