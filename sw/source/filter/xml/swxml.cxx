@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-26 15:11:18 $
+ *  last change: $Author: dvo $ $Date: 2001-07-30 11:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,30 +519,22 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
-    // create XStatusIndicator
+    // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
-    if ( !SW_MOD()->IsEmbeddedLoadSave() )
+    if (pDocSh->GetMedium())
     {
-        uno::Reference<frame::XModel> xModel( pDocSh->GetModel() );
-        if (xModel.is())
+        SfxItemSet* pSet = pDocSh->GetMedium()->GetItemSet();
+        if (pSet)
         {
-            uno::Reference<frame::XController> xController(
-                xModel->getCurrentController());
-            if( xController.is())
+            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+            if (pItem)
             {
-                uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-                if( xFrame.is())
-                {
-                    uno::Reference<task::XStatusIndicatorFactory> xFactory(
-                        xFrame, uno::UNO_QUERY );
-                    if( xFactory.is())
-                    {
-                        xStatusIndicator = xFactory->createStatusIndicator();
-                    }
-                }
+                pItem->GetValue() >>= xStatusIndicator;
             }
         }
     }
+
 
     // set progress range and start status indicator
     sal_Int32 nProgressRange(1000000);
