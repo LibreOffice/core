@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-28 12:00:30 $
+ *  last change: $Author: fme $ $Date: 2002-06-11 13:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ class SwLayoutModeModifier
 public:
     SwLayoutModeModifier( const OutputDevice& rOutp );
     ~SwLayoutModeModifier();
-    Modify( sal_Bool bChgToRTL );
+    void Modify( sal_Bool bChgToRTL );
 };
 
 #endif
