@@ -165,8 +165,8 @@ namespace configmgr
     }
 
     // ---------------------------------------------------------------------------------------
-    static sal_Unicode kComponentSeparator = '.' ;
-    static sal_Unicode kPathSeparator = '/' ;
+    static const sal_Unicode kComponentSeparator = '.' ;
+    static const sal_Unicode kPathSeparator = '/' ;
 
     rtl::OUString componentToPath(const rtl::OUString& aComponent)
     {
@@ -174,6 +174,24 @@ namespace configmgr
 
         retCode.append(kPathSeparator) ;
         retCode.append(aComponent.replace(kComponentSeparator, kPathSeparator)) ;
+        return retCode.makeStringAndClear() ;
+    }
+    //------------------------------------------------------------------------------
+    rtl::OUString layeridToPath(const rtl::OUString& aLayerId)
+    {
+        sal_Int32 const nSplit = aLayerId.indexOf(k_cLayerIdSeparator);
+        if (nSplit < 0)
+            return componentToPath(aLayerId);
+
+        rtl::OUString const aComponent= aLayerId.copy(0,nSplit);
+        rtl::OUString const aSubid = aLayerId.copy(nSplit+1);
+
+        rtl::OUStringBuffer retCode ;
+
+        retCode.append(kPathSeparator) ;
+        retCode.append(aComponent.replace(kComponentSeparator, kPathSeparator)) ;
+        retCode.append(kPathSeparator) ;
+        retCode.append(aSubid) ;
         return retCode.makeStringAndClear() ;
     }
     //------------------------------------------------------------------------------
