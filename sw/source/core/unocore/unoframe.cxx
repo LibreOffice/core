@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:20:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,10 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX //autogen
 #include <svx/frmdiritem.hxx>
+#endif
+// DVO, OD 01.10.2003 #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
 #endif
 
 #include <so3/outplace.hxx>
@@ -677,6 +681,16 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
         SvXMLAttrContainerItem aAttr(RES_UNKNOWNATR_CONTAINER);
         aAttr.PutValue(*pUnknown, 0);
         rToSet.Put(aAttr);
+    }
+
+    // DVO, OD 01.10.2003 #i18732#
+    uno::Any* pFollowTextFlow = 0;
+    GetProperty(RES_FOLLOW_TEXT_FLOW, 0, pFollowTextFlow);
+    if ( pFollowTextFlow )
+    {
+        SwFmtFollowTextFlow aFmtFollowTextFlow;
+        aFmtFollowTextFlow.PutValue(*pFollowTextFlow, 0);
+        rToSet.Put(aFmtFollowTextFlow);
     }
 
     return bRet;
