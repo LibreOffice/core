@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:54 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 13:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ class SwMSConvertControls;
 class WW8OleMaps;
 class SvStorageRef;
 struct WW8_PdAttrDesc;
+class SvxBrushItem;
 
 #define WWFL_ULSPACE_LIKE_SWG   0x00000001
 #define WWFL_NO_GRAF            0x00000080
@@ -524,6 +525,8 @@ public:
     void WritePostItBegin( WW8Bytes* pO = 0 );
     short TrueFrameDirection(const SwFrmFmt &rFlyFmt) const;
     short GetCurrentPageDirection() const;
+    const SvxBrushItem* GetCurrentPageBgBrush() const;
+    const SvxBrushItem* TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const;
     void OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd );
     void OutWW8FlyFrm( const SwFrmFmt& rFlyFrmFmt, const Point& rNdTopLeft );
     void OutFlyFrms( const SwCntntNode& rNode );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:53 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 13:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,11 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
 
+#if 0
     if (SFX_ITEM_SET == rFmt.GetItemState(RES_BACKGROUND, true, &pItem))
+#else
+    if (pItem = rWrt.TrueFrameBgBrush(rFmt))
+#endif
     {
         if( ((SvxBrushItem*)pItem)->GetGraphic() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:53 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 13:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,11 +1195,11 @@ short SwWW8Writer::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
         {
             pItem = 0;
             const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
-            if( FLY_PAGE != pAnchor->GetAnchorId() &&
-                pAnchor->GetCntntAnchor() )
+            if (FLY_PAGE != pAnchor->GetAnchorId() &&
+                pAnchor->GetCntntAnchor())
             {
-                pFlyFmt = pAnchor->GetCntntAnchor()->nNode.
-                                    GetNode().GetFlyFmt();
+                pFlyFmt =
+                    pAnchor->GetCntntAnchor()->nNode.GetNode().GetFlyFmt();
             }
             else
                 pFlyFmt = 0;
@@ -1216,6 +1216,65 @@ short SwWW8Writer::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
 
     ASSERT(nRet != FRMDIR_ENVIRONMENT, "leaving with environment direction");
     return nRet;
+}
+
+const SvxBrushItem* SwWW8Writer::GetCurrentPageBgBrush() const
+{
+    const SwFrmFmt  &rFmt = pAktPageDesc
+                    ? pAktPageDesc->GetMaster()
+                    : pDoc->GetPageDesc(0).GetMaster();
+
+    const SfxPoolItem* pItem = 0;
+    //If not set, or "no fill", get real bg
+    SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
+
+    const SvxBrushItem* pRet = (const SvxBrushItem*)pItem;
+    if (SFX_ITEM_SET != eState || (!pRet->GetGraphic() &&
+        pRet->GetColor() == COL_TRANSPARENT))
+    {
+        pRet = (const SvxBrushItem*)
+            &pDoc->GetAttrPool().GetDefaultItem(RES_BACKGROUND);
+    }
+    return pRet;
+}
+
+const SvxBrushItem* SwWW8Writer::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
+{
+    const SwFrmFmt *pFlyFmt = &rFlyFmt;
+    const SvxBrushItem* pRet = 0;
+
+    while (pFlyFmt)
+    {
+        //If not set, or "no fill", get real bg
+        const SfxPoolItem* pItem = 0;
+        SfxItemState eState =
+            pFlyFmt->GetItemState(RES_BACKGROUND, true, &pItem);
+        pRet = (const SvxBrushItem*)pItem;
+        if (SFX_ITEM_SET != eState || (!pRet->GetGraphic() &&
+            pRet->GetColor() == COL_TRANSPARENT))
+        {
+            pRet = 0;
+            const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
+            if (FLY_PAGE != pAnchor->GetAnchorId() &&
+                pAnchor->GetCntntAnchor())
+            {
+                pFlyFmt =
+                    pAnchor->GetCntntAnchor()->nNode.GetNode().GetFlyFmt();
+            }
+            else
+                pFlyFmt = 0;
+        }
+        else
+            pFlyFmt = 0;
+    }
+
+    if (!pRet)
+        pRet = GetCurrentPageBgBrush();
+
+    ASSERT(pRet &&
+        (pRet->GetGraphic() || pRet->GetColor() != COL_TRANSPARENT),
+        "leaving with no real brush");
+    return pRet;
 }
 
 Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
