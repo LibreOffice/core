@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-05 07:22:28 $
+ *  last change: $Author: hdu $ $Date: 2002-08-06 15:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2761,9 +2761,6 @@ int OutputDevice::ImplNewFont()
                 long nFactor = 0;
                 pGraphics->GetFontMetric(
                                          pFontEntry->maMetric, nFactor,
-/*TODO: remove
-                IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST, pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX,
-*/
                                          0x21, 0x20, NULL,
                                          (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
                                          &pKernPairs, nKernPairs );
@@ -3639,7 +3636,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
                 ImplInitTextLineSize();
             nLinePos = pFontEntry->maMetric.mnWUnderlineOffset;
             nLineHeight = pFontEntry->maMetric.mnWUnderlineSize;
-
         }
         if ( (eUnderline == UNDERLINE_SMALLWAVE) &&
              (nLineHeight > 3) )
@@ -4065,56 +4061,40 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplIsLineCharacter( sal_Unicode c )
-{
-    // !(Control+Space, C1-Control+HardSpace, General Space Punctuation)
-    if ( ((c > 0x0020) && (c < 0x0080)) ||
-         ((c > 0x00A0) && (c < 0x2000)) ||
-         (c > 0x200F) )
-        return TRUE;
-    return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
 void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
     FontStrikeout eStrikeout, FontUnderline eUnderline, BOOL bWordLine, BOOL bUnderlineAbove )
 {
-#if 0 // TODO: enable bWordLining for CTL
     if( bWordLine )
     {
-        BOOL        bLine = FALSE;
-        xub_StrLen  nLineStart = 0;
-        xub_StrLen  nLineEnd = 0;
-        for(; nLineEnd < nLen; ++nLineEnd )
+        Point aPos, aStartPt;
+        long nWidth = 0;
+        for( int nStart = 0;;)
         {
-            BOOL bCurLine = ImplIsLineCharacter( *(pStr+nLineEnd) );
+            long nGlyphIndex, nAdvance;
+            if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+                break;
 
-            // draw a new line?
-            if ( bLine && !bCurLine )
+            if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
             {
-                // Query Size to text start and draw the Line to text end
-                long nStartX = ImplGetTextWidth( pStr, nLineStart, pDXAry );
-                long nEndX = ImplGetTextWidth( pStr, nLineEnd, pDXAry );
-                ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline, bUnderlineAbove );
+                if( !nWidth )
+                    aStartPt = aPos;
+                nWidth += nAdvance;
             }
-            if ( bLine != bCurLine )
+            else if( nWidth > 0 )
             {
-                bLine = bCurLine;
-                nLineStart = nLineEnd;
+                ImplDrawTextLine( aStartPt.X(), aStartPt.X(), aStartPt.Y(), nWidth,
+                    eStrikeout, eUnderline, bUnderlineAbove );
+                nWidth = 0;
             }
         }
 
-        if ( bLine && nLen )
+        if( nWidth > 0 )
         {
-            // Query Size to text start and draw the Line to text end
-            long nStartX = ImplGetTextWidth( pStr, nLineStart, pDXAry );
-            long nEndX = ImplGetTextWidth( pStr, nLineEnd, pDXAry );
-            ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline, bUnderlineAbove );
+            ImplDrawTextLine( aStartPt.X(), aStartPt.X(), aStartPt.Y(), nWidth,
+                eStrikeout, eUnderline, bUnderlineAbove );
         }
     }
     else
-#endif
     {
         Point aPos = rSalLayout.GetDrawPosition();
         int nPixWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
@@ -5553,6 +5533,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         nLayoutFlags |= SAL_LAYOUT_KERNING_PAIRS;
     if( maFont.GetKerning() & KERNING_ASIAN )
         nLayoutFlags |= SAL_LAYOUT_KERNING_ASIAN;
+    if( maFont.IsVertical() )
+        nLayoutFlags |= SAL_LAYOUT_VERTICAL;
 
     if( mnLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
         nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
@@ -5639,7 +5621,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
 xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
                                        xub_StrLen nIndex, xub_StrLen nLen,
-                                       long nCharExtra, BOOL /*bCellBreaking*/ ) const
+                                       long nCharExtra, BOOL /*TODO: bCellBreaking*/ ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBreak()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
