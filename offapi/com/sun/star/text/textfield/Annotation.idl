@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Annotation.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of an annotation text field.
     @see com::sun::star::text::TextField
 */
-service Annotation
+published service Annotation
 {
     service  com::sun::star::text::TextField;
     /** contains the name of the author of the annotation.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetExpression.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module FieldMaster {
 /** Specifies the service of a set expression field master.
     @see com::sun::star::text::TextFieldMaster
 */
-service SetExpression
+published service SetExpression
 {
     service  com::sun::star::text::TextFieldMaster;
 
