@@ -246,6 +246,8 @@ public class XSLTransformer
                     // into the buffer so it won't keep the content open until it
                     // gets finalized by the java GC
                     xistream.closeInput();
+                    // set stream to null, so the uno reference gets cleaned ASAP
+                    xistream = null;
 
                     /*
                     String xmlFile = bufstream.toString("UTF-8");
@@ -336,6 +338,8 @@ public class XSLTransformer
 
                     output.close();
                     xostream.closeOutput();
+                    // try to release reference asap...
+                    xostream = null;
 
                     // notify any listeners about close
                     for (Enumeration e = listeners.elements(); e.hasMoreElements();)
