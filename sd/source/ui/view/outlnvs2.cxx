@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:00:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
