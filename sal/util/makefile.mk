@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+#   last change: $Author: hro $ $Date: 2000-09-27 12:16:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,15 +85,19 @@ USE_DEFFILE=TRUE
 .IF "$(header)" == ""
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=$(SLB)$/cpposl.lib $(SLB)$/oslall.lib $(SLB)$/cpprtl.lib
-.IF "$(GUI)"=="WIN"
-LIB1FILES+=$(SLB)$/shell9x.lib $(SLB)$/kernel9x.lib $(SLB)$/user9x.lib $(SLB)$/comdlg9x.lib $(SLB)$/tools32.lib
-.ELSE
+.IF "$(GUI)"=="WNT"
+LIB1FILES+=$(SLB)$/advapi9x.lib $(SLB)$/shell9x.lib $(SLB)$/kernel9x.lib $(SLB)$/user9x.lib $(SLB)$/comdlg9x.lib $(SLB)$/tools32.lib
+.ENDIF
+.IF "$(GUI)"!="WIN"
 LIB1FILES+=$(SLB)$/textenc.lib
 .ENDIF
 
 LIB3TARGET=$(LB)$/a$(TARGET).lib
 LIB3ARCHIV=$(LB)$/lib$(TARGET)$(SAL_MAJOR)$(DLLPOSTFIX).a
 LIB3FILES=$(LB)$/cpposl.lib $(LB)$/oslall.lib $(LB)$/cpprtl.lib
+.IF "$(GUI)"=="WNT"
+LIB3FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/comdlg9x.lib $(LB)$/tools32.lib
+.ENDIF
 
 .IF "$(UPDATER)"!=""
 .IF "$(GUI)"!="WIN"
@@ -108,16 +112,10 @@ SHL1IMPLIB= i$(TARGET)
 .IF "$(COM)"!="GCC"
 SHL1STDLIBS=	\
                 advapi32.lib\
-                advapi9x.lib\
-                kernel9x.lib\
-                shell9x.lib\
-                user9x.lib\
-                comdlg9x.lib\
                 wsock32.lib\
                 mpr.lib\
                 ole32.lib\
                 shell32.lib\
-                tools32.lib\
                 comdlg32.lib\
                 user32.lib
 .ELSE
