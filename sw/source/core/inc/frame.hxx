@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:19:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,16 @@ public:
     const SwDrawObjs *GetDrawObjs() const { return pDrawObjs; }
           SwDrawObjs *GetDrawObjs()       { return pDrawObjs; }
     void  CalcFlys( BOOL bInvaPosOnly );
+
+    /** method to invalidate/re-calculate the position of all floating screen
+        objects (Writer fly frames and drawing objects), which are anchored
+        to paragraph/character
+
+        // OD 2004-03-17 #i11860#
+
+        @author OD
+    */
+    void InvalidateObjPos() const;
 
     virtual void PaintBorder( const SwRect&, const SwPageFrm *pPage,
                               const SwBorderAttrs & ) const;
