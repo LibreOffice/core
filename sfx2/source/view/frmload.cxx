@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-30 07:46:13 $
+ *  last change: $Author: mba $ $Date: 2002-05-07 13:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,19 +616,22 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         aMedium.SetInteractionHandler( xInteraction );
 
         BOOL bIsStorage = aMedium.IsStorage();
-        if ( bIsStorage )
-            aMedium.GetStorage();
-        else
-            aMedium.GetInStream();
+        if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+        {
+            if ( bIsStorage )
+                aMedium.GetStorage();
+            else
+                aMedium.GetInStream();
 
-        // special filters that can or must(!) be detected inside the medium without further investigation
-        // f.e. disk spanned jar files
-        if ( aMedium.GetFilter() )
-            pFilter = aMedium.GetFilter();
+            // special filters that can or must(!) be detected inside the medium without further investigation
+            // f.e. disk spanned jar files
+            if ( aMedium.GetFilter() )
+                pFilter = aMedium.GetFilter();
 
-        // remember input stream and put it into the descriptor later
-        xStream = aMedium.GetInputStream();
-        bReadOnly = aMedium.IsReadOnly();
+            // remember input stream and put it into the descriptor later
+            xStream = aMedium.GetInputStream();
+            bReadOnly = aMedium.IsReadOnly();
+        }
 
         if ( aMedium.GetErrorCode() == ERRCODE_NONE && !aMedium.GetFilter() )
         {
