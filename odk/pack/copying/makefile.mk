@@ -30,7 +30,7 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/Inspector	\
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess	\
     $(DESTDIRJAVAEXAMPLES)$/ToDo	\
-    $(DESTDIRJAVAEXAMPLES)$/WriterSelctor	\
+        $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
     $(DESTDIRBASICEXAMPLES)		 	\
     $(DESTDIRBASICEXAMPLES)$/drawing 	\
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls	 	\
