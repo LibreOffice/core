@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-12 10:49:13 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 08:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
+#endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE file
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
 #endif
 
 using namespace connectivity;
@@ -423,6 +427,12 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
                 aColumnName = pPredicateNode->getChild(2)->getTokenValue();
         }
 
+        if(!m_orgColumns->hasByName(aColumnName))
+        {
+            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Column not found: ");
+            sMsg += aColumnName;
+            throw SQLException(sMsg,NULL,SQLSTATE_GENERAL,1000,Any());
+        }
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
         try
         {
