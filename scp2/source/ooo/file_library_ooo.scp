@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.41 $
+*  $Revision: 1.42 $
 *
-*  last change: $Author: hr $ $Date: 2004-09-08 14:38:46 $
+*  last change: $Author: hr $ $Date: 2004-09-08 15:04:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -216,6 +216,17 @@ File gid_File_Lib_Cli_Cppuhelper
     TXT_FILE_BODY;
     Styles = (PACKED);
     Name = "cli_cppuhelper.dll";
+    Dir = gid_Dir_Program_Assembly;
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Cli_Cppuhelper_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Name = "cli_cppuhelper.dll";
     Dir = gid_Dir_Program;
 End
 
@@ -224,6 +235,17 @@ End
 #if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Types
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Name = "cli_types.dll";
+    Dir = gid_Dir_Program_Assembly;
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Cli_Types_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED);
     Name = "cli_types.dll";
@@ -246,6 +268,17 @@ End
 #if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Ure
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Name = "cli_ure.dll";
+    Dir = gid_Dir_Program_Assembly;
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Cli_Ure_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED);
     Name = "cli_ure.dll";
