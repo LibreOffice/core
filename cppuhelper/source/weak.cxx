@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:16 $
+ *  last change: $Author: dbo $ $Date: 2002-03-13 09:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,15 +387,21 @@ OWeakRefListener::OWeakRefListener() SAL_THROW( () )
 OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () )
     : m_aRefCount( 0 )
 {
+    try
+    {
     m_XWeakConnectionPoint = rRef.m_XWeakConnectionPoint;
 
     if (m_XWeakConnectionPoint.is())
         m_XWeakConnectionPoint->addReference((XReference*)this);
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
 }
 
 OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW( () )
     : m_aRefCount( 0 )
 {
+    try
+    {
     Reference< XWeak > xWeak( Reference< XWeak >::query( xInt ) );
 
     if (xWeak.is())
@@ -407,13 +413,19 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THRO
             m_XWeakConnectionPoint->addReference((XReference*)this);
         }
     }
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
 }
 
 OWeakRefListener::~OWeakRefListener() SAL_THROW( () )
 {
+    try
+    {
     acquire(); // dont die again
     if (m_XWeakConnectionPoint.is())
         m_XWeakConnectionPoint->removeReference((XReference*)this);
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
 }
 
 // XInterface
@@ -479,6 +491,8 @@ WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SA
 
 WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
 {
+    try
+    {
     if (this != &rWeakRef)
     {
         Reference< XInterface > xInt( rWeakRef.get() );
@@ -498,11 +512,15 @@ WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& r
             m_pImpl->acquire();
         }
     }
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
     return *this;
 }
 
 WeakReferenceHelper::~WeakReferenceHelper() SAL_THROW( () )
 {
+    try
+    {
     if (m_pImpl)
     {
         if (m_pImpl->m_XWeakConnectionPoint.is())
@@ -513,10 +531,14 @@ WeakReferenceHelper::~WeakReferenceHelper() SAL_THROW( () )
         m_pImpl->release();
         m_pImpl = 0; // for safety
     }
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
 }
 
 Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW( () )
 {
+    try
+    {
     Reference< XAdapter > xAdp;
     {
         MutexGuard guard(cppu::getWeakMutex());
@@ -526,6 +548,8 @@ Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW( () )
 
     if (xAdp.is())
         return xAdp->queryAdapted();
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
 
     return Reference< XInterface >();
 }
