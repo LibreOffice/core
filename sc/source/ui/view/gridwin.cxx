@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 17:29:17 $
+ *  last change: $Author: nn $ $Date: 2001-07-09 13:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@
 #include "dpoutput.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "sizedev.hxx"
 
 using namespace com::sun::star;
 
@@ -3615,7 +3616,8 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     pViewData->GetPosFromPixel( rPos.X(), rPos.Y(), eWhich, nPosX, nPosY );
 
     USHORT nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
     ScBaseCell* pCell = NULL;
 
     BOOL bFound = FALSE;
@@ -3660,6 +3662,8 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
         //  EditEngine
 
     ScFieldEditEngine aEngine( pDoc->GetEditPool() );
+    ScSizeDeviceProvider aProv(pDocSh);
+    aEngine.SetRefDevice( aProv.GetDevice() );
     aEngine.SetRefMapMode( MAP_100TH_MM );
     SfxItemSet aDefault( aEngine.GetEmptyItemSet() );
     pPattern->FillEditItemSet( &aDefault );
