@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:41:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include <string.h>     // memset(), ...
 #ifndef UNX
 #include <io.h>         // access()
+#endif
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
 
 #ifndef _RTL_TENCINFO_H
@@ -410,10 +413,10 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
             sal_Unicode* pBuf = pOffsets[i].sName.AllocBuffer( nLen / 2 );
             xVBAProject->Read( (sal_Char*)pBuf, nLen  );
 
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
             for( j = 0; j < nLen / 2; ++j, ++pBuf )
                 *pBuf = SWAPSHORT( *pBuf );
-#endif // ifdef __BIGENDIAN
+#endif // ifdef OSL_BIGENDIAN
         }
         else
         {
