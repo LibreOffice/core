@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 09:30:28 $
+ *  last change: $Author: tl $ $Date: 2001-03-28 11:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HDL_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hdl>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XAVAILABLELOCALES_HPP_
+#include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #endif
 #ifndef _LINGUISTIC_MISC_HXX_
 #include <linguistic/misc.hxx>
@@ -282,26 +285,24 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
         Sequence< INT16 > aSpellAvailLang;
         Sequence< INT16 > aHyphAvailLang;
         Sequence< INT16 > aThesAvailLang;
-        if (LinguMgr::GetLngSvcMgr().is())
+        Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
+        if (xAvail.is())
         {
             Sequence< Locale > aTmp;
 
             if (LANG_LIST_SPELL_AVAIL & nLangList)
             {
-                aTmp = LinguMgr::GetLngSvcMgr()
-                            ->getAvailableLocales( A2OU( SN_SPELLCHECKER ) );
+                aTmp = xAvail->getAvailableLocales( A2OU( SN_SPELLCHECKER ) );
                 aSpellAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
             if (LANG_LIST_HYPH_AVAIL  & nLangList)
             {
-                aTmp = LinguMgr::GetLngSvcMgr()
-                            ->getAvailableLocales( A2OU( SN_HYPHENATOR ) );
+                aTmp = xAvail->getAvailableLocales( A2OU( SN_HYPHENATOR ) );
                 aHyphAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
             if (LANG_LIST_THES_AVAIL  & nLangList)
             {
-                aTmp = LinguMgr::GetLngSvcMgr()
-                            ->getAvailableLocales( A2OU( SN_THESAURUS ) );
+                aTmp = xAvail->getAvailableLocales( A2OU( SN_THESAURUS ) );
                 aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
             }
         }
