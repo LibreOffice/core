@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:35:33 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Voorbeeld";
         Text[ chinese_simplified ] = "Τ¤ΐΐ";
         Text[ greek ] = "Προεπισκόπηση";
-        Text[ korean ] = "ΉΜΈ® ΊΈ±β";
+        Text[ korean ] = "ΉΜΈ®ΊΈ±β";
         Text[ turkish ] = "Φnizleme";
     };
     CheckBox CB_PREVIEW_TIFF
@@ -154,7 +154,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
         Text[ chinese_simplified ] = "ΝΌΟρΤ¤ΐΐ(~TIFF)";
         Text[ greek ] = "Προεπισκόπηση εικόνας (TIFF)";
-        Text[ korean ] = "±ΧΈ² ΉΜΈ® ΊΈ±β (TIFF)(~P)";
+        Text[ korean ] = "±ΧΈ² ΉΜΈ®ΊΈ±β (TIFF)(~P)";
         Text[ chinese_traditional ] = "ΉΟ¤ωΉwΔύ(TIFF)(~P)";
         Text[ turkish ] = "Resim φnizleme (TIFF)";
     };
@@ -349,7 +349,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Grijswaarden";
         Text[ chinese_simplified ] = "»Ò¶Θ(~G)";
         Text[ greek ] = "Διαβάθμιση του γκρι";
-        Text[ korean ] = "ΘΈ»φΑ¶(~G)";
+        Text[ korean ] = "ΘΈ»φµµ(~G)";
         Text[ turkish ] = "Gri tonlarύ";
     };
 
