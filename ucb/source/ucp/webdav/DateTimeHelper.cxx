@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTimeHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-09 15:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ using namespace webdav_ucp;
 bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     DateTime& dateTime)
 {
-    const char* _s = OUStringToOString (s, RTL_TEXTENCODING_ASCII_US).getStr ();
+    OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
     sal_Int32 year;
     sal_Int32 month;
@@ -83,7 +83,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     sal_Int32 minutes;
     sal_Int32 seconds;
 
-    sal_Int32 i = sscanf (_s, "%4d-%2d-%2dT%2d:%2d:%2d",
+    sal_Int32 i = sscanf (aDT.getStr(), "%4d-%2d-%2dT%2d:%2d:%2d",
         &year, &month, &day,
         &hours, &minutes, &seconds);
     if (i != 6)
@@ -144,8 +144,8 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     if (found != -1)
     {
         OUString _s = s.copy (found);
-        const sal_Char* __s =
-            OUStringToOString (_s, RTL_TEXTENCODING_ASCII_US).getStr ();
+        OString aDT (_s.getStr(), _s.getLength(), RTL_TEXTENCODING_ASCII_US);
+        const sal_Char* __s = aDT.getStr();
 
         // RFC 1123
         found = sscanf (__s, ", %2d %3s %4d %2d:%2d:%2d GMT",
@@ -164,11 +164,10 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     {
         char string_day[3 + 1];
 
-        const sal_Char* _s =
-            OUStringToOString (s, RTL_TEXTENCODING_ASCII_US).getStr ();
+        OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
         // ANSI C's asctime () format
-        found = sscanf (_s, "%3s %3s %d %2d:%2d:%2d %4d",
+        found = sscanf (aDT.getStr(), "%3s %3s %d %2d:%2d:%2d %4d",
             string_day, string_month,
             &day,
             &hours, &minutes, &seconds,
