@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 09:40:07 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,8 @@ Gallery::~Gallery()
 Gallery* Gallery::AcquireGallery( const String& rMultiPath )
 {
     Gallery*                pGallery = NULL;
-    GalleryCacheEntry*      pEntry;
-    GalleryCacheEntry*      pFound;
+    GalleryCacheEntry*      pEntry = NULL;
+    GalleryCacheEntry*      pFound = NULL;
 
     for( pEntry = (GalleryCacheEntry*) aGalleryCache.First(); pEntry && !pGallery; pEntry = (GalleryCacheEntry*) aGalleryCache.Next() )
         if( rMultiPath == pEntry->GetMultiPath() )
