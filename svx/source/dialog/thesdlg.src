@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text [ dutch ] = "Selectie" ;
         Text [ italian ] = "Scelta" ;
         Text [ spanish ] = "Selección" ;
-        Text [ french ] = "Langues installées" ;
+        Text [ french ] = "Sélection" ;
         Text [ swedish ] = "Urval" ;
         Text [ danish ] = "Udvalg" ;
         Text [ portuguese_brazilian ] = "Auswahl" ;
@@ -460,3 +460,4 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ finnish ] = "Valitse kieli";
 };
  // ********************************************************************** EOF
+
