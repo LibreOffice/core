@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: os $ $Date: 2001-02-28 14:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2106,7 +2106,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
             aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
         }
         //created from any text range
-        if(pUnoCrsr->HasMark())
+        if(PARAFRAME_PORTION_CHAR != nParaFrameMode && pUnoCrsr->HasMark())
         {
             if(pUnoCrsr->Start() != pUnoCrsr->GetPoint())
                 pUnoCrsr->Exchange();
