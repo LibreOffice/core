@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:39:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,31 +71,15 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
-
-CXXFILES = \
-        rtfgrf.cxx	   \
-        rtfitem.cxx 	\
-        svxrtf.cxx
 
 SLOFILES =	\
         $(SLO)$/rtfgrf.obj  \
         $(SLO)$/rtfitem.obj	\
         $(SLO)$/svxrtf.obj
-
-.IF "$(GUI)" == "WIN"
-SLOFILES +=	\
-        $(SLO)$/segincr.obj
-.ENDIF
-
-.ENDIF
 
 # ==========================================================================
 
