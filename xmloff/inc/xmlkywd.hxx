@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-14 14:29:49 $
+ *  last change: $Author: sab $ $Date: 2001-03-15 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,9 +410,9 @@ XML_CONSTASCII_ACTION( sXML_conditional_text, "conditional-text" );
 XML_CONSTASCII_ACTION( sXML_cone, "cone" );
 XML_CONSTASCII_ACTION( sXML_conference, "conference" );
 XML_CONSTASCII_ACTION( sXML_config_item, "config-item" );
-XML_CONSTASCII_ACTION( sXML_config_item_map_indexed, "config-item-item-map-indexed" );
-XML_CONSTASCII_ACTION( sXML_config_item_map_named, "config-item-item-map-named" );
-XML_CONSTASCII_ACTION( sXML_config_item_map_entry, "config-item-item-map-entry" );
+XML_CONSTASCII_ACTION( sXML_config_item_map_indexed, "config-item-map-indexed" );
+XML_CONSTASCII_ACTION( sXML_config_item_map_named, "config-item-map-named" );
+XML_CONSTASCII_ACTION( sXML_config_item_map_entry, "config-item-map-entry" );
 XML_CONSTASCII_ACTION( sXML_config_item_set, "config-item-set" );
 XML_CONSTASCII_ACTION( sXML_configuration_settings, "configuration-settings" );
 XML_CONSTASCII_ACTION( sXML_conjugate, "conjugate" );
