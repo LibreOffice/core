@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-19 14:44:39 $
+ *  last change: $Author: cl $ $Date: 2002-01-11 12:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "TextRightDistance",               XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     MAP( "TextWritingMode",                 XML_NAMESPACE_DRAW, XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE ),
     MAP( "NumberingRules",                  XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
-    MAP( "NumberingRules",                  XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME ),
+    MAP( "NumberingRules",                  XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
 
     // shadow attributes
     MAP( "Shadow",                          XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 ),
@@ -1079,7 +1079,7 @@ XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< 
         msCDATA( GetXMLToken(XML_CDATA)),
         msTrue( GetXMLToken(XML_TRUE)),
         msFalse( GetXMLToken(XML_FALSE)),
-        mbIsInAutoStyles( sal_False )
+        mbIsInAutoStyles( sal_True )
 {
 }
 
@@ -1138,21 +1138,14 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                         property->mnIndex = -1;
                 }
                 break;
-            case CTF_NUMBERINGRULES_NAME:
+            case CTF_SD_NUMBERINGRULES_NAME:
                 {
-                    if( mbIsInAutoStyles )
-                    {
-                        uno::Reference< container::XIndexReplace > xNumRule;
-                        if( property->maValue >>= xNumRule )
-                        {
-                            const OUString sName = ((XMLTextListAutoStylePool*)&mrExport.GetTextParagraphExport()->GetListAutoStylePool())->Add( xNumRule );
-                            property->maValue <<= sName;
-                        }
-                    }
-                    else
-                    {
+                    // this property is not exported in the style:properties element
+                    // because its an XIndexAccess and not a string.
+                    // This will be handled in SvXMLAutoStylePoolP::exportStyleAttributes
+                    // This is suboptimal
+                    if( !mbIsInAutoStyles )
                         property->mnIndex = -1;
-                    }
                 }
                 break;
             case CTF_WRITINGMODE:
@@ -1528,3 +1521,4 @@ void XMLPageExportPropertyMapper::handleElementItem(
 }
 
 #endif // #ifndef SVX_LIGHT
+

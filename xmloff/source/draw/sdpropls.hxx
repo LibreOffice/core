@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: cl $ $Date: 2002-01-11 12:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 //////////////////////////////////////////////////////////////////////////////
 
 #define CTF_NUMBERINGRULES          1000
-#define CTF_NUMBERINGRULES_NAME     1001
+//#define CTF_NUMBERINGRULES_NAME       1001
 #define CTF_WRITINGMODE             1002
 #define CTF_REPEAT_OFFSET_X         1003
 #define CTF_REPEAT_OFFSET_Y         1004

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
+ *  last change: $Author: cl $ $Date: 2002-01-11 12:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
+#include <com/sun/star/container/XIndexReplace.hpp>
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -80,6 +84,10 @@
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
+#include "XMLTextListAutoStylePool.hxx"
 #endif
 
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
@@ -112,14 +120,14 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 #endif
         ) const
 {
-    if (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily)
+    if( (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily) || (XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily) )
     {   // it's a graphics style
         UniReference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
         DBG_ASSERT(aPropertyMapper.is(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property set mapper!");
 
-#ifdef DBG_UTIL
         sal_Bool bFoundControlShapeDataStyle = sal_False;
-#endif
+        sal_Bool bFoundNumberingRulesName = sal_False;
+
         for (   vector< XMLPropertyState >::const_iterator pProp = rProperties.begin();
                 pProp != rProperties.end();
                 ++pProp
@@ -127,36 +135,54 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         {
             if (pProp->mnIndex > -1)
             {   // it's a valid property
-                if (CTF_SD_CONTROL_SHAPE_DATA_STYLE == aPropertyMapper->GetEntryContextId(pProp->mnIndex))
-                {   // it's the control shape data style property
+                switch( aPropertyMapper->GetEntryContextId(pProp->mnIndex) )
+                {
+                case CTF_SD_CONTROL_SHAPE_DATA_STYLE:
+                    {   // it's the control shape data style property
 
-#ifdef DBG_UTIL
-                    if (bFoundControlShapeDataStyle)
-                    {
-                        DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
-                        // already added the attribute for the first occurence
+                        if (bFoundControlShapeDataStyle)
+                        {
+                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
+                            // already added the attribute for the first occurence
+                            break;
+                        }
+
+                        // obtain the data style name
+                        ::rtl::OUString sControlDataStyleName;
+                        pProp->maValue >>= sControlDataStyleName;
+                        DBG_ASSERT(sControlDataStyleName.getLength(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property value for the data style name!");
+
+                        // add the attribute
+                        GetExport().AddAttribute(
+                            aPropertyMapper->GetEntryNameSpace(pProp->mnIndex),
+                            aPropertyMapper->GetEntryXMLName(pProp->mnIndex),
+                            sControlDataStyleName );
+
+                        // check if there is another property with the special context id we're handling here
+                        bFoundControlShapeDataStyle = sal_True;
                         break;
                     }
-#endif
-                    // obtain the data style name
-                    ::rtl::OUString sControlDataStyleName;
-                    pProp->maValue >>= sControlDataStyleName;
-                    DBG_ASSERT(sControlDataStyleName.getLength(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property value for the data style name!");
+                case CTF_SD_NUMBERINGRULES_NAME:
+                    {
+                        if (bFoundNumberingRulesName)
+                        {
+                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
+                            // already added the attribute for the first occurence
+                            break;
+                        }
 
-                    // add the attribute
-                    GetExport().AddAttribute(
-                        aPropertyMapper->GetEntryNameSpace(pProp->mnIndex),
-                        aPropertyMapper->GetEntryXMLName(pProp->mnIndex),
-                        sControlDataStyleName );
+                        uno::Reference< container::XIndexReplace > xNumRule;
+                        pProp->maValue >>= xNumRule;
+                        if( xNumRule.is() && (xNumRule->getCount() > 0 ) )
+                        {
+                            const OUString sName(((XMLTextListAutoStylePool*)&GetExport().GetTextParagraphExport()->GetListAutoStylePool())->Add( xNumRule ));
 
-#ifdef DBG_UTIL
-                    // in a non-pro version, check if there is another property with the special context id we're handling here
-                    bFoundControlShapeDataStyle = sal_True;
-                    continue;
-#else
-                    // in a pro version, just leave the loop
-                    break;
-#endif
+                            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_LIST_STYLE_NAME, sName );
+                        }
+
+                        bFoundNumberingRulesName = sal_True;
+                        break;
+                    }
                 }
             }
         }
