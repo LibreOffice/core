@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2003-03-07 15:11:39 $
+#   last change: $Date: 2003-03-25 15:30:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,13 @@ TARGET  = $(PRJNAME)
 
 .INCLUDE: settings.mk
 
+.IF "$(TESTS)" == "TRUE"
 R_SUBDIRS = util share stats lib complexlib helper basicrunner \
-             base org$/openoffice
-
+            base org$/openoffice mod ifc
+.ELSE   #"$(SERVICE)" == "TRUE"
+R_SUBDIRS = util share stats lib complexlib helper basicrunner \
+            base org$/openoffice
+.ENDIF  #"$(SERVICE)" == "TRUE"
 
 MYJARCOMMANDS = $(foreach,i,$(R_SUBDIRS) -C $(CLASSDIR) $i)
 
@@ -81,5 +85,5 @@ OWNJAR: ALLTAR
 .INCLUDE :  target.mk
 
 OWNJAR:
-    +jar cvf $(CLASSDIR)$/$(TARGET).jar -C $(PRJ) objdsc $(MYJARCOMMANDS)
+    +jar cvfm $(CLASSDIR)$/$(TARGET).jar manifest -C $(PRJ) objdsc $(MYJARCOMMANDS)
 
