@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: obo $ $Date: 2001-07-03 12:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
 #if SUPD > 636
         aArguments[0] <<=
             rtl::OUString::createFromAscii( "org.openoffice.Webtop.Security" );
-#elsif SUPD > 604
+#elif SUPD > 604
         aArguments[0] <<=
             rtl::OUString::createFromAscii( "org.openoffice.Security" );
 #else
