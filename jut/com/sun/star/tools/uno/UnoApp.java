@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 17:10:02 $
+ *  last change: $Author: kr $ $Date: 2000-09-29 09:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ import com.sun.star.uno.Type;
  * <p>
  */
 public class UnoApp {
+    static public final boolean DEBUG = true;
+
     /**
      * Bootstraps a servicemanager with some base components registered.
      * <p>
@@ -436,6 +438,8 @@ public class UnoApp {
         }
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".set:" + args[0]);
+
             unoApp._context = args[index[0] ++];
             unoApp._creator = this;
         }
@@ -516,19 +520,27 @@ public class UnoApp {
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
             String arg = args[index[0] ++];
 
-            if(arg.charAt(0) == '"')
-                arg = arg.substring(0, arg.length() - 1).substring(1);
+            if(DEBUG) System.err.println("##### " + getClass().getName() + ".set:" + arg);
 
-            String comps[] = parseString(arg);
+            Vector comps = new Vector();
+            int idx = arg.indexOf(',');
+            while(idx != -1) {
+                comps.addElement(arg.substring(0, idx));
 
+                arg = arg.substring(idx + 1);
+
+                idx = arg.indexOf(',');
+            }
+            comps.addElement(arg);
 
             XMultiServiceFactory xMultiServiceFactory = unoApp._xMultiServiceFactory;
 
             // now use the XSet interface at the ServiceManager to add the factory of the loader
               XSet xSet = (XSet) UnoRuntime.queryInterface(XSet.class, xMultiServiceFactory);
 
-            for(int i = 0; i < comps.length; ++ i) {
-                Object object = new UnoApp(comps[i]).getObject();
+            for(int i = 0; i < comps.size(); ++ i) {
+                Object object = new UnoApp((String)comps.elementAt(i)).getObject();
+
                 XSingleServiceFactory xSingleServiceFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(XSingleServiceFactory.class,
                                                                                                                object);
                 if(xSingleServiceFactory == null) {
@@ -614,6 +626,7 @@ public class UnoApp {
         String arg = mergeString(args);
 
         UnoApp unoApp = new UnoApp(arg);
+//          UnoApp unoApp = new UnoApp(args);
 
         if(unoApp._uno_url != null) // see, if we have to export the object
             export(unoApp._xMultiServiceFactory, unoApp._uno_url, unoApp.getObject());
@@ -630,7 +643,7 @@ public class UnoApp {
 
     /**
      * Initializes <code>UnoApp</code>.
-     * If string only is one word and the does not start with "-"
+     * If string only is one word and the word does not start with "-"
      * set the context with string.
      * <p>
      * @param  string   the arguments
@@ -642,6 +655,22 @@ public class UnoApp {
 
         if(args.length == 1 && args[0].charAt(0) != '-')
             _context = string;
+        else
+            parseArgs(args);
+    }
+
+    /**
+     * Initializes <code>UnoApp</code>.
+     * If args contains only one word and the word does not start with "-"
+     * set the context with string.
+     * <p>
+     * @param  string   the arguments
+     */
+    UnoApp(String args[]) throws Exception {
+        _xMultiServiceFactory = createSimpleServiceManager();
+
+        if(args.length == 1 && args[0].charAt(0) != '-')
+            _context = args[0];
         else
             parseArgs(args);
     }
