@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:33:35 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,14 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     Text [ swedish ] = "Fälturval";
     Text [ polish ] = "Wybór pola";
     Text [ portuguese_brazilian ] = "Feldauswahl";
-    Text [ japanese ] = "Ì¨°ÙÄŞ‚Ì‘I‘ğ";
-    Text [ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î";
-    Text [ chinese_traditional ] = "¿ï¾ÜÄæ¦ì";
+    Text [ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®é¸æŠ";
+    Text [ chinese_simplified ] = "é€‰æ‹©å­—æ®µ";
+    Text [ chinese_traditional ] = "é¸æ“‡æ¬„ä½";
     Text [ arabic ] = "ÊÍÏíÏ ÇáÍŞá";
     Text [ dutch ] = "Veldkeuze";
-    Text [ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î";
+    Text [ chinese_simplified ] = "é€‰æ‹©å­—æ®µ";
     Text [ greek ] = "ÅğéëïãŞ ğåäßïõ";
-    Text [ korean ] = "ÇÊµå ¼±ÅÃ";
+    Text [ korean ] = "í•„ë“œ ì„ íƒ";
     Text [ turkish ] = "Alan seçimi";
 
     FixedLine FL_FRAME
@@ -110,10 +110,10 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ swedish ] = "Tabellelement";
         Text[ polish ] = "Element tabeli";
         Text[ portuguese_brazilian ] = "Table Element";
-        Text[ japanese ] = "Ã°ÌŞÙ\\¬—v‘f";
-        Text[ korean ] = "Å×ÀÌºí ¿ä¼Ò";
-        Text[ chinese_simplified ] = "±íµ¥Ôª¼ş";
-        Text[ chinese_traditional ] = "ªí³æ¤¸¥ó";
+        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™æ§‹æˆè¦ç´ ";
+        Text[ korean ] = "í…Œì´ë¸” ìš”ì†Œ";
+        Text[ chinese_simplified ] = "è¡¨å•å…ƒä»¶";
+        Text[ chinese_traditional ] = "è¡¨å–®å…ƒä»¶";
         Text[ turkish ] = "Table Element";
         Text[ arabic ] = "Table Element";
         Text[ catalan ] = "Table Element";
@@ -136,14 +136,14 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ swedish ] = "Existerande fält";
         Text [ polish ] = "Istniej¹ce pola";
         Text [ portuguese_brazilian ] = "Vorhandene Felder";
-        Text [ japanese ] = "g—p‚Å‚«‚éÌ¨°ÙÄŞ";
-        Text [ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(V)";
-        Text [ chinese_traditional ] = "²{¦sªºÄæ¦ì";
+        Text [ japanese ] = "ä½¿ç”¨ã§ãã‚‹ï¾Œï½¨ï½°ï¾™ï¾„ï¾";
+        Text [ chinese_simplified ] = "ç°æœ‰çš„å­—æ®µ(V)";
+        Text [ chinese_traditional ] = "ç¾å­˜çš„æ¬„ä½";
         Text [ arabic ] = "ÇáÍŞæá ÇáãÊæİÑÉ";
         Text [ dutch ] = "Bestaande velden";
-        Text [ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(V)";
+        Text [ chinese_simplified ] = "ç°æœ‰çš„å­—æ®µ(V)";
         Text [ greek ] = "ÕğÜñ÷ïíôá ğåäßá";
-        Text [ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
+        Text [ korean ] = "ì¡´ì¬í•˜ëŠ” í•„ë“œ";
         Text [ turkish ] = "Mevcut alanlar";
         Text[ catalan ] = "Campos existentes";
         Text[ finnish ] = "Vorhandene Felder";
@@ -199,14 +199,14 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ swedish ] = "Utvalda fält";
         Text [ polish ] = "Wybrane pola";
         Text [ portuguese_brazilian ] = "Ausgew?hlte Felder";
-        Text [ japanese ] = "‘I‘ğ‚µ‚½Ì¨°ÙÄŞ";
-        Text [ chinese_simplified ] = "ÒÑ¾­Ñ¡ÔñµÄ×Ö¶Î";
-        Text [ chinese_traditional ] = "¿ï¤¤ªºÄæ¦ì";
+        Text [ japanese ] = "é¸æŠã—ãŸï¾Œï½¨ï½°ï¾™ï¾„ï¾";
+        Text [ chinese_simplified ] = "å·²ç»é€‰æ‹©çš„å­—æ®µ";
+        Text [ chinese_traditional ] = "é¸ä¸­çš„æ¬„ä½";
         Text [ arabic ] = "ÇáÍŞæá ÇáãõÍÏÏÉ";
         Text [ dutch ] = "Geselecteerde velden";
-        Text [ chinese_simplified ] = "ÒÑ¾­Ñ¡ÔñµÄ×Ö¶Î";
+        Text [ chinese_simplified ] = "å·²ç»é€‰æ‹©çš„å­—æ®µ";
         Text [ greek ] = "Åğéëåãìİíá ğåäßá";
-        Text [ korean ] = "¼±ÅÃµÈ ÇÊµå";
+        Text [ korean ] = "ì„ íƒëœ í•„ë“œ";
         Text [ turkish ] = "Seçilmiş alanlar";
         Text[ catalan ] = "Campos seleccionados";
         Text[ finnish ] = "Ausgewählte Felder";
@@ -239,14 +239,14 @@ String RID_STR_DATEPOSTFIX
     Text [ swedish ] = " (Datum)";
     Text [ polish ] = " (Data)";
     Text [ portuguese_brazilian ] = "(Datum)";
-    Text [ japanese ] = "(“ú•t)";
-    Text [ chinese_simplified ] = "(ÈÕÆÚ)";
-    Text [ chinese_traditional ] = "(¤é´Á)";
+    Text [ japanese ] = "(æ—¥ä»˜)";
+    Text [ chinese_simplified ] = "(æ—¥æœŸ)";
+    Text [ chinese_traditional ] = "(æ—¥æœŸ)";
     Text [ arabic ] = "(ÇáÊÇÑíÎ)";
     Text [ dutch ] = "(Datum)";
-    Text [ chinese_simplified ] = "(ÈÕÆÚ)";
+    Text [ chinese_simplified ] = "(æ—¥æœŸ)";
     Text [ greek ] = " (Çìåñïìçíßá)";
-    Text [ korean ] = " (³¯Â¥)";
+    Text [ korean ] = " (ë‚ ì§œ)";
     Text [ turkish ] = "(Tarih)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks";
     Text[ catalan ] = "(Fecha)";
@@ -267,14 +267,14 @@ String RID_STR_TIMEPOSTFIX
     Text [ swedish ] = " (Tid)";
     Text [ polish ] = " (Godzina)";
     Text [ portuguese_brazilian ] = " (Zeit)";
-    Text [ japanese ] = "()";
-    Text [ chinese_simplified ] = " (Ê±¼ä)";
-    Text [ chinese_traditional ] = " (®É¶¡)";
+    Text [ japanese ] = "(æ™‚åˆ»)";
+    Text [ chinese_simplified ] = " (æ—¶é—´)";
+    Text [ chinese_traditional ] = " (æ™‚é–“)";
     Text [ arabic ] = " (ÇáæŞÊ)";
     Text [ dutch ] = " (Tijd)";
-    Text [ chinese_simplified ] = " (Ê±¼ä)";
+    Text [ chinese_simplified ] = " (æ—¶é—´)";
     Text [ greek ] = " (¿ñá)";
-    Text [ korean ] = " (½Ã°£)";
+    Text [ korean ] = " (ì‹œê°„)";
     Text [ turkish ] = " (Saat)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks";
     Text[ catalan ] = "(Hora)";
@@ -284,6 +284,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/07/17 20:33:35  kz
+ *  Merge SRC638: 17.07.01 - 22:32:47
+ *
  *  Revision 1.13  2001/07/13 21:08:23  kz
  *  Merge SRC638: 13.07.01 - 23:07:15
  *
@@ -326,6 +329,7 @@ String RID_STR_TIMEPOSTFIX
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
+
 
 
 
