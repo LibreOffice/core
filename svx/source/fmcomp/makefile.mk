@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+#   last change: $Author: fs $ $Date: 2001-03-26 15:05:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ IMGLST_SRS=$(SRS)$/fmcomp.srs
 BMP_IN=$(PRJ)$/win/res
 
 CXXFILES= \
+    dbaexchange.cxx	\
     dbbrowse.cxx	\
     dbbrwcbx.cxx	\
     dbbrwchk.cxx	\
@@ -98,6 +99,7 @@ SRC1FILES= \
     showcols.src
 
 SLOFILES= \
+    $(SLO)$/dbaexchange.obj	\
     $(SLO)$/dbbrowse.obj	\
     $(SLO)$/dbbrwchk.obj	\
     $(SLO)$/dbbrwcbx.obj	\
