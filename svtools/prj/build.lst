@@ -10,13 +10,13 @@ st	svtools\win\res							get		-	all	st_wres NULL
 st	svtools\os2\inc							get		-	all	st_oinc NULL
 st	svtools\mac\inc							get		-	all	st_minc NULL
 st	svtools\unx\inc							get		-	all	st_uinc NULL
+st	svtools\bmpmaker						nmake	-	all	st_bmp NULL
 st	svtools\source\cmdparse					nmake	-	all	st_cmdparse NULL
 st	svtools\source\memtools					nmake	-	all	st_mem NULL
 st	svtools\source\numbers					nmake	-	all	st_num NULL
 st	svtools\source\notify					nmake	-	all	st_not NULL
 st	svtools\source\sbx						nmake	-	all	st_sbx NULL
 st	svtools\source\config					nmake	-	all	st_conf NULL
-st	svtools\bmpmaker						nmake	-	all	st_bmp st_util NULL
 st	svtools\unx\source\eaimp				nmake	-	u	st_ueaimp NULL
 st	svtools\unx\source\filter				nmake	-	u	st_ufilt NULL
 st	svtools\unx\source\svdde				nmake	-	u	st_usdde NULL
@@ -34,7 +34,7 @@ st	svtools\source\filter.vcl\ixpm			nmake	-	all	st_vixpm NULL
 st	svtools\source\filter.vcl\ipng			nmake	-	all	st_vipng NULL
 st	svtools\source\brwbox					nmake	-	all	st__brw NULL
 st	svtools\source\urlobj					nmake	-	all	st__url NULL
-st	svtools\source\misc						nmake	-	all	st__misc NULL
+st	svtools\source\misc						nmake	-	all	st__misc st_bmp NULL
 st	svtools\source\contnr					nmake	-	all	st__ctr NULL
 st	svtools\source\search					nmake	-	all	st__srch NULL
 st	svtools\source\svdde					nmake	-	all	st__dde NULL
