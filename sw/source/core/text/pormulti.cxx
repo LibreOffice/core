@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 13:44:57 $
+ *  last change: $Author: fme $ $Date: 2001-11-19 11:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1717,8 +1717,12 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         }
         else
         {
-            if( nActWidth > nTmpX + rMulti.Width() + 1)
-                nActWidth = nTmpX + rMulti.Width() + 1;
+            // For Solaris, this optimisation can causes trouble:
+            // Setting this to the portion width ( = rMulti.Width() )
+            // can make GetTextBreak inside SwTxtGuess::Guess return to small
+            // values. Therefore we add some extra twips.
+            if( nActWidth > nTmpX + rMulti.Width() + 6 )
+                nActWidth = nTmpX + rMulti.Width() + 6;
             nMaxWidth = nActWidth;
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
             if( nActWidth >= nMaxWidth )

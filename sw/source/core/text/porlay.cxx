@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-07 09:59:11 $
+ *  last change: $Author: fme $ $Date: 2001-11-19 11:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                         if( pPos->GetExpTxt( rInf, aTxt ) && aTxt.Len() )
                             SetCntnt( sal_True );
                     }
-                    else if( pPos->InTxtGrp() && pPos->GetLen() )
+                    else if( ( pPos->InTxtGrp() || pPos->IsMultiPortion() ) &&
+                             pPos->GetLen() )
                         SetCntnt( sal_True );
                 }
                 bTmpDummy = bTmpDummy && !HasCntnt() &&
