@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertystatecontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:51:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 #include <map>
 
@@ -97,7 +100,7 @@ namespace comphelper
 
         @see com.sun.star.beans.XPropertyState
     */
-    class OPropertyStateContainer
+    class COMPHELPER_DLLPUBLIC OPropertyStateContainer
                 :public  OPropertyContainer
                 ,public  OPropertyStateContainer_TBase
     {
