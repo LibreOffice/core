@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-12 12:27:07 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1879,7 +1879,6 @@ BOOL SwHTMLParser::FileDownload( const String& rURL,
 
     // Ein Medium anlegen
     SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-    aDLMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
 
     // Medium registrieren, damit abgebrochen werden kann
     if( pDoc->GetDocShell() )
