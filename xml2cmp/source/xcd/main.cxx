@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:39:36 $
+ *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ int                     Do_IndexCommandLine(
                             const CommandLine &     i_rCommandLine );
 int                     Do_SingleFileCommandLine(
                             const CommandLine &     i_rCommandLine );
-void                    Create_TypeInfoFile(
+void                    Create_TypeInfo(
                             const char *            o_sOutputFile,
                             ModuleDescription &     i_rData );
 
@@ -155,8 +155,8 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
 
     if (strlen(i_rCommandLine.TypeInfoFile()) > 0)
     {
-        Create_TypeInfoFile( i_rCommandLine.TypeInfoFile() ,
-                             aDescr );
+        Create_TypeInfo( i_rCommandLine.TypeInfoFile(),
+                         aDescr );
     }
 
     return 0;
@@ -185,10 +185,32 @@ Do_IndexCommandLine(const CommandLine & i_rCommandLine)
 
 
 
+//********************      Creating of typeinfo       ********************//
+
+
+void                    Put2StdOut_TypeInfo(
+                            ModuleDescription &     i_rData );
+void                    Put2File_TypeInfo(
+                            const char *            i_sOutputFile,
+                            ModuleDescription &     i_rData );
+void                    StreamOut_TypeInfo(
+                            ostream &               o_rOut,
+                            ModuleDescription &     i_rData,
+                            const char *            i_sSeparator );
+
+
+
+
 void
-Create_TypeInfoFile( const char *           o_sOutputFile,
-                     ModuleDescription &    i_rData )
+Create_TypeInfo( const char *           o_sOutputFile,
+                 ModuleDescription &    i_rData )
 {
+    if ( strcmp(o_sOutputFile, "stdout") == 0 )
+        Put2StdOut_TypeInfo(i_rData);
+    else
+        Put2File_TypeInfo(o_sOutputFile,i_rData);
+
+#if 0
     ofstream aOut(o_sOutputFile, ios::out
 #ifdef WNT
                                                | ios::binary
@@ -253,5 +275,90 @@ Create_TypeInfoFile( const char *           o_sOutputFile,
     }
 
     aOut.close();
+#endif // 0
+}
+
+void
+Put2StdOut_TypeInfo( ModuleDescription &    i_rData )
+{
+    StreamOut_TypeInfo(cout, i_rData, " ");
+}
+
+void
+Put2File_TypeInfo( const char *            i_sOutputFile,
+                   ModuleDescription &     i_rData )
+{
+    ofstream aOut(i_sOutputFile, ios::out
+#ifdef WNT
+                                               | ios::binary
+#endif
+    );
+    if ( !aOut )
+    {
+        cerr << "Error: " << i_sOutputFile << " could not be created." << endl;
+        return;
+    }
+
+    Simstr  sLibPrefix = i_rData.ModuleName();
+    WriteStr( aOut, sLibPrefix );
+    WriteStr( aOut, "_XML2CMPTYPES= ");
+
+    StreamOut_TypeInfo(aOut, i_rData, "\t\\\n\t\t");
+
+    aOut.close();
+}
+
+void
+StreamOut_TypeInfo( ostream &               o_rOut,
+                    ModuleDescription &     i_rData,
+                    const char *            i_sSeparator )
+{
+    Heap    aTypesHeap(12);
+
+    // Gather types:
+    List< const MultipleTextElement * > aTypes;
+    i_rData.Get_Types(aTypes);
+
+    for ( unsigned t = 0; t < aTypes.size(); ++t )
+    {
+        unsigned i_max = aTypes[t]->Size();
+        for ( unsigned  i = 0; i < i_max; ++i )
+        {
+            aTypesHeap.InsertValue( aTypes[t]->Data(i), "" );
+        }  // end for
+    }
+
+    // Write types:
+    HeapItem * pLastHeapTop = 0;
+    for ( HeapItem * pHeapTop = aTypesHeap.ReleaseTop(); pHeapTop != 0; pHeapTop = aTypesHeap.ReleaseTop() )
+    {
+        if (pLastHeapTop != 0)
+        {
+            if ( 0 == strcmp(pHeapTop->Key(), pLastHeapTop->Key()) )
+                continue;
+            delete pLastHeapTop;
+            // pLastHeapTop = 0;
+        }
+        pLastHeapTop = pHeapTop;
+
+        WriteStr( o_rOut, i_sSeparator );
+
+        const char * sEnd = strchr( pHeapTop->Key(), ' ' );
+        if (sEnd != 0)
+        {
+            const char * sQuali = strrchr( pHeapTop->Key(), ' ' ) + 1;
+            WriteStr( o_rOut, sQuali );
+            WriteStr( o_rOut, "." );
+            o_rOut.write( pHeapTop->Key(), sEnd - pHeapTop->Key() );
+        }
+        else
+            WriteStr( o_rOut, pHeapTop->Key() );
+    }   // end for
+
+    if (pLastHeapTop != 0)
+    {
+        delete pLastHeapTop;
+        pLastHeapTop = 0;
+    }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:39:36 $
+ *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,13 @@ class Index
                             const ModuleDescription &
                                                 i_rModule );
     void                WriteTableFromHeap(
-                            std::ofstream &     o_rOut,
+                            std::ostream &      o_rOut,
                             Heap &              i_rHeap,
                             const char *        i_sIndexKey,
                             const char *        i_sIndexReference,
                             E_LinkType          i_eLinkType );
     void                WriteHeap(
-                            std::ofstream &     o_rOut,
+                            std::ostream &      o_rOut,
                             Heap &              i_rHeap,
                             E_LinkType          i_eLinkType );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:23:17 $
+ *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ using namespace std;
 char C_sSpaceInName[] = "&nbsp;&nbsp;&nbsp;";
 
 void
-WriteName( ofstream &       o_rFile,
+WriteName( ostream &        o_rFile,
            const Simstr &   i_rIdlDocuBaseDir,
            const Simstr &   i_rName,
            E_LinkType       i_eLinkType )
@@ -189,14 +189,14 @@ WriteName( ofstream &       o_rFile,
 
 
 void
-WriteStr( std::ofstream &       o_rFile,
+WriteStr( std::ostream &    o_rFile,
           const char *      i_sStr )
 {
     o_rFile.write( i_sStr, strlen(i_sStr) );
 }
 
 void
-WriteStr( std::ofstream &         o_rFile,
+WriteStr( std::ostream &      o_rFile,
           const Simstr &      i_sStr )
 {
     o_rFile.write( i_sStr.str(), i_sStr.l() );

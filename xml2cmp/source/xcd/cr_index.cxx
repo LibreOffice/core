@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:39:36 $
+ *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,8 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
 
 
 void
-Index::WriteTableFromHeap( ofstream &   o_rOut,
-                           Heap &           i_rHeap,
+Index::WriteTableFromHeap( ostream &    o_rOut,
+                           Heap &       i_rHeap,
                            const char * i_sIndexValue,
                            const char * i_sIndexReference,
                            E_LinkType       i_eLinkType )
@@ -220,7 +220,7 @@ Index::WriteTableFromHeap( ofstream &   o_rOut,
 
 
 void
-Index::WriteHeap( ofstream &    o_rOut,
+Index::WriteHeap( ostream &     o_rOut,
                   Heap &        i_rHeap,
                   E_LinkType    i_eLinkType )
 {
