@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:31:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-03 11:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,7 +1124,7 @@ void OCopyTableWizard::loadData()
     loadData(m_xSourceObject,m_vSourceColumns,m_vSourceVec); // create the field description
 }
 // -----------------------------------------------------------------------------
-=======
+//=======
 void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName)
 {
     UniString sTitle(ModuleRes(STR_STAT_WARNING));
