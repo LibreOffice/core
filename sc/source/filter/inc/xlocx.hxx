@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:56:42 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,10 @@
 class XclOcxConverter : protected SvxMSConvertOCXControls
 {
 protected:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  XFormComponentRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       XShapeRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >    XDrawPageRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       XShapeRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  XFormComponentRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    XControlModelRef;
 
 protected:
     explicit                    XclOcxConverter( const XclRoot& rRoot );
@@ -112,6 +113,7 @@ private:
 
 class XclImpEscherOle;
 class XclImpEscherTbxCtrl;
+class XclImpCtrlLinkHelper;
 
 /** Converter for import of OXC controls. */
 class XclImpOcxConverter : public XclOcxConverter, protected XclImpRoot
@@ -135,6 +137,11 @@ private:
                                     XShapeRef* pxShape,
                                     BOOL bFloatingCtrl );
 
+    /** Tries to set a spreadsheet cell link and source range link at the passed form control. */
+    void                        ConvertSheetLinks(
+                                    XControlModelRef rxModel,
+                                    const XclImpCtrlLinkHelper& rControl ) const;
+
 private:
     SvStorageStreamRef          mxStrm;         /// The 'Ctls' strem.
 };
@@ -148,6 +155,7 @@ class XclExpObjOcxCtrl;
 #else
 class XclExpObjTbxCtrl;
 #endif
+class XclExpCtrlLinkHelper;
 
 /** Converter for export of OXC controls. */
 class XclExpOcxConverter : public XclOcxConverter, protected XclExpRoot
@@ -163,6 +171,13 @@ public:
     /** Creates a TBX form control OBJ record from the passed form control. */
     XclExpObjTbxCtrl*           CreateCtrlObj( const XShapeRef& rxShape );
 #endif
+
+private:
+    /** Tries to get spreadsheet cell link and source range link from the passed model.
+        @param rControl  The Excel form control that stores and exports the links. */
+    void                        ConvertSheetLinks(
+                                    XclExpCtrlLinkHelper& rControl,
+                                    const XControlModelRef& rxModel ) const;
 
 private:
     SvStorageStreamRef          mxStrm;         /// The 'Ctls' stream.
