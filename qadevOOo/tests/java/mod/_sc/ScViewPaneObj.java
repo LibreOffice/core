@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScViewPaneObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:09 $
+ *  last change:$Date: 2003-02-04 17:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.sheet.SpreadsheetViewPane</code>. <p>
@@ -137,8 +140,7 @@ public class ScViewPaneObj extends TestCase {
     * </ul>
     * @see com.sun.star.frame.XModel
     */
-    public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XModel xm = (XModel)
             UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
@@ -146,11 +148,15 @@ public class ScViewPaneObj extends TestCase {
         XIndexAccess xIA = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, xc);
         try {
-            oObj = (XInterface)xIA.getByIndex(0);
+            oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class),xIA.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get by index", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         }
