@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:14:41 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,9 @@ public:
     virtual Reference< XInterface > SAL_CALL getContext() throw( RuntimeException )
     { return _xContext; }
 
-    virtual sal_Bool SAL_CALL setModel( const Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException ) = NULL;
+    virtual sal_Bool SAL_CALL setModel( const Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException ) = 0;
 //  { DBG_ERROR( "### setModel() illegal on plugincontrol!" ); return sal_False; }
-    virtual Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( RuntimeException ) = NULL;
+    virtual Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( RuntimeException ) = 0;
 
     virtual Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw( RuntimeException )
     { return (::com::sun::star::awt::XView*)this; }
