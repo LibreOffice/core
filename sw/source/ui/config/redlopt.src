@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:36:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
+        Text[ english_us ] = "Attributes";
+        Text[ portuguese ] = "Attributes";
+        Text[ russian ] = "Attributes";
+        Text[ greek ] = "Attributes";
+        Text[ dutch ] = "Attributes";
+        Text[ french ] = "Attributes";
+        Text[ spanish ] = "Attributes";
+        Text[ italian ] = "Attributes";
+        Text[ danish ] = "Attributes";
+        Text[ swedish ] = "Attributes";
+        Text[ polish ] = "Attributes";
+        Text[ portuguese_brazilian ] = "Attributes";
+        Text[ japanese ] = "Attributes";
+        Text[ korean ] = "Attributes";
+        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_traditional ] = "ƒ›© ";
+        Text[ turkish ] = "Attributes";
+        Text[ arabic ] = "Attributes";
     };
     ListBox LB_INS_ATTR
     {
@@ -432,6 +450,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 70 , 27 ) ;
         Text = "Einf¸gen" ;
         Text [ English ] = "Insert" ;
+        Text[ english_us ] = "Insert";
+        Text[ portuguese ] = "Insert";
+        Text[ russian ] = "Insert";
+        Text[ greek ] = "Insert";
+        Text[ dutch ] = "Insert";
+        Text[ french ] = "Insert";
+        Text[ spanish ] = "Insert";
+        Text[ italian ] = "Insert";
+        Text[ danish ] = "Insert";
+        Text[ swedish ] = "Insert";
+        Text[ polish ] = "Insert";
+        Text[ portuguese_brazilian ] = "Insert";
+        Text[ japanese ] = "Insert";
+        Text[ korean ] = "Insert";
+        Text[ chinese_simplified ] = "Insert";
+        Text[ chinese_traditional ] = "¥°§J";
+        Text[ turkish ] = "Insert";
+        Text[ arabic ] = "Insert";
     };
     FixedText FT_DEL_ATTR
     {
@@ -439,6 +475,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
+        Text[ english_us ] = "Attributes";
+        Text[ portuguese ] = "Attributes";
+        Text[ russian ] = "Attributes";
+        Text[ greek ] = "Attributes";
+        Text[ dutch ] = "Attributes";
+        Text[ french ] = "Attributes";
+        Text[ spanish ] = "Attributes";
+        Text[ italian ] = "Attributes";
+        Text[ danish ] = "Attributes";
+        Text[ swedish ] = "Attributes";
+        Text[ polish ] = "Attributes";
+        Text[ portuguese_brazilian ] = "Attributes";
+        Text[ japanese ] = "Attributes";
+        Text[ korean ] = "Attributes";
+        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_traditional ] = "ƒ›© ";
+        Text[ turkish ] = "Attributes";
+        Text[ arabic ] = "Attributes";
     };
     ListBox LB_DEL_ATTR
     {
@@ -453,6 +507,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
+        Text[ english_us ] = "Color";
+        Text[ portuguese ] = "Color";
+        Text[ russian ] = "Color";
+        Text[ greek ] = "Color";
+        Text[ dutch ] = "Color";
+        Text[ french ] = "Color";
+        Text[ spanish ] = "Color";
+        Text[ italian ] = "Color";
+        Text[ danish ] = "Color";
+        Text[ swedish ] = "Color";
+        Text[ polish ] = "Color";
+        Text[ portuguese_brazilian ] = "Color";
+        Text[ japanese ] = "Color";
+        Text[ korean ] = "Color";
+        Text[ chinese_simplified ] = "Color";
+        Text[ chinese_traditional ] = "√C¶‚";
+        Text[ turkish ] = "Color";
+        Text[ arabic ] = "Color";
     };
     ListBox LB_DEL_COL
     {
@@ -468,6 +540,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 70 , 27 ) ;
         Text = "Lˆschen" ;
         Text [ English ] = "Delete" ;
+        Text[ english_us ] = "Delete";
+        Text[ portuguese ] = "Delete";
+        Text[ russian ] = "Delete";
+        Text[ greek ] = "Delete";
+        Text[ dutch ] = "Delete";
+        Text[ french ] = "Delete";
+        Text[ spanish ] = "Delete";
+        Text[ italian ] = "Delete";
+        Text[ danish ] = "Delete";
+        Text[ swedish ] = "Delete";
+        Text[ polish ] = "Delete";
+        Text[ portuguese_brazilian ] = "Delete";
+        Text[ japanese ] = "Delete";
+        Text[ korean ] = "Delete";
+        Text[ chinese_simplified ] = "Delete";
+        Text[ chinese_traditional ] = "ßR∞£";
+        Text[ turkish ] = "Delete";
+        Text[ arabic ] = "Delete";
     };
     FixedText FT_CHG_ATTR
     {
@@ -475,6 +565,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
+        Text[ english_us ] = "Attributes";
+        Text[ portuguese ] = "Attributes";
+        Text[ russian ] = "Attributes";
+        Text[ greek ] = "Attributes";
+        Text[ dutch ] = "Attributes";
+        Text[ french ] = "Attributes";
+        Text[ spanish ] = "Attributes";
+        Text[ italian ] = "Attributes";
+        Text[ danish ] = "Attributes";
+        Text[ swedish ] = "Attributes";
+        Text[ polish ] = "Attributes";
+        Text[ portuguese_brazilian ] = "Attributes";
+        Text[ japanese ] = "Attributes";
+        Text[ korean ] = "Attributes";
+        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_traditional ] = "ƒ›© ";
+        Text[ turkish ] = "Attributes";
+        Text[ arabic ] = "Attributes";
     };
     ListBox LB_CHG_ATTR
     {
@@ -489,6 +597,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
+        Text[ english_us ] = "Color";
+        Text[ portuguese ] = "Color";
+        Text[ russian ] = "Color";
+        Text[ greek ] = "Color";
+        Text[ dutch ] = "Color";
+        Text[ french ] = "Color";
+        Text[ spanish ] = "Color";
+        Text[ italian ] = "Color";
+        Text[ danish ] = "Color";
+        Text[ swedish ] = "Color";
+        Text[ polish ] = "Color";
+        Text[ portuguese_brazilian ] = "Color";
+        Text[ japanese ] = "Color";
+        Text[ korean ] = "Color";
+        Text[ chinese_simplified ] = "Color";
+        Text[ chinese_traditional ] = "√C¶‚";
+        Text[ turkish ] = "Color";
+        Text[ arabic ] = "Color";
     };
     ListBox LB_CHG_COL
     {
@@ -504,6 +630,24 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 70 , 27 ) ;
         Text = "Attribute" ;
         Text [ English ] = "Attributes" ;
+        Text[ english_us ] = "Attributes";
+        Text[ portuguese ] = "Attributes";
+        Text[ russian ] = "Attributes";
+        Text[ greek ] = "Attributes";
+        Text[ dutch ] = "Attributes";
+        Text[ french ] = "Attributes";
+        Text[ spanish ] = "Attributes";
+        Text[ italian ] = "Attributes";
+        Text[ danish ] = "Attributes";
+        Text[ swedish ] = "Attributes";
+        Text[ polish ] = "Attributes";
+        Text[ portuguese_brazilian ] = "Attributes";
+        Text[ japanese ] = "Attributes";
+        Text[ korean ] = "Attributes";
+        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_traditional ] = "ƒ›© ";
+        Text[ turkish ] = "Attributes";
+        Text[ arabic ] = "Attributes";
     };
     FixedLine GB_LC
     {
@@ -524,7 +668,7 @@ TabPage TP_REDLINE_OPT
         Text[ russian ] = "»ÁÏÂÌÂÌÌ˚Â ÒÚÓÍË";
         Text[ polish ] = "Zmienione wiersze";
         Text[ japanese ] = "ïœçXÇµÇΩçs";
-        Text[ chinese_traditional ] = "≈‹ßÛ™∫¶Ê";
+        Text[ chinese_traditional ] = "§w∏g≈‹ßÛ™∫¶Ê";
         Text[ arabic ] = "√”ÿ— „⁄œ·…";
         Text[ greek ] = "√Ò·ÏÏ›Ú Ôı ›˜ÔıÌ ·ÎÎ·˜ËÂﬂ";
         Text[ korean ] = "∫Ø∞Êµ»°°º±.";
@@ -538,22 +682,22 @@ TabPage TP_REDLINE_OPT
         Text = "Ma~rkierung" ;
         Text [ English ] = "Mark" ;
         Text [ portuguese ] = "Marca" ;
-        Text [ english_us ] = "Mark" ;
+        Text [ english_us ] = "Mar~k" ;
         Text [ portuguese_brazilian ] = "Markierung" ;
-        Text [ swedish ] = "Markering" ;
+        Text [ swedish ] = "Ma~rkering" ;
         Text [ danish ] = "Markering" ;
         Text [ italian ] = "Contrassegno" ;
-        Text [ spanish ] = "Marca" ;
-        Text [ french ] = "Marque" ;
+        Text [ spanish ] = "~Marca" ;
+        Text [ french ] = "Ma~rque" ;
         Text [ dutch ] = "Markering" ;
-        Text[ chinese_simplified ] = "±Íº«";
+        Text[ chinese_simplified ] = "±Íº«(~K)";
         Text[ russian ] = "¬˚‰ÂÎÂÌËÂ";
         Text[ polish ] = "Zaznaczenie";
-        Text[ japanese ] = "ëIë";
-        Text[ chinese_traditional ] = "º–∞O";
+        Text[ japanese ] = "ãLçÜ(~K)";
+        Text[ chinese_traditional ] = "º–∞O(~K)";
         Text[ arabic ] = "«· ÕœÌœ";
-        Text[ greek ] = "Ã·ÒÍ‹ÒÈÛÏ·";
-        Text[ korean ] = "∏∂≈∑";
+        Text[ greek ] = "”ﬁÏ·ÌÛÁ";
+        Text[ korean ] = "∏∂≈∑(~K)";
         Text[ turkish ] = "›˛aret";
         Text[ language_user1 ] = " ";
     };
@@ -738,23 +882,23 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "Far~be" ;
         Text [ English ] = "Color" ;
-        Text [ english_us ] = "Color" ;
+        Text [ english_us ] = "~Color" ;
         Text [ portuguese_brazilian ] = "Farbe" ;
-        Text [ swedish ] = "F‰rg" ;
+        Text [ swedish ] = "F‰r~g" ;
         Text [ danish ] = "Farve" ;
         Text [ italian ] = "Colore" ;
-        Text [ spanish ] = "Color" ;
-        Text [ french ] = "Couleur" ;
+        Text [ spanish ] = "~Color" ;
+        Text [ french ] = "~Couleur" ;
         Text [ dutch ] = "Kleur" ;
         Text [ portuguese ] = "Cor" ;
-        Text[ chinese_simplified ] = "—’…´";
+        Text[ chinese_simplified ] = "—’…´(~C)";
         Text[ russian ] = "÷‚ÂÚ";
         Text[ polish ] = "Kolor";
-        Text[ japanese ] = "êF";
-        Text[ chinese_traditional ] = "√C¶‚";
+        Text[ japanese ] = "êF(~C)";
+        Text[ chinese_traditional ] = "√C¶‚(~C)";
         Text[ arabic ] = "«··Ê‰";
         Text[ greek ] = "◊Ò˛Ï·";
-        Text[ korean ] = "ªˆªÛ";
+        Text[ korean ] = "ªˆªÛ(~C)";
         Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
     };
