@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 18:59:26 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ void SAL_CALL
     AccessibleOutlineView::frameAction (const frame::FrameActionEvent& rEventObject)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    AccessibleDocumentViewBase::frameAction (rEventObject);
+    //    AccessibleDocumentViewBase::frameAction (rEventObject);
 
     if (rEventObject.Action == frame::FrameAction_COMPONENT_REATTACHED)
         UpdateChildren();
