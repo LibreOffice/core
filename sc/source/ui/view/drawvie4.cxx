@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:25:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
 void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
 {
     USHORT nPages = pModel->GetPageCount();
-    for (USHORT nTab=0; nTab<nPages; nTab++)
+    for (SCTAB nTab=0; nTab<nPages; nTab++)
     {
         SdrPage* pPage = pModel->GetPage(nTab);
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -281,8 +281,8 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
     if (pViewData)
         nPPTX /= pViewData->GetDocShell()->GetOutputFactor();
 
-    USHORT nEndCol = 0;
-    USHORT nEndRow = 0;
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
     pDoc->GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
