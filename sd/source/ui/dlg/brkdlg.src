@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:08:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,8 @@ ModalDialog DLG_BREAK
     Text[ hindi ] = "खण्डन";
     Text[ slovak ] = "Zalomenie";
 };
+
+
 
 
 
