@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:36:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace dbaccess
         sal_Bool        bIsDocument;    // IsDocument
         sal_Bool        bIsFolder;      // IsFolder
         sal_Bool        bAsTemplate;    // AsTemplate
-        ::rtl::OUString sPersistentName;// persitent name of the document
+        ::rtl::OUString sPersistentName;// persistent name of the document
 
         // @@@ Add other properties supported by your content.
 
