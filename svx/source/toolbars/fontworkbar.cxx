@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:16:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,8 @@ void FontworkBar::execute( SdrView* pSdrView, sal_uInt16 nSID )
                 pModel->InsertPage( pFmPage, 0 );
 
                 SdrObject* pSingleObj = NULL;
-                if (pSdrView->GetMarkList().GetMarkCount()==1)
-                    pSingleObj = pSdrView->GetMarkList().GetMark(0)->GetObj();
+                if (pSdrView->GetMarkedObjectList().GetMarkCount()==1)
+                    pSingleObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetObj();
 
                 if( pSingleObj )
                 {
