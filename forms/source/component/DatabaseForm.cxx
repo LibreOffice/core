@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-18 16:43:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-23 10:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1901,12 +1901,10 @@ void ODatabaseForm::disposing()
     if (m_xAggregateAsRowSet.is())
         m_xAggregateAsRowSet->removeRowSetListener(this);
 
-    Reference<XPropertySet> xProp(m_xAggregate,UNO_QUERY);
-    OSL_ENSHURE(xProp.is(),"No PropSet!");
-
     // dispose the active connection
     Reference<XComponent>  xConnection;
-    xProp->getPropertyValue(PROPERTY_ACTIVE_CONNECTION) >>= xConnection;
+    if (m_xAggregateSet.is())
+        ::cppu::extractInterface(xConnection, m_xAggregateSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
 
     Reference<XComponent>  xAggregationComponent;
     if (query_aggregation(m_xAggregate, xAggregationComponent))
