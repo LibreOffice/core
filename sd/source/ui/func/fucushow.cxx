@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucushow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ FuCustomShowDlg::FuCustomShowDlg (
         if( pDlg->IsModified() )//CHINA001 if( aDlg.IsModified() )
         {
             pDoc->SetChanged( TRUE );
-            pDoc->SetCustomShow( pDlg->IsCustomShow() ); //CHINA001 pDoc->SetCustomShow( aDlg.IsCustomShow() );
+            sd::PresentationSettings& rSettings = pDoc->getPresentationSettings();
+            rSettings.mbCustomShow = pDlg->IsCustomShow();
         }
 
         if( nRet == RET_YES )
