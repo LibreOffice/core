@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:56:29 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:27:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=frmdlg
+LIBTARGET=no
 
 # --- Settings -----------------------------------------------------
 
@@ -102,6 +103,18 @@ SLOFILES =  \
 NOOPTFILES = \
         $(SLO)$/frmex.obj
 .ENDIF          # "$(OS)"=="SOLARIS"
+
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =	\
+        $(SLO)$/bbmgr.obj \
+        $(SLO)$/colmgr.obj \
+        $(SLO)$/colex.obj \
+        $(SLO)$/frmex.obj \
+        $(SLO)$/frmmgr.obj
+        
+        
+        
 
 # --- Tagets -------------------------------------------------------
 
