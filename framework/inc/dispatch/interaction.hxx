@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-14 16:05:40 $
+ *  last change: $Author: as $ $Date: 2001-12-19 13:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,6 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
-#include <classes/filtercache.hxx>
-#endif
-
-#ifndef __FRAMEWORK_GENERAL_H_
-#include <general.h>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -96,6 +88,10 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_NOSUCHFILTERREQUEST_HPP_
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_AMBIGOUSFILTERREQUEST_HPP_
+#include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
@@ -158,7 +154,6 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-
 template< class TContinuationType >
 class ContinuationBase : public ::cppu::WeakImplHelper1< TContinuationType >
 {
@@ -195,7 +190,7 @@ class ContinuationBase : public ::cppu::WeakImplHelper1< TContinuationType >
         //---------------------------------------------------------------------------------------------------------
         // called by handler to mark continuation as the only possible solution for started interaction
         //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL select() throw( css::uno::RuntimeException )
+        virtual void SAL_CALL select() throw( ::com::sun::star::uno::RuntimeException )
         {
             m_bSelected = sal_True;
         }
@@ -220,8 +215,7 @@ class ContinuationBase : public ::cppu::WeakImplHelper1< TContinuationType >
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-
-typedef ContinuationBase< css::task::XInteractionAbort > ContinuationAbort;
+typedef ContinuationBase< ::com::sun::star::task::XInteractionAbort > ContinuationAbort;
 
 /*-************************************************************************************************************//**
     @short          declaration of special continuation for filter selection
@@ -243,42 +237,19 @@ typedef ContinuationBase< css::task::XInteractionAbort > ContinuationAbort;
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-
-class ContinuationFilterSelect : public ContinuationBase< css::document::XInteractionFilterSelect >
+class ContinuationFilterSelect : public ContinuationBase< ::com::sun::star::document::XInteractionFilterSelect >
 {
     // c++ interface
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        // initialize continuation with right start values
-        //---------------------------------------------------------------------------------------------------------
-        ContinuationFilterSelect()
-            : m_sFilter( ::rtl::OUString() )
-        {
-        }
+        ContinuationFilterSelect();
 
     // uno interface
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        // handler should use it after selection to set user specified filter for transport
-        //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL setFilter( const ::rtl::OUString& sFilter ) throw( css::uno::RuntimeException )
-        {
-            m_sFilter = sFilter;
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        // read access to transported filter
-        //---------------------------------------------------------------------------------------------------------
-        virtual ::rtl::OUString SAL_CALL getFilter() throw( css::uno::RuntimeException )
-        {
-            return m_sFilter;
-        }
+        virtual void            SAL_CALL setFilter( const ::rtl::OUString& sFilter ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::rtl::OUString SAL_CALL getFilter(                                ) throw( ::com::sun::star::uno::RuntimeException );
 
     // member
     private:
-
         ::rtl::OUString m_sFilter;
 
 };  // class ContinuationFilterSelect
@@ -305,78 +276,62 @@ class ContinuationFilterSelect : public ContinuationBase< css::document::XIntera
     @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
-
-class RequestFilterSelect : public ::cppu::WeakImplHelper1< css::task::XInteractionRequest >
+class RequestFilterSelect : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
     // c++ interface
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        // initialize instance with all neccessary informations
-        // We use it without any further checks on our member then ...!
-        //---------------------------------------------------------------------------------------------------------
-        RequestFilterSelect( const ::rtl::OUString& sURL )
-        {
-            ::rtl::OUString aStr;
-            css::document::NoSuchFilterRequest aFilterRequest( aStr, css::uno::Reference< css::uno::XInterface >(), sURL );
-            m_aRequest <<= aFilterRequest;
-
-            m_pAbort  = new ContinuationAbort       ;
-            m_pFilter = new ContinuationFilterSelect;
-
-            m_lContinuations.realloc( 2 );
-            m_lContinuations[0] = css::uno::Reference< css::task::XInteractionContinuation >( m_pAbort  );
-            m_lContinuations[1] = css::uno::Reference< css::task::XInteractionContinuation >( m_pFilter );
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        // return abort state of interaction
-        // If it is true, return value of method "getFilter()" will be unspecified then!
-        //---------------------------------------------------------------------------------------------------------
-        sal_Bool isAbort() const
-        {
-            return m_pAbort->isSelected();
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        // return user selected filter
-        // Return value valid for non aborted interaction only. Please check "isAbort()" before you call these ony!
-        //---------------------------------------------------------------------------------------------------------
-        ::rtl::OUString getFilter() const
-        {
-            return m_pFilter->getFilter();
-        }
+        RequestFilterSelect( const ::rtl::OUString& sURL );
+        sal_Bool        isAbort  () const;
+        ::rtl::OUString getFilter() const;
 
     // uno interface
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        // handler call it to get type of request
-        // Is hard coded to "please select filter" here. see ctor for further informations.
-        //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Any SAL_CALL getRequest() throw( css::uno::RuntimeException )
-        {
-            return m_aRequest;
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        // handler call it to get possible continuations
-        // We support "abort/select_filter" only here.
-        // After interaction we support read access on these continuations on our c++ interface to
-        // return user decision.
-        //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException )
-        {
-            return m_lContinuations;
-        }
+        virtual ::com::sun::star::uno::Any                                                                                              SAL_CALL getRequest      () throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException );
 
     // member
     private:
+        ::com::sun::star::uno::Any                                                                                                 m_aRequest      ;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >    m_lContinuations;
+        ContinuationAbort*                                                                                                         m_pAbort        ;
+        ContinuationFilterSelect*                                                                                                  m_pFilter       ;
 
-        css::uno::Any                                                                       m_aRequest      ;
-        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >    m_lContinuations;
-        ContinuationAbort*                                                                  m_pAbort        ;
-        ContinuationFilterSelect*                                                           m_pFilter       ;
+};  // class RequestFilterSelect
+
+/*-************************************************************************************************************//**
+    @short          special request for interaction
+    @descr          User must decide between a preselected and another detected filter.
+                    It capsulate communication with any interaction handler and supports an easy
+                    access on interaction results for user of these class.
+
+    @implements     XInteractionRequest
+
+    @base           WeakImplHelper1
+
+    @devstatus      ready to use
+    @threadsafe     no (used on once position only!)
+*//*-*************************************************************************************************************/
+class RequestAmbigousFilter : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+{
+    // c++ interface
+    public:
+        RequestAmbigousFilter( const ::rtl::OUString& sURL            ,
+                               const ::rtl::OUString& sSelectedFilter ,
+                               const ::rtl::OUString& sDetectedFilter );
+        sal_Bool        isAbort  () const;
+        ::rtl::OUString getFilter() const;
+
+    // uno interface
+    public:
+        virtual ::com::sun::star::uno::Any                                                                                              SAL_CALL getRequest      () throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException );
+
+    // member
+    private:
+        ::com::sun::star::uno::Any                                                                                                 m_aRequest      ;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >    m_lContinuations;
+        ContinuationAbort*                                                                                                         m_pAbort        ;
+        ContinuationFilterSelect*                                                                                                  m_pFilter       ;
 
 };  // class RequestFilterSelect
 
