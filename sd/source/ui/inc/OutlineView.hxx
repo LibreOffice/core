@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:37:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ public:
     virtual BOOL    GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
     virtual BOOL    SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
-    virtual BOOL       HasMarkedObj() const;
+//  virtual BOOL       HasMarkedObjUnused() const;
     void               FillOutliner();
     void               SetLinks();
     void               ResetLinks() const;
