@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:32:08 $
+#   last change: $Author: hr $ $Date: 2005-02-11 18:25:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,11 +133,7 @@ CXX*=nmcl /NMttOn
 .IF "$(syntax)"!=""
 CXX*=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
 .ELSE
-.IF "$(USE_SHELL)"=="4nt"
-CXX*=cl
-.ELSE			# "$(USE_SHELL)"=="4nt"
 CXX*=$(WRAPCMD) cl
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF
 .ENDIF
@@ -293,14 +289,9 @@ CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
 .ENDIF
 
-COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(DESTINATION_MINOR)_$(FUNCORD)_$(__DATE)_$(__TIME)_$(VCSID)_"
+COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(VCSID)_"
 
-
-.IF "$(USE_SHELL)"=="4nt"
-LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
-.ELSE			# "$(USE_SHELL)"=="4nt"
-LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+LINK=$(WRAPCMD) link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 LINKOUTPUTFILTER= |& $(GREP) -v "LNK4197:"
 .IF "$(PRODUCT)"!="full"
 .ELSE
@@ -388,13 +379,8 @@ LIBSTLPORTST=stlport_vc7_static.lib
 ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include 
 ATL_LIB*=$(COMPATH)$/atlmfc$/lib 
 
-.IF "$(USE_SHELL)"=="4nt"
-LIBMGR=lib $(NOLOGO)
-IMPLIB=lib
-.ELSE			# "$(USE_SHELL)"=="4nt"
 LIBMGR=$(WRAPCMD) lib $(NOLOGO)
 IMPLIB=$(WRAPCMD) lib
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 LIBFLAGS=
 
 IMPLIBFLAGS=-machine:IX86
@@ -402,11 +388,7 @@ IMPLIBFLAGS=-machine:IX86
 MAPSYM=
 MAPSYMFLAGS=
 
-.IF "$(USE_SHELL)"=="4nt"
-RC=rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
 RC=$(WRAPCMD) rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
 RCLINK=rc
 RCLINKFLAGS=
@@ -429,13 +411,13 @@ RDBMAKER=$(WRAPCMD) rdbmaker
 STARDEP=$(WRAPCMD) javadep
 JAVAC=$(WRAPCMD) javac
 JAVA=$(WRAPCMD) java
+JAVAI!=$(WRAPCMD) java
 #SCPCOMP=$(WRAPCMD) scpcomp
 #SCPLINK=$(WRAPCMD) scplink
 SCPCOMP=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin/pre2par.pl
 SCPLINK=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin/par2script.pl
-LZIP=$(WRAPCMD) -env lzip
 CPPLCC=$(WRAPCMD) cpplcc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF
 .ENDIF              # "$(COM)"=="MSC"
 
