@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ String RID_OBJECTBAR_DRAWFORM
     Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶ÎÀ¸";
     Text[ russian ] = "Ïàíåëü ıëåìåíòîâ óïğàâëåíèÿ";
     Text[ polish ] = "Pasek formantów";
-    Text[ japanese ] = "ºİÄÛ°Ù Â°ÙÊŞ°";
+    Text[ japanese ] = "ºİÄÛ°ÙÂ°ÙÊŞ°";
     Text[ chinese_traditional ] = "±±¨î¶µ¦C";
     Text[ arabic ] = "ÔÑíØ ÚäÇÕÑ ÇáÊÍßã";
     Text[ dutch ] = "Controlebalk";
