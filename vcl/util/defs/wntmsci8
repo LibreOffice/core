@@ -7884,3 +7884,13 @@ threadFunc
 ??_C@_0CH@PAGKDIDO@o?3?2SRX645?2wntmsci8?2inc?2rtl?1ustri@
 ??4?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@QAAAAV01234@ABV01234@@Z
 ?GetDigitLanguage@OutputDevice@@QBEGXZ
+?GetDocInfo@PDFWriter@vcl@@QBEABUPDFDocInfo@2@XZ
+?SetDocInfo@PDFWriter@vcl@@QAEXABUPDFDocInfo@2@@Z
+??0PDFDocInfo@vcl@@QAE@XZ
+??1PDFDocInfo@vcl@@QAE@XZ
+??A?$vector@HV?$allocator@H@_STL@@@_STL@@QBEABHI@Z
+?IsControlChar@@YA_NG@Z
+?begin@?$vector@HV?$allocator@H@_STL@@@_STL@@QBEPBHXZ
+??0UniscribeLayout@@QAE@PAUHDC__@@AAPAX@Z
+??1UniscribeLayoutCache@@UAE@XZ
+?flush@UniscribeLayoutCache@@UAEXH@Z
