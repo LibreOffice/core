@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpdispatch.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-17 10:57:34 $
+ *  last change: $Author: pb $ $Date: 2001-10-19 09:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,16 +102,24 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
 
 {
     DBG_ASSERT( m_xRealDispatch.is(), "invalid dispatch" );
-    URL aNewURL( aURL );
-    sal_Int32 nIdx = aURL.Complete.indexOf( DEFINE_CONST_OUSTRING("&Keyword=") );
-    if ( nIdx != -1 )
+
+    const PropertyValue* pBegin = aArgs.getConstArray();
+    const PropertyValue* pEnd   = pBegin + aArgs.getLength();
+    for ( ; pBegin != pEnd; ++pBegin )
     {
-        String aKeyword = aURL.Complete.copy( nIdx + 9 );
-        aNewURL.Complete = aURL.Complete.copy( 0, nIdx );
+        if ( 0 == ( *pBegin ).Name.compareToAscii( "HelpKeyword" ) )
+        {
+            rtl::OUString sHelpKeyword;
+            if ( ( ( *pBegin ).Value >>= sHelpKeyword ) && sHelpKeyword.getLength() > 0 )
+            {
+                // ...
+            }
+        }
     }
-    m_rInterceptor.addURL( aNewURL.Complete );
-    m_rInterceptor.GetHelpWindow()->AddURLListener( aNewURL, m_xRealDispatch );
-    m_xRealDispatch->dispatch( aNewURL, aArgs );
+
+    m_rInterceptor.addURL( aURL.Complete );
+    m_rInterceptor.GetHelpWindow()->AddURLListener( aURL, m_xRealDispatch );
+    m_xRealDispatch->dispatch( aURL, aArgs );
 }
 
 // -----------------------------------------------------------------------
