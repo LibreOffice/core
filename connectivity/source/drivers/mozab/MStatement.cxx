@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:24:52 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 18:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ void OStatement_BASE2::disposing()
     OStatement_Base::disposing();
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OStatement_BASE2::release() throw(RuntimeException)
+void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
