@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 18:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,14 @@ enum ScLkUpdMode
 //==================================================================
 
 // -----------------------------------------------------------------------
+
+// enum with values equal to old DBObject enum from sdb
+enum ScDBObject
+{
+    ScDbTable,
+    ScDbQuery
+};
+
 struct ScImportParam
 {
     USHORT          nCol1;
