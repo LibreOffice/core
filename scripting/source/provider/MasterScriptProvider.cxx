@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:16:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,12 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
+#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
+#include <util/MiscUtils.hxx>
+
 
 #include "ActiveMSPList.hxx"
 #include "MasterScriptProvider.hxx"
@@ -79,6 +83,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::script;
+using namespace ::sf_misc;
 
 namespace func_provider
 {
@@ -93,6 +98,14 @@ const ::rtl::OUString s_serviceNameList[] = {
 
 Sequence< ::rtl::OUString > s_serviceNames = Sequence <
         ::rtl::OUString > ( s_serviceNameList, 2 );
+
+//*************************************************************************
+//  Definitions for MasterScriptProviderFactory global methods.
+//*************************************************************************
+
+::rtl::OUString SAL_CALL mspf_getImplementationName() ;
+Reference< XInterface > SAL_CALL mspf_create( Reference< XComponentContext > const & xComponentContext );
+Sequence< ::rtl::OUString > SAL_CALL mspf_getSupportedServiceNames();
 
 //::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
@@ -156,8 +169,6 @@ throw ( Exception, RuntimeException )
 
     if ( args.getLength() != 0 )
     {
-        Any stringAny = makeAny( ::rtl::OUString() );
-
         // check if first parameter is a string
         // if it is, this implies that this is a MSP created
         // with a user or share ctx ( used for browse functionality )
@@ -165,13 +176,13 @@ throw ( Exception, RuntimeException )
         //
         if ( args[ 0 ].getValueType() ==  ::getCppuType((const ::rtl::OUString* ) NULL ) )
         {
-            ::rtl::OUString dir;
-            args[ 0 ] >>= dir;
+            args[ 0 ] >>= m_sCtxString;
             OSL_TRACE("Creating MSP for user or share, dir is %s",
-            ::rtl::OUStringToOString( dir , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            ::rtl::OUStringToOString( m_sCtxString , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             invokeArgs[ 0 ] = args[ 0 ];
         }
-        else
+        else if ( args[ 0 ].getValueType() ==  ::getCppuType((const Reference< frame::XModel >* ) NULL ) )
+
         {
             try
             {
@@ -226,6 +237,7 @@ throw ( Exception, RuntimeException )
                 throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
             }
         }
+
     }
     else // no args
     {
@@ -233,14 +245,6 @@ throw ( Exception, RuntimeException )
         invokeArgs = Sequence< Any >( 0 ); // no arguments
     }
     m_sAargs = invokeArgs;
-    if ( m_xModel.is() )
-    {
-        // This MSP created from a document, add to ActiveMSPList
-        // ??? will the Reference to "this" cause problems, don't know if
-        // reference objects are simple or shared?
-        ActiveMSPList::instance( m_xContext ).addActiveMSP( m_xModel, Reference< provider::XScriptProvider >( this ) );
-
-    }
     OSL_TRACE( "Initialised XMasterScriptProvider" );
     m_bInitialised = true;
     m_bIsValid = true;
@@ -372,7 +376,15 @@ MasterScriptProvider::providerCache()
 MasterScriptProvider::getName()
         throw ( css::uno::RuntimeException )
 {
-    return  ActiveMSPList::instance( m_xContext ).getName();
+    if ( m_xModel.is() )
+    {
+        m_sNodeName = MiscUtils::xModelToDocTitle( m_xModel );
+    }
+    else
+    {
+        m_sNodeName = parseLocationName( m_sCtxString );
+    }
+    return m_sNodeName;
 }
 
 //*************************************************************************
@@ -380,9 +392,19 @@ Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
         throw ( css::uno::RuntimeException )
 {
-    // 1. create a XBrowseNodeImpl (location )node for each MSP in the ActiveMSPList
-    // 2. add each Provider as a childNode for (location ) node
-     return ActiveMSPList::instance( m_xContext ).getChildNodes();
+    OSL_TRACE("MasterScriptProvider:getChildNodes() ctx = %s",
+        ::rtl::OUStringToOString( m_sNodeName,
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    Sequence< Reference< provider::XScriptProvider > > providers = getAllProviders();
+
+    sal_Int32 size = providers.getLength();
+    Sequence<  Reference< browse::XBrowseNode > > children( size );
+    sal_Int32 provIndex = 0;
+    for ( ; provIndex < providers.getLength(); provIndex++ )
+    {
+        children[ provIndex ] = Reference< browse::XBrowseNode >( providers[ provIndex ], UNO_QUERY );
+    }
+    return children;
 }
 
 //*************************************************************************
@@ -390,7 +412,7 @@ sal_Bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
         throw ( css::uno::RuntimeException )
 {
-    return ActiveMSPList::instance( m_xContext ).hasChildNodes();
+    return sal_True;
 }
 
 //*************************************************************************
@@ -398,9 +420,32 @@ sal_Int16 SAL_CALL
 MasterScriptProvider::getType()
         throw ( css::uno::RuntimeException )
 {
-    return ActiveMSPList::instance( m_xContext ).getType();
+    return browse::BrowseNodeTypes::CONTAINER;
 }
 
+//*************************************************************************
+
+::rtl::OUString
+MasterScriptProvider::parseLocationName( const ::rtl::OUString& location )
+{
+    // strip out the last leaf of location name
+    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
+    ::rtl::OUString temp = location;
+    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
+
+    if ( lastSlashIndex > -1 )
+    {
+        if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
+        {
+            temp = temp.copy( lastSlashIndex + 1 );
+        }
+    }
+    else
+    {
+        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
+    }
+    return temp;
+}
 
 //*************************************************************************
 Sequence< Reference< provider::XScriptProvider > > SAL_CALL
@@ -454,7 +499,12 @@ throw( RuntimeException )
     }
 
     } // namespace func_provider
-
+namespace browsenodefactory
+{
+::rtl::OUString SAL_CALL bnf_getImplementationName() ;
+Reference< XInterface > SAL_CALL bnf_create( Reference< XComponentContext > const & xComponentContext );
+Sequence< ::rtl::OUString > SAL_CALL bnf_getSupportedServiceNames();
+}
 
     namespace scripting_runtimemgr
     {
@@ -472,6 +522,7 @@ throw( RuntimeException )
         return ::func_provider::s_serviceNames;
 }
 
+
 //*************************************************************************
 ::rtl::OUString sp_getImplementationName( )
 SAL_THROW( () )
@@ -484,6 +535,16 @@ static struct cppu::ImplementationEntry s_entries [] =
         {
             sp_create, sp_getImplementationName,
             sp_getSupportedServiceNames, cppu::createSingleComponentFactory,
+            0, 0
+        },
+        {
+            func_provider::mspf_create, func_provider::mspf_getImplementationName,
+            func_provider::mspf_getSupportedServiceNames, cppu::createSingleComponentFactory,
+            0, 0
+        },
+        {
+            browsenodefactory::bnf_create, browsenodefactory::bnf_getImplementationName,
+            browsenodefactory::bnf_getSupportedServiceNames, cppu::createSingleComponentFactory,
             0, 0
         },
         { 0, 0, 0, 0, 0, 0 }
@@ -526,8 +587,12 @@ extern "C"
                     reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
 
                 Reference< registry::XRegistryKey >xKey = pKey->createKey(
-                    OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
-                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager") );
+                    OUSTR("drafts.com.sun.star.script.provider.MasterScriptProviderFactory/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory"));
+                xKey->setStringValue( OUSTR("drafts.com.sun.star.script.provider.MasterScriptProviderFactory") );
+                // BrowseNodeFactory Mangager singleton
+                xKey = pKey->createKey(
+                    OUSTR("drafts.com.sun.star.script.browse.BrowseNodeFactory/UNO/SINGLETONS/drafts.com.sun.star.script.browse.theBrowseNodeFactory"));
+                xKey->setStringValue( OUSTR("drafts.com.sun.star.script.browse.BrowseNodeFactory") );
                 return sal_True;
             }
             catch (Exception & exc)
