@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:06:39 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,13 @@ enum XMLAttrTransformerAction
                                          //           + token of new attribute value
                                          // if param2 or param3 are unused they must contain
                                          // XML_TOKEN_INVALID
-    XML_ATACTION_ISO2RNG_DATETIME,       // converts , into . in datetimes
+    XML_ATACTION_RNG2ISO_DATETIME,       // converts . into , in datetimes
+    XML_ATACTION_RENAME_RNG2ISO_DATETIME,// converts . into , in datetimes and renames the attribute
+                                         // - param1: namespace +
+                                         //           token of local name
+    XML_ATACTION_MOVE_FROM_ELEM_RNG2ISO_DATETIME, // turn elem into an attr and convert . to , in datetimes
+                                        // - param1: namespace +
+                                        //           token of local name
     XML_ATACTION_SVG_WIDTH_HEIGHT_OOO,   // replace "inch" with "in" and subtracts 1/100th mm
     XML_ATACTION_SVG_WIDTH_HEIGHT_OASIS, // replace "in" with "inch" and adds 1/100th mm
     XML_ATACTION_DRAW_MIRROR_OOO,        // renames draw:mirror to style:mirror and adapts values
