@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSingleLayerStratum.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:19:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XSingleLayerStratum_idl__
+#define __com_sun_star_configuration_backend_XSingleLayerStratum_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XLayer_idl__
+#include <com/sun/star/configuration/backend/XLayer.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XUpdatableLayer_idl__
+#include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_BackendAccessException_idl__
+#include <com/sun/star/configuration/backend/BackendAccessException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/**
+  Handles access to a stratum consisting of a single layer
+  in a configuration data repository
+
+  <p> The interface provides timestamp-checking capabilities
+     for efficient caching.
+  </p>
+
+  @see com::sun::star::util::XTimeStamped
+  @see com::sun::star::configuration::backend::XSchemaSupplier
+  @see com::sun::star::configuration::backend::XMultiLayerStratum
+
+  @since #107954#
+*/
+interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /**
+        retrieves the layer data for a component, if newer than indicated.
+
+        <p> A timestamp can be provided, which is used to indicate
+            a point in time. The layer should be returned only if is modified
+            since that time.
+        </p>
+
+        @param aComponent
+                The name of the component to access.
+
+        @param aTimestamp
+                a timestamp for the layer.
+
+                <p> An empty timestamp indicates, that the layer should be
+                    retrieved irrespective of its modification time.
+                </p>
+                <p> The format and meaning of a timestamp depends on
+                    the implementation. Timestamps can be obtained using
+                    <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
+                </p>
+
+      @returns
+                a <type>Layer</type> object providing access to the layer data,
+                <NULL/> if the layer is newer than indicated by the timestamp.
+
+      @throws   com::sun::star::lang::IllegalArgumentException
+                if the component identifier is invalid or
+                if the timestamp is invalid.
+
+      @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the data.
+
+      @see com::sun::star::util::XTimeStamped
+    */
+    XLayer getLayer([in] string aComponent,
+                    [in] string aTimestamp)
+        raises (BackendAccessException,
+                com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+
+    /**
+        retrieves a writable representation of the layer for a component.
+
+        @param aComponent
+                The name of the component to access.
+
+        @return
+                an <type>UpdatableLayer</type> object providing
+                write access to the layer
+
+        @throws   com::sun::star::lang::IllegalArgumentException
+                if the component identifier is invalid.
+
+        @throws   com::sun::star::lang::NoSupportException
+                if the implementation does not support updates.
+
+        @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the data.
+     */
+    XUpdatableLayer getUpdatableLayer([in] string aComponent)
+        raises (BackendAccessException,
+                com::sun::star::lang::NoSupportException,
+                com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+} ;
+
+//=============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif
