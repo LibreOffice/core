@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:47:14 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1872,21 +1872,7 @@ void ToolBox::SetHelpText( USHORT nItemId, const XubString& rText )
 
 const XubString& ToolBox::GetHelpText( USHORT nItemId ) const
 {
-    ImplToolItem* pItem = ImplGetItem( nItemId );
-
-    if ( pItem )
-    {
-        if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
-        {
-            Help* pHelp = Application::GetHelp();
-            if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
-        }
-
-        return pItem->maHelpText;
-    }
-    else
-        return ImplGetSVEmptyStr();
+    return ImplGetHelpText( nItemId );
 }
 
 // -----------------------------------------------------------------------
