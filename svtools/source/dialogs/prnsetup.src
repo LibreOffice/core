@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-03 16:44:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 15:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,7 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text [ danish ] = "Ikke nok hukommelse" ;
     Text [ italian ] = "Non c'и abbastanza memoria" ;
     Text [ spanish ] = "Memoria insuficiente" ;
-    Text [ french ] = "Mйmoire insuffisante" ;
+    Text [ french ] = "Mйmoire insuffisante !" ;
     Text [ dutch ] = "Niet voldoende opslagruimte" ;
     Text[ chinese_simplified ] = "ДЪґжІ»Чг";
     Text[ russian ] = "Недостаточно памяти";
