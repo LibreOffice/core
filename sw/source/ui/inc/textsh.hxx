@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 09:57:12 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,8 @@
 #include <basesh.hxx>
 #endif
 
-class Button;
+//CHINA001 class Button;
+class AbstractSvxPostItDialog;
 class SwFldMgr;
 class SvxHyperlinkItem;
 
@@ -83,10 +84,14 @@ public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL);
     TYPEINFO();
 
-    DECL_LINK( PostItNextHdl, Button * );
-    DECL_LINK( PostItPrevHdl, Button * );
-    DECL_LINK( RedlineNextHdl, Button * );
-    DECL_LINK( RedlinePrevHdl, Button * );
+//CHINA001  DECL_LINK( PostItNextHdl, Button * );
+//CHINA001  DECL_LINK( PostItPrevHdl, Button * );
+//CHINA001  DECL_LINK( RedlineNextHdl, Button * );
+//CHINA001  DECL_LINK( RedlinePrevHdl, Button * );
+    DECL_LINK( PostItNextHdl, AbstractSvxPostItDialog * );
+    DECL_LINK( PostItPrevHdl, AbstractSvxPostItDialog * );
+    DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
+    DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );
 
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);
