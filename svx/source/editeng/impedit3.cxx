@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-28 15:31:25 $
+ *  last change: $Author: mt $ $Date: 2002-10-17 12:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1766,14 +1766,17 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
         if ( nBreakPos < nMinBreakPos )
         {
-            DBG_ERROR( "I18N: XBreakIterator::getLineBreak returns position < Min" );
             nBreakPos = nMinBreakPos;
         }
-        else if ( nBreakPos > nMaxBreakPos )
+        else if ( ( nBreakPos > nMaxBreakPos ) && !aUserOptions.allowPunctuationOutsideMargin )
         {
             DBG_ERROR( "I18N: XBreakIterator::getLineBreak returns position > Max" );
             nBreakPos = nMaxBreakPos;
         }
+
+        // #101795# nBreakPos can never be outside the portion, even not with hangig punctuation
+        if ( nBreakPos > nMax )
+            nBreakPos = nMax;
 
         // BUG in I18N - the japanese dot is in the next line!
         // !!!  Testen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
