@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gh $ $Date: 2002-01-11 09:33:12 $
+ *  last change: $Author: gh $ $Date: 2002-01-21 10:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,22 +110,22 @@ ByteString &InformationParser::ReadLine()
          if ( !pActStream->IsEof()) {
             pActStream->ReadLine( sLine );
             ULONG nStart = 0;
-            ULONG nEnd = sLine.Len()-1;
+            ULONG nEnd = sLine.Len();
             BOOL bCopy = FALSE;
-            while ( nStart <= nEnd && ( sLine.GetChar( nStart ) == ' ' || sLine.GetChar( nStart ) == 0x09 ) )
+            while ( nStart < nEnd && ( sLine.GetChar( nStart ) == ' ' || sLine.GetChar( nStart ) == 0x09 ) )
             {
                 nStart++;
                 bCopy = TRUE;
             }
 
-            while ( nStart <= nEnd && ( sLine.GetChar( nEnd ) == ' ' || sLine.GetChar( nEnd ) == 0x09 ) )
+            while ( nStart < nEnd && ( sLine.GetChar( nEnd-1 ) == ' ' || sLine.GetChar( nEnd-1 ) == 0x09 ) )
             {
                 nEnd--;
                 bCopy = TRUE;
             }
 
             if ( bCopy )
-                sLine = sLine.Copy( nStart, nEnd - nStart +1 );
+                sLine = sLine.Copy( nStart, nEnd - nStart );
 
             if (( sLine.GetChar( 0 ) == '#' ) || ( !sLine.Len())) {
                 if ( sCurrentComment.Len())
