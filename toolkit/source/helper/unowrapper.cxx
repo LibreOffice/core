@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:10:45 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
