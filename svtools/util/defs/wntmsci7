@@ -10080,3 +10080,4 @@ _real@8@3ffeccccccccccccd000
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx880831978@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx880831978@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx880831978@@YAEABVString@@AAV2@@Z
+?setUserItem@IMPL_TViewData@@QAEXABVOUString@rtl@@ABVAny@uno@star@sun@com@@@Z
