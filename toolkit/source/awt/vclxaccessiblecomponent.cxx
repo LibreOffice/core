@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:29:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,9 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             // avoid notification if a child frame is already active
             // only one frame may be active at a given time
-            if( !pWindow->HasActiveChildFrame() )
+            if ( !pWindow->HasActiveChildFrame() &&
+                 ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+                   getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             {
                 aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
@@ -363,8 +365,12 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_DEACTIVATE:
         {
-            aOldValue <<= accessibility::AccessibleStateType::ACTIVE;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            if ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+                 getAccessibleRole() == accessibility::AccessibleRole::DIALOG )  // #i18891#
+            {
+                aOldValue <<= accessibility::AccessibleStateType::ACTIVE;
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            }
         }
         break;
         case VCLEVENT_WINDOW_GETFOCUS:
@@ -530,7 +536,9 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         if ( pWindow->IsEnabled() )
             rStateSet.AddState( accessibility::AccessibleStateType::ENABLED );
 
-        if ( pWindow->HasChildPathFocus() )
+        if ( pWindow->HasChildPathFocus() &&
+             ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+               getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
 
         Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
