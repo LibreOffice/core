@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.27 2001-01-30 13:55:21 cl Exp $
+	$Id: office.mod,v 1.28 2001-02-01 17:38:58 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -139,7 +139,7 @@
 
 <!ENTITY % change-marks "text:change | text:change-start | text:change-end">
 
-<!ENTITY % body "(text:tracked-changes?,%text-decls;,table:calculation-settings?,table:content-validations?,table:label-ranges?,
+<!ENTITY % body "((text:tracked-changes|table:tracked-changes)?,%text-decls;,table:calculation-settings?,table:content-validations?,table:label-ranges?,
 		(text:h|text:p|text:ordered-list|
 		text:unordered-list|table:table|chart:chart|draw:page|
 		draw:a|%shape;|text:section|text:table-of-content|
@@ -162,7 +162,7 @@
 <!ATTLIST office:dde-source table:conversion-mode (into-default-style-data-style|into-english-number|let-text) "into-default-style-data-style" >
 
 <!-- annotations -->
-<!-- limitation: in the current implementation, only plain text inside of 
+<!-- limitation: in the current implementation, only plain text inside of
      paragraphs is supported -->
 <!ELEMENT office:annotation (text:p)*>
 <!ATTLIST office:annotation office:author %string; #IMPLIED>
