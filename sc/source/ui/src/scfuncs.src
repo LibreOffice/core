@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 21:16:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3955,14 +3955,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ dutch ] = "Converteert een datum in de vorm van tekst te naar een serieel getal." ;
             Text [ spanish ] = "Devuelve el número de serie de la hora representada por texto_de_hora." ;
             Text [ english_us ] = "Returns a sequential number for a text shown in a possible time entry format." ;
-            Text[ chinese_simplified ] = "×ª»»ÎÄ±¾ÀàĞÍµÄÊ±¼äÖµ³ÉÎªĞòÁĞÊ±¼äÖµ¡£";
+            Text[ chinese_simplified ] = "×ª»»ÎÄ×ÖÀàĞÍµÄÊ±¼äÖµ³ÉÎªĞòÁĞÊ±¼äÖµ¡£";
             Text[ russian ] = "Ïğåîáğàçóåò âğåìÿ èç òåêñòîâîãî ôîğìàòà â äàòó â ÷èñëîâîì ôîğìàòå.";
             Text[ polish ] = "Zamienia tekst w formacie wprowadzania czasu na kolejn¹ liczbê.";
             Text[ japanese ] = "ŠÔ‚ğ•\\‚·•¶š—ñ‚ğ¼Ø±Ù’l‚É•ÏŠ·‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¦r¤¸®É¶¡®æ¦¡Âà´«¦¨§Ç¦C¼Æ®É¶¡®æ¦¡¡C";
             Text[ arabic ] = "ÊÍæá ÇáæŞÊ Úáì Ôßá äÕ Åáì ÑŞã ÊÓáÓáí.";
             Text[ dutch ] = "Converteert een datum in de vorm van tekst te naar een serieel getal.";
-            Text[ chinese_simplified ] = "×ª»»ÎÄ±¾ÀàĞÍµÄÊ±¼äÖµ³ÉÎªĞòÁĞÊ±¼äÖµ¡£";
+            Text[ chinese_simplified ] = "×ª»»ÎÄ×ÖÀàĞÍµÄÊ±¼äÖµ³ÉÎªĞòÁĞÊ±¼äÖµ¡£";
             Text[ greek ] = "Ïñßæåé İíáí óõíå÷üìåíï áñéèìü ãéá İíá êåßìåíï ìå ìéá ğéèáíŞ ìïñöŞ ÷ñüíïõ.";
             Text[ korean ] = "°¡´ÉÇÑ ½Ã°£ ÀÔ·Â Æ÷¸ËÀÇ ÅØ½ºÆ®¿¡¼­ ¿¬¼ÓÀûÀÎ ¼ö ¼±ÅÃ£®";
             Text[ turkish ] = "Muhtemel bir saat formatındaki bir metinden iç sayı üretir.";
@@ -14193,14 +14193,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ dutch ] = "Cellenbereik waarin de zoekcriteria zijn aangegeven." ;
             Text [ spanish ] = "área de celda en el que se especifican los valores buscados." ;
             Text [ english_us ] = "The cell range in which the search criteria are given." ;
-            Text[ chinese_simplified ] = "±»Ö¸¶¨²ÉÓÃÑ°ÕÒÌõ¼şµÄµ¥Ôª¸ñÇøÓò¡£";
+            Text[ chinese_simplified ] = "Ö¸¶¨²ÉÓÃËÑÑ°Ìõ¼şµÄµ¥Ôª¸ñÇøÓò¡£";
             Text[ russian ] = "Îáëàñòü ÿ÷åéêè, â êîòîğîé çàäàíû êğèòåğèè ïîèñêà.";
             Text[ polish ] = "Zakres komórek, w którym wyznaczone zostan¹ kryteria wyszukiwania.";
             Text[ japanese ] = "ŒŸõğŒ‚ğ“–‚Ä‚Í‚ß‚é¾Ù”ÍˆÍB";
-            Text[ chinese_traditional ] = "³Q«ü©w±Ä¥Î·j´M±ø¥óªºÀx¦s®æ°Ï°ì¡C";
+            Text[ chinese_traditional ] = "«ü©w±Ä¥Î·j´M±ø¥óªºÀx¦s®æ°Ï°ì¡C";
             Text[ arabic ] = "äØÇŞ ÇáÎáÇíÇ ÇáĞí íæÌÏ Èå ãÚÇííÑ ÇáÈÍË.";
             Text[ dutch ] = "Cellenbereik waarin de zoekcriteria zijn aangegeven.";
-            Text[ chinese_simplified ] = "±»Ö¸¶¨²ÉÓÃÑ°ÕÒÌõ¼şµÄµ¥Ôª¸ñÇøÓò¡£";
+            Text[ chinese_simplified ] = "Ö¸¶¨²ÉÓÃËÑÑ°Ìõ¼şµÄµ¥Ôª¸ñÇøÓò¡£";
             Text[ greek ] = "Ğåñéï÷Ş êåëéşí, óôçí ïğïßá õğÜñ÷ïõí ôá êñéôŞñéá áíáæŞôçóçò.";
             Text[ korean ] = "°Ë»ö ±âÁØÀÌ Á¤ÇØÁ® ÀÖ´Â ¼¿ ¿µ¿ª";
             Text[ turkish ] = "Arama ölçütlerinin belirtildiği hücre aralığı.";
@@ -37476,14 +37476,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Converteert een getal naar tekst op basis van de valutanotatie." ;
             Text [ spanish ] = "Convierte un número en texto usando un formato monetario" ;
             Text [ english_us ] = "Converts a number to text in currency format." ;
-            Text[ chinese_simplified ] = "×ª»»ÎÄ±¾ÖĞµÄÊı×Ö³ÉÒ»¸ö»õ±Ò¸ñÊ½¡£";
+            Text[ chinese_simplified ] = "×ª»»ÎÄ×ÖÖĞµÄÊı×Ö³ÉÒ»¸ö»õ±Ò¸ñÊ½¡£";
             Text[ russian ] = "Ïğåîáğàçóåò ÷èñëîâîå çíà÷åíèå â òåêñò â äåíåæíîì ôîğìàòå.";
             Text[ polish ] = "Przekszta³ca liczbê na tekst w formacie walutowym.";
             Text[ japanese ] = "”’l‚ğ’Ê‰İÌ«°Ï¯Ä‚Ì•¶š—ñ‚É•ÏŠ·‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "Âà´«¤å¥»¤¤ªº¼Æ¦r¦¨¤@­Ó³f¹ô®æ¦¡¡C";
             Text[ arabic ] = "ÊÍæá ÑŞã Åáì äÕ ÈÇÓÊÎÏÇã ÊäÓíŞ ÇáÚãáÉ.";
             Text[ dutch ] = "Converteert een getal naar tekst op basis van de valutanotatie.";
-            Text[ chinese_simplified ] = "×ª»»ÎÄ±¾ÖĞµÄÊı×Ö³ÉÒ»¸ö»õ±Ò¸ñÊ½¡£";
+            Text[ chinese_simplified ] = "×ª»»ÎÄ×ÖÖĞµÄÊı×Ö³ÉÒ»¸ö»õ±Ò¸ñÊ½¡£";
             Text[ greek ] = "Ìåôáôñİğåé ìéá áñéèìçôéêŞ ôéìŞ óå İíá êåßìåíï ìå íïìéóìáôéêŞ ìïñöŞ.";
             Text[ korean ] = "È­ÆóÆ÷¸Ë¿¡¼­ ¼ö°ªÀ» ÅØ½ºÆ®·Î º¯È¯";
             Text[ turkish ] = "Sayı değerini, para birimi formatındaki bir metne dönüştürür.";
@@ -37731,14 +37731,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Verwijdert niet-afdrukbare tekens uit de tekst." ;
             Text [ spanish ] = "Elimina del texto caracteres no imprimibles." ;
             Text [ english_us ] = "Removes all nonprintable characters from text." ;
-            Text[ chinese_simplified ] = "É¾³ıÎÄ±¾ÖĞ²»ÄÜ´òÓ¡µÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "É¾³ıÎÄ×ÖÖĞ²»ÄÜ´òÓ¡µÄ×Ö·û¡£";
             Text[ russian ] = "Óäàëÿåò èç òåêñòà âñå íåïå÷àòàåìûå ñèìâîëû.";
             Text[ polish ] = "Usuwa niedrukowalne znaki z tekstu.";
             Text[ japanese ] = "ˆóü‚Å‚«‚È‚¢•¶š‚ğ•¶š—ñ‚©‚çíœ‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "§R°£¤å¦r¤¤¤£¯à¦C¦Lªº¦r¤¸¡C";
             Text[ arabic ] = "ÊÍĞİ ÇáÃÍÑİ ÇáÊí áÇ ÊõØÈÚ ãä ÇáäÕ.";
             Text[ dutch ] = "Verwijdert niet-afdrukbare tekens uit de tekst.";
-            Text[ chinese_simplified ] = "É¾³ıÎÄ±¾ÖĞ²»ÄÜ´òÓ¡µÄ×Ö·û¡£";
+            Text[ chinese_simplified ] = "É¾³ıÎÄ×ÖÖĞ²»ÄÜ´òÓ¡µÄ×Ö·û¡£";
             Text[ greek ] = "ÄéáãñÜöåé áğü ôï êåßìåíï ôïõò ÷áñáêôŞñåò ïé ïğïßïé äåí åßíáé äõíáôüí íá åêôõğùèïıí.";
             Text[ korean ] = "ÅØ½ºÆ®¿¡¼­ ´Ü¶ô±âÈ£Ç¥½Ã  Á¦°Å";
             Text[ turkish ] = "Yazdırılamayan karakterleri metinden siler.";
@@ -37795,14 +37795,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "De tekst waaruit de niet-afdrukbare tekens worden verwijderd." ;
             Text [ spanish ] = "Es el texto del que se eliminan los caracteres no imprimibles." ;
             Text [ english_us ] = "The text from which nonprintable characters are to be removed." ;
-            Text[ chinese_simplified ] = "Òª´ÓÖĞÉ¾³ıÎŞ·¨´òÓ¡×Ö·ûµÄÎÄ±¾¡£";
+            Text[ chinese_simplified ] = "Òª´ÓÖĞÉ¾³ıÎŞ·¨´òÓ¡×Ö·ûµÄÎÄ×Ö¡£";
             Text[ russian ] = "Òåêñò, èç êîòîğîãî óäàëÿşòñÿ íåïå÷àòàåìûå ñèìâîëû.";
             Text[ polish ] = "Tekst, z którego zosta³y usuniête niedrukowalne znaki.";
             Text[ japanese ] = "ˆóü‚Å‚«‚È‚¢•¶š‚ğíœ‚µ‚½•¶š—ñB";
             Text[ chinese_traditional ] = "­n±q¤¤§R°£µLªk¦C¦L¦r¤¸ªº¤å¦r¡C";
             Text[ arabic ] = "ÇáäÕ ÇáĞí ÊÑíÏ ÍĞİ ÇáÚáÇãÇÊ ÇáÛíÑ ŞÇÈáÉ ááØÈÇÚÉ ãäå.";
             Text[ dutch ] = "De tekst waaruit de niet-afdrukbare tekens worden verwijderd.";
-            Text[ chinese_simplified ] = "Òª´ÓÖĞÉ¾³ıÎŞ·¨´òÓ¡×Ö·ûµÄÎÄ±¾¡£";
+            Text[ chinese_simplified ] = "Òª´ÓÖĞÉ¾³ıÎŞ·¨´òÓ¡×Ö·ûµÄÎÄ×Ö¡£";
             Text[ greek ] = "Ôï êåßìåíï áğü ôï ïğïßï èá áğïìáêñõíèïıí ïé ÷áñáêôŞñåò ğïõ äåí åßíáé äõíáôüí íá åêôõğùèïıí.";
             Text[ korean ] = "´Ü¶ô±âÈ£Ç¥½Ã°¡  Á¦°ÅµÇ¾î¾ß  ÇÏ´Â ÅØ½ºÆ®";
             Text[ turkish ] = "Yazdırılamayan karakterlerin silineceği metin.";
@@ -39611,12 +39611,12 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Dezimalstellen" ;
             Text [ english ] = "decimals" ;
             Text [ norwegian ] = "D" ;
-            Text [ italian ] = "decimali" ;
+            Text [ italian ] = "Decimali" ;
             Text [ portuguese_brazilian ] = "D" ;
             Text [ portuguese ] = "Decimais" ;
             Text [ finnish ] = "desimaalit" ;
             Text [ danish ] = "Decimaler" ;
-            Text [ french ] = "D" ;
+            Text [ french ] = "Décimales" ;
             Text [ swedish ] = "Decimaler" ;
             Text [ dutch ] = "Aantal decimalen" ;
             Text [ spanish ] = "Decimales" ;
@@ -39669,19 +39669,19 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Keine Tausenderseparatoren" ;
             Text [ english ] = "no thousand separators" ;
             Text [ norwegian ] = "T" ;
-            Text [ italian ] = "Nessun_separatore" ;
+            Text [ italian ] = "Nessun separatore delle migliaia" ;
             Text [ portuguese_brazilian ] = "T" ;
             Text [ portuguese ] = "Sem separador de milhares" ;
             Text [ finnish ] = "T" ;
             Text [ danish ] = "T" ;
-            Text [ french ] = "S" ;
+            Text [ french ] = "Sans séparateur de milliers" ;
             Text [ swedish ] = "Inga tusentalsavgränsare" ;
             Text [ dutch ] = "Geen separatoren voor duizendtallen" ;
             Text [ spanish ] = "No_separar_millares" ;
             Text [ english_us ] = "T" ;
             Text[ chinese_simplified ] = "T";
             Text[ russian ] = "Áåç ïğîáåëîâ";
-            Text[ polish ] = "Bez separatorów tysiêcznych";
+            Text[ polish ] = "Bez separatorów tysiêcy";
             Text[ japanese ] = "çŒ…‹æØ‚è‚È‚µ";
             Text[ chinese_traditional ] = "T";
             Text[ arabic ] = "T";
@@ -39698,23 +39698,23 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Keine Tausenderseparatoren. Wahrheitswert, wenn vorhanden und WAHR (ungleich 0) werden keine Tausenderseparatoren gesetzt." ;
             Text [ english ] = "No thousand separators. Logical value, if present and TRUE (not 0) no thousand separators are set." ;
             Text [ norwegian ] = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
-            Text [ italian ] = "è una valore logico che, se VERO, non consente a FISSO di includere i separatori delle migliaia nel testo restituito." ;
+            Text [ italian ] = "Nessun separatore delle migliaia. Valore logico che, se VERO (diverso da 0), non consente di includere i separatori delle migliaia." ;
             Text [ portuguese_brazilian ] = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
             Text [ portuguese ] = "Sem separador de milhares. Se o valor lógico existir e for VERDADEIRO (diferente de 0), o separador de milhares não é colocado." ;
             Text [ finnish ] = "Tuhaterotin. Määrittää tuhaterotinasetuksen." ;
             Text [ danish ] = "Tusindtalsseparator. Angiver, om en tusindtalsseparator skal sættes." ;
-            Text [ french ] = "Séparateur de milliers. Indique si des espaces doivent être insérés ou non." ;
+            Text [ french ] = "Sans séparateur de milliers si une valeur logique existe et est VRAI (différente de 0)." ;
             Text [ swedish ] = "Inga tusentalsavgränsare. Sannolikhetsvärde om det finns och är SANT (ej lika med 0) sätts inga tusentalsavgränsare." ;
-            Text [ dutch ] = "Duizendtallen. Geeft aan of punten als scheidingsteken voor duizendtallen moeten worden weergegeven." ;
+            Text [ dutch ] = "Geen scheidingstekens voor duizendtallen. Als de waarheidswaarde, indien voorhanden, WAAR (ongelijk aan O) is, dan worden er geen scheidingstekens gezet." ;
             Text [ spanish ] = "Sin separadores de millares. Si el valor lógico existe y es VERDADERO (no igual a 0) no se mostrarán separadores de millares." ;
             Text [ english_us ] = "Thousand delimiter. Defines if thousand delimitersare to be set." ;
             Text[ chinese_simplified ] = "Ç§Î»µã¡£¸ø¶¨ÊÇ·ñÊ¹ÓÃÇ§Î»µã¡£";
             Text[ russian ] = "Îïğåäåëÿåò, äîëæåí ëè ïîÿâèòüñÿ ïğîáåë â êà÷åñòâå ğàçäåëèòåëÿ ãğóïï ğàçğÿäîâ.";
-            Text[ polish ] = "Znak tysiêczny. Okreœla, czy znak tysiêczny ma zostaæ wstawiony.";
+            Text[ polish ] = "Bez separatorów tysiêcy. Je¿eli jest wartoœæ logiczna PRAWDA (nierówna 0), separatory tysiêcy nie zostan¹ osadzone.";
             Text[ japanese ] = "ŒvZŒ‹‰Ê‚ğ¶İÏ(,)‚ÅŒ…‹æØ‚è‚·‚é‚©‚Ç‚¤‚©‚ğA˜_—’l‚Åw’è‚µ‚Ü‚·B";
-            Text[ chinese_traditional ] = "¤d¦ìÂI¡C«ü©w¬O§_¨Ï¥Î¤d¦ìÂI¡C";
+            Text[ chinese_traditional ] = "¤d¦ìÂI¡C«ü©w¬O§_¨Ï¥Î¤d¦ìÂI¡C¦pªGÅŞ¿è­È¦s¦b¨Ã¥B¬O true(¤£µ¥©ó0)¡A«h¤£¬O¨Ï¥Î¤d¦ìÂI¡C";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ ÊÍÏÏ ãÇ ÅĞÇ ßÇä ãä ÇáÖÑæÑí æÖÚ İæÇÕá Èíä ÇáÃÑŞÇã.";
-            Text[ dutch ] = "Duizendtallen. Geeft aan of punten als scheidingsteken voor duizendtallen moeten worden weergegeven.";
+            Text[ dutch ] = "Geen scheidingstekens voor duizendtallen. Als de waarheidswaarde, indien voorhanden, WAAR (ongelijk aan O) is, dan worden er geen scheidingstekens gezet.";
             Text[ chinese_simplified ] = "Ç§Î»µã¡£¸ø¶¨ÊÇ·ñÊ¹ÓÃÇ§Î»µã¡£";
             Text[ greek ] = "Äéá÷ùñéóôéêü ÷éëßùí. Ïñßæåé áí åìöáíßæïíôáé äéá÷ùñéóôéêÜ ÷éëßùí.";
             Text[ korean ] = "ÃµÀÚ¸® Á¡. ÃµÀÚ¸® Á¡À» ÂïÀ»ÁöÀÇ ¿©ºÎ¸¦ ÁöÁ¤ÇÕ´Ï´Ù.";
@@ -40612,7 +40612,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "Texte_cherché" ;
             Text [ swedish ] = "söktext" ;
             Text [ dutch ] = "Zoektekst" ;
-            Text [ spanish ] = "texto_original" ;
+            Text [ spanish ] = "Texto a buscar" ;
             Text [ english_us ] = "search_text" ;
             Text[ chinese_simplified ] = "search_text";
             Text[ russian ] = "Èñêîìûé òåêñò";
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
