@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 08:58:06 $
+ *  last change: $Author: os $ $Date: 2002-10-10 06:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,10 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aDefaultVS.SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 
     // Controls fuer Zusaetzebereich beim MoreButton anmelden
-    aCLNrEdt.SetModifyHdl(LINK(this, SwColumnPage, ColModify));
+    Link aCLNrLk = LINK(this, SwColumnPage, ColModify);
+    aCLNrEdt.SetLoseFocusHdl(aCLNrLk);
+    aCLNrEdt.SetUpHdl(aCLNrLk);
+    aCLNrEdt.SetDownHdl(aCLNrLk);
     Link aLk = LINK(this, SwColumnPage, GapModify);
     aDistEd1.SetUpHdl(aLk);
     aDistEd1.SetDownHdl(aLk);
