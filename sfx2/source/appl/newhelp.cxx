@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:43:55 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,7 +637,6 @@ long IndexBox_Impl::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
-        SelectExecutableEntry();
         GetDoubleClickHdl().Call( NULL );
         bHandled = sal_True;
     }
@@ -876,7 +875,6 @@ void IndexTabPage_Impl::ClearIndex()
 
 IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 {
-    aIndexCB.SelectExecutableEntry();
     aIndexCB.GetDoubleClickHdl().Call( &aIndexCB );
     return 0;
 }
@@ -2036,6 +2034,14 @@ void SfxHelpIndexWindow_Impl::OpenKeyword( const String& rKeyword )
     pIPage->SetKeyword( sKeyword );
 }
 
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::SelectExecutableEntry()
+{
+    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_INDEX && pIPage )
+        pIPage->SelectExecutableEntry();
+}
+
 // class TextWin_Impl ----------------------------------------------------
 
 TextWin_Impl::TextWin_Impl( Window* p ) : DockingWindow( p, 0 )
@@ -2781,6 +2787,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 
 IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 {
+    pIndexWin->SelectExecutableEntry();
     String aEntry = pIndexWin->GetSelectEntry();
 
     if ( aEntry.Len() > 0 )
