@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-12 00:31:24 $
+ *  last change: $Author: khong $ $Date: 2002-11-20 20:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,12 +253,19 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
 sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
     sal_Int32 nStartPos, sal_Int16 ScriptType ) throw(RuntimeException)
 {
+    if (nStartPos > Text.getLength())
+        nStartPos = Text.getLength();
+
     sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text[nStartPos])) ? 3 : 2;
 
     while (numberOfChange > 0 && --nStartPos >= 0) {
-        if (nStartPos == 0 ||
-            (((numberOfChange % 2) == 0) ^ (ScriptType != getScriptClass(Text[nStartPos]))))
+        if (((numberOfChange % 2) == 0) ^ (ScriptType != getScriptClass(Text[nStartPos])))
         numberOfChange--;
+        else if (nStartPos == 0) {
+        if (numberOfChange > 0)
+            numberOfChange--;
+        nStartPos--;
+        }
     }
     return numberOfChange == 0 ? nStartPos + 1 : -1;
 }
@@ -267,13 +274,16 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int3
     sal_Int16 ScriptType ) throw(RuntimeException)
 
 {
+    if (nStartPos < 0)
+        nStartPos = 0;
+
     sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text[nStartPos])) ? 2 : 1;
      sal_Int32 strLen = Text.getLength();
 
     while (numberOfChange > 0 && ++nStartPos < strLen) {
         sal_Int16 currentCharScriptType = getScriptClass(Text[nStartPos]);
-        if ((numberOfChange == 1) ? (ScriptType != currentCharScriptType) :
-            (ScriptType == currentCharScriptType || currentCharScriptType == ScriptType::WEAK))
+        if ((numberOfChange == 1) ? (ScriptType == currentCharScriptType) :
+            (ScriptType != currentCharScriptType && currentCharScriptType != ScriptType::WEAK))
         numberOfChange--;
     }
     return numberOfChange == 0 ? nStartPos : -1;
@@ -325,9 +335,13 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
     sal_Int16 numberOfChange = (CharType == unicode::getUnicodeType(Text[nStartPos])) ? 3 : 2;
 
     while (numberOfChange > 0 && --nStartPos >= 0) {
-        if (nStartPos == 0 ||
-            (((numberOfChange % 2) == 0) ^ (CharType != unicode::getUnicodeType(Text[nStartPos]))))
+        if (((numberOfChange % 2) == 0) ^ (CharType != unicode::getUnicodeType(Text[nStartPos])))
         numberOfChange--;
+        if (nStartPos == 0) {
+        if (numberOfChange > 0)
+            numberOfChange--;
+        nStartPos--;
+        }
     }
     return numberOfChange == 0 ? nStartPos + 1 : -1;
 }
