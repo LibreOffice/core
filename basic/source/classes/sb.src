@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:09:50 $
+ *  last change: $Author: rt $ $Date: 2000-11-09 12:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,7 +1331,7 @@ Resource RID_BASIC_START
         Text [ finnish ] = "No application responded to DDE initiate" ;
         Text [ english_us ] = "No application responded to DDE connect initiation" ;
         Text[ chinese_simplified ] = "Г»УРИОєОУ¦УГіМРт»ШУ¦ DDE Б¬ЅУЗлЗу";
-        Text[ russian ] = "Никакое приложение не отвечает на требование подключения DDE";
+        Text[ russian ] = "Никакое приложение не отвечает на требование связи DDE";
         Text[ polish ] = "Za duїo aplikacji odpowiada na inicjacjк poі№czenia DDE";
         Text[ japanese ] = "DDEђЪ‘±Љу–]‚Й‰ћ“љ‚·‚й±МЯШ№°ј®Э‚Є‚ ‚и‚Ь‚№‚с";
         Text[ chinese_traditional ] = "ЁS¦іҐф¦уАіҐОµ{¦Ў¦^Аі DDE іsµІЅРЁD";
