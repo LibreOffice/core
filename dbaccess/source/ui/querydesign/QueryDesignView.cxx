@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:00:22 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 #define SQL_ISRULEOR2(pParseNode, e1,e2)    ((pParseNode)->isRule() && (\
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e1) || \
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e2)))
+                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e1) || \
+                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e2)))
 
 // here we define our functions used in the anonymous namespace to get our header file smaller
 // please look at the book LargeScale C++ to know why
