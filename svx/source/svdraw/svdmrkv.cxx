@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 16:00:12 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,7 +853,16 @@ void SdrMarkView::SetMarkHandles()
     }
     if (bFrmHdl) {
         Rectangle aRect(GetMarkedObjRect());
-        if (!aRect.IsEmpty()) { // sonst nix gefunden
+
+        // #i33755#
+        const sal_Bool bHideHandlesWhenInTextEdit(
+            ((SdrView*)this)->IsTextEdit()
+            && pMarkedObj
+            && pMarkedObj->ISA(SdrTextObj)
+            && ((SdrTextObj*)pMarkedObj)->IsInEditMode());
+
+        if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit)
+        { // sonst nix gefunden
             BOOL bWdt0=aRect.Left()==aRect.Right();
             BOOL bHgt0=aRect.Top()==aRect.Bottom();
             if (bWdt0 && bHgt0) {
@@ -1288,6 +1297,10 @@ void SdrMarkView::CheckMarked()
 // actual IAO-Handles to throw away saved contents
 void SdrMarkView::ForceInvalidateMarkHandles()
 {
+    // #i32773#
+    // call parent
+    SdrPaintView::ForceInvalidateMarkHandles();
+
     // #86973#
     aHdl.Clear();
 }
