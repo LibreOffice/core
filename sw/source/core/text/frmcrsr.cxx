@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:18:14 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #include "viewsh.hxx"       // InvalidateWindows
 #include "swfntcch.hxx"     // SwFontAccess
 #include "flyfrm.hxx"
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 #if OSL_DEBUG_LEVEL > 1
 #include "txtpaint.hxx"
