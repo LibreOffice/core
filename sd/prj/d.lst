@@ -13,9 +13,9 @@ touch: ..\%__SRC%\misc\sd.hid %_DEST%\bin%_EXT%\sd.hid
 ..\%__SRC%\bin\sdraw3.exe %_DEST%\bin%_EXT%\sdraw3.exe
 ..\%__SRC%\bin\sdraw3.sym %_DEST%\bin%_EXT%\sdraw3.sym
 ..\%__SRC%\bin\sdslots.tlb %_DEST%\bin%_EXT%\sdslots.tlb
-..\%__SRC%\bin\sd%upd%*.dll %_DEST%\bin%_EXT%\sd%upd%*.dll
-..\%__SRC%\bin\sd%upd%*.res %_DEST%\bin%_EXT%\sd%upd%*.res
-..\%__SRC%\bin\emp%upd%*.* %_DEST%\bin%_EXT%\emp%upd%*.*
+..\%__SRC%\bin\sd?????.dll %_DEST%\bin%_EXT%\sd?????.dll
+..\%__SRC%\bin\sd?????.res %_DEST%\bin%_EXT%\sd?????.res
+..\%__SRC%\bin\emp?????.* %_DEST%\bin%_EXT%\emp?????.*
 ..\%__SRC%\bin\sdslots.tlb %_DEST%\bin%_EXT%\sdslots.tlb
 ..\%__SRC%\bin\sdgslots.tlb %_DEST%\bin%_EXT%\sdgslots.tlb
 ..\%__SRC%\lib\sdl.lib %_DEST%\lib%_EXT%\sdl.lib
