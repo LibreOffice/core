@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-14 17:35:11 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-14 18:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,10 +142,6 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-
-#include <stdio.h>
-#include <tools/stream.hxx>
-#include <undobj.hxx>
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 {
@@ -1627,14 +1623,26 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
             BOOL bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
 
+            /* #101076# When copying to a non-content node Copy will
+               insert a paragraph before that node and insert before
+               that inserted node. Copy creates an SwUndoInserts that
+               does not cover the extra paragraph. Thus we insert the
+               extra paragraph ourselves, _with_ correct undo
+               information. */
             if (bDelLastPara)
             {
+                /* aInsPos points to the non-content node. Move it to
+                   the previous content node. */
                 SwPaM aInsPam(aInsPos);
                 BOOL bMoved = aInsPam.Move(fnMoveBackward);
                 ASSERT(bMoved, "No content node found!");
 
                 if (bMoved)
                 {
+                    /* Append the new node after the content node
+                       found. The new position to insert the moved
+                       paragraph at is before the inserted
+                       paragraph. */
                     AppendTxtNode(*aInsPam.GetPoint());
                     aInsPos = *aInsPam.GetPoint();
                 }
@@ -1696,17 +1704,6 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
 SetRedlineMode( eOld );
             EndUndo( UNDO_END );
             SetModified();
-
-#ifdef DEBUG
-            char * aLogfileName = getenv("LOGFILE");
-            if (aLogfileName)
-            {
-                SvFileStream aStream(String::CreateFromAscii(aLogfileName),
-                                     STREAM_WRITE | STREAM_TRUNC);
-                aStream << *pUndos;
-                aStream.Flush();
-            }
-#endif
 
             return TRUE;
         }
