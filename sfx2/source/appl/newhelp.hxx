@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:29:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,15 @@ public:
 
 // class HelpTabPage_Impl ------------------------------------------------
 
+class SfxHelpIndexWindow_Impl;
+
 class HelpTabPage_Impl : public TabPage
 {
+protected:
+    SfxHelpIndexWindow_Impl*    m_pIdxWin;
+
 public:
-    HelpTabPage_Impl( Window* pParent, const ResId& rResId );
+    HelpTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin, const ResId& rResId );
 
     virtual Control*    GetLastFocusControl() = 0;
 };
@@ -160,7 +165,7 @@ private:
     ContentListBox_Impl aContentBox;
 
 public:
-    ContentTabPage_Impl( Window* pParent );
+    ContentTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
 
     virtual void        Resize();
     virtual void        ActivatePage();
@@ -208,7 +213,7 @@ private:
     DECL_LINK(          TimeoutHdl, Timer* );
 
 public:
-    IndexTabPage_Impl( Window* pParent );
+    IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     ~IndexTabPage_Impl();
 
     virtual void        Resize();
@@ -281,7 +286,7 @@ private:
     DECL_LINK(          ModifyHdl, Edit* );
 
 public:
-    SearchTabPage_Impl( Window* pParent );
+    SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     ~SearchTabPage_Impl();
 
     virtual void        Resize();
@@ -325,7 +330,7 @@ private:
     DECL_LINK(          OpenHdl, PushButton* );
 
 public:
-    BookmarksTabPage_Impl( Window* pParent );
+    BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
 
     virtual void        Resize();
     virtual void        ActivatePage();
@@ -351,6 +356,8 @@ private:
     Timer               aTimer;
 
     Link                aSelectFactoryLink;
+    Link                aPageDoubleClickLink;
+    Link                aIndexKeywordLink;
     String              sKeyword;
 
     SfxHelpWindow_Impl*     pParentWin;
@@ -361,10 +368,16 @@ private:
     BookmarksTabPage_Impl*  pBPage;
 
     long                nMinWidth;
+    bool                bWasCursorLeftOrRight;
 
     void                Initialize();
     void                SetActiveFactory();
     HelpTabPage_Impl*   GetCurrentPage( USHORT& rCurId );
+
+    inline ContentTabPage_Impl*     GetContentPage();
+    inline IndexTabPage_Impl*       GetIndexPage();
+    inline SearchTabPage_Impl*      GetSearchPage();
+    inline BookmarksTabPage_Impl*   GetBookmarksPage();
 
     DECL_LINK(          ActivatePageHdl, TabControl* );
     DECL_LINK(          SelectHdl, ListBox* );
@@ -395,7 +408,57 @@ public:
     sal_Bool            IsFullWordSearch() const;
     void                OpenKeyword( const String& rKeyword );
     void                SelectExecutableEntry();
+    inline bool         WasCursorLeftOrRight();
 };
+
+// inlines ---------------------------------------------------------------
+
+ContentTabPage_Impl* SfxHelpIndexWindow_Impl::GetContentPage()
+{
+    if ( !pCPage )
+    {
+        pCPage = new ContentTabPage_Impl( &aTabCtrl, this );
+        pCPage->SetOpenHdl( aPageDoubleClickLink );
+    }
+    return pCPage;
+}
+IndexTabPage_Impl* SfxHelpIndexWindow_Impl::GetIndexPage()
+{
+    if ( !pIPage )
+    {
+        pIPage = new IndexTabPage_Impl( &aTabCtrl, this );
+        pIPage->SetDoubleClickHdl( aPageDoubleClickLink );
+        pIPage->SetKeywordHdl( aIndexKeywordLink );
+    }
+    return pIPage;
+}
+
+SearchTabPage_Impl* SfxHelpIndexWindow_Impl::GetSearchPage()
+{
+    if ( !pSPage )
+    {
+        pSPage = new SearchTabPage_Impl( &aTabCtrl, this );
+        pSPage->SetDoubleClickHdl( aPageDoubleClickLink );
+    }
+    return pSPage;
+}
+
+BookmarksTabPage_Impl* SfxHelpIndexWindow_Impl::GetBookmarksPage()
+{
+    if ( !pBPage )
+    {
+        pBPage = new BookmarksTabPage_Impl( &aTabCtrl, this );
+        pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
+    }
+    return pBPage;
+}
+
+bool SfxHelpIndexWindow_Impl::WasCursorLeftOrRight()
+{
+    bool bRet = bWasCursorLeftOrRight;
+    bWasCursorLeftOrRight = false;
+    return bRet;
+}
 
 // class TextWin_Impl ----------------------------------------------------
 
