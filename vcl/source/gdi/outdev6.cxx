@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:07:09 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,6 +850,7 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
     Rectangle       aBound;
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
     const BOOL      bOldMap = mbMap;
+    BOOL            bNeedGradient = TRUE;
 
 /*
     if ( rWallpaper.IsRect() )
@@ -863,7 +864,27 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
-    DrawGradient( aBound, rWallpaper.GetGradient() );
+    if( OUTDEV_WINDOW == meOutDevType && rWallpaper.GetStyle() == WALLPAPER_APPLICATIONGRADIENT )
+    {
+        Window *pWin = dynamic_cast< Window* >( this );
+        if( pWin )
+        {
+            // limit gradient to useful size, so that it still can be noticed
+            // in maximized windows
+            long gradientWidth = pWin->GetDesktopRectPixel().GetSize().Width();
+            if( gradientWidth > 1024 )
+                gradientWidth = 1024;
+            if( mnOutOffX+nWidth > gradientWidth )
+                ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
+            if( mnOutOffX > gradientWidth )
+                bNeedGradient = FALSE;
+            else
+                aBound = Rectangle( Point( -mnOutOffX, nY ), Size( gradientWidth, nHeight ) );
+        }
+    }
+
+    if( bNeedGradient )
+        DrawGradient( aBound, rWallpaper.GetGradient() );
 
     Pop();
     EnableMapMode( bOldMap );
