@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-17 07:58:12 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ namespace xmloff
 
         // some very special methods for some very special attribute/property pairs
 
-        /** add the hlink:xref attribute to the export context.
+        /** add the hlink:target-frame attribute to the export context.
 
             <p>The value of this attribute is extracted from the TargetFrame property of the object given.</p>
 
@@ -247,6 +247,14 @@ namespace xmloff
             and the property.</p>
         */
         void exportTargetFrameAttribute();
+
+        /** add the form:href attribute to the export context.
+
+            <p>The value of this attribute is extracted from the TargetURL property of the object given.</p>
+
+            <p>The property needs a special handling because the URL's need to be made relative</p>
+        */
+        void exportTargetLocationAttribute();
 
         /** flag the style properties as 'already exported'
 
@@ -404,6 +412,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/04/17 07:58:12  fs
+ *  #85427# +_bVoidDefault parameter for addEnumPropertyAttribute
+ *
  *  Revision 1.11  2001/03/29 12:18:58  fs
  *  #85097# when exporting boolean properties, allow for MAYBEVOID props
  *

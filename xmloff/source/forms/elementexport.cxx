@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-14 13:39:35 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,12 +459,12 @@ namespace xmloff
             // the attribute ids of all properties which are expected to be of type string
             static sal_Int32 nStringPropertyAttributeIds[] =
             {
-                CCA_IMAGE_DATA, CCA_LABEL, CCA_TARGET_LOCATION, CCA_TITLE
+                CCA_IMAGE_DATA, CCA_LABEL, CCA_TITLE
             };
             // the names of all properties which are expected to be of type string
             static const sal_Char* pStringPropertyNames[] =
             {
-                PROPERTY_IMAGEURL, PROPERTY_LABEL, PROPERTY_TARGETURL, PROPERTY_TITLE
+                PROPERTY_IMAGEURL, PROPERTY_LABEL, PROPERTY_TITLE
             };
             OSL_ENSURE( sizeof(pStringPropertyNames)/sizeof(pStringPropertyNames[0]) ==
                         sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
@@ -589,6 +589,15 @@ namespace xmloff
         #ifdef DBG_UTIL
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_FRAME;
+        #endif
+        }
+
+        if (m_nIncludeCommon & CCA_TARGET_LOCATION)
+        {
+            exportTargetLocationAttribute();
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_LOCATION;
         #endif
         }
 
@@ -1505,6 +1514,8 @@ namespace xmloff
         exportServiceNameAttribute();
         // the target frame
         exportTargetFrameAttribute();
+        // the target URL
+        exportTargetLocationAttribute();
 
         // master fields
         exportStringSequenceAttribute(
@@ -1525,6 +1536,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/06/14 13:39:35  fs
+ *  #88016# corrected the condition for the assertion
+ *
  *  Revision 1.16  2001/05/21 13:30:17  fs
  *  #85388# when exporting the ListSource as attribs, store form:option elements as long as there are valid 'selected' or 'default-selected' entries
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-21 13:33:04 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,6 +718,20 @@ namespace xmloff
         simluateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
     }
 
+    //---------------------------------------------------------------------
+    void OButtonImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    {
+        static const ::rtl::OUString s_sTargetLocationAttributeName = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_TARGET_LOCATION));
+        if (s_sTargetLocationAttributeName == _rLocalName)
+        {
+            // make a global URL out of the local one
+            ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference(_rValue);
+            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, sAdjustedValue);
+        }
+        else
+            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+    }
+
     //=====================================================================
     //= OTextLikeImport
     //=====================================================================
@@ -1264,6 +1278,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/05/21 13:33:04  fs
+ *  #85388# when exporting the ListSource as attribs, store form:option elements as long as there are valid 'selected' or 'default-selected' entries
+ *
  *  Revision 1.21  2001/05/17 12:40:01  fs
  *  #86895# #86825# implTranslateValueProperty: special handling for EffectiveValue and EffectiveDefault
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-21 13:33:48 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,7 @@ namespace xmloff
             OControlElement::ElementType _eType
         );
 
+    protected:
         // OPropertyImport overridables
         virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
@@ -363,6 +364,11 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+
+        // OPropertyImport overridables
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
+            const ::rtl::OUString& _rLocalName,
+            const ::rtl::OUString& _rValue);
     };
 
     //=====================================================================
@@ -631,6 +637,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/21 13:33:48  fs
+ *  #85388# +m_nEmptyXXXItems/+implEmptyXXXFound
+ *
  *  Revision 1.11  2001/03/29 09:45:16  fs
  *  #85386# +OTextLikeImport / handle attributes which's defaults differ from the property defaults
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:00:42 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,6 +528,18 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OPropertyExport::exportTargetLocationAttribute()
+    {
+        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_TARGETURL, ::rtl::OUString);
+
+        ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETURL));
+        sTargetLocation = m_rContext.getGlobalContext().GetRelativeReference(sTargetLocation);
+        AddAttribute(getCommonControlAttributeNamespace(CCA_TARGET_LOCATION), getCommonControlAttributeName(CCA_TARGET_LOCATION), sTargetLocation);
+
+        exportedProperty(PROPERTY_TARGETURL);
+    }
+
+    //---------------------------------------------------------------------
     void OPropertyExport::flagStyleProperties()
     {
         // flag all the properties which are part of the style as "handled"
@@ -796,6 +808,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/05/28 15:00:42  fs
+ *  #86712# don't export DateFormat and TimeFormat directly anymore - the format settings are stored as style now
+ *
  *  Revision 1.16  2001/04/17 07:58:12  fs
  *  #85427# +_bVoidDefault parameter for addEnumPropertyAttribute
  *
