@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-23 18:55:46 $
+ *  last change: $Author: nn $ $Date: 2001-11-30 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1384,14 +1384,15 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
             }
         }
 
-        aFormatCode.insert( 0, aConditions.makeStringAndClear() );
-        OUString sFormat = aFormatCode.makeStringAndClear();
-
-        if ( !sFormat.getLength() )
+        if ( !aFormatCode.getLength() )
         {
             //  insert empty format as empty string (with quotes)
-            sFormat = OUString::createFromAscii("\"\"");    // ""
+            //  #93901# this check has to be done before inserting the conditions
+            aFormatCode.appendAscii("\"\"");    // ""
         }
+
+        aFormatCode.insert( 0, aConditions.makeStringAndClear() );
+        OUString sFormat = aFormatCode.makeStringAndClear();
 
         //  test special cases
 
