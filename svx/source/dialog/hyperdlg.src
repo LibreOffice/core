@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:10:51 $
+ *  last change: $Author: obo $ $Date: 2002-08-16 20:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Przegl�darka WWW";
         QuickHelpText[ portuguese_brazilian ] = "Browse";
         QuickHelpText[ japanese ] = "WWWブラウザ";
-        QuickHelpText[ korean ] = "브라우즈";
+        QuickHelpText[ korean ] = "브라우저";
         QuickHelpText[ chinese_simplified ] = "万维网浏览器";
         QuickHelpText[ chinese_traditional ] = "WWW 瀏覽器";
         QuickHelpText[ arabic ] = "����� ���";
@@ -380,6 +380,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ catalan ] = "Navegador";
         QuickHelpText[ finnish ] = "WWW-selain";
         Text[ english_us ] = "WWW Browser";
+        Text[ korean ] = "WWW 브라우저";
+        Text[ chinese_traditional ] = "WWW 瀏覽器";
     };
     Image IMG_BROWSE_HC
     {
@@ -423,6 +425,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ finnish ] = "Kohde asiakirjassa";
         Text[ english_us ] = "Target in Document";
         Text[ thai ] = "เป้าหมายในเอกสาร";
+        Text[ korean ] = "문서 내 대상";
+        Text[ chinese_traditional ] = "文件內的目標";
     };
     Image IMG_TARGET_HC
     {
@@ -758,6 +762,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ english_us ] = "Events";
         Text[ catalan ] = "-";
         Text[ thai ] = "เหตุการณ์";
+        Text[ korean ] = "이벤트";
+        Text[ chinese_traditional ] = "事件";
     };
     Image IMG_SCRIPT_HC
     {
@@ -982,12 +988,14 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ japanese ] = "データソース...";
         QuickHelpText[ korean ] = "주소록";
         QuickHelpText[ chinese_simplified ] = "通讯簿";
-        QuickHelpText[ chinese_traditional ] = "通訊錄...";
+        QuickHelpText[ chinese_traditional ] = "資料源...";
         QuickHelpText[ turkish ] = "Adressbuch";
         QuickHelpText[ arabic ] = "���� ��������";
         QuickHelpText[ catalan ] = "Libreta de direccions";
         QuickHelpText[ finnish ] = "Osoitekirja";
         Text[ english_us ] = "Data Sources...";
+        Text[ korean ] = "데이터 원본";
+        Text[ chinese_traditional ] = "資料源...";
     };
     Image IMG_ADRESSBOOK_HC
     {
@@ -1323,6 +1331,8 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ english_us ] = "Events";
         Text[ catalan ] = "-";
         Text[ thai ] = "เหตุการณ์";
+        Text[ korean ] = "이벤트";
+        Text[ chinese_traditional ] = "事件";
     };
     Image IMG_SCRIPT_HC
     {
@@ -1462,6 +1472,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ finnish ] = "Avaa tiedosto";
         Text[ english_us ] = "Open File";
         Text[ thai ] = "เปิดแฟ้ม";
+        Text[ korean ] = "파일 열기";
+        Text[ chinese_traditional ] = "開啟舊檔";
     };
     Image IMG_FILEOPEN_HC
     {
@@ -1624,6 +1636,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ finnish ] = "Kohde asiakirjassa";
         Text[ english_us ] = "Target in Document";
         Text[ thai ] = "เป้าหมายในเอกสาร";
+        Text[ korean ] = "문서 내 대상";
+        Text[ chinese_traditional ] = "文件之內的目標";
     };
     Image IMG_BROWSE_HC
     {
@@ -1959,6 +1973,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ english_us ] = "Events";
         Text[ catalan ] = "-";
         Text[ thai ] = "เหตุการณ์";
+        Text[ korean ] = "이벤트";
+        Text[ chinese_traditional ] = "事件";
     };
     Image IMG_SCRIPT_HC
     {
@@ -2188,7 +2204,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ polish ] = "Wybierz �cie�k�";
         QuickHelpText[ portuguese_brazilian ] = "Create";
         QuickHelpText[ japanese ] = "パスの選択";
-        QuickHelpText[ korean ] = "생성";
+        QuickHelpText[ korean ] = "경로 선택";
         QuickHelpText[ chinese_simplified ] = "选择路径";
         QuickHelpText[ chinese_traditional ] = "選擇路徑";
         QuickHelpText[ arabic ] = "������ ������";
@@ -2197,6 +2213,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ finnish ] = "Valitse polku";
         Text[ english_us ] = "Select Path";
         Text[ thai ] = "เลือกเส้นทาง";
+        Text[ korean ] = "경로 선택";
+        Text[ chinese_traditional ] = "選擇路徑";
     };
     Image IMG_CREATE_HC
     {
@@ -2532,6 +2550,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ english_us ] = "Events";
         Text[ catalan ] = "-";
         Text[ thai ] = "เหตุการณ์";
+        Text[ korean ] = "이벤트";
+        Text[ chinese_traditional ] = "事件";
     };
     Image IMG_SCRIPT_HC
     {
@@ -2788,9 +2808,9 @@ String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
     Text[ swedish ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
     Text[ polish ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
     Text[ japanese ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
-    Text[ korean ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
+    Text[ korean ] = "여기에서 웹 페이지, FTP 서버 또는 Telnet 접속으로 연결하는 하이퍼링크를 만듭니다.";
     Text[ chinese_simplified ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
-    Text[ chinese_traditional ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
+    Text[ chinese_traditional ] = "建立一個網頁的、一個FTP 伺服器的或一個 Telnet 連線的超連結。";
     Text[ turkish ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
     Text[ arabic ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
 };
@@ -2837,9 +2857,9 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
     Text[ swedish ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ polish ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ japanese ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
-    Text[ korean ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
+    Text[ korean ] = "여기에서 전자 우편 또는 뉴스 그룹으로 하이퍼링크를 만듭니다.";
     Text[ chinese_simplified ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
-    Text[ chinese_traditional ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
+    Text[ chinese_traditional ] = "建立一個電子郵件地址的或新聞群組的超連結。";
     Text[ turkish ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ arabic ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
 };
@@ -2886,9 +2906,9 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
     Text[ swedish ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
     Text[ polish ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
     Text[ japanese ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
-    Text[ korean ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
+    Text[ korean ] = "여기에서 기존의 문서 또는 문서 내의 대상으로 연결되는 하이퍼링크를 만듭니다.";
     Text[ chinese_simplified ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
-    Text[ chinese_traditional ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
+    Text[ chinese_traditional ] = "建立一個現有的文件的或其中一個目標的超連結。";
     Text[ turkish ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
     Text[ arabic ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
 };
@@ -2935,9 +2955,9 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
     Text[ swedish ] = "This is where you create a new document to which the new link points.";
     Text[ polish ] = "This is where you create a new document to which the new link points.";
     Text[ japanese ] = "This is where you create a new document to which the new link points.";
-    Text[ korean ] = "This is where you create a new document to which the new link points.";
+    Text[ korean ] = "여기에서 새 하이퍼링크와 연결되는 새 문서를 만듭니다.";
     Text[ chinese_simplified ] = "This is where you create a new document to which the new link points.";
-    Text[ chinese_traditional ] = "This is where you create a new document to which the new link points.";
+    Text[ chinese_traditional ] = "新增一個新的超連結指向的文件。";
     Text[ turkish ] = "This is where you create a new document to which the new link points.";
     Text[ arabic ] = "This is where you create a new document to which the new link points.";
 };
