@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futransf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "futransf.hxx"
+
 #include <svx/dialogs.hrc>
 #include <svx/labdlg.hxx>
 #include <svx/polysc3d.hxx>
@@ -76,11 +78,16 @@
 #endif
 
 #include "strings.hrc"
-#include "viewshel.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdresid.hxx"
-#include "futransf.hxx"
 #include "drawdoc.hxx"
+
+namespace sd {
 
 TYPEINIT1( FuTransform, FuPoor );
 
@@ -90,7 +97,7 @@ TYPEINIT1( FuTransform, FuPoor );
 |*
 \************************************************************************/
 
-FuTransform::FuTransform(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
+FuTransform::FuTransform(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                          SdDrawDocument* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -244,3 +251,4 @@ Point FuTransform::GetPoint( Rectangle aRect, RECT_POINT eRP )
 }
 
 
+} // end of namespace sd

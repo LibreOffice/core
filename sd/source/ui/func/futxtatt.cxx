@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futxtatt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "futxtatt.hxx"
+
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -71,10 +73,15 @@
 #include <svx/textattr.hxx>
 #include <svx/textanim.hxx>
 
-#include "sdview.hxx"
-#include "viewshel.hxx"
-#include "futxtatt.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
+
+namespace sd {
 
 TYPEINIT1( FuTextAttrDlg, FuPoor );
 
@@ -84,9 +91,13 @@ TYPEINIT1( FuTextAttrDlg, FuPoor );
 |*
 \************************************************************************/
 
-FuTextAttrDlg::FuTextAttrDlg(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuTextAttrDlg::FuTextAttrDlg (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SfxItemSet aNewAttr( pDoc->GetPool() );
     pView->GetAttributes( aNewAttr );
@@ -122,3 +133,4 @@ FuTextAttrDlg::FuTextAttrDlg(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView
 }
 
 
+} // end of namespace sd
