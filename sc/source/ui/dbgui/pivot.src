@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:57:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Drag the fields from the right into the desired area using the mouse." ;
         Text [ norwegian ] = "Dra feltene fra høyre og inn I det ønskede området ved å bruke musen." ;
         Text [ italian ] = "Trascinate i campi da destra nell'area desiderata usando il mouse." ;
-        Text [ portuguese_brazilian ] = "Arraste os campos da direita para a área desejada usando o mouse." ;
+        Text [ portuguese_brazilian ] = "Arraste os campos da direita para a ?rea desejada usando o mouse." ;
         Text [ portuguese ] = "Com o rato arraste os campos da direita para as áreas desejadas." ;
         Text [ finnish ] = "Vedä oikealla olevat kentät haluamaasi kohtaan." ;
         Text [ danish ] = "Træk felterne på højre side til de ønskede områder ved hjælp af musen." ;
@@ -300,7 +300,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Output from" ;
         Text [ norwegian ] = "Utgående fra " ;
         Text [ italian ] = "Risultato da" ;
-        Text [ portuguese_brazilian ] = "Saída de" ;
+        Text [ portuguese_brazilian ] = "Sa?da de" ;
         Text [ portuguese ] = "Saída de" ;
         Text [ finnish ] = "Tulokset kohteeseen" ;
         Text [ danish ] = "Output fra" ;
@@ -357,7 +357,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
@@ -550,7 +550,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Average - " ;
         Text [ norwegian ] = "Gjennomsnitt - " ;
         Text [ italian ] = "Media - " ;
-        Text [ portuguese_brazilian ] = "Média - " ;
+        Text [ portuguese_brazilian ] = "M?dia - " ;
         Text [ portuguese ] = "Média - " ;
         Text [ finnish ] = "Keskiarvo - " ;
         Text [ danish ] = "Middel - " ;
@@ -561,7 +561,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Mean - " ;
         Text[ chinese_simplified ] = "ÖĞ¼äÖµ - ";
         Text[ russian ] = "Ñğåäíåå çíà÷åíèå -  ";
-        Text[ polish ] = "Œrednia wartoœæ -  ";
+        Text[ polish ] = "?rednia warto?æ -  ";
         Text[ japanese ] = "•½‹Ï’l - ";
         Text[ chinese_traditional ] = "¤¤¶¡­È - ";
         Text[ arabic ] = "Ü Average";
