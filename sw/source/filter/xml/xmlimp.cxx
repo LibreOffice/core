@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-17 11:13:28 $
+ *  last change: $Author: dvo $ $Date: 2002-11-08 15:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,7 +1024,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
  "PrintFaxName" ,
  "PrintPaperFromSetup" ,
  "PrintTables" ,
- "PrintSingleJobs"
+ "PrintSingleJobs",
+ "UpdateFromTemplate"
   };
 #define TBL_MAX 100
 int aArr[ TBL_MAX ];
@@ -1094,39 +1095,46 @@ void main()
     static const struct {
         const sal_Char* pName;
         sal_uInt16 nLen;
-    }  aNotSetArr[31] = {
-/* 0*/      {RTL_CONSTASCII_STRINGPARAM ( "ChartAutoUpdate" )},
-/* 1*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintAnnotationMode" )},
-/* 2*/      {RTL_CONSTASCII_STRINGPARAM ( "ForbiddenCharacters" )},
-/* 3*/      {0,0},
-/* 4*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" )},
-/* 5*/      {RTL_CONSTASCII_STRINGPARAM ( "IsKernAsianPunctuation" )},
-/* 6*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintControls" )},
-/* 7*/      {RTL_CONSTASCII_STRINGPARAM ( "AddParaTableSpacing" )},
-/* 8*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" )},
-/* 9*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" )},
-/*10*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" )},
-/*11*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" )},
-/*12*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" )},
-/*13*/      {RTL_CONSTASCII_STRINGPARAM ( "AddParaTableSpacingAtStart" )},
-/*14*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" )},
-/*15*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" )},
-/*16*/      {0,0},
-/*17*/      {0,0},
-/*18*/      {0,0},
-/*19*/      {RTL_CONSTASCII_STRINGPARAM ( "FieldAutoUpdate" )},
-/*20*/      {0,0},
-/*21*/      {0,0},
-/*22*/      {0,0},
-/*23*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" )},
-/*24*/      {0,0},
-/*25*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" )},
-/*26*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintTables" )},
-/*27*/      {RTL_CONSTASCII_STRINGPARAM ( "CharacterCompressionType" )},
-/*28*/      {RTL_CONSTASCII_STRINGPARAM ( "PrintBlackFonts" )},
-/*29*/      {0,0},
-/*30*/      {RTL_CONSTASCII_STRINGPARAM ( "LinkUpdateMode" )}
+    }  aNotSetArr[35] = {
+/* 0*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPageBackground" )},
+/* 1*/      {RTL_CONSTASCII_STRINGPARAM( "PrintControls" )},
+/* .*/      {0,0},
+/* .*/      {0,0},
+/* 4*/      {RTL_CONSTASCII_STRINGPARAM( "PrintReversed" )},
+/* 5*/      {RTL_CONSTASCII_STRINGPARAM( "ForbiddenCharacters" )},
+/* 6*/      {RTL_CONSTASCII_STRINGPARAM( "PrintAnnotationMode" )},
+/* 7*/      {RTL_CONSTASCII_STRINGPARAM( "PrintFaxName" )},
+/* .*/      {0,0},
+/* .*/      {0,0},
+/* 10*/     {RTL_CONSTASCII_STRINGPARAM( "PrintProspect" )},
+/* .*/      {0,0},
+/* 12*/     {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacingAtStart" )},
+/* 13*/     {RTL_CONSTASCII_STRINGPARAM( "PrintPaperFromSetup" )},
+/* 14*/     {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacing" )},
+/* 15*/     {RTL_CONSTASCII_STRINGPARAM( "PrintDrawings" )},
+/* 16*/     {RTL_CONSTASCII_STRINGPARAM( "FieldAutoUpdate" )},
+/* .*/      {0,0},
+/* 18*/     {RTL_CONSTASCII_STRINGPARAM( "LinkUpdateMode" )},
+/* 19*/     {RTL_CONSTASCII_STRINGPARAM( "UpdateFromTemplate" )},
+/* 20*/     {RTL_CONSTASCII_STRINGPARAM( "PrintTables" )},
+/* 21*/     {RTL_CONSTASCII_STRINGPARAM( "IsKernAsianPunctuation" )},
+/* 22*/     {RTL_CONSTASCII_STRINGPARAM( "PrintLeftPages" )},
+/* 23*/     {RTL_CONSTASCII_STRINGPARAM( "PrintSingleJobs" )},
+/* 24*/     {RTL_CONSTASCII_STRINGPARAM( "CharacterCompressionType" )},
+/* .*/      {0,0},
+/* 26*/     {RTL_CONSTASCII_STRINGPARAM( "PrintGraphics" )},
+/* .*/      {0,0},
+/* .*/      {0,0},
+/* .*/      {0,0},
+/* 30*/     {RTL_CONSTASCII_STRINGPARAM( "PrintBlackFonts" )},
+/* 31*/     {RTL_CONSTASCII_STRINGPARAM( "PrintRightPages" )},
+/* 32*/     {RTL_CONSTASCII_STRINGPARAM( "ChartAutoUpdate" )},
+/* .*/      {0,0},
+/* .*/      {0,0}
     };
+
+    const ULONG nPrime = 43;
+    const ULONG nSub = 116;
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1143,7 +1151,7 @@ void main()
             ULONG nHash = 0;
             const sal_Unicode* p = pValues->Name;
             for( ULONG nLen = pValues->Name.getLength(); nLen; --nLen, ++p )
-                nHash = (nHash * 14) ^ ( *p - 76 );
+                nHash = (nHash * nPrime) ^ ( *p - nSub );
             nHash %= sizeof( aNotSetArr ) / sizeof( aNotSetArr[0] );
             bSet = 0 == aNotSetArr[ nHash ].pName ||
                     !pValues->Name.equalsAsciiL(
