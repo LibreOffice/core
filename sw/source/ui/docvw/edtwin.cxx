@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:08:01 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 13:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,7 @@
 #include <charfmt.hxx>
 #include <numrule.hxx>
 #include <pagedesc.hxx>
+#include <svtools/ruler.hxx> // #i23726#
 
 //JP 11.10.2001: enable test code for bug fix 91313
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
@@ -1291,45 +1292,57 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     String sFmlEntry;
 
     enum SW_KeyState { KS_Start,
-                    KS_CheckKey, KS_InsChar, KS_InsTab,
-                    KS_NoNum, KS_NumOff, KS_NumOrNoNum, KS_NumDown, KS_NumUp,
-                    KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
-                    KS_GlossaryExpand, KS_NextPrevGlossary,
-                    KS_AutoFmtByInput, KS_DontExpand,
-                    KS_NextObject, KS_PrevObject,
-                    KS_KeyToView,
-                    KS_LaunchOLEObject, KS_GoIntoFly, KS_GoIntoDrawing,
-                    KS_EnterDrawHandleMode,
-                    KS_CheckDocReadOnlyKeys,
-                    KS_CheckAutoCorrect, KS_EditFormula,
-                    KS_ColLeftBig, KS_ColRightBig,
-                    KS_ColLeftSmall, KS_ColRightSmall,
-                    KS_ColBottomBig,
-                    KS_ColBottomSmall,
-                    KS_CellLeftBig, KS_CellRightBig,
-                    KS_CellLeftSmall, KS_CellRightSmall,
-                    KS_CellTopBig, KS_CellBottomBig,
-                    KS_CellTopSmall, KS_CellBottomSmall,
+                       KS_CheckKey, KS_InsChar, KS_InsTab,
+                       KS_NoNum, KS_NumOff, KS_NumOrNoNum, KS_NumDown, KS_NumUp,
+                       // -> #i23725#
+                       KS_NumIndentInc, KS_NumIndentDec,
+                       // <- #i23725#
 
-                    KS_InsDel_ColLeftBig, KS_InsDel_ColRightBig,
-                    KS_InsDel_ColLeftSmall, KS_InsDel_ColRightSmall,
-                    KS_InsDel_ColTopBig, KS_InsDel_ColBottomBig,
-                    KS_InsDel_ColTopSmall, KS_InsDel_ColBottomSmall,
-                    KS_InsDel_CellLeftBig, KS_InsDel_CellRightBig,
-                    KS_InsDel_CellLeftSmall, KS_InsDel_CellRightSmall,
-                    KS_InsDel_CellTopBig, KS_InsDel_CellBottomBig,
-                    KS_InsDel_CellTopSmall, KS_InsDel_CellBottomSmall,
-                    KS_TblColCellInsDel,
+                       KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
+                       KS_GlossaryExpand, KS_NextPrevGlossary,
+                       KS_AutoFmtByInput, KS_DontExpand,
+                       KS_NextObject, KS_PrevObject,
+                       KS_KeyToView,
+                       KS_LaunchOLEObject, KS_GoIntoFly, KS_GoIntoDrawing,
+                       KS_EnterDrawHandleMode,
+                       KS_CheckDocReadOnlyKeys,
+                       KS_CheckAutoCorrect, KS_EditFormula,
+                       KS_ColLeftBig, KS_ColRightBig,
+                       KS_ColLeftSmall, KS_ColRightSmall,
+                       KS_ColTopBig, KS_ColBottomBig,
+                       KS_ColTopSmall, KS_ColBottomSmall,
+                       KS_CellLeftBig, KS_CellRightBig,
+                       KS_CellLeftSmall, KS_CellRightSmall,
+                       KS_CellTopBig, KS_CellBottomBig,
+                       KS_CellTopSmall, KS_CellBottomSmall,
 
-                    KS_Fly_Change, KS_Draw_Change,
-                    KS_SpecialInsert,
-                    KS_EnterCharCell,
-                    KS_Ende };
+                       KS_InsDel_ColLeftBig, KS_InsDel_ColRightBig,
+                       KS_InsDel_ColLeftSmall, KS_InsDel_ColRightSmall,
+                       KS_InsDel_ColTopBig, KS_InsDel_ColBottomBig,
+                       KS_InsDel_ColTopSmall, KS_InsDel_ColBottomSmall,
+                       KS_InsDel_CellLeftBig, KS_InsDel_CellRightBig,
+                       KS_InsDel_CellLeftSmall, KS_InsDel_CellRightSmall,
+                       KS_InsDel_CellTopBig, KS_InsDel_CellBottomBig,
+                       KS_InsDel_CellTopSmall, KS_InsDel_CellBottomSmall,
+                       KS_TblColCellInsDel,
+
+                       KS_Fly_Change, KS_Draw_Change,
+                       KS_SpecialInsert,
+                       KS_EnterCharCell,
+                       KS_Ende };
 
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
                                            : KS_CheckKey,
                 eNextKeyState = KS_Ende;
     BYTE nDir;
+
+    // -> #i23725#
+    if (nKS_NUMDOWN_Count > 0)
+        nKS_NUMDOWN_Count--;
+
+    if (nKS_NUMINDENTINC_Count > 0)
+        nKS_NUMINDENTINC_Count--;
+    // <- #i23725#
 
     while( KS_Ende != eKeyState )
     {
@@ -1623,6 +1636,50 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                     KEY_BACKSPACE != rKeyCode.GetFullCode(),
                                     TRUE))
                             eKeyState = KS_NumOrNoNum;
+
+                        BOOL bOutline = FALSE;
+#ifdef TASK_59308
+                        const SwTxtFmtColl* pColl;
+                        if( !rSh.SwCrsrShell::HasSelection() &&
+                            0 != ( pColl = rSh.GetCurTxtFmtColl() ) &&
+                            NO_NUMBERING != pColl->GetOutlineLevel() &&
+                            NO_NUMBERING == rSh.GetNumLevel( FALSE ) )
+                            bOutline = TRUE;
+#endif
+                        // #i23725#
+                        BOOL bDone = FALSE;
+                        if (rSh.IsSttPara() &&
+                            NULL == rSh.GetCurNumRule())
+                            bDone = rSh.TryRemoveIndent();
+
+                        // -> #i23725#
+                        if (bDone)
+                            eKeyState = KS_Ende;
+                        else
+                        {
+                            if (rSh.IsSttPara() &&
+                                ! rSh.IsNoNum())
+                            {
+                                if (nKS_NUMDOWN_Count > 0 &&
+                                    0 < rSh.GetNumLevel())
+                                {
+                                    eKeyState = KS_NumUp;
+                                    nKS_NUMDOWN_Count = 2;
+                                    bDone = TRUE;
+                                }
+                                else if (nKS_NUMINDENTINC_Count > 0)
+                                {
+                                    eKeyState = KS_NumIndentDec;
+                                    nKS_NUMINDENTINC_Count = 2;
+                                    bDone = TRUE;
+                                }
+                            }
+                            // <- #i23725#
+                            if( ! bDone && rSh.NumOrNoNum
+                                (KEY_BACKSPACE != rKeyCode.GetFullCode(),
+                                      TRUE, bOutline ))
+                                eKeyState = KS_NumOrNoNum;
+                        }
                     }
                     break;
 
@@ -1654,7 +1711,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
 #endif
                     if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
-                        eKeyState = KS_NumDown;
+                    {
+                        if (rSh.IsFirstOfNumRule()) // #i23725#
+                            eKeyState = KS_NumIndentInc;
+                        else
+                            eKeyState = KS_NumDown;
+                    }
                     else if ( rSh.GetTableFmt() )
                     {
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
@@ -1676,7 +1738,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-                            if( pColl && 0 <= pColl->GetOutlineLevel() &&
+                            if( pColl &&
+                                //0 <= pColl->GetOutlineLevel() && #i24560#
                                 MAXLEVEL - 1 > pColl->GetOutlineLevel() )
                                 eKeyState = KS_OutlineDown;
                         }
@@ -1693,7 +1756,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
 #endif
                     if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
-                        eKeyState = KS_NumUp;
+                    {
+                        if (rSh.IsFirstOfNumRule()) // #i23725#
+                            eKeyState = KS_NumIndentDec;
+                        else
+                            eKeyState = KS_NumUp;
+                    }
                     else if ( rSh.GetTableFmt() )
                     {
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
@@ -1750,7 +1818,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             else
                             {
                                 SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-                                if( pColl && 0 <= pColl->GetOutlineLevel() &&
+                                if( pColl &&
+                                    //0 <= pColl->GetOutlineLevel() &&  #i24560#
                                     MAXLEVEL - 1 > pColl->GetOutlineLevel() )
                                     eKeyState = KS_InsTab;
                             }
@@ -2026,10 +2095,22 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case KS_NumDown:
                 rSh.NumUpDown( TRUE );
+                nKS_NUMDOWN_Count = 2; // #i23725#
                 break;
             case KS_NumUp:
                 rSh.NumUpDown( FALSE );
                 break;
+
+                // -> #i23726#
+            case KS_NumIndentInc:
+                rSh.NumIndent(360);
+                nKS_NUMINDENTINC_Count = 2;
+                break;
+
+            case KS_NumIndentDec:
+                rSh.NumIndent(-360);
+                break;
+                // <- #i23726#
 
             case KS_OutlineDown:
                 rSh.OutlineUpDown( 1 );
@@ -2286,9 +2367,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
     aRszMvHdlPt.X() = 0, aRszMvHdlPt.Y() = 0;
 
     BYTE nMouseTabCol = 0;
-    if ( !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
+    BOOL bTmp = !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
          rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons() &&
-         !rSh.IsTableMode() &&
+        !rSh.IsTableMode();
+    if (  bTmp &&
          0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ))
     {
         //Zuppeln von Tabellenspalten aus dem Dokument heraus.
@@ -2314,6 +2396,27 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
             return;
         }
     }
+    // #i23726#
+    else if (bTmp &&
+             rSh.IsNumLabel(aDocPos))
+    {
+        rView.SetNumRuleNodeFromDoc(rSh.GetNumRuleNodeAtPos(aDocPos));
+        rView.InvalidateRulerPos();
+        SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
+        rBind.Update();
+
+        if (RulerMarginDrag( rView , rMEvt))
+        {
+            rView.SetNumRuleNodeFromDoc( NULL );
+            rView.InvalidateRulerPos();
+            rBind.Update();
+            bCallBase = FALSE;
+        }
+        else
+        {
+            return;
+        }
+    }
 
     //Man kann sich in einem Selektionszustand befinden, wenn zuletzt
     //mit dem Keyboard selektiert wurde, aber noch kein CURSOR_KEY
@@ -2330,6 +2433,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
     {
         BOOL bOnlyText = FALSE;
         bMBPressed = bNoInterrupt = TRUE;
+        nKS_NUMDOWN_Count = 0; // #i23725#
+
         CaptureMouse();
 
         //ggf. Cursorpositionen zuruecksetzen
@@ -2541,6 +2646,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                                 }
                             }
                         }
+
                         break;
                     }
                     case 2:
@@ -3017,12 +3123,22 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
 
     BYTE nMouseTabCol;
     if( !bIsDocReadOnly && bInsWin && !pApplyTempl && !rSh.IsInSelect() &&
-         0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt )) && !rSh.IsTableMode())
+        !rSh.IsTableMode())
     {
-        //Zuppeln von Tabellenspalten aus dem Dokument heraus.
+        if (0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt )))
+        {
+            //Zuppeln von Tabellenspalten aus dem Dokument heraus.
 
-        SetPointer( SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol? POINTER_VSIZEBAR : POINTER_HSIZEBAR );
-        return;
+            SetPointer( SW_TABCOL_VERT == nMouseTabCol ? POINTER_VSIZEBAR : POINTER_HSIZEBAR );
+            return;
+        }
+        // #i23726#
+        else if (rSh.IsNumLabel(aDocPt, RULER_MOUSE_MARGINWIDTH))
+        {
+            SetPointer( POINTER_HSIZEBAR );
+
+            return;
+        }
     }
 
     BOOL bDelShadCrsr = TRUE;
@@ -3328,7 +3444,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     // sicherheitshalber zuruecksetzen Bug 27900
     rView.SetTabColFromDoc( FALSE );
-    rView.SetTabRowFromDoc( FALSE );
+    rView.SetNumRuleNodeFromDoc(NULL);
+
     SwWrtShell &rSh = rView.GetWrtShell();
     SET_CURR_SHELL( &rSh );
     SdrView *pSdrView = rSh.GetDrawView();
@@ -3869,7 +3986,9 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     nDropFormat( 0 ),
     nDropDestination( 0 ),
     nInsFrmColCount( 1 ),
-    bLockInput(FALSE)
+    bLockInput(FALSE),
+    nKS_NUMDOWN_Count(0), // #i23725#
+    nKS_NUMINDENTINC_Count(0) // #i23725#
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
