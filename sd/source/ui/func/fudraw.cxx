@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-10-15 15:16:08 $
+ *  last change: $Author: aw $ $Date: 2002-11-19 15:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,13 +595,17 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             KeyCode aCode = rKEvt.GetKeyCode();
 
-            // Switch to FuSelect.
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                SID_OBJECT_SELECT,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
+                // #105336# Moved next line which was a bugfix itself into
+                // the scope which really does the object selection travel
+                // and thus is allowed to call SelectionHasChanged().
+
+                // Switch to FuSelect.
+                pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                    SID_OBJECT_SELECT,
+                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+
                 // changeover to the next object
                 if(!pView->MarkNextObj( !aCode.IsShift() ))
                 {
