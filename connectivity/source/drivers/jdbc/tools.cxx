@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:27:12 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,11 @@ java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const
             pBegin->Name.compareToAscii("IsPasswordRequired") &&
             pBegin->Name.compareToAscii("IsAutoRetrievingEnabled") &&
             pBegin->Name.compareToAscii("AutoRetrievingStatement") &&
+            pBegin->Name.compareToAscii("AutoIncrementCreation") &&
+            pBegin->Name.compareToAscii("Extension") &&
+            pBegin->Name.compareToAscii("NoNameLengthLimit") &&
+            pBegin->Name.compareToAscii("EnableSQL92Check") &&
+            pBegin->Name.compareToAscii("EnableOuterJoinEscape") &&
             pBegin->Name.compareToAscii("BooleanComparisonMode"))
         {
             ::rtl::OUString aStr;
