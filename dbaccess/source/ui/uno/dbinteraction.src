@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:54:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ swedish ] = "Ko~m ihåg lösenordet tills tillämpningen avslutas";
     Text[ turkish ] = "~Remember password till end of session";
     Text[ catalan ] = "~Recordar contraseña hasta finalizar la aplicación";
+    Text[ finnish ] = "~Muista salasana istunnon loppuun asti";
 };
 
 String STR_REMEMBERPASSWORD_PERSISTENT
@@ -115,12 +116,16 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ swedish ] = "~Spara lösenord permanent";
     Text[ turkish ] = "~Save password";
     Text[ catalan ] = "~Guardar contraseña";
+    Text[ finnish ] = "~Muista salasana";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/04 19:54:27  rt
+ *  Merge SRC630: 04.05.01 - 21:53:59 (NoBranch)
+ *
  *  Revision 1.6  2001/03/31 05:50:58  kz
  *  Merge SRC627: 31.03.01 - 07:50:37 (NoBranch)
  *
