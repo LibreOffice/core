@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 18:47:46 $
+ *  last change: $Author: jp $ $Date: 2001-02-26 15:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1736,7 +1736,8 @@ void SwCrsrShell::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         //vom Insert brauch nicht mehr die Keule RES_FMT_CHG versandt werden.
         CallChgLnk();
 
-    if( aGrfArrivedLnk.IsSet() && RES_GRAPHIC_ARRIVED == nWhich )
+    if( aGrfArrivedLnk.IsSet() &&
+        ( RES_GRAPHIC_ARRIVED == nWhich || RES_GRAPHIC_SWAPIN == nWhich ))
         aGrfArrivedLnk.Call( this );
 }
 
