@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:12:44 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,17 @@ interface FormatForSelection : Selection
     SID_ATTR_ALIGN_LOCKPOS     [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
     SID_ATTR_ALIGN_MARGIN      [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
     SID_ATTR_ALIGN_ORIENTATION      [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
+
+    // pseudo slots from Format menu
+    SID_ALIGN_ANY_LEFT      [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_HCENTER   [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_RIGHT     [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_JUSTIFIED [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_TOP       [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_VCENTER   [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_BOTTOM    [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_HDEFAULT  [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_VDEFAULT  [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
 
     SID_SCATTR_PROTECTION [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_BACKGROUND_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
