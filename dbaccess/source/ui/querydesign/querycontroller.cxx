@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,9 +440,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                     m_bDesign = !m_bDesign;
                                     m_sStatement = ::rtl::OUString();
                                     pNode->parseNodeToStr(  m_sStatement,
-                                                            getMetaData(),
-                                                            &getParser()->getContext(),
-                                                            sal_True,sal_True);
+                                                            getMetaData()); // we don't want any international keywords here
                                     getContainer()->SaveUIConfig();
                                     getContainer()->switchView();
                                 }
