@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:06:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #endif
 
 using namespace dbaui;
@@ -452,35 +455,35 @@ void DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
     sal_Bool bNeedText = sal_True;
     switch(GetOSQLPredicateType(_rComp.GetSelectEntryPos(),_rComp.GetEntryCount()))
     {
-        case SQL_PRED_EQUAL:
+        case SQLFilterOperator::EQUAL:
             aFilter += ::rtl::OUString::createFromAscii("=");
             break;
-        case SQL_PRED_NOTEQUAL:
+        case SQLFilterOperator::NOT_EQUAL:
             aFilter += ::rtl::OUString::createFromAscii("<>");
             break;
-        case SQL_PRED_LESS:
+        case SQLFilterOperator::LESS:
             aFilter += ::rtl::OUString::createFromAscii("<");
             break;
-        case SQL_PRED_LESSOREQUAL:
+        case SQLFilterOperator::LESS_EQUAL:
             aFilter += ::rtl::OUString::createFromAscii("<=");
             break;
-        case SQL_PRED_GREATER:
+        case SQLFilterOperator::GREATER:
             aFilter += ::rtl::OUString::createFromAscii(">");
             break;
-        case SQL_PRED_GREATEROREQUAL:
+        case SQLFilterOperator::GREATER_EQUAL:
             aFilter += ::rtl::OUString::createFromAscii(">=");
             break;
-        case SQL_PRED_NOTLIKE:
+        case SQLFilterOperator::NOT_LIKE:
             aFilter += ::rtl::OUString::createFromAscii("NOT LIKE");
             break;
-        case SQL_PRED_LIKE:
+        case SQLFilterOperator::LIKE:
             aFilter += ::rtl::OUString::createFromAscii("LIKE");
             break;
-        case SQL_PRED_ISNULL:
+        case SQLFilterOperator::SQLNULL:
             aFilter += ::rtl::OUString::createFromAscii("IS NULL");
             bNeedText = sal_False;
             break;
-        case SQL_PRED_ISNOTNULL:
+        case SQLFilterOperator::NOT_SQLNULL:
             aFilter += ::rtl::OUString::createFromAscii("IS NOT NULL");
             bNeedText = sal_False;
             break;
@@ -763,7 +766,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
         ListSelectHdl( pColumnListControl );
 
         // select the appropriate condition
-        pPredicateListControl->SelectEntryPos( GetSelectionPos( _rItem.Handle, *pPredicateListControl ) );
+        pPredicateListControl->SelectEntryPos( GetSelectionPos( (sal_Int32)_rItem.Handle, *pPredicateListControl ) );
 
         // initially normalize this value
         ::rtl::OUString aString( aStr );
