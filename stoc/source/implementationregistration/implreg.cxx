@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:07:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
