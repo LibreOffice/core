@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 18:53:42 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 12:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,18 +229,33 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, c
     const SfxPoolItem* pItem = 0;
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
 
+    if( NULL == pItem )
+    {
+        SfxItemPool* pPool = rSet.GetPool();
+        if( pPool )
+        {
+            pItem = &(pPool->GetDefaultItem( pMap->nWID ));
+        }
+    }
+
     // item-Wert als UnoAny zurueckgeben
-    if(eState >= SFX_ITEM_DEFAULT && pItem)
+    if(pItem)
+    {
         pItem->QueryValue( aVal, pMap->nMemberId );
 
-    // allgemeine SfxEnumItem Values in konkrete wandeln
-    if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
-          aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
-    {
-        sal_Int32 nEnum;
-        aVal >>= nEnum;
+        // allgemeine SfxEnumItem Values in konkrete wandeln
+        if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
+              aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
+        {
+            sal_Int32 nEnum;
+            aVal >>= nEnum;
 
-        aVal.setValue( &nEnum, *pMap->pType );
+            aVal.setValue( &nEnum, *pMap->pType );
+        }
+    }
+    else
+    {
+        DBG_ERROR( "No SfxPoolItem found for property!" );
     }
 
     return aVal;
