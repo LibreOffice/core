@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-30 09:53:32 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 16:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#include <hash_map>
+#include <vector>
 
 class SalFrame;
 class WorkWindow;
@@ -94,12 +94,21 @@ class StatusWindow;
 
 class I18NStatus
 {
+public:
+    struct ChoiceData
+    {
+        String  aString;
+        void*   pData;
+    };
+private:
     SalFrame*               m_pParent;
     StatusWindow*           m_pStatusWindow;
     SalI18N_InputContext*   m_pInputContext;
     String                  m_aCurrentIM;
 
-    ::std::hash_map< ::rtl::OUString, void*, ::rtl::OUStringHash >
+
+
+    ::std::vector< ChoiceData >
                             m_aChoices;
 
     I18NStatus();
@@ -120,7 +129,7 @@ public:
 
     void show( bool bShow = true );
 
-    const ::std::hash_map< ::rtl::OUString, void*, ::rtl::OUStringHash >& getChoices() const { return m_aChoices; }
+    const ::std::vector< ChoiceData >& getChoices() const { return m_aChoices; }
     void clearChoices();
     void addChoice( const String&, void* pData );
     SalI18N_InputContext* getInputContext( bool& bDeleteAfterUse );

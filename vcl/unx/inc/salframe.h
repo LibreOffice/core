@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-01 20:37:32 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 16:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ public:
             bool            IsOverrideRedirect() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
     void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
+    bool                    isMapped() const { return bMapped_; }
 };
 
 #ifdef _SV_SALDISP_HXX

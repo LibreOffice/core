@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-01 21:01:58 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 16:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,12 @@
 
 #include <wrkwin.hxx>
 #include <fixed.hxx>
-#include <lstbox.hxx>
-#include <button.hxx>
+#include <menubtn.hxx>
+#include <menu.hxx>
 #include <svdata.hxx>
+#include <saldisp.hxx>
 #include <salframe.hxx>
 #include <saldata.hxx>
-#include <saldisp.hxx>
 
 using namespace vcl;
 using namespace rtl;
@@ -234,14 +234,11 @@ namespace vcl {
 
 class IIIMPStatusWindow : public StatusWindow
 {
-    PushButton              m_aButton;
-    WorkWindow*             m_pStatusMenu;
-    ListBox*                m_pStatusBox;
+    MenuButton              m_aStatusBtn;
+    PopupMenu               m_aMenu;
     SalFrame*               m_pResetFocus;
 
-    DECL_LINK( SelectHdl, ListBox* );
-    DECL_LINK( ClickBtnHdl, PushButton* );
-    DECL_LINK( LoseFocusHdl, ListBox* );
+    DECL_LINK( SelectHdl, MenuButton* );
 public:
     IIIMPStatusWindow( SalFrame* pParent  ); // for initial position
     virtual ~IIIMPStatusWindow();
@@ -258,30 +255,34 @@ public:
 
 IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
         StatusWindow( WB_MOVEABLE ),
-        m_aButton( this, WB_BORDER ),
-        m_pStatusBox( NULL ),
-        m_pStatusMenu( NULL ),
+        m_aStatusBtn( this, WB_BORDER ),
         m_pResetFocus( pParent )
 {
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "IME Status" ) ) );
 
-    Size aSize( PixelToLogic( Size( 150, 2 ) ) );
-    Size aControlSize( 146, 2 );
+    Size aSize( PixelToLogic( Size( 180, 2 ) ) );
+    Size aControlSize( 180, 2 );
 
     const SystemEnvData* pEnvData = GetSystemData();
     const SystemEnvData* pParentEnvData = pParent->GetSystemData();
 
-    m_aButton.SetClickHdl( LINK( this, IIIMPStatusWindow, ClickBtnHdl ) );
-    Font aFont( m_aButton.GetFont() );
+    m_aStatusBtn.SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
+    Font aFont( m_aStatusBtn.GetFont() );
     if( aFont.GetHeight() < 12 )
         aFont.SetHeight( 12 );
     aSize.Height() = aFont.GetHeight()+10;
     aSize = LogicToPixel( aSize );
     aControlSize.Height() = aSize.Height();
 
-    m_aButton.SetPosSizePixel( Point( 1, 2 ), aControlSize );
-    m_aButton.SetFont( aFont );
-    m_aButton.Show( TRUE );
+    m_aStatusBtn.SetPosSizePixel( Point( 0, 0 ), aControlSize );
+    m_aStatusBtn.SetFont( aFont );
+    m_aStatusBtn.SetPopupMenu( &m_aMenu );
+    m_aStatusBtn.Show( TRUE );
+
+    const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
+    int i = 1;
+    for( ::std::vector< I18NStatus::ChoiceData >::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it, i++ )
+        m_aMenu.InsertItem( i, it->aString );
 
     SetOutputSizePixel( aSize );
 
@@ -303,27 +304,21 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
 
 IIIMPStatusWindow::~IIIMPStatusWindow()
 {
-    if( m_pStatusBox )
-        delete m_pStatusBox;
-    if( m_pStatusMenu )
-        delete m_pStatusMenu;
 }
 
 void IIIMPStatusWindow::setText( const String& rText )
 {
-    m_aButton.SetText( rText );
+    m_aStatusBtn.SetText( rText );
 }
 
 const String& IIIMPStatusWindow::getText() const
 {
-    return m_aButton.GetText();
+    return m_aStatusBtn.GetText();
 }
 
 void IIIMPStatusWindow::show( bool bShow )
 {
-    // never hide the status window, only user can do that
-    if( bShow )
-        Show( TRUE );
+    Show( bShow );
 }
 
 void IIIMPStatusWindow::GetFocus()
@@ -354,7 +349,7 @@ void IIIMPStatusWindow::GetFocus()
                             CurrentTime
                             );
             XSync( (Display*)pParentEnvData->pDisplay, False );
-            m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( FALSE );
+            m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( bIgnore );
         }
         m_pResetFocus = NULL;
     }
@@ -362,70 +357,36 @@ void IIIMPStatusWindow::GetFocus()
 
 // --------------------------------------------------------------------------
 
-IMPL_LINK( IIIMPStatusWindow, SelectHdl, ListBox*, pBox )
+IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
 {
-    const ::std::hash_map< OUString, void*, OUStringHash >& rChoices( I18NStatus::get().getChoices() );
-    ::std::hash_map< OUString, void*, OUStringHash >::const_iterator it;
-    if( pBox == m_pStatusBox  && ( it = rChoices.find( m_pStatusBox->GetSelectEntry() ) ) != rChoices.end() )
+    if( pBtn == & m_aStatusBtn )
     {
-        bool bDummy; // should always be false in this case
-        XSetICValues( I18NStatus::get().getInputContext( bDummy )->GetContext(),
-                      XNUnicodeCharacterSubset,
-                      it->second,
-                      0);
-    }
-    delete m_pStatusBox, m_pStatusBox = NULL;
-    delete m_pStatusMenu, m_pStatusMenu = NULL;
-    return 0;
-}
-
-// --------------------------------------------------------------------------
-
-IMPL_LINK( IIIMPStatusWindow, LoseFocusHdl, ListBox*, pBox )
-{
-    if( pBox == m_pStatusBox )
-    {
-        delete m_pStatusBox;
-        m_pStatusBox = NULL;
-        delete m_pStatusMenu;
-        m_pStatusMenu = NULL;
-    }
-    return 0;
-}
-
-// --------------------------------------------------------------------------
-
-IMPL_LINK( IIIMPStatusWindow, ClickBtnHdl, PushButton*, pButton )
-{
-    if( pButton == &m_aButton && ! m_pStatusMenu )
-    {
-        const ::std::hash_map< OUString, void*, OUStringHash >& rChoices( I18NStatus::get().getChoices() );
-
-        m_pStatusMenu = new WorkWindow( this, 0 );
-        Font aFont( m_aButton.GetFont() );
-        Size aSize;
-        aSize.Width() = GetSizePixel().Width()-3;
-        aSize.Height() = aFont.GetHeight() * rChoices.size();
-        Size aMenuSize( aSize );
-        aMenuSize.Width() += 2;
-        aMenuSize.Height() += 2;
-        m_pStatusMenu->SetSizePixel( aMenuSize );
-        m_pStatusBox = new ListBox( m_pStatusMenu, WB_BORDER );
-        m_pStatusBox->SetPosSizePixel( Point( 1, 1 ),
-                                       aSize );
-        m_pStatusBox->SetFont( aFont );
-        m_pStatusBox->Show( TRUE );
-
-        for( ::std::hash_map< OUString, void*, OUStringHash >::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
-            m_pStatusBox->InsertEntry( it->first );
-        m_pStatusBox->SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
-        m_pStatusBox->SetLoseFocusHdl( LINK( this, IIIMPStatusWindow, LoseFocusHdl ) );
-        m_pStatusMenu->Show( TRUE );
-        m_pStatusBox->GrabFocus();
+        const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
+        int nIndex = m_aStatusBtn.GetCurItemId()-1;
+        if( nIndex < rChoices.size() )
+        {
+            bool bDummy; // should always be false in this case
+            XSetICValues( I18NStatus::get().getInputContext( bDummy )->GetContext(),
+                          XNUnicodeCharacterSubset,
+                          rChoices[nIndex].pData,
+                          0);
+            SalFrame* pParent = I18NStatus::get().getParent();
+            if( pParent && pParent->maFrameData.isMapped() )
+            {
+                BOOL bIgnore = pParent->maFrameData.GetDisplay()->GetXLib()->GetIgnoreXErrors();
+                pParent->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+                XSetInputFocus( pParent->maFrameData.GetXDisplay(),
+                                pParent->maFrameData.GetShellWindow(),
+                                RevertToNone,
+                                CurrentTime
+                                );
+                XSync( pParent->maFrameData.GetXDisplay(), False );
+                pParent->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( bIgnore );
+            }
+        }
     }
     return 0;
 }
-
 
 /*
  *  I18NStatus
@@ -569,7 +530,10 @@ void I18NStatus::clearChoices()
 
 void I18NStatus::addChoice( const String& rChoice, void* pData )
 {
-    m_aChoices[ rChoice ] = pData;
+    ChoiceData aData;
+    aData.pData     = pData;
+    aData.aString   = rChoice;
+    m_aChoices.push_back( aData );
 }
 
 // --------------------------------------------------------------------------
