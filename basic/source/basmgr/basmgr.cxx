@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             Any aElement = xLibNameAccess->getByName( aModuleName );
             OUString aMod;
             aElement >>= aMod;
-            pLib->MakeModule( aModuleName, aMod );
+            pLib->MakeModule32( aModuleName, aMod );
         }
     }
 
@@ -339,7 +339,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
             SbModule* pMod = pLib->FindModule( aName );
             if( !pMod )
             {
-                pLib->MakeModule( aName, aMod );
+                pLib->MakeModule32( aName, aMod );
                 pLib->SetModified( FALSE );
             }
         }
@@ -367,9 +367,9 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const ContainerEvent
         OUString aMod;
         Event.Element >>= aMod;
         if( pMod )
-            pMod->SetSource( aMod );
+            pMod->SetSource32( aMod );
         else
-            pLib->MakeModule( aName, aMod );
+            pLib->MakeModule32( aName, aMod );
 
         pLib->SetModified( FALSE );
     }
@@ -812,7 +812,7 @@ void copyToLibraryContainer( StarBASIC* pBasic, LibraryContainerInfo* pInfo )
                 String aModName = pModule->GetName();
                 if( !xLib->hasByName( aModName ) )
                 {
-                    OUString aSource = pModule->GetSource();
+                    OUString aSource = pModule->GetSource32();
                     Any aSourceAny;
                     aSourceAny <<= aSource;
                     xLib->insertByName( aModName, aSourceAny );
@@ -1361,7 +1361,7 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
                     for( USHORT j = 0; j < nModCount ; j++ )
                     {
                         SbModule* pMod = (SbModule*)pModules->Get( j );
-                        pMod->SetSource( aDummySource );
+                        pMod->SetSource32( aDummySource );
                         pMod->Compile();
                     }
                 }
@@ -2621,7 +2621,7 @@ Any ModuleContainer_Impl::getByName( const OUString& aName )
     if( !pMod )
         throw NoSuchElementException();
     Reference< XStarBasicModuleInfo > xMod = (XStarBasicModuleInfo*)new ModuleInfo_Impl
-        ( aName, OUString::createFromAscii( "StarBasic" ), pMod->GetSource() );
+        ( aName, OUString::createFromAscii( "StarBasic" ), pMod->GetSource32() );
     Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;
@@ -2670,7 +2670,7 @@ void ModuleContainer_Impl::insertByName( const OUString& aName, const Any& aElem
         throw IllegalArgumentException();
     Reference< XStarBasicModuleInfo > xMod;
     aElement >>= xMod;
-    mpLib->MakeModule( aName, xMod->getSource() );
+    mpLib->MakeModule32( aName, xMod->getSource() );
 }
 
 void ModuleContainer_Impl::removeByName( const OUString& Name )
@@ -3065,7 +3065,7 @@ void SAL_CALL StarBasicAccess_Impl::addModule
     StarBASIC* pLib = mpMgr->GetLib( LibraryName );
     DBG_ASSERT( pLib, "XML Import: Lib for module unknown");
     if( pLib )
-        pLib->MakeModule( ModuleName, Source );
+        pLib->MakeModule32( ModuleName, Source );
 }
 
 void SAL_CALL StarBasicAccess_Impl::addDialog
