@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:50:02 $
+ *  last change: $Author: ama $ $Date: 2002-01-29 10:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,11 @@ long SwFEShell::EndDrag( const Point *, BOOL )
         //Im EndDragObj() wird dies unsinniger und faelschlicherweise wieder
         //Rueckgaengig gemacht. Um Konsistenz herzustellen muessen wir das
         //Xor also wieder zur Anzeige bringen.
-//      pView->ShowShownXor( GetOut() );
+
+        // Reanimation from the hack #50778 to fix bug #97057
+        // May be not the best solution, but the one with lowest risc at the moment.
+        pView->ShowShownXor( GetOut() );
+
         pView->EndDragObj();
         // JP 18.08.95: DrawUndo-Action auf FlyFrames werden nicht gespeichert
         //              Die Fly aendern das Flag
