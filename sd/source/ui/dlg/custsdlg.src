@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:33:57 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,11 +171,11 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ spanish ] = "~Copiar" ;
         Text [ french ] = "Co~pier" ;
         Text [ dutch ] = "~KopiÎren" ;
-        Text[ chinese_simplified ] = "∏¥÷∆(~C)";
+        Text[ chinese_simplified ] = "∏¥÷∆(~Y)";
         Text[ russian ] = "~ ÓÔËÓ‚‡Ú¸";
         Text[ polish ] = "Kopiuj";
-        Text[ japanese ] = "∫Àﬂ∞(~C)";
-        Text[ chinese_traditional ] = "Ω∆ªs(~C)";
+        Text[ japanese ] = "∫Àﬂ∞(~Y)";
+        Text[ chinese_traditional ] = "Ω∆ªs(~Y)";
         Text[ arabic ] = "‰”Œ";
         Text[ greek ] = "¡ÌÙÈ~„Ò·ˆﬁ";
         Text[ korean ] = "∫πªÁ(~Y)";
