@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-28 11:49:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,29 @@ namespace psp
 
 class FontCache
 {
-    typedef ::std::list< PrintFontManager::PrintFont* > FontCacheEntry;
-    typedef ::std::hash_map< ::rtl::OString, FontCacheEntry, ::rtl::OStringHash > FontDirMap;
-    typedef ::std::hash_map< int, FontDirMap > FontCacheData;
+    struct FontDir;
+    friend class FontDir;
+    struct FontFile;
+    friend class FontFile;
+
+    typedef std::list< PrintFontManager::PrintFont* > FontCacheEntry;
+    struct FontFile
+    {
+        sal_Int64           m_nTimestamp;
+        FontCacheEntry      m_aEntry;
+    };
+
+    typedef std::hash_map< ::rtl::OString, FontFile, ::rtl::OStringHash > FontDirMap;
+    struct FontDir
+    {
+        sal_Int64   m_nTimestamp;
+        bool        m_bNoFiles;
+        FontDirMap  m_aEntries;
+
+        FontDir() : m_nTimestamp(0), m_bNoFiles(false) {}
+    };
+
+    typedef std::hash_map< int, FontDir > FontCacheData;
     FontCacheData   m_aCache;
     bool            m_bDoFlush;
 
@@ -84,14 +104,23 @@ class FontCache
 
     void copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo ) const;
     PrintFontManager::PrintFont* clonePrintFont( const PrintFontManager::PrintFont* pFont ) const;
+
+    void createCacheDir( int nDirID );
 public:
     FontCache();
     ~FontCache();
 
-    bool getFontCacheFile( int nDirID, const ::rtl::OString& rDir, const ::rtl::OString& rFile, ::std::list< PrintFontManager::PrintFont* >& rNewFonts );
+    bool getFontCacheFile( int nDirID, const rtl::OString& rDir, const rtl::OString& rFile, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
     void updateFontCacheEntry( const PrintFontManager::PrintFont*, bool bFlush );
+    void markEmptyDir( int nDirID, bool bNoFiles = true );
+
+    // returns false for non cached directory
+    // a cached but empty directory will return true but not append anything
+    bool listDirectory( const rtl::OString& rDir, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
 
     void flush();
+
+    void updateDirTimestamp( int nDirID );
 };
 
 } // namespace psp
