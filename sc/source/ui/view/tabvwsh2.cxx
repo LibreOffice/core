@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 15:06:38 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,8 +350,10 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 case SVX_SNAP_DRAW_PIE:             nNewId = SID_DRAW_PIE;              break;
                 case SVX_SNAP_DRAW_CIRCLECUT:       nNewId = SID_DRAW_CIRCLECUT;        break;
                 case SVX_SNAP_DRAW_TEXT:            nNewId = SID_DRAW_TEXT;             break;
+                case SVX_SNAP_DRAW_TEXT_VERTICAL:   nNewId = SID_DRAW_TEXT_VERTICAL;    break;
                 case SVX_SNAP_DRAW_TEXT_MARQUEE:    nNewId = SID_DRAW_TEXT_MARQUEE;     break;
                 case SVX_SNAP_DRAW_CAPTION:         nNewId = SID_DRAW_CAPTION;          break;
+                case SVX_SNAP_DRAW_CAPTION_VERTICAL: nNewId = SID_DRAW_CAPTION_VERTICAL; break;
             }
         }
         else                    // USHORT-Item vom Controller
@@ -414,7 +416,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( nNewId != SID_DRAW_CHART )             // Chart nicht mit DrawShell
     {
-        if ( nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT )
+        if ( nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL ||
+                nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT )
             SetDrawTextShell( TRUE );
         else
         {
@@ -458,6 +461,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_CAPTION:
+        case SID_DRAW_CAPTION_VERTICAL:
             pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
             pView->SetFrameDragSingles( FALSE );
             rBindings.Invalidate( SID_BEZIER_EDIT );
@@ -477,6 +481,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_TEXT:
+        case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
             pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, pDoc, aNewReq));
@@ -533,8 +538,10 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
                          nPutId != SID_DRAW_PIE &&
                          nPutId != SID_DRAW_CIRCLECUT &&
                          nPutId != SID_DRAW_TEXT &&
+                         nPutId != SID_DRAW_TEXT_VERTICAL &&
                          nPutId != SID_DRAW_TEXT_MARQUEE &&
-                         nPutId != SID_DRAW_CAPTION )
+                         nPutId != SID_DRAW_CAPTION &&
+                         nPutId != SID_DRAW_CAPTION_VERTICAL )
                         nPutId = USHRT_MAX;
                     SfxAllEnumItem aItem( nWhich, nPutId );
                     rSet.Put( aItem );
