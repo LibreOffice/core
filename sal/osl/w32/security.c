@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2000-11-22 13:53:27 $
+ *  last change: $Author: hro $ $Date: 2001-05-23 10:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include <osl/security.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <osl/file.h>
+
 #include "dirW9X.h"
 
 #include "secimpl.h"
@@ -456,17 +458,20 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
 }
 
 
-sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **strDirectory)
+sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
+    rtl_uString *ustrSysDir = NULL;
+    sal_Bool    bSuccess = sal_False;
+
     if (Security != NULL)
     {
         oslSecurityImpl *pSecImpl = (oslSecurityImpl*)Security;
 
         if (pSecImpl->m_pNetResource != NULL)
         {
-            rtl_uString_newFromStr( strDirectory, pSecImpl->m_pNetResource->lpRemoteName);
+            rtl_uString_newFromStr( &ustrSysDir, pSecImpl->m_pNetResource->lpRemoteName);
 
-            return (sal_True);
+            bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory );
         }
         else
         {
@@ -500,24 +505,34 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **strDirector
             }
             else
 #endif
-                return (GetSpecialFolder(strDirectory, CSIDL_PERSONAL));
+
+                bSuccess = GetSpecialFolder( &ustrSysDir, CSIDL_PERSONAL ) && (osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory ));
         }
     }
 
-    return sal_False;
+    if ( ustrSysDir )
+        rtl_uString_release( ustrSysDir );
+
+    return bSuccess;
 }
 
-sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **strDirectory)
+sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
+    sal_Bool    bSuccess = sal_False;
+
     if (Security != NULL)
     {
         oslSecurityImpl *pSecImpl = (oslSecurityImpl*)Security;
 
         if (pSecImpl->m_pNetResource != NULL)
         {
-            rtl_uString_newFromStr( strDirectory, pSecImpl->m_pNetResource->lpRemoteName);
+            rtl_uString *ustrSysDir = NULL;
 
-            return (sal_True);
+            rtl_uString_newFromStr( &ustrSysDir, pSecImpl->m_pNetResource->lpRemoteName);
+            bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory );
+
+            if ( ustrSysDir )
+                rtl_uString_release( ustrSysDir );
         }
         else
         {
@@ -528,25 +543,25 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **strDirect
             }
             else
             {
-                rtl_uString *file=0;
+                rtl_uString *ustrFile = NULL;
                 sal_Unicode sFile[_MAX_PATH];
 
-                if (! GetSpecialFolder(&file, CSIDL_APPDATA))
+                if ( !GetSpecialFolder( &ustrFile, CSIDL_APPDATA) )
                 {
                     OSL_VERIFY(lpfnGetWindowsDirectory(sFile, _MAX_DIR) > 0);
 
-                    rtl_uString_newFromStr( &file, sFile);
+                    rtl_uString_newFromStr( &ustrFile, sFile);
                 }
 
-                rtl_uString_newFromString( strDirectory, file);
-                rtl_uString_release(file);
+                bSuccess = osl_getFileURLFromSystemPath( ustrFile, pustrDirectory );
 
-                return (sal_True);
+                if ( ustrFile )
+                    rtl_uString_release( ustrFile );
             }
         }
     }
 
-    return sal_False;
+    return bSuccess;
 }
 
 
