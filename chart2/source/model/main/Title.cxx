@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 19:41:36 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 15:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ void lcl_AddDefaultsToMap(
     // todo: default is just for testing. should be void
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_REF_PAGE_SIZE ));
     rOutMap[ PROP_TITLE_REF_PAGE_SIZE ] =
-        uno::makeAny( awt::Size( 3000, 2000 ) );
+        uno::makeAny( awt::Size( 10000, 7500 ) );
 
     // override other defaults
     rOutMap[ ::chart::FillProperties::PROP_FILL_STYLE ] =
