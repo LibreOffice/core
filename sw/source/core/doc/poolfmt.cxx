@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-08-13 15:27:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 14:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,13 +430,50 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
 
 
-    // Gebe die "Auto-Collection" mit der Id zurueck. Existiert
-    // sie noch nicht, dann erzeuge sie
-    // Ist der String-Pointer definiert, dann erfrage nur die
-    // Beschreibung der Attribute, !! es legt keine Vorlage an !!
+// Gebe die "Auto-Collection" mit der Id zurueck. Existiert
+// sie noch nicht, dann erzeuge sie
+// Ist der String-Pointer definiert, dann erfrage nur die
+// Beschreibung der Attribute, !! es legt keine Vorlage an !!
 
-SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
-    SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric )
+SvxFrameDirection lcl_GetFrameDirection(ULONG nLanguage)
+{
+    SvxFrameDirection eResult = FRMDIR_HORI_LEFT_TOP;
+
+    switch (nLanguage)
+    {
+    case LANGUAGE_ARABIC:
+    case LANGUAGE_ARABIC_SAUDI_ARABIA:
+    case LANGUAGE_ARABIC_IRAQ:
+    case LANGUAGE_ARABIC_EGYPT:
+    case LANGUAGE_ARABIC_LIBYA:
+    case LANGUAGE_ARABIC_ALGERIA:
+    case LANGUAGE_ARABIC_MOROCCO:
+    case LANGUAGE_ARABIC_TUNISIA:
+    case LANGUAGE_ARABIC_OMAN:
+    case LANGUAGE_ARABIC_YEMEN:
+    case LANGUAGE_ARABIC_SYRIA:
+    case LANGUAGE_ARABIC_JORDAN:
+    case LANGUAGE_ARABIC_LEBANON:
+    case LANGUAGE_ARABIC_KUWAIT:
+    case LANGUAGE_ARABIC_UAE:
+    case LANGUAGE_ARABIC_BAHRAIN:
+    case LANGUAGE_ARABIC_QATAR:
+    case LANGUAGE_HEBREW:
+    case LANGUAGE_URDU:
+        eResult = FRMDIR_HORI_RIGHT_TOP;
+
+        break;
+
+    default:
+        break;
+    }
+
+    return eResult;
+}
+
+SwTxtFmtColl* SwDoc::GetTxtCollFromPool
+( USHORT nId, String* pDesc, SfxItemPresentation ePres,
+  SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, BOOL bRegardLanguage)
 {
     ASSERT(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
@@ -517,6 +554,12 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
     {
     // allgemeine Inhaltsformen
     case RES_POOLCOLL_STANDARD:
+        if (bRegardLanguage &&
+            lcl_GetFrameDirection(GetAppLanguage()) == FRMDIR_HORI_RIGHT_TOP)
+        {
+            SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT);
+            aSet.Put(aAdjust);
+        }
         break;
 
     case RES_POOLCOLL_TEXT:                 // Textkoerper
@@ -1595,7 +1638,8 @@ void lcl_GetStdPgSize( SwDoc* pDoc, SfxItemSet& rSet )
 
 
 SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
-    SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric )
+    SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+    BOOL bRegardLanguage)
 {
     ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
@@ -1628,7 +1672,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
     else
     {
         BOOL bIsModified = IsModified();
-        n = MakePageDesc( aNm );
+        n = MakePageDesc( aNm, 0, bRegardLanguage );
         pNewPgDsc = aPageDescs[ n ];
         pNewPgDsc->SetPoolFmtId( nId );
         if( !bIsModified )
