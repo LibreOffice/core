@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:05:32 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 14:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1859,7 +1859,7 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
 }
 
 #if (defined UNX) || (defined OS2)
-void main( int argc, char * argv[] )
+int main( int argc, char * argv[] )
 #else
 
 void _cdecl main( int argc, char * argv[] )
