@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:38:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #include "ViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATE_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -70,6 +74,8 @@
 #endif
 #include "DrawController.hxx"
 #include "LayerTabBar.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -329,8 +335,8 @@ ViewShell::~ViewShell()
     CancelSearching();
 
     // Stop listening for window events.
-    GetParentWindow()->RemoveEventListener (
-        LINK(this,ViewShell,FrameWindowEventListener));
+    // GetParentWindow()->RemoveEventListener (
+    //    LINK(this,ViewShell,FrameWindowEventListener));
 
     if (IsMainViewShell())
         GetDocSh()->Disconnect(this);
@@ -524,18 +530,14 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         GetDocSh()->Connect(this);
 }
 
-
-
-
-void ViewShell::UIActivate( SvInPlaceObject *pIPObj )
+void ViewShell::UIActivating( SfxInPlaceClient* pCli )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
 }
 
 
 
-
-void ViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
+void ViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
 }
@@ -883,36 +885,6 @@ BOOL ViewShell::HasRuler (void)
 
 
 
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
-#if 0
-void ViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
-{
-    Point rP = rPos;
-    Size rS = rSize;
-    rS.Width() += aScrBarWH.Width();
-    rS.Height() += aScrBarWH.Height();
-
-    SetupRulers ();
-
-    if ( mpVerticalRuler.get() != NULL )
-        rS.Width() += mpVerticalRuler->GetSizePixel().Width();
-    if ( mpHorizontalRuler.get() != NULL )
-        rS.Height() += mpHorizontalRuler->GetSizePixel().Height();
-    AdjustPosSizePixel(rP, rS);
-}
-#endif
-
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
 void ViewShell::Resize (const Point& rPos, const Size& rSize)
 {
     SetupRulers ();
@@ -951,79 +923,6 @@ void ViewShell::Resize (const Point& rPos, const Size& rSize)
         pView->VisAreaChanged(GetActiveWindow());
     }
 }
-
-#if 0
-void ViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
-{
-    long nHRulerOfs = 0;
-
-    if( !pFuSlideShow || ( ANIMATIONMODE_PREVIEW == pFuSlideShow->GetAnimationMode() ) )
-    {
-        if ( !mpVerticalRuler.get() != NULL )
-        {
-            mpVerticalRuler.reset(CreateVRuler(GetActiveWindow()));
-            if ( mpVerticalRuler.get() != NULL )
-            {
-                nHRulerOfs = mpVerticalRuler->GetSizePixel().Width();
-                mpVerticalRuler->SetActive(TRUE);
-                mpVerticalRuler->Show();
-            }
-        }
-
-        if ( !mpHorizontalRuler.get() != NULL )
-        {
-            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow(), TRUE));
-            if ( mpHorizontalRuler.get() != NULL )
-            {
-                mpHorizontalRuler->SetWinPos(nHRulerOfs);
-                mpHorizontalRuler->SetActive(TRUE);
-                mpHorizontalRuler->Show();
-            }
-        }
-    }
-
-    AdjustPosSizePixel(rPos, rSize);
-
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisArea = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-
-    if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-    {
-        GetDocSh()->SetVisArea(aVisArea);
-    }
-
-    VisAreaChanged(aVisArea);
-
-    ::sd::View* pView = GetView();
-
-    if (pView)
-    {
-        pView->VisAreaChanged(GetActiveWindow());
-    }
-}
-#endif
-
-#if 0
-/** After a simple consistency check the given values are stored so that
-    they can be accessed by the <member>ArrangeGUIElements</member> method
-    which is finally called and performs the actual adjustment of sizes and
-    positions of the GUI elements.
-*/
-void ViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
-{
-    // Make sure that the new size is not degenerate.
-    if ( !rNewSize.Width() || !rNewSize.Height() )
-        return;
-
-    // Remember the new position and size.
-    aViewPos  = rNewPos;
-    aViewSize = rNewSize;
-
-    // Rearrange the UI elements to take care of the new position and size.
-    ArrangeGUIElements ();
-}
-#endif
-
 
 SvBorder ViewShell::GetBorder (bool bOuterResize)
 {
@@ -1591,7 +1490,7 @@ ViewShell::ShellType ViewShell::GetShellType (void) const
 
 
 
-
+/*
 IMPL_LINK(ViewShell, FrameWindowEventListener,  VclSimpleEvent*, pEvent )
 {
     if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
@@ -1603,7 +1502,7 @@ IMPL_LINK(ViewShell, FrameWindowEventListener,  VclSimpleEvent*, pEvent )
             //            case VCLEVENT_WINDOW_ACTIVATE:
             case VCLEVENT_WINDOW_RESIZE:
             {
-                if ( ! GetDocSh()->GetProtocol().IsInPlaceActive())
+                if ( ! GetViewFrame()->GetFrame()->IsInPlace())
                 {
                     // Forward the event only when in in-place mode
                     // which is handled differently (InnerResize from
@@ -1619,7 +1518,7 @@ IMPL_LINK(ViewShell, FrameWindowEventListener,  VclSimpleEvent*, pEvent )
     }
     return 0;
 }
-
+*/
 
 DrawDocShell* ViewShell::GetDocSh (void) const
 {
