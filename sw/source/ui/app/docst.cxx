@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-02-26 12:46:03 $
+ *  last change: $Author: os $ $Date: 2002-03-04 12:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,12 +286,11 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_WATERCAN:
             {
-                SwEditWin& rEdtWin = pView->GetEditWin();
+                SwEditWin& rEdtWin = pShell->GetView().GetEditWin();
                 SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
                 rSet.Put(SfxBoolItem(nWhich, pApply && pApply->eType != 0));
-                break;
             }
-
+            break;
             case SID_STYLE_UPDATE_BY_EXAMPLE:
                 if( pShell->IsFrmSelected()
                         ? SFX_STYLE_FAMILY_FRAME != nActualFamily
