@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-03 12:44:48 $
+ *  last change: $Author: ama $ $Date: 2002-09-12 12:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,6 +1293,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     }
                 }
 #ifdef VERTICAL_LAYOUT
+                pFrm->CheckDirChange();
                 if( pFrm->IsVertical() )
                     ((SwSectionFrm*)pFrm)->Init();
 #endif
