@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:16 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2452,16 +2452,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     if( pWrtShell )
     {
-        SwViewOption aViewOpt( *pWrtShell->GetViewOptions() );
-        aViewOpt.SetPDFExport( TRUE );
-        if ( pWrtShell->IsBrowseMode() )
-            aViewOpt.SetPrtFormat( TRUE );
-        pWrtShell->ApplyViewOptions( aViewOpt );
-
+        pWrtShell->SetPDFExportOption( sal_True );
         pWrtShell->CalcLayout();
-
-        aViewOpt.SetPDFExport( FALSE );
-        pWrtShell->ApplyViewOptions( aViewOpt );
+        pWrtShell->SetPDFExportOption( sal_False );
     }
 
     return pDoc->GetPageCount();
@@ -2595,14 +2588,9 @@ void SAL_CALL SwXTextDocument::render(
         //! aOptions.bPrintSelection parameter will be false.
         aOptions.bPrintSelection = FALSE;
 
-        SwViewOption aViewOpt( *pVwSh->GetViewOptions() );
-        aViewOpt.SetPDFExport( TRUE );
-        pVwSh->ApplyViewOptions( aViewOpt );
-
+        pVwSh->SetPDFExportOption( sal_True );
         pVwSh->Prt( aOptions, aProgress, pOut );
-
-        aViewOpt.SetPDFExport( FALSE );
-        pVwSh->ApplyViewOptions( aViewOpt );
+        pVwSh->SetPDFExportOption( sal_False );
     }
 }
 /* -----------------------------20.06.00 09:54--------------------------------
