@@ -2,9 +2,9 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:57:58 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:55:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,34 @@ use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
+
+##############################################################
+# Returning the file object for the msiassembly table.
+##############################################################
+
+sub get_file_by_name
+{
+    my ( $filesref, $filename ) = @_;
+
+    my $foundfile = 0;
+    my $onefile;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        $onefile = ${$filesref}[$i];
+        my $name = $onefile->{'Name'};
+
+        if ( $name eq $filename )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    if (! $foundfile ) { $onefile  = ""; }
+
+    return $onefile;
+}
 
 ##############################################################
 # Returning identifier for shortcut table.
@@ -568,6 +596,22 @@ sub create_shortcut_table
                             . $shortcut{'IconIndex'} . "\t" . $shortcut{'ShowCmd'} . "\t" . $shortcut{'WkDir'} . "\n";
 
                 push(@shortcuttable, $oneline);
+            }
+        }
+
+        # if it is part of the product, the soffice.exe has to be included into the icon table
+        # as icon for the ARP applet
+
+        my $sofficefile = "soffice.exe";
+        my $onefile = get_file_by_name($filesref, $sofficefile);
+
+        if ( $onefile ne "" )
+        {
+            my $sourcepath = $onefile->{'sourcepath'};
+            if (! installer::existence::exists_in_array($sourcepath, $iconfilecollector))
+            {
+                unshift(@{$iconfilecollector}, $sourcepath);
+                $installer::globals::sofficeiconadded = 1;
             }
         }
 
