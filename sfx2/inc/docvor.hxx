@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 11:49:40 $
+ *  last change: $Author: pb $ $Date: 2002-01-15 09:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ friend class SfxOrganizeDlg_Impl;
     Image aClosedDocBmp;
     SfxOrganizeDlg_Impl *pDlg;
     static BOOL bDropMoveOk;
+
+    DECL_LINK( OnAsyncExecuteDrop, ExecuteDropEvent* );
 
 protected:
     virtual BOOL EditingEntry( SvLBoxEntry* pEntry, Selection & );
