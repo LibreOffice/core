@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-21 09:51:16 $
+ *  last change: $Author: ama $ $Date: 2002-01-22 11:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1632,8 +1632,15 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             if ( bExtraData )
             {
                 //Ja, das ist grob, aber wie macht man es besser?
+#ifdef VERTICAL_LAYOUT
+                SWRECTFN( pPage )
+                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
+                    (pPage->Frm().*fnRect->fnGetLeft)(),
+                    (pPage->Frm().*fnRect->fnGetWidth)() );
+#else
                 aPaintRect.Left( pPage->Frm().Left() );
                 aPaintRect.Right( pPage->Frm().Right() );
+#endif
                 aPaintRect._Intersection( pSh->VisArea() );
             }
 
