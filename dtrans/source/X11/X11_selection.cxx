@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:28:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #else
 #include <poll.h>
 #endif
-#if !(defined FREEBSD || defined NETBSD)
+#if !(defined FREEBSD || defined NETBSD || defined MACOSX)
 #include <alloca.h>
 #endif
 
