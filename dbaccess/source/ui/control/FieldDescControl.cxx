@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #endif
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace dbaui;
@@ -751,65 +754,92 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
     if( !pActFieldDescr )
         return 0;
 
-    sal_uInt32 nOldFormatKey(pActFieldDescr->GetFormatKey());
+    sal_Int32 nOldFormatKey(pActFieldDescr->GetFormatKey());
     SvxCellHorJustify rOldJustify = pActFieldDescr->GetHorJustify();
+    Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
 
-    // ------------
-    // UNO->ItemSet
-    static SfxItemInfo aItemInfos[] =
+    Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
+    SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+
+    SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
+    sal_uInt16 nFlags;
+    if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,nFlags,sal_True))
     {
-        { 0, 0 },
-        { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
-        { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
-        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE }
-    };
-    static sal_uInt16 aAttrMap[] =
-    {
-        SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
-        SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
-        0
-    };
-
-    SfxPoolItem* pDefaults[] =
-    {
-        new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-        new SfxUInt32Item(SBA_DEF_FMTVALUE),
-        new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-        new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False)
-    };
-
-    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
-    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
-
-    SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
-    // fill it
-    pFormatDescriptor->Put(SvxHorJustifyItem(rOldJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
-    pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nOldFormatKey));
-
-    {   // want the dialog to be destroyed before our set
-        Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
-
-        Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-        SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
-
-        SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-
-        SbaSbAttrDlg aDlg(this, pFormatDescriptor, pFormatter, TP_ATTR_ALIGN | TP_ATTR_NUMBER);
-        if( aDlg.Execute() == RET_OK )
+        sal_Bool bModified = sal_False;
+        if(nOldFormatKey != pActFieldDescr->GetFormatKey())
         {
-            const SfxItemSet* pSet = aDlg.GetExampleSet();
-                // GetExampleSet statt GetOutputItemSet, denn letzteres enthaelt nur die modifizierten Items
+            pActFieldDescr->SetFormatKey( nOldFormatKey );
+            bModified = sal_True;
+        }
+        if(rOldJustify != pActFieldDescr->GetHorJustify())
+        {
+            pActFieldDescr->SetHorJustify( rOldJustify );
+            bModified = sal_True;
+        }
 
-            sal_Bool bModified = sal_False;
-            // den Formatkey
-            SfxUInt32Item& rFormatItem = (SfxUInt32Item&)pSet->Get(SBA_DEF_FMTVALUE);
-            sal_uInt32 nNewFormatKey(rFormatItem.GetValue());
-            if (nNewFormatKey != nOldFormatKey)
-            {
-                SetModified(sal_True);
-                bModified = sal_True;
-            }
+        if(bModified)
+        {
+            SetModified(sal_True);
+            UpdateFormatSample(pActFieldDescr);
+        }
+    }
+
+//  // ------------
+//  // UNO->ItemSet
+//  static SfxItemInfo aItemInfos[] =
+//  {
+//      { 0, 0 },
+//      { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
+//      { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
+//      { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE }
+//  };
+//  static sal_uInt16 aAttrMap[] =
+//  {
+//      SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
+//      SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
+//      0
+//  };
+//
+//  SfxPoolItem* pDefaults[] =
+//  {
+//      new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
+//      new SfxUInt32Item(SBA_DEF_FMTVALUE),
+//      new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
+//      new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False)
+//  };
+//
+//  SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
+//  pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
+//  pPool->FreezeIdRanges();                        // the same
+//
+//  SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
+//  // fill it
+//  pFormatDescriptor->Put(SvxHorJustifyItem(rOldJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
+//  pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nOldFormatKey));
+//
+//  {   // want the dialog to be destroyed before our set
+//      Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
+//
+//      Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
+//      SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+//
+//      SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
+//
+//      SbaSbAttrDlg aDlg(this, pFormatDescriptor, pFormatter, TP_ATTR_ALIGN | TP_ATTR_NUMBER);
+//      if( aDlg.Execute() == RET_OK )
+//      {
+//          const SfxItemSet* pSet = aDlg.GetExampleSet();
+//              // GetExampleSet statt GetOutputItemSet, denn letzteres enthaelt nur die modifizierten Items
+//
+//          sal_Bool bModified = sal_False;
+//          // den Formatkey
+//          SfxUInt32Item& rFormatItem = (SfxUInt32Item&)pSet->Get(SBA_DEF_FMTVALUE);
+//          sal_uInt32 nNewFormatKey(rFormatItem.GetValue());
+//          if (nNewFormatKey != nOldFormatKey)
+//          {
+//              SetModified(sal_True);
+//              bModified = sal_True;
+//          }
 
 //          if (m_pFormatterShell->GetListPos4Entry(nNewFormatKey) == -1)
 //              // Das neue Format ist meiner Formatter-Shell nicht bekannt, wurde also gerade neu angelegt
@@ -817,32 +847,32 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
 //              // Das bedeutet, das ich die Shell updaten muss, sonst laeuft UpdateFormatSample in's Leere.
 //              InitFormatterShell(nNewFormatKey);
 
-            // die horizontale Ausrichtung
-            SvxHorJustifyItem& rHorJustifyItem = (SvxHorJustifyItem&)pSet->Get(SBA_ATTR_ALIGN_HOR_JUSTIFY);
-            SvxCellHorJustify rNewJustify = (SvxCellHorJustify)rHorJustifyItem.GetValue();
-            if (rNewJustify != rOldJustify)
-            {
-                SetModified(sal_True);
-                bModified = sal_True;
-            }
-
-            if (bModified)
-                CellModified(-1, FIELD_PROPERTY_FORMAT);
-
-            // das Setzen an der FieldDecription NACH den CellModified, da das ein Undo-::com::sun::star::chaos::Action erzeugt und die auf die Description
-            // zurueckgreift
-            pActFieldDescr->SetFormatKey( nNewFormatKey );
-            pActFieldDescr->SetHorJustify(rNewJustify);
-
-            UpdateFormatSample(pActFieldDescr);
-
-            //  SFX_BINDINGS().Invalidate(SID_SAVEDOC);
-        }
-    }
-    delete pFormatDescriptor;
-    delete pPool;
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
-        delete pDefaults[i];
+//          // die horizontale Ausrichtung
+//          SvxHorJustifyItem& rHorJustifyItem = (SvxHorJustifyItem&)pSet->Get(SBA_ATTR_ALIGN_HOR_JUSTIFY);
+//          SvxCellHorJustify rNewJustify = (SvxCellHorJustify)rHorJustifyItem.GetValue();
+//          if (rNewJustify != rOldJustify)
+//          {
+//              SetModified(sal_True);
+//              bModified = sal_True;
+//          }
+//
+//          if (bModified)
+//              CellModified(-1, FIELD_PROPERTY_FORMAT);
+//
+//          // das Setzen an der FieldDecription NACH den CellModified, da das ein Undo-::com::sun::star::chaos::Action erzeugt und die auf die Description
+//          // zurueckgreift
+//          pActFieldDescr->SetFormatKey( nNewFormatKey );
+//          pActFieldDescr->SetHorJustify(rNewJustify);
+//
+//          UpdateFormatSample(pActFieldDescr);
+//
+//          //  SFX_BINDINGS().Invalidate(SID_SAVEDOC);
+//      }
+//  }
+//  delete pFormatDescriptor;
+//  delete pPool;
+//  for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+//      delete pDefaults[i];
 
     return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-24 12:16:47 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,132 +1200,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
 
     // get the field the column is bound to
     Reference< XPropertySet >  xField = getField(nModelPos);
-
-    if (xAffectedCol.is() && xField.is())
-    {
-        // the allowed format changes depend of the type of the field ...
-        String sColName = ::comphelper::getString(xField->getPropertyValue(PROPERTY_NAME));
-
-        sal_uInt16  nFlags = TP_ATTR_ALIGN;
-        Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
-        sal_Bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
-        if (bHasFormat)
-            nFlags |= TP_ATTR_NUMBER;
-
-        // ------------
-        // UNO->ItemSet
-        static SfxItemInfo aItemInfos[] =
-        {
-            { 0, 0 },
-            { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
-            { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
-            { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE },
-            { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEM_POOLABLE }
-        };
-        static sal_uInt16 aAttrMap[] =
-        {
-            SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
-            SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
-            SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
-            0
-        };
-
-        SfxPoolItem* pDefaults[] =
-        {
-            new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-            new SfxUInt32Item(SBA_DEF_FMTVALUE),
-            new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-            new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False),
-            new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
-        };
-
-        SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
-        pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
-        pPool->FreezeIdRanges();                        // the same
-
-        SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
-        // fill it
-        SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
-        Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
-        if (aAlignment.hasValue())
-            switch (::comphelper::getINT16(aAlignment))
-            {
-                case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
-                case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
-                case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
-                default:
-                    OSL_ENSURE(0,"Invalid TextAlign!");
-            }
-        pFormatDescriptor->Put(SvxHorJustifyItem(eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
-        sal_Bool bText = sal_False;
-        if (bHasFormat)
-        {
-            sal_Int32 nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
-            // if the col is bound to a text field we have to disallow all non-text formats
-            sal_Int32 nFieldType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
-            if ((DataType::CHAR == nFieldType) || (DataType::VARCHAR == nFieldType) || (DataType::LONGVARCHAR == nFieldType))
-            {
-                sal_Bool bText = sal_True;
-                pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
-                if (!pFormatter->IsTextFormat(nFormatKey))
-                    // text fields can only have text formats
-                    nFormatKey = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT, Window::GetSettings().GetLanguage());
-            }
-
-            pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nFormatKey));
-        }
-
-        if (!bText)
-        {
-            double dPreviewVal = 1234.56789;
-            SvxNumberInfoItem aFormatter(pFormatter, dPreviewVal, SID_ATTR_NUMBERFORMAT_INFO);
-            pFormatDescriptor->Put(aFormatter);
-        }
-
-        {   // want the dialog to be destroyed before our set
-            SbaSbAttrDlg aDlg(this, pFormatDescriptor, pFormatter, nFlags);
-            if (RET_OK == aDlg.Execute())
-            {
-                // ------------
-                // ItemSet->UNO
-                // UNO-properties
-                const SfxItemSet* pSet = aDlg.GetExampleSet();
-                // (of course we could put the modified items directly into the column, but then the UNO-model
-                // won't reflect these changes, and why do we have a model, then ?)
-
-                // horizontal justify
-                SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, sal_True);
-
-                xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny(dbaui::mapTextAllign((SvxCellHorJustify)pHorJustify->GetValue())));
-
-                // format key
-                if (nFlags & TP_ATTR_NUMBER)
-                {
-                    SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
-                    xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny((sal_Int32)pFormat->GetValue()));
-                }
-            }
-                // deleted formats
-            const SfxItemSet* pResult = aDlg.GetOutputItemSet();
-            if (pResult)
-            {
-                const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
-                const SvxNumberInfoItem* pInfoItem = static_cast<const SvxNumberInfoItem*>(pItem);
-                if (pInfoItem && pInfoItem->GetDelCount())
-                {
-                    const sal_uInt32* pDeletedKeys = pInfoItem->GetDelArray();
-
-                    for (sal_uInt16 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
-                        pFormatter->DeleteEntry(*pDeletedKeys);
-                }
-            }
-        }
-
-        delete pFormatDescriptor;
-        delete pPool;
-        for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
-            delete pDefaults[i];
-    }
+    ::dbaui::callColumnFormatDialog(xAffectedCol,xField,pFormatter,this);//(Window::GetSettings().GetLanguage());
 }
 
 
@@ -1771,7 +1646,31 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     }
 
 }
+/// unary_function Functor object for class ZZ returntype is void
+    struct SbaGridControlPrec : ::std::unary_function<DataFlavorExVector::value_type,bool>
+    {
+        sal_Bool    bQueryDrop;
+        SbaGridControlPrec(sal_Bool _bQueryDrop)
+            : bQueryDrop(_bQueryDrop)
+        {
+        }
 
+        inline bool operator()(const DataFlavorExVector::value_type& _aType)
+        {
+            switch (_aType.mnSotId)
+            {
+                case SOT_FORMAT_RTF:                    // RTF data descriptions
+                case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
+                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
+                case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
+                case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
+                case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
+                    return true;
+                    break;
+            }
+            return false;
+        }
+    };
 //------------------------------------------------------------------------------
 sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
@@ -1800,10 +1699,6 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         if ((nCol == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount))
             // no valid cell under the mouse cursor
             break;
-
-        // from now we work with ids instead of positions
-        nCol = GetColumnId(nCol);
-
         Rectangle aRect = GetCellRect(nRow, nCol, sal_False);
         if (!aRect.IsInside(rEvt.maPosPixel))
             // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
@@ -1861,6 +1756,10 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         }
 
     } while (sal_False);
+
+//  DataFlavorExVector& _rFlavors = GetDataFlavorExVector();
+//  if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(sal_True)) != _rFlavors.end())
+//      nAction = DND_ACTION_COPY;
 
 /*
     // check formats
@@ -2013,6 +1912,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 //  }
     return sal_False;
 */
+
     return DND_ACTION_NONE;
 }
 

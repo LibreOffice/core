@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-24 12:19:38 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace com { namespace sun { namespace star {
 
 class Window;
 class Font;
+class SvNumberFormatter;
 // .........................................................................
 namespace dbaui
 {
@@ -187,6 +188,26 @@ namespace dbaui
         @return the new FontDescriptor
     */
     ::com::sun::star::awt::FontDescriptor CreateFontDescriptor( const Font& _rFont );
+
+    /** call teh format dialog and set the selected format at the column
+        @param  _xAffectedCol   Font to be converted
+        @param  _xField         Font to be converted
+    */
+    void callColumnFormatDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xAffectedCol,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xField,
+                                SvNumberFormatter* _pFormatter,
+                                Window* _pParent);
+
+    /** second variant of the function before
+    */
+    sal_Bool callColumnFormatDialog(Window* _pParent,
+                                    SvNumberFormatter* _pFormatter,
+                                    sal_Int32 _nDataType,
+                                    sal_Int32& _nFormatKey,
+                                    SvxCellHorJustify& _eJustify,
+                                    sal_uInt16& _nFlags,
+                                    sal_Bool  _bHasFormat);
+
 // .........................................................................
 }
 // .........................................................................

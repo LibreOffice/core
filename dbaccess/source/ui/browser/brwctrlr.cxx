@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1181,7 +1181,8 @@ void SbaXDataBrowserController::disposing()
     if (m_xFormControllerImpl.is())
     {
         m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggListener)) >>= xAggListener;
-        m_xCurrentFrame->removeFrameActionListener(xAggListener);
+        if(m_xCurrentFrame.is()) // may be null if the component dba couldn't be loaded
+            m_xCurrentFrame->removeFrameActionListener(xAggListener);
     }
 
     // and dispose the aggregate

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 
 
@@ -255,8 +258,12 @@ OTableDesignView::OTableDesignView( Window* pParent,
 
     try
     {
-        Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-        m_aLocale.Language = ::comphelper::getString(aValue);
+
+        //  Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
+        //  m_aLocale.Language = ::comphelper::getString(aValue);
+        String sLanguage, sCountry;
+        ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
+        m_aLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
     }
     catch(Exception&)
     {

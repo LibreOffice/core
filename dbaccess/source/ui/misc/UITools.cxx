@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
 #include <com/sun/star/awt/FontWidth.hpp>
 #endif
-
+#ifndef DBAUI_SBATTRDLG_HRC
+#include "dlgattr.hrc"
+#endif
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
@@ -142,6 +144,54 @@
 #include "FieldDescriptions.hxx"
 #endif
 
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
+#define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
+#define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
+#define ITEMID_ORIENTATION      SID_ATTR_ALIGN_ORIENTATION
+#define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
+#define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
+#define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
+
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
+#endif
+#ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
+#include <svtools/itemset.hxx>
+#endif
+#ifndef DBACCESS_SBA_GRID_HRC
+#include "sbagrid.hrc"
+#endif
+#ifndef _SFXRNGITEM_HXX
+#include <svtools/rngitem.hxx>
+#endif
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+#ifndef _SVX_ALGITEM_HXX
+#include <svx/algitem.hxx>
+#endif
+#ifndef _SVX_NUMINF_HXX
+#include <svx/numinf.hxx>
+#endif
+#define _ZFORLIST_DECLARE_TABLE
+#ifndef _SVX_NUMINF_HXX
+#include <svx/numinf.hxx>
+#endif
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+#ifndef DBAUI_SBATTRDLG_HXX
+#include "dlgattr.hxx"
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 // .........................................................................
 namespace dbaui
 {
@@ -605,6 +655,7 @@ void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFie
     if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
         _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_pFieldDesc->GetDescription()));
 }
+// -----------------------------------------------------------------------------
 float ConvertFontWeight( ::FontWeight eWeight )
 {
     if( eWeight == WEIGHT_DONTKNOW )
@@ -679,6 +730,167 @@ float ConvertFontWidth( ::FontWidth eWidth )
     aFD.WordLineMode    = rFont.IsWordLineMode();
     aFD.Type            = 0;   // ??? => Nur an Metric...
     return aFD;
+}
+// -----------------------------------------------------------------------------
+void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
+                            const Reference<XPropertySet>& xField,
+                            SvNumberFormatter* _pFormatter,
+                            Window* _pParent)
+{
+    if (xAffectedCol.is() && xField.is())
+    {
+        Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
+        sal_Bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
+        sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
+
+        SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
+        Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
+        if (aAlignment.hasValue())
+            switch (::comphelper::getINT16(aAlignment))
+            {
+                case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
+                case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
+                case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
+                default:
+                    OSL_ENSURE(0,"Invalid TextAlign!");
+            }
+        sal_uInt16 nFlags;
+        sal_Int32  nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
+        if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,nFlags,bHasFormat))
+        {
+            try
+            {
+                xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny((sal_Int16)dbaui::mapTextAllign(eJustify)));
+                if (nFlags & TP_ATTR_NUMBER)
+                    xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
+            }
+            catch(const Exception&)
+            {
+                // could not set the column properties here
+            }
+
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+sal_Bool callColumnFormatDialog(Window* _pParent,
+                                SvNumberFormatter* _pFormatter,
+                                sal_Int32 _nDataType,
+                                sal_Int32& _nFormatKey,
+                                SvxCellHorJustify& _eJustify,
+                                sal_uInt16& _nFlags,
+                                sal_Bool  _bHasFormat)
+{
+    sal_Bool bRet = sal_False;
+    // the allowed format changes depend of the type of the field ...
+    _nFlags = TP_ATTR_ALIGN;
+
+    if (_bHasFormat)
+        _nFlags |= TP_ATTR_NUMBER;
+
+    // ------------
+    // UNO->ItemSet
+    static SfxItemInfo aItemInfos[] =
+    {
+        { 0, 0 },
+        { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
+        { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
+        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE },
+        { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEM_POOLABLE }
+    };
+    static sal_uInt16 aAttrMap[] =
+    {
+        SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
+        SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
+        SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
+        0
+    };
+
+    SfxPoolItem* pDefaults[] =
+    {
+        new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
+        new SfxUInt32Item(SBA_DEF_FMTVALUE),
+        new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
+        new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False),
+        new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
+    };
+
+    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
+    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
+    pPool->FreezeIdRanges();                        // the same
+
+    SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
+    // fill it
+    pFormatDescriptor->Put(SvxHorJustifyItem(_eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
+    sal_Bool bText = sal_False;
+    if (_bHasFormat)
+    {
+        // if the col is bound to a text field we have to disallow all non-text formats
+        if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType))
+        {
+            sal_Bool bText = sal_True;
+            pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
+            if (!_pFormatter->IsTextFormat(_nFormatKey))
+                // text fields can only have text formats
+                _nFormatKey = _pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT,_pParent->GetSettings().GetLanguage());
+        }
+
+        pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, _nFormatKey));
+    }
+
+    if (!bText)
+    {
+        double dPreviewVal = 1234.56789;
+        SvxNumberInfoItem aFormatter(_pFormatter, dPreviewVal, SID_ATTR_NUMBERFORMAT_INFO);
+        pFormatDescriptor->Put(aFormatter);
+    }
+
+    {   // want the dialog to be destroyed before our set
+        SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor, _pFormatter, _nFlags);
+        if (RET_OK == aDlg.Execute())
+        {
+            // ------------
+            // ItemSet->UNO
+            // UNO-properties
+            const SfxItemSet* pSet = aDlg.GetExampleSet();
+            // (of course we could put the modified items directly into the column, but then the UNO-model
+            // won't reflect these changes, and why do we have a model, then ?)
+
+            // horizontal justify
+            SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, sal_True);
+
+            _eJustify = (SvxCellHorJustify)pHorJustify->GetValue();
+
+            // format key
+            if (_nFlags & TP_ATTR_NUMBER)
+            {
+                SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
+                _nFormatKey = (sal_Int32)pFormat->GetValue();
+            }
+            bRet = sal_True;
+        }
+            // deleted formats
+        const SfxItemSet* pResult = aDlg.GetOutputItemSet();
+        if (pResult)
+        {
+            const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
+            const SvxNumberInfoItem* pInfoItem = static_cast<const SvxNumberInfoItem*>(pItem);
+            if (pInfoItem && pInfoItem->GetDelCount())
+            {
+                const sal_uInt32* pDeletedKeys = pInfoItem->GetDelArray();
+
+                for (sal_uInt16 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
+                    _pFormatter->DeleteEntry(*pDeletedKeys);
+            }
+        }
+    }
+
+    delete pFormatDescriptor;
+    delete pPool;
+    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+        delete pDefaults[i];
+
+    return bRet;
 }
 // .........................................................................
 }

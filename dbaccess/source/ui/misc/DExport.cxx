@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:16:25 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
 #define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 
@@ -197,6 +200,9 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     {
         Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
         m_nLocale.Language = ::comphelper::getString(aValue);
+//      String sLanguage, sCountry;
+//      ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
+//      m_nLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
     }
     catch(Exception&)
     {
@@ -230,6 +236,9 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     {
         Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
         m_nLocale.Language = ::comphelper::getString(aValue);
+//      String sLanguage, sCountry;
+//      ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
+//      m_nLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
     }
     catch(Exception&)
     {
