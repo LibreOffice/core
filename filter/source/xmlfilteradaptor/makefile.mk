@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aidan $ $Date: 2002-04-09 09:03:43 $
+#   last change: $Author: aidan $ $Date: 2002-04-10 11:45:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,23 +77,16 @@ BOOTSTRAP_SERVICE=	FALSE
 
 CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
-# --- Generate -----------------------------------------------------
-
-SLOFILES=	$(SLO)/XmlFilterAdaptor.obj \
-        $(SLO)/genericfilter.obj \
-        $(SLO)/streamwrap.obj 
-
 # --- Targets ------------------------------------------------------
 SHL1TARGET=		xmlfilteradaptor$(DLLPOSTFIX)
 
 SHL1IMPLIB=		i$(SHL1TARGET)
-
-SHL1OBJS=  		$(SLO)$/genericfilter.obj		\
+                
+SHL1OBJS=		$(SLO)$/genericfilter.obj		\
                 $(SLO)$/XmlFilterAdaptor.obj\
                 $(SLO)$/streamwrap.obj
+
                 
-                
-                    
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(VOSLIB)							\
