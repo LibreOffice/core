@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 15:12:53 $
+ *  last change: $Author: os $ $Date: 2002-08-13 13:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,8 +1577,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         if( ( nWhich == FN_TOOL_ANKER_PAGE &&
                               ((HTMLMODE_ON & nHtmlMode) && (0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS)))) ||
                             ( nWhich == FN_TOOL_ANKER_FRAME && !rSh.IsFlyInFly() ) ||
-                            ( nWhich == FN_TOOL_ANKER_AT_CHAR && !rSh.IsFrmSelected())||
-                            ( nWhich == FN_TOOL_ANKER_PAGE && rSh.IsInHeaderFooter() ))
+                            ( nWhich == FN_TOOL_ANKER_AT_CHAR && !rSh.IsFrmSelected()))
                             rSet.DisableItem(nWhich);
                         else
                             rSet.Put(SfxBoolItem(nWhich, bSet));
