@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:28:22 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,11 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
-
-#if SUPD>637
-#include <rtl/logfile.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
+
+#include <rtl/logfile.hxx>
 
 #pragma hdrstop
 
@@ -147,8 +148,6 @@
 #include "docfac.hxx"
 #include "evntconf.hxx"
 #include "frameobj.hxx"
-#include "fsetobsh.hxx"
-#include "fsetview.hxx"
 #include "imgmgr.hxx"
 #include "interno.hxx"
 #include "intro.hxx"
@@ -271,10 +270,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pSfxFrameObjectFactoryPtr->pSfxFrameObjectFactory = SfxFrameObject::ClassFactory();
     SvBindStatusCallback::SetProgressCallback( STATIC_LINK( 0, SfxProgress, DefaultBindingProgress ) );
     INetURLHistory::GetOrCreate()->SetLocation( SvtPathOptions().GetUserConfigPath() );
-
-    // merken, falls Applikation normal gestartet wurde
-    if ( pAppData_Impl->bDirectAliveCount )
-        SvFactory::IncAliveCount();
 
     pImp->pEventHdl = new UniqueIndex( 1, 4, 4 );
     //InitializeDisplayName_Impl();
