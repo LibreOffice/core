@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceFactory.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:31:32 $
+ *  last change: $Author: kr $ $Date: 2001-03-14 12:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 
 package com.sun.star.comp.helper;
 
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.RuntimeException;
+
 
 public class RegistryServiceFactory {
     static {
@@ -117,6 +120,13 @@ public class RegistryServiceFactory {
             String writeRegistryFile, String readRegistryFile, boolean readOnly )
         throws com.sun.star.uno.Exception
     {
+        // Ensure that we are on a native threads vm
+        // (binary UNO does use native threads).
+        String vm_info = System.getProperty("java.vm.info");
+        if(vm_info != null && vm_info.indexOf("green") != -1)
+            throw new RuntimeException(RegistryServiceFactory.class.toString() + ".create - can't use binary UNO with green threads");
+
+
         if (writeRegistryFile == null && readRegistryFile == null)
             throw new com.sun.star.uno.Exception("No registry is specified!");
 
