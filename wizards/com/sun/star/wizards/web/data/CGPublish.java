@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CGPublish.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:18:10 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,19 +80,41 @@ public class CGPublish extends ConfigGroup {
 
     /**
      * cp_URL is the url given by the user
-     * for this publisher.
+     * for this publisher. (in UCB URL form)
      * This one will be edited to result the "url"
      * field, which is the true url, ucb uses to publish.
+     * It is used for example to add ftp username and password, or zip url
      */
     public String url;
 
-    public void setURL(String url) {
-        throw new NullPointerException("CGPublish.setURL not allowed.");
-        //cp_URL = url;
+
+    /**
+     * if the user approved overwriting files in this publisher target
+     */
+    public boolean overwriteApproved;
+
+    /**
+     * here I get an URL from user input, and parse it to
+     * a UCB url...
+     * @param url
+     */
+    public void setURL(String path) {
+        try {
+            this.cp_URL = ((CGSettings)this.root).getFileAccess().getURL(path);
+            overwriteApproved = false;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public String getURL() {
-        return JavaTools.convertfromURLNotation(cp_URL);
+        try {
+            return  ((CGSettings)this.root).getFileAccess().getPath(cp_URL, null );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private String ftpURL() {
