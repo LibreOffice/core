@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,25 @@ namespace xmloff
             const sal_Char* _pAttributeName,
             const ::rtl::OUString& _rPropertyName,
             const sal_Int16 _nDefault);
+
+        /** add an attribute which is represented by a sal_Int32 property to the export context
+
+            @param _nNamespaceKey
+                the key of the namespace to use for the attribute name. Is used with the namespace map
+                provided by the export context.
+            @param _pAttributeName
+                the name of the attribute to add. Must not contain any namespace (it's added automatically)
+            @param _pPropertyName
+                the name of the property to ask the control for
+            @param _nDefault
+                the default of the attribute. If the current property value equals this default, no
+                attribute is added.
+        */
+        void exportInt32PropertyAttribute(
+            const sal_uInt16 _nNamespaceKey,
+            const sal_Char* _pAttributeName,
+            const ::rtl::OUString& _rPropertyName,
+            const sal_Int32 _nDefault);
 
         /** add an attribute which is represented by a enum property to the export context
 
