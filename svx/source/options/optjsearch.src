@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:24:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "Treat as equal";
         Text[ portuguese ] = "Tratar como igual";
         Text[ russian ] = "Îáğàùàòüñÿ êàê ñ ğàâíîöåííûìè";
-        Text[ greek ] = "ºäéá ìåôá÷åßñéóç";
+        Text[ greek ] = "×ùñßò äéÜêñéóç";
         Text[ dutch ] = "Gelijkwaardig behandelen";
         Text[ french ] = "Considérer comme identique";
         Text[ spanish ] = "Tratar igual";
@@ -97,7 +97,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ç•¶ä½œç›¸ç­‰è™•ç†";
         Text[ turkish ] = "Eşitmiş gibi davran";
         Text[ arabic ] = "Treat as equal";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: Group box title. Use only one verb for the whole group box. Instead of saying \"Treat as equal - match...\" (dh gleichwertig behandeln und gleichstellen), just use \"treat as equal\" as title above all and no verb at check boxes (ie diff than English MS Word)";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: Group box title. Use only one verb for the whole group box. Instead of saying \"Treat as equal - match...\" (dh gleichwertig behandeln und gleichstellen), just use \"treat as equal\" as title above all and no verb at check boxes (ie diff than English MS Word)";
         Text[ catalan ] = "Tracta com a iguals";
         Text[ finnish ] = "Käsittele tasa-arvoisena";
         Text[ thai ] = "à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸—à¹ˆà¸²à¹€à¸—à¸µà¸¢à¸¡à¸à¸±à¸™";
@@ -115,7 +115,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~uppercase/lowercase";
         Text[ portuguese ] = "~Maiúsculas/minúsculas";
         Text[ russian ] = "Çàãëàâíûå/ñòğî÷íûå áóêâû";
-        Text[ greek ] = "Êåöáëáßá/ĞåæÜ";
+        Text[ greek ] = "~êåöáëáßá/ğåæÜ";
         Text[ dutch ] = "Hoofdletters/~kleine letters";
         Text[ french ] = "Majuscules/minuscules";
         Text[ spanish ] = "Mayúsculas/minúsculas";
@@ -130,7 +130,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "å­—æ¯å¤§å°å¯«(~U)";
         Text[ turkish ] = "büyük/küçük harf";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "Majúscules/minúscules";
         Text[ finnish ] = "isot kirjaimet/pienet kirjaimet";
         Text[ thai ] = "~à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ/à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹€à¸¥à¹‡à¸";
@@ -148,7 +148,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~full-width/half-width forms";
         Text[ portuguese ] = "Formas de meia-largura e largura normal";
         Text[ russian ] = "Ïîëíûé/óêîğî÷åííûé ôîğìàò ôîğì";
-        Text[ greek ] = "Öüñìåò êáíïíéêïı/ìéóïı ğëÜôïõò";
+        Text[ greek ] = "öüñìåò êá~íïíéêïı/ìéóïı ğëÜôïõò";
         Text[ dutch ] = "~Normale/halfbrede vormen";
         Text[ french ] = "Formes de demi et pleine chasse";
         Text[ spanish ] = "Formas normales/medio anchas";
@@ -163,7 +163,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "å…¨å½¢å’ŒåŠå½¢å­—å‹(~F)";
         Text[ turkish ] = "Formlarda Tam genişlik/Yarım genişlik";
         Text[ arabic ] = "Match full/half width form";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "formes d'amplada completa/mitja amplada";
         Text[ finnish ] = "täysleveät/puolileveät lomakkeet";
         Text[ thai ] = "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡~à¹€à¸•à¹‡à¸¡/à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸„à¸£à¸¶à¹ˆà¸‡à¸«à¸™à¸¶à¹ˆà¸‡";
@@ -181,7 +181,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~hiragana/katakana";
         Text[ portuguese ] = "~Hiragana/Katakana";
         Text[ russian ] = "Õèğàãàíà/êàòàêàíà";
-        Text[ greek ] = "Hiragana/Katakana";
+        Text[ greek ] = "~hiragana/katakana";
         Text[ dutch ] = "Hira~gana/Katakana";
         Text[ french ] = "Hiragana/katakana";
         Text[ spanish ] = "Hiragana/Katakana";
@@ -196,7 +196,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "å¹³å‡åå’Œç‰‡å‡å(~H)";
         Text[ turkish ] = "hiragana/katakana";
         Text[ arabic ] = "åíÑÇÌÇäÇ/ßÇÊÇßÇäÇ";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "hiragana/katakana";
         Text[ finnish ] = "hiragana/katakana";
         Text[ thai ] = "~à¸®à¸´à¸£à¸²à¸à¸²à¸™à¸°/à¸„à¸²à¸•à¸²à¸à¸²à¸™à¸°";
@@ -214,7 +214,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~contractions (yo-on, sokuon)";
         Text[ portuguese ] = "~Contracções(yo-on, sokuon)";
         Text[ russian ] = "Êîíòğàêòàöèÿ ãëàñíûõ (yo-on, sokuon)";
-        Text[ greek ] = "Óõíáßñåóç (yo-on, sokuon)";
+        Text[ greek ] = "~óõíáéñİóåéò (yo-on, sokuon)";
         Text[ dutch ] = "~Samentrekkingen (yo-on, sokuon)";
         Text[ french ] = "Contractions (yo-on, sokuon)";
         Text[ spanish ] = "Contracciones (yo-on, sokuon)";
@@ -229,7 +229,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "æ—¥æ–‡ç¸®å¯«å¼(æ‹—éŸ³ï¼Œä¿ƒéŸ³)(~C)";
         Text[ turkish ] = " büzülmeler (yo-on, sokuon)";
         Text[ arabic ] = "Match contractions (yo-on, sokuon)";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "contraccions (yo-on, sokuon)";
         Text[ finnish ] = "kutistumat (yo-on, sokuon)";
         Text[ thai ] = "~à¸«à¸™à¸±à¸‡à¸ªà¸·à¸­à¸ªà¸±à¸à¸à¸² (yo-on, sokuon)";
@@ -247,7 +247,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~minus/dash/cho-on";
         Text[ portuguese ] = "Me~nos/traço/cho-on";
         Text[ russian ] = "Äåôèñ/cho-on";
-        Text[ greek ] = "Ìåßïí/ÓõíäåôéêŞ ãñáììŞ/cho-on";
+        Text[ greek ] = "~ìåßïí/ğáıëá/cho-on";
         Text[ dutch ] = "~Minteken/verbindingsstreepje/cho-on";
         Text[ french ] = "Moins/trait/cho-on";
         Text[ spanish ] = "Menos/Guión/cho-on";
@@ -262,7 +262,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "è² æ•¸ç¬¦è™Ÿ/é€£å­—ç¬¦/é•·éŸ³[ï¼/â€/ãƒ¼](~M)";
         Text[ turkish ] = "eksi/çizgi/cho-on";
         Text[ arabic ] = "Match minus/dash/cho-on";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "Menys/Guió/cho-on";
         Text[ finnish ] = "miinus/viiva/cho-on";
         Text[ thai ] = "~à¸¥à¸š/à¹€à¸ªà¹‰à¸™à¸›à¸£à¸°/cho-on";
@@ -280,7 +280,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "'re~peat character' marks";
         Text[ portuguese ] = "Ca~racteres de repetição";
         Text[ russian ] = "Ïîâòîğÿşùèåñÿ ñèìâîëû";
-        Text[ greek ] = "×áñáêôŞñåò åğáíÜëçøçò";
+        Text[ greek ] = "óçìÜäéá \"åğáíá~ëáìâ. ÷áñáêôŞñùí\"";
         Text[ dutch ] = "He~rhalingstekens";
         Text[ french ] = "Caractères de répétition";
         Text[ spanish ] = "Carácter de repetición";
@@ -295,7 +295,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "é‡å¾©çš„å­—å…ƒ[ãƒ½ãƒ¾ã‚ã‚ã€…](~P)";
         Text[ turkish ] = "Tekrarlanan karakterlere eşleş";
         Text[ arabic ] = "ÍÑİ ÇáÅÚÇÏÉ";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "Caràcter de repetició";
         Text[ finnish ] = "merkintoistomerkit";
         Text[ thai ] = "'à¸—à¸³à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°~à¸‹à¹‰à¸³";
@@ -313,7 +313,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~variant-form kanji (itaiji)";
         Text[ portuguese ] = "~Variantes kanji (itaiji)";
         Text[ russian ] = "Âàğèàíò êàíäçè (èòàèäçè)";
-        Text[ greek ] = "Kanji Variante (itaiji)";
+        Text[ greek ] = "~öüñìåò-ğáñáëëáãşí kanji (itaiji)";
         Text[ dutch ] = "K~anji variant (itaiji)";
         Text[ french ] = "Variantes kanji (itaiji)";
         Text[ spanish ] = "Variante Kanji (itaiji)";
@@ -328,7 +328,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "æ—¥æ–‡æ¼¢å­—(ç•°ä½“å­—)(~V)";
         Text[ turkish ] = " variant-form kanji (itaiji)";
         Text[ arabic ] = "Match variant-form kanji (itaiji)";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "Kanji de forma variant (Itaiji)";
         Text[ finnish ] = "kanji (itaiji) -muodot";
         Text[ thai ] = "à¹à¸šà¸šà¹~à¸›à¸£à¸œà¸±à¸™à¸„à¸±à¸™à¸ˆà¸´ (itaiji)";
@@ -346,7 +346,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~old Kana forms";
         Text[ portuguese ] = "Ant~igas formas kana";
         Text[ russian ] = "Ñòàğûå ôîğìû êàíû";
-        Text[ greek ] = "Ğáëéİò ìïñöİò kana";
+        Text[ greek ] = "~ğáëéİò ìïñöİò kana";
         Text[ dutch ] = "~Oude Kana-vormen";
         Text[ french ] = "Anciennes formes kana";
         Text[ spanish ] = "Antiguas formas Kana";
@@ -361,7 +361,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "èˆŠå¼æ—¥æ–‡å‡å(~O)";
         Text[ turkish ] = "Eski Kana formları";
         Text[ arabic ] = "Match old kana forms";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "formes Kana antigues";
         Text[ finnish ] = "vanhat Kana-muodot";
         Text[ thai ] = "à¹à¸šà¸šà¸„à¸²à¸™à¸°à¹€~à¸à¹ˆà¸²";
@@ -379,7 +379,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~di/zi, du/zu";
         Text[ portuguese ] = "~Di/zi, du/zu";
         Text[ russian ] = "Di/zi, du/zu";
-        Text[ greek ] = "Di/zi, du/zu";
+        Text[ greek ] = "~di/zi, du/zu";
         Text[ dutch ] = "~Di/zi, du/zu";
         Text[ french ] = "Di/zi, du/zu";
         Text[ spanish ] = "Di/zi, du/zu";
@@ -394,7 +394,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ãƒ‚/ã‚¸ã€ãƒ…/ã‚º(~D)";
         Text[ turkish ] = " di/zi, du/zu";
         Text[ arabic ] = "Match di/zi, du/zu";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "di/zi, du/zu";
         Text[ finnish ] = "di/zi, du/zu";
         Text[ thai ] = "~di/zi, du/zu";
@@ -412,7 +412,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~ba/va, ha/fa";
         Text[ portuguese ] = "~Ba/va, ha/fa";
         Text[ russian ] = "Ba/va, ha/fa";
-        Text[ greek ] = "Ba/va, ha/fa";
+        Text[ greek ] = "~ba/va, ha/fa";
         Text[ dutch ] = "~Ba/va, ha/fa";
         Text[ french ] = "Ba/va, ha/fa";
         Text[ spanish ] = "Ba/va, ha/fa";
@@ -427,7 +427,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ãƒ/ãƒ´ã‚¡ã€ãƒ/ãƒ•ã‚¡(~B)";
         Text[ turkish ] = " ba/va, ha/fa";
         Text[ arabic ] = "Match ba/va, ha/fa";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "ba/va, ha/fa";
         Text[ finnish ] = "ba/va, ha/fa";
         Text[ thai ] = "~ba/va, ha/fa";
@@ -445,7 +445,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~tsi/thi/chi, dhi/zi";
         Text[ portuguese ] = "~Tsi/thi/chi, dhi/zi";
         Text[ russian ] = "Tsi/thi/chi, dhi/zi";
-        Text[ greek ] = "Tsi/thi/chi, dhi/zi";
+        Text[ greek ] = "~tsi/thi/chi, dhi/zi";
         Text[ dutch ] = "~Tsi/thi/chi, dhi/zi";
         Text[ french ] = "Tsi/thi/chi, dhi/zi";
         Text[ spanish ] = "Tsi/thi/chi, dhi/zi";
@@ -460,7 +460,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ãƒ/ãƒ´ã‚¡ã€ãƒ/ãƒ•ã‚¡(~T)";
         Text[ turkish ] = "tsi/thi/chi, dhi/zi";
         Text[ arabic ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "tsi/thi/chi, dhi/zi";
         Text[ finnish ] = "tsi/thi/chi, dhi/zi";
         Text[ thai ] = "~tsi/thi/chi, dhi/zi";
@@ -478,7 +478,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "h~yu/fyu, byu/vyu";
         Text[ portuguese ] = "H~yu/fyu, byu/vyu";
         Text[ russian ] = "Hyu/fyu, byu/vyu";
-        Text[ greek ] = "Hyu/fyu, byu/vyu";
+        Text[ greek ] = "h~yu/fyu, byu/vyu";
         Text[ dutch ] = "H~yu/fyu, byu/vyu";
         Text[ french ] = "Hyu/fyu, byu/vyu";
         Text[ spanish ] = "hyu/fyu, byu/vyu";
@@ -493,7 +493,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ãƒ’ãƒ¥/ãƒ•ãƒ¥ã€ãƒ“ãƒ¥/ãƒ´ãƒ¥(~Y)";
         Text[ turkish ] = "hyu/fyu, byu/vyu";
         Text[ arabic ] = "Match hyu/fyu, byu/vyu";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "hyu/fyu, byu/vyu";
         Text[ finnish ] = "hyu/fyu, byu/vyu";
         Text[ thai ] = "h~yu/fyu, byu/vyu";
@@ -511,7 +511,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~se/she, ze/je";
         Text[ portuguese ] = "~Se/she, ze/je";
         Text[ russian ] = "Se/she, ze/je";
-        Text[ greek ] = "Se/she, ze/je";
+        Text[ greek ] = "~se/she, ze/je";
         Text[ dutch ] = "Se/she, ~ze/je";
         Text[ french ] = "Se/she, ze/je";
         Text[ spanish ] = "Se/she, ze/je";
@@ -526,7 +526,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ãƒ/ãƒ´ã‚¡ã€ãƒ/ãƒ•ã‚¡(~S)";
         Text[ turkish ] = "se/she, ze/je";
         Text[ arabic ] = "Match se/she, ze/je";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "se/she, ze/je";
         Text[ finnish ] = "se/she, ze/je";
         Text[ thai ] = "~se/she, ze/je";
@@ -544,7 +544,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~ia/iya (piano/piyano)";
         Text[ portuguese ] = "Ia/iya (~piano/piyano)";
         Text[ russian ] = "Ia/iya (piano/piyano)";
-        Text[ greek ] = "Ia/iya (piano/piyano)";
+        Text[ greek ] = "~ia/iya (piano/piyano)";
         Text[ dutch ] = "Ia/iya (~piano/piyano)";
         Text[ french ] = "Ia/iya (piano/piyano)";
         Text[ spanish ] = "Ia/iya (piano/piyano)";
@@ -559,7 +559,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ã‚¤æ®µåŠã‚¨æ®µçš„é€£æ¥(ï¾‹ï¾Ÿï½±ï¾‰/ï¾‹ï¾Ÿï¾”ï¾‰)(~I)";
         Text[ turkish ] = " ia/iya (piano/piyano)";
         Text[ arabic ] = "Match ia/iya (piano/piyano)";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "ia/iya (piano/piyano)";
         Text[ finnish ] = "ia/iya (piano/piyano)";
         Text[ thai ] = "~ia/iya (piano/piyano)";
@@ -577,7 +577,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~ki/ku (tekisuto/tekusuto)";
         Text[ portuguese ] = "Ki/k~u (tekisuto/tekusuto)";
         Text[ russian ] = "Ki/ku (tekisuto/tekusuto)";
-        Text[ greek ] = "Ki/ku (tekisuto/tekusuto)";
+        Text[ greek ] = "~ki/ku (tekisuto/tekusuto)";
         Text[ dutch ] = "Ki/k~u (tekisuto/tekusuto)";
         Text[ french ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ spanish ] = "Ki/ku (tekisuto/tekusuto)";
@@ -592,7 +592,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "ã‚µè¡Œä¹‹å‰çš„ï½·/ï½¸(ï¾ƒï½·ï½½ï¾„/ï¾ƒï½¸ï½½ï¾„)(~K)";
         Text[ turkish ] = " ki/ku (tekisuto/tekusuto)";
         Text[ arabic ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ language_user1 ] = "EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ language_user1 ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
         Text[ catalan ] = "ki/ku (tekisuto/tekusuto)";
         Text[ finnish ] = "ki/ku (tekisuto/tekusuto)";
         Text[ thai ] = "~ki/ku (tekisuto/tekusuto)";
@@ -618,11 +618,11 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ danish ] = "Prolon~ged vowels (ka-/kaa)";
         Text[ swedish ] = "Förlängda ~vokaler (ka-/kaa)";
         Text[ polish ] = "Prolon~ged vowels (ka-/kaa)";
-        Text[ portuguese_brazilian ] = "Prolon~ged vowels (ka-/kaa)";
-        Text[ japanese ] = "é•·éŸ³(ã‚«ãƒ¼/ã‚«ã‚¢)";
-        Text[ korean ] = "ì¥ëª¨ìŒ (ka-/kaa)";
-        Text[ chinese_simplified ] = "é•¿å…ƒéŸ³(ï½¶/ï½¶ï½°)";
-        Text[ chinese_traditional ] = "é•·å…ƒéŸ³(ï½¶/ï½¶ï½°)";
+        Text[ portuguese_brazilian ] = "Vogais~ prolongadas (ka-/kaa)";
+        Text[ japanese ] = "é•·éŸ³(ã‚«ãƒ¼/ã‚«ã‚¢)(~G)";
+        Text[ korean ] = "ì¥ëª¨ìŒ (ka-/kaa)(~G)";
+        Text[ chinese_simplified ] = "é•¿å…ƒéŸ³(ï½¶/ï½¶ï½°)(~G)";
+        Text[ chinese_traditional ] = "é•·å…ƒéŸ³(ï½¶/ï½¶ï½°)(~G)";
         Text[ turkish ] = "Uzatılmış ünlü harfler (ka-/kaa)";
         Text[ arabic ] = "Prolon~ged vowels (ka-/kaa)";
         Text[ catalan ] = "Prolon~ged vowels (ka-/kaa)";
@@ -673,7 +673,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "Pu~nctuation characters";
         Text[ portuguese ] = "~Caracteres de pontuação";
         Text[ russian ] = "Çíàêè ïóíêòóàöèè";
-        Text[ greek ] = "Óçìåßá óôßîçò";
+        Text[ greek ] = "×áñáêôŞñåò óôß~îçò";
         Text[ dutch ] = "Int~erpunctietekens";
         Text[ french ] = "Signes de ponctuation";
         Text[ spanish ] = "Caracteres de puntuación";
@@ -705,7 +705,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "~Whitespace characters";
         Text[ portuguese ] = "~Espaços";
         Text[ russian ] = "Ñèìâîëû ïğîáåëîâ";
-        Text[ greek ] = "×áñáêôŞñáò êåíïı";
+        Text[ greek ] = "~×áñáêôŞñåò êåíïı äéáóôŞìáôïò";
         Text[ dutch ] = "Spat~ietekens";
         Text[ french ] = "Espaces";
         Text[ spanish ] = "~Espacio";
@@ -737,7 +737,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ english_us ] = "Midd~le dots";
         Text[ portuguese ] = "~Pontos centrais";
         Text[ russian ] = "Òî÷êà â öåíòğå";
-        Text[ greek ] = "ÊåíôñéêŞ ôåëåßá";
+        Text[ greek ] = "Ô~åëåßåò óôç ìİóç";
         Text[ dutch ] = "Ge~centreerde punt";
         Text[ french ] = "Points centraux";
         Text[ spanish ] = "Punto centrado";
@@ -763,7 +763,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     Text[ english_us ] = "Searching in Japanese";
     Text[ portuguese ] = "Opções de procura para Japonês";
     Text[ russian ] = "Ïîèñê â ÿïîíñêîì ÿçûêå";
-    Text[ greek ] = "Åğéëïãİò áíáæŞôçóçò ãéá ôçí éáğùíİæéêç ãëşóóá";
+    Text[ greek ] = "ÁíáæŞôçóç óôá ÉáğùíéêÜ";
     Text[ dutch ] = "Zoekopties voor Japans";
     Text[ french ] = "Options de recherche pour le japonais";
     Text[ spanish ] = "Opciones de búsqueda para japonés";
@@ -787,6 +787,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     Text[ slovak ] = "HÄ¾adanie v japonÄine";
 };
 // end TabPage
+
 
 
 
