@@ -14,6 +14,7 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\contenthelper.hxx %_DEST%\inc%_EXT%\ucbhelper\contenthelper.hxx
 ..\inc\ucbhelper\contentidentifier.hxx %_DEST%\inc%_EXT%\ucbhelper\contentidentifier.hxx
 ..\inc\ucbhelper\contentinfo.hxx %_DEST%\inc%_EXT%\ucbhelper\contentinfo.hxx
+..\inc\ucbhelper\fileidentifierconverter.hxx %_DEST%\inc%_EXT%\ucbhelper\fileidentifierconverter.hxx
 ..\inc\ucbhelper\macros.hxx %_DEST%\inc%_EXT%\ucbhelper\macros.hxx
 ..\inc\ucbhelper\propertyvalueset.hxx %_DEST%\inc%_EXT%\ucbhelper\propertyvalueset.hxx
 ..\inc\ucbhelper\providerhelper.hxx %_DEST%\inc%_EXT%\ucbhelper\providerhelper.hxx
