@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-27 11:24:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ void APChooseDriverPage::fill( PrinterInfo& rInfo )
     USHORT nPos = m_aDriverBox.GetSelectEntryPos();
     String* pDriver = (String*)m_aDriverBox.GetEntryData( nPos );
     rInfo.m_aDriverName = *pDriver;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "m_aLastPrinterName = \"%s\", rInfo.m_aPrinterName = \"%s\"\n",
              OUStringToOString( m_aLastPrinterName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              OUStringToOString( rInfo.m_aPrinterName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
