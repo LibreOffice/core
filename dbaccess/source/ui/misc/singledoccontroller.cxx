@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ namespace dbaui
     void SAL_CALL OSingleDocumentController::disposing()
     {
         OSingleDocumentController_CBASE::disposing();
+        OSingleDocumentController_PBASE::disposing();
         m_aUndoManager.Clear();
 
         disconnect();
@@ -417,14 +418,21 @@ namespace dbaui
     //--------------------------------------------------------------------
     void SAL_CALL OSingleDocumentController::disposing(const EventObject& _rSource) throw( RuntimeException )
     {
-        if ( !m_bSuspended // when already suspended then we don't have to reconnect
-            &&  !getBroadcastHelper().bInDispose
-            &&  !getBroadcastHelper().bDisposed
-            &&  isConnected()
-            &&  ( _rSource.Source == getConnection() )
-            )
+        if ( _rSource.Source == getConnection() )
         {
-            losingConnection();
+            if (    !m_bSuspended // when already suspended then we don't have to reconnect
+                &&  !getBroadcastHelper().bInDispose
+                &&  !getBroadcastHelper().bDisposed
+                &&  isConnected()
+                )
+            {
+                losingConnection();
+            }
+            else
+            {
+                m_bOwnConnection = sal_False;   // this prevents the "disposeComponent" call in disconnect
+                disconnect();
+            }
         }
         else
             OSingleDocumentController_CBASE::disposing( _rSource );
