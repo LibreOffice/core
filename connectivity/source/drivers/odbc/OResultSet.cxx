@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:49:44 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
+    OSL_ENSURE(m_aBindVector.empty(),"Bind vector mot released!");
     delete m_pRowStatusArray;
     delete m_pSkipDeletedSet;
 }
@@ -339,53 +340,54 @@ void OResultSet::releaseBuffer()
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
-                delete static_cast< ::rtl::OString* >((void*)*pValue);
+                delete reinterpret_cast< ::rtl::OString* >(*pValue);
                 break;
             case DataType::BIGINT:
-                delete static_cast< sal_Int64* >((void*)*pValue);
+                delete reinterpret_cast< sal_Int64* >(*pValue);
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                delete static_cast< ::rtl::OString* >((void*)*pValue);
+                delete reinterpret_cast< ::rtl::OString* >(*pValue);
                 break;
             case DataType::REAL:
             case DataType::DOUBLE:
-                delete static_cast< double* >((void*)*pValue);
+                delete reinterpret_cast< double* >(*pValue);
                 break;
             case DataType::LONGVARCHAR:
-                delete [] static_cast< char* >((void*)*pValue);
+                delete [] reinterpret_cast< char* >(*pValue);
                 break;
             case DataType::LONGVARBINARY:
-                delete [] static_cast< char* >((void*)*pValue);
+                delete [] reinterpret_cast< char* >(*pValue);
                 break;
             case DataType::DATE:
-                delete static_cast< DATE_STRUCT* >((void*)*pValue);
+                delete reinterpret_cast< DATE_STRUCT* >(*pValue);
                 break;
             case DataType::TIME:
-                delete static_cast< TIME_STRUCT* >((void*)*pValue);
+                delete reinterpret_cast< TIME_STRUCT* >(*pValue);
                 break;
             case DataType::TIMESTAMP:
-                delete static_cast< TIMESTAMP_STRUCT* >((void*)*pValue);
+                delete reinterpret_cast< TIMESTAMP_STRUCT* >(*pValue);
                 break;
             case DataType::BIT:
-                delete static_cast< sal_Int8* >((void*)*pValue);
+                delete reinterpret_cast< sal_Int8* >(*pValue);
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
-                delete static_cast< sal_Int16* >((void*)*pValue);
+                delete reinterpret_cast< sal_Int16* >(*pValue);
                 break;
             case DataType::INTEGER:
-                delete static_cast< sal_Int32* >((void*)*pValue);
+                delete reinterpret_cast< sal_Int32* >(*pValue);
                 break;
             case DataType::FLOAT:
-                delete static_cast< float* >((void*)*pValue);
+                delete reinterpret_cast< float* >(*pValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
-                delete static_cast< sal_Int8* >((void*)*pValue);
+                delete reinterpret_cast< sal_Int8* >(*pValue);
                 break;
         }
     }
+    m_aBindVector.clear();
     m_aLengthVector.clear();
 }
 // -------------------------------------------------------------------------
