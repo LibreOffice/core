@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:18:51 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String RID_GALLERYSTR_THEME_3D
     Text[ chinese_traditional ] = "3D ®ÄªG";
     Text[ arabic ] = "ÃÔßÇá ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ greek ] = "ÅöÝ 3Ä";
-    Text[ korean ] = "3£Ä";
+    Text[ korean ] = "3£ÄÈ¿°ú";
     Text[ turkish ] = "3B";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Efectos 3D";
@@ -250,7 +250,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ italian ] = "Emoticons";
     Text[ danish ] = "Former";
     Text[ swedish ] = "Emoticons";
-    Text[ polish ] = "Bu?ki";
+    Text[ polish ] = "BuŸki";
     Text[ portuguese_brazilian ] = "Forms";
     Text[ japanese ] = "´Ó°Ã¨ºÝ";
     Text[ chinese_simplified ] = "Çé?Í¼°¸";
@@ -527,7 +527,7 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ italian ] = "Suoni";
     Text[ danish ] = "Lyde";
     Text[ swedish ] = "Ljud";
-    Text[ polish ] = "D?wiêki";
+    Text[ polish ] = "DŸwiêki";
     Text[ portuguese_brazilian ] = "Sounds";
     Text[ japanese ] = "»³ÝÄÞ";
     Text[ chinese_simplified ] = "ÉùÒôÍ¼±ê";
@@ -985,3 +985,4 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
