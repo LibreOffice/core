@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-22 15:02:35 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,6 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_bQueryEscapeProcessing( sal_False )
     ,m_bHiContrast(sal_False)
     ,m_bShowMenu(sal_False)
-    ,m_bPreview(sal_False)
     ,m_bInSuspend(sal_False)
     ,m_bEnableBrowser(sal_True)
     ,m_nBorder(1)
@@ -493,39 +492,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     if (getBrowserView())
         getBrowserView()->setTreeView(NULL);
 
-    if (m_pTreeModel)
-    {
-        // clear the user data of the tree model
-        SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
-        while (pEntryLoop)
-        {
-            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
-            if(pData)
-            {
-                pEntryLoop->SetUserData(NULL);
-                Reference< XContainer > xContainer(pData->xObject, UNO_QUERY);
-                if (xContainer.is())
-                    xContainer->removeContainerListener(this);
-
-                Reference<XConnection> xCon(pData->xObject,UNO_QUERY);
-                if(xCon.is())
-                {
-                    Reference< XComponent >  xComponent(xCon, UNO_QUERY);
-                    if (xComponent.is())
-                    {
-                        Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                        xComponent->removeEventListener(xEvtL);
-                    }
-                    ::comphelper::disposeComponent(pData->xObject);
-                }
-
-                pData->xObject.clear();
-                delete pData;
-            }
-            pEntryLoop = m_pTreeModel->Next(pEntryLoop);
-        }
-    }
-    m_pCurrentlyDisplayed = NULL;
+    clearTreeModel();
     // clear the tree model
     {
         ::std::auto_ptr<DBTreeListModel> aTemp(m_pTreeModel);
@@ -604,7 +571,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView->setModel(m_pTreeModel);
         m_pTreeView->setSelectHdl(LINK(this, SbaTableQueryBrowser, OnSelectEntry));
         m_pTreeView->getListBox()->SetDoubleClickHdl(LINK(this, SbaTableQueryBrowser, OnEntryDoubleClicked));
-        initializeTreeModel();
+        //  initializeTreeModel(); call moved to impl_initialize
 
         // TODO
         getBrowserView()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
@@ -965,7 +932,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
                             xProp->setPropertyValue(PROPERTY_ALIGN,evt.NewValue);
                     }
                     else
-                        xProp->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)0));
+                        xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(::com::sun::star::awt::TextAlign::LEFT));
                 }
             }
             catch(Exception&)
@@ -1150,7 +1117,8 @@ namespace
         INetURLObject aURL( _rDS );
         if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         {
-            _rDisplayName = aURL.getName();
+            _rDisplayName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
+            //  _rDisplayName = aURL.getName(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
             _rUniqueId = aURL.GetMainURL( INetURLObject::NO_DECODE );
             return true;
         }
@@ -1171,9 +1139,7 @@ namespace
     bool FilterByEntryDataId::includeEntry( SvLBoxEntry* _pEntry ) const
     {
         DBTreeListModel::DBTreeListUserData* pData = static_cast< DBTreeListModel::DBTreeListUserData* >( _pEntry->GetUserData() );
-        if ( !pData || ( pData->sAccessor == sId ) )
-            return true;
-        return false;
+        return ( !pData || ( pData->sAccessor == sId ) );
     }
 }
 
@@ -1218,7 +1184,8 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                 Image a, b, c;  // not interested in  reusing them
                 String e, f;
                 implAddDatasource( _rDataSource, a, e, b, f, c );
-                pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(_rDataSource, NULL);
+                pDataSource = m_pTreeView->getListBox()->GetEntryPosByName( sDisplayName, NULL, &aFilter );
+                DBG_ASSERT( pDataSource, "SbaTableQueryBrowser::getObjectEntry: hmm - did not find it again!" );
             }
         }
         if (_ppDataSourceEntry)
@@ -3059,6 +3026,8 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
     SbaXDataBrowserController::impl_initialize( aArguments );
 
     Reference<XConnection> xConnection;
+    Reference< XFrame > xFrame;
+
     PropertyValue aValue;
     const Any* pBegin   = aArguments.getConstArray();
     const Any* pEnd     = pBegin + aArguments.getLength();
@@ -3092,13 +3061,12 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
             aValue.Value >>= aTableName;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_USE_ESCAPE_PROCESSING))
             bEsacpeProcessing = ::cppu::any2bool(aValue.Value);
+        else if ( 0 == aValue.Name.compareToAscii( "Frame" ) )
+            aValue.Value >>= xFrame;
         else if (0 == aValue.Name.compareToAscii("Preview"))
         {
             if ( ::cppu::any2bool(aValue.Value) )
-            {
                 bShow = sal_False;
-                m_bPreview = sal_True;
-            }
         }
         else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWTREEVIEW))
         {
@@ -3177,13 +3145,37 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
         }
     }
 
+
+    Reference<XConnection> xEmbeddedConnection;
+    sal_Bool bEmbedded = sal_False;
+    if ( xFrame.is() )
+    {
+        Reference<XFramesSupplier> xSup = xFrame->getCreator();
+        Reference<XController> xCont = xSup.is() ? xSup->getController() : Reference<XController>();
+
+        if ( xCont.is() && ::dbtools::isEmbeddedInDatabase(xCont->getModel(),xEmbeddedConnection) && xEmbeddedConnection.is() )
+        {
+            xConnection = xEmbeddedConnection;
+            bEmbedded = sal_True;
+        }
+    }
+
     Reference<XChild> xChild(xConnection,UNO_QUERY);
     if ( !sInitialDataSourceName.getLength() && xChild.is() )
     {
         Reference<XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-        if ( xProp.is() )
-            xProp->getPropertyValue(PROPERTY_NAME) >>= sInitialDataSourceName;
+        if ( xProp.is() && (xProp->getPropertyValue(PROPERTY_NAME) >>= sInitialDataSourceName) && sInitialDataSourceName.getLength() && bEmbedded )
+        {
+            Image aDBImage, aQueriesImage, aTablesImage;
+            String sQueriesName, sTablesName;
+
+            implAddDatasource(sInitialDataSourceName, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage);
+            m_pTreeView->getListBox()->Expand(m_pTreeView->getListBox()->First());
+        }
     }
+    if ( !bEmbedded )
+        initializeTreeModel();
+
     if ( implSelect(sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing,xConnection,sal_True) )
     {
         try
