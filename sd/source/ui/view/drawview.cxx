@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:41:47 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,7 @@ BOOL DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAtt
 |*
 \************************************************************************/
 
-void DrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void DrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc /*=NULL*/)
 {
 
     BOOL bMPCache = FALSE;
@@ -733,7 +733,7 @@ void DrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
     {
         if (!bPixelMode)
         {
-            ::sd::View::InitRedraw(pOutDev, rReg);
+            ::sd::View::InitRedraw(pOutDev, rReg, pPaintProc);
         }
         else
         {
@@ -741,7 +741,7 @@ void DrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
             * Pixelmodus
             ******************************************************************/
             // Objekte ins VDev zeichnen
-            ::sd::View::InitRedraw(pVDev, rReg);
+            ::sd::View::InitRedraw(pVDev, rReg, pPaintProc );
 
             // VDev auf Window ausgeben
             pOutDev->DrawOutDev(Point(), pVDev->GetOutputSize(),
@@ -1127,7 +1127,11 @@ IMPL_LINK( DrawView, PaintProc, SdrPaintProcRec *, pRecord )
                 delete pClone;
             }
             else
-                pRecord->pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
+            {
+                SdrObject* pObj = pRecord->pObj;
+                if( pObj->GetPage() && pObj->GetPage()->checkVisibility( pRecord, false ) )
+                    pRecord->pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
+            }
         }
     }
     // das Hintergrundrechteck gibt sich faelschlicherweise als EmptyPresObj
