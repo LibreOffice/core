@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:49:08 $
+ *  last change: $Author: dvo $ $Date: 2002-03-25 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1437,6 +1437,9 @@ SwXMLTableContext::~SwXMLTableContext()
     delete pColumnDefaultCellStyleNames;
     delete pSharedBoxFormats;
     delete pRows;
+
+    // close redlines on table end nodes
+    GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_False);
 }
 
 SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
