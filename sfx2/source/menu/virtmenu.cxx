@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-25 08:29:26 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -776,25 +776,25 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
             if ( xDesktop.is() )
             {
-                Reference< XTasksSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
+                Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
                 Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-                Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
-                while (( xList->hasMoreElements() == sal_True ))
+                Reference< XIndexAccess > xList ( xTasksSupplier->getFrames(), UNO_QUERY );
+                sal_Int32 nCount = xList->getCount();
+                for( sal_Int32 i=0; i<nCount; ++i )
                 {
-                    Reference< XTask > xTask;
-                    xList->nextElement() >>= xTask;
-                    if ( xTask.is() )
-                    {
-                        Reference< XFrame > xFrame( xTask, UNO_QUERY );
-                        if ( xFrame == xCurrentFrame )
-                            nActiveItemId = nItemId;
+                    Reference< XFrame > xTask;
+                    Any aVal = xList->getByIndex(i);
+                    if (!(aVal>>=xTask) || !xTask.is() )
+                        continue;
 
-                        Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-                        if ( pWin && pWin->IsVisible() )
-                        {
-                            aNewWindowListVector.push_back( pWin->GetText() );
-                            ++nItemId;
-                        }
+                    if ( xTask == xCurrentFrame )
+                        nActiveItemId = nItemId;
+
+                    Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+                    if ( pWin && pWin->IsVisible() )
+                    {
+                        aNewWindowListVector.push_back( pWin->GetText() );
+                        ++nItemId;
                     }
                 }
             }

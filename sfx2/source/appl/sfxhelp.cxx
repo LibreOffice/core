@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-06 12:07:07 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,8 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -573,9 +570,9 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         sHelpKeyword = ::rtl::OUString( rURL );
     }
     Reference < XDispatchProvider > xFrame;
-    Reference < XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+    Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XTask > xActiveTask = xDesktop->getActiveTask();
+    Reference < XFrame > xActiveTask = xDesktop->getActiveFrame();
 
     Sequence < PropertyValue > aArgs;
     if ( sHelpKeyword.getLength() > 0 )

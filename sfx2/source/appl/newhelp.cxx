@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-15 06:59:39 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,18 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
@@ -2007,7 +2019,6 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
     sfx2::RemoveFromTaskPaneList( &aToolBox );
 
     bIsInClose = sal_True;
-//! xFrame->dispose();
 }
 
 // -----------------------------------------------------------------------
@@ -2294,7 +2305,15 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 void SfxHelpTextWindow_Impl::CloseFrame()
 {
     bIsInClose = sal_True;
-    xFrame->dispose();
+    try
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
+        if (xCloseable.is())
+            xCloseable->close(sal_True);
+    }
+    catch( ::com::sun::star::util::CloseVetoException& )
+    {
+    }
 }
 
 // class SfxHelpWindow_Impl ----------------------------------------------

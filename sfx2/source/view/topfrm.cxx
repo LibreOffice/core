@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-16 14:10:18 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,17 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
 #endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
@@ -138,6 +141,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------------
 
@@ -1114,7 +1118,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_BACKTOWEBTOP:
         {
             // disable CloseWin, if frame is not a task
-            Reference < XTask > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
+            Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
             if ( !xTask.is() )
                 break;
 
@@ -1148,7 +1152,16 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                         return;
                     }
 
-                    bClosed = xTask->close();
+                    bClosed = sal_False;
+                    try
+                    {
+                        xTask->close(sal_True);
+                        bClosed = sal_True;
+                    }
+                    catch( CloseVetoException& )
+                    {
+                        bClosed = sal_False;
+                    }
                 }
 
                 rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bClosed ));
@@ -1194,7 +1207,7 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
             case SID_BACKTOWEBTOP:
             {
                 // disable CloseWin, if frame is not a task
-                Reference < XTask > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
+                Reference < XCloseable > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
                 if ( !xTask.is() )
                     rSet.DisableItem(nWhich);
                 break;

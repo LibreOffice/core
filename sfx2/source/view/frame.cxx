@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 08:13:15 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,18 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 #ifndef _MENU_HXX //autogen
@@ -362,7 +374,24 @@ sal_Bool SfxFrame::DoClose()
         if ( bRet )
         {
             if ( xFrame.is() )
-                xFrame->dispose();
+            {
+                try
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDisposeable( xFrame, ::com::sun::star::uno::UNO_QUERY );
+                    if (xCloseable.is())
+                        xCloseable->close(sal_True);
+                    else
+                    if (xDisposeable.is())
+                        xDisposeable->dispose();
+                }
+                catch( ::com::sun::star::util::CloseVetoException& )
+                {
+                }
+                catch( ::com::sun::star::lang::DisposedException& )
+                {
+                }
+            }
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-24 11:06:45 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1903,9 +1899,9 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
             sal_uInt16 nPos = pIFace->GetObjectBarPos(nNo);
             if ( ( nPos & SFX_POSITION_MASK ) == 0 )
             {
-                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XTask >
+                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                     xTask( pImp->pFrame->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
-                if ( !xTask.is() )
+                if ( !xTask->isTop() )
                     continue;
             }
 

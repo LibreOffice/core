@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,11 +149,14 @@
 #ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
 #include <com/sun/star/mozilla/XPluginInstance.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
-#include <com/sun/star/container/XEnumeration.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -794,17 +797,21 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
     {
         if( !pAppData_Impl->bInvisible )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTasksSupplier >
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
                     xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                     ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTask > xTask = xDesktop->getActiveTask();
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
             if ( !xTask.is() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
-                if( xList->hasMoreElements() )
-                    xList->nextElement() >>= xTask;
-                else
-                    pAppData_Impl->bInvisible = TRUE;
+                // If no frame is currently active - we searh for any other one which exist in general.
+                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+                sal_Int32 nCount = xList->getCount();
+                if (nCount>0)
+                {
+                    ::com::sun::star::uno::Any aItem = xList->getByIndex(0);
+                    if ( !(aItem>>=xTask) || !xTask.is() )
+                        pAppData_Impl->bInvisible = TRUE;
+                }
             }
 
             if ( xTask.is() )
@@ -1594,26 +1601,15 @@ void SfxApplication::SetTopWindow( WorkWindow *pWindow )
 
 sal_Bool SfxApplication::IsPlugin()
 {
-/*  Reference < XPluginInstance > xPlugin ( pImp->xFrame, UNO_QUERY );
-    return xPlugin.is();*/
-
-    // Set default return value if method failed.
+    // ask property of desktop to get this information
     sal_Bool bReturn = sal_False;
-    // Get Desktop to get a list of all current tasks on it.
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), ::com::sun::star::uno::UNO_QUERY );
-    DBG_ASSERT( !(xDesktop.is()==sal_False), "SfxFrame::IsPlugin_Impl()Can't get reference to desktop service!\n" );
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
-    while( xList->hasMoreElements() == sal_True )
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), ::com::sun::star::uno::UNO_QUERY );
+    if(xDesktop.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTask > xTask;
-        xList->nextElement() >>= xTask;
-        ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XPluginInstance > xPlugIn( xTask, ::com::sun::star::uno::UNO_QUERY );
-        if( xPlugIn.is() == sal_True )
-        {
-            bReturn = sal_True;
-            break;
-        }
+        ::com::sun::star::uno::Any aVal = xDesktop->getPropertyValue( ::rtl::OUString::createFromAscii("IsPlugged") );
+        aVal >>= bReturn;
     }
+
     return bReturn;
 }
 

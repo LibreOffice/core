@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sb $ $Date: 2002-05-06 16:20:39 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,17 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -185,6 +188,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 
 #define SFX_KEY_MULTIQUICKSEARCH    "ExplorerMultiQuickSearch"
 
@@ -598,8 +602,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_CLOSEWINS:
         {
 
-            Reference < XTasksSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-            Reference< XIndexAccess > xTasks( xDesktop->getTasks(), UNO_QUERY );
+            Reference < XFramesSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+            Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
             if ( !xTasks.is() )
                 break;
 
@@ -610,10 +614,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     break;
 
                 Any aAny = xTasks->getByIndex(n);
-                Reference < XTask > xTask;
+                Reference < XCloseable > xTask;
                 aAny >>= xTask;
-                if ( !xTask->close() )
+                try
+                {
+                    xTask->close(sal_True);
                     n++;
+                }
+                catch( CloseVetoException& )
+                {
+                }
             }
             while( sal_True );
 
@@ -879,8 +889,8 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_CLOSEDOCS:
                 case SID_CLOSEWINS:
                 {
-                    Reference < XTasksSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-                    Reference< XIndexAccess > xTasks( xDesktop->getTasks(), UNO_QUERY );
+                    Reference < XFramesSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+                    Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );
                     if ( !xTasks.is() || !xTasks->getCount() )
                         rSet.DisableItem(nWhich);
                     break;

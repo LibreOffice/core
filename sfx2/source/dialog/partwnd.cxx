@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-01-07 12:12:09 $
+ *  last change: $Author: as $ $Date: 2002-05-23 13:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,18 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -215,7 +227,24 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
     if ( pWin && xFrame == pWin->GetBindings().GetActiveFrame() )
         pWin->GetBindings().SetActiveFrame( GetFrame() );
     if( xFrame.is() )
-        xFrame->dispose();
+    {
+        try
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDisposeable( xFrame, ::com::sun::star::uno::UNO_QUERY );
+            if (xCloseable.is())
+                xCloseable->close(sal_True);
+            else
+            if (xDisposeable.is())
+                xDisposeable->dispose();
+        }
+        catch( ::com::sun::star::util::CloseVetoException& )
+        {
+        }
+        catch( ::com::sun::star::lang::DisposedException& )
+        {
+        }
+    }
 }
 
 sal_Bool SfxPartChildWnd_Impl::QueryClose()
