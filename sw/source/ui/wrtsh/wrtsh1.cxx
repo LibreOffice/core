@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:05:18 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 
 #pragma hdrstop
 
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
 #include <so3/outplace.hxx>
 
 #if STLPORT_VERSION>=321
@@ -93,8 +96,14 @@
 #ifndef _INSDLG_HXX //autogen
 #include <so3/insdlg.hxx>
 #endif
+#ifndef _APPLET_HXX
+#include <so3/applet.hxx>
+#endif
 #ifndef _FRAMEOBJ_HXX //autogen
 #include <sfx2/frameobj.hxx>
+#endif
+#ifndef _SFX_FRMDESCRHXX
+#include <sfx2/frmdescr.hxx>
 #endif
 #ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
@@ -110,6 +119,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
+#ifndef _SVX_SIZEITEM_HXX //autogen
+#include <svx/sizeitem.hxx>
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
@@ -234,6 +246,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX //autogen
+#include <sfx2/request.hxx>
 #endif
 
 #define COMMON_INI_LIST \
@@ -491,7 +506,8 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
 ------------------------------------------------------------------------*/
 
 
-void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bActivate, USHORT nSlotId)
+void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
+                            BOOL bActivate, USHORT nSlotId, SfxRequest* pReq )
 {
     ResetCursorStack();
     if( !_CanInsert() )
@@ -551,6 +567,13 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bAc
 
                     xIPObj = aDlg.Execute( GetWin(), aStor);
                     bDoVerb = FALSE;
+                    if(pReq)
+                    {
+                        INetURLObject* pURL = aDlg.GetURL();
+                        if(pURL)
+                            pReq->AppendItem(SfxStringItem(FN_PARAM_2, pURL->GetMainURL(INetURLObject::NO_DECODE)));
+                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
+                    }
                 }
                 break;
 
@@ -558,8 +581,15 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bAc
                 {
                     SvInsertAppletDialog aDlg;
                     aDlg.SetHelpId(nSlotId);
-
                     xIPObj = aDlg.Execute( GetWin(), aStor);
+                    if(pReq)
+                    {
+                        SvAppletObjectRef xApplet ( xIPObj );
+                        if(xApplet.Is())
+                            pReq->AppendItem(SfxStringItem(FN_PARAM_1 , xApplet->GetCodeBase()));
+                        pReq->AppendItem(SfxStringItem(FN_PARAM_2 , aDlg.GetClass()));
+                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
+                    }
                     bDoVerb = FALSE;
                 }
                 break;
@@ -568,6 +598,18 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bAc
                 {
                     SfxInsertFloatingFrameDialog aDlg( GetWin() );
                     xIPObj = aDlg.Execute( aStor );
+                    SfxFrameObjectRef xFloatingFrame( xIPObj );
+                    if(pReq && xFloatingFrame.Is())
+                    {
+                        const SfxFrameDescriptor* pDescriptor = xFloatingFrame->GetFrameDescriptor();
+                        pReq->AppendItem(SfxStringItem(FN_PARAM_1, pDescriptor->GetName()));
+                        pReq->AppendItem(
+                                SfxStringItem( FN_PARAM_2,
+                                    pDescriptor->GetURL().GetMainURL(INetURLObject::NO_DECODE)));
+                        pReq->AppendItem(SvxSizeItem(FN_PARAM_3, pDescriptor->GetMargin()));
+                        pReq->AppendItem(SfxByteItem(FN_PARAM_4, pDescriptor->GetScrollingMode()));
+                        pReq->AppendItem(SfxBoolItem(FN_PARAM_5, pDescriptor->HasFrameBorder()));
+                    }
                     bDoVerb = FALSE;
                 }
 
@@ -645,7 +687,7 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
         String aDummy;
         // determine source CLSID
         aRef->SvPseudoObject::FillClass( &aCLSID, &lDummy, &aDummy, &aDummy, &aDummy);
-        bStarMath = SmModuleDummy::HasID( *aRef->GetSvFactory() );
+        bStarMath = 0 != SmModuleDummy::HasID( *aRef->GetSvFactory() );
 
         if( IsSelection() )
         {
