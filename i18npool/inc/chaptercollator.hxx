@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: indexentrysupplier.hxx,v $
+ *  $RCSfile: chaptercollator.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: bustamam $ $Date: 2002-03-26 13:36:40 $
  *
@@ -37,53 +37,37 @@
  *
  *
  ************************************************************************/
-#ifndef _I18N_INDEXENTRYSUPPLIER_HXX_
-#define _I18N_INDEXENTRYSUPPLIER_HXX_
+#ifndef _I18N_CHAPTERCOLLATOR_HXX_
+#define _I18N_CHAPTERCOLLATOR_HXX_
 
-#include <com/sun/star/i18n/XIndexEntrySupplier.hpp>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <collatorImpl.hxx>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <tools/list.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class IndexEntrySupplier
-//  ----------------------------------------------------
-class IndexEntrySupplier : public cppu::WeakImplHelper2
-<
-    XIndexEntrySupplier,
-    com::sun::star::lang::XServiceInfo
->
+//      ----------------------------------------------------
+//      class ChapterCollator
+//      ----------------------------------------------------
+class ChapterCollator : public CollatorImpl
 {
-    rtl::OUString aServiceName;
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
-    com::sun::star::uno::Reference < XIndexEntrySupplier > xIES;
-
-    com::sun::star::lang::Locale aLocale;
-    rtl::OUString aSortAlgorithm;
-    sal_Bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const rtl::OUString& name) throw( com::sun::star::uno::RuntimeException );
-    com::sun::star::uno::Reference < XIndexEntrySupplier > SAL_CALL getLocaleSpecificIndexEntrySupplier(
-        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm) throw (com::sun::star::uno::RuntimeException);
-
-protected:
-    sal_Char *implementationName;
-
 public:
-    IndexEntrySupplier( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
-    IndexEntrySupplier() {};
+    // Constructors
+    ChapterCollator( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    // Destructor
+    ~ChapterCollator();
 
-    // Methods
-    virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& IndexEntry,
-        const com::sun::star::lang::Locale& aLocale, const rtl::OUString& SortAlgorithm ) throw (com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getIndexFollowPageWord( sal_Bool MorePages,
-        const com::sun::star::lang::Locale& aLocale ) throw (com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL compareSubstring( const rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1,
+        const rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2) throw(com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL compareString( const rtl::OUString& s1, const rtl::OUString& s2) throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
+
+private :
+    // CharacterClassification Implementation
+    com::sun::star::uno::Reference< XCharacterClassification > cclass;
 };
 
 } } } }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:22:59 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 13:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,71 +80,68 @@
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #endif
 
+namespace com { namespace sun { namespace star { namespace i18n {
+
 class DefaultNumberingProvider : public cppu::WeakImplHelper4
-                                <
-                                    com::sun::star::text::XDefaultNumberingProvider,
-                                    com::sun::star::text::XNumberingFormatter,
-                                    com::sun::star::text::XNumberingTypeInfo,
-                                    com::sun::star::lang::XServiceInfo
-                                >
+<
+    com::sun::star::text::XDefaultNumberingProvider,
+    com::sun::star::text::XNumberingFormatter,
+    com::sun::star::text::XNumberingTypeInfo,
+    com::sun::star::lang::XServiceInfo
+>
 {
-    void GetCharStrN(
-        sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
-
-    void GetCharStr(
-        sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
-
-    void GetRomanString(
-        sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
-
+    void GetCharStrN( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
+    void GetCharStr( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
+    void GetRomanString( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
 public:
     DefaultNumberingProvider(
-        const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xMSF );
+        const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xMSF );
     ~DefaultNumberingProvider();
 
     //XDefaultNumberingProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XIndexAccess > > SAL_CALL
-            getDefaultOutlineNumberings( const ::com::sun::star::lang::Locale& aLocale )
-                throw(::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
+        com::sun::star::container::XIndexAccess > > SAL_CALL
+        getDefaultOutlineNumberings( const com::sun::star::lang::Locale& aLocale )
+        throw(com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue > > SAL_CALL
-            getDefaultContinuousNumberingLevels( const ::com::sun::star::lang::Locale& aLocale )
-                throw(::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Sequence<
+        com::sun::star::beans::PropertyValue > > SAL_CALL
+        getDefaultContinuousNumberingLevels( const com::sun::star::lang::Locale& aLocale )
+        throw(com::sun::star::uno::RuntimeException);
 
     //XNumberingFormatter
-    virtual ::rtl::OUString SAL_CALL makeNumberingString(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue >& aProperties,
-        const ::com::sun::star::lang::Locale& aLocale )
-                throw(::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL makeNumberingString(
+        const com::sun::star::uno::Sequence<
+        com::sun::star::beans::PropertyValue >& aProperties,
+        const com::sun::star::lang::Locale& aLocale )
+        throw(com::sun::star::lang::IllegalArgumentException,
+        com::sun::star::uno::RuntimeException);
 
     //XNumberingTypeInfo
-    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  )
-                throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL getNumberingType( const ::rtl::OUString& NumberingIdentifier )
-                throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasNumberingType( const ::rtl::OUString& NumberingIdentifier )
-                throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType )
-                throw(::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  )
+        throw(com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL getNumberingType( const rtl::OUString& NumberingIdentifier )
+        throw(com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasNumberingType( const rtl::OUString& NumberingIdentifier )
+        throw(com::sun::star::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType )
+        throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void)
-                throw( ::com::sun::star::uno::RuntimeException );
+                throw( com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
-                throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
-                throw( ::com::sun::star::uno::RuntimeException );
+                throw( com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+                throw( com::sun::star::uno::RuntimeException );
 private:
     void getTransliteration();
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::i18n::XTransliteration > translit;
+    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xSMgr;
+        com::sun::star::uno::Reference < com::sun::star::i18n::XTransliteration > translit;
 
 };
+
+} } } }
 
 #endif
