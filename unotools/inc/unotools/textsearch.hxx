@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 09:07:52 $
+ *  last change: $Author: jp $ $Date: 2001-02-01 20:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ private:
     int nLEV_ShorterY;
     int nLEV_LongerZ;
 
+    // asian flags - used for the transliteration
+    long nTransliterationFlags;
+
 public:
     SearchParam( const String &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
@@ -149,6 +152,9 @@ public:
     void SetLEVOther( int nValue )              { nLEV_OtherX = nValue; }
     void SetLEVShorter( int nValue )            { nLEV_ShorterY = nValue; }
     void SetLEVLonger( int nValue )             { nLEV_LongerZ = nValue; }
+
+    long GetTransliterationFlags() const        { return nTransliterationFlags; }
+    void SetTransliterationFlags( long nValue ) { nTransliterationFlags = nValue; }
 };
 
 //  Klasse zum Suchen eines Strings in einem String.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-09 15:01:20 $
+ *  last change: $Author: jp $ $Date: 2001-02-01 20:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ SearchParam::SearchParam( const String &rText,
     bSrchInSel      = bSearchInSel;
     bCaseSense      = bCaseSensitive;
 
+    nTransliterationFlags = 0;
+
     // Werte fuer "Gewichtete Levenshtein-Distanz"
     bLEV_Relaxed    = TRUE;
     nLEV_OtherX     = 2;
@@ -130,6 +132,8 @@ SearchParam::SearchParam( const SearchParam& rParam )
     nLEV_OtherX     = rParam.nLEV_OtherX;
     nLEV_ShorterY   = rParam.nLEV_ShorterY;
     nLEV_LongerZ    = rParam.nLEV_LongerZ;
+
+    nTransliterationFlags = rParam.nTransliterationFlags;
 }
 
 //  Klasse zum Suchen eines Strings in einem Text. Es wird genau nach
@@ -205,6 +209,7 @@ void TextSearch::Init( const SearchParam & rParam,
     aSOpt.Locale = rLocale;
     if( !rParam.IsCaseSensitive() )
         aSOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
+    aSOpt.transliterateFlags = rParam.GetTransliterationFlags();
 
     try
     {
