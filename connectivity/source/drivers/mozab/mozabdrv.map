@@ -1,6 +1,7 @@
 MOZABDRV_1_0 {
     global:
         OMozabConnection_CreateInstance;
+        setMozabServiceFactory;
     local:
         *;
 };
