@@ -319,7 +319,8 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
             // copy the original stream into the temporary stream ( only transacted mode is supported )
             if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS )
                 m_pSource->ResetError();
-            else {
+            else
+            {
                 *m_pSource >> *m_pStream;
                 m_pStream->Flush();
             }
@@ -387,7 +388,9 @@ void UCBStorageStream_Impl::SwitchToWritable( StreamMode nMode, BOOL bDirect )
             // copy the original stream into the temporary stream ( only transacted mode is supported )
             if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS )
                 m_pSource->ResetError();
-            else {
+            else
+            {
+                m_pSource->Seek(0);
                 *m_pSource >> *m_pStream;
                 m_pStream->Flush();
             }
@@ -526,7 +529,10 @@ BOOL UCBStorageStream_Impl::Revert()
         if ( !m_pSource )
             // SourceStream was released on last Commit
             m_pSource = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
+        else
+            m_pSource->Seek(0);
 
+        m_pStream->Seek(0);
         *m_pSource >> *m_pStream;
         m_pStream->Seek(0);
         m_pSource->Seek(0);
@@ -832,6 +838,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
 
     // copy data into the temporary file
     m_pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE );
+    rStream.Seek(0);
     rStream >> *m_pStream;
     m_pStream->Flush();
     DELETEZ( m_pStream );
@@ -1133,6 +1140,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     if ( m_pSource != 0 )
                     {
                         m_pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
+                        m_pSource->Seek(0);
                         *m_pStream >> *m_pSource;
                         DELETEZ( m_pStream );
                         m_pSource->Seek(0);
