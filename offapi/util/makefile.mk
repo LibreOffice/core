@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: jsc $ $Date: 2001-11-29 12:06:29 $
+#   last change: $Author: jsc $ $Date: 2001-12-03 13:42:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,6 @@ UNOIDLDBFILES= \
     $(UCR)$/csspackages.db \
     $(UCR)$/cssmanifest.db \
     $(UCR)$/csszippackage.db \
-    $(UCR)$/csspgp.db \
     $(UCR)$/cssplugin.db \
     $(UCR)$/csspresentation.db \
     $(UCR)$/cssresource.db \

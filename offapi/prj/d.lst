@@ -28,7 +28,6 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\mozilla
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\packages
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\packages\manifest
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\packages\zip
-mkdir: %_DEST%\idl%_EXT%\com\sun\star\pgp
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\plugin
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\presentation
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\resource
@@ -80,7 +79,6 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\com\sun\star\packages\*.idl %_DEST%\idl%_EXT%\com\sun\star\packages\*.idl
 ..\com\sun\star\packages\manifest\*.idl %_DEST%\idl%_EXT%\com\sun\star\packages\manifest\*.idl
 ..\com\sun\star\packages\zip\*.idl %_DEST%\idl%_EXT%\com\sun\star\packages\zip\*.idl
-..\com\sun\star\pgp\*.idl %_DEST%\idl%_EXT%\com\sun\star\pgp\*.idl
 ..\com\sun\star\plugin\*.idl %_DEST%\idl%_EXT%\com\sun\star\plugin\*.idl
 ..\com\sun\star\presentation\*.idl %_DEST%\idl%_EXT%\com\sun\star\presentation\*.idl
 ..\com\sun\star\resource\*.idl %_DEST%\idl%_EXT%\com\sun\star\resource\*.idl
