@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:56:30 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ polish ] = "DocType";
         Text[ turkish ] = "DocType";
         Text[ thai ] = "DocType";
+        Text[ hungarian ] = "DocType   ";
+        Text[ slovenian ] = "VrstaDok";
     };
 
     Edit ED_XML_DOCTYPE
@@ -163,6 +165,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ polish ] = "DTD";
         Text[ turkish ] = "DTD";
         Text[ thai ] = "DTD";
+        Text[ hungarian ] = "DTD";
+        Text[ slovenian ] = "DTD";
     };
 
     ComboBox ED_XML_DTD_SCHEMA
@@ -194,7 +198,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Listovat...";
+        Text[ czech ] = "Proch√°zet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przeglπdaj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -205,6 +209,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏Å‡∏î‡∏π...";
         Text[ slovak ] = "Prehliada≈•...";
         Text[ hindi ] = "‡§¨‡•ç‡§∞‡§â‡§ú‡§º...";
+        Text[ hungarian ] = "Tall√≥z√°s...";
+        Text[ slovenian ] = "Prebrskaj...";
     };
 
     // Export XSLT ----------------------------------------------------
@@ -225,11 +231,11 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_traditional ] = "Áî®ÊñºÂåØÂá∫ÁöÑ XSLT";
         Text[ slovak ] = "XSLT pre export";
         Text[ portuguese_brazilian ] = "XSLT para exportar";
-        Text[ greek ] = "XSLT for export";
-        Text[ dutch ] = "XSLT for export";
+        Text[ greek ] = "XSLT „È· ÙÁÌ ÂÓ·„˘„ﬁ";
+        Text[ dutch ] = "XSLT voor exporteren";
         Text[ finnish ] = "XSLT for export";
         Text[ czech ] = "XSLT pro export";
-        Text[ danish ] = "XSLT for export";
+        Text[ danish ] = "XSLT til eksportering";
         Text[ arabic ] = "XSLT for export";
         Text[ hebrew ] = "XSLT for export";
         Text[ catalan ] = "XSLT for export";
@@ -239,6 +245,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ polish ] = "XSLT for export";
         Text[ turkish ] = "XSLT for export";
         Text[ thai ] = "XSLT for export";
+        Text[ hungarian ] = "Export√°l√≥ XSLT";
+        Text[ slovenian ] = "XSLT za izvoz";
     };
 
     ComboBox ED_XML_EXPORT_XSLT
@@ -269,7 +277,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Listovat...";
+        Text[ czech ] = "Proch√°zet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przeglπdaj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -280,6 +288,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏Å‡∏î‡∏π...";
         Text[ slovak ] = "Prehliada≈•...";
         Text[ hindi ] = "‡§¨‡•ç‡§∞‡§â‡§ú‡§º...";
+        Text[ hungarian ] = "Tall√≥z√°s...";
+        Text[ slovenian ] = "Prebrskaj...";
     };
 
     // Import XSLT ----------------------------------------------------
@@ -301,10 +311,10 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ slovak ] = "XSLT pre import";
         Text[ portuguese_brazilian ] = "XSLT para importar";
         Text[ greek ] = "XSLT for import";
-        Text[ dutch ] = "XSLT for import";
+        Text[ dutch ] = "XSLT voor importeren";
         Text[ finnish ] = "XSLT for import";
         Text[ czech ] = "XSLT pro import";
-        Text[ danish ] = "XSLT for import";
+        Text[ danish ] = "XSLT til importering";
         Text[ arabic ] = "XSLT for import";
         Text[ hebrew ] = "XSLT for import";
         Text[ catalan ] = "XSLT for import";
@@ -314,6 +324,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ polish ] = "XSLT for import";
         Text[ turkish ] = "XSLT for import";
         Text[ thai ] = "XSLT for import";
+        Text[ hungarian ] = "Import√°l√≥ XSLT";
+        Text[ slovenian ] = "XSLT za uvoz";
     };
 
     ComboBox ED_XML_IMPORT_XSLT
@@ -344,7 +356,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Listovat...";
+        Text[ czech ] = "Proch√°zet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przeglπdaj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -355,6 +367,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏Å‡∏î‡∏π...";
         Text[ slovak ] = "Prehliada≈•...";
         Text[ hindi ] = "‡§¨‡•ç‡§∞‡§â‡§ú‡§º...";
+        Text[ hungarian ] = "Tall√≥z√°s...";
+        Text[ slovenian ] = "Prebrskaj...";
     };
 
     // Import Template ------------------------------------------------
@@ -376,10 +390,10 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ slovak ] = "≈†abl√≥na pre import";
         Text[ portuguese_brazilian ] = "Modelo para importar";
         Text[ greek ] = "Template for import";
-        Text[ dutch ] = "Template for import";
+        Text[ dutch ] = "Sjabloon voor importeren";
         Text[ finnish ] = "Template for import";
         Text[ czech ] = "≈†ablona pro import";
-        Text[ danish ] = "Template for import";
+        Text[ danish ] = "Skabelon til import";
         Text[ arabic ] = "Template for import";
         Text[ hebrew ] = "Template for import";
         Text[ catalan ] = "Template for import";
@@ -389,6 +403,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ polish ] = "Template for import";
         Text[ turkish ] = "Template for import";
         Text[ thai ] = "Template for import";
+        Text[ hungarian ] = "Import√°l√≥ sablon";
+        Text[ slovenian ] = "Predloga za uvoz";
     };
 
     ComboBox ED_XML_IMPORT_TEMPLATE
@@ -419,7 +435,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Listovat...";
+        Text[ czech ] = "Proch√°zet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przeglπdaj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -430,6 +446,8 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏Å‡∏î‡∏π...";
         Text[ slovak ] = "Prehliada≈•...";
         Text[ hindi ] = "‡§¨‡•ç‡§∞‡§â‡§ú‡§º...";
+        Text[ hungarian ] = "Tall√≥z√°s...";
+        Text[ slovenian ] = "Prebrskaj...";
     };
     Text[ french ] = "Transformation";
     Text[ spanish ] = "TransformaciÛn";
@@ -442,10 +460,10 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     Text[ slovak ] = "Transform√°cia";
     Text[ portuguese_brazilian ] = "TransformaÁ„o";
     Text[ greek ] = "Transformation";
-    Text[ dutch ] = "Transformation";
+    Text[ dutch ] = "Transformatie";
     Text[ finnish ] = "Transformation";
     Text[ czech ] = "Transformace";
-    Text[ danish ] = "Transformation";
+    Text[ danish ] = "Transformering";
     Text[ arabic ] = "Transformation";
     Text[ hebrew ] = "Transformation";
     Text[ catalan ] = "Transformation";
@@ -455,7 +473,10 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     Text[ polish ] = "Transformation";
     Text[ turkish ] = "Transformation";
     Text[ thai ] = "Transformation";
+    Text[ hungarian ] = "√Åtalak√≠t√°s";
+    Text[ slovenian ] = "Pretvorba";
 };
+
 
 
 
