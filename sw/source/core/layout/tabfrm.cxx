@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:33:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 13:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _FMTTSPLT_HXX //autogen
 #include <fmtlsplt.hxx>
 #endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
+#endif
 #ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
 #endif
@@ -119,6 +122,10 @@
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
+#ifndef _SWTBLFMT_HXX
+#include <swtblfmt.hxx>
+#endif
+
 #include "tabfrm.hxx"
 #include "rowfrm.hxx"
 #include "cellfrm.hxx"
@@ -145,7 +152,8 @@ SwTabFrm::SwTabFrm( SwTable &rTab ):
     pTable( &rTab )
 {
     bComplete = bCalcLowers = bONECalcLowers = bLowersFormatted = bLockBackMove =
-    bResizeHTMLTable = FALSE;
+    bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
+    bRestrictTableGrowth = FALSE;
     BFIXHEIGHT = FALSE;     //Nicht nochmal auf die Importfilter hereinfallen.
     nType = FRMC_TAB;
 
@@ -172,7 +180,8 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
 {
     bIsFollow = TRUE;
     bLockJoin = bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
-    bResizeHTMLTable = FALSE;
+    bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
+    bRestrictTableGrowth = FALSE;
     BFIXHEIGHT = FALSE;     //Nicht nochmal auf die Importfilter hereinfallen.
     nType = FRMC_TAB;
 
@@ -180,8 +189,22 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     rTab.SetFollow( this );
 }
 
+extern const SwTable   *pLastTable;
+extern const SwTabFrm  *pLastTabFrm;
+extern const SwFrm  *pLastCellFrm;
+
 SwTabFrm::~SwTabFrm()
 {
+    // There is some terrible code in fetab.cxx, that
+    // makes use of these global pointers. Obviously
+    // this code did not consider that a TabFrm can be
+    // deleted.
+    if ( this == pLastTabFrm )
+    {
+        pLastTable  = NULL;
+        pLastTabFrm = NULL;
+        pLastCellFrm= NULL;
+    }
 }
 
 /*************************************************************************
@@ -225,6 +248,613 @@ void SwTabFrm::RegistFlys()
     }
 }
 
+// Prototypes
+void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom );
+BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom );
+void MA_FASTCALL lcl_CalcLayout( SwLayoutFrm *pLay, long nBottom );
+BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva );
+BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm, long nBottom );
+SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow );
+
+//
+// Local helper function to change the split attribute for
+// an oversized row frame. Loop prevention!
+//
+void lcl_ChangeSplitAttribute( SwRowFrm& rRow )
+{
+    const SwTableLine* pTabLine = rRow.GetTabLine();
+    SwTableLineFmt* pFrmFmt = (SwTableLineFmt*)pTabLine->GetFrmFmt();
+    const SwFmtRowSplit& rLP = pFrmFmt->GetRowSplit();
+    ((SwFmtRowSplit&)rLP).SetValue( TRUE );
+}
+
+//
+// Local helper function to change the size attribute for
+// an oversized row frame. Loop prevention!
+//
+void lcl_ChangeSizeAttribute( SwRowFrm& rRow )
+{
+    if ( rRow.HasFixSize() )
+    {
+        const SwFmtFrmSize &rSz = rRow.GetFmt()->GetFrmSize();
+        ((SwFmtFrmSize&)rSz).SetSizeType( ATT_VAR_SIZE );
+        rRow.SetFixSize( FALSE );
+    }
+}
+
+
+//
+// Local helper function to insert a new follow flow line
+//
+SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, BOOL bRepeat )
+{
+    ASSERT( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" )
+    const SwRowFrm& rRow = (SwRowFrm&)rTmpRow;
+
+    rTab.SetFollowFlowLine( TRUE );
+    SwRowFrm *pFollowFlowLine = new SwRowFrm(*rRow.GetTabLine(), false );
+
+    SwFrm* pFirstRow = bRepeat ? rTab.GetFollow()->Lower() : 0;
+    ASSERT( !bRepeat || pFirstRow, "repeated headline assumes first row in follow tab" )
+    pFollowFlowLine->InsertBehind( rTab.GetFollow(), pFirstRow );
+    return pFollowFlowLine;
+}
+
+//
+// Local helper function to shrink all lowers of rRow to 0 height
+//
+void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
+{
+    SwFrm* pCurrMasterCell = rRow.Lower();
+    SWRECTFN( pCurrMasterCell )
+
+    while ( pCurrMasterCell )
+    {
+        // TODO: Optimize number of frames which are set to 0 height
+        SwFrm* pTmp = ((SwCellFrm*)pCurrMasterCell)->Lower();
+
+        // we have to start with the last lower frame, otherwise
+        // the shrink will not shrink the current cell
+        while ( pTmp && pTmp->GetNext() )
+            pTmp = pTmp->GetNext();
+
+        if ( pTmp && pTmp->IsRowFrm() )
+        {
+            SwRowFrm* pTmpRow = (SwRowFrm*)pTmp;
+            lcl_ShrinkCellsAndAllContent( *pTmpRow );
+        }
+        else
+        {
+            // TODO: Optimize number of frames which are set to 0 height
+            while ( pTmp )
+            {
+                // the frames have to be shrunk
+                pTmp->Shrink( (pTmp->Frm().*fnRect->fnGetHeight)() );
+                (pTmp->Prt().*fnRect->fnSetTop)( 0 );
+                (pTmp->Prt().*fnRect->fnSetHeight)( 0 );
+                pTmp = pTmp->GetPrev();
+            }
+
+            // all lowers should have the correct position
+              lcl_ArrangeLowers( (SwCellFrm*)pCurrMasterCell, (pCurrMasterCell->*fnRect->fnGetPrtTop)(), sal_False );
+        }
+
+        pCurrMasterCell = pCurrMasterCell->GetNext();
+    }
+}
+
+//
+// Local helper function to move the content from rSourceLine to rDestLine
+// The content is inserted behind the last content in the corresponding
+// cell in rDestLine.
+//
+void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
+{
+    SwCellFrm* pCurrDestCell = (SwCellFrm*)rDestLine.Lower();
+    SwCellFrm* pCurrSourceCell = (SwCellFrm*)rSourceLine.Lower();
+
+    SWRECTFN( pCurrDestCell )
+
+    // Move content of follow cells into master cells
+    while ( pCurrSourceCell )
+    {
+        if ( pCurrSourceCell->Lower() && pCurrSourceCell->Lower()->IsRowFrm() )
+        {
+            SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
+            while ( pTmpSourceRow )
+            {
+                if ( pTmpSourceRow->IsFollowFlowRow() )
+                {
+                    // move content from follow flow row to pTmpDestRow:
+                    SwRowFrm* pTmpDestRow = (SwRowFrm*)pCurrDestCell->Lower();
+                    while ( pTmpDestRow->GetNext() )
+                        pTmpDestRow = (SwRowFrm*)pTmpDestRow->GetNext();
+
+                    ASSERT( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Knoten in der Tabelle" )
+
+                    lcl_MoveRowContent( *pTmpSourceRow, *pTmpDestRow );
+                    pTmpDestRow->SetFollowRow( pTmpSourceRow->GetFollowRow() );
+                    pTmpSourceRow->Remove();
+                    delete pTmpSourceRow;
+                }
+                else
+                {
+                    // move complete row:
+                    pTmpSourceRow->Remove();
+                    pTmpSourceRow->InsertBefore( pCurrDestCell, 0 );
+                }
+
+                pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
+            }
+        }
+        else
+        {
+            SwFrm *pTmp = ::SaveCntnt( (SwCellFrm*)pCurrSourceCell );
+            if ( pTmp )
+            {
+                // Find last content
+                SwFrm* pFrm = ((SwCellFrm*)pCurrDestCell)->Lower();
+                while ( pFrm && pFrm->GetNext() )
+                    pFrm = pFrm->GetNext();
+                ::RestoreCntnt( pTmp, (SwCellFrm*)pCurrDestCell, pFrm, true );
+            }
+        }
+        pCurrDestCell = (SwCellFrm*)pCurrDestCell->GetNext();
+        pCurrSourceCell = (SwCellFrm*)pCurrSourceCell->GetNext();
+    }
+}
+
+//
+// Local helper function to move all footnotes in rRowFrm from
+// the footnote boss of rTabFrm to the footnote boss of rTabFrm.GetFollow().
+//
+void lcl_MoveFootnotesToFollow( SwTabFrm& rTabFrm, SwRowFrm& rRowFrm )
+{
+    if ( 0 != rTabFrm.GetFmt()->GetDoc()->GetFtnIdxs().Count() )
+    {
+        SwFtnBossFrm* pOldBoss = rTabFrm.FindFtnBossFrm( TRUE );
+        SwFtnBossFrm* pNewBoss = rTabFrm.GetFollow()->FindFtnBossFrm( TRUE );
+        rRowFrm.MoveLowerFtns( 0, pOldBoss, pNewBoss, TRUE );
+    }
+}
+
+//
+// Local helper function to handle nested table cells before the split process
+//
+void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
+                                SwRowFrm& rFollowFlowLine, SwTwips nRemain )
+{
+    SwCellFrm* pCurrLastLineCell = (SwCellFrm*)rLastLine.Lower();
+    SwCellFrm* pCurrFollowFlowLineCell = (SwCellFrm*)rFollowFlowLine.Lower();
+
+    SWRECTFN( pCurrLastLineCell )
+
+    //
+    // Move content of follow cells into master cells
+    //
+    while ( pCurrLastLineCell )
+    {
+        if ( pCurrLastLineCell->Lower() && pCurrLastLineCell->Lower()->IsRowFrm() )
+        {
+            SwTwips nTmpCut = nRemain;
+            SwRowFrm* pTmpLastLineRow = (SwRowFrm*)pCurrLastLineCell->Lower();
+
+            SwTwips nCurrentHeight = lcl_CalcMinRowHeight( pTmpLastLineRow );;
+            while ( pTmpLastLineRow && pTmpLastLineRow->GetNext() && nTmpCut > nCurrentHeight )
+            {
+                nTmpCut -= nCurrentHeight;
+                pTmpLastLineRow = (SwRowFrm*)pTmpLastLineRow->GetNext();
+                nCurrentHeight = lcl_CalcMinRowHeight( pTmpLastLineRow );
+            }
+
+            //
+            // pTmpLastLineRow does not fit to the line or it is the last line
+            //
+            if ( pTmpLastLineRow )
+            {
+                //
+                // Check if we can move pTmpLastLineRow to the follow table,
+                // or if we have to split the line:
+                //
+                SwFrm* pCell = pTmpLastLineRow->Lower();
+                bool bTableLayoutToComplex = false;
+                long nMinHeight = 0;
+
+                //
+                // We have to take into account:
+                // 1. The fixed height of the row
+                // 2. The borders of the cells inside the row
+                // 3. The minimum height of the row
+                //
+                if ( pTmpLastLineRow->HasFixSize() )
+                    nMinHeight = (pTmpLastLineRow->Frm().*fnRect->fnGetHeight)();
+                else
+                {
+                    while ( pCell )
+                    {
+                        if ( ((SwCellFrm*)pCell)->Lower() &&
+                             ((SwCellFrm*)pCell)->Lower()->IsRowFrm() )
+                        {
+                            bTableLayoutToComplex = true;
+                            break;
+                        }
+
+                        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
+                        const SwBorderAttrs &rAttrs = *aAccess.Get();
+                        nMinHeight = Max( nMinHeight, (long)(rAttrs.CalcTop() + rAttrs.CalcBottom()) );
+                        pCell = pCell->GetNext();
+                    }
+
+                    const SwFmtFrmSize &rSz = pTmpLastLineRow->GetFmt()->GetFrmSize();
+                    if ( rSz.GetSizeType() == ATT_MIN_SIZE )
+                        nMinHeight = Max( nMinHeight, rSz.GetHeight() );
+                }
+
+                //
+                // 1. Case:
+                // The line completely fits into the master table.
+                // Nevertheless, we build a follow (otherwise painting problems
+                // with empty cell).
+                //
+                // 2. Case:
+                // The line has to be split, the minimum height still fits into
+                // the master table, and the table structure is not to complex.
+                //
+                if ( nTmpCut > nCurrentHeight ||
+                     ( pTmpLastLineRow->IsRowSplitAllowed() &&
+                      !bTableLayoutToComplex && nMinHeight < nTmpCut ) )
+                {
+                    // The line has to be split:
+                    SwRowFrm* pNewRow = new SwRowFrm( *pTmpLastLineRow->GetTabLine(), false );
+                    pNewRow->SetFollowFlowRow( true );
+                    pNewRow->SetFollowRow( pTmpLastLineRow->GetFollowRow() );
+                    pTmpLastLineRow->SetFollowRow( pNewRow );
+                    pNewRow->InsertBehind( pCurrFollowFlowLineCell, 0 );
+                    pTmpLastLineRow = (SwRowFrm*)pTmpLastLineRow->GetNext();
+                }
+
+                //
+                // The following lines have to be moved:
+                //
+                while ( pTmpLastLineRow )
+                {
+                    SwRowFrm* pTmp = (SwRowFrm*)pTmpLastLineRow->GetNext();
+                    lcl_MoveFootnotesToFollow( rTab, *pTmpLastLineRow );
+                    pTmpLastLineRow->Remove();
+                    pTmpLastLineRow->InsertBefore( pCurrFollowFlowLineCell, 0 );
+                    pTmpLastLineRow->Shrink( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
+                    pCurrFollowFlowLineCell->Grow( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
+                    pTmpLastLineRow = pTmp;
+                }
+            }
+        }
+
+        pCurrLastLineCell = (SwCellFrm*)pCurrLastLineCell->GetNext();
+        pCurrFollowFlowLineCell = (SwCellFrm*)pCurrFollowFlowLineCell->GetNext();
+    }
+}
+
+//
+// Local helper function to handle nested table cells after the split process
+//
+void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
+                                 SwRowFrm& rFollowFlowLine )
+{
+    SwCellFrm* pCurrMasterCell = (SwCellFrm*)rLastLine.Lower();
+    while ( pCurrMasterCell )
+    {
+        if ( pCurrMasterCell->Lower() &&
+             pCurrMasterCell->Lower()->IsRowFrm() )
+        {
+            SwRowFrm* pRowFrm = (SwRowFrm*)pCurrMasterCell->Lower();
+            while ( pRowFrm->GetNext() )
+                pRowFrm = (SwRowFrm*)pRowFrm->GetNext();
+
+            if ( NULL != pRowFrm->GetPrev() && !pRowFrm->ContainsCntnt() )
+            {
+                ASSERT( pRowFrm->GetFollowRow(), "Deleting row frame without follow" )
+
+                // The footnotes have to be moved:
+                lcl_MoveFootnotesToFollow( rTab, *pRowFrm );
+                pRowFrm->Cut();
+                SwRowFrm* pFollowRow = pRowFrm->GetFollowRow();
+                pRowFrm->Paste( pFollowRow->GetUpper(), pFollowRow );
+                pRowFrm->SetFollowRow( pFollowRow->GetFollowRow() );
+                lcl_MoveRowContent( *pFollowRow, *pRowFrm );
+                pFollowRow->Cut();
+                delete pFollowRow;
+                ::SwInvalidateAll( pCurrMasterCell, LONG_MAX );
+            }
+        }
+
+        pCurrMasterCell = (SwCellFrm*)pCurrMasterCell->GetNext();
+    }
+}
+
+
+//
+// Local helper function to re-calculate the split line.
+//
+inline void TableSplitRecalcLock( SwFlowFrm *pTab ) { pTab->LockJoin(); }
+inline void TableSplitRecalcUnlock( SwFlowFrm *pTab ) { pTab->UnlockJoin(); }
+
+void lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
+                          SwTwips nRemainingSpaceForLastRow )
+{
+    SwTabFrm& rTab = (SwTabFrm&)*rLastLine.GetUpper();
+
+    //
+    // If there are nested cells in rLastLine, the recalculation of the last
+    // line needs some preprocessing.
+    //
+    lcl_PreprocessRowsInCells( rTab, rLastLine, rFollowLine, nRemainingSpaceForLastRow );
+
+    //
+    // Here the recalculation process starts:
+    //
+    rTab.SetRebuildLastLine( TRUE );
+    SWRECTFN( rTab.GetUpper() )
+
+    //
+    // manipulate row and cell sizes
+    //
+    ::lcl_ShrinkCellsAndAllContent( rLastLine );
+
+    //
+    // invalidate last line
+    //
+    ::SwInvalidateAll( &rLastLine, LONG_MAX );
+
+    //
+    // Lock this tab frame and its follow
+    //
+    bool bUnlockMaster = false;
+    bool bUnlockFollow = false;
+    SwTabFrm* pMaster = rTab.IsFollow() ? (SwTabFrm*)rTab.FindMaster() : 0;
+    if ( pMaster && !pMaster->IsJoinLocked() )
+    {
+        bUnlockMaster = true;
+        ::TableSplitRecalcLock( pMaster );
+    }
+    if ( !rTab.GetFollow()->IsJoinLocked() )
+    {
+        bUnlockFollow = true;
+        ::TableSplitRecalcLock( rTab.GetFollow() );
+    }
+
+    //
+    // Do the recalculation
+    //
+    ::lcl_CalcLayout( &rLastLine, LONG_MAX );
+
+    //
+    // Unlock this tab frame and its follow
+    //
+    if ( bUnlockFollow )
+        ::TableSplitRecalcUnlock( rTab.GetFollow() );
+    if ( bUnlockMaster )
+        ::TableSplitRecalcUnlock( pMaster );
+
+    //
+    // If there are nested cells in rLastLine, the recalculation of the last
+    // line needs some postprocessing.
+    //
+    lcl_PostprocessRowsInCells( rTab, rLastLine, rFollowLine );
+
+    //
+    // There are two situations that make it necessary to
+    // move the last line to the follow table:
+    //
+    // a) There is at least one cell in the master line without content.
+    // b) The recalculation of the table did not work: The table still does not fit.
+    //
+    bool bMoveLastLine = false;
+    const bool bRepeat = rTab.GetTable()->IsHeadlineRepeat();
+    const bool bHasMoreLines = NULL != rLastLine.GetPrev() &&
+                               ( !bRepeat || rLastLine.GetPrev()->GetPrev() );
+
+    if ( ( !rTab.IsFollow() && rTab.GetIndPrev() ) || bHasMoreLines )
+    {
+        //
+        // Check if each cell in the last line has at least on content frame.
+        // Otherwise we move the last line to the follow table.
+        //
+        SwCellFrm* pCurrMasterCell = (SwCellFrm*)rLastLine.Lower();
+        while ( pCurrMasterCell )
+        {
+            if ( !pCurrMasterCell->ContainsCntnt() )
+            {
+                bMoveLastLine = true;
+                break;
+            }
+            pCurrMasterCell = (SwCellFrm*)pCurrMasterCell->GetNext();
+        }
+
+        //
+        // Check if table fits to its upper.
+        //
+        SwTwips nDistanceToUpperPrtBottom =
+                (rTab.Frm().*fnRect->fnBottomDist)( (rTab.GetUpper()->*fnRect->fnGetPrtBottom)());
+        if ( nDistanceToUpperPrtBottom < 0 )
+            bMoveLastLine = true;
+    }
+
+    if ( bMoveLastLine )
+    {
+        // pLastLine has to be moved to the follow table:
+        rTab.SetFollowFlowLine( FALSE );
+        // The footnotes have to be moved:
+        lcl_MoveFootnotesToFollow( rTab, rLastLine );
+        rLastLine.Cut();
+        rLastLine.Paste( rTab.GetFollow(), &rFollowLine );
+        ::SwInvalidateAll( &rLastLine, LONG_MAX );
+        lcl_MoveRowContent( rFollowLine, rLastLine );
+        rFollowLine.Cut();
+        delete &rFollowLine;
+    }
+    else
+        ::SwInvalidateAll( &rFollowLine, LONG_MAX );
+
+    rTab.SetRebuildLastLine( FALSE );
+}
+
+//
+// Local helper function to remove the FollowFlowLine of rTab.
+// The content of the FollowFlowLine is moved to the associated line in the
+// master table.
+//
+bool lcl_RemoveFollowFlowLine( SwTabFrm& rTab )
+{
+    // find FollowFlowLine
+    SwFrm* pFollowFlowLine = rTab.GetFollow()->Lower();
+    const bool bHeadlineRepeat = rTab.GetTable()->IsHeadlineRepeat();
+    if ( bHeadlineRepeat )
+        pFollowFlowLine = pFollowFlowLine->GetNext();
+
+    ASSERT( rTab.HasFollowFlowLine() &&
+            pFollowFlowLine, "There should be a flowline in the follow" )
+
+    // find last row in master
+    SwFrm* pLastLine = rTab.Lower();
+    while ( pLastLine->GetNext() )
+        pLastLine = pLastLine->GetNext();
+
+    // We have to reset the flag here, because lcl_MoveRowContent
+    // calls a GrowFrm(), which has a different bahavior if
+    // this flag is set.
+    rTab.SetFollowFlowLine( FALSE );
+    lcl_MoveRowContent( *(SwRowFrm*)pFollowFlowLine, *(SwRowFrm*)pLastLine );
+
+    bool bJoin = !pFollowFlowLine->GetNext();
+    pFollowFlowLine->Cut();
+    delete pFollowFlowLine;
+
+    return bJoin;
+}
+
+
+//
+// Local helper function to calculate height of first text row
+//
+SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
+{
+    // Find corresponding split line in master table
+    const SwTabFrm* pTab = rSourceLine.FindTabFrm();
+    SWRECTFN( pTab )
+    const SwCellFrm* pCurrSourceCell = (SwCellFrm*)rSourceLine.Lower();
+
+    //
+    // 1. Case: rSourceLine is a follow flow line.
+    // In this case we have to return the minimum of the heights
+    // of the first lines in rSourceLine.
+    //
+    // 2. Case: rSourceLine is not a follow flow line.
+    // In this case we have to return the maximum of the heights
+    // of the first lines in rSourceLine.
+    //
+    bool bIsInFollowFlowLine = rSourceLine.IsInFollowFlowRow();
+    SwTwips nHeight = bIsInFollowFlowLine ? LONG_MAX : 0;
+
+    while ( pCurrSourceCell )
+    {
+        if ( pCurrSourceCell->Lower() && pCurrSourceCell->Lower()->IsRowFrm() )
+        {
+            SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
+            while ( pTmpSourceRow )
+            {
+                // TODO: recursion
+                pTmpSourceRow = (SwRowFrm*)pTmpSourceRow->GetNext();
+            }
+        }
+        else
+        {
+            const SwFrm *pTmp = pCurrSourceCell->Lower();
+            if ( pTmp && pTmp->IsTxtFrm() )
+            {
+                SwTxtFrm* pTxtFrm = (SwTxtFrm*)pTmp;
+                pTxtFrm->GetFormatted();
+                SwTwips nTmpHeight = pTxtFrm->FirstLineHeight();
+                if ( USHRT_MAX != nTmpHeight )
+                {
+                    const SwCellFrm* pPrevCell = pCurrSourceCell->GetPreviousCell();
+                    if ( pPrevCell )
+                    {
+                        // If we are in a split row, there may be some space
+                        // left in the cell frame of the master row.
+                        // We look for the minimum if all first line heights;
+                        SwTwips nReal = (pPrevCell->Prt().*fnRect->fnGetHeight)();
+                        const SwFrm* pFrm = pPrevCell->Lower();
+                        while ( pFrm )
+                        {
+                            nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
+                            pFrm = pFrm->GetNext();
+                        }
+
+                        if ( nReal > 0 )
+                            nTmpHeight -= nReal;
+                    }
+                    else
+                    {
+                        // pFirstRow is not a FollowFlowRow. In this case,
+                        // we look for the maximum of all first line heights:
+                        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCurrSourceCell );
+                        const SwBorderAttrs &rAttrs = *aAccess.Get();
+                        nTmpHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
+                    }
+                }
+
+                if ( bIsInFollowFlowLine )
+                {
+                    // minimum
+                    if ( nTmpHeight < nHeight )
+                        nHeight = nTmpHeight;
+                }
+                else
+                {
+                    // maximum
+                    if ( nTmpHeight > nHeight && USHRT_MAX != nTmpHeight )
+                        nHeight = nTmpHeight;
+                }
+
+            }
+        }
+
+        pCurrSourceCell = (SwCellFrm*)pCurrSourceCell->GetNext();
+    }
+
+    return ( LONG_MAX == nHeight ) ? 0 : nHeight;
+}
+
+#ifndef OD_FLYFRAMES_FINISHED
+
+bool lcl_FindObjectsInRow( const SwRowFrm& rRow )
+{
+    bool bRet = false;
+    SwCellFrm* pLower = (SwCellFrm*)rRow.Lower();
+    while ( pLower )
+    {
+        SwFrm* pTmpFrm = pLower->Lower();
+        while ( pTmpFrm )
+        {
+            if ( pTmpFrm->IsRowFrm() )
+                bRet = lcl_FindObjectsInRow( *(SwRowFrm*)pTmpFrm );
+            else
+                bRet = 0 != pTmpFrm->GetDrawObjs() || pTmpFrm->IsSctFrm();
+
+            if ( bRet )
+                return true;
+            pTmpFrm = pTmpFrm->GetNext();
+        }
+
+        pLower = (SwCellFrm*)pLower->GetNext();
+    }
+    return bRet;
+}
+
+#endif
+
+
+
 /*************************************************************************
 |*
 |*  SwTabFrm::Split(), Join()
@@ -233,7 +863,7 @@ void SwTabFrm::RegistFlys()
 |*  Letzte Aenderung    MA 03. Sep. 96
 |*
 |*************************************************************************/
-SwTwips SwTabFrm::Split( const SwTwips nCutPos )
+bool SwTabFrm::Split( const SwTwips nCutPos )
 {
     SWRECTFN( this )
     ASSERT( bVert ? nCutPos >= Frm().Left()
@@ -244,43 +874,122 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
     //Um die Positionen der Zellen mit der CutPos zu vergleichen muessen sie
     //ausgehend von der Tabelle nacheinander berechnet werden. Sie koennen
     //wg. Positionsaenderungen der Tabelle durchaus ungueltig sein.
-
     SwFrm *pRow = Lower();
     if( !pRow )
-        return 0;
-    SwTwips nCut = (*fnRect->fnYDiff)( nCutPos, (Frm().*fnRect->fnGetTop)() );
-    nCut -= (this->*fnRect->fnGetTopMargin)();
-    SwTwips nRowPos = (pRow->Frm().*fnRect->fnGetHeight)();
-    const BOOL bRepeat  = GetTable()->IsHeadlineRepeat();
-    pRow = pRow->GetNext();
-    if( pRow && bRepeat )
-    {
-        nRowPos += (pRow->Frm().*fnRect->fnGetHeight)();
-        pRow = pRow->GetNext();
-    }
-    // No break before the first row and, in case of repeated headlines,
-    // before the the second row.
-    if( !pRow )
-        return 0;
+        return true;
 
-    while( pRow && nCut >= ( nRowPos + (pRow->Frm().*fnRect->fnGetHeight)() ) )
+    const bool bRepeat = GetTable()->IsHeadlineRepeat();
+    SwTwips nRemainingSpaceForLastRow =
+        (*fnRect->fnYDiff)( nCutPos, (Frm().*fnRect->fnGetTop)() );
+    nRemainingSpaceForLastRow -= (this->*fnRect->fnGetTopMargin)();
+
+    //
+    // Make pRow point to the line that does not fit anymore:
+    //
+    while( pRow->GetNext() &&
+           nRemainingSpaceForLastRow >= (pRow->Frm().*fnRect->fnGetHeight)() )
     {
-        nRowPos += (pRow->Frm().*fnRect->fnGetHeight)();
+        nRemainingSpaceForLastRow -= (pRow->Frm().*fnRect->fnGetHeight)();
         pRow = pRow->GetNext();
     }
 
-    if ( !pRow )
+    //
+    // Check if pRow can be split:
+    //
+    bool bSplitRowAllowed = ((SwRowFrm*)pRow)->IsRowSplitAllowed();
+
+#ifndef OD_FLYFRAMES_FINISHED
+    //
+    // Search for objects anchored at content inside pRow:
+    //
+    bool bObjectsFound = false;
+    if ( lcl_FindObjectsInRow( *(SwRowFrm*)pRow ) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        ASSERT( FALSE, "Tablesplit out of rows?" );
+        bObjectsFound = true;
+        bSplitRowAllowed = false;
+    }
 #endif
-        pRow = Lower();
-        while ( pRow && pRow->GetNext() )
+
+    if ( bRepeat && pRow == Lower() )
+    {
+        //
+        // First case: The repeated headline does not fit to the page anymore.
+        // At least one more non-heading row has to stay in this table in
+        // order to avoid loops:
+        //
+        ASSERT( !GetIndPrev(), "Table is supposed to be at beginning" )
+        pRow = pRow->GetNext();
+        if ( pRow )
             pRow = pRow->GetNext();
+        bSplitRowAllowed = false;
+    }
+    else if ( !GetIndPrev() &&
+              ( ( bRepeat && pRow == Lower()->GetNext() ||
+                 !bRepeat && pRow == Lower() ) ) )
+    {
+        //
+        // Second case: The first non-headline row does not fit to the page.
+        // If it is not allowed to be split, or it contains a sub-row that
+        // is not allowed to be split, we change the attribute for this row:
+        //
+        if ( !bSplitRowAllowed )
+        {
+
+#ifndef OD_FLYFRAMES_FINISHED
+            if ( bObjectsFound )
+            {
+                // The first non-heading row does not fit to the page.
+                // It contains objects, therefore it is (currently) not splittable.
+                // We keep this row in this table:
+                pRow = pRow->GetNext();
+            }
+            else
+            {
+#endif
+
+            // Change attributes:
+            ASSERT( false, "Weird layout! Row frame is to big but not allowed to split. I'll change the attributes now." )
+            lcl_ChangeSplitAttribute( *(SwRowFrm*)pRow );
+            lcl_ChangeSizeAttribute( *(SwRowFrm*)pRow );
+            bSplitRowAllowed = true;
+
+#ifndef OD_FLYFRAMES_FINISHED
+            }
+#endif
+
+        }
+
+        // Check if there are (first) rows inside this row,
+        // which are not allowed to be split.
+        SwCellFrm* pLower = pRow ? (SwCellFrm*)((SwRowFrm*)pRow)->Lower() : 0;
+        while ( pLower )
+        {
+            if ( pLower->Lower() && pLower->Lower()->IsRowFrm() )
+            {
+                const SwRowFrm* pLowerRow = (SwRowFrm*)pLower->Lower();
+                if ( !pLowerRow->IsRowSplitAllowed() &&
+                    (pLowerRow->Frm().*fnRect->fnGetHeight)() >
+                    nRemainingSpaceForLastRow )
+                {
+                    // Change attributes:
+                    ASSERT( false, "Weird layout! Row frame is to big but not allowed to split. I'll change the attributes now." )
+                    lcl_ChangeSplitAttribute( *(SwRowFrm*)pLowerRow );
+                    lcl_ChangeSizeAttribute( *(SwRowFrm*)pRow );
+                }
+            }
+            pLower = (SwCellFrm*)pLower->GetNext();
+        }
     }
 
-    //Wenn es bereits einen Follow gibt so geht's dort hinein andernfalls
-    //muss eben einer erzeugt werden.
+    //
+    // No more row to split or to move to follow table:
+    //
+    if ( !pRow )
+        return true;
+
+    //
+    // Build follow table if not already done:
+    //
     FASTBOOL bNewFollow;
     SwTabFrm *pFoll;
     if ( GetFollow() )
@@ -292,6 +1001,11 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
     {
         bNewFollow = TRUE;
         pFoll = new SwTabFrm( *this );
+
+        // We give the follow table an initial width.
+        (pFoll->Frm().*fnRect->fnAddWidth)( (Frm().*fnRect->fnGetWidth)() );
+        (pFoll->Prt().*fnRect->fnAddWidth)( (Prt().*fnRect->fnGetWidth)() );
+
         pFoll->InsertBehind( GetUpper(), this );
 
         if( bRepeat )
@@ -320,15 +1034,37 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
             }
         }
     }
+
+    // If the row that does not fit anymore is allowed
+    // to be split, the next row has to be moved to the follow table.
+    SwRowFrm* pLastRow = (SwRowFrm*)pRow;
+    SwRowFrm* pFollowRow = 0;
+    if ( bSplitRowAllowed )
+    {
+        pRow = pRow->GetNext();
+
+        // new follow flow line for last row of master table
+        pFollowRow = lcl_InsertNewFollowFlowLine( *this, *pLastRow, bRepeat );
+    }
+
     SwTwips nRet = 0;
-    SwFrm *pNxt;
+    SwFrm* pNxt;
+    SwFrm* pPrv;
 
     //Optimierung beim neuen Follow braucht's kein Paste und dann kann
     //das Optimierte Insert verwendet werden (nur dann treten gluecklicher weise
     //auch groessere Mengen von Rows auf).
     if ( bNewFollow )
     {
-        SwFrm *pPrv = GetTable()->IsHeadlineRepeat() ? pFoll->Lower() : 0;
+        if ( bSplitRowAllowed )
+        {
+            pPrv = pFoll->Lower();
+            if ( pPrv && GetTable()->IsHeadlineRepeat() )
+                pPrv = pPrv->GetNext();
+        }
+        else
+            pPrv = GetTable()->IsHeadlineRepeat() ? pFoll->Lower() : 0;
+
         while ( pRow )
         {
             pNxt = pRow->GetNext();
@@ -342,27 +1078,70 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
     }
     else
     {
-        SwFrm *pPrv = pFoll->Lower();
+        pPrv = pFoll->Lower();
         if ( pPrv && GetTable()->IsHeadlineRepeat() )
             pPrv = pPrv->GetNext();
+        if ( bSplitRowAllowed )
+        {
+            pPrv = pPrv->GetNext();
+        }
+
         while ( pRow )
         {
             pNxt = pRow->GetNext();
             nRet += (pRow->Frm().*fnRect->fnGetHeight)();
+
+            // The footnotes have to be moved:
+            lcl_MoveFootnotesToFollow( *this, (SwRowFrm&)*pRow );
+
             pRow->Remove();
             pRow->Paste( pFoll, pPrv );
+
             pRow->CheckDirChange();
             pRow = pNxt;
         }
     }
-    ASSERT( !bNewFollow || !(pFoll->Frm().*fnRect->fnGetHeight)(),
-            "Dont care about Performance");
+
     Shrink( nRet );
-    return nRet;
+
+    // we build a new last line to assure that it will be fully formatted
+    if ( bSplitRowAllowed )
+    {
+        ASSERT( pFollowRow, "Table Split: FollowFlowRow is missing" )
+
+        // recalculate the split line
+        lcl_RecalcSplitLine( *pLastRow, *pFollowRow, nRemainingSpaceForLastRow );
+
+        // check if last row does not contain contents:
+        if ( bRepeat )
+        {
+            SwFrm* pTmp = Lower();
+            while ( pTmp->GetNext() )
+                pTmp = pTmp->GetNext();
+
+            if ( !((SwRowFrm*)pTmp)->ContainsCntnt() )
+            {
+                // move the first row from the follow table to this:
+                SetFollowFlowLine( FALSE );
+                SwFrm* pTmpRow = pFoll->Lower()->GetNext();
+                ASSERT( pTmpRow, "Heading without next in this and follow" )
+                pTmpRow->Cut();
+                pTmpRow->Paste( this, 0 );
+                // delete empty row frame:
+                pTmp->Cut();
+                delete pTmp;
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
-SwTwips SwTabFrm::Join()
+bool SwTabFrm::Join()
 {
+    ASSERT( !HasFollowFlowLine(), "Joining follow flow line" )
+
     SwTabFrm *pFoll = GetFollow();
     SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
 
@@ -381,6 +1160,7 @@ SwTwips SwTabFrm::Join()
         SwFrm *pPrv = Lower();
         while ( pPrv && pPrv->GetNext() )
             pPrv = pPrv->GetNext();
+
         while ( pRow )
         {
             pNxt = pRow->GetNext();
@@ -392,11 +1172,15 @@ SwTwips SwTabFrm::Join()
             pPrv = pRow;
             pRow = pNxt;
         }
+
         SetFollow( pFoll->GetFollow() );
+        SetFollowFlowLine( pFoll->HasFollowFlowLine() );
         delete pFoll;
+
         Grow( nHeight PHEIGHT );
     }
-    return nHeight;
+
+    return true;
 }
 
 /*************************************************************************
@@ -428,8 +1212,33 @@ void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
               (*fnRect->fnYDiff)( (pFrm->Frm().*fnRect->fnGetTop)(), nBottom ) < 0 ) );
 }
 
+void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom )
+{
+    // LONG_MAX == nBottom means we have to calculate all
+    BOOL bAll = LONG_MAX == nBottom;
+    SWRECTFN( pFrm )
+    do
+    {   pFrm->_InvalidatePos();
+        pFrm->_InvalidateSize();
+        pFrm->_InvalidatePrt();
+        if( pFrm->IsLayoutFrm() )
+        {
+            if ( ((SwLayoutFrm*)pFrm)->Lower() )
+                ::SwInvalidateAll( ((SwLayoutFrm*)pFrm)->Lower(), nBottom);
+        }
+        else
+            pFrm->Prepare( PREP_CLEAR );
+        pFrm = pFrm->GetNext();
+    } while ( pFrm &&
+              ( bAll ||
+              (*fnRect->fnYDiff)( (pFrm->Frm().*fnRect->fnGetTop)(), nBottom ) < 0 ) );
+}
+
 BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom )
 {
+    if ( !pLay )
+        return TRUE;
+
     // LONG_MAX == nBottom means we have to calculate all
     BOOL bAll = LONG_MAX == nBottom;
     BOOL bRet = FALSE;
@@ -531,7 +1340,7 @@ void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
     long nBottom = (pUp->*fnRect->fnGetPrtBottom)();
     if ( pTab->GetFmt()->GetDoc()->IsBrowseMode() )
         nBottom += pUp->Grow( LONG_MAX, TRUE );
-    lcl_CalcLowers( (SwLayoutFrm*)pTab->Lower(), nBottom );
+    lcl_CalcLowers( (SwLayoutFrm*)pTab->Lower(), LONG_MAX );
 }
 
 void MA_FASTCALL lcl_Recalc( SwTabFrm *pTab,
@@ -550,16 +1359,6 @@ void MA_FASTCALL lcl_Recalc( SwTabFrm *pTab,
         }
         ::SwInvalidatePositions( pFirstRow, LONG_MAX );
         ::lcl_CalcLayout( pFirstRow, LONG_MAX );
-        SwTwips nNew = (pTab->Frm().*fnRect->fnGetHeight)();
-        if ( nOldHeight < nNew )
-            rNotify.AddHeightOfst( nNew - nOldHeight );
-        else if ( nOldHeight > nNew )
-            rNotify.SubtractHeightOfst( nOldHeight - nNew );
-        nNew = (pTab->Frm().*fnRect->fnGetWidth)();
-        if ( nOldWidth < nNew )
-            rNotify.AddWidthOfst( nNew - nOldWidth );
-        else if ( nOldWidth > nNew )
-            rNotify.SubtractWidthOfst( nOldWidth - nNew );
     }
 }
 
@@ -601,6 +1400,15 @@ void SwTabFrm::MakeAll()
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
         return;
 
+    if ( HasFollow() )
+    {
+        SwTabFrm* pFollow = (SwTabFrm*)GetFollow();
+        ASSERT( !pFollow->IsJoinLocked() || !pFollow->IsRebuildLastLine(),
+                "SwTabFrm::MakeAll for master while follow is in RebuildLastLine()" )
+        if ( pFollow->IsJoinLocked() && pFollow->IsRebuildLastLine() )
+            return;
+    }
+
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
     LockJoin(); //Ich lass mich nicht unterwegs vernichten.
@@ -620,7 +1428,15 @@ void SwTabFrm::MakeAll()
             !GetFollow()->IsJoinLocked()
           )
     {
-        aNotify.AddHeightOfst( Join() );
+        Join();
+    }
+
+    // The bRemoveFollowFlowLinePending is set if the split attribute of the
+    // last line is set:
+    if ( IsRemoveFollowFlowLinePending() && HasFollowFlowLine() )
+    {
+        lcl_RemoveFollowFlowLine( *this );
+        SetRemoveFollowFlowLinePending( FALSE );
     }
 
     if ( bResizeHTMLTable ) //Optimiertes Zusammenspiel mit Grow/Shrink des Inhaltes
@@ -640,20 +1456,29 @@ void SwTabFrm::MakeAll()
                                 //fliessen (solange, bis er einmal
                                 //vorwaerts ge'moved wurde).
     BOOL bSplit     = FALSE;    //Wird TRUE wenn der Frm gesplittet wurde.
-    BOOL bFtnsInDoc = 0 != GetFmt()->GetDoc()->GetFtnIdxs().Count();
+    const BOOL bFtnsInDoc = 0 != GetFmt()->GetDoc()->GetFtnIdxs().Count();
     BOOL bMoveable;
-    const BOOL bRepeat  = GetTable()->IsHeadlineRepeat();
     const BOOL bFly     = IsInFly();
 
     SwBorderAttrAccess  *pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
     const BOOL bKeep = IsKeep( *pAttrs );
+    // All rows should keep together
     const BOOL bDontSplit = !IsFollow() && !GetFmt()->GetLayoutSplit().GetValue();
+    // This flag indicates that an error (e.g., oversized heading row)
+    // occured during the split operation.
+    bool bSplitError = false;
 
     if ( bDontSplit )
+    {
         while ( GetFollow() )
-            aNotify.AddHeightOfst( Join() );
+        {
+            if ( HasFollowFlowLine() )
+                lcl_RemoveFollowFlowLine( *this );
+            Join();
+        }
+    }
 
     //Einen Frischling moven wir gleich schon einmal vorwaerts...
     if ( !Frm().Top() && IsFollow() )
@@ -668,7 +1493,6 @@ void SwTabFrm::MakeAll()
     }
 
     SWRECTFN( this )
-
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
         if ( TRUE == (bMoveable = IsMoveable()) )
@@ -680,6 +1504,7 @@ void SwTabFrm::MakeAll()
 
         Point aOldPos( (Frm().*fnRect->fnGetPos)() );
         MakePos();
+
         if ( aOldPos != (Frm().*fnRect->fnGetPos)() )
         {
             if ( aOldPos.Y() != (Frm().*fnRect->fnGetTop)() )
@@ -712,7 +1537,7 @@ void SwTabFrm::MakeAll()
         if ( IsFollow() )
         {
             SwFrm *pFrm = Lower();
-            if ( bRepeat && pFrm )
+            if ( GetTable()->IsHeadlineRepeat() && pFrm )
                 pFrm = pFrm->GetNext();
             if ( pFrm )
                 n1StLineHeight = (pFrm->Frm().*fnRect->fnGetHeight)();
@@ -835,7 +1660,7 @@ void SwTabFrm::MakeAll()
             {
                 //Nur wenn die Hoehe der ersten Zeile kleiner geworder ist.
                 SwFrm *pFrm = Lower();
-                if ( bRepeat && pFrm )
+                if ( GetTable()->IsHeadlineRepeat() && pFrm )
                     pFrm = pFrm->GetNext();
                 if(pFrm && n1StLineHeight >(pFrm->Frm().*fnRect->fnGetHeight)())
                 {
@@ -905,6 +1730,7 @@ void SwTabFrm::MakeAll()
         ///     table frame bottom to the bottom of the upper printing area.
         /// Note: negative values denotes the situation that table frame doesn't
         ///     fit in its upper.
+
         SwTwips nDistanceToUpperPrtBottom =
                 (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
 
@@ -921,8 +1747,10 @@ void SwTabFrm::MakeAll()
             }
         }
 
-        if( nDistanceToUpperPrtBottom >= 0)
-        {
+        if( nDistanceToUpperPrtBottom >= 0 )
+/*        if( ( bSplit && nDistanceToUpperPrtBottom == 0 ) ||
+              nDistanceToUpperPrtBottom > 0 )
+*/      {
             // OD 23.10.2002 - translate german commentary
             // If there is space left in the upper printing area, join as for trial
             // at least one further row of an existing follow.
@@ -937,9 +1765,41 @@ void SwTabFrm::MakeAll()
                         nDeadLine += pTmp->Grow( LONG_MAX, TRUE );
                     if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
                     {
+                        //
+                        // First, we remove an existing follow flow line.
+                        //
+                        if ( HasFollowFlowLine() )
+                        {
+                            lcl_RemoveFollowFlowLine( *this );
+                            // invalidate and rebuild last row
+                            SwFrm* pLastLine = Lower();
+                            while ( pLastLine->GetNext() )
+                                pLastLine = pLastLine->GetNext();
+
+                            ::SwInvalidateAll( pLastLine, LONG_MAX );
+                            SetRebuildLastLine( TRUE );
+                            ::lcl_CalcLayout( (SwLayoutFrm*)pLastLine, LONG_MAX );
+                            SetRebuildLastLine( FALSE );
+
+                            SwFrm *pRow = GetFollow()->Lower();
+                            if ( GetTable()->IsHeadlineRepeat() )
+                                pRow = pRow->GetNext();
+
+                            if ( !pRow || !pRow->GetNext() )
+                                //Der Follow wird leer und damit ueberfluessig.
+                                Join();
+
+                            continue;
+                        }
+
+                        //
+                        // If there is no follow flow line, we move the first
+                        // row in the follow table to the master table.
+                        //
                         SwFrm *pRow = GetFollow()->Lower();
-                        if ( bRepeat )
+                        if ( GetTable()->IsHeadlineRepeat() )
                             pRow = pRow->GetNext();
+
                         const SwTwips nOld = (Frm().*fnRect->fnGetHeight)();
 
                         const BOOL bMoveFtns = bFtnsInDoc && pRow &&
@@ -952,13 +1812,11 @@ void SwTabFrm::MakeAll()
                         //fix(8680): Row kann 0 werden.
                         if ( !pRow || !pRow->GetNext() )
                             //Der Follow wird leer und damit ueberfluessig.
-                            aNotify.AddHeightOfst( Join() );
+                            Join();
                         else
                         {
                             pRow->Cut();
                             pRow->Paste( this );
-                            aNotify.AddHeightOfst(
-                                        (pRow->Frm().*fnRect->fnGetHeight)() );
                         }
                         //Die Fussnoten verschieben!
                         if ( pRow && bMoveFtns )
@@ -1034,17 +1892,16 @@ void SwTabFrm::MakeAll()
         //Zeile enthaelt und wenn die Unterkante des Upper unter der ersten
         //Zeile liegt.
         SwFrm *pIndPrev = GetIndPrev();
-        if ( Lower()->GetNext() && (!bDontSplit || !pIndPrev) )
+        if ( !bSplitError && ( !bDontSplit || !pIndPrev ) )
         {
-            //Damit der Schatten nicht extra herausgerechnet werden muss,
-            //lassen wir das Spiel gleich wenn es ein HeadlineRepeat gibt und
-            //nur noch eine nicht Headline Zeile vorhanden ist.
-            if ( !bRepeat || Lower()->GetNext()->GetNext() )
+            // only try to break table if there is at least one non-headline row
+            if ( !GetTable()->IsHeadlineRepeat() || Lower()->GetNext() )
             {
                 SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 if( IsInSct() )
                     nDeadLine = (*fnRect->fnYInc)( nDeadLine,
                                         GetUpper()->Grow( LONG_MAX, TRUE ) );
+
                 ::lcl_CalcLayout( (SwLayoutFrm*)Lower(), nDeadLine );
                 bLowersFormatted = TRUE;
                 aNotify.SetLowersComplete( TRUE );
@@ -1052,17 +1909,29 @@ void SwTabFrm::MakeAll()
                     continue;
 
                 SwTwips nBreakLine = (Frm().*fnRect->fnGetTop)();
+
                 nBreakLine = (*fnRect->fnYInc)( nBreakLine,
                         (this->*fnRect->fnGetTopMargin)() +
-                        (Lower()->Frm().*fnRect->fnGetHeight)() +
-                        ( bRepeat ?
-                          (Lower()->GetNext()->Frm().*fnRect->fnGetHeight)()
-                          : 0 ) );
+                        ( GetTable()->IsHeadlineRepeat() ? (Lower()->Frm().*fnRect->fnGetHeight)() : 0 ) );
+
                 if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
                 {
-                    aNotify.SubtractHeightOfst( Split( nDeadLine ) );
-                    if ( aNotify.GetHeightOfst() < 0 )
-                        aNotify.ResetHeightOfst();
+                    //
+                    // An existing follow flow line has to be removed.
+                    //
+                    if ( HasFollowFlowLine() )
+                        lcl_RemoveFollowFlowLine( *this );
+
+                    bSplitError = !Split( nDeadLine );
+
+                    // Caution: The follow now can be empty:
+                    if ( GetFollow() )
+                    {
+                        if ( !GetFollow()->Lower() ||
+                             ( GetTable()->IsHeadlineRepeat() && !GetFollow()->Lower()->GetNext() ) )
+                            Join();
+                    }
+
                     aNotify.SetLowersComplete( FALSE );
                     bSplit = TRUE;
                     //Damit es nicht zu Oszillationen kommt, muss der
@@ -1077,13 +1946,16 @@ void SwTabFrm::MakeAll()
                             ++nStack;
                             StackHack aHack;
                             delete pAccess;
+
                             GetFollow()->MakeAll();
-                            pAccess= new SwBorderAttrAccess( SwFrm::GetCache(),
-                                                             this );
+
+                            pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
+
                             ((SwTabFrm*)GetFollow())->SetLowersFormatted(FALSE);
                             ::lcl_CalcLayout((SwLayoutFrm*)GetFollow()->Lower(),
                                 (GetFollow()->GetUpper()->Frm().*fnRect->fnGetBottom)() );
+
                             if ( !GetFollow()->GetFollow() )
                             {
                                 SwFrm* pNxt = ((SwFrm*)GetFollow())->FindNext();
@@ -1117,7 +1989,10 @@ void SwTabFrm::MakeAll()
                         if ( 0 != (pSh = GetShell()) )
                             pSh->Imp()->ResetScroll();
                     }
-                    continue;
+                    // If the split operation results in an empty master
+                    // tab frame, the whole tab frame has to move forward.
+                    if ( !bSplit || ( Lower() && ( !GetTable()->IsHeadlineRepeat() || Lower()->GetNext() ) ) )
+                        continue;
                 }
             }
         }
@@ -1147,7 +2022,11 @@ void SwTabFrm::MakeAll()
         //Wenn mein direkter Nachbar jetzt gleichzeitig mein Follow ist
         //verleibe ich mir das Teil ein.
         if ( GetNext() && GetNext() == GetFollow() )
-            aNotify.AddHeightOfst( Join() );
+        {
+            if ( HasFollowFlowLine() )
+                lcl_RemoveFollowFlowLine( *this );
+            Join();
+        }
 
         if ( bMovedBwd && GetUpper() )
             //Beim zurueckfliessen wurde der Upper angeregt sich vollstaendig
@@ -1542,43 +2421,38 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     if( nHeight > 0 && nDist > ( LONG_MAX - nHeight ) )
         nDist = LONG_MAX - nHeight;
 
-    //Tabelle waechst immer (sie kann ja ggf. aufgespalten werden).
-    if ( !bTst )
+    if ( bTst && !IsRestrictTableGrowth() )
+        return nDist;
+
+    if ( GetUpper() )
     {
-        if ( GetUpper() )
+        SwRect aOldFrm( Frm() );
+
+        if ( IsRestrictTableGrowth() )
         {
             //Der Upper wird nur soweit wie notwendig gegrowed. In nReal wird erstmal
             //die bereits zur Verfuegung stehende Strecke bereitgestellt.
             SwTwips nReal = (GetUpper()->Prt().*fnRect->fnGetHeight)();
             SwFrm *pFrm = GetUpper()->Lower();
-            while ( pFrm )
-            {   nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
+            while ( pFrm && GetFollow() != pFrm )
+            {
+                nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
                 pFrm = pFrm->GetNext();
             }
 
-            SwRect aOldFrm( Frm() );
-            nHeight = (Frm().*fnRect->fnGetHeight)();
-            (Frm().*fnRect->fnSetHeight)( nHeight + nDist );
-            if( IsVertical() && !IsReverse() )
-                Frm().Pos().X() -= nDist;
+            long nTmp = 0;
             if ( nReal < nDist )
-                GetUpper()->Grow( nDist - (nReal>0 ? nReal : 0), bTst, bInfo );
-
-            SwRootFrm *pRootFrm = FindRootFrm();
-            if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
-                pRootFrm->GetCurrShell() )
             {
-                pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
+                nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
+                nTmp = Min( nDist, nReal + nTmp );
+                nDist = nTmp < 0 ? 0 : nTmp;
             }
         }
-        else
+
+        if ( !bTst )
         {
-            ASSERT( !this, "Table without Upper" );
-            SwRect aOldFrm( Frm() );
-            nHeight = (Frm().*fnRect->fnGetHeight)();
-            (Frm().*fnRect->fnSetHeight)( nHeight + nDist );
-            if( IsVertical() && !IsReverse() )
-                Frm().Pos().X() -= nDist;
+            (Frm().*fnRect->fnAddBottom)( nDist );
+
             SwRootFrm *pRootFrm = FindRootFrm();
             if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
                 pRootFrm->GetCurrShell() )
@@ -1586,7 +2460,10 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
             }
         }
+    }
 
+    if ( !bTst && ( nDist || IsRestrictTableGrowth() ) )
+    {
         SwPageFrm *pPage = FindPageFrm();
         if ( GetNext() )
         {
@@ -1602,6 +2479,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
             SetCompletePaint();
     }
+
     return nDist;
 }
 /*************************************************************************
@@ -1804,6 +2682,7 @@ BOOL SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 SwCntntFrm *SwTabFrm::FindLastCntnt()
 {
     SwFrm *pRet = pLower;
+
     while ( pRet && !pRet->IsCntntFrm() )
     {
         SwFrm *pOld = pRet;
@@ -1820,7 +2699,8 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
         if ( pRet->GetLower() )
             pRet = pRet->GetLower();
         if ( pRet == pOld )
-        {   // Wenn am Ende der letzten Zelle ein spaltiger Bereich steht,
+        {
+            // Wenn am Ende der letzten Zelle ein spaltiger Bereich steht,
             // der eine leere letzte Spalte hat, muessen wir noch die anderen
             // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
@@ -1832,12 +2712,22 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
 #endif
                 return pRet->FindSctFrm()->FindLastCntnt();
             }
-            ASSERT( false, "FindLastCntnt is going to return unexpected result" )
-            return 0;   //Hier geht es nicht weiter. Inkonsistenter Zustand
-                        //der Tabelle (z.B. Undo TextToTable).
+
+            // pRet may be a cell frame without a lower (cell has been split)
+            ASSERT( pRet->IsCellFrm(), "SwTabFrm::FindLastCntnt failed" )
+
+            do
+            {
+                if ( ((SwCellFrm*)pRet)->Lower() )
+                {
+                    pRet = ((SwCellFrm*)pRet)->Lower();
+                    break;
+                }
+                pRet = pRet->GetPrev();
+            }
+            while( pRet );
         }
     }
-
     // #112929# There actually is a situation, which results in pRet = 0:
     // Insert frame, insert table via text <-> table. This gives you a frame
     // containing a table without any other content frames. Split the table
@@ -1853,6 +2743,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
     }
 
     ASSERT( pRet && pRet->IsCntntFrm(), "FindLastCntnt is going to return unexpected result" )
+
     return (SwCntntFrm*)pRet;
 }
 
@@ -1951,14 +2842,39 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
 
         if ( bMoveAnyway )
             return rReformat = TRUE;
-        else if ( !bLockBackMove )
-        {   const BOOL bRepeat = GetTable()->IsHeadlineRepeat();
-            SwTwips nHeight = bRepeat && Lower()->GetNext() ?
-                    (Lower()->GetNext()->Frm().*fnRect->fnGetHeight)()
-                    : (Lower()->Frm().*fnRect->fnGetHeight)();
-            if ( bHead && bRepeat && Lower()->GetNext() )
-                nHeight += (Lower()->Frm().*fnRect->fnGetHeight)();
-            return nHeight <= nSpace;
+        else if ( !bLockBackMove && nSpace > 0 )
+        {
+            const BOOL bRepeat = GetTable()->IsHeadlineRepeat();
+            const SwFrm* pFirstRow = Lower();
+            ASSERT( pFirstRow, "FollowTable without Lower" )
+            SwTwips nTmpHeight = 0;
+
+            if ( bRepeat )
+            {
+                pFirstRow = pFirstRow->GetNext();
+                ASSERT( !IsFollow() || pFirstRow, "FollowTable without Lower" )
+            }
+
+            if ( !IsFollow() && bRepeat )
+                nTmpHeight = (Lower()->Frm().*fnRect->fnGetHeight)();
+
+            if ( pFirstRow )
+            {
+                bool bSplittable = ((SwRowFrm*)pFirstRow)->IsRowSplitAllowed();
+
+                if ( !bSplittable )
+                    nTmpHeight += (pFirstRow->Frm().*fnRect->fnGetHeight)();
+                else
+                {
+                    const bool bOldJoinLock = IsJoinLocked();
+                    LockJoin();
+                    nTmpHeight += lcl_CalcHeightOfFirstContentLine( *(SwRowFrm*)pFirstRow );
+                    if ( !bOldJoinLock )
+                        UnlockJoin();
+                }
+            }
+
+            return nTmpHeight < nSpace;
         }
     }
     return FALSE;
@@ -2146,9 +3062,11 @@ void SwTabFrm::Prepare( const PrepareHint eHint, const void *, BOOL )
 |*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
-SwRowFrm::SwRowFrm( const SwTableLine &rLine ):
+SwRowFrm::SwRowFrm( const SwTableLine &rLine, bool bInsertContent ):
     SwLayoutFrm( rLine.GetFrmFmt() ),
-    pTabLine( &rLine )
+    pTabLine( &rLine ),
+    pFollowRow( 0 ),
+    bIsFollowFlowRow( false )
 {
     nType = FRMC_ROW;
 
@@ -2157,7 +3075,7 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine ):
     SwFrm *pPrev = 0;
     for ( USHORT i = 0; i < rBoxes.Count(); ++i )
     {
-        SwCellFrm *pNew = new SwCellFrm( *rBoxes[i] );
+        SwCellFrm *pNew = new SwCellFrm( *rBoxes[i], bInsertContent );
         pNew->InsertBehind( this, pPrev );
         pPrev = pNew;
     }
@@ -2201,8 +3119,13 @@ void SwRowFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     const SfxPoolItem *pItem = 0;
 
     if( bAttrSetChg )
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRM_SIZE, FALSE, &pItem);
-    else if ( RES_FRM_SIZE == pNew->Which() )
+    {
+        const SwAttrSet* pChgSet = ((SwAttrSetChg*)pNew)->GetChgSet();
+        pChgSet->GetItemState( RES_FRM_SIZE, FALSE, &pItem);
+        if ( !pItem )
+            pChgSet->GetItemState( RES_ROW_SPLIT, FALSE, &pItem);
+    }
+    else if ( RES_FRM_SIZE == pNew->Which() || RES_ROW_SPLIT == pNew->Which() )
         pItem = pNew;
 
     if ( pItem )
@@ -2323,13 +3246,17 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
     //Der Border will natuerlich auch mitspielen, er kann leider nicht
     //aus PrtArea und Frm errechnet werden, da diese in beliebiger
     //Kombination ungueltig sein koennen.
-    if ( pAttrs )
-        nHeight += pAttrs->CalcTop() + pAttrs->CalcBottom();
-    else
+    if ( pCell->Lower() )
     {
-        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
-        const SwBorderAttrs &rAttrs = *aAccess.Get();
-        nHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
+        SwTabFrm* pTab = pCell->FindTabFrm();
+        if ( pAttrs )
+            nHeight += pAttrs->CalcTop() + pAttrs->CalcBottom();
+        else
+        {
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
+            const SwBorderAttrs &rAttrs = *aAccess.Get();
+            nHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
+        }
     }
     return nHeight;
 }
@@ -2337,8 +3264,13 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
 SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow )
 {
     SWRECTFN( pRow )
+    const SwFmtFrmSize &rSz = pRow->GetFmt()->GetFrmSize();
+
     if ( pRow->HasFixSize() )
-        return (pRow->Frm().*fnRect->fnGetHeight)();
+    {
+        ASSERT( ATT_FIX_SIZE == rSz.GetSizeType(), "pRow claims to have fixed size" )
+        return rSz.GetHeight();
+    }
 
     SwTwips nHeight = 0;
     SwLayoutFrm *pLow = (SwLayoutFrm*)pRow->Lower();
@@ -2349,7 +3281,6 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow )
             nHeight = nTmp;
         pLow = (SwLayoutFrm*)pLow->GetNext();
     }
-    const SwFmtFrmSize &rSz = pRow->GetFmt()->GetFrmSize();
     if ( rSz.GetSizeType() == ATT_MIN_SIZE )
         nHeight = Max( nHeight, rSz.GetHeight() );
     return nHeight;
@@ -2438,6 +3369,7 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
             {
                 SwRect aOldFrm( pFrm->Frm() );
                 (pFrm->Frm().*fnRect->fnAddBottom)( nDiff );
+
                 if( !pRootFrm )
                     pRootFrm = FindRootFrm();
                 if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
@@ -2492,7 +3424,54 @@ void SwRowFrm::Cut()
 
 SwTwips SwRowFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-    const SwTwips nReal = SwLayoutFrm::GrowFrm( nDist, bTst, bInfo);
+    SwTwips nReal = 0;
+
+    SwTabFrm* pTab = FindTabFrm();
+    SWRECTFN( pTab )
+
+    bool bRestrictTableGrowth;
+    bool bHasFollowFlowLine = pTab->HasFollowFlowLine();
+
+    if ( GetUpper()->IsTabFrm() )
+        bRestrictTableGrowth = NULL != IsInSplitTableRow();
+    else
+    {
+        ASSERT( GetUpper()->IsCellFrm(), "RowFrm->GetUpper neither table nor cell" )
+        bRestrictTableGrowth = GetFollowRow() && bHasFollowFlowLine;
+        ASSERT( !bRestrictTableGrowth || !GetNext(),
+                "GetFollowRow for row frame that has a Next" )
+
+        //
+        // There may still be some space left in my direct upper:
+        //
+        const SwTwips nAdditionalSpace =
+                (Frm().*fnRect->fnBottomDist)( (GetUpper()->GetUpper()->*fnRect->fnGetPrtBottom)() );
+        if ( bRestrictTableGrowth && nAdditionalSpace > 0 )
+        {
+            nReal = Min( nAdditionalSpace, nDist );
+            nDist -= nReal;
+            if ( !bTst )
+                (Frm().*fnRect->fnAddBottom)( nReal );
+        }
+    }
+
+    if ( bRestrictTableGrowth )
+        pTab->SetRestrictTableGrowth( TRUE );
+    else
+    {
+        // Ok, this looks like a hack, indeed, it is a hack.
+        // If the current row frame is inside another cell frame,
+        // and the current row frame has no follow, it should not
+        // be allowed to grow. In fact, setting bRestrictTableGrowth
+        // to 'false' does not work, because the surrounding RowFrm
+        // would set this to 'true'.
+        pTab->SetFollowFlowLine( FALSE );
+    }
+
+    nReal += SwLayoutFrm::GrowFrm( nDist, bTst, bInfo);
+
+    pTab->SetRestrictTableGrowth( FALSE );
+    pTab->SetFollowFlowLine( bHasFollowFlowLine );
 
     //Hoehe der Zellen auf den neuesten Stand bringen.
     if ( !bTst )
@@ -2502,8 +3481,10 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         if ( nReal )
             SetCompletePaint();
     }
+
     return nReal;
 }
+
 /*************************************************************************
 |*
 |*  SwRowFrm::ShrinkFrm()
@@ -2591,11 +3572,12 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             SetCompletePaint();
 
             SwTabFrm *pTab = FindTabFrm();
-            if ( pTab->IsFollow() &&
+            if ( !pTab->IsRebuildLastLine() && pTab->IsFollow() &&
                  (!GetPrev() ||
-                  (pTab->GetTable()->IsHeadlineRepeat() && !GetPrev()->GetPrev())))
+                     (pTab->GetTable()->IsHeadlineRepeat() && !GetPrev()->GetPrev() ) ) )
             {
-                pTab->FindMaster()->InvalidatePos();
+                SwTabFrm* pMasterTab = const_cast< SwTabFrm* >( pTab->FindMaster() );
+                pMasterTab->InvalidatePos();
             }
         }
         AdjustCells( (Prt().*fnRect->fnGetHeight)() - nReal, TRUE );
@@ -2603,6 +3585,24 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     return nReal;
 }
 
+/*************************************************************************
+|*
+|*  SwRowFrm::IsRowSplitAllowed()
+|*
+|*************************************************************************/
+bool SwRowFrm::IsRowSplitAllowed() const
+{
+    if ( HasFixSize() )
+    {
+        const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
+        ASSERT( ATT_FIX_SIZE == rSz.GetSizeType(), "pRow claims to have fixed size" )
+        return false;
+    }
+    const SwTableLine* pTabLine = GetTabLine();
+    const SwTableLineFmt* pFrmFmt = (SwTableLineFmt*)pTabLine->GetFrmFmt();
+    const SwFmtRowSplit& rLP = pFrmFmt->GetRowSplit();
+    return 0 != rLP.GetValue();
+}
 
 /*************************************************************************
 |*
@@ -2612,11 +3612,14 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
-SwCellFrm::SwCellFrm( const SwTableBox &rBox ) :
+SwCellFrm::SwCellFrm( const SwTableBox &rBox, bool bInsertContent ) :
     SwLayoutFrm( rBox.GetFrmFmt() ),
     pTabBox( &rBox )
 {
     nType = FRMC_CELL;
+
+    if ( !bInsertContent )
+        return;
 
     //Wenn ein StartIdx vorhanden ist, so werden CntntFrms in der Zelle
     //angelegt, andernfalls muessen Rows vorhanden sein und diese werden
@@ -2631,7 +3634,7 @@ SwCellFrm::SwCellFrm( const SwTableBox &rBox ) :
         SwFrm *pPrev = 0;
         for ( USHORT i = 0; i < rLines.Count(); ++i )
         {
-            SwRowFrm *pNew = new SwRowFrm( *rLines[i] );
+            SwRowFrm *pNew = new SwRowFrm( *rLines[i], bInsertContent );
             pNew->InsertBehind( this, pPrev );
             pPrev = pNew;
         }
@@ -2751,6 +3754,17 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
         if( !pFrm->IsColumnFrm() && !pFrm->IsCellFrm() )
             lYStart = (*fnRect->fnYInc)( lYStart,
                                         (pFrm->Frm().*fnRect->fnGetHeight)() );
+
+        // Nowadays, the content inside a cell can flow into the follow table.
+        // Thus, the cell may only grow up to the end of the environment.
+        // So the content may have grown, but the cell could not grow.
+        // Therefore we have to trigger a formatting for the frames, which do
+        // not fit into the cell anymore:
+        SwTwips nDistanceToUpperPrtBottom =
+            (pFrm->Frm().*fnRect->fnBottomDist)( (pLay->*fnRect->fnGetPrtBottom)());
+        if ( nDistanceToUpperPrtBottom < 0 && pFrm->IsInSplitTableRow() )
+            pFrm->InvalidatePos();
+
         pFrm = pFrm->GetNext();
     }
     return bRet;
@@ -2769,9 +3783,12 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
         long nRightSpace = pAttrs->CalcRight( this );
         (this->*fnRect->fnSetXMargins)( nLeftSpace, nRightSpace );
-        long nTopSpace = pAttrs->CalcTop();
-        long nBottomSpace = pAttrs->CalcBottom();
-        (this->*fnRect->fnSetYMargins)( nTopSpace, nBottomSpace );
+        if ( Lower() )
+        {
+            long nTopSpace = pAttrs->CalcTop();
+            long nBottomSpace = pAttrs->CalcBottom();
+            (this->*fnRect->fnSetYMargins)( nTopSpace, nBottomSpace );
+        }
     }
     long nRemaining = ::lcl_CalcMinCellHeight( this, pAttrs );
     if ( !bValidSize )
@@ -2852,7 +3869,11 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         }
     }
     const SwFmtVertOrient &rOri = pAttrs->GetAttrSet().GetVertOrient();
-    if ( VERT_NONE != rOri.GetVertOrient() )
+
+    if ( !Lower() )
+        return;
+
+    if ( !FindTabFrm()->IsRebuildLastLine() && VERT_NONE != rOri.GetVertOrient() )
     {
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() )
         {
@@ -2979,3 +4000,7 @@ void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 
     SwLayoutFrm::Modify( pOld, pNew );
 }
+
+
+
+
