@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:48:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,8 @@ class SetupAppX : public SetupApp
     LPTSTR      m_pErrorText;
     LPTSTR      m_pModuleFile;
 
-    boolean     m_bQuiet;
-    boolean     m_bAdministrative;
+    boolean     m_bQuiet            : 1;
+    boolean     m_bAdministrative   : 1;
 
     FILE       *m_pLogFile;
 
