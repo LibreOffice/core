@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:46:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,13 @@ public:
         throw (CannotDumpException);
 };
 
-sal_Bool produceType(const ::rtl::OString& typeName,
+bool produceType(const ::rtl::OString& typeName,
+                     TypeManager const & typeMgr,
+                     codemaker::GeneratedTypeSet & generated,
+                     CppuOptions* pOptions)
+                 throw( CannotDumpException );
+
+bool produceType(RegistryKey& typeName, bool bIsExtraType,
                      TypeManager const & typeMgr,
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions)
