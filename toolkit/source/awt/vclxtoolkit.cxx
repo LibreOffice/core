@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 11:15:51 $
+ *  last change: $Author: mt $ $Date: 2001-08-23 15:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 //  class VCLXToolkit
 //  ----------------------------------------------------
 
-//static sal_Int32                          nVCLToolkitInstanceCount = 0;
+static sal_Int32                            nVCLToolkitInstanceCount = 0;
 static BOOL                                 bInitedByVCLToolkit = sal_False;
 //static cppu::OInterfaceContainerHelper *  pToolkits = 0;
 
@@ -433,6 +433,10 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
         */
         DeInitVCL();
     }
+    else
+    {
+        JoinMainLoopThread();
+    }
     delete pTTD;
 }
 
@@ -446,7 +450,8 @@ VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::st
     fnSvtCreateWindow = NULL;
 
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
-//  if( nVCLToolkitInstanceCount++ == 0 )
+    nVCLToolkitInstanceCount++;
+    if( ( nVCLToolkitInstanceCount == 1 ) && ( !Application::IsInMain() ) )
     {
         // setup execute thread
         CreateMainLoopThread( ToolkitWorkerFunction, new ToolkitThreadData( rSMgr, this ) );
@@ -478,7 +483,7 @@ void SAL_CALL VCLXToolkit::disposing()
     }
 
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
-//  if( --nVCLToolkitInstanceCount == 0 )
+    if( --nVCLToolkitInstanceCount == 0 )
     {
         if( bInitedByVCLToolkit )
         {
