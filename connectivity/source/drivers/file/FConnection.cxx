@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:55:21 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 11:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
+using namespace ::ucb;
 using namespace rtl;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
@@ -233,22 +234,29 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     OUString* pProps = aProps.getArray();
     pProps[ 0 ] = OUString::createFromAscii( "Title" );
 
-    if (aFile.isFolder())
+    try
     {
-        m_xDir = aFile.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
-        m_xContent = aFile.get();
-    }
-    else if (aFile.isDocument())
-    {
-        Reference<XContent> xParent(Reference<XChild>(aFile.get(),UNO_QUERY)->getParent(),UNO_QUERY);
-        Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
-        m_xContent = xParent;
+        if (aFile.isFolder())
+        {
+            m_xDir = aFile.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+            m_xContent = aFile.get();
+        }
+        else if (aFile.isDocument())
+        {
+            Reference<XContent> xParent(Reference<XChild>(aFile.get(),UNO_QUERY)->getParent(),UNO_QUERY);
+            Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
+            m_xContent = xParent;
 
-        ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
-        m_xDir = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+            ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+            m_xDir = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+        }
+        else
+            throw SQLException();
     }
-    else
+    catch(Exception&) // a execption is thrown when no file exists
+    {
         throw SQLException();
+    }
 
     if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
         throw SQLException();
@@ -482,12 +490,19 @@ void OConnection::disposing()
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet > OConnection::getDir() const
 {
-    Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
-    ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
-    Sequence< ::rtl::OUString > aProps(1);
-    ::rtl::OUString* pProps = aProps.getArray();
-    pProps[ 0 ] = ::rtl::OUString::createFromAscii( "Title" );
-    Reference<XDynamicResultSet> xContent = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+    Reference<XDynamicResultSet> xContent;
+    try
+    {
+        Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
+        ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+        Sequence< ::rtl::OUString > aProps(1);
+        ::rtl::OUString* pProps = aProps.getArray();
+        pProps[ 0 ] = ::rtl::OUString::createFromAscii( "Title" );
+        xContent = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+    }
+    catch(Exception&)
+    {
+    }
     return xContent;
 }
 
