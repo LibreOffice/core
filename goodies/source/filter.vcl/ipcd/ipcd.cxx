@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipcd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 14:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 #include <tools/new.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/config.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/fltcall.hxx>
 #include <svtools/solar.hrc>
+#include <svtools/FilterConfigItem.hxx>
 #include "strings.hrc"
 #include "dlgipcd.hrc"
 #include "dlgipcd.hxx"
@@ -82,14 +82,6 @@ enum PCDResolution {
     PCDRES_4BASE,   // 1536 x 1024
     PCDRES_16BASE   // 3072 x 3072
 };
-
-
-// Schluesselworte in der INI-Datei:
-#define PCDINI_RES_KEY     "PCD-IMPORT-RESOLUTION"
-#define PCDINI_RES_BASE16  "BASE/16"
-#define PCDINI_RES_BASE4   "BASE/4"
-#define PCDINI_RES_BASE    "BASE"
-
 
 class PCDReader {
 
@@ -135,16 +127,16 @@ public:
     PCDReader() {}
     ~PCDReader() {}
 
-    BOOL ReadPCD(SvStream & rPCD, Graphic & rGraphic,
-                  PFilterCallback pcallback, void * pcallerdata,
-                  Config * pConfig);
+    BOOL ReadPCD( SvStream & rPCD, Graphic & rGraphic,
+                    PFilterCallback pcallback, void * pcallerdata,
+                        FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von PCDReader ==============================
 
-BOOL PCDReader::ReadPCD(SvStream & rPCD, Graphic & rGraphic,
-                        PFilterCallback pcallback, void * pcallerdata,
-                        Config * pConfig)
+BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic,
+                            PFilterCallback pcallback, void * pcallerdata,
+                                FilterConfigItem* pConfigItem )
 {
     Bitmap       aBmp;
 
@@ -163,23 +155,15 @@ BOOL PCDReader::ReadPCD(SvStream & rPCD, Graphic & rGraphic,
     ReadOrientation();
 
     // Welche Aufloesung wollen wir ?:
-    if ( pConfig == NULL )
-        eResolution = PCDRES_BASE;
-    else
+    eResolution = PCDRES_BASE;
+    if ( pConfigItem )
     {
-        String aStr;
-
-        pConfig->Update();
-        aStr = UniString( pConfig->ReadKey( PCDINI_RES_KEY, PCDINI_RES_BASE ), RTL_TEXTENCODING_UTF8 );
-        aStr.ToUpperAscii();
-        if ( aStr.CompareToAscii( PCDINI_RES_BASE16 ) == COMPARE_EQUAL )
-            eResolution = PCDRES_BASE16;
-        else if ( aStr.CompareToAscii( PCDINI_RES_BASE4 ) == COMPARE_EQUAL )
+        sal_Int32 nResolution = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), 2 );
+        if ( nResolution == 1 )
             eResolution = PCDRES_BASE4;
-        else
-            eResolution = PCDRES_BASE;
+        else if ( nResolution == 2 )
+            eResolution = PCDRES_BASE16;
     }
-
     // Groesse und Position (Position in PCD-Datei) des Bildes bestimmen:
     switch (eResolution)
     {
@@ -444,16 +428,16 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
 
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config * pOptionsConfig, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem* pConfigItem, BOOL)
 #else
 extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config * pOptionsConfig, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem* pConfigItem, BOOL)
 #endif
 {
     PCDReader aPCDReader;
-    return aPCDReader.ReadPCD( rStream, rGraphic, pCallback, pCallerData, pOptionsConfig );
+    return aPCDReader.ReadPCD( rStream, rGraphic, pCallback, pCallerData, pConfigItem );
 }
 
 //================== GraphicDialog - die exportierte Funktion ================
@@ -462,7 +446,7 @@ extern "C" BOOL SAL_CALL DoImportDialog( FltCallDialogParameter& rPara )
 {
     BOOL    bRet = FALSE;
 
-    if ( rPara.pWindow && rPara.pCfg )
+    if ( rPara.pWindow )
     {
         ByteString  aResMgrName( "icd" );
         ResMgr* pResMgr;

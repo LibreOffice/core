@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+#   last change: $Author: sj $ $Date: 2001-03-08 14:59:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,8 +86,7 @@ PROJECTPCHSOURCE=eeng_pch
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRCFILES =	dlgipcd.src	\
-            ipcdstr.src
+SRCFILES =	dlgipcd.src
 
 SLOFILES =  $(SLO)$/ipcd.obj		\
             $(SLO)$/dlgipcd.obj
@@ -101,7 +100,7 @@ RESLIB1SRSFILES=\
 
 SHL1TARGET=     icd$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcd
-SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(CPPULIB)
+SHL1STDLIBS=    $(TOOLSLIB) $(SVTOOLLIB) $(SVLIB) $(CPPULIB) $(SALLIB)
 SHL1DEPN=       $(LB)$/ipcd.lib
 SHL1LIBS=       $(SLB)$/ipcd.lib # $(LB)$/rtftoken.lib
 
