@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:42:57 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ PushButton BTN_STANDARD
     Text [ english_us ] = "~Home" ;
     Text[ chinese_simplified ] = "±Í◊º(~H)";
     Text[ russian ] = "—Ú‡Ì‰‡Ú";
-    Text[ polish ] = "Standard";
+    Text[ polish ] = "Domyúlnie";
     Text[ japanese ] = "ïWèÄ";
     Text[ chinese_traditional ] = "º–∑«(~H)";
     Text[ arabic ] = "ﬁÌ«”Ì";
