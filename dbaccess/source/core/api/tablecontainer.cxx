@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:05:16 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,12 +214,8 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
     ,m_pMediator(NULL)
 {
     DBG_CTOR(OTableContainer, NULL);
-    osl_incrementInterlockedCount(&m_refCount);
-    {
-        m_pMediator = new OContainerMediator(this,Reference<XNameAccess>(_xTableDefinitions,UNO_QUERY));
-        m_xTableMediator = m_pMediator;
-    }
-    osl_decrementInterlockedCount( &m_refCount );
+    m_pMediator = new OContainerMediator(this,Reference<XNameAccess>(_xTableDefinitions,UNO_QUERY));
+    m_xTableMediator = m_pMediator;
 }
 
 //------------------------------------------------------------------------------
@@ -410,7 +406,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
     {
         String sMessage(DBACORE_RESSTRING(RID_STR_TABLE_IS_FILTERED));
         sMessage.SearchAndReplaceAscii("$name$", aName);
-        throw SQLException(sMessage,*this,SQLSTATE_GENERAL,1000,Any());
+        throw SQLException(sMessage,static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)),SQLSTATE_GENERAL,1000,Any());
     }
 
     m_bInAppend = sal_True;
@@ -467,13 +463,10 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                     if ( !xColumnDefinitions->hasByName(*pIter) )
                     {
                         Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
-                        OTableColumnDescriptor* pColumn = NULL;
-                        OTableColumnDescriptorWrapper* pColumnWrapper = NULL;
-                        if ( comphelper::getImplementation(pColumn,xColumn)
-                            || comphelper::getImplementation(pColumnWrapper,xColumn) )
+                        OColumnSettings* pColumnSettings = NULL;
+                        if ( ::comphelper::getImplementation( pColumnSettings, xColumn ) )
                         {
-                            if ( (pColumn && !pColumn->isDefaulted())
-                                || (pColumnWrapper && !pColumnWrapper->isDefaulted()) )
+                            if ( ( pColumnSettings && !pColumnSettings->isDefaulted() ) )
                             {
                                 ::comphelper::copyProperties(xColumn,xProp);
                                 xAppend->appendByDescriptor(xProp);
@@ -526,7 +519,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             }
 
             if(!sComposedName.getLength())
-                ::dbtools::throwFunctionSequenceException(*this);
+                ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
             ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
 
@@ -637,3 +630,10 @@ void OTableContainer::addMasterContainerListener()
     if(xCont.is())
         xCont->addContainerListener(this);
 }
+// -----------------------------------------------------------------------------
+void OTableContainer::notifyDataSourceModified()
+{
+    // nothing to do here
+}
+// -----------------------------------------------------------------------------
+
