@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtwrapinfluenceonobjpos.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:00:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,12 @@ BOOL SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
         {
             sal_Int16 nNewWrapInfluence;
             rVal >>= nNewWrapInfluence;
-            if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ||
-                 nNewWrapInfluence == text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED )
+            // --> OD 2004-10-18 #i35017# - constant names have changed and
+            // <ITERATIVE> has been added
+            if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
+                 nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
+                 nNewWrapInfluence == text::WrapInfluenceOnPosition::ITERATIVE )
+            // <--
             {
                 SetWrapInfluenceOnObjPos( nNewWrapInfluence );
             }
@@ -162,8 +166,12 @@ BOOL SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
 
 void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
 {
-    if ( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ||
-         _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED )
+    // --> OD 2004-10-18 #i35017# - constant names have changed and consider
+    // new value <ITERATIVE>
+    if ( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
+         _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
+         _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ITERATIVE )
+    // <--
     {
         mnWrapInfluenceOnPosition = _nWrapInfluenceOnPosition;
     }
@@ -173,7 +181,19 @@ void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInflu
     }
 }
 
-sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos() const
+// --> OD 2004-10-18 #i35017# - add parameter <_bIterativeAsOnceConcurrent>
+// to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
+sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
+                                const bool _bIterativeAsOnceConcurrent ) const
 {
-    return mnWrapInfluenceOnPosition;
+    sal_Int16 nWrapInfluenceOnPosition( mnWrapInfluenceOnPosition );
+
+    if ( _bIterativeAsOnceConcurrent &&
+         nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ITERATIVE )
+    {
+        nWrapInfluenceOnPosition = text::WrapInfluenceOnPosition::ONCE_CONCURRENT;
+    }
+
+    return nWrapInfluenceOnPosition;
 }
+// <--
