@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-17 10:48:13 $
+ *  last change: $Author: bm $ $Date: 2001-01-22 16:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
             xNext = xNext->mxNextMapper;
         xNext->mxNextMapper = rMapper;
     }
+    else
+        mxNextMapper = rMapper;
 
     // if rMapper was already chained, correct
     // map pointer of successors
