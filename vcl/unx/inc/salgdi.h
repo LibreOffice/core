@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:14:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@ class   SalGraphicsData;
 #include <tools/fract.hxx>
 #endif
 
+#ifndef _VCL_DLLAPI_H
+#include <dllapi.h>
+#endif
+
 #include "xfont.hxx"
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,7 +106,7 @@ class   ServerFontLayout;
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-class X11SalGraphics : public SalGraphics
+class VCL_DLLPUBLIC X11SalGraphics : public SalGraphics
 {
     friend class            X11FontLayout;
     friend class            ServerFontLayout;
