@@ -10,7 +10,7 @@
 #include "chartview/ObjectIdentifier.hxx"
 
 #ifndef _SV_GEN_HXX
-#include <vcl/gen.hxx>
+#include <tools/gen.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>

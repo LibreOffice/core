@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 10:15:35 $
+ *  last change: $Author: iha $ $Date: 2004-01-05 15:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,6 @@
 #include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
 #endif
 
-/*
-#ifndef _SV_GEN_HXX
-#include <vcl/gen.hxx>
-#endif
-*/
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
