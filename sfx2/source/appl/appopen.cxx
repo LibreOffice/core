@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-17 06:53:13 $
+ *  last change: $Author: pb $ $Date: 2001-08-23 10:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,37 +826,23 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOC);
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
-        SvtDocumentTemplateDialog aDlg( GetTopWindow() );
-        aDlg.Execute();
+        Window* pTopWin = GetTopWindow();
+        SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( pTopWin );
+        sal_Bool bNewWin = sal_False;
+        if ( pDocTemplDlg->Execute() == RET_OK && pTopWin != GetTopWindow() )
+        {
+            // the dialogue opens a document -> a new TopWindow appears
+            pTopWin = GetTopWindow();
+            bNewWin = sal_True;
+        }
+
+        delete pDocTemplDlg;
+        if ( bNewWin )
+            // after the destruction of the dialogue its parent comes to top,
+            // but we want that the new document is on top
+            pTopWin->ToTop();
+
         return;
-        /*! pb
-        if ( RET_OK == pDlg->Execute() )
-        {
-            if ( pDlg->IsTemplate() )
-            {
-                aTemplateName = pDlg->GetTemplateName();
-                aTemplateRegion = pDlg->GetTemplateRegion();
-                aTemplateFileName = pDlg->GetTemplateFileName();
-                rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aTemplateName) );
-                rReq.AppendItem( SfxStringItem( SID_TEMPLATE_REGIONNAME, aTemplateRegion) );
-                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aTemplateFileName) );
-                delete pDlg;
-            }
-            else
-            {
-                delete pDlg;
-                aTemplateFileName = String::CreateFromAscii("private:factory/");
-                aTemplateFileName += String::CreateFromAscii( GetDefaultFactory().GetShortName() );
-                aTemplateFileName = aTemplateFileName.ToLowerAscii();
-                bDirect = TRUE;
-            }
-        }
-        else
-        {
-            delete pDlg;
-            return;
-        }
-        */
     }
     else
     {
@@ -875,8 +861,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             bDirect = TRUE;
         }
     }
-
-//! (pb) MaxLen?         DirEntry(aTemplateName).GetFull( FSYS_STYLE_HOST,FALSE,20));
 
     ULONG lErr = 0;
     SfxItemSet* pSet = new SfxAllItemSet( GetPool() );
@@ -926,7 +910,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             rReq.SetReturnValue( *pRet );
     }
 }
-
 
 //---------------------------------------------------------------------------
 
