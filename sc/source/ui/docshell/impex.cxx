@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,7 +891,12 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
                 Date aDate( nDay, nMonth, nYear );
                 Date aNullDate = *pFormatter->GetNullDate();
                 double nValue = aDate - aNullDate;
-                long nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, pDoc->GetLanguage() );
+
+                LanguageType eLatin, eCjk, eCtl;
+                pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                LanguageType eDocLang = eLatin;                 //! which language for date formats?
+
+                long nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eDocLang );
 
                 pDoc->PutCell( nCol, nRow, nTab, new ScValueCell(nValue), nFormat, FALSE );
 
@@ -950,7 +955,10 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     const BYTE* pColFormat  = pExtOptions->GetColFormat();
     long nSkipLines = pExtOptions->GetStartRow();
 
-    LanguageType eDocLang = pDoc->GetLanguage();
+    LanguageType eLatin, eCjk, eCtl;
+    pDoc->GetLanguage( eLatin, eCjk, eCtl );
+    LanguageType eDocLang = eLatin;                 //! which language for date formats?
+
     International aInter( eDocLang );               // fuer Datums-Erkennung
     International* pEnglish = NULL;
     if ( eDocLang != LANGUAGE_ENGLISH_US )

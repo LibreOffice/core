@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 08:15:28 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,9 +346,9 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
 {
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
-    USHORT nDefLang;
+    USHORT nDefLang, nCjkLang, nCtlLang;
     BOOL bAutoSpell, bHideAuto;
-    ScModule::GetSpellSettings( nDefLang, bAutoSpell, bHideAuto );
+    ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell, bHideAuto );
     ScModule* pScMod = SC_MOD();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
@@ -364,7 +364,7 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
 
     //  Druck-Optionen werden jetzt direkt vor dem Drucken gesetzt
 
-    aDocument.SetLanguage( (LanguageType) nDefLang );
+    aDocument.SetLanguage( (LanguageType) nDefLang, (LanguageType) nCjkLang, (LanguageType) nCtlLang );
 }
 
 //---------------------------------------------------------------------
