@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:40:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
@@ -460,7 +460,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
@@ -504,7 +504,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    if( rSh.GetDrawView()->GetMarkList().GetMarkCount() )
+    if( rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
     {
         switch(rReq.GetSlot())
         {
@@ -588,7 +588,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
                     if (nResult == RET_OK)
                     {
-                        if (pSdrView->HasMarkedObj())
+                        if (pSdrView->AreObjectsMarked())
                         {
                             pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
                             rReq.Done(*(pDlg->GetOutputItemSet()));
