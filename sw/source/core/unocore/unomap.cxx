@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:21:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,6 +430,7 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
 
 #define ANCHOR_TYPES_PROPERTY    { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPES), FN_UNO_ANCHOR_TYPES,    CPPU_E2T(CPPUTYPE_SEQANCHORTYPE),PropertyAttribute::READONLY, 0xff},
 
+// OD 18.09.2003 #i18732# - add property
 #define COMMON_FRAME_PROPERTIES \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
@@ -487,7 +488,8 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
     { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,               CPPU_E2T(CPPUTYPE_INT32),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },            \
     { SW_PROP_NMID(UNO_LINK_DISPLAY_NAME), FN_PARAM_LINK_DISPLAY_NAME,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0xff},                \
     { SW_PROP_NMID(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },\
-    { SW_PROP_NMID(UNO_NAME_Z_ORDER), FN_UNO_Z_ORDER,           CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, 0},
+    { SW_PROP_NMID(UNO_NAME_Z_ORDER), FN_UNO_Z_ORDER,           CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, 0}, \
+    { SW_PROP_NMID(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
 
 
 
@@ -747,6 +749,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_PHYSICAL), FN_UNO_IS_PHYSICAL,     CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_IS_AUTO_UPDATE), FN_UNO_IS_AUTO_UPDATE, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    // OD 18.09.2003 #i18732#
+                    { SW_PROP_NMID(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFrameStyleMap;
