@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:35:26 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 09:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,5 +314,6 @@ void XMLSettingsExportHelper::exportSettings(
                     const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
+    DBG_ASSERT(aProps.getLength(), "no properties to export");
     exportSequencePropertyValue(aProps, rName);
 }
