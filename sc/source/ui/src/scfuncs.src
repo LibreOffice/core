@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2001-05-29 15:25:13 $
+ *  last change: $Author: er $ $Date: 2001-05-30 09:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -41135,9 +41135,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text = "Rechnet einen Wert anhand einer Umrechnungstabelle aus der Konfiguration um." ;
-            Text [ english ] = "Converts a value according to a conversion table defined in the configuration." ;
-            Text[ english_us ] = "Converts a value according to a conversion table defined in the configuration.";
+            Text = "Rechnet einen Wert anhand einer Umrechnungstabelle aus der Konfiguration (calc.xml) um." ;
+            Text [ english ] = "Converts a value according to a conversion table defined in the configuration (calc.xml)." ;
+            Text[ english_us ] = "Converts a value according to a conversion table defined in the configuration (calc.xml).";
             Text[ portuguese ] = "Converte um valor a partir de uma entrada da tabela convert.ini.";
             Text[ russian ] = "Преобразует значение на основании элементов таблицы convert.ini.";
             Text[ dutch ] = "Converteert een waarde aan de hand van een item in de tabel convert.ini.";
