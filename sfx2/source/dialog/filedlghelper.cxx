@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dv $ $Date: 2001-08-20 10:09:13 $
+ *  last change: $Author: sj $ $Date: 2001-08-20 11:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,21 +635,23 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
 
     ErrCode nRet = ERRCODE_NONE;
 
+    sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
+
     // non-local?
     if ( INET_PROT_FILE != aURLObj.GetProtocol() )
     {
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ );
 
         if( pStream )
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter );
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter, NULL, nFilterImportFlags );
         else
-            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
 
         delete pStream;
     }
     else
     {
-        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
+        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
     }
 
     return nRet;
