@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APNDataObject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-19 12:45:54 $
+ *  last change: $Author: tra $ $Date: 2001-07-26 11:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,31 +89,55 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
 {
     try
     {
-        if ( m_rIDataObjectOrg )
-        {
-            // we marshal the IDataObject interface pointer here so
-            // that it can be unmarshaled multiple times when this
-            // class will be used from another apartment
-            IStreamPtr pStm;
-            HRESULT  hr = CreateStreamOnHGlobal(
-                0, KEEP_HGLOB_ON_RELEASE, &pStm );
-            if ( SUCCEEDED( hr ) )
-            {
-                hr = CoMarshalInterface(
-                    pStm,
-                    __uuidof( IDataObject ),
-                    m_rIDataObjectOrg,
-                    MSHCTX_LOCAL,
-                    NULL,
-                    MSHLFLAGS_TABLEWEAK );
+        OSL_ENSURE( m_rIDataObjectOrg.GetInterfacePtr( ), "constructing CAPNDataObject with empty data object" );
 
-                if ( SUCCEEDED( hr )  )
-                    GetHGlobalFromStream( pStm, &m_hGlobal );
+        // we marshal the IDataObject interface pointer here so
+        // that it can be unmarshaled multiple times when this
+        // class will be used from another apartment
+        IStreamPtr pStm;
+        HRESULT hr = CreateStreamOnHGlobal( 0, KEEP_HGLOB_ON_RELEASE, &pStm );
+
+        OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
+
+        if ( SUCCEEDED( hr ) )
+        {
+            HRESULT hr_marshal = CoMarshalInterface(
+                pStm,
+                __uuidof( IDataObject ),
+                m_rIDataObjectOrg,
+                MSHCTX_LOCAL,
+                NULL,
+                MSHLFLAGS_TABLEWEAK );
+
+            OSL_ENSURE( CO_E_NOTINITIALIZED != hr_marshal, "COM is not initialized" );
+
+            // marshalling may fail if COM is not initialized
+            // for the calling thread which is a program time
+            // error or because of stream errors which are runtime
+            // errors for instance E_OUTOFMEMORY etc.
+
+            hr = GetHGlobalFromStream( pStm, &m_hGlobal );
+
+            OSL_ENSURE( E_INVALIDARG != hr, "invalid stream passed to GetHGlobalFromStream" );
+
+            // if the marshalling failed we free the
+            // global memory again and set m_hGlobal
+            // to a defined value
+            if ( FAILED( hr_marshal ) )
+            {
+                OSL_ENSURE( sal_False, "marshalling failed" );
+
+                HGLOBAL hGlobal = GlobalFree( m_hGlobal );
+
+                OSL_ENSURE( NULL == hGlobal, "GlobalFree failed" );
+
+                m_hGlobal = NULL;
             }
         }
     }
     catch( _com_error& )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
     }
 }
 
@@ -128,14 +152,21 @@ CAPNDataObject::~CAPNDataObject( )
         if ( m_hGlobal )
         {
             IStreamPtr pStm;
-            HRESULT  hr = CreateStreamOnHGlobal(
-                m_hGlobal, FREE_HGLOB_ON_RELEASE, &pStm );
+            HRESULT  hr = CreateStreamOnHGlobal( m_hGlobal, FREE_HGLOB_ON_RELEASE, &pStm );
 
-            CoReleaseMarshalData( pStm );
+            OSL_ENSURE( E_INVALIDARG != hr, "invalid args passed to CreateStreamOnHGlobal" );
+
+            if ( SUCCEEDED( hr ) )
+            {
+                hr = CoReleaseMarshalData( pStm );
+
+                OSL_ENSURE( SUCCEEDED( hr ), "CoReleaseMarshalData failed" );
+            }
         }
     }
     catch( _com_error& )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
     }
 }
 
@@ -194,21 +225,24 @@ STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
 
 STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
-    HRESULT hr = E_FAIL;
+    HRESULT hr;
 
     try
     {
         hr = m_rIDataObjectOrg->GetData( pFormatetc, pmedium );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->GetData( pFormatetc, pmedium );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -226,16 +260,19 @@ STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** 
     try
     {
         hr = m_rIDataObjectOrg->EnumFormatEtc( dwDirection, ppenumFormatetc );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->EnumFormatEtc( dwDirection, ppenumFormatetc );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -253,16 +290,19 @@ STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
     try
     {
         hr = m_rIDataObjectOrg->QueryGetData( pFormatetc );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->QueryGetData( pFormatetc );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -280,16 +320,19 @@ STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pm
     try
     {
         hr = m_rIDataObjectOrg->GetDataHere( pFormatetc, pmedium );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->GetDataHere( pFormatetc, pmedium );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -307,16 +350,19 @@ STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc( LPFORMATETC pFormatectIn, LP
     try
     {
         hr = m_rIDataObjectOrg->GetCanonicalFormatEtc( pFormatectIn, pFormatetcOut );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->GetCanonicalFormatEtc( pFormatectIn, pFormatetcOut );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -334,16 +380,19 @@ STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
     try
     {
         hr = m_rIDataObjectOrg->SetData( pFormatetc, pmedium, fRelease );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->SetData( pFormatetc, pmedium, fRelease );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -361,16 +410,19 @@ STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVI
     try
     {
         hr = m_rIDataObjectOrg->DAdvise( pFormatetc, advf, pAdvSink, pdwConnection );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->DAdvise( pFormatetc, advf, pAdvSink, pdwConnection );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -388,16 +440,19 @@ STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
     try
     {
         hr = m_rIDataObjectOrg->DUnadvise( dwConnection );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->DUnadvise( dwConnection );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -415,16 +470,19 @@ STDMETHODIMP CAPNDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
     try
     {
         hr = m_rIDataObjectOrg->EnumDAdvise( ppenumAdvise );
+
         if ( RPC_E_WRONG_THREAD == hr )
         {
             IDataObjectPtr pIDOTmp;
             hr = MarshalIDataObjectIntoCurrentApartment( &pIDOTmp );
+
             if ( SUCCEEDED( hr ) )
                 hr = pIDOTmp->EnumDAdvise( ppenumAdvise );
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
@@ -458,16 +516,21 @@ HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** pp
         {
             IStreamPtr pStm;
             hr = CreateStreamOnHGlobal( m_hGlobal, KEEP_HGLOB_ON_RELEASE, &pStm );
+
+            OSL_ENSURE( E_INVALIDARG != hr, "CreateStreamOnHGlobal with invalid args called" );
+
             if ( SUCCEEDED( hr ) )
             {
                 hr = CoUnmarshalInterface(
                     pStm, __uuidof( IDataObject ), (void**)ppIDataObj );
-                OSL_ASSERT( SUCCEEDED( hr ) );
+
+                OSL_ENSURE( CO_E_NOTINITIALIZED != hr, "COM is not initialized" );
             }
         }
     }
     catch( _com_error& ex )
     {
+        OSL_ENSURE( sal_False, "com exception caught" );
         hr = ex.Error( );
     }
 
