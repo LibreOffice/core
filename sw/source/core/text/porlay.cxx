@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-27 13:49:52 $
+ *  last change: $Author: fme $ $Date: 2001-11-30 15:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,13 +563,23 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
     aScriptChg.Remove( nCnt, nScriptRemove );
     aScriptType.Remove( nCnt, nScriptRemove );
 
-    // we know now that script at position nChg is nScript
-    // we have to start at position - 1 to make sure that appending a
-    // character cannot cause the occurence of two successing character
-    // groups of the same type in the array
-    if ( nChg )
-         nChg--;
+    xub_StrLen nGrpStart;
+    if ( nCnt )
+        nGrpStart = GetScriptChg( nCnt - 1 );
+    else
+        nGrpStart = 0;
 
+    // by stepping back one position we know that we are inside a group
+    // declared as an nScript group
+    if ( nChg )
+        --nChg;
+
+    // we go back in our group until we reach a non-weak character
+    while ( nChg > nGrpStart &&
+            WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
+        --nChg;
+
+    // the current group only contains weak characters
     if( WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
     {
         xub_StrLen nEnd =
@@ -651,6 +661,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
     if ( WEAK == nScript )
         // only weak characters in paragraph
         return;
+
+    ASSERT( WEAK != (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg ),
+            "Oh my god, it's weak again" );
 
     do
     {
