@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 17:17:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 16:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,12 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF)
 {
-    translit = new TransliterationImpl(xMSF);
+        translit = new TransliterationImpl(xMSF);
 }
 
 DefaultNumberingProvider::~DefaultNumberingProvider()
 {
-    delete translit;
+        delete translit;
 }
 
 Sequence< Reference<container::XIndexAccess> >
@@ -121,44 +121,44 @@ DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLo
 OUString toRoman( sal_Int32 n )
 {
 
-//      i, ii, iii, iv, v, vi, vii, vii, viii, ix
-//                          (Dummy),1000,500,100,50,10,5,1
-    static const sal_Char coRomanArr[] = "MDCLXVI--";   // +2 Dummy entries !!
-    const sal_Char* cRomanStr = coRomanArr;
-    sal_uInt16 nMask = 1000;
-    sal_uInt32 nOver1000 = n / nMask;
-    n -= ( nOver1000 * nMask );
+//              i, ii, iii, iv, v, vi, vii, vii, viii, ix
+//                                                      (Dummy),1000,500,100,50,10,5,1
+        static const sal_Char coRomanArr[] = "MDCLXVI--";       // +2 Dummy entries !!
+        const sal_Char* cRomanStr = coRomanArr;
+        sal_uInt16 nMask = 1000;
+        sal_uInt32 nOver1000 = n / nMask;
+        n -= ( nOver1000 * nMask );
 
-    OUStringBuffer sTmp;
+        OUStringBuffer sTmp;
     while(nOver1000--)
         sTmp.append(sal_Unicode(*coRomanArr));
 
-    while( nMask )
-    {
-        sal_uInt8 nZahl = sal_uInt8( n / nMask );
-        sal_uInt8 nDiff = 1;
-        n %= nMask;
-
-        if( 5 < nZahl )
+        while( nMask )
         {
-            if( nZahl < 9 )
-                sTmp.append(sal_Unicode(*(cRomanStr-1)));
-            ++nDiff;
-            nZahl -= 5;
-        }
-        switch( nZahl )
-        {
-        case 3: sTmp.append(sal_Unicode(*cRomanStr));       //no break!
-        case 2: sTmp.append(sal_Unicode(*cRomanStr));       //no break!
-        case 1: sTmp.append(sal_Unicode(*cRomanStr));       break;
-        case 4: sTmp.append(sal_Unicode(*cRomanStr)).append(sal_Unicode(*(cRomanStr-nDiff))); break;
-        case 5: sTmp.append(sal_Unicode(*(cRomanStr-nDiff)));   break;
-        }
+                sal_uInt8 nZahl = sal_uInt8( n / nMask );
+                sal_uInt8 nDiff = 1;
+                n %= nMask;
 
-        nMask /= 10;            // to the next decade
-        cRomanStr += 2;
-    }
-    return sTmp.makeStringAndClear();
+                if( 5 < nZahl )
+                {
+                        if( nZahl < 9 )
+                                sTmp.append(sal_Unicode(*(cRomanStr-1)));
+                        ++nDiff;
+                        nZahl -= 5;
+                }
+                switch( nZahl )
+                {
+                case 3: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
+                case 2: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
+                case 1: sTmp.append(sal_Unicode(*cRomanStr));           break;
+                case 4: sTmp.append(sal_Unicode(*cRomanStr)).append(sal_Unicode(*(cRomanStr-nDiff))); break;
+                case 5: sTmp.append(sal_Unicode(*(cRomanStr-nDiff)));   break;
+                }
+
+                nMask /= 10;                    // to the next decade
+                cRomanStr += 2;
+        }
+        return sTmp.makeStringAndClear();
 }
 
 static
@@ -209,26 +209,26 @@ void lcl_formatChars1( sal_Unicode table[], int tableSize, int n, OUString& s )
      int repeat_count = n / tableSize + 1;
 
      for( int i=0; i<repeat_count; i++ )
-     s += OUString::valueOf( table[ n%tableSize ] );
+         s += OUString::valueOf( table[ n%tableSize ] );
 }
 
 static
 int should_ignore( OUString s )
 {
-    // return true if blank or null
-    return s.compareToAscii(" ")==0 || (s.getLength()>0 && s[0]==0);
+        // return true if blank or null
+        return s.compareToAscii(" ")==0 || (s.getLength()>0 && s[0]==0);
 }
 
 static
 Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
                                                 const char* name, sal_Bool bRequired )
 {
-    for( int i=0; i<aProperties.getLength(); i++ )
-        if( aProperties[i].Name.equalsAscii(name) )
-            return aProperties[i].Value;
-    if(bRequired)
-        throw IllegalArgumentException();
-    return Any();
+        for( int i=0; i<aProperties.getLength(); i++ )
+                if( aProperties[i].Name.equalsAscii(name) )
+                        return aProperties[i].Value;
+        if(bRequired)
+            throw IllegalArgumentException();
+        return Any();
 }
 
 //XNumberingFormatter
@@ -252,7 +252,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
      // Q: why is the type of numType sal_Int16 instead of style::NumberingType?
      // A: an Any can't hold a style::NumberingType for some reason.
-    //  add.: style::NumberingType holds constants of type sal_Int16, it's not an enum type
+        //      add.: style::NumberingType holds constants of type sal_Int16, it's not an enum type
 
      sal_Int16 natNum = 0;
      sal_Int16 tableSize = 0;
@@ -343,110 +343,110 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                lcl_formatChars1( lowerLetter, 26,  number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
                break;
           case TRANSLITERATION:
-           try {
-             const OUString &tmp = OUString::valueOf( number );
-             OUString transliteration;
-             getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
-             translit->loadModuleByImplName(transliteration, aLocale);
-             result += translit->transliterateString2String(tmp, 0, tmp.getLength());
-           } catch (Exception& ) {
-            // When translteration property is missing, return default number (bug #101141#)
-            result += OUString::valueOf( number );
+               try {
+                    const OUString &tmp = OUString::valueOf( number );
+                    OUString transliteration;
+                    getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
+                    translit->loadModuleByImplName(transliteration, aLocale);
+                    result += translit->transliterateString2String(tmp, 0, tmp.getLength());
+               } catch (Exception& ) {
+                    // When translteration property is missing, return default number (bug #101141#)
+                    result += OUString::valueOf( number );
                     // assert(0);
                     // throw IllegalArgumentException();
-           }
+               }
                break;
           case NATIVE_NUMBERING:
-          natNum = NativeNumberMode::NATNUM1;
-        locale = aLocale;
+                natNum = NativeNumberMode::NATNUM1;
+                locale = aLocale;
                 break;
-      case FULLWIDTH_ARABIC:
-          natNum = NativeNumberMode::NATNUM3;
-        locale = aLocale;
+          case FULLWIDTH_ARABIC:
+                natNum = NativeNumberMode::NATNUM3;
+                locale = aLocale;
                 break;
-      case NUMBER_LOWER_ZH:
-          natNum = NativeNumberMode::NATNUM7;
-        locale.Language = OUString::createFromAscii("zh");
+          case NUMBER_LOWER_ZH:
+                natNum = NativeNumberMode::NATNUM7;
+                locale.Language = OUString::createFromAscii("zh");
                 break;
-      case NUMBER_UPPER_ZH_TW:
-        locale.Country = OUString::createFromAscii("TW");
-      case NUMBER_UPPER_ZH:
-          natNum = NativeNumberMode::NATNUM8;
-        locale.Language = OUString::createFromAscii("zh");
+          case NUMBER_UPPER_ZH_TW:
+                locale.Country = OUString::createFromAscii("TW");
+          case NUMBER_UPPER_ZH:
+                natNum = NativeNumberMode::NATNUM8;
+                locale.Language = OUString::createFromAscii("zh");
                 break;
-          natNum = NativeNumberMode::NATNUM8;
-        locale.Language = OUString::createFromAscii("zh");
+                natNum = NativeNumberMode::NATNUM8;
+                locale.Language = OUString::createFromAscii("zh");
                 break;
-      case NUMBER_TRADITIONAL_JA:
-          natNum = NativeNumberMode::NATNUM8;
-        locale.Language = OUString::createFromAscii("ja");
+          case NUMBER_TRADITIONAL_JA:
+                natNum = NativeNumberMode::NATNUM8;
+                locale.Language = OUString::createFromAscii("ja");
                 break;
-      case NUMBER_UPPER_KO:
-          natNum = NativeNumberMode::NATNUM8;
-        locale.Language = OUString::createFromAscii("ko");
+          case NUMBER_UPPER_KO:
+                natNum = NativeNumberMode::NATNUM8;
+                locale.Language = OUString::createFromAscii("ko");
                 break;
-      case NUMBER_HANGUL_KO:
-          natNum = NativeNumberMode::NATNUM11;
-        locale.Language = OUString::createFromAscii("ko");
+          case NUMBER_HANGUL_KO:
+                natNum = NativeNumberMode::NATNUM11;
+                locale.Language = OUString::createFromAscii("ko");
                 break;
 
-      case CIRCLE_NUMBER:
-          table = table_CircledNumber;
-          tableSize = sizeof(table_CircledNumber) / sizeof(sal_Unicode);
-          break;
-      case TIAN_GAN_ZH:
-          table = table_TianGan_zh;
-          tableSize = sizeof(table_TianGan_zh) / sizeof(sal_Unicode);
-          break;
-      case DI_ZI_ZH:
-          table = table_DiZi_zh;
-          tableSize = sizeof(table_DiZi_zh) / sizeof(sal_Unicode);
-          break;
-      case AIU_FULLWIDTH_JA:
-          table = table_AIUFullWidth_ja_JP;
-          tableSize = sizeof(table_AIUFullWidth_ja_JP) / sizeof(sal_Unicode);
-          break;
-      case AIU_HALFWIDTH_JA:
-          table = table_AIUHalfWidth_ja_JP;
-          tableSize = sizeof(table_AIUHalfWidth_ja_JP) / sizeof(sal_Unicode);
-          break;
-      case IROHA_FULLWIDTH_JA:
-          table = table_IROHAFullWidth_ja_JP;
-          tableSize = sizeof(table_IROHAFullWidth_ja_JP) / sizeof(sal_Unicode);
-          break;
-      case IROHA_HALFWIDTH_JA:
-          table = table_IROHAHalfWidth_ja_JP;
-          tableSize = sizeof(table_IROHAHalfWidth_ja_JP) / sizeof(sal_Unicode);
-          break;
-      case HANGUL_JAMO_KO:
-          table = table_HangulJamo_ko;
-          tableSize = sizeof(table_HangulJamo_ko) / sizeof(sal_Unicode);
-          recycleSymbol = sal_True;
-          break;
-      case HANGUL_SYLLABLE_KO:
-          table = table_HangulSyllable_ko;
-          tableSize = sizeof(table_HangulSyllable_ko) / sizeof(sal_Unicode);
-          recycleSymbol = sal_True;
-          break;
-      case HANGUL_CIRCLED_JAMO_KO:
-          table = table_HangulCircledJamo_ko;
-          tableSize = sizeof(table_HangulCircledJamo_ko) / sizeof(sal_Unicode);
-          recycleSymbol = sal_True;
-          break;
-      case HANGUL_CIRCLED_SYLLABLE_KO:
-          table = table_HangulCircledSyllable_ko;
-          tableSize = sizeof(table_HangulCircledSyllable_ko) / sizeof(sal_Unicode);
-          recycleSymbol = sal_True;
-          break;
-      case CHARS_ARABIC:
-          lcl_formatChars(table_Alphabet_ar, sizeof(table_Alphabet_ar) / sizeof(sal_Unicode), number - 1, result);
-          break;
-      case CHARS_THAI:
-          lcl_formatChars(table_Alphabet_th, sizeof(table_Alphabet_th) / sizeof(sal_Unicode), number - 1, result);
-          break;
-      case CHARS_HEBREW:
-          lcl_formatChars(table_Alphabet_he, sizeof(table_Alphabet_he) / sizeof(sal_Unicode), number - 1, result);
-          break;
+          case CIRCLE_NUMBER:
+              table = table_CircledNumber;
+              tableSize = sizeof(table_CircledNumber) / sizeof(sal_Unicode);
+              break;
+          case TIAN_GAN_ZH:
+              table = table_TianGan_zh;
+              tableSize = sizeof(table_TianGan_zh) / sizeof(sal_Unicode);
+              break;
+          case DI_ZI_ZH:
+              table = table_DiZi_zh;
+              tableSize = sizeof(table_DiZi_zh) / sizeof(sal_Unicode);
+              break;
+          case AIU_FULLWIDTH_JA:
+              table = table_AIUFullWidth_ja_JP;
+              tableSize = sizeof(table_AIUFullWidth_ja_JP) / sizeof(sal_Unicode);
+              break;
+          case AIU_HALFWIDTH_JA:
+              table = table_AIUHalfWidth_ja_JP;
+              tableSize = sizeof(table_AIUHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              break;
+          case IROHA_FULLWIDTH_JA:
+              table = table_IROHAFullWidth_ja_JP;
+              tableSize = sizeof(table_IROHAFullWidth_ja_JP) / sizeof(sal_Unicode);
+              break;
+          case IROHA_HALFWIDTH_JA:
+              table = table_IROHAHalfWidth_ja_JP;
+              tableSize = sizeof(table_IROHAHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              break;
+          case HANGUL_JAMO_KO:
+              table = table_HangulJamo_ko;
+              tableSize = sizeof(table_HangulJamo_ko) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
+              break;
+          case HANGUL_SYLLABLE_KO:
+              table = table_HangulSyllable_ko;
+              tableSize = sizeof(table_HangulSyllable_ko) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
+              break;
+          case HANGUL_CIRCLED_JAMO_KO:
+              table = table_HangulCircledJamo_ko;
+              tableSize = sizeof(table_HangulCircledJamo_ko) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
+              break;
+          case HANGUL_CIRCLED_SYLLABLE_KO:
+              table = table_HangulCircledSyllable_ko;
+              tableSize = sizeof(table_HangulCircledSyllable_ko) / sizeof(sal_Unicode);
+              recycleSymbol = sal_True;
+              break;
+          case CHARS_ARABIC:
+              lcl_formatChars(table_Alphabet_ar, sizeof(table_Alphabet_ar) / sizeof(sal_Unicode), number - 1, result);
+              break;
+          case CHARS_THAI:
+              lcl_formatChars(table_Alphabet_th, sizeof(table_Alphabet_th) / sizeof(sal_Unicode), number - 1, result);
+              break;
+          case CHARS_HEBREW:
+              lcl_formatChars(table_Alphabet_he, sizeof(table_Alphabet_he) / sizeof(sal_Unicode), number - 1, result);
+              break;
 
           default:
                assert(0);
@@ -454,70 +454,70 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
       }
 
-    if (natNum) {
-        NativeNumberSupplier sNatNum;
-        result += sNatNum.getNativeNumberString(OUString::valueOf( number ), locale, natNum);
-    } else if (tableSize) {
-        if ( number > tableSize && !recycleSymbol)
-        result += OUString::valueOf( number);
-        else
-        result += OUString(&table[--number % tableSize], 1);
-    }
+        if (natNum) {
+            NativeNumberSupplier sNatNum;
+            result += sNatNum.getNativeNumberString(OUString::valueOf( number ), locale, natNum);
+        } else if (tableSize) {
+            if ( number > tableSize && !recycleSymbol)
+                result += OUString::valueOf( number);
+            else
+                result += OUString(&table[--number % tableSize], 1);
+        }
 
-    // append suffix
-    if( !should_ignore(suffix) ) result += suffix;
+        // append suffix
+        if( !should_ignore(suffix) ) result += suffix;
 
-    return result;
+        return result;
 }
 /* -----------------------------21.02.01 15:57--------------------------------
 
  ---------------------------------------------------------------------------*/
 
-#define LANG_ALL    (1 << 0)
-#define LANG_CJK    (1 << 1)
-#define LANG_CTL    (1 << 2)
+#define LANG_ALL        (1 << 0)
+#define LANG_CJK        (1 << 1)
+#define LANG_CTL        (1 << 2)
 
 struct Supported_NumberingType
 {
-    sal_Int16       nType;
-    const sal_Char* cSymbol;
-    sal_Int16       langOption;
+        sal_Int16               nType;
+        const sal_Char* cSymbol;
+        sal_Int16               langOption;
 };
 static const Supported_NumberingType aSupportedTypes[] =
 {
-    {style::NumberingType::CHARS_UPPER_LETTER,  "A", LANG_ALL},
-    {style::NumberingType::CHARS_LOWER_LETTER,  "a", LANG_ALL},
-    {style::NumberingType::ROMAN_UPPER,             "I", LANG_ALL},
-    {style::NumberingType::ROMAN_LOWER,             "i", LANG_ALL},
-    {style::NumberingType::ARABIC,              "1", LANG_ALL},
-    {style::NumberingType::NUMBER_NONE,             "''", LANG_ALL},
-    {style::NumberingType::CHAR_SPECIAL,            "Bullet", LANG_ALL},
-    {style::NumberingType::PAGE_DESCRIPTOR,         "Page", LANG_ALL},
-    {style::NumberingType::BITMAP,              "Bitmap", LANG_ALL},
-    {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA", LANG_ALL},
-    {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa", LANG_ALL},
-    {style::NumberingType::NATIVE_NUMBERING,    "Native Numbering", LANG_CJK|LANG_CTL},
-    {style::NumberingType::FULLWIDTH_ARABIC,    NULL, LANG_CJK},
-    {style::NumberingType::CIRCLE_NUMBER,       NULL, LANG_CJK},
-    {style::NumberingType::NUMBER_LOWER_ZH,     NULL, LANG_CJK},
-    {style::NumberingType::NUMBER_UPPER_ZH,     NULL, LANG_CJK},
-    {style::NumberingType::NUMBER_UPPER_ZH_TW,  NULL, LANG_CJK},
-    {style::NumberingType::TIAN_GAN_ZH,     NULL, LANG_CJK},
-    {style::NumberingType::DI_ZI_ZH,        NULL, LANG_CJK},
-    {style::NumberingType::NUMBER_TRADITIONAL_JA,   NULL, LANG_CJK},
-    {style::NumberingType::AIU_FULLWIDTH_JA,    NULL, LANG_CJK},
-    {style::NumberingType::AIU_HALFWIDTH_JA,    NULL, LANG_CJK},
-    {style::NumberingType::IROHA_FULLWIDTH_JA,  NULL, LANG_CJK},
-    {style::NumberingType::IROHA_HALFWIDTH_JA,  NULL, LANG_CJK},
-    {style::NumberingType::NUMBER_UPPER_KO,     NULL, LANG_CJK},
-    {style::NumberingType::NUMBER_HANGUL_KO,    NULL, LANG_CJK},
-    {style::NumberingType::HANGUL_JAMO_KO,      NULL, LANG_CJK},
-    {style::NumberingType::HANGUL_SYLLABLE_KO,  NULL, LANG_CJK},
-    {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL, LANG_CJK},
-    {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,  NULL, LANG_CJK},
-    {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
-    {style::NumberingType::CHARS_THAI,  NULL, LANG_CTL},
-    {style::NumberingType::CHARS_HEBREW,    NULL, LANG_CTL},
+        {style::NumberingType::CHARS_UPPER_LETTER,      "A", LANG_ALL},
+        {style::NumberingType::CHARS_LOWER_LETTER,      "a", LANG_ALL},
+        {style::NumberingType::ROMAN_UPPER,                     "I", LANG_ALL},
+        {style::NumberingType::ROMAN_LOWER,                     "i", LANG_ALL},
+        {style::NumberingType::ARABIC,                          "1", LANG_ALL},
+        {style::NumberingType::NUMBER_NONE,                     "''", LANG_ALL},
+        {style::NumberingType::CHAR_SPECIAL,                    "Bullet", LANG_ALL},
+        {style::NumberingType::PAGE_DESCRIPTOR,                 "Page", LANG_ALL},
+        {style::NumberingType::BITMAP,                          "Bitmap", LANG_ALL},
+        {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA", LANG_ALL},
+        {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa", LANG_ALL},
+        {style::NumberingType::NATIVE_NUMBERING,        "Native Numbering", LANG_CJK|LANG_CTL},
+        {style::NumberingType::FULLWIDTH_ARABIC,        NULL, LANG_CJK},
+        {style::NumberingType::CIRCLE_NUMBER,           NULL, LANG_CJK},
+        {style::NumberingType::NUMBER_LOWER_ZH,         NULL, LANG_CJK},
+        {style::NumberingType::NUMBER_UPPER_ZH,         NULL, LANG_CJK},
+        {style::NumberingType::NUMBER_UPPER_ZH_TW,      NULL, LANG_CJK},
+        {style::NumberingType::TIAN_GAN_ZH,             NULL, LANG_CJK},
+        {style::NumberingType::DI_ZI_ZH,                NULL, LANG_CJK},
+        {style::NumberingType::NUMBER_TRADITIONAL_JA,   NULL, LANG_CJK},
+        {style::NumberingType::AIU_FULLWIDTH_JA,        NULL, LANG_CJK},
+        {style::NumberingType::AIU_HALFWIDTH_JA,        NULL, LANG_CJK},
+        {style::NumberingType::IROHA_FULLWIDTH_JA,      NULL, LANG_CJK},
+        {style::NumberingType::IROHA_HALFWIDTH_JA,      NULL, LANG_CJK},
+        {style::NumberingType::NUMBER_UPPER_KO,         NULL, LANG_CJK},
+        {style::NumberingType::NUMBER_HANGUL_KO,        NULL, LANG_CJK},
+        {style::NumberingType::HANGUL_JAMO_KO,          NULL, LANG_CJK},
+        {style::NumberingType::HANGUL_SYLLABLE_KO,      NULL, LANG_CJK},
+        {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL, LANG_CJK},
+        {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,      NULL, LANG_CJK},
+        {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
+        {style::NumberingType::CHARS_THAI,      NULL, LANG_CTL},
+        {style::NumberingType::CHARS_HEBREW,    NULL, LANG_CTL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
@@ -525,53 +525,53 @@ static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / siz
  ---------------------------------------------------------------------------*/
 
 OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
-                throw(RuntimeException)
+                                throw(RuntimeException)
 {
-    if (aSupportedTypes[index].cSymbol)
-        return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
-    else {
-        OUString result;
-        Locale aLocale(OUString::createFromAscii("en"), OUString(), OUString());
-        Sequence<beans::PropertyValue> aProperties(2);
-        aProperties[0].Name = OUString::createFromAscii("NumberingType");
-        aProperties[0].Value <<= aSupportedTypes[index].nType;
-        aProperties[1].Name = OUString::createFromAscii("Value");
-        for (sal_Int32 j = 1; j <= 3; j++) {
-        aProperties[1].Value <<= j;
-        result += makeNumberingString( aProperties, aLocale );
-        result += OUString::createFromAscii(", ");
+        if (aSupportedTypes[index].cSymbol)
+            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
+        else {
+            OUString result;
+            Locale aLocale(OUString::createFromAscii("en"), OUString(), OUString());
+            Sequence<beans::PropertyValue> aProperties(2);
+            aProperties[0].Name = OUString::createFromAscii("NumberingType");
+            aProperties[0].Value <<= aSupportedTypes[index].nType;
+            aProperties[1].Name = OUString::createFromAscii("Value");
+            for (sal_Int32 j = 1; j <= 3; j++) {
+                aProperties[1].Value <<= j;
+                result += makeNumberingString( aProperties, aLocale );
+                result += OUString::createFromAscii(", ");
+            }
+            result += OUString::createFromAscii("...");
+            return result;
         }
-        result += OUString::createFromAscii("...");
-        return result;
-    }
 }
 
 sal_Bool SAL_CALL
 DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(RuntimeException)
 {
     if (! xHierarchicalNameAccess.is()) {
-    Reference< XInterface > xInterface;
+        Reference< XInterface > xInterface;
 
-    xInterface = xSMgr->createInstance(OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"));
-    Reference< XMultiServiceFactory > xConfigProvider =
-        Reference< XMultiServiceFactory >(xInterface, UNO_QUERY );
+        xInterface = xSMgr->createInstance(OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"));
+        Reference< XMultiServiceFactory > xConfigProvider =
+                Reference< XMultiServiceFactory >(xInterface, UNO_QUERY );
 
-    if (! xConfigProvider.is())
-        throw RuntimeException();
+        if (! xConfigProvider.is())
+            throw RuntimeException();
 
-    Sequence< Any > aArgs(1);
-    beans::PropertyValue aPath;
-    aPath.Name = OUString::createFromAscii("nodepath");
-    aPath.Value <<= OUString::createFromAscii("/org.openoffice.Office.Common/I18N"),
-    aArgs[0] <<= aPath;
+        Sequence< Any > aArgs(1);
+        beans::PropertyValue aPath;
+        aPath.Name = OUString::createFromAscii("nodepath");
+        aPath.Value <<= OUString::createFromAscii("/org.openoffice.Office.Common/I18N"),
+        aArgs[0] <<= aPath;
 
-    xInterface = xConfigProvider->createInstanceWithArguments(
-        OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), aArgs);
+        xInterface = xConfigProvider->createInstanceWithArguments(
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), aArgs);
 
-    xHierarchicalNameAccess.set(xInterface, UNO_QUERY);
+        xHierarchicalNameAccess.set(xInterface, UNO_QUERY);
 
-    if (! xHierarchicalNameAccess.is())
-        throw RuntimeException();
+        if (! xHierarchicalNameAccess.is())
+            throw RuntimeException();
     }
 
     Any aEnabled = xHierarchicalNameAccess->getByHierarchicalName(aName);
@@ -584,55 +584,55 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
 }
 
 Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
-                throw(RuntimeException)
+                                throw(RuntimeException)
 {
-    Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
-    sal_Int16* pArray = aRet.getArray();
+        Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
+        sal_Int16* pArray = aRet.getArray();
 
-    sal_Bool cjkEnabled = isScriptFlagEnabled(OUString::createFromAscii("CJK/CJKFont"));
-    sal_Bool ctlEnabled = isScriptFlagEnabled(OUString::createFromAscii("CTL/CTLFont"));
+        sal_Bool cjkEnabled = isScriptFlagEnabled(OUString::createFromAscii("CJK/CJKFont"));
+        sal_Bool ctlEnabled = isScriptFlagEnabled(OUString::createFromAscii("CTL/CTLFont"));
 
-    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
-        if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
-            (aSupportedTypes[i].langOption & LANG_CJK) && cjkEnabled ||
-            (aSupportedTypes[i].langOption & LANG_CTL) && ctlEnabled)
-        pArray[i] = aSupportedTypes[i].nType;
-    }
-    return aRet;
+        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
+            if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
+                    (aSupportedTypes[i].langOption & LANG_CJK) && cjkEnabled ||
+                    (aSupportedTypes[i].langOption & LANG_CTL) && ctlEnabled)
+                pArray[i] = aSupportedTypes[i].nType;
+        }
+        return aRet;
 }
 /* -----------------------------21.02.01 15:57--------------------------------
 
  ---------------------------------------------------------------------------*/
 sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumberingIdentifier )
-                throw(RuntimeException)
+                                throw(RuntimeException)
 {
-    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
-            return aSupportedTypes[i].nType;
-    throw RuntimeException();
-    return -1;
+        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
+                if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
+                        return aSupportedTypes[i].nType;
+        throw RuntimeException();
+        return -1;
 }
 /* -----------------------------21.02.01 15:57--------------------------------
 
  ---------------------------------------------------------------------------*/
 sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
-                throw(RuntimeException)
+                                throw(RuntimeException)
 {
-    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
-            return sal_True;
-    return sal_False;
+        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
+                if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
+                        return sal_True;
+        return sal_False;
 }
 /* -----------------------------21.02.01 15:57--------------------------------
 
  ---------------------------------------------------------------------------*/
 OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingType )
-                throw(RuntimeException)
+                                throw(RuntimeException)
 {
-    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(nNumberingType == aSupportedTypes[i].nType)
-        return makeNumberingIdentifier(i);
-    return OUString();
+        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
+            if(nNumberingType == aSupportedTypes[i].nType)
+                return makeNumberingIdentifier(i);
+        return OUString();
 }
 /* -----------------------------05.07.01 13:34--------------------------------
 
