@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-27 12:57:08 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,6 @@
  ************************************************************************/
 
 #include <stdlib.h>
-#define _SV_BITMAP_CXX
-
-#ifdef W31
-#include <tools/svwin.h>
-#endif
 #include <tools/new.hxx>
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
@@ -1033,7 +1028,7 @@ BOOL Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 
                     while( ( nActY < nNewHeight1 ) && ( pLutY[ nActY + 1 ] == nMapY ) )
                     {
-                        HMEMCPY( pWriteAcc->GetScanline( nActY + 1L ),
+                        memcpy( pWriteAcc->GetScanline( nActY + 1L ),
                                  pWriteAcc->GetScanline( nActY ), nScanlineSize );
                         nActY++;
                     }
@@ -1316,11 +1311,6 @@ BOOL Bitmap::Dither( ULONG nDitherFlags, const BitmapPalette* pDitherPal )
     return bRet;
 }
 
-//fuer WIN16 Borland
-#ifdef WIN
-#pragma codeseg BITMAP3_SEG1
-#endif
-
 // ------------------------------------------------------------------------
 
 BOOL Bitmap::ImplDitherMatrix( const BitmapPalette* pDitherPal )
@@ -1413,7 +1403,6 @@ BOOL Bitmap::ImplDitherFloyd( const BitmapPalette* pDitherPal )
             long        nX;
             long        nW = nWidth * 3L;
             long        nW2 = nW - 3L;
-            long        nWLen = nW << 2;
             long        nRErr, nGErr, nBErr;
             long        nRC, nGC, nBC;
             long        nTemp;
@@ -1491,7 +1480,8 @@ BOOL Bitmap::ImplDitherFloyd( const BitmapPalette* pDitherPal )
                 pWriteAcc->SetPixel( nYAcc, 0, BitmapColor( (BYTE) ( nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ] ) ) );
 
                 // mittlere Pixel ueber Schleife
-                for ( long nX = 3L, nXAcc = 1L; nX < nW2; nXAcc++ )
+                long nX, nXAcc;
+                for ( nX = 3L, nXAcc = 1L; nX < nW2; nXAcc++ )
                 {
                     CALC_ERRORS;
                     CALC_TABLES7;
@@ -1908,12 +1898,12 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
         if( pWAcc )
         {
             const ULONG nSize = 32768UL * sizeof( ULONG );
-            HPULONG     pColBuf = (HPULONG) SvMemAlloc( nSize );
+            ULONG*      pColBuf = (ULONG*) SvMemAlloc( nSize );
             const long  nWidth = pWAcc->Width();
             const long  nHeight = pWAcc->Height();
             long        nIndex = 0L;
 
-            HMEMSET( (HPBYTE) pColBuf, 0, nSize );
+            memset( (HPBYTE) pColBuf, 0, nSize );
 
             // create Buffer
             if( pRAcc->HasPalette() )
@@ -1986,7 +1976,7 @@ void Bitmap::ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal,
     const long  nGLen = nG2 - nG1;
     const long  nBLen = nB2 - nB1;
     long        nR, nG, nB;
-    HPULONG     pBuf = pColBuf;
+    ULONG*      pBuf = pColBuf;
 
     if( !nRLen && !nGLen && !nBLen )
     {
