@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #endif
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBAUI_JOINCONTROLLER_HXX
 #include "JoinController.hxx"
