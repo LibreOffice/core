@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
+ *  last change: $Author: mib $ $Date: 2001-03-29 08:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,8 +258,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     sal_Int32 nHeight = 0;
 
     const SvXMLTokenMap& rTokenMap =
-        bPath ? GetImport().GetShapeImport()->GetPathShapeAttrTokenMap()
-              : GetImport().GetShapeImport()->GetPolygonShapeAttrTokenMap();
+        GetImport().GetTextImport()->GetTextContourAttrTokenMap();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -271,47 +270,33 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
-        if( bPath )
+        switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
-            switch( rTokenMap.Get( nPrefix, aLocalName ) )
-            {
-            case XML_TOK_PATHSHAPE_VIEWBOX:
-                sViewBox = rValue;
-                break;
-            case XML_TOK_PATHSHAPE_D:
+        case XML_TOK_TEXT_CONTOUR_VIEWBOX:
+            sViewBox = rValue;
+            break;
+        case XML_TOK_TEXT_CONTOUR_D:
+            if( bPath )
                 sD = rValue;
-                break;
-//          case XML_TOK_PATHSHAPE_WIDTH:
-//              GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
-//                                                                  rValue);
-//              break;
-//          case XML_TOK_PATHSHAPE_HEIGHT:
-//              GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-//                                                                  rValue);
-//              break;
-            }
-        }
-        else
-        {
-            switch( rTokenMap.Get( nPrefix, aLocalName ) )
-            {
-            case XML_TOK_POLYGONSHAPE_VIEWBOX:
-                sViewBox = rValue;
-                break;
-            case XML_TOK_POLYGONSHAPE_POINTS:
+            break;
+        case XML_TOK_TEXT_CONTOUR_POINTS:
+            if( !bPath )
                 sPoints = rValue;
-                break;
-//          case XML_TOK_POLYGONSHAPE_WIDTH:
-//              GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
-//                                                                  rValue);
-//              break;
-//          case XML_TOK_POLYGONSHAPE_HEIGHT:
-//              GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-//                                                                  rValue);
-//              break;
-            }
+            break;
+        case XML_TOK_TEXT_CONTOUR_WIDTH:
+            GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+                                                                rValue);
+            break;
+        case XML_TOK_TEXT_CONTOUR_HEIGHT:
+            GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+                                                                rValue);
+            break;
         }
     }
+#if SUPD < 628
+    // HACK!!!!
+    delete (SvXMLTokenMap *)&rTokenMap;
+#endif
 
     OUString sContourPolyPolygon(
             RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon") );

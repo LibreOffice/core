@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 13:40:51 $
+ *  last change: $Author: mib $ $Date: 2001-03-29 08:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,6 +480,16 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static __FAR_DATA SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG, sXML_width,    XML_TOK_TEXT_CONTOUR_WIDTH      },
+    { XML_NAMESPACE_SVG, sXML_height,   XML_TOK_TEXT_CONTOUR_HEIGHT     },
+    { XML_NAMESPACE_SVG, sXML_viewBox,  XML_TOK_TEXT_CONTOUR_VIEWBOX    },
+    { XML_NAMESPACE_SVG, sXML_d,        XML_TOK_TEXT_CONTOUR_D          },
+    { XML_NAMESPACE_DRAW,sXML_points,   XML_TOK_TEXT_CONTOUR_POINTS     },
+    XML_TOKEN_MAP_END
+};
+
 static __FAR_DATA SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXT_HYPERLINK_HREF },
@@ -518,6 +528,9 @@ XMLTextImportHelper::XMLTextImportHelper(
     pTextListBlockElemTokenMap( 0 ),
     pTextFieldAttrTokenMap( 0 ),
     pTextFrameAttrTokenMap( 0 ),
+#if SUPD > 627
+    pTextContourAttrTokenMap( 0 ),
+#endif
     pTextHyperlinkAttrTokenMap( 0 ),
     pTextMasterPageElemTokenMap( 0 ),
     pPrevFrmNames( 0 ),
@@ -651,6 +664,9 @@ XMLTextImportHelper::XMLTextImportHelper(
     pTextListBlockElemTokenMap( 0 ),
     pTextFieldAttrTokenMap( 0 ),
     pTextFrameAttrTokenMap( 0 ),
+#if SUPD > 627
+    pTextContourAttrTokenMap( 0 ),
+#endif
     pTextHyperlinkAttrTokenMap( 0 ),
     pTextMasterPageElemTokenMap( 0 ),
     pPrevFrmNames( 0 ),
@@ -779,6 +795,9 @@ XMLTextImportHelper::~XMLTextImportHelper()
     delete pTextListBlockElemTokenMap;
     delete pTextFieldAttrTokenMap;
     delete pTextFrameAttrTokenMap;
+#if SUPD > 627
+    delete pTextContourAttrTokenMap;
+#endif
     delete pTextHyperlinkAttrTokenMap;
     delete pTextMasterPageElemTokenMap;
 
@@ -845,6 +864,12 @@ SvXMLTokenMap *XMLTextImportHelper::_GetTextFrameAttrTokenMap()
 {
     return new SvXMLTokenMap( aTextFrameAttrTokenMap );
 }
+
+SvXMLTokenMap *XMLTextImportHelper::_GetTextContourAttrTokenMap()
+{
+    return new SvXMLTokenMap( aTextContourAttrTokenMap );
+}
+
 
 SvXMLTokenMap *XMLTextImportHelper::_GetTextHyperlinkAttrTokenMap()
 {
