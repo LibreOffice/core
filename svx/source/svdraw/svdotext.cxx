@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-20 09:40:35 $
+ *  last change: $Author: dl $ $Date: 2001-06-29 11:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,7 +906,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& r
             pMtf->Pause(TRUE);
 
         Font aFontMerk(pOut->GetFont());
-        Font aTmpFont(System::GetStandardFont(STDFONT_ROMAN));
+        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ) );
 
         aTmpFont.SetSize(Size(0,100));
         pOut->SetFont(aTmpFont);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
+ *  last change: $Author: dl $ $Date: 2001-06-29 11:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,7 +780,7 @@ void SdrGrafObj::ImpPaintReplacement(OutputDevice* pOutDev, const XubString& rTe
             Point aOutPos(aTextRect.TopLeft()); aOutPos.X()+=3; aOutPos.Y()+=3;
             long nMaxOutY=aOutPos.Y()+aOutSize.Height();
             Font aFontMerk(pOutDev->GetFont());
-            Font aFont(System::GetStandardFont(STDFONT_SWISS));
+            Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ) );
             aFont.SetColor(COL_LIGHTRED);
             aFont.SetTransparent(TRUE);
             aFont.SetLineOrientation(USHORT(NormAngle360(aGeo.nDrehWink)/10));
