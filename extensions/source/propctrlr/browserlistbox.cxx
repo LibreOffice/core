@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:00:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ namespace pcr
         ListBox aListBox(this,WB_DROPDOWN);
         aListBox.SetPosSizePixel(Point(0,0),Size(100,100));
         m_nRowHeight = (sal_uInt16)aListBox.GetSizePixel().Height()+2;
-        SetBackground(m_aPlayGround.GetBackground());
+        SetBackground( pParent->GetBackground() );
+        m_aPlayGround.SetBackground( GetBackground() );
 
         m_aPlayGround.SetPosPixel(Point(0,0));
         m_aPlayGround.SetPaintTransparent(sal_True);
