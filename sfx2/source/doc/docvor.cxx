@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-18 09:54:01 $
+ *  last change: $Author: dv $ $Date: 2001-06-18 11:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,11 @@
 #include "app.hxx"
 #include "dispatch.hxx"
 #include "sfxresid.hxx"
-#include "iodlg.hxx"
 #include "doc.hrc"
 #include "sfx.hrc"
 #include "docvor.hrc"
 #include "docfilt.hxx"
+#include "filedlghelper.hxx"
 
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
@@ -1537,12 +1537,16 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     String aPath;
     String aExtension = DEFINE_CONST_UNICODE( "vor" );
 
-    ULONG nBits = bOpen ? WB_OPEN | WB_3DLOOK : WB_SAVEAS | WB_3DLOOK;
-    SfxFileDialog* pFileDlg = new SfxFileDialog( pDialog, nBits );
-    pFileDlg->AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ), DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    short nDialogType = bOpen ? FILEOPEN_SIMPLE : FILESAVE_SIMPLE;
+
+    sfx2::FileDialogHelper aFileDlg( nDialogType, 0L );
+
+    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ), DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+
     const String aFilter( SfxResId( STR_TEMPLATE_FILTER ) );
-    pFileDlg->AddFilter( aFilter, DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti" ) );
-    pFileDlg->SetCurFilter( aFilter );
+    aFileDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti" ) );
+    aFileDlg.SetCurrentFilter( aFilter );
+
     if ( aLastDir.Len() || rFileName.Len() )
     {
         INetURLObject aObj;
@@ -1563,14 +1567,12 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
         }
 
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-        pFileDlg->SetPath( aObj.GetMainURL() );
+        aFileDlg.SetDisplayDirectory( aObj.GetMainURL() );
     }
 
-    pFileDlg->SetDefaultExt( aExtension );
-
-    if ( RET_OK == pFileDlg->Execute() )
+    if ( ERRCODE_NONE == aFileDlg.Execute() )
     {
-        aPath = pFileDlg->GetPath();
+        aPath = aFileDlg.GetPath();
         INetURLObject aObj( aPath );
 
         // we want to keep the original extension when exporting, the file open dialog
@@ -1587,7 +1589,6 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
         aObj.removeSegment();
         aLastDir = aObj.GetMainURL();
     }
-    delete pFileDlg;
     return aPath;
 }
 
@@ -2060,6 +2061,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 */
 {
+#ifdef DONT_USE_FILE_DIALOG_SERVICE
     SfxFileDialog *pFileDlg = new SfxFileDialog( pDialog, WB_OPEN );
     const SfxObjectFactory& rFact = SfxObjectFactory::GetDefaultFactory();
     USHORT nMax = rFact.GetFilterCount();
@@ -2091,6 +2093,37 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
         aLastDir = aObj.GetMainURL();
     }
     delete pFileDlg;
+#else
+    sfx2::FileDialogHelper aFileDlg( WB_OPEN );
+
+    const SfxObjectFactory& rFact = SfxObjectFactory::GetDefaultFactory();
+    USHORT nMax = rFact.GetFilterCount();
+    for ( USHORT i = 0; i < nMax; ++i )
+    {
+        const SfxFilter* pFilter = rFact.GetFilter(i);
+        if ( pFilter->IsInternal() )
+            continue;
+        BOOL bIsImpFilter = pFilter->CanImport();
+        if ( bIsImpFilter && pFilter->IsAllowedAsTemplate() )
+        {
+            aFileDlg.AddFilter( pFilter->GetUIName(), pFilter->GetWildcard()() );
+        }
+    }
+    aFileDlg.AddFilter( String(SfxResId(RID_STR_FILTCONFIG)), DEFINE_CONST_UNICODE( "*.cfg" ) );
+    aFileDlg.AddFilter( String(SfxResId(RID_STR_FILTBASIC)), DEFINE_CONST_UNICODE( "*.sbl" ) );
+
+    if ( aLastDir.Len() )
+        aFileDlg.SetDisplayDirectory( aLastDir );
+    if ( ERRCODE_NONE == aFileDlg.Execute() )
+    {
+        String aPath = aFileDlg.GetPath();
+        aMgr.InsertFile( pFocusBox, aPath );
+        INetURLObject aObj( aPath );
+        aObj.removeSegment();
+        aObj.setFinalSlash();
+        aLastDir = aObj.GetMainURL();
+    }
+#endif
     return 0;
 }
 
