@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environmentofanchoredobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:57:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ namespace objectpositioning
 
                 this is, if object hasn't to follow the text flow:
                 - page frame.
-                - Exception: If environment layout frame is used for page alignment,
-                  it's the cell frame, if anchored inside a cell.
+                OD 2005-01-20 #118546# - no exception any more. Thus remove
+                parameter <_bForPageAlignment>
 
                 @author OD
 
@@ -113,15 +113,10 @@ namespace objectpositioning
                 oriented at (typically it's the anchor frame).
                 starting point for the search of the layout frame.
 
-                @param _bForPageAlignment
-                input parameter - indicates, if the environment layout frame
-                for the page alignments has to be determined or not.
-
                 @return reference to the layout frame, which determines the
                 the horizontal environment the object has to be positioned in.
             */
-            const SwLayoutFrm& GetHoriEnvironmentLayoutFrm( const SwFrm& _rHoriOrientFrm,
-                                                            const bool _bForPageAlignment ) const;
+            const SwLayoutFrm& GetHoriEnvironmentLayoutFrm( const SwFrm& _rHoriOrientFrm ) const;
 
             /** determine environment layout frame for possible vertical object
                 positions respectively for alignments to 'page areas'
@@ -136,8 +131,8 @@ namespace objectpositioning
 
                 this is, if object hasn't to follow the text flow:
                 - page frame.
-                - Exception: If environment layout frame is used for page alignment,
-                  it's the cell frame, if anchored inside a cell.
+                OD 2005-01-20 #118546# - no exception any more. Thus remove
+                parameter <_bForPageAlignment>
 
                 @author OD
 
@@ -146,15 +141,10 @@ namespace objectpositioning
                 oriented at (typically it's the anchor frame).
                 starting point for the search of the layout frame.
 
-                @param _bForPageAlignment
-                input parameter - indicates, if the environment layout frame
-                for the page alignments has to be determined or not.
-
                 @return reference to the layout frame, which determines the
                 the vertical environment the object has to be positioned in.
             */
-            const SwLayoutFrm& GetVertEnvironmentLayoutFrm( const SwFrm& _rVertOrientFrm,
-                                                            const bool _bForPageAlignment ) const;
+            const SwLayoutFrm& GetVertEnvironmentLayoutFrm( const SwFrm& _rVertOrientFrm ) const;
     };
 };
 
