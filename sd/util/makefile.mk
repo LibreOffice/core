@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 08:23:50 $
+#   last change: $Author: kz $ $Date: 2004-10-04 18:49:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,6 @@ SHL1STDLIBS+= \
     $(BASICLIB) \
     $(BASEGFXLIB) \
     $(GOODIESLIB) \
-    $(SO2LIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
     $(VCLLIB) \
@@ -160,7 +159,6 @@ LIB3FILES=      \
             $(SLB)$/xml.lib			\
             $(SLB)$/cgm.lib			\
             $(SLB)$/grf.lib			\
-            $(SLB)$/bin.lib			\
             $(SLB)$/html.lib		\
             $(SLB)$/filter.lib		\
             $(SLB)$/unoidl.lib		\
@@ -189,6 +187,7 @@ SHL2STDLIBS= \
             $(SVTOOLLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
+                        $(SOTLIB) \
             $(TOOLSLIB) \
             $(UCBHELPERLIB) \
             $(COMPHELPERLIB) \
