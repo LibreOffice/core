@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 25
+# count = 27
 T4_CALC = \
     calc_DIF \
     writer_web_HTML \
@@ -25,10 +25,12 @@ T4_CALC = \
     calc_Text_txt_csv_StarCalc \
     calc_StarOffice_XML_Calc_Template \
     pdf_Portable_Document_Format \
-    calc_dBase
+    calc_dBase\
+    calc8\
+    calc8_template
 
 # -----------------------------------------------
-# count = 26
+# count = 28
 F4_CALC = \
     DIF \
     HTML__StarCalc_ \
@@ -55,7 +57,9 @@ F4_CALC = \
     calc_HTML_WebQuery \
     calc_StarOffice_XML_Calc_Template \
     calc_pdf_Export \
-    dBase
+    dBase\
+    calc8\
+    calc8_template
 
 # -----------------------------------------------
 # count = 0

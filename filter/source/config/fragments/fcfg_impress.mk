@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 16
+# count = 18
 T4_IMPRESS = \
     draw_StarDraw_30 \
     draw_StarDraw_30_Vorlage \
@@ -16,10 +16,12 @@ T4_IMPRESS = \
     impress_StarOffice_XML_Impress \
     impress_StarOffice_XML_Impress_Template \
     pdf_Portable_Document_Format \
-    pwp_PlaceWare
+    pwp_PlaceWare\
+    impress8\
+    impress8_template
 
 # -----------------------------------------------
-# count = 16
+# count = 19
 F4_IMPRESS = \
     MS_PowerPoint_97 \
     MS_PowerPoint_97_Vorlage \
@@ -36,7 +38,10 @@ F4_IMPRESS = \
     StarOffice_XML__Impress_ \
     impress_StarOffice_XML_Impress_Template \
     impress_pdf_Export \
-    placeware_Export
+    placeware_Export\
+    impress8\
+    impress8_template\
+    impress8_draw
 
 # -----------------------------------------------
 # count = 0

@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 7
+# count = 9
 T4_DRAW = \
     draw_StarDraw_30 \
     draw_StarDraw_30_Vorlage \
@@ -7,10 +7,12 @@ T4_DRAW = \
     draw_StarDraw_50_Vorlage \
     draw_StarOffice_XML_Draw \
     draw_StarOffice_XML_Draw_Template \
-    pdf_Portable_Document_Format
+    pdf_Portable_Document_Format\
+    draw8 \
+    draw8_template
 
 # -----------------------------------------------
-# count = 7
+# count = 9
 F4_DRAW = \
     StarDraw_3_0 \
     StarDraw_3_0_Vorlage \
@@ -18,7 +20,9 @@ F4_DRAW = \
     StarDraw_5_0_Vorlage \
     StarOffice_XML__Draw_ \
     draw_StarOffice_XML_Draw_Template \
-    draw_pdf_Export
+    draw_pdf_Export\
+    draw8\
+    draw8_template
 
 # -----------------------------------------------
 # count = 0
