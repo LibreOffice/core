@@ -598,86 +598,71 @@ public class HelpIndexer {
          private final OutputMethodHandlerImpl _output;
 
 
-        // Same as below from URL
-
-          public ParseStuff( String styleSheet, boolean any )
-           {
+        private ParseStuff()
+        {
             _processor = new XSLProcessorImpl();
+
+            // Determine the parser
              SAXParserFactory spf = SAXParserFactory.newInstance();
               spf.setValidating( false );
-               Parser _parser = null;
             try
             {
-                SAXParser sp = spf.newSAXParser();
-                 _parser = sp.getParser();
-
+                _processor.setParser( spf.newSAXParser().getParser() );
             }
             catch( java.lang.Exception e )
             {
-                System.out.println( "<!-- NO HELP AVAILABLE: no parser found -->" );
+                System.err.println( "<!-- NO HELP AVAILABLE: no parser found -->" );
                  System.exit( 1 );
             }
 
-            _processor.setParser( _parser );
+            // Determine the OutputMethodHandler
             _output = new OutputMethodHandlerImpl( _processor );
             _processor.setOutputMethodHandler( _output );
+        }
 
+        // Loading from a URL
+          public ParseStuff( URL url )
+           {
+            this();
             try
             {
-                _processor.loadStylesheet( new InputSource( styleSheet ) );
+                _processor.loadStylesheet( new InputSource( url.toExternalForm() ) );
             }
             catch( SAXException e )
             {
-                System.out.println( "<!-- Syntactic error in stylesheet -->" );
+                System.err.println( "<!-- Syntactic error in stylesheet -->" );
+                System.err.println( e.getMessage() );
                    System.exit( 1 );
             }
             catch( java.io.IOException e )
             {
-                System.out.println( "<!-- Style sheet not found: " + styleSheet + " -->" );
+                System.err.println( "<!-- Style sheet not found -->" );
+                System.err.println( e.getMessage() );
                    System.exit( 1 );
             }
+            System.out.println( "Using stylesheet: " + url.toExternalForm() );
         }
 
 
-
-
-
+        // Loading from a file
           public ParseStuff( String styleSheet )
            {
-            _processor = new XSLProcessorImpl();
-             SAXParserFactory spf = SAXParserFactory.newInstance();
-              spf.setValidating( false );
-               Parser _parser = null;
-            try
-            {
-                SAXParser sp = spf.newSAXParser();
-                 _parser = sp.getParser();
-
-            }
-            catch( java.lang.Exception e )
-            {
-                System.out.println( "<!-- NO HELP AVAILABLE: no parser found -->" );
-                 System.exit( 1 );
-            }
-
-            _processor.setParser( _parser );
-            _output = new OutputMethodHandlerImpl( _processor );
-            _processor.setOutputMethodHandler( _output );
-
+            this();
             try
             {
                 _processor.loadStylesheet( new InputSource( new FileInputStream( styleSheet ) ) );
             }
             catch( SAXException e )
             {
-                System.out.println( "<!-- Syntactic error in stylesheet -->" );
+                System.err.println( "<!-- Syntactic error in stylesheet -->" );
                    System.exit( 1 );
             }
             catch( java.io.IOException e )
             {
-                System.out.println( "<!-- Style sheet not found: " + styleSheet + " -->" );
+                System.err.println( "<!-- Style sheet not found: -->" );
                    System.exit( 1 );
             }
+            System.out.println( "Using stylesheet: " + styleSheet );
         }
 
 
@@ -690,7 +675,8 @@ public class HelpIndexer {
             HelpOutputStream _out = new HelpOutputStream();
                try
             {
-                  OutputStreamDestination _dest = new OutputStreamDestination( _out );
+                  // OutputStreamDestination _dest = new OutputStreamDestination( _out );
+                HelpProvider.ProviderDestination _dest = new HelpProvider.ProviderDestination( _out,"UTF-8" );
                   synchronized( this )
                  {
                     _output.setDestination( _dest );
@@ -700,11 +686,20 @@ public class HelpIndexer {
              }
             catch( java.io.IOException e )
             {
-                System.out.println( "no file corresponding to URL exists, but I don't tell you what the URL is ..." );
+                System.err.println( "no file corresponding to URL exists: " + url );
+                System.err.println( "no file corresponding to URL exists: " + e.getMessage() );
+                // System.exit( 1 );
             }
             catch( SAXException e )
             {
-                System.out.println( "ill formed xml document: " + e.getMessage() );
+                System.err.println( "ill formed xml document: " + e.getMessage() );
+                System.err.println( "                    url: " + url );
+                // System.exit( 1 );
+            }
+            catch( Exception e )
+            {
+                System.err.println( "any other exception" );
+                System.err.println( e.getMessage() );
             }
 
                return _out.getBigBuffer();
@@ -715,8 +710,8 @@ public class HelpIndexer {
            {
             _processor.setParameter( key,value );
         }
-    }   // end class ParseStuff
 
+    }   // end class ParseStuff
 
 
 
