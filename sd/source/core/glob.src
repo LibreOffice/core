@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 21:01:09 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 21:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2237,7 +2237,7 @@ Resource RID_SD_ERRHDL
         Text [ portuguese ] = "Descoberto erro de formato na posiзгo $(ARG1)(linha, coluna) no ficheiro" ;
         Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
         Text[ chinese_simplified ] = "ењЁж–‡д»¶зљ„ $(ARG1)(иЎЊпјЊе€—)е¤„еЏ‘зЋ°ж јејЏй”™иЇЇ";
-        Text[ russian ] = "В файле в позиции $(ARG1)(строка,столбец) обнаружена ошибка формата файла.";
+        Text[ russian ] = "В файле в позиции $(ARG1)(строка,столбец) обнаружена ошибка формата.";
         Text[ polish ] = "Wykryto bі№d w formacie pliku na pozycji $(ARG1)(wiersz, kolumna)";
         Text[ japanese ] = "пѕЊпЅ§пЅІпѕ™гЃ® $(ARG1)(иЎЊгЂЃе€—)гЃ«ж›ёејЏпЅґпѕ—пЅ°гЃЊи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "жЄ”жЎ€зљ„ж јејЏйЊЇиЄ¤пјЊдЅЌзЅ®ењЁ $(ARG1)(иЎЊпјЊе€—)";
@@ -2300,6 +2300,7 @@ Resource RID_SD_ERRHDL
         Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
     };
 };
+
 
 
 
