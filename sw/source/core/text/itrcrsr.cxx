@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:44:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
+#endif
+
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
 #endif
 
 #include "txtcfg.hxx"
@@ -222,8 +226,15 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
                   rSpace.GetTxtFirstLineOfst() :
                   0 );
     else
-        nLeft = Max( long( rSpace.GetTxtLeft() + nLMWithNum), pFrm->Prt().Left() ) +
+    {
+        if (! pNewInf->GetVsh()->IsOldNumbering())
+            nLeft = long( rSpace.GetTxtLeft() + nLMWithNum) +
                 pFrm->Frm().Left();
+        else
+            nLeft = Max( long( rSpace.GetTxtLeft() + nLMWithNum),
+                         pFrm->Prt().Left() ) +
+                pFrm->Frm().Left();
+    }
 #else
     nLeft = Max( long( rSpace.GetTxtLeft() + pNode->GetLeftMarginWithNum(sal_True) ),
                  pFrm->Prt().Left() ) +
@@ -299,8 +310,10 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
         if ( pFrm->IsRightToLeft() )
             nFirst = nLeft + nFirstLineOfs;
         else
-            nFirst = Max( rSpace.GetTxtLeft() + nLMWithNum + nFirstLineOfs,
-                          pFrm->Prt().Left() ) + pFrm->Frm().Left();
+        {
+            nFirst = rSpace.GetTxtLeft() + nLMWithNum + nFirstLineOfs
+                + pFrm->Frm().Left();
+        }
 #else
         nFirst = Max( rSpace.GetTxtLeft() + pNode->GetLeftMarginWithNum( sal_True )
             + nFirstLineOfs, pFrm->Prt().Left() ) + pFrm->Frm().Left();
