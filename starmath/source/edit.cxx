@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-21 08:25:50 $
+ *  last change: $Author: tl $ $Date: 2001-11-21 11:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,21 +229,19 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
     if (pEditEngine && pEditEngineItemPool)
     {
-        Font aFont = GetFont();
+        //!
+        //! see also SmDocShell::GetEditEngine() !
+        //!
+
         pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
-        long nFntHeight = aFont.GetSize().Height();
-
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontItem( aFont.GetFamily(), aFont.GetName(),
-                    aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
-                    EE_CHAR_FONTINFO ) );
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT ) );
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+        SvxFontHeightItem aItem( GetFont().GetSize().Height(), 100,
+                                 EE_CHAR_FONTHEIGHT );
+        pEditEngineItemPool->SetPoolDefaultItem( aItem );
+        aItem.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
+        pEditEngineItemPool->SetPoolDefaultItem( aItem );
+        aItem.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
+        pEditEngineItemPool->SetPoolDefaultItem( aItem );
 
         // forces new settings to be used
         pEditEngine->Clear();   //#77957 incorrect font size

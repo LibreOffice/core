@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-02 12:13:16 $
+ *  last change: $Author: tl $ $Date: 2001-11-21 11:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUPROPS_HXX_
+#include <svtools/linguprops.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
@@ -168,8 +174,18 @@
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
 #endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 #ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 
 #ifndef STARMATH_HRC
@@ -215,8 +231,11 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+
+#define A2OU(x)        rtl::OUString::createFromAscii( x )
 
 #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
 #define SO2_DECL_SVSTORAGESTREAM_DEFINED
@@ -393,15 +412,53 @@ EditEngine& SmDocShell::GetEditEngine()
 {
     if (!pEditEngine)
     {
+        //!
+        //! see also SmEditWindow::DataChanged !
+        //!
+
         pEditEngineItemPool = EditEngine::CreatePool();
 
-        Font aFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
+        //
+        // set fonts to be used
+        //
+        SvtLinguOptions aOpt;
+        SvtLinguConfig().GetOptions( aOpt );
+        //
+        struct FontDta {
+            INT16       nFallbackLang;
+            INT16       nLang;
+            USHORT      nFontType;
+            USHORT      nFontInfoId;
+            } aTable[3] =
+        {
+            // info to get western font to be used
+            {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
+                DEFAULTFONT_SERIF,      EE_CHAR_FONTINFO },
+            // info to get CJK font to be used
+            {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
+                DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
+            // info to get CTL font to be used
+            {   LANGUAGE_ARABIC,        LANGUAGE_NONE,
+                DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
+        };
+        aTable[0].nLang = aOpt.nDefaultLanguage;
+        aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
+        aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
+        //
+        for (int i = 0;  i < 3;  ++i)
+        {
+            const FontDta &rFntDta = aTable[i];
+            LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
+                    rFntDta.nFallbackLang : rFntDta.nLang;
+            Font aFont = Application::GetDefaultDevice()->GetDefaultFont(
+                        rFntDta.nFontType, nLang, DEFAULTFONT_FLAGS_ONLYONE );
+            pEditEngineItemPool->SetPoolDefaultItem(
+                    SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                        aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
+                        rFntDta.nFontInfoId ) );
+        }
 
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontItem( aFont.GetFamily(), aFont.GetName(),
-                    aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
-                    EE_CHAR_FONTINFO ) );
-
+        // set font heights
         SvxFontHeightItem aFontHeigt(
                         Application::GetDefaultDevice()->LogicToPixel(
                         Size( 0, 10 ), MapMode( MAP_POINT ) ).Height(), 100,
