@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 14:41:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,8 @@ void ModuleUIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                xElementTypeStorage = m_xUserConfigStorage->openStorageElement( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
+                if ( m_pStorageHandler[i] )
+                    xElementTypeStorage = m_pStorageHandler[i]->getWorkingStorageUser();
             }
             catch ( com::sun::star::container::NoSuchElementException& )
             {
@@ -802,8 +803,10 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager( com::sun::star::uno:
     , m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
     , m_xServiceManager( xServiceManager )
     , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
-    , m_aStorageHandler( xServiceManager )
 {
+    for ( int i = 0; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        m_pStorageHandler[i] = 0;
+
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
     m_aUIElements[LAYER_DEFAULT].resize( ::drafts::com::sun::star::ui::UIElementType::COUNT );
@@ -812,6 +815,8 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager( com::sun::star::uno:
 
 ModuleUIConfigurationManager::~ModuleUIConfigurationManager()
 {
+    for ( int i = 0; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        delete m_pStorageHandler[i];
 }
 
 // XComponent
@@ -875,44 +880,34 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
         m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
         m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
 
-        m_aStorageHandler.connectToResource(PresetHandler::E_MODULES,
-                                            PresetHandler::RESOURCETYPE_MENUBAR(), // this path wont be used later ... seee next lines!
-                                            m_aModuleShortName,
-                                            css::uno::Reference< css::embed::XStorage >()); // no document root used here!
-
-        m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(m_aStorageHandler.getOrCreateRootStorageUser(), css::uno::UNO_QUERY_THROW);
-        m_xDefaultConfigStorage = m_aStorageHandler.getParentStorageShare(m_aStorageHandler.getWorkingStorageShare());
-        m_xUserConfigStorage    = m_aStorageHandler.getParentStorageUser(m_aStorageHandler.getWorkingStorageUser());
-
-/*TODO_AS
-        for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+        for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
-            PropertyValue aPropValue;
-            if ( aArguments[n] >>= aPropValue )
+            rtl::OUString aResourceType;
+            if ( i == drafts::com::sun::star::ui::UIElementType::MENUBAR )
+                aResourceType = PresetHandler::RESOURCETYPE_MENUBAR();
+            else if ( i == drafts::com::sun::star::ui::UIElementType::TOOLBAR )
+                aResourceType = PresetHandler::RESOURCETYPE_TOOLBAR();
+            else if ( i == drafts::com::sun::star::ui::UIElementType::STATUSBAR )
+                aResourceType = PresetHandler::RESOURCETYPE_STATUSBAR();
+
+            if ( aResourceType.getLength() > 0 )
             {
-                if ( aPropValue.Name.equalsAscii( "DefaultConfigStorage" ))
-                {
-                    aPropValue.Value >>= m_xDefaultConfigStorage;
-                }
-                else if ( aPropValue.Name.equalsAscii( "UserConfigStorage" ))
-                {
-                    aPropValue.Value >>= m_xUserConfigStorage;
-                }
-                else if ( aPropValue.Name.equalsAscii( "ModuleIdentifier" ))
-                {
-                    aPropValue.Value >>= m_aModuleIdentifier;
-                }
-                else if ( aPropValue.Name.equalsAscii( "ModuleShortName" ))
-                {
-                    aPropValue.Value >>= m_aModuleShortName;
-                }
-                else if ( aPropValue.Name.equalsAscii( "UserRootCommit" ))
-                {
-                    aPropValue.Value >>= m_xUserRootCommit;
-                }
+                m_pStorageHandler[i] = new PresetHandler( m_xServiceManager );
+                m_pStorageHandler[i]->connectToResource( PresetHandler::E_MODULES,
+                                                         aResourceType, // this path wont be used later ... seee next lines!
+                                                         m_aModuleShortName,
+                                                         css::uno::Reference< css::embed::XStorage >()); // no document root used here!
             }
         }
-*/
+
+        // initialize root storages for all resource types
+        m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(
+                                    m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY_THROW);
+        m_xDefaultConfigStorage = m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageShare(
+                                    m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageShare());
+        m_xUserConfigStorage    = m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getParentStorageUser(
+                                    m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::MENUBAR]->getWorkingStorageUser());
+
         if ( m_xUserConfigStorage.is() )
         {
             Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
@@ -968,7 +963,6 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
         // Remove all elements from our user-defined storage!
         try
         {
-            bool bCommit( false );
             for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
             {
                 UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
@@ -983,29 +977,17 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     {
                         xSubStorage->removeElement( aUIElementStreamNames[j] );
                         bCommitSubStorage = true;
-                        bCommit = true;
                     }
 
                     if ( bCommitSubStorage )
                     {
                         Reference< XTransactedObject > xTransactedObject( xSubStorage, UNO_QUERY );
                         xTransactedObject->commit();
+                        m_pStorageHandler[i]->commitUserChanges();
                     }
                 }
             }
 
-            // Commit changes
-            if ( bCommit )
-            {
-                /*TODO_AS
-                Reference< XTransactedObject > xTransactedObject( m_xUserConfigStorage, UNO_QUERY );
-                if ( xTransactedObject.is() )
-                    xTransactedObject->commit();
-                if ( m_xUserRootCommit.is() )
-                    m_xUserRootCommit->commit();
-                */
-                m_aStorageHandler.commitUserChanges();
-            }
             bResetStorage = true;
 
             // remove settings from user defined layer and notify listener about removed settings data!
@@ -1586,7 +1568,10 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
                 Reference< XStorage > xStorage( rElementType.xStorage, UNO_QUERY );
 
                 if ( rElementType.bModified && xStorage.is() )
+                {
                     impl_storeElementTypeData( xStorage, rElementType );
+                    m_pStorageHandler[i]->commitUserChanges();
+                }
             }
             catch ( Exception& )
             {
@@ -1595,14 +1580,6 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
         }
 
         m_bModified = false;
-        /*TODO_AS
-        Reference< XTransactedObject > xTransactedObject( m_xUserConfigStorage, UNO_QUERY );
-        xTransactedObject->commit();
-
-        if ( m_xUserRootCommit.is() )
-            m_xUserRootCommit->commit(); // commit also our root storage
-        */
-        m_aStorageHandler.commitUserChanges();
     }
 }
 
