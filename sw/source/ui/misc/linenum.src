@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:55:50 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,7 @@ TabPage TP_LINENUMBERING
         Text[ swedish ] = "~Börja om på varje ny sida";
         Text[ polish ] = "Ponowne uruchomienie na pocz¹tku strony";
         Text[ portuguese_brazilian ] = "~Restart each new page";
-        Text[ japanese ] = "Íß°¼Ş‚ª‚©‚í‚é‚Æ‚Ü‚½‚P‚©‚ç”‚¦’¼‚µ(~R)";
+        Text[ japanese ] = "Íß°¼Ş‚²‚Æ‚É‚P‚©‚ç(~R)";
         Text[ korean ] = "»õ ÆäÀÌÁö ½ÃÀÛ½Ã¿¡ ´Ù½Ã½ÃÀÛ";
         Text[ chinese_simplified ] = "ÔÚÒ³Ê×ÖØĞÂ¿ªÊ¼(~R)";
         Text[ chinese_traditional ] = "±q­¶­º­«·s¶}©l(~R)";
