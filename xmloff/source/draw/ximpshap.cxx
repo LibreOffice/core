@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:35:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@
 
 #ifndef _ENHANCED_CUSTOMSHAPE_TOKEN_HXX
 #include "EnhancedCustomShapeToken.hxx"
+#endif
+#ifndef _XMLOFF_XMLREPLACEMENTIMAGECONTEXT_HXX
+#include "XMLReplacementImageContext.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
@@ -646,7 +649,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
                 else
                 {
-                    aStyleName = pDocStyle->GetParent();
+                    aStyleName = pDocStyle->GetParentName();
                 }
             }
 
@@ -3118,7 +3121,8 @@ SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape)
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+    mbSupportsReplacement( sal_False )
 {
     uno::Reference < util::XCloneable > xClone( xAttrList, uno::UNO_QUERY );
     if( xClone.is() )
@@ -3144,6 +3148,28 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( USHORT nPrefix,
                         GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
 
         mxImplContext = pContext;
+        mbSupportsReplacement = IsXMLToken( rLocalName, XML_OBJECT ) ||
+                                IsXMLToken( rLocalName, XML_OBJECT_OLE );
+    }
+    else if( mbSupportsReplacement && !mxReplImplContext &&
+             XML_NAMESPACE_DRAW == nPrefix &&
+             IsXMLToken( rLocalName, XML_IMAGE ) )
+    {
+        // read replacement image
+        SvXMLImportContext *pImplContext = &mxImplContext;
+        SdXMLShapeContext *pSContext =
+            PTR_CAST( SdXMLShapeContext, pImplContext );
+        if( pSContext )
+        {
+            uno::Reference < beans::XPropertySet > xPropSet(
+                    pSContext->getShape(), uno::UNO_QUERY );
+            if( xPropSet.is() )
+            {
+                pContext = new XMLReplacementImageContext( GetImport(),
+                                    nPrefix, rLocalName, xAttrList, xPropSet );
+                mxReplImplContext = pContext;
+            }
+        }
     }
     else if( (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) ) ||
              (nPrefix == XML_NAMESPACE_DRAW && (IsXMLToken( rLocalName, XML_GLUE_POINT ) ||
