@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.3 2001-03-19 09:36:10 nf Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.4 2001-03-31 05:50:40 kz Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: nf $ $Date: 2001-03-19 09:36:10 $ $Revision: 1.3 $
+ //  $Author: kz $ $Date: 2001-03-31 05:50:40 $ $Revision: 1.4 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -145,11 +145,11 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "~ÎŞ²Ù×÷";
         Text[ russian ] = "Áåç äåéñòâèÿ";
         Text[ polish ] = "Bez akcji";
-        Text[ japanese ] = "±¸¼®İ‚È‚µ";
-        Text[ chinese_traditional ] = "µL°Ê§@";
+        Text[ japanese ] = "±¸¼®İ‚È‚µ(~N)";
+        Text[ chinese_traditional ] = "µL°Ê§@(~N)";
         Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
         Text[ greek ] = "~ÊáìéÜ åíİñãåéá";
-        Text[ korean ] = "½ÇÇà ¾øÀ½";
+        Text[ korean ] = "½ÇÇà ¾øÀ½(~N)";
         Text[ turkish ] = "İşlem yok";
         Text[ language_user1 ] = " ";
     };
@@ -168,14 +168,14 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ spanish ] = "Actualizar ~cascada" ;
         Text [ french ] = "Mise à jour ~cascade" ;
         Text [ dutch ] = "~Casc. update" ;
-        Text[ chinese_simplified ] = "¸üĞÂ²ãµş";
+        Text[ chinese_simplified ] = "¸üĞÂ²ãµş(~U)";
         Text[ russian ] = "Îáíîâëåíèå êàñêàäà";
         Text[ polish ] = "Aktualizuj kaskadê";
-        Text[ japanese ] = "¶½¹°ÄŞ‚ÌXV";
-        Text[ chinese_traditional ] = "§ó·s¼hÅ|";
+        Text[ japanese ] = "¶½¹°ÄŞ‚ÌXV(~U)";
+        Text[ chinese_traditional ] = "§ó·s¼hÅ|(~U)";
         Text[ arabic ] = "ÊÍÏíË ÇáÊÊÇáí";
         Text[ greek ] = "Åíçìİñùóç åğéêÜëõøçò";
-        Text[ korean ] = "°è´Ü½Ä ¾÷µ¥ÀÌÆ®";
+        Text[ korean ] = "°è´Ü½Ä ¾÷µ¥ÀÌÆ®(~U)";
         Text[ turkish ] = "Basamakları güncelle";
         Text[ language_user1 ] = " ";
     };
@@ -194,14 +194,14 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ spanish ] = "Poner ~null" ;
         Text [ french ] = "Définir ~Null" ;
         Text [ dutch ] = "~Op nul zetten" ;
-        Text[ chinese_simplified ] = "Éè¶¨Áã";
+        Text[ chinese_simplified ] = "Éè¶¨Áã(~S)";
         Text[ russian ] = "Óñòàíîâèòü íóëü";
         Text[ polish ] = "OsadŸ zero";
-        Text[ japanese ] = "¾ŞÛ‚Éİ’è";
-        Text[ chinese_traditional ] = "³]©w¹s";
+        Text[ japanese ] = "¾ŞÛ‚Éİ’è(~S)";
+        Text[ chinese_traditional ] = "³]©w¹s(~S)";
         Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
         Text[ greek ] = "Ïñéóìüò ìçäİ~í";
-        Text[ korean ] = "³Î ¼³Á¤";
+        Text[ korean ] = "³Î ¼³Á¤(~S)";
         Text[ turkish ] = "Sıfır belirle";
         Text[ language_user1 ] = " ";
     };
@@ -220,14 +220,14 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ spanish ] = "~Predeterminar" ;
         Text [ french ] = "~Définir par défaut" ;
         Text [ dutch ] = "Op ~standaard zetten" ;
-        Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ";
+        Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ(~D)";
         Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
         Text[ polish ] = "OsadŸ domyœlne";
-        Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è";
-        Text[ chinese_traditional ] = "³]©wÀq»{";
+        Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è(~D)";
+        Text[ chinese_traditional ] = "³]©wÀq»{(~D)";
         Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
         Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
-        Text[ korean ] = "±âº» ¼³Á¤";
+        Text[ korean ] = "±âº» ¼³Á¤(~D)";
         Text[ turkish ] = "Standart belirle";
         Text[ language_user1 ] = " ";
     };
@@ -274,14 +274,14 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ spanish ] = "Ninguna a~cción" ;
         Text [ french ] = "A~ucune action" ;
         Text [ dutch ] = "G~een activiteit" ;
-        Text[ chinese_simplified ] = "ÎŞ²Ù×÷";
+        Text[ chinese_simplified ] = "ÎŞ²Ù×÷(~N)";
         Text[ russian ] = "Áåç äåéñòâèÿ";
         Text[ polish ] = "Bez akcji";
-        Text[ japanese ] = "±¸¼®İ‚È‚µ";
-        Text[ chinese_traditional ] = "µL°Ê§@";
+        Text[ japanese ] = "±¸¼®İ‚È‚µ(~N)";
+        Text[ chinese_traditional ] = "µL°Ê§@(~N)";
         Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
         Text[ greek ] = "ÊáìéÜ ~åíİñãåéá";
-        Text[ korean ] = "½ÇÇà¾øÀ½";
+        Text[ korean ] = "½ÇÇà¾øÀ½(~N)";
         Text[ turkish ] = "İşlem yok";
         Text[ language_user1 ] = " ";
     };
@@ -300,14 +300,14 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ spanish ] = "Eliminar c~ascada" ;
         Text [ french ] = "~Supprimer la cascade" ;
         Text [ dutch ] = "~Casc. wissen" ;
-        Text[ chinese_simplified ] = "É¾³ı²ãµş";
+        Text[ chinese_simplified ] = "É¾³ı²ãµş(~C)";
         Text[ russian ] = "Óäàëèòü êàñêàä";
         Text[ polish ] = "Usuñ kaskadê";
-        Text[ japanese ] = "¶½¹°ÄŞ‚Ìíœ";
-        Text[ chinese_traditional ] = "§R°£¼hÅ|";
+        Text[ japanese ] = "¶½¹°ÄŞ‚Ìíœ(~C)";
+        Text[ chinese_traditional ] = "§R°£¼hÅ|(~C)";
         Text[ arabic ] = "ÍĞİ ÇáÊÊÇáí";
         Text[ greek ] = "ÄéáãñáöŞ åğéêÜëõøçò";
-        Text[ korean ] = "°è´Ü½Ä »èÁ¦";
+        Text[ korean ] = "°è´Ü½Ä »èÁ¦(~C)";
         Text[ turkish ] = "Basamakları sil";
         Text[ language_user1 ] = " ";
     };
@@ -326,14 +326,14 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ spanish ] = "Poner ~null" ;
         Text [ french ] = "Définir N~ull" ;
         Text [ dutch ] = "Op n~ul zetten" ;
-        Text[ chinese_simplified ] = "Éè¶¨Áã";
+        Text[ chinese_simplified ] = "Éè¶¨Áã(~S)";
         Text[ russian ] = "Óñòàíîâèòü íóëü";
         Text[ polish ] = "OsadŸ zero";
-        Text[ japanese ] = "¾ŞÛ‚Éİ’è";
-        Text[ chinese_traditional ] = "³]©w¹s";
+        Text[ japanese ] = "¾ŞÛ‚Éİ’è(~S)";
+        Text[ chinese_traditional ] = "³]©w¹s(~S)";
         Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
         Text[ greek ] = "Ïñéóìüò ìçäİí";
-        Text[ korean ] = "³Î ¼³Á¤";
+        Text[ korean ] = "³Î ¼³Á¤(~S)";
         Text[ turkish ] = "Sıfır belirle";
         Text[ language_user1 ] = " ";
     };
@@ -352,14 +352,14 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ spanish ] = "Pre~determinar" ;
         Text [ french ] = "Définir par dé~faut" ;
         Text [ dutch ] = "Op standaard ~zetten" ;
-        Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ";
+        Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ(~D)";
         Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
         Text[ polish ] = "Ustaw domyœlne";
-        Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è";
-        Text[ chinese_traditional ] = "³]©wÀq»{";
+        Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è(~D)";
+        Text[ chinese_traditional ] = "³]©wÀq»{(~D)";
         Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
         Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
-        Text[ korean ] = "±âº» ¼³Á¤";
+        Text[ korean ] = "±âº» ¼³Á¤(~D)";
         Text[ turkish ] = "Standart belirle";
         Text[ language_user1 ] = " ";
     };
