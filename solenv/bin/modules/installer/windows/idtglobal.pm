@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 15:00:56 $
+#   last change: $Author: rt $ $Date: 2004-07-09 13:54:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -447,7 +447,7 @@ sub get_language_string_from_language_block
 
     if ( $newstring eq "" )
     {
-        $language = "en-US";    # defaulting to english
+        $language = "01";   # defaulting to english
 
         for ( my $i = 0; $i <= $#{$language_block}; $i++ )
         {

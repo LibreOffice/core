@@ -2,9 +2,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:55:31 $
+#   last change: $Author: rt $ $Date: 2004-07-09 13:55:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,8 +91,13 @@ sub resolving_archive_flag
 
     installer::logger::include_header_into_logfile("Files with flag ARCHIVE:");
 
+    my $repeat_unzip = 0;
+    my $maxcounter = 0;
+
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
     {
+        if ( $repeat_unzip ) { $i--; }  # decreasing the counter
+
         my $onefile = ${$filesarrayref}[$i];
         my $styles = "";
 
@@ -131,7 +136,6 @@ sub resolving_archive_flag
             $unzipdir = $unzipdir . $onefilename . $installer::globals::separator;
 
             if ( $installer::globals::dounzip ) { installer::systemactions::create_directory($unzipdir); }  # creating subdirectories with the names of the zipfiles
-
 
             $systemcall = "$installer::globals::unzippath -l $sourcepath |";
             open (UNZIP, "$systemcall");
@@ -182,6 +186,7 @@ sub resolving_archive_flag
                 }
 
                 my $zipfileref = \@zipfile;
+                my $unziperror = 0;
 
                 # Format: Length, Date, Time, Name
                 # This includes new destination directories!
@@ -233,9 +238,40 @@ sub resolving_archive_flag
                             $newfile{'destination'} = $destination . $zipname;
                             $newfile{'sourcepath'} = $unzipdir . $zipname;
 
-                            push(@newallfilesarray, \%newfile);
+                            my $sourcefiletest = $unzipdir . $zipname;
+                            if ( ! -f $sourcefiletest )
+                            {
+                                $infoline = "ATTENTION: Unzip failed for $sourcefiletest!\n";
+                                push( @installer::globals::logfileinfo, $infoline);
+                                $unziperror = 1;
+                            }
+
+                            # only adding the new line into the files array, if not in repeat modus
+
+                            if ( ! $repeat_unzip ) { push(@newallfilesarray, \%newfile); }
                         }
                     }
+                }
+
+                if ( $unziperror )
+                {
+                    print "WARNING: Repeating to unpack $sourcepath! \n";
+                    $infoline = "ATTENTION: Repeating to unpack $sourcepath !\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $repeat_unzip = 1;
+                    $maxcounter++;
+
+                    if ( $maxcounter == 5 ) # exiting the program
+                    {
+                        installer::exiter::exit_program("ERROR: Failed to unzip $sourcepath !", "resolving_archive_flag");
+                    }
+                }
+                else
+                {
+                    $infoline = "Info: $sourcepath unpacked without problems !\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $repeat_unzip = 0;
+                    $maxcounter = 0;
                 }
             }
         }
