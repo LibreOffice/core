@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seekableinput.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:33:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,14 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace comphelper
 {
 
-class OSeekableInputWrapper : public ::cppu::WeakImplHelper2< ::com::sun::star::io::XInputStream,
+class COMPHELPER_DLLPUBLIC OSeekableInputWrapper : public ::cppu::WeakImplHelper2< ::com::sun::star::io::XInputStream,
                                                                 ::com::sun::star::io::XSeekable >
 {
     ::osl::Mutex    m_aMutex;
@@ -101,7 +104,7 @@ class OSeekableInputWrapper : public ::cppu::WeakImplHelper2< ::com::sun::star::
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xCopySeek;
 
 private:
-    void PrepareCopy_Impl();
+    COMPHELPER_DLLPRIVATE void PrepareCopy_Impl();
 
 public:
     OSeekableInputWrapper(
