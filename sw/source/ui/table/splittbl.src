@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:54:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "½Ζ»sΌΠΓD(~C)";
         Text[ arabic ] = "δΣΞ ΗαΪδζΗδ";
         Text[ greek ] = "Αντιγραφή επικεφαλίδας";
-        Text[ korean ] = "Α¦Έρ ΊΉ»η(~C)";
+        Text[ korean ] = "Η¥Α¦ ΊΉ»η";
         Text[ turkish ] = "B~aώlύπύ kopyala";
         Text[ language_user1 ] = " ";
     };
@@ -167,7 +167,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "¦Ϋ­qΌΠΓD΅A±aΌΛ¦΅(~S)";
         Text[ arabic ] = "ΪδζΗδ ΞΗΥ (ΚΨΘνή ΗαδγΨ)";
         Text[ greek ] = "Προσαρμοσμένη επικεφαλίδα (με στυλ)";
-        Text[ korean ] = "°νΐ―  Α¦Έρ (ΐ―Ηό ΐϋΏλ)";
+        Text[ korean ] = "°νΐ―  Η¥Α¦£¨ΐ―Ηό ΐϋΏλ£©";
         Text[ turkish ] = "~Φzel baώlύk (biηim uygula)";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
@@ -193,7 +193,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "¦Ϋ­qΌΠΓD(~H)";
         Text[ arabic ] = "ΪδζΗδ ΞΗΥ";
         Text[ greek ] = "Προσαρμοσμένη επικεφαλίδα";
-        Text[ korean ] = "»ηΏλΐΪ Α¦Έρ(~S)";
+        Text[ korean ] = "»ηΏλΐΪ Η¥Α¦";
         Text[ turkish ] = "Φ~zel baώlύk";
         Text[ language_user1 ] = " ";
     };
@@ -219,7 +219,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "µLΌΠΓD(~N)";
         Text[ arabic ] = "ΘΟζδ ΪδζΗδ";
         Text[ greek ] = "Χωρίς επικεφαλίδα";
-        Text[ korean ] = "Α¦ΈρΐΜ Ύψΐ½(~N)";
+        Text[ korean ] = "Η¥Α¦ Ύψΐ½";
         Text[ turkish ] = "~Baώlύk yok";
         Text[ language_user1 ] = " ";
     };
