@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:23 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
     Text [ ENGLISH ] = "Header/Footer" ; \
     Text [ norwegian ] = "Header/Footer" ; \
     Text [ italian ] = "Intestazione/piè di pagina" ; \
-    Text [ portuguese_brazilian ] = "Cabe?alho/Rodap?" ; \
+    Text [ portuguese_brazilian ] = "Cabeçalhos/Rodapés" ; \
     Text [ portuguese ] = "Cabeçalhos/Rodapés" ; \
     Text [ finnish ] = "Ylä-/alatunnisteet" ; \
     Text [ danish ] = "Sidehoved/Sidefod" ; \
@@ -77,7 +77,7 @@
     Text [ english_us ] = "Headers/Footers" ; \
     Text[ chinese_simplified ] = "é¡µçœ‰/é¡µè„š";   \
     Text[ russian ] = "Âåğõíèé/Íèæíèé êîëîíòèòóëû"; \
-    Text[ polish ] = "Nag³ówki-/Stopki";    \
+    Text[ polish ] = "Nag³ówki/stopki"; \
     Text[ japanese ] = "ãƒ˜ãƒƒãƒ€/ãƒ•ãƒƒã‚¿";   \
     Text[ chinese_traditional ] = "é é¦–å’Œé å°¾";    \
     Text[ arabic ] = "ÑÄæÓ/ÊĞííáÇÊ ÇáÕİÍÇÊ";    \
@@ -88,14 +88,17 @@
     Text[ turkish ] = "Üst/Altbilgi";   \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Capçaleres/Peus";    \
-    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©/à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©/à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";    \
+    Text[ czech ] = "ZÃ¡hlavÃ­/ZÃ¡patÃ­";   \
+    Text[ hebrew ] = "Kopf-/FuÃŸzeilen";    \
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾/à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 
 #define HEADER \
     Text = "Kopfzeile" ; \
     Text [ ENGLISH ] = "Header" ; \
     Text [ norwegian ] = "Header" ; \
     Text [ italian ] = "Riga d'intestazione" ; \
-    Text [ portuguese_brazilian ] = "Cabe?alho" ; \
+    Text [ portuguese_brazilian ] = "Cabeçalho" ; \
     Text [ portuguese ] = "Cabeçalho" ; \
     Text [ finnish ] = "Ylätunniste" ; \
     Text [ danish ] = "Sidehoved" ; \
@@ -117,14 +120,17 @@
     Text[ turkish ] = "Üstbilgi";   \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Capçalera";  \
-    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©";
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©";   \
+    Text[ czech ] = "ZÃ¡hlavÃ­";    \
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×¢×œ×™×•× ×”â€¬";   \
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 
 #define FOOTER \
     Text = "Fußzeile" ; \
     Text [ ENGLISH ] = "Footer" ; \
     Text [ norwegian ] = "Footer" ; \
     Text [ italian ] = "Piè di pagina" ; \
-    Text [ portuguese_brazilian ] = "Rodap?" ; \
+    Text [ portuguese_brazilian ] = "Rodapé" ; \
     Text [ portuguese ] = "Rodapé" ; \
     Text [ finnish ] = "Alatunniste" ; \
     Text [ danish ] = "Sidefod" ; \
@@ -146,14 +152,17 @@
     Text[ turkish ] = "Altbilgi";   \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Peu de pàgina";  \
-    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";
+    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";    \
+    Text[ czech ] = "ZÃ¡patÃ­"; \
+    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×ª×—×ª×•× ×”â€¬";   \
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 
 #define HEADER_RIGHT \
     Text = "Kopfzeile (rechts)" ; \
     Text [ ENGLISH ] = "Header (right)" ; \
     Text [ norwegian ] = "Header (right)" ; \
     Text [ italian ] = "Riga d'intestazione (destra)" ; \
-    Text [ portuguese_brazilian ] = "Cabe?alho (direito)" ; \
+    Text [ portuguese_brazilian ] = "Cabeçalho (à direita)" ; \
     Text [ portuguese ] = "Cabeçalho (direito)" ; \
     Text [ finnish ] = "Ylätunniste (oikea)" ; \
     Text [ danish ] = "Sidehoved (højre)" ; \
@@ -164,7 +173,7 @@
     Text [ english_us ] = "Header (right)" ; \
     Text[ chinese_simplified ] = "é¡µçœ‰(å³)"; \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñïğàâà)";    \
-    Text[ polish ] = "Wiersz nag³ówka (z prawej)";  \
+    Text[ polish ] = "Nag³ówek (z prawej)"; \
     Text[ japanese ] = "ãƒ˜ãƒƒãƒ€(å³)";    \
     Text[ chinese_traditional ] = "é é¦–(å³)";    \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íãíä)";   \
@@ -172,17 +181,20 @@
     Text[ chinese_simplified ] = "é¡µçœ‰(å³)"; \
     Text[ greek ] = "Êåöáëßäá (äåîéÜ)"; \
     Text[ korean ] = "ë¨¸ë¦¬ê¸€(ì˜¤ë¥¸ìª½)";    \
-    Text[ turkish ] = "Altbilgi (sağ)"; \
+    Text[ turkish ] = "Üstbilgi (sağ)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Capçalera (dreta)";  \
-    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸© (à¸‚à¸§à¸²)";
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸© (à¸‚à¸§à¸²)";   \
+    Text[ czech ] = "ZÃ¡hlavÃ­ (vpravo)";   \
+    Text[ hebrew ] = "Kopfzeile (rechts)";  \
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ (à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾)";
 
 #define HEADER_LEFT \
     Text = "Kopfzeile (links)" ; \
     Text [ ENGLISH ] = "Header (left)" ; \
     Text [ norwegian ] = "Header (left)" ; \
     Text [ italian ] = "Riga d'intestazione (sinistra)" ; \
-    Text [ portuguese_brazilian ] = "Cabe?alho (esquerdo)" ; \
+    Text [ portuguese_brazilian ] = "Cabeçalho (à esquerda)" ; \
     Text [ portuguese ] = "Cabeçalho (esquerdo)" ; \
     Text [ finnish ] = "Ylätunniste (vasen)" ; \
     Text [ danish ] = "Sidehoved (venstre)" ; \
@@ -193,7 +205,7 @@
     Text [ english_us ] = "Header (left)" ; \
     Text[ chinese_simplified ] = "é¡µçœ‰(å·¦)"; \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñëåâà)"; \
-    Text[ polish ] = "Wiersz nag³ówka (z lewej)";   \
+    Text[ polish ] = "Nag³ówek (z lewej)";  \
     Text[ japanese ] = "ãƒ˜ãƒƒãƒ€(å·¦)";    \
     Text[ chinese_traditional ] = "é é¦–(å·¦)";    \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íÓÇÑ)";   \
@@ -204,14 +216,17 @@
     Text[ turkish ] = "Üstbilgi (sol)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Capçalera (esquerra)";   \
-    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸© (à¸‹à¹‰à¸²à¸¢)";
+    Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸© (à¸‹à¹‰à¸²à¸¢)";    \
+    Text[ czech ] = "ZÃ¡hlavÃ­ (vlevo)";    \
+    Text[ hebrew ] = "Kopfzeile (links)";   \
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ (à¤¬à¤¾à¤¯à¤¾à¤)";
 
 #define FOOTER_RIGHT \
     Text = "Fußzeile (rechts)" ; \
     Text [ ENGLISH ] = "Footer (right)" ; \
     Text [ norwegian ] = "Footer (right)" ; \
     Text [ italian ] = "Piè di pagina (destra)" ; \
-    Text [ portuguese_brazilian ] = "Rodap? (direito)" ; \
+    Text [ portuguese_brazilian ] = "Rodapé (à direita)" ; \
     Text [ portuguese ] = "Rodapé (direito)" ; \
     Text [ finnish ] = "Alatunniste (oikea)" ; \
     Text [ danish ] = "Sidefod (højre)" ; \
@@ -222,7 +237,7 @@
     Text [ english_us ] = "Footer (right)" ; \
     Text[ chinese_simplified ] = "é¡µè„š(å³)"; \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñïğàâà)"; \
-    Text[ polish ] = "Wiersz stopki (z prawej)";    \
+    Text[ polish ] = "Stopka (z prawej)";   \
     Text[ japanese ] = "ãƒ•ãƒƒã‚¿(å³)";    \
     Text[ chinese_traditional ] = "é å°¾(å³)";    \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íãíä)"; \
@@ -233,14 +248,17 @@
     Text[ turkish ] = "Altbilgi (sağ)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Peu de pàgina (dreta)";  \
-    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸© (à¸‚à¸§à¸²)";
+    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸© (à¸‚à¸§à¸²)";    \
+    Text[ czech ] = "ZÃ¡patÃ­ (vpravo)";    \
+    Text[ hebrew ] = "FuÃŸzeile (rechts)";  \
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ (à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾)";
 
 #define FOOTER_LEFT \
     Text = "Fußzeile (links)" ; \
     Text [ ENGLISH ] = "Footer (left)" ; \
     Text [ norwegian ] = "Footer (left)" ; \
     Text [ italian ] = "Piè di pagina (sinistra)" ; \
-    Text [ portuguese_brazilian ] = "Rodap? (esquerdo)" ; \
+    Text [ portuguese_brazilian ] = "Rodapé (à esquerda)" ; \
     Text [ portuguese ] = "Rodapé (esquerdo)" ; \
     Text [ finnish ] = "Alatunniste (vasen)" ; \
     Text [ danish ] = "Sidefod (venstre)" ; \
@@ -251,7 +269,7 @@
     Text [ english_us ] = "Footer (left)" ; \
     Text[ chinese_simplified ] = "é¡µè„š(å·¦)"; \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñëåâà)";  \
-    Text[ polish ] = "Wiersz stopki (z lewej)"; \
+    Text[ polish ] = "Stopka (z lewej)";    \
     Text[ japanese ] = "ãƒ•ãƒƒã‚¿(å·¦)";    \
     Text[ chinese_traditional ] = "é å°¾(å·¦)";    \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íÓÇÑ)"; \
@@ -262,7 +280,10 @@
     Text[ turkish ] = "Altbilgi (sol)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Peu de pàgina (esquerra)";   \
-    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸© (à¸‹à¹‰à¸²à¸¢)";
+    Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸© (à¸‹à¹‰à¸²à¸¢)"; \
+    Text[ czech ] = "ZÃ¡patÃ­ (vlevo)"; \
+    Text[ hebrew ] = "FuÃŸzeile (links)";   \
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ (à¤¬à¤¾à¤¯à¤¾à¤)";
 
  //------------------------------------------------------------------------
  // Bearbeiten vom Seitendialog aus aufgerufen
@@ -276,7 +297,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text [ ENGLISH ] = "Header" ;
     Text [ norwegian ] = "Header" ;
     Text [ italian ] = "Intestazioni" ;
-    Text [ portuguese_brazilian ] = "Cabe?alho" ;
+    Text [ portuguese_brazilian ] = "Cabeçalhos" ;
     Text [ portuguese ] = "Cabeçalhos" ;
     Text [ finnish ] = "Ylätunnisteet" ;
     Text [ danish ] = "Sidehoveder" ;
@@ -323,6 +344,9 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Capçaleres";
     Text[ thai ] = "à¸«à¸±à¸§à¸à¸£à¸°à¸”à¸²à¸©";
+    Text[ czech ] = "ZÃ¡hlavÃ­";
+    Text[ hebrew ] = "Kopfzeilen";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 };
 TabDialog RID_SCDLG_HFED_FOOTER
 {
@@ -333,7 +357,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text [ ENGLISH ] = "Footer" ;
     Text [ norwegian ] = "Footer" ;
     Text [ italian ] = "Piè di pagina" ;
-    Text [ portuguese_brazilian ] = "Rodap?" ;
+    Text [ portuguese_brazilian ] = "Rodapés" ;
     Text [ portuguese ] = "Rodapé" ;
     Text [ finnish ] = "Alatunnisteet" ;
     Text [ danish ] = "Sidefødder" ;
@@ -380,6 +404,9 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Peus de pàgina";
     Text[ thai ] = "à¸—à¹‰à¸²à¸¢à¸à¸£à¸°à¸”à¸²à¸©";
+    Text[ czech ] = "ZÃ¡patÃ­";
+    Text[ hebrew ] = "FuÃŸzeilen";
+    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
 };
  //------------------------------------------------------------------------
  // Bearbeiten/Kopf-Fusszeile:
@@ -711,7 +738,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Left Area" ;
         Text [ norwegian ] = "~Left Area" ;
         Text [ italian ] = "Area ~sinistra" ;
-        Text [ portuguese_brazilian ] = "~?rea Esquerda" ;
+        Text [ portuguese_brazilian ] = "~Área Esquerda" ;
         Text [ portuguese ] = "~Área esquerda" ;
         Text [ finnish ] = "~Vasen alue" ;
         Text [ danish ] = "Venstre område" ;
@@ -722,7 +749,7 @@ TabPage RID_HFBASE
         Text [ english_us ] = "~Left area" ;
         Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
         Text[ russian ] = "Ëåâàÿ îáëàñòü";
-        Text[ polish ] = "Lewy obszar";
+        Text[ polish ] = "~Lewy obszar";
         Text[ japanese ] = "å·¦ã®ç¯„å›²(~L)";
         Text[ chinese_traditional ] = "å·¦å€åŸŸ(~L)";
         Text[ arabic ] = "ãäØŞÉ íÓÑì";
@@ -734,6 +761,9 @@ TabPage RID_HFBASE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea ~esquerra";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™~à¸‹à¹‰à¸²à¸¢";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "~Linker Bereich";
+        Text[ hindi ] = "~à¤¬à¤¾à¤¯à¤¾à¤ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_LEFT
@@ -752,7 +782,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Center Area" ;
         Text [ norwegian ] = "~Center Area" ;
         Text [ italian ] = "Area ~centrale" ;
-        Text [ portuguese_brazilian ] = "~?rea Central" ;
+        Text [ portuguese_brazilian ] = "~Área Central" ;
         Text [ portuguese ] = "~Área central" ;
         Text [ finnish ] = "~Keskitä alue" ;
         Text [ danish ] = "Midterområde" ;
@@ -763,7 +793,7 @@ TabPage RID_HFBASE
         Text [ english_us ] = "~Center area" ;
         Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ(~C)";
         Text[ russian ] = "Öåíòğàëüíàÿ îáëàñòü";
-        Text[ polish ] = "Œrodkowy obszar";
+        Text[ polish ] = "Œr~odkowy obszar";
         Text[ japanese ] = "ä¸­å¤®ã®ç¯„å›²(~C)";
         Text[ chinese_traditional ] = "ä¸­é–“å€åŸŸ(~C)";
         Text[ arabic ] = "ãäØŞÉ æÓØì";
@@ -775,6 +805,9 @@ TabPage RID_HFBASE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea ~central";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ~à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡";
+        Text[ czech ] = "UprostÅ™ed";
+        Text[ hebrew ] = "~Mittlerer Bereich";
+        Text[ hindi ] = "~à¤®à¤§à¥à¤¯à¤­à¤¾à¤— à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_CENTER
@@ -793,7 +826,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Right Area" ;
         Text [ norwegian ] = "~Right Area" ;
         Text [ italian ] = "Area ~destra" ;
-        Text [ portuguese_brazilian ] = "~?rea Direita" ;
+        Text [ portuguese_brazilian ] = "~Área Direita" ;
         Text [ portuguese ] = "~Área direita" ;
         Text [ finnish ] = "~Oikea alue" ;
         Text [ danish ] = "Hø~jre område" ;
@@ -812,10 +845,13 @@ TabPage RID_HFBASE
         Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
         Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
         Text[ korean ] = "ì˜¤ë¥¸ìª½ ì˜ì—­(~I)";
-        Text[ turkish ] = "~Sağ bölüm";
+        Text[ turkish ] = "S~ağ bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea d~reta";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™~à¸‚à¸§à¸²";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "~Rechter Bereich";
+        Text[ hindi ] = "à¤¦à¤¾~à¤¹à¤¿à¤¨à¤¾ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_RIGHT
@@ -836,7 +872,7 @@ TabPage RID_HFBASE
         QuickHelpText [ ENGLISH ] = "Text Attributes" ;
         QuickHelpText [ norwegian ] = "Text Attributes" ;
         QuickHelpText [ italian ] = "Attributi di testo" ;
-        QuickHelpText [ portuguese_brazilian ] = "Atributos de Texto" ;
+        QuickHelpText [ portuguese_brazilian ] = "Atributos do Texto" ;
         QuickHelpText [ portuguese ] = "Atributos de texto" ;
         QuickHelpText [ finnish ] = "Tekstimääritteet" ;
         QuickHelpText [ danish ] = "Tekstattributter" ;
@@ -864,6 +900,9 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "text.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
+        QuickHelpText[ czech ] = "Atributy textu";
+        QuickHelpText[ hebrew ] = "Textattribute";
+        QuickHelpText[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸";
     };
     Image IMG_TEXT_H
     {
@@ -908,6 +947,9 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "file.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
+        QuickHelpText[ czech ] = "NÃ¡zev souboru";
+        QuickHelpText[ hebrew ] = "Dateiname";
+        QuickHelpText[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¤¾ à¤¨à¤¾à¤®";
     };
     Image IMG_FILE_H
     {
@@ -926,7 +968,7 @@ TabPage RID_HFBASE
                 Text = "Titel" ;
                 Text [ english ] = "Titel" ;
                             Text[ italian ] = "Titolo";
-                Text[ portuguese_brazilian ] = "Titel";
+                Text[ portuguese_brazilian ] = "Título";
                 Text[ portuguese ] = "Título";
                 Text[ danish ] = "Titel";
                 Text[ french ] = "Titre";
@@ -949,6 +991,9 @@ TabPage RID_HFBASE
                 Text[ catalan ] = "Títol";
                 Text[ finnish ] = "Otsikko";
                 Text[ thai ] = "à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+                Text[ czech ] = "NÃ¡zev";
+                Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
+                Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
             };
             MenuItem
             {
@@ -958,7 +1003,7 @@ TabPage RID_HFBASE
                 Text [ english ] = "Filename" ;
                 RadioCheck = TRUE ;
                             Text[ italian ] = "Nome file";
-                Text[ portuguese_brazilian ] = "Dateiname";
+                Text[ portuguese_brazilian ] = "Nome do Arquivo";
                 Text[ portuguese ] = "Nome do ficheiro";
                 Text[ danish ] = "Filnavn";
                 Text[ french ] = "Nom de fichier";
@@ -981,6 +1026,9 @@ TabPage RID_HFBASE
                 Text[ catalan ] = "Nom del fitxer";
                 Text[ finnish ] = "Tiedoston nimi";
                 Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡";
+                Text[ czech ] = "NÃ¡zev souboru";
+                Text[ hebrew ] = "Dateiname";
+                Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¤¾ à¤¨à¤¾à¤®";
             };
             MenuItem
             {
@@ -990,7 +1038,7 @@ TabPage RID_HFBASE
                 Text [ english ] = "Path/Filename" ;
                 RadioCheck = TRUE ;
                             Text[ italian ] = "Nome di percorso/file";
-                Text[ portuguese_brazilian ] = "Pfad/Dateiname";
+                Text[ portuguese_brazilian ] = "Nome do Caminho/Arquivo";
                 Text[ portuguese ] = "Atalho/Nome do ficheiro";
                 Text[ danish ] = "Sti/Filnavn";
                 Text[ french ] = "Chemin/Nom de fichier";
@@ -1008,11 +1056,14 @@ TabPage RID_HFBASE
                 Text[ chinese_simplified ] = "è·¯å¾„/æ–‡ä»¶å";
                 Text[ greek ] = "¼íïìá äéáäñïìŞò/ïíüìáôïò";
                 Text[ korean ] = "ê²½ë¡œ/íŒŒì¼ ì´ë¦„";
-                Text[ turkish ] = "Yol/dosya adı";
+                Text[ turkish ] = "Veryolu/dosya adı";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Nom del camí/fitxer";
                 Text[ finnish ] = "Polun/tiedoston nimi";
                 Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡/à¹à¸Ÿà¹‰à¸¡";
+                Text[ czech ] = "Cesta a jmÃ©no souboru";
+                Text[ hebrew ] = "Pfad/Dateiname";
+                Text[ hindi ] = "à¤®à¤¾à¤°à¥à¤—/à¤«à¤¾à¤‡à¤² à¤•à¤¾ à¤¨à¤¾à¤®";
             };
         };
     };
@@ -1027,7 +1078,7 @@ TabPage RID_HFBASE
         QuickHelpText [ ENGLISH ] = "Table Name" ;
         QuickHelpText [ norwegian ] = "Table Name" ;
         QuickHelpText [ italian ] = "Nome tabella" ;
-        QuickHelpText [ portuguese_brazilian ] = "Tabela Nome" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nome da Planilha" ;
         QuickHelpText [ portuguese ] = "Nome da folha" ;
         QuickHelpText [ finnish ] = "Lomakkeen nimi" ;
         QuickHelpText [ danish ] = "Arknavn" ;
@@ -1055,6 +1106,9 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "table.bmp" ; };
             MaskColor = STD_MASKCOLOR;
         };
+        QuickHelpText[ czech ] = "NÃ¡zev listu";
+        QuickHelpText[ hebrew ] = "Tabellenname";
+        QuickHelpText[ hindi ] = "à¤¶à¥€à¤Ÿà¥ à¤•à¤¾ à¤¨à¤¾à¤®";
     };
     Image IMG_TABLE_H
     {
@@ -1099,6 +1153,9 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "page.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
+        QuickHelpText[ czech ] = "StrÃ¡nka";
+        QuickHelpText[ hebrew ] = "Seite";
+        QuickHelpText[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ";
     };
     Image IMG_PAGE_H
     {
@@ -1143,6 +1200,9 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "pages.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
+        QuickHelpText[ czech ] = "StrÃ¡nky";
+        QuickHelpText[ hebrew ] = "Seiten";
+        QuickHelpText[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ";
     };
     Image IMG_PAGES_H
     {
@@ -1187,6 +1247,9 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "date.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
+        QuickHelpText[ czech ] = "Datum";
+        QuickHelpText[ hebrew ] = "Datum";
+        QuickHelpText[ hindi ] = "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•";
     };
     Image IMG_DATE_H
     {
@@ -1231,6 +1294,9 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
+        QuickHelpText[ czech ] = "ÄŒas";
+        QuickHelpText[ hebrew ] = "Uhrzeit";
+        QuickHelpText[ hindi ] = "à¤¸à¤®à¤¯";
     };
     Image IMG_TIME_H
     {
@@ -1246,7 +1312,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
         Text [ norwegian ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
         Text [ italian ] = "Usare i pulsanti per modificare il tipo di carattere\no per inserire comandi speciali come data, ora, ecc." ;
-        Text [ portuguese_brazilian ] = "Use os bot?s de imagem para mudar a fonte do texto ouinserir comandos especiais como data hora, etc." ;
+        Text [ portuguese_brazilian ] = "Use os botões para mudar a fonte do texto ou inserir comandos de campos tais como data, hora, etc." ;
         Text [ portuguese ] = "Use os botões para mudar o tipo de letra ou inserir campos como data, hora, etc." ;
         Text [ finnish ] = "Näppäimien avulla voit vaihtaa fonttia tai lisätä kenttäkomentoja, kuten päivämäärän tai kellonajan." ;
         Text [ danish ] = "Brug knapperne til at forandre skrifttypen eller til at indsætte felter som dato, klokkeslæt etc." ;
@@ -1257,7 +1323,7 @@ TabPage RID_HFBASE
         Text [ english_us ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
         Text[ chinese_simplified ] = "è¯·ç‚¹å‡»æŒ‰é’®ï¼Œæ›´æ”¹å­—ä½“æˆ–æ’å…¥æ—¥æœŸï¼Œæ—¶é—´ç­‰åŒºåŸŸæŒ‡ä»¤ã€‚";
         Text[ russian ] = "Èñïîëüçóéòå êíîïêè äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ, êàê äàòà, âğåìÿ è ò.ä.";
-        Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
+        Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê lub wstawiæ pola poleceñ, takie jak pola daty, godziny itd.";
         Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®å¤‰æ›´ã¾ãŸã¯æ—¥ä»˜ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚„æ™‚åˆ»ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãªã©ã‚’æŒ¿å…¥ã™ã‚‹ã¨ãã¯ã€å¤‰æ›´ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã€‚";
         Text[ chinese_traditional ] = "è«‹æŒ‰ä¸€ä¸‹é€™å€‹æŒ‰éˆ•ä¾†è®Šæ›´å­—å‹æˆ–æ’å…¥æ—¥æœŸã€æ™‚é–“ç­‰å€åŸŸæŒ‡ä»¤ã€‚";
         Text[ arabic ] = "ÇÓÊÎÏã ÇáãİÇÊíÍ áÊÛííÑ äæÚ ÇáÎØ Ãæ áÅÖÇİÉ ÃæÇãÑ ÍŞæá¡ ãËá ÇáÊÇÑíÎ¡ Ãæ ÇáæŞÊ ...ÅáÎ.";
@@ -1269,6 +1335,9 @@ TabPage RID_HFBASE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilitzeu els botons per canviar el tipus de lletra o bé inserir ordres de camp com ara la data, l'hora, etc.";
         Text[ thai ] = "à¹ƒà¸Šà¹‰à¸›à¸¸à¹ˆà¸¡à¹€à¸à¸·à¹ˆà¸­à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸«à¸£à¸·à¸­à¹à¸—à¸£à¸à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥  à¹€à¸Šà¹ˆà¸™  à¸§à¸±à¸™à¸—à¸µà¹ˆ  à¹€à¸§à¸¥à¸²  à¸¯à¸¥à¸¯";
+        Text[ czech ] = "PouÅ¾ijte tlaÄÃ­tka ke zmÄ›nÄ› fontu nebo vloÅ¾enÃ­ polÃ­ jako je datum, Äas apod.";
+        Text[ hebrew ] = "Benutzen Sie die SchaltflÃ¤chen, um die Schriftart zu verÃ¤ndern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufÃ¼gen.";
+        Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿ à¤•à¥‹ à¤¬à¤¦à¤²à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤…à¤¥à¤µà¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤•à¤¾ à¤†à¤œà¥à¤à¤¾ à¤œà¥ˆà¤¸à¥‡ à¤¦à¤¿à¤¨à¤¾à¤‚à¤•, à¤¸à¤®à¤¯, à¤‡à¤¤à¥à¤¯à¤¾à¤¦à¤¿. à¤œà¥‹à¤¡à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¬à¤Ÿà¤¨à¥‹à¤‚ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¥€à¤œà¤¿à¤ à¥¤";
     };
     FixedLine FL_INFO
     {
@@ -1278,7 +1347,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "Hint" ;
         Text [ norwegian ] = "Hint" ;
         Text [ italian ] = "Nota" ;
-        Text [ portuguese_brazilian ] = "Dica" ;
+        Text [ portuguese_brazilian ] = "Anotação" ;
         Text [ portuguese ] = "Observação" ;
         Text [ finnish ] = "Huomautus" ;
         Text [ danish ] = "Bemærk!" ;
@@ -1289,7 +1358,7 @@ TabPage RID_HFBASE
         Text [ english_us ] = "Note" ;
         Text[ chinese_simplified ] = "æç¤º";
         Text[ russian ] = "Ïğèìå÷àíèå";
-        Text[ polish ] = "Wskazówka";
+        Text[ polish ] = "Notatka";
         Text[ japanese ] = "æŒ‡ç¤º";
         Text[ chinese_traditional ] = "æç¤º";
         Text[ arabic ] = "ãáÇÍÙÉ";
@@ -1301,6 +1370,9 @@ TabPage RID_HFBASE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nota";
         Text[ thai ] = "à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸";
+        Text[ czech ] = "PoznÃ¡mka";
+        Text[ hebrew ] = "â€®×”×¢×¨×”â€¬";
+        Text[ hindi ] = "à¤¸à¥‚à¤šà¤¨à¤¾";
     };
 };
  // Kombinationen: Header/Footer links/rechts
@@ -1421,6 +1493,23 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
