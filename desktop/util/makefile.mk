@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 16:18:46 $
+#   last change: $Author: obo $ $Date: 2004-06-01 09:12:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,7 @@ LINKFLAGSAPPGUI!:=	$(LINKFLAGSAPPGUI:s/-bind_at_load//)
 # winXX is handled like solaris for now
 APP1_STDPRE=
 APP1_STDPOST=$(CPPULIB) $(CPPUHELPERLIB) $(UNOLIB) $(TOOLSLIB) \
-    $(VOSLIB) $(SALLIB)
+    $(VOSLIB) $(SALLIB) 
 .ELSE
 APP1_STDPRE=$(SALLIB) $(VOSLIB) $(TOOLSLIB) $(UNOLIB) $(CPPULIB) \
     $(CPPUHELPERLIB)
@@ -142,7 +142,9 @@ APP1STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(TKLIB)            \
-    $(SALLIB)
+    $(SALLIB) \
+       $(JVMFWKLIB)
+
 
 #	$(APP1_STDPRE)		\
 #	$(SVLLIB)			\
@@ -243,7 +245,8 @@ APP5STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-    $(TKLIB)            
+     $(TKLIB)     \
+    $(JVMFWKLIB)       
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
