@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:02:32 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,14 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     BOOL    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
 
     // Numerierung und Bullets
+    /**
+       Turns on numbering or bullets.
+
+       @param bNum    TRUE: turn on numbering
+                      FALSE: turn on bullets
+    */
+    void    NumOrBulletOn(BOOL bNum); // #i29560#
+    void    NumOrBulletOff(); // #i29560#
     void    NumOn();
     void    BulletOn();
 
