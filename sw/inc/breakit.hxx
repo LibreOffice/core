@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 15:00:30 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,20 +78,29 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
+#include <com/sun/star/i18n/ForbiddenCharacters.hdl>
+#endif
+
 class SwBreakIt
 {
 public:
     com::sun::star::uno::Reference < com::sun::star::i18n::XBreakIterator > xBreak;
 private:
     com::sun::star::lang::Locale* pLocale;
-    LanguageType aLast;
+    com::sun::star::i18n::ForbiddenCharacters* pForbidden;
+    LanguageType aLast;          // language of the current locale
+    LanguageType aForbiddenLang; // language of the current forbiddenChar struct
 
     com::sun::star::lang::Locale& _GetLocale( const LanguageType aLang );
+    com::sun::star::i18n::ForbiddenCharacters& _GetForbidden( const LanguageType    aLang );
 public:
     SwBreakIt();
-    ~SwBreakIt() { delete pLocale; }
+    ~SwBreakIt() { delete pLocale; delete pForbidden; }
     com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )
     { if( aLast == aLang ) return *pLocale; return _GetLocale( aLang ); }
+    com::sun::star::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
+    { if( aForbiddenLang == aLang ) return *pForbidden; return _GetForbidden( aLang ); }
 };
 
 extern SwBreakIt* pBreakIt;
