@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-21 09:53:43 $
+ *  last change: $Author: patrick.luby $ $Date: 2000-09-22 05:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@
 #ifndef ODBC_UNX
 #define ODBC_UNX
 #endif
-#include <odbc/qeodbc.h>
+//#include <odbc/qeodbc.h>
 #define CALLBACK
 #define EXPORT
 #include <odbc/sqlext.h>
