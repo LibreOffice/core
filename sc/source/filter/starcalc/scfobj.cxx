@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:45:51 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 17:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <svtools/moduleoptions.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/objsh.hxx>
@@ -347,7 +348,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, USHORT nDestTab, const Rec
                                 USHORT nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
 {
     //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
-    if ( !SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+    if ( !SvtModuleOptions().IsChart() )
         return;
 
     SvStorageRef aStor = new SvStorage(String());
