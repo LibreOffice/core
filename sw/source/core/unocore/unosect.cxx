@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 14:38:46 $
+ *  last change: $Author: os $ $Date: 2000-10-27 13:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,6 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= uTmp;
                 }
                 break;
-#ifdef DDE_AVAILABLE
                 case WID_SECT_DDE_TYPE      :
                 case WID_SECT_DDE_FILE      :
                 case WID_SECT_DDE_ELEMENT   :
@@ -630,7 +629,6 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= OUString(sRet);
                 }
                 break;
-#endif
                 case WID_SECT_LINK     :
                 {
                      text::SectionFileLink aLink;

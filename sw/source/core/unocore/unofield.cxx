@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-17 12:36:09 $
+ *  last change: $Author: os $ $Date: 2000-10-27 13:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,7 +1817,6 @@ void SwXTextField::attachToRange(
                 ((SwPageNumberField*)pFld)->SetUserString(m_pProps->sPar1);
             }
             break;
-#ifdef DDE_AVAILABLE
             case SW_SERVICE_FIELDTYPE_DDE:
             {
                 SwFieldType* pFldType = pDoc->GetFldType(RES_DDEFLD, m_sTypeName);
@@ -1826,7 +1825,6 @@ void SwXTextField::attachToRange(
                 pFld = new SwDDEField( (SwDDEFieldType*)pFldType );
             }
             break;
-#endif
             case SW_SERVICE_FIELDTYPE_DATABASE_NAME:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNAMEFLD);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 15:12:56 $
+ *  last change: $Author: os $ $Date: 2000-10-27 13:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,11 +206,7 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.TextField.Annotation",       //SW_SERVICE_FIELDTYPE_ANNOTATION
         "com.sun.star.text.TextField.Input",                    //SW_SERVICE_FIELDTYPE_INPUT
         "com.sun.star.text.TextField.Macro",                    //SW_SERVICE_FIELDTYPE_MACRO
-#ifdef DDE_AVAILABLE
         "com.sun.star.text.TextField.DDE",              //SW_SERVICE_FIELDTYPE_DDE
-#else
-        "",             //SW_SERVICE_FIELDTYPE_DDE
-#endif
         "com.sun.star.text.TextField.HiddenParagraph",  //SW_SERVICE_FIELDTYPE_HIDDEN_PARA
         "",//com.sun.star.text.TextField.DocumentInfo",     //SW_SERVICE_FIELDTYPE_DOC_INFO
         "com.sun.star.text.TextField.TemplateName",     //SW_SERVICE_FIELDTYPE_TEMPLATE_NAME
