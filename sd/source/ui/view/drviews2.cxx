@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:02:47 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SfxItemSet aAttr(pDoc->GetPool());
                         pObj = rMarkList.GetMark(i)->GetObj();
-                        aAttr.Put(pObj->GetItemSet());
+                        aAttr.Put(pObj->GetMergedItemSet());
 
                         INT32 nActLineWidth = ((const XLineWidthItem&)aAttr.Get(XATTR_LINEWIDTH)).GetValue();
 
@@ -319,7 +319,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                             }
 
                             if(bSetItemSet)
-                                pObj->SetItemSet(aAttr);
+                                pObj->SetMergedItemSet(aAttr);
                         }
                     }
                 }
@@ -335,7 +335,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SfxItemSet aAttr(pDoc->GetPool());
                         pObj = rMarkList.GetMark(i)->GetObj();
-                        aAttr.Put(pObj->GetItemSet());
+                        aAttr.Put(pObj->GetMergedItemSet());
 
                         const XFillStyleItem& rFillStyle =
                          (const XFillStyleItem&) aAttr.Get(XATTR_FILLSTYLE);
@@ -355,7 +355,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                             aAttr.Put(XFillStyleItem(XFILL_SOLID));
                             aAttr.Put(XFillColorItem(String(), COL_WHITE));
 
-                            pObj->SetItemSet(aAttr);
+                            pObj->SetMergedItemSet(aAttr);
                         }
                     }
 
@@ -975,7 +975,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrMarkList aMarkList = pDrView->GetMarkList();
                 for (int i=0; i < (int) aMarkList.GetMarkCount(); i++)
                 {
-                    aAllMarkedRect.Union ( aMarkList.GetMark(i)->GetObj()->GetBoundRect() );
+                    aAllMarkedRect.Union ( aMarkList.GetMark(i)->GetObj()->GetCurrentBoundRect() );
                 }
                 pGraphicObj->SetLogicRect (aAllMarkedRect);
 
@@ -1033,7 +1033,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     if( pPresObjList->GetPos( pObj ) != LIST_ENTRY_NOTFOUND )
                     {
                         SfxItemSet* pSet = new SfxItemSet( pDoc->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
-                        pSet->Put(pObj->GetItemSet());
+                        pSet->Put(pObj->GetMergedItemSet());
                         pAttrList->Insert( pSet, LIST_APPEND );
                         pAttrList->Insert( pObj->GetUserCall(), LIST_APPEND );
                     }
@@ -1080,12 +1080,12 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                         if ( pSet && pSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SFX_ITEM_ON )
                         {
-                            pObj->SetItem(pSet->Get(SDRATTR_TEXT_MINFRAMEHEIGHT));
+                            pObj->SetMergedItem(pSet->Get(SDRATTR_TEXT_MINFRAMEHEIGHT));
                         }
 
                         if ( pSet && pSet->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) == SFX_ITEM_ON )
                         {
-                            pObj->SetItem(pSet->Get(SDRATTR_TEXT_AUTOGROWHEIGHT));
+                            pObj->SetMergedItem(pSet->Get(SDRATTR_TEXT_AUTOGROWHEIGHT));
                         }
 
                         if( pUserCall )
