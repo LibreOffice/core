@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:16:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2557,26 +2557,10 @@ sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
         nResId = RES_DDEFLD;
     else if(rTypeName.EqualsAscii("SetExpression"))
     {
-        // build indices do access programmatic names
-        static sal_uInt16 nIds[] =
-        {
-            RES_POOLCOLL_LABEL_DRAWING  - RES_POOLCOLL_EXTRA_BEGIN,
-            RES_POOLCOLL_LABEL_ABB      - RES_POOLCOLL_EXTRA_BEGIN,
-            RES_POOLCOLL_LABEL_TABLE    - RES_POOLCOLL_EXTRA_BEGIN,
-            RES_POOLCOLL_LABEL_FRAME    - RES_POOLCOLL_EXTRA_BEGIN,
-            0
-        };
-        const SvStringsDtor& rExtraArr = SwStyleNameMapper::GetExtraProgNameArray();
-
         nResId = RES_SETEXPFLD;
 
         String sFldTypName( rName.GetToken( 1, '.' ));
-        String sUIName( sFldTypName );
-        if (*rExtraArr[ nIds[0] ] == sUIName ||
-            *rExtraArr[ nIds[1] ] == sUIName ||
-            *rExtraArr[ nIds[2] ] == sUIName ||
-            *rExtraArr[ nIds[3] ] == sUIName)
-            sUIName = SwStyleNameMapper::GetUIName( sFldTypName, GET_POOLID_TXTCOLL );
+        String sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFldTypName ) );
 
         if( sUIName != sFldTypName )
             rName.SetToken( 1, '.', sUIName );
@@ -2646,8 +2630,7 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
     case RES_SETEXPFLD:
         rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
         rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "SetExpression."));
-        rName += String(SwStyleNameMapper::GetProgName( rFldType.GetName(),
-                                                        GET_POOLID_TXTCOLL ));
+        rName += String( SwStyleNameMapper::GetSpecialExtraProgName( rFldType.GetName() ) );
         break;
 
     case RES_DBFLD:
