@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-23 10:51:11 $
+ *  last change: $Author: tl $ $Date: 2002-07-23 11:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4074,6 +4074,10 @@
                 </info>
             </prop>
             <group oor:name="Japanese">
+                <!-- Responsible: OS -->
+                <info>
+                    <desc xml:lang="en-US">Contains search options for the Japanese language.</desc>
+                </info>
                 <prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
@@ -4081,7 +4085,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Do not distinguish between full-width and half-width characters.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean">
@@ -4091,7 +4095,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Do not distinguish between hiragana and katakana characters.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatchContractions" oor:type="xs:boolean">
@@ -4101,7 +4105,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between characters with diphthongs and double consonants and plain characters.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean">
@@ -4111,7 +4115,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between minus signs, dashes, and long vowel sounds.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean">
@@ -4121,7 +4125,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between repeat character marks.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean">
@@ -4131,7 +4135,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between standard and nonstandard ideography.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatchOldKanaForms" oor:type="xs:boolean">
@@ -4141,7 +4145,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between standard and nonstandard ideography.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean">
@@ -4151,7 +4155,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between 'Di' and 'Zi' or 'Du' and 'Zu'.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean">
@@ -4161,7 +4165,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between 'Ba' and 'Va' or 'Ha' and 'Fa'.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean">
@@ -4171,7 +4175,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between 'Tsi', 'Thi' and 'Chi' or 'Dhi' and 'Zi'.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean">
@@ -4181,7 +4185,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between 'Hyu' and 'Fyu' or 'Byu' and 'Vyu'.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean">
@@ -4191,7 +4195,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between 'Se' and 'She' or 'Ze' and 'Je'.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatch_IaIya" oor:type="xs:boolean">
@@ -4201,7 +4205,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between 'Ia' and 'Iya'.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsMatch_KiKu" oor:type="xs:boolean">
@@ -4211,7 +4215,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between 'Ki' and 'Ku'.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsIgnorePunctuation" oor:type="xs:boolean">
@@ -4221,7 +4225,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between punctuation characters.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsIgnoreWhitespace" oor:type="xs:boolean">
@@ -4231,7 +4235,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between characters used as blank spaces, such as full-width spaces, half-width spaces, and tabs.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean">
@@ -4241,7 +4245,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between prolonged sound marks.</desc>
                     </info>
                 </prop>
                 <prop oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean">
@@ -4251,7 +4255,7 @@
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Search without distinguishing between normal dots and middle dots.</desc>
                     </info>
                 </prop>
             </group>
