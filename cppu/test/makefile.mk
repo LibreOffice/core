@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-21 16:18:01 $
+#   last change: $Author: dbo $ $Date: 2000-12-22 10:38:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ INCPRE+=	$(OUT)$/inc$/test
 
 OBJFILES=	\
         $(OBJ)$/testcppu.obj	\
-        $(OBJ)$/test_di.obj	\
+        $(OBJ)$/test_di.obj		\
         $(OBJ)$/test_Cincludes.obj
 #		$(OBJ)$/test_sec.obj	\
 
@@ -128,7 +128,7 @@ CFLAGS += /Ob0
 
 .INCLUDE :  target.mk
 
-CPPUMAKERFLAGS =
+CPPUMAKERFLAGS = -C
 .IF "$(COM)" == "MSC"
 CPPUMAKERFLAGS = -L
 .ENDIF
