@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-20 09:56:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-27 07:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,12 +695,12 @@ sal_Bool OResultSet::evaluate()
         {
             if(m_pEvaluationKeySet)
             {
-                bRet = m_pTable->fetchRow(m_aEvaluateRow,m_pTable->getTableColumns().getBody(),sal_True);
+                bRet = m_pTable->fetchRow(m_aEvaluateRow,m_pTable->getTableColumns().getBody(),sal_True,sal_True);
                 evaluate();
 
             }
             else
-                bRet = m_pTable->fetchRow(m_aRow,m_xColumns.getBody(),sal_True);
+                bRet = m_pTable->fetchRow(m_aRow,m_xColumns.getBody(),sal_False,sal_True);
         }
     }
 
@@ -1092,14 +1092,14 @@ again:
 
     if (!bEvaluate) // Laeuft keine Auswertung, dann nur Ergebniszeile fuellen
     {
-        m_pTable->fetchRow(m_aRow,m_pTable->getTableColumns().getBody(), bRetrieveData);
+        m_pTable->fetchRow(m_aRow,m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData);
 
         //  if (bShowDeleted && m_aRow->isDeleted())
             //  m_aRow->setState(ROW_DELETED);
     }
     else
     {
-        m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), TRUE);
+        m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
 
         if (m_aEvaluateRow->isDeleted() ||
             (m_aSQLAnalyzer.hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Sätzen
@@ -1179,7 +1179,7 @@ again:
         if (bEvaluate)
         {
             // jetzt die eigentliche Ergebniszeile Lesen
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), TRUE);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
         }
 
         if (bOK)
@@ -1194,7 +1194,7 @@ again:
         sal_Bool bOK = sal_True;
         if (bEvaluate)
         {
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), TRUE);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
         }
         if (bOK)
         {
@@ -1309,7 +1309,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                     if (bOK)
                     {
                         // jetzt nochmal die Ergebnisse lesen
-                        m_pTable->fetchRow(m_aRow, m_pTable->getTableColumns().getBody(), bRetrieveData);
+                        m_pTable->fetchRow(m_aRow, m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData);
 
                         // now set the bookmark for outside
                         (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
@@ -1462,7 +1462,7 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
         // and than move forward until we are after the last row
         while(bDataFound)
         {
-            bDataFound = Move(OFileTable::FILE_NEXT, 1, bRetrieveData);
+            bDataFound = Move(OFileTable::FILE_NEXT, 1, sal_False); // we don't need the data here
             if(bDataFound && !m_aRow->isDeleted())
             {
                 ++nCurPos;

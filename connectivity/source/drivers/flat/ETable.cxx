@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 10:45:19 $
+ *  last change: $Author: oj $ $Date: 2000-11-27 07:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,7 +826,7 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
     return sal_True;
 }
 //------------------------------------------------------------------
-sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols, sal_Bool bRetrieveData)
+sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
 {
     OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     (*_rRow)[0] = m_nFilePos;
