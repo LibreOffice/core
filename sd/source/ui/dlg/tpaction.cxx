@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 09:54:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,7 +1198,6 @@ IMPL_LINK( SdTPAction, SelectTreeHdl, void *, EMPTYARG )
 IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
 {
     String aFile( GetEditText() );
-    String aStrTmp = aFile.ToLowerAscii();
 
     if( aFile != aLastFile )
     {
