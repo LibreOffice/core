@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-30 15:08:54 $
+ *  last change: $Author: jp $ $Date: 2001-04-02 13:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2129,9 +2129,6 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             nRet = 1;
         }
     }
-
-    if( !nRet )
-        InfoBox( 0, SW_RES(MSG_CLPBRD_FORMAT_ERROR)).Execute();
 
     return nRet;
 }
