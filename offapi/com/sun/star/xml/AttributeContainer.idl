@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttributeContainer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module xml {
     <code>AttributeData</code>, you must use a prefix in the name and you must
     use a namespace, if you use a prefix.
 */
-service AttributeContainer
+published service AttributeContainer
 {
     interface com::sun::star::container::XNameContainer;
 };
