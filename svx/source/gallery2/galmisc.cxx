@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:06:09 $
+ *  last change: $Author: ka $ $Date: 2001-10-15 12:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
@@ -75,6 +76,7 @@
 #include "svdograf.hxx"
 #include "fmmodel.hxx"
 #include "fmview.hxx"
+#include "unomodel.hxx"
 #include "codec.hxx"
 #include "gallery.hrc"
 #include "gallery1.hxx"
@@ -685,21 +687,21 @@ sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pU
 
     if( pUserObject )
     {
-        FmFormModel* pModel = (FmFormModel*) pUserObject;
+        FmFormModel* pModel = static_cast< FmFormModel* >( pUserObject );
 
         pModel->BurnInStyleSheetAttributes();
         pModel->SetStreamingSdrModel( TRUE );
         pModel->RemoveNotPersistentObjects( TRUE );
-        rxOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
         rxOStm->SetBufferSize( 16348 );
-        pModel->PreSave();
-        pModel->GetItemPool().SetFileFormatVersion( (USHORT) rxOStm->GetVersion() );
-        pModel->GetItemPool().Store( *rxOStm );
-        *rxOStm << *pModel;
-        pModel->PostSave();
-        rxOStm->Commit();
-        pModel->SetStreamingSdrModel( FALSE );
 
+        {
+            com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+
+            if( xDocOut.is() && SvxDrawingLayerExport( pModel, xDocOut ) )
+                rxOStm->Commit();
+        }
+
+        pModel->SetStreamingSdrModel( FALSE );
         bRet = ( rxOStm->GetError() == ERRCODE_NONE );
     }
 
