@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-02 14:28:36 $
+#   last change: $Author: hr $ $Date: 2004-12-10 17:55:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,10 +76,6 @@ AUTOSEG=true
 
 NO_HID_FILES=app.src
 .EXPORT : NO_HID_FILES
-
-# --- Update-Version -----------------------------------------------
-
-RSCUPDVER=$(RSCREVISION)SV$(UPD)$(UPDMINOR)
 
 # --- Files --------------------------------------------------------
 
