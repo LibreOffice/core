@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
+ *  last change: $Author: sab $ $Date: 2001-06-13 16:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,8 +611,11 @@ void XMLTableStyleContext::FillPropertySet(
                 if (!pStyle)
                 {
                     XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
-                    pStyle = (SvXMLNumFormatContext *)pMyStyles->
-                        FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+                    if (pMyStyles)
+                        pStyle = (SvXMLNumFormatContext *)pMyStyles->
+                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+                    else
+                        DBG_ERROR("not possible to get style");
                 }
                 if (pStyle)
                 {
