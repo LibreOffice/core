@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:24:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
 #endif
+#ifndef _SCEXTOPT_HXX
+#include "scextopt.hxx"
+#endif
 #ifndef SC_SCPATATR_HXX
 #include "patattr.hxx"
 #endif
@@ -138,8 +141,9 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
-    maScMaxPos( SCMAXCOL, SCMAXROW, SCMAXTAB ),
+    maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
     maXclMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
+    maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbTruncated( false ),
@@ -148,6 +152,11 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
 #ifdef DBG_UTIL
     mnObjCnt = 0;
 #endif
+
+    if( mrDoc.GetExtDocOptions() )
+        mpExtDocOpt.reset( new ScExtDocOptions( *mrDoc.GetExtDocOptions() ) );
+    else
+        mpExtDocOpt.reset( new ScExtDocOptions );
 }
 
 XclRootData::~XclRootData()
@@ -228,6 +237,9 @@ void XclRoot::SetMaxPos()
         case xlBiff8:   mrData.maXclMaxPos.Set( EXC_MAXCOL8, EXC_MAXROW8, EXC_MAXTAB8 );    break;
         default:        DBG_ERROR_BIFF();
     }
+    mrData.maMaxPos.SetCol( ::std::min( mrData.maScMaxPos.Col(), mrData.maXclMaxPos.Col() ) );
+    mrData.maMaxPos.SetRow( ::std::min( mrData.maScMaxPos.Row(), mrData.maXclMaxPos.Row() ) );
+    mrData.maMaxPos.SetTab( ::std::min( mrData.maScMaxPos.Tab(), mrData.maXclMaxPos.Tab() ) );
 }
 
 SfxObjectShell* XclRoot::GetDocShell() const
@@ -317,6 +329,11 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mpDrawEditEng;
+}
+
+ScExtDocOptions& XclRoot::GetExtDocOptions() const
+{
+    return *mrData.mpExtDocOpt;
 }
 
 XclTracer& XclRoot::GetTracer() const
