@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedispatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:21:00 $
+ *  last change: $Author: as $ $Date: 2001-07-06 13:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,16 +395,21 @@ class BaseDispatcher    :   // interfaces
         virtual ~BaseDispatcher();
 
         /*-****************************************************************************************************//**
-            @short      you should react for successfully or failed load operations.
-            @descr      These baseclass implement handling of synchronous or asynchronous loading
-                        operations into a target frame. They implement the complete listener mechanism to send
-                        status events to our listener too! But we couldn't react for this event in all cases.
+            @short      you should react for successfully or failed load/handle operations.
+            @descr      These baseclass implement handling of dispatched URLs and synchronous/asynchronous loading
+                        of it into a target frame. It implement the complete listener mechanism to get events from
+                        used loader or handler and sending of status events to registered listener too!
+                        But we couldn't react for this events in all cases.
                         May be - you wish to reactivate suspended controllers or wish to delete a new created
                         task if operation failed ...!?
-                        By overwriting these pure virtual method it's possible to do such things.
+                        By overwriting these pure virtual methods it's possible to do such things.
                         We call you with all available informations ... you should react for it.
                         BUT - don't send any status events to your listener! We will do it everytime.
                         (other listener could be informed as well!)
+
+                        You will called back in: a) "reactForLoadingState()" , if URL was loaded into a frame
+                                                 b) "reactForHandlingState()", if URL was handled by a registered content handler
+                                                                               (without using a target frame!)
 
             @seealso    method statusChanged()
             @seealso    method loadFinished()
@@ -419,10 +424,14 @@ class BaseDispatcher    :   // interfaces
             @onerror    -
             @threadsafe -
         *//*-*****************************************************************************************************/
-        virtual void SAL_CALL reactForLoadingState( const css::util::URL&                                  aURL          ,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >& lDescriptor   ,
-                                                    const css::uno::Reference< css::frame::XFrame >&       xTarget       ,
-                                                          sal_Bool                                         bState        ) = 0;
+        virtual void SAL_CALL reactForLoadingState ( const css::util::URL&                                  aURL          ,
+                                                     const css::uno::Sequence< css::beans::PropertyValue >& lDescriptor   ,
+                                                     const css::uno::Reference< css::frame::XFrame >&       xTarget       ,
+                                                           sal_Bool                                         bState        ) = 0;
+
+        virtual void SAL_CALL reactForHandlingState( const css::util::URL&                                  aURL          ,
+                                                     const css::uno::Sequence< css::beans::PropertyValue >& lDescriptor   ,
+                                                           sal_Bool                                         bState        ) = 0;
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods

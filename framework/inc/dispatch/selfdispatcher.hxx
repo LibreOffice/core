@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selfdispatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:21:47 $
+ *  last change: $Author: as $ $Date: 2001-07-06 13:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,14 @@ class SelfDispatcher   :   // -interfaces  ... are supported by our BaseDispatch
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
-        virtual void SAL_CALL reactForLoadingState( const css::util::URL&                                         aURL        ,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >&        lDescriptor ,
-                                                    const css::uno::Reference< css::frame::XFrame >&              xTarget     ,
-                                                          sal_Bool                                                bState      );
+        virtual void SAL_CALL reactForLoadingState ( const css::util::URL&                                      aURL        ,
+                                                     const css::uno::Sequence< css::beans::PropertyValue >&     lDescriptor ,
+                                                     const css::uno::Reference< css::frame::XFrame >&           xTarget     ,
+                                                           sal_Bool                                             bState      );
+
+        virtual void SAL_CALL reactForHandlingState( const css::util::URL&                                      aURL        ,
+                                                     const css::uno::Sequence< css::beans::PropertyValue >&     lDescriptor ,
+                                                           sal_Bool                                             bState      );
 
 };      //  class SelfDispatcher
 
