@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:21:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,10 @@ class FontCache
     {
         sal_Int64   m_nTimestamp;
         bool        m_bNoFiles;
+        bool        m_bUserOverrideOnly;
         FontDirMap  m_aEntries;
 
-        FontDir() : m_nTimestamp(0), m_bNoFiles(false) {}
+        FontDir() : m_nTimestamp(0), m_bNoFiles(false), m_bUserOverrideOnly( false ) {}
     };
 
     typedef std::hash_map< int, FontDir > FontCacheData;
@@ -123,6 +124,8 @@ public:
     // returns false for non cached directory
     // a cached but empty directory will return true but not append anything
     bool listDirectory( const rtl::OString& rDir, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
+    // returns true for directoris that contain only user overridden fonts
+    bool scanAdditionalFiles( const rtl::OString& rDir );
 
     void flush();
 
