@@ -33,6 +33,9 @@
                     <value xml:lang="zh-CN">图表数据(~C)</value>
                     <value xml:lang="pt">~Dados do gráfico</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:InsertTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -405,6 +408,9 @@
                     <value xml:lang="zh-CN">图表类型(~R)...</value>
                     <value xml:lang="pt">~Tipo de gráfico...</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ToggleTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -435,6 +441,9 @@
                     <value xml:lang="hi">शीर्षक शुरु/बंद</value>
                     <value xml:lang="zh-CN">显示或隐入标题</value>
                     <value xml:lang="pt">Título</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToggleLegend" oor:op="replace">
@@ -467,6 +476,9 @@
                     <value xml:lang="zh-CN">显示或隐入图例</value>
                     <value xml:lang="pt">Legenda</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ToggleAxisTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -497,6 +509,9 @@
                     <value xml:lang="hi">अक्षरेखा शीर्षक शुरु/बंद</value>
                     <value xml:lang="zh-CN">显示或隐入轴标题</value>
                     <value xml:lang="pt">Título dos eixos</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToggleAxisDescr" oor:op="replace">
@@ -529,6 +544,9 @@
                     <value xml:lang="zh-CN">显示或隐入轴数值</value>
                     <value xml:lang="pt">Mostrar/Ocultar eixos</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ToggleGridHorizontal" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -559,6 +577,9 @@
                     <value xml:lang="hi">समतल जाल शुरु/बंद</value>
                     <value xml:lang="zh-CN">显示或隐入横向网格线</value>
                     <value xml:lang="pt">Grelha horizontal</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToggleGridVertical" oor:op="replace">
@@ -591,6 +612,9 @@
                     <value xml:lang="zh-CN">显示或隐入纵向网格线</value>
                     <value xml:lang="pt">Grelha vertical</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DataInRows" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -622,6 +646,9 @@
                     <value xml:lang="zh-CN">行数据</value>
                     <value xml:lang="pt">Dados em linhas</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DataInColumns" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -652,6 +679,9 @@
                     <value xml:lang="hi">स्तम्भों में ड़ॉटा</value>
                     <value xml:lang="zh-CN">列数据</value>
                     <value xml:lang="pt">Dados em colunas</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToolSelect" oor:op="replace">
@@ -745,6 +775,9 @@
                     <value xml:lang="hi">चार्ट को फिर से व्यवस्था करो</value>
                     <value xml:lang="zh-CN">重新排序图表</value>
                     <value xml:lang="pt">Reorganizar gráfico</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertGrids" oor:op="replace">
@@ -1428,6 +1461,9 @@
                     <value xml:lang="zh-CN">文字显示比例</value>
                     <value xml:lang="pt">Dimensionar texto</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DataDescriptionType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1614,6 +1650,9 @@
                     <value xml:lang="zh-CN">上移一层(~F)</value>
                     <value xml:lang="pt">~Mais para a frente</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Backward" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1644,6 +1683,9 @@
                     <value xml:lang="hi">पिछली ~ओर भेजो</value>
                     <value xml:lang="zh-CN">下移一层(~W)</value>
                     <value xml:lang="pt">Mais para o f~undo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisA" oor:op="replace">
