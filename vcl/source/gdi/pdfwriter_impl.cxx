@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-24 16:09:45 $
+ *  last change: $Author: pl $ $Date: 2002-07-24 18:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <image.hxx>
 #include <outdev.h>
 #include <sallayout.hxx>
+#include <metric.hxx>
 #ifndef REMOTE_APPSERVER
 #include <svsys.h>
 #include <salgdi.hxx>
@@ -1964,12 +1965,27 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     Point aPos;
     bool bFirst = true;
     int nMinCharIndex = 0, nMaxCharIndex = rText.Len()-1;
+    double fXScale = 1.0;
+    if( m_aCurrentPDFState.m_aFont.GetWidth() )
+    {
+        Font aFont( m_aCurrentPDFState.m_aFont );
+        aFont.SetWidth( 0 );
+        FontMetric aMetric = m_pReferenceDevice->GetFontMetric( aFont );
+        if( aMetric.GetWidth() != m_aCurrentPDFState.m_aFont.GetWidth() )
+        {
+            fXScale =
+                (double)m_aCurrentPDFState.m_aFont.GetWidth() /
+                (double)aMetric.GetWidth();
+        }
+        // force state befor GetFontMetric
+        m_pReferenceDevice->ImplNewFont();
+    }
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharIndices )) )
     {
         // add ascent since PDF calculates relative to baseline, VCL to upper left corner
         aPos.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnAscent;
         // optimize use of Td vs. Tm
-        if( bFirst )
+        if( bFirst && fXScale == 1.0 )
         {
             m_aPages.back().appendPoint( aPos, aLine );
             aLine.append( " Td " );
@@ -1977,7 +1993,8 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         }
         else
         {
-            aLine.append( "1 0 0 1 " );
+            appendDouble( fXScale, aLine );
+            aLine.append( " 0 0 1 " );
             m_aPages.back().appendPoint( aPos, aLine );
             aLine.append( " Tm " );
         }
