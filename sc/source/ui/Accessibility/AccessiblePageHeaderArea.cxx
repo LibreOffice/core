@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,29 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
+//=====  XServiceInfo  ========================================================
+
+::rtl::OUString SAL_CALL
+       ScAccessiblePageHeaderArea::getImplementationName(void)
+    throw (uno::RuntimeException)
+{
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessiblePageHeaderArea"));
+}
+
+uno::Sequence< ::rtl::OUString> SAL_CALL
+       ScAccessiblePageHeaderArea::getSupportedServiceNames(void)
+    throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    sal_Int32 nOldSize(aSequence.getLength());
+    aSequence.realloc(nOldSize + 1);
+    ::rtl::OUString* pNames = aSequence.getArray();
+
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessiblePageHeaderFooterAreasView"));
+
+    return aSequence;
+}
+
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence<sal_Int8> SAL_CALL
@@ -237,13 +260,13 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(v
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :
-        sDesc = rtl::OUString(String(ScResId(STR_ACC_LEFTAREA_DESCR)));
+        sDesc = String(ScResId(STR_ACC_LEFTAREA_DESCR));
         break;
     case SVX_ADJUST_RIGHT:
-        sDesc = rtl::OUString(String(ScResId(STR_ACC_RIGHTAREA_DESCR)));
+        sDesc = String(ScResId(STR_ACC_RIGHTAREA_DESCR));
         break;
     case SVX_ADJUST_CENTER:
-        sDesc = rtl::OUString(String(ScResId(STR_ACC_CENTERAREA_DESCR)));
+        sDesc = String(ScResId(STR_ACC_CENTERAREA_DESCR));
         break;
     default:
         DBG_ERRORFILE("wrong adjustment found");
@@ -259,13 +282,13 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :
-        sName = rtl::OUString(String(ScResId(STR_ACC_LEFTAREA_NAME)));
+        sName = String(ScResId(STR_ACC_LEFTAREA_NAME));
         break;
     case SVX_ADJUST_RIGHT:
-        sName = rtl::OUString(String(ScResId(STR_ACC_RIGHTAREA_NAME)));
+        sName = String(ScResId(STR_ACC_RIGHTAREA_NAME));
         break;
     case SVX_ADJUST_CENTER:
-        sName = rtl::OUString(String(ScResId(STR_ACC_CENTERAREA_NAME)));
+        sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
         break;
     default:
         DBG_ERRORFILE("wrong adjustment found");
