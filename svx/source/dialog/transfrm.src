@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 22:25:25 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 12:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ japanese ] = "Protect";
         Text[ korean ] = "Protect";
         Text[ chinese_simplified ] = "Protect";
-        Text[ chinese_traditional ] = "Protect";
+        Text[ chinese_traditional ] = "‰øùË≠∑";
         Text[ turkish ] = "Protect";
         Text[ arabic ] = "Protect";
         Text[ catalan ] = "Protect";
@@ -557,7 +557,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ japanese ] = "~Size";
         Text[ korean ] = "~Size";
         Text[ chinese_simplified ] = "~Size";
-        Text[ chinese_traditional ] = "~Size";
+        Text[ chinese_traditional ] = "Â§ßÂ∞è(~S)";
         Text[ turkish ] = "~Size";
         Text[ arabic ] = "~Size";
         Text[ catalan ] = "~Size";
@@ -715,7 +715,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ russian ] = "œË‚ˇÁÍ‡";
         Text[ polish ] = "Kotwica";
         Text[ japanese ] = "„Ç¢„É≥„Ç´„Éº(~A)";
-        Text[ chinese_traditional ] = "Ê®ôËôü(~A)";
+        Text[ chinese_traditional ] = "Á∏ÆÂÆö(~A)";
         Text[ arabic ] = "„—”«…";
         Text[ greek ] = "¡„Í˝Ò˘ÛÁ";
         Text[ korean ] = "Í∏∞Ï§Ä ÏúÑÏπò(~A)";
