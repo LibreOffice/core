@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:42:05 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,11 @@ sal_Bool SdrGrafObj::DoPaintObject( ExtOutputDevice& rOut, const SdrPaintInfoRec
     {
         OutputDevice* pOutDev = rOut.GetOutDev();
         Point aLogPos(aRect.TopLeft());
-        Size aLogSize(pOutDev->PixelToLogic(pOutDev->LogicToPixel(aRect).GetSize()));
+
+        // #116639# Simply take the logic size, forward/backward conversion is no longer necessary
+        // and may make the pixel size one too big.
+        Size aLogSize(aRect.GetSize());
+
         GraphicAttr aAttr(aGrafInfo);
         const SdrView* pView = (rInfoRec.pPV ? &rInfoRec.pPV->GetView() : 0L);
         const sal_uInt32 nGraphicManagerDrawMode(pView ? pView->GetGraphicManagerDrawMode() : GRFMGR_DRAW_STANDARD);
