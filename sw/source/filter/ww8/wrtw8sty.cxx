@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:37:52 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -170,14 +173,22 @@
 #ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
 #endif
-
+#ifndef _FMTCLDS_HXX
+#include <fmtclds.hxx>
+#endif
 #ifndef SW_LINEINFO_HXX
 #include <lineinfo.hxx>
 #endif
 
-#ifndef _WW8PAR_HXX
-#include <ww8par.hxx>
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
 #endif
+
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"
+#endif
+
+using namespace sw::util;
 
 struct WW8_SED
 {
@@ -735,7 +746,7 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
     if (RTL_TEXTENCODING_SYMBOL == eChrSet)
         maWW8_FFN[4] = 2;
     else
-        maWW8_FFN[4] = 0;
+        maWW8_FFN[4] = rtl_getBestWindowsCharsetFromTextEncoding(eChrSet);
 
     if (mbAlt)
         maWW8_FFN[5] = msFamilyNm.Len()+1;
@@ -922,6 +933,36 @@ WW8_WrPlcSepx::~WW8_WrPlcSepx()
         delete[] pAttrs;
     }
     delete pTxtPos;
+}
+
+sal_uInt16 WW8_WrPlcSepx::CurrentNoColumns(const SwDoc &rDoc) const
+{
+    ASSERT(aSects.Count(), "no segement inserted yet");
+    if (!aSects.Count())
+        return 1;
+
+    WW8_SepInfo& rInfo = aSects[aSects.Count() - 1];
+    const SwPageDesc* pPd = rInfo.pPageDesc;
+    if (!pPd)
+        pPd = &rDoc.GetPageDesc(0);
+
+    if (!pPd)
+    {
+        ASSERT(pPd, "totally impossible");
+        return 1;
+    }
+
+    const SfxItemSet &rSet = pPd->GetMaster().GetAttrSet();
+    SfxItemSet aSet(*rSet.GetPool(), RES_COL, RES_COL);
+    aSet.SetParent(&rSet);
+
+    //0xffffffff, what the hell is going on with that!, fixme most terribly
+    if (rInfo.pSectionFmt && (SwSectionFmt*)0xFFFFFFFF != rInfo.pSectionFmt)
+        aSet.Put(rInfo.pSectionFmt->GetAttr(RES_COL));
+
+    const SwFmtCol& rCol = (const SwFmtCol&)aSet.Get(RES_COL);
+    const SwColumns& rColumns = rCol.GetColumns();
+    return rColumns.Count();
 }
 
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp,
@@ -1263,15 +1304,17 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 
                 // am Nachkommen NUR  die Spaltigkeit gemaess Sect-Attr.
                 // umsetzen
-                aSet.Put( rSepInfo.pSectionFmt->GetAttr( RES_COL ) );
+                aSet.Put(rSepInfo.pSectionFmt->GetAttr(RES_COL));
 
                 const SvxLRSpaceItem &rSectionLR =
-                    (const SvxLRSpaceItem&)(rSepInfo.pSectionFmt->GetAttr(RES_LR_SPACE));
+                    ItemGet<SvxLRSpaceItem>(*(rSepInfo.pSectionFmt),
+                    RES_LR_SPACE);
                 const SvxLRSpaceItem &rPageLR =
-                    (const SvxLRSpaceItem&)(pPdFmt->GetAttr(RES_LR_SPACE));
+                    ItemGet<SvxLRSpaceItem>(*pPdFmt,RES_LR_SPACE);
 
-                SvxLRSpaceItem aResultLR(rPageLR.GetLeft() + rSectionLR.GetLeft(),
-                    rPageLR.GetRight() + rSectionLR.GetRight());
+                SvxLRSpaceItem aResultLR(rPageLR.GetLeft() +
+                    rSectionLR.GetLeft(), rPageLR.GetRight() +
+                    rSectionLR.GetRight());
 
                 aSet.Put(aResultLR);
 
@@ -1321,20 +1364,54 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
                  )
                )
             {
-                if( rSepInfo.pPDNd )
-                    pPdFirstPgFmt = pPd->GetPageFmtOfNode( *rSepInfo.pPDNd );
-                else
-                    pPdFirstPgFmt = &pPd->GetMaster();
+                /*
+                For #i4320# I am going to try this, nothing will ever be
+                perfect with the mismatch from title page of winword sections
+                vs our system. But I am relying on the natural inclination of
+                users to treat title pages as special and to generally always
+                have a manual page break inside them that we can convert to a
+                section break in the test in our page break exporter to see if
+                the page break will cause a new page descriptor to follow
+                */
 
-                rWrt.pAktPageDesc = pPd = pPd->GetFollow();
-                pPdFmt = &pPd->GetMaster();
+                bool bPlausableTitlePage = true;
 
-                // sprmSFTitlePage
-                if( rWrt.bWrtWW8 )
-                    SwWW8Writer::InsUInt16( *pO, 0x300A );
-                else
-                    pO->Insert( 143, pO->Count() );
-                pO->Insert( 1, pO->Count() );
+                /*
+                So if this is not plausably a title page of the following page
+                style don't try to make it into one and rely on the users
+                likely manual page break to fix everything for us.
+
+                Additional tests may be necessary in the future. A balance
+                will have to be found.
+                */
+                const SwPageDesc *pFollow = pPd->GetFollow();
+                const SwFrmFmt& rFollowFmt = pFollow->GetMaster();
+
+                const SwFmtCol& rFirstCols = pPdFmt->GetCol();
+                const SwFmtCol& rFollowCols = rFollowFmt.GetCol();
+                const SwColumns& rFirstColumns = rFirstCols.GetColumns();
+                const SwColumns& rFollowColumns = rFollowCols.GetColumns();
+
+                if (rFirstColumns.Count() != rFollowColumns.Count())
+                    bPlausableTitlePage = false;
+
+                if (bPlausableTitlePage)
+                {
+                    if (rSepInfo.pPDNd)
+                        pPdFirstPgFmt = pPd->GetPageFmtOfNode(*rSepInfo.pPDNd);
+                    else
+                        pPdFirstPgFmt = &pPd->GetMaster();
+
+                    rWrt.pAktPageDesc = pPd = pFollow;
+                    pPdFmt = &rFollowFmt;
+
+                    // sprmSFTitlePage
+                    if( rWrt.bWrtWW8 )
+                        SwWW8Writer::InsUInt16( *pO, 0x300A );
+                    else
+                        pO->Insert( 143, pO->Count() );
+                    pO->Insert( 1, pO->Count() );
+                }
             }
 
             const SfxItemSet* pOldI = rWrt.pISet;
