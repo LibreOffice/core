@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-22 15:07:31 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 12:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ class XMLConfigItemContext : public SvXMLImportContext
 {
     rtl::OUString               sType;
     rtl::OUString               sValue;
+    uno::Sequence<sal_Int8>     aDecoded;
     com::sun::star::uno::Any&   rAny;
     XMLConfigBaseContext*       pBaseContext;
 
@@ -539,7 +540,39 @@ SvXMLImportContext *XMLConfigItemContext::CreateChildContext( USHORT nPrefix,
 
 void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
 {
-    sValue += rChars;
+    if (sType.compareToAscii(sXML_base64Binary) == 0)
+    {
+        rtl::OUString sTrimmedChars( rChars.trim() );
+        if( sTrimmedChars.getLength() )
+        {
+            rtl::OUString sChars;
+            if( sValue )
+            {
+                sChars = sValue;
+                sChars += sTrimmedChars;
+                sValue = rtl::OUString();
+            }
+            else
+            {
+                sChars = sTrimmedChars;
+            }
+            uno::Sequence<sal_Int8> aBuffer((sChars.getLength() / 4) * 3 );
+            sal_Int32 nCharsDecoded =
+                GetImport().GetMM100UnitConverter().
+                    decodeBase64SomeChars( aBuffer, sChars );
+            sal_uInt32 nStartPos(aDecoded.getLength());
+            sal_uInt32 nCount(aBuffer.getLength());
+            aDecoded.realloc(nStartPos + nCount);
+            sal_Int8* pDecoded = aDecoded.getArray();
+            sal_Int8* pBuffer = aBuffer.getArray();
+            for (sal_uInt32 i = 0; i < nCount; i++, pBuffer++)
+                pDecoded[nStartPos + i] = *pBuffer;
+            if( nCharsDecoded != sChars.getLength() )
+                sValue = sChars.copy( nCharsDecoded );
+        }
+    }
+    else
+        sValue += rChars;
 }
 
 
@@ -589,9 +622,7 @@ void XMLConfigItemContext::EndElement()
         }
         else if (sType.compareToAscii(sXML_base64Binary) == 0)
         {
-            uno::Sequence < sal_Int8 > aSequence;
-            SvXMLUnitConverter::decodeBase64(aSequence, sValue);
-            rAny <<= aSequence;
+            rAny <<= aDecoded;
         }
         else
             DBG_ERROR("wrong type");
