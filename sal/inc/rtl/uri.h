@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:38:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ typedef enum
     /** Like rtl_UriEncodeIgnoreEscapes, but indicating failure when converting
         unmappable characters.
 
-        @since #109735#
+        @since UDK 3.2.0
      */
     rtl_UriEncodeStrict,
 
@@ -232,7 +232,7 @@ typedef enum
     /** Like rtl_UriDecodeWithCharset, but indicating failure when converting
         unmappable characters.
 
-        @since #109735#
+        @since UDK 3.2.0
      */
     rtl_UriDecodeStrict,
 
