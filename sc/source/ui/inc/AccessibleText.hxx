@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 15:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ public:
                         ScAccessibleCellTextData(ScTabViewShell* pViewShell,
                             const ScAddress& rP, ScSplitPos eSplitPos);
     virtual             ~ScAccessibleCellTextData();
+
+    virtual ScAccessibleCellTextData* Clone() const;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 15:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,11 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
         }
     }
     ScCellTextData::Notify(rBC, rHint);
+}
+
+ScAccessibleCellTextData* ScAccessibleCellTextData::Clone() const
+{
+    return new ScAccessibleCellTextData(mpViewShell, aCellPos, meSplitPos);
 }
 
 SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
