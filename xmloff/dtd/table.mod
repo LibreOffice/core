@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.31 2001-04-11 05:20:39 sab Exp $
+	$Id: table.mod,v 1.32 2001-04-23 17:27:26 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -52,14 +52,40 @@
    Contributor(s): _______________________________________
 
 -->
-<!ELEMENT table:tracked-changes (table:cell-content-change | table:insertion | table:deletion | table:movement | table:rejection)+>
+
+<!ELEMENT table:calculation-settings (table:null-date?, table:iteration?)>
+<!ATTLIST table:calculation-settings
+	table:case-sensitive %boolean; "true"
+	table:precision-as-shown %boolean; "false"
+	table:search-criteria-must-apply-to-whole-cell %boolean; "true"
+	table:automatic-find-labels %boolean; "true"
+	table:null-year %positiveInteger; "1930"
+>
+<!ELEMENT table:null-date EMPTY>
+<!ATTLIST table:null-date
+	table:value-type %valueType; #FIXED "date"
+	table:date-value %date; "1899-12-30"
+>
+<!ELEMENT table:iteration EMPTY>
+<!ATTLIST table:iteration
+	table:status (enable | disable) "disable"
+	table:steps %positiveInteger; "100"
+	table:maximum-difference %float; "0.001"
+>
+
+<!ELEMENT table:tracked-changes (table:cell-content-change | table:insertion | table:deletion | table:movement | table:rejection)*>
+<!ATTLIST table:tracked-changes table:track-changes %boolean; "true"
+				table:protected %boolean; "false"
+				table:protection-key CDATA #IMPLIED
+>
+
 <!ELEMENT table:dependences (table:dependence)+>
 <!ELEMENT table:dependence EMPTY>
 <!ATTLIST table:dependence
 	table:id CDATA #REQUIRED
 >
 <!ELEMENT table:deletions (table:cell-content-deletion | table:change-deletion)+>
-<!ELEMENT table:cell-content-deletion (table:cell-address?, table:table-cell?)>
+<!ELEMENT table:cell-content-deletion (table:cell-address?, table:change-track-table-cell?)>
 <!ATTLIST table:cell-content-deletion
 	table:id CDATA #IMPLIED
 >
@@ -131,6 +157,18 @@
 	table:end-row %integer; #IMPLIED
 	table:end-table %integer; #IMPLIED
 >
+<!ELEMENT table:change-track-table-cell (text:p*)
+	table:cell-address %cell-address; #IMPLIED
+	table:matrix-covered (true | false) "false"
+	table:formula %string; #IMPLIED
+	table:number-matrix-rows-spanned %positiveInteger; #IMPLIED
+	table:number-matrix-columns-spanned %positiveInteger; #IMPLIED
+	table:value-type %valueType; "string"
+	table:value %float; #IMPLIED
+	table:date-value %date; #IMPLIED
+	table:time-value %timeInstance; #IMPLIED
+	table:string-value %string; #IMPLIED
+>
 <!ELEMENT table:cell-content-change (table:cell-address, office:change-info, table:dependences?, table:deletions?, table:previous)>
 <!ATTLIST table:cell-content-change
 	table:id CDATA #REQUIRED
@@ -143,7 +181,7 @@
 	table:row %integer; #IMPLIED
 	table:table %integer; #IMPLIED
 >
-<!ELEMENT table:previous (table:table-cell)>
+<!ELEMENT table:previous (table:change-track-table-cell)>
 <!ATTLIST table:previous
 	table:id CDATA #IMPLIED
 >
@@ -153,6 +191,7 @@
 	table:acceptance-state (accepted | rejected | pending) "pending"
 	table:rejecting-change-id %positiveInteger; #IMPLIED
 >
+
 <!ENTITY % table-columns "( table:table-columns | ( table:table-column | table:table-column-group )+ )">
 <!ENTITY % table-header-columns "table:table-header-columns">
 <!ENTITY % table-rows "( table:table-rows | ( table:table-row | table:table-row-group )+ )">
@@ -176,6 +215,7 @@
 	table:filter-name CDATA #IMPLIED
 	table:table-name CDATA #IMPLIED
 	table:filter-options CDATA #IMPLIED
+	table:refresh-delay %timeDuration; #IMPLIED
 >
 <!ELEMENT table:scenario EMPTY>
 <!ATTLIST table:scenario
@@ -214,108 +254,72 @@
 	table:style-name %styleName; #IMPLIED
 	table:visibility (visible | collapse | filter) "visible"
 >
-<!ELEMENT table:subtable (%table-column-groups;, %table-row-groups;)>
+
 <!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;|chart:chart)*">
 <!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,table:detective?,(table:subtable|%text-wo-table;))">
 <!ELEMENT table:table-cell %cell-content;>
 <!ELEMENT table:covered-table-cell %cell-content;>
 <!ATTLIST table:table-cell
 	table:number-columns-repeated %positiveInteger; "1"
->
-<!ATTLIST table:covered-table-cell
-	table:number-columns-repeated %positiveInteger; "1"
->
-<!ATTLIST table:table-cell
 	table:number-rows-spanned %positiveInteger; "1"
 	table:number-columns-spanned %positiveInteger; "1"
 	table:style-name %styleName; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:style-name %styleName; #IMPLIED
->
-<!ATTLIST table:table-cell
 	table:validation-name CDATA #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:validation-name CDATA #IMPLIED
->
-<!ATTLIST table:table-cell
-	table:formula %string; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
 	table:formula %string; #IMPLIED
 	table:number-matrix-rows-spanned %positiveInteger; #IMPLIED
->
-<!ATTLIST table:table-cell
-	table:number-matrix-rows-spanned %positiveInteger; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:number-matrix-columns-spanned %positiveInteger; #IMPLIED
->
-<!ATTLIST table:table-cell
 	table:number-matrix-columns-spanned %positiveInteger; #IMPLIED
 	table:value-type %valueType; "string"
->
-<!ATTLIST table:covered-table-cell
-	table:value-type %valueType; "string"
->
-<!ATTLIST table:table-cell
 	table:value %float; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:value %float; #IMPLIED
->
-<!ATTLIST table:table-cell
 	table:date-value %date; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:date-value %date; #IMPLIED
->
-<!ATTLIST table:table-cell
 	table:time-value %timeInstance; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:time-value %timeInstance; #IMPLIED
->
-<!ATTLIST table:table-cell
 	table:boolean-value %boolean; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:boolean-value %boolean; #IMPLIED
->
-<!ATTLIST table:table-cell
 	table:string-value %string; #IMPLIED
->
-<!ATTLIST table:covered-table-cell
-	table:string-value %string; #IMPLIED
->
-<!ATTLIST table:table-cell
 	table:currency %string; #IMPLIED
 >
 <!ATTLIST table:covered-table-cell
+	table:number-columns-repeated %positiveInteger; "1"
+	table:style-name %styleName; #IMPLIED
+	table:validation-name CDATA #IMPLIED
+	table:formula %string; #IMPLIED
+	table:number-matrix-rows-spanned %positiveInteger; #IMPLIED
+	table:number-matrix-columns-spanned %positiveInteger; #IMPLIED
+	table:value-type %valueType; "string"
+	table:value %float; #IMPLIED
+	table:date-value %date; #IMPLIED
+	table:time-value %timeInstance; #IMPLIED
+	table:boolean-value %boolean; #IMPLIED
+	table:string-value %string; #IMPLIED
 	table:currency %string; #IMPLIED
 >
 <!-- cell protection in writer: cell attribute; calc uses format -->
 <!ATTLIST table:table-cell table:protect %boolean; "false">
-<!ELEMENT table:calculation-settings (table:null-date?, table:iteration?)>
-<!ATTLIST table:calculation-settings
-	table:case-sensitive %boolean; "true"
-	table:precision-as-shown %boolean; "false"
-	table:search-criteria-must-apply-to-whole-cell %boolean; "true"
-	table:automatic-find-labels %boolean; "true"
-	table:null-year %positiveInteger; "1930"
+
+<!ELEMENT table:cell-range-source EMPTY>
+<!ATTLIST table:cell-range-source
+	table:name %string; #REQUIRED
+	xlink:type (simple) #FIXED "simple"
+	xlink:actuate (onRequest) #FIXED "onRequest"
+	xlink:href %uriReference; #REQUIRED
+	table:filter-name %string; #REQUIRED
+	table:filter-options %string; #IMPLIED
+	table:last-column-spanned %positiveInteger; #REQUIRED
+	table:last-row-spanned %positiveInteger; #REQUIRED
+	table:refresh-delay %timeDuration; #IMPLIED
 >
-<!ELEMENT table:null-date EMPTY>
-<!ATTLIST table:null-date
-	table:value-type %valueType; #FIXED "date"
-	table:date-value %date; "1899-12-30"
+
+<!ELEMENT table:detective (table:highlighted-range*, table:operation*)>
+<!ELEMENT table:highlighted-range EMPTY>
+<!ATTLIST table:highlighted-range
+	table:cell-range-address %cell-range-address; #IMPLIED
+	table:direction (from-another-table | to-another-table | from-same-table | to-same-table) #REQUIRED
+	table:contains-error %boolean; "false"
 >
-<!ELEMENT table:iteration EMPTY>
-<!ATTLIST table:iteration
-	table:status (enable | disable) "disable"
-	table:steps %positiveInteger; "100"
-	table:maximum-difference %float; "0.001"
+<!ELEMENT table:operation EMPTY>
+<!ATTLIST table:operation
+	table:name (trace-dependents | remove-dependents | trace-precedents | remove-precedents | trace-errors) #REQUIRED
+	table:index %nonNegativeInteger; #REQUIRED
 >
+
 <!ELEMENT table:content-validations (table:content-validation)+>
 <!ELEMENT table:content-validation (table:help-message?, (table:error-message | table:error-macro)?)>
 <!ATTLIST table:content-validation
@@ -340,6 +344,9 @@
 	table:name CDATA #IMPLIED
 	table:execute %boolean; #IMPLIED
 >
+
+<!ELEMENT table:sub-table (%table-column-groups; , %table-row-groups;)>
+
 <!ELEMENT table:label-ranges (table:label-range)*>
 <!ELEMENT table:label-range EMPTY>
 <!ATTLIST table:label-range
@@ -347,31 +354,7 @@
 	table:data-cell-range-address %cell-range-address; #REQUIRED
 	table:orientation (column | row) #REQUIRED
 >
-<!ELEMENT table:cell-range-source EMPTY>
-<!ATTLIST table:cell-range-source
-	table:name %string; #REQUIRED
-	xlink:type (simple) #FIXED "simple"
-	xlink:actuate (onRequest) #FIXED "onRequest"
-	xlink:href %uriReference; #REQUIRED
-	table:filter-name %string; #REQUIRED
-	table:filter-options %string; #IMPLIED
-	table:last-column-spanned %positiveInteger; #REQUIRED
-	table:last-row-spanned %positiveInteger; #REQUIRED
-	table:refresh-delay %timeDuration; #IMPLIED
->
-<!ELEMENT table:detective (table:highlighted-range*, table:operation*)>
-<!ELEMENT table:highlighted-range EMPTY>
-<!ATTLIST table:highlighted-range
-	table:cell-range-address %cell-range-address; #IMPLIED
-	table:direction (from-another-table | to-another-table | from-same-table | to-same-table) #REQUIRED
-	table:contains-error %boolean; "false"
->
-<!ELEMENT table:operation EMPTY>
-<!ATTLIST table:operation
-	table:name (trace-dependents | remove-dependents | trace-precedents | remove-precedents | trace-errors) #REQUIRED
-	table:index %nonNegativeInteger; #REQUIRED
->
-<!ELEMENT table:sub-table (%table-column-groups; | %table-row-groups;)>
+
 <!ELEMENT table:named-expressions (table:named-range | table:named-expression)*>
 <!ELEMENT table:named-range EMPTY>
 <!ATTLIST table:named-range
@@ -386,6 +369,7 @@
 	table:expression CDATA #REQUIRED
 	table:base-cell-address %cell-address; #IMPLIED
 >
+
 <!ELEMENT table:filter (table:filter-condition | table:filter-and | table:filter-or)>
 <!ATTLIST table:filter
 	table:target-range-address %cell-range-address; #IMPLIED
@@ -403,6 +387,7 @@
 	table:value CDATA #REQUIRED
 	table:operator CDATA #REQUIRED
 >
+
 <!ELEMENT table:database-ranges (table:database-range)*>
 <!ELEMENT table:database-range ((table:database-source-sql | table:database-source-table | table:database-source-query)?, table:filter?, table:sort?, table:subtotal-rules?)>
 <!ATTLIST table:database-range
@@ -415,6 +400,7 @@
 	table:contains-header %boolean; "true"
 	table:display-filter-buttons %boolean; "false"
 	table:target-range-address %cell-range-address; #REQUIRED
+	table:refresh-delay %timeDuration; #IMPLIED
 >
 <!ELEMENT table:database-source-sql EMPTY>
 <!ATTLIST table:database-source-sql
@@ -432,6 +418,7 @@
 	table:database-name CDATA #REQUIRED
 	table:query-name CDATA #REQUIRED
 >
+
 <!ELEMENT table:sort (table:sort-by)+>
 <!ATTLIST table:sort
 	table:bind-styles-to-content %boolean; "true"
@@ -447,6 +434,7 @@
 	table:data-type (text | number | automatic | qname-but-not-ncname) "automatic"
 	table:order (ascending | descending) "ascending"
 >
+
 <!ELEMENT table:subtotal-rules (table:sort-groups? | table:subtotal-rule*)?>
 <!ATTLIST table:subtotal-rules
 	table:bind-styles-to-content %boolean; "true"
@@ -467,6 +455,7 @@
 	table:field-number %nonNegativeInteger; #REQUIRED
 	table:function CDATA #REQUIRED
 >
+
 <!ELEMENT table:data-pilot-tables (table:data-pilot-table)*>
 <!ELEMENT table:data-pilot-table ((table:database-source-sql | table:database-source-table | table:database-source-query | table:source-service | table:source-cell-range)?, table:data-pilot-field+)>
 <!ATTLIST table:data-pilot-table
@@ -514,6 +503,7 @@
 	table:display %boolean; #IMPLIED
 	table:display-details %boolean; #IMPLIED
 >
+
 <!ELEMENT table:consolidation EMPTY>
 <!ATTLIST table:consolidation
 	table:function CDATA #REQUIRED
@@ -522,5 +512,6 @@
 	table:use-label (none | column | row | both) "none"
 	table:link-to-source-data %boolean; "false"
 >
+
 <!ELEMENT table:dde-links (table:dde-link)+>
 <!ELEMENT table:dde-link (office:dde-source, table:table)>
