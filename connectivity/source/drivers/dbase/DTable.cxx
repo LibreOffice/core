@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:57 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,7 +823,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
                 }
                 break;
                 case DataType::DECIMAL:
-                    (*_rRow)[i] = aStr.ToDouble();
+                    (*_rRow)[i] = aStr;
                     //  pVal->setDouble(SdbTools::ToDouble(aStr));
                 break;
                 case DataType::BIT:

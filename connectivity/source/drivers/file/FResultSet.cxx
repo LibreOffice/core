@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2753,7 +2753,7 @@ void OResultSet::SetAssignValue(const String& aColumnName,
             case DataType::TIME:
             case DataType::TIMESTAMP:
             {
-                (*m_aAssignValues)[nId] = aValue.ToDouble();
+                (*m_aAssignValues)[nId] = aValue; // .ToDouble
 //              try
 //              {
 //                  double n = xValue->toDouble();

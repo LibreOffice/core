@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,15 +279,15 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
         // add type definition
         switch(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
         {
-                        case DataType::CHAR:
-                        case DataType::VARCHAR:
+            case DataType::CHAR:
+            case DataType::VARCHAR:
                 aSql += ::rtl::OUString::createFromAscii("(")
                             + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
                             + ::rtl::OUString::createFromAscii(")");
                 break;
 
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
                 aSql += ::rtl::OUString::createFromAscii("(")
                             + ::rtl::OUString::valueOf(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
                             + ::rtl::OUString::createFromAscii(",")
@@ -462,15 +462,15 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 
         switch(getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)))
         {
-                        case DataType::CHAR:
-                        case DataType::VARCHAR:
+            case DataType::CHAR:
+            case DataType::VARCHAR:
                 aSql += ::rtl::OUString::createFromAscii("(")
                             + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)))
                             + ::rtl::OUString::createFromAscii(")");
                 break;
 
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
                 aSql += ::rtl::OUString::createFromAscii("(")
                             + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)))
                             + ::rtl::OUString::createFromAscii(",")

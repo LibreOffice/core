@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,8 +893,6 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                     (*_rRow)[i].setNull();
                 }
             }   break;
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
             case DataType::DOUBLE:
             case DataType::INTEGER:
             {
@@ -921,6 +919,8 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                 double nVal = toDouble(aStrConverted,pConnection->getTextEncoding());
                 (*_rRow)[i] = nVal;
             } break;
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
             default:
             {
                 // Wert als String in Variable der Row uebernehmen
