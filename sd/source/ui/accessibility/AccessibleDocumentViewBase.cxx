@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2002-08-05 11:36:06 $
+ *  last change: $Author: af $ $Date: 2002-09-06 14:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,10 +426,14 @@ awt::Rectangle SAL_CALL
     // Prepare to subtract the parent position to transform into relative
     // coordinates.
     awt::Point aParentPosition;
-    Reference<XAccessibleComponent> xParentComponent (
-        getAccessibleParent(), uno::UNO_QUERY);
-    if (xParentComponent.is())
-        aParentPosition = xParentComponent->getLocationOnScreen();
+    Reference<XAccessible> xParent = getAccessibleParent ();
+    if (xParent.is())
+    {
+        Reference<XAccessibleComponent> xParentComponent (
+            xParent->getAccessibleContext(), uno::UNO_QUERY);
+        if (xParentComponent.is())
+            aParentPosition = xParentComponent->getLocationOnScreen();
+    }
 
     return awt::Rectangle (
         aPixelTopLeft.X() - aParentPosition.X,
