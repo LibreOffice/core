@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:10:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,6 +1597,8 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ hindi ] = "लेखपत्र में पहिले से ही ग्रन्थ-सूची प्रविष्टि है, लेकिन अलग ड़ॉटा है । आप अस्तित्व में रहनेवाले प्रविष्टियों को व्यवस्था करना चाहते है?";
     MESSAGE[ slovak ] = "Dokument už obsahuje záznam zoznamu použitej literatúry, ale s inými údajmi. Chcete upraviť existujúce záznamy?";
 };
+
+
 
 
 
