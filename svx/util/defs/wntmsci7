@@ -17516,3 +17516,11 @@ _real@8@3ffd820c49ba5e354000
 ?getOrCreate@SvxPropertySetInfoPool@@SAPAVPropertySetInfo@utl@@J@Z
 ?mpInfos@SvxPropertySetInfoPool@@0PAPAVPropertySetInfo@utl@@A
 _real@4@3ffaccccccccccccd000
+?sUNO_service_drawing_ConnectorProperties@@3PBDB
+?sUNO_service_drawing_FillProperties@@3PBDB
+?sUNO_service_drawing_LineProperties@@3PBDB
+?sUNO_service_drawing_MeasureProperties@@3PBDB
+?sUNO_service_drawing_ShadowProperties@@3PBDB
+?sUNO_service_drawing_TextProperties@@3PBDB
+?SvxConvertPolyPolygonBezierToXPolygon@@YAXPBUPolyPolygonBezierCoords@drawing@star@sun@com@@AAVXPolygon@@@Z
+?SvxConvertXPolygonToPolyPolygonBezier@@YAXABVXPolygon@@AAUPolyPolygonBezierCoords@drawing@star@sun@com@@@Z
