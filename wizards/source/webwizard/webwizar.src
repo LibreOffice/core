@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:06:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ String WEBDIALOG + 1
     Text[ portuguese ] = "AutoPiloto - Pαgina Web";
     Text[ dutch ] = "AutoPiloot webpagina";
     Text[ swedish ] = "AutoPilot fφr webbsida";
-    Text[ greek ] = "ΑυτοΠιλότος σελίδας Web";
+    Text[ greek ] = "Αυτόματος Πιλότος ιστοσελίδας";
     Text[ russian ] = "Μΰρςεπ βεα-ρςπΰνθφϋ";
     Text[ danish ] = "AutoPilot Webside";
     Text[ polish ] = "AutoPilot: Strona WWW";
@@ -139,7 +139,7 @@ String WEBDIALOG + 2
     Text[ portuguese ] = "C~ancelar";
     Text[ dutch ] = "A~nnuleren";
     Text[ swedish ] = "Av~bryt";
-    Text[ greek ] = "Ακύρωση";
+    Text[ greek ] = "Άκυρο";
     Text[ russian ] = "~Ξςμενθςό";
     Text[ danish ] = "A~nnuller";
     Text[ polish ] = "~Anuluj";
@@ -171,7 +171,7 @@ String WEBDIALOG + 3
     Text[ portuguese ] = "~Criar";
     Text[ dutch ] = "~Voltooien";
     Text[ swedish ] = "~Fδrdigstδll";
-    Text[ greek ] = "Ολοκλήρωση";
+    Text[ greek ] = "Δ~ημιουργία";
     Text[ russian ] = "~Ρξηδΰςό";
     Text[ danish ] = "~Udfψr";
     Text[ polish ] = "~Utwσrz";
@@ -247,7 +247,7 @@ String WEBDIALOG + 5
     Text[ chinese_traditional ] = "θ¦ζ΅η”¨ε“ªδΈ€η¨®ιΆ¨ζ ΌοΌ";
     Text[ arabic ] = "Γν δγΨ ΚΡΫΘ ΘΗΣΚΞΟΗγεΏ";
     Text[ turkish ] = "Hangi biηim/dόzen kullanύlsύn ?";
-    Text[ language_user1 ] = "The German should read \"Stilart\" and has nothing to do with \"Vorlage\". ENG: don't use style here.(EM16.5.00)";
+    Text[ language_user1 ] = "; The German should read \"Stilart\" and has nothing to do with \"Vorlage\". ENG: don't use style here.(EM16.5.00)";
     Text[ catalan ] = "Quin format s'ha d'utilitzar?";
     Text[ finnish ] = "Mitδ asettelua kδytetδδn?";
     Text[ thai ] = "ΰΉ€ΰΈ„ΰΉ‰ΰΈ²ΰΉ‚ΰΈ„ΰΈ£ΰΈ‡ΰΈ­ΰΈ±ΰΈ™ΰΉ„ΰΈ«ΰΈ™ΰΈ—ΰΈµΰΉΰΈΰΈ°ΰΉƒΰΈΰΉ‰?";
@@ -457,7 +457,7 @@ String WEBERROR + 2
     Text = "Es wurde keine Vorlage fόr den Seitenstil gefunden.";
     Text[English] = "No template for the page style could be found.";
     Text[ English_us ] = "A Style for the Page Style could not be found.";
-    Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM \"Seitenstil\" in Dt should be \"Seitenvorlage\"!! I asked TV. Maybe the Dt sentence will be changed.16.5.00EM";
+    Text[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM \"Seitenstil\" in Dt should be \"Seitenvorlage\"!! I asked TV. Maybe the Dt sentence will be changed.16.5.00EM";
     Text[ portuguese ] = "Foi impossνvel encontrar qualquer estilo de pαgina.";
     Text[ russian ] = "Νεβξημξζνξ νΰιςθ ψΰαλξν δλÿ ρςθλÿ ρςπΰνθφϋ.";
     Text[ greek ] = "Δεν βρέθηκε πρότυπο για το στυλ της σελίδας";
@@ -568,7 +568,7 @@ String WEBERROR + 5
     Text[ chinese_traditional ] = "ε¨θ¨­ε®ι€™ε€‹ζ ΌεΌζ¨£εΌζ™‚η™Όη”δΈ€ε€‹ι―θª¤γ€‚";
     Text[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΚΪννδ ΓδγΗΨ ΗαΚδΣνή.";
     Text[ turkish ] = "Biηemin uygulanmasύ esnasύnda bir hata oluώtu.";
-    Text[ language_user1 ] = "- All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM p.s.Formatvorlagen sind Styles.";
+    Text[ language_user1 ] = "; - All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM p.s.Formatvorlagen sind Styles.";
     Text[ catalan ] = "S'ha produοt un error en aplicar els estils.";
     Text[ finnish ] = "Tyylejδ liitettδessδ on ilmennyt virhe.";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ΄ΰΈ”ΰΈ‚ΰΉ‰ΰΈ­ΰΈΰΈ΄ΰΈ”ΰΈΰΈ¥ΰΈ²ΰΈ”ΰΈ‚ΰΈ¶ΰΉ‰ΰΈ™ΰΈ‚ΰΈ“ΰΈ°ΰΈΰΈ³ΰΈ¥ΰΈ±ΰΈ‡ΰΉƒΰΈΰΉ‰ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
@@ -620,7 +620,7 @@ String WEBERROR + 7
     Text[ portuguese ] = "Surgiu um erro durante a execuηγo do AutoPiloto.";
     Text[ dutch ] = "Bij het uitvoeren van de autopiloot is een fout opgetreden.";
     Text[ swedish ] = "Ett fel uppstod nδr AutoPiloten kφrdes.";
-    Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την εκτέλεση του ΑυτοΠιλότου.";
+    Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την εκτέλεση του αυτόματου πιλότου.";
     Text[ russian ] = "Ξψθακΰ πΰαξςϋ Μΰρςεπΰ.";
     Text[ danish ] = "Der opstod en fejl under udfψrelse af AutoPilot.";
     Text[ polish ] = "WystΉpi³ b³Ήd podczas uruchamiania AutoPilota.";
@@ -639,6 +639,7 @@ String WEBERROR + 7
     Text[ hindi ] = "ΰ¤“ΰ¤ΰ¥‹ΰ¤ªΰ¥ΰ¤²ΰ¤ΰ¥ ΰ¤•ΰ¥‹ ΰ¤ΰ¤²ΰ¤Ύΰ¤¨ΰ¥‡ ΰ¤•ΰ¥‡ ΰ¤Έΰ¤®ΰ¤― ΰ¤—ΰ¤²ΰ¤¤ΰ¥€ ΰ¤ΰ¤ΰ¤Ώΰ¤¤ ΰ¤Ήΰ¥ΰ¤† ΰ¥¤";
     Text[ slovak ] = "PoΔas behu Sprievodcu sa vyskytla chyba.";
 };
+
 
 
 
