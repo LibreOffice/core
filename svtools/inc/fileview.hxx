@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-13 13:36:24 $
+ *  last change: $Author: dv $ $Date: 2001-07-17 12:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 
 // class SvtFileView -----------------------------------------------------
 
@@ -138,6 +141,32 @@ struct SvtContentEntry
     SvtContentEntry( const UniString& rURL, sal_Bool bIsFolder ) :
         mbIsFolder( bIsFolder ), maURL( rURL ) {}
 };
+
+namespace svtools {
+// QueryDeleteDlg_Impl
+
+class QueryDeleteDlg_Impl : public ModalDialog
+{
+    FixedText               _aEntryLabel;
+    FixedText               _aEntry;
+
+    FixedText               _aQueryMsg;
+
+    PushButton              _aYesButton;
+    PushButton              _aNoButton;
+    CancelButton            _aCancelButton;
+
+private:
+
+    DECL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton* );
+
+public:
+
+                            QueryDeleteDlg_Impl( Window* pParent,
+                                                 const String& rName );
+};
+
+}
 
 #endif // _SVT_FILEVIEW_HXX
 
