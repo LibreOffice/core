@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 13:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,7 +961,14 @@ BOOL ODbaseTable::CreateImpl()
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
-    aURL.SetSmartURL(getEntry(), INetURLObject::ENCODE_ALL);
+    String aName = getEntry();
+    if(!aName.Len())
+    {
+        ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
+        aIdent += m_Name;
+        aName = aIdent.getStr();
+    }
+    aURL.SetSmartURL(aName, INetURLObject::ENCODE_ALL);
 
     if(aURL.getExtension() != m_pConnection->getExtension())
         aURL.setExtension(m_pConnection->getExtension());
