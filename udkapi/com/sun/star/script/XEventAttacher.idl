@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventAttacher.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 /** makes it possible to attach script events given by a sequence of
     <type>ScriptEventDescriptor</type> structures to a given interface.
  */
-interface XEventAttacher: com::sun::star::uno::XInterface
+published interface XEventAttacher: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** registers the given "AllListener" object as a listener at the
