@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EscapeDirection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 /** This enumeration defines the escape direction a connector takes on
     a glue point.
  */
-enum EscapeDirection
+published enum EscapeDirection
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR EscapeDirection::  SMART,
