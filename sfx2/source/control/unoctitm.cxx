@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:56:35 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #endif
 #include <svtools/intitem.hxx>
 #include <svtools/itemset.hxx>
+#include <tools/urlobj.hxx>
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -111,6 +112,31 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 //long nOfficeDispatchCount = 0;
+
+enum URLTypeId
+{
+    URLType_BOOL,
+    URLType_BYTE,
+    URLType_SHORT,
+    URLType_LONG,
+    URLType_HYPER,
+    URLType_STRING,
+    URLType_FLOAT,
+    URLType_DOUBLE,
+    URLType_COUNT
+};
+
+const char* URLTypeNames[URLType_COUNT] =
+{
+    "bool",
+    "byte",
+    "short",
+    "long",
+    "hyper",
+    "string",
+    "float",
+    "double"
+};
 
 SFX_IMPL_XINTERFACE_2( SfxUnoControllerItem, OWeakObject, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 SFX_IMPL_XTYPEPROVIDER_2( SfxUnoControllerItem, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
@@ -483,12 +509,93 @@ void SfxDispatchController_Impl::UnBindController()
     }
 }
 
+void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util::URL& aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs ) const
+{
+    // Extract the parameter from the URL and put them into the property value sequence
+    sal_Int32 nQueryIndex = aURL.Complete.indexOf( '?' );
+    if ( nQueryIndex > 0 )
+    {
+        rtl::OUString aParamString( aURL.Complete.copy( nQueryIndex+1 ));
+        sal_Int32 nIndex = 0;
+        do
+        {
+            rtl::OUString aToken = aParamString.getToken( 0, '&', nIndex );
+
+            sal_Int32 nParmIndex = 0;
+            rtl::OUString aParamType;
+            rtl::OUString aParamName = aToken.getToken( 0, '=', nParmIndex );
+            rtl::OUString aValue = aToken.getToken( 0, '=', nParmIndex );
+
+            if ( aParamName.getLength() > 0 )
+            {
+                nParmIndex = 0;
+                aToken = aParamName;
+                aParamName = aToken.getToken( 0, ':', nParmIndex );
+                aParamType = aToken.getToken( 0, ':', nParmIndex );
+            }
+
+            sal_Int32 nLen = rArgs.getLength();
+            rArgs.realloc( nLen+1 );
+            rArgs[nLen].Name = aParamName;
+
+            if ( aParamType.getLength() == 0 )
+            {
+                // Default: LONG
+                rArgs[nLen].Value <<= aValue.toInt32();
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BOOL], 4 ))
+            {
+                // BOOL support
+                rArgs[nLen].Value <<= aValue.toBoolean();
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BYTE], 4 ))
+            {
+                // BYTE support
+                rArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_LONG], 4 ))
+            {
+                // LONG support
+                rArgs[nLen].Value <<= aValue.toInt32();
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_SHORT], 5 ))
+            {
+                // SHORT support
+                rArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_HYPER], 5 ))
+            {
+                // HYPER support
+                rArgs[nLen].Value <<= aValue.toInt64();
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_FLOAT], 5 ))
+            {
+                // FLOAT support
+                rArgs[nLen].Value <<= aValue.toFloat();
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_STRING], 6 ))
+            {
+                // STRING support
+                rArgs[nLen].Value <<= rtl::OUString( INetURLObject::decode( aValue, '%', INetURLObject::DECODE_WITH_CHARSET ));
+            }
+            else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_DOUBLE], 6))
+            {
+                // DOUBLE support
+                rArgs[nLen].Value <<= aValue.toDouble();
+            }
+        }
+        while ( nIndex >= 0 );
+    }
+}
+
 void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util::URL& aURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( pDispatch && aURL == aDispatchURL )
+    if ( pDispatch &&
+        (( aURL.Protocol.equalsAscii( ".uno:" ) && ( aURL.Path == aDispatchURL.Path )) ||
+         ( aURL == aDispatchURL )))
     {
         if ( !IsBound() && pBindings )
         {
@@ -500,12 +607,18 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs( aArgs );
+        sal_Int32 nCount = lNewArgs.getLength();
+
+        // Support for URL based arguments
+        INetURLObject aURLObj( aURL.Complete );
+        if ( aURLObj.HasParam() )
+            addParametersToArgs( aURL, lNewArgs );
+
         // Try to find call mode and frame name inside given arguments...
         SfxCallMode nCall = SFX_CALLMODE_SYNCHRON;
         sal_Int32   nMarkArg = -1;
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs( aArgs );
-        sal_Int32 nCount = lNewArgs.getLength();
         sal_Bool bTemp;
         for( sal_Int32 n=0; n<nCount; n++ )
         {
