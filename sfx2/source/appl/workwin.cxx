@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 12:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,9 +514,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
 
 void SfxWorkWindow::ArrangeChilds_Impl()
 {
-    aClientArea = GetTopRect_Impl();
-    if ( nChilds )
-        Arrange_Impl (aClientArea);
+    Arrange_Impl();
 }
 
 //====================================================================
@@ -531,7 +529,7 @@ void SfxIPWorkWin_Impl::ArrangeChilds_Impl()
 
     SvBorder aBorder;
     if ( nChilds )
-        aBorder = Arrange_Impl( aClientArea );
+        aBorder = Arrange_Impl();
 
     // Wenn das zugeh"orige Objekt noch die UI-Kontrolle hat, mu\s der
     // AppBorder gesetzt werden; wenn hier allerdings die UITools entfernt
@@ -557,7 +555,7 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
 
     SvBorder aBorder;
     if ( nChilds )
-        aBorder = Arrange_Impl (aClientArea);
+        aBorder = Arrange_Impl();
 
     // Wenn das aktuelle Dokument der Applikation einen IPClient enth"alt, mu\s
     // dem dazugeh"origen Objekt durch SetTopToolFramePixel der zur Verf"ugung
@@ -584,7 +582,7 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
 
 //--------------------------------------------------------------------
 
-SvBorder SfxWorkWindow::Arrange_Impl(Rectangle &rRect)
+SvBorder SfxWorkWindow::Arrange_Impl()
 
 /*  [Beschreibung]
 
@@ -597,14 +595,19 @@ SvBorder SfxWorkWindow::Arrange_Impl(Rectangle &rRect)
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
 
-    Rectangle aTmp( rRect );
+    aClientArea = GetTopRect_Impl();
+    aUpperClientArea = aClientArea;
+
+    SvBorder aBorder;
+    if ( !nChilds )
+        return aBorder;
 
     if (!bSorted)
         Sort_Impl();
 
-    SvBorder  aBorder;
-    Point     aPos;
-    Size      aSize;
+    Point aPos;
+    Size aSize;
+    Rectangle aTmp( aClientArea );
 
     for ( USHORT n=0; n<aSortedList.Count(); ++n )
     {
@@ -628,10 +631,11 @@ SvBorder SfxWorkWindow::Arrange_Impl(Rectangle &rRect)
         BOOL bAllowHiding = TRUE;
         switch ( pCli->eAlign )
         {
+            case SFX_ALIGN_HIGHESTTOP:
+                aUpperClientArea.Top() += aSize.Height();
             case SFX_ALIGN_TOP:
             case SFX_ALIGN_TOOLBOXTOP:
             case SFX_ALIGN_LOWESTTOP:
-            case SFX_ALIGN_HIGHESTTOP:
                 bAllowHiding = FALSE;
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
@@ -639,9 +643,10 @@ SvBorder SfxWorkWindow::Arrange_Impl(Rectangle &rRect)
                 aSize.Width() = aTmp.GetWidth();
                 break;
 
+            case SFX_ALIGN_LOWESTBOTTOM:
+                aUpperClientArea.Bottom() -= aSize.Height();
             case SFX_ALIGN_BOTTOM:
             case SFX_ALIGN_TOOLBOXBOTTOM:
-            case SFX_ALIGN_LOWESTBOTTOM:
             case SFX_ALIGN_HIGHESTBOTTOM:
                 aBorder.Bottom() += aSize.Height();
                 aPos = aTmp.BottomLeft();
@@ -650,9 +655,10 @@ SvBorder SfxWorkWindow::Arrange_Impl(Rectangle &rRect)
                 aSize.Width() = aTmp.GetWidth();
                 break;
 
+            case SFX_ALIGN_FIRSTLEFT:
+                aUpperClientArea.Left() += aSize.Width();
             case SFX_ALIGN_LEFT:
             case SFX_ALIGN_TOOLBOXLEFT:
-            case SFX_ALIGN_FIRSTLEFT:
             case SFX_ALIGN_LASTLEFT:
                 bAllowHiding = FALSE;
                 aBorder.Left() += aSize.Width();
@@ -661,10 +667,11 @@ SvBorder SfxWorkWindow::Arrange_Impl(Rectangle &rRect)
                 aSize.Height() = aTmp.GetHeight();
                 break;
 
+            case SFX_ALIGN_LASTRIGHT:
+                aUpperClientArea.Right() -= aSize.Width();
             case SFX_ALIGN_RIGHT:
             case SFX_ALIGN_TOOLBOXRIGHT:
             case SFX_ALIGN_FIRSTRIGHT:
-            case SFX_ALIGN_LASTRIGHT:
                 aBorder.Right() += aSize.Width();
                 aPos = aTmp.TopRight();
                 aPos.X() -= (aSize.Width()-1);
@@ -689,28 +696,28 @@ SvBorder SfxWorkWindow::Arrange_Impl(Rectangle &rRect)
         }
     }
 
-    if ( rRect.GetWidth() >= aBorder.Left() + aBorder.Right() )
+    if ( aClientArea.GetWidth() >= aBorder.Left() + aBorder.Right() )
     {
-        rRect.Left() += aBorder.Left();
-        rRect.Right() -= aBorder.Right();
+        aClientArea.Left() += aBorder.Left();
+        aClientArea.Right() -= aBorder.Right();
     }
     else
     {
-        aBorder.Left() = rRect.Left();
-        aBorder.Right() = rRect.Right();
-        rRect.Right() = rRect.Left() = aTmp.Left();
+        aBorder.Left() = aClientArea.Left();
+        aBorder.Right() = aClientArea.Right();
+        aClientArea.Right() = aClientArea.Left() = aTmp.Left();
     }
 
-    if ( rRect.GetHeight() >= aBorder.Top() + aBorder.Bottom() )
+    if ( aClientArea.GetHeight() >= aBorder.Top() + aBorder.Bottom() )
     {
-        rRect.Top() += aBorder.Top();
-        rRect.Bottom() -= aBorder.Bottom();
+        aClientArea.Top() += aBorder.Top();
+        aClientArea.Bottom() -= aBorder.Bottom();
     }
     else
     {
-        aBorder.Top() = rRect.Top();
-        aBorder.Bottom() = rRect.Bottom();
-        rRect.Top() = rRect.Bottom() = aTmp.Top();
+        aBorder.Top() = aClientArea.Top();
+        aBorder.Bottom() = aClientArea.Bottom();
+        aClientArea.Top() = aClientArea.Bottom() = aTmp.Top();
     }
 
     return IsDockingAllowed() ? aBorder : SvBorder();
@@ -1332,7 +1339,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                     {
                         // Fenster ist direktes Child
                         if ( bAllChildsVisible && ( IsDockingAllowed() || pCW->pCli->eAlign == SFX_ALIGN_NOALIGNMENT ) )
-                            pCW->pCli->nVisible |= CHILD_NOT_HIDDEN;
+                            pCW->pCli->nVisible |= CHILD_ACTIVE;
                     }
                     else if ( pCW->bCreate && IsDockingAllowed() )
                         // Fenster liegt in einem SplitWindow
@@ -2651,7 +2658,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
     if ( pParent )
         pParent->ArrangeAutoHideWindows( pActSplitWin );
 
-    Rectangle aArea( aClientArea );
+    Rectangle aArea( aUpperClientArea );
     for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         // Es werden entweder Dummyfenster oder Fenster im AutoShow-Modus
