@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerucb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-06 10:57:43 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 10:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _UCBHELPER_REGISTERUCB_HXX_
 #define _UCBHELPER_REGISTERUCB_HXX_
 
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -69,7 +72,6 @@
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace ucb { class XContentProviderManager; }
-    namespace uno { class RuntimeException; }
 } } }
 namespace rtl { class OUString; }
 
