@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-25 11:11:49 $
+ *  last change: $Author: ssa $ $Date: 2002-03-25 15:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6077,7 +6077,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
 
         USHORT lum = aCol.GetLuminance();
         bHighContrastBlack = (lum <= 25);
-        bHighContrastWhite = (lum >= 225);
+        bHighContrastWhite = (lum >= 225) && GetSettings().GetStyleSettings().GetHighContrastMode();
 
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
@@ -6619,7 +6619,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
             Color aCol = aWall.GetColor();
             USHORT lum = aCol.GetLuminance();
             bHighContrastBlack = (lum <= 25);
-            bHighContrastWhite = (lum >= 225);
+            bHighContrastWhite = (lum >= 225) && GetSettings().GetStyleSettings().GetHighContrastMode();
         }
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
