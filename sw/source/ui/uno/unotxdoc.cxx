@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 14:54:14 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 12:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2210,7 +2210,8 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_PRINTER_NAME:
         {
             SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
-            aAny <<= OUString ( pPrinter->GetName());
+            aAny <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
+
         }
         break;
         case WID_DOC_IS_KERN_ASIAN_PUNCTUATION:
