@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:23:54 $
+ *  last change: $Author: jp $ $Date: 2000-11-15 15:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1837,7 +1837,7 @@ SwFieldType* SwExtUserFieldType::Copy() const
  ---------------------------------------------------------------------------*/
 String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat) const
 {
-    SvxAddressItem aAdr( *SFX_APP()->GetIniManager() );
+    SvxAddressItem aAdr;
     String aRet( aEmptyStr );
     sal_uInt16 nRet = USHRT_MAX;
     switch(nSub)
@@ -1846,20 +1846,20 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat) const
     case EU_NAME:           aRet = aAdr.GetName();      break;
     case EU_SHORTCUT:       aRet = aAdr.GetShortName(); break;
 
-    case EU_COMPANY:        nRet = ADDRESS_COMPANY;     break;
-    case EU_STREET:         nRet = ADDRESS_STREET;      break;
-    case EU_TITLE:          nRet = ADDRESS_TITLE;       break;
-    case EU_POSITION:       nRet = ADDRESS_POSITION;    break;
-    case EU_PHONE_PRIVATE:  nRet = ADDRESS_TEL_PRIVATE; break;
-    case EU_PHONE_COMPANY:  nRet = ADDRESS_TEL_COMPANY; break;
-    case EU_FAX:            nRet = ADDRESS_FAX;         break;
-    case EU_EMAIL:          nRet = ADDRESS_EMAIL;       break;
-    case EU_COUNTRY:        nRet = ADDRESS_COUNTRY;     break;
-    case EU_ZIP:            nRet = ADDRESS_PLZ;         break;
-    case EU_CITY:           nRet = ADDRESS_CITY;        break;
-    case EU_STATE:          nRet = ADDRESS_STATE;       break;
-    case EU_FATHERSNAME:    nRet = ADDRESS_FATHERSNAME;     break;
-    case EU_APARTMENT:      nRet = ADDRESS_APARTMENT;       break;
+    case EU_COMPANY:        nRet = POS_COMPANY;         break;
+    case EU_STREET:         nRet = POS_STREET;          break;
+    case EU_TITLE:          nRet = POS_TITLE;           break;
+    case EU_POSITION:       nRet = POS_POSITION;        break;
+    case EU_PHONE_PRIVATE:  nRet = POS_TEL_PRIVATE;     break;
+    case EU_PHONE_COMPANY:  nRet = POS_TEL_COMPANY;     break;
+    case EU_FAX:            nRet = POS_FAX;             break;
+    case EU_EMAIL:          nRet = POS_EMAIL;           break;
+    case EU_COUNTRY:        nRet = POS_COUNTRY;         break;
+    case EU_ZIP:            nRet = POS_PLZ;             break;
+    case EU_CITY:           nRet = POS_CITY;            break;
+    case EU_STATE:          nRet = POS_STATE;           break;
+    case EU_FATHERSNAME:    nRet = POS_FATHERSNAME;     break;
+    case EU_APARTMENT:      nRet = POS_APARTMENT;       break;
     default:                ASSERT( !this, "Field unknown");
     }
     if( USHRT_MAX != nRet )
