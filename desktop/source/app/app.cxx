@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:30:04 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 
+#ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATION_HPP_
+#include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -108,9 +111,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
-#include <com/sun/star/document/XTypeDetection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -1271,22 +1271,17 @@ void Desktop::Main()
         // Startup screen
         OpenSplashScreen();
 
-        UserInstall::UserInstallError instErr = UserInstall::finalize( *this );
-        if ( instErr != UserInstall::E_None )
+        UserInstall::UserInstallError instErr_lang = UserInstall::configureLanguage();
+        UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
+        if ( instErr_lang != UserInstall::E_None || instErr_fin != UserInstall::E_None)
         {
-            // problems with user installation...
-            if (instErr == UserInstall::E_License) {
-                OSL_ENSURE(sal_False, "license was not accepted");
-                return;
-            } else {
-                OSL_ENSURE(sal_False, "userinstall failed");
-                HandleBootstrapErrors( BE_USERINSTALL_FAILED );
-                return;
-            }
+            OSL_ENSURE(sal_False, "userinstall failed");
+            HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+            return;
         }
         // refresh path information
         utl::Bootstrap::reloadData();
-        SetSplashScreenProgress(15);
+        SetSplashScreenProgress(10);
     }
     else
     {
@@ -1295,104 +1290,106 @@ void Desktop::Main()
     }
 
     CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+    Reference< XMultiServiceFactory > xSMgr =
+        ::comphelper::getProcessServiceFactory();
 
-#ifndef UNX
-    if ( pCmdLineArgs->IsHelp() ) {
-        displayCmdlineHelp();
-        return;
-    }
-#endif
-
-    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-
-    ResMgr::SetReadStringHook( ReplaceStringHookProc );
-    SetAppName( DEFINE_CONST_UNICODE("soffice") );
-
-    // check user installation directory for lockfile so we can be sure
-    // there is no other instance using our data files from a remote host
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
-    m_pLockfile = new Lockfile;
-    if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
-        // Lockfile exists, and user clicked 'no'
-        return;
-    }
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
-
-    com::sun::star::uno::ContextLayer layer( com::sun::star::uno::getCurrentContext() );
-
-    com::sun::star::uno::setCurrentContext(
-        new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
-
-    // ----  Startup screen ----
-    // OpenSplashScreen();
-
-    // check if accessibility is enabled but not working and allow to quit
-    if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
-    {
-        BOOL bQuitApp;
-
-        if( !InitAccessBridge( true, bQuitApp ) )
-            if( bQuitApp )
-                return;
-    }
-
-    //  Initialise Single Signon
-    if ( !InitSSO() ) return;
-
-    //    The only step that should be done if terminate flag was specified
-    //    Typically called by the plugin only
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "setup2 (ok93719) ::Installer::InitializeInstallation" );
-    InitializeInstallation( Application::GetAppFileName() );
-    if( pCmdLineArgs->IsTerminateAfterInit() ) return;
-
-
-    //  Read the common configuration items for optimization purpose
-    if ( !InitializeConfiguration() ) return;
-
-    SetSplashScreenProgress(15);
-
-    // create title string
-    sal_Bool bCheckOk = sal_False;
-    String aMgrName = String::CreateFromAscii( "iso" );
-    aMgrName += String::CreateFromInt32(SUPD); // current build version
-    ResMgr* pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
-    if ( !pLabelResMgr )
-    {
-        // no "iso" resource -> search for "ooo" resource
-        aMgrName = String::CreateFromAscii( "ooo" );
-        aMgrName += String::CreateFromInt32(SUPD); // current build version
-        pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
-    }
-    String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, pLabelResMgr ) ) : String();
-    delete pLabelResMgr;
-
-    // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
-    OUString aTitleString( aTitle );
-    bCheckOk = CheckInstallation( aTitleString );
-    if ( !bCheckOk )
-        return;
-    else
-        aTitle = aTitleString;
-
-#ifndef PRODUCT
-    //include version ID in non product builds
-    ::rtl::OUString aDefault;
-    aTitle += DEFINE_CONST_UNICODE(" [");
-    String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-    aTitle += aVerId;
-    aTitle += ']';
-#endif
-    SetSplashScreenProgress(20);
-    SetDisplayName( aTitle );
-    SvtPathOptions* pPathOptions = NULL;
     SvtLanguageOptions* pLanguageOptions = NULL;
+    SvtPathOptions* pPathOptions = NULL;
 
     try
     {
-        // register services first
-        RegisterServices( xSMgr );
-        SetSplashScreenProgress(30);
 
+        RegisterServices( xSMgr );
+
+        SetSplashScreenProgress(15);
+
+#ifndef UNX
+        if ( pCmdLineArgs->IsHelp() ) {
+            displayCmdlineHelp();
+            return;
+        }
+#endif
+
+
+        ResMgr::SetReadStringHook( ReplaceStringHookProc );
+        SetAppName( DEFINE_CONST_UNICODE("soffice") );
+
+        // check user installation directory for lockfile so we can be sure
+        // there is no other instance using our data files from a remote host
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
+        m_pLockfile = new Lockfile;
+        if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
+            // Lockfile exists, and user clicked 'no'
+            return;
+        }
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
+
+        com::sun::star::uno::ContextLayer layer(
+            com::sun::star::uno::getCurrentContext() );
+
+        com::sun::star::uno::setCurrentContext(
+            new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
+
+        // check if accessibility is enabled but not working and allow to quit
+        if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+        {
+            BOOL bQuitApp;
+
+            if( !InitAccessBridge( true, bQuitApp ) )
+                if( bQuitApp )
+                    return;
+        }
+
+        //  Initialise Single Signon
+        if ( !InitSSO() ) return;
+
+        //    The only step that should be done if terminate flag was specified
+        //    Typically called by the plugin only
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "setup2 (ok93719) ::Installer::InitializeInstallation" );
+        InitializeInstallation( Application::GetAppFileName() );
+        if( pCmdLineArgs->IsTerminateAfterInit() ) return;
+
+
+        //  Read the common configuration items for optimization purpose
+        if ( !InitializeConfiguration() ) return;
+
+        SetSplashScreenProgress(20);
+
+        // create title string
+        sal_Bool bCheckOk = sal_False;
+        LanguageType aLanguageType = LANGUAGE_DONTKNOW;
+        String aMgrName = String::CreateFromAscii( "iso" );
+        aMgrName += String::CreateFromInt32(SUPD); // current build version
+        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+        if ( !pLabelResMgr )
+        {
+            // no "iso" resource -> search for "ooo" resource
+            aMgrName = String::CreateFromAscii( "ooo" );
+            aMgrName += String::CreateFromInt32(SUPD); // current build version
+            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+        }
+        String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, pLabelResMgr ) ) : String();
+        delete pLabelResMgr;
+
+        // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
+        OUString aTitleString( aTitle );
+        bCheckOk = CheckInstallation( aTitleString );
+        if ( !bCheckOk )
+            return;
+        else
+            aTitle = aTitleString;
+
+#ifndef PRODUCT
+        //include version ID in non product builds
+        ::rtl::OUString aDefault;
+        aTitle += DEFINE_CONST_UNICODE(" [");
+        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+        aTitle += aVerId;
+        aTitle += ']';
+#endif
+
+        SetDisplayName( aTitle );
+        SetSplashScreenProgress(30);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pPathOptions = new SvtPathOptions;
         SetSplashScreenProgress(40);
@@ -1570,17 +1567,9 @@ void Desktop::Main()
     if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
         InitializeQuickstartMode( xSMgr );
 
-    // Create TypeDetection service to support feature "increase startup performance for loading filter config".
-    // Its not an one-instance service any longer. But it shares a singleton cache instance internaly.
-    // On the other side the feature of concurrent write access on these TypeDetection service instance
-    // can be solved only, if we use multi-service instances ...
-    Reference< XTypeDetection > xTypeDetection;
-    RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
+    RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
     try
     {
-        xTypeDetection = Reference< XTypeDetection >( xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))), UNO_QUERY );
-        SetSplashScreenProgress(85);
         Reference< XDesktop > xDesktop( xSMgr->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
         if ( xDesktop.is() )
@@ -1623,7 +1612,15 @@ void Desktop::Main()
     // call Application::Execute to process messages in vcl message loop
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
 
-    Execute();
+    try
+    {
+        Execute();
+    }
+    catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
+    {
+        FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
+        // dont kill the office here! Terminate it in the right way. It shouldnt be a problem ...
+    }
 
     Resource::SetResManager( NULL );
     delete pResMgr;
@@ -1640,8 +1637,10 @@ void Desktop::Main()
     tools::DeInitTestToolLib();
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
-    delete pLanguageOptions;
-    delete pPathOptions;
+    if (pLanguageOptions != NULL)
+        delete pLanguageOptions;
+    if (pPathOptions != NULL)
+        delete pPathOptions;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
