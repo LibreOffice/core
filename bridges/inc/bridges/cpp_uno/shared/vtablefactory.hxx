@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vtablefactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:32:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,17 @@ private:
         void ** slots, unsigned char * code,
         typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
         sal_Int32 functionCount, sal_Int32 vtableOffset);
+
+    // This function is not defined in the generic part, but instead has to be
+    // defined individually for each CPP--UNO bridge:
+    /** Flush all the generated code snippets of a vtable, on platforms that
+        require it.
+
+        @param begin  points to the start of the code snippet area
+        @param end  points behind the end of the code snippet area
+     */
+    static void flushCode(
+        unsigned char const * begin, unsigned char const * end);
 
     typedef std::hash_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
 
