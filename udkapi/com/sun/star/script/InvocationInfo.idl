@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvocationInfo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /**
     This struct is used to specify information about object members
     (methods or properties) accessed via XInvocation, such as names,
-    types, parameters
+    types, or parameters.
     </p>
  */
 struct InvocationInfo
@@ -98,8 +98,8 @@ struct InvocationInfo
         <type>com::sun::star::beans::PropertyAttribute</type>
         constants group. It is not guaranteed that all necessary
         constants are set to describe the property completely,
-        but a flag will only be set if the according charac-
-        teristic really exist. Example: If the READONLY flag
+        but a flag will only be set, if the corresponding charac-
+        teristic really exists. Example: If the READONLY flag
         is set, the property is readonly. If it isn't set, the
         property nevertheless can be readonly.
 
@@ -115,7 +115,7 @@ struct InvocationInfo
      */
     sequence< type > aParamTypes;
 
-    /** Mode of of method parameters (IN, OUT, INOUT),
+    /** Mode of method parameters (IN, OUT, INOUT),
         for properties this sequence is empty.
      */
     sequence< com::sun::star::reflection::ParamMode > aParamModes;
@@ -128,6 +128,9 @@ struct InvocationInfo
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:35  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocation.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,8 @@ interface XInvocation: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::script::XInvocation::invoke
     /** provides access to properties and methods exposed by an object.
 
-        @param aParams all parameters; pure out params are undefined in sequence,
-                       i.e. the value has to be ignored by the callee
+        @param aParams all parameters; pure, out params are undefined in sequence,
+                       i.e., the value has to be ignored by the callee
         @param aOutParamIndex out indices
         @param aOutParam out parameters
      */
@@ -200,6 +200,9 @@ interface XInvocation: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:40  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/19 15:32:25  mi
     documentation syntax fixed
 

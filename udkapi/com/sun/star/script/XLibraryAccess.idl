@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLibraryAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@ interface XLibraryAccess: com::sun::star::uno::XInterface
                 otherwise it returns <FALSE/>.
 
                 @param aFunctionName
-                the full qualified name of a funtion.
-                (e.g.: "UtilLibrary.ModuleDate.FunctionCurrentDate")
+                the fully qualified name of a funtion.
+                (e.g., "UtilLibrary.ModuleDate.FunctionCurrentDate")
      */
     boolean isFunction( [in] string aFunctionName );
 
@@ -100,10 +100,10 @@ interface XLibraryAccess: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::script::XLibraryAccess::isValidPath
     /** @returns
-                <TRUE/> if a full qualified function name begins with this name.
+                <TRUE/> if a fully qualified function name begins with this name.
 
                 @param aPathName
-                a part of a function name (e.g.: "UtilLibrary").
+                a part of a function name (e.g., "UtilLibrary").
      */
     boolean isValidPath( [in] string aPathName );
 
@@ -111,8 +111,8 @@ interface XLibraryAccess: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XLibraryAccess::getModuleNames
 
     // DocMerge from idl: method com::sun::star::script::XLibraryAccess::getModuleNames
-    /** * Return all module names which contain code.
-             * e.g.: { "UtilLibrary.ModuleDate", "UtilLibrary.Output", ... }
+    /** Return all module names which contain code.
+         e.g., { "UtilLibrary.ModuleDate", "UtilLibrary.Output", ... }
      */
     sequence<string> getModuleNames();
 
@@ -128,12 +128,12 @@ interface XLibraryAccess: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XLibraryAccess::getModuleCode
 
     // DocMerge from idl: method com::sun::star::script::XLibraryAccess::getModuleCode
-    /** * Get the hole compiled code of a module.
-             *
-             * @param ModuleName the full qualified name of a module.
-             *                  (e.g.: "UtilLibrary.ModuleDate")
-             * @return          an empty sequence, if this module is not found or the
-             *                  code is not compiled.
+    /** Get the hole compiled code of a module.
+
+        @param ModuleName the full qualified name of a module.
+                            (e.g., "UtilLibrary.ModuleDate")
+        @return         an empty sequence, if this module is not found or the
+                            code is not compiled.
      */
     sequence<byte> getModuleCode( [in] string aModuleName );
 
@@ -149,11 +149,11 @@ interface XLibraryAccess: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XLibraryAccess::getFunctionCode
 
     // DocMerge from idl: method com::sun::star::script::XLibraryAccess::getFunctionCode
-    /** * Get the compiled code of a function.
-             *
-             * @param FunctionName the full qualified name of a function.
-             *                  (e.g.: "UtilLibrary.ModuleDate.Function.CurrentDate")
-             * @return          an empty sequence, if this function is not found.
+    /** Get the compiled code of a function.
+
+        @param FunctionName the full qualified name of a function.
+                            (e.g., "UtilLibrary.ModuleDate.Function.CurrentDate")
+        @return         an empty sequence, if this function is not found.
      */
     sequence<byte> getFunctionCode( [in] string FunctionName );
 
@@ -166,6 +166,9 @@ interface XLibraryAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:40  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/19 13:49:38  mi
     syntax errors in documentation fixed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScriptEventsAttacher.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 /**
     This interface can be used to attach script events to a number of
     objects that give access to the definition of events that should
-    be attached to them, e.g. by supporting XEventsSupplier
+    be attached to them, e.g., by supporting XEventsSupplier
 */
 interface XScriptEventsAttacher: com::sun::star::uno::XInterface
 {
@@ -103,15 +103,18 @@ interface XScriptEventsAttacher: com::sun::star::uno::XInterface
         Attaches the events defined by XScriptEventsSupplier to the
         corresponding object implementing XScriptEventsSupplier.
 
-        @param Objects      Sequence of all objects. Usually the objects should directly
+        @param Objects
+                            Sequence of all objects. Usually the objects should directly
                             support <type>XScriptEventsAttacher</type> to define the events
                             but this is not strictly required. It's also possible that
                             the object implementing <type>XScriptEventsAttacher</type>
                             knows how to get the necessary information for the objects.
-        @param xListener    All events (if defined by XScriptEventsSupplier) that are fired
+        @param xListener
+                            All events (if defined by XScriptEventsSupplier) that are fired
                             by one of the objects are mapped into a <type>ScriptEvent</type>
                             and passed to the methods of this XScriptListener.
-        @param Helper       Helper object for the implementation. This value will be
+        @param Helper
+                            Helper object for the implementation. This value will be
                             passed to the XScriptListener as Helper property in the
                             <type>ScriptEvent</type>.
     */

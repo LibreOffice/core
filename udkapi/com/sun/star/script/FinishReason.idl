@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FinishReason.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ enum FinishReason
     // DOCUMENTATION CHANGED FOR FinishReason:: Error
 
     // DocMerge from xml: value com::sun::star::script::FinishReason::Error
-    /** error occur during script execution or compiling.
+    /** error occurred during script execution or compiling.
      */
     Error
 
@@ -106,6 +106,9 @@ enum FinishReason
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:35  hjs
     initial import
 
