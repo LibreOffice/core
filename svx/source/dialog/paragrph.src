@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-18 13:44:09 $
+ *  last change: $Author: kz $ $Date: 2001-12-20 21:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2521,7 +2521,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     StringList [ japanese ] =
     {
             < "自動" ; Default ; > ;
-        < "??手動" ; Default ; > ;
+        < "手動" ; Default ; > ;
     };
     StringList [ korean ] =
     {
@@ -2582,3 +2582,4 @@ TabPage RID_SVXPAGE_PARA_ASIAN
 };
 
  // ********************************************************************** EOF
+
