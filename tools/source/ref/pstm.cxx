@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pstm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:46:31 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
                 ByteString aStr( "false list len: read = " );
                 aStr += ByteString::CreateFromInt32( (long)(rStm.Tell() - nObjPos) );
                 aStr += ", should = ";
-                aStr += nObjLen;
+                aStr += ByteString::CreateFromInt64(nObjLen);
                 DBG_ERROR( aStr.GetBuffer() )
             }
 #endif
