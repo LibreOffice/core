@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-08 09:53:38 $
+ *  last change: $Author: vg $ $Date: 2001-05-08 15:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1206,6 +1206,7 @@ double SAL_CALL AnalysisAddIn::getBessely( constREFXPS&, double fNum, sal_Int32 
 
     if( nOrder < 0 )
         THROW_IAE;
+    return 0.0; // temporary solution ;-)
 }
 
 
