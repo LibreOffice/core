@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-04 19:08:07 $
+ *  last change: $Author: nn $ $Date: 2001-12-21 12:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ SO2_DECL_REF(SvStorage)
 #include "client.hxx"
 #include "fuinsert.hxx"
 #include "docsh.hxx"
+#include "chartarr.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -223,6 +224,17 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                         // for selection inside the chart
                         pMemChart->SetSelectionHdl( LINK( GetViewData()->GetDocShell(),
                                                           ScDocShell, ChartSelectionHdl ) );
+
+                        //  #96148# if an unmodified chart in a 5.2-document is edited
+                        //  after swapping out and in again, the ChartRange has to be set
+                        //  (from SomeData strings) again, or SetReadOnly doesn't work
+                        if ( pMemChart->SomeData1().Len() && pMemChart->GetChartRange().maRanges.size() == 0 )
+                        {
+                            ScChartArray aArray( GetViewData()->GetDocument(), *pMemChart );
+                            if ( aArray.IsValid() )
+                                aArray.SetExtraStrings( *pMemChart );
+                        }
+
                         // disable DataBrowseBox for editing chart data
                         pMemChart->SetReadOnly( TRUE );
                     }
