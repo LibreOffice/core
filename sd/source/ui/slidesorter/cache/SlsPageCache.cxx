@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:10:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,41 +134,50 @@
     and b) a factory of preview bitmaps.
 */
 
-#include "cache/SlsPageCache.hxx"
 
+#include "cache/SlsPageCache.hxx"
 #include "SlsBitmapCache.hxx"
 #include "SlsGenericPageCache.hxx"
 #include "SlsGenericRequestQueue.hxx"
 #include "SlsRequestFactory.hxx"
 #include "SlsCacheCompactor.hxx"
-#ifdef USE_THREAD
-#include "SlsQueueProcessorThread.hxx"
-#else
+
+
+// First we make some typedefs that define the arguments to the cache
+// templates.  Currently there are two arguments for which exist
+// alternatives:
+// 1.  The queue processor is implemented once with threads and once
+//     without.
 #include "SlsQueueProcessor.hxx"
-#endif
-#include "SlsPreviewBitmapFactory.hxx"
+#define QUEUE_PROCESSOR QueueProcessor
+//#include "SlsQueueProcessorThread.hxx"
+//#define QUEUE_PROCESSOR QueueProcessorThread
+
+// 2.  There are two implementations of the preview factory.  One uses the
+// class PreviewRenderer (originally created for the toolpanel master page
+// controls.).  The other uses the new drawing layer more directly.
+#include "SlsPreviewBitmapFactory2.hxx"
+#define PREVIEW_BITMAP_FACTORY PreviewBitmapFactory2
+//#include "SlsPreviewBitmapFactory.hxx"
+//#define PREVIEW_BITMAP_FACTORY PreviewBitmapFactory
+
+
 
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 
+
 namespace sd { namespace slidesorter { namespace cache {
+
 
 typedef GenericRequestQueue<PageCache::RequestData,2> Queue;
 
 
-#ifdef USE_THREAD
-typedef QueueProcessorThread<
+typedef QUEUE_PROCESSOR<
     Queue,
     PageCache::RequestData,
     BitmapCache,
-    PreviewBitmapFactory> Processor;
-#else
-typedef QueueProcessor<
-    Queue,
-    PageCache::RequestData,
-    BitmapCache,
-    PreviewBitmapFactory> Processor;
-#endif
+    PREVIEW_BITMAP_FACTORY> Processor;
 
 typedef GenericPageCache<
     PageCache::RequestData,
