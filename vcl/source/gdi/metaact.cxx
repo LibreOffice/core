@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-07 08:54:51 $
+ *  last change: $Author: sj $ $Date: 2002-06-11 11:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,10 +918,18 @@ void MetaPolyLineAction::Scale( double fScaleX, double fScaleY )
 
 void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WRITE_BASE_COMPAT( rOStm, 3, pData );
 
-    rOStm << maPoly;        // Version 1
-    rOStm << maLineInfo;    // Version 2
+    Polygon aSimplePoly;
+    maPoly.GetSimple( aSimplePoly );
+
+    rOStm << aSimplePoly;                               // Version 1
+    rOStm << maLineInfo;                                // Version 2
+
+    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();        // Version 3
+    rOStm << bHasPolyFlags;
+    if ( bHasPolyFlags )
+        maPoly.Write( rOStm );
 }
 
 // ------------------------------------------------------------------------
@@ -935,8 +943,13 @@ void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
     // Version 2
     if( aCompat.GetVersion() >= 2 )
-    {
         rIStm >> maLineInfo;
+    if ( aCompat.GetVersion() >= 3 )
+    {
+        sal_uInt8 bHasPolyFlags;
+        rIStm >> bHasPolyFlags;
+        if ( bHasPolyFlags )
+            maPoly.Read( rIStm );
     }
 }
 
@@ -986,8 +999,16 @@ void MetaPolygonAction::Scale( double fScaleX, double fScaleY )
 
 void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPoly;
+    WRITE_BASE_COMPAT( rOStm, 2, pData );
+
+    Polygon aSimplePoly;                            // Version 1
+    maPoly.GetSimple( aSimplePoly );
+    rOStm << aSimplePoly;
+
+    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();    // Version 2
+    rOStm << bHasPolyFlags;
+    if ( bHasPolyFlags )
+        maPoly.Write( rOStm );
 }
 
 // ------------------------------------------------------------------------
@@ -995,7 +1016,16 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    rIStm >> maPoly;
+
+    rIStm >> maPoly;                    // Version 1
+
+    if( aCompat.GetVersion() >= 2 )     // Version 2
+    {
+        sal_uInt8 bHasPolyFlags;
+        rIStm >> bHasPolyFlags;
+        if ( bHasPolyFlags )
+            maPoly.Read( rIStm );
+    }
 }
 
 // ========================================================================
@@ -1045,8 +1075,34 @@ void MetaPolyPolygonAction::Scale( double fScaleX, double fScaleY )
 
 void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maPolyPoly;
+    WRITE_BASE_COMPAT( rOStm, 2, pData );
+
+    sal_uInt16 nNumberOfComplexPolygons = 0;
+    sal_uInt16 i, nPolyCount = maPolyPoly.Count();
+
+    Polygon aSimplePoly;                                // Version 1
+    rOStm << nPolyCount;
+    for ( i = 0; i < nPolyCount; i++ )
+    {
+        const Polygon& rPoly = maPolyPoly.GetObject( i );
+        if ( rPoly.HasFlags() )
+            nNumberOfComplexPolygons++;
+        rPoly.GetSimple( aSimplePoly );
+        rOStm << aSimplePoly;
+    }
+
+    rOStm << nNumberOfComplexPolygons;                  // Version 2
+    for ( i = 0; nNumberOfComplexPolygons && ( i < nPolyCount ); i++ )
+    {
+        const Polygon& rPoly = maPolyPoly.GetObject( i );
+        if ( rPoly.HasFlags() )
+        {
+            rOStm << i;
+            rPoly.Write( rOStm );
+
+            nNumberOfComplexPolygons--;
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1054,7 +1110,20 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    rIStm >> maPolyPoly;
+    rIStm >> maPolyPoly;                // Version 1
+
+    if ( aCompat.GetVersion() >= 2 )    // Version 2
+    {
+        sal_uInt16 i, nIndex, nNumberOfComplexPolygons;
+        rIStm >> nNumberOfComplexPolygons;
+        for ( i = 0; i < nNumberOfComplexPolygons; i++ )
+        {
+            rIStm >> nIndex;
+            Polygon aPoly;
+            aPoly.Read( rIStm );
+            maPolyPoly.Replace( aPoly, nIndex );
+        }
+    }
 }
 
 // ========================================================================
