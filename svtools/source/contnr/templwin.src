@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:13:32 $
+ *  last change: $Author: vg $ $Date: 2001-07-27 20:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Geändert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "ZL : \\\\\\\\" ; DI_PRINTBY ; > ;
+        < "ZL : \\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
         < "Größe" ; DI_SIZE ; > ;
     };
@@ -641,7 +641,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Descripción" ; DI_DESCRIPTION ; > ;
         < "Tipo de contenido" ; DI_MIMETYPE ; > ;
         < "Fecha de modificación" ; DI_MODIFIEDDATE ; > ;
-        < "MOdificado por" ; DI_MODIFIEDBY ; > ;
+        < "Modificado por" ; DI_MODIFIEDBY ; > ;
         < "Fecha de impresión" ; DI_PRINTDATE ; > ;
         < "Impreso por" ; DI_PRINTBY ; > ;
         < "Tema" ; DI_THEME ; > ;
@@ -843,6 +843,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Größe" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
