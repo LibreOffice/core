@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-07 21:33:50 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ SfxSlotInfo FN_ABSTRACT_NEWDOC
     SlotName[ turkish ] = "Belge ˆzeti Á˝kar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Documento desde extracto";
-    SlotName[ finnish ] = "Asiakirja tiivistelm?st?";
+    SlotName[ finnish ] = "Asiakirja tiivistelm‰st‰";
 };
 SfxSlotInfo FN_ABSTRACT_STARIMPRESS
 {
@@ -116,7 +116,7 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ turkish ] = "Sunu ˆzeti Á˝kar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "PresentaciÛn desde extracto";
-    SlotName[ finnish ] = "Esitys tiivistelm?st?";
+    SlotName[ finnish ] = "Esitys tiivistelm‰st‰";
 };
 SfxSlotInfo FN_ADD_UNKNOWN
 {
@@ -144,7 +144,7 @@ SfxSlotInfo FN_ADD_UNKNOWN
     SlotName[ turkish ] = "Bilinmeyen sˆzc¸kler ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aceptar palabras desconocidas";
-    SlotName[ finnish ] = "Lis?? tunnistamattomia sanoja";
+    SlotName[ finnish ] = "Lis‰‰ tunnistamattomia sanoja";
 };
 SfxSlotInfo FN_AUTO_CORRECT
 {
@@ -200,7 +200,7 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
     SlotName[ turkish ] = "Otomatik formatlama seÁeneklerini uygula";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aplicar opciones AutoFormato";
-    SlotName[ finnish ] = "K?yt? automaattisen muotoilun asetuksia";
+    SlotName[ finnish ] = "K‰yt‰ automaattisen muotoilun asetuksia";
 };
 SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
@@ -252,7 +252,7 @@ SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
     SlotName[ turkish ] = "Otomatik formatlama seÁeneklerini uygula ve dei˛iklikleri onayla";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "AutoFormato-Aplicar opciones y confirmar modificaciones";
-    SlotName[ finnish ] = "K?yt? automaattisen muotoilun asetuksia ja vahvista muutokset";
+    SlotName[ finnish ] = "K‰yt‰ automaattisen muotoilun asetuksia ja vahvista muutokset";
 };
 SfxSlotInfo FN_BACKSPACE
 {
@@ -588,7 +588,7 @@ SfxSlotInfo FN_DEC_INDENT_OFFSET
     SlotName[ turkish ] = "Girintiyi k¸Á¸lt";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Disminuir sangrÌa en";
-    SlotName[ finnish ] = "V?henn? sisennysarvoa";
+    SlotName[ finnish ] = "V‰henn‰ sisennysarvoa";
 };
 SfxSlotInfo FN_DELETE_BACK_LINE
 {
@@ -924,7 +924,7 @@ SfxSlotInfo FN_EDIT_FIELD
     SlotName[ turkish ] = "Alan ˆesi";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "CÛdigo de campo";
-    SlotName[ finnish ] = "Kent?t";
+    SlotName[ finnish ] = "Kent‰t";
 };
 SfxSlotInfo FN_EDIT_FOOTNOTE
 {
@@ -980,7 +980,7 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ turkish ] = "Form¸l ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar fÛrmula";
-    SlotName[ finnish ] = "Lis?? kaava";
+    SlotName[ finnish ] = "Lis‰‰ kaava";
 };
 SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
 {
@@ -1008,7 +1008,7 @@ SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
     SlotName[ turkish ] = "Dizin giri˛i";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Entrada del Ìndice";
-    SlotName[ finnish ] = "Hakemistomerkint?";
+    SlotName[ finnish ] = "Hakemistomerkint‰";
 };
 SfxSlotInfo FN_EDIT_LINK_DLG
 {
@@ -1568,7 +1568,7 @@ SfxSlotInfo FN_ENVELOP
     SlotName[ turkish ] = "Zarf ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar sobre";
-    SlotName[ finnish ] = "Lis?? kirjekuori";
+    SlotName[ finnish ] = "Lis‰‰ kirjekuori";
 };
 SfxSlotInfo FN_ESCAPE
 {
@@ -1624,7 +1624,7 @@ SfxSlotInfo FN_EXECUTE_MACROFIELD
     SlotName[ turkish ] = "Makro alan˝n˝ Áal˝˛t˝r";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ejecutar Campo de macro";
-    SlotName[ finnish ] = "Suorita makrokentt?";
+    SlotName[ finnish ] = "Suorita makrokentt‰";
 };
 SfxSlotInfo FN_EXPAND_GLOSSARY
 {
@@ -1652,7 +1652,7 @@ SfxSlotInfo FN_EXPAND_GLOSSARY
     SlotName[ turkish ] = "Otomatik metin giri˛ini uygula";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ejecutar entrada AutoTexto";
-    SlotName[ finnish ] = "Suorita automaattinen tekstimerkint?";
+    SlotName[ finnish ] = "Suorita automaattinen tekstimerkint‰";
 };
 SfxSlotInfo FN_FLIP_HORZ_GRAFIC
 {
@@ -1680,7 +1680,7 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ turkish ] = "Yatay yans˝t";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Reflejar horizontal";
-    SlotName[ finnish ] = "Flip Horizontal";
+    SlotName[ finnish ] = "K‰‰nn‰ pystysuunta";
 };
 SfxSlotInfo FN_FLIP_VERT_GRAFIC
 {
@@ -1708,7 +1708,7 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ korean ] = "ÏàòÌèâÏúºÎ°ú ÎåÄÏπ≠";
     SlotName[ turkish ] = "Dikey yans˝t";
     SlotName[ catalan ] = "Reflejar verticalmente";
-    SlotName[ finnish ] = "Flip Vertical";
+    SlotName[ finnish ] = "K‰‰nn‰ vaakasuunta";
 };
 SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
 {
@@ -1988,7 +1988,7 @@ SfxSlotInfo FN_FORMAT_RESET
     SlotName[ korean ] = "Í∏ÄÍº¥ ÏÜçÏÑ± ÏõêÎûòÎåÄÎ°ú";
     SlotName[ turkish ] = "Yaz˝tipi ˆznitelikleri";
     SlotName[ catalan ] = "Restablecer fuentes";
-    SlotName[ finnish ] = "Palauta fonttim??ritteet";
+    SlotName[ finnish ] = "Palauta fonttim‰‰ritteet";
 };
 SfxSlotInfo FN_FORMAT_TABLE_DLG
 {
@@ -2044,7 +2044,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
     SlotName[ turkish ] = "Yatay ortala";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Centrar horizontalmente";
-    SlotName[ finnish ] = "Keskit? vaakatasossa";
+    SlotName[ finnish ] = "Keskit‰ vaakatasossa";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
 {
@@ -2240,7 +2240,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
     SlotName[ turkish ] = "Karakterin ¸st kenar˝ ile hizala";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear encima del car·cter";
-    SlotName[ finnish ] = "Tasaa merkin yl?osaan";
+    SlotName[ finnish ] = "Tasaa merkin yl‰osaan";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 {
@@ -2324,7 +2324,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
     SlotName[ turkish ] = "Sat˝r˝n ¸st kenar˝ ile hizala";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear encima de la lÌnea";
-    SlotName[ finnish ] = "Tasaa rivin yl?osaan";
+    SlotName[ finnish ] = "Tasaa rivin yl‰osaan";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
 {
@@ -2352,7 +2352,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
     SlotName[ turkish ] = "Yukar˝ hizala";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Alinear arriba";
-    SlotName[ finnish ] = "Tasaa yl?osa";
+    SlotName[ finnish ] = "Tasaa yl‰osa";
 };
 SfxSlotInfo FN_FRAME_CHAIN
 {
@@ -2380,7 +2380,7 @@ SfxSlotInfo FN_FRAME_CHAIN
     SlotName[ turkish ] = "Bala";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Vincular marcos";
-    SlotName[ finnish ] = "Linkit? kehykset";
+    SlotName[ finnish ] = "Linkit‰ kehykset";
 };
 SfxSlotInfo FN_FRAME_DOWN
 {
@@ -2408,7 +2408,7 @@ SfxSlotInfo FN_FRAME_DOWN
     SlotName[ turkish ] = "Geriye gˆnder";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Hacia atr·s";
-    SlotName[ finnish ] = "Vie taaksep?in";
+    SlotName[ finnish ] = "Vie taaksep‰in";
 };
 SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
 {
@@ -2464,7 +2464,7 @@ SfxSlotInfo FN_FRAME_NOWRAP
     SlotName[ turkish ] = "Metin da˝l˝m˝ kapal˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desactivar Ajuste";
-    SlotName[ finnish ] = "Rivitys pois k?yt?t?";
+    SlotName[ finnish ] = "Rivitys pois k‰ytˆst‰";
 };
 SfxSlotInfo FN_FRAME_TO_ANCHOR
 {
@@ -2492,7 +2492,7 @@ SfxSlotInfo FN_FRAME_TO_ANCHOR
     SlotName[ turkish ] = "›mleci, sabitleyici ¸zerine yerle˛tir";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Colocar cursor sobre ancla";
-    SlotName[ finnish ] = "M??rit? ohjain ankkuriksi";
+    SlotName[ finnish ] = "M‰‰rit‰ ohjain ankkuriksi";
 };
 SfxSlotInfo FN_FRAME_UNCHAIN
 {
@@ -2548,7 +2548,7 @@ SfxSlotInfo FN_FRAME_UP
     SlotName[ turkish ] = "÷ne al";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Hacia adelante";
-    SlotName[ finnish ] = "Tuo eteenp?in";
+    SlotName[ finnish ] = "Tuo eteenp‰in";
 };
 SfxSlotInfo FN_FRAME_WRAP
 {
@@ -2576,7 +2576,7 @@ SfxSlotInfo FN_FRAME_WRAP
     SlotName[ turkish ] = "Metin da˝l˝m˝ aÁ˝k";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar Ajuste";
-    SlotName[ finnish ] = "Rivitys k?yt?s?";
+    SlotName[ finnish ] = "Rivitys k‰ytˆss‰";
 };
 SfxSlotInfo FN_FRAME_WRAP_CONTOUR
 {
@@ -2604,7 +2604,7 @@ SfxSlotInfo FN_FRAME_WRAP_CONTOUR
     SlotName[ turkish ] = "Kontur aÁ˝k";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Contorno";
-    SlotName[ finnish ] = "??riviivarivitys k?yt?s?";
+    SlotName[ finnish ] = "ƒ‰riviivarivitys k‰ytˆss‰";
 };
 SfxSlotInfo FN_FRAME_WRAP_IDEAL
 {
@@ -2660,7 +2660,7 @@ SfxSlotInfo FN_FRAME_WRAP_LEFT
     SlotName[ turkish ] = "Sol metin da˝l˝m˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ajuste izquierda";
-    SlotName[ finnish ] = "Rivit? vasemmalle";
+    SlotName[ finnish ] = "Rivit‰ vasemmalle";
 };
 SfxSlotInfo FN_FRAME_WRAP_RIGHT
 {
@@ -2688,7 +2688,7 @@ SfxSlotInfo FN_FRAME_WRAP_RIGHT
     SlotName[ turkish ] = "Sa metin da˝l˝m˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ajuste derecha";
-    SlotName[ finnish ] = "Rivit? oikealle";
+    SlotName[ finnish ] = "Rivit‰ oikealle";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU
 {
@@ -2716,7 +2716,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU
     SlotName[ turkish ] = "Metin arkas˝na gˆnder";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Continuo";
-    SlotName[ finnish ] = "Rivit? l?pi";
+    SlotName[ finnish ] = "Rivit‰ l‰pi";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
 {
@@ -2744,7 +2744,7 @@ SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
     SlotName[ turkish ] = "Metin arkas˝na gˆnder (saydam)";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Continuo transparente";
-    SlotName[ finnish ] = "Rivit? l?pin?kyv?sti";
+    SlotName[ finnish ] = "Rivit‰ l‰pin‰kyv‰sti";
 };
 SfxSlotInfo FN_GLOSSARY_DLG
 {
@@ -2772,7 +2772,7 @@ SfxSlotInfo FN_GLOSSARY_DLG
     SlotName[ turkish ] = "Otomatik metni d¸zenle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar AutoTexto";
-    SlotName[ finnish ] = "Muokkaa automaattista teksti?";
+    SlotName[ finnish ] = "Muokkaa automaattista teksti‰";
 };
 SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
 {
@@ -2800,7 +2800,7 @@ SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
     SlotName[ turkish ] = "Sonraki giri˛ alan˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al campo de entrada siguiente";
-    SlotName[ finnish ] = "Seuraavaan sy?t?entt??n";
+    SlotName[ finnish ] = "Seuraavaan syˆttˆkentt‰‰n";
 };
 SfxSlotInfo FN_GOTO_NEXT_MARK
 {
@@ -2912,7 +2912,7 @@ SfxSlotInfo FN_GOTO_PREV_INPUTFLD
     SlotName[ turkish ] = "÷nceki giri˛ alan˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al campo de entrada anterior";
-    SlotName[ finnish ] = "Edelliseen sy?t?entt??n";
+    SlotName[ finnish ] = "Edelliseen syˆttˆkentt‰‰n";
 };
 SfxSlotInfo FN_GOTO_PREV_MARK
 {
@@ -3052,7 +3052,7 @@ SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     SlotName[ korean ] = "ÏßùÏàò ÌéòÏù¥ÏßÄÏÉÅÏùò Í∑∏ÎûòÌîΩ ÎåÄÏπ≠";
     SlotName[ turkish ] = "Grafii Áift say˝l˝ sayfalarda yans˝t";
     SlotName[ catalan ] = "Reflejar imagen en las p·ginas pares";
-    SlotName[ finnish ] = "K??nn? grafiikka parillisilla sivuilla";
+    SlotName[ finnish ] = "K‰‰nn‰ grafiikka parillisilla sivuilla";
 };
 SfxSlotInfo FN_GROW_FONT_SIZE
 {
@@ -3108,7 +3108,7 @@ SfxSlotInfo FN_HSCROLLBAR
     SlotName[ turkish ] = "Yatay kayd˝r";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazamiento Horizontal";
-    SlotName[ finnish ] = "Vierit? vaakasuorassa";
+    SlotName[ finnish ] = "Vierit‰ vaakasuorassa";
 };
 SfxSlotInfo FN_HYPHENATE_OPT_DLG
 {
@@ -3220,7 +3220,7 @@ SfxSlotInfo FN_INSERT_BOOKMARK
     SlotName[ turkish ] = "Metin i˛areti ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marca";
-    SlotName[ finnish ] = "Lis?? kirjanmerkki";
+    SlotName[ finnish ] = "Lis‰‰ kirjanmerkki";
 };
 SfxSlotInfo FN_INSERT_BREAK
 {
@@ -3248,7 +3248,7 @@ SfxSlotInfo FN_INSERT_BREAK
     SlotName[ turkish ] = "Paragraf ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar p·rrafo";
-    SlotName[ finnish ] = "Lis?? kappale";
+    SlotName[ finnish ] = "Lis‰‰ kappale";
 };
 SfxSlotInfo FN_INSERT_BREAK_DLG
 {
@@ -3276,7 +3276,7 @@ SfxSlotInfo FN_INSERT_BREAK_DLG
     SlotName[ turkish ] = "Man¸el kesme ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar un salto manual";
-    SlotName[ finnish ] = "Lis?? manuaalinen vaihto";
+    SlotName[ finnish ] = "Lis‰‰ manuaalinen vaihto";
 };
 SfxSlotInfo FN_INSERT_CAPTION
 {
@@ -3304,7 +3304,7 @@ SfxSlotInfo FN_INSERT_CAPTION
     SlotName[ turkish ] = "Resim yaz˝s˝ ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar etiqueta";
-    SlotName[ finnish ] = "Lis?? kuvaotsikko";
+    SlotName[ finnish ] = "Lis‰‰ kuvaotsikko";
 };
 SfxSlotInfo FN_INSERT_COLUMN_BREAK
 {
@@ -3332,7 +3332,7 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ turkish ] = "S¸tun sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar cambio de columnas";
-    SlotName[ finnish ] = "Lis?? sarakevaihto";
+    SlotName[ finnish ] = "Lis‰‰ sarakevaihto";
 };
 SfxSlotInfo FN_INSERT_CTRL
 {
@@ -3360,7 +3360,7 @@ SfxSlotInfo FN_INSERT_CTRL
     SlotName[ turkish ] = "Ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar";
-    SlotName[ finnish ] = "Lis??";
+    SlotName[ finnish ] = "Lis‰‰";
 };
 SfxSlotInfo FN_INSERT_ENDNOTE
 {
@@ -3388,7 +3388,7 @@ SfxSlotInfo FN_INSERT_ENDNOTE
     SlotName[ turkish ] = "Sonnotu dorudan ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota final directamente";
-    SlotName[ finnish ] = "Lis?? loppuhuomautus suoraan";
+    SlotName[ finnish ] = "Lis‰‰ loppuhuomautus suoraan";
 };
 SfxSlotInfo FN_INSERT_FIELD
 {
@@ -3416,7 +3416,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ turkish ] = "Alan ˆesi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar cÛdigo de campo";
-    SlotName[ finnish ] = "Lis?? kent?t";
+    SlotName[ finnish ] = "Lis‰‰ kent‰t";
 };
 SfxSlotInfo FN_INSERT_FIELD_CTRL
 {
@@ -3444,7 +3444,7 @@ SfxSlotInfo FN_INSERT_FIELD_CTRL
     SlotName[ turkish ] = "Alan ˆeleri ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar cÛdigos de campo";
-    SlotName[ finnish ] = "Lis?? kent?t";
+    SlotName[ finnish ] = "Lis‰‰ kent‰t";
 };
 SfxSlotInfo FN_INSERT_FLD_AUTHOR
 {
@@ -3472,7 +3472,7 @@ SfxSlotInfo FN_INSERT_FLD_AUTHOR
     SlotName[ turkish ] = "Yazan ad˝ alan˝ ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar campo para autor";
-    SlotName[ finnish ] = "Lis?? laatijakentt?";
+    SlotName[ finnish ] = "Lis‰‰ laatijakentt‰";
 };
 SfxSlotInfo FN_INSERT_FLD_DATE
 {
@@ -3500,7 +3500,7 @@ SfxSlotInfo FN_INSERT_FLD_DATE
     SlotName[ turkish ] = "Tarih ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar fecha";
-    SlotName[ finnish ] = "Lis?? p?iv?m??r?";
+    SlotName[ finnish ] = "Lis‰‰ p‰iv‰m‰‰r‰";
 };
 SfxSlotInfo FN_INSERT_FLD_PGCOUNT
 {
@@ -3528,7 +3528,7 @@ SfxSlotInfo FN_INSERT_FLD_PGCOUNT
     SlotName[ turkish ] = "Sayfa say˝s˝ ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar contador de p·ginas";
-    SlotName[ finnish ] = "Lis?? sivum??r?";
+    SlotName[ finnish ] = "Lis‰‰ sivum‰‰r‰";
 };
 SfxSlotInfo FN_INSERT_FLD_PGNUMBER
 {
@@ -3556,7 +3556,7 @@ SfxSlotInfo FN_INSERT_FLD_PGNUMBER
     SlotName[ turkish ] = "Sayfa numaras˝ ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar n˙mero de p·gina";
-    SlotName[ finnish ] = "Lis?? sivunumero";
+    SlotName[ finnish ] = "Lis‰‰ sivunumero";
 };
 SfxSlotInfo FN_INSERT_FLD_TIME
 {
@@ -3584,7 +3584,7 @@ SfxSlotInfo FN_INSERT_FLD_TIME
     SlotName[ turkish ] = "Saat ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar hora";
-    SlotName[ finnish ] = "Lis?? aika";
+    SlotName[ finnish ] = "Lis‰‰ aika";
 };
 SfxSlotInfo FN_INSERT_FLD_TITLE
 {
@@ -3612,7 +3612,7 @@ SfxSlotInfo FN_INSERT_FLD_TITLE
     SlotName[ turkish ] = "Belge ba˛l˝˝ ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar tÌtulo de documento";
-    SlotName[ finnish ] = "Lis?? asiakirjan otsikko";
+    SlotName[ finnish ] = "Lis‰‰ asiakirjan otsikko";
 };
 SfxSlotInfo FN_INSERT_FLD_TOPIC
 {
@@ -3640,7 +3640,7 @@ SfxSlotInfo FN_INSERT_FLD_TOPIC
     SlotName[ turkish ] = "Konu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar tema";
-    SlotName[ finnish ] = "Lis?? aihe";
+    SlotName[ finnish ] = "Lis‰‰ aihe";
 };
 SfxSlotInfo FN_INSERT_FOOTER
 {
@@ -3668,7 +3668,7 @@ SfxSlotInfo FN_INSERT_FOOTER
     SlotName[ turkish ] = "Altbilgi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar pie de p·gina";
-    SlotName[ finnish ] = "Lis?? alaselite";
+    SlotName[ finnish ] = "Lis‰‰ alaselite";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE
 {
@@ -3696,7 +3696,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE
     SlotName[ turkish ] = "Dipnotu dorudan ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota al pie, directo";
-    SlotName[ finnish ] = "Lis?? alaviite suoraan";
+    SlotName[ finnish ] = "Lis‰‰ alaviite suoraan";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
 {
@@ -3724,7 +3724,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
     SlotName[ turkish ] = "Dipnot ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota al pie";
-    SlotName[ finnish ] = "Lis?? alaviite";
+    SlotName[ finnish ] = "Lis‰‰ alaviite";
 };
 SfxSlotInfo FN_INSERT_FRAME
 {
@@ -3752,7 +3752,7 @@ SfxSlotInfo FN_INSERT_FRAME
     SlotName[ turkish ] = "«erÁeve ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marco";
-    SlotName[ finnish ] = "Lis?? kehys";
+    SlotName[ finnish ] = "Lis‰‰ kehys";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
 {
@@ -3805,7 +3805,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT
     SlotName[ turkish ] = "«erÁeveyi manuel olarak ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marco manualmente";
-    SlotName[ finnish ] = "Lis?? kehys manuaalisesti";
+    SlotName[ finnish ] = "Lis‰‰ kehys manuaalisesti";
 };
 SfxSlotInfo FN_INSERT_HARD_SPACE
 {
@@ -3833,7 +3833,7 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ turkish ] = "Bˆl¸nemez bo˛luk ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar espacio protegido";
-    SlotName[ finnish ] = "Lis?? sitova v?lily?ti";
+    SlotName[ finnish ] = "Lis‰‰ sitova v‰lilyˆnti";
 };
 SfxSlotInfo FN_INSERT_HARDHYPHEN
 {
@@ -3861,7 +3861,7 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ turkish ] = "Bˆl¸nemez tire ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar guiÛn protegido";
-    SlotName[ finnish ] = "Lis?? sitova yhdysmerkki";
+    SlotName[ finnish ] = "Lis‰‰ sitova yhdysmerkki";
 };
 SfxSlotInfo FN_INSERT_HEADER
 {
@@ -3889,7 +3889,7 @@ SfxSlotInfo FN_INSERT_HEADER
     SlotName[ turkish ] = "‹stbilgi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar encabezamiento";
-    SlotName[ finnish ] = "Lis?? yl?otsikko";
+    SlotName[ finnish ] = "Lis‰‰ yl‰otsikko";
 };
 SfxSlotInfo FN_INSERT_HRULER
 {
@@ -3917,7 +3917,7 @@ SfxSlotInfo FN_INSERT_HRULER
     SlotName[ turkish ] = "Yatay ay˝rma Áizgisi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar lÌneas horizontales";
-    SlotName[ finnish ] = "Lis?? vaakakohdistin";
+    SlotName[ finnish ] = "Lis‰‰ vaakakohdistin";
 };
 SfxSlotInfo FN_INSERT_HYPERLINK
 {
@@ -3944,7 +3944,7 @@ SfxSlotInfo FN_INSERT_HYPERLINK
     SlotName[ korean ] = "ÌïòÏù¥ÌçºÎßÅÌÅ¨ ÏÇΩÏûÖ";
     SlotName[ turkish ] = "Hyperlink ekle";
     SlotName[ catalan ] = "Insertar hiperenlace";
-    SlotName[ finnish ] = "Lis?? hyperlinkki";
+    SlotName[ finnish ] = "Lis‰‰ hyperlinkki";
 };
 SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
 {
@@ -3972,7 +3972,7 @@ SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
     SlotName[ turkish ] = "Dizin belirteci ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar marca en el Ìndice";
-    SlotName[ finnish ] = "Lis?? hakemistomerkki";
+    SlotName[ finnish ] = "Lis‰‰ hakemistomerkki";
 };
 SfxSlotInfo FN_INSERT_LINEBREAK
 {
@@ -4000,7 +4000,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ turkish ] = "Man¸el sat˝r sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar salto de lÌnea manual";
-    SlotName[ finnish ] = "Lis?? manuaalinen rivinvaihto";
+    SlotName[ finnish ] = "Lis‰‰ manuaalinen rivinvaihto";
 };
 SfxSlotInfo FN_INSERT_OBJ_CTRL
 {
@@ -4028,7 +4028,7 @@ SfxSlotInfo FN_INSERT_OBJ_CTRL
     SlotName[ turkish ] = "Nesne ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar objetos";
-    SlotName[ finnish ] = "Lis?? objektit";
+    SlotName[ finnish ] = "Lis‰‰ objektit";
 };
 SfxSlotInfo FN_INSERT_OBJECT_DLG
 {
@@ -4056,7 +4056,7 @@ SfxSlotInfo FN_INSERT_OBJECT_DLG
     SlotName[ turkish ] = "Ba˛ka nesne ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar otros objetos";
-    SlotName[ finnish ] = "Lis?? muita objekteja";
+    SlotName[ finnish ] = "Lis‰‰ muita objekteja";
 };
 SfxSlotInfo FN_INSERT_PAGEBREAK
 {
@@ -4084,7 +4084,7 @@ SfxSlotInfo FN_INSERT_PAGEBREAK
     SlotName[ turkish ] = "Man¸el sayfa sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar un salto de p·gina manual";
-    SlotName[ finnish ] = "Lis?? manuaalinen sivunvaihto";
+    SlotName[ finnish ] = "Lis‰‰ manuaalinen sivunvaihto";
 };
 SfxSlotInfo FN_INSERT_PAGEFOOTER
 {
@@ -4112,7 +4112,7 @@ SfxSlotInfo FN_INSERT_PAGEFOOTER
     SlotName[ turkish ] = "Altbilgi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar pie de p·gina";
-    SlotName[ finnish ] = "Lis?? alaselite";
+    SlotName[ finnish ] = "Lis‰‰ alaselite";
 };
 SfxSlotInfo FN_INSERT_PAGEHEADER
 {
@@ -4140,7 +4140,7 @@ SfxSlotInfo FN_INSERT_PAGEHEADER
     SlotName[ turkish ] = "‹stbilgi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar encabezamiento";
-    SlotName[ finnish ] = "Lis?? yl?otsikko";
+    SlotName[ finnish ] = "Lis‰‰ yl‰otsikko";
 };
 SfxSlotInfo FN_INSERT_REF_FIELD
 {
@@ -4168,7 +4168,7 @@ SfxSlotInfo FN_INSERT_REF_FIELD
     SlotName[ turkish ] = "«apraz ba˛vuru alan˝ ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar campo referencia";
-    SlotName[ finnish ] = "Lis?? kentt?viite";
+    SlotName[ finnish ] = "Lis‰‰ kentt‰viite";
 };
 SfxSlotInfo FN_INSERT_REGION
 {
@@ -4196,7 +4196,7 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ turkish ] = "Bˆl¸m ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar ·rea";
-    SlotName[ finnish ] = "Lis?? osio";
+    SlotName[ finnish ] = "Lis‰‰ osio";
 };
 SfxSlotInfo FN_INSERT_SMA
 {
@@ -4224,7 +4224,7 @@ SfxSlotInfo FN_INSERT_SMA
     SlotName[ turkish ] = "StarMath nesnesi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar objeto %PRODUCTNAME Math";
-    SlotName[ finnish ] = "Lis?? %PRODUCTNAME Math -objekti";
+    SlotName[ finnish ] = "Lis‰‰ %PRODUCTNAME Math -objekti";
 };
 SfxSlotInfo FN_INSERT_SOFT_HYPHEN
 {
@@ -4252,7 +4252,7 @@ SfxSlotInfo FN_INSERT_SOFT_HYPHEN
     SlotName[ turkish ] = "Tire ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar guiÛn opcional";
-    SlotName[ finnish ] = "Lis?? lis?yhdysmerkki";
+    SlotName[ finnish ] = "Lis‰‰ lis‰yhdysmerkki";
 };
 SfxSlotInfo FN_INSERT_SYMBOL
 {
@@ -4280,7 +4280,7 @@ SfxSlotInfo FN_INSERT_SYMBOL
     SlotName[ turkish ] = "÷zel karakter ekle ";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar sÌmbolo ";
-    SlotName[ finnish ] = "Lis?? erikoismerkki";
+    SlotName[ finnish ] = "Lis‰‰ erikoismerkki";
 };
 SfxSlotInfo FN_INSERT_TABLE
 {
@@ -4308,7 +4308,7 @@ SfxSlotInfo FN_INSERT_TABLE
     SlotName[ turkish ] = "Tablo ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar tabla";
-    SlotName[ finnish ] = "Lis?? taulukko";
+    SlotName[ finnish ] = "Lis‰‰ taulukko";
 };
 SfxSlotInfo FN_JAVAEDIT
 {
@@ -4336,7 +4336,7 @@ SfxSlotInfo FN_JAVAEDIT
     SlotName[ turkish ] = "Komut dizisi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar script";
-    SlotName[ finnish ] = "Lis?? komentosarja";
+    SlotName[ finnish ] = "Lis‰‰ komentosarja";
 };
 SfxSlotInfo FN_LABEL
 {
@@ -4364,7 +4364,7 @@ SfxSlotInfo FN_LABEL
     SlotName[ turkish ] = "Etiket ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar etiquetas";
-    SlotName[ finnish ] = "Lis?? nimi?";
+    SlotName[ finnish ] = "Lis‰‰ nimiˆt";
 };
 SfxSlotInfo FN_BUSINESS_CARD
 {
@@ -4390,7 +4390,7 @@ SfxSlotInfo FN_BUSINESS_CARD
     SlotName[ turkish ] = "Kartvizit ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar tarjetas de visita";
-    SlotName[ finnish ] = "Lis?? k?yntikortit";
+    SlotName[ finnish ] = "Lis‰‰ k‰yntikortit";
 };
 SfxSlotInfo FN_LINE_DOWN
 {
@@ -4446,7 +4446,7 @@ SfxSlotInfo FN_LINE_DOWN_SEL
     SlotName[ turkish ] = "Alttaki sat˝ra kadar seÁ";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta la lÌnea de abajo";
-    SlotName[ finnish ] = "Valitse alasp?in";
+    SlotName[ finnish ] = "Valitse alasp‰in";
 };
 SfxSlotInfo FN_LINE_NUMBERING_DLG
 {
@@ -4502,7 +4502,7 @@ SfxSlotInfo FN_LINE_UP
     SlotName[ turkish ] = "‹sttteki sat˝r";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir a la lÌnea de arriba";
-    SlotName[ finnish ] = "Ylimm?lle riville";
+    SlotName[ finnish ] = "Ylimm‰lle riville";
 };
 SfxSlotInfo FN_LINE_UP_SEL
 {
@@ -4530,7 +4530,7 @@ SfxSlotInfo FN_LINE_UP_SEL
     SlotName[ turkish ] = "‹stteki sat˝ra kadar ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Seleccionar hasta lÌnea de arriba";
-    SlotName[ finnish ] = "Valitse ylimm?lle riville";
+    SlotName[ finnish ] = "Valitse ylimm‰lle riville";
 };
 SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
 {
@@ -4586,7 +4586,7 @@ SfxSlotInfo FN_NEW_GLOBAL_DOC
     SlotName[ turkish ] = "Ana belge";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Crear un documento maestro";
-    SlotName[ finnish ] = "Luo p??asiakirja";
+    SlotName[ finnish ] = "Luo p‰‰asiakirja";
 };
 SfxSlotInfo FN_NEW_HTML_DOC
 {
@@ -4978,7 +4978,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
     SlotName[ turkish ] = "A˛a˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia abajo";
-    SlotName[ finnish ] = "Siirr? alas";
+    SlotName[ finnish ] = "Siirr‰ alas";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEUP
 {
@@ -5006,7 +5006,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEUP
     SlotName[ turkish ] = "Yukar˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia arriba";
-    SlotName[ finnish ] = "Siirr? yl?";
+    SlotName[ finnish ] = "Siirr‰ ylˆs";
 };
 SfxSlotInfo FN_NUM_BULLET_NEXT
 {
@@ -5062,7 +5062,7 @@ SfxSlotInfo FN_NUM_BULLET_NONUM
     SlotName[ turkish ] = "Numaras˝z giri˛ ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar entrada sin n˙mero";
-    SlotName[ finnish ] = "Lis?? numeroimaton merkint?";
+    SlotName[ finnish ] = "Lis‰‰ numeroimaton merkint‰";
 };
 SfxSlotInfo FN_NUM_BULLET_OFF
 {
@@ -5118,7 +5118,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
     SlotName[ turkish ] = "Alt noktalar˝ ile a˛a˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Bajar un nivel con subniveles";
-    SlotName[ finnish ] = "Siirr? alas alikohteiden kanssa";
+    SlotName[ finnish ] = "Siirr‰ alas alikohteiden kanssa";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
 {
@@ -5146,7 +5146,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
     SlotName[ turkish ] = "Alt noktalar˝ ile a˛a˝ ta˛˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia abajo con subniveles";
-    SlotName[ finnish ] = "Siirr? alas alikohteiden kanssa";
+    SlotName[ finnish ] = "Siirr‰ alas alikohteiden kanssa";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
 {
@@ -5174,7 +5174,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
     SlotName[ turkish ] = "Alt noktalar˝ ile yukar˝ya ta˛˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desplazar hacia arriba con subniveles";
-    SlotName[ finnish ] = "Siirr? yl? alikohteiden kanssa";
+    SlotName[ finnish ] = "Siirr‰ ylˆs alikohteiden kanssa";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
 {
@@ -5202,7 +5202,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
     SlotName[ turkish ] = "Alt noktalar˝ ile yukar˝ya ta˛˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Subir un nivel con subniveles";
-    SlotName[ finnish ] = "Siirr? yl? alikohteiden kanssa";
+    SlotName[ finnish ] = "Siirr‰ ylˆs alikohteiden kanssa";
 };
 SfxSlotInfo FN_NUM_BULLET_PREV
 {
@@ -5258,7 +5258,7 @@ SfxSlotInfo FN_NUM_BULLET_UP
     SlotName[ turkish ] = "Bir d¸zey yukar˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Subir un nivel";
-    SlotName[ finnish ] = "Yksi taso yl?";
+    SlotName[ finnish ] = "Yksi taso ylˆs";
 };
 SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
 {
@@ -5398,7 +5398,7 @@ SfxSlotInfo FN_NUMBER_DATE
     SlotName[ turkish ] = "Say˝ format˝: Tarih";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Formato numÈrico : Fecha";
-    SlotName[ finnish ] = "Numeromuoto: P?iv?m??r?";
+    SlotName[ finnish ] = "Numeromuoto: P‰iv‰m‰‰r‰";
 };
 SfxSlotInfo FN_NUMBER_NEWSTART
 {
@@ -5594,7 +5594,7 @@ SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
     SlotName[ turkish ] = "Bˆl¸m numaralamas˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "NumeraciÛn de capÌtulos";
-    SlotName[ finnish ] = "J?sennysnumerointi";
+    SlotName[ finnish ] = "J‰sennysnumerointi";
 };
 SfxSlotInfo FN_OPTIMIZE_TABLE
 {
@@ -5650,7 +5650,7 @@ SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
     SlotName[ turkish ] = "Anahatlar˝ panoya gˆnder";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema al portapapeles";
-    SlotName[ finnish ] = "J?senn? Leikep?d?lle";
+    SlotName[ finnish ] = "J‰senn‰ Leikepˆyd‰lle";
 };
 SfxSlotInfo FN_OUTLINE_TO_IMPRESS
 {
@@ -5678,7 +5678,7 @@ SfxSlotInfo FN_OUTLINE_TO_IMPRESS
     SlotName[ turkish ] = "Anahatlar˝ sunuya aktar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema para presentaciÛn";
-    SlotName[ finnish ] = "J?senn? Esitykseen";
+    SlotName[ finnish ] = "J‰senn‰ Esitykseen";
 };
 SfxSlotInfo FN_PAGE_STYLE_SET_COLS
 {
@@ -5846,7 +5846,7 @@ SfxSlotInfo FN_PASTESPECIAL
     SlotName[ turkish ] = "÷zel yap˝˛t˝r";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Pegado especial";
-    SlotName[ finnish ] = "Liit? m??r?ten";
+    SlotName[ finnish ] = "Liit‰ m‰‰r‰ten";
 };
 SfxSlotInfo FN_POSTIT
 {
@@ -5874,7 +5874,7 @@ SfxSlotInfo FN_POSTIT
     SlotName[ turkish ] = "Not ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar nota";
-    SlotName[ finnish ] = "Lis?? huomautus";
+    SlotName[ finnish ] = "Lis‰‰ huomautus";
 };
 SfxSlotInfo FN_PREV_BOOKMARK
 {
@@ -6210,7 +6210,7 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ korean ] = "Ïù∏ÏáÑ ÏòµÏÖò, ÌéòÏù¥ÏßÄ Î≥¥Í∏∞";
     SlotName[ turkish ] = "Sayfa gˆr¸n¸m¸ yazd˝rma seÁenekleri";
     SlotName[ catalan ] = "Opciones de impresiÛn";
-    SlotName[ finnish ] = "Tulostusasetusten n?kym?";
+    SlotName[ finnish ] = "Tulostusasetusten n‰kym‰";
 };
 SfxSlotInfo FN_PREVIEW_ZOOM
 {
@@ -6291,7 +6291,7 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ turkish ] = "Sayfa gˆr¸n¸m¸n¸ yazd˝r";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Imprimir previsualizaciÛn";
-    SlotName[ finnish ] = "Sivun tulostusn?kym?";
+    SlotName[ finnish ] = "Sivun tulostusn‰kym‰";
 };
 SfxSlotInfo FN_QRY_MERGE
 {
@@ -6319,7 +6319,7 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ turkish ] = "Standart mektup yazd˝rmay˝ haz˝rla";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Preparar impresiÛn en serie";
-    SlotName[ finnish ] = "Valmistele yhdist?minen";
+    SlotName[ finnish ] = "Valmistele yhdist‰minen";
 };
 SfxSlotInfo FN_REDLINE_ACCEPT
 {
@@ -6347,7 +6347,7 @@ SfxSlotInfo FN_REDLINE_ACCEPT
     SlotName[ turkish ] = "Dei˛iklikleri kabul ya da reddet";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aceptar modificaciones o rechazarlas";
-    SlotName[ finnish ] = "Hyv?ksy tai hylk?? muutokset";
+    SlotName[ finnish ] = "Hyv‰ksy tai hylk‰‰ muutokset";
 };
 SfxSlotInfo FN_REDLINE_COMMENT
 {
@@ -6375,7 +6375,7 @@ SfxSlotInfo FN_REDLINE_COMMENT
     SlotName[ turkish ] = "AÁ˝klama ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar comentario";
-    SlotName[ finnish ] = "Lis?? huomautus";
+    SlotName[ finnish ] = "Lis‰‰ huomautus";
 };
 SfxSlotInfo FN_REDLINE_ON
 {
@@ -6429,7 +6429,7 @@ SfxSlotInfo FN_REDLINE_PROTECT
     SlotName[ turkish ] = "Protect changes trace mode";
     SlotName[ arabic ] = "Protect changes trace mode";
     SlotName[ catalan ] = "Protect changes trace mode";
-    SlotName[ finnish ] = "ƒnderungsaufzeichnung sch¸tzen";
+    SlotName[ finnish ] = "Suojaa muutostietue";
 };
 SfxSlotInfo FN_REDLINE_SHOW
 {
@@ -6485,7 +6485,7 @@ SfxSlotInfo FN_REFRESH_VIEW
     SlotName[ turkish ] = "Gˆr¸n¸m¸ geri getir";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Restablecer visualizaciÛn";
-    SlotName[ finnish ] = "Palauta n?kym?";
+    SlotName[ finnish ] = "Palauta n‰kym‰";
 };
 SfxSlotInfo FN_REPAGINATE
 {
@@ -6653,7 +6653,7 @@ SfxSlotInfo FN_SET_ADD_MODE
     SlotName[ turkish ] = "«oklu seÁim aÁ˝k";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar selecciÛn m˙ltiple";
-    SlotName[ finnish ] = "Monivalinta k?yt?s?";
+    SlotName[ finnish ] = "Monivalinta k‰ytˆss‰";
 };
 SfxSlotInfo FN_SET_EXT_MODE
 {
@@ -6681,7 +6681,7 @@ SfxSlotInfo FN_SET_EXT_MODE
     SlotName[ turkish ] = "Ayr˝nt˝l˝ seÁim aÁ˝k";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar SelecciÛn Extendida";
-    SlotName[ finnish ] = "Laajennettu valinta k?yt?s?";
+    SlotName[ finnish ] = "Laajennettu valinta k‰ytˆss‰";
 };
 SfxSlotInfo FN_SET_PAGE_STYLE
 {
@@ -6709,7 +6709,7 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ turkish ] = "Sayfa biÁimi uygula";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aplicar estilo de p·gina";
-    SlotName[ finnish ] = "K?yt? sivun tyyli?";
+    SlotName[ finnish ] = "K‰yt‰ sivun tyyli‰";
 };
 SfxSlotInfo FN_SET_SUB_SCRIPT
 {
@@ -6765,7 +6765,7 @@ SfxSlotInfo FN_SET_SUPER_SCRIPT
     SlotName[ turkish ] = "‹st simge";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "SuperÌndice";
-    SlotName[ finnish ] = "Yl?indeksi";
+    SlotName[ finnish ] = "Yl‰indeksi";
 };
 SfxSlotInfo FN_SHADOWCURSOR
 {
@@ -6849,7 +6849,7 @@ SfxSlotInfo FN_SHOW_FOUR_PAGES
     SlotName[ turkish ] = "Sayfa ˆn izleme: Dˆrt sayfa";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Vista preliminar: cuatro p·ginas";
-    SlotName[ finnish ] = "Sivun esikatselu: nelj? sivua";
+    SlotName[ finnish ] = "Sivun esikatselu: nelj‰ sivua";
 };
 SfxSlotInfo FN_SHOW_TWO_PAGES
 {
@@ -6905,7 +6905,7 @@ SfxSlotInfo FN_SHRINK_FONT_SIZE
     SlotName[ turkish ] = "Yaz˝tipini k¸Á¸lt";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Reducir fuente";
-    SlotName[ finnish ] = "Pienenn? fonttia";
+    SlotName[ finnish ] = "Pienenn‰ fonttia";
 };
 SfxSlotInfo FN_SORTING_DLG
 {
@@ -6961,7 +6961,7 @@ SfxSlotInfo FN_SOURCEVIEW
     SlotName[ turkish ] = "HTML kaynak kodunu gˆr¸nt¸le";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Mostrar texto fuente HTML";
-    SlotName[ finnish ] = "N?yt? HTML-l?hde";
+    SlotName[ finnish ] = "N‰yt‰ HTML-l‰hde";
 };
 SfxSlotInfo FN_SPELLING_DLG
 {
@@ -7658,7 +7658,7 @@ SfxSlotInfo FN_TABLE_BALANCE_CELLS
     SlotName[ turkish ] = "S¸tunlar˝ geni˛liklerini e˛itle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ordenar columnas";
-    SlotName[ finnish ] = "Tasaa sarakev?lit";
+    SlotName[ finnish ] = "Tasaa sarakev‰lit";
 };
 SfxSlotInfo FN_TABLE_BALANCE_ROWS
 {
@@ -7686,7 +7686,7 @@ SfxSlotInfo FN_TABLE_BALANCE_ROWS
     SlotName[ turkish ] = "Sat˝r y¸ksekliklerini e˛itle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ordenar filas";
-    SlotName[ finnish ] = "Tasaa riviv?lit";
+    SlotName[ finnish ] = "Tasaa riviv‰lit";
 };
 SfxSlotInfo FN_TABLE_DELETE_COL
 {
@@ -7770,7 +7770,7 @@ SfxSlotInfo FN_TABLE_INSERT_COL
     SlotName[ turkish ] = "S¸tun ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar columna";
-    SlotName[ finnish ] = "Lis?? sarakkeet";
+    SlotName[ finnish ] = "Lis‰‰ sarakkeet";
 };
 SfxSlotInfo FN_TABLE_INSERT_ROW
 {
@@ -7798,7 +7798,7 @@ SfxSlotInfo FN_TABLE_INSERT_ROW
     SlotName[ turkish ] = "Sat˝r ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar fila";
-    SlotName[ finnish ] = "Lis?? rivit";
+    SlotName[ finnish ] = "Lis‰‰ rivit";
 };
 SfxSlotInfo FN_TABLE_MERGE_CELLS
 {
@@ -7826,7 +7826,7 @@ SfxSlotInfo FN_TABLE_MERGE_CELLS
     SlotName[ turkish ] = "H¸creleri birle˛tir";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Unir celdas";
-    SlotName[ finnish ] = "Yhdist? solut";
+    SlotName[ finnish ] = "Yhdist‰ solut";
 };
 SfxSlotInfo FN_TABLE_MERGE_TABLE
 {
@@ -7854,7 +7854,7 @@ SfxSlotInfo FN_TABLE_MERGE_TABLE
     SlotName[ turkish ] = "Tabloyu birle˛tir";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Unir tabla";
-    SlotName[ finnish ] = "Yhdist? taulukko";
+    SlotName[ finnish ] = "Yhdist‰ taulukko";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX
 {
@@ -7882,7 +7882,7 @@ SfxSlotInfo FN_TABLE_MODE_FIX
     SlotName[ turkish ] = "Tablo: Sabit";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Tabla: fija";
-    SlotName[ finnish ] = "Taulukko: Kiinte?";
+    SlotName[ finnish ] = "Taulukko: Kiinte‰";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX_PROP
 {
@@ -7910,7 +7910,7 @@ SfxSlotInfo FN_TABLE_MODE_FIX_PROP
     SlotName[ turkish ] = "Tablo: Sabit, orant˝l˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Tabla: fija, proporcional";
-    SlotName[ finnish ] = "Taulukko: Kiinte?, suhteellinen";
+    SlotName[ finnish ] = "Taulukko: Kiinte‰, suhteellinen";
 };
 SfxSlotInfo FN_TABLE_MODE_VARIABLE
 {
@@ -8274,7 +8274,7 @@ SfxSlotInfo FN_TABLE_VERT_CENTER
     SlotName[ turkish ] = "Ortalanm˝˛ (dikey)";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Centrado (vertical)";
-    SlotName[ finnish ] = "Keskit? (pystysuunnassa)";
+    SlotName[ finnish ] = "Keskit‰ (pystysuunnassa)";
 };
 SfxSlotInfo FN_TABLE_VERT_NONE
 {
@@ -8302,7 +8302,7 @@ SfxSlotInfo FN_TABLE_VERT_NONE
     SlotName[ turkish ] = "‹stte";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Arriba";
-    SlotName[ finnish ] = "Yl?osa";
+    SlotName[ finnish ] = "Yl‰osa";
 };
 SfxSlotInfo FN_THESAURUS_DLG
 {
@@ -8386,7 +8386,7 @@ SfxSlotInfo FN_TO_HEADER
     SlotName[ turkish ] = "‹stbilgi";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ir al encabezamiento";
-    SlotName[ finnish ] = "Yl?otsikkoon";
+    SlotName[ finnish ] = "Yl‰otsikkoon";
 };
 SfxSlotInfo FN_TOOL_ANKER
 {
@@ -8582,7 +8582,7 @@ SfxSlotInfo FN_TOOL_GROUP
     SlotName[ turkish ] = "Grup";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Agrupar";
-    SlotName[ finnish ] = "Ryhm?";
+    SlotName[ finnish ] = "Ryhm‰";
 };
 SfxSlotInfo FN_TOOL_HIERARCHIE
 {
@@ -8638,7 +8638,7 @@ SfxSlotInfo FN_TOOL_UNGROUP
     SlotName[ turkish ] = "Grubu Áˆz";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Desagrupar";
-    SlotName[ finnish ] = "Pura ryhm?";
+    SlotName[ finnish ] = "Pura ryhm‰";
 };
 SfxSlotInfo FN_UNDERLINE_DOUBLE
 {
@@ -8694,7 +8694,7 @@ SfxSlotInfo FN_UPDATE_ALL
     SlotName[ turkish ] = "T¸m¸n¸ g¸ncelle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar todo";
-    SlotName[ finnish ] = "P?ivit? kaikki";
+    SlotName[ finnish ] = "P‰ivit‰ kaikki";
 };
 SfxSlotInfo FN_UPDATE_ALL_LINKS
 {
@@ -8722,7 +8722,7 @@ SfxSlotInfo FN_UPDATE_ALL_LINKS
     SlotName[ turkish ] = "Balant˝lar˝ g¸ncelle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar vÌnculos";
-    SlotName[ finnish ] = "P?ivit? kaikki linkit";
+    SlotName[ finnish ] = "P‰ivit‰ kaikki linkit";
 };
 SfxSlotInfo FN_UPDATE_CUR_TOX
 {
@@ -8750,7 +8750,7 @@ SfxSlotInfo FN_UPDATE_CUR_TOX
     SlotName[ turkish ] = "Dizini g¸ncelle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar Ìndice";
-    SlotName[ finnish ] = "P?ivit? hakemisto";
+    SlotName[ finnish ] = "P‰ivit‰ hakemisto";
 };
 SfxSlotInfo FN_EDIT_CURRENT_TOX
 {
@@ -8804,7 +8804,7 @@ SfxSlotInfo FN_UPDATE_FIELDS
     SlotName[ turkish ] = "Alanlar˝ g¸ncelle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar campos";
-    SlotName[ finnish ] = "P?ivit? kent?t";
+    SlotName[ finnish ] = "P‰ivit‰ kent‰t";
 };
 SfxSlotInfo FN_UPDATE_INPUTFIELDS
 {
@@ -8832,7 +8832,7 @@ SfxSlotInfo FN_UPDATE_INPUTFIELDS
     SlotName[ turkish ] = "Giri˛ alanlar˝n˝ g¸ncelle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar campos para entradas";
-    SlotName[ finnish ] = "P?ivit? hakemistokent?t";
+    SlotName[ finnish ] = "P‰ivit‰ hakemistokent‰t";
 };
 SfxSlotInfo FN_UPDATE_TOX
 {
@@ -8860,7 +8860,7 @@ SfxSlotInfo FN_UPDATE_TOX
     SlotName[ turkish ] = "Dizinleri g¸ncelle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Actualizar Ìndices";
-    SlotName[ finnish ] = "P?ivit? hakemistot";
+    SlotName[ finnish ] = "P‰ivit‰ hakemistot";
 };
 SfxSlotInfo FN_VIEW_BOUNDS
 {
@@ -8944,7 +8944,7 @@ SfxSlotInfo FN_VIEW_FIELDS
     SlotName[ turkish ] = "Alan ˆeleri";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Campos";
-    SlotName[ finnish ] = "Kent?t";
+    SlotName[ finnish ] = "Kent‰t";
 };
 SfxSlotInfo FN_VIEW_GRAPHIC
 {
@@ -9026,7 +9026,7 @@ SfxSlotInfo FN_VIEW_MARKS
     SlotName[ turkish ] = "BelirteÁler";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Marcas";
-    SlotName[ finnish ] = "Kent?n varjostus";
+    SlotName[ finnish ] = "Kent‰n varjostus";
 };
 SfxSlotInfo FN_VIEW_META_CHARS
 {
@@ -9163,7 +9163,7 @@ SfxSlotInfo FN_WRAP_ANCHOR_ONLY
     SlotName[ turkish ] = "›lk paragrafta metin da˝l˝m˝";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Ajuste del primer p·rrafo";
-    SlotName[ finnish ] = "Rivit? ensimm?inen kappale";
+    SlotName[ finnish ] = "Rivit‰ ensimm‰inen kappale";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
 {
@@ -9219,7 +9219,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     SlotName[ turkish ] = "Vurgu renk doldurma";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Fondo de car·cter";
-    SlotName[ finnish ] = "Korosta t?ytt?";
+    SlotName[ finnish ] = "Korosta t‰yttˆ";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
 {
@@ -9247,7 +9247,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
     SlotName[ turkish ] = "Yaz˝tipi rengi doldurma";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Color de relleno del car·cter";
-    SlotName[ finnish ] = "Fontin t?ytt??ri";
+    SlotName[ finnish ] = "Fontin t‰yttˆv‰ri";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR2
 {
@@ -9275,7 +9275,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR2
     SlotName[ turkish ] = "Yaz˝tipi rengi";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Color del car·cter";
-    SlotName[ finnish ] = "Fontin v?ri";
+    SlotName[ finnish ] = "Fontin v‰ri";
 };
 SfxSlotInfo SID_TEMPLATE_LOAD
 {
@@ -9329,7 +9329,7 @@ SfxSlotInfo FN_INSERT_COLUMN_SECTION
     SlotName[ turkish ] = "Bˆl¸m ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar ·rea";
-    SlotName[ finnish ] = "Lis?? osio";
+    SlotName[ finnish ] = "Lis‰‰ osio";
 };
 SfxSlotInfo FN_FORMAT_COLUMN
 {
@@ -9382,7 +9382,7 @@ SfxSlotInfo FN_INSERT_MULTI_TOX
     SlotName[ arabic ] = "≈œ—«Ã ›Â—”";
     SlotName[ turkish ] = "Dizin ekle";
     SlotName[ catalan ] = "Insertar Ìndice";
-    SlotName[ finnish ] = "Lis?? hakemisto";
+    SlotName[ finnish ] = "Lis‰‰ hakemisto";
 };
 SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
 {
@@ -9408,7 +9408,7 @@ SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
     SlotName[ turkish ] = "KaynakÁa giri˛i ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar entrada de bibliografÌa";
-    SlotName[ finnish ] = "Lis?? bibliografiamerkint?";
+    SlotName[ finnish ] = "Lis‰‰ bibliografiamerkint‰";
 };
 
 SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
@@ -9435,7 +9435,7 @@ SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
     SlotName[ turkish ] = "KaynakÁa giri˛ini d¸zenle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Editar entrada de bibliografÌa";
-    SlotName[ finnish ] = "Muokkaa bibliografiamerkint??";
+    SlotName[ finnish ] = "Muokkaa bibliografiamerkint‰‰";
 };
 
 SfxSlotInfo FN_REMOVE_CUR_TOX
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
