@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
+ *  last change: $Author: mt $ $Date: 2001-10-17 12:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2935,68 +2935,68 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
 
 Range ImpEditEngine::GetInvalidYOffsets( ParaPortion* pPortion )
 {
-    DBG_ASSERT( pPortion->IsVisible(), "Wozu GetInvalidYOffset() bei einem unsichtbaren Absatz?" );
-
     Range aRange( 0, 0 );
 
-    const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
-    const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-    USHORT nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
-                        ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
-
-    // erst von vorne...
-    USHORT nFirstInvalid = 0xFFFF;
-    USHORT nLine;
-    for ( nLine = 0; nLine < pPortion->GetLines().Count(); nLine++ )
+    if ( pPortion->IsVisible() )
     {
-        EditLine* pL = pPortion->GetLines().GetObject( nLine );
-        if ( pL->IsInvalid() )
+        const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+        const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
+        USHORT nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
+                            ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
+
+        // erst von vorne...
+        USHORT nFirstInvalid = 0xFFFF;
+        USHORT nLine;
+        for ( nLine = 0; nLine < pPortion->GetLines().Count(); nLine++ )
         {
-            nFirstInvalid = nLine;
-            break;
+            EditLine* pL = pPortion->GetLines().GetObject( nLine );
+            if ( pL->IsInvalid() )
+            {
+                nFirstInvalid = nLine;
+                break;
+            }
+            if ( nLine && !aStatus.IsOutliner() )   // nicht die erste Zeile
+                aRange.Min() += nSBL;
+            aRange.Min() += pL->GetHeight();
         }
-        if ( nLine && !aStatus.IsOutliner() )   // nicht die erste Zeile
-            aRange.Min() += nSBL;
-        aRange.Min() += pL->GetHeight();
-    }
-    DBG_ASSERT( nFirstInvalid != 0xFFFF, "Keine ungueltige Zeile gefunden in GetInvalidYOffset(1)" );
+        DBG_ASSERT( nFirstInvalid != 0xFFFF, "Keine ungueltige Zeile gefunden in GetInvalidYOffset(1)" );
 
 
-    // Abgleichen und weiter...
-    aRange.Max() = aRange.Min();
-    aRange.Max() += pPortion->GetFirstLineOffset();
-    if ( nFirstInvalid != 0 )   // Nur wenn nicht die erste Zeile ungueltig
-        aRange.Min() = aRange.Max();
+        // Abgleichen und weiter...
+        aRange.Max() = aRange.Min();
+        aRange.Max() += pPortion->GetFirstLineOffset();
+        if ( nFirstInvalid != 0 )   // Nur wenn nicht die erste Zeile ungueltig
+            aRange.Min() = aRange.Max();
 
-    USHORT nLastInvalid = pPortion->GetLines().Count()-1;
-    for ( nLine = nFirstInvalid; nLine < pPortion->GetLines().Count(); nLine++ )
-    {
-        EditLine* pL = pPortion->GetLines().GetObject( nLine );
-        if ( pL->IsValid() )
+        USHORT nLastInvalid = pPortion->GetLines().Count()-1;
+        for ( nLine = nFirstInvalid; nLine < pPortion->GetLines().Count(); nLine++ )
         {
-            nLastInvalid = nLine;
-            break;
+            EditLine* pL = pPortion->GetLines().GetObject( nLine );
+            if ( pL->IsValid() )
+            {
+                nLastInvalid = nLine;
+                break;
+            }
+
+            if ( nLine && !aStatus.IsOutliner() )
+                aRange.Max() += nSBL;
+            aRange.Max() += pL->GetHeight();
         }
 
-        if ( nLine && !aStatus.IsOutliner() )
-            aRange.Max() += nSBL;
-        aRange.Max() += pL->GetHeight();
+        // MT 07/00 SBL kann jetzt kleiner 100% sein => ggf. die Zeile davor neu ausgeben.
+        if( ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP ) &&
+            ( rLSItem.GetPropLineSpace() < 100 ) )
+        {
+            EditLine* pL = pPortion->GetLines().GetObject( nFirstInvalid );
+            long n = pL->GetTxtHeight() * ( 100 - rLSItem.GetPropLineSpace() );
+            n /= 100;
+            aRange.Min() -= n;
+            aRange.Max() += n;
+        }
+
+        if ( ( nLastInvalid == pPortion->GetLines().Count()-1 ) && ( !aStatus.IsOutliner() ) )
+            aRange.Max() += GetYValue( rULSpace.GetLower() );
     }
-
-    // MT 07/00 SBL kann jetzt kleiner 100% sein => ggf. die Zeile davor neu ausgeben.
-    if( ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP ) &&
-        ( rLSItem.GetPropLineSpace() < 100 ) )
-    {
-        EditLine* pL = pPortion->GetLines().GetObject( nFirstInvalid );
-        long n = pL->GetTxtHeight() * ( 100 - rLSItem.GetPropLineSpace() );
-        n /= 100;
-        aRange.Min() -= n;
-        aRange.Max() += n;
-    }
-
-    if ( ( nLastInvalid == pPortion->GetLines().Count()-1 ) && ( !aStatus.IsOutliner() ) )
-        aRange.Max() += GetYValue( rULSpace.GetLower() );
-
     return aRange;
 }
 
