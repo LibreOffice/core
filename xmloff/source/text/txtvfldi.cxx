@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 13:23:40 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,7 +1173,7 @@ void XMLDatabaseDisplayImportContext::ProcessAttribute(
             break;
         case XML_TOK_TEXTFIELD_DATABASE_NAME:
         case XML_TOK_TEXTFIELD_TABLE_NAME:
-        case XML_TOK_TEXTFIELD_COMMAND_TYPE:
+        case XML_TOK_TEXTFIELD_TABLE_TYPE:
             // handled by super class
             XMLDatabaseFieldImportContext::ProcessAttribute(nAttrToken,
                                                             sAttrValue);

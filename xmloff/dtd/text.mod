@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.50 2002-06-11 14:17:50 dvo Exp $
+	$Id: text.mod,v 1.51 2002-06-11 14:59:33 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -427,7 +427,7 @@
 
 <!ENTITY % database-table "text:database-name CDATA #REQUIRED 
 						   text:table-name CDATA #REQUIRED
-						   text:command-type (table|query|command) #IMPLIED">
+						   text:table-type (table|query|command) #IMPLIED">
 
 <!ELEMENT text:database-display (#PCDATA)>
 <!ATTLIST text:database-display %database-table;>

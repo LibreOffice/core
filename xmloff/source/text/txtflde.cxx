@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 13:23:40 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2595,7 +2595,7 @@ void XMLTextFieldExport::ProcessCommandType(
     }
 
     if( eToken != XML_TOKEN_INVALID )
-        rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_COMMAND_TYPE, eToken );
+        rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_TABLE_TYPE, eToken );
 }
 
 

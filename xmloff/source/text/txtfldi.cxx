@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 13:23:40 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_IS_HIDDEN, XML_TOK_TEXTFIELD_IS_HIDDEN },
     { XML_NAMESPACE_TEXT, XML_CURRENT_VALUE,
                 XML_TOK_TEXTFIELD_CURRENT_VALUE },
-    { XML_NAMESPACE_TEXT, XML_COMMAND_TYPE, XML_TOK_TEXTFIELD_COMMAND_TYPE },
+    { XML_NAMESPACE_TEXT, XML_TABLE_TYPE, XML_TOK_TEXTFIELD_TABLE_TYPE },
 
     XML_TOKEN_MAP_END
 };
@@ -1546,7 +1546,7 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
             sTableName = sAttrValue;
             bTableOK = sal_True;
             break;
-        case XML_TOK_TEXTFIELD_COMMAND_TYPE:
+        case XML_TOK_TEXTFIELD_TABLE_TYPE:
             if( IsXMLToken( sAttrValue, XML_TABLE ) )
             {
                 nCommandType = sdb::CommandType::TABLE;
