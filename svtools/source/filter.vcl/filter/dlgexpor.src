@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:43:19 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,9 +306,9 @@ ModalDialog DLG_EXPORT_PIX
         < "1 비트- 임계값" ; Default ; > ;
         < "1비트 - 흔들림" ; Default ; > ;
         < "4 비트 - 회색조" ; Default ; > ;
-        < "4 비트 - 색상 파레트" ; Default ; > ;
+        < "4 비트 - 색상 팔레트" ; Default ; > ;
         < "8 비트 - 회색조" ; Default ; > ;
-        < "8 비트 - 색상 파레트" ; Default ; > ;
+        < "8 비트-색상 팔레트" ; Default ; > ;
         < "24 비트 - 트루 컬러" ; Default ; > ;
     };
     StringList [ turkish ] =
