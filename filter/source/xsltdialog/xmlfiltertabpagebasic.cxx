@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:35:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ bool XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
                 if( pInfo->maDocumentService == (*aIter)->maDocumentUIName )
                 {
                     pInfo->maDocumentService = (*aIter)->maDocumentService;
+                    pInfo->maExportService = (*aIter)->maXMLExporter;
+                    pInfo->maImportService = (*aIter)->maXMLImporter;
                     break;
                 }
                 aIter++;
@@ -170,8 +172,14 @@ void XMLFilterTabPageBasic::SetInfo(const filter_info_impl* pInfo)
     if( pInfo )
     {
         maEDFilterName.SetText( string_decode(pInfo->maFilterName) );
+        /*
         if( pInfo->maDocumentService.getLength() )
             maCBApplication.SetText( getApplicationUIName( pInfo->maDocumentService ) );
+        */
+        if( pInfo->maExportService.getLength() )
+            maCBApplication.SetText( getApplicationUIName( pInfo->maImportService ) );
+        else
+            maCBApplication.SetText( getApplicationUIName( pInfo->maExportService ) );
         maEDInterfaceName.SetText( string_decode(pInfo->maInterfaceName) );
         maEDExtension.SetText( pInfo->maExtension );
         maEDDescription.SetText( string_decode( pInfo->maComment ) );
