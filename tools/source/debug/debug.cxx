@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-16 07:59:15 $
+ *  last change: $Author: hr $ $Date: 2002-03-18 18:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,8 @@
 #endif
 
 #include <time.h>
-#include <cstdarg>
+#include <stdarg.h> // include both to satisfy all compiler/platform
+#include <cstdarg>  // combinations
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
