@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:45:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,8 @@
 #include "unolingu.hxx"
 #include "xtable.hxx"
 #include "connpoolconfig.hxx"
+#include "dbregister.hxx"
+#include "dbregisterednamesconfig.hxx"
 
 #ifndef _SVX_LANGITEM_HXX
 #define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
@@ -272,6 +274,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_OFAPAGE_MSFILTEROPT2:              fnCreate = &OfaMSFilterTabPage2::Create; break;
         case RID_SVXPAGE_JSEARCH_OPTIONS:           fnCreate = &SvxJSearchOptionsPage::Create ; break;
         case SID_SB_CONNECTIONPOOLING:              fnCreate = &::offapp::ConnectionPoolOptionsPage::Create; break;
+        case SID_SB_DBREGISTEROPTIONS:              fnCreate = &::svx::DbRegistrationOptionsPage::Create; break;
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
         case RID_SVXPAGE_SSO:                       fnCreate = ( CreateTabPage ) GetSSOCreator(); break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
@@ -1252,9 +1255,10 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 
         case SID_SB_STARBASEOPTIONS:
             pRet = new SfxItemSet( SFX_APP()->GetPool(),
-            SID_SB_POOLING_ENABLED, SID_SB_DRIVER_TIMEOUTS,
+            SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER,
             0 );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
+            ::svx::DbRegisteredNamesConfig::GetOptions(*pRet);
             break;
     }
     return pRet;
@@ -1409,6 +1413,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
         case SID_SB_STARBASEOPTIONS:
             ::offapp::ConnectionPoolConfig::SetOptions( rSet );
+            ::svx::DbRegisteredNamesConfig::SetOptions(rSet);
             break;
         break;
     }
