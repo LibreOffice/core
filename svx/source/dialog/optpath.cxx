@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:47:35 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,8 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
+#pragma hdrstop
 #include "svxdlg.hxx" //CHINA001
-#if defined (WIN) || defined (WNT)
-#ifndef _SVWIN_H
-#include <tools/svwin.h>
-#endif
-#endif
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
@@ -84,9 +80,6 @@
 #ifndef _SVTABBX_HXX //autogen
 #include <svtools/svtabbx.hxx>
 #endif
-#ifndef _AEITEM_HXX //autogen
-#include <svtools/aeitem.hxx>
-#endif
 #ifndef _SVT_FILEDLG_HXX //autogen
 #include <svtools/filedlg.hxx>
 #endif
@@ -97,7 +90,6 @@
 #include <vcl/svapp.hxx>
 #include <svtools/defaultoptions.hxx>
 #include <unotools/localfilehelper.hxx>
-#pragma hdrstop
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -129,6 +121,12 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+#ifndef _SVX_READONLYIMAGE_HXX
+#include <readonlyimage.hxx>
+#endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -217,6 +215,7 @@ public:
     virtual void    Paint( const Rectangle& rRect );
     void            InitHeaderBar( HeaderBar* _pHeaderBar );
     virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
+    virtual void    RequestHelp( const HelpEvent& rHEvt );
 };
 
 // class OptLBoxString_Impl ----------------------------------------------
@@ -287,7 +286,48 @@ void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
         pEntry->ReplaceItem( pStr, nCol );
     }
 }
+/*-- 26.02.2004 14:21:54---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void OptHeaderTabListBox::RequestHelp( const HelpEvent& rHEvt )
+{
+    bool bHandled = false;
+    if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
+    {
+        Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
+        SvLBoxEntry* pEntry = GetEntry( aPos );
+        if( pEntry )
+        {
+            String sEntry = ReadOnlyImage::GetHelpTip();
+            SvLBoxTab* pTab;
+            SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
+            Image aEntryImage = GetCollapsedEntryBmp( pEntry );
+            BOOL bNotReadOnly = !aEntryImage;
+            if( !bNotReadOnly && pItem && SV_ITEM_ID_LBOXCONTEXTBMP == pItem->IsA())
+            {
+                Point aPos = SvTreeListBox::GetEntryPos( pEntry );
+                Size aSize( pItem->GetSize( this, pEntry ) );
+
+                if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
+                    aSize.Width() = GetSizePixel().Width() - aPos.X();
+
+                aPos = OutputToScreenPixel(aPos);
+                Rectangle aItemRect( aPos, aSize );
+                if(Help::IsBalloonHelpEnabled())
+                {
+                    aPos.X() += aSize.Width();
+                    Help::ShowBalloon( this, aPos, aItemRect, sEntry );
+                }
+                else
+                    Help::ShowQuickHelp( this, aItemRect, sEntry,
+                        QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                bHandled = true;
+            }
+        }
+    }
+    if(!bHandled)
+        SvTabListBox::RequestHelp(rHEvt);
+}
 IMPL_LINK( OptHeaderTabListBox, TabBoxScrollHdl_Impl, SvTabListBox*, pList )
 {
     m_pHeaderBar->SetOffset( -GetXOffset() );
@@ -408,115 +448,73 @@ SfxTabPage* SvxPathTabPage::Create( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-BOOL SvxPathTabPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL SvxPathTabPage::FillItemSet( SfxItemSet& )
 {
-    SfxAllEnumItem aPathItem( GetWhich( SID_ATTR_PATHNAME ) );
-    String aBlank( ' ' );
-
+    SvtPathOptions aPathOpt;
     for ( USHORT i = 0; i < pPathBox->GetEntryCount(); ++i )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
-        SfxItemState eState = pPathImpl ? pPathImpl->eState : SFX_ITEM_UNKNOWN;
         USHORT nRealId = pPathImpl->nRealId;
-
-        switch ( eState )
+        if(pPathImpl->eState == SFX_ITEM_SET)
         {
-            case SFX_ITEM_SET:
-                // Eintrag in App-Ini machen
-                aPathItem.InsertValue( nRealId, pPathImpl->aPathStr );
-                break;
-
-            case SFX_ITEM_DONTCARE:
-                // Eintrag in App-Ini l"oschen
-                aPathItem.InsertValue( nRealId, String() );
-                break;
-
-            case SFX_ITEM_UNKNOWN:
-                // Eintrag in App-Ini unver"andert lassen
-                aPathItem.InsertValue( nRealId, aBlank );
-                break;
+            String sPath(pPathImpl->aPathStr);
+            if(nRealId == SvtPathOptions::PATH_ADDIN ||
+                    nRealId == SvtPathOptions::PATH_FILTER ||
+                    nRealId == SvtPathOptions::PATH_HELP  ||
+                    nRealId == SvtPathOptions::PATH_MODULE  ||
+                    nRealId == SvtPathOptions::PATH_PLUGIN  ||
+                    nRealId == SvtPathOptions::PATH_STORAGE  )
+                ::utl::LocalFileHelper::ConvertURLToPhysicalName( pPathImpl->aPathStr, sPath );
+            aPathOpt.SetPath(SvtPathOptions::Pathes(nRealId), sPath);
         }
     }
 
-    aPathItem.InsertValue( SvtPathOptions::PATH_CONFIG, aBlank );
-    aPathItem.InsertValue( SvtPathOptions::PATH_FAVORITES, aBlank );
-    aPathItem.InsertValue( SvtPathOptions::PATH_HELP, aBlank );
-    aPathItem.InsertValue( SvtPathOptions::PATH_MODULE, aBlank );
-    aPathItem.InsertValue( SvtPathOptions::PATH_STORAGE, aBlank );
-
-    rCoreSet.Put( aPathItem );
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxPathTabPage::Reset( const SfxItemSet& rSet )
+void SvxPathTabPage::Reset( const SfxItemSet& )
 {
-    SfxItemState eItemState = SFX_ITEM_UNKNOWN;
-    const SfxAllEnumItem* pGrpItem = NULL;
-    const SfxAllEnumItem* pNameItem = NULL;
-    USHORT nWhich = GetWhich( SID_ATTR_PATHGROUP );
-
-    // Item mit den Pfad-Gruppen holen
-    eItemState = rSet.GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pGrpItem );
-
-    if ( eItemState == SFX_ITEM_DEFAULT )
-        pGrpItem = (const SfxAllEnumItem*)&( rSet.Get( nWhich ) );
-    else if ( eItemState == SFX_ITEM_DONTCARE )
-        pGrpItem = NULL;
-
-    // Item mit den Pfad-Namen holen
-    nWhich = GetWhich( SID_ATTR_PATHNAME );
-    eItemState = rSet.GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pNameItem );
-
-    if ( eItemState == SFX_ITEM_DEFAULT )
-        pNameItem = (const SfxAllEnumItem*)&( rSet.Get( nWhich ) );
-    else if ( eItemState == SFX_ITEM_DONTCARE )
-        pNameItem = NULL;
-
-    if ( !pGrpItem || !pNameItem )
-    {
-        DBG_ERRORFILE( "keine Pfade" );
-        return;
-    }
-
-    if ( pGrpItem->GetValueCount() != pNameItem->GetValueCount() )
-    {
-        DBG_ERRORFILE( "die Counts der Items sind unterschiedlich" );
-        return;
-    }
-
-    // TabListBox f"ullen
     pPathBox->Clear();
     SvtPathOptions aPathOpt;
 
-    for ( USHORT i = 0; i < pNameItem->GetValueCount(); ++i )
-    {
-        // Users shouldn't configure these pathes
-        if ( SvtPathOptions::PATH_CONFIG == i || SvtPathOptions::PATH_FAVORITES == i ||
-             SvtPathOptions::PATH_HELP == i || SvtPathOptions::PATH_MODULE == i ||
-             SvtPathOptions::PATH_STORAGE == i )
-            // so don't show them
-            continue;
-
-        String aStr( pGrpItem->GetValueTextByPos(i) );
-        String aValue( pNameItem->GetValueTextByPos(i) );
-        aStr += '\t';
-        aStr += Convert_Impl( aValue );
-        SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
-        BOOL   bReadonly = aPathOpt.IsPathReadonly((SvtPathOptions::Pathes) i);
-        if(bReadonly)
+    for( USHORT i = 0; i <= (USHORT)SvtPathOptions::PATH_WORK; ++i )
+        switch(i)
         {
-            pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImage,   BMP_COLOR_NORMAL );
-            pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImageHC,   BMP_COLOR_HIGHCONTRAST  );
+            case SvtPathOptions::PATH_CONFIG:
+            case SvtPathOptions::PATH_FAVORITES:
+            case SvtPathOptions::PATH_HELP:
+            case SvtPathOptions::PATH_MODULE:
+            case SvtPathOptions::PATH_STORAGE:
+            break;
+            default:
+            {
+                String aStr( SVX_RES(RID_SVXSTR_PATH_NAME_START + i));
+                String sTmpPath(aPathOpt.GetPath(SvtPathOptions::Pathes(i)));
+                String aValue( sTmpPath );
+                if(i == SvtPathOptions::PATH_ADDIN ||
+                        i == SvtPathOptions::PATH_FILTER ||
+                        i == SvtPathOptions::PATH_HELP  ||
+                        i == SvtPathOptions::PATH_MODULE  ||
+                        i == SvtPathOptions::PATH_PLUGIN  ||
+                        i == SvtPathOptions::PATH_STORAGE  )
+                    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sTmpPath, aValue );
+                aStr += '\t';
+                aStr += Convert_Impl( aValue );
+                SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
+                BOOL   bReadonly = aPathOpt.IsPathReadonly((SvtPathOptions::Pathes) i);
+                if(bReadonly)
+                {
+                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImage,   BMP_COLOR_NORMAL );
+                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImageHC,   BMP_COLOR_HIGHCONTRAST  );
+                }
+                PathUserData_Impl* pPathImpl = new PathUserData_Impl( i );
+                pPathImpl->aPathStr = aValue;
+                pEntry->SetUserData( pPathImpl );
+            }
         }
-        PathUserData_Impl* pPathImpl = new PathUserData_Impl( i );
-        pPathImpl->aPathStr = aValue;
-        pEntry->SetUserData( pPathImpl );
-    }
-
     String aUserData = GetUserData();
-
     if ( aUserData.Len() )
     {
         // Spaltenbreite restaurieren
