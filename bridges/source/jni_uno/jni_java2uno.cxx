@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:00 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,8 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
     {
 #if defined _DEBUG
         // append java stack trace to Message member
-        *reinterpret_cast< OUString * >( uno_exc->pData ) += jni.get_stack_trace();
+        reinterpret_cast< ::com::sun::star::uno::Exception * >( uno_exc->pData )->Message +=
+            jni.get_stack_trace();
 #endif
 
 #if defined DEBUG
