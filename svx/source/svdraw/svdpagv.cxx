@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:18:18 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 10:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,23 @@ SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj
 {
     DBG_ASSERT( xControl.is(), "SdrUnoControlRec::SdrUnoControlRec: invalid control, this will crash!" );
 
+    bVisible = xControl.is() ? !xControl->isDesignMode() : TRUE;
+    bool bOldVisible = bVisible;
+
+    // if bVisible is TRUE here, then switchControlListening will also start
+    // DesignModeListening
     switchControlListening( true );
 
     // adjust the initial visibility according to the visibility of the layer
     // 2003-06-03 - #110592# - fs@openoffice.org
     adjustControlVisibility( true );
+
+    // no start this design mode listening
+    if ( bOldVisible && !bOldVisible )
+        // visibility changed from true to false -> explicitly
+        // start DesignModeListening
+        // 2003-07-18 - #110916# - fs@openoffice.org
+        switchDesignModeListening( true );
 }
 
 //------------------------------------------------------------------------------
@@ -169,7 +181,7 @@ void SdrUnoControlRec::adjustControlVisibility( bool _bForce )
 {
     uno::Reference< awt::XWindow > xControlWindow( xControl, uno::UNO_QUERY );
     if ( xControlWindow.is() && !xControl->isDesignMode() )
-        {
+    {
         // the layer of our object
         SdrLayerID nObjectLayer = pObj->GetLayer();
         // the SdrPageView we're living in
