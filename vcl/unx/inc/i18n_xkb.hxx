@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_xkb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,11 @@
 #include <sal/types.h>
 #endif
 
-class SalI18N_KeyboardExtension
+#ifndef _VCL_DLLAPI_H
+#include <dllapi.h>
+#endif
+
+class VCL_DLLPUBLIC SalI18N_KeyboardExtension
 {
 private:
 
