@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsort.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:23:44 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _DOC_HXX
@@ -92,7 +91,9 @@
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
-
+#ifndef _NODE2LAY_HXX
+#include <node2lay.hxx>
+#endif
 
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
@@ -161,9 +162,13 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
             pUndoTblAttr->Undo( rIter );
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
+
+        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // does not work if the table is inside a frame and has no prev/next.
+        SwNode2Layout aNode2Layout( *pTblNd );
+        // <--
+
         pTblNd->DelFrms();
-        SwNodeIndex aBehindIdx( *pTblNd->EndOfSectionNode() );
-        rDoc.GetNodes().GoNext( &aBehindIdx );          // Index in Cntnt, hinter der Tabelle
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
@@ -181,7 +186,13 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
             // schon Verschobenen in der Liste merken
             aMovedList.Insert(pTarget, aMovedList.Count() );
         }
-        pTblNd->MakeFrms( &aBehindIdx);
+
+        // Restore table frames:
+        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // does not work if the table is inside a frame and has no prev/next.
+        const ULONG nIdx = pTblNd->GetIndex();
+        aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
+        // <--
     }
     else
     {
@@ -227,9 +238,13 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
+
+        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // does not work if the table is inside a frame and has no prev/next.
+        SwNode2Layout aNode2Layout( *pTblNd );
+        // <--
+
         pTblNd->DelFrms();
-        SwNodeIndex aBehindIdx( *pTblNd->EndOfSectionNode() );
-        rDoc.GetNodes().GoNext( &aBehindIdx );            // Index in Cntnt, hinter der Tabelle
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
@@ -250,7 +265,12 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         if( pUndoTblAttr )
             pUndoTblAttr->Redo( rIter );
 
-        pTblNd->MakeFrms( &aBehindIdx );
+        // Restore table frames:
+        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // does not work if the table is inside a frame and has no prev/next.
+        const ULONG nIdx = pTblNd->GetIndex();
+        aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
+        // <--
     }
     else
     {
