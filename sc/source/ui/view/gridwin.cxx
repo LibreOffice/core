@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:54:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1669,11 +1669,16 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
-    BOOL bAutoFill = TestMouse( rMEvt, TRUE );
-    if (bAutoFill)
+    BOOL bCrossPointer = TestMouse( rMEvt, TRUE );
+    if ( bCrossPointer )
+    {
+        if ( bDouble )
+            pViewData->GetView()->FillCrossDblClick();
+        else
         pScMod->InputEnterHandler();                                // Autofill etc.
+    }
 
-    if (!bAutoFill)
+    if ( !bCrossPointer )
     {
         nPagebreakMouse = HitPageBreak( rMEvt.GetPosPixel(), &aPagebreakSource,
                                             &nPagebreakBreak, &nPagebreakPrev );
@@ -1689,7 +1694,7 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
     if (!bFormulaMode && !bEditMode && rMEvt.IsLeft())
     {
-        if ( !bAutoFill && DrawMouseButtonDown(rMEvt) )
+        if ( !bCrossPointer && DrawMouseButtonDown(rMEvt) )
         {
             //if (DrawHasMarkedObj())
             //  pViewData->GetViewShell()->SetDrawShellOrSub();     // Draw-Objekt selektiert
@@ -1807,7 +1812,7 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( nMouseStatus != SC_GM_IGNORE && !bRefMode )
     {
-        if (bDouble)
+        if ( bDouble && !bCrossPointer )
         {
             if (nMouseStatus == SC_GM_TABDOWN)
                 nMouseStatus = SC_GM_DBLDOWN;
