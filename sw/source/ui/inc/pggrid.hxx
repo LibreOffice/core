@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-10 15:04:37 $
+ *  last change: $Author: os $ $Date: 2002-04-16 10:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,12 @@ class SwTextGridPage: public SfxTabPage
 
     FixedText       aLinesPerPageFT;
     NumericField    aLinesPerPageNF;
-    FixedText       aLinesPerPageHintFT;
 
     FixedText       aTextSizeFT;
     MetricField     aTextSizeMF;
 
     FixedText       aCharsPerLineFT;
     NumericField    aCharsPerLineNF;
-    FixedText       aCharsPerLineHintFT;
 
     FixedText       aRubySizeFT;
     MetricField     aRubySizeMF;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-10 15:04:37 $
+ *  last change: $Author: os $ $Date: 2002-04-16 10:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,10 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aLayoutFL               (this, ResId(FL_LAYOUT          )),
     aLinesPerPageFT         (this, ResId(FT_LINESPERPAGE    )),
     aLinesPerPageNF         (this, ResId(NF_LINESPERPAGE    )),
-    aLinesPerPageHintFT     (this, ResId(FT_LINESPERPAGEHINT)),
     aTextSizeFT             (this, ResId(FT_TEXTSIZE        )),
     aTextSizeMF             (this, ResId(MF_TEXTSIZE        )),
     aCharsPerLineFT         (this, ResId(FT_CHARSPERLINE    )),
     aCharsPerLineNF         (this, ResId(NF_CHARSPERLINE    )),
-    aCharsPerLineHintFT     (this, ResId(FT_CHARSPERLINEHINT)),
     aRubySizeFT             (this, ResId(FT_RUBYSIZE        )),
     aRubySizeMF             (this, ResId(MF_RUBYSIZE        )),
     aRubyBelowCB            (this, ResId(CB_RUBYBELOW       )),
