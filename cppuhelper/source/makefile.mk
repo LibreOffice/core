@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: dbo $ $Date: 2001-06-01 11:48:56 $
+#   last change: $Author: dbo $ $Date: 2001-06-07 08:58:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,13 +154,13 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 .IF "$(OS)$(CPU)$(COM)"=="WNTIMSC"
-SHL1VERSIONMAP=msci.map
+SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(OS)$(CPU)$(COM)"=="SOLARISSC52"
-SHL1VERSIONMAP=sols.map
+SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(OS)$(CPU)$(COM)"=="SOLARISIC52"
-SHL1VERSIONMAP=soli.map
+SHL1VERSIONMAP=cc5_solaris_intel.map
 .ELIF "$(OS)$(CPU)$(COM)"=="LINUXIGCC"
-SHL1VERSIONMAP=lngi.map
+SHL1VERSIONMAP=gcc2_linux_intel.map
 .ENDIF
 
 # --- Targets ------------------------------------------------------
