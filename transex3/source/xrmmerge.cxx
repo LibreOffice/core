@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:26:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include "xrmmerge.hxx"
 #include "utf8conv.hxx"
 #include "tokens.h"
+#include <iostream>
+#include <vector>
+
+using namespace std;
 
 extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
@@ -95,6 +99,7 @@ ByteString sInputFileName;
 ByteString sActFileName;
 ByteString sOutputFile;
 ByteString sMergeSrc;
+String sUsedTempFile;
 XRMResParser *pParser = NULL;
 
 extern "C" {
@@ -207,7 +212,12 @@ extern char *GetOutputFile( int argc, char* argv[])
     // command line is not valid
     return NULL;
 }
-
+void removeTempFile(){
+    if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
+        DirEntry aTempFile( sUsedTempFile );
+        aTempFile.Kill();
+    }
+}
 /*****************************************************************************/
 int InitXrmExport( char *pOutput )
 /*****************************************************************************/
@@ -243,14 +253,26 @@ int EndXrmExport()
 extern FILE *GetXrmFile()
 /*****************************************************************************/
 {
+    FILE *pFile = 0;
     // look for valid filename
     if ( sInputFileName.Len()) {
-
-        // able to open file?
-        FILE *pFile = fopen( sInputFileName.GetBuffer(), "r" );
-        if ( !pFile )
+        if( Export::fileHasUTF8ByteOrderMarker( sInputFileName ) ){
+            DirEntry aTempFile = Export::GetTempFile();
+            DirEntry aSourceFile( String( sInputFileName , RTL_TEXTENCODING_ASCII_US ) );
+            aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
+            String sTempFile = aTempFile.GetFull();
+            Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
+            pFile = fopen( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ).GetBuffer(), "r" );
+            sUsedTempFile = sTempFile;
+        }else{
+            // able to open file?
+            pFile = fopen( sInputFileName.GetBuffer(), "r" );
+            sUsedTempFile = String::CreateFromAscii("");
+        }
+        if ( !pFile ){
             fprintf( stderr, "Error: Could not open file %s\n",
                 sInputFileName.GetBuffer());
+        }
         else {
             // this is a valid file which can be opened, so
             // create path to project root
