@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-23 13:37:53 $
+ *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,7 @@ friend class WW8FormulaControl;
     void NewAttr( const SfxPoolItem& rAttr );
 
     BOOL GetFontParams( USHORT, FontFamily&, String&, FontPitch&, rtl_TextEncoding& );
-    BOOL SetNewFontAttr( USHORT nFCode, BOOL bSetEnums=TRUE );
+    BOOL SetNewFontAttr( USHORT nFCode, BOOL bSetEnums, USHORT nWhich );
     void ResetCharSetVars();
 
     const SfxPoolItem* GetFmtAttr( USHORT nWhich );
@@ -977,6 +977,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_Kern(             USHORT, BYTE* pData, short nLen );
     void Read_FontKern(         USHORT, BYTE* pData, short nLen );
     void Read_Invisible(        USHORT, BYTE* pData, short nLen );
+    void Read_Emphasis(         USHORT, BYTE* pData, short nLen );
 
     void Read_NoLineNumb(       USHORT nId, BYTE* pData, short nLen );
 
@@ -990,6 +991,8 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_KeepParas(        USHORT, BYTE* pData, short nLen );
     void Read_BreakBefore(      USHORT, BYTE* pData, short nLen );
     void Read_ApoPPC(           USHORT, BYTE* pData, short nLen );
+
+    void Read_BoolItem(         USHORT nId, BYTE*, short nLen );
 
     void Read_Border(           USHORT nId, BYTE* pData, short nLen );
     void Read_Tab(              USHORT nId, BYTE* pData, short nLen );
@@ -1116,11 +1119,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.6 2000-11-23 13:37:53 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.7 2000-12-01 11:22:52 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/11/23 13:37:53  khz
+      #79474# Save/restore PLCF state before/after reading header or footer data
+
       Revision 1.5  2000/11/20 14:09:17  jp
       Read_FieldIniFlags removed
 

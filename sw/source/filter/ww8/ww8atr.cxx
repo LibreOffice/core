@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-11-24 19:47:04 $
+ *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,9 @@
 #endif
 #ifndef _SVX_PBINITEM_HXX //autogen wg. SvxPaperBinItem
 #include <svx/pbinitem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX
+#include <svx/emphitem.hxx>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -675,6 +678,19 @@ static Writer& OutWW8_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutWW8_SwCJKFont( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if( rWrtWW8.bWrtWW8 )
+    {
+        rWrtWW8.InsUInt16( 0x286f );
+        rWrtWW8.pO->Insert( 1, rWrtWW8.pO->Count() );
+        rWrtWW8.InsUInt16( 0x4a50 );
+        rWrtWW8.InsUInt16( rWrtWW8.GetId( (const SvxFontItem&)rHt ) );
+    }
+    return rWrt;
+}
+
 static Writer& OutWW8_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
 {
     return OutWW8_SwBoldUSW( rWrt, 1,
@@ -797,13 +813,25 @@ static Writer& OutWW8_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutWW8_SwLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    const SvxLanguageItem& rAttr = (const SvxLanguageItem&)rHt;
+    USHORT nId = 0;
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
     if( rWrtWW8.bWrtWW8 )
-        rWrtWW8.InsUInt16( 0x486D );    // use sprmCRgLid0 rather than sprmCLid
+        switch( rHt.Which() )
+        {
+        case RES_CHRATR_LANGUAGE:       nId = 0x486D; break;
+        case RES_CHRATR_CJK_LANGUAGE:   nId = 0x486E; break;
+        }
     else
-        rWrtWW8.pO->Insert( 97, rWrtWW8.pO->Count() );
-    rWrtWW8.InsUInt16( rAttr.GetLanguage() );
+        nId = 97;
+
+    if( nId )
+    {
+        if( rWrtWW8.bWrtWW8 )
+            rWrtWW8.InsUInt16( nId );   // use sprmCRgLid0 rather than sprmCLid
+        else
+            rWrtWW8.pO->Insert( (BYTE)nId, rWrtWW8.pO->Count() );
+        rWrtWW8.InsUInt16( ((const SvxLanguageItem&)rHt).GetLanguage() );
+    }
     return rWrt;
 }
 
@@ -861,13 +889,49 @@ static Writer& OutWW8_SwEscapement( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutWW8_SwSize( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    const SvxFontHeightItem& rAttr = (const SvxFontHeightItem&)rHt;
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    USHORT nId = 0;
+    if( rWrtWW8.bWrtWW8 )
+        switch ( rHt.Which() )
+        {
+        case RES_CHRATR_FONTSIZE:
+        case RES_CHRATR_CJK_FONTSIZE:   nId = 0x4A43;   break;
+        }
+    else
+        nId = 99;
+
+    if( nId )
+    {
+        if( rWrtWW8.bWrtWW8 )
+            rWrtWW8.InsUInt16( nId );
+        else
+            rWrtWW8.pO->Insert( (BYTE)nId, rWrtWW8.pO->Count() );
+
+        const SvxFontHeightItem& rAttr = (const SvxFontHeightItem&)rHt;
+        rWrtWW8.InsUInt16( (UINT16)(( rAttr.GetHeight() + 5 ) / 10 ) );
+    }
+    return rWrt;
+}
+
+static Writer& OutWW8_EmphasisMark( Writer& rWrt, const SfxPoolItem& rHt )
+{
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
     if( rWrtWW8.bWrtWW8 )
-        rWrtWW8.InsUInt16( 0x4A43 );
-    else
-        rWrtWW8.pO->Insert( 99, rWrtWW8.pO->Count() );
-    rWrtWW8.InsUInt16( (UINT16)(( rAttr.GetHeight() + 5 ) / 10 ) );
+    {
+        BYTE nVal;
+        switch ( ((const SvxEmphasisMarkItem&)rHt).GetValue() )
+        {
+        case EMPHASISMARK_NONE:             nVal = 0;   break;
+        case EMPHASISMARK_SIDE_DOTS:        nVal = 2;   break;
+        case EMPHASISMARK_CIRCLE_ABOVE:     nVal = 3;   break;
+        case EMPHASISMARK_DOTS_BELOW:       nVal = 4;   break;
+//      case 1:
+        default:                            nVal = 1;   break;
+        }
+
+        rWrtWW8.InsUInt16( 0x2A34 );
+        rWrtWW8.pO->Insert( nVal, rWrtWW8.pO->Count() );
+    }
     return rWrt;
 }
 
@@ -1821,6 +1885,31 @@ static Writer& OutWW8_SvxHyphenZone( Writer& rWrt, const SfxPoolItem& rHt )
         rWrtWW8.pO->Insert( 44, rWrtWW8.pO->Count() );
 
     rWrtWW8.pO->Insert( rAttr.IsHyphen() ? 0 : 1, rWrtWW8.pO->Count() );
+    return rWrt;
+}
+
+static Writer& OutWW8_SfxBoolItem( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    USHORT nId = 0;
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if( rWrtWW8.bWrtWW8 )
+        switch ( rHt.Which() )
+        {
+        case RES_PARATR_SCRIPTSPACE:            nId = 0x2437;   break;
+        case RES_PARATR_HANGINGPUNCTUATION:     nId = 0x2435;   break;
+        case RES_PARATR_FORBIDDEN_RULES:        nId = 0x2433;   break;
+        }
+
+    if( nId )
+    {
+        if( rWrtWW8.bWrtWW8 )
+            rWrtWW8.InsUInt16( nId );
+        else
+            rWrtWW8.pO->Insert( (BYTE)nId, rWrtWW8.pO->Count() );
+
+        rWrtWW8.pO->Insert( ((SfxBoolItem&)rHt).GetValue() ? 1 : 0,
+                            rWrtWW8.pO->Count() );
+    }
     return rWrt;
 }
 
@@ -2893,7 +2982,7 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
                     rWW8Wrt.InsUInt16( 0xF203 );
                 else
                     rWW8Wrt.pO->Insert( 136, rWW8Wrt.pO->Count() );
-                rWW8Wrt.pO->Insert( n, rWW8Wrt.pO->Count() );
+                rWW8Wrt.pO->Insert( (BYTE)n, rWW8Wrt.pO->Count() );
                 rWW8Wrt.InsUInt16( rCol.CalcPrtColWidth( n, (USHORT)nPageSize ) );
 
                 if( n+1 != nCols )
@@ -2903,7 +2992,7 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
                         rWW8Wrt.InsUInt16( 0xF204 );
                     else
                         rWW8Wrt.pO->Insert( 137, rWW8Wrt.pO->Count() );
-                    rWW8Wrt.pO->Insert( n, rWW8Wrt.pO->Count() );
+                    rWW8Wrt.pO->Insert( (BYTE)n, rWW8Wrt.pO->Count() );
                     rWW8Wrt.InsUInt16( rColumns[ n ]->GetRight() +
                                        rColumns[ n + 1 ]->GetLeft() );
                 }
@@ -3305,18 +3394,18 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
 /* RES_CHRATR_BACKGROUND */         OutWW8_SwFmtCharBackground,
-/* RES_CHRATR_CJK_FONT */           0,
-/* RES_CHRATR_CJK_FONTSIZE */       0,
-/* RES_CHRATR_CJK_LANGUAGE */       0,
-/* RES_CHRATR_CJK_POSTURE */        0,
-/* RES_CHRATR_CJK_WEIGHT */         0,
+/* RES_CHRATR_CJK_FONT */           OutWW8_SwCJKFont,
+/* RES_CHRATR_CJK_FONTSIZE */       OutWW8_SwSize,
+/* RES_CHRATR_CJK_LANGUAGE */       OutWW8_SwLanguage,
+/* RES_CHRATR_CJK_POSTURE */        OutWW8_SwPosture,
+/* RES_CHRATR_CJK_WEIGHT */         OutWW8_SwWeight,
 /* RES_CHRATR_CTL_FONT */           0,
 /* RES_CHRATR_CTL_FONTSIZE */       0,
 /* RES_CHRATR_CTL_LANGUAGE */       0,
 /* RES_CHRATR_CTL_POSTURE */        0,
 /* RES_CHRATR_CTL_WEIGHT */         0,
 /* RES_CHRATR_WRITING_DIRECTION */  0,
-/* RES_CHRATR_DUMMY2 */             0,
+/* RES_CHRATR_EMPHASIS_MARK*/       OutWW8_EmphasisMark,
 /* RES_CHRATR_DUMMY3 */             0,
 /* RES_CHRATR_DUMMY4 */             0,
 /* RES_CHRATR_DUMMY5 */             0,
@@ -3351,9 +3440,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_PARATR_DROP */               0,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
 /* RES_PARATR_NUMRULE */            OutWW8_SwNumRuleItem,
-/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
-/* RES_PARATR_DUMMY1 */             0, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */        OutWW8_SfxBoolItem, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */ OutWW8_SfxBoolItem, // Dummy:
+/* RES_PARATR_DUMMY1 */             OutWW8_SfxBoolItem, // Dummy:
 /* RES_PARATR_DUMMY2 */             0, // Dummy:
 /* RES_PARATR_DUMMY3 */             0, // Dummy:
 /* RES_PARATR_DUMMY4 */             0, // Dummy:
@@ -3428,6 +3517,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/24 19:47:04  er
+      #80660# GetNumberFmt: new date keys
+
       Revision 1.3  2000/11/20 09:38:45  jp
       new para attributes - expand para range
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-23 13:37:53 $
+ *  last change: $Author: jp $ $Date: 2000-12-01 11:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1288,6 +1288,7 @@ protected:
     UINT16  istdMaxFixedWhenSaved;  // How many fixed-index istds are there?
     UINT16  nVerBuiltInNamesWhenSaved;  // Current version of built-in stylenames
     UINT16  ftcStandardChpStsh;     // ftc used by StandardChpStsh for this document
+    UINT16  ftcStandardChpCJKStsh;  // ftc used by StandardChpStsh for this document
 
 public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
@@ -1540,12 +1541,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.3 2000-11-23 13:37:53 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.4 2000-12-01 11:22:53 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/23 13:37:53  khz
+      #79474# Save/restore PLCF state before/after reading header or footer data
+
       Revision 1.2  2000/11/21 11:23:57  khz
       added comments
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-25 14:10:36 $
+ *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2526,22 +2526,22 @@ nWwNumLevel( 0 ), pStyRule( 0 )
 
 void WW8RStyle::Set1StyleDefaults()
 {
-    if( !bFontChanged )                         // Style hat keinen Font ?
+    if( !bFontChanged )     // Style has no Font? set the default
+        pIo->SetNewFontAttr( ftcStandardChpStsh, TRUE, RES_CHRATR_FONT );
+
+    if( !bCJKFontChanged )  // Style no CJK Font? set the default
+        pIo->SetNewFontAttr( ftcStandardChpCJKStsh, TRUE, RES_CHRATR_CJK_FONT );
+
+    if( !pIo->bNoAttrImport )
     {
-        short nWwDefaultFont = ftcStandardChpStsh;
-        pIo->SetNewFontAttr( nWwDefaultFont );  // ... dann hart 'reinsetzen
-    }
-    if( pIo->bNoAttrImport )
-        return;
-    if( !bFSizeChanged )
-    {                                           // Style hat keine FontSize ?
-        SvxFontHeightItem aSz( 200 );           // WW-Default: 10pt
-        pIo->pAktColl->SetAttr( aSz );
-    }
-    if( pIo->pWDop->fWidowControl && !bWidowsChanged )  // Widows ?
-    {
-        pIo->pAktColl->SetAttr( SvxWidowsItem( 2 ) );
-        pIo->pAktColl->SetAttr( SvxOrphansItem( 2 ) );
+        if( !bFSizeChanged )    // Style hat keine FontSize ? WW-Default: 10pt
+            pIo->pAktColl->SetAttr( SvxFontHeightItem( 200 ) );
+
+        if( pIo->pWDop->fWidowControl && !bWidowsChanged )  // Widows ?
+        {
+            pIo->pAktColl->SetAttr( SvxWidowsItem( 2 ) );
+            pIo->pAktColl->SetAttr( SvxOrphansItem( 2 ) );
+        }
     }
 }
 
@@ -2628,14 +2628,12 @@ SwCharFmt* WW8RStyle::MakeOrGetCharFmt( BOOL* pbStyExist, WW8_STD* pStd, const S
             return pFmt;
         }
     }
-    {
-        *pbStyExist = FALSE;
-        String aName( rName );
-        USHORT nPos = aName.Search( ',' );
-        if( nPos )  // mehrere Namen mit Komma getrennt gibts im SW nicht
-            aName.Erase( nPos );
-        return MakeNewCharFmt( pStd, aName );   // nicht gefunden
-    }
+    *pbStyExist = FALSE;
+    String aName( rName );
+    xub_StrLen nPos = aName.Search( ',' );
+    if( STRING_NOTFOUND != nPos )   // mehrere Namen mit Komma getrennt
+        aName.Erase( nPos );        // gibts im SW nicht
+    return MakeNewCharFmt( pStd, aName );   // nicht gefunden
 }
 
 //-----------------------------------------
@@ -2722,51 +2720,30 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl( BOOL* pbStyExist, WW8_STD* pStd, cons
     ASSERT( ( sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE ) == 75 ),
             "Style-UEbersetzungstabelle hat falsche Groesse" );
 
-#if 1
     if( pStd->sti < sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE )
         && aArr[pStd->sti]!=RES_NONE    // Default-Style bekannt
-        && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) ){ // nicht abgeschaltet
+        && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) ) // nicht abgeschaltet
+    {
 
         SwTxtFmtColl* pCol = pIo->rDoc.GetTxtCollFromPool( aArr[pStd->sti] );
-        if( pCol ){
+        if( pCol )
+        {
             *pbStyExist = TRUE;
             return pCol;
         }
     }
+    String aName( rName );
+    xub_StrLen nPos = aName.Search( ',' );
+    if( STRING_NOTFOUND != nPos )   // mehrere Namen mit Komma getrennt
+        aName.Erase( nPos );        // gibts im SW nicht
+    SwTxtFmtColl* pCol = SearchFmtColl( aName );
+    if( pCol )
     {
-        String aName( rName );
-        USHORT nPos = aName.Search( ',' );
-        if( nPos )  // mehrere Namen mit Komma getrennt gibts im SW nicht
-            aName.Erase( nPos );
-        SwTxtFmtColl* pCol = SearchFmtColl( aName );
-        if( pCol ){
-            *pbStyExist = TRUE;
-            return pCol;
-        }
-        *pbStyExist = FALSE;
-        return MakeNewFmtColl( pStd, aName );   // nicht gefunden
+        *pbStyExist = TRUE;
+        return pCol;
     }
-#else // 1
-    if( pIo->bNew                   // Einfuegen: immer neue Styles generieren
-        && pStd->sti < sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE )
-        && aArr[pStd->sti]!=RES_NONE    // Default-Style bekannt
-        && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) ){ // nicht abgeschaltet
-
-        SwTxtFmtColl* pCol = pIo->rDoc.GetTxtCollFromPool( aArr[pStd->sti] );
-        if( pCol ){
-            *pbStyExist = TRUE;
-            return pCol;
-        }
-    }
-    {
-        *pbStyExist = FALSE;
-        String aName( rName );
-        USHORT nPos = aName.Search( ',' );
-        if( nPos )  // mehrere Namen mit Komma getrennt gibts im SW nicht
-            aName.Erase( nPos );
-        return MakeNewFmtColl( pStd, aName );   // nicht gefunden
-    }
-#endif // !1
+    *pbStyExist = FALSE;
+    return MakeNewFmtColl( pStd, aName );   // nicht gefunden
 }
 
 void WW8RStyle::Import1Style( USHORT nNr )
@@ -2852,7 +2829,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
                                     // wird, gehts danach wieder richtig
 
     pStyRule = 0;                   // falls noetig, neu anlegen
-    bFontChanged = bFSizeChanged = bWidowsChanged = FALSE;
+    bFontChanged = bCJKFontChanged = bFSizeChanged = bWidowsChanged = FALSE;
     pIo->SetNAktColl( nNr );
     pIo->bStyNormal = nNr == 0;
 
@@ -3026,11 +3003,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.2 2000-10-25 14:10:36 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.3 2000-12-01 11:22:52 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/25 14:10:36  khz
+      Now supporting negative horizontal indentation of paragrahps and tables
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-28 15:22:49 $
+ *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,18 @@
 #endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX //autogen
+#include <svx/emphitem.hxx>
+#endif
+#ifndef _SVX_FORBIDDENRULEITEM_HXX
+#include <svx/forbiddenruleitem.hxx>
+#endif
+#ifndef _SVX_SCRIPSPACEITEM_HXX
+#include <svx/scriptspaceitem.hxx>
+#endif
+#ifndef _SVX_HNGPNCTITEM_HXX
+#include <svx/hngpnctitem.hxx>
 #endif
 
 #ifndef _SVX_PBINITEM_HXX
@@ -2936,7 +2948,7 @@ void SwWW8ImplReader::Read_Symbol( USHORT nId, BYTE* pData, short nLen )
         {
             // neues Font-Atribut aufmachen
             // (wird in SwWW8ImplReader::ReadChars() geschlossen)
-            if( SetNewFontAttr( SVBT16ToShort( pData ), FALSE ))
+            if( SetNewFontAttr( SVBT16ToShort( pData ), FALSE, RES_CHRATR_FONT ))
             {
                 if( bVer67 )
                     cSymbol = ByteString::ConvertToUnicode(
@@ -2953,11 +2965,13 @@ void SwWW8ImplReader::Read_Symbol( USHORT nId, BYTE* pData, short nLen )
 #  Zeichen - Attribute
 #**************************************************************************/
 
-static USHORT __FAR_DATA nEndIds[ 8 ] = {
+static USHORT __FAR_DATA nEndIds[ 8 + 2 ] = {
         RES_CHRATR_WEIGHT,          RES_CHRATR_POSTURE,
         RES_CHRATR_CROSSEDOUT,      RES_CHRATR_CONTOUR,
         RES_CHRATR_SHADOWED,        RES_CHRATR_CASEMAP,
-        RES_CHRATR_CASEMAP,         RES_CHRATR_CROSSEDOUT
+        RES_CHRATR_CASEMAP,         RES_CHRATR_CROSSEDOUT,
+
+        RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CJK_POSTURE
     };
 
 // Read_BoldUsw fuer Italic, Bold, Kapitaelchen, Versalien, durchgestrichen,
@@ -2969,13 +2983,16 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, BYTE* pData, short nLen )
     if( 0x2A53 != nId )
         nI = bVer67 ? nId - 85 : nId - 0x0835;  // Index 0..6
     else
-        nI = 7;                                                                 // Index 7 (Doppelt durchgestrichen)
+        nI = 7;                         // Index 7 (Doppelt durchgestrichen)
 
     BYTE nMask = 1 << nI;
 
     if( nLen < 0 )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ nI ] );
+        // reset the CJK Weight and Posture
+        if( nI < 2 )
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ 8 + nI ] );
         pCtrlStck->SetToggleAttr( nI, FALSE );
         return;
     }
@@ -3014,10 +3031,22 @@ void SwWW8ImplReader::SetToggleAttr( BYTE nAttrId, BOOL bOn )
 {
     switch( nAttrId )
     {
-    case 0: NewAttr( SvxWeightItem( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
-            break;
-    case 1: NewAttr( SvxPostureItem( bOn ? ITALIC_NORMAL : ITALIC_NONE ) );
-            break;
+    case 0:
+        {
+            SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL );
+            NewAttr( aAttr );
+            aAttr.SetWhich( RES_CHRATR_CJK_WEIGHT );
+            NewAttr( aAttr );
+        }
+        break;
+    case 1:
+        {
+            SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE );
+            NewAttr( aAttr );
+            aAttr.SetWhich( RES_CHRATR_CJK_POSTURE );
+            NewAttr( aAttr );
+        }
+        break;
     case 2: NewAttr( SvxCrossedOutItem( bOn ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
             break;
     case 3: NewAttr( SvxContourItem( bOn ) );
@@ -3279,7 +3308,8 @@ BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
     return TRUE;
 }
 
-BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums )
+BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
+                                        USHORT nWhich )
 {
     FontFamily eFamily;
     String aName;
@@ -3291,7 +3321,7 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums )
 
     CharSet eDstCharSet = eSrcCharSet;
 
-    SvxFontItem aFont( eFamily, aName, aEmptyStr, ePitch, eDstCharSet );
+    SvxFontItem aFont( eFamily, aName, aEmptyStr, ePitch, eDstCharSet, nWhich);
 
     if( bSetEnums )
     {
@@ -3306,7 +3336,6 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums )
     }
 
     NewAttr( aFont );                       // ...und 'reinsetzen
-
 
     return TRUE;
 }
@@ -3328,43 +3357,77 @@ void SwWW8ImplReader::ResetCharSetVars()
 /*
     Font ein oder ausschalten:
 */
-void SwWW8ImplReader::Read_FontCode( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_FontCode( USHORT nId, BYTE* pData, short nLen )
 {
     if( !bSymbol && !bIgnoreText )  // falls bSymbol, gilt der am Symbol
     {                               // (siehe sprmCSymbol) gesetzte Font !
-        if( nLen < 0 )
-        {                   // Ende des Attributes
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
-            ResetCharSetVars();
-            return;
+        switch( nId )
+        {
+        case 0x93:
+        case 0x4a51:
+        case 0x4a4f:    nId = RES_CHRATR_FONT;      break;
+        case 0x4a50:    nId = RES_CHRATR_CJK_FONT;  break;
+//          nId = RES_CHRATR_CTL_FONT;  break;
+        default:
+            return ;
         }
 
-        USHORT nFCode = SVBT16ToShort( pData ); // Font-Nummer
-
-        if( SetNewFontAttr( nFCode )        // Lies Inhalt
-            && pAktColl && pStyles )        // Style-Def ?
-            pStyles->bFontChanged = TRUE;   // merken zur Simulation Default-Font
+        if( nLen < 0 )
+        {                   // Ende des Attributes
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
+            ResetCharSetVars();
+        }
+        else
+        {
+            USHORT nFCode = SVBT16ToShort( pData );     // Font-Nummer
+            if( SetNewFontAttr( nFCode, TRUE, nId )     // Lies Inhalt
+                && pAktColl && pStyles )                // Style-Def ?
+            {
+                // merken zur Simulation Default-Font
+                if( RES_CHRATR_CJK_FONT == nId )
+                    pStyles->bCJKFontChanged = TRUE;
+                else
+                    pStyles->bFontChanged = TRUE;
+            }
+        }
     }
 }
 
 
 
 
-void SwWW8ImplReader::Read_FontSize( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_FontSize( USHORT nId, BYTE* pData, short nLen )
 {
-    if( nLen < 0 ){                 // Ende des Attributes
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONTSIZE );
-        return;
+    switch( nId )
+    {
+    case 99:
+    case 0x4a43:    nId = RES_CHRATR_FONTSIZE;      break;
+//  case 0x4a61:    nId = RES_CHRATR_CTL_FONTSIZE;  break;
+    default:
+        return ;
     }
 
-//  USHORT nFSize = bVer67 ? SVBT16ToShort( pData ) : *pData;         // Font-Groesse in halben Point
-    USHORT nFSize = SVBT16ToShort( pData );         // Font-Groesse in halben Point
-
+    if( nLen < 0 )          // Ende des Attributes
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), nId  );
+        if( RES_CHRATR_FONTSIZE == nId )  // reset additional the CJK size
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_CJK_FONTSIZE );
+    }
+    else
+    {
+        USHORT nFSize = SVBT16ToShort( pData ) * 10;         // Font-Groesse in halben Point
                                                 //  10 = 1440 / ( 72 * 2 )
-    SvxFontHeightItem aSz( (const ULONG)( (ULONG)nFSize * 10 ) );
-    NewAttr( aSz );
-    if( pAktColl && pStyles )           // Style-Def ?
-        pStyles->bFSizeChanged = TRUE;  // merken zur Simulation Default-FontSize
+
+        SvxFontHeightItem aSz( nFSize, 100, nId );
+        NewAttr( aSz );
+        if( RES_CHRATR_FONTSIZE == nId )  // set additional the CJK size
+        {
+            aSz.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+            NewAttr( aSz );
+        }
+        if( pAktColl && pStyles )           // Style-Def ?
+            pStyles->bFSizeChanged = TRUE;  // merken zur Simulation Default-FontSize
+    }
 }
 
 
@@ -3383,15 +3446,24 @@ void SwWW8ImplReader::Read_CharSet( USHORT nId, BYTE* pData, short nLen )
         eHardCharSet = RTL_TEXTENCODING_DONTKNOW;
 }
 
-void SwWW8ImplReader::Read_Language( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_Language( USHORT nId, BYTE* pData, short nLen )
 {
-    if( nLen < 0 ){                 // Ende des Attributes
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_LANGUAGE );
-        return;
+    switch( nId )
+    {
+    case 97:
+    case 0x486d:    nId = RES_CHRATR_LANGUAGE;      break;
+    case 0x486e:    nId = RES_CHRATR_CJK_LANGUAGE;  break;
+    default:
+        return ;
     }
-    USHORT nLang = SVBT16ToShort( pData );  // Language-Id
 
-    NewAttr( SvxLanguageItem( (const LanguageType)nLang ) );
+    if( nLen < 0 )                  // Ende des Attributes
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
+    else
+    {
+        USHORT nLang = SVBT16ToShort( pData );  // Language-Id
+        NewAttr( SvxLanguageItem( (const LanguageType)nLang, nId ));
+    }
 }
 
 
@@ -3780,6 +3852,49 @@ void SwWW8ImplReader::Read_Justify( USHORT, BYTE* pData, short nLen )
 }                                               // bei Stuss-Werten
 
 
+void SwWW8ImplReader::Read_BoolItem( USHORT nId, BYTE* pData, short nLen )
+{
+    switch( nId )
+    {
+    case 0x2433:    nId = RES_PARATR_FORBIDDEN_RULES;       break;
+    case 0x2435:    nId = RES_PARATR_HANGINGPUNCTUATION;    break;
+    case 0x2437:    nId = RES_PARATR_SCRIPTSPACE;           break;
+    default:
+        ASSERT( !this, "wrong Id" );
+        return ;
+    }
+
+    if( nLen < 0 )
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
+    else
+    {
+        SfxBoolItem* pI = (SfxBoolItem*)GetDfltAttr( nId )->Clone();
+        pI->SetValue( 0 != *pData );
+        NewAttr( *pI );
+        delete pI;
+    }
+}
+
+void SwWW8ImplReader::Read_Emphasis( USHORT, BYTE* pData, short nLen )
+{
+    if( nLen < 0 )
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_EMPHASIS_MARK );
+    else
+    {
+        sal_uInt16 nVal;
+        switch( *pData )
+        {
+        case 0:     nVal = EMPHASISMARK_NONE;           break;
+        case 2:     nVal = EMPHASISMARK_SIDE_DOTS;      break;
+        case 3:     nVal = EMPHASISMARK_CIRCLE_ABOVE;   break;
+        case 4:     nVal = EMPHASISMARK_DOTS_BELOW;     break;
+//      case 1:
+        default:    nVal = EMPHASISMARK_DOTS_ABOVE;     break;
+        }
+
+        NewAttr( SvxEmphasisMarkItem( nVal ) );
+    }
+}
 
 
 SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
@@ -4456,11 +4571,11 @@ SprmReadInfo aSprmReadTab[] = {
     0x2430, (FNReadRecord)0, //"sprmPFLocked" // pap.fLocked;0 or 1;byte;
     0x2431, &SwWW8ImplReader::Read_WidowControl, //"sprmPFWidowControl" // pap.fWidowControl;0 or 1;byte;
     0xC632, (FNReadRecord)0, //"sprmPRuler" // ;;variable length;
-    0x2433, (FNReadRecord)0, //"sprmPFKinsoku" // pap.fKinsoku;0 or 1;byte;
+    0x2433, &SwWW8ImplReader::Read_BoolItem, //"sprmPFKinsoku" // pap.fKinsoku;0 or 1;byte;
     0x2434, (FNReadRecord)0, //"sprmPFWordWrap" // pap.fWordWrap;0 or 1;byte;
-    0x2435, (FNReadRecord)0, //"sprmPFOverflowPunct" // pap.fOverflowPunct;0 or 1;byte;
+    0x2435, &SwWW8ImplReader::Read_BoolItem, //"sprmPFOverflowPunct" // pap.fOverflowPunct;0 or 1;byte;
     0x2436, (FNReadRecord)0, //"sprmPFTopLinePunct" // pap.fTopLinePunct;0 or 1;byte;
-    0x2437, (FNReadRecord)0, //"sprmPFAutoSpaceDE" // pap.fAutoSpaceDE;0 or 1;byte;
+    0x2437, &SwWW8ImplReader::Read_BoolItem, //"sprmPFAutoSpaceDE" // pap.fAutoSpaceDE;0 or 1;byte;
     0x2438, (FNReadRecord)0, //"sprmPFAutoSpaceDN" // pap.fAutoSpaceDN;0 or 1;byte;
     0x4439, (FNReadRecord)0, //"sprmPWAlignFont" // pap.wAlignFont;iFa (see description of PAP for definition);word;
     0x443A, (FNReadRecord)0, //"sprmPFrameTextFlow" // pap.fVertical pap.fBackward pap.fRotateFont;complex (see description of PAP for definition);word;
@@ -4495,7 +4610,8 @@ SprmReadInfo aSprmReadTab[] = {
     0xCA31, (FNReadRecord)0, //"sprmCIstdPermute" // chp.istd;permutation vector (see below);variable length;
     0x2A32, (FNReadRecord)0, //"sprmCDefault" // whole CHP (see below);none;variable length;
     0x2A33, (FNReadRecord)0, //"sprmCPlain" // whole CHP (see below);none; Laenge: 0;
-//0x2A34, ? ? ?, "sprmCKcd", // ;;;
+
+    0x2A34, &SwWW8ImplReader::Read_Emphasis, // "sprmCKcd", // ;;;
 
     0x0835, &SwWW8ImplReader::Read_BoldUsw, //"sprmCFBold" // chp.fBold;0,1, 128, or 129 (see below);byte;
     0x0836, &SwWW8ImplReader::Read_BoldUsw, //"sprmCFItalic" // chp.fItalic;0,1, 128, or 129 (see below);byte;
@@ -4543,7 +4659,7 @@ SprmReadInfo aSprmReadTab[] = {
 //0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
 //0x485F, ? ? ?  , "sprmCLidBi", // ;;;
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;
-//0x4A61, ? ? ?  , "sprmCHpsBi", // ;;;
+//0x4A61, &SwWW8ImplReader::Read_FontSize,  // "sprmCHpsBi", // ;;;
     0xCA62, (FNReadRecord)0, //"sprmCDispFldRMark" // chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;
     0x4863, (FNReadRecord)0, //"sprmCIbstRMarkDel" // chp.ibstRMarkDel;index into sttbRMark;short;
     0x6864, (FNReadRecord)0, //"sprmCDttmRMarkDel" // chp.dttmRMarkDel;DTTM;long;
@@ -4553,7 +4669,7 @@ SprmReadInfo aSprmReadTab[] = {
     0x0868, (FNReadRecord)0, //"sprmCFUsePgsuSettings" // chp.fUsePgsuSettings;1 or 0;bit;
     0x486B, (FNReadRecord)0, //"sprmCCpg" // ;;word;
     0x486D, &SwWW8ImplReader::Read_Language, //"sprmCRgLid0" // chp.rglid[0];LID: for non-Far East text;word;
-    0x486E, (FNReadRecord)0, //"sprmCRgLid1" // chp.rglid[1];LID: for Far East text;word;
+    0x486E, &SwWW8ImplReader::Read_Language, //"sprmCRgLid1" // chp.rglid[1];LID: for Far East text;word;
     0x286F, (FNReadRecord)0, //"sprmCIdctHint" // chp.idctHint;IDCT: (see below);byte;
     0x2E00, (FNReadRecord)0, //"sprmPicBrcl" // pic.brcl;brcl (see PIC structure definition);byte;
     0xCE01, (FNReadRecord)0, //"sprmPicScale" // pic.mx, pic.my, pic.dxaCropleft, pic.dyaCropTop pic.dxaCropRight, pic.dyaCropBottom;Complex (see below);length byte plus 12 bytes;
@@ -4762,12 +4878,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.5 2000-11-28 15:22:49 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.6 2000-12-01 11:22:52 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/28 15:22:49  khz
+      #79657# avoid accessing NULL pointer when reading LVL properties
+
       Revision 1.4  2000/10/26 12:23:38  khz
       add paragraph's left border to TabStops (as WW does)
 

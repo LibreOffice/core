@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@ friend class SwWW8ImplReader;
     BYTE nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
 
     BOOL bFontChanged   : 1;    // Fuer Simulation Default-Font
+    BOOL bCJKFontChanged: 1;    // Fuer Simulation Default-Font
     BOOL bFSizeChanged  : 1;    // Fuer Simulation Default-FontSize
     BOOL bWidowsChanged : 1;    // Fuer Simulation Default-Widows / Orphans
 
@@ -290,11 +291,14 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.2 2000-12-01 11:22:52 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.22  2000/09/18 16:05:00  willem.vandorp
       OpenOffice header added.
 
