@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-17 15:36:06 $
+ *  last change: $Author: mtg $ $Date: 2001-02-07 09:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertyS
 void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if (aPropertyName == OUString::createFromAscii("MediaType"))
+    if (aPropertyName.equalsAsciiL("MediaType", 9))
     {
         aValue >>= sMediaType;
 
@@ -156,12 +156,12 @@ void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropert
                 bToBeCompressed = sal_False;
         }
     }
-    else if (aPropertyName == OUString::createFromAscii("Size"))
+    else if (aPropertyName.equalsAsciiL("Size", 4))
         aValue >>= aEntry.nSize;
 #if SUPD>617
-    else if (aPropertyName == OUString::createFromAscii("Compressed"))
+    else if (aPropertyName.equalsAsciiL("Compressed",10))
 #else
-    else if (aPropertyName == OUString::createFromAscii("Compress"))
+    else if (aPropertyName.equalsAsciiL("Compress", 8))
 #endif
         aValue >>= bToBeCompressed;
     else
@@ -171,20 +171,20 @@ uno::Any SAL_CALL ZipPackageEntry::getPropertyValue( const ::rtl::OUString& Prop
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    if (PropertyName == OUString::createFromAscii("MediaType"))
+    if (PropertyName.equalsAsciiL("MediaType", 9))
     {
         aAny <<= sMediaType;
         return aAny;
     }
-    else if (PropertyName == OUString::createFromAscii("Size"))
+    else if (PropertyName.equalsAsciiL("Size", 4))
     {
         aAny <<= aEntry.nSize;
         return aAny;
     }
 #if SUPD>617
-    else if (PropertyName == OUString::createFromAscii("Compressed"))
+    else if (PropertyName.equalsAsciiL("Compressed",10))
 #else
-    else if (PropertyName == OUString::createFromAscii("Compress"))
+    else if (PropertyName.equalsAsciiL("Compress", 8))
 #endif
     {
         aAny <<= bToBeCompressed;

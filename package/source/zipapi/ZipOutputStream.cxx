@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-17 13:42:25 $
+ *  last change: $Author: mtg $ $Date: 2001-02-07 09:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,22 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
 void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
     throw(io::IOException, uno::RuntimeException)
 {
+    sal_Int32 nSize = rBuffer.getLength();
+    sal_Bool bFound = sal_False;
+    const sal_Int8 *pBuf = rBuffer.getConstArray();
+    for (sal_Int32 nIter = 0; nIter < nSize ; nIter++ )
+    {
+        if (*(pBuf+nIter) == '>')
+        {
+            if (bFound)
+                *((int*)0) = 42;
+            else
+                bFound = sal_True;
+        }
+        else
+            bFound = sal_False;
+    }
+
     switch (pCurrentEntry->nMethod)
     {
         case DEFLATED:

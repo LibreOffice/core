@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-23 13:54:12 $
+ *  last change: $Author: mtg $ $Date: 2001-02-07 09:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,15 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 }
                 // Then copy it back
+                try
+                {
+                    uno::Any aAny = pFolder->getPropertyValue(OUString::createFromAscii("MediaType"));
+                    aAny >>= pMan->sMediaType;
+                }
+                catch (::com::sun::star::beans::UnknownPropertyException & )
+                {
+                    VOS_ENSURE( 0, "MediaType is an unknown property!!" );
+                }
                 ZipPackageFolder::copyZipEntry(pFolder->aEntry, pMan->aEntry);
                 pFolder->aEntry.nOffset *= -1;
                 rManList.push_back (pMan);
@@ -337,7 +346,16 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 }
-                pMan->sMediaType = OUString::createFromAscii("");
+                try
+                {
+                    uno::Any aAny = pFolder->getPropertyValue(OUString::createFromAscii("MediaType"));
+                    aAny >>= pMan->sMediaType;
+                }
+                catch (::com::sun::star::beans::UnknownPropertyException & )
+                {
+                    VOS_ENSURE( 0, "MediaType is an unknown property!!" );
+                }
+
                 // Then copy it back
                 ZipPackageFolder::copyZipEntry(pFolder->aEntry, pMan->aEntry);
                 pFolder->aEntry.nOffset *= -1;
@@ -453,6 +471,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 }
             }
+
             try
             {
                 uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("MediaType"));

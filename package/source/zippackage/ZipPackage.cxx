@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
+ *  last change: $Author: mtg $ $Date: 2001-02-07 09:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,20 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     if (xRootFolder->hasByName(OUString::createFromAscii("META-INF")))
         xRootFolder->removeByName(OUString::createFromAscii("META-INF"));
 
+    ManifestEntry *pMan = new ManifestEntry;
+    ZipPackageFolder::copyZipEntry(pMan->aEntry, pRootFolder->aEntry);
+    pMan->aEntry.sName = OUString::createFromAscii("/");
+    try
+    {
+        Any aAny = pRootFolder->getPropertyValue(OUString::createFromAscii("MediaType"));
+        aAny >>= pMan->sMediaType;
+    }
+    catch (::com::sun::star::beans::UnknownPropertyException & )
+    {
+        VOS_ENSURE( 0, "MediaType is an unknown property!!" );
+    }
+
+    aManList.push_back(pMan);
     pRootFolder->saveContents(OUString::createFromAscii(""), aManList, *pZipOut);
 
     ZipPackageFolder *pMetaInfFolder = new ZipPackageFolder();
