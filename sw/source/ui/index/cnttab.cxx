@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-06 12:40:33 $
+ *  last change: $Author: fme $ $Date: 2002-08-23 08:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,8 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#include <unotools/collatorwrapper.hxx>
-#endif
-#ifndef SVTOOLS_COLLATORRESSOURCE_HXX
-#include <svtools/collatorres.hxx>
+#ifndef SVTOOLS_INDEXENTRYRESSOURCE_HXX
+#include <svtools/indexentryres.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -214,6 +211,9 @@
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _TOXHLP_HXX
+#include <toxwrap.hxx>
 #endif
 
 #ifndef _UTLUI_HRC
@@ -1095,11 +1095,20 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     sAddStyleUser(ResId(ST_USER_ADDSTYLE)),
     sAutoMarkType(ResId(ST_AUTOMARK_TYPE)),
     bFirstCall(sal_True),
-    pColRes(0)
+    pIndexRes(0)
 {
     FreeResource();
-    aLanguageLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
-                                 FALSE, FALSE, FALSE );
+
+    pIndexEntryWrapper = new IndexEntrySupplierWrapper();
+    Sequence< Locale > sLocaleList = pIndexEntryWrapper->GetLocaleList();
+    const sal_Int32 nCnt = sLocaleList.getLength();
+
+    const Locale* psLocaleList = sLocaleList.getConstArray();
+    for ( sal_Int32 nI = 0; nI < nCnt; ++nI )
+        aLanguageLB.InsertLanguage( SvxLocaleToLanguage( psLocaleList[ nI ] ) );
+
+//    aLanguageLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
+//                                 FALSE, FALSE, FALSE );
 
     sAddStyleContent = aAddStylesCB.GetText();
 
@@ -1155,7 +1164,8 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
   -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
 {
-    delete pColRes;
+    delete pIndexRes;
+    delete pIndexEntryWrapper;
 }
 /* -----------------21.10.99 17:03-------------------
 
@@ -1700,10 +1710,10 @@ IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, pButton )
 IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 {
     Locale aLcl( SvxCreateLocale( aLanguageLB.GetSelectLanguage() ) );
-    Sequence < OUString > aSeq(
-                            GetAppCollator().listCollatorAlgorithms( aLcl ));
-    if( !pColRes )
-        pColRes = new CollatorRessource();
+    Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
+
+    if( !pIndexRes )
+        pIndexRes = new IndexEntryRessource();
 
     String sOldString;
     void* pUserData;
@@ -1721,7 +1731,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     nEnd = aSeq.getLength();
     for( long nCnt = 0; nCnt < nEnd; ++nCnt )
     {
-        sUINm = pColRes->GetTranslation( sAlg = aSeq[ nCnt ] );
+        sUINm = pIndexRes->GetTranslation( sAlg = aSeq[ nCnt ] );
         nInsPos = aSortAlgorithmLB.InsertEntry( sUINm );
         aSortAlgorithmLB.SetEntryData( nInsPos, new String( sAlg ));
         if( sAlg == sOldString )
