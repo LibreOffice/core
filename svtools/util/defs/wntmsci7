@@ -9708,3 +9708,6 @@ _real@8@3ffeccccccccccccd000
 ??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx245163243@@QAE_NABUFilterEntry@@@Z
 ??RGroupTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx245163243@@QAE_NABUFilterEntry@@@Z
 ?realloc@?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@QAAXJ@Z
+?getSomething@SvNumberFormatsSupplierServiceObject@@UAA_JABV?$Sequence@C@uno@star@sun@com@@@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx1377123708@@QAE_NABUFilterEntry@@@Z
+??RGroupTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx1377123708@@QAE_NABUFilterEntry@@@Z
