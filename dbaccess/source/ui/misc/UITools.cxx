@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:19:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,6 +760,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                     aName = _rsTypeNames.GetToken(TYPE_DATETIME);
                     break;
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     aName = _rsTypeNames.GetToken(TYPE_BOOL);
                     break;
                 case DataType::TINYINT:
