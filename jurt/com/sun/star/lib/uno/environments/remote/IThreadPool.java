@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IThreadPool.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ package com.sun.star.lib.uno.environments.remote;
  * This interface is an abstraction of the various
  * threadpool implementations.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2002-06-25 07:16:52 $
+ * @version     $Revision: 1.5 $ $ $Date: 2003-10-09 10:09:56 $
  * @author      Joerg Budischewski
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPoolFactory
@@ -73,6 +73,13 @@ package com.sun.star.lib.uno.environments.remote;
  * @since       UDK1.0
  */
 public interface IThreadPool {
+    /**
+     * Retrieves the global threadId for the current thread.
+     * <p>
+     * @return the thread id
+     */
+    ThreadId getThreadId();
+
     /**
      * Attaches this thread to the thread pool.
      * <p>
