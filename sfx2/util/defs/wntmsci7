@@ -8273,3 +8273,12 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ??1OMailSendThread@@UAE@XZ
 ?onTerminated@OMailSendThread@@UAAXXZ
 ?run@OMailSendThread@@UAAXXZ
+?addStatusListener@SfxMacroLoader@@UAAXABV?$Reference@VXStatusListener@frame@star@sun@com@@@uno@star@sun@com@@ABUURL@util@456@@Z
+?dispatch@SfxMacroLoader@@UAAXABUURL@util@star@sun@com@@ABV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@456@@Z
+?dispatchWithNotification@SfxMacroLoader@@UAAXABUURL@util@star@sun@com@@ABV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@456@ABV?$Reference@VXDispatchResultListener@frame@star@sun@com@@@8456@@Z
+?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXTypeProvider@lang@456@PAVXNotifyingDispatch@frame@456@PAVXDispatch@frame@456@@Z
+?removeStatusListener@SfxMacroLoader@@UAAXABV?$Reference@VXStatusListener@frame@star@sun@com@@@uno@star@sun@com@@ABUURL@util@456@@Z
+?importFromOldStorage@SfxDialogLibraryContainer@@EAAXABVOUString@rtl@@@Z
+?implImportLibDescriptor@SfxLibraryContainer_Impl@@IAEXPAVSfxLibrary_Impl@@AAULibDescriptor@xmlscript@@@Z
+?importFromOldStorage@SfxScriptLibraryContainer@@EAAXABVOUString@rtl@@@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2109328713@@YAXABVSbxVariableRef@@PAX@Z
