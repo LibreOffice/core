@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:17:11 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,13 +181,13 @@ STDMETHODIMP_(ULONG) ProviderOleWrapper_Impl::AddRef()
 STDMETHODIMP_(ULONG) ProviderOleWrapper_Impl::Release()
 {
     MutexGuard aGuard( Mutex::getGlobalMutex());
-    m_refCount--;
+    ULONG refCount = --m_refCount;
     if (m_refCount == 0)
     {
         delete this;
     }
 
-    return m_refCount;
+    return refCount;
 }
 
 STDMETHODIMP ProviderOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
@@ -314,15 +314,14 @@ STDMETHODIMP_(ULONG) OneInstanceOleWrapper_Impl::AddRef()
 
 STDMETHODIMP_(ULONG) OneInstanceOleWrapper_Impl::Release()
 {
-
     MutexGuard oGuard( Mutex::getGlobalMutex());
-    m_refCount--;
+    ULONG refCount = --m_refCount;
     if ( m_refCount == 0)
     {
         delete this;
     }
 
-    return m_refCount;
+    return refCount;
 }
 
 STDMETHODIMP OneInstanceOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
