@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:40:29 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 20:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,7 +1215,7 @@ TabPage RID_HFBASE
         Text[ russian ] = "Äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ êàê äàòà, âğåìÿ è ò.ä. èñïîëüçóéòå êíîïêè.";
         Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
         Text[ japanese ] = "ï¾Œï½«ï¾ï¾„ã®å¤‰æ›´ã¾ãŸã¯æ—¥ä»˜ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã‚„æ™‚åˆ»ï¾Œï½¨ï½°ï¾™ï¾„ï¾ãªã©ã‚’æŒ¿å…¥ã™ã‚‹ã¨ãã¯ã€å¤‰æ›´ï¾ï¾ï¾€ï¾ã‚’ï½¸ï¾˜ï½¯ï½¸ã—ã¾ã™ã€‚";
-        Text[ chinese_traditional ] = "è«‹æ‚¨æŒ‰ä¸€ä¸‹æŒ‰éˆ•ï¹è®Šæ›´å­—å‹æˆ–æ’å…¥æ—¥æœŸï¹æ™‚é–“ç­‰å€åŸŸæŒ‡ä»¤ã€‚";
+        Text[ chinese_traditional ] = "è«‹æŒ‰ä¸€ä¸‹é€™å€‹æŒ‰éˆ•ä¾†è®Šæ›´å­—å‹æˆ–æ’å…¥æ—¥æœŸã€æ™‚é–“ç­‰å€åŸŸæŒ‡ä»¤ã€‚";
         Text[ arabic ] = "ÇÓÊÎÏã ÇáãİÇÊíÍ áÊÛííÑ äæÚ ÇáÎØ Ãæ áÅÖÇİÉ ÃæÇãÑ ÍŞæá¡ ãËá ÇáÊÇÑíÎ¡ Ãæ ÇáæŞÊ ...ÅáÎ.";
         Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
         Text[ chinese_simplified ] = "è¯·ç‚¹å‡»æŒ‰é’®ï¼Œæ›´æ”¹å­—ä½“æˆ–æ’å…¥æ—¥æœŸï¼Œæ—¶é—´ç­‰åŒºåŸŸæŒ‡ä»¤ã€‚";
@@ -1375,6 +1375,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
 
