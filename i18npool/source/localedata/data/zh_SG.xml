@@ -267,9 +267,9 @@
 </FormatElement>
 </LC_FORMAT>
 <LC_COLLATION>
-<Collator unoid="zh_SG.pinyin" default="true"/>
-<Collator unoid="zh_SG.stroke" default="false"/>
-<Collator unoid="zh_SG.radical" default="false"/>
+<Collator unoid="pinyin" default="true"/>
+<Collator unoid="stroke" default="false"/>
+<Collator unoid="radical" default="false"/>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>

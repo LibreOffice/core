@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.1 $
+#*  $Revision: 1.2 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-02-20 00:35:43 $
+#*  last change: $Author: bustamam $ $Date: 2002-03-15 19:08:57 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=i18npool
-TARGET=localedata_data
+TARGET=localedata
 
 # Disable debugging on MSC compilers, due linker bug
 .IF "$(COM)"=="MSC"
@@ -75,90 +75,43 @@ debug!=
 
 # --- Files --------------------------------------------------------
 
-MY_MISC_CXXFILES= \
-    $(MISC)$/localedata_de_DE.cxx	\
-    $(MISC)$/localedata_en_US.cxx	\
-    $(MISC)$/localedata_es_ES.cxx	\
-    $(MISC)$/localedata_fr_FR.cxx	\
-    $(MISC)$/localedata_it_IT.cxx	\
-    $(MISC)$/localedata_sv_SE.cxx	\
-    $(MISC)$/localedata_af_ZA.cxx	\
-    $(MISC)$/localedata_ca_ES.cxx	\
-    $(MISC)$/localedata_cs_CZ.cxx	\
-    $(MISC)$/localedata_da_DK.cxx	\
-    $(MISC)$/localedata_de_AT.cxx	\
-    $(MISC)$/localedata_de_CH.cxx	\
-    $(MISC)$/localedata_de_LU.cxx	\
-    $(MISC)$/localedata_el_GR.cxx	\
-    $(MISC)$/localedata_en_AU.cxx	\
-    $(MISC)$/localedata_en_BZ.cxx	\
-    $(MISC)$/localedata_en_CA.cxx	\
-    $(MISC)$/localedata_en_GB.cxx	\
-    $(MISC)$/localedata_en_IE.cxx	\
-    $(MISC)$/localedata_en_JM.cxx	\
-    $(MISC)$/localedata_en_NZ.cxx	\
-    $(MISC)$/localedata_en_PH.cxx	\
-    $(MISC)$/localedata_en_TT.cxx	\
-    $(MISC)$/localedata_en_ZA.cxx	\
-    $(MISC)$/localedata_en_ZW.cxx	\
-    $(MISC)$/localedata_es_AR.cxx	\
-    $(MISC)$/localedata_es_BO.cxx	\
-    $(MISC)$/localedata_es_CL.cxx	\
-    $(MISC)$/localedata_es_CO.cxx	\
-    $(MISC)$/localedata_es_CR.cxx	\
-    $(MISC)$/localedata_es_DO.cxx	\
-    $(MISC)$/localedata_es_EC.cxx	\
-    $(MISC)$/localedata_es_GT.cxx	\
-    $(MISC)$/localedata_es_HN.cxx	\
-    $(MISC)$/localedata_es_MX.cxx	\
-    $(MISC)$/localedata_es_NI.cxx	\
-    $(MISC)$/localedata_es_PA.cxx	\
-    $(MISC)$/localedata_es_PE.cxx	\
-    $(MISC)$/localedata_es_PR.cxx	\
-    $(MISC)$/localedata_es_PY.cxx	\
-    $(MISC)$/localedata_es_SV.cxx	\
-    $(MISC)$/localedata_es_UY.cxx	\
-    $(MISC)$/localedata_es_VE.cxx	\
-    $(MISC)$/localedata_fi_FI.cxx	\
-    $(MISC)$/localedata_fr_BE.cxx	\
-    $(MISC)$/localedata_fr_CA.cxx	\
-    $(MISC)$/localedata_fr_CH.cxx	\
-    $(MISC)$/localedata_fr_LU.cxx	\
-    $(MISC)$/localedata_fr_MC.cxx	\
-    $(MISC)$/localedata_hu_HU.cxx	\
-    $(MISC)$/localedata_id_ID.cxx	\
-    $(MISC)$/localedata_is_IS.cxx	\
-    $(MISC)$/localedata_it_CH.cxx	\
-    $(MISC)$/localedata_nl_BE.cxx	\
-    $(MISC)$/localedata_nl_NL.cxx	\
-    $(MISC)$/localedata_no_NO.cxx	\
-    $(MISC)$/localedata_nn_NO.cxx	\
-    $(MISC)$/localedata_pl_PL.cxx	\
-    $(MISC)$/localedata_pt_BR.cxx	\
-    $(MISC)$/localedata_pt_PT.cxx	\
-    $(MISC)$/localedata_ru_RU.cxx	\
-    $(MISC)$/localedata_sv_FI.cxx	\
-    $(MISC)$/localedata_tr_TR.cxx	\
-    $(MISC)$/localedata_nb_NO.cxx	\
-    $(MISC)$/localedata_en_CB.cxx	\
-    $(MISC)$/localedata_de_LI.cxx	\
-    $(MISC)$/localedata_ar_EG.cxx	\
-    $(MISC)$/localedata_ko_KR.cxx	\
-    $(MISC)$/localedata_ja_JP.cxx	\
-    $(MISC)$/localedata_zh_CN.cxx	\
-    $(MISC)$/localedata_zh_TW.cxx	\
-    $(MISC)$/localedata_zh_HK.cxx	\
-    $(MISC)$/localedata_zh_SG.cxx	\
-    $(MISC)$/localedata_zh_MO.cxx
+# English Locales
+SHL1TARGET=localedata_en
+SHL1IMPLIB= 	i$(SHL1TARGET)
+DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=	$(SHL1TARGET)
+DEFLIB1NAME=	$(SHL1TARGET)
+SHL1OBJS= \
+    $(SLO)$/localedata_en_AU.obj \
+    $(SLO)$/localedata_en_BZ.obj \
+    $(SLO)$/localedata_en_CA.obj \
+    $(SLO)$/localedata_en_CB.obj \
+    $(SLO)$/localedata_en_GB.obj \
+    $(SLO)$/localedata_en_IE.obj \
+    $(SLO)$/localedata_en_JM.obj \
+    $(SLO)$/localedata_en_NZ.obj \
+    $(SLO)$/localedata_en_PH.obj \
+    $(SLO)$/localedata_en_TT.obj \
+    $(SLO)$/localedata_en_US.obj \
+    $(SLO)$/localedata_en_ZA.obj \
+    $(SLO)$/localedata_en_ZW.obj
 
-SLOFILES=	\
+LIB1TARGET=	$(SLB)$/$(SHL1TARGET).lib
+LIB1OBJFILES=$(SHL1OBJS)
+
+# European Locales
+SHL2TARGET=localedata_euro
+SHL2IMPLIB= 	i$(SHL2TARGET)
+DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt
+SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=	$(SHL2TARGET)
+DEFLIB2NAME=	$(SHL2TARGET)
+SHL2OBJS=	\
     $(SLO)$/localedata_de_DE.obj	\
-    $(SLO)$/localedata_en_US.obj	\
-    $(SLO)$/localedata_es_ES.obj	\
     $(SLO)$/localedata_fr_FR.obj	\
     $(SLO)$/localedata_it_IT.obj	\
     $(SLO)$/localedata_sv_SE.obj	\
-    $(SLO)$/localedata_af_ZA.obj	\
     $(SLO)$/localedata_ca_ES.obj	\
     $(SLO)$/localedata_cs_CZ.obj	\
     $(SLO)$/localedata_da_DK.obj	\
@@ -166,43 +119,12 @@ SLOFILES=	\
     $(SLO)$/localedata_de_CH.obj	\
     $(SLO)$/localedata_de_LU.obj	\
     $(SLO)$/localedata_el_GR.obj	\
-    $(SLO)$/localedata_en_AU.obj	\
-    $(SLO)$/localedata_en_BZ.obj	\
-    $(SLO)$/localedata_en_CA.obj	\
-    $(SLO)$/localedata_en_GB.obj	\
-    $(SLO)$/localedata_en_IE.obj	\
-    $(SLO)$/localedata_en_JM.obj	\
-    $(SLO)$/localedata_en_NZ.obj	\
-    $(SLO)$/localedata_en_PH.obj	\
-    $(SLO)$/localedata_en_TT.obj	\
-    $(SLO)$/localedata_en_ZA.obj	\
-    $(SLO)$/localedata_en_ZW.obj	\
-    $(SLO)$/localedata_es_AR.obj	\
-    $(SLO)$/localedata_es_BO.obj	\
-    $(SLO)$/localedata_es_CL.obj	\
-    $(SLO)$/localedata_es_CO.obj	\
-    $(SLO)$/localedata_es_CR.obj	\
-    $(SLO)$/localedata_es_DO.obj	\
-    $(SLO)$/localedata_es_EC.obj	\
-    $(SLO)$/localedata_es_GT.obj	\
-    $(SLO)$/localedata_es_HN.obj	\
-    $(SLO)$/localedata_es_MX.obj	\
-    $(SLO)$/localedata_es_NI.obj	\
-    $(SLO)$/localedata_es_PA.obj	\
-    $(SLO)$/localedata_es_PE.obj	\
-    $(SLO)$/localedata_es_PR.obj	\
-    $(SLO)$/localedata_es_PY.obj	\
-    $(SLO)$/localedata_es_SV.obj	\
-    $(SLO)$/localedata_es_UY.obj	\
-    $(SLO)$/localedata_es_VE.obj	\
     $(SLO)$/localedata_fi_FI.obj	\
     $(SLO)$/localedata_fr_BE.obj	\
     $(SLO)$/localedata_fr_CA.obj	\
     $(SLO)$/localedata_fr_CH.obj	\
     $(SLO)$/localedata_fr_LU.obj	\
     $(SLO)$/localedata_fr_MC.obj	\
-    $(SLO)$/localedata_hu_HU.obj	\
-    $(SLO)$/localedata_id_ID.obj	\
     $(SLO)$/localedata_is_IS.obj	\
     $(SLO)$/localedata_it_CH.obj	\
     $(SLO)$/localedata_nl_BE.obj	\
@@ -216,26 +138,97 @@ SLOFILES=	\
     $(SLO)$/localedata_sv_FI.obj	\
     $(SLO)$/localedata_tr_TR.obj	\
     $(SLO)$/localedata_nb_NO.obj	\
-    $(SLO)$/localedata_en_CB.obj	\
-    $(SLO)$/localedata_de_LI.obj	\
-    $(SLO)$/localedata_ar_EG.obj	\
-    $(SLO)$/localedata_ko_KR.obj	\
-    $(SLO)$/localedata_ja_JP.obj	\
-    $(SLO)$/localedata_zh_CN.obj	\
-    $(SLO)$/localedata_zh_TW.obj	\
-    $(SLO)$/localedata_zh_HK.obj	\
-    $(SLO)$/localedata_zh_SG.obj	\
-    $(SLO)$/localedata_zh_MO.obj
+    $(SLO)$/localedata_de_LI.obj
+
+LIB2TARGET=	$(SLB)$/$(SHL2TARGET).lib
+LIB2OBJFILES=$(SHL2OBJS)
+
+# Missing
+#	$(SLO)$/localedata_et_EE.obj
+
+# Spanish Locales
+SHL3TARGET=localedata_es
+SHL3IMPLIB= 	i$(SHL3TARGET)
+DEF3DEPN=	$(MISC)$/$(SHL3TARGET).flt
+SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=	$(SHL3TARGET)
+DEFLIB3NAME=	$(SHL3TARGET)
+SHL3OBJS= \
+    $(SLO)$/localedata_es_AR.obj \
+    $(SLO)$/localedata_es_BO.obj \
+    $(SLO)$/localedata_es_CL.obj \
+    $(SLO)$/localedata_es_CO.obj \
+    $(SLO)$/localedata_es_CR.obj \
+    $(SLO)$/localedata_es_DO.obj \
+    $(SLO)$/localedata_es_EC.obj \
+    $(SLO)$/localedata_es_ES.obj \
+    $(SLO)$/localedata_es_GT.obj \
+    $(SLO)$/localedata_es_HN.obj \
+    $(SLO)$/localedata_es_MX.obj \
+    $(SLO)$/localedata_es_NI.obj \
+    $(SLO)$/localedata_es_PA.obj \
+    $(SLO)$/localedata_es_PE.obj \
+    $(SLO)$/localedata_es_PR.obj \
+    $(SLO)$/localedata_es_PY.obj \
+    $(SLO)$/localedata_es_SV.obj \
+    $(SLO)$/localedata_es_UY.obj \
+    $(SLO)$/localedata_es_VE.obj
+
+LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
+LIB3OBJFILES=$(SHL3OBJS)
+
+# Other Locales
+SHL4TARGET=localedata_others
+SHL4IMPLIB= 	i$(SHL4TARGET)
+DEF4DEPN=	$(MISC)$/$(SHL4TARGET).flt
+SHL4DEF=	$(MISC)$/$(SHL4TARGET).def
+DEF4NAME=	$(SHL4TARGET)
+DEFLIB4NAME=	$(SHL4TARGET)
+SHL4OBJS= \
+    $(SLO)$/localedata_af_ZA.obj \
+    $(SLO)$/localedata_ar_EG.obj \
+    $(SLO)$/localedata_ar_SA.obj \
+    $(SLO)$/localedata_he_IL.obj \
+    $(SLO)$/localedata_hu_HU.obj \
+    $(SLO)$/localedata_id_ID.obj \
+    $(SLO)$/localedata_ja_JP.obj \
+    $(SLO)$/localedata_ko_KR.obj \
+    $(SLO)$/localedata_th_TH.obj \
+    $(SLO)$/localedata_zh_CN.obj \
+    $(SLO)$/localedata_zh_HK.obj \
+    $(SLO)$/localedata_zh_MO.obj \
+    $(SLO)$/localedata_zh_SG.obj \
+    $(SLO)$/localedata_zh_TW.obj
+
+LIB4TARGET=	$(SLB)$/$(SHL4TARGET).lib
+LIB4OBJFILES=$(SHL4OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-$(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST) $(BIN)$/applicat.rdb
-
 $(BIN)$/applicat.rdb : $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/applicat.rdb
     +$(GNUCOPY) $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/applicat.rdb $(BIN)$/applicat.rdb
 
 $(MISC)$/localedata_%.cxx : %.xml
-    +-$(RM) $@
     +$(BIN)$/saxparser $* $< $@ $(BIN)$/applicat.rdb
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo Provider>> $@
+
+$(MISC)$/$(SHL2TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo Provider>> $@
+
+$(MISC)$/$(SHL3TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo Provider>> $@
+
+$(MISC)$/$(SHL4TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo Provider>> $@

@@ -181,7 +181,7 @@
 </FormatElement>
 </LC_FORMAT>
 <LC_COLLATION>
-<Collator unoid="ja_JP.charset" default="true">
+<Collator unoid="charset" default="true">
 </Collator>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>

@@ -320,8 +320,8 @@
 </LC_FORMAT>
 
 <LC_COLLATION>
-<Collator unoid="zh_HK.stroke" default="true" />
-<Collator unoid="zh_HK.radical" default="false" />
+<Collator unoid="stroke" default="true" />
+<Collator unoid="radical" default="false" />
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>

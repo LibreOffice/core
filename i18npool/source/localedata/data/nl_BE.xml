@@ -225,7 +225,7 @@
 </FormatElement>
 </LC_FORMAT>
 <LC_COLLATION>
-<Collator unoid="nl_BE.alphanumeric" default="true"/>
+<Collator unoid="alphanumeric" default="true"/>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>

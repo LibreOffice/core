@@ -325,10 +325,10 @@
 </LC_FORMAT>
 
 <LC_COLLATION>
-<Collator unoid="zh_CN.pinyin" default="true"/>
-<Collator unoid="zh_CN.stroke" default="false"/>
-<Collator unoid="zh_CN.radical" default="false"/>
-<Collator unoid="zh_CN.charset" default="false"/>
+<Collator unoid="pinyin" default="true"/>
+<Collator unoid="stroke" default="false"/>
+<Collator unoid="radical" default="false"/>
+<Collator unoid="charset" default="false"/>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>

@@ -363,8 +363,8 @@
 </FormatElement>
 </LC_FORMAT>
 <LC_COLLATION>
-<Collator unoid="ko_KR.charset" default="false"/>
-<Collator unoid="ko_KR.dict" default="true"/>
+<Collator unoid="charset" default="false"/>
+<Collator unoid="dict" default="true"/>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>

@@ -314,8 +314,8 @@
 
 <LC_COLLATION>
 
-<Collator unoid="zh_MO.stroke" default="true" />
-<Collator unoid="zh_MO.radical" default="false" />
+<Collator unoid="stroke" default="true" />
+<Collator unoid="radical" default="false" />
 
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>

@@ -350,10 +350,10 @@
 
 <LC_COLLATION>
 
-<Collator unoid="zh_TW.stroke" default="true" />
-<Collator unoid="zh_TW.radical" default="false" />
-<Collator unoid="zh_TW.zhuyin" default="false" />
-<Collator unoid="zh_TW.pinyin" default="false" />
+<Collator unoid="stroke" default="true" />
+<Collator unoid="radical" default="false" />
+<Collator unoid="zhuyin" default="false" />
+<Collator unoid="pinyin" default="false" />
 
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
@@ -649,7 +649,7 @@
 
 <Era>
 
-<EraID>Dummy</EraID>
+<EraID>before</EraID>
 <DefaultAbbrvName>民國前</DefaultAbbrvName>
 <DefaultFullName>中華民國前</DefaultFullName>
 
