@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-22 11:12:25 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 10:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <string.h>
+#include <malloc.h>
 
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
@@ -156,6 +157,8 @@ inline int IntFromFixed(FIXED f)
 // these variables can be static because they store system wide settings
 static BOOL bImplSalCourierScalable = FALSE;
 static BOOL bImplSalCourierNew = FALSE;
+
+static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics );
 
 // =======================================================================
 
@@ -919,9 +922,14 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
                 pMetric->mnOrientation = 0;
             }
             pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
-            pMetric->mnAscent           = aWinMetric.tmAscent;
-            pMetric->mnDescent          = aWinMetric.tmDescent;
             pMetric->mnLeading          = aWinMetric.tmInternalLeading;
+            pMetric->mnAscent           = aWinMetric.tmAscent;
+            if ( FontHasCJKUnicodeRange( this ))    // #107888# worakround for Asian...
+            {
+                pMetric->mnLeading  += aWinMetric.tmExternalLeading;
+                pMetric->mnAscent   += aWinMetric.tmExternalLeading;
+            }
+            pMetric->mnDescent          = aWinMetric.tmDescent;
             pMetric->mnSlant            = 0;
             pMetric->mnFirstChar        = aWinMetric.tmFirstChar;
             pMetric->mnLastChar         = aWinMetric.tmLastChar;
@@ -956,6 +964,11 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             pMetric->mnAscent           = aWinMetric.tmAscent;
             pMetric->mnDescent          = aWinMetric.tmDescent;
             pMetric->mnLeading          = aWinMetric.tmInternalLeading;
+            if ( FontHasCJKUnicodeRange( this ))    // #107888# worakround for Asian...
+            {
+                pMetric->mnLeading  += aWinMetric.tmExternalLeading;
+                pMetric->mnAscent   += aWinMetric.tmExternalLeading;
+            }
             pMetric->mnSlant            = 0;
             pMetric->mnFirstChar        = aWinMetric.tmFirstChar;
             pMetric->mnLastChar         = aWinMetric.tmLastChar;
@@ -1178,6 +1191,40 @@ static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
+
+static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics )
+{
+    BOOL bCJKCapable = FALSE;
+
+    if ( pGraphics )
+    {
+        const DWORD Cos2Tag = CalcTag( "OS/2" );
+        DWORD nRCos2 = GetFontData( pGraphics->maGraphicsData.mhDC, Cos2Tag, 0, NULL, 0 );
+        if ( nRCos2 != GDI_ERROR )
+        {
+            int nLength = nRCos2;
+            unsigned char* pOS2map = (unsigned char*)alloca( nLength );
+            nRCos2 = GetFontData( pGraphics->maGraphicsData.mhDC, Cos2Tag, 0, pOS2map, nLength );
+            sal_uInt32 version = GetUShort( pOS2map );
+            if ( version >= 0x0001 && nLength >= 58 )
+            {
+                // We need at least version 0x0001 (TrueType rev 1.66)
+                // to have access to the needed struct members.
+                sal_uInt32 ulUnicodeRange1 = GetUInt( pOS2map + 42 );
+                sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
+                sal_uInt32 ulUnicodeRange3 = GetUInt( pOS2map + 50 );
+                sal_uInt32 ulUnicodeRange4 = GetUInt( pOS2map + 54 );
+
+                // Check for CJK capabilities of the current font
+                sal_uInt32 nResult = ( ulUnicodeRange2 & 0x2fff0000 ) |
+                                     ( ulUnicodeRange3 & 0x00000001 );
+                bCJKCapable = ( nResult != 0 );
+            }
+        }
+    }
+
+    return bCJKCapable;
+}
 
 ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
