@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-03 13:58:24 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,17 @@
 #ifndef _ZIP_OUTPUT_STREAM_HXX
 #include <ZipOutputStream.hxx>
 #endif
+#ifndef _ZIP_PACKAGE_BUFFER_HXX
+#include <ZipPackageBuffer.hxx>
+#endif
 #ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
 #endif
+/*
 #ifndef _THREADED_BUFFER_HXX
 #include <ThreadedBuffer.hxx>
 #endif
+*/
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
 #endif
@@ -93,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP_
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP_
+#include <com/sun/star/packages/manifest/XManifestWriter.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
@@ -108,6 +116,12 @@
 #endif
 #ifndef _INTERACTION_REQUEST_HXX_
 #include <InteractionRequest.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include <cppuhelper/factory.hxx>
 #endif
 #include <memory>
 
@@ -125,9 +139,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::packages;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::container;
-using namespace com::sun::star::registry;
 using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::manifest;
@@ -177,10 +188,10 @@ void SuffixGenerator::generateFileName( OUString &rFileName, const OUString &rPr
     rFileName = aStringBuf.makeStringAndClear();
 }
 
+#ifdef MTG_DEBUG
 char * ImplGetChars( const OUString & rString )
 {
-    // Memory leak ? oh yeah! Who cares, this function lives until this feature works
-    // and no longer
+    // Memory leak ? Bah!
     sal_Int32 nLength = rString.getLength();
     const sal_Unicode *pString = rString.getStr();
     char * pChar = new char [nLength+1];
@@ -191,6 +202,7 @@ char * ImplGetChars( const OUString & rString )
     pChar[nLength] = '\0';
     return pChar;
 }
+#endif
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pContent(NULL)
@@ -201,7 +213,6 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xRootFolder (NULL)
 , xFactory(xNewFactory)
 , bHasEncryptedEntries ( sal_False )
-, bSpanned( sal_False )
 , nSegmentSize ( 0 )
 {
     pRootFolder = new ZipPackageFolder();
@@ -333,6 +344,7 @@ void ZipPackage::getZipFileContents()
                 const OUString sPropSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
                 const OUString sPropIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
                 const OUString sPropSize ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
+                const OUString sPropDigest ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
 
                 Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                 sal_Int32 nLength = aManifestSequence.getLength();
@@ -344,7 +356,7 @@ void ZipPackage::getZipFileContents()
                 {
                     OUString sPath, sMediaType;
                     const PropertyValue *pValue = pSequence->getConstArray();
-                    const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL;
+                    const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL, *pDigest = NULL;
                     for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                     {
                         if (pValue[j].Name.equals( sPropFullPath ) )
@@ -359,6 +371,8 @@ void ZipPackage::getZipFileContents()
                             pCount = &(pValue[j].Value);
                         else if (pValue[j].Name.equals( sPropSize ) )
                             pSize = &(pValue[j].Value);
+                        else if (pValue[j].Name.equals( sPropDigest ) )
+                            pDigest = &(pValue[j].Value);
                     }
                     if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
                     {
@@ -393,6 +407,12 @@ void ZipPackage::getZipFileContents()
                                 *pSize >>= nSize;
                                 pStream->setSize ( nSize );
 
+                                if ( pDigest )
+                                {
+                                    *pDigest >>= aSequence;
+                                    pStream->setDigest ( aSequence );
+                                }
+
                                 pStream->SetToBeEncrypted ( sal_True );
                                 bHasEncryptedEntries = sal_True;
                             }
@@ -420,6 +440,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     fprintf ( stderr, "MTG: initialise called on %s\n", ImplGetChars ( sURL ) );
 #endif
 
+    sal_Bool bSpanned = sal_False;
     try
     {
         Reference < XActiveDataSink > xSink = new ZipPackageSink;
@@ -453,14 +474,10 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         try
         {
             if ( bSpanned)
-            {
                 // after unSpanFile, xContentStream will refer to the tempfile containing
                 // the unspanned file
                 unSpanFile ();
-                pZipFile = new ZipFile ( xContentStream, sURL );
-            }
-            else
-                pZipFile = new ZipFile ( xContentStream, sal_True);
+            pZipFile = new ZipFile ( xContentStream, xFactory, sal_True );
             getZipFileContents();
         }
         catch ( IOException & )
@@ -671,54 +688,122 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     return xRef;
 }
 
-// XChangesBatch
-void SAL_CALL ZipPackage::commitChanges(  )
-        throw(WrappedTargetException, RuntimeException)
+void ZipPackage::writeTempFile()
 {
-    ThreadedBuffer *pBuffer;
-    Reference < XOutputStream > xOutBuffer = (pBuffer = new ThreadedBuffer ( n_ConstBufferSize, *this ));
-    Reference < XInputStream > xInBuffer ( pBuffer );
-    ZipOutputStream aZipOut ( xOutBuffer, nSegmentSize != 0);
-    pBuffer->setZipOutputStream ( aZipOut );
-
-    aZipOut.setMethod(DEFLATED);
-    aZipOut.setLevel(DEFAULT_COMPRESSION);
-
-    // Remove the old META-INF directory as this will be re-generated below.
-    // Pass save-contents a vector which will be used to store information
-    // that should be stored in the manifest.
-
-    const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
-    if (xRootFolder->hasByName( sMeta ) )
-        xRootFolder->removeByName( sMeta );
-    /// >>>>>>>>
-    // Then create a tempfile...
-    OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-
+    // First, create a temporary file to write to:
+    const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
     Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
 #ifdef MTG_DEBUG
     fprintf(stderr, "We have a %s tempfile!\n", xTempOut.is() ? "good" : "bad" );
 #endif
-    Reference < XInputStream > xTempIn = Reference < XInputStream > ( xTempOut, UNO_QUERY );
-    Reference < XSeekable > xTempSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY );
-    // Then write the full package to the temp file...
-    Sequence < sal_Int8 > aBuffer;
-    sal_Int64 nRead;
 
-    do
+    // Hand it to the ZipOutputStream:
+    ZipOutputStream aZipOut ( xTempOut, nSegmentSize != 0);
+    aZipOut.setMethod(DEFLATED);
+    aZipOut.setLevel(DEFAULT_COMPRESSION);
+
+    // Remove the old META-INF directory (if there is one) as the
+    // manifest will be re-generated and the META-INF directory implicitly
+    // created
+    const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
+    if (xRootFolder->hasByName( sMeta ) )
+        xRootFolder->removeByName( sMeta );
+
+    // Create a vector to store data for the manifest.xml file
+    vector < Sequence < PropertyValue > > aManList;
+
+    // Make a reference to the manifest output stream so it persists
+    // until the call to ZipOutputStream->finish()
+    Reference < XOutputStream > xManOutStream;
+    const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+    const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+
+    Sequence < PropertyValue > aPropSeq ( 2 );
+    aPropSeq [0].Name = sMediaType;
+    aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
+    aPropSeq [1].Name = sFullPath;
+    aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+
+    aManList.push_back( aPropSeq );
+
+    // Get a random number generator and seed it with current timestamp
+    // This will be used to generate random salt and initialisation vectors
+    // for encrypted streams
+    TimeValue aTime;
+    osl_getSystemTime( &aTime );
+    rtlRandomPool aRandomPool = rtl_random_createPool ();
+    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+
+    // call saveContents (it will recursively save sub-directories
+    pRootFolder->saveContents( OUString(), aManList, aZipOut, aEncryptionKey, aRandomPool );
+
+    // Clean up random pool memory
+    rtl_random_destroyPool ( aRandomPool );
+
+    // Write the manifest
+    OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
+    Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
+    if ( xWriter.is() )
     {
-        nRead = xInBuffer->readBytes ( aBuffer, n_ConstBufferSize );
-        xTempOut->writeBytes( aBuffer );
+        ZipEntry * pEntry = new ZipEntry;
+        ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+        xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
+
+        pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
+        pEntry->nMethod = DEFLATED;
+        pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+        pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+        // Convert vector into a Sequence
+        Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
+        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
+        for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+             aIter != aEnd;
+             aIter++, pSequence++)
+            *pSequence= (*aIter);
+        xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
+
+        sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+        pBuffer->realloc( nBufferLength );
+
+        try
+        {
+            // the manifest.xml is never encrypted - so pass an empty reference
+            vos::ORef < EncryptionData > xEmpty;
+            aZipOut.putNextEntry( *pEntry, xEmpty );
+            aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
+            aZipOut.closeEntry();
+        }
+        catch (::com::sun::star::io::IOException & )
+        {
+            VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
+        }
     }
-    while ( nRead == n_ConstBufferSize );
+    try
+    {
+        aZipOut.finish();
+    }
+    catch (::com::sun::star::io::IOException & )
+    {
+        VOS_ENSURE( 0, "Error writing ZIP file to disk" );
+    }
+
+    // Update our References to point to the new temp file
+    xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY );
+    xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY );
 
     // seek back to the beginning of the temp file so we can read segments from it
-    xTempSeek->seek ( 0 );
-    xContentStream = xTempIn;
-    xContentSeek = xTempSeek;
-    pZipFile->setInputStream ( xTempIn );
-    // <<<<<<<<<<
+    xContentSeek->seek ( 0 );
+    pZipFile->setInputStream ( xContentStream );
+}
 
+// XChangesBatch
+void SAL_CALL ZipPackage::commitChanges(  )
+        throw(WrappedTargetException, RuntimeException)
+{
+    // First we write the entire package to a temporary file. After writeTempFile,
+    // xContentSeek and xContentStream will reference the new temporary file.
+    writeTempFile();
 
     if (!nSegmentSize )
     {
@@ -726,30 +811,13 @@ void SAL_CALL ZipPackage::commitChanges(  )
         {
             if ( !pContent )
                 pContent = new Content(sURL, Reference < XCommandEnvironment >() );
-            pContent->writeStream ( xTempIn, sal_True );
+            pContent->writeStream ( xContentStream, sal_True );
         }
         catch (::com::sun::star::uno::Exception& r)
         {
             throw WrappedTargetException( OUString::createFromAscii( "Unable to write Zip File to disk!" ),
                     static_cast < OWeakObject * > ( this ), makeAny( r ) );
         }
-        /*
-        Reference < XActiveDataSink > xSink = new ZipPackageSink;
-         * We want to reference the temp file, not the one we just wrote
-        try
-        {
-            // Update our references to point to the new file
-            if (pContent->openStream ( xSink ) )
-                xContentStream = xSink->getInputStream();
-            xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
-            pZipFile->setInputStream ( xContentStream );
-        }
-        catch (com::sun::star::uno::Exception& r)
-        {
-            throw WrappedTargetException( OUString::createFromAscii( "Unable to read Zip File content!" ),
-                static_cast < OWeakObject * > ( this ), makeAny( r ) );
-        }
-        */
     }
     else
     {
@@ -788,9 +856,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
         SuffixGenerator aGenerator;
         do
         {
-            //pBuffer->nextSegment( ++nDiskNum);
             nDiskNum++;
-            sal_Int64 nCurrentPos = xTempSeek->getPosition();
+            sal_Int64 nCurrentPos = xContentSeek->getPosition();
             if ( nDiskNum == 1 )
                 sFileName = sURL.copy ( 1 + nLastSlash );
             else
@@ -802,18 +869,18 @@ void SAL_CALL ZipPackage::commitChanges(  )
 
                 do
                 {
-                    eRet = writeSegment ( sFileName, sMountPath, xTempIn, nDiskNum );
+                    eRet = writeSegment ( sFileName, sMountPath, xContentStream, nDiskNum );
                     if (eRet == e_Aborted)
                         return;
                     else if ( eRet == e_Retry )
-                        xTempSeek->seek ( nCurrentPos );
+                        xContentSeek->seek ( nCurrentPos );
                 }
                 while ( eRet == e_Retry );
             }
             else
             {
                 OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
-                if ( xTempSeek->getLength() > static_cast < sal_Int64 > ( aInfo.getFreeSpace() ) )
+                if ( xContentSeek->getLength() > static_cast < sal_Int64 > ( aInfo.getFreeSpace() ) )
                 {
                     // no room on the hard drive, display a message and return
                     HandleError (  osl_File_E_NOSPC, EC_YES, sFullPath );
@@ -825,7 +892,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                     {
                         if ( !pContent )
                             pContent = new Content(sURL, Reference < XCommandEnvironment >() );
-                        pContent->writeStream ( xTempIn, sal_True );
+                        pContent->writeStream ( xContentStream, sal_True );
                     }
                     catch (::com::sun::star::uno::Exception& r)
                     {
@@ -837,11 +904,11 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 {
                     do
                     {
-                        eRet = writeSegment ( sFullPath, xTempIn );
+                        eRet = writeSegment ( sFullPath, xContentStream );
                         if (eRet == e_Aborted)
                             return;
                         else if ( eRet == e_Retry )
-                            xTempSeek->seek ( nCurrentPos );
+                            xContentSeek->seek ( nCurrentPos );
                     }
                     while ( eRet == e_Retry );
                 }
