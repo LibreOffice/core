@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:43:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,7 +843,9 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
-                bRet = pEmbObj->DoSaveAs( xWorkStore );
+                // mba: no BaseURL for clipboard
+                SfxMedium aMedium( xWorkStore, String() );
+                bRet = pEmbObj->DoSaveObjectAs( aMedium, FALSE );
                 pEmbObj->DoSaveCompleted();
 
                 uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
@@ -887,15 +889,15 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         break;
 
     case SWTRANSFER_OBJECTTYPE_HTML:
-        GetHTMLWriter( aEmptyStr, xWrt );
+        GetHTMLWriter( aEmptyStr, String(), xWrt );
         break;
 
     case SWTRANSFER_OBJECTTYPE_RTF:
-        GetRTFWriter( aEmptyStr, xWrt );
+        GetRTFWriter( aEmptyStr, String(), xWrt );
         break;
 
     case SWTRANSFER_OBJECTTYPE_STRING:
-        GetASCWriter( aEmptyStr, xWrt );
+        GetASCWriter( aEmptyStr, String(), xWrt );
         if( xWrt.Is() )
         {
             SwAsciiOptions aAOpt;
@@ -910,11 +912,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
     if( xWrt.Is() )
     {
-        //JP 12.04.96: fuer die absoluten/relative Namen -> absolut lassen!
         SwDoc* pDoc = (SwDoc*)pObject;
-        String sSave( INetURLObject::GetBaseURL() );
-        INetURLObject::SetBaseURL( aEmptyStr );
-
         xWrt->bWriteClipboardDoc = TRUE;
         xWrt->bWriteOnlyFirstTable = 0 != (TRNSFR_TABELLE & eBufferType);
         xWrt->SetShowProgress( FALSE );
@@ -925,7 +923,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             xStream->Commit();
             bRet = sal_True;
         }
-        INetURLObject::SetBaseURL( sSave );
     }
 
     return bRet;
@@ -1752,7 +1749,6 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     int nRet = 0;
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
-    String sTmpBaseURL( INetURLObject::GetBaseURL() );
 
     SotStorageStreamRef xStrm;
     SvStream* pStream = 0;
@@ -1791,7 +1787,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                 pStream = aMSE40ClpObj.IsValid( *xStrm );
                 pRead = ReadHTML;
                 pRead->SetReadUTF8( TRUE );
-                INetURLObject::SetBaseURL( aMSE40ClpObj.GetBaseURL() );
+                //pRead->SetBaseURL( aMSE40ClpObj.GetBaseURL() );
 
                 BOOL bNoComments =
                     ( nFmt == SOT_FORMATSTR_ID_HTML_NO_COMMENT );
@@ -1814,13 +1810,11 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         Link aOldLink( rSh.GetChgLnk() );
         rSh.SetChgLnk( Link() );
 
-        SwReader aReader( *pStream, aEmptyStr, *rSh.GetCrsr() );
+        SwReader aReader( *pStream, aEmptyStr, String(), *rSh.GetCrsr() );
         if( IsError( aReader.Read( *pRead )) )
             nResId = ERR_CLPBRD_READ;
         else
             nResId = 0, nRet = 1;
-
-        INetURLObject::SetBaseURL( sTmpBaseURL );
 
         rSh.SetChgLnk( aOldLink );
         if( nRet )
@@ -2308,8 +2302,9 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 String sDesc;
                 SwTransferable::_CheckForURLOrLNKFile( rData, sTxt, &sDesc );
 
+                INetURLObject aTemp( sTxt );
                 aBkmk = INetBookmark(
-                    URIHelper::SmartRelToAbs( sTxt ), sDesc );
+                    aTemp.GetMainURL(INetURLObject::NO_DECODE), sDesc );
                 bCheckForGrf = TRUE;
                 bCheckForImageMap = SW_PASTESDR_REPLACE == nAction;
             }
@@ -2412,7 +2407,8 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         SvStream* pStream = aMed.GetInStream();
         if( pStream != NULL  &&
             !pStream->GetError()  &&
-            aMap.Read( *pStream, IMAP_FORMAT_DETECT ) == IMAP_ERR_OK &&
+            // mba: no BaseURL for clipboard functionality
+            aMap.Read( *pStream, IMAP_FORMAT_DETECT, String() ) == IMAP_ERR_OK &&
             aMap.GetIMapObjectCount() )
         {
             SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
@@ -2546,7 +2542,8 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
     // und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
                     SwSection* pSect = new SwSection( FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
-                    pSect->SetLinkFileName( URIHelper::SmartRelToAbs( sFile ) );
+                    INetURLObject aTemp( sFile );
+                    pSect->SetLinkFileName( aTemp.GetMainURL(INetURLObject::NO_DECODE) );
                     pSect->SetProtect( TRUE );
 
                     Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
