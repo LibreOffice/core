@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-19 15:57:06 $
+ *  last change: $Author: ka $ $Date: 2001-12-20 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,12 +425,6 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
         if( pSet )
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
     }
-
-    // adjust macro mode
-    const String aScriptType;
-
-    if( bRet && pDoc && pDoc->containsActiveCode( aScriptType ) )
-        AdjustMacroMode( aScriptType );
 
     return bRet;
 }
