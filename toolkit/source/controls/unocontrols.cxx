@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 11:16:00 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 12:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,18 +984,21 @@ void UnoEditControl::setText( const ::rtl::OUString& aText ) throw(uno::RuntimeE
     uno::Any aAny;
     aAny <<= aText;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_True );
+
+    // Setting the property to the VCLXWindow doesn't call textChanged
+    if ( maTextListeners.getLength() )
+    {
+        ::com::sun::star::awt::TextEvent aEvent;
+        aEvent.Source = (::cppu::OWeakObject*)this;
+        maTextListeners.textChanged( aEvent );
+    }
 }
 
-void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUString& aText ) throw(uno::RuntimeException)
+void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUString& rNewText ) throw(uno::RuntimeException)
 {
-    uno::Any aAny;
-    aAny <<= aText;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_True );
-    if ( mxPeer.is() )
-    {
-        uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
-        xText->insertText( rSel, aText );
-    }
+    ::rtl::OUString aOldText = getText();
+    ::rtl::OUString  aNewText = aOldText.replaceAt( rSel.Min, rSel.Max - rSel.Min, rNewText );
+    setText( aNewText );
 }
 
 ::rtl::OUString UnoEditControl::getText() throw(uno::RuntimeException)
