@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-10-15 11:57:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,9 @@ static sal_uInt16 nKey1Pos = USHRT_MAX;
 
 static sal_uInt16 nKey2Pos = USHRT_MAX;
 
+static const char*  pUserItemNamePosX = "POSX";
+static const char*  pUserItemNamePosY = "POSY";
+
 using namespace com::sun::star;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
@@ -212,8 +215,10 @@ using namespace ::com::sun::star;
  --------------------------------------------------------------------*/
 SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
                                sal_Bool bNewDlg,
-                               const ResId& rResId ) :
+                               const ResId& rResId,
+                               sal_Int32 _nOptionsId ) :
       Window(pParent, rResId),
+    nOptionsId( _nOptionsId ),
     bDel(sal_False),
     bNewMark(bNewDlg),
     pTOXMgr(0),
@@ -1196,7 +1201,7 @@ SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* pBindings,
                                    Window *pParent,
                                    sal_Bool bNew) :
 SfxModelessDialog(pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_INSIDXMARK_CJK):SW_RES(DLG_INSIDXMARK)),
-    aDlg(this, bNew, ResId(WIN_DLG))
+    aDlg(this, bNew, ResId(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_INSIDXMARK_CJK:DLG_INSIDXMARK)
 {
     FreeResource();
 }
@@ -1213,7 +1218,7 @@ void    SwIndexMarkFloatDlg::Activate()
  --------------------------------------------------*/
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) :
 SvxStandardDialog(pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_EDIT_IDXMARK_CJK):SW_RES(DLG_EDIT_IDXMARK)),
-    aDlg(this, sal_False, ResId(WIN_DLG))
+    aDlg(this, sal_False, ResId(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_EDIT_IDXMARK_CJK:DLG_EDIT_IDXMARK)
 {
     FreeResource();
     aDlg.ReInitDlg(rSh, pCurTOXMark);
@@ -1245,6 +1250,8 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
     rDlg.ReInitDlg(*pWrtShell);
 
     ((SwIndexMarkFloatDlg*)pWindow)->Initialize(pInfo);
+    pWindow->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
+                        // -> Show() will invoke StateChanged() and save pos
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
 /* -----------------07.09.99 09:14-------------------
