@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:06:57 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1899,6 +1899,10 @@ BOOL SwFEShell::ImpEndCreate()
         SwFmtVertOrient aVert( nYOffset, VERT_NONE, FRAME );
         aSet.Put( aVert );
         SwDrawFrmFmt* pFmt = (SwDrawFrmFmt*)GetDoc()->MakeLayoutFmt( RND_DRAW_OBJECT, 0, &aSet );
+        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        pFmt->SetPositionLayoutDir(
+            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+        // <--
 
         SwDrawContact *pContact = new SwDrawContact( pFmt, &rSdrObj );
         if( bCharBound )
