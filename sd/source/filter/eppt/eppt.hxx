@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-23 13:55:55 $
+ *  last change: $Author: sj $ $Date: 2001-08-31 14:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ class GroupTable
         void                    SkipCurrentGroup();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
-        void                    EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
+        sal_Bool                EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
         sal_Bool                GetNextGroupEntry();
                                 GroupTable();
                                 ~GroupTable();

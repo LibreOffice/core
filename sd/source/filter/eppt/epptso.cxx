@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-23 13:55:55 $
+ *  last change: $Author: sj $ $Date: 2001-08-31 14:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,14 +340,23 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
 
 // ---------------------------------------------------------------------------------------------
 
-void GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
+sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
 {
+    sal_Bool bRet = sal_False;
     if ( rXIndexAccessRef.is() )
     {
-        if ( mnMaxGroupEntry == mnCurrentGroupEntry )
-            ImplResizeGroupTable( mnMaxGroupEntry + 8 );
-        mpGroupEntry[ mnCurrentGroupEntry++ ] = new GroupEntry( rXIndexAccessRef );
+        GroupEntry* pNewGroup = new GroupEntry( rXIndexAccessRef );
+        if ( pNewGroup->mnCount )
+        {
+            if ( mnMaxGroupEntry == mnCurrentGroupEntry )
+                ImplResizeGroupTable( mnMaxGroupEntry + 8 );
+            mpGroupEntry[ mnCurrentGroupEntry++ ] = pNewGroup;
+            bRet = sal_True;
+        }
+        else
+            delete pNewGroup;
     }
+    return bRet;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -4203,10 +4212,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
                         aXIndexAccess( mXShape, ::com::sun::star::uno::UNO_QUERY );
-                    EnterGroup( aXIndexAccess );
-                    GetNextGroupEntry();
-                    ImplGetShapeByIndex( GetCurrentGroupIndex(), TRUE );
-                    SkipCurrentGroup();
+                    if ( EnterGroup( aXIndexAccess ) )
+                    {
+                        GetNextGroupEntry();
+                        ImplGetShapeByIndex( GetCurrentGroupIndex(), TRUE );
+                        SkipCurrentGroup();
+                    }
                 }
             }
             else
@@ -4216,14 +4227,16 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     SvMemoryStream* pTmp = NULL;
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
                         aXIndexAccess( mXShape, ::com::sun::star::uno::UNO_QUERY );
-                    EnterGroup( aXIndexAccess );
-                    if ( bEffect )
+                    if ( EnterGroup( aXIndexAccess ) )
                     {
-                        pTmp = new SvMemoryStream( 0x200, 0x200 );
-                        ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
+                        if ( bEffect )
+                        {
+                            pTmp = new SvMemoryStream( 0x200, 0x200 );
+                            ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
+                        }
+                        mpPptEscherEx->EnterGroup( &maRect, pTmp );
+                        delete pTmp;
                     }
-                    mpPptEscherEx->EnterGroup( &maRect, pTmp );
-                    delete pTmp;
                 }
                 else
                 {
