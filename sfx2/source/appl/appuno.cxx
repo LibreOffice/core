@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-20 07:37:45 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ using namespace ::rtl;
 #include "frmload.hxx"
 #include "frame.hxx"
 #include "sfxbasic.hxx"
+#include "objsh.hxx"
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
@@ -1154,7 +1155,10 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader") );
+    Sequence < ::rtl::OUString > aServices = SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames();
+    sal_Int16 nCount = aServices.getLength();
+    for ( sal_Int16 i=0; i<nCount; i++ )
+        xNewKey->createKey( aServices.getConstArray()[i] );
 
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
@@ -1165,14 +1169,6 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xLoaderKey = xKey->createKey( aTempStr );
     xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
     xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/*" )) );
-
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxFilterDetect_Impl::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ExtendedFilterDetect") );
 
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxMacroLoader::impl_getStaticImplementationName();
@@ -1219,7 +1215,6 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY( DownloaderLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxFilterDetect_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
 
         // Factory is valid - service was found.
