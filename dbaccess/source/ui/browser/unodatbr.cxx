@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 16:12:51 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,7 +1420,11 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
         case ID_BROWSER_PASTE:
             if(m_pTreeView->HasChildPathFocus())
             {
+#if SUPD<631
+                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+#else
                 TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+#endif
                 SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
                 implPasteTable( pEntry, aTransferData );
                 break;
@@ -1435,7 +1439,11 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                 pTransfer       = implCopyObject( pEntry, eType == ET_QUERY ? CommandType::QUERY : CommandType::TABLE);
                 aEnsureDelete   = pTransfer;
                 if (pTransfer)
+#if SUPD<631
+                    pTransfer->CopyToClipboard();
+#else
                     pTransfer->CopyToClipboard(getView());
+#endif
                 break;
             }// else run through
         case ID_BROWSER_CUT:// cut isn't allowed for the treeview
@@ -1565,7 +1573,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
             BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sConnecting);
 
             // connect
-            xConnection = connect(pString->GetText());
+            xConnection = connect(pString->GetText(), sal_True);
             pFirstData->xObject = xConnection;
         }
         if(xConnection.is())
@@ -1865,7 +1873,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             }
             if(!xConnection.is())
             {
-                xConnection = connect(sDataSourceName);
+                xConnection = connect(sDataSourceName, sal_True);
                 pConData->xObject = xConnection;
             }
             if(!xConnection.is())
@@ -2575,7 +2583,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
             _xConnection = Reference<XConnection>(pData->xObject,UNO_QUERY);
         if(!_xConnection.is() && pData)
         {
-            _xConnection = connect(aDSName);
+            _xConnection = connect(aDSName, sal_True);
             pData->xObject = _xConnection; // share the conenction with the querydesign
         }
     }
@@ -2695,7 +2703,7 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
             return;
 
         ::rtl::OUString sCurrentObject;
-        if ((ID_TREE_QUERY_EDIT == _nAction || ID_TREE_TABLE_EDIT == _nAction) && _pApplyTo)
+        if ((ID_EDIT_QUERY_DESIGN == _nAction || ID_EDIT_TABLE == _nAction) && _pApplyTo)
         {
             // get the name of the query
             SvLBoxItem* pQueryTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
@@ -2709,7 +2717,7 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
                 pData = new DBTreeListModel::DBTreeListUserData;
 
                 Reference<XNameAccess> xNameAccess;
-                if(ID_TREE_TABLE_EDIT == _nAction)
+                if(ID_EDIT_TABLE == _nAction)
                 {
                     Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
                     if(xSup.is())
@@ -2742,21 +2750,21 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
         switch(_nAction)
         {
             case ID_TREE_RELATION_DESIGN:
-                pDispatcher = new ORelationDesignAccess(m_xMultiServiceFacatory) ;
+                pDispatcher = new ORelationDesignAccess(m_xMultiServiceFacatory);
                 break;
-            case ID_TREE_TABLE_EDIT:
+            case ID_EDIT_TABLE:
                 bEdit = sal_True; // run through
-            case ID_TREE_TABLE_CREATE_DESIGN:
+            case ID_NEW_TABLE_DESIGN:
                 pDispatcher = new OTableDesignAccess(m_xMultiServiceFacatory) ;
                 break;
-            case ID_TREE_QUERY_EDIT:
+            case ID_EDIT_QUERY_DESIGN:
                 bEdit = sal_True; // run through
-            case ID_TREE_QUERY_CREATE_DESIGN:
-            case ID_TREE_QUERY_CREATE_TEXT:
-                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory) ;
+            case ID_NEW_QUERY_DESIGN:
+            case ID_NEW_QUERY_SQL:
+                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory, sal_False, ID_NEW_QUERY_SQL == _nAction);
                 break;
-            case ID_TREE_VIEW_CREATE_DESIGN:
-                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory,sal_True) ;
+            case ID_NEW_VIEW_DESIGN:
+                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory, sal_True) ;
                 break;
         }
         ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
@@ -2764,7 +2772,7 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
         if (bEdit)
             pDispatcher->edit(aDSName, sCurrentObject, xConnection);
         else
-            pDispatcher->create(aDSName, xConnection, (ID_TREE_QUERY_CREATE_DESIGN == _nAction) || (ID_TREE_VIEW_CREATE_DESIGN == _nAction));
+            pDispatcher->create(aDSName, xConnection);
         delete pDispatcher;
     }
     catch(SQLException& e)
@@ -2867,8 +2875,11 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
         }
     }
     else
-        // TODO
-        ;
+    {
+        String sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
+        ErrorBox aError(getView(), WB_OK, sMessage);
+        aError.Execute();
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -2965,9 +2976,9 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bPasteAble);
 
                 // 1.3 actions on existing tables
-                aContextMenu.EnableItem(ID_TREE_TABLE_EDIT,     ET_TABLE == eType);
-                aContextMenu.EnableItem(ID_TREE_TABLE_DELETE,   ET_TABLE == eType);
-                aContextMenu.EnableItem(ID_TREE_TABLE_COPY,     ET_TABLE == eType);
+                aContextMenu.EnableItem(ID_EDIT_TABLE,      ET_TABLE == eType);
+                aContextMenu.EnableItem(ID_DROP_TABLE,      ET_TABLE == eType);
+                aContextMenu.EnableItem(ID_TREE_TABLE_COPY, ET_TABLE == eType);
 
             }
             break;
@@ -2976,8 +2987,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             case ET_QUERY:
             {
                 // 2.2 actions on existing queries
-                aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,     ET_QUERY == eType);
-                aContextMenu.EnableItem(ID_TREE_QUERY_DELETE,   ET_QUERY == eType);
+                aContextMenu.EnableItem(ID_EDIT_QUERY_DESIGN,   ET_QUERY == eType);
+                aContextMenu.EnableItem(ID_DROP_QUERY,          ET_QUERY == eType);
                 aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     ET_QUERY == eType);
             }
             break;
@@ -3035,20 +3046,20 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             break;
 
         case ID_TREE_RELATION_DESIGN:
-        case ID_TREE_TABLE_CREATE_DESIGN:
-        case ID_TREE_VIEW_CREATE_DESIGN:
-        case ID_TREE_QUERY_CREATE_DESIGN:
-        case ID_TREE_QUERY_CREATE_TEXT:
-        case ID_TREE_QUERY_EDIT:
-        case ID_TREE_TABLE_EDIT:
+        case ID_NEW_TABLE_DESIGN:
+        case ID_NEW_VIEW_DESIGN:
+        case ID_NEW_QUERY_DESIGN:
+        case ID_NEW_QUERY_SQL:
+        case ID_EDIT_QUERY_DESIGN:
+        case ID_EDIT_TABLE:
             implCreateObject( pEntry, nPos );
             break;
 
-        case ID_TREE_QUERY_DELETE:
+        case ID_DROP_QUERY:
             implRemoveQuery( pEntry );
             break;
 
-        case ID_TREE_TABLE_DELETE:
+        case ID_DROP_TABLE:
             implDropTable( pEntry );
             break;
 
@@ -3057,7 +3068,11 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::QUERY );
             Reference< XTransferable> aEnsureDelete = pTransfer;
             if (pTransfer)
+#if SUPD<631
+                pTransfer->CopyToClipboard();
+#else
                 pTransfer->CopyToClipboard(getView());
+#endif
         }
         break;
 
@@ -3067,13 +3082,21 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             Reference< XTransferable> aEnsureDelete = pTransfer;
 
             if (pTransfer)
+#if SUPD<631
+                pTransfer->CopyToClipboard();
+#else
                 pTransfer->CopyToClipboard(getView());
+#endif
         }
         break;
 
         case ID_TREE_TABLE_PASTE:
         {
+#if SUPD<631
+            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+#else
             TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+#endif
             implPasteTable( pEntry, aTransferData );
         }
         break;
