@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-20 16:02:32 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,6 @@
 #include <basmgr.hxx>
 #endif
 
-#if SUPD>614
 #ifndef _SFXEVENT_HXX
 #include <event.hxx>
 #endif
@@ -219,9 +218,6 @@
 
 #ifndef _SFX_EVENTCONF_HXX
 #include <evntconf.hxx>
-#endif
-#else
-#include "sfxsids.hrc"
 #endif
 
 #ifndef _SFX_HRC
@@ -267,7 +263,8 @@
 //using namespace ::osl                             ;
 //using namespace ::rtl                             ;
 //using namespace ::cppu                            ;
-using namespace ::com::sun::star::uno               ;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 //using namespace ::com::sun::star::container       ;
 //using namespace ::com::sun::star::frame           ;
 //using namespace ::com::sun::star::document        ;
@@ -981,7 +978,45 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENE
 
 void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETOEXCEPTION, RUNTIMEEXCEPTION)
 {
-    /*TODO must be implemented in further times ...*/
+    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+    if (pContainer!=NULL)
+    {
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        while (pIterator.hasMoreElements())
+        {
+            try
+            {
+                ((util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+            }
+            catch( uno::RuntimeException& )
+            {
+                pIterator.remove();
+            }
+        }
+    }
+
+    // no own objections against closing!
+
+    pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+    if (pContainer!=NULL)
+    {
+        ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
+        while (pCloseIterator.hasMoreElements())
+        {
+            try
+            {
+                ((util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
+            }
+            catch( uno::RuntimeException& )
+            {
+                pCloseIterator.remove();
+            }
+        }
+    }
+
+    dispose();
 }
 
 //____________________________________________________________________________________________________
@@ -990,7 +1025,11 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
 
 void SAL_CALL SfxBaseModel::addCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
 {
-    /*TODO must be implemented in further times ...*/
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XCLOSELISTENER >*)0), xListener );
 }
 
 //____________________________________________________________________________________________________
@@ -999,7 +1038,11 @@ void SAL_CALL SfxBaseModel::addCloseListener( const REFERENCE< XCLOSELISTENER >&
 
 void SAL_CALL SfxBaseModel::removeCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
 {
-    /*TODO must be implemented in further times ...*/
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XCLOSELISTENER >*)0), xListener );
 }
 
 //________________________________________________________________________________________________________
@@ -1305,7 +1348,7 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
     String sUcbUrl;
     ::utl::TempFile* pUCBPrintTempFile = NULL;
 
-    sal_Bool bWaitUntilEnd = sal_True;
+    sal_Bool bWaitUntilEnd = sal_False;
     for ( int n = 0; n < rOptions.getLength(); ++n )
     {
         // get Property-Value from options
