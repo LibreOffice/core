@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aststructinstance.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:05:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "idlc/asttype.hxx"
 #include "idlc/idlctypes.hxx"
 
+class AstDeclaration;
 class AstScope;
 
 class AstStructInstance: public AstType {
@@ -75,8 +76,15 @@ public:
 
     AstType const * getTypeTemplate() const { return m_typeTemplate; }
 
+    DeclList::const_iterator getTypeArgumentsBegin() const
+    { return m_typeArguments.begin(); }
+
+    DeclList::const_iterator getTypeArgumentsEnd() const
+    { return m_typeArguments.end(); }
+
 private:
     AstType const * m_typeTemplate;
+    DeclList m_typeArguments;
 };
 
 #endif
