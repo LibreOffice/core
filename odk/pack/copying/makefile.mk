@@ -51,7 +51,8 @@ all : 	\
     $(DESTIDLLIST)  \
     $(DESTDIRBIN)$/applicat.rdb  \
     $(DESTDIR)$/settings$/dk.mk \
-    $(DESTDIR)$/classes$/unoil.jar
+    $(DESTDIR)$/classes$/unoil.jar \
+    $(DESTDIR)$/odk_overview.html
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
@@ -73,6 +74,10 @@ $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb
 $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/util$/dk.mk $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     +-rm -f $@
