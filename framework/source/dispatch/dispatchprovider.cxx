@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: as $ $Date: 2002-05-31 10:17:58 $
+ *  last change: $Author: vg $ $Date: 2002-05-31 15:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,12 +720,9 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPlugi
                   nRightFlags &= ~css::frame::FrameSearchFlag::CREATE;
 
         xDispatcher = implts_queryFrameDispatch(xPlugin, aURL, sTargetFrameName, nRightFlags);
-        if (
-            ( ! xDispatcher.is()                                 )  &&
-            ( nSearchFlags & css::frame::FrameSearchFlag::CREATE )
-           )
+        if ( !xDispatcher.is() && ( nSearchFlags & css::frame::FrameSearchFlag::CREATE ) )
         {
-            if (implts_isLoadableContent(aURL))
+            if ( implts_isLoadableContent ( aURL ) )
                 xDispatcher = implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER, xPlugin );
         }
     }
