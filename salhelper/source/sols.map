@@ -3,7 +3,6 @@ SALHLP_1_0 {
 GetVersionInfo;
 _fini;
 _init;
-component_getDescriptionFunc;
 __1cJsalhelperSORealDynamicLoaderLnewInstance6Fpp1rknDrtlIOUString_7_2_;
 __1cJsalhelperSORealDynamicLoader2t5B6Mpp1rknDrtlIOUString_7pv8_v_;
 __1cJsalhelperSORealDynamicLoader2t6Mpp1rknDrtlIOUString_7pv8_v_;
