@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 14:16:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 11:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,12 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
                     ReadRecordParams( nFunction );
                 else
                     nSkipActions--;
-                pWMF->Seek( nPos += nRecSize * 2 );
+                nPos += nRecSize * 2;
+                if ( nPos <= nEndPos )
+                    pWMF->Seek( nPos  );
+                else
+                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+
             }
         }
         else
@@ -1112,12 +1117,12 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
 
     sal_uInt16 nFunction;
     sal_uInt32 nRecSize;
-    sal_uInt32 nStartPos = pWMF->Tell();
+    sal_uInt32 nPos = pWMF->Tell();
     sal_uInt32 nEndPos = pWMF->Seek( STREAM_SEEK_TO_END );
 
-    pWMF->Seek( nStartPos );
+    pWMF->Seek( nPos );
 
-    if( nEndPos - nStartPos )
+    if( nEndPos - nPos )
     {
         while( bRet )
         {
@@ -1295,7 +1300,15 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
                 }
                 break;
             }
-            pWMF->Seek( nStartPos += nRecSize * 2 );
+            nPos += nRecSize * 2;
+             if ( nPos <= nEndPos )
+                 pWMF->Seek( nPos );
+             else
+             {
+                 pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                 bRet = sal_False;
+             }
+
         }
     }
     else
@@ -1303,7 +1316,6 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
         pWMF->SetError( SVSTREAM_GENERALERROR );
         bRet = sal_False;
     }
-    pWMF->Seek( nStartPos );
     return bRet;
 }
 
