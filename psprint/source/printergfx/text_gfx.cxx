@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.5 $
+  *  $Revision: 1.6 $
   *
-  *  last change: $Author: pl $ $Date: 2001-05-21 17:18:03 $
+  *  last change: $Author: cp $ $Date: 2001-06-07 16:11:22 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -277,13 +277,26 @@ PrinterGfx::DrawText (
     }
 
     // move and rotate the user coordinate system
-    sal_Int32 nOrigAngle = mnTextAngle;
-    PSGSave ();
-    PSTranslate (rPoint);
-    if (mnTextAngle != 0)
+    // avoid the gsave/grestore for the simple cases since it allows
+    // reuse of the current font if it hasn't changed
+    sal_Int32 nCurrentTextAngle = mnTextAngle;
+    sal_Int32 nCurrentPointX;
+    sal_Int32 nCurrentPointY;
+
+    if (nCurrentTextAngle != 0)
     {
-        PSRotate (mnTextAngle);
+        PSGSave ();
+        PSTranslate (rPoint);
+        PSRotate (nCurrentTextAngle);
         mnTextAngle = 0;
+
+        nCurrentPointX = 0;
+        nCurrentPointY = 0;
+    }
+    else
+    {
+        nCurrentPointX = rPoint.X();
+        nCurrentPointY = rPoint.Y();
     }
 
     // draw the string
@@ -299,26 +312,36 @@ PrinterGfx::DrawText (
             nTo++ ;
         }
 
-        SetFont( nFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, mnTextAngle, mbTextVertical );
+        SetFont( nFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
+                mnTextAngle, mbTextVertical );
 
         if (mbTextVertical)
         {
-            drawVerticalizedText( Point(nDelta, 0), pEffectiveStr + nFrom, nTo - nFrom,
-                                  pNewDeltaArray + nFrom );
+            drawVerticalizedText(
+                    Point(nCurrentPointX + nDelta, nCurrentPointY),
+                    pEffectiveStr + nFrom, nTo - nFrom,
+                    pNewDeltaArray + nFrom );
         }
         else
         {
-            drawText( Point(nDelta, 0), pEffectiveStr + nFrom, nTo - nFrom,
-                      pDeltaArray == NULL ? NULL : pNewDeltaArray + nFrom );
+            drawText(
+                    Point(nCurrentPointX + nDelta, nCurrentPointY),
+                    pEffectiveStr + nFrom, nTo - nFrom,
+                    pDeltaArray == NULL ? NULL : pNewDeltaArray + nFrom );
         }
         nDelta += pNewDeltaArray[ nTo - 1 ];
     }
 
     // restore the user coordinate system
-    PSGRestore ();
-    mnTextAngle = nOrigAngle;
+    if (nCurrentTextAngle != 0)
+    {
+        PSGRestore ();
+        mnTextAngle = nCurrentTextAngle;
+    }
 
-    SetFont( nRestoreFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, mnTextAngle, mbTextVertical );
+    // restore the original font settings
+    SetFont( nRestoreFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
+            mnTextAngle, mbTextVertical );
 }
 
 void PrinterGfx::drawVerticalizedText(
