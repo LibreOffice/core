@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:14:48 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, USHORT nCol ) const
 
 String SvTabListBox::GetEntryText( ULONG nPos, USHORT nCol ) const
 {
-    SvLBoxEntry* pEntry = SvTreeListBox::GetEntry( nPos );
+    SvLBoxEntry* pEntry = GetEntryOnPos( nPos );
     return GetEntryText( pEntry, nCol );
 }
 
@@ -627,6 +627,50 @@ String SvTabListBox::GetTabEntryText( ULONG nPos, USHORT nCol ) const
         }
     }
     return aResult;
+}
+
+SvLBoxEntry* SvTabListBox::GetEntryOnPos( ULONG _nEntryPos ) const
+{
+    SvLBoxEntry* pEntry = NULL;
+    ULONG i, nPos = 0, nCount = GetLevelChildCount( NULL );
+    for ( i = 0; i < nCount; ++i )
+    {
+        SvLBoxEntry* pParent = GetEntry(i);
+        if ( nPos == _nEntryPos )
+        {
+            pEntry = pParent;
+            break;
+        }
+        else
+        {
+            nPos++;
+            pEntry = GetChildOnPos( pParent, _nEntryPos, nPos );
+            if ( pEntry )
+                break;
+        }
+    }
+
+    return pEntry;
+}
+
+SvLBoxEntry* SvTabListBox::GetChildOnPos( SvLBoxEntry* _pParent, ULONG _nEntryPos, ULONG& _rPos ) const
+{
+    ULONG i, nCount = GetLevelChildCount( _pParent );
+    for ( i = 0; i < nCount; ++i )
+    {
+        SvLBoxEntry* pParent = GetEntry( _pParent, i );
+        if ( _rPos == _nEntryPos )
+            return pParent;
+        else
+        {
+            _rPos++;
+            SvLBoxEntry* pEntry = GetChildOnPos( pParent, _nEntryPos, _rPos );
+            if ( pEntry )
+                return pEntry;
+        }
+    }
+
+    return NULL;
 }
 
 void SvTabListBox::SetTabJustify( USHORT nTab, SvTabJustify eJustify)
