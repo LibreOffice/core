@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: os $ $Date: 2001-03-28 13:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,16 @@
 #define CB_CLIP             33
 
 // TP_LAYOUT
+#define GB_LINK                 1
+#define RB_ALWAYS               2
+#define RB_REQUEST              3
+#define RB_NEVER                4
+#define CB_DOCONLY              5
+#define CB_MERGE_PARA_DIST      6
+#define GB_COMPAT               7
+#define CB_AUTO_UPDATE_FIELDS   8
+#define CB_AUTO_UPDATE_CHARTS   9
+#define FT_UPDATE_LINKS         10
 
 #define GB_WINDOW       50
 #define CB_ROWCOLHEADER 51
@@ -191,7 +201,8 @@
 #define CB_PAGEBREAKS   66
 #define CB_HANDLES      67
 #define CB_BIGHANDLES   68
-
+#define FT_TAB          69
+#define FT_UNIT         70
 // TP_INPUT
 
 #define GB_OPTIONS      70

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: os $ $Date: 2001-03-28 13:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,24 +96,43 @@ class ScViewOptions;
 
 class ScTpContentOptions : public SfxTabPage
 {
-    GroupBox    aDisplayGB;
-    CheckBox    aFormulaCB;
-    CheckBox    aNilCB;
-    CheckBox    aAnnotCB;
-    CheckBox    aValueCB;
-    CheckBox    aAnchorCB;
-    CheckBox    aClipMarkCB;
+    FixedLine       aLinesGB;
+    CheckBox        aGridCB;
+    FixedText       aColorFT;
+    ColorListBox    aColorLB;
+    CheckBox        aBreakCB;
+    CheckBox        aGuideLineCB;
+    CheckBox        aHandleCB;
+    CheckBox        aBigHandleCB;
 
-    GroupBox    aObjectGB;
-    FixedText   aObjGrfFT;
-    ListBox     aObjGrfLB;
-    FixedText   aDiagramFT;
-    ListBox     aDiagramLB;
-    FixedText   aDrawFT;
-    ListBox     aDrawLB;
+    FixedLine       aDisplayGB;
+    CheckBox        aFormulaCB;
+    CheckBox        aNilCB;
+    CheckBox        aAnnotCB;
+    CheckBox        aValueCB;
+    CheckBox        aAnchorCB;
+    CheckBox        aClipMarkCB;
+    CheckBox        aRangeFindCB;
+
+    FixedLine       aObjectGB;
+    FixedText       aObjGrfFT;
+    ListBox         aObjGrfLB;
+    FixedText       aDiagramFT;
+    ListBox         aDiagramLB;
+    FixedText       aDrawFT;
+    ListBox         aDrawLB;
+
+    FixedLine       aWindowGB;
+    CheckBox        aRowColHeaderCB;
+    CheckBox        aHScrollCB;
+    CheckBox        aVScrollCB;
+    CheckBox        aTblRegCB;
+    CheckBox        aOutlineCB;
 
     ScViewOptions*  pLocalOptions;
 
+    void    InitGridOpt();
+    DECL_LINK( GridHdl, CheckBox* );
     DECL_LINK( SelLbObjHdl, ListBox* );
     DECL_LINK( CBHdl, CheckBox* );
 
@@ -134,38 +153,40 @@ public:
 
 //========================================================================
 // TabPage Layout
-
+class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
 {
-    GroupBox        aLinesGB;
-    CheckBox        aGridCB;
-    FixedText       aColorFT;
-    ColorListBox    aColorLB;
-    CheckBox        aBreakCB;
-    CheckBox        aGuideLineCB;
-    CheckBox        aHandleCB;
-    CheckBox        aBigHandleCB;
-
-    GroupBox        aWindowGB;
-    CheckBox        aRowColHeaderCB;
-    CheckBox        aHScrollCB;
-    CheckBox        aVScrollCB;
-    CheckBox        aTblRegCB;
-    CheckBox        aOutlineCB;
-
-    GroupBox        aUnitGB;
+    FixedLine       aUnitGB;
+    FixedText       aUnitFT;
     ListBox         aUnitLB;
+    FixedText       aTabFT;
+    MetricField     aTabMF;
 
-    GroupBox    aTabGB;
-    MetricField aTabMF;
+    FixedLine       aLinkGB;
+    FixedText       aLinkFT;
+    RadioButton     aAlwaysRB;
+    RadioButton     aRequestRB;
+    RadioButton     aNeverRB;
+
+    FixedLine       aOptionsGB;
+    CheckBox        aAlignCB;
+    ListBox         aAlignLB;
+    CheckBox        aEditModeCB;
+    CheckBox        aFormatCB;
+    CheckBox        aExpRefCB;
+    CheckBox        aMarkHdrCB;
 
     SvxStringArray  aUnitArr;
     ScViewOptions*  pLocalOptions;
 
-    void    InitGridOpt();
-    DECL_LINK( GridHdl, CheckBox* );
     DECL_LINK( CBHdl, CheckBox* );
+
     DECL_LINK(MetricHdl, ListBox*);
+    DECL_LINK( AlignHdl, CheckBox* );
+
+    ScDocument *pDoc;
+
+    DECL_LINK(  UpdateHdl, CheckBox* );
 
             ScTpLayoutOptions( Window*          pParent,
                              const SfxItemSet&  rArgSet );
@@ -179,37 +200,10 @@ public:
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
+    void                SetDocument(ScDocument* pPtr){pDoc = pPtr;}
 
 };
 //========================================================================
-// TabPage Eingabe
-
-class ScTpInputOptions : public SfxTabPage
-{
-    GroupBox        aOptionsGB;
-    CheckBox        aAlignCB;
-    ListBox         aAlignLB;
-    CheckBox        aEditModeCB;
-    CheckBox        aFormatCB;
-    CheckBox        aRangeFindCB;
-    CheckBox        aExpRefCB;
-    CheckBox        aMarkHdrCB;
-
-    DECL_LINK( AlignHdl, CheckBox* );
-
-            ScTpInputOptions( Window*           pParent,
-                             const SfxItemSet&  rArgSet );
-            ~ScTpInputOptions();
-
-public:
-    static  SfxTabPage* Create          ( Window*               pParent,
-                                          const SfxItemSet&     rCoreSet );
-    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
-    virtual void        Reset           ( const SfxItemSet& rCoreSet );
-
-};
-
-
 
 #endif // SC_TPUSRLST_HXX
 

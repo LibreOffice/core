@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+#   last change: $Author: os $ $Date: 2001-03-28 13:27:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,6 @@ SRCFILES = \
     scfuncs.src	 \
     crnrdlg.src	 \
     condfrmt.src \
-    optload.src\
     opredlin.src \
     simpref.src
 

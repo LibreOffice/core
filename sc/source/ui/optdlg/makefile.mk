@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+#   last change: $Author: os $ $Date: 2001-03-28 13:27:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,19 +82,15 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        optdlg.cxx      \
         tpusrlst.cxx    \
         tpview.cxx      \
         tpcalc.cxx      \
-        optload.cxx     \
         opredlin.cxx
 
 SLOFILES =  \
-        $(SLO)$/optdlg.obj      \
         $(SLO)$/tpusrlst.obj \
         $(SLO)$/tpview.obj   \
         $(SLO)$/tpcalc.obj	\
-        $(SLO)$/optload.obj     \
         $(SLO)$/opredlin.obj
 
 # --- Tagets -------------------------------------------------------

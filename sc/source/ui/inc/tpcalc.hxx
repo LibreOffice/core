@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:12:35 $
+ *  last change: $Author: os $ $Date: 2001-03-28 13:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,13 @@ private:
     NumericField    aEdSteps;
     FixedText       aFtEps;
     Edit            aEdEps;
-    GroupBox        aGbZRefs;
+    FixedLine       aGbZRefs;
 
     RadioButton     aBtnDateStd;
     RadioButton     aBtnDateSc10;
     RadioButton     aBtnDate1904;
 
-    GroupBox        aGbDate;
+    FixedLine       aGbDate;
 
     CheckBox        aBtnCase;
     CheckBox        aBtnCalc;

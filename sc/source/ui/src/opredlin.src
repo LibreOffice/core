@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:01:10 $
+ *  last change: $Author: os $ $Date: 2001-03-28 13:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,10 +172,10 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "~Taþýnan giriþler";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_COLORCHGS
+    FixedLine GB_COLORCHGS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 76 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Farbgebung für Änderungen" ;
         Text [ ENGLISH ] = "Colors for Changes" ;
         Text [ portuguese ] = "Cores para modificações" ;

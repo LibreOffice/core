@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: os $ $Date: 2001-03-28 13:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ class ScRedlineOptionsTabPage : public SfxTabPage
     ColorListBox        aInsertColorLB;
     FixedText           aMoveFT;
     ColorListBox        aMoveColorLB;
-    GroupBox            aChangedGB;
+    FixedLine           aChangedGB;
     String              aAuthorStr;
     DECL_LINK( ColorHdl, ColorListBox *pColorLB );
 

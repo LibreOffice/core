@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:21:38 $
+ *  last change: $Author: os $ $Date: 2001-03-28 13:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@
 #include "appoptio.hxx"
 #include "inputopt.hxx"
 #include "navicfg.hxx"
-#include "optdlg.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
@@ -124,7 +123,6 @@
 #include "tpusrlst.hxx"
 #include "tpcalc.hxx"
 #include "opredlin.hxx"
-#include "optload.hxx"
 #include "transobj.hxx"
 
 #define ScModule
@@ -336,48 +334,6 @@ void ScModule::Execute( SfxRequest& rReq )
                 pApp->LeaveBasicCall();
             }
             break;
-        case SID_SC_EDITOPTIONS:
-            {
-                if ( pReqArgs != NULL )
-                {
-                    ModifyOptions( *pReqArgs );
-                }
-                else if ( pReqArgs == NULL )
-                {
-                    GetAppOptions();    // -> AppOptionen initialisieren
-
-                    SfxItemSet* pDlgSet = CreateItemSet( nSlot );
-
-                    //---------------------------------------------------------
-
-                    //  Der Parent muss hier auf jeden Fall stimmen, weil sonst
-                    //  SfxViewShell::Current in SetOptions die falsche ViewShell gibt.
-
-                    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,
-                                                SfxViewShell::Current());
-                    Window* pWin = pViewSh ?
-                                    pViewSh->GetDialogParent() :
-                                    Application::GetDefDialogParent();
-                    ScOptionsDlg* pDlg = new ScOptionsDlg(
-                                                SFX_APP()->GetViewFrame(),
-                                                pWin, pDlgSet );
-
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-
-                        if ( pOutSet )
-                        {
-                            ApplyItemSet( nSlot, *pOutSet );
-                            rReq.Done( *pOutSet, FALSE );
-                        }
-                    }
-                    delete pDlg;
-                    delete pDlgSet;
-                }
-            }
-            break;
-
         case SID_AUTOSPELL_CHECK:
             {
                 BOOL bSet;
@@ -1887,12 +1843,10 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
     {
         case SID_SC_TP_LAYOUT:      pRet = ScTpLayoutOptions::Create(pParent, rSet); break;
         case SID_SC_TP_CONTENT:     pRet = ScTpContentOptions::Create(pParent, rSet); break;
-        case SID_SC_TP_INPUT:       pRet = ScTpInputOptions::Create(pParent, rSet); break;
         case SID_SC_TP_GRID:        pRet = SvxGridTabPage::Create(pParent, rSet); break;
         case SID_SC_TP_USERLISTS:   pRet = ScTpUserLists::Create(pParent, rSet); break;
         case SID_SC_TP_CALC:        pRet = ScTpCalcOptions::Create(pParent, rSet); break;
         case SID_SC_TP_CHANGES:     pRet = ScRedlineOptionsTabPage::Create(pParent, rSet); break;
-        case SID_SC_TP_MISC:        pRet = ScLoadOptPage::Create(pParent, rSet); break;
     }
     DBG_ASSERT(pRet, "Id unbekannt")
     return pRet;
