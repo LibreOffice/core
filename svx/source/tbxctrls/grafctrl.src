@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:22:12 $
+ *  last change: $Author: ka $ $Date: 2000-11-26 15:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,4 +167,216 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Text[ language_user1 ] = " ";
 };
 
- // ********************************************************************** EOF
+// -----------
+// - Strings -
+// -----------
+
+String RID_SVXSTR_UNDO_GRAFMODE
+{
+    Text = "Grafikmodus";
+    Text[ english ] = "Graphics mode";
+    Text[ english_us ] = "Graphics Mode";
+    Text[ portuguese ] = "Modo gráfico";
+    Text[ greek ] = "ÊáôÜóôáóç ãñáöéêşí";
+    Text[ dutch ] = "Afbeeldingenmodus";
+    Text[ french ] = "Mode Graphique";
+    Text[ spanish ] = "Modo gráfico";
+    Text[ swedish ] = "Grafikläge";
+    Text[ russian ] = "Ãğàôè÷åñêèé ğåæèì";
+    Text[ italian ] = "Modo grafico";
+    Text[ danish ] = "Grafikmodus";
+    Text[ polish ] = "Tryb grafiki";
+    Text[ portuguese_brazilian ] = "Graphics mode";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ";
+    Text[ korean ] = "±×·¡ÇÈ ¸ğµå";
+    Text[ chinese_simplified ] = "Í¼ĞÎÄ£Ê½";
+    Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
+    Text[ arabic ] = "æÖÚ ÇáÕæÑ";
+    Text[ turkish ] = "Grafik kipi";
+};
+String RID_SVXSTR_UNDO_GRAFRED
+{
+    Text = "Rotanteil";
+    Text[ english ] = "Red portion";
+    Text[ english_us ] = "Red";
+    Text[ portuguese ] = "Proporção de vermelho";
+    Text[ greek ] = "Áíáëïãßá êüêêéíï";
+    Text[ dutch ] = "Rood";
+    Text[ french ] = "Proportion de rouge";
+    Text[ spanish ] = "Proporción de rojo";
+    Text[ swedish ] = "Andel rött";
+    Text[ russian ] = "Êîëè÷åñòâî êğàñíîãî";
+    Text[ italian ] = "Percentuale di rosso";
+    Text[ danish ] = "Rød-andel";
+    Text[ polish ] = "Zawartoœæ czerw.";
+    Text[ portuguese_brazilian ] = "Red portion";
+    Text[ japanese ] = "ÔF‚ÌŠ„‡";
+    Text[ korean ] = "Àû»öÀÇ ºñÀ²";
+    Text[ chinese_simplified ] = "ºìÉ«±ÈÀı";
+    Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
+    Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
+    Text[ turkish ] = "Kırmızı oranı";
+};
+String RID_SVXSTR_UNDO_GRAFGREEN
+{
+    Text = "Grünanteil";
+    Text[ english ] = "Green portion";
+    Text[ english_us ] = "Green";
+    Text[ portuguese ] = "Proporção de verde";
+    Text[ greek ] = "Áíáëïãßá ğñÜóéíï";
+    Text[ dutch ] = "Groen";
+    Text[ french ] = "Proportion de vert";
+    Text[ spanish ] = "Proporción de verde";
+    Text[ swedish ] = "Andel grönt";
+    Text[ russian ] = "Êîëè÷åñòâî çåëåíîãî";
+    Text[ italian ] = "Percentuale di verde";
+    Text[ danish ] = "Grøn-andel";
+    Text[ polish ] = "Zawartoœæ zielonego";
+    Text[ portuguese_brazilian ] = "Green portion";
+    Text[ japanese ] = "—ÎF‚ÌŠ„‡";
+    Text[ korean ] = "³ì»öÀÇ ºñÀ²";
+    Text[ chinese_simplified ] = "ÂÌÉ«±ÈÀı";
+    Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
+    Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
+    Text[ turkish ] = "Yeşil oranı";
+};
+String RID_SVXSTR_UNDO_GRAFBLUE
+{
+    Text = "Blauanteil";
+    Text[ english ] = "Blue portion";
+    Text[ english_us ] = "Blue";
+    Text[ portuguese ] = "Proporção de azul";
+    Text[ greek ] = "Áíáëïãßá ìğëå";
+    Text[ dutch ] = "Blauw";
+    Text[ french ] = "Proportion de bleu";
+    Text[ spanish ] = "Proporción de azul";
+    Text[ swedish ] = "Andel blått";
+    Text[ russian ] = "Êîëè÷åñòâî ñèíåãî";
+    Text[ italian ] = "Percentuale di blu";
+    Text[ danish ] = "Blå-andel";
+    Text[ polish ] = "Zawartoœæ niebiesk.";
+    Text[ portuguese_brazilian ] = "Blue portion";
+    Text[ japanese ] = "ÂF‚ÌŠ„‡";
+    Text[ korean ] = "Ã»»öÀÇ ºñÀ²";
+    Text[ chinese_simplified ] = "À¶É«±ÈÀı";
+    Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
+    Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ";
+    Text[ turkish ] = "Mavi oranı";
+};
+String RID_SVXSTR_UNDO_GRAFLUMINANCE
+{
+    Text = "Helligkeit";
+    Text[ english ] = "Luminance";
+    Text[ english_us ] = "Brightness";
+    Text[ portuguese ] = "Brilho";
+    Text[ greek ] = "Öùôåéíüôçôá";
+    Text[ dutch ] = "Helderheid";
+    Text[ french ] = "Luminosité";
+    Text[ spanish ] = "Brillo";
+    Text[ swedish ] = "Ljusstyrka";
+    Text[ russian ] = "ßğêîñòü";
+    Text[ italian ] = "Luminosità";
+    Text[ danish ] = "Lysstyrke";
+    Text[ polish ] = "Jasnoœæ";
+    Text[ portuguese_brazilian ] = "Luminance";
+    Text[ japanese ] = "–¾“x";
+    Text[ korean ] = "¸íµµ";
+    Text[ chinese_simplified ] = "ÁÁ¶È";
+    Text[ chinese_traditional ] = "«G«×";
+    Text[ arabic ] = "ÇáÅÖÇÁÉ";
+    Text[ turkish ] = "Parlaklık";
+};
+String RID_SVXSTR_UNDO_GRAFCONTRAST
+{
+    Text = "Kontrast";
+    Text[ english ] = "Contrast";
+    Text[ english_us ] = "Contrast";
+    Text[ portuguese ] = "Contraste";
+    Text[ greek ] = "ÊïíôñÜóô";
+    Text[ dutch ] = "Contrast";
+    Text[ french ] = "Contraste";
+    Text[ spanish ] = "Contraste";
+    Text[ swedish ] = "Kontrast";
+    Text[ russian ] = "Êîíòğàñò";
+    Text[ italian ] = "Contrasto";
+    Text[ danish ] = "Kontrast";
+    Text[ polish ] = "Kontrast";
+    Text[ portuguese_brazilian ] = "Contrast";
+    Text[ japanese ] = "ºİÄ×½Ä";
+    Text[ korean ] = "´ëºñ";
+    Text[ chinese_simplified ] = "¶Ô±È¶È";
+    Text[ chinese_traditional ] = "¹ï¤ñ«×";
+    Text[ arabic ] = "ÇáÊÈÇíä";
+    Text[ turkish ] = "Kontrast";
+};
+String RID_SVXSTR_UNDO_GRAFGAMMA
+{
+    Text = "Gamma";
+    Text[ english ] = "Gamma";
+    Text[ english_us ] = "Gamma";
+    Text[ portuguese ] = "Gamma";
+    Text[ greek ] = "ÃÜììá";
+    Text[ dutch ] = "Gamma";
+    Text[ french ] = "Gamma";
+    Text[ spanish ] = "Gamma";
+    Text[ swedish ] = "Gamma";
+    Text[ russian ] = "Ãàììà";
+    Text[ italian ] = "Gamma";
+    Text[ danish ] = "Gamma";
+    Text[ polish ] = "Gama";
+    Text[ portuguese_brazilian ] = "Gamma";
+    Text[ japanese ] = "¶ŞİÏ";
+    Text[ korean ] = "°¨¸¶";
+    Text[ chinese_simplified ] = "»ÒÉ«ÏµÊı";
+    Text[ chinese_traditional ] = "¦Ç¦â¨t¼Æ";
+    Text[ arabic ] = "ÛÇãÇ";
+    Text[ turkish ] = "Gamma";
+};
+String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
+{
+    Text = "Transparenz";
+    Text[ english ] = "Transparency";
+    Text[ english_us ] = "Transparency";
+    Text[ portuguese ] = "Transparência";
+    Text[ greek ] = "ÄéáöÜíåéá";
+    Text[ dutch ] = "Transparantie";
+    Text[ french ] = "Transparence";
+    Text[ spanish ] = "Transparencia";
+    Text[ swedish ] = "Transparens";
+    Text[ russian ] = "Ïğîçğà÷íîñòü";
+    Text[ italian ] = "Trasparenza";
+    Text[ danish ] = "Transparens";
+    Text[ polish ] = "Przezroczystoœæ";
+    Text[ portuguese_brazilian ] = "Transparency";
+    Text[ japanese ] = "“§‰ß«";
+    Text[ korean ] = "Åõ¸í";
+    Text[ chinese_simplified ] = "Í¸Ã÷";
+    Text[ chinese_traditional ] = "³z©ú";
+    Text[ arabic ] = "ÔİÇİíÉ";
+    Text[ turkish ] = "Saydamlık";
+};
+String RID_SVXSTR_GRAFCROP
+{
+    Text = "Zuschneiden";
+    Text[ english ] = "Crop";
+    Text[ english_us ] = "Crop";
+    Text[ portuguese ] = "Recortar";
+    Text[ russian ] = "Îáğåçàòü";
+    Text[ greek ] = "ĞñïóáñìïãŞ";
+    Text[ dutch ] = "Uitknippen";
+    Text[ french ] = "Rogner";
+    Text[ spanish ] = "Recortar";
+    Text[ italian ] = "Taglia";
+    Text[ danish ] = "Crop";
+    Text[ swedish ] = "Beskär";
+    Text[ polish ] = "Przytnij";
+    Text[ portuguese_brazilian ] = "Crop";
+    Text[ japanese ] = "Crop";
+    Text[ korean ] = "Crop";
+    Text[ chinese_simplified ] = "¼ôÏÂ";
+    Text[ chinese_traditional ] = "°Å¤U";
+    Text[ turkish ] = "Crop";
+    Text[ arabic ] = "Crop";
+};
+
+// ********************************************************************** EOF
