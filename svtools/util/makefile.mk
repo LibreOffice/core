@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.5 $
+#*  $Revision: 1.6 $
 #*
-#*  last change: $Author: sb $ $Date: 2000-11-03 17:52:16 $
+#*  last change: $Author: mh $ $Date: 2000-11-10 09:21:23 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -377,6 +377,7 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Impl@@>>$@
     @echo Imp@@>>$@
     @echo __CT>>$@
+    @echo _STL>>$@
 .ENDIF
 
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
@@ -469,5 +470,6 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo Impl@@>>$@
     @echo Imp@@>>$@
     @echo __CT>>$@
+    @echo _STL>>$@
 .ENDIF
 
