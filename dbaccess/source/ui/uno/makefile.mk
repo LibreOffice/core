@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.8 $
+ #  $Revision: 1.9 $
  #
- #  last change: $Author: pjunck $ $Date: 2004-10-27 13:10:35 $
+ #  last change: $Author: obo $ $Date: 2005-01-05 12:38:18 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -81,8 +81,7 @@ SRC1FILES =	\
 # ... object files ............................
 
 SLOFILES=	\
-        $(SLO)$/unofilter.obj	\
-        $(SLO)$/unoorder.obj	\
+        $(SLO)$/composerdialogs.obj	\
         $(SLO)$/unosqlmessage.obj	\
         $(SLO)$/unoadmin.obj	\
         $(SLO)$/admindlg.obj	\
