@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTreeListBoxEntry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:55 $
+ *  last change:$Date: 2003-03-31 13:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,9 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("EditOnly",
+                    "This method isn't supported in this component");
 
         final XAccessibleComponent fXComp = (XAccessibleComponent)
             UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
