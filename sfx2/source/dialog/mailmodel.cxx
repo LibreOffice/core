@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:15:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
 
         // Get PDF Filter from document
         SfxFilterMatcher aMatcher( String::CreateFromAscii(xDocShell->GetFactory().GetShortName()) );
-        String aPDFExtension = String::CreateFromAscii( ".pdf" );
+        String aPDFExtension = String::CreateFromAscii( "pdf" );
 
         const SfxFilter*    pFilter     = aMatcher.GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
         sal_Bool            bHasFilter  = pFilter ? sal_True : sal_False;
