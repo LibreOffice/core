@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDocument.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-03-19 14:38:57 $
+ *  last change:$Date: 2004-05-03 08:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import util.DesktopTools;
 
 import util.SOfficeFactory;
 import util.WriterTools;
@@ -101,19 +102,8 @@ public class SwXTextDocument extends TestCase {
 
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-            closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class,
-                                                            xSecondTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        DesktopTools.closeDoc(xSecondTextDoc);
+        DesktopTools.closeDoc(xTextDoc);
     }
 
     /**
@@ -155,6 +145,10 @@ public class SwXTextDocument extends TestCase {
                                                  ControlCharacter.LINE_BREAK,
                                                  false);
                 }
+                            for (int i = 0; i < 11; i++) {
+                oText.insertString(oCursor, "xTextDoc ", false);
+
+            }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert lines", e);
