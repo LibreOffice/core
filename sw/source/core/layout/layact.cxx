@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:47:13 $
+ *  last change: $Author: od $ $Date: 2002-10-10 08:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1920,7 +1920,8 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
             if ( pTab->IsRetouche() && !pTab->GetNext() )
             {
                 SwRect aRect( pTab->GetUpper()->PaintArea() );
-                aRect.Top( pTab->Frm().Top() + pTab->Prt().Bottom() - 1 );
+                /// OD 09.10.2002 #102779# - delete "- 1"
+                aRect.Top( pTab->Frm().Top() + pTab->Prt().Bottom() );
                 if ( !pImp->GetShell()->AddPaintRect( aRect ) )
                     pTab->ResetRetouche();
             }
@@ -1934,8 +1935,11 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     }
     if ( IsPaint() && bAddRect && pTab->IsRetouche() && !pTab->GetNext() )
     {
-        SwRect aRect( pTab->PaintArea() );
-        aRect.Top( pTab->Frm().Top() + pTab->Prt().Bottom() + 1 );
+        /// OD 04.10.2002 #102779#
+        /// set correct rectangle for retouche: area between bottom of table frame
+        /// and bottom of paint area of the upper frame.
+        SwRect aRect( pTab->GetUpper()->PaintArea() );
+        aRect.Top( pTab->Frm().Top() + pTab->Prt().Bottom() );
         if ( !pImp->GetShell()->AddPaintRect( aRect ) )
             pTab->ResetRetouche();
     }
