@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:18:30 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #endif
 
 #include "sdmod.hxx"
+#include "docshell.hxx"
+#include "grdocsh.hxx"
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -101,22 +103,9 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    // to create the service the SW_MOD should be already initialized
-    DBG_ASSERT( SD_MOD(), "No StarDraw module!" );
-
-    if ( SD_MOD() )
-    {
-        ::rtl::OUString aFactoryURL( RTL_CONSTASCII_USTRINGPARAM ( "private:factory/sdraw" ) );
-        const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( aFactoryURL );
-        if ( pFactory )
-        {
-            SfxObjectShell* pShell = pFactory->CreateObject();
-            if( pShell )
-                return uno::Reference< uno::XInterface >( pShell->GetModel() );
-        }
-    }
-
-    return uno::Reference< uno::XInterface >();
+    SdDLL::Init();
+    SfxObjectShell* pShell = new SdGraphicDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 // com.sun.star.comp.Draw.PresentationDocument
@@ -128,11 +117,11 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 
 uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq( 4 );
+    uno::Sequence< rtl::OUString > aSeq( 3 );
     aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
-    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
-    aSeq[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
-    aSeq[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
+    aSeq[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+    //aSeq[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
 
     return aSeq;
 }
@@ -142,22 +131,9 @@ uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    // to create the service the SW_MOD should be already initialized
-    DBG_ASSERT( SD_MOD(), "No StarDraw module!" );
-
-    if ( SD_MOD() )
-    {
-        ::rtl::OUString aFactoryURL( RTL_CONSTASCII_USTRINGPARAM ( "private:factory/simpress" ) );
-        const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( aFactoryURL );
-        if ( pFactory )
-        {
-            SfxObjectShell* pShell = pFactory->CreateObject();
-            if( pShell )
-                return uno::Reference< uno::XInterface >( pShell->GetModel() );
-        }
-    }
-
-    return uno::Reference< uno::XInterface >();
+    SdDLL::Init();
+    SfxObjectShell* pShell = new SdDrawDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 
