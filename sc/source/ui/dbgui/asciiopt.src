@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2002-01-10 13:07:47 $
+ *  last change: $Author: dr $ $Date: 2002-01-10 13:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,19 +93,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE_BRAZILIAN ] = "Feldbreite" ;
         Text [ SWEDISH ] = "Fält" ;
         Text [ PORTUGUESE ] = "Campos" ;
-        Text[ chinese_simplified ] = "×Ö¶Î";
+        Text[ chinese_simplified ] = "å­—æ®µ";
         Text[ russian ] = "Ïîëÿ";
         Text[ polish ] = "Pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ";
-        Text[ chinese_traditional ] = "Äæ¦ì";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
+        Text[ chinese_traditional ] = "æ¬„ä½";
         Text[ arabic ] = "ÍŞæá";
         Text[ dutch ] = "Velden";
-        Text[ chinese_simplified ] = "×Ö¶Î";
+        Text[ chinese_simplified ] = "å­—æ®µ";
         Text[ greek ] = "Ğåäßá";
-        Text[ korean ] = "ÇÊµå";
+        Text[ korean ] = "í•„ë“œ";
         Text[ turkish ] = "Alan";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Campos";
+        Text[ catalan ] = "Camps";
         Text[ finnish ] = "Kentät";
     };
     FixedText FT_TYPE
@@ -121,20 +121,19 @@ ModalDialog RID_SCDLG_ASCII
         Text[ dutch ] = "Kolomt~ype";
         Text[ french ] = "T~ype";
         Text[ spanish ] = "T~ipo de columna";
-        Text[ finnish ] = "~Tyyppi";
+        Text[ finnish ] = "Saraket~yyppi";
         Text[ italian ] = "Tipo colonna";
         Text[ danish ] = "Type";
         Text[ swedish ] = "Kolumnt~yp";
         Text[ polish ] = "Rodzaj kolumny";
         Text[ portuguese_brazilian ] = "Typ";
-        Text[ japanese ] = "—ñ‚Ìí—Ş(~Y)";
-        Text[ korean ] = "´Ü À¯Çü(~Y)";
-        Text[ chinese_simplified ] = "ÁĞÀàĞÍ(~Y)";
-        Text[ chinese_traditional ] = "ÄæªºÃş«¬(~Y)";
+        Text[ japanese ] = "åˆ—ã®ç¨®é¡(~Y)";
+        Text[ korean ] = "ë‹¨ ìœ í˜•(~Y)";
+        Text[ chinese_simplified ] = "åˆ—ç±»å‹(~Y)";
+        Text[ chinese_traditional ] = "æ¬„çš„é¡å‹(~Y)";
         Text[ turkish ] = "T~ip";
         Text[ arabic ] = "ÇáäæÚ";
-        Text[ catalan ] = "T~ipo";
-        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "T~ipus";
     };
     ListBox LB_TYPE1
     {
@@ -158,20 +157,20 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE_BRAZILIAN ] = "Trennoptionen" ;
         Text [ SWEDISH ] = "Delningsalternativ" ;
         Text [ PORTUGUESE ] = "Opções de separação" ;
-        Text[ chinese_simplified ] = "·Ö¸ôÑ¡Ïî";
+        Text[ chinese_simplified ] = "åˆ†éš”é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû ğàçäåëåíèÿ";
         Text[ polish ] = "Opcje separatora";
-        Text[ japanese ] = "‹æØ‚è‚ÌµÌß¼®İ";
-        Text[ chinese_traditional ] = "¤À¹j¿ï¶µ";
+        Text[ japanese ] = "åŒºåˆ‡ã‚Šã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "åˆ†éš”é¸é …";
         Text[ arabic ] = "ÎÕÇÆÕ ÇáİÕá";
         Text[ dutch ] = "Afscheidingsopties";
-        Text[ chinese_simplified ] = "·Ö¸ôÑ¡Ïî";
+        Text[ chinese_simplified ] = "åˆ†éš”é€‰é¡¹";
         Text[ greek ] = "Åğéëïãİò äéá÷ùñéóôéêïı";
-        Text[ korean ] = "±¸ºĞÀÚ ¿É¼Ç";
+        Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸ ì˜µì…˜";
         Text[ turkish ] = "Ayırma işa. seçenekleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones de separación";
-        Text[ finnish ] = "Erotinasetukset";
+        Text[ catalan ] = "Opcions de separació";
+        Text[ finnish ] = "Erottimen asetukset";
     };
     RadioButton RB_FIXED
     {
@@ -189,19 +188,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ SWEDISH ] = "~Fast bredd" ;
         Text [ PORTUGUESE ] = "Largura fixa" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¹Ì¶¨µÄ¿í¶È(~F)";
+        Text[ chinese_simplified ] = "å›ºå®šçš„å®½åº¦(~F)";
         Text[ russian ] = "Ôèêñ.  øèğèíà";
         Text[ polish ] = "Sta³a szerokoœæ";
-        Text[ japanese ] = "ŒÅ’è•(~F)";
-        Text[ chinese_traditional ] = "©T©wªº¼e«×(~F)";
+        Text[ japanese ] = "å›ºå®šå¹…(~F)";
+        Text[ chinese_traditional ] = "å›ºå®šçš„å¯¬åº¦(~F)";
         Text[ arabic ] = "ÚÑÖ ËÇÈÊ";
         Text[ dutch ] = "~Vaste breedte";
-        Text[ chinese_simplified ] = "¹Ì¶¨µÄ¿í¶È(~F)";
+        Text[ chinese_simplified ] = "å›ºå®šçš„å®½åº¦(~F)";
         Text[ greek ] = "Óôáèåñü ğëÜôïò";
-        Text[ korean ] = "°íÁ¤µÈ ³Êºñ(~F)";
+        Text[ korean ] = "ê³ ì • ë„ˆë¹„(~F)";
         Text[ turkish ] = "~Sabit genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ancho ~fijo";
+        Text[ catalan ] = "~Amplada fixa";
         Text[ finnish ] = "~Kiinteä leveys";
     };
     RadioButton RB_SEPARATED
@@ -221,19 +220,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE ] = "Separado" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "·Ö¸ô(~S)";
+        Text[ chinese_simplified ] = "åˆ†éš”(~S)";
         Text[ russian ] = "Ğàçäåëüíî";
         Text[ polish ] = "Rozdzielony";
-        Text[ japanese ] = "‹æØ‚é(~S)";
-        Text[ chinese_traditional ] = "¤À¹j(~S)";
+        Text[ japanese ] = "åŒºåˆ‡ã‚‹(~S)";
+        Text[ chinese_traditional ] = "åˆ†éš”(~S)";
         Text[ arabic ] = "ãİÕæá";
         Text[ dutch ] = "~Gescheiden";
-        Text[ chinese_simplified ] = "·Ö¸ô(~S)";
+        Text[ chinese_simplified ] = "åˆ†éš”(~S)";
         Text[ greek ] = "Äéá÷ùñéæüìåíá";
-        Text[ korean ] = "·Î ³ª´©±â(~S)";
+        Text[ korean ] = "ë¡œ ë‚˜ëˆ„ê¸°(~S)";
         Text[ turkish ] = "~Ayrı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Separado";
+        Text[ catalan ] = "~Separat per";
         Text[ finnish ] = "~Erottimena";
     };
     FixedText FT_CHARSET
@@ -243,7 +242,7 @@ ModalDialog RID_SCDLG_ASCII
         Text = "Z~eichensatz" ;
         Text [ ENGLISH ] = "Charset" ;
         Text [ DANISH ] = "Tegnsæt" ;
-        Text [ ENGLISH_US ] = "C~haracter set" ;
+        Text [ ENGLISH_US ] = "Ch~aracter set" ;
         Text [ SPANISH ] = "Juego de caracteres" ;
         Text [ FRENCH ] = "Jeu de caractères" ;
         Text [ ITALIAN ] = "Ti~po di carattere" ;
@@ -251,19 +250,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE_BRAZILIAN ] = "Zeichensatz" ;
         Text [ SWEDISH ] = "~Teckenuppsättning" ;
         Text [ PORTUGUESE ] = "Conjunto de caracteres" ;
-        Text[ chinese_simplified ] = "×ÖÌå(~H)";
+        Text[ chinese_simplified ] = "å­—ç¬¦é›†(~A)";
         Text[ russian ] = "Íàáîğ çíàêîâ";
         Text[ polish ] = "Zbiór znaków";
-        Text[ japanese ] = "•¶š—ñ(~H)";
-        Text[ chinese_traditional ] = "¦r«¬(~H)";
+        Text[ japanese ] = "æ–‡å­—åˆ—(~A)";
+        Text[ chinese_traditional ] = "å­—å‹(~A)";
         Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
         Text[ dutch ] = "~Tekenset";
-        Text[ chinese_simplified ] = "×ÖÌå(~H)";
+        Text[ chinese_simplified ] = "å­—ç¬¦é›†(~A)";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ó~åô ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚÁıÇÕ(~H)";
+        Text[ korean ] = "ë¬¸ìì§‘í•©(~A)";
         Text[ turkish ] = "~Karakter kümesi";
-        Text[ catalan ] = "Juego de caracteres";
+        Text[ catalan ] = "Joc de c~aràcters";
         Text[ finnish ] = "~Merkistö";
     };
     ListBox LB_CHARSET
@@ -289,19 +288,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "Import" ;
         Text [ dutch ] = "Import" ;
         Text [ portuguese ] = "Importar" ;
-        Text[ chinese_simplified ] = "ÊäÈë";
+        Text[ chinese_simplified ] = "è¾“å…¥";
         Text[ russian ] = "Èìïîğò";
         Text[ polish ] = "Import";
-        Text[ japanese ] = "²İÎß°Ä";
-        Text[ chinese_traditional ] = "¶×¤J";
+        Text[ japanese ] = "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ";
+        Text[ chinese_traditional ] = "åŒ¯å…¥";
         Text[ arabic ] = "ÇÓÊíÑÇÏ";
         Text[ dutch ] = "Import";
-        Text[ chinese_simplified ] = "ÊäÈë";
+        Text[ chinese_simplified ] = "è¾“å…¥";
         Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ korean ] = "°¡Á®¿À±â";
+        Text[ korean ] = "ê°€ì ¸ì˜¤ê¸°";
         Text[ turkish ] = "İçe aktar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Importación";
+        Text[ catalan ] = "Importació";
         Text[ finnish ] = "Tuo";
     };
     FixedText FT_TEXTSEP
@@ -319,19 +318,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE_BRAZILIAN ] = "Texttrenner" ;
         Text [ SWEDISH ] = "Te~xtavgränsare" ;
         Text [ PORTUGUESE ] = "Separadores de texto" ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö·Ö¸ô·û(~X)";
+        Text[ chinese_simplified ] = "æ–‡å­—åˆ†éš”ç¬¦(~X)";
         Text[ russian ] = "Ğàçäåëèòåëü òåêñòà";
         Text[ polish ] = "Separator tekstu";
-        Text[ japanese ] = "Ã·½Ä‚Ì‹æØ‚è‹L†(~X)";
-        Text[ chinese_traditional ] = "¤å¦r¤À¹j²Å(~X)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®åŒºåˆ‡ã‚Šè¨˜å·(~X)";
+        Text[ chinese_traditional ] = "æ–‡å­—åˆ†éš”ç¬¦(~X)";
         Text[ arabic ] = "İÇÕá ÇáäÕ";
         Text[ dutch ] = "T~ekstafscheiding";
-        Text[ chinese_simplified ] = "ÎÄ×Ö·Ö¸ô·û(~X)";
+        Text[ chinese_simplified ] = "æ–‡å­—åˆ†éš”ç¬¦(~X)";
         Text[ greek ] = "Äéá÷ùñéóôéêü êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® ºĞ¸®ÀÚ(~X)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ êµ¬ë¶„ ê¸°í˜¸(~X)";
         Text[ turkish ] = "Me~tin ayırma işareti";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Separador de te~xto";
+        Text[ catalan ] = "Delimitador de te~xt";
         Text[ finnish ] = "~Tekstin erottimet";
     };
     ComboBox CB_TEXTSEP
@@ -373,20 +372,20 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE_BRAZILIAN ] = "Spalte" ;
         Text [ SWEDISH ] = "Kolumn" ;
         Text [ PORTUGUESE ] = "Coluna" ;
-        Text[ chinese_simplified ] = "ÁĞ";
+        Text[ chinese_simplified ] = "åˆ—";
         Text[ russian ] = "Êîëîíêà";
         Text[ polish ] = "Kolumna";
-        Text[ japanese ] = "—ñ";
-        Text[ chinese_traditional ] = "Äæ";
+        Text[ japanese ] = "åˆ—";
+        Text[ chinese_traditional ] = "æ¬„";
         Text[ arabic ] = "ÚãæÏ";
         Text[ dutch ] = "Kolom";
-        Text[ chinese_simplified ] = "ÁĞ";
+        Text[ chinese_simplified ] = "åˆ—";
         Text[ greek ] = "ÓôŞëç";
-        Text[ korean ] = "¿­";
+        Text[ korean ] = "ì—´";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Columna";
-        Text[ finnish ] = "Sarake ";
+        Text[ finnish ] = "Sarake";
     };
     String STR_TO
     {
@@ -401,20 +400,20 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE_BRAZILIAN ] = "bis" ;
         Text [ SWEDISH ] = "till" ;
         Text [ PORTUGUESE ] = "até" ;
-        Text[ chinese_simplified ] = "ÖÁ";
+        Text[ chinese_simplified ] = "è‡³";
         Text[ russian ] = "äî";
         Text[ polish ] = "do";
-        Text[ japanese ] = "I‚è‚Ìs";
-        Text[ chinese_traditional ] = "¦Ü";
+        Text[ japanese ] = "çµ‚ã‚Šã®è¡Œ";
+        Text[ chinese_traditional ] = "è‡³";
         Text[ arabic ] = "ÍÊì";
         Text[ dutch ] = "tot";
-        Text[ chinese_simplified ] = "ÖÁ";
+        Text[ chinese_simplified ] = "è‡³";
         Text[ greek ] = "İùò";
-        Text[ korean ] = "±îÁö";
+        Text[ korean ] = "ê¹Œì§€";
         Text[ turkish ] = "son";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "hasta";
-        Text[ finnish ] = "kohteeseen";
+        Text[ catalan ] = "a";
+        Text[ finnish ] = "kohde";
     };
     CheckBox CKB_TAB
     {
@@ -428,23 +427,23 @@ ModalDialog RID_SCDLG_ASCII
         Text [ swedish ] = "Tabu~lator" ;
         Text [ danish ] = "Tabulator" ;
         Text [ italian ] = "~Tabulazione" ;
-        Text [ spanish ] = "~Tabulación" ;
+        Text [ spanish ] = "~Tabulador" ;
         Text [ french ] = "~Tabulation" ;
         Text [ dutch ] = "~Tabulator" ;
         Text [ portuguese ] = "~Tabulação" ;
-        Text[ chinese_simplified ] = "ÖÆ±í·û(~T)";
+        Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦(~T)";
         Text[ russian ] = "Òàáóëÿòîğ";
         Text[ polish ] = "Tabulator";
-        Text[ japanese ] = "ÀÌŞ(~T)";
-        Text[ chinese_traditional ] = "»sªí²Å(~T)";
+        Text[ japanese ] = "ã‚¿ãƒ–(~T)";
+        Text[ chinese_traditional ] = "å®šä½éµ(~T)";
         Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
         Text[ dutch ] = "~Tabulator";
-        Text[ chinese_simplified ] = "ÖÆ±í·û(~T)";
+        Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦(~T)";
         Text[ greek ] = "Óôçëïèİôçò";
-        Text[ korean ] = "ÅÇ(~T)";
+        Text[ korean ] = "íƒ­(~T)";
         Text[ turkish ] = "~Sekme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tabulación";
+        Text[ catalan ] = "~Pestanya";
         Text[ finnish ] = "~Sarkain";
     };
     CheckBox CKB_SEMICOLON
@@ -463,19 +462,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "~Point-virgule" ;
         Text [ dutch ] = "~Puntkomma" ;
         Text [ portuguese ] = "~Ponto e vírgula" ;
-        Text[ chinese_simplified ] = "·ÖºÅ(~E)";
+        Text[ chinese_simplified ] = "åˆ†å·(~E)";
         Text[ russian ] = "Òî÷êà ñ çàïÿòîé";
         Text[ polish ] = "Œrednik";
-        Text[ japanese ] = "¾ĞºÛİ(~E)";
-        Text[ chinese_traditional ] = "¤À¸¹(~E)";
+        Text[ japanese ] = "ã‚»ãƒŸã‚³ãƒ­ãƒ³(~E)";
+        Text[ chinese_traditional ] = "åˆ†è™Ÿ(~E)";
         Text[ arabic ] = "İÇÕáÉ ãäŞæØÉ";
         Text[ dutch ] = "~Puntkomma";
-        Text[ chinese_simplified ] = "·ÖºÅ(~E)";
+        Text[ chinese_simplified ] = "åˆ†å·(~E)";
         Text[ greek ] = "¢íù ôåëåßá";
-        Text[ korean ] = "¼¼¹ÌÄİ·Ğ(~E)";
+        Text[ korean ] = "ì„¸ë¯¸ì½œë¡ (~E)";
         Text[ turkish ] = "~Noktalı virgül";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Punto y coma";
+        Text[ catalan ] = "P~unt i coma";
         Text[ finnish ] = "~Puolipiste";
     };
     CheckBox CKB_COMMA
@@ -494,19 +493,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "~Virgule" ;
         Text [ dutch ] = "~Komma" ;
         Text [ portuguese ] = "~Vírgula" ;
-        Text[ chinese_simplified ] = "¶ººÅ(~C)";
+        Text[ chinese_simplified ] = "é€—å·(~C)";
         Text[ russian ] = "Çàïÿòàÿ";
         Text[ polish ] = "Przecin~ek";
-        Text[ japanese ] = "ºİÏ(~C)";
-        Text[ chinese_traditional ] = "³r¸¹(~C)";
+        Text[ japanese ] = "ã‚³ãƒ³ãƒ(~C)";
+        Text[ chinese_traditional ] = "é€—è™Ÿ(~C)";
         Text[ arabic ] = "İÇÕáÉ";
         Text[ dutch ] = "~Komma";
-        Text[ chinese_simplified ] = "¶ººÅ(~C)";
+        Text[ chinese_simplified ] = "é€—å·(~C)";
         Text[ greek ] = "Êüììá";
-        Text[ korean ] = "ÄŞ¸¶(~C)";
+        Text[ korean ] = "ì½¤ë§ˆ(~C)";
         Text[ turkish ] = "~Virgül";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~ma";
+        Text[ catalan ] = "~Coma";
         Text[ finnish ] = "~Pilkku";
     };
     CheckBox CKB_SPACE
@@ -525,19 +524,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "~Espace" ;
         Text [ dutch ] = "~Spatie" ;
         Text [ portuguese ] = "~Espaço" ;
-        Text[ chinese_simplified ] = "¿Õ¸ñ(~P)";
+        Text[ chinese_simplified ] = "ç©ºæ ¼(~P)";
         Text[ russian ] = "Ïğîáåë";
         Text[ polish ] = "Spacja";
-        Text[ japanese ] = "½Íß°½(~P)";
-        Text[ chinese_traditional ] = "ªÅ®æ(~P)";
+        Text[ japanese ] = "ã‚¹ãƒšãƒ¼ã‚¹(~P)";
+        Text[ chinese_traditional ] = "ç©ºæ ¼(~P)";
         Text[ arabic ] = "ÍÑİ ãÓÇİÉ";
         Text[ dutch ] = "~Spatie";
-        Text[ chinese_simplified ] = "¿Õ¸ñ(~P)";
+        Text[ chinese_simplified ] = "ç©ºæ ¼(~P)";
         Text[ greek ] = "Êåíü";
-        Text[ korean ] = "°£°İ(~P)";
+        Text[ korean ] = "ê°„ê²©(~P)";
         Text[ turkish ] = "B~oşluk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Espacio";
+        Text[ catalan ] = "Es~pai";
         Text[ finnish ] = "~Väli";
     };
     CheckBox CKB_OTHER
@@ -556,19 +555,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "~Autres" ;
         Text [ dutch ] = "~Andere" ;
         Text [ portuguese ] = "~Outros" ;
-        Text[ chinese_simplified ] = "ÆäËû(~O)";
+        Text[ chinese_simplified ] = "å…¶ä»–(~O)";
         Text[ russian ] = "Äğóãèå";
         Text[ polish ] = "Inne";
-        Text[ japanese ] = "‚»‚Ì‘¼(~O)";
-        Text[ chinese_traditional ] = "¨ä¥L(~O)";
+        Text[ japanese ] = "ãã®ä»–(~O)";
+        Text[ chinese_traditional ] = "å…¶ä»–(~O)";
         Text[ arabic ] = "ÛíÑ Ğáß";
         Text[ dutch ] = "~Andere";
-        Text[ chinese_simplified ] = "ÆäËû(~O)";
+        Text[ chinese_simplified ] = "å…¶ä»–(~O)";
         Text[ greek ] = "¢ëëá";
-        Text[ korean ] = "ÀÚ¼¼È÷(~O)";
+        Text[ korean ] = "ê¸°íƒ€(~O)";
         Text[ turkish ] = "~Diğer";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Otros";
+        Text[ catalan ] = "~Altres";
         Text[ finnish ] = "~Muu";
     };
     Edit ED_OTHER
@@ -594,19 +593,19 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "A partir de la ~ligne" ;
         Text [ dutch ] = "Vanaf  ~rij" ;
         Text [ portuguese ] = "A partir da ~linha" ;
-        Text[ chinese_simplified ] = "¿ªÊ¼µÄĞĞÊı(~W)";
+        Text[ chinese_simplified ] = "å¼€å§‹çš„è¡Œæ•°(~W)";
         Text[ russian ] = "Ñî ñòğîêè";
         Text[ polish ] = "Od wiersza";
-        Text[ japanese ] = "n‚ß‚Ìs(~W)";
-        Text[ chinese_traditional ] = "¶}©lªº¦C¼Æ(~W)";
+        Text[ japanese ] = "å§‹ã‚ã®è¡Œ(~W)";
+        Text[ chinese_traditional ] = "é–‹å§‹çš„åˆ—æ•¸(~W)";
         Text[ arabic ] = "ÈÏÇíÉ ãä ÇáÕİ";
         Text[ dutch ] = "Vanaf  ~rij";
-        Text[ chinese_simplified ] = "¿ªÊ¼µÄĞĞÊı(~W)";
+        Text[ chinese_simplified ] = "å¼€å§‹çš„è¡Œæ•°(~W)";
         Text[ greek ] = "Áğü ãñáììŞ";
-        Text[ korean ] = "ÇàºÎÅÍ(~W)";
+        Text[ korean ] = "í–‰ë¶€í„°(~W)";
         Text[ turkish ] = "İlk sa~tır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A partir de ~línea";
+        Text[ catalan ] = "Des de la f~ila";
         Text[ finnish ] = "Riviltä";
     };
     NumericField NF_AT_ROW
@@ -655,35 +654,47 @@ ModalDialog RID_SCDLG_ASCII
         Text [ french ] = "~Regrouper séparateurs de champ" ;
         Text [ dutch ] = "Vel~dscheidingstekens samenvatten" ;
         Text [ portuguese ] = "Agrupar ~separadores de campos" ;
-        Text[ chinese_simplified ] = "Ñ¹ËõÏÔÊ¾(~D)";
+        Text[ chinese_simplified ] = "å‹ç¼©æ˜¾ç¤º(~D)";
         Text[ russian ] = "Îáúåäèíèòü ğàçäåëèòåëè ïîëÿ";
         Text[ polish ] = "Kompresuj separatory pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‹æØ‚è‚ÌŒ‹‡(~D)";
-        Text[ chinese_traditional ] = "À£ÁYÅã¥Ü(~D)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åŒºåˆ‡ã‚Šã®çµåˆ(~D)";
+        Text[ chinese_traditional ] = "å£“ç¸®é¡¯ç¤º(~D)";
         Text[ arabic ] = "Öã İæÇÕá ÇáÍŞæá";
         Text[ dutch ] = "Vel~dscheidingstekens samenvatten";
-        Text[ chinese_simplified ] = "Ñ¹ËõÏÔÊ¾(~D)";
+        Text[ chinese_simplified ] = "å‹ç¼©æ˜¾ç¤º(~D)";
         Text[ greek ] = "Óıíïøç äéá÷ùñéóôéêşí ğåäßùí";
-        Text[ korean ] = "ÇÊµå ±¸ºĞÀÚ ¿ä¾à(~D)";
+        Text[ korean ] = "í•„ë“œ êµ¬ë¶„ ê¸°í˜¸ ìš”ì•½(~D)";
         Text[ turkish ] = "Ay~ırma işaretlerini özetle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reagrupar los ~separadores de campo";
-        Text[ finnish ] = "~Tiivistetty näyttö";
+        Text[ catalan ] = "Fusiona els ~delimitadors";
+        Text[ finnish ] = "~Yhdistä erottimet";
     };
-    Text[ chinese_simplified ] = "ÊäÈëÎÄ×Ö";
+    Text[ chinese_simplified ] = "è¾“å…¥æ–‡å­—";
     Text[ russian ] = "Èìïîğò òåêñòà";
     Text[ polish ] = "Import tekstu";
-    Text[ japanese ] = "Ã·½Ä‚Ì²İÎß°Ä";
-    Text[ chinese_traditional ] = "¶×¤J¤å¦r";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ";
+    Text[ chinese_traditional ] = "åŒ¯å…¥æ–‡å­—";
     Text[ arabic ] = "ÇÓÊíÑÇÏ äÕ";
     Text[ dutch ] = "Tekstimport";
-    Text[ chinese_simplified ] = "ÊäÈëÎÄ×Ö";
+    Text[ chinese_simplified ] = "è¾“å…¥æ–‡å­—";
     Text[ greek ] = "ÅéóáãùãŞ êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ® °¡Á®¿À±â";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸°";
     Text[ turkish ] = "İçe aktar (metin)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Importar texto";
+    Text[ catalan ] = "Importació de text";
     Text[ finnish ] = "Tekstin tuonti";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
