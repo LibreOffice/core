@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:20:50 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 07:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_simplified ] = "æÿ’Û(~X)";
         Text[ russian ] = "Ã‡ÚËˆ‡";
         Text[ polish ] = "Macierz";
-        Text[ japanese ] = "œƒÿ∏Ω(~X)";
+        Text[ japanese ] = "œƒÿØ∏Ω(~X)";
         Text[ chinese_traditional ] = "Øx∞}(~X)";
         Text[ arabic ] = "„’›Ê›…";
         Text[ greek ] = "ÃﬁÙÒ·";
@@ -946,6 +946,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ arabic ] = " ﬂ»Ì—";
         QuickHelpText[ greek ] = "ÃÂ„›ËıÌÛÁ";
         QuickHelpText[ korean ] = "Maximize";
+        QuickHelpText[ turkish ] = "Vergrˆﬂern";
     };
     /*
     HelpButton BTN_HELP
@@ -1032,7 +1033,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_simplified ] = "ºÃ–¯(~N)";
         Text[ russian ] = "~ƒ‡ÎÂÂ >>";
         Text[ polish ] = "Dalej >>";
-        Text[ japanese ] = "éüÇ÷ >>(~N)";
+        Text[ japanese ] = "éüÇ÷(~N) >>";
         Text[ chinese_traditional ] = "ƒ~ƒÚ >>";
         Text[ arabic ] = "«· «·Ì <<";
         Text[ greek ] = "≈¸ÏÂÌÔ >>";
