@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:54:14 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,15 +571,14 @@ BOOL SvxSearchDialog::Close()
 
 INT32 SvxSearchDialog::GetTransliterationFlags() const
 {
-    INT32 &rFlags = (INT32) nTransliterationFlags;
     if (!aMatchCaseCB.IsChecked())
-        rFlags |=  TransliterationModules_IGNORE_CASE;
+        nTransliterationFlags |=  TransliterationModules_IGNORE_CASE;
     else
-        rFlags &= ~TransliterationModules_IGNORE_CASE;
+        nTransliterationFlags &= ~TransliterationModules_IGNORE_CASE;
     if ( !aJapMatchFullHalfWidthCB.IsChecked())
-        rFlags |=  TransliterationModules_IGNORE_WIDTH;
+        nTransliterationFlags |=  TransliterationModules_IGNORE_WIDTH;
     else
-        rFlags &= ~TransliterationModules_IGNORE_WIDTH;
+        nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
     return nTransliterationFlags;
 }
 
