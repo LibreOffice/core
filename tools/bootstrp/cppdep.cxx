@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:14:31 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,26 +62,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef WNT
-#ifdef BOOTSTRAPPER
-#include <glibc/posix/getopt.h>
-#else
-#include <glibc/getopt.h>
-#endif
-#endif
-
-#ifdef UNX
-#ifdef MACOSX
-#if ( __GNUC__ < 3 )
-#ifdef BOOTSTRAPPER
-#include <glibc/posix/getopt.h>
-#else
-#include <glibc/getopt.h>
-#endif
-#endif
-#endif
 #include <unistd.h>
-#endif
 
 #include <sys/stat.h>
 #include <stream.hxx>
