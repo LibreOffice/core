@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-11-18 16:31:51 $
+ *  last change:$Date: 2004-01-05 20:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,6 @@
  ************************************************************************/
 package mod._toolkit;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.FormTools;
-import util.WriterTools;
-import util.utils;
-
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
@@ -89,6 +79,17 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.FormTools;
+import util.WriterTools;
+import util.utils;
+
 
 public class UnoControlContainer extends TestCase {
     XTextDocument xTextDoc;
@@ -100,8 +101,10 @@ public class UnoControlContainer extends TestCase {
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
             log.println("creating a textdocument");
-            xTD2 = WriterTools.createTextDoc( (XMultiServiceFactory) param.getMSF());
-            xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) param.getMSF());
+            xTD2 = WriterTools.createTextDoc(
+                           (XMultiServiceFactory) param.getMSF());
+            xTextDoc = WriterTools.createTextDoc(
+                               (XMultiServiceFactory) param.getMSF());
         } catch (Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace(log);
@@ -112,19 +115,8 @@ public class UnoControlContainer extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
 
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-
-            closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class,
-                                                            xTD2);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
+        util.DesktopTools.closeDoc(xTD2);
     }
 
     public TestEnvironment createTestEnvironment(TestParameters param,
@@ -144,6 +136,7 @@ public class UnoControlContainer extends TestCase {
 
         XGraphics aGraphic = null;
 
+
         // create 3 XControls
         // create first XControl
         shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
@@ -159,6 +152,7 @@ public class UnoControlContainer extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create XControl", e);
         }
+
 
         // create second XControl
         shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
@@ -212,6 +206,7 @@ public class UnoControlContainer extends TestCase {
         try {
             the_win = the_access.getControl(the_Model).getPeer();
             the_kit = the_win.getToolkit();
+
             XDevice aDevice = the_kit.createScreenCompatibleDevice(200, 200);
             aGraphic = aDevice.createGraphics();
         } catch (Exception e) {
@@ -232,8 +227,8 @@ public class UnoControlContainer extends TestCase {
         // finished create Object Relations -----------------------------------
         // create the UnoControlContainer
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) param.getMSF())
-                        .createInstance("com.sun.star.awt.UnoControlContainer");
+            oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
+                           "com.sun.star.awt.UnoControlContainer");
 
             XControl xCtrl = (XControl) UnoRuntime.queryInterface(
                                      XControl.class, oObj);
@@ -241,8 +236,6 @@ public class UnoControlContainer extends TestCase {
 
             ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
                                XControlContainer.class, oObj);
-
-
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create UnoControlContainer", e);
@@ -256,12 +249,15 @@ public class UnoControlContainer extends TestCase {
         String objName = "UnoControlContainer";
         tEnv.addObjRelation("OBJNAME", "toolkit." + objName);
 
+
         // Object relation for XContainer
         tEnv.addObjRelation("XContainer.Container", ctrlCont);
         tEnv.addObjRelation("INSTANCE", xCtrl);
 
+
         //Adding ObjRelation for XView
         tEnv.addObjRelation("GRAPHICS", aGraphic);
+
 
         // Object Relation for XControlContainer
         tEnv.addObjRelation("CONTROL1", xCtrl1);
