@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-04 06:28:26 $
+ *  last change: $Author: mib $ $Date: 2001-04-04 13:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,14 +459,23 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         (rPropMapper->GetEntryFlags( *aIndexItr ) &
                                         MID_FLAG_DEFAULT_ITEM_EXPORT) != 0 )
                     {
-                        if( !bGotValue )
+                        try
                         {
-                            aNewProperty.maValue =
-                                rPropSet->getPropertyValue( aItr->GetApiName() );
-                            bGotValue = sal_True;
+                            if( !bGotValue )
+                            {
+                                aNewProperty.maValue =
+                                    rPropSet->getPropertyValue( aItr->GetApiName() );
+                                bGotValue = sal_True;
+                            }
+                            aNewProperty.mnIndex = *aIndexItr;
+                            aPropStates.AddPropertyState( aNewProperty );
                         }
-                        aNewProperty.mnIndex = *aIndexItr;
-                        aPropStates.AddPropertyState( aNewProperty );
+                        catch( UnknownPropertyException& )
+                        {
+                            // might be a problem of getImplemenetationId
+                            OSL_ENSURE( !this, "unknown property in getPropertyValue" );
+                        }
+
                     }
                 }
             }
@@ -595,12 +604,21 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
                 const uno::Sequence<OUString>& rApiNames =
                     pFilterInfo->GetApiNames();
 
-                Sequence < PropertyState > aStates =
-                    xPropState->getPropertyStates( rApiNames );
+                try
+                {
+                    Sequence < PropertyState > aStates =
+                        xPropState->getPropertyStates( rApiNames );
 
-                pFilterInfo->FillPropertyStateArray(aPropStateArray, aStates,
-                                                    xPropSet, maPropMapper,
-                                                    bDefault);
+                    pFilterInfo->FillPropertyStateArray(aPropStateArray,
+                                                        aStates,
+                                                        xPropSet, maPropMapper,
+                                                        bDefault);
+                }
+                catch( UnknownPropertyException& )
+                {
+                    // might be a problem of getImplemenetationId
+                    OSL_ENSURE( !this, "unknown property in getPropertyStates" );
+                }
             }
         }
         else
