@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:10:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svtools/filter.hxx>
 #include <svtools/itempool.hxx>
 #include <sfx2/docfile.hxx>
+#include <avmedia/mediawindow.hxx>
 #include "impgrf.hxx"
 #include "svdpage.hxx"
 #include "svdograf.hxx"
@@ -214,46 +215,6 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
         rModel.SetStreamingSdrModel( TRUE );
         bRet = SvxDrawingLayerImport( &rModel, xInputStream );
         rModel.SetStreamingSdrModel( FALSE );
-    }
-
-    return bRet;
-}
-
-// ----------------------
-// - GalleryIsSoundFile -
-// ----------------------
-
-BOOL GalleryIsSoundFile( const INetURLObject& rURL )
-{
-    DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-    const String    aExt( rURL.getExtension().ToLowerAscii() );
-    BOOL            bRet = FALSE;
-
-    if( ( aExt == String( RTL_CONSTASCII_USTRINGPARAM( "wav" ) ) ) ||
-        ( aExt == String( RTL_CONSTASCII_USTRINGPARAM( "aif" ) ) ) ||
-        ( aExt == String( RTL_CONSTASCII_USTRINGPARAM( "au" ) ) ) )
-    {
-        bRet = TRUE;
-    }
-    else
-    {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-
-        if( pIStm )
-        {
-            BYTE cVal1, cVal2, cVal3, cVal4;
-
-            *pIStm >> cVal1 >> cVal2 >> cVal3 >> cVal4;
-
-            if ( ( cVal1 == 'R' && cVal2 == 'I' && cVal3 == 'F' && cVal4 == 'F' ) ||
-                 ( cVal1 == '.' && cVal2 == 's' && cVal3 == 'n' && cVal4 == 'd' ) )
-            {
-                bRet = TRUE;
-            }
-
-            delete pIStm;
-        }
     }
 
     return bRet;
