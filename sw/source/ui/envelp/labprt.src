@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:55:33 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,11 +314,11 @@ TabPage TP_LAB_PRT
         Text [ danish ] = "Printer " ;
         Text [ portuguese_brazilian ] = "Drucker " ;
         Text [ portuguese ] = "Impressora " ;
-        Text[ chinese_simplified ] = "´òÓ¡»ú ";
+        Text[ chinese_simplified ] = " ´òÓ¡»ú ";
         Text[ russian ] = "Ïğèíòåğ";
         Text[ polish ] = "Drukarka ";
         Text[ japanese ] = "ÌßØİÀ ";
-        Text[ chinese_traditional ] = "¦Lªí¾÷ ";
+        Text[ chinese_traditional ] = " ¦Lªí¾÷ ";
         Text[ arabic ] = "ÇáØÇÈÚÉ ";
         Text[ greek ] = "ÅêôõğùôŞò ";
         Text[ korean ] = "ÇÁ¸°ÅÍ ";
@@ -328,4 +328,5 @@ TabPage TP_LAB_PRT
     };
 };
  // **************************************************************************
+
 
