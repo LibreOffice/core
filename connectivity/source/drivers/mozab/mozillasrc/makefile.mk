@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-19 17:33:56 $
+#   last change: $Author: vg $ $Date: 2003-04-15 17:39:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,13 +110,13 @@ SLOFILES = \
 
 
 .IF "$(GUI)" == "WNT"
-.IF "$(DEBUG)" == ""
+.IF "$(DBG_LEVEL)" == "0"
 INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
         -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap 
+        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap
 CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
@@ -124,7 +124,7 @@ CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
             -DOJI -DWIN32 -D_X86_ -D_WINDOWS \
         -DMOZ_XUL -DMOZ_REFLOW_PERF -DMOZ_REFLOW_PERF_DSP \
         -DNSPR20 -DOS_HAS_DLL -DNO_JNI_STUBS \
-        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL 
+        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL
 CFLAGS +=   -GR- -W3 -Gy -MD -UDEBUG
 .ELSE
 INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
@@ -132,15 +132,15 @@ INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
         -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap 
-CDEFS +=    -DDEBUG -DWINVER=0x400 -DMOZILLA_CLIENT \
+        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap
+CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
             -DDMSVC4 -DDEVELOPER_DEBUG -DNS_MT_SUPPORTED -DNETLIB_THREAD \
-            -DOJI -D_DEBUG -DWIN32 -D_X86_ -D_WINDOWS \
+            -DOJI -DWIN32 -D_X86_ -D_WINDOWS \
         -DMOZ_XUL -DMOZ_REFLOW_PERF -DMOZ_REFLOW_PERF_DSP \
         -DDEBUG_Administrator -DNSPR20 -DOS_HAS_DLL -DNO_JNI_STUBS \
-        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL 
+        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL
 CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UNDEBUG
 .ENDIF
 .ENDIF
@@ -150,7 +150,7 @@ INCPOST += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
         -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap 
+        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap
 CDEFS+=	    -DMOZILLA_CLIENT \
             -DOSTYPE=\"Linux2.2.14-5\" -DOJI
 .IF "$(OS)" == "LINUX"
@@ -158,14 +158,14 @@ CFLAGS +=   -fPIC -g
 CFLAGSCXX += \
             -fno-rtti -Wall -Wconversion -Wpointer-arith \
             -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-            -Wno-long-long -pthread 
+            -Wno-long-long -pthread
 CDEFS     += -DTRACING
 .ELIF "$(OS)" == "NETBSD"
-CFLAGS +=   -fPIC 
+CFLAGS +=   -fPIC
 CFLAGSCXX += \
             -fno-rtti -Wall -Wconversion -Wpointer-arith \
             -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-            -Wno-long-long 
+            -Wno-long-long
 CDEFS     += -DTRACING
 .ENDIF
 .ENDIF
@@ -179,7 +179,7 @@ SHL1TARGET_NAME=$(TARGET)$(MOZAB_MAJOR)
 .INCLUDE : target.mk
 
 
-killdpc: 
+killdpc:
     -+$(RM) $(DPCTARGET)
     -+$(RM) $(DEPFILES)
     @+echo Dependency files removed
