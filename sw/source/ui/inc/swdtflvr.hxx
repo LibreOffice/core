@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-29 08:48:15 $
+ *  last change: $Author: jp $ $Date: 2001-10-29 10:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,8 @@ class SwTransferable : public TransferableHelper
                             BOOL bMsg );
 
     static int _PasteFileList( TransferableDataHelper& rData,
-                            SwWrtShell& rSh, const Point* pPt, BOOL bMsg );
+                                SwWrtShell& rSh, BOOL bLink,
+                                const Point* pPt, BOOL bMsg );
 
     int PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, BOOL bMove,
                         BOOL bIsXSelection );

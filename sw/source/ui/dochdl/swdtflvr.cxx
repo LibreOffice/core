@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-29 08:50:10 $
+ *  last change: $Author: jp $ $Date: 2001-10-29 10:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,7 +1298,9 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
 
             case SOT_FORMAT_FILE_LIST:
                 // dann nur als Grafiken einfuegen
-                nRet = SwTransferable::_PasteFileList( rData, rSh, pPt, bMsg );
+                nRet = SwTransferable::_PasteFileList( rData, rSh,
+                                    EXCHG_IN_ACTION_LINK == nClearedAction,
+                                    pPt, bMsg );
                 break;
 
             case SOT_FORMATSTR_ID_SONLK:
@@ -2496,33 +2498,36 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
 // -----------------------------------------------------------------------
 
 int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
-                                    SwWrtShell& rSh, const Point* pPt,
-                                    BOOL bMsg )
+                                    SwWrtShell& rSh, BOOL bLink,
+                                    const Point* pPt, BOOL bMsg )
 {
     int nRet = 0;
     FileList aFileList;
     if( rData.GetFileList( SOT_FORMAT_FILE_LIST, aFileList ) &&
         aFileList.Count() )
     {
+        USHORT nAct = bLink ? SW_PASTESDR_SETATTR : SW_PASTESDR_INSERT;
+        String sFlyNm;
         // iterate over the filelist
         for( ULONG n = 0, nEnd = aFileList.Count(); n < nEnd; ++n )
         {
+            TransferDataContainer* pHlp = new TransferDataContainer;
+            pHlp->CopyString( FORMAT_FILE, aFileList.GetFile( n ));
+            TransferableDataHelper aData( pHlp );
 
-            DataFlavorEx aFlavorEx;
-            if( SotExchange::GetFormatDataFlavor( FORMAT_FILE, aFlavorEx ) )
+            if( SwTransferable::_PasteGrf( aData, rSh, SOT_FORMAT_FILE, nAct,
+                                            pPt, FALSE, bMsg ))
             {
-                SwTransferable* pHlp = new SwTransferable( rSh );
-
-                pHlp->AddFormat( aFlavorEx );
-                pHlp->SetString( aFileList.GetFile( n ), aFlavorEx );
-                TransferableDataHelper aData( pHlp );
-
-                if( SwTransferable::_PasteGrf( aData, rSh, SOT_FORMAT_FILE,
-                                                SW_PASTESDR_INSERT, pPt,
-                                                FALSE, bMsg ))
-                    nRet = 1;
+                if( bLink )
+                {
+                    sFlyNm = rSh.GetFlyName();
+                    SwTransferable::SetSelInShell( rSh, FALSE, pPt );
+                }
+                nRet = 1;
             }
         }
+        if( sFlyNm.Len() )
+            rSh.GotoFly( sFlyNm );
     }
     else if( bMsg )
     {
