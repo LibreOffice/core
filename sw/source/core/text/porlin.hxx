@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 15:26:09 $
+ *  last change: $Author: fme $ $Date: 2001-05-11 06:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ public:
 
     // Ausgabe
     virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
-    void PrePaint( const SwTxtPaintInfo &rInf, SwLinePortion *pLast ) const;
+    void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
 #ifndef PRODUCT
     virtual sal_Bool Check( SvStream &rOs, SwTxtSizeInfo &rInfo ); //$ ostream
