@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:20:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,23 +179,4 @@ namespace toolkit
 //........................................................................
 
 #endif // TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3.58.1  2003/04/11 17:25:52  mt
- *  #108656# Moved accessibility from drafts to final
- *
- *  Revision 1.3  2002/10/29 08:08:38  fs
- *  #65293# must-change not done: new methods for XAccessibleComponent implemented
- *
- *  Revision 1.2  2002/05/17 15:28:42  tbe
- *  #97222# removed isShowing, isVisible, isFocusTraversable, addFocusListener, removeFocusListener
- *
- *  Revision 1.1  2002/04/26 14:30:04  fs
- *  initial checkin - fallback AccessibleContext for uno controls
- *
- *
- *  Revision 1.0 17.04.2002 12:34:01  fs
- ************************************************************************/
 
