@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:54:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         };
         StringList [ french ] =
         {
-            < "Total" ; Default ; > ;
+            < "Somme" ; Default ; > ;
             < "Nombre" ; Default ; > ;
             < "Moyenne" ; Default ; > ;
             < "Max" ; Default ; > ;
@@ -458,18 +458,18 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "èkè¨!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
         QuickHelpText[ chinese_simplified ] = "◊Ó–°/◊Ó¥Û";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "√‡º“!";
+        QuickHelpText[ korean ] = "√‡º“";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienenn‰!";
+        QuickHelpText[ finnish ] = "Pienenn‰";
     };
     ImageButton RB_DEST_AREA
     {
@@ -488,18 +488,18 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "èkè¨!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
         QuickHelpText[ chinese_simplified ] = "◊Ó–°/◊Ó¥Û";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "√‡º“!";
+        QuickHelpText[ korean ] = "√‡º“";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienenn‰!";
+        QuickHelpText[ finnish ] = "Pienenn‰";
     };
     ListBox LB_DATA_AREA
     {
@@ -896,6 +896,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Consolidar";
 };
+
 
 
 
