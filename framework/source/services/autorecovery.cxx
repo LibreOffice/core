@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:38:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
 #endif
 
 //_______________________________________________
@@ -485,7 +489,6 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::lang::XMultiServiceFa
 AutoRecovery::~AutoRecovery()
 {
     implts_stopTimer();
-    implts_stopListening();
 }
 
 //-----------------------------------------------
@@ -512,7 +515,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
         return;
     }
 
-    m_eJob = eNewJob;
+    m_eJob |= eNewJob;
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     sal_Bool  bAsynchron        = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, (sal_Bool)sal_False                                 );
@@ -549,7 +552,7 @@ void AutoRecovery::implts_dispatch()
     sal_Bool bWasAutoSaveActive = ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE);
 
     // On the other side it make no sense to reactivate the AutoSave operation
-    // i fthe new dispatch indicates a final decision ...
+    // if the new dispatch indicates a final decision ...
     // E.g. an EmergencySave/SessionSave indicates the end of life of the current office session.
     // It make no sense to reactivate an AutoSave then.
     // But a Recovery or SessionRestore should reactivate a may be already active AutoSave.
@@ -617,8 +620,11 @@ void AutoRecovery::implts_dispatch()
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
+    // depends on bAllowAutoSaveReactivation implicitly by looking on m_eJob=E_AUTO_SAVE! see before ...
     implts_actualizeTimer();
-    implts_startListening();
+
+    if (bAllowAutoSaveReactivation)
+        implts_startListening();
 }
 
 //-----------------------------------------------
@@ -1450,7 +1456,7 @@ AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      Au
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_hideAllDocs()
+void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -1472,8 +1478,113 @@ void AutoRecovery::implts_hideAllDocs()
             continue;
 
         css::uno::Reference< css::awt::XWindow > xWindow = xTask->getContainerWindow();
-        xWindow->setVisible(sal_False);
+        xWindow->setVisible(bVisible);
     }
+
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
+}
+
+//-----------------------------------------------
+void AutoRecovery::implts_prepareSessionShutdown()
+{
+    // a) reset modified documents (of course the must be saved before this method is called!)
+    // b) close it without showing any UI!
+
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
+
+    // Attention: Because we close all documents during we use an iterator over the list of all open documents,
+    // we must be aware that the iterator will be invalid ...
+    // It seeems to be better, to get a copy of all open documents .-)
+
+    try
+    {
+        ::std::vector< css::uno::Reference< css::frame::XFrame > > lTasks;
+        css::uno::Reference< css::frame::XFramesSupplier >         xDesktop  (xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XIndexAccess >        xContainer(xDesktop->getFrames()                     , css::uno::UNO_QUERY_THROW);
+        sal_Int32                                                  c         = xContainer->getCount();
+        sal_Int32                                                  i         = 0;
+
+        for (i=0; i<c; ++i)
+        {
+            css::uno::Reference< css::frame::XFrame > xTask;
+            xContainer->getByIndex(i) >>= xTask;
+            if (!xTask.is())
+                continue;
+            lTasks.push_back(xTask);
+        }
+
+        ::std::vector< css::uno::Reference< css::frame::XFrame > >::const_iterator pIt;
+        for (  pIt  = lTasks.begin();
+               pIt != lTasks.end()  ;
+             ++pIt                  )
+        {
+            css::uno::Reference< css::frame::XFrame > xTask = *pIt;
+            if (!xTask.is())
+                continue;
+
+            // reset the modified flag of an may existing model
+            css::uno::Reference< css::frame::XModel >      xModel;
+            css::uno::Reference< css::frame::XController > xController(xTask->getController(), css::uno::UNO_QUERY);
+            if (xController.is())
+                xModel = xController->getModel();
+            css::uno::Reference< css::util::XModifiable > xModify(xModel, css::uno::UNO_QUERY);
+            if (xModify.is())
+                xModify->setModified(sal_False);
+
+            // try to close the frame
+            css::uno::Reference< css::util::XCloseable > xClose(xTask, css::uno::UNO_QUERY);
+            if (xClose.is())
+            {
+                try
+                {
+                    // dont deliver the owner ship! Otherwise we risk an asynchronous closing frame ...
+                    // But we must work synchronously!
+                    xClose->close(sal_False);
+                    continue;
+                }
+                catch(const css::lang::DisposedException&)
+                    {
+                        // closed ... disposed ... always the same .-)
+                        continue;
+                    }
+                catch(const css::util::CloseVetoException&)
+                    {
+                        // ??? Normaly there is no chance to bring a veto against a session shutdown.
+                        // The user itself will kill us next time .-(
+                        // Let it run ... may be we will not run into other trouble.-)
+                        continue;
+                    }
+            }
+
+            // shouldnt be reached normaly .. excepting there is a new office application using
+            // non standard frames .-(
+            css::uno::Reference< css::lang::XComponent > xDispose(xTask, css::uno::UNO_QUERY);
+            if (xDispose.is())
+            {
+                try
+                {
+                    xDispose->dispose();
+                    continue;
+                }
+                catch(const css::lang::DisposedException&)
+                    {
+                        // closed ... disposed ... always the same .-)
+                        continue;
+                    }
+            }
+        }
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        {
+            throw exRun;
+        }
+    catch(const css::uno::Exception&)
+        {}
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -1971,6 +2082,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
     String sExtension(rInfo.Extension                 );
     String sPath     (sBackupPath                     );
     ::utl::TempFile aTempFile(sName, &sExtension, &sPath);
+
     rInfo.NewTempURL = aTempFile.GetURL();
 }
 
@@ -2024,9 +2136,12 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
     ::rtl::OUStringBuffer sFeature(256);
     sFeature.append(CMD_PROTOCOL);
 
-    if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
-        sFeature.append(CMD_DO_AUTO_SAVE);
-    else
+    // Attention: Because "eJob" is used as a flag field the order of checking these
+    // flags is importent. We must preferr job with higher priorities!
+    // E.g. EmergencySave has an higher prio then AutoSave ...
+    // On the other side there exist a well defined order between two different jobs.
+    // e.g. PrepareEmergencySave must be done before EmergencySave is started of course.
+
     if ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE)
         sFeature.append(CMD_DO_PREPARE_EMERGENCY_SAVE);
     else
@@ -2036,17 +2151,20 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
     if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
         sFeature.append(CMD_DO_RECOVERY);
     else
+    if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
+        sFeature.append(CMD_DO_SESSION_SAVE);
+    else
+    if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
+        sFeature.append(CMD_DO_SESSION_RESTORE);
+    else
     if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
         sFeature.append(CMD_DO_ENTRY_BACKUP);
     else
     if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
         sFeature.append(CMD_DO_ENTRY_CLEANUP);
     else
-    if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
-        sFeature.append(CMD_DO_SESSION_SAVE);
-    else
-    if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
-        sFeature.append(CMD_DO_SESSION_RESTORE);
+    if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
+        sFeature.append(CMD_DO_AUTO_SAVE);
     #ifdef ENABLE_WARNINGS
     else
         LOG_WARNING("AutoRecovery::implst_getJobDescription()", "Invalid job identifier detected.")
@@ -2163,7 +2281,11 @@ void AutoRecovery::implts_resetHandleStates(sal_Bool bLoadCache)
 //-----------------------------------------------
 void AutoRecovery::implts_prepareEmergencySave()
 {
-    implts_hideAllDocs();
+    // Be sure to know all open documents realy .-)
+    implts_verifyCacheAgainstDesktopDocumentList();
+
+    // hide all docs, so the user cant disturb our emergency save .-)
+    implts_changeAllDocVisibility(sal_False);
 }
 
 //-----------------------------------------------
@@ -2234,6 +2356,9 @@ void AutoRecovery::implts_doRecovery()
 //-----------------------------------------------
 void AutoRecovery::implts_doSessionSave()
 {
+    // Be sure to know all open documents realy .-)
+    implts_verifyCacheAgainstDesktopDocumentList();
+
     // The called method for saving documents runs
     // during normal AutoSave more then once. Because
     // it postpone active documents and save it later.
@@ -2256,6 +2381,10 @@ void AutoRecovery::implts_doSessionSave()
     // Of course following restore session must be started without
     // any "handle" state ...
     implts_resetHandleStates(sal_False);
+
+    // reset all modified documents, so the dont show any UI on closing ...
+    // and close all documents, so we can shutdown the OS!
+    implts_prepareSessionShutdown();
 }
 
 //-----------------------------------------------
@@ -2274,6 +2403,9 @@ void AutoRecovery::implts_doSessionRestore()
     // Of course a may be following save session must be started without
     // any "handle" state ...
     implts_resetHandleStates(sal_True);
+
+    // make all opened documents visible
+    implts_changeAllDocVisibility(sal_True);
 }
 
 //-----------------------------------------------
@@ -2502,6 +2634,79 @@ void AutoRecovery::implts_unlockDocCache()
     m_bDocCacheLock = sal_False;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
+}
+
+//-----------------------------------------------
+void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
+{
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+
+    try
+    {
+        css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
+            xSMGR->createInstance(SERVICENAME_DESKTOP),
+            css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::container::XIndexAccess > xContainer(
+            xDesktop->getFrames(),
+            css::uno::UNO_QUERY_THROW);
+
+        sal_Int32 i = 0;
+        sal_Int32 c = xContainer->getCount();
+
+        for (i=0; i<c; ++i)
+        {
+            css::uno::Reference< css::frame::XFrame > xFrame;
+            try
+            {
+                xContainer->getByIndex(i) >>= xFrame;
+                if (!xFrame.is())
+                    continue;
+            }
+            // can happen in multithreaded environments, that frames was removed from the container during this loop runs!
+            // Ignore it.
+            catch(const css::lang::IndexOutOfBoundsException&)
+                { continue; }
+
+            // We are interested on visible documents only.
+            // Note: It's n optional interface .-(
+            css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(
+                xFrame->getContainerWindow(),
+                css::uno::UNO_QUERY);
+            if (
+                (!xVisibleCheck.is()        ) ||
+                (!xVisibleCheck->isVisible())
+               )
+            {
+                continue;
+            }
+
+            // extract the model from the frame.
+            // Ignore "view only" frames, which does not have a model.
+            css::uno::Reference< css::frame::XController > xController;
+            css::uno::Reference< css::frame::XModel >      xModel;
+
+            xController = xFrame->getController();
+            if (xController.is())
+                xModel = xController->getModel();
+            if (!xModel.is())
+                continue;
+
+            // insert model into cache ...
+            // If the model is already well known inside cache
+            // it's information set will be updated by asking the
+            // model again for it's new states.
+            implts_registerDocument(xModel);
+        }
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 } // namespace framework
