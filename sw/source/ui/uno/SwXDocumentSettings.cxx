@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:47:10 $
+ *  last change: $Author: mib $ $Date: 2002-06-25 16:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             //the printer must be created
             OUString sPrinterName;
-            if (rValue >>= sPrinterName )
+            if ( (rValue >>= sPrinterName) && (sPrinterName.getLength()) )
             {
                 SfxPrinter *pPrinter = mpDoc->GetPrt();
                 if ( !pPrinter )
@@ -324,28 +324,31 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             if ( rValue >>= aSequence )
             {
                 sal_uInt32 nSize = aSequence.getLength();
-                SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
-                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                static sal_uInt16 __READONLY_DATA nRange[] =
+                if( nSize > 0 )
                 {
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,  SID_HTML_MODE,
-                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    0
-                };
-                SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
-                SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                    SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                    static sal_uInt16 __READONLY_DATA nRange[] =
+                    {
+                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
+                        SID_HTML_MODE,  SID_HTML_MODE,
+                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                        0
+                    };
+                    SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
+                    SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
-                mpDoc->SetPrt( pPrinter, sal_False );
+                    mpDoc->SetPrt( pPrinter, sal_False );
 
-                if ( !pPrinter->IsOriginal() )
-                {
-                    mpDocSh->UpdateFontList();
-                    SdrModel * pDrawModel = mpDoc->GetDrawModel();
-                    if ( pDrawModel )
-                        pDrawModel->SetRefDevice( pPrinter );
-                    mpDoc->SetOLEPrtNotifyPending();
+                    if ( !pPrinter->IsOriginal() )
+                    {
+                        mpDocSh->UpdateFontList();
+                        SdrModel * pDrawModel = mpDoc->GetDrawModel();
+                        if ( pDrawModel )
+                            pDrawModel->SetRefDevice( pPrinter );
+                        mpDoc->SetOLEPrtNotifyPending();
+                    }
                 }
             }
             else
