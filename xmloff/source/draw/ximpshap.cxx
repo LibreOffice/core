@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-18 16:36:12 $
+ *  last change: $Author: cl $ $Date: 2002-02-05 11:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2349,7 +2349,8 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
     char* pService = "com.sun.star.drawing.OLE2Shape";
 
-    sal_Bool bIsPresShape = isPresentationShape();
+    sal_Bool bIsPresShape = maPresentationClass.getLength() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
+;
 
     if( bIsPresShape )
     {
