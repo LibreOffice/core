@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-05 06:54:38 $
+ *  last change: $Author: vg $ $Date: 2002-11-25 15:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση του περιεχομένου ενός πεδίου συνδυασμού ή ενός πεδίου λίστας";
     Text[ dutch ] = "Inhoud combinatieveld of keuzelijst niet gevonden";
     Text[ french ] = "Impossible de dιterminer le contenu de la zone combinιe/zone de liste.";
-    Text[ spanish ] = "No se pudo determinar el contenido de un campo combinado o un listado.";
+    Text[ spanish ] = "No se pudo determinar el contenido del campo combinado o del listado.";
     Text[ italian ] = "Non θ stato possibile determinare il contenuto di una casella combinata o di una casella di riepilogo.";
     Text[ danish ] = "Det var ikke muligt at bestemme indholdet for en kombinationsboks eller rulleliste.";
     Text[ swedish ] = "Innehεllet i ett kombinationsfδlt eller en listruta kunde inte bestδmmas.";
@@ -100,7 +100,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text [ swedish ] = "Infoga grafik" ;
     Text [ danish ] = "Indsζt grafik" ;
     Text [ italian ] = "Inserisci immagine" ;
-    Text [ spanish ] = "Insertar imagen" ;
+    Text [ spanish ] = "Insertar una imagen" ;
     Text [ french ] = "Insιrer une image" ;
     Text [ dutch ] = "Afbeelding invoegen" ;
     Text[ chinese_simplified ] = "ζ’ε…¥ε›Ύε½Ά";
@@ -373,7 +373,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ greek ] = "Σφάλμα κατά την διαγραφή των επιλεγμένων εγγραφών";
     Text[ dutch ] = "Fout bij wissen van records";
     Text[ french ] = "Erreur lors de la suppression des enregistrements spιcifiιs";
-    Text[ spanish ] = "Error al eliminar los registros de datos indicados.";
+    Text[ spanish ] = "Error al eliminar los registros de los datos indicados.";
     Text[ italian ] = "Errore nel cancellare i record di dati specificati.";
     Text[ danish ] = "Fejl ved sletning af de angivne dataposter";
     Text[ swedish ] = "Fel vid radering av de angivna dataposterna";
@@ -427,7 +427,7 @@ String RID_STR_OPEN_GRAPHICS
     Text[ greek ] = "Insert graphics from...";
     Text[ dutch ] = "Afbeelding invoegen uit...";
     Text[ french ] = "Insιrer une image ΰ partir de...";
-    Text[ spanish ] = "Insertar imagen de...";
+    Text[ spanish ] = "Insertar una imagen de...";
     Text[ finnish ] = "Insert graphics from...";
     Text[ italian ] = "Inserisci l'immagine da...";
     Text[ danish ] = "Indsζt grafik fra...";
@@ -454,7 +454,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ greek ] = "Remove graphics";
     Text[ dutch ] = "Afbeelding verwijderen";
     Text[ french ] = "Supprimer l'image";
-    Text[ spanish ] = "Eliminar imagen";
+    Text[ spanish ] = "Eliminar la imagen";
     Text[ finnish ] = "Remove graphics";
     Text[ italian ] = "Elimina l'immagine";
     Text[ danish ] = "Fjern grafik";
