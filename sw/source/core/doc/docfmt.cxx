@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:40:29 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1636,6 +1636,28 @@ BOOL SwDoc::SetTxtFmtColl(const SwPaM &rRg, SwTxtFmtColl *pFmt, BOOL bReset)
             if( pHst )
                 pHst->Add( pCNd->GetFmtColl(), pCNd->GetIndex(), ND_TEXTNODE );
             pCNd->ChgFmtColl( pFmt );
+
+            const SfxPoolItem * pItem = NULL;
+            const SwNumRule * pRule = NULL;
+
+            if (pFmt->GetOutlineLevel() < NO_NUMLEVEL)
+            {
+                pRule = GetOutlineNumRule();
+            }
+            else if (SFX_ITEM_SET ==
+                     pFmt->GetAttrSet().GetItemState(RES_PARATR_NUMRULE,
+                                                     TRUE, &pItem))
+            {
+                pRule = FindNumRulePtr(reinterpret_cast<const SwNumRuleItem *>
+                                       (pItem)->GetValue());
+            }
+
+            if (pRule)
+            {
+                SwPaM aPam(*pCNd);
+
+                SetNumRule(aPam, *pRule);
+            }
         }
         else
             bRet = FALSE;
@@ -2344,7 +2366,7 @@ void SwDoc::SetNumRuleFromColl(SwFmt & rFmt)
             const SwClient * pClient = aIter.First(TYPE(SwTxtNode));
             while (pClient)
             {
-                const SwTxtNode * pTxtNode = ((const SwTxtNode *) pClient);
+                SwTxtNode * pTxtNode = ((SwTxtNode *) pClient);
 
                 const SwPaM aPam(*pTxtNode);
                 SetNumRule(aPam, *pRule);
