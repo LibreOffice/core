@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:43:14 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-13 16:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,14 @@ LocalSingleBackend::LocalSingleBackend(
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kSharedDataUrl(
-        RTL_CONSTASCII_USTRINGPARAM("SharedDataUrl")) ;
-static const rtl::OUString kUserDataUrl(
-        RTL_CONSTASCII_USTRINGPARAM("UserDataUrl")) ;
-static const rtl::OUString kUserName(
-        RTL_CONSTASCII_USTRINGPARAM("UserName")) ;
+static const rtl::OUString kMetaConfPrefix(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.bootstrap")) ;
+static const rtl::OUString kSharedDataUrl(kMetaConfPrefix +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SharedDataUrl"))) ;
+static const rtl::OUString kUserDataUrl(kMetaConfPrefix +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserDataUrl"))) ;
+static const rtl::OUString kUserName(kMetaConfPrefix +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserName"))) ;
 
 void SAL_CALL LocalSingleBackend::initialize(
         const uno::Sequence<uno::Any>& aParameters)
