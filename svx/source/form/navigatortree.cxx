@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:34:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
 #endif
-#ifndef _SVX_TABORDER_HXX
-#include "taborder.hxx"
-#endif
+//CHINA001 #ifndef _SVX_TABORDER_HXX
+//CHINA001 #include "taborder.hxx"
+//CHINA001 #endif
 #ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
 #endif
@@ -150,6 +150,8 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
 
+#include "svxdlg.hxx" //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 //............................................................................
 namespace svxform
 {
@@ -636,9 +638,15 @@ namespace svxform
 
                             Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
                             if( !xTabController.is() ) break;
-                            FmTabOrderDlg aTabDlg(m_xORB, Application::GetDefDialogParent(), GetNavModel()->GetFormShell() );
-                            aTabDlg.Execute();
-
+                            //CHINA001 FmTabOrderDlg aTabDlg(m_xORB, GetpApp()->GetAppWindow(), GetNavModel()->GetFormShell() );
+                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                            if(pFact)
+                            {
+                                VclAbstractDialog* aTabDlg = pFact->CreateFmTabOrderDlg( m_xORB, Application::GetDefDialogParent(), GetNavModel()->GetFormShell(), ResId(RID_SVXDLG_TAB_ORDER) );
+                                DBG_ASSERT(aTabDlg, "Dialogdiet fail!");//CHINA001
+                                aTabDlg->Execute(); //CHINA001 aTabDlg.Execute();
+                                delete aTabDlg; //add by CHINA001
+                            }
                         }
                         break;
                         case SID_FM_SHOW_PROPERTY_BROWSER:
