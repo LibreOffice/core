@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.3 2002-10-11 13:42:43 waratah Exp $
+/* RCS  $Id: getinp.c,v 1.4 2004-01-28 13:21:11 hjs Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -45,6 +45,7 @@ static int  rule_ind = 0;   /* index of rule when reading Rule_tab   */
 static int  skip = FALSE;   /* if true the skip input        */
 
 int partcomp( char* lhs, int opcode );
+int parse_complex_expression( char *expr, char **expr_end, int opcode );
 
 
 PUBLIC int
@@ -441,17 +442,20 @@ char *tg;
    DB_ENTER( "_is_conditional" );
 
    tg++;
-   switch( *tg ) {
-      case 'I': if( !strcmp( tg, "IF" )) DB_RETURN( ST_IF   );
-         else if( !strcmp( tg, "IFEQ" )) DB_RETURN( ST_IFEQ   );
-         else if( !strcmp( tg, "IFNEQ" )) DB_RETURN( ST_IFNEQ ); break;
+   switch( *tg )
+   {
+      case 'I':
+         if( !strcmp( tg, "IF" ))         DB_RETURN( ST_IF    );
+         else if( !strcmp( tg, "IFEQ" ))  DB_RETURN( ST_IFEQ  );
+         else if( !strcmp( tg, "IFNEQ" )) DB_RETURN( ST_IFNEQ );
+         break;
 
       case 'E':
-         if( !strcmp( tg, "END" ))   DB_RETURN( ST_END  );
+         if( !strcmp( tg, "END" ))        DB_RETURN( ST_END  );
          else if( !strcmp( tg, "ENDIF")) DB_RETURN( ST_END  );
          else if( !strcmp( tg, "ELSE" )) DB_RETURN( ST_ELSE );
          else if( !strcmp( tg, "ELIF" )) DB_RETURN( ST_ELIF );
-     break;
+         break;
    }
 
    DB_RETURN( 0 );
@@ -468,19 +472,15 @@ char *tg;
 #define ACCEPT_ELIF 0x20
 
 static int
-_handle_conditional( opcode, tg )/*
-===================================
-    Perform the necessary processing for .IF conditinal targets.
-    Someday this should be modified to do bracketted expressions ala
-    CPP... sigh */
-int      opcode;
-TKSTRPTR tg;
+_handle_conditional( opcode, tg )
+    int      opcode;
+    TKSTRPTR tg;
 {
    static short action[MAX_COND_DEPTH];
-   static char  ifcntl[MAX_COND_DEPTH];
-   char     *lhs, *expr;
-   char     *lop, *partstr;
-   int      result, n, m;
+   static char      ifcntl[MAX_COND_DEPTH];
+   char         *lhs, *expr, *expr_end;
+   char         *lop, *partstr;
+   int          result, n, m;
 
    DB_ENTER( "_handle_conditional" );
 
@@ -502,40 +502,17 @@ TKSTRPTR tg;
      lhs = DmStrSpn( expr, " \t" );
      if( !*lhs ) lhs = NIL(char);
 
-     if ( (lop = DmStrStr(lhs, "&&" )) !=  NIL(char) )
-        Fatal( ".IF do not support && " );
+      /* Don't support C-style define keyword */
      if ( (lop = DmStrStr(lhs, "defined" )) !=  NIL(char) )
         Fatal( ".IF do not support defined " );
      if ( (lop = DmStrStr(lhs, "DEFINED" )) !=  NIL(char) )
         Fatal( ".IF do not support defined " );
-/*-----------------18.03.99 14:38-------------------
- *  hjs -   simple OR fixed and less code
---------------------------------------------------*/
-     if ( (lop = DmStrStr(lhs, "||" )) !=  NIL(char) )
-     {
-/*      printf("todo: %s\n", expr ); */
-        partstr = MALLOC( strlen (lhs ) + 5, char);
-        result = FALSE;
-        while(( lop = DmStrStr(lhs, "||" )) !=  NIL(char) )
-        {
-            n = strlen( lop );
-            m = strlen( lhs );
-            strncpy( partstr, lhs, m - n );
-            partstr[ m - n ] = '\0';
-            result |= partcomp( partstr, opcode);
-            lhs = lop+2;
-            lhs = DmStrSpn( lhs, " \t" );
-        }
-        result |= partcomp( lhs, opcode );
-/*
-        if ( result )
-            printf("TRUE\n\n");
-        else
-            printf("false\n\n");
-        FREE( partstr );
-*/
-     }
-/*--------------------------------------------------*/
+
+     lhs = expr;
+      SCAN_WHITE( lhs );
+     /* Parse the expression and get its logical result */
+     if ( ((lop = DmStrStr(lhs, "||" )) !=  NIL(char)) || ((lop = DmStrStr(lhs, "&&" )) !=  NIL(char)) )
+        result = parse_complex_expression( lhs, &expr_end, opcode );
      else
         result = partcomp( lhs, opcode );
 
@@ -582,65 +559,219 @@ TKSTRPTR tg;
    DB_RETURN( action[ Nest_level ] );
 }
 
+/* uncomment to turn on expression debug statements */
+/*#define PARSE_DEBUG       /* */
+#define PARSE_SKIP_WHITE(A)     while( *A && ((*A==' ') || (*A=='\t')) )  A++;
+
+#define OP_NONE 0
+#define OP_AND  1
+#define OP_OR   2
+
+static int n = 1;
+
+int parse_complex_expression( char *expr, char **expr_end, int opcode )
+{
+    char *p = expr;
+    char *term_start = p;
+    char *term_end;
+    int  local_term;
+    char *part;
+    int  term_result = FALSE;
+    int  final_result = TRUE;
+    unsigned int   term_len;
+    unsigned int   last_op = OP_NONE;
+
+    #ifdef PARSE_DEBUG
+        printf( "%d: parse_complex_expression( %s ): %d\n", n, expr, match_paren );
+    #endif
+
+    while ( 1 )
+    {
+        /* A new sub-expression */
+        local_term = TRUE;
+        if ( *p == '(' )
+        {
+            n++;
+            term_result = parse_complex_expression( p+1, &p, opcode );
+            n--;
+            PARSE_SKIP_WHITE( p );
+            term_start = p;
+            term_end = p;
+            local_term = FALSE;
+        }
+        else
+            term_end = p;
+
+        /* Lets do an operation!! */
+        if ( !(*p)                                  /* at the end of the entire line */
+            || ((*p == '&') && (*(p+1) && (*(p+1)=='&')))   /* found an && */
+            || ((*p == '|') && (*(p+1) && (*(p+1)=='|')))   /* found an || */
+            || (*p == ')') )                            /* at the end of our term */
+        {
+            /* Grab the sub-expression if we parsed it.  Otherwise,
+             * it was a () subexpression and we don't need to evaluate
+             * it since that was already done.
+             */
+            if ( local_term == TRUE )
+            {
+                /* Back up 1 to the end of the actual term */
+                term_end--;
+
+                /* Evaluate the term */
+                PARSE_SKIP_WHITE( term_start );
+                term_len = term_end - term_start + 1;
+                part = MALLOC( term_len + 1, char );
+                strncpy( part, term_start, term_len );
+                *(part+term_len) = '\0';
+                #ifdef PARSE_DEBUG
+                    printf( "%d:   evaling '%s'\n", n, part );
+                #endif
+                term_result = partcomp( part, opcode );
+                #ifdef PARSE_DEBUG
+                    printf( "%d:   evaled, result %d\n", n, term_result );
+                #endif
+                FREE( part );
+            }
+
+            /* Do the actual logical operation using the _preceding_
+             * logical operator, NOT the one we just found.
+             */
+            if ( last_op == OP_AND )
+                final_result = final_result && term_result;
+            else if ( last_op == OP_OR )
+                final_result = final_result || term_result;
+            else
+                final_result = term_result;
+            #ifdef PARSE_DEBUG
+                printf( "%d:   final_result:%d\n", n, final_result );
+            #endif
+
+            /* If we're not at the end of the line, just keep going */
+            if ( *p )
+            {
+                /* Recognize the operator we just found above */
+                if ( *p == '&' )
+                    last_op = OP_AND;
+                else if ( *p == '|' )
+                    last_op = OP_OR;
+                if ( *p != ')' )
+                    p += 2;
+
+                /* Get the start of the next term */
+                PARSE_SKIP_WHITE( p );
+                term_start = p;
+
+                /* If this is the close of a term, we are done and return
+                * to our caller.
+                */
+                if ( *p == ')' )
+                {
+                    p++;
+                    break;
+                }
+            }
+            else break;     /* At end of line, all done */
+        }
+        else if ( local_term == TRUE )  p++;        /* Advance to next char in expression */
+    }
+    *expr_end = p;
+
+    #ifdef PARSE_DEBUG
+        printf( "%d:   done, returning '%s', result %d\n", n, *expr_end, final_result );
+    #endif
+    return( final_result );
+}
+
 
 int partcomp( char* lhs, int opcode )
 {
 
     char    *tok, *rhs, *op = 0;
-    int result, opsind;
+    int     result, opsind;
     const int localopscount=4;
-    char* localops[]={"==","!=","<=",">="};
-    int lint, rint;
+    char*   localops[] = { "==", "!=", "<=", ">=" };
+    int     lint, rint;
 
 #define EQUAL           0
 #define NOTEQUAL        1
 #define LESS_EQUAL      2
 #define GREATER_EQUAL   3
 
-    opsind=0;
-/*  printf( "eval: %s\n", lhs);*/
-    if( opcode == ST_IFEQ || opcode == ST_IFNEQ ) { /* no == */
-        for( op = lhs; ((*op)&&(*op != ' ')&&(*op != '\t')); op++ );
-        if( *op )
-           op++;
-        else
-           op = NIL(char);
-    } else  while ( opsind < localopscount && (op = DmStrStr( lhs, localops[opsind] )) == NIL(char))
+    #ifdef PARSE_DEBUG
+        printf( "eval: %s\n", lhs);
+    #endif
+
+    opsind = 0;
+    if( opcode == ST_IFEQ || opcode == ST_IFNEQ )
     {
-/*      printf("%d %s\n", opsind, localops[opsind]);*/
-        opsind++;
+        /* IF[N]EQ syntax is:  .IF[N]EQ <1> <2>
+         * Here, step over first argument and get to <2> if it exists.
+         */
+        for( op = lhs; ((*op)&&(*op != ' ')&&(*op != '\t')); op++ );
+        if( *op )       op++;           /* position op at start of <2> */
+        else            op = NIL(char); /* only 1 argument given */
     }
+    else
+    {
+        /* Find which logical operator we are to use for this expression,
+         * and jump to it */
+        while ( (opsind < localopscount) && ((op = DmStrStr(lhs, localops[opsind])) == NIL(char)) )
+            opsind++;
 
-/*  if ( opsind == localopscount )
-        Fatal( "Unknown Operator\n" );*/
+        #ifdef PARSE_DEBUG
+            printf("  found op %d: %s\n", opsind, localops[opsind]);
+        #endif
+     }
 
+    /* If the opcode was IFEQ or IFNEQ and only 1 argument was given,
+     * or an unknown logical operator was encountered,
+     * return false if argument is empty string, true if !empty
+     */
     if( op == NIL(char) )
-        result = (lhs != NIL(char));
-    else {
-/*      printf("op#%s\n",op);*/
-        if( opcode != ST_IFEQ && opcode != ST_IFNEQ )   /* no == */
+        result = (*lhs != '\0');
+    else
+     {
+        /* Make both characters of the operation the same, replacing the = in op[1]
+         * Its easier to deal with this way???
+         */
+        if( opcode != ST_IFEQ && opcode != ST_IFNEQ )
             op[1] = op[0];
-/*      printf("op#%s\n",op);*/
-        if( lhs != op ) {
-           for( tok = op-1; (tok != lhs) && ((*tok == ' ')||(*tok == '\t'));
-                tok-- );
-           tok[1] = '\0';
+
+        #ifdef PARSE_DEBUG
+            printf("  op:%s\n", op);
+        #endif
+
+        /* Isolate the left half of the expression */
+        if( lhs != op )
+        {
+            for( tok = op-1; (tok != lhs) && ((*tok == ' ')||(*tok == '\t')); tok-- );
+            tok[1] = '\0';
         }
         else
-           lhs = NIL(char);
+            lhs = NIL(char);
 
-        if( opcode == ST_IFEQ || opcode == ST_IFNEQ )   /* no == */
-           op--;
+        /* Jump over the operation so we can grab the right half of the expression */
+        if( opcode == ST_IFEQ || opcode == ST_IFNEQ )
+            op--;
         else
-           op++;
+            op++;
+
+        /* Isolate the right half of the expression */
         rhs = DmStrSpn( op+1, " \t" );
         if( !*rhs ) rhs = NIL(char);
 
-        if ( opsind > NOTEQUAL ) {
-/*          printf("new ops\n");*/
-            switch( opsind ){
+        #ifdef PARSE_DEBUG
+            printf("  lhs:%s, rhs:%s\n", lhs, rhs);
+        #endif
+
+        /* Do the actual logical operation on the expression */
+        if ( opsind > NOTEQUAL )
+        {
+            switch( opsind )
+            {
                 case LESS_EQUAL:
                 case GREATER_EQUAL:
+                    /* Ignore quotes around the arguments */
                     if ( lhs[0] == '"' ) lhs++;
                     if ( rhs[0] == '"' ) rhs++;
                     lint = atoi( lhs );
@@ -653,21 +784,28 @@ int partcomp( char* lhs, int opcode )
                     result = FALSE;
             }
         }
-        else {
+        else
+        {
+            /* Use a simple string compare to determine equality */
             if( (rhs == NIL(char)) || (lhs == NIL(char)) )
-               result = (rhs == lhs) ? TRUE : FALSE;
-            else {
+                result = (rhs == lhs) ? TRUE : FALSE;
+            else
+            {
+                /* String off whitespace at the end of the right half of the expression */
                 tok = rhs + strlen( rhs );
-                for( tok=tok-1; (tok != lhs) && ((*tok == ' ')||(*tok == '\t'));
-                tok--);
+                for( tok=tok-1; (tok != lhs) && ((*tok == ' ')||(*tok == '\t')); tok--);
                 tok[1] = '\0';
 
-               result = (strcmp( lhs, rhs ) == 0) ? TRUE : FALSE;
+                  result = (strcmp( lhs, rhs ) == 0) ? TRUE : FALSE;
             }
+
             if( *op == '!' || opcode == ST_IFNEQ ) result = !result;
         }
     }
-/*  printf("partresult %d\n",result);*/
+
+    #ifdef PARSE_DEBUG
+        printf("partresult %d\n\n",result);
+    #endif
     return result;
 }
 
