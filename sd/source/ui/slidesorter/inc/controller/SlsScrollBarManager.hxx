@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:20:26 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,8 @@ public:
     /** Create a new scroll bar manager that manages three controls: the two
         given scroll bars and a little window it creates and ownes that
         fills the gap at the bottom right corner that is left between the
-        two scroll bars.
+        two scroll bars.  Call LateInitialization() after constructing a new
+        object.
         @param pParentWindow
             This window is used to create the little filler window.
         @param pContentWindow
@@ -126,12 +127,10 @@ public:
         ScrollBarBox* pScrollBarFiller);
 
     ~ScrollBarManager (void);
-    void LateInitialization (void);
 
-    /** This method tells the scroll bar manager whether to use the vertical
-        scroll bar on the next call to PlaceScrollBars().
+    /** Call this method after constructing a new object of this class.
     */
-    void UseVerticalScrollBar (bool bUseVerticalScrollBar);
+    void LateInitialization (void);
 
     /** Set up the scroll bar, i.e. thumb size and position.  Call this
         method when the content of the browser window changed, i.e. pages
@@ -164,13 +163,21 @@ public:
     */
     void SetTop (long nTop);
 
-    /** Return the width of the vertical scroll bar (which should be fixed
-        in contrast to its height).
+    /** Return the width of the vertical scroll bar, which--when
+        shown--should be fixed in contrast to its height.
         @return
-           Returns 0 when the vertical scroll bar does not exist, otherwise
-           its width in pixel is returned.
+           Returns 0 when the vertical scroll bar is not shown or does not
+           exist, otherwise its width in pixel is returned.
     */
     int GetVerticalScrollBarWidth (void) const;
+
+    /** Return the height of the horizontal scroll bar, which--when
+        shown--should be fixed in contrast to its width.
+        @return
+           Returns 0 when the vertical scroll bar is not shown or does not
+           exist, otherwise its height in pixel is returned.
+    */
+    int GetHorizontalScrollBarHeight (void) const;
 
     /** Call this method to scroll a window while the mouse is in dragging a
         selection.  If the mouse is near the window border or is outside the
@@ -185,7 +192,13 @@ public:
 
 private:
     SlideSorterController& mrController;
+    /** The horizontal scroll bar.  Note that is used but not owned by
+        objects of this class.  It is given to the constructor.
+    */
     ScrollBar* mpHorizontalScrollBar;
+    /** The vertical scroll bar.  Note that is used but not owned by
+        objects of this class.  It is given to the constructor.
+    */
     ScrollBar* mpVerticalScrollBar;
     /// Relative horizontal position of the visible area in the view.
     double mnHorizontalPosition;
@@ -210,12 +223,6 @@ private:
     Timer maAutoScrollTimer;
     Size maAutoScrollOffset;
 
-    /** This flag indicates whether the vertical scroll bar is displayed when
-        necessary or whether it is not ever shown and instead the
-        PlaceScrollBars() method enlarges the given area.
-    */
-    bool mbUseVerticalScrollBar;
-
     /** The content window is the one whose view port is controlled by the
         scroll bars.
     */
@@ -225,7 +232,30 @@ private:
         double nHorizontalPosition,
         double nVerticalPosition);
 
-    bool IsHorizontalScrollBarVisible (void);
+    /** Determine the visibility of the scroll bars so that the window
+        content is not clipped in any dimension without showing a scroll
+        bar.
+        @param rAvailableArea
+            The area in which the scroll bars, the scroll bar filler, and
+            the SlideSorterView will be placed.
+        @return
+            The area that is enclosed by the scroll bars is returned.  It
+            will be filled with the SlideSorterView.
+    */
+    Rectangle DetermineScrollBarVisibilities (const Rectangle& rAvailableArea);
+
+    /** Typically called by DetermineScrollBarVisibilities() this method
+        tests a specific configuration of the two scroll bars being visible
+        or hidden.
+        @return
+            When the window content can be shown with only being clipped in
+            an orientation where the scroll bar would be shown then <TRUE/>
+            is returned.
+    */
+    bool TestScrollBarVisibilities (
+        bool bHorizontalScrollBarVisible,
+        bool bVerticalScrollBarVisible,
+        const Rectangle& rAvailableArea);
 
     void CalcAutoScrollOffset (const Point& rMouseWindowPosition);
     bool RepeatAutoScroll (void);
@@ -234,9 +264,9 @@ private:
     DECL_LINK(VerticalScrollBarHandler, ScrollBar*);
     DECL_LINK(AutoScrollTimeoutHandler, Timer*);
 
-    void PlaceHorizontalScrollBar (Rectangle& aArea);
-    void PlaceVerticalScrollBar (Rectangle& aArea);
-    void PlaceFiller (Rectangle& aArea);
+    void PlaceHorizontalScrollBar (const Rectangle& aArea);
+    void PlaceVerticalScrollBar (const Rectangle& aArea);
+    void PlaceFiller (const Rectangle& aArea);
 
     /** Make the height of the content window larger or smaller, so that the
 
