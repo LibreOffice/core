@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 20:31:58 $
+ *  last change: $Author: mtg $ $Date: 2001-11-20 17:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,27 +869,29 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     sal_Bool bChangeShowRedline = sal_False, bChangeBrowseMode = sal_False,
              bChangeFooter = sal_False, bChangeHeader = sal_False;
 
+    sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MAP_TWIP;
+
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
         if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setY( nTmp );
+            aRect.setY( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setX( nTmp );
+            aRect.setX( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setWidth( nTmp );
+            aRect.setWidth( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setHeight( nTmp );
+            aRect.setHeight( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineChanges" ) ) )
         {
