@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleDropDownComboBox.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:20:46 $ 
+'*  last change:$Date: 2003-10-06 13:27:25 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -65,12 +65,8 @@
 '*************************************************************************
 '*************************************************************************
 
-
-
 ' Be sure that all variables are dimensioned:
 option explicit
-
-
 
 Sub CreateObj()
 
@@ -97,7 +93,7 @@ Sub DisposeObj()
 End Sub
 
 Sub fireEvent()
-    oObj.grabFocus()
+    oObj.doAccessibleAction(0)
 End Sub
 
 </script:module>
