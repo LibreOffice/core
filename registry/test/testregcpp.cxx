@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregcpp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+ *  last change: $Author: jsc $ $Date: 2000-10-09 11:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,8 @@ void test_coreReflection()
 
         if (reader.isValid())
         {
+            VOS_ENSHURE(reader.getTypeName().equals(OUString::createFromAscii("ModuleA")), "testCoreReflection error 9a2");
+
             RTConstValue aReadConst = reader.getFieldConstValue(8);
             OString aConstStr = OUStringToOString(aConst.m_value.aString, RTL_TEXTENCODING_ASCII_US);
             VOS_ENSHURE(aConstStr.equals("dies ist ein unicode string"), "testCoreReflection error 9b");
@@ -357,6 +359,21 @@ void test_coreReflection()
         sal_uInt32      aBlopSize = writer.getBlopSize();
 
         VOS_ENSHURE(!key7.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9e");
+        sal_uInt8* readBlop = (sal_uInt8*)rtl_allocateMemory(aBlopSize);
+        VOS_ENSHURE(!key7.getValue(OUString(), (void*)readBlop) , "testCoreReflection error 9e2");
+
+        RegistryTypeReader reader(*pReaderLoader, readBlop, aBlopSize, sal_True);
+
+        if (reader.isValid())
+        {
+            VOS_ENSHURE(reader.getTypeName().equals(OUString::createFromAscii("ModuleA/ServiceA")), "testCoreReflection error 9e3");
+
+            sal_uInt32 referenceCount = reader.getReferenceCount();
+            VOS_ENSHURE( referenceCount == 4, "testCoreReflection error 9e4");
+
+            OUString refName = reader.getReferenceName(0);
+            VOS_ENSHURE(refName.equals(OUString::createFromAscii("ModuleA/XInterfaceA")), "testCoreReflection error 9e5");
+        }
     }
 
     {
