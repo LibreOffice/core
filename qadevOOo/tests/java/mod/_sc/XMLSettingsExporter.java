@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSettingsExporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:34 $
+ *  last change:$Date: 2003-05-27 13:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class XMLSettingsExporter extends TestCase {
      * New spreadsheet document created.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -154,7 +154,7 @@ public class XMLSettingsExporter extends TestCase {
                                                   PrintWriter log )
                                                     throws StatusException {
 
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
         XInterface oObj = null;
         SettingsFilterChecker filter = new SettingsFilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class), filter);
