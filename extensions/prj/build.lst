@@ -34,4 +34,4 @@ ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr NULL
 ex	extensions\source\propctrlr				nmake	-	all	ex_propctrlr NULL
 ex	extensions\source\dbimport				nmake	-	all	ex_dbimport NULL
 ex	extensions\source\dbpilots				nmake	-	all	ex_dbpilots NULL
-ex	extensions\util							nmake	-	all	ex_dbpilots ex_dbpilots ex_dbimport ex_propctrlr ex_bib ex_ichk ex_pchk NULL
+ex	extensions\util							nmake	-	all	ex_util ex_dbpilots ex_dbpilots ex_dbimport ex_propctrlr ex_bib ex_ichk ex_pchk NULL
