@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-30 14:29:50 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 13:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1462,6 +1462,11 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 AddChild(xAcc, sal_True);
 
+                if (mpAccessibleSpreadsheet)
+                    mpAccessibleSpreadsheet->LostFocus();
+                else
+                    CommitFocusLost();
+
                 mpTempAccEdit->GotFocus();
             }
         }
@@ -1469,8 +1474,16 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (mxTempAcc.is())
             {
+                if (mpTempAccEdit)
+                    mpTempAccEdit->LostFocus();
+
                 mpTempAccEdit = NULL;
                 RemoveChild(mxTempAcc, sal_True);
+
+                if (mpAccessibleSpreadsheet)
+                    mpAccessibleSpreadsheet->GotFocus();
+                else
+                    CommitFocusGained();
             }
         }
         else if ((rRef.GetId() == SC_HINT_ACC_VISAREACHANGED) || (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED))
