@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 09:41:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,21 @@ String RID_STR_WATCHNAME
 {
     Text [ de ] = "Beobachter" ;
     Text [ en-US ] = "Watch" ;
+};
+String RID_STR_WATCHVARIABLE
+{
+    Text [ de ] = "Variable" ;
+    Text [ en-US ] = "Variable" ;
+};
+String RID_STR_WATCHVALUE
+{
+    Text [ de ] = "Wert" ;
+    Text [ en-US ] = "Value" ;
+};
+String RID_STR_WATCHTYPE
+{
+    Text [ de ] = "Typ" ;
+    Text [ en-US ] = "Type" ;
 };
 String RID_STR_STACKNAME
 {
