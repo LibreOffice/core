@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:45:39 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2624,7 +2624,15 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
         }
         else
         {
-            pAnch = ((SwDrawContact*)pUserCall)->GetAnchor();
+            // OD 13.10.2003 #i19919# - consider 'virtual' drawing objects
+            if ( pObj->ISA(SwDrawVirtObj) )
+            {
+                pAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
+            }
+            else
+            {
+                pAnch = ((SwDrawContact*)pUserCall)->GetAnchor();
+            }
             if ( pAnch )
             {
                 if ( !pAnch->GetValidPosFlag() )
