@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 16:07:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
-    if(!m_xCatalog.get().is())
+    if(!m_xCatalog.is())
     {
         ODbaseCatalog *pCat = new ODbaseCatalog(this);
         xTab = pCat;

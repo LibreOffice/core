@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-10 11:05:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,10 +233,16 @@ void ODbaseTable::fillColumns()
 
     // Anzahl Felder:
     sal_Int32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
+    m_aColumns->reserve(nFieldCount);
+    m_aTypes.reserve(nFieldCount);
+    m_aPrecisions.reserve(nFieldCount);
+    m_aScales.reserve(nFieldCount);
 
     String aStrFieldName;aStrFieldName.AssignAscii("Column");
     sal_Int32 nFieldCnt = 0;
     ::rtl::OUString aTypeName;
+    static const ::rtl::OUString sVARCHAR   = ::rtl::OUString::createFromAscii("VARCHAR");
+    sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
 
     for (sal_Int32 i = 0; i < nFieldCount; i++)
     {
@@ -252,7 +258,7 @@ void ODbaseTable::fillColumns()
         {
             case 'C':
                 eType = DataType::VARCHAR;
-                aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
+                aTypeName = sVARCHAR;
                 break;
             case 'F':
             case 'N':
@@ -284,23 +290,31 @@ void ODbaseTable::fillColumns()
 
         }
 
-        sal_Int32 nFlags = 0;
-        switch (aDBFColumn.db_typ)
-        {
-            case 'C':
-            case 'D':
-            case 'L':   nFlags = ColumnSearch::FULL; break;
-            case 'F':
-            case 'N':   nFlags = ColumnSearch::BASIC; break;
-            case 'M':   nFlags = ColumnSearch::CHAR; break;
-            default:
-                        nFlags = ColumnSearch::NONE;
+//      sal_Int32 nFlags = 0;
+//      switch (aDBFColumn.db_typ)
+//      {
+//          case 'C':
+//          case 'D':
+//          case 'L':   nFlags = ColumnSearch::FULL; break;
+//          case 'F':
+//          case 'N':   nFlags = ColumnSearch::BASIC; break;
+//          case 'M':   nFlags = ColumnSearch::CHAR; break;
+//          default:
+//                      nFlags = ColumnSearch::NONE;
+//
+//      }
 
-        }
-
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aColumnName,aTypeName,::rtl::OUString(),
-                                                ColumnValue::NULLABLE,nPrecision,aDBFColumn.db_dez,eType,sal_False,sal_False,sal_False,
-                                                getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aColumnName,
+                                                    aTypeName,
+                                                    ::rtl::OUString(),
+                                                    ColumnValue::NULLABLE,
+                                                    nPrecision,
+                                                    aDBFColumn.db_dez,
+                                                    eType,
+                                                    sal_False,
+                                                    sal_False,
+                                                    sal_False,
+                                                    bCase);
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
         m_aTypes.push_back(eType);
@@ -499,6 +513,7 @@ void ODbaseTable::refreshColumns()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
+    aVector.reserve(m_aColumns->size());
 
     for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
@@ -586,15 +601,11 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
 Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)  ||
-        //  rType == ::getCppuType((const Reference<XAlterTable>*)0)    ||
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
 
-    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(!aRet.hasValue())
-        aRet = OTable_TYPEDEF::queryInterface(rType);
-
-    return aRet;
+    Any aRet = OTable_TYPEDEF::queryInterface(rType);
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
 }
 
 //--------------------------------------------------------------------------
@@ -617,10 +628,11 @@ Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return ODbaseTable_BASE::getSomething(rId);
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            ODbaseTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData)
@@ -643,11 +655,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
     OSQLColumns::const_iterator aIter = _rCols.begin();
     for (sal_Int32 i = 1; aIter != _rCols.end();++aIter, i++)
     {
-        //  pVal = (*_rRow)[i].getBodyPtr();
-        Reference< XPropertySet> xColumn = *aIter;
-
-        ::rtl::OUString aName;
-        xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
         // Laengen je nach Datentyp:
         sal_Int32 nLen;
         sal_Int32 nType;
@@ -658,8 +665,8 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
         }
         else
         {
-            xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))  >>= nLen;
-            xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
+            (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nLen;
+            (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))      >>= nType;
         }
         switch(nType)
         {
@@ -668,14 +675,13 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
                 if(_bUseTableDefs)
                     nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[i-1]);
                 else
-                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
+                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT:         nLen = 1; break;
             case DataType::LONGVARCHAR: nLen = 10; break;
             case DataType::OTHER:
                 nByteOffset += nLen;
                 continue;
-            default:                    break;
         }
 
         // Ist die Variable ueberhaupt gebunden?
@@ -700,10 +706,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
             if (!aStr.Len())                // keine StringLaenge, dann NULL
                 (*_rRow)[i].setNull();
             else
-            {
-                ::rtl::OUString aStr2(aStr);
-                (*_rRow)[i] = aStr2;
-            }
+                (*_rRow)[i] = aStr;
             pData[nLen] = cLast;
         }
         else
@@ -1267,8 +1270,8 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     // Einfach das Loesch-Flag setzen (egal, ob es schon gesetzt war
     // oder nicht):
     // Auf gewuenschten Record positionieren:
-    long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
-    m_pFileStream->Seek(nPos);
+    long nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    m_pFileStream->Seek(nFilePos);
 
     OValueRow aRow = new OValueVector(_rCols.size());
 
@@ -1280,21 +1283,22 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     for (USHORT i = 0; i < m_pColumns->getCount(); i++)
     {
-        ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
-        OSL_ENSURE(xCol.is(),"ODbaseTable::DeleteRow column is null!");
-
-        if(xCol.is())
+        Reference<XPropertySet> xIndex = isUniqueByColumnName(i);
+        if (xIndex.is())
         {
-            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-            Reference<XPropertySet> xIndex = isUniqueByColumnName(aColName);
-            if (xIndex.is())
+            ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
+            OSL_ENSURE(xCol.is(),"ODbaseTable::DeleteRow column is null!");
+            if(xCol.is())
             {
+                xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+
                 Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
                 OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
                 ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
                 OSL_ENSURE(pIndex,"ODbaseTable::DeleteRow: No Index returned!");
 
                 OSQLColumns::const_iterator aIter = _rCols.begin();
+                sal_Int32 nPos = 1;
                 for(;aIter != _rCols.end();++aIter,++nPos)
                 {
                     if(aCase(getString((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))),aColName))
@@ -1308,26 +1312,35 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         }
     }
 
-    m_pFileStream->Seek(nPos);
+    m_pFileStream->Seek(nFilePos);
     (*m_pFileStream) << (BYTE)'*'; // mark the row in the table as deleted
     m_pFileStream->Flush();
-    return sal_True;;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
-Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUString& _rColName)
+Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
 {
     if(!m_pIndexes)
         refreshIndexes();
-    Reference<XPropertySet> xIndex;
-    for(sal_Int32 i=0;i<m_pIndexes->getCount();++i)
+    if(m_pIndexes->hasElements())
     {
-        ::cppu::extractInterface(xIndex,m_pIndexes->getByIndex(i));
-        if(xIndex.is() && getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
-        {
-            Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
-            if(xCols->hasByName(_rColName))
-                return xIndex;
+        Reference<XPropertySet> xCol;
+        m_pColumns->getByIndex(_nColumnPos) >>= xCol;
+        OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+        ::rtl::OUString sColName;
+        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColName;
 
+        Reference<XPropertySet> xIndex;
+        for(sal_Int32 i=0;i<m_pIndexes->getCount();++i)
+        {
+            ::cppu::extractInterface(xIndex,m_pIndexes->getByIndex(i));
+            if(xIndex.is() && getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
+            {
+                Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
+                if(xCols->hasByName(sColName))
+                    return xIndex;
+
+            }
         }
     }
     return Reference<XPropertySet>();
@@ -1349,31 +1362,36 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     Reference<XPropertySet> xIndex;
     USHORT i;
     ::rtl::OUString aColName;
-    ::std::vector< Reference<XPropertySet> > aIndexedCols(m_pColumns->getCount());
+    sal_Int32 nColumnCount = m_pColumns->getCount();
+    ::std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
+    Reference<XIndexAccess> xColumns = m_pColumns;
     // first search a key that exist already in the table
-    for (i = 0; i < m_pColumns->getCount(); i++)
+    for (i = 0; i < nColumnCount; ++i)
     {
-        m_pColumns->getByIndex(i) >>= xCol;
-        OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
-        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-
-        sal_Int32 nPos = 0;
-        for(;nPos<_xCols->getCount();++nPos)
+        sal_Int32 nPos = i;
+        if(_xCols != xColumns)
         {
-            Reference<XPropertySet> xFindCol;
-            ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
-            OSL_ENSURE(xFindCol.is(),"ODbaseTable::UpdateBuffer column is null!");
-            if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
-                break;
+            m_pColumns->getByIndex(i) >>= xCol;
+            OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+
+            for(nPos = 0;nPos<_xCols->getCount();++nPos)
+            {
+                Reference<XPropertySet> xFindCol;
+                ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
+                OSL_ENSURE(xFindCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+                if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
+                    break;
+            }
+            if (nPos >= _xCols->getCount())
+                continue;
         }
-        if (nPos >= _xCols->getCount())
-            continue;
 
         ++nPos;
-        xIndex = isUniqueByColumnName(aColName);
+        xIndex = isUniqueByColumnName(i);
         aIndexedCols[i] = xIndex;
         if (xIndex.is())
         {
@@ -1402,17 +1420,11 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
     // when we are here there is no double key in the table
 
-    for (i = 0; i < m_pColumns->getCount(); i++)
+    for (i = 0; i < nColumnCount; ++i)
     {
-        m_pColumns->getByIndex(i) >>= xCol;
-        OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
-        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-
         // Laengen je nach Datentyp:
-        sal_Int32 nLen;
-        sal_Int32 nType;
-        nLen    = m_aPrecisions[i];
-        nType   = m_aTypes[i];
+        sal_Int32 nLen  = m_aPrecisions[i];
+        sal_Int32 nType = m_aTypes[i];
 
         switch (nType)
         {
@@ -1426,20 +1438,27 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
         }
 
-        sal_Int32 nPos = 0;
-        for(;nPos<_xCols->getCount();++nPos)
+        sal_Int32 nPos = i;
+        if(_xCols != xColumns)
         {
-            Reference<XPropertySet> xFindCol;
-            ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
-            if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
-                break;
+            m_pColumns->getByIndex(i) >>= xCol;
+            OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+            for(nPos = 0;nPos<_xCols->getCount();++nPos)
+            {
+                Reference<XPropertySet> xFindCol;
+                ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
+                if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
+                    break;
+            }
+            if (nPos >= _xCols->getCount())
+            {
+                nByteOffset += nLen;
+                continue;
+            }
         }
 
-        if (nPos >= _xCols->getCount())
-        {
-            nByteOffset += nLen;
-            continue;
-        }
+
 
         ++nPos; // the row values start at 1
         // Ist die Variable ueberhaupt gebunden?
@@ -1497,6 +1516,9 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
                     double n = rRow[nPos];
 
+                    m_pColumns->getByIndex(i) >>= xCol;
+                    OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+                    xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                     int nPrecision      = (int)m_aPrecisions[i];
                     int nScale          = (int)getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
@@ -1561,6 +1583,10 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         }
         catch ( Exception& )
         {
+            m_pColumns->getByIndex(i) >>= xCol;
+            OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid value for column: ");
             sMsg += aColName;
             sMsg += ::rtl::OUString::createFromAscii("!");
@@ -1904,21 +1930,20 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     if(nPos)
     {
         aInsertRow = new OValueVector(_pNewTable->m_pColumns->getCount());
-        for(OValueVector::iterator aInsertIter = aInsertRow->begin(); aInsertIter != aInsertRow->end();++aInsertIter)
-            aInsertIter->setBound(sal_True);
+        ::std::for_each(aInsertRow->begin(),aInsertRow->end(),TSetBound(sal_True));
     }
     else
         aInsertRow = aRow;
 
     // we only have to bind the values which we need to copy into the new table
-    for(OValueVector::iterator aIter = aRow->begin(); aIter != aRow->end();++aIter)
-        aIter->setBound(sal_True);
+    ::std::for_each(aRow->begin(),aRow->end(),TSetBound(sal_True));
     if(nPos && (nPos < (sal_Int32)aRow->size()))
         (*aRow)[nPos].setBound(sal_False);
 
 
     sal_Bool bOk = sal_True;
     sal_Int32 nCurPos;
+    OValueVector::iterator aIter;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
     {
         if(bOk = seekRow(FILE_BOOKMARK,nRowPos+1,nCurPos))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 14:27:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,8 @@ sal_Bool SAL_CALL ODbaseResultSet::supportsService( const ::rtl::OUString& _rSer
 // -------------------------------------------------------------------------
 Any SAL_CALL ODbaseResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = OResultSet::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = ODbaseResultSet_BASE::queryInterface(rType);
-    return aRet;
+    Any aRet = ODbaseResultSet_BASE::queryInterface(rType);
+    return aRet.hasValue() ? aRet : OResultSet::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL ODbaseResultSet::getTypes(  ) throw( RuntimeException)
@@ -176,10 +174,6 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     sal_Int32 nFirst,nSecond,nResult;
     first  >>= nFirst;
     second >>= nSecond;
@@ -235,7 +229,7 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                 sal_uInt32 nRec = pIter->First();
                 while (nRec != SQL_COLUMN_NOTFOUND)
                 {
-                    if (bOrderbyAscending[0])
+                    if (m_aOrderbyAscending[0])
                         m_pFileSet->push_back(nRec);
                     else
                         m_pFileSet->insert(m_pFileSet->begin(),nRec);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,76 +130,75 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setTypeInfoMap();
-    ORows aRows;
-    ORow aRow;
+    static ODatabaseMetaDataResultSet::ORows aRows;
+    if(aRows.empty())
+    {
+        ODatabaseMetaDataResultSet::ORow aRow;
+        aRow.reserve(18);
 
-    aRow.push_back(ORowSetValue());
-    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("CHAR")));
-    aRow.push_back(ORowSetValue(DataType::CHAR));
-    aRow.push_back(ORowSetValue((sal_Int32)254));
-    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
-    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
-    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("length")));
-    aRow.push_back(ORowSetValue((sal_Int32)ColumnValue::NULLABLE));
-    aRow.push_back(ORowSetValue((sal_Int32)1));
-    aRow.push_back(ORowSetValue((sal_Int32)ColumnSearch::FULL));
-    aRow.push_back(ORowSetValue((sal_Int32)1));
-    aRow.push_back(ORowSetValue((sal_Int32)0));
-    aRow.push_back(ORowSetValue((sal_Int32)0));
-    aRow.push_back(ORowSetValue());
-    aRow.push_back(ORowSetValue((sal_Int32)0));
-    aRow.push_back(ORowSetValue((sal_Int32)0));
-    aRow.push_back(ORowSetValue());
-    aRow.push_back(ORowSetValue());
-    aRow.push_back(ORowSetValue((sal_Int32)10));
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("CHAR")));
+        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::CHAR));
+        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)254));
+        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
+        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("length")));
+        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)ColumnSearch::FULL));
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)10));
 
-    // bound row
-    ORow::iterator aIter = aRow.begin();
-    for(;aIter != aRow.end();++aIter)
-        aIter->setBound(sal_True);
+        aRows.push_back(aRow);
 
-    aRows.push_back(aRow);
-
-    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("VARCHAR"));
-    aRow[2] = ORowSetValue(DataType::VARCHAR);
-    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
-    aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("length"));
-    aRows.push_back(aRow);
+        aRow[1] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("VARCHAR"));
+        aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::VARCHAR);
+        aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue();
+        aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue();
+        aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("length"));
+        aRows.push_back(aRow);
 
 
-    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("LONGVARCHAR"));
-    aRow[2] = ORowSetValue(DataType::LONGVARCHAR);
-    aRow[3] = ORowSetValue((sal_Int32)65535);
-    aRows.push_back(aRow);
+        aRow[1] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("LONGVARCHAR"));
+        aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::LONGVARCHAR);
+        aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)65535);
+        aRows.push_back(aRow);
 
-    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DATE"));
-    aRow[2] = ORowSetValue(DataType::DATE);
-    aRow[3] = ORowSetValue((sal_Int32)10);
-    aRows.push_back(aRow);
+        aRow[1] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("DATE"));
+        aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::DATE);
+        aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)10);
+        aRows.push_back(aRow);
 
-    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("BOOL"));
-    aRow[2] = ORowSetValue(DataType::BIT);
-    aRow[3] = ORowSetValue((sal_Int32)1);
-    aRow[4] = ORowSetValue();
-    aRow[5] = ORowSetValue();
-    aRow[6] = ORowSetValue(::rtl::OUString());
-    aRow[9] = ORowSetValue((sal_Int32)ColumnSearch::BASIC);
-    aRows.push_back(aRow);
+        aRow[1] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("BOOL"));
+        aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::BIT);
+        aRow[3] = ODatabaseMetaDataResultSet::get1Value();
+        aRow[4] = ODatabaseMetaDataResultSet::getEmptyValue();
+        aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
+        aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString());
+        aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
+        aRows.push_back(aRow);
 
-    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DECIMAL"));
-    aRow[2] = ORowSetValue(DataType::DECIMAL);
-    aRow[3] = ORowSetValue((sal_Int32)20);
-    aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("length,scale"));
-    aRow[15] = ORowSetValue((sal_Int32)15);
-    aRows.push_back(aRow);
+        aRow[1] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("DECIMAL"));
+        aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::DECIMAL);
+        aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)20);
+        aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("length,scale"));
+        aRow[15] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)15);
+        aRows.push_back(aRow);
 
-    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("NUMERIC"));
-    aRow[2] = ORowSetValue(DataType::NUMERIC);
-    aRow[3] = ORowSetValue((sal_Int32)20);
-    aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("length,scale"));
-    aRow[15] = ORowSetValue((sal_Int32)20);
-    aRows.push_back(aRow);
+        aRow[1] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("NUMERIC"));
+        aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::NUMERIC);
+        aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)20);
+        aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("length,scale"));
+        aRow[15] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)20);
+        aRows.push_back(aRow);
+    }
 
     pResult->setRows(aRows);
     return xRef;
@@ -233,14 +232,10 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     if(!xNames.is())
         throw SQLException();
 
-    ORows aRows;
-    ORow aRow(19);
-    // bound row
-    ORow::iterator aIter = aRow.begin();
-    for(;aIter != aRow.end();++aIter)
-        aIter->setBound(sal_True);
+    ODatabaseMetaDataResultSet::ORows aRows;
+    ODatabaseMetaDataResultSet::ORow aRow(19);
 
-    aRow[10] = (sal_Int32)10;
+    aRow[10] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)10);
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
     const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
     const ::rtl::OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
@@ -251,7 +246,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
             Reference< XColumnsSupplier> xTable;
             ::cppu::extractInterface(xTable,xNames->getByName(*pTabBegin));
             OSL_ENSURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
-            aRow[3] = *pTabBegin;
+            aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(*pTabBegin);
 
             Reference< XNameAccess> xColumns = xTable->getColumns();
             if(!xColumns.is())
@@ -266,43 +261,39 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
             {
                 if(match(columnNamePattern,*pBegin,'\0'))
                 {
-                    aRow[4] = *pBegin;
+                    aRow[4] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(*pBegin);
 
                     ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
                     OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
-                    aRow[5] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
-                    aRow[6] = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
-                    aRow[7] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
-                    //  aRow[8] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-                    aRow[9] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
-                    aRow[11] = getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
-                    //  aRow[12] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-                    aRow[13] = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
-                    //  aRow[14] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-                    //  aRow[15] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-                    switch((sal_Int32)aRow[5])
+                    aRow[5] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
+                    aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
+                    aRow[7] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))));
+                    aRow[9] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
+                    aRow[11] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))));
+                    aRow[13] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))));
+                    switch((sal_Int32)aRow[5]->getValue())
                     {
                     case DataType::CHAR:
                     case DataType::VARCHAR:
-                        aRow[16] = (sal_Int32)254;
+                        aRow[16] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)254);
                         break;
                     case DataType::LONGVARCHAR:
-                        aRow[16] = (sal_Int32)65535;
+                        aRow[16] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)65535);
                         break;
                     default:
-                        aRow[16] = (sal_Int32)0;
+                        aRow[16] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)0);
                     }
-                    aRow[17] = i;
-                    switch(sal_Int32(aRow[11]))
+                    aRow[17] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(i);
+                    switch(sal_Int32(aRow[11]->getValue()))
                     {
                     case ColumnValue::NO_NULLS:
-                        aRow[18] = ::rtl::OUString::createFromAscii("NO");
+                        aRow[18] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
                         break;
                     case ColumnValue::NULLABLE:
-                        aRow[18] = ::rtl::OUString::createFromAscii("YES");
+                        aRow[18] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("YES"));
                         break;
                     default:
-                        aRow[18] = ::rtl::OUString();
+                        aRow[18] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString());
                     }
                     aRows.push_back(aRow);
                 }
@@ -376,20 +367,16 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     if(!xNames.is())
                 throw SQLException();
 
-    ORows aRows;
-    ORow aRow(14);
-    // bound row
-    ORow::iterator aIter = aRow.begin();
-    for(;aIter != aRow.end();++aIter)
-        aIter->setBound(sal_True);
+    ODatabaseMetaDataResultSet::ORows aRows;
+    ODatabaseMetaDataResultSet::ORow aRow(14);
 
-    aRow[5]     = ::rtl::OUString();
-    aRow[10]    = ::rtl::OUString::createFromAscii("A");
+    aRow[5]     = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString());
+    aRow[10]    = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("A"));
 
     Reference< XIndexesSupplier> xTable;
     ::cppu::extractInterface(xTable,xNames->getByName(table));
-    aRow[3] = table;
-    aRow[7] = (sal_Int32)3;
+    aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(table);
+    aRow[7] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)3);
 
     Reference< XNameAccess> xIndexes = xTable->getIndexes();
     if(!xIndexes.is())
@@ -407,8 +394,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
         if(unique && !getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             continue;
-        aRow[4] = getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE)));
-        aRow[6] = *pBegin;
+        aRow[4] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))));
+        aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(*pBegin);
 
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
         if(xTunnel.is())
@@ -416,8 +403,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
             ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
             if(pIndex)
             {
-                aRow[11] = (sal_Int32)pIndex->getHeader().db_maxkeys;
-                aRow[12] = (sal_Int32)pIndex->getHeader().db_pagecount;
+                aRow[11] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)pIndex->getHeader().db_maxkeys);
+                aRow[12] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)pIndex->getHeader().db_pagecount);
             }
         }
 
@@ -431,8 +418,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
         {
             //  xColumns->getByName(*pColBegin) >>= xColumn;
-            aRow[8] = j;
-            aRow[9] = *pColBegin;
+            aRow[8] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(j);
+            aRow[9] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(*pColBegin);
             aRows.push_back(aRow);
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 08:28:41 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
         memset(pEmptyData,0x00,nSize);
         rStream.Write((BYTE*)pEmptyData,nSize);
         rStream.Seek(nTell);
-        delete pEmptyData;
+        delete [] pEmptyData;
     }
     return rStream;
 }
