@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFrames.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: os $ $Date: 2000-11-17 09:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
 
 #ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
@@ -92,6 +95,13 @@ service TextFrames
                 always "XTextFrame".
      */
     interface com::sun::star::container::XNameAccess;
+    /** This interface makes it possible to access all <type>TextFrame</type>
+                instances within this context (e.g. a document) by its index.
+
+                <p>The type of the interfaces returned by this collection is
+                always "XTextFrame".
+     */
+    interface com::sun::star::container::XIndexAccess;
 
 
     // DocMerge from xml: service com::sun::star::text::TextFrames: interface com::sun::star::container::XContainer
@@ -107,18 +117,4 @@ service TextFrames
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:36:03  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:01  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
