@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:04:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1799,15 +1799,16 @@ void ScTabView::UpdateEditView()
 void ScTabView::KillEditView( BOOL bNoPaint )
 {
     USHORT i;
-    USHORT nCol1 = aViewData.GetEditViewCol();
-    USHORT nRow1 = aViewData.GetEditViewRow();
+    USHORT nCol1 = aViewData.GetEditStartCol();
+    USHORT nRow1 = aViewData.GetEditStartRow();
     USHORT nCol2 = aViewData.GetEditEndCol();
     USHORT nRow2 = aViewData.GetEditEndRow();
     BOOL bPaint[4];
     BOOL bNotifyAcc(false);
 
     BOOL bExtended = nRow1 != nRow2;                    // Col wird sowieso bis zum Ende gezeichnet
-    BOOL bAtCursor = nCol1 == aViewData.GetCurX() &&
+    BOOL bAtCursor = nCol1 <= aViewData.GetCurX() &&
+                     nCol2 >= aViewData.GetCurX() &&
                      nRow1 == aViewData.GetCurY();
     for (i=0; i<4; i++)
     {
@@ -1958,17 +1959,20 @@ void ScTabView::PaintArea( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, U
                         pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, eMode );
                     else    // ALL oder MARKS
                     {
+                        BOOL bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+                        long nLayoutSign = bLayoutRTL ? -1 : 1;
+
                         Point aStart = aViewData.GetScrPos( nCol1, nRow1, (ScSplitPos) i );
                         Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, (ScSplitPos) i );
                         if ( eMode == SC_UPDATE_ALL )
-                            aEnd.X() = pGridWin[i]->GetOutputSizePixel().Width();
-                        aEnd.X() -= 1;
+                            aEnd.X() = bLayoutRTL ? 0 : (pGridWin[i]->GetOutputSizePixel().Width());
+                        aEnd.X() -= nLayoutSign;
                         aEnd.Y() -= 1;
 
                         BOOL bShowChanges = TRUE;           //! ...
                         if (bShowChanges)
                         {
-                            aStart.X() -= 1;    // auch Change-Markierung
+                            aStart.X() -= nLayoutSign;      // include change marks
                             aStart.Y() -= 1;
                         }
 
@@ -1982,9 +1986,9 @@ void ScTabView::PaintArea( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, U
                             //!                     0, nRow1, nCol1-1, nRow2 ) )
                             {
                                 long nMarkPixel = (long)( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
-                                aStart.X() -= nMarkPixel;
+                                aStart.X() -= nMarkPixel * nLayoutSign;
                                 if (!bShowChanges)
-                                    aStart.X() -= 1;        // Zellgitter
+                                    aStart.X() -= nLayoutSign;      // cell grid
                             }
                         }
 
@@ -2312,6 +2316,9 @@ void ScTabView::PaintTopArea( USHORT nStartCol, USHORT nEndCol )
     if (nStartCol>0)
         --nStartCol;                //! allgemeiner ?
 
+    BOOL bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     for (USHORT i=0; i<2; i++)
     {
         ScHSplitPos eWhich = (ScHSplitPos) i;
@@ -2321,9 +2328,9 @@ void ScTabView::PaintTopArea( USHORT nStartCol, USHORT nEndCol )
             long nStartX = aViewData.GetScrPos( nStartCol, 0, eWhich ).X();
             long nEndX;
             if (nEndCol >= MAXCOL)
-                nEndX = aWinSize.Width()-1;
+                nEndX = bLayoutRTL ? 0 : ( aWinSize.Width()-1 );
             else
-                nEndX = aViewData.GetScrPos( nEndCol+1, 0, eWhich ).X() - 1;
+                nEndX = aViewData.GetScrPos( nEndCol+1, 0, eWhich ).X() - nLayoutSign;
             pColBar[eWhich]->Invalidate(
                     Rectangle( nStartX, 0, nEndX, aWinSize.Height()-1 ) );
         }
@@ -2442,7 +2449,14 @@ void ScTabView::InvertBlockMark(USHORT nBlockStartX, USHORT nBlockStartY,
                     ScSplitPos ePos = (ScSplitPos) i;
                     Point aStartPoint = aViewData.GetScrPos( nBlockStartX, nBlockStartY, ePos );
                     Point aEndPoint = aViewData.GetScrPos( nBlockEndX+1, nBlockEndY+1, ePos );
-                    aEndPoint.X() -= 1;
+                    if ( pDoc->IsLayoutRTL( nTab ) )
+                    {
+                        long nTemp = aStartPoint.X();
+                        aStartPoint.X() = aEndPoint.X() + 1;    // +1 - excluding start of nBlockEndX+1
+                        aEndPoint.X() = nTemp;
+                    }
+                    else
+                        aEndPoint.X() -= 1;
                     aEndPoint.Y() -= 1;
                     if ( aEndPoint.X() >= aStartPoint.X() && aEndPoint.Y() >= aStartPoint.Y() )
                     {
