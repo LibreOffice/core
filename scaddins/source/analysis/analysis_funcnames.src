@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:13:25 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2463,7 +2463,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZWEIFAKULTÄT";
         Text [ english ] = "FACTDOUBLE";
         Text[ english_us ] = "FACTDOUBLE";
-        Text[ portuguese ] = "FACTDOUBLE";
+        Text[ portuguese ] = "FACTDUPLO";
         Text[ russian ] = "ÄÂÔÀÊÒÐ";
         Text[ greek ] = "FACTDOUBLE";
         Text[ dutch ] = "DUBBELE.FACULTEIT";
@@ -2485,6 +2485,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
     };
 
 };
+
 
 
 
