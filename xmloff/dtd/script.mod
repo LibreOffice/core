@@ -1,5 +1,5 @@
 <!--
-	$Id: script.mod,v 1.1 2000-12-07 14:56:21 ab Exp $
+	$Id: script.mod,v 1.2 2000-12-15 11:12:07 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -62,7 +62,7 @@
 <!ATTLIST script:library-linked xlink:href %string; #REQUIRED>
 <!ATTLIST script:library-linked xlink:type (simple) #FIXED "simple">
 
-<!ELEMENT script:module EMPTY>
+<!ELEMENT script:module #PCDATA>
 <!ATTLIST script:module script:name %string; #REQUIRED>
 <!ATTLIST script:module script:language %string; #IMPLIED>
 
