@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ private:
     ULONG nAktNode;             // save CursorPos at Start-Action
     xub_StrLen nAktCntnt;
     USHORT nAktNdTyp;
+    bool bAktSelection;
 
     /*
      * Mit den Methoden SttCrsrMove und EndCrsrMove wird dieser Zaehler
@@ -450,6 +451,16 @@ public:
     CRSR_INLINE FASTBOOL HasMark();
 
     void ClearMark();
+
+    /**
+       Ensure point and mark of the current PaM are in a specific order.
+
+       @param bPointFirst TRUE: If the point is behind the mark then
+       swap the PaM. FALSE: If the mark is behind the point then swap
+       the PaM.
+    */
+    void NormalizePam(BOOL bPointFirst = TRUE);
+
     void SwapPam();
     FASTBOOL ChgCurrPam( const Point & rPt,
                      BOOL bTstOnly = TRUE,      //Nur testen, nicht setzen
@@ -540,7 +551,7 @@ public:
 
     // Abfrage, ob der aktuelle Cursor eine Selektion aufspannt,
     // also, ob Mark gesetzt und SPoint und Mark unterschiedlich sind.
-    FASTBOOL HasSelection();
+    FASTBOOL HasSelection() const;
 
     // Abfrage, ob ueberhaupt eine Selektion existiert, sprich der akt. Cursor
     // aufgespannt oder nicht der einzigste ist.
@@ -627,7 +638,7 @@ public:
     CRSR_INLINE         SwPaM* GetTblCrs();
 
     FASTBOOL IsTblComplex() const;
-    FASTBOOL IsTblComplexForChart() const;
+    FASTBOOL IsTblComplexForChart();
     // erfrage die akt. TabellenSelektion als Text
     String GetBoxNms() const;
 
