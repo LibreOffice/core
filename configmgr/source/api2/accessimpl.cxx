@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: fs $ $Date: 2000-11-21 19:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,31 @@
  *
  ************************************************************************/
 
+#ifndef CONFIGMGR_API_BASEACCESSIMPL_HXX_
 #include "accessimpl.hxx"
+#endif
 
+#ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGSET_HXX_
 #include "configset.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
+#endif
+#ifndef CONFIGMGR_API_ENCODENAME_HXX_
 #include "encodename.hxx"
+#endif
+#ifndef CONFIGMGR_API_PROPERTYINFOIMPL_HXX_
 #include "propertyinfohelper.hxx"
+#endif
+#ifndef _CONFIGMGR_TREEITERATORS_HXX_
+#include "treeiterators.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -488,39 +505,11 @@ Any implGetByName(NodeAccess& rNode, const OUString& sName )
 }
 
 //-----------------------------------------------------------------------------------
-namespace internal
-{
-    class CollectNames :  public NodeVisitor
-    {
-    public:
-        CollectNames() : aList() {}
-
-        virtual Result handle(NodeRef const& aNode); // NodeVisitor
-
-        typedef std::vector<OUString> NameList;
-        NameList const& list() const { return aList; }
-
-    private:
-        void add(Name const& aName)
-        {
-            aList.push_back(aName.toString());
-        }
-        NameList aList;
-    };
-
-    NodeVisitor::Result CollectNames::handle(NodeRef const& aNode)
-    {
-        add(aNode.getName());
-        return CONTINUE;
-    }
-}
-
-//-----------------------------------------------------------------------------------
 // TODO: optimization - less locking for group nodes
 //-----------------------------------------------------------------------------------
 Sequence< OUString > implGetElementNames( NodeAccess& rNode ) throw( RuntimeException)
 {
-    internal::CollectNames aCollect;
+    CollectNodeNames aCollect;
 
     try
     {
