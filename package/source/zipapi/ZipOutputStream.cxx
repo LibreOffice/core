@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:59:39 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 10:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,14 @@
 #endif
 
 using namespace rtl;
-using namespace com::sun::star;
+using namespace com::sun::star::io;
+using namespace com::sun::star::packages;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::packages::ZipConstants;
 
 /** This class is used to write Zip files
  */
-ZipOutputStream::ZipOutputStream( uno::Reference < io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize)
+ZipOutputStream::ZipOutputStream( Reference < XOutputStream > &xOStream, sal_Int32 nNewBufferSize)
 : xStream(xOStream)
 , aChucker(xOStream)
 , nMethod(DEFLATED)
@@ -93,7 +94,6 @@ ZipOutputStream::ZipOutputStream( uno::Reference < io::XOutputStream > &xOStream
 , bEncryptCurrentEntry(sal_False)
 , aBuffer(nNewBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
-, nCurrentDataBegin ( 0 )
 {
 }
 
@@ -104,25 +104,25 @@ ZipOutputStream::~ZipOutputStream( void )
 }
 
 void SAL_CALL ZipOutputStream::setComment( const ::rtl::OUString& rComment )
-    throw(uno::RuntimeException)
+    throw(RuntimeException)
 {
     sComment = rComment;
 }
 void SAL_CALL ZipOutputStream::setMethod( sal_Int32 nNewMethod )
-    throw(uno::RuntimeException)
+    throw(RuntimeException)
 {
     nMethod = static_cast < sal_Int16 > (nNewMethod);
 }
 void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
-    throw(uno::RuntimeException)
+    throw(RuntimeException)
 {
     aDeflater.setLevel( nNewLevel);
 }
 
-void SAL_CALL ZipOutputStream::putNextEntry( packages::ZipEntry& rEntry,
+void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
                         const vos::ORef < EncryptionData > &xEncryptData,
                         sal_Bool bEncrypt)
-    throw(io::IOException, uno::RuntimeException)
+    throw(IOException, RuntimeException)
 {
     if (pCurrentEntry != NULL)
         closeEntry();
@@ -139,11 +139,6 @@ void SAL_CALL ZipOutputStream::putNextEntry( packages::ZipEntry& rEntry,
         rEntry.nFlag = 0;
 
     rEntry.nOffset = static_cast < sal_Int32 > (aChucker.getPosition());
-    writeLOC(rEntry);
-    nCurrentDataBegin = static_cast < sal_Int32 > (aChucker.getPosition());
-    aZipList.push_back( &rEntry );
-    pCurrentEntry = &rEntry;
-
     if (bEncrypt)
     {
         bEncryptCurrentEntry = sal_True;
@@ -156,18 +151,23 @@ void SAL_CALL ZipOutputStream::putNextEntry( packages::ZipEntry& rEntry,
                             xEncryptData->aInitVector.getConstArray(),
                             xEncryptData->aInitVector.getLength());
         OSL_ASSERT( aResult == rtl_Cipher_E_None );
+        rEntry.nFlag |= 1 << 4;
     }
+    writeLOC(rEntry);
+    aZipList.push_back( &rEntry );
+    pCurrentEntry = &rEntry;
+
 }
 void SAL_CALL ZipOutputStream::close(  )
-    throw(io::IOException, uno::RuntimeException)
+    throw(IOException, RuntimeException)
 {
     finish();
 }
 
 void SAL_CALL ZipOutputStream::closeEntry(  )
-    throw(io::IOException, uno::RuntimeException)
+    throw(IOException, RuntimeException)
 {
-    packages::ZipEntry *pEntry = pCurrentEntry;
+    ZipEntry *pEntry = pCurrentEntry;
     if (pEntry)
     {
         switch (pEntry->nMethod)
@@ -199,80 +199,22 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                     pEntry->nSize = aDeflater.getTotalIn();
                     pEntry->nCompressedSize = aDeflater.getTotalOut();
                     pEntry->nCrc = aCRC.getValue();
-                    // writeEXT(*pEntry);
-                    // Let's seek back and re-write the LOC header correctly
-                    // Also, if it's an encrypted stream, we need to flag
-                    // the method type as STORED instead of DEFLATED or
-                    // no standard tools will be able to read them!
-                    // - mtg
-
-                    pEntry->nFlag    =  0;
-                    pEntry->nVersion = 10;
                     if ( bEncryptCurrentEntry )
-                    {
-                        pEntry->nMethod = STORED;
                         pEntry->nSize = pEntry->nCompressedSize;
-                    }
-                    sal_Int64 nPos = aChucker.getPosition();
-
-                    aChucker.seek( pEntry->nOffset );
-                    aChucker << LOCSIG;
-                    aChucker << pEntry->nVersion;
-                    aChucker << pEntry->nFlag;
-                    aChucker << pEntry->nMethod;
-                    aChucker << static_cast < sal_uInt32 > (pEntry->nTime);
-                    aChucker << static_cast < sal_uInt32 > (pEntry->nCrc);
-                    aChucker << pEntry->nCompressedSize;
-                    aChucker << pEntry->nSize;
-
-                    aChucker.seek( nPos );
+                    writeEXT(*pEntry);
                 }
                 aDeflater.reset();
+                aCRC.reset();
                 break;
             case STORED:
-
-                pEntry->nCrc = aCRC.getValue();
                 if (!((pEntry->nFlag & 8) == 0))
-                {
-                    // writeEXT(*pEntry);
-                    // instead of writing a data descriptor (due to the fact
-                    // that the 'jar' tool doesn't like data descriptors
-                    // for STORED streams), we seek back and update the LOC
-                    // header.
-
-                    pEntry->nFlag    =  0;
-                    pEntry->nVersion = 10;
-                    sal_Int64 nPos = aChucker.getPosition(), nSize = aChucker.getPosition() - nCurrentDataBegin;
-                    pEntry->nCompressedSize = pEntry->nSize = static_cast < sal_Int32 > (nSize);
-
-                    aChucker.seek( pEntry->nOffset );
-                    aChucker << LOCSIG;
-                    aChucker << pEntry->nVersion;
-                    aChucker << pEntry->nFlag;
-                    aChucker << pEntry->nMethod;
-                    aChucker << static_cast < sal_uInt32 > (pEntry->nTime);
-                    aChucker << static_cast < sal_uInt32 > (pEntry->nCrc);
-                    aChucker << pEntry->nCompressedSize;
-                    aChucker << pEntry->nSize;
-
-                    aChucker.seek( nPos );
-                }
-
-                /*
-                if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
-                {
-                    // boom
-
-                    VOS_DEBUG_ONLY("Invalid entry crc32");
-                }
-                */
+                    VOS_ENSURE ( 0, "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
                 break;
             default:
-                // boom;
                 VOS_DEBUG_ONLY("Invalid compression method");
                 break;
         }
-        aCRC.reset();
+
         if (bEncryptCurrentEntry)
         {
             aEncryptionBuffer.realloc ( 0 );
@@ -280,12 +222,11 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
             rtl_cipher_destroy ( aCipher );
         }
         pCurrentEntry = NULL;
-        nCurrentDataBegin = 0;
     }
 }
 
-void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-    throw(io::IOException, uno::RuntimeException)
+void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    throw(IOException, RuntimeException)
 {
     switch (pCurrentEntry->nMethod)
     {
@@ -301,65 +242,56 @@ void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, 
             break;
         case STORED:
             sal_Int32 nOldLength = rBuffer.getLength();
-            uno::Sequence < sal_Int8 > *pBuffer = const_cast < uno::Sequence < sal_Int8 > *> (&rBuffer);
+            Sequence < sal_Int8 > *pBuffer = const_cast < Sequence < sal_Int8 > *> (&rBuffer);
             pBuffer->realloc(nNewLength);
-            if (bEncryptCurrentEntry)
-            {
-                rtlCipherError aResult;
-                aEncryptionBuffer.realloc ( nNewLength );
-                aResult = rtl_cipher_encode ( aCipher, static_cast < const void * > (pBuffer->getConstArray()),
-                                              nNewLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nNewLength );
-                aChucker.writeBytes ( aEncryptionBuffer );
-                aCRC.updateSegment( aEncryptionBuffer, nNewOffset, nNewLength);
-                aEncryptionBuffer.realloc ( nOldLength );
-            }
-            else
-            {
-                aChucker.writeBytes( *pBuffer );
-                aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
-            }
+            aChucker.writeBytes( *pBuffer );
             pBuffer->realloc(nOldLength);
             break;
     }
+}
 
-}
-void SAL_CALL ZipOutputStream::rawWrite( const uno::Sequence< sal_Int8 >& rBuffer)
-    throw(io::IOException, uno::RuntimeException)
+void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    throw(IOException, RuntimeException)
 {
+    sal_Int32 nOldLength = rBuffer.getLength();
+    rBuffer.realloc(nNewLength);
     aChucker.writeBytes(rBuffer);
+    rBuffer.realloc(nOldLength);
 }
+
 void SAL_CALL ZipOutputStream::rawCloseEntry(  )
-    throw(io::IOException, uno::RuntimeException)
+    throw(IOException, RuntimeException)
 {
-    writeEXT(*pCurrentEntry);
-    aCRC.reset();
+    if ( pCurrentEntry->nMethod == DEFLATED )
+        writeEXT(*pCurrentEntry);
     pCurrentEntry = NULL;
 }
+
 void SAL_CALL ZipOutputStream::finish(  )
-    throw(io::IOException, uno::RuntimeException)
+    throw(IOException, RuntimeException)
 {
     if (bFinished)
         return;
+
     if (pCurrentEntry != NULL)
         closeEntry();
+
     if (aZipList.size() < 1)
-    {
-        // boom
         VOS_DEBUG_ONLY("Zip file must have at least one entry!\n");
-    }
+
     sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.getPosition());
     for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
         writeCEN( *aZipList[i] );
     writeEND( nOffset, static_cast < sal_Int32 > (aChucker.getPosition()) - nOffset);
     bFinished = sal_True;
 }
+
 void ZipOutputStream::doDeflate()
 {
-    //sal_Int32 nOldOut = aDeflater.getTotalOut();
     sal_Int32 nLength = aDeflater.doDeflateSegment(aBuffer, 0, aBuffer.getLength());
     sal_Int32 nOldLength = aBuffer.getLength();
-    //sal_Int32 nNewOut = aDeflater.getTotalOut() - nOldOut;
-    if (nLength> 0 )
+
+    if ( nLength > 0 )
     {
         aBuffer.realloc(nLength);
         if (bEncryptCurrentEntry)
@@ -373,15 +305,15 @@ void ZipOutputStream::doDeflate()
             aEncryptionBuffer.realloc ( nOldLength );
         }
         else
-            aChucker.writeBytes(aBuffer);
-        aBuffer.realloc(nOldLength);
+            aChucker.writeBytes ( aBuffer );
+        aBuffer.realloc( nOldLength );
     }
 }
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
-    throw(io::IOException, uno::RuntimeException)
+    throw(IOException, RuntimeException)
 {
     sal_Int16 nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
-    uno::Sequence < sal_Int8 > aSequence (nCommentLength);
+    Sequence < sal_Int8 > aSequence (nCommentLength);
     sal_Int8 *pArray = aSequence.getArray();
 
     const sal_Unicode *pChar = sComment.getStr();
@@ -401,8 +333,8 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     if (nCommentLength)
         aChucker.writeBytes(aSequence);
 }
-void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
-    throw(io::IOException, uno::RuntimeException)
+void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
+    throw(IOException, RuntimeException)
 {
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( rEntry.sName.getLength() ) ,
               nCommentLength    = static_cast < sal_Int16 > ( rEntry.sComment.getLength() ) ,
@@ -411,8 +343,19 @@ void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
     aChucker << CENSIG;
     aChucker << rEntry.nVersion;
     aChucker << rEntry.nVersion;
-    aChucker << rEntry.nFlag;
-    aChucker << rEntry.nMethod;
+    if (rEntry.nFlag & (1 << 4) )
+    {
+        // If it's an encrypted entry, we pretend its stored plain text
+        ZipEntry *pEntry = const_cast < ZipEntry * > ( &rEntry );
+        pEntry->nFlag &= ~(1 <<4 );
+        aChucker << rEntry.nFlag;
+        aChucker << static_cast < sal_Int16 > ( STORED );
+    }
+    else
+    {
+        aChucker << rEntry.nFlag;
+        aChucker << rEntry.nMethod;
+    }
     aChucker << static_cast < sal_uInt32> (rEntry.nTime);
     aChucker << static_cast < sal_uInt32> (rEntry.nCrc);
     aChucker << rEntry.nCompressedSize;
@@ -424,16 +367,9 @@ void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
     aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int32> (0);
     aChucker << rEntry.nOffset;
-/*
-    sal_uInt64 nCurrent = aChucker.getPosition();
-    aChucker.seek(rEntry.nOffset+16);
-    aChucker << static_cast < sal_uInt32> (rEntry.nCrc);
-    aChucker << rEntry.nCompressedSize;
-    aChucker << rEntry.nSize;
-    aChucker.seek(nCurrent);
-*/
+
     const sal_Unicode *pChar = rEntry.sName.getStr();
-    uno::Sequence < sal_Int8 > aSequence (nNameLength);
+    Sequence < sal_Int8 > aSequence (nNameLength);
     sal_Int8 *pArray = aSequence.getArray();
 
     for ( sal_Int16 i = 0; i < nNameLength; i++)
@@ -460,26 +396,39 @@ void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
         aChucker.writeBytes( aSequence );
     }
 }
-void ZipOutputStream::writeEXT( const packages::ZipEntry &rEntry )
-    throw(io::IOException, uno::RuntimeException)
+void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
+    throw(IOException, RuntimeException)
 {
     aChucker << EXTSIG;
-    aChucker << rEntry.nCrc;
+    aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
     aChucker << rEntry.nCompressedSize;
     aChucker << rEntry.nSize;
 }
 
-void ZipOutputStream::writeLOC( const packages::ZipEntry &rEntry )
-    throw(io::IOException, uno::RuntimeException)
+void ZipOutputStream::writeLOC( const ZipEntry &rEntry )
+    throw(IOException, RuntimeException)
 {
     sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());
-    uno::Sequence < sal_Int8 > aSequence(nNameLength);
+    Sequence < sal_Int8 > aSequence(nNameLength);
     sal_Int8 *pArray = aSequence.getArray();
 
     aChucker << LOCSIG;
     aChucker << rEntry.nVersion;
-    aChucker << rEntry.nFlag;
-    aChucker << rEntry.nMethod;
+
+    if (rEntry.nFlag & (1 << 4) )
+    {
+        // If it's an encrypted entry, we pretend its stored plain text
+        sal_Int16 nTmpFlag = rEntry.nFlag;
+        nTmpFlag &= ~(1 <<4 );
+        aChucker << nTmpFlag;
+        aChucker << static_cast < sal_Int16 > ( STORED );
+    }
+    else
+    {
+        aChucker << rEntry.nFlag;
+        aChucker << rEntry.nMethod;
+    }
+
     aChucker << static_cast < sal_uInt32 > (rEntry.nTime);
     if ((rEntry.nFlag & 8) == 8 )
     {
