@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:40:34 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,13 +319,20 @@ SwFmt::~SwFmt()
         bFmtInDTOR = TRUE;
 
         SwFmt *pParentFmt = DerivedFrom();
-        while( GetDepends() )
+        if (!pParentFmt)        // see #112405#
         {
-            SwFmtChg aOldFmt(this);
-            SwFmtChg aNewFmt(pParentFmt);
-            SwClient * pDepend = (SwClient*)GetDepends();
-            pParentFmt->Add(pDepend);
-            pDepend->Modify(&aOldFmt, &aNewFmt);
+            DBG_ERROR( "~SwFmt: parent format missing" );
+        }
+        else
+        {
+            while( GetDepends() )
+            {
+                SwFmtChg aOldFmt(this);
+                SwFmtChg aNewFmt(pParentFmt);
+                SwClient * pDepend = (SwClient*)GetDepends();
+                pParentFmt->Add(pDepend);
+                pDepend->Modify(&aOldFmt, &aNewFmt);
+            }
         }
     }
 }
