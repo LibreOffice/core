@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,13 @@ Time::Time()
 
 // -----------------------------------------------------------------------
 
+Time::Time( const Time& rTime )
+{
+    nTime = rTime.nTime;
+}
+
+// -----------------------------------------------------------------------
+
 Time::Time( ULONG nHour, ULONG nMin, ULONG nSec, ULONG n100Sec )
 {
     // Zeit normalisieren
@@ -324,6 +331,14 @@ double Time::GetTimeInDays() const
     double n100Sec    = Get100Sec();
 
     return (nHour+(nMin/60)+(nSec/(60*60))+(n100Sec/(60*60*100))) / 24 * nSign;
+}
+
+// -----------------------------------------------------------------------
+
+Time& Time::operator =( const Time& rTime )
+{
+    nTime = rTime.nTime;
+    return *this;
 }
 
 // -----------------------------------------------------------------------
