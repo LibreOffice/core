@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsdvalidationhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:14:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,11 @@ namespace pcr
     //====================================================================
     class XSDValidationHelper : public EFormsHelper
     {
+    private:
+        bool    m_bInspectingFormattedField;
+    public:
+        bool    isInspectingFormattedField() const { return m_bInspectingFormattedField; }
+
     public:
         XSDValidationHelper(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxIntrospectee,
@@ -149,6 +154,12 @@ namespace pcr
         */
         void    copyDataType( const ::rtl::OUString& _rFromModel, const ::rtl::OUString& _rToModel,
                     const ::rtl::OUString& _rDataTypeName ) const SAL_THROW(());
+
+        /** finds (and sets) a default format for the formatted field we're inspecting,
+            according to the current data type the control value is evaluated against
+        */
+        void findDefaultFormatForIntrospectee() SAL_THROW(());
+
     private:
         /** retrieves the data type repository associated with the current model
         */
