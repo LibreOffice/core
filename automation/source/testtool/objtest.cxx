@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:49 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2418,11 +2418,23 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             long nWait = rPar->Get(1)->GetLong();
                             if( nWait >= 0 )
                             {
+#ifdef DEBUG
+                                Time aStart;
+#endif
                                 Timer aTimer;
                                 aTimer.SetTimeout( nWait );
                                 aTimer.Start();
                                 while ( aTimer.IsActive() )
                                     Application::Yield();
+#ifdef DEBUG
+                                Time aEnd;
+                                Time aDiff = aEnd - aStart;
+                                ULONG aMS = aDiff.GetMSFromTime();
+                                if ( Abs( aDiff.GetMSFromTime() - nWait ) > 100 )
+                                {
+                                    DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait )
+                                }
+#endif
                             }
                         }
                         else
