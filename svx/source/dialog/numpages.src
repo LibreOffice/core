@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 22:02:56 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 11:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "~Numbering" ;
         Text [ swedish ] = "Numrering" ;
         Text [ danish ] = "Nummerering" ;
-        Text [ italian ] = "~Numerazione" ;
+        Text [ italian ] = "Numerazione" ;
         Text [ spanish ] = "Nu~meraciÛn" ;
         Text [ french ] = "~NumÈrotation" ;
         Text [ dutch ] = "~Nummering" ;
@@ -749,7 +749,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Davor" ;
         Text [ ENGLISH ] = "~Before" ;
         Text [ norwegian ] = "F¯r" ;
-        Text [ italian ] = "~Davanti" ;
+        Text [ italian ] = "Davanti" ;
         Text [ portuguese_brazilian ] = "Antes" ;
         Text [ portuguese ] = "¿ fr~ente" ;
         Text [ finnish ] = "Ennen" ;
@@ -862,14 +862,14 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "Co~lor" ;
         Hide = TRUE;
-        Text[ italian ] = "~Colore";
+        Text[ italian ] = "Colore";
         Text[ portuguese_brazilian ] = "~Color:";
         Text[ portuguese ] = "~Cor";
         Text[ danish ] = "Farve:";
         Text[ french ] = "Couleur";
         Text[ swedish ] = "~F‰rg";
         Text[ dutch ] = "~Kleur";
-        Text[ spanish ] = "~Color";
+        Text[ spanish ] = "Color";
         Text[ english_us ] = "Color";
         Text[ chinese_simplified ] = "È¢úËâ≤";
         Text[ russian ] = "÷‚ÂÚ";
@@ -1396,9 +1396,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "~Breite" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ danish ] = "Bredde" ;
-        Text [ italian ] = "~Largh." ;
-        Text [ spanish ] = "A~ncho" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ italian ] = "Larghezza" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ french ] = "Largeur" ;
         Text [ dutch ] = "~Breedte" ;
         Text [ portuguese ] = "~Largura" ;
         Text[ chinese_simplified ] = "ÂÆΩÂ∫¶";
@@ -1444,7 +1444,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "~H?e" ;
         Text [ swedish ] = "H~ˆjd" ;
         Text [ danish ] = "H¯jde" ;
-        Text [ italian ] = "~Altezza" ;
+        Text [ italian ] = "Altezza" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ french ] = "Hauteur" ;
         Text [ dutch ] = "~Hoogte" ;
@@ -1494,7 +1494,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ danish ] = "Proportional" ;
         Text [ italian ] = "Sin~cronizza" ;
         Text [ spanish ] = "~SincronizaciÛn" ;
-        Text [ french ] = "~Proportionnel" ;
+        Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Synchroniseren" ;
         Text [ portuguese ] = "Pr~oporcional" ;
         Text[ chinese_simplified ] = "ÂêåÊ≠•Âåñ";
@@ -2342,7 +2342,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ danish ] = "Standard" ;
         Text [ italian ] = "~Standard" ;
         Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "Par ~dÈfaut" ;
+        Text [ french ] = "Par dÈfaut" ;
         Text [ dutch ] = "~Standaard" ;
         Text [ portuguese ] = "~Padr„o" ;
         Text[ chinese_simplified ] = "Ê†áÂáÜ";
