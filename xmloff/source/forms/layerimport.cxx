@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,6 @@ namespace xmloff
     OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
     {
         // outlined to allow forward declaration of OAttribute2Property in the header
-        static_cast<OControlPropertyHandlerFactory*>(m_xPropertyHandlerFactory.getBodyPtr())->releaseContext();
 
         if (m_pAutoStyles)
             m_pAutoStyles->ReleaseRef();
@@ -588,6 +587,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/28 14:59:18  fs
+ *  #86712# added control number style related functionality
+ *
  *  Revision 1.11  2001/03/20 13:39:58  fs
  *  #83970# +createOfficeFormsContext
  *
