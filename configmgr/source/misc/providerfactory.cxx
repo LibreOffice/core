@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
+ *  last change: $Author: jb $ $Date: 2001-05-18 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,14 +158,21 @@ namespace configmgr
     }
 
     //---------------------------------------------------------------------------------------
-    void OProviderFactory::ensureSettings()
+    void OProviderFactory::ensureBootstrapSettings()
     {
         if (!m_pPureSettings)
-            m_pPureSettings = new ConnectionSettings;
+            m_pPureSettings = new BootstrapSettings();
     }
 
     //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::implGetProvider(const ConnectionSettings& _rSettings, sal_Bool _bCreateWithPassword)
+    static bool checkForOptions(const ConnectionSettings& _rSettings)
+    {
+        return  _rSettings.hasLocale()          ||
+                _rSettings.hasAsyncSetting();
+    }
+
+    //---------------------------------------------------------------------------------------
+    Reference< XInterface > OProviderFactory::implGetProvider(const ConnectionSettings& _rSettings, sal_Bool _bCanReuse)
     {
         // the providers for the given session type
         UserSpecificProviders& rProviders = m_aProviders[_rSettings.getSessionType()];
@@ -175,12 +182,18 @@ namespace configmgr
         if (_rSettings.hasUser())
             sUser = _rSettings.getUser();
 
+        if (checkForOptions(_rSettings))
+            _bCanReuse = false;
+
         Reference< XInterface > xReturn;
-        if (!_bCreateWithPassword)
+        if (_bCanReuse)
         {
             UserSpecificProvidersIterator aExistentProvider = rProviders.find(sUser);
             if (rProviders.end() != aExistentProvider)
+            {
+                // should check for differing parameters here
                 xReturn = aExistentProvider->second;
+            }
         }
 
         // #78409
@@ -191,8 +204,18 @@ namespace configmgr
         {
             // create and connect the provider (may still throw exceptions)
             xReturn = (*m_pObjectCreator)(m_xORB, _rSettings);
+
+            // check for success
+            if (!xReturn.is())
+            {
+                OSL_ENSURE(false, "Object creator could not create provider, but returned NULL instead of throwing an exception");
+                sal_Char const sCannotCreate[] = "Cannot create ConfigurationProvider. Unknown backend or factory error.";
+                // should become CannotLoadConfigurationException
+                throw uno::Exception( OUString::createFromAscii(sCannotCreate), *this );
+            }
+
             // remember it for later usage
-            if (!_bCreateWithPassword)
+            if (_bCanReuse)
                 rProviders[sUser] = xReturn;
         }
 
@@ -200,14 +223,38 @@ namespace configmgr
     }
 
     //---------------------------------------------------------------------------------------
+    Reference< XInterface > OProviderFactory::implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool _bRequiresBootstrap, bool _bCanReuse)
+    {
+        try
+        {
+            return implGetProvider(_rSettings, _bCanReuse);
+        }
+        catch(uno::Exception& e)
+        {
+            if (_bRequiresBootstrap)
+            {
+                OSL_ASSERT(m_pPureSettings);
+                raiseBootstrapException(*m_pPureSettings, *this);
+
+                OSL_ASSERT(m_pPureSettings->status == BOOTSTRAP_DATA_OK);
+            }
+
+            sal_Char const sConnectionFailure[] = "Cannot open Configuration: ";
+            OUString const sFailure = OUString::createFromAscii(sConnectionFailure);
+            e.Message = sFailure.concat(e.Message);
+            throw;
+        }
+    }
+
+    //---------------------------------------------------------------------------------------
     void OProviderFactory::ensureDefaultProvider()
     {
-        MutexGuard aGuard(m_aMutex);
         if (m_xDefaultProvider.is())
             return;
-        ensureSettings();
 
-        m_xDefaultProvider = createProviderWithArguments(Sequence< Any >());
+        ensureBootstrapSettings();
+
+        m_xDefaultProvider = implCreateProviderWithSettings(m_pPureSettings->settings,true,true);
 
         // register disposing listener
         Reference<com::sun::star::lang::XComponent> xComponent(m_xDefaultProvider, UNO_QUERY);
@@ -228,15 +275,38 @@ namespace configmgr
     //---------------------------------------------------------------------------------------
     Reference< XInterface > OProviderFactory::createProviderWithArguments(const Sequence< Any >& _rArguments)
     {
+        ConnectionSettings aSettings(_rArguments);
+        return createProviderWithSettings( aSettings );
+    }
+
+    //---------------------------------------------------------------------------------------
+    Reference< XInterface > OProviderFactory::createProviderWithSettings(const ConnectionSettings& _rSettings)
+    {
         MutexGuard aGuard(m_aMutex);
 
-        ensureSettings();
-        ConnectionSettings aThisRoundSettings = m_pPureSettings->createMergedSettings(_rArguments);
+        ConnectionSettings aThisRoundSettings(_rSettings);
 
-        ::rtl::OUString sSessionType = aThisRoundSettings.getSessionType();
-        sal_Bool bIsPluginSession = (0 == sSessionType.compareToAscii(PLUGIN_SESSION_IDENTIFIER));
+        // use bootstrap data if necessary
+        bool bUseBootstrapData = !aThisRoundSettings.isComplete();
 
-        Reference< XInterface > xProvider;
+        // detect a plugin session. Can be specified only as argument
+        sal_Bool bIsPluginSession = aThisRoundSettings.isPlugin();
+
+        if (bIsPluginSession)
+        {
+            OSL_ENSURE(!aThisRoundSettings.isSourcePathValid(),"Invalid Argument: No explicit source path should be specified for plugin session");
+            bUseBootstrapData = true;
+        }
+
+        // use bootstrap data if necessary
+        if (bUseBootstrapData)
+        {
+            ensureBootstrapSettings();
+
+            ConnectionSettings aMergedSettings = m_pPureSettings->settings;
+            aMergedSettings.mergeOverrides(aThisRoundSettings);
+            aMergedSettings.swap(aThisRoundSettings);
+        }
 
         // if we have a plugin session, translate the session type into the one appliable.
         if (bIsPluginSession)
@@ -246,36 +316,46 @@ namespace configmgr
             // For a plugin-local session, we need a valid update directory.
             // (We can't just rely on the session to fail if it is created with a valid source directory and an
             // invalid update directory. In such a scenario it will succeed to open, but not to update.)
-            if (aThisRoundSettings.hasRegistry() && aThisRoundSettings.isValidUpdatePath())
+            if (!m_pPureSettings->settings.isLocalSession())
             {
-                const ::rtl::OUString sLocalSessionIdentifier = ::rtl::OUString::createFromAscii(LOCAL_SESSION_IDENTIFIER);
-                aThisRoundSettings.setSessionType(sLocalSessionIdentifier);
+                const OUString sLocalSessionIdentifier = OUString::createFromAscii(LOCAL_SESSION_IDENTIFIER);
 
+                // (We can't just rely on the session to fail if it is created with a valid source directory and an
+                // invalid update directory. In such a scenario it will succeed to open, but not to update.)
+                if (aThisRoundSettings.isComplete(sLocalSessionIdentifier) &&
+                    aThisRoundSettings.isUpdatePathValid())
                 try
                 {
-                    xProvider = implGetProvider(
-                        aThisRoundSettings,
-                        sal_False       // no password for local sessions
-                        );
+                    aThisRoundSettings.setSessionType(sLocalSessionIdentifier, Settings::SO_ADJUSTMENT);
+                    return implGetProvider(aThisRoundSettings,true);
                 }
                 catch(Exception&)
                 {
                     // allowed. The creation of the local provider may fail.
                 }
             }
+            // did not create the local session
 
-            if (!xProvider.is())
-            {   // failed to create the local session
-                // -> create a portal one
-                const ::rtl::OUString sPortalSessionIdentifier = ::rtl::OUString::createFromAscii(PORTAL_SESSION_IDENTIFIER);
-                aThisRoundSettings.setSessionType(sPortalSessionIdentifier);
-                // the real creation is below ...
-                sSessionType = sPortalSessionIdentifier;
+            // -> create the original one
+            if (m_pPureSettings->settings.isSessionTypeKnown())
+            {
+                OUString sOriginalType = m_pPureSettings->settings.getSessionType();
+                aThisRoundSettings.setSessionType(sOriginalType, Settings::SO_ADJUSTMENT);
+            }
+            else
+            {
+                OUString const sPortalSessionIdentifier = OUString::createFromAscii(PORTAL_SESSION_IDENTIFIER);
+                aThisRoundSettings.setSessionType(sPortalSessionIdentifier, Settings::SO_ADJUSTMENT);
             }
         }
 
-        if (!xProvider.is())
-            xProvider = implGetProvider(aThisRoundSettings, aThisRoundSettings.hasPassword());
+        aThisRoundSettings.validate();
+        OSL_ENSURE(aThisRoundSettings.isComplete(), "Incomplete Data for creating a ConfigurationProvider");
+
+        Reference< XInterface > xProvider =
+            implCreateProviderWithSettings( aThisRoundSettings,bUseBootstrapData,
+                                            !aThisRoundSettings.hasPassword() );
+
         return xProvider;
     }
 
@@ -331,6 +411,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/03 16:33:58  jb
+ *  Local AdministrationProvider now mapped to Setup-session
+ *
  *  Revision 1.7  2001/03/21 12:15:40  jl
  *  OSL_ENSHURE replaced by OSL_ENSURE
  *

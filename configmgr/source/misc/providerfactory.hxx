@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
+ *  last change: $Author: jb $ $Date: 2001-05-18 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,21 +88,26 @@
 namespace configmgr
 {
 //........................................................................
+    namespace uno  = ::com::sun::star::uno;
+    namespace lang = ::com::sun::star::lang;
+    using ::rtl::OUString;
+//........................................................................
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+    uno::Reference< lang::XSingleServiceFactory > SAL_CALL
         createProviderFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
-            const ::rtl::OUString& _rComponentName,
+            const uno::Reference< lang::XMultiServiceFactory >& _rServiceManager,
+            const OUString& _rComponentName,
             ::configmgr::ProviderInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames
+            const uno::Sequence< OUString >& _rServiceNames
         );
 
     class ConnectionSettings;
+    class BootstrapSettings;
 
     //====================================================================
     //= OProviderFactory
     //====================================================================
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XSingleServiceFactory > OProviderFactory_Base;
+    typedef ::cppu::WeakImplHelper1< lang::XSingleServiceFactory > OProviderFactory_Base;
     /** a special factory for the configuration provider, which implements some kind of
         "shared multiple instances" factory.
     */
@@ -113,43 +118,44 @@ namespace configmgr
     protected:
         ::osl::Mutex                        m_aMutex;
         ProviderInstantiation               m_pObjectCreator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xEventListener; // must be the first uno::object
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                            m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                                            m_xDefaultProvider;
-        ConnectionSettings*                 m_pPureSettings;
-                                                // the pure settings, not overwritten by any runtime arguments
+        uno::Reference< lang::XEventListener >          m_xEventListener; // must be the first uno::object
+        uno::Reference< lang::XMultiServiceFactory >    m_xORB;
+        uno::Reference< uno::XInterface >               m_xDefaultProvider;
 
-        typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >   ProviderReference;
+        // the pure settings, not overwritten by any runtime arguments
+        BootstrapSettings const*            m_pPureSettings;
+
+        typedef uno::WeakReference< uno::XInterface >   ProviderReference;
         DECLARE_STL_USTRINGACCESS_MAP(ProviderReference, UserSpecificProviders);
         DECLARE_STL_USTRINGACCESS_MAP(UserSpecificProviders, SessionSpecificProviders);
         SessionSpecificProviders    m_aProviders;
 
     public:
         OProviderFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const uno::Reference< lang::XMultiServiceFactory >& _rxORB,
             ProviderInstantiation _pObjectCreator);
         ~OProviderFactory();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(  ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual uno::Reference< uno::XInterface > SAL_CALL createInstance(  ) throw(uno::Exception, uno::RuntimeException);
+        virtual uno::Reference< uno::XInterface > SAL_CALL createInstanceWithArguments( const uno::Sequence< uno::Any >& aArguments ) throw(uno::Exception, uno::RuntimeException);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createProvider();
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createProviderWithArguments(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments);
+        uno::Reference< uno::XInterface > createProvider();
+        uno::Reference< uno::XInterface > createProviderWithArguments(const uno::Sequence< uno::Any >& _rArguments);
+        uno::Reference< uno::XInterface > createProviderWithSettings(const ConnectionSettings& _rSettings);
 
     protected:
         void    ensureDefaultProvider();
+        void    ensureBootstrapSettings();
 
+        uno::Reference< uno::XInterface > implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool bRequiresBootstrap, bool _bReusable);
         // from the given map, extract a provider for the given user. (if necessary, create one and insert it into the map)
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > implGetProvider(
+        uno::Reference< uno::XInterface > implGetProvider(
                     const ConnectionSettings& _rSettings,
-                    sal_Bool _bCreateWithPassword
+                    sal_Bool _bReusable
                 );
 
         // to be called with m:aMutex locked
-        void ensureSettings();
         void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
     };
 
@@ -162,6 +168,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/03 16:33:58  jb
+ *  Local AdministrationProvider now mapped to Setup-session
+ *
  *  Revision 1.3  2001/01/29 08:51:11  dg
  *  #82336# invalid syntax for template
  *
