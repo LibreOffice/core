@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:13:07 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ ModalDialog DLG_UUI_LOGIN
         Size = MAP_APPFONT ( 197 , 8 ) ;
         Text = "Anmelden" ;
         Text [ English ] = "Connect" ;
-        Text [ english_us ] = "Login" ;
+        Text [ english_us ] = "Log in" ;
         Text [ portuguese_brazilian ] = "Anmelden" ;
         Text [ swedish ] = "Logga in" ;
         Text [ danish ] = "Login" ;
@@ -367,7 +367,7 @@ ModalDialog DLG_UUI_LOGIN
         Text = "Bitte geben Sie hier Benutzernamen und Passwort für \"%2\" auf %1 ein." ;
         Text [ English ] = "Please enter user name and password here for \"%2\" on %1." ;
         Text [ portuguese ] = "em  " ;
-        Text [ english_us ] = "to " ;
+        Text [ english_us ] = "Please enter user name and password for \"%2\" on %1 here." ;
         Text [ portuguese_brazilian ] = "auf " ;
         Text [ swedish ] = "på " ;
         Text [ danish ] = "på " ;
@@ -375,8 +375,8 @@ ModalDialog DLG_UUI_LOGIN
         Text [ spanish ] = "Especifique su nombre de usuario y su contraseña para \"%2\" en %1." ;
         Text [ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour \"%2\" sur %1." ;
         Text [ dutch ] = "op    " ;
-        Text[ chinese_simplified ] = "åœ¨ ";
-        Text[ russian ] = "íà ";
+        Text[ chinese_simplified ] = "è¯·åœ¨æ­¤ä¸º %1 è¾“å…¥ \"%2\" çš„ä½¿ç”¨åå’Œå¯†ç ã€‚";
+        Text[ russian ] = "Ââåäèòå èìÿ è ïàğîëü ïîëüçîâàòåëÿ äëÿ \"%2\" ê %1.";
         Text[ polish ] = "na ";
         Text[ japanese ] = "ã“ã“ã« %1 ã® \"%2\" ã«å¿…è¦ãªï¾•ï½°ï½»ï¾ï½°åã¨ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
         Text[ chinese_traditional ] = "è«‹åœ¨é€™è£¡ç‚º %1 è¼¸å…¥ \"%2\" çš„ä½¿ç”¨è€…åç¨±å’Œå¯†ç¢¼ã€‚";
@@ -408,6 +408,7 @@ ModalDialog DLG_UUI_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseña";
     Text[ finnish ] = "Käyttäjätunnus ja salasana pakolliset";
 };
+
 
 
 
