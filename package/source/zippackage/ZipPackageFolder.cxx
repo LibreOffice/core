@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-07 11:04:07 $
+ *  last change: $Author: hjs $ $Date: 2000-12-07 15:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void SAL_CALL ZipPackageFolder::removeByName( const ::rtl::OUString& Name )
     else
         sName = Name;
     if (!aContents.count(sName))
-        throw(container::NoSuchElementException());
+        throw container::NoSuchElementException();
     aContents.erase(sName);
 }
     // XEnumerationAccess
@@ -187,7 +187,7 @@ uno::Any SAL_CALL ZipPackageFolder::getByName( const ::rtl::OUString& aName )
     else
         sName = aName;
     if (!aContents.count(sName))
-        throw (container::NoSuchElementException());
+        throw container::NoSuchElementException();
 
     TunnelHash::const_iterator aCI = aContents.find(sName);
     aAny <<= (*aCI).second;
@@ -224,7 +224,7 @@ void SAL_CALL ZipPackageFolder::replaceByName( const ::rtl::OUString& aName, con
     if (hasByName(aName))
         removeByName(aName);
     else
-        throw(container::NoSuchElementException());
+        throw container::NoSuchElementException();
     insertByName(aName, aElement);
 }
     //XPropertySet
@@ -307,7 +307,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
 
             nTest = xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId());
             if (nTest == 0)
-                throw (uno::RuntimeException());
+                throw uno::RuntimeException();
             pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
             bIsFolder = sal_False;
         }
@@ -439,7 +439,7 @@ void ZipPackageFolder::updateReferences( ZipFile * pNewZipFile)
 
             nTest = xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId());
             if (nTest == 0)
-                throw (uno::RuntimeException());
+                throw uno::RuntimeException();
             pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
             bIsFolder = sal_False;
         }
