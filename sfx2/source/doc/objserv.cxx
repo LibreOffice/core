@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-26 11:58:07 $
+ *  last change: $Author: mav $ $Date: 2002-04-30 11:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,6 @@
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
-/*
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-*/
-#ifndef  _COM_SUN_STAR_AWT_XDIALOG_HPP_
-#include <com/sun/star/awt/XDialog.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -344,6 +336,16 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
     sal_Bool bDialogUsed = sal_False;
     sal_Bool bUseFilterOptions = sal_False;
+
+    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+    Reference< XNameAccess > xFilterCFG;
+    if( xServiceManager.is() )
+    {
+        xFilterCFG = Reference< XNameAccess >(
+            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+            UNO_QUERY );
+    }
+
     if ( !pFileNameItem )
     {
         bDialogUsed = sal_True;
@@ -351,17 +353,42 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         {
             // check if we have a filter which allows for filter options
             sal_Bool bAllowOptions = sal_False;
+            const SfxFilter* pFilter;
             SfxFilterFlags nMust = SFX_FILTER_EXPORT | ( bSaveTo ? 0 : SFX_FILTER_IMPORT );
             SfxFilterFlags nDont = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | ( bIsExport ? SFX_FILTER_IMPORT : 0 );
 
             SfxFilterMatcher aMatcher( GetFactory().GetFilterContainer() );
             SfxFilterMatcherIter aIter( &aMatcher, nMust, nDont );
 
-            const SfxFilter* pFilter;
-            for ( pFilter = aIter.First(); pFilter && !bAllowOptions; pFilter = aIter.Next() )
+            if( !bIsExport )
             {
-                if ( 0 != ( pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS ) )
-                    bAllowOptions = sal_True;
+                // in case of Export, filter options dialog is used if available
+                for ( pFilter = aIter.First(); pFilter && !bAllowOptions; pFilter = aIter.Next() )
+                {
+                    if( xFilterCFG.is() )
+                    {
+                        try {
+                            Sequence < PropertyValue > aProps;
+                               Any aAny = xFilterCFG->getByName( pFilter->GetName() );
+                               if ( aAny >>= aProps )
+                               {
+                                   ::rtl::OUString aServiceName;
+                                   sal_Int32 nPropertyCount = aProps.getLength();
+                                   for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                                       if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                                       {
+                                        ::rtl::OUString aServiceName;
+                                           aProps[nProperty].Value >>= aServiceName;
+                                        if( aServiceName.getLength() )
+                                            bAllowOptions = sal_True;
+                                    }
+                            }
+                        }
+                        catch( Exception& )
+                        {
+                        }
+                    }
+                }
             }
 
             // get the filename by dialog ...
@@ -424,6 +451,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
 
             // merge in results of the dialog execution
+            // filename and filtername is not here
+            // they will be merged in pRequest later
             if( pTempSet )
                 pParams->Put( *pTempSet );
 
@@ -484,6 +513,9 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
         }
 
+        // merge in results of the dialog execution
+        pParams->Put( SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
+        pParams->Put( SfxStringItem( SID_FILTER_NAME, aFilterName) );
         // Request mit Dateiname und Filter vervollst"andigen
         pRequest->AppendItem(SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
         pRequest->AppendItem(SfxStringItem( SID_FILTER_NAME, aFilterName));
@@ -514,12 +546,16 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             return sal_False;
         }
 
+        // get the path from the dialog
+        aURL.SetURL( aFileDlg.GetPath() );
+
         // merge in results of the dialog execution
         if( pTempSet )
             pParams->Put( *pTempSet );
-
-        // get the path from the dialog
-        aURL.SetURL( aFileDlg.GetPath() );
+        pParams->Put( SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
+        pParams->Put( SfxStringItem( SID_FILTER_NAME, aFilterName) );
+        pRequest->AppendItem(SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
+        pRequest->AppendItem(SfxStringItem( SID_FILTER_NAME, aFilterName));
     }
     else if ( pFileNameItem )
     {
@@ -561,28 +597,23 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         if( bSaveTo || bUseFilterOptions )
         {
             // call filter dialog
-            Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-            if( xServiceManager.is() )
+            if( xFilterCFG.is() )
             {
-                Reference< XNameAccess > xFilterCFG(
-                            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.dun.star.document.FilterFactory" ) ),
-                            UNO_QUERY );
-
-                if( xFilterCFG.is() )
-                {
-                    try {
-                        Sequence < PropertyValue > aProps;
-                        Any aAny = xFilterCFG->getByName( aFilterName );
-                        if ( aAny >>= aProps )
-                        {
-                            ::rtl::OUString aServiceName;
-                            sal_Int32 nPropertyCount = aProps.getLength();
-                            for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                                if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                try {
+                    Sequence < PropertyValue > aProps;
+                       Any aAny = xFilterCFG->getByName( aFilterName );
+                       if ( aAny >>= aProps )
+                       {
+                           ::rtl::OUString aServiceName;
+                           sal_Int32 nPropertyCount = aProps.getLength();
+                           for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                               if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                               {
+                                ::rtl::OUString aServiceName;
+                                   aProps[nProperty].Value >>= aServiceName;
+                                if( aServiceName.getLength() )
                                 {
-                                    ::rtl::OUString aServiceName;
-                                    aProps[nProperty].Value >>= aServiceName;
-                                    Reference< XDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
+                                    Reference< XExecutableDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
                                     Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
 
                                     if( xFilterDialog.is() && xFilterProperties.is() )
@@ -591,31 +622,32 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
                                         Sequence< PropertyValue > aPropsForDialog;
                                         TransformItems( pRequest->GetSlot(), *pParams, aPropsForDialog, NULL );
-                                        xFilterProperties->setPropertyValues( aPropsForDialog ); //???
+                                        xFilterProperties->setPropertyValues( aPropsForDialog );
 
-                                        xFilterDialog->execute();
-
-                                        SfxAllItemSet aNewParams( GetPool() );
-                                        TransformParameters( pRequest->GetSlot(),
-                                                             xFilterProperties->getPropertyValues(),
-                                                             aNewParams,
-                                                             NULL );
-                                        pParams->Put( aNewParams );
+                                        if( xFilterDialog->execute() )
+                                        {
+                                            SfxAllItemSet aNewParams( GetPool() );
+                                            TransformParameters( pRequest->GetSlot(),
+                                                                 xFilterProperties->getPropertyValues(),
+                                                                 aNewParams,
+                                                                 NULL );
+                                            pParams->Put( aNewParams );
+                                        }
                                     }
-
-                                    break;
                                 }
-                        }
+
+                                break;
+                            }
                     }
-                    catch( NoSuchElementException& )
-                    {
-                        // the filter name is unknown
-                        SetError( ERRCODE_IO_INVALIDPARAMETER );
-                        return sal_False;
-                    }
-                    catch( Exception& )
-                    {
-                    }
+                }
+                catch( NoSuchElementException& )
+                {
+                    // the filter name is unknown
+                       SetError( ERRCODE_IO_INVALIDPARAMETER );
+                    return sal_False;
+                }
+                catch( Exception& )
+                {
                 }
             }
         }
