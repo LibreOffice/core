@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:31:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,8 @@
 #ifndef _XMLOFF_XMLPERCENTORMEASUREPROPERTYHANDLER_HXX
 #include "XMLPercentOrMeasurePropertyHandler.hxx"
 #endif
+
+#include "sdxmlexp_impl.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -455,6 +457,31 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     MAP( "FillBitmapRectanglePoint",    XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT,   XML_SD_TYPE_BITMAP_REFPOINT, 0 ),
     MAP( "FillBitmapOffsetX",           XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X ),
     MAP( "FillBitmapOffsetY",           XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET, XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y ),
+
+    MAP( "IsHeaderVisible",             XML_NAMESPACE_DRAW, XML_HEADER_VISIBLE,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_HEADER_VISIBLE ),
+    MAP( "HeaderText",                  XML_NAMESPACE_DRAW, XML_HEADER_TEXT,            XML_TYPE_STRING, CTF_HEADER_TEXT ),
+    MAP( "IsFooterVisible",             XML_NAMESPACE_DRAW, XML_FOOTER_VISIBLE,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_FOOTER_VISIBLE ),
+    MAP( "FooterText",                  XML_NAMESPACE_DRAW, XML_FOOTER_TEXT,            XML_TYPE_STRING, CTF_FOOTER_TEXT ),
+    MAP( "IsPageNumberVisible",         XML_NAMESPACE_DRAW, XML_PAGE_NUMBER_VISIBLE,    XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_NUMBER_VISIBLE ),
+    MAP( "IsDateTimeVisible",           XML_NAMESPACE_DRAW, XML_DATE_TIME_VISIBLE,      XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_DATE_TIME_VISIBLE ),
+    MAP( "IsDateTimeFixed",             XML_NAMESPACE_DRAW, XML_DATE_TIME_UPDATE,       XML_SD_TYPE_DATETIMEUPDATE, CTF_DATE_TIME_UPDATE ),
+    MAP( "DateTimeText",                XML_NAMESPACE_DRAW, XML_DATE_TIME_TEXT,         XML_TYPE_STRING, CTF_DATE_TIME_TEXT ),
+    MAP( "DateTimeFormat",              XML_NAMESPACE_DRAW, XML_DATE_TIME_FORMAT,       XML_SD_TYPE_DATETIME_FORMAT, CTF_DATE_TIME_FORMAT ),
+
+    { 0L }
+};
+
+const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[] =
+{
+    MAP( "IsHeaderVisible",             XML_NAMESPACE_DRAW, XML_HEADER_VISIBLE,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_HEADER_VISIBLE ),
+    MAP( "HeaderText",                  XML_NAMESPACE_DRAW, XML_HEADER_TEXT,            XML_TYPE_STRING, CTF_HEADER_TEXT ),
+    MAP( "IsFooterVisible",             XML_NAMESPACE_DRAW, XML_FOOTER_VISIBLE,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_FOOTER_VISIBLE ),
+    MAP( "FooterText",                  XML_NAMESPACE_DRAW, XML_FOOTER_TEXT,            XML_TYPE_STRING, CTF_FOOTER_TEXT ),
+    MAP( "IsPageNumberVisible",         XML_NAMESPACE_DRAW, XML_PAGE_NUMBER_VISIBLE,    XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_NUMBER_VISIBLE ),
+    MAP( "IsDateTimeVisible",           XML_NAMESPACE_DRAW, XML_DATE_TIME_VISIBLE,      XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_DATE_TIME_VISIBLE ),
+    MAP( "IsDateTimeFixed",             XML_NAMESPACE_DRAW, XML_DATE_TIME_UPDATE,       XML_SD_TYPE_DATETIMEUPDATE, CTF_DATE_TIME_UPDATE ),
+    MAP( "DateTimeText",                XML_NAMESPACE_DRAW, XML_DATE_TIME_TEXT,         XML_TYPE_STRING, CTF_DATE_TIME_TEXT ),
+    MAP( "DateTimeFormat",              XML_NAMESPACE_DRAW, XML_DATE_TIME_FORMAT,       XML_SD_TYPE_DATETIME_FORMAT, CTF_DATE_TIME_FORMAT ),
 
     { 0L }
 };
@@ -811,8 +838,8 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Type_Enum[] =
 
 //////////////////////////////////////////////////////////////////////////////
 
-XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel )
-: mxModel( xModel )
+XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLExport* pExport )
+: mxModel( xModel ), mpExport( pExport )
 {
 }
 
@@ -1051,6 +1078,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_CAPTION_TYPE:
                 pHdl = new XMLEnumPropertyHdl( pXML_Caption_Type_Enum , ::getCppuType((const sal_Int32*)0));
                 break;
+            case XML_SD_TYPE_DATETIMEUPDATE:
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FIXED), GetXMLToken(XML_VARIABLE) );
+                break;
+            case XML_SD_TYPE_DATETIME_FORMAT:
+                pHdl = new XMLDateTimeFormatHdl( mpExport );
         }
 
         if(pHdl)
@@ -1428,6 +1460,8 @@ void XMLPageExportPropertyMapper::ContextFilter(
     XMLPropertyState* pRepeatOffsetY = NULL;
     XMLPropertyState* pTransType = NULL;
     XMLPropertyState* pTransDuration = NULL;
+    XMLPropertyState* pDateTimeUpdate = NULL;
+    XMLPropertyState* pDateTimeFormat = NULL;
 
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
@@ -1467,6 +1501,10 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 }
                 break;
             case CTF_PAGE_VISIBLE:
+//          case CTF_HEADER_VISIBLE:
+//          case CTF_FOOTER_VISIBLE:
+//          case CTF_PAGE_NUMBER_VISIBLE:
+//          case CTF_DATE_TIME_VISIBLE:
                 {
                     sal_Bool bVisible;
                     (*property).maValue >>= bVisible;
@@ -1477,7 +1515,33 @@ void XMLPageExportPropertyMapper::ContextFilter(
             case CTF_PAGE_TRANS_DURATION:
                 pTransDuration = property;
                 break;
+            case CTF_HEADER_TEXT:
+            case CTF_FOOTER_TEXT:
+            case CTF_DATE_TIME_TEXT:
+                {
+                    OUString aValue;
+                    (*property).maValue >>= aValue;
+                    if( aValue.getLength() == 0 )
+                        (*property).mnIndex = -1;
+                }
+                break;
+
+            case CTF_DATE_TIME_UPDATE:
+                pDateTimeUpdate = property;
+                break;
+
+            case CTF_DATE_TIME_FORMAT:
+                pDateTimeFormat = property;
+                break;
         }
+    }
+
+    if( pDateTimeFormat && pDateTimeUpdate )
+    {
+        sal_Bool bIsFixed;
+        pDateTimeUpdate->maValue >>= bIsFixed;
+        if( bIsFixed )
+            pDateTimeFormat->mnIndex = -1;
     }
 
     if( pRepeatOffsetX && pRepeatOffsetY )
