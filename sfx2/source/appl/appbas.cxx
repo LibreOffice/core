@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,12 +532,8 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     // Ncht den vom BasicManager, falls inzwischen der Pfad geaendert wurde !?
     // So wird natuerlich auch das erste Dir genommen, wenn der BasicManager
     // vorher im zweiten gefunden wurde...
-/*MUSTINI-----------------------------------------------------------------------------
-    String aBasicPath( GetIniManager()->Get( SFX_KEY_BASIC_PATH ) );
-*/
     String aBasicPath( SvtPathOptions().GetBasicPath() );
-/*MUSTINI-----------------------------------------------------------------------------*/
-    INetURLObject aAppBasicObj( aBasicPath.GetToken(0), INET_PROT_FILE );
+    INetURLObject aAppBasicObj( aBasicPath.GetToken(0) );
     aAppBasicObj.insertName( Application::GetAppName() );
     aAppBasicObj.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
     String aAppBasicPath( aAppBasicObj.PathToFileName() );
@@ -625,22 +621,10 @@ BasicManager* SfxApplication::GetBasicManager()
     if ( !pImp->pBasicMgr )
     {
         // Directory bestimmen
-#if SUPD<613//MUSTINI
-         SfxIniManager* pIniMgr = GetIniManager();
-        String aAppBasicDir( pIniMgr->Get( SFX_KEY_BASIC_PATH ) );
-        if ( !aAppBasicDir.Len() )
-        {
-            aAppBasicDir = pIniMgr->GetProgramPath();
-            pIniMgr->Set( aAppBasicDir, SFX_KEY_BASIC_PATH );
-        }
-#else
         SvtPathOptions aPathCFG;
         String aAppBasicDir( aPathCFG.GetBasicPath() );
         if ( !aAppBasicDir.Len() )
-        {
-            aPathCFG.SetBasicPath( aPathCFG.SubstituteVariable( String::CreateFromAscii("$(insturl)") ) );
-        }
-#endif
+            aPathCFG.SetBasicPath( String::CreateFromAscii("$(prog)") );
 
         // #58293# soffice.new nur im ::com::sun::star::sdbcx::User-Dir suchen => erstes Verzeichnis
         String aAppFirstBasicDir = aAppBasicDir.GetToken(0);
@@ -648,7 +632,8 @@ BasicManager* SfxApplication::GetBasicManager()
 
         // Basic erzeugen und laden
         // MT: #47347# AppBasicDir ist jetzt ein PATH!
-        INetURLObject aAppBasic( Application::GetAppFileName(), INET_PROT_FILE );
+        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
+        aAppBasic.insertName( Application::GetAppName() );
         aAppBasic.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
         String aAppBasicFile, aNewBasicFile;
         // Direkt nach der Installation gibt es ggf. _nur_ eine SOFFICE.NEW
@@ -665,9 +650,7 @@ BasicManager* SfxApplication::GetBasicManager()
         }
         else
             aAppBasic = INetURLObject( aAppBasicFile );
-        SvStorageRef aStor;
-        if ( SfxContentHelper::Exists( aAppBasic.GetMainURL() ) )
-            aStor = new SvStorage( aAppBasic.PathToFileName(), STREAM_READ | STREAM_SHARE_DENYWRITE );
+        SvStorageRef aStor = new SvStorage( aAppBasic.GetMainURL(), STREAM_READ | STREAM_SHARE_DENYWRITE );
         if ( aStor.Is() && 0 == aStor->GetError() )
         {
             SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, Application::GetAppName() );
@@ -714,7 +697,8 @@ BasicManager* SfxApplication::GetBasicManager()
 
             // Als Destination das erste Dir im Pfad:
             String aFileName( aAppBasic.getName() );
-            aAppBasic = INetURLObject( aAppBasicDir.GetToken(0), INET_PROT_FILE );
+            aAppBasic = INetURLObject( aAppBasicDir.GetToken(0) );
+            DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
             aAppBasic.insertName( aFileName );
             pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ struct ApplicationType
     String aDomainName;
 };
 
+/*
 BOOL SfxApplication::InitOfficeAppType_Impl( USHORT nAppId, ApplicationType& rType, BOOL bEmbed )
 {
     if ( nAppId < SID_START_BEGIN || nAppId > SID_START_END )
@@ -225,7 +226,7 @@ BOOL SfxApplication::InitOfficeAppType_Impl( USHORT nAppId, ApplicationType& rTy
 
     rType.aPathName = aFullName;
     if ( bEmbed )
-        rType.aParams = DEFINE_CONST_UNICODE( "/embedding" );
+        rType.aParams = DEFINE_CONST_UNICODE( "-embedding" );
     INetURLObject aObj( aFullName, INET_PROT_FILE );
     rType.aDomainName = aObj.getBase();
     return TRUE;
@@ -248,6 +249,7 @@ FASTBOOL SfxApplication::PostOfficeAppEvent( USHORT nAppId, const String& rEvent
     SvFactory::DecAliveCount();
     return bOk;
 }
+ */
 
 void SfxApplication::BasicLibExec_Impl( SfxRequest &rReq, BasicManager *pMgr )
 {
@@ -389,11 +391,8 @@ void SfxApplication::BasicLibExec_Impl( SfxRequest &rReq, BasicManager *pMgr )
                             INetURLObject aOld( aFileName, INET_PROT_FILE );
                             aDest = aOld.GetName();
                         }
-#if SUPD<613//MUSTINI
-                        INetURLObject aNew( SFX_INIMANAGER()->Get( SFX_KEY_BASIC_PATH ).GetToken( 0, ';' ), INET_PROT_FILE );
-#else
+
                         INetURLObject aNew( SvtPathOptions().GetBasicPath().GetToken( 0, ';' ), INET_PROT_FILE );
-#endif
                         aNew.SetExtension( aExt );
                         pMgr->SetLibStorageName( nLib, aNew.GetFull() );
                         SaveBasicManager();
@@ -634,15 +633,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     if ( pStringItem )
                     {
                         aCfgName = pStringItem->GetValue();
-                        INetURLObject aObj( pStringItem->GetValue(), INET_PROT_FILE );
+                        INetURLObject aObj( pStringItem->GetValue() );
+                        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
+
                         if ( aObj.HasError() )
                         {
                             // Wenn relativ, ConfigDir verwenden
-#if SUPD<613//MUSTINI
-                            aObj.SetSmartURL( SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH) );
-#else
-                            aObj.SetSmartURL( SvtPathOptions().GetUserConfigPath() );
-#endif
+                            aObj.SetURL( SvtPathOptions().GetUserConfigPath() );
                             aObj.insertName( pStringItem->GetValue() );
                             aCfgName = aObj.PathToFileName();
                         }
@@ -701,15 +698,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     if ( pStringItem )
                     {
                         aCfgName = pStringItem->GetValue();
-                        INetURLObject aObj( pStringItem->GetValue(), INET_PROT_FILE );
+                        INetURLObject aObj( pStringItem->GetValue() );
+                        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
                         if ( aObj.HasError() )
                         {
                             // Wenn relativ, ConfigDir verwenden
-#if SUPD<613//MUSTINI
-                            aObj.SetSmartURL( SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH) );
-#else
-                            aObj.SetSmartURL( SvtPathOptions().GetUserConfigPath() );
-#endif
+                            aObj.SetURL( SvtPathOptions().GetUserConfigPath() );
                             aObj.insertName( pStringItem->GetValue() );
                             aCfgName = aObj.PathToFileName();
                         }

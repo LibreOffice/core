@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,97 +199,6 @@ const USHORT* SfxApplication::GetOptionsRanges() const
     return pRange;
 }
 
-// -----------------------------------------------------------------------
-#if SUPD<613//MUSTINI
-
-String GetJavaIniEntry_Impl( SfxIniKey eKey, SfxIniManager* pIniMgr )
-{
-    INetURLObject aObj;
-    aObj.SetSmartProtocol( INET_PROT_FILE );
-    aObj.SetSmartURL( Config::GetConfigName( pIniMgr->Get( SFX_KEY_USERCONFIG_PATH ),
-                                             DEFINE_CONST_UNICODE("java") ) );
-    String aIniEntry;
-    String aIniPath = aObj.getName();
-    if ( pIniMgr->SearchFile( aIniPath ) )
-    {
-        Config aJavaCfg( aIniPath );
-        aJavaCfg.SetGroup( "Java" );
-        String aIniKey = pIniMgr->GetKeyName( eKey );
-        aIniEntry = (String)S2U(aJavaCfg.ReadKey( U2S(aIniKey) ));
-    }
-    return aIniEntry;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SetJavaIniEntry_Impl( SfxIniKey eKey, const String& rValue, SfxIniManager* pIniMgr )
-{
-    String aIniFile =
-        Config::GetConfigName( pIniMgr->Get( SFX_KEY_USERCONFIG_PATH ), DEFINE_CONST_UNICODE("java") );
-    if ( !SfxContentHelper::Exists( aIniFile ) )
-    {
-        INetURLObject aObj( aIniFile, INET_PROT_FILE );
-        String aIniFileName = aObj.getName();
-        aObj.SetSmartURL( pIniMgr->Get( SFX_KEY_CONFIG_DIR ) );
-        aObj.insertName( aIniFileName );
-        String aShareFile = aObj.PathToFileName();
-
-        if ( !SfxContentHelper::Exists( aShareFile ) ||
-             !SfxContentHelper::CopyTo( aShareFile, aIniFile ) )
-            return FALSE;
-    }
-    Config aJavaCfg( aIniFile );
-    aJavaCfg.SetGroup( "Java" );
-    String aIniKey = pIniMgr->GetKeyName( eKey );
-    aJavaCfg.WriteKey( U2S(aIniKey), U2S(rValue) );
-    return TRUE;
-}
-
-#else
-
-// -----------------------------------------------------------------------
-
-String GetJavaIniEntry_Impl( const String& sKeyName )
-{
-    INetURLObject aObj;
-    aObj.SetSmartProtocol( INET_PROT_FILE );
-    aObj.SetSmartURL( Config::GetConfigName( SvtPathOptions().GetUserConfigPath(), DEFINE_CONST_UNICODE("java") ) );
-    String aIniEntry;
-    String aIniPath = aObj.getName();
-
-    Config aJavaCfg( aIniPath );
-    aJavaCfg.SetGroup( "Java" );
-    aIniEntry = (String)S2U(aJavaCfg.ReadKey( U2S(sKeyName) ));
-
-    return aIniEntry;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SetJavaIniEntry_Impl( const String& sKeyName, const String& sValue )
-{
-    SvtPathOptions aPathOptions;
-    String aIniFile = Config::GetConfigName( aPathOptions.GetUserConfigPath(), DEFINE_CONST_UNICODE("java") );
-    if ( !SfxContentHelper::Exists( aIniFile ) )
-    {
-        INetURLObject aObj( aIniFile, INET_PROT_FILE );
-        String aIniFileName = aObj.getName();
-        aObj.SetSmartURL( aPathOptions.GetConfigPath() );
-        aObj.insertName( aIniFileName );
-        String aShareFile = aObj.PathToFileName();
-
-        if ( !SfxContentHelper::Exists( aShareFile ) ||
-             !SfxContentHelper::CopyTo( aShareFile, aIniFile ) )
-            return FALSE;
-    }
-    Config aJavaCfg( aIniFile );
-    aJavaCfg.SetGroup( "Java" );
-    aJavaCfg.WriteKey( U2S(sKeyName), U2S(sValue) );
-    return TRUE;
-}
-
-#endif
-
 //--------------------------------------------------------------------
 
 BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
@@ -414,43 +323,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                  aUndoOptions.GetUndoCount() ) ) )
                         bRet = TRUE;
                     break;
-#if SUPD<613//MUSTINI
-                case SID_INET_HOMEPAGE   :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_HOMEPAGE   ),
-                                 pIni->Get(SFX_KEY_INET_HOME) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_MEMCACHE :
-                    if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_MEMCACHE ),
-                                 pIni->Get(SFX_KEY_INET_MEMCACHE).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_DISKCACHE :
-                    if(rSet.Put( SfxUInt32Item ( rPool.GetWhich( SID_INET_DISKCACHE ),
-                                 pIni->Get(SFX_KEY_INET_DISKCACHE).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_EXPIRATION :
-                    if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_EXPIRATION ),
-                                 pIni->Get(SFX_KEY_INET_CACHEEXPIRATION).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_CACHEJS :
-                    if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_CACHEJS),
-                              pIni->Get(SFX_KEY_INET_CACHEJS).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_CACHEEXPIRED :
-                    if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_CACHEEXPIRED),
-                              pIni->Get(SFX_KEY_INET_CACHEEXPIRED).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_CACHEABORTED :
-                    if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_CACHEABORTED),
-                              pIni->Get(SFX_KEY_INET_CACHEABORTED).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-#else
+
                 case SID_INET_HOMEPAGE          :
                 case SID_INET_MEMCACHE          :
                 case SID_INET_DISKCACHE         :
@@ -462,14 +335,10 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values not no longer supported!\n" );
 #endif
                     break;
-#endif
+
                 case SID_INET_REVEAL_MAILADDR :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_INET_REVEAL_MAILADDR),
-#if SUPD<613//MUSTINI
-                               (BOOL)(USHORT)pIni->Get(SFX_KEY_INET_REVEAL_MAILADDR).ToInt32() ) ) )
-#else
                                 aInetOptions.GetProtocolRevealMailAddress() ) ) )
-#endif
                         bRet = TRUE;
                     break;
                 case SID_SAVEREL_INET :
@@ -484,50 +353,10 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_INET_SMTPSERVER :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_SMTPSERVER),
-#if SUPD<613//MUSTINI
-                                 pIni->Get(SFX_KEY_INET_SMTPSERVER) ) ) )
-#else
                                 aInetOptions.GetSmtpServerName() )))
-#endif
                         bRet = TRUE;
                     break;
-#if SUPD<613//MUSTINI
-                case SID_INET_POPSERVER :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_POPSERVER),
-                                 pIni->Get(SFX_KEY_INET_POPSERVER) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_NNTPSERVER :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NNTPSERVER),
-                                 pIni->Get(SFX_KEY_INET_NNTPSERVER) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_MAXNEWS :
-                    if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_MAXNEWS),
-                                 pIni->Get(SFX_KEY_INET_MAXNEWS).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_MAXHTTPCONS :
-                    if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_MAXHTTPCONS),
-                                 pIni->Get(SFX_KEY_INET_MAXHTTPCONS).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_MAXFTPCONS :
-                    if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_MAXFTPCONS),
-                                 pIni->Get(SFX_KEY_INET_MAXFTPCONS).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_SMTPGATEWAY :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_SMTPGATEWAY),
-                                 pIni->Get(SFX_KEY_INET_MAILGATEWAY) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_MAILUSERNAME :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_MAILUSERNAME),
-                                 pIni->Get(SFX_KEY_INET_MAILUSERNAME) ) ) )
-                        bRet = TRUE;
-                    break;
-#else
+
                 case SID_INET_POPSERVER :
                 case SID_INET_NNTPSERVER :
                 case SID_INET_MAXNEWS :
@@ -539,83 +368,51 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values not longer supported!\n" );
 #endif
                     break;
-#endif
                 case SID_ATTR_ALLOWFOLDERWEBVIEW :
-#if SUPD<613//MUSTINI
-                    if(rSet.Put( SfxStringItem( rPool.GetWhich(SID_ATTR_ALLOWFOLDERWEBVIEW),
-                                 pIni->Get(SFX_KEY_ALLOWFOLDERWEBVIEW) ) ) )
-                        bRet = TRUE;
-#else
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT(sal_False,"SfxApplication::GetOptions()\nINI-Key \"Common\\AllowFolderWebView\" is obsolete ... SID_ATTR_ALLOWFOLDERWEBVIEW isn't supported any longer!\n");
 #endif
-#endif
                     break;
-#if SUPD<613//MUSTINI
-                case SID_INET_MAILPASSWORD :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_MAILPASSWORD),
-                                 SfxStringDecode( pIni->Get(SFX_KEY_INET_MAILPASSWORD) ) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_MAILTEXTFORMAT :
-                {
-                    String aTextFormat = pIni->Get( SFX_KEY_INET_MAILTEXTFORMAT );
-                    BYTE nTextFormat = (BYTE)(USHORT)aTextFormat.ToInt32();
-                    if(rSet.Put( SfxByteItem( rPool.GetWhich( SID_INET_MAILTEXTFORMAT ),
-                               nTextFormat ) ) )
-                        bRet = TRUE;
-                    break;
-                }
-#else
                 case SID_INET_MAILPASSWORD :
                 case SID_INET_MAILTEXTFORMAT :
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nConfig item for INET values not implemented yet!\n" );
 #endif
                     break;
-#endif
                 case SID_BASIC_ENABLED :
                     if ( rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ),
-#if SUPD<613//MUSTINI
-                                pIni->Get(SFX_KEY_BASIC_ENABLE).ToInt32()) ) )
-#else
                                 aSecurityOptions.GetBasicMode())))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_JAVA_ENABLE:
                 {
-#if SUPD<613//MUSTINI
-                    String aIniEntry = GetJavaIniEntry_Impl( SFX_KEY_JAVA_ENABLE, pIni );
-#else
+                    DBG_ERROR( "Not implemented!" );
+/*
                     String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Java") );
-#endif
                     if ( rSet.Put( SfxBoolItem(
                             rPool.GetWhich( SID_INET_JAVA_ENABLE ), ( aIniEntry == aTRUEStr ) ) ) )
                         bRet = TRUE;
+*/
                     break;
                 }
 
                 case SID_INET_EXE_APPLETS :
                 {
-#if SUPD<613//MUSTINI
-                    String aIniEntry = GetJavaIniEntry_Impl( SFX_KEY_INET_EXE_APPLETS, pIni );
-#else
+                    DBG_ERROR( "Not implemented!" );
+/*
                     String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Applets") );
-#endif
                     if ( rSet.Put( SfxBoolItem(
                             rPool.GetWhich( SID_INET_EXE_APPLETS ), ( aIniEntry == aTRUEStr ) ) ) )
                         bRet = TRUE;
+ */
                     break;
                 }
                 case SID_INET_JAVA_ACCESSTYPE:
                 {
+                    DBG_ERROR( "Not implemented!" );
+/*
                     SjNetAccess eAccess = NET_HOST;
-#if SUPD<613//MUSTINI
-                    String aNetAccess = GetJavaIniEntry_Impl( SFX_KEY_JAVA_NETACCESS, pIni );
-#else
                     String aNetAccess = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("NetAccess") );
-#endif
                     if ( aNetAccess.Len() )
                     {
                         if ( aNetAccess.CompareIgnoreCaseToAscii( "UNRESTRICTED" ) == COMPARE_EQUAL )
@@ -626,49 +423,31 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 
                     if ( rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_INET_JAVA_ACCESSTYPE ), (USHORT)eAccess ) ) )
                         bRet = TRUE;
+ */
                     break;
                 }
                 case SID_INET_JAVA_SECURITY:
                 {
-#if SUPD<613//MUSTINI
-                    String aIniEntry = GetJavaIniEntry_Impl( SFX_KEY_JAVA_SECURITY, pIni );
-#else
+                    DBG_ERROR( "Not implemented!" );
+/*
                     String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Security") );
-#endif
                     if ( rSet.Put( SfxBoolItem(
                             rPool.GetWhich( SID_INET_JAVA_SECURITY ), ( aIniEntry.CompareToAscii("0") != COMPARE_EQUAL ) ) ) )
                         bRet = TRUE;
+ */
                     break;
                 }
                 case SID_INET_JAVA_CLASSPATH :
                 {
-#if SUPD<613//MUSTINI
-                    String aIniEntry = GetJavaIniEntry_Impl( SFX_KEY_JAVA_USERCLASSPATH, pIni );
-#else
+                    DBG_ERROR( "Not implemented!" );
+/*
                     String aIniEntry = GetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("UserClassPath") );
-#endif
                     if ( rSet.Put( SfxStringItem( rPool.GetWhich( SID_INET_JAVA_CLASSPATH ), aIniEntry ) ) )
                         bRet = TRUE;
+ */
                     break;
                 }
 
-#if SUPD<613//MUSTINI
-                case SID_INET_EXE_PLUGIN  :
-                    if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_EXE_PLUGIN ),
-                        ( pIni->Get( SFX_KEY_INET_EXE_PLUGIN ) == aTRUEStr ) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_USERAGENT :
-                    if ( rSet.Put( SfxStringItem( rPool.GetWhich(SID_INET_USERAGENT ),
-                                  pIni->Get( SFX_KEY_INET_USERAGENT ) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_NONCACHED_SERVER :
-                    if ( rSet.Put( SfxStringItem( rPool.GetWhich( SID_INET_NONCACHED_SERVER ),
-                                  pIni->Get( SFX_KEY_INET_NONCACHED_SERVER ) ) ) )
-                        bRet = TRUE;
-                    break;
-#else
                 case SID_INET_EXE_PLUGIN  :
                 case SID_INET_USERAGENT :
                 case SID_INET_NONCACHED_SERVER :
@@ -676,59 +455,26 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values no longer supported!\n" );
 #endif
                     break;
-#endif
+
                 case SID_INET_DNS_SERVER :
                     if ( rSet.Put( SfxStringItem( rPool.GetWhich(SID_INET_DNS_SERVER),
-#if SUPD<613//MUSTINI
-                                     pIni->Get(SFX_KEY_INET_DNS ) ) ) )
-#else
                                      aInetOptions.GetDnsIpAddress() ) ) )
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_DNS_AUTO  :
                     if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_DNS_AUTO ),
-#if SUPD<613//MUSTINI
-                            !pIni->Get(SFX_KEY_INET_DNS).Len() ) ) )
-#else
                                 !aInetOptions.GetDnsIpAddress().getLength() ) ) )
-#endif
                         bRet = TRUE;
                     break;
-#if SUPD<613//MUSTINI
-                case SID_INET_CHANNELS_ONOFF  :
-                    if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_CHANNELS_ONOFF ),
-                                ( pIni->Get( SFX_KEY_INET_CHANNELS ) == aTRUEStr ) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_COOKIESHANDLE :
-                    if ( rSet.Put( SfxUInt16Item ( rPool.GetWhich(SID_INET_COOKIESHANDLE),
-                                   pIni->Get(SFX_KEY_INET_COOKIES).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-#else
                 case SID_INET_CHANNELS_ONOFF  :
                 case SID_INET_COOKIESHANDLE :
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values no longer supported!\n" );
 #endif
                     break;
-#endif
+
                 case SID_SECURE_URL :
                 {
-#if SUPD<613//MUSTINI
-                    List aList;
-                    USHORT nCount = pIni->Get( SFX_KEY_SECURE_URL ).ToInt32();
-                    USHORT n;
-                    for ( n = 0; n < nCount; ++n )
-                        aList.Insert( new String( pIni->Get(SFX_KEY_SECURE_URL, n) ), LIST_APPEND );
-                    if ( rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL),
-                            &aList ) ) )
-                        bRet = TRUE;
-                    for ( n = 0; n < nCount; ++n )
-                        delete (String*)aList.GetObject(n);
-                    aList.Clear();
-#else
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs = aSecurityOptions.GetSecureURLs();
                     List aList;
                     sal_uInt32 nCount = seqURLs.getLength();
@@ -747,152 +493,74 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         delete (String*)aList.GetObject(nURL);
                     }
                     aList.Clear();
-#endif
                     break;
                 }
-#if SUPD<613//MUSTINI
-                case SID_ICONGRID :
-                {
-                    String aIconGrid( pIni->Get(SFX_KEY_ICONGRID) );
-                    if ( rSet.Put( SfxSizeItem( rPool.GetWhich( SID_ICONGRID ),
-                            Size( aIconGrid.GetToken(0).ToInt32(), aIconGrid.GetToken(1).ToInt32() ) ) ) )
-                        bRet = TRUE;
-                    break;
-                }
-
-                case SID_AUTO_ADJUSTICONS :
-                {
-                    String aIconGrid( pIni->Get(SFX_KEY_ICONGRID) );
-                    if ( rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_AUTO_ADJUSTICONS ),
-                                (UINT16)aIconGrid.GetToken(2).ToInt32() )) )
-                        bRet = TRUE;
-                    break;
-                }
-#else
                 case SID_ICONGRID :
                 case SID_AUTO_ADJUSTICONS :
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"View\\IconGrid\" is obsolete! .. How I can support SID_ICONGRID & SID_AUTO_ADJUSTICONS any longer?\n");
 #endif
                     break;
-#endif
+
                 case SID_RESTORE_EXPAND_STATE :
                 {
-#if SUPD<613//MUSTINI
-                    String aRestoreExpand( pIni->Get( SFX_KEY_AUTOOPEN ));
-                    BOOL bRestoreExpand = TRUE;
-                    if( aRestoreExpand.Len() )
-                        bRestoreExpand = ((USHORT)aRestoreExpand.ToInt32()) > 0 ? TRUE : FALSE;
-                    if( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_RESTORE_EXPAND_STATE ),
-                            bRestoreExpand )))
-                        bRet = TRUE;
-#else
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"View\\AutoOpen\" is obsolete! .. How I can support SID_RESTORE_EXPAND_STATE any longer?\n");
 #endif
-#endif
+
                     break;
                 }
                 case SID_ENABLE_METAFILEPRINT :
-#if SUPD<613//MUSTINI
-                    if( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ENABLE_METAFILEPRINT ),
-                               (BOOL)(USHORT)pIni->Get(SFX_KEY_METAFILEPRINT ).ToInt32() ) ) )
-                        bRet = TRUE;
-#else
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"Common\\MetafilePrint\" is obsolete! .. How I can support SID_ENABLE_METAFILEPRINT any longer?\n");
 #endif
-#endif
+
                     break;
                 case SID_INET_PROXY_TYPE :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
-#if SUPD<613//MUSTINI
-                                 pIni->Get(SFX_KEY_INET_PROXYTYPE).ToInt32() ) ) )
-#else
                                 aInetOptions.GetProxyType() )))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_NAME :
                     if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_FTP_PROXY_NAME ),
-#if SUPD<613//MUSTINI
-                            pIni->Get(SFX_KEY_INET_FTPPROXYNAME) ) ) )
-#else
                             aInetOptions.GetProxyFtpName() )))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_PORT :
                     if ( rSet.Put( SfxInt32Item ( rPool.GetWhich(SID_INET_FTP_PROXY_PORT ),
-#if SUPD<613//MUSTINI
-                            pIni->Get(SFX_KEY_INET_FTPPROXYPORT).ToInt32() ) ) )
-#else
                             aInetOptions.GetProxyFtpPort() )))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_HTTP_PROXY_NAME :
                     if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
-#if SUPD<613//MUSTINI
-                            pIni->Get(SFX_KEY_INET_HTTPPROXYNAME) ) ) )
-#else
                             aInetOptions.GetProxyHttpName() )))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_HTTP_PROXY_PORT :
                     if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
-#if SUPD<613//MUSTINI
-                            pIni->Get(SFX_KEY_INET_HTTPPROXYPORT).ToInt32() ) ) )
-#else
                             aInetOptions.GetProxyHttpPort() )))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_SOCKS_PROXY_NAME :
                     if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_SOCKS_PROXY_NAME ),
-#if SUPD<613//MUSTINI
-                            pIni->Get(SFX_KEY_INET_SOCKSPROXYNAME) ) ) )
-#else
                             aInetOptions.GetProxySocksName() )))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_INET_SOCKS_PROXY_PORT :
                     if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_SOCKS_PROXY_PORT ),
-#if SUPD<613//MUSTINI
-                            pIni->Get(SFX_KEY_INET_SOCKSPROXYPORT).ToInt32() ) ) )
-#else
                             aInetOptions.GetProxySocksPort() )))
-#endif
                         bRet = TRUE;
                     break;
-#if SUPD<613//MUSTINI
-                case SID_INET_SECURITY_PROXY_NAME :
-                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_SECURITY_PROXY_NAME ),
-                            pIni->Get(SFX_KEY_INET_SECURITYPROXYNAME) ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_SECURITY_PROXY_PORT :
-                    if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_SECURITY_PROXY_PORT ),
-                            pIni->Get(SFX_KEY_INET_SECURITYPROXYPORT).ToInt32() ) ) )
-                        bRet = TRUE;
-                    break;
-#else
                 case SID_INET_SECURITY_PROXY_NAME :
                 case SID_INET_SECURITY_PROXY_PORT :
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                     DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values no longer supported!\n" );
 #endif
                     break;
-#endif
+
                 case SID_INET_NOPROXY :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
-#if SUPD<613//MUSTINI
-                                 pIni->Get(SFX_KEY_INET_NOPROXY) ) ) )
-#else
                                 aInetOptions.GetProxyNoProxy() )))
-#endif
                         bRet = TRUE;
                     break;
                 case SID_ATTR_PATHNAME :
@@ -900,9 +568,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 {
                     SfxAllEnumItem aNames(rPool.GetWhich(SID_ATTR_PATHGROUP));
                     SfxAllEnumItem aValues(rPool.GetWhich(SID_ATTR_PATHNAME));
-#if SUPD<613//MUSTINI
-                    pIni->Fill(SFX_GROUP_DIR, aNames, aValues);
-#else
                     SvtPathOptions aPathCFG;
                     sal_uInt32 nCount   = aNames.GetValueCount();
                     sal_uInt32 nPosition= 0;
@@ -1015,11 +680,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                             sValue = aPathCFG.GetStoragePath();
                         }
                         else
-                        if( sPathType.CompareToAscii("SubIni") )
-                        {
-                            sValue = aPathCFG.GetSubIniPath();
-                        }
-                        else
                         if( sPathType.CompareToAscii("Temp") )
                         {
                             sValue = aPathCFG.GetTempPath();
@@ -1057,7 +717,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         }
                         aValues.InsertValue(nPosition,sValue);
                     }
-#endif
+
                     if ( rSet.Put(aNames) || rSet.Put(aValues) )
                         bRet = TRUE;
                     break;
@@ -1079,62 +739,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 //--------------------------------------------------------------------
 BOOL SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* pReferer ) const
 {
-#if SUPD<613//MUSTINI
-    // unkritisches Protokoll?
-    INetProtocol eProt = rURL.GetProtocol();
-    if ( INET_PROT_MACRO != eProt && INET_PROT_SLOT != eProt )
-        return TRUE;
-    if ( rURL.GetMainURL().CompareIgnoreCaseToAscii( "macro://#", 9 ) == COMPARE_EQUAL )
-        return TRUE;
-
-    if ( rURL.GetMainURL().CompareToAscii("slot:5500") == COMPARE_EQUAL )
-        return TRUE;
-
-    // StarBasic-Modus abholen
-    SfxIniManager *pIni = GetIniManager();
-       USHORT nStarBasicMode = pIni->Get(SFX_KEY_BASIC_ENABLE).ToInt32();
-
-    // StarBasic gar nicht erlaubt?
-    if ( 0 == nStarBasicMode )
-        return FALSE;
-
-    // StarBasic immer erlaubt?
-    if ( 2 == nStarBasicMode )
-        return TRUE;
-
-    // trusted referer?
-    BOOL bTrusted = FALSE;
-    if ( pReferer && pReferer->Len() )
-    {
-        // secure-URLs noch nicht geladen?
-        if ( !pAppData_Impl->pSecureURLs )
-        {
-            pAppData_Impl->pSecureURLs = new SvStrings;
-            USHORT nCount = pIni->Get(SFX_KEY_SECURE_URL).ToInt32();
-            USHORT nPos = 0;
-            for ( USHORT n = 0; n < nCount; ++n )
-            {
-                String aURL = pIni->Get(SFX_KEY_SECURE_URL, n);
-                if ( aURL.Len() )
-                    pAppData_Impl->pSecureURLs->Insert( new String( aURL ), nPos++ );
-            }
-        }
-
-        // suchen
-        for ( USHORT n = 0; !bTrusted && n < pAppData_Impl->pSecureURLs->Count(); ++n )
-        {
-            const String* pSecureURL = pAppData_Impl->pSecureURLs->GetObject(n);
-            String aSecureURL( *pSecureURL );
-            aSecureURL += DEFINE_CONST_UNICODE('*');
-            bTrusted = WildCard( aSecureURL ).Matches( *pReferer );
-        }
-    }
-
-    // gemaess Liste
-    return bTrusted;
-#else
     return SvtSecurityOptions().IsSecureURL( rURL.GetMainURL(), *pReferer );
-#endif
 }
 //--------------------------------------------------------------------
 
@@ -1302,14 +907,8 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         BOOL bReset = ((const SfxBoolItem *)pItem)->GetValue();
         if ( bReset )
         {
-            Config aConfig( SfxHelp_Impl::GetHelpAgentConfig() );
-            ImplSetLanguageGroup( aConfig, DEFINE_CONST_UNICODE( "WelcomeScreen" ), TRUE );
-            USHORT nTips = aConfig.GetKeyCount();
-            ByteString aOn = ByteString::CreateFromInt32( 1 );
-            for ( USHORT nTip = 0; nTip < nTips; nTip++ )
-                aConfig.WriteKey( aConfig.GetKeyName( nTip ), aOn );
-        }
-    }
+            DBG_ERROR( "Not implemented, may be EOL!" );
+        }                                                   }
 
     // SaveRelINet
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_INET), TRUE, &pItem))
@@ -1353,54 +952,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
             }
         }
     }
-#if SUPD<613//MUSTINI
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_HOMEPAGE), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_HOME);
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MEMCACHE), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-        USHORT nCount = ( (const SfxUInt16Item *)pItem )->GetValue();
-        pIni->Set( String::CreateFromInt32( nCount ), SFX_KEY_INET_MEMCACHE );
-        SfxPickList_Impl::Get()->GetMemCache().ClearToLimit( nCount );
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DISKCACHE), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxUInt32Item), "UInt32Item expected" );
-        String aValue = String::CreateFromInt32( ( (const SfxUInt32Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_INET_DISKCACHE );
-        bResetSession = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_EXPIRATION), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-        String aValue = String::CreateFromInt32( ( (const SfxUInt16Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_INET_CACHEEXPIRATION );
-        bResetSession = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_CACHEJS), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-        INT32 nFlag = (USHORT)( (const SfxBoolItem*)pItem )->GetValue();
-        pIni->Set( String::CreateFromInt32( nFlag ), SFX_KEY_INET_CACHEJS );
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_CACHEEXPIRED), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-        INT32 nFlag = (USHORT)( (const SfxBoolItem*)pItem )->GetValue();
-        pIni->Set( String::CreateFromInt32( nFlag ), SFX_KEY_INET_CACHEEXPIRED );
-        // Ist auch eine Einstellung fuer die Session
-        bResetSession = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_CACHEABORTED), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-        INT32 nFlag = (USHORT)( (const SfxBoolItem*)pItem )->GetValue();
-        pIni->Set( String::CreateFromInt32( nFlag ), SFX_KEY_INET_CACHEABORTED );
-    }
-#else
+
     if(
         ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_HOMEPAGE), TRUE, &pItem))   ||
         ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MEMCACHE), TRUE, &pItem))   ||
@@ -1415,16 +967,11 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
 #endif
     }
-#endif
+
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_REVEAL_MAILADDR), TRUE, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-#if SUPD<613//MUSTINI
-        INT32 nFlag = (USHORT)( (const SfxBoolItem*)pItem )->GetValue();
-        pIni->Set( String::CreateFromInt32( nFlag ), SFX_KEY_INET_REVEAL_MAILADDR );
-#else
         aInetOptions.SetProtocolRevealMailAddress( ((const SfxBoolItem*)pItem)->GetValue() );
-#endif
         bResetSession = TRUE;
     }
 
@@ -1432,87 +979,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_SMTPSERVER), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-#if SUPD<613//MUSTINI
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_SMTPSERVER);
-#else
         aInetOptions.SetSmtpServerName(((const SfxStringItem *)pItem)->GetValue());
-#endif
         bResetSession = TRUE;
     }
-#if SUPD<613//MUSTINI
-    // POP-Server
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_POPSERVER), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_POPSERVER);
-        bResetSession = TRUE;
-    }
-
-    // NNTP-Server
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_NNTPSERVER), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_NNTPSERVER);
-        bResetSession = TRUE;
-    }
-
-    // MaxNewsMessages
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAXNEWS), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-        String aValue = String::CreateFromInt32( ( (const SfxUInt16Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_INET_MAXNEWS );
-        bResetSession = TRUE;
-    }
-
-    // MaxHttpCons
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAXHTTPCONS), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-        String aValue = String::CreateFromInt32( ( (const SfxUInt16Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_INET_MAXHTTPCONS );
-        bResetSession = TRUE;
-    }
-
-    // MaxFtpCons
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAXFTPCONS), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
-        String aValue = String::CreateFromInt32( ( (const SfxUInt16Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_INET_MAXFTPCONS);
-        bResetSession = TRUE;
-    }
-
-    // Mail-Gateway zum SMTP
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_SMTPGATEWAY), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_MAILGATEWAY);
-    }
-
-    // Mail-Username
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAILUSERNAME), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_MAILUSERNAME);
-    }
-
-    // Mail-Password
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_MAILPASSWORD), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        String aPassword( ((const SfxStringItem *)pItem)->GetValue() );
-        pIni->Set( SfxStringEncode( aPassword ), SFX_KEY_INET_MAILPASSWORD );
-    }
-
-    // Mail-Text-Format
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_MAILTEXTFORMAT ), TRUE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxByteItem), "ByteItem expected" );
-        INT32 nFlag = (USHORT)( (const SfxByteItem*)pItem )->GetValue();
-        pIni->Set( String::CreateFromInt32( nFlag ), SFX_KEY_INET_MAILTEXTFORMAT );
-    }
-#else
     if(
         ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_POPSERVER), TRUE, &pItem))   ||
         ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_NNTPSERVER), TRUE, &pItem))   ||
@@ -1529,18 +998,13 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
 #endif
     }
-#endif
+
 
     // Proxy-Type
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-#if SUPD<613//MUSTINI
-        String aValue = String::CreateFromInt32( ( (const SfxUInt16Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_INET_PROXYTYPE );
-#else
         aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
-#endif
         bResetSession = TRUE;
         bProxiesModified = TRUE;
     }
@@ -1549,11 +1013,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-#if SUPD<613//MUSTINI
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_NOPROXY);
-#else
         aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
-#endif
         bResetSession = TRUE;
         bProxiesModified = TRUE;
     }
@@ -1562,44 +1022,39 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_BASIC_ENABLED, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "SfxInt16Item expected");
-#if SUPD<613//MUSTINI
-        String aValue = String::CreateFromInt32( ( (const SfxUInt16Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_BASIC_ENABLE );
-#else
         aSecurityOptions.SetBasicMode( (EBasicSecurityMode)( (const SfxUInt16Item*)pItem )->GetValue() );
-#endif
     }
 
     // Java Enable
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_INET_JAVA_ENABLE, TRUE, &pItem ) )
     {
+                    DBG_ERROR( "Not implemented!" );
+/*
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         BOOL bJava = ( (const SfxBoolItem*)pItem )->GetValue();
         String aVal = bJava ? 0x0031 : 0x0030; // ^= '1' or '0'
-#if SUPD<613//MUSTINI
-        BOOL bSet = SetJavaIniEntry_Impl( SFX_KEY_JAVA_ENABLE, aVal, pIni );
-#else
         BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Java"), aVal );
-#endif
         bResetSession = TRUE;
+ */
     }
     // Applets Enable
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_INET_EXE_APPLETS, TRUE, &pItem ) )
     {
+                    DBG_ERROR( "Not implemented!" );
+/*
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         BOOL bApplets = ( (const SfxBoolItem*)pItem )->GetValue();
         String aVal = bApplets ? 0x0031 : 0x0030; // ^= '1' or '0'
-#if SUPD<613//MUSTINI
-        BOOL bSet = SetJavaIniEntry_Impl( SFX_KEY_INET_EXE_APPLETS, aVal, pIni );
-#else
         BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Applets"), aVal );
-#endif
         bResetSession = TRUE;
+ */
     }
 
     // Java AccessType
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_JAVA_ACCESSTYPE), TRUE, &pItem))
     {
+                    DBG_ERROR( "Not implemented!" );
+/*
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         SjNetAccess eAccess = (SjNetAccess) ((const SfxUInt16Item *)pItem)->GetValue();
         String aVal;
@@ -1609,39 +1064,34 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
             aVal = DEFINE_CONST_UNICODE("UNRESTRICTED");
         else
             aVal = DEFINE_CONST_UNICODE("NONE");
-#if SUPD<613//MUSTINI
-        BOOL bSet = SetJavaIniEntry_Impl( SFX_KEY_JAVA_NETACCESS, aVal, pIni );
-#else
         BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("NetAccess"), aVal );
-#endif
         bResetSession = TRUE;
+ */
     }
 
     // Java Security
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_JAVA_SECURITY, TRUE, &pItem))
     {
+                    DBG_ERROR( "Not implemented!" );
+/*
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         BOOL bSecurity = ((const SfxBoolItem *)pItem)->GetValue();
         String aVal = bSecurity ? 0x0031 : 0x0030; // ^= '1' or '0'
-#if SUPD<613//MUSTINI
-        BOOL bSet = SetJavaIniEntry_Impl( SFX_KEY_JAVA_SECURITY, aVal, pIni );
-#else
         BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("Security"), aVal );
-#endif
         bResetSession = TRUE;
+ */
     }
 
     // Java ClassPath
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_JAVA_CLASSPATH, TRUE, &pItem))
     {
+                    DBG_ERROR( "Not implemented!" );
+/*
         DBG_ASSERT( pItem->ISA(SfxStringItem), "SfxStringItem expected" );
         String aVal = ( (const SfxStringItem *)pItem )->GetValue();
-#if SUPD<613//MUSTINI
-        BOOL bSet = SetJavaIniEntry_Impl( SFX_KEY_JAVA_USERCLASSPATH, aVal, pIni );
-#else
         BOOL bSet = SetJavaIniEntry_Impl( DEFINE_CONST_UNICODE("UserClassPath"), aVal );
-#endif
         bResetSession = TRUE;
+ */
     }
 
     // Execute PlugIns
@@ -1649,13 +1099,10 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         BOOL bExe = ( (const SfxBoolItem *)pItem )->GetValue();
-#if SUPD<613//MUSTINI
-        pIni->Set( bExe ? 0x0031 : 0x0030 /* ^= '1' or '0' */, SFX_KEY_INET_EXE_PLUGIN );
-#else
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
 #endif
-#endif
+
         bResetSession = TRUE;
     }
 
@@ -1666,11 +1113,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         BOOL bIsAuto = ((const SfxBoolItem *)pItem)->GetValue();
         if( bIsAuto )
         {
-#if SUPD<613//MUSTINI
-            pIni->Set( String(), SFX_KEY_INET_DNS );
-#else
             aInetOptions.SetDnsIpAddress( String() );
-#endif
         }
         else
         {
@@ -1680,32 +1123,11 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                 DBG_ASSERT(pItem->ISA(SfxStringItem), "SfxStringItem expected");
                 aDNS = ((const SfxStringItem *)pItem)->GetValue();
             }
-#if SUPD<613//MUSTINI
-            pIni->Set( aDNS, SFX_KEY_INET_DNS );
-#else
             aInetOptions.SetDnsIpAddress( aDNS );
-#endif
         }
         bResetSession = TRUE;
     }
 
-#if SUPD<613//MUSTINI
-    // Noncahed Server
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NONCACHED_SERVER, TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_NONCACHED_SERVER);
-        bResetSession = TRUE;
-    }
-
-    // UserAgent
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_USERAGENT, TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pIni->Set(((const SfxStringItem *)pItem)->GetValue(), SFX_KEY_INET_USERAGENT);
-        bResetSession = TRUE;
-    }
-#else
     if(
         ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NONCACHED_SERVER, TRUE, &pItem))   ||
         ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_USERAGENT, TRUE, &pItem))
@@ -1715,32 +1137,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
 #endif
     }
-#endif
 
-#if SUPD<613//MUSTINI
-    // Proxies
-    for ( USHORT nOfs = 0;
-          nOfs <= SID_INET_SECURITY_PROXY_PORT - SID_INET_HTTP_PROXY_NAME;
-          nOfs += 2 )
-    {
-        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME + nOfs ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-            String aVal( ((const SfxStringItem *)pItem)->GetValue() );
-            pIni->Set( aVal, 175+nOfs );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT + nOfs ), TRUE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-            String aValue = String::CreateFromInt32( ( (const SfxInt32Item*)pItem )->GetValue() );
-            pIni->Set( aValue, 176 + nOfs );
-            bResetSession = TRUE;
-            bProxiesModified = TRUE;
-        }
-    }
-#else
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
@@ -1783,25 +1180,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         bResetSession = TRUE;
         bProxiesModified = TRUE;
     }
-#endif
 
-#if SUPD<613//MUSTINI
-    // Channels
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_CHANNELS_ONOFF, TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
-        BOOL bExe = ((const SfxBoolItem *)pItem)->GetValue();
-        pIni->Set( bExe ? 0x0031 : 0x0030 /* ^= '1' or '0' */, SFX_KEY_INET_CHANNELS );
-    }
-
-    // Cookies
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_COOKIESHANDLE, TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxUInt16Item), "SfxUInt16Item expected");
-        String aValue = String::CreateFromInt32( ( (const SfxUInt16Item*)pItem )->GetValue() );
-        pIni->Set( aValue, SFX_KEY_INET_COOKIES );
-    }
-#else
     if(
         ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_CHANNELS_ONOFF, TRUE, &pItem)) ||
         ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_COOKIESHANDLE, TRUE, &pItem))
@@ -1811,7 +1190,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nSome INET keys no longer supported!\n");
 #endif
     }
-#endif
+
 
     // Secure-Referers
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, TRUE, &pItem))
@@ -1820,11 +1199,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
         DBG_ASSERT(pItem->ISA(SfxStringListItem), "StringListItem expected");
         const List *pList = ((SfxStringListItem*)pItem)->GetList();
-#if SUPD<613//MUSTINI
-        pIni->Set( String::CreateFromInt32( pList->Count() ), SFX_KEY_SECURE_URL );
-        for ( USHORT n = 0; n < pList->Count(); ++n )
-            pIni->Set( *(const String*)(pList->GetObject(n)), SFX_KEY_SECURE_URL, n );
-#else
         sal_uInt32 nCount = pList->Count();
         ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs(nCount);
         for( sal_uInt32 nPosition=0;nPosition<nCount;++nPosition)
@@ -1832,71 +1206,23 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
             seqURLs[nPosition] = *(const String*)(pList->GetObject(nPosition));
         }
         aSecurityOptions.SetSecureURLs( seqURLs );
-#endif
     }
 
     // EnableMetafilePrint
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ENABLE_METAFILEPRINT ), TRUE, &pItem ) )
     {
-#if SUPD<613//MUSTINI
-        DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-        BOOL bPrint = (( const SfxBoolItem*)pItem )->GetValue();
-        pIni->Set( bPrint ? 0x0031 : 0x0030 /* ^= '1' or '0' */, SFX_KEY_METAFILEPRINT );
-#else
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"MetafilPrint\" not supported any longer!\n");
-#endif
 #endif
     }
 
     // Web-View
     if( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_ALLOWFOLDERWEBVIEW), TRUE, &pItem))
     {
-#if SUPD<613//MUSTINI
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "SfxStringItem expected");
-        pIni->Set(((const SfxStringItem*)pItem)->GetValue(), SFX_KEY_ALLOWFOLDERWEBVIEW);
-#else
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"AllowFolderWebView\" not supported any longer!\n");
 #endif
-#endif
     }
-
-    // Explorer
-#if SUPD<613//MUSTINI
-    String aIconGrid( pIni->Get(SFX_KEY_ICONGRID) );
-    Size aGrid( aIconGrid.GetToken(0).ToInt32(), aIconGrid.GetToken(1).ToInt32() );
-    UINT16 nMode = (UINT16)aIconGrid.GetToken(2).ToInt32();
-    BOOL bSet = FALSE;
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_AUTO_ADJUSTICONS, TRUE, &pItem) )
-    {
-        const SfxUInt16Item *pUInt16Item = (const SfxUInt16Item*) pItem;
-        nMode = pUInt16Item->GetValue();
-        bSet = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_ICONGRID, TRUE, &pItem) )
-    {
-        const SfxSizeItem *pSizeItem = (const SfxSizeItem*) pItem;
-        aGrid = pSizeItem->GetValue();
-        bSet = TRUE;
-    }
-    if ( bSet )
-    {
-        aIconGrid = String::CreateFromInt32( aGrid.Width() );
-        aIconGrid += DEFINE_CONST_UNICODE( ";" );
-        aIconGrid += String::CreateFromInt32( aGrid.Height() );
-        aIconGrid += DEFINE_CONST_UNICODE( ";" );
-        aIconGrid += String::CreateFromInt32( nMode );
-        pIni->Set( aIconGrid, SFX_KEY_ICONGRID );
-    }
-
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_RESTORE_EXPAND_STATE, TRUE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-        BOOL bRestoreExpand = ( (const SfxBoolItem*)pItem )->GetValue();
-        pIni->Set( bRestoreExpand ? 0x0031 : 0x0030 /* ^= '1' or '0' */, SFX_KEY_AUTOOPEN );
-    }
-#endif
 
     if ( bResetSession )
     {
@@ -1904,38 +1230,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         ::vos::ORef< ::inet::INetConfig > xINetConfig;
         if ( aWrapper.getINetConfig( xINetConfig ) )
         {
-#if SUPD<613//MUSTINI
-            xINetConfig->setDomainNameServer( pIni->Get( SFX_KEY_INET_DNS ) );
-            xINetConfig->setUserAgent( pIni->Get( SFX_KEY_INET_USERAGENT ) );
-
-            if ( bProxiesModified )
-            {
-                ::inet::INetProxyConfig aProxyCfg (xINetConfig->getProxyConfig());
-                USHORT bProxy = (USHORT)(pIni->Get (SFX_KEY_INET_PROXYTYPE).ToInt32());
-                if (bProxy)
-                    aProxyCfg.setNoProxyList(pIni->Get (SFX_KEY_INET_NOPROXY));
-                else
-                    aProxyCfg.setNoProxyList(DEFINE_CONST_UNICODE("*:*"));
-
-                aProxyCfg.setHttpProxy (
-                    pIni->Get (SFX_KEY_INET_HTTPPROXYNAME),
-                    pIni->Get (SFX_KEY_INET_HTTPPROXYPORT).ToInt32());
-
-                aProxyCfg.setFtpProxy (
-                    pIni->Get (SFX_KEY_INET_FTPPROXYNAME),
-                    pIni->Get (SFX_KEY_INET_FTPPROXYPORT).ToInt32());
-
-                aProxyCfg.setSecureSocketProxy (
-                    pIni->Get (SFX_KEY_INET_SECURITYPROXYNAME),
-                    pIni->Get (SFX_KEY_INET_SECURITYPROXYPORT).ToInt32());
-
-                aProxyCfg.setSocksProxy (
-                    pIni->Get (SFX_KEY_INET_SOCKSPROXYNAME),
-                    pIni->Get (SFX_KEY_INET_SOCKSPROXYPORT).ToInt32());
-
-                xINetConfig->setProxyConfig (aProxyCfg);
-            }
-#else
             xINetConfig->setDomainNameServer( aInetOptions.GetDnsIpAddress() );
 
             if ( bProxiesModified )
@@ -1962,7 +1256,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
                 xINetConfig->setProxyConfig (aProxyCfg);
             }
-#endif
         }
     }
 

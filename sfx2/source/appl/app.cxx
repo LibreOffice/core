@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
-#ifdef ENABLE_INIMANAGER//MUSTINI
+#if SUPD<613
     pAppIniMgr = CreateIniManager();
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->StartListening( *pAppIniMgr );
@@ -334,7 +334,7 @@ SfxApplication::~SfxApplication()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
     delete pImp;
     delete pAppData_Impl;
-#ifdef ENABLE_INIMANAGER//MUSTINI
+#if SUPD<613
     SfxIniManager::Close();
 #endif
     utl::ConfigManager::RemoveConfigManager();
@@ -518,7 +518,9 @@ void SfxApplication::UserEvent
 
 sal_Bool IsTemplate_Impl( const String& aPath )
 {
-    INetURLObject aObj( aPath, INET_PROT_FILE );
+    INetURLObject aObj( aPath );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
     if ( aObj.getExtension().CompareIgnoreCaseToAscii( "vor" ) == COMPARE_EQUAL )
         return sal_True;
 
@@ -556,7 +558,9 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
 #ifdef APPEVENT_DBG
             aStream << "Open: " << (const char *)aFileName.GetValue();
 #endif
-            // Art, Existens und Groesse
+            // if the filename is a physical name, it is the client file system, not the file system
+            // of the machine where the office is running ( if this are different machines )
+            // the file system of the client is addressed through the "file:" protocol
             INetURLObject aURL( aFileName.GetValue(), INET_PROT_FILE );
             sal_Bool bIsFileURL = INET_PROT_FILE == aURL.GetProtocol();
 
@@ -834,11 +838,7 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         if ( !pSh )
         {
             // Wenn es ein Dokument gibt, wird die BaseURL im Activate gesetzt
-#if SUPD<613//MUSTINI
-            INetURLObject aObject( GetIniManager()->Get( SFX_KEY_WORK_PATH ), INET_PROT_FILE );
-#else
-            INetURLObject aObject( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
-#endif
+            INetURLObject aObject( SvtPathOptions().GetWorkPath() );
             aObject.setFinalSlash();
             INetURLObject::SetBaseURL( aObject.GetMainURL() );
         }
@@ -1223,94 +1223,8 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
         SfxNewHdl::Get()->FlushExceptMem();
     }
 
-#ifndef TF_UCB
-        // Flush all CHAOS data.
-    CntSystem::Flush();
-#endif
+    INetURLObject aSaveObj( SvtPathOptions().GetBackupPath() );
 
-#if SUPD<613//MUSTINI
-    INetURLObject aSaveObj( pAppIniMgr->Get( SFX_KEY_BACKUP_PATH ), INET_PROT_FILE );
-    if ( Application::IsInExecute() )
-    {
-        SfxObjectShell *pIter, *pNext;
-        sal_uInt16 n = 0;
-        for(pIter = SfxObjectShell::GetFirst(); pIter; pIter = pNext)
-        {
-            pNext = SfxObjectShell::GetNext(*pIter);
-            if( pIter->IsModified() && pIter->GetName().CompareToAscii("BasicIDE") != COMPARE_EQUAL && !pIter->IsLoading() )
-            {
-                //try
-                {
-                    // backup unsaved document
-                    SFX_ITEMSET_ARG( pIter->GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, sal_False );
-                    SfxRequest aReq(SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, pIter->GetPool());
-
-                    sal_Bool bHadName = pIter->HasName();
-                    INetURLObject aOldURL = pIter->GetMedium()->GetURLObject();
-                    String aOldName = pIter->GetTitle();
-
-                    const SfxFilter *pFilter = pIter->GetMedium()->GetFilter();
-                    const SfxFilter *pOrigFilter = pFilter;
-                    if ( !pFilter || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) || !( pFilter->GetFilterFlags() & SFX_FILTER_EXPORT ) )
-                        // packed files must be saved with default format, but remember original filter !
-                        pFilter = pIter->GetFactory().GetFilter(0);
-
-                    String aSaveName, aSavePath = aSaveObj.GetMainURL();
-                    String aFilterName;
-                    if ( pFilter )
-                    {
-                        aFilterName = pFilter->GetName();
-                        TempFile aTempFile( &aSavePath );
-                        aSaveName = aTempFile.GetName();
-                    }
-                    else
-                    {
-                        String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
-                        TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
-                        aSaveName = aTempFile.GetName();
-                    }
-
-                    aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aSaveName ) );
-                    aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
-                    if ( pPassItem )
-                        aReq.AppendItem( *pPassItem );
-
-                    pIter->ExecuteSlot(aReq);
-
-                    String aEntry( aSaveName );
-                    aEntry += DEFINE_CONST_UNICODE(";");
-                    aEntry += pOrigFilter ? pOrigFilter->GetName() : aFilterName;
-                    aEntry += DEFINE_CONST_UNICODE(";");
-
-                    if ( bHadName && INET_PROT_FILE == aOldURL.GetProtocol() )
-                    {
-                        aEntry += DEFINE_CONST_UNICODE("url;"),
-                        aEntry += aOldURL.GetMainURL();
-                    }
-                    else
-                    {
-                        aEntry += DEFINE_CONST_UNICODE("title;"),
-                        aEntry += aOldName;
-                    }
-                    pAppIniMgr->Set( aEntry, SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n++ );
-                }
-                /*catch ( ::Exception & )
-                {
-                }*/
-            }
-        }
-        pAppIniMgr->Flush();
-
-        if ( ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
-        {
-            Window *pTopWindow = GetTopWindow(); // GCC needs temporary
-            WarningBox( pTopWindow, SfxResId(STR_RECOVER_PREPARED) ).Execute();
-        }
-    }
-    else
-        pAppIniMgr->Flush();
-#else//MUSTINI
-    INetURLObject aSaveObj( SvtPathOptions().GetBackupPath(), INET_PROT_FILE );
     // save all modified documents and close all documents
     // Do it only, if it's allowed! Ask configuration for right flag.
     if(
@@ -1370,15 +1284,10 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                     aEntry += pOrigFilter ? pOrigFilter->GetName() : aFilterName;
                     aEntry += DEFINE_CONST_UNICODE(";");
 
-                    if ( bHadName && INET_PROT_FILE == aOldURL.GetProtocol() )
+                    if ( bHadName )
                     {
                         aEntry += DEFINE_CONST_UNICODE("url;"),
                         aEntry += aOldURL.GetMainURL();
-                    }
-                    else
-                    {
-                        aEntry += DEFINE_CONST_UNICODE("title;"),
-                        aEntry += aOldName;
                     }
 
                     seqWindowList.realloc(n+1);
@@ -1399,7 +1308,6 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
             WarningBox( pTopWindow, SfxResId(STR_RECOVER_PREPARED) ).Execute();
         }
     }
-#endif//MUSTINI
 
 #if SUPD<613//MUSTINI
 /*TODO: We need a new key to save informations for SenCrashMail feature.*/

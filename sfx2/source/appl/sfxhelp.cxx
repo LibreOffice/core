@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,19 +956,12 @@ void SfxHelp_Impl::AssertValidHelpDocInfo()
 
 String SfxHelp_Impl::GetHelpPath()
 {
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIni = SFX_INIMANAGER()->Find( SFX_KEY_HELP_DIR );
-    if ( !pIni )
-        pIni = SFX_INIMANAGER();
-    String aHelpDir = pIni->Get( SFX_KEY_HELP_DIR );
-#else
     String aHelpDir = SvtPathOptions().GetHelpPath();
-#endif
-
     if ( aHelpDir.Len() )
     {
         String aPath;
-        INetURLObject aHelpRoot( aHelpDir, INET_PROT_FILE );
+        INetURLObject aHelpRoot( aHelpDir );
+        DBG_ASSERT( aHelpRoot.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 
         // Nach Prioritaeten das richtige Language-Dir suchen...
         LanguageType eLanguage = Application::GetSettings().GetInternational().GetLanguage();
@@ -989,31 +982,15 @@ String SfxHelp_Impl::GetHelpPath()
     }
     else
     {
-        INetURLObject aObj( Application::GetAppFileName(), INET_PROT_FILE );
+        String aProgURL = SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(PROGURL)") );
+        INetURLObject aObj( aProgURL );
         return aObj.GetMainURL();
     }
 }
 
 void SfxHelp_Impl::CreatePIStarterList()
 {
-    // Config:
-    // [Tips]
-    // Slot=0/1
-
-    DBG_ASSERT( !pPIStarterList, "PIStarterList existiert schon!" );
     pPIStarterList = new SortedULONGs;
-    Config aConfig( GetHelpAgentConfig() );
-    ImplSetLanguageGroup( aConfig, String::CreateFromAscii(zsHelpAgentConfig_Tips), TRUE );
-    USHORT nTips = aConfig.GetKeyCount();
-    for ( USHORT nTip = 0; nTip < nTips; nTip++ )
-    {
-        if ( (BOOL)(USHORT)aConfig.ReadKey( nTip ).ToInt32() )
-        {
-            ULONG nId = aConfig.GetKeyName( nTip ).ToInt32();
-            if ( nId )
-                pPIStarterList->Insert( nId );
-        }
-    }
 }
 
 void SfxHelp_Impl::StartHelpPI( ULONG nHelpId, BOOL bSlot, BOOL bTip )
@@ -1061,31 +1038,10 @@ void SfxHelp_Impl::StartHelpPI( ULONG nHelpId, BOOL bSlot, BOOL bTip )
 
 void SfxHelp_Impl::EnableTip( ULONG nTip, BOOL bEnable )
 {
-    Config aConfig( GetHelpAgentConfig() );
-    ImplSetLanguageGroup( aConfig, String::CreateFromAscii(zsHelpAgentConfig_Tips), TRUE );
-    aConfig.WriteKey( ByteString::CreateFromInt32( nTip ),
-                      ByteString::CreateFromInt32( (USHORT)bEnable ) );
-    if ( !bEnable )
-    {
-        USHORT nPos;
-        if ( GetPIStarterList()->Seek_Entry( nTip, &nPos ) )
-            GetPIStarterList()->Remove( nPos );
-    }
-    else
-        GetPIStarterList()->Insert( nTip );
 }
 
 void SfxHelp_Impl::ResetPIStarterList()
 {
-    delete pPIStarterList;
-    pPIStarterList = 0;
-
-    Config aConfig( GetHelpAgentConfig() );
-    ImplSetLanguageGroup( aConfig, String::CreateFromAscii(zsHelpAgentConfig_Tips), TRUE );
-    USHORT nTips = aConfig.GetKeyCount();
-    ByteString aOn = ByteString::CreateFromInt32( 1 );
-    for ( USHORT nTip = 0; nTip < nTips; nTip++ )
-        aConfig.WriteKey( aConfig.GetKeyName( nTip ), aOn );
 }
 
 String SfxHelp_Impl::GetConfigDir( BOOL bGetSharedConfig )
@@ -1110,14 +1066,6 @@ String SfxHelp_Impl::GetConfigDir( BOOL bGetSharedConfig )
     return sConfigDir;
 #endif
 }
-
-String SfxHelp_Impl::GetHelpAgentConfig()
-{
-    INetURLObject aObj( GetConfigDir( FALSE ), INET_PROT_FILE );
-    aObj.insertName( String::CreateFromAscii( zsHelpAgentConfig ) );
-    return aObj.PathToFileName();
-}
-
 
 void SfxHelp::SetCustomHelpFile( const String& rName )
 {
@@ -1263,24 +1211,6 @@ void SfxHelpTipsWindow::Resize()
 
 IMPL_LINK( SfxHelpTipsWindow, ShowTip, void*, EMPTYARG )
 {
-    ULONG nId = 0;
-    Config aConfig( SfxHelp_Impl::GetHelpAgentConfig() );
-    ImplSetLanguageGroup( aConfig, DEFINE_CONST_UNICODE("WelcomeScreen"), TRUE );
-    USHORT nTips = aConfig.GetKeyCount();
-    for ( USHORT nTip = 0; nTip < nTips; nTip++ )
-    {
-        if ( (BOOL)(USHORT)aConfig.ReadKey( nTip ).ToInt32() )
-        {
-            nId = aConfig.GetKeyName( nTip ).ToInt32();
-            break;
-        }
-    }
-
-    if ( nId )
-    {
-        // at the moment no implementation
-    }
-
     return 0;
 }
 

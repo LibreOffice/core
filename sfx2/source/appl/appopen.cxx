@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #include <svtools/sbxobj.hxx>
 #include <svtools/urihelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -254,7 +255,8 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 
 {
     // zu suchenden Namen als URL aufbereiten
-    INetURLObject aUrlToFind( rName, INET_PROT_FILE );
+    INetURLObject aUrlToFind( rName );
+    DBG_ASSERT( aUrlToFind.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );
     String aPostString;
     if (  pPostStr )
         aPostString = *pPostStr;
@@ -279,7 +281,7 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
                      !xDoc->IsAbortingImport() && !xDoc->IsLoading() )
                 {
                     // Vergleiche anhand der URLs
-                    INetURLObject aUrl( xDoc->GetMedium()->GetName(), INET_PROT_FILE );
+                    INetURLObject aUrl( xDoc->GetMedium()->GetName() );
                     if ( !aUrl.HasError() && aUrl == aUrlToFind &&
                          (!bForbidVisible ||
                           !SfxViewFrame::GetFirst( xDoc, 0, TRUE )) &&
@@ -346,8 +348,10 @@ void SetTemplate_Impl( SvStorage *pStorage,
         rInfo.SetTemplateDate( aTemplInfo.GetChanged().GetTime() );
 
     // Template in DocInfo von pDoc eintragen
-    INetURLObject aObj( rFileName, INET_PROT_FILE );
-    if ( aObj.GetProtocol() == INET_PROT_FILE )
+    INetURLObject aObj( rFileName );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );
+
+    if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
     {
         String aFoundName;
         if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rLongName, aFoundName ) )
@@ -787,60 +791,21 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
             // Ist dieser allerdings selbst wieder Start - oder Neumen"u, wird das beim Speichern
             // "ubergangen ( ->objstor.cxx )
             xDoc->GetMedium()->GetItemSet()->Put( *pReferer, SID_REFERER );
-            INetURLObject aURLObj;
-            aURLObj.SetSmartURL( pReferer->GetValue() );
-
+            INetURLObject aURLObj( pReferer->GetValue() );
             BOOL bBookmark=TRUE;
-            if( aURLObj.GetProtocol() == INET_PROT_FILE )
+            SvtPathOptions aPathCFG;
+            USHORT nPathLevel = aURLObj.getSegmentCount();
+            INetURLObject aNewPathObj = INetURLObject( aPathCFG.GetNewMenuPath() );
+            USHORT nNewLevel = aNewPathObj.getSegmentCount();
+            int nOffset = nPathLevel;
+            nOffset -= nNewLevel;
+            if ( nOffset >= 0 )
             {
-#if SUPD<613//MUSTINI
-                SfxIniManager* pMgr = GetIniManager();
-                SfxIniKey aKey[] =
-                {
-                    SFX_KEY_NEW_DIR,
-                    SFX_KEY_STARTMENU_DIR,
-//                  SFX_KEY_TEMPLATE_PATH,
-                    0
-                };
-                USHORT nPathLevel = aURLObj.getSegmentCount();
-                USHORT nIndex = 0;
-                while ( aKey[ nIndex ] )
-                {
-                    INetURLObject aNewPathObj( pMgr->Get( aKey[ nIndex ] ), INET_PROT_FILE );
-                    USHORT nNewLevel = aNewPathObj.getSegmentCount();
-                    int nOffset = nPathLevel;
-                    nOffset -= nNewLevel;
-                    if ( nOffset >= 0 )
-                    {
-                        INetURLObject aTempObj = aURLObj;
-                        for ( ; nOffset > 0; nOffset-- )
-                            aTempObj.removeSegment();
-                        if ( aTempObj == aNewPathObj )
-                        {
-                            bBookmark = FALSE;
-                            break;
-                        }
-                    }
-                    ++nIndex;
-                }
-#else
-                SvtPathOptions aPathCFG;
-                USHORT nPathLevel = aURLObj.getSegmentCount();
-                INetURLObject aNewPathObj = INetURLObject( aPathCFG.GetNewMenuPath(), INET_PROT_FILE );
-                USHORT nNewLevel = aNewPathObj.getSegmentCount();
-                int nOffset = nPathLevel;
-                nOffset -= nNewLevel;
-                if ( nOffset >= 0 )
-                {
-                    INetURLObject aTempObj = aURLObj;
-                    for ( ; nOffset > 0; nOffset-- )
-                        aTempObj.removeSegment();
-                    if ( aTempObj == aNewPathObj )
-                    {
-                        bBookmark = FALSE;
-                    }
-                }
-#endif
+                INetURLObject aTempObj = aURLObj;
+                for ( ; nOffset > 0; nOffset-- )
+                    aTempObj.removeSegment();
+                if ( aTempObj == aNewPathObj )
+                    bBookmark = FALSE;
             }
 
             if ( !bBookmark && pPath )
@@ -868,37 +833,25 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         if( pInternalArgs )
             xDoc->GetMedium()->GetItemSet()->Put( *pInternalArgs );
         BOOL bOwnsFrame = FALSE;
-        SfxFrame* pFrame = GetTargetFrame_Impl( rReq.GetArgs(), bOwnsFrame );
-
-        if ( pFrame->PrepareClose_Impl( TRUE, TRUE ) == TRUE )
+        SFX_REQUEST_ARG(rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+        SfxFrame* pFrame = pFrameItem ? pFrameItem->GetFrame() : NULL;
+        DBG_ASSERT( pFrame, "This call we not work correctly in StarPortal !" );
+        if ( pFrame )
         {
-            if ( pHidden && pHidden->GetValue() )
+            if ( pFrame->PrepareClose_Impl( TRUE, TRUE ) == TRUE )
             {
-                xDoc->RestoreNoDelete();
-                xDoc->OwnerLock( TRUE );
+                if ( pHidden && pHidden->GetValue() )
+                {
+                    xDoc->RestoreNoDelete();
+                    xDoc->OwnerLock( TRUE );
+                }
+                pFrame->InsertDocument( xDoc );
+                pViewFrame = pFrame->GetCurrentViewFrame();
             }
-            pFrame->InsertDocument( xDoc );
-            pViewFrame = pFrame->GetCurrentViewFrame();
+            else
+                xDoc.Clear();
         }
-        else if ( pFrame->PrepareClose_Impl( TRUE, TRUE ) == RET_NEWTASK )
-        {
-            pFrame = SfxTopFrame::Create();
-            bOwnsFrame = TRUE;
-            DBG_ERROR( "NYI!" );
-            xDoc.Clear();
-        }
-        else
-            xDoc.Clear();
-/*
-        SFX_REQUEST_ARG(rReq, pTargetItem, SfxStringItem,
-                        SID_TARGETNAME, FALSE);
-        String aTargetName;
-        if( pTargetItem ) pTargetItem->GetValue();
-        if ( aTargetName.Len() &&
-             aTargetName.CompareIgnoreCaseToAscii("_blank") != COMPARE_EQUAL &&
-             aTargetName.CompareIgnoreCaseToAscii("_top") != COMPARE_EQUAL )
-            pFrame->SetFrameName( aTargetName );
-*/
+
         rReq.SetReturnValue( SfxFrameItem( 0, pFrame ) );
     }
 
@@ -944,8 +897,10 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             else
             {
                 delete pDlg;
+                aTemplateFileName = String::CreateFromAscii("private:factory/");
+                aTemplateFileName += String::CreateFromAscii( GetDefaultFactory().GetShortName() );
+                aTemplateFileName = aTemplateFileName.ToLowerAscii();
                 bDirect = TRUE;
-                return;
             }
         }
         else
@@ -972,7 +927,19 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         }
     }
 
-    INetURLObject aObj( aTemplateName, INET_PROT_FILE );
+    INetURLObject aTestObj( aTemplateFileName );
+    if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
+    {
+        // temp. fix until Templates are managed by UCB compatible service
+        // does NOT work in locally cached components !
+        String aTemp;
+        utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemplateFileName, aTemp );
+        aTemplateFileName = aTemp;
+    }
+
+    INetURLObject aObj( aTemplateFileName );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
+
     SfxErrorContext aEC( ERRCTX_SFX_LOADTEMPLATE, aObj.PathToFileName() );
 //! (pb) MaxLen?         DirEntry(aTemplateName).GetFull( FSYS_STYLE_HOST,FALSE,20));
 
@@ -1004,7 +971,9 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
         if ( aTemplateFileName.Len() )
         {
-            INetURLObject aObj( aTemplateFileName, INET_PROT_FILE );
+            INetURLObject aObj( aTemplateFileName );
+            DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
+
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL() );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
@@ -1021,145 +990,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     }
 }
 
-
-//-------------------------------------------------------------------------
-
-SfxFrame* SfxApplication::GetTargetFrame_Impl( const SfxItemSet* pSet, BOOL& rbOwner  )
-{
-    SFX_ITEMSET_ARG(pSet, pViewItem, SfxBoolItem, SID_VIEW, FALSE);
-
-    if ( pViewItem && !pViewItem->GetValue() )
-        // ohne View laden
-        return NULL;
-
-    SFX_ITEMSET_ARG(pSet, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-    SFX_ITEMSET_ARG(pSet, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
-    SFX_ITEMSET_ARG(pSet, pBoolItem, SfxBoolItem, SID_ONLYSUBFRAMES, FALSE);
-    SFX_ITEMSET_ARG(pSet, pRefererItem, SfxStringItem, SID_REFERER, FALSE);
-    SFX_ITEMSET_ARG(pSet, pBrowsingItem, SfxUInt16Item, SID_BROWSEMODE, FALSE);
-    SFX_ITEMSET_ARG(pSet, pPreviewItem, SfxBoolItem, SID_PREVIEW, FALSE);
-
-    // Frame als Parameter mitgegeben?
-    SfxFrame *pFrame = NULL;
-    if ( pFrmItem )
-        pFrame = pFrmItem->GetFrame();
-    SfxFrame *pSource = pFrame;
-    SfxFrame *pStart = pFrame;
-
-    if ( pPreviewItem && pPreviewItem->GetValue() )
-    {
-        DBG_ASSERT( pFrame, "Preview without frame!" );
-        return pFrame;
-    }
-
-    String aTargetName;
-    if ( pRefererItem && ( !pBrowsingItem || pBrowsingItem->GetValue() == BROWSE_NORMAL ) )
-    {
-        INetURLObject aURLObj;
-        aURLObj.SetSmartURL( pRefererItem->GetValue() );
-        if ( aURLObj.GetProtocol() == INET_PROT_FILE && ( !pFrame || pFrame->IsTop() ) )
-        {
-#if SUPD<613//MUSTINI
-            SfxIniManager* pIniMgr = GetIniManager();
-            INetURLObject aStartMenuObj( pIniMgr->Get( SFX_KEY_STARTMENU_DIR ), INET_PROT_FILE );
-            INetURLObject aQuickStartObj( pIniMgr->Get( SFX_KEY_QUICKSTART_DIR ), INET_PROT_FILE );
-            if ( aURLObj == aStartMenuObj || aURLObj == aQuickStartObj )
-            {
-                aTargetName = String::CreateFromAscii( "_blank" );
-                pTargetItem = NULL;
-            }
-#else
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-            DBG_ASSERT(sal_False, "SfxApplication::GetTargetFrame_Impl()\nStartMenu-Dir & QuickStart-Dir no longer supported!\n");
-#endif
-            aTargetName = String::CreateFromAscii( "_blank" );
-            pTargetItem = NULL;
-#endif
-        }
-    }
-
-    if ( pTargetItem && pTargetItem->GetValue().Len() )
-    {
-        // Wenn ein TargetItem mitgegeben wurde, aber kein Frame, den
-        // Current ViewFrame nehmen
-        SfxViewFrame* pCurViewFrame = SfxViewFrame::Current();
-        if ( !pCurViewFrame )
-            pCurViewFrame = SfxViewFrame::GetFirst();
-
-        if ( !pFrame && pCurViewFrame )
-        {
-            pFrame = pCurViewFrame->GetFrame();
-            pStart = pFrame;
-        }
-
-        if ( pFrame )
-        {
-            aTargetName = pTargetItem->GetValue();
-
-            // Wenn kein TargetName, dann den vom Current Document
-            SfxObjectShell* pCur = SfxObjectShell::Current();
-            if( !aTargetName.Len() && pCur )
-                aTargetName = pCur->GetDocInfo().GetDefaultTarget();
-        }
-    }
-    else if ( pFrame && (pFrame->GetFrameName().CompareToAscii("mail-body") == COMPARE_EQUAL) )
-    {
-        // Hack for MailDocument in Office 5.2
-        aTargetName = String::CreateFromAscii("_blank");
-    }
-
-    BOOL bNewTask =
-            aTargetName.CompareToAscii("_blank")    == COMPARE_EQUAL ||
-            aTargetName.CompareToAscii("_null")     == COMPARE_EQUAL;
-
-    if ( pFrame )
-    {
-        if ( pBoolItem && pBoolItem->GetValue() )
-        {
-            DBG_ASSERT( aTargetName.Len(), "OnlySubFrames, aber kein Name!" );
-            pFrame = pFrame->SearchChildrenForName_Impl( aTargetName );
-        }
-        else
-        {
-            if ( !bNewTask || pFrame->GetFrameName().Len() || pFrame->GetCurrentDocument() || pFrame->GetParentFrame() )
-                // Auch bei leerem TargetName suchen wg. SmartSelf
-                // _blank nur suchen, wenn pFrame nicht schon _blank ist!
-                pFrame = pFrame->SearchFrame( aTargetName );
-        }
-    }
-
-    BOOL bName = ( pFrame == NULL );
-    if ( pFrame && ( !pBrowsingItem || pBrowsingItem->GetValue() == BROWSE_NORMAL ) )
-    {
-        // Es wurde ein Frame gefunden; dessen Doc darf nicht ersetzt werden,
-        // wenn es der Desktop ist oder wenn es embedded ist
-        // Ausnahme: neuerdings k"onnen wir auch innerhalb des Desktops browsen, wenn dieser ein Frameset ist
-        SfxObjectShell* pCur = pFrame->GetCurrentDocument();
-        if( pCur &&
-            ( ( pCur->GetFlags() & SFXOBJECTSHELL_DONTREPLACE ) ||
-              pCur->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) )
-        {
-            pFrame = 0;
-            pSource = 0;
-            pStart = 0;
-        }
-    }
-
-    // Kein Frame gefunden -> Neuen Frame nehmen
-    if ( !pFrame )
-    {
-        SFX_ITEMSET_ARG( pSet, pHiddenItem, SfxBoolItem, SID_HIDDEN, FALSE);
-        BOOL bHidden =  pHiddenItem && pHiddenItem->GetValue();
-        pFrame = SfxTopFrame::Create( NULL, 0, bHidden );
-        rbOwner = TRUE;
-        if ( !bNewTask && bName )
-            pFrame->SetFrameName( aTargetName );
-    }
-    else
-        rbOwner = FALSE;
-
-    return pFrame;
-}
 
 //---------------------------------------------------------------------------
 
@@ -1179,11 +1009,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         String aPath;
         if ( nSID == SID_OPENTEMPLATE )
         {
-#if SUPD<613//MUSTINI
-            aPath = GetIniManager()->Get( SFX_KEY_TEMPLATE_PATH );
-#else
             aPath = SvtPathOptions().GetTemplatePath();
-#endif
             aPath = aPath.GetToken(0,';');
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ void SfxApplication::OpenClients()
 
         // Dateiname
 #if SUPD<613//MUSTINI
-        String aName = SFX_INIMANAGER()->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("StartDocument") );
+        String aName = pAppIniMgr->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("StartDocument") );
 #else
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::OpenClients()\nsoffice.ini key \"Common\\StartDocument\" no longer supported ...\n");
@@ -760,15 +760,17 @@ SfxIniManager* SfxApplication::CreateIniManager()
 
     // If some configurtation files are missing or corrupt
     // try to start setup. If starting failed show a errorbox and exit application with an error code.
-    INetURLObject aSetupObj( Application::GetAppFileName(), INET_PROT_FILE );
+    String aProgURL = SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(PROGURL)") );
+    INetURLObject aSetupObj( aProgURL );
+
     #if defined(UNX)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("setup") );
+    aSetupObj.insertName( DEFINE_CONST_UNICODE("setup") );
     #endif
     #if defined(WIN) || defined(WNT) || defined(OS2)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("setup.exe") );
+    aSetupObj.insertName( DEFINE_CONST_UNICODE("setup.exe") );
     #endif
     #if defined(MAC)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("Setup") );
+    aSetupObj.insertName( DEFINE_CONST_UNICODE("Setup") );
     #endif
 
     // We must use different messages for fat office and portal.
@@ -948,11 +950,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
     if ( !pList )
     {
         // Gibt es eine Slotdatei ?
-#if SUPD<613//MUSTINI
-        INetURLObject aObj( GetIniManager()->Get( SFX_KEY_CONFIG_DIR ), INET_PROT_FILE );
-#else
-        INetURLObject aObj( SvtPathOptions().GetConfigPath(), INET_PROT_FILE );
-#endif
+        INetURLObject aObj( SvtPathOptions().GetConfigPath() );
         aObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
         SvFileStream aStrm( aObj.GetMainURL(), STREAM_STD_READ );
 
@@ -1141,37 +1139,6 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
 
 PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bool bNew )
 {
-#if SUPD<613//MUSTINI
-    String aPath;
-    SfxBmkMenu** ppMenu;
-    sal_uInt16 nKey;
-    switch( nSID )
-    {
-        case SID_NEWDOCDIRECT:
-            ppMenu = &pNewMenu;
-            nKey = SFX_KEY_NEW_DIR;
-            break;
-        case SID_AUTOPILOTMENU:
-            ppMenu = &pAutoPilotMenu;
-            nKey = SFX_KEY_AUTOPILOT_DIR;
-            break;
-        default:
-            ppMenu = 0;
-            DBG_ERROR( "Menu ID unknown!" );
-            break;
-    }
-
-    if( ppMenu && ( !*ppMenu || bNew ) )
-    {
-        INetURLObject aObj( SFX_INIMANAGER()->Get( nKey ), INET_PROT_FILE );
-        String aURL = aObj.GetMainURL();
-        if ( *ppMenu )
-            delete *ppMenu;
-        *ppMenu = new SfxBmkMenu( aURL, aURL );
-        (*ppMenu)->Initialize();
-    }
-    return ppMenu ? *ppMenu : NULL;
-#else
     String aPath;
     SfxBmkMenu** ppMenu;
     String sKey;
@@ -1193,7 +1160,7 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
 
     if( ppMenu && ( !*ppMenu || bNew ) )
     {
-        INetURLObject aObj( sKey, INET_PROT_FILE );
+        INetURLObject aObj( sKey );
         String aURL = aObj.GetMainURL();
         if ( *ppMenu )
             delete *ppMenu;
@@ -1201,7 +1168,6 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
         (*ppMenu)->Initialize();
     }
     return ppMenu ? *ppMenu : NULL;
-#endif
 }
 
 SfxMenuBarManager* SfxApplication::GetMenuBarManager() const
@@ -1213,4 +1179,90 @@ SfxMenuBarManager* SfxApplication::GetMenuBarManager() const
         return 0;
 }
 
+#if SUPD<613
+SfxIniManager* SfxApplication::GetIniManager() const
+
+/*  [Beschreibung]
+
+    Diese Methode liefert den Ini-Manager der Dokument-Factory
+    des aktiven Dokuments, insofern ein Dokument aktiv ist.
+    Ansonsten liefert sie den Ini-Manager der Applikation.
+
+    W"ahrend 'Application:Execute()' ist der R"uckgabewert
+    immer ein g"ultiger Pointer, ansonsten kann es auch ein
+    0-Pointer sein.
+*/
+
+{
+    return pAppIniMgr;
+}
+
+//--------------------------------------------------------------------
+#ifdef WNT
+extern String GetUserID();
+#endif
+
+SfxIniManager* SfxApplication::CreateIniManager()
+{
+    SfxIniManager *pIniMgr = NULL;
+    try
+    {
+        pIniMgr = SfxIniManager::Get();
+        if ( pIniMgr )
+        {
+            pIniMgr->EnterLock();
+
+            // Dialog-Mnemonics/Scaling
+            LanguageType eLang = Application::GetAppInternational().GetLanguage();
+            Application::EnableAutoMnemonic( pIniMgr->Get( SFX_KEY_INTERNATIONAL_AUTOMNEMONIC,(sal_uInt16) eLang ).CompareToAscii("1") == COMPARE_EQUAL );
+            Application::SetDialogScaleX( (short)
+                    pIniMgr->Get( SFX_KEY_INTERNATIONAL_DIALOGSCALEX,
+                                (sal_uInt16) eLang ).ToInt32() );
+            return pIniMgr;
+        }
+    }
+    catch ( ::com::sun::star::registry::InvalidRegistryException& )
+    {
+        pIniMgr = NULL;
+    }
+
+    // If some configurtation files are missing or corrupt
+    // try to start setup. If starting failed show a errorbox and exit application with an error code.
+    INetURLObject aSetupObj( Application::GetAppFileName(), INET_PROT_FILE );
+    #if defined(UNX)
+    aSetupObj.setName( DEFINE_CONST_UNICODE("setup") );
+    #endif
+    #if defined(WIN) || defined(WNT) || defined(OS2)
+    aSetupObj.setName( DEFINE_CONST_UNICODE("setup.exe") );
+    #endif
+    #if defined(MAC)
+    aSetupObj.setName( DEFINE_CONST_UNICODE("Setup") );
+    #endif
+
+    // We must use different messages for fat office and portal.
+    // A fat office can be repaired by user himself ...
+    // but portal problems must fixed by an admin!
+    String aMsg;
+    if( Application::IsRemoteServer())
+    {
+        aMsg += DEFINE_CONST_UNICODE("Your user account is not configured correctly.\n");
+        aMsg += DEFINE_CONST_UNICODE("Please contact your StarPortal administator.\n");
+    }
+    else
+    {
+        aMsg += DEFINE_CONST_UNICODE("Configuration files could not be found.\n");
+        aMsg += DEFINE_CONST_UNICODE("Can't start neither StarOffice nor Setup.\n");
+        aMsg += DEFINE_CONST_UNICODE("Please try to start setup by yourself.");
+    }
+
+    String aImageName( aSetupObj.PathToFileName() );
+    ::vos::OProcess aProcess( aImageName.GetBuffer() );
+    ::rtl::OUString aArg = ::rtl::OUString::createFromAscii( "/officemode" );
+    ::vos::OArgumentList aList( 1, &aArg );
+    if ( 0 != aProcess.execute( ::vos::OProcess::TOption_Detached, aList ) )
+        Application::Abort( aMsg );
+    exit(-1);
+    return 0;
+}
+#endif
 
