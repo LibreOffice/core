@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:36:39 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 14:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,25 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
 <oor:component-data oor:name="Setup" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <node oor:name="Office">
-    <prop oor:name="ooSetupInstCompleted">
-      <value>false</value>
-    </prop>
-    <prop oor:name="ooSetupShowIntro">
-      <value>true</value>
-    </prop>
-    <prop oor:name="ooSetupLocales">
-      <value>en-US de</value>
-    </prop>
-  </node>
-  <node oor:name="L10N">
-    <prop oor:name="ooLocale" oor:type="xs:string">
-      <value>en-US</value>
-    </prop>
-  </node>
-  <node oor:name="Configuration">
-    <prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean">
-      <value>true</value>
-    </prop>
-  </node>
+    <node oor:name="Office">
+        <prop oor:name="ooSetupInstCompleted">
+            <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupShowIntro">
+            <value>true</value>
+        </prop>
+        <prop oor:name="ooSetupLocales">
+            <value>en-US de</value>
+        </prop>
+    </node>
+    <node oor:name="L10N">
+        <prop oor:name="ooLocale" oor:type="xs:string">
+            <value/>
+        </prop>
+    </node>
+    <node oor:name="Configuration">
+        <prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean">
+            <value>true</value>
+        </prop>
+    </node>
 </oor:component-data>
