@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,9 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
+
+#include "fuzoom.hxx"
 
 #include <svx/svxids.hrc>
 #ifndef _SFX_BINDINGS_HXX //autogen
@@ -75,13 +76,22 @@
 #include <svx/svdpagv.hxx>
 #endif
 
-#include "fuzoom.hxx"
-#include "frmview.hxx"
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "zoomlist.hxx"
+
+namespace sd {
 
 USHORT SidArrayZoom[] = {
                     SID_ATTR_ZOOM,
@@ -97,18 +107,19 @@ TYPEINIT1( FuZoom, FuPoor );
 |*
 \************************************************************************/
 
-FuZoom::FuZoom(SdViewShell*     pViewSh,
-               SdWindow*        pWin,
-               SdView*          pView,
-               SdDrawDocument*  pDoc,
-               SfxRequest&      rReq) :
-    FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-    bVisible(FALSE),
-    bStartDrag(FALSE),
-    bLineDraft(FALSE),
-    bFillDraft(FALSE),
-    bTextDraft(FALSE),
-    bGrafDraft(FALSE)
+FuZoom::FuZoom(
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+      bVisible(FALSE),
+      bStartDrag(FALSE),
+      bLineDraft(FALSE),
+      bFillDraft(FALSE),
+      bTextDraft(FALSE),
+      bGrafDraft(FALSE)
 {
 }
 
@@ -314,3 +325,4 @@ void FuZoom::Deactivate()
     pWindow->SetPointer( aPtr );
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
 }
+} // end of namespace sd
