@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
+#endif
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
 #endif
@@ -89,9 +92,6 @@
 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
-#endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -396,8 +396,9 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
                         SID_ATTR_ADDRESS, SID_ATTR_ADDRESS,
                         SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS,
                         0L );
-    SvxAddressItem aAddress( pPathFinder->GetAddress() );
-    aSet.Put(aAddress);
+    SvxAddressItem aAddress( *SFX_APP()->GetIniManager() );
+    aAddress.SetWhich(SID_ATTR_ADDRESS);
+    aSet.Put( aAddress );
     USHORT nEditPos = UNKNOWN_EDIT;
 
     switch(pCurFld->GetSubType())
@@ -424,13 +425,13 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
     SwAddrDlg aDlg( this, aSet );
     aDlg.Execute();
-    const SfxItemSet* pSfxItemSet = aDlg.GetOutputItemSet();
-    const SvxAddressItem* pAddrItem;
 
-    if( pSfxItemSet && SFX_ITEM_SET == pSfxItemSet->GetItemState(SID_ATTR_ADDRESS,
-            FALSE, (const SfxPoolItem**)&pAddrItem) )
+    const SfxItemSet* pSfxItemSet = aDlg.GetOutputItemSet();
+    const SfxPoolItem* pItem;
+    if( pSfxItemSet && SFX_ITEM_SET == pSfxItemSet->GetItemState(
+            SID_ATTR_ADDRESS, FALSE, &pItem ) )
     {
-        pPathFinder->SetAddress( (SvxAddressItem&)*pAddrItem );
+        ((SvxAddressItem*)pItem)->Store( *SFX_APP()->GetIniManager() );
         pSh->UpdateFlds( *pCurFld );
     }
 
@@ -440,6 +441,9 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:36  hr
+    initial import
+
     Revision 1.146  2000/09/18 16:05:28  willem.vandorp
     OpenOffice header added.
 

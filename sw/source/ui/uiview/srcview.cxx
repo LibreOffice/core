@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
 #endif
@@ -117,6 +120,9 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
 #endif
 #ifndef _IODLG_HXX //autogen
 #include <sfx2/iodlg.hxx>
@@ -138,9 +144,6 @@
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
@@ -498,7 +501,7 @@ void SwSrcView::SaveContent(const String& rTmpFile)
  --------------------------------------------------------------------*/
 
 
-void __EXPORT SwSrcView::Execute(SfxRequest& rReq)
+void SwSrcView::Execute(SfxRequest& rReq)
 {
     USHORT nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -528,6 +531,7 @@ void __EXPORT SwSrcView::Execute(SfxRequest& rReq)
         break;
         case SID_SAVEASDOC:
         {
+            SvtPathOptions aPathOpt;
             Window* pParent = &GetViewFrame()->GetWindow();
             SfxFileDialog* pFileDlg = new SfxFileDialog(pParent, WB_SAVEAS|WB_3DLOOK);
             pFileDlg->DisableSaveLastDirectory();
@@ -535,7 +539,7 @@ void __EXPORT SwSrcView::Execute(SfxRequest& rReq)
             String sHtml(C2S("HTML"));
             pFileDlg->AddFilter( sHtml, C2S("*.html;*.htm") );
             pFileDlg->SetCurFilter( sHtml );
-            pFileDlg->SetPath( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ) );
+            pFileDlg->SetPath( aPathOpt.GetWorkPath() );
             if( RET_OK == pFileDlg->Execute())
             {
                 String aFileName = pFileDlg->GetPath();
@@ -669,7 +673,7 @@ void __EXPORT SwSrcView::Execute(SfxRequest& rReq)
  --------------------------------------------------------------------*/
 
 
-void __EXPORT SwSrcView::GetState(SfxItemSet& rSet)
+void SwSrcView::GetState(SfxItemSet& rSet)
 {
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -927,7 +931,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 /*-----------------02.07.97 09:29-------------------
 
 --------------------------------------------------*/
-USHORT __EXPORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
+USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
 {
     SwDocShell* pDocSh = GetDocShell();
     if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
@@ -1053,7 +1057,7 @@ ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
  --------------------------------------------------------------------*/
 
 
-SfxPrinter* __EXPORT SwSrcView::GetPrinter( BOOL bCreate )
+SfxPrinter* SwSrcView::GetPrinter( BOOL bCreate )
 {
     return  GetDocShell()->GetDoc()->GetPrt( bCreate );
 }
@@ -1063,7 +1067,7 @@ SfxPrinter* __EXPORT SwSrcView::GetPrinter( BOOL bCreate )
  --------------------------------------------------------------------*/
 
 
-void __EXPORT SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) &&
             (((SfxSimpleHint&) rHint).GetId() == SFX_HINT_MODECHANGED) ||
@@ -1112,13 +1116,12 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     {
         TempFile aTempFile;
         aTempFile.EnableKillingFile();
-        String sFileURL = aTempFile.GetName();
+        String sFileURL( aTempFile.GetName() ),
+               sBaseURL( INetURLObject::GetBaseURL() );
         BOOL bIsRemote = pMedium->IsRemote();
-        SfxOptions& rOpt = SFX_APP()->GetOptions();
-        String sBaseURL = INetURLObject::GetBaseURL();
+        SvtSaveOptions aOpt;
 
-        if( rOpt.IsSaveRelINet() && bIsRemote ||
-                rOpt.IsSaveRelFSys() && !bIsRemote)
+        if( bIsRemote ? aOpt.IsSaveRelINet() : aOpt.IsSaveRelFSys() )
             INetURLObject::SetBaseURL( pMedium->GetName() );
         else
             INetURLObject::SetBaseURL( aEmptyStr );
@@ -1162,6 +1165,9 @@ void SwSrcView::Load(SwDocShell* pDocShell)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:48  hr
+    initial import
+
     Revision 1.109  2000/09/18 16:06:11  willem.vandorp
     OpenOffice header added.
 

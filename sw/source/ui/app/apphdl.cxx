@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:22:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,12 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
-#include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SFXEVENT_HXX //autogen
-#include <sfx2/event.hxx>
-#endif
-
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
@@ -87,6 +78,18 @@
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_UNDOOPT_HXX
+#include <svtools/undoopt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX //autogen
+#include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXEVENT_HXX //autogen
+#include <sfx2/event.hxx>
 #endif
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
@@ -143,28 +146,69 @@
 #include <navicfg.hxx>
 #endif
 
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "finder.hxx"
-#include "docsh.hxx"
-#include "cmdid.h"          // Funktion-Ids
-#include "initui.hxx"
-#include "uitool.hxx"
-#include "swmodule.hxx"
-#include "wdocsh.hxx"
-#include "wview.hxx"
-#include "wizzard.hxx"      // Wizzards
-#include "usrpref.hxx"
-#include "gloslst.hxx"      // SwGlossaryList
-#include "glosdoc.hxx"      // SwGlossaryList
-#include "doc.hxx"
-#include "cfgitems.hxx"
-#include "prtopt.hxx"
-#include "srcvcfg.hxx"
-#include "modcfg.hxx"
-#include "globals.h"        // globale Konstanten z.B.
-#include "cfgid.h"
-#include "app.hrc"
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>          // Funktion-Ids
+#endif
+#ifndef _INITUI_HXX
+#include <initui.hxx>
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _WDOCSH_HXX
+#include <wdocsh.hxx>
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+#ifndef _WIZZARD_HXX
+#include <wizzard.hxx>      // Wizzards
+#endif
+#ifndef _USRPREF_HXX
+#include <usrpref.hxx>
+#endif
+#ifndef _GLOSLST_HXX
+#include <gloslst.hxx>      // SwGlossaryList
+#endif
+#ifndef _GLOSDOC_HXX
+#include <glosdoc.hxx>      // SwGlossaryList
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _CFGITEMS_HXX
+#include <cfgitems.hxx>
+#endif
+#ifndef _PRTOPT_HXX
+#include <prtopt.hxx>
+#endif
+#ifndef _SRCVCFG_HXX
+#include <srcvcfg.hxx>
+#endif
+#ifndef _MODCFG_HXX
+#include <modcfg.hxx>
+#endif
+#ifndef _GLOBALS_H
+#include <globals.h>        // globale Konstanten z.B.
+#endif
+#ifndef _CFGID_H
+#include <cfgid.h>
+#endif
+#ifndef _APP_HRC
+#include <app.hrc>
+#endif
 #ifndef _USRPREF_HXX //autogen
 #include <usrpref.hxx>
 #endif
@@ -177,7 +221,9 @@
 #ifndef _FONTCFG_HXX //autogen
 #include <fontcfg.hxx>
 #endif
-#include "barcfg.hxx"
+#ifndef _BARCFG_HXX
+#include <barcfg.hxx>
+#endif
 #ifndef _UINUMS_HXX //autogen
 #include <uinums.hxx>
 #endif
@@ -463,7 +509,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
             break;
             case SID_ATTR_ADDRESS:
             {
-                rSet.Put(pPathFinder->GetAddress());
+                SvxAddressItem aAddress( *SFX_APP()->GetIniManager() );
+                aAddress.SetWhich( nWhich );
+                rSet.Put( aAddress );
             }
             break;
             case SID_ATTR_UNDO_COUNT:
@@ -783,8 +831,8 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
                 if(aParam == C2S("~~~GetMacroPath"))
                 {
-                    aPath = SFX_INIMANAGER()->Get( SFX_KEY_CONFIG_DIR );
-                    aPath = URIHelper::SmartRelToAbs(aPath);
+                    SvtPathOptions aPathOpt;
+                    aPath = URIHelper::SmartRelToAbs( aPathOpt.GetConfigPath() );
                     if(aPath.Len())
                         aPath += INET_PATH_TOKEN;
                 }
@@ -815,7 +863,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
         {
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, sal_False, &pItem))
             {
-                pPathFinder->SetAddress( *(SvxAddressItem*)pItem );
+                ((SvxAddressItem*)pItem)->Store( *SFX_APP()->GetIniManager() );
             }
         }
         break;
@@ -839,8 +887,11 @@ void SwModule::ExecOther(SfxRequest& rReq)
             }
             SwEditShell::SetUndoActionCount( nNew );
             // intern kommt der Request aus dem Dialog, dort werden die Options gesetzt
-            if(rReq.IsAPI())
-                OFF_APP()->GetOptions().SetUndoCount(  nNew );
+            if( rReq.IsAPI() )
+            {
+                SvtUndoOptions aOpt;
+                aOpt.SetUndoCount(  nNew );
+            }
             break;
         }
         break;
@@ -859,7 +910,6 @@ void SwModule::ExecOther(SfxRequest& rReq)
                     SwView* pActView = ::GetActiveView();
                     sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
                     ::SetDfltMetric(eUnit, bWebView);
-                    OFF_APP()->GetOptions().SetMetric(eUnit);
                 }
                 break;
             }
@@ -1091,6 +1141,9 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/28 15:22:17  os
+    use of configuration service in view options
+
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
 

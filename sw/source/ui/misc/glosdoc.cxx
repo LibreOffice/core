@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
@@ -118,9 +121,6 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
 #endif
 
 #ifndef _UNOATXT_HXX
@@ -812,7 +812,8 @@ sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
 
 void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 {
-    String aNewPath( SFX_INIMANAGER()->Get( SFX_KEY_GLOSSARY_PATH ) );
+    SvtPathOptions aPathOpt;
+    String aNewPath( aPathOpt.GetGlossaryPath() );
     sal_Bool bPathChanged = aPath != aNewPath;
     if (bFull || bPathChanged)
     {
@@ -910,6 +911,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:44  hr
+    initial import
+
     Revision 1.115  2000/09/18 16:05:56  willem.vandorp
     OpenOffice header added.
 

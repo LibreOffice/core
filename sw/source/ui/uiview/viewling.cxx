@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,24 +131,55 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-#include "initui.hxx"               // fuer SpellPointer
-#include "finder.hxx"               // Pathes fuer Lingu
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "basesh.hxx"
-#include "docsh.hxx"                // CheckSpellChanges
-#include "viewopt.hxx"              // Viewoptions
-#include "swundo.hxx"               // fuer Undo-Ids
-#include "cmdid.h"
-#include "globals.hrc"
-#include "comcore.hrc"              // STR_MULT_INTERACT_SPELL_WARN
-#include "splwrp.hxx"               //    "
-#include "hyp.hxx"                  // Trennung
-#include "olmenu.hxx"               // PopupMenu fuer OnlineSpelling
-#include "pam.hxx"                  // Spelling: Multiselektion
-#include "edtwin.hxx"
+#ifndef _INITUI_HXX
+#include <initui.hxx>               // fuer SpellPointer
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _BASESH_HXX
+#include <basesh.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>                // CheckSpellChanges
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>              // Viewoptions
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>               // fuer Undo-Ids
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
+#endif
+#ifndef _SPLWRP_HXX
+#include <splwrp.hxx>               //    "
+#endif
+#ifndef _HYP_HXX
+#include <hyp.hxx>                  // Trennung
+#endif
+#ifndef _OLMENU_HXX
+#include <olmenu.hxx>               // PopupMenu fuer OnlineSpelling
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>                  // Spelling: Multiselektion
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
 
-#include "view.hrc"
+#ifndef _VIEW_HRC
+#include <view.hrc>
+#endif
 
 using namespace ::com::sun::star;
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
@@ -703,6 +734,9 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.135  2000/09/18 16:06:13  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -81,6 +84,9 @@
 #endif
 #ifndef _SFX_INIMGR_HXX
 #include <sfx2/inimgr.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
@@ -164,16 +170,15 @@ SwBaseNumRules::~SwBaseNumRules()
 {
     if( bModified )
     {
-        String sNm( SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH ));
-        sNm = URIHelper::SmartRelToAbs(sNm);
-
+        SvtPathOptions aPathOpt;
+        String sNm( URIHelper::SmartRelToAbs( aPathOpt.GetUserConfigPath() ));
         sNm += INET_PATH_TOKEN;
         sNm += sFileName;
         INetURLObject aTempObj(sNm);
         sNm = aTempObj.GetFull();
-        SvFileStream aStrm( sNm, STREAM_WRITE | STREAM_TRUNC |
-                                        STREAM_SHARE_DENYALL );
-        Store( aStrm );
+        SfxMedium aStrm( sNm, STREAM_WRITE | STREAM_TRUNC |
+                                        STREAM_SHARE_DENYALL, TRUE );
+        Store( *aStrm.GetOutStream() );
     }
 
     for( USHORT i = 0; i < nMaxRules; ++i )
@@ -191,8 +196,8 @@ void  SwBaseNumRules::Init()
     String sNm( sFileName );
     if( SFX_INIMANAGER()->SearchFile( sNm, SFX_KEY_USERCONFIG_PATH ))
     {
-        SvFileStream aStrm( sNm, STREAM_STD_READ );
-        Load( aStrm );
+        SfxMedium aStrm( sNm, STREAM_STD_READ, TRUE );
+        Load( *aStrm.GetInStream() );
     }
 }
 
@@ -756,6 +761,9 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:33  hr
+    initial import
+
     Revision 1.69  2000/09/18 16:05:18  willem.vandorp
     OpenOffice header added.
 

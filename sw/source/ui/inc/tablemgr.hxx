@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablemgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ public:
     BOOL IsTableSelected() const { return pFmt != 0; }
 
     const SwFrmFmt *GetTableFmt() const { return pFmt; }
+
+    SwWrtShell* GetShell() const { return pSh; }
 
     void InsertChart( SchMemChart& rData, const SfxItemSet* pSet = 0 );
     void UpdateChart();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+#ifndef _SFXINIMGR_HXX //autogen
+#include <svtools/iniman.hxx>
+#endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
@@ -166,9 +169,6 @@
 #endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
-#endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
 #endif
 #ifndef _INITUI_HXX
 #include <initui.hxx>
@@ -695,6 +695,15 @@ String  lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSepara
     Beschreibung:
  --------------------------------------------------------------------*/
 
+inline String lcl_GetDBInsertMode( String sDBName )
+{
+    sDBName.SearchAndReplace( DB_DELIM, '.');
+    return  SFX_APP()->GetIniManager()->Get( String::CreateFromAscii(
+                RTL_CONSTASCII_STRINGPARAM( "DataBaseFormatInfo" )),
+                FALSE, FALSE, sDBName );
+}
+
+
 #ifdef REPLACE_OFADBMGR
 void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 #else
@@ -714,11 +723,11 @@ void SwNewDBMgr::ImportDBEntry(SbaDBDataDef* pDef, SwWrtShell* pSh)
         String sSymDBName(pMergeData->sDataSource);
         sSymDBName += DB_DELIM;
         sSymDBName += pMergeData->sTableOrQuery;
-        String sFormatStr = pPathFinder->GetDBInsertMode(sSymDBName);
+        String sFormatStr( lcl_GetDBInsertMode( sSymDBName ));
 #else
         const ODbRowRef&  xRow = rParam.GetCursor()->GetRow();
         ULONG nCount = (UINT16)xRow->size();
-        String sFormatStr = pPathFinder->GetDBInsertMode(rParam.GetSymDBName());
+        String sFormatStr( lcl_GetDBInsertMode( rParam.GetSymDBName() ));
 #endif
         USHORT nFmtLen = sFormatStr.Len();
         if( nFmtLen )
@@ -2523,6 +2532,9 @@ Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:33  hr
+    initial import
+
     Revision 1.372  2000/09/18 16:05:18  willem.vandorp
     OpenOffice header added.
 

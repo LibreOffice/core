@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:22:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,29 @@
 #endif
 
 #pragma hdrstop
-#include <sot/dtrans.hxx>
-#include "uiparam.hxx"
-#include "hintids.hxx"
 
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>          // Funktion-Ids
+#endif
 
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
+
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+
+#include <sot/dtrans.hxx>
+
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
@@ -83,9 +98,6 @@
 #endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -102,43 +114,72 @@
 #ifndef _SVX_BACKGRND_HXX //autogen
 #include <svx/backgrnd.hxx>
 #endif
-
 #ifndef _OFF_OFAIDS_HRC
 #include <offmgr/ofaids.hrc>
 #endif
+
 #ifndef _OPTPAGE_HXX //autogen
 #include <optpage.hxx>
 #endif
-#define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
-#ifndef _OPTPAGE_HXX //autogen
-#include <optpage.hxx>
+#ifndef _OPTINS_HXX
+#include <optins.hxx>
 #endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _OPTLOAD_HXX
+#include <optload.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _INITUI_HXX
+#include <initui.hxx>                   // fuer ::GetGlossaries()
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>      //fuer UpdateFields
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+#ifndef _CFGITEMS_HXX
+#include <cfgitems.hxx>
+#endif
+#ifndef _PRTOPT_HXX
+#include <prtopt.hxx>
+#endif
+#ifndef _PVIEW_HXX
+#include <pview.hxx>
+#endif
+#ifndef _USRPREF_HXX
+#include <usrpref.hxx>
+#endif
+#ifndef _MODCFG_HXX
+#include <modcfg.hxx>
+#endif
+#ifndef _GLOSDOC_HXX
+#include <glosdoc.hxx>
+#endif
+#ifndef _UIITEMS_HXX
+#include <uiitems.hxx>
 #endif
 
-#include "optins.hxx"
-#include "optload.hxx"
-#include <edtwin.hxx>
-#include "finder.hxx"
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "uitool.hxx"
-#include "initui.hxx"                   // fuer ::GetGlossaries()
-#include "fldbas.hxx"      //fuer UpdateFields
-#include "cmdid.h"          // Funktion-Ids
-#include "globals.hrc"
-#include "globals.h"        // globale Konstanten z.B.
-#include "wview.hxx"
-#include "cfgitems.hxx"
-#include "prtopt.hxx"
-#include "pview.hxx"
-#include "usrpref.hxx"
-#include "modcfg.hxx"
-#include "glosdoc.hxx"
-#include "uiitems.hxx"
+
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _GLOBALS_H
+#include <globals.h>        // globale Konstanten z.B.
+#endif
 
 
 
@@ -545,6 +586,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/28 15:22:17  os
+    use of configuration service in view options
+
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
 

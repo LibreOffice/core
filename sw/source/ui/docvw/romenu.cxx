@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,18 @@
 #include <hintids.hxx>
 
 
-#ifndef _SFXDISPATCH_HXX //autogen
-#include <sfx2/dispatch.hxx>
+#ifndef _URLOBJ_HXX //autogen
+#include <tools/urlobj.hxx>
 #endif
-#ifndef _IODLG_HXX
-#include "sfx2/iodlg.hxx"
+#ifndef _GRAPH_HXX //autogen
+#include <vcl/graph.hxx>
 #endif
-
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _CLIP_HXX //autogen
+#include <vcl/clip.hxx>
+#endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
@@ -84,8 +89,26 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _FILTER_HXX //autogen
+#include <svtools/filter.hxx>
+#endif
+#ifndef _IMAP_HXX //autogen
+#include <svtools/imap.hxx>
+#endif
+#ifndef _INETIMG_HXX //autogen
+#include <svtools/inetimg.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX //autogen
+#include <sfx2/dispatch.hxx>
+#endif
+#ifndef _IODLG_HXX
+#include <sfx2/iodlg.hxx>
 #endif
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
@@ -93,38 +116,11 @@
 #ifndef _SVX_IMPGRF_HXX //autogen
 #include <svx/impgrf.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _GRAPH_HXX //autogen
-#include <vcl/graph.hxx>
-#endif
 #ifndef _GALLERY_HXX_ //autogen
 #include <svx/gallery.hxx>
 #endif
-#ifndef _FILTER_HXX //autogen
-#include <svtools/filter.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _IMAP_HXX //autogen
-#include <svtools/imap.hxx>
-#endif
-#ifndef _INETIMG_HXX //autogen
-#include <svtools/inetimg.hxx>
 #endif
 
 
@@ -177,8 +173,6 @@
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
-
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
@@ -507,26 +501,24 @@ void lcl_GetPreferedExtension( String &rExt, /*const*/ Graphic &rGrf )
 {
     // dann ggfs. ueber die native-Info der Grafik den "besten"
     // Filter vorschlagen
+    const sal_Char* pExt = "png";
     switch( rGrf.GetLink().GetType() )
     {
-        case GFX_LINK_TYPE_NATIVE_GIF:      rExt = C2S("gif"); break;
-        case GFX_LINK_TYPE_NATIVE_TIF:      rExt = C2S("tif"); break;
-        case GFX_LINK_TYPE_NATIVE_WMF:      rExt = C2S("wmf"); break;
-        case GFX_LINK_TYPE_NATIVE_MET:      rExt = C2S("met"); break;
-        case GFX_LINK_TYPE_NATIVE_PCT:      rExt = C2S("pct"); break;
-        case GFX_LINK_TYPE_NATIVE_JPG:      rExt = C2S("jpg"); break;
-
-        // case GFX_LINK_TYPE_NATIVE_PNG:
-        default:                            rExt = C2S("png"); break;
+        case GFX_LINK_TYPE_NATIVE_GIF:      pExt = "gif"; break;
+        case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
+        case GFX_LINK_TYPE_NATIVE_WMF:      pExt = "wmf"; break;
+        case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;
+        case GFX_LINK_TYPE_NATIVE_PCT:      pExt = "pct"; break;
+        case GFX_LINK_TYPE_NATIVE_JPG:      pExt = "jpg"; break;
     }
+    rExt.AssignAscii( pExt );
 }
 
 
 String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 {
-    static String sGrfPath;
-    if(!sGrfPath.Len())
-        sGrfPath = SFX_INIMANAGER()->Get(SFX_KEY_GRAPHICS_PATH);
+    SvtPathOptions aPathOpt;
+    String sGrfPath( aPathOpt.GetGraphicPath() );
     SwWrtShell &rSh = rView.GetWrtShell();
     SfxFileDialog aExpDlg( NULL, WinBits(WB_SAVEAS|WB_3DLOOK) );
     aExpDlg.DisableSaveLastDirectory();
@@ -643,6 +635,9 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:35  hr
+      initial import
+
       Revision 1.56  2000/09/18 16:05:24  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+#   last change: $Author: jp $ $Date: 2000-10-06 13:39:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,8 +71,6 @@ PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
 PROJECTPCHSOURCE=..\ui_1st\ui_pch
 
-# future: DEMO\finder.obj
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -89,7 +87,6 @@ CXXFILES = \
         bookctrl.cxx \
         condedit.cxx \
         content.cxx \
-        finder.cxx \
         gloslst.cxx \
         glbltree.cxx \
         initui.cxx \
@@ -119,7 +116,6 @@ SLOFILES =  \
         $(SLO)$/bookctrl.obj \
         $(SLO)$/condedit.obj \
         $(SLO)$/content.obj \
-        $(SLO)$/finder.obj \
         $(SLO)$/gloslst.obj \
         $(SLO)$/glbltree.obj \
         $(SLO)$/initui.obj \

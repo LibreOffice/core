@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,19 +139,6 @@
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
-
-// MONIKER-SS
-#ifndef PRODUCT
-// fuer den neuen SvBaseLink!
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
-#endif
-#endif
-// MONIKER-SS
-
 
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
@@ -1588,6 +1575,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 17:14:53  hr
+   initial import
+
    Revision 1.342  2000/09/18 16:06:27  willem.vandorp
    OpenOffice header added.
 

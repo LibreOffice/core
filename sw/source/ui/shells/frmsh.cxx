@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #endif
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _IMAP_HXX //autogen
 #include <svtools/imap.hxx>
@@ -428,7 +425,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                //SFX_APP()->GetOptions().SetMetric(::GetDfltMetric());
                 SfxItemSet aSet(GetPool(),  RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
                                             SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
                                             FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
@@ -1030,6 +1026,9 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:46  hr
+    initial import
+
     Revision 1.199  2000/09/18 16:06:04  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 13:06:56 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,30 +65,45 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
+
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
 #ifndef _TOOLS_RESID_HXX //autogen
 #include <tools/resid.hxx>
 #endif
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
+#endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
+#endif
+#ifndef _SVX_ADRITEM_HXX //autogen
+#include <svx/adritem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#include "errhdl.hxx"
-#include "finder.hxx"
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "envimg.hxx"
-#include "envelp.hrc"
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _ENVIMG_HXX
+#include <envimg.hxx>
+#endif
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _ENVELP_HRC
+#include <envelp.hrc>
+#endif
 
 #ifdef WIN
 #define NEXTLINE  UniString::CreateFromAscii("\r\n")
@@ -106,21 +121,20 @@ using namespace com::sun::star::uno;
 // --------------------------------------------------------------------------
 String MakeSender()
 {
-    ASSERT( pPathFinder, "PathFinder not found" );
-    SvxAddressItem aAdr( pPathFinder->GetAddress() );
+    SvxAddressItem aAdr( *SFX_APP()->GetIniManager() );
 
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
-    USHORT nTokenCount = sSenderToken.GetTokenCount(';');
+    xub_StrLen nSttPos = 0, nTokenCount = sSenderToken.GetTokenCount(';');
     BOOL bLastLength = TRUE;
-    for(USHORT i = 0; i < nTokenCount; i++)
+    for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {
-        String sToken = sSenderToken.GetToken(i, ';');
+        String sToken = sSenderToken.GetToken( 0, ';', nSttPos );
         if(sToken.EqualsAscii("COMPANY"))
         {
-            String sTmp = aAdr.GetToken( ADDRESS_COMPANY );
-            sRet += sTmp;
-            bLastLength = sTmp.Len() > 0;
+            xub_StrLen nOldLen = sRet.Len();
+            sRet += aAdr.GetToken( ADDRESS_COMPANY );
+            bLastLength = sRet.Len() != nOldLen;
         }
         else if(sToken.EqualsAscii("CR"))
         {

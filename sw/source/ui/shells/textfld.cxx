@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,46 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"  //_immer_ vor den solar-Items
-#include "uiparam.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>  //_immer_ vor den solar-Items
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
 
+#ifndef _URLOBJ_HXX //autogen
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _LINKDLG_HXX //autogen
+#include <so3/linkdlg.hxx>
+#endif
+#ifndef _LINKDLG_HXX //autogen
+#include <so3/linkdlg.hxx>
+#endif
+#ifndef _SFXITEMPOOL_HXX //autogen
+#include <svtools/itempool.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
+#ifndef _SFX_WHITER_HXX //autogen
+#include <svtools/whiter.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX //autogen
+#include <svtools/eitem.hxx>
+#endif
+#ifndef _SFXMACITEM_HXX //autogen
+#include <svtools/macitem.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX //autogen
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX //autogen
+#include <sfx2/request.hxx>
+#endif
 #ifndef _SVX_POSTATTR_HXX //autogen
 #include <svx/postattr.hxx>
 #endif
@@ -77,52 +114,15 @@
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
-#ifndef _LINKDLG_HXX //autogen
-#include <so3/linkdlg.hxx>
-#endif
 #ifndef _SVX_POSTDLG_HXX //autogen
 #include <svx/postdlg.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX //autogen
-#include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
-#include <svtools/whiter.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXMACITEM_HXX //autogen
-#include <svtools/macitem.hxx>
 #endif
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
 #endif
-#ifndef _LINKDLG_HXX //autogen
-#include <so3/linkdlg.hxx>
+#ifndef _OFF_APP_HXX //autogen
+#include <offmgr/app.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX //autogen
-#include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
-#include <sfx2/request.hxx>
-#endif
-
 
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
@@ -130,25 +130,58 @@
 #ifndef _FLDWRAP_HXX //autogen
 #include <fldwrap.hxx>
 #endif
-#include "redline.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "basesh.hxx"
-#include "wrtsh.hxx"
-#include "finder.hxx"
-#include "flddat.hxx"
-#include "javaedit.hxx"
-#include "numrule.hxx"
-#include "textsh.hxx"
-#include "docufld.hxx"
-#include "usrfld.hxx"
-#include "ddefld.hxx"
-#include "expfld.hxx"
-#include "fldmgr.hxx"
-#include "fldedt.hxx"
-//#include "addrdlg.hxx"
-#include "shells.hrc"
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _BASESH_HXX
+#include <basesh.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _FLDDAT_HXX
+#include <flddat.hxx>
+#endif
+#ifndef _JAVAEDIT_HXX
+#include <javaedit.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
+#ifndef _TEXTSH_HXX
+#include <textsh.hxx>
+#endif
+#ifndef _DOCUFLD_HXX
+#include <docufld.hxx>
+#endif
+#ifndef _USRFLD_HXX
+#include <usrfld.hxx>
+#endif
+#ifndef _DDEFLD_HXX
+#include <ddefld.hxx>
+#endif
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
+#endif
+#ifndef _FLDMGR_HXX
+#include <fldmgr.hxx>
+#endif
+#ifndef _FLDEDT_HXX
+#include <fldedt.hxx>
+#endif
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _SHELLS_HRC
+#include <shells.hrc>
+#endif
 
 
 extern BOOL bNoInterrupt;       // in mainwn.cxx
@@ -327,9 +360,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 }
                 else
                 {
-                    SvxAddressItem aAdr( pPathFinder->GetAddress() );
-                    aSet.Put(SvxPostItTextItem(aEmptyStr, SID_ATTR_POSTIT_TEXT));
-                    aSet.Put(SvxPostItAuthorItem(aAdr.GetShortName(), SID_ATTR_POSTIT_AUTHOR));
+                    SvtUserOptions aUserOpt;
+                    aSet.Put(SvxPostItTextItem( aEmptyStr,
+                                                    SID_ATTR_POSTIT_TEXT));
+                    aSet.Put(SvxPostItAuthorItem( aUserOpt.GetID(),
+                                                    SID_ATTR_POSTIT_AUTHOR));
                     aSet.Put(SvxPostItDateItem(
                             Application::GetAppInternational().
                             GetDate(Date()), SID_ATTR_POSTIT_DATE));
@@ -680,9 +715,10 @@ IMPL_LINK( SwTextShell, PostItNextHdl, Button *, pBtn )
     SvxPostItDialog *pDlg = (SvxPostItDialog*)pBtn;
 
     if( pDlg->IsOkEnabled() )
-        pPostItFldMgr->UpdateCurFld( 0,
-                                    SFX_INIMANAGER()->Get(SFX_KEY_USER_ID),
-                                    pDlg->GetNote() );
+    {
+        SvtUserOptions aUserOpt;
+        pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
+    }
     pPostItFldMgr->GoNext();
     SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
     pDlg->SetNote(pPostIt->GetPar2().ConvertLineEnd());
@@ -716,9 +752,10 @@ IMPL_LINK( SwTextShell, PostItPrevHdl, Button *, pBtn )
     SvxPostItDialog *pDlg = (SvxPostItDialog*)pBtn;
 
     if( pDlg->IsOkEnabled() )
-        pPostItFldMgr->UpdateCurFld( 0,
-                                    SFX_INIMANAGER()->Get(SFX_KEY_USER_ID),
-                                    pDlg->GetNote() );
+    {
+        SvtUserOptions aUserOpt;
+        pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
+    }
     pPostItFldMgr->GoPrev();
     SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
     pDlg->SetNote(pPostIt->GetPar2().ConvertLineEnd());
@@ -872,6 +909,9 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, Button *, pBtn )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.117  2000/09/18 16:06:05  willem.vandorp
     OpenOffice header added.
 

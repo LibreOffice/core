@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-26 13:33:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -820,8 +823,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 BOOL bOverwrite = FALSE;
                 BOOL bNumbering = FALSE;
                 USHORT nRet = USHRT_MAX;
+                SvtPathOptions aPathOpt;
                 SwLoadTemplateDlg* pDlg = new SwLoadTemplateDlg(0);
-                pDlg->SetPath( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ));
+                pDlg->SetPath( aPathOpt.GetWorkPath() );
                 String sSW5(String::CreateFromAscii(FILTER_SW5));
 
                 SfxObjectFactory &rFact = GetFactory();
@@ -1242,10 +1246,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pFileDlg->SetCurFilter( pFlt->GetUIName() );
                 }
 
+                SvtPathOptions aPathOpt;
                 Window *pTemplateFT = AddTemplateBtn(pFileDlg);
                 pFileDlg->SetText( SW_RESSTR( nStrId ));
-                pFileDlg->SetPath( SFX_INIMANAGER()->Get(
-                                            SFX_KEY_WORK_PATH ) );
+                pFileDlg->SetPath( aPathOpt.GetWorkPath() );
 
                 if( RET_OK == pFileDlg->Execute() )
                 {
@@ -1669,6 +1673,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/26 13:33:18  jp
+    SFXDISPATHER removed
+
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
 

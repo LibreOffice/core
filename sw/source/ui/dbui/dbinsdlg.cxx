@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,9 +175,6 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
@@ -948,7 +945,6 @@ IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
 IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 {
     SwWrtShell& rSh = pView->GetWrtShell();
-    SFX_APP()->GetOptions().SetMetric( ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView)) );
     BOOL bNewSet = FALSE;
     if( !pTblSet )
     {
@@ -2342,6 +2338,9 @@ void _DB_ColumnConfig::SetData( _DB_ColumnConfigData* pData )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:33  hr
+    initial import
+
     Revision 1.40  2000/09/18 16:05:18  willem.vandorp
     OpenOffice header added.
 

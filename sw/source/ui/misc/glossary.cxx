@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,11 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _IODLG_HXX
 #include <sfx2/iodlg.hxx>
@@ -724,7 +721,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         {
             // call the FileOpenDialog do find WinWord - Files with templates
             SfxFileDialog* pDlg = new SfxFileDialog( this, WB_OPEN | WB_3DLOOK );
-            pDlg->SetPath( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ));
+            SvtPathOptions aPathOpt;
+            pDlg->SetPath( aPathOpt.GetWorkPath() );
             String sWW8( C2S(FILTER_WW8) );
 
             sal_uInt16 i = 0;
@@ -778,7 +776,8 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
     else
     {
         //check if at least one glossary path is write enabled
-        String sGlosPath( SFX_INIMANAGER()->Get( SFX_KEY_GLOSSARY_PATH ) );
+        SvtPathOptions aPathOpt;
+        String sGlosPath( aPathOpt.GetGlossaryPath() );
         USHORT nPaths = sGlosPath.GetTokenCount(';');
         BOOL bIsWritable = FALSE;
         for(USHORT nPath = 0; nPath < nPaths; nPath++)
@@ -1254,14 +1253,15 @@ String SwGlossaryDlg::GetCurrGrpName() const
 IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
 {
     SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pBtn);
-    String sGlosPath( SFX_INIMANAGER()->Get( SFX_KEY_GLOSSARY_PATH ) );
+    SvtPathOptions aPathOpt;
+    String sGlosPath( aPathOpt.GetGlossaryPath() );
     pDlg->SetPath(sGlosPath);
     if(RET_OK == pDlg->Execute())
     {
         String sTmp(pDlg->GetPath());
         if(sTmp != sGlosPath)
         {
-            SFX_INIMANAGER()->Set(sTmp, SFX_KEY_GLOSSARY_PATH);
+            aPathOpt.SetGlossaryPath( sTmp );
             ::GetGlossaries()->UpdateGlosPath( sal_True );
             Init();
         }
@@ -1344,6 +1344,9 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 /*--------------------------------------------------------------------
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:44  hr
+      initial import
+
       Revision 1.154  2000/09/18 16:05:56  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:23:41 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
@@ -89,7 +92,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
+//#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _IODLG_HXX
 #include <sfx2/iodlg.hxx>
@@ -302,7 +305,10 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
     if( rURL.Len() )
         pFileDlg->SetPath( rURL );
     else
-        pFileDlg->SetPath( SFX_INIMANAGER()->Get(SFX_KEY_USERCONFIG_PATH) );
+    {
+        SvtPathOptions aPathOpt;
+        pFileDlg->SetPath( aPathOpt.GetUserConfigPath() );
+    }
 
     if( RET_OK == pFileDlg->Execute())
         sRet = pFileDlg->GetPath();
@@ -693,11 +699,11 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame && !bExampleCreated)
         {
             bExampleCreated = sal_True;
-            SfxIniManager* pIniMan = SFX_INIMANAGER();
             const sal_Unicode  cSearch = SFX_SEARCHPATH_DELIMITER;
             const String  sAccess = INET_PATH_TOKEN;
+            SvtPathOptions aPathOpt;
 
-            String sPath(pIniMan->Get(SFX_KEY_TEMPLATE_PATH));
+            String sPath( aPathOpt.GetTemplatePath() );
             sal_uInt16 nTokenCount = sPath.GetTokenCount(cSearch);
             sal_uInt16 nToken = 0;
             sal_Bool bExist = sal_False;
@@ -4778,6 +4784,9 @@ IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, pButton)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/05 12:23:41  jp
+    should change: remove image
+
     Revision 1.1.1.1  2000/09/18 17:14:43  hr
     initial import
 

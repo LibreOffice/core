@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,23 +68,41 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
-#endif
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
 #endif
 
+#ifndef _COLWD_HXX
+#include <colwd.hxx>
+#endif
+#ifndef _TABLEMGR_HXX
+#include <tablemgr.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _WDOCSH_HXX
+#include <wdocsh.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _MODCFG_HXX
+#include <modcfg.hxx>
+#endif
 
-#include "cmdid.h"
-#include "colwd.hxx"
-#include "tablemgr.hxx"
-
-#include "colwd.hrc"
-#include "table.hrc"
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _COLWD_HRC
+#include <colwd.hrc>
+#endif
+#ifndef _TABLE_HRC
+#include <table.hrc>
+#endif
 
 
 IMPL_LINK_INLINE_START( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
@@ -114,7 +132,14 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
     rFnc(rTableFnc)
 {
     FreeResource();
-    ::SetFieldUnit(aWidthEdit, OFF_APP()->GetOptions().GetMetric());
+
+    BOOL bIsWeb = rTableFnc.GetShell()
+                    ? 0 != PTR_CAST( SwWebDocShell,
+                            rTableFnc.GetShell()->GetView().GetDocShell() )
+                    : FALSE;
+    FieldUnit eFieldUnit = SW_MOD()->GetModuleConfig()->GetMetric( bIsWeb );
+    ::SetFieldUnit(aWidthEdit, eFieldUnit );
+
     aColEdit.SetValue( rFnc.GetCurColNum() +1 );
     aWidthEdit.SetMin(aWidthEdit.Normalize(MINLAY), FUNIT_TWIP);
     if(!aWidthEdit.GetMin())
@@ -139,6 +164,9 @@ void SwTableWidthDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.40  2000/09/18 16:06:07  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 11:55:45 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SV_WAITOBJ_HXX //autogen
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -166,9 +169,11 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
+
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
+
 #define C2U(char) rtl::OUString::createFromAscii(char)
 #else
 
@@ -309,11 +314,11 @@ String lcl_GetLabelsIni()
 {
     String sRet( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                     "labels.ini" )));
-    SfxIniManager* pIniManager = SFX_INIMANAGER();
-    if( !pIniManager->SearchFile( sRet, SFX_KEY_USERCONFIG_PATH ))
+    if( !SFX_INIMANAGER()->SearchFile( sRet, SFX_KEY_USERCONFIG_PATH ))
     {
         sRet.Insert( INET_PATH_TOKEN, 0 );
-        sRet.Insert( pIniManager->Get( SFX_KEY_USERCONFIG_PATH ), 0 );
+        SvtPathOptions aPathOpt;
+        sRet.Insert( aPathOpt.GetUserConfigPath(), 0 );
     }
     return sRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,28 +74,48 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 
 
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
-#include "cmdid.h"
-#include "swtypes.hxx"
-#include "rowht.hxx"
-#include "wrtsh.hxx"
-#include "frmatr.hxx"
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _ROWHT_HXX
+#include <rowht.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
+#endif
+#ifndef _WDOCSH_HXX
+#include <wdocsh.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _MODCFG_HXX
+#include <modcfg.hxx>
+#endif
 
-#include "rowht.hrc"
-#include "table.hrc"
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _ROWHT_HRC
+#include <rowht.hrc>
+#endif
+#ifndef _TABLE_HRC
+#include <table.hrc>
+#endif
 
 
 
@@ -130,7 +150,12 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
     rSh( rS )
 {
     FreeResource();
-    ::SetFieldUnit(aHeightEdit, OFF_APP()->GetOptions().GetMetric());
+
+    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    FieldUnit eFieldUnit = pModOpt->GetMetric(0 != PTR_CAST( SwWebDocShell,
+                                rSh.GetView().GetDocShell() ));
+    ::SetFieldUnit( aHeightEdit, eFieldUnit );
+
     aHeightEdit.SetMin(MINLAY, FUNIT_TWIP);
     if(!aHeightEdit.GetMin())
         aHeightEdit.SetMin(1);
@@ -149,6 +174,9 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:48  hr
+    initial import
+
     Revision 1.38  2000/09/18 16:06:08  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-27 12:27:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
 #ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
@@ -85,11 +88,17 @@
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -140,13 +149,7 @@
 #endif
 #endif
 
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -228,9 +231,10 @@ IMPL_LINK(SwGlossDecideDlg, SelectHdl, ListBox*, EMPTYARG)
 
 
 SwGlossaryList::SwGlossaryList() :
-    bFilled(FALSE),
-    sPath( SFX_INIMANAGER()->Get( SFX_KEY_GLOSSARY_PATH ) )
+    bFilled(FALSE)
 {
+    SvtPathOptions aPathOpt;
+    sPath = aPathOpt.GetGlossaryPath();
     SetTimeout(GLOS_TIMEOUT);
 }
 
@@ -390,7 +394,9 @@ void SwGlossaryList::Update()
 {
     if(!IsActive())
         Start();
-    String sTemp( SFX_INIMANAGER()->Get( SFX_KEY_GLOSSARY_PATH ) );
+
+    SvtPathOptions aPathOpt;
+    String sTemp( aPathOpt.GetGlossaryPath() );
     if(sTemp != sPath)
     {
         sPath = sTemp;
@@ -625,11 +631,14 @@ void    SwGlossaryList::ClearGroups()
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.2 2000-09-27 12:27:59 jp Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.3 2000-10-06 13:39:19 jp Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/27 12:27:59  jp
+    use the new FileStatHelper class
+
     Revision 1.1.1.1  2000/09/18 17:14:50  hr
     initial import
 

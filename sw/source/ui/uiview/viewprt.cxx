@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -633,6 +630,9 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
 /*--------------------------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.1.1.1  2000/09/18 17:14:49  hr
+initial import
+
 Revision 1.143  2000/09/18 16:06:14  willem.vandorp
 OpenOffice header added.
 

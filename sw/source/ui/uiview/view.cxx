@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:34:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_UNDOOPT_HXX
+#include <svtools/undoopt.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -92,9 +95,6 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -911,7 +911,10 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         !((SvEmbeddedObject *)pDocSh)->GetVisArea().IsEmpty() )
         SetVisArea( ((SvEmbeddedObject *)pDocSh)->GetVisArea(),sal_False);
 
-    SwEditShell::SetUndoActionCount( SFX_APP()->GetOptions().GetUndoCount() );
+    {
+        SvtUndoOptions aOpt;
+        SwEditShell::SetUndoActionCount( aOpt.GetUndoCount() );
+    }
     pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
 
     const FASTBOOL bBrowse = pWrtShell->GetDoc()->IsBrowseMode();

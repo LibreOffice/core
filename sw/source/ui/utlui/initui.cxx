@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
-#endif
 #ifndef _INITUI_HXX
 #include <initui.hxx>
 #endif
@@ -114,7 +111,6 @@
 SwGlossaries*       pGlossaries = 0;
 
 // Liefert alle benoetigten Pfade. Wird durch UI initialisiert
-SwPathFinder*       pPathFinder = 0;
 SwGlossaryList*     pGlossaryList = 0;
 
 String* pOldGrfCat = 0;
@@ -139,7 +135,6 @@ void _FinitUI()
 
     SwEditWin::_FinitStaticData();
 
-    DELETEZ(pPathFinder);
     DELETEZ(pGlossaries);
 
     delete SwFieldType::pFldNames;
@@ -163,7 +158,6 @@ void _FinitUI()
 
 void _InitUI()
 {
-    pPathFinder = new SwPathFinder;
     // ShellResource gibt der CORE die Moeglichkeit mit Resourcen zu arbeiten
     ViewShell::SetShellRes( new ShellResource );
     pDBNameList = new SvStringsDtor( 5, 5 );
@@ -308,6 +302,9 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 /*************************************************************************
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:50  hr
+    initial import
+
     Revision 1.112  2000/09/18 16:06:17  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _NEWSTYLE_HXX //autogen
 #include <sfx2/newstyle.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
@@ -330,7 +327,6 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     SwWrtShell* pActShell = 0;
-    SFX_APP()->GetOptions().SetMetric(::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, this)));
     BOOL bSetReturn = TRUE;
     switch (nSlot)
     {
@@ -519,7 +515,6 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 {
     ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
     SfxStyleSheetBase *pStyle = 0;
-    SFX_APP()->GetOptions().SetMetric(::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, this)));
 
     USHORT nRet = nMask;
     BOOL bModified = pDoc->IsModified();
@@ -1186,7 +1181,7 @@ void SwDocShell::FormatPage( const String& rPage, BOOL bColumn, SwWrtShell*     
     Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, FALSE, bColumn, pActShell);
 }
 
-Bitmap __EXPORT SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
+Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
 {
     if( SFX_STYLE_FAMILY_PSEUDO == eFamily )
         return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM ));
@@ -1195,6 +1190,9 @@ Bitmap __EXPORT SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:31  hr
+    initial import
+
     Revision 1.149  2000/09/18 16:05:11  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,43 +64,63 @@
 #endif
 
 #pragma hdrstop
-#ifndef _SDB_SDBHASH_HXX
-#include <sdb/sdbhash.hxx>
-#endif
-#ifndef _IODLG_HXX
-#include "sfx2/iodlg.hxx"
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
-#endif
-#ifndef _MAILENUM_HXX //autogen
-#include <goodies/mailenum.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#ifndef _SVX_MULTIFIL_HXX
-#include <svx/multifil.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SDB_SDBHASH_HXX
+#include <sdb/sdbhash.hxx>
+#endif
+#ifndef _MAILENUM_HXX //autogen
+#include <goodies/mailenum.hxx>
+#endif
+#ifndef _IODLG_HXX
+#include <sfx2/iodlg.hxx>
+#endif
+#ifndef _SVX_MULTIFIL_HXX
+#include <svx/multifil.hxx>
+#endif
 
-#include "helpid.h"
-#include "view.hxx"
-#include "docsh.hxx"
-#include "wrtsh.hxx"
-#include "dbmgr.hxx"
-#include "dbui.hxx"
-#include "swmodule.hxx"
-#include "modcfg.hxx"
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
+#ifndef _DBUI_HXX
+#include <dbui.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _MODCFG_HXX
+#include <modcfg.hxx>
+#endif
 
-#include "envelp.hrc"
-#include "mailmrge.hrc"
-#include "mailmrge.hxx"
+#ifndef _ENVELP_HRC
+#include <envelp.hrc>
+#endif
+#ifndef _MAILMRGE_HRC
+#include <mailmrge.hrc>
+#endif
+#ifndef _MAILMRGE_HXX
+#include <mailmrge.hxx>
+#endif
+
 
 #ifdef REPLACE_OFADBMGR
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
@@ -249,9 +269,8 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
     aPathED.SetText(pModOpt->GetMailingPath());
     if (!aPathED.GetText().Len())
     {
-        SfxIniManager* pIniManager = SFX_APP()->GetIniManager();
-        ASSERT(pIniManager, "Kein Inimanager angelegt !!");
-        aPathED.SetText(pIniManager->Get(SFX_KEY_WORK_PATH));
+        SvtPathOptions aPathOpt;
+        aPathED.SetText( aPathOpt.GetWorkPath() );
     }
     String sMailName = pModOpt->GetMailName();
 
@@ -499,11 +518,12 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
 
 IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, pBtn )
 {
-    SfxIniManager* pIniManager = SFX_APP()->GetIniManager();
-    ASSERT(pIniManager, "Kein Inimanager angelegt !!");
-    String sPath(aPathED.GetText());
-    if (!sPath.Len())
-        sPath = pIniManager->Get(SFX_KEY_WORK_PATH);
+    String sPath( aPathED.GetText() );
+    if( !sPath.Len() )
+    {
+        SvtPathOptions aPathOpt;
+        sPath = aPathOpt.GetWorkPath();
+    }
     WinBits nBits = WB_3DLOOK|WB_STDMODAL|WB_OPEN|SFXWB_PATHDIALOG;
 
     SfxFileDialog* pFileDlg = new SfxFileDialog( this, nBits );
@@ -539,6 +559,9 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, pBtn )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:35  hr
+    initial import
+
     Revision 1.75  2000/09/18 16:05:27  willem.vandorp
     OpenOffice header added.
 
