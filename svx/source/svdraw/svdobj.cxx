@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-13 12:55:21 $
+ *  last change: $Author: aw $ $Date: 2001-03-13 13:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1979,7 +1979,7 @@ void SdrObject::ImpDrawShadowLineGeometry(
         PolyPolygon3D aRememberLinePoly = rLineGeometry.GetLinePoly3D();
         Matrix4D aTrans;
 
-        aTrans.Translate((double)nXDist, (double)-nYDist, 0.0);
+        aTrans.Translate((double)nXDist, -(double)nYDist, 0.0);
         rLineGeometry.GetPolyPoly3D().Transform(aTrans);
         rLineGeometry.GetLinePoly3D().Transform(aTrans);
 
