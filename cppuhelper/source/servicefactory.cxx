@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 10:17:54 $
+ *  last change: $Author: dbo $ $Date: 2000-12-19 15:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _UNO_ENVIRONMENT_H_
-#include <uno/environment.h>
-#endif
-#ifndef _UNO_MAPPING_HXX_
-#include <uno/mapping.hxx>
-#endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
+#include <cppuhelper/shlib.hxx>
 
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -93,6 +85,7 @@ using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::loader;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::container;
 
@@ -102,148 +95,25 @@ namespace cppu
 
 //==================================================================================================
 static Reference< XSingleServiceFactory > loadLibComponentFactory(
-    const OUString & rLibName, const OUString & rImplName, const OUString & rBootstrapPath,
+    const OUString & rLibName, const OUString & rImplName,
+    const OUString & rBootstrapPath,
     const Reference< XMultiServiceFactory > & xSF, const Reference< XRegistryKey > & xKey )
+    throw ()
 {
-    Reference< XSingleServiceFactory > xRet;
-    sal_uInt32 bufLen = 32;
-
-    if ( rBootstrapPath.getLength() > 0 )
+    try
     {
-        bufLen += rBootstrapPath.getLength() + 1;
+        return loadSharedLibComponentFactory(
+            rLibName, rBootstrapPath, rImplName, xSF, xKey );
     }
-
-    OUStringBuffer aLibNameBuf( bufLen );
-    if ( bufLen > 32 )
+    catch (CannotActivateFactoryException &)
     {
-        aLibNameBuf.append( rBootstrapPath );
-        aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/") );
+        return Reference< XSingleServiceFactory >();
     }
-
-#ifdef SAL_UNX
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
-    aLibNameBuf.append( rLibName );
-#ifdef MACOSX
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
-#else
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
-#endif
-#else
-    aLibNameBuf.append( rLibName );
-#ifndef OS2
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dll") );
-#endif
-#endif
-
-    OUString aLibName( aLibNameBuf.makeStringAndClear() );
-    oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-
-    if (lib)
-    {
-        void * pSym;
-
-        // ========================= LATEST VERSION =========================
-#ifdef MACOSX
-        OUString aGetEnvName(
-            rLibName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) ) );
-#else
-        OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
-#endif
-        if (pSym = ::osl_getSymbol( lib, aGetEnvName.pData ))
-        {
-            uno_Environment * pCurrentEnv = 0;
-            uno_Environment * pEnv = 0;
-            const sal_Char * pEnvTypeName = 0;
-            (*((component_getImplementationEnvironmentFunc)pSym))( &pEnvTypeName, &pEnv );
-
-            sal_Bool bNeedsMapping =
-                (pEnv || 0 != rtl_str_compare( pEnvTypeName, CPPU_CURRENT_LANGUAGE_BINDING_NAME ));
-
-            OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-
-            if (bNeedsMapping)
-            {
-                if (! pEnv)
-                    uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
-                if (pEnv)
-                {
-                    OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-                    uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
-                    if (pCurrentEnv)
-                        bNeedsMapping = (pEnv != pCurrentEnv);
-                }
-            }
-
-#ifdef MACOSX
-            OUString aGetFactoryName(
-                rLibName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) ) );
-#else
-            OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
-#endif
-            if (pSym = ::osl_getSymbol( lib, aGetFactoryName.pData ))
-            {
-                OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-
-                if (bNeedsMapping)
-                {
-                    if (pEnv && pCurrentEnv)
-                    {
-                        Mapping aCurrent2Env( pCurrentEnv, pEnv );
-                        Mapping aEnv2Current( pEnv, pCurrentEnv );
-
-                        if (aCurrent2Env.is() && aEnv2Current.is())
-                        {
-                            void * pSMgr = aCurrent2Env.mapInterface(
-                                xSF.get(), ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
-                            void * pKey = aCurrent2Env.mapInterface(
-                                xKey.get(), ::getCppuType( (const Reference< XRegistryKey > *)0 ) );
-
-                            void * pSSF = (*((component_getFactoryFunc)pSym))(
-                                aImplName.getStr(), pSMgr, pKey );
-
-                            if (pKey)
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pKey );
-                            if (pSMgr)
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSMgr );
-
-                            if (pSSF)
-                            {
-                                aEnv2Current.mapInterface(
-                                    reinterpret_cast< void ** >( &xRet ),
-                                    pSSF, ::getCppuType( (const Reference< XSingleServiceFactory > *)0 ) );
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSSF );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    XSingleServiceFactory * pRet = (XSingleServiceFactory *)
-                        (*((component_getFactoryFunc)pSym))(
-                            aImplName.getStr(), xSF.get(), xKey.get() );
-                    if (pRet)
-                    {
-                        xRet = pRet;
-                        pRet->release();
-                    }
-                }
-            }
-
-            if (pEnv)
-                (*pEnv->release)( pEnv );
-            if (pCurrentEnv)
-                (*pCurrentEnv->release)( pCurrentEnv );
-        }
-
-        if (! xRet.is())
-            osl_unloadModule( lib );
-    }
-
-    return xRet;
 }
 //==================================================================================================
 static Reference< ::com::sun::star::lang::XSingleServiceFactory> SAL_CALL createLoaderFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
+    throw ()
 {
       return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("cpld") ),
@@ -253,6 +123,7 @@ static Reference< ::com::sun::star::lang::XSingleServiceFactory> SAL_CALL create
 //==================================================================================================
 static Reference< XSingleServiceFactory > SAL_CALL createSimpleRegistryFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
+    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("simreg") ),
@@ -262,6 +133,7 @@ static Reference< XSingleServiceFactory > SAL_CALL createSimpleRegistryFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createDefaultRegistryFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
+    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("defreg") ),
@@ -271,6 +143,7 @@ static Reference< XSingleServiceFactory> SAL_CALL createDefaultRegistryFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createNestedRegistryFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
+    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("defreg") ),
@@ -280,6 +153,7 @@ static Reference< XSingleServiceFactory> SAL_CALL createNestedRegistryFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createImplRegFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
+    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("impreg") ),
@@ -289,6 +163,7 @@ static Reference< XSingleServiceFactory> SAL_CALL createImplRegFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createRegTDProviderFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
+    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("rdbtdp") ),
@@ -298,6 +173,7 @@ static Reference< XSingleServiceFactory> SAL_CALL createRegTDProviderFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createTDManagerFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
+    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("tdmgr") ),

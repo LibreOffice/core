@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2000-11-24 10:30:44 $
+#   last change: $Author: dbo $ $Date: 2000-12-19 15:01:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,19 +121,8 @@ SLOFILES=	\
         $(SLO)$/interfacecontainer.obj	\
         $(SLO)$/stdidlclass.obj 	\
         $(SLO)$/factory.obj		\
-        $(SLO)$/component.obj
-
-# OBJFILES= \
-# 		$(OBJ)$/typeprovider.obj 	\
-# 		$(OBJ)$/exc_thrower.obj 	\
-# 		$(OBJ)$/servicefactory.obj 	\
-# 		$(OBJ)$/implbase.obj 		\
-# 		$(OBJ)$/propshlp.obj 		\
-# 		$(OBJ)$/weak.obj		\
-# 		$(OBJ)$/interfacecontainer.obj	\
-# 		$(OBJ)$/stdidlclass.obj 	\
-# 		$(OBJ)$/factory.obj		\
-# 		$(OBJ)$/component.obj
+        $(SLO)$/component.obj		\
+        $(SLO)$/shlib.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
