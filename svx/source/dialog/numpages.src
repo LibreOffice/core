@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 21:46:04 $
+ *  last change: $Author: rt $ $Date: 2001-10-11 21:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "ε­—ε…ƒζ¨£εΌ(~C)";
         Text[ arabic ] = "δγΨ ΗαΓΝΡέ:";
         Text[ greek ] = "Στυλ χαρακτήρων:";
-        Text[ korean ] = "λ¬Έμ μ ν•";
+        Text[ korean ] = "λ¬Έμ μ ν•(~C)";
         Text[ turkish ] = "Karakter ώablonu:";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "Es~tilo de carαcter:";
@@ -915,7 +915,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "η›Έε°η„ε¤§ε°(~R)";
         Text[ arabic ] = ":ΝΜγ δΣΘν";
         Text[ greek ] = "Σχετικό μέγεθος:";
-        Text[ korean ] = "μƒλ€μ  ν¬κΈ°";
+        Text[ korean ] = "μƒλ€μ  ν¬κΈ°(~R)";
         Text[ turkish ] = "Orantύlύ boyut:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tamaρo relativo:";
@@ -1343,7 +1343,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ english_us ] = "Gallery";
                     Text[ portuguese ] = "Gallery";
                     Text[ russian ] = "Γΰλεπεÿ";
-                    Text[ greek ] = "Gallery";
+                    Text[ greek ] = "Γκαλερί";
                     Text[ dutch ] = "Gallery";
                     Text[ french ] = "Gallery";
                     Text[ spanish ] = "Gallery";
@@ -1874,7 +1874,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "ι€£ηΊη·¨θ™(~C)";
         Text[ arabic ] = "ΗαΚΡήνγ ΘΤία γΚΣαΣα";
         Text[ greek ] = "Συνεχόμενη αρίθμηση";
-        Text[ korean ] = "μ—°μ† λ²νΈλ§¤κΈ°κΈ°";
+        Text[ korean ] = "μ—°μ† λ²νΈλ§¤κΈ°κΈ°(~C)";
         Text[ turkish ] = "Sόrekli numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeraciσn c~onsecutiva";
@@ -2402,6 +2402,7 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
 
 
 
