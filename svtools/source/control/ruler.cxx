@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 17:01:36 $
+ *  last change: $Author: os $ $Date: 2001-09-14 13:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,7 +930,11 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
 
         if ( (n >= nMin) && (n <= nMax) )
         {
-            if ( nIndentStyle == RULER_INDENT_BOTTOM )
+            if(nIndentStyle == RULER_INDENT_BORDER)
+            {
+                ImplVDrawLine( n, nVirTop, n, nVirBottom );
+            }
+            else if ( nIndentStyle == RULER_INDENT_BOTTOM )
             {
                 aPoly.SetPoint( Point( n+0, nVirBottom-nIndentHeight ), 0 );
                 aPoly.SetPoint( Point( n-nIndentWidth2, nVirBottom-3 ), 1 );

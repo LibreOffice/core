@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-08-24 14:42:39 $
+ *  last change: $Author: os $ $Date: 2001-09-14 13:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ Werte initialisiert werden muessen:
     USHORT  nStyle          - Bit-Style:
                                 RULER_INDENT_TOP    (Erstzeileneinzug)
                                 RULER_INDENT_BOTTOM (Linker/Rechter Einzug)
+                                RULER_INDENT_BORDER (Verical line that shows the border distance)
                                 Zu diesen Style's koennen folgende Style-
                                 Bits dazugeodert werden:
                                 RULER_STYLE_DONTKNOW (fuer alte Position oder
@@ -637,6 +638,7 @@ struct RulerBorder
 
 #define RULER_INDENT_TOP        ((USHORT)0x0000)
 #define RULER_INDENT_BOTTOM     ((USHORT)0x0001)
+#define RULER_INDENT_BORDER     ((USHORT)0x0002)
 #define RULER_INDENT_STYLE      ((USHORT)0x000F)
 
 struct RulerIndent
