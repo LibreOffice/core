@@ -5,8 +5,8 @@
 #*    Beschreibung      Draw (Graphic) ViewShell-IDL
 #*
 #*    Ersterstellung    SOH 04.04.97
-#*    Letzte Aenderung  $Author: af $ $Date: 2002-11-29 09:09:38 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: rt $ $Date: 2003-09-19 08:15:28 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/sd/idl/grviewsh.idv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grviewsh.sdi,v 1.3 2002-11-29 09:09:38 af Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grviewsh.sdi,v 1.4 2003-09-19 08:15:28 rt Exp $
 
 *************************************************************************/
 
@@ -43,6 +43,7 @@ interface GraphicEditView : DrawView
 shell SdGraphicViewShell : SfxViewShell
 {
     import GraphicEditView[Automation];
+    import View;
 }
 
 /*************************************************************************
@@ -50,6 +51,12 @@ shell SdGraphicViewShell : SfxViewShell
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.3.164.1  2003/07/14 17:52:02  mba
+      #110843#: get rid of factories
+
+      Revision 1.3  2002/11/29 09:09:38  af
+      #105729# Added missing slots for search&replace.
+
       Revision 1.2  2001/10/22 13:36:31  ka
       #93586#: removed __EXPORT compiler flag
 
