@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-08 11:57:54 $
+ *  last change: $Author: sb $ $Date: 2002-07-19 15:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,10 +430,10 @@ URIHelper::FindFirstURLInText(UniString const & rText,
     //    \W domain "@" domain \W
     //
     // 4th Production (ftp):
-    //    \W "ftp" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
+    //    \W "FTP" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
     //
     // 5th Production (http):
-    //    \W "www" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
+    //    \W "WWW" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
     //
     // 6th Production (file):
     //    \W "//" (domain / IPv6reference) ["/" *wchar] ["#" 1*wchar] \W
@@ -518,12 +518,18 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                     }
                     else if (nLabels >= 3
                              && rText.GetChar(nPos + 3) == '.'
-                             && ((rText.GetChar(nPos) == 'w'
-                                  && rText.GetChar(nPos + 1) == 'w'
-                                  && rText.GetChar(nPos + 2) == 'w')
-                                 || (rText.GetChar(nPos) == 'f'
-                                     && rText.GetChar(nPos + 1) == 't'
-                                     && rText.GetChar(nPos + 2) == 'p')))
+                             && (((rText.GetChar(nPos) == 'w'
+                                   || rText.GetChar(nPos) == 'W')
+                                  && (rText.GetChar(nPos + 1) == 'w'
+                                      || rText.GetChar(nPos + 1) == 'W')
+                                  && (rText.GetChar(nPos + 2) == 'w'
+                                      || rText.GetChar(nPos + 2) == 'W'))
+                                 || ((rText.GetChar(nPos) == 'f'
+                                      || rText.GetChar(nPos) == 'F')
+                                     && (rText.GetChar(nPos + 1) == 't'
+                                         || rText.GetChar(nPos + 1) == 'T')
+                                     && (rText.GetChar(nPos + 2) == 'p'
+                                         || rText.GetChar(nPos + 2) == 'P'))))
                         // 4th, 5th
                         // (note that rText.GetChar(nPos + 3) is guaranteed to
                         // be valid)
