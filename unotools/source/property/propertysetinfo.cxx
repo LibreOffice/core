@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetinfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 21:47:46 $
+ *  last change: $Author: os $ $Date: 2001-03-13 14:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
             pProperties->Handle = pEntry->mnWhich;
             pProperties->Type = *pEntry->mpType;
             pProperties->Attributes = pEntry->mnFlags;
-
+            pProperties++;
             aIter++;
         }
     }
