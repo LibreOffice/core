@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:17:06 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,14 +110,14 @@ Resource RID_SVXERRCTX
         Text [ danish ] = "$(ERR) under køring af stavekontrollen." ;
         Text [ portuguese ] = "$(ERR) ao executar a verificação ortográfica." ;
         Text [ portuguese_brazilian ] = "$(ERR) bei der Ausführung der Rechtschreibprüfung." ;
-        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÖ´ĞĞÕı×Ö·¨¼ì²éÊ±¡£";
+        Text[ chinese_simplified ] = "Æ´Ğ´¼ì²éÊ±·¢Éú $(ERR) ¡£";
         Text[ russian ] = "$(ERR) ïğè âûïîëíåíèè ïğîâåğêè ïğàâîïèñàíèÿ.";
         Text[ polish ] = "$(ERR) przy sprawdzaniu pisowni.";
         Text[ japanese ] = "$(ERR) ½ÍßÙÁª¯¸Às’†‚É”­¶B";
-        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¨Ï¥Î«÷¦r¥\\¯à®É¡C";
+        Text[ chinese_traditional ] = "«÷¼gÀË¬d®Éµo¥Í $(ERR)¡C";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊäİíĞ ÚãáíÉ ÇáÊÏŞíŞ ÇáÅãáÇÆí.";
         Text[ dutch ] = "$(ERR) bij het uitvoeren van de spellingcontrole";
-        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÖ´ĞĞÕı×Ö·¨¼ì²éÊ±¡£";
+        Text[ chinese_simplified ] = "Æ´Ğ´¼ì²éÊ±·¢Éú $(ERR) ¡£";
         Text[ greek ] = "$(ERR) êáôÜ ôçí åêôİëåóç ôïõ ïñèïãñáöéêïı åëİã÷ïõ.";
         Text[ korean ] = "¸ÂÃã¹ı °Ë»ç ½ÇÇà½Ã $(ERR)";
         Text[ turkish ] = "Yazım denetimi sırasında $(ERR).";
@@ -306,14 +306,14 @@ Resource RID_SVXERRCODE
         Text [ danish ] = "Stavekontrollen står ikke til rådighed." ;
         Text [ portuguese ] = "A verificação ortográfica não está disponível." ;
         Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung ist nicht verfügbar." ;
-        Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÕı×Ö·¨¼ì²é¹¦ÄÜ¡£";
+        Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÆ´Ğ´¼ì²é¹¦ÄÜ¡£";
         Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ íåäîñòóïíà.";
         Text[ polish ] = "Sprawdzanie pisowni jest niedostêpne.";
         Text[ japanese ] = "‚±‚Ì•¶ÍZ³‚Íg—p‚Å‚«‚Ü‚¹‚ñB";
-        Text[ chinese_traditional ] = "³o­Ó«÷¦r¥\\¯à¤£¦s¦b¡C";
+        Text[ chinese_traditional ] = "³o­Ó«÷¼gÀË¬d¥\\¯à¤£¦s¦b¡C";
         Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí ÛíÑ ãÊæİÑ.";
         Text[ dutch ] = "De spellingcontrole is niet beschikbaar.";
-        Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÕı×Ö·¨¼ì²é¹¦ÄÜ¡£";
+        Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÆ´Ğ´¼ì²é¹¦ÄÜ¡£";
         Text[ greek ] = "Ï ïñèïãñáöéêüò İëåã÷ïò äåí åßíáé äéáèİóéìïò.";
         Text[ korean ] = "¸ÂÃã¹ı °Ë»ç¸¦ ÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Yazım denetimi işlevi kullanılamıyor.";
