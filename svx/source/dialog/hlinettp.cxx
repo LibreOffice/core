@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-15 11:52:00 $
+ *  last change: $Author: sj $ $Date: 2002-11-20 12:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
         aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_NAME ) ) );
         if ( FileExists( aURL ) )
         {
-            maStrStdDocURL = aURL.GetMainURL();
+            maStrStdDocURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
             break;
         }
     }
