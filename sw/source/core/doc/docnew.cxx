@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:45:52 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 16:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,15 +468,16 @@ SwDoc::SwDoc() :
     pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
 
-
+    // set compatibility defaults
     SvtCompatibilityOptions aOptions;
-    SetTabCompat( aOptions.IsTabCompat() );
-    SetAddExtLeading( aOptions.IsAddExtLeading() );
-    short nUseVirtualDev = !aOptions.IsUseVirtualDevice()
+    SetTabCompat( !aOptions.IsUseOurTabStops() );
+    SetAddExtLeading( !aOptions.IsNoExtLeading() );
+    short nUseVirtualDev = aOptions.IsUsePrtDevice()
         ? PrinterIndependentLayout::DISABLED
         : PrinterIndependentLayout::HIGH_RESOLUTION;
     SetUseVirtualDevice( nUseVirtualDev );
-    SetParaSpaceMax( aOptions.IsParaSpaceMax(), aOptions.IsParaSpaceMaxAtPages() );
+    SetParaSpaceMax( aOptions.IsAddSpacing(), aOptions.IsAddSpacingAtPages() );
+    SetUseFormerLineSpacing( aOptions.IsUseLineSpacing() );
 
     ResetModified();
 }
