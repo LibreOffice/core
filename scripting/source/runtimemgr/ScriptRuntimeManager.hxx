@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptRuntimeManager.hxx,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: dsherwin $ $Date: 2002-10-29 10:27:31 $
+*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 
@@ -174,6 +175,7 @@ private:
         throw( css::uno::RuntimeException );
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     ::osl::Mutex m_mutex;
 };
 } // scripting_runtimemgr

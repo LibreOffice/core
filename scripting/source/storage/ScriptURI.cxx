@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:39 $
+ *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,7 @@ static const OUString schema = OUString::createFromAscii( "script://" );
 ScriptURI::ScriptURI( const ::rtl::OUString& scriptURI )
     throw ( IllegalArgumentException ) : m_uri( scriptURI )
 {
-#ifdef _DEBUG
-    printf( "received uri: %s\n",::rtl::OUStringToOString( m_uri, RTL_TEXTENCODING_ASCII_US).pData->buffer );
-#endif
+    OSL_TRACE( "received uri: %s\n",::rtl::OUStringToOString( m_uri, RTL_TEXTENCODING_ASCII_US).pData->buffer );
     set_values( parseIt() );
     if( !isValid() )
     {
@@ -205,11 +203,8 @@ Uri ScriptURI::parseIt()
         return results;
     }
     results.logicalName = m_uri.copy( schemaLen, len-schemaLen );
-#ifdef _DEBUG
-
-    printf( "log name: %s\n", ::rtl::OUStringToOString( results.logicalName,
+    OSL_TRACE( "log name: %s\n", ::rtl::OUStringToOString( results.logicalName,
         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-#endif
 
     len++;
     // now get the attributes
@@ -217,11 +212,8 @@ Uri ScriptURI::parseIt()
     do
     {
         attr = m_uri.getToken( 0, ';', len );
-#ifdef _DEBUG
-
-        printf( "chunk: %s\n", ::rtl::OUStringToOString( attr,
+        OSL_TRACE( "chunk: %s\n", ::rtl::OUStringToOString( attr,
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-#endif
 
         if( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "language" ) )
             == sal_True )
@@ -246,10 +238,7 @@ Uri ScriptURI::parseIt()
         }
         else
         {
-#ifdef _DEBUG
-            printf( "Unknown attribute?\n" );
-#endif
-
+            OSL_TRACE( "Unknown attribute?\n" );
         }
     }
     while ( len >= 0 );

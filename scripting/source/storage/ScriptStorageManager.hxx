@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:33 $
+ *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #define _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_SCRIPTSTORAGEMANAGER_HXX_
 
 #include <hash_map>
+#include <map>
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -80,9 +81,9 @@ namespace scripting_impl
 #define css ::com::sun::star
 #define dcsssf ::drafts::com::sun::star::script::framework
 
-// Define a hash_map used to store the ScriptingStorages key;d by ID
-typedef ::std::hash_map < sal_Int32, css::uno::Reference < css::uno::XInterface > >
-    ScriptStorage_hash;
+// Define a map used to store the ScriptingStorages key;d by ID
+typedef ::std::map < sal_Int32, css::uno::Reference < css::uno::XInterface > >
+    ScriptStorage_map;
 
 typedef ::std::hash_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash>
     StorageId_hash;
@@ -181,7 +182,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     ::osl::Mutex m_mutex;
-    ScriptStorage_hash m_ScriptStorageHash;
+    ScriptStorage_map m_ScriptStorageMap;
     StorageId_hash m_StorageIdHash;
     sal_Int32 m_count;
 

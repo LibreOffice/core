@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: dsherwin $ $Date: 2002-10-29 10:27:31 $
+*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -71,8 +71,7 @@
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 
 #include <drafts/com/sun/star/script/framework/XScriptNameResolver.hpp>
-
-#include "StorageBridgeFactory.hxx"
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 
 namespace scripting_runtimemgr
 {
@@ -123,12 +122,16 @@ private:
     resolveURIFromStorageID( sal_Int32 sid, const ::rtl::OUString &
         nameToResolve )
         SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );
+    css::uno::Reference< dcsssf::storage::XScriptInfoAccess >
+    getStorageInstance( sal_Int32 sid )
+        SAL_THROW ( ( css::uno::RuntimeException ) );
+
     /**********************************************
      Reference< XComponentContext > m_xContext
         to obtain other services if needed
     */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    StorageBridgeFactory m_StorageFactory;
+    css::uno::Reference< css::lang::XMultiComponentFactory > m_xMultiComFac;
     ::osl::Mutex m_mutex;
 
 };

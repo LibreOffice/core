@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: lkovacs $ $Date: 2002-11-05 10:32:50 $
+*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <sal/config.h>
+#include <rtl/uri.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -186,12 +187,9 @@ SAL_THROW ( ( RuntimeException ) )
         aArgs[ 1 ] <<= m_count;
         aArgs[ 2 ] <<= storageStr;
 
-#ifdef _DEBUG
-
-        fprintf( stderr, "creating storage for: %s\n",
+        OSL_TRACE( "creating storage for: %s\n",
             ::rtl::OUStringToOString( storageStr,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-#endif
 
         Reference<XInterface> xInterface =
             m_xMgr->createInstanceWithArgumentsAndContext(
@@ -201,14 +199,11 @@ SAL_THROW ( ( RuntimeException ) )
 
         validateXRef( xInterface, "ScriptStorageManager:: setupAnyStorage: Can't create ScriptStorage for share" );
 
-        // and place it in the hash_maps. Increment the counter
-        m_ScriptStorageHash[ m_count++ ] = xInterface;
-    m_StorageIdHash [storageStr] = m_count - 1;
+        // and place it in the hash_map. Increment the counter
+        m_ScriptStorageMap[ m_count++ ] = xInterface;
+        m_StorageIdHash [storageStr] = m_count - 1;
 
-#ifdef _DEBUG
-
-        fprintf( stderr, "\tcreated with ID=%d\n", m_count - 1 );
-#endif
+        OSL_TRACE( "\tcreated with ID=%d\n", m_count - 1 );
 
     }
     catch ( Exception & e )
@@ -254,7 +249,14 @@ throw ( RuntimeException )
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorageWithURI\n" );
     validateXRef( xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
-    return setupAnyStorage( xSFA, stringURI );
+    // convert file:///... url to vnd... syntax
+    ::rtl::OUString canonicalURI(
+        ::rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" ) );
+    canonicalURI = canonicalURI.concat( ::rtl::Uri::encode( stringURI,
+        rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
+        RTL_TEXTENCODING_ASCII_US ) );
+
+    return setupAnyStorage( xSFA, canonicalURI );
 }
 
 //*************************************************************************
@@ -265,10 +267,10 @@ throw( RuntimeException )
     OSL_TRACE( "** ==> ScriptStorageManager in getStorageInstance\n" );
     OSL_TRACE( "** ==> request for id=%d",scriptStorageID );
 
-    ScriptStorage_hash::const_iterator itr =
-        m_ScriptStorageHash.find( scriptStorageID );
+    ScriptStorage_map::const_iterator itr =
+        m_ScriptStorageMap.find( scriptStorageID );
 
-    if ( itr == m_ScriptStorageHash.end() )
+    if ( itr == m_ScriptStorageMap.end() )
     {
         throw RuntimeException(
             OUSTR( "ScriptStorageManager::getScriptStorage: invalid storage ID" ),
@@ -383,10 +385,10 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
     // attempt to get the storage from the hash to ensure that we have a
     // valid storageID
-    ScriptStorage_hash::const_iterator itr =
-        m_ScriptStorageHash.find( scriptStorageID );
+    ScriptStorage_map::const_iterator itr =
+        m_ScriptStorageMap.find( scriptStorageID );
 
-    if ( itr == m_ScriptStorageHash.end() )
+    if ( itr == m_ScriptStorageMap.end() )
     {
         throw RuntimeException(
             OUSTR( "ScriptStorageManager::disposing: attempt to dispose non-existent storage" ),
@@ -396,7 +398,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
                   "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
 
     // erase the entry from the hash
-    m_ScriptStorageHash.erase( scriptStorageID );
+    m_ScriptStorageMap.erase( scriptStorageID );
 
 
     // erase from name/storageId hash
@@ -450,11 +452,6 @@ Sequence< OUString > ss_getSupportedServiceNames( ) SAL_THROW( () );
 //*************************************************************************
 OUString ss_getImplementationName( ) SAL_THROW( () );
 //*************************************************************************
-Reference< XInterface > SAL_CALL si_create( const Reference< XComponentContext > & xCompC );
-//*************************************************************************
-Sequence< OUString > si_getSupportedServiceNames( ) SAL_THROW( () );
-//*************************************************************************
-OUString si_getImplementationName( ) SAL_THROW( () );
 //*************************************************************************
 static struct cppu::ImplementationEntry s_entries [] =
     {
@@ -466,11 +463,6 @@ static struct cppu::ImplementationEntry s_entries [] =
         {
             ss_create, ss_getImplementationName,
             ss_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            &s_moduleCount.modCnt, 0
-        },
-        {
-            si_create, si_getImplementationName,
-            si_getSupportedServiceNames, cppu::createSingleComponentFactory,
             &s_moduleCount.modCnt, 0
         },
         { 0, 0, 0, 0, 0, 0 }

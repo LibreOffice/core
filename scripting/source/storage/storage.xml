@@ -14,6 +14,7 @@
     <type>com.sun.star.beans.XPropertyContainer</type>
         <type>com.sun.star.uno.Exception</type>
         <type>com.sun.star.uno.XComponentContext</type>
+        <type>com.sun.star.uno.XWeak</type>
         <type>com.sun.star.io.IOException</type>
         <type>com.sun.star.io.XStream</type>
         <type>com.sun.star.io.XOutputStream</type>

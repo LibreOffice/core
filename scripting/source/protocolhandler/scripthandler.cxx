@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:23 $
+*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -97,7 +97,11 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     }
     // first argument contains a reference to the frame (may be empty or the desktop,
     // but usually it's a "real" frame)
-    aArguments[ 0 ] >>= m_xFrame;
+    if ( sal_False == ( aArguments[ 0 ] >>= m_xFrame ) )
+    {
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: could not extract reference to the frame" );
+        throw RuntimeException( temp, Reference< XInterface >() );
+    }
 
     validateXRef( m_xFactory,
         "ScriptProtocolHandler::initialize: No Service Manager available" );
@@ -135,20 +139,19 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     }
     catch ( Exception & e )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: " );
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
         OSL_TRACE( "ScriptProtocolHandler::initialise: Caught Exception %s",
             ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer
             );
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: " );
+        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
+        OSL_TRACE( "ScriptProtocolHandler::initialize: Unknown exception caught" );
         throw RuntimeException(
             OUSTR( "ScriptProtocolHandler::initialize: UnknownException: " ),
                     Reference< XInterface > () );
-
-        OSL_TRACE( "ScriptProtocolHandler::initialize: Unknown exception caught" );
     }
 #endif
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: lkovacs $ $Date: 2002-11-01 14:55:18 $
+#   last change: $Author: dfoster $ $Date: 2002-11-06 16:26:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,14 +83,13 @@ RESLIB1SRSFILES=        $(SRS)$/runtimemgr.srs
 
 SLOFILES=\
         $(SLO)$/ScriptNameResolverImpl.obj\
-        $(SLO)$/ScriptRuntimeManager.obj\
-        $(SLO)$/StorageBridge.obj\
-        $(SLO)$/StorageBridgeFactory.obj\
+        $(SLO)$/ScriptRuntimeManager.obj
 
 SHL1TARGET=	$(TARGET)
 
 SHL1STDLIBS= \
         $(TOOLSLIB)	\
+        $(VCLLIB)	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(SALLIB) \

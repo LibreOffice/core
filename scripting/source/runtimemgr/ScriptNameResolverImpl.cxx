@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-30 16:07:09 $
+ *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
 
+#include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
+
 #include "ScriptNameResolverImpl.hxx"
 #include "ScriptRuntimeManager.hxx"
 
@@ -85,6 +87,9 @@ OUString nrs_serviceName = OUString::createFromAscii(
     "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" );
 Sequence< OUString > nrs_serviceNames = Sequence< OUString >( &nrs_serviceName, 1 );
 
+const char* const SCRIPTSTORAGEMANAGER_SERVICE =
+    "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager";
+
 extern ::rtl_StandardModuleCount s_moduleCount;
 
 // define storages to search
@@ -93,9 +98,14 @@ static ::std::vector< sal_Int32 >* m_pSearchIDs = NULL;
 //*************************************************************************
 ScriptNameResolverImpl::ScriptNameResolverImpl(
     const Reference< XComponentContext > & xContext ) :
-    m_xContext( xContext ), m_StorageFactory( xContext )
+    m_xContext( xContext )
 {
     OSL_TRACE( "< ScriptNameResolverImpl ctor called >\n" );
+    validateXRef( m_xContext, "ScriptNameResolverImpl::ScriptNameResolverImpl: invalid context" );
+    m_xMultiComFac = m_xContext->getServiceManager();
+
+    validateXRef( m_xMultiComFac, "ScriptNameResolverImpl::ScriptNameResolverImpl: invalid XMultiComponentFactory " );
+
     if( !m_pSearchIDs )
     {
         osl::Guard< osl::Mutex > aGuard( m_mutex );
@@ -180,13 +190,11 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 #endif
 
 
-#ifdef _DEBUG
     ::rtl::OString docUriO(
         ::rtl::OUStringToOString( docUri , RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr,
+    OSL_TRACE(
         "ScriptNameResolverImpl::resolve: *** >>> DOC URI: %s, doc sid is %d\n",
         docUriO.pData->buffer, docSid );
-#endif
 
 
     OSL_TRACE( "ScriptNameResolverImpl::resolve Starting..." );
@@ -204,8 +212,8 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             if ( ( resolvedName = resolveURIFromStorageID( *iter, scriptURI ) ).is() )
             {
                 OSL_TRACE( "found match in uri from storage %d", *iter );
-            xPropSetScriptingContext->setPropertyValue(
-                scriptingConstantsPool.RESOLVED_STORAGE_ID, makeAny(*iter) );
+                xPropSetScriptingContext->setPropertyValue(
+                    scriptingConstantsPool.RESOLVED_STORAGE_ID, makeAny(*iter) );
                 break;
             }
 
@@ -297,18 +305,17 @@ ScriptNameResolverImpl::resolveURIFromStorageID
 ( sal_Int32 sid, const ::rtl::OUString& scriptURI )
 SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
-    Reference< XInterface > resolvedName;
+    Reference< XInterface > resolvedScriptInfo;
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
         scripting_constants::ScriptingConstantsPool::instance();
     if ( sid == scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET )
     {
         OSL_TRACE( "@@@@ **** ScriptNameResolverImpl::resolve DOC_STORAGE_ID_NOT_SET" );
-        return resolvedName;
+        return resolvedScriptInfo;
     }
     try
     {
-        Reference< storage::XScriptInfoAccess > storage =
-            m_StorageFactory.getStorageInstance( sid );
+        Reference< storage::XScriptInfoAccess > storage = getStorageInstance( sid );
         validateXRef( storage,
         "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptInfoAccess" );
         Sequence< Reference< storage::XScriptInfo > > results =
@@ -318,33 +325,33 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 
         if ( !length )
         {
-            return resolvedName;
+            return resolvedScriptInfo;
         }
 
         OSL_TRACE( "ScriptNameResolverImpl::resolve Got some results..." );
         for ( sal_Int32 index = 0;index < length;index++ )
         {
-            Reference< storage::XScriptInfo > uri = results[ index ];
+            Reference< storage::XScriptInfo > scriptInfo = results[ index ];
 #ifdef _DEBUG
 
-            ::rtl::OString languageO( ::rtl::OUStringToOString( uri->getLanguage(),
+            ::rtl::OString languageO( ::rtl::OUStringToOString( scriptInfo->getLanguage(),
                 RTL_TEXTENCODING_ASCII_US ) );
-            ::rtl::OString functionName( ::rtl::OUStringToOString( uri->getFunctionName(),
+            ::rtl::OString functionName( ::rtl::OUStringToOString( scriptInfo->getFunctionName(),
                 RTL_TEXTENCODING_ASCII_US ) );
-            ::rtl::OString logicalName( ::rtl::OUStringToOString( uri->getLogicalName(),
+            ::rtl::OString logicalName( ::rtl::OUStringToOString( scriptInfo->getLogicalName(),
                 RTL_TEXTENCODING_ASCII_US ) );
-            fprintf( stderr, "[%d] URI, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
+            OSL_TRACE(  "[%d] URI, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
                      index, languageO.pData->buffer,
                      functionName.pData->buffer, logicalName.pData->buffer );
 #endif
 
             // just choose first one that has language=LANGUAGE_TO_RESOLVE_ON
-            ::rtl::OUString language( uri->getLanguage() );
+            ::rtl::OUString language( scriptInfo->getLanguage() );
 
             if ( ( language.compareToAscii( LANGUAGE_TO_RESOLVE_ON ) == 0 ) )
             {
                 OSL_TRACE( "Found desired language\n" );
-                resolvedName = uri;
+                resolvedScriptInfo = scriptInfo;
                 break;
             }
         }
@@ -379,7 +386,50 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
             Reference< XInterface > () );
     }
 #endif
-    return resolvedName;
+    return resolvedScriptInfo;
+}
+//*************************************************************************
+
+Reference< storage::XScriptInfoAccess >
+
+ScriptNameResolverImpl::getStorageInstance( sal_Int32 sid ) SAL_THROW ( ( RuntimeException ) )
+{
+    Reference< storage::XScriptInfoAccess > xScriptInfoAccess;
+    try
+    {
+        Reference< XInterface > xInterface;
+
+        Any a = m_xContext->getValueByName(
+                    OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
+        if ( sal_False == ( a >>= xInterface ) )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptNameResolverImpl::getStorageInstance: could not obtain ScriptStorageManager singleton" ),
+                Reference< XInterface >() );
+        }
+        validateXRef( xInterface,
+                      "ScriptNameResolverImpl::getStorageInstance: cannot get Storage service" );
+        Reference< storage::XScriptStorageManager > xScriptStorageManager( xInterface, UNO_QUERY_THROW );
+        validateXRef( xScriptStorageManager,
+                      "ScriptNameResolverImpl::getStorageInstance:  cannot get Script Storage Manager service" );
+        Reference< XInterface > xScriptStorage =
+            xScriptStorageManager->getScriptStorage( sid );
+        validateXRef( xScriptStorage,
+                      "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
+        xScriptInfoAccess = Reference<
+            storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
+    }
+    catch ( RuntimeException & re )
+    {
+        OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
+        throw RuntimeException( temp.concat( re.Message ), Reference< XInterface >() );
+    }
+    catch ( Exception & e )
+    {
+        OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
+        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+    }
+    return xScriptInfoAccess;
 }
 //*************************************************************************
 Sequence<OUString> SAL_CALL

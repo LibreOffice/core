@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-31 11:52:58 $
+ *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,8 @@
 #ifndef __SCRIPT_FRAMEWORK_STORAGE_SCRIPTINFO_HXX_
 #define __SCRIPT_FRAMEWORK_STORAGE_SCRIPTINFO_HXX_
 
-#include <cppuhelper/implbase2.hxx> // helper for component factory
+#include <cppuhelper/implbase1.hxx> // helper for component factory
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
@@ -77,23 +76,11 @@ namespace scripting_impl
 #define css ::com::sun::star
 #define dcsssf ::drafts::com::sun::star::script::framework
 
-class ScriptInfo : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo,
-    dcsssf::storage::XScriptInfo >
+class ScriptInfo : public ::cppu::WeakImplHelper1< dcsssf::storage::XScriptInfo >
 {
 public:
-    explicit ScriptInfo(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    explicit ScriptInfo(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const ScriptData & scriptData, sal_Int32 storageID );
+    explicit ScriptInfo( const ScriptData & scriptData, sal_Int32 storageID );
     virtual ~ScriptInfo();
-
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-        throw( css::uno::RuntimeException );
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-        throw( css::uno::RuntimeException );
 
     // XScriptInfo
     virtual ::rtl::OUString SAL_CALL getLogicalName()
@@ -114,14 +101,8 @@ public:
         throw ( css::uno::RuntimeException );
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
-
-    ::osl::Mutex     m_mutex;
-
     ScriptData m_scriptData;
     sal_Int32 m_storageID;
-
 };
 
 }

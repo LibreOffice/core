@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-10-30 14:26:24 $
+ *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,11 @@ ScriptRuntimeManager::ScriptRuntimeManager(
     m_xContext( xContext )
 {
     OSL_TRACE( "< ScriptRuntimeManager ctor called >\n" );
+    validateXRef( m_xContext,
+        "ScriptRuntimeManager::ScriptRuntimeManager: invalid context" );
+    m_xMgr = m_xContext->getServiceManager();
+    validateXRef( m_xMgr,
+        "ScriptRuntimeManager::ScriptRuntimeManager: cannot get ServiceManager" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 
@@ -121,22 +126,21 @@ throw( RuntimeException )
 
     Reference< XScriptInvocation > xScriptInvocation;
 
-    validateXRef( m_xContext,
-        "ScriptRuntimeManager::GetScriptRuntime: No context available" );
-    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
-    validateXRef( xMgr,
-        "ScriptRuntimeManager::GetScriptRuntime: No service manager available" );
-
     try
     {
-        Reference< XInterface > xx;
+        Reference< XInterface > xInterface;
         Any a = m_xContext->getValueByName( OUString::createFromAscii(
             "/singletons/drafts.com.sun.star.script.framework.theScriptRuntimeForJava" ) );
-        a >>= xx;
-        validateXRef( xx,
+        if ( sal_False == ( a >>= xInterface ) )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptRuntimeManager::GetScriptRuntime: could not obtain ScriptRuntimeForJava singleton" ),
+                Reference< XInterface >() );
+        }
+        validateXRef( xInterface,
             "ScriptRuntimeManager::GetScriptRuntime: cannot get ScriptRuntimeForJava Service"
         );
-        xScriptInvocation = Reference< XScriptInvocation >( xx, UNO_QUERY_THROW );
+        xScriptInvocation = Reference< XScriptInvocation >( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -156,21 +160,15 @@ throw( RuntimeException )
     OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptNameResolver\n" );
     Reference< XScriptNameResolver > xScriptNameResolver;
 
-    validateXRef( m_xContext,
-        "ScriptRuntimeManager::GetScriptNameResolver: No context available" );
-    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
-    validateXRef( xMgr,
-        "ScriptRuntimeManager::GetScriptRuntime: No Service Manager available" );
-
     try
     {
-        Reference< XInterface > xx = xMgr->createInstanceWithContext(
+        Reference< XInterface > xInterface = m_xMgr->createInstanceWithContext(
             OUString::createFromAscii(
                 "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" ),
                 m_xContext );
-        validateXRef( xx,
+        validateXRef( xInterface,
             "ScriptRuntimeManager::GetScriptRuntime: cannot get instance of DefaultScriptNameResolver" );
-        xScriptNameResolver = Reference< XScriptNameResolver >( xx, UNO_QUERY_THROW );
+        xScriptNameResolver = Reference< XScriptNameResolver >( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -207,21 +205,21 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
             resolvedCtx );
         validateXRef( resolvedScript, "ScriptRuntimeManager::invoke: No resolvedURI" );
 
-        Reference< beans::XPropertySet > xPropSetScriptingContext;
-        if ( sal_False == ( resolvedCtx >>= xPropSetScriptingContext ) )
+        Reference< beans::XPropertySet > xPropSetResolvedCtx;
+        if ( sal_False == ( resolvedCtx >>= xPropSetResolvedCtx ) )
         {
             throw RuntimeException( OUSTR(
                 "ScriptRuntimeManager::invoke : unable to get XPropSetScriptingContext from param" ),
                 Reference< XInterface > () );
         }
 
-        Any any = xPropSetScriptingContext->getPropertyValue(
+        Any any = xPropSetResolvedCtx->getPropertyValue(
             scriptingConstantsPool.RESOLVED_STORAGE_ID );
         sal_Int32 docSid;
         if ( sal_False == ( any >>= docSid ) )
         {
             throw RuntimeException( OUSTR(
-                "ScriptRuntimeManager::invoke : unable to get doc storage id from xPropSetScriptingContext" ),
+                "ScriptRuntimeManager::invoke : unable to get doc storage id from xPropSetResolvedCtx" ),
                 Reference< XInterface > () );
         }
 
@@ -241,13 +239,12 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
             }
         }
 
-        Reference< beans::XPropertySet > invocationProps;
-        resolvedCtx >>= invocationProps;
+        // modifying the XPropertySet on the resolved Context to contain the
+        // full script info
         Any aResolvedScript;
         aResolvedScript <<= resolvedScript;
 
-        validateXRef( invocationProps, "ScriptRuntimeManager::invoke: failed to get XPropertySet from invocationContext" );
-        invocationProps->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO,
+        xPropSetResolvedCtx->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO,
                 aResolvedScript );
 
         Reference< XScriptInvocation > xScriptInvocation =
@@ -255,8 +252,9 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
         validateXRef( xScriptInvocation,
             "ScriptRuntimeManager::invoke: cannot get instance of language specific runtime." );
 
-
-        //1st arg needs fixing?
+        // the scriptURI is currently passed to the language-dept runtime but
+        // is not used (may be useful in the future?). All of the script info
+        // is contained as a property(SCRIPT_INFO) within the resolvedCtx
         results = xScriptInvocation->invoke( scriptURI, resolvedCtx, aParams,
                                              aOutParamIndex, aOutParam );
     }
@@ -297,6 +295,12 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke RuntimeException: " );
         throw RuntimeException( temp.concat( re.Message ),
+                                Reference< XInterface > () );
+    }
+    catch ( Exception & e )
+    {
+        OUString temp = OUSTR( "ScriptRuntimeManager::invoke Exception: " );
+        throw RuntimeException( temp.concat( e.Message ),
                                 Reference< XInterface > () );
     }
 #ifdef _DEBUG
