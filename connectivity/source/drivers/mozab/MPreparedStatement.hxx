@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MPreparedStatement.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ namespace connectivity
             virtual ~OPreparedStatement();
 
             virtual void SAL_CALL disposing();
-            virtual void parseSql( const ::rtl::OUString& sql ) throw (
+            virtual sal_Bool parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted = sal_False) throw (
                            ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
 
             virtual OResultSet* createResultSet();
