@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-21 16:49:00 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@ import java.net.MalformedURLException;
 import java.util.Hashtable;
 
 import java.util.zip.ZipEntry;
-
-import sun.tools.jar.JarVerifierStream;
-
 
 final class ClassContextImpl extends ClassLoader implements ClassContext {
     private static int instances;
