@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-11-17 11:04:22 $
+ *  last change: $Author: as $ $Date: 2000-11-21 14:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,18 +113,20 @@ using namespace ::com::sun::star::beans ;
 #define PATHDELIMITER                           OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
 #define PROPERTYNAME_PICKLISTSIZE               OUString(RTL_CONSTASCII_USTRINGPARAM("PickListSize"             ))
 #define PROPERTYNAME_HISTORYSIZE                OUString(RTL_CONSTASCII_USTRINGPARAM("Size"                     ))
-#define PROPERTYNAME_PICKLIST                   OUString(RTL_CONSTASCII_USTRINGPARAM("PickList/"                ))
-#define PROPERTYNAME_HISTORY                    OUString(RTL_CONSTASCII_USTRINGPARAM("List/"                    ))
-#define PROPERTYNAME_HISTORYITEM_URL            HISTORY_PROPERTYNAME_URL+PATHDELIMITER
-#define PROPERTYNAME_HISTORYITEM_FILTER         HISTORY_PROPERTYNAME_FILTER+PATHDELIMITER
-#define PROPERTYNAME_HISTORYITEM_TITLE          HISTORY_PROPERTYNAME_TITLE+PATHDELIMITER
-#define PROPERTYNAME_HISTORYITEM_PASSWORD       HISTORY_PROPERTYNAME_PASSWORD+PATHDELIMITER
+#define PROPERTYNAME_PICKLIST                   OUString(RTL_CONSTASCII_USTRINGPARAM("PickList"                 ))
+#define PROPERTYNAME_HISTORY                    OUString(RTL_CONSTASCII_USTRINGPARAM("List"                     ))
+#define PROPERTYNAME_HISTORYITEM_URL            HISTORY_PROPERTYNAME_URL
+#define PROPERTYNAME_HISTORYITEM_FILTER         HISTORY_PROPERTYNAME_FILTER
+#define PROPERTYNAME_HISTORYITEM_TITLE          HISTORY_PROPERTYNAME_TITLE
+#define PROPERTYNAME_HISTORYITEM_PASSWORD       HISTORY_PROPERTYNAME_PASSWORD
 #define OFFSET_URL                              0
 #define OFFSET_FILTER                           1
 #define OFFSET_TITLE                            2
 #define OFFSET_PASSWORD                         3
 #define PROPERTYHANDLE_PICKLISTSIZE             0
 #define PROPERTYHANDLE_HISTORYSIZE              PROPERTYHANDLE_PICKLISTSIZE+1   //!!!
+#define FIXP                                    OUString(RTL_CONSTASCII_USTRINGPARAM("p"                        ))
+#define FIXH                                    OUString(RTL_CONSTASCII_USTRINGPARAM("h"                        ))
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -346,14 +348,18 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     sal_uInt32 nPosition = PROPERTYHANDLE_HISTORYSIZE+1;
     // Get names/values for picklist.
     // 4 subkeys for every item!
+    OUString sName;
     for( sal_Int32 nItem=0; nItem<nPicklistCount; ++nItem )
     {
-        seqValues[nPosition+OFFSET_URL      ] >>= aItem.sURL        ;
-        seqValues[nPosition+OFFSET_FILTER   ] >>= aItem.sFilter     ;
-        seqValues[nPosition+OFFSET_TITLE    ] >>= aItem.sTitle      ;
-        seqValues[nPosition+OFFSET_PASSWORD ] >>= aItem.sPassword   ;
-        m_aPicklist.push_front( aItem );
+        seqValues[nPosition] >>= aItem.sURL         ;
         ++nPosition;
+        seqValues[nPosition] >>= aItem.sFilter      ;
+        ++nPosition;
+        seqValues[nPosition] >>= aItem.sTitle       ;
+        ++nPosition;
+        seqValues[nPosition] >>= aItem.sPassword    ;
+        ++nPosition;
+        m_aPicklist.push_front( aItem );
     }
 
     // Attention: Don't reset nPosition here!
@@ -362,12 +368,15 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     // 4 subkeys for every item!
     for( nItem=0; nItem<nHistoryCount; ++nItem )
     {
-        seqValues[nPosition+OFFSET_URL      ] >>= aItem.sURL        ;
-        seqValues[nPosition+OFFSET_FILTER   ] >>= aItem.sFilter     ;
-        seqValues[nPosition+OFFSET_TITLE    ] >>= aItem.sTitle      ;
-        seqValues[nPosition+OFFSET_PASSWORD ] >>= aItem.sPassword   ;
-        m_aHistory.push_front( aItem );
+        seqValues[nPosition] >>= aItem.sURL         ;
         ++nPosition;
+        seqValues[nPosition] >>= aItem.sFilter      ;
+        ++nPosition;
+        seqValues[nPosition] >>= aItem.sTitle       ;
+        ++nPosition;
+        seqValues[nPosition] >>= aItem.sPassword    ;
+        ++nPosition;
+        m_aHistory.push_front( aItem );
     }
 
 /*TODO: Not used in the moment! see Notify() ...
@@ -428,36 +437,36 @@ void SvtHistoryOptions_Impl::Commit()
     sal_uInt32 nPicklistCount = m_aPicklist.size();
     for( sal_uInt32 nItem=0; nItem<nPicklistCount; ++nItem )
     {
-        aItem = m_aPicklist[nItem];
-        seqPropertyValues[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
-        seqPropertyValues[OFFSET_FILTER     ].Name  =   PROPERTYNAME_HISTORYITEM_FILTER     ;
-        seqPropertyValues[OFFSET_TITLE      ].Name  =   PROPERTYNAME_HISTORYITEM_TITLE      ;
-        seqPropertyValues[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_HISTORYITEM_PASSWORD   ;
-        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                          ;
-        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                       ;
-        seqPropertyValues[OFFSET_TITLE      ].Value <<= aItem.sTitle                        ;
-        seqPropertyValues[OFFSET_PASSWORD   ].Value <<= aItem.sPassword                     ;
+        aItem   = m_aPicklist[nItem];
+        sNode   = PROPERTYNAME_PICKLIST + PATHDELIMITER + FIXP + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
+        seqPropertyValues[OFFSET_URL        ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_URL        ;
+        seqPropertyValues[OFFSET_FILTER     ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_FILTER     ;
+        seqPropertyValues[OFFSET_TITLE      ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_TITLE      ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_PASSWORD   ;
+        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                                  ;
+        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                               ;
+        seqPropertyValues[OFFSET_TITLE      ].Value <<= aItem.sTitle                                ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Value <<= aItem.sPassword                             ;
 
-        sNode = PROPERTYNAME_PICKLIST + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
-        SetSetProperties( sNode, seqPropertyValues );
+        SetSetProperties( PROPERTYNAME_PICKLIST, seqPropertyValues );
     }
 
     // Copy URL-list entries to save-list!
     sal_uInt32 nHistoryCount = m_aHistory.size();
     for( nItem=0; nItem<nHistoryCount; ++nItem )
     {
-        aItem = m_aHistory[nItem];
-        seqPropertyValues[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
-        seqPropertyValues[OFFSET_FILTER     ].Name  =   PROPERTYNAME_HISTORYITEM_FILTER     ;
-        seqPropertyValues[OFFSET_TITLE      ].Name  =   PROPERTYNAME_HISTORYITEM_TITLE      ;
-        seqPropertyValues[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_HISTORYITEM_PASSWORD   ;
-        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                          ;
-        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                       ;
-        seqPropertyValues[OFFSET_TITLE      ].Value <<= aItem.sTitle                        ;
-        seqPropertyValues[OFFSET_PASSWORD   ].Value <<= aItem.sPassword                     ;
+        aItem   = m_aHistory[nItem];
+        sNode   = PROPERTYNAME_HISTORY + PATHDELIMITER + FIXH + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
+        seqPropertyValues[OFFSET_URL        ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_URL        ;
+        seqPropertyValues[OFFSET_FILTER     ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_FILTER     ;
+        seqPropertyValues[OFFSET_TITLE      ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_TITLE      ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Name  =   sNode + PROPERTYNAME_HISTORYITEM_PASSWORD   ;
+        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                                  ;
+        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                               ;
+        seqPropertyValues[OFFSET_TITLE      ].Value <<= aItem.sTitle                                ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Value <<= aItem.sPassword                             ;
 
-        sNode = PROPERTYNAME_HISTORY + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
-        SetSetProperties( sNode, seqPropertyValues );
+        SetSetProperties( PROPERTYNAME_HISTORY, seqPropertyValues );
     }
 }
 
@@ -638,10 +647,13 @@ Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames( sal_uInt32& 
     // nPosition is the start point of an history item, nItem an index into right list of node names!
     for( sal_Int32 nItem=0; nItem<nPicklistCount; ++nItem )
     {
-        seqProperties[nPosition+OFFSET_URL      ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_URL      ;
-        seqProperties[nPosition+OFFSET_FILTER   ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_FILTER   ;
-        seqProperties[nPosition+OFFSET_TITLE    ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_TITLE    ;
-        seqProperties[nPosition+OFFSET_PASSWORD ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_PASSWORD ;
+        seqProperties[nPosition] = PROPERTYNAME_PICKLIST + PATHDELIMITER + seqPicklistItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_URL       ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_PICKLIST + PATHDELIMITER + seqPicklistItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_FILTER    ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_PICKLIST + PATHDELIMITER + seqPicklistItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_TITLE ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_PICKLIST + PATHDELIMITER + seqPicklistItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_PASSWORD  ;
         ++nPosition;
     }
 
@@ -652,10 +664,13 @@ Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames( sal_uInt32& 
     // nPosition is the start point of an history item, nItem an index into right list of node names!
     for( nItem=0; nItem<nHistoryCount; ++nItem )
     {
-        seqProperties[nPosition+OFFSET_URL      ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_URL        ;
-        seqProperties[nPosition+OFFSET_FILTER   ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_FILTER     ;
-        seqProperties[nPosition+OFFSET_TITLE    ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_TITLE      ;
-        seqProperties[nPosition+OFFSET_PASSWORD ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_PASSWORD   ;
+        seqProperties[nPosition] = PROPERTYNAME_HISTORY + PATHDELIMITER + seqHistoryItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_URL     ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_HISTORY + PATHDELIMITER + seqHistoryItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_FILTER      ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_HISTORY + PATHDELIMITER + seqHistoryItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_TITLE       ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_HISTORY + PATHDELIMITER + seqHistoryItems[nItem] + PATHDELIMITER + PROPERTYNAME_HISTORYITEM_PASSWORD    ;
         ++nPosition;
     }
 
