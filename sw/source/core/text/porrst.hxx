@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:57:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,20 @@ public:
     inline KSHORT GetInnerWidth() const { return nInnerWidth; }
 };
 
+/*************************************************************************
+ *                      class SwHiddenTextPortion
+ * Is used to hide text
+ *************************************************************************/
+
+class SwHiddenTextPortion : public SwLinePortion
+{
+public:
+    inline SwHiddenTextPortion( xub_StrLen nLen )
+        { SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen ); }
+
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+};
 
 /*************************************************************************
  *                  inline - Implementations
