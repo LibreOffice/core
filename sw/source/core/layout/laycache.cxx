@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:47:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                     {
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if( pFly->Frm().Left() != WEIT_WECH &&
-                            !pFly->GetAnchor()->FindFooterOrHeader() )
+                            !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                         {
                             const SwContact *pC = (SwContact*)GetUserCall(pO);
                             if( pC )
@@ -1105,8 +1105,8 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
             if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                if( pFly->GetAnchor() &&
-                    !pFly->GetAnchor()->FindFooterOrHeader() )
+                if( pFly->GetAnchorFrm() &&
+                    !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                 {
                     const SwContact *pC = (SwContact*)GetUserCall(pO);
                     if( pC )
@@ -1161,8 +1161,8 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
 BOOL SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 {
-    if( !pFly->GetAnchor() || !pFly->GetVirtDrawObj() ||
-        pFly->GetAnchor()->FindFooterOrHeader() )
+    if( !pFly->GetAnchorFrm() || !pFly->GetVirtDrawObj() ||
+        pFly->GetAnchorFrm()->FindFooterOrHeader() )
         return FALSE;
     BOOL bRet = FALSE;
     SwDoc* pDoc = rpPage->GetFmt()->GetDoc();
