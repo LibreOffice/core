@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-12 13:56:39 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 11:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,12 +127,15 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 
             double fValue(nValue);
             double fNewValue ((fValue * nRange) / nReference);
-            double fPercent ((fNewValue * 100) / nRange);
-            if (fPercent >= (fOldPercent + fProgressStep))
-            {
-                xStatusIndicator->setValue((sal_Int32)fNewValue);
-                fOldPercent = fPercent;
-            }
+            xStatusIndicator->setValue((sal_Int32)fNewValue);
+
+            // #95181# disabled, because we want to call setValue very often to enable a good reschedule
+//          double fPercent ((fNewValue * 100) / nRange);
+//          if (fPercent >= (fOldPercent + fProgressStep))
+//          {
+//              xStatusIndicator->setValue((sal_Int32)fNewValue);
+//              fOldPercent = fPercent;
+//          }
         }
         else
             DBG_ERROR("tried to set a wrong value on the progressbar");
