@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-21 09:30:34 $
+ *  last change: $Author: jl $ $Date: 2004-04-21 12:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,11 @@ typedef struct _JavaInfo JavaInfo;
  */
 void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
 
+/**
+   Both arguments must me valid JavaInfo*.
+ */
+sal_Bool SAL_CALL jfw_areEqualJavaInfo(
+    JavaInfo const * pInfoA,JavaInfo const * pInfoB);
 /** When a Java is already running and a user changes the Java configuration
     in the options dialog then the user must be informed that the new
     settings come into effect after re-starting the office. The options dialog

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-21 09:30:36 $
+ *  last change: $Author: jl $ $Date: 2004-04-21 12:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "libxml/xpathinternals.h"
 #include <vector>
 #include <algorithm>
+#include <functional>
 #include "jni.h"
 
 #include "framework.hxx"
@@ -117,8 +118,6 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     errcode = jfw::getVendorPluginURLs(doc, context, & vecPlugins);
     if (errcode != JFW_E_NONE)
         return errcode;
-
-
     //Add the JavaInfos found by getAllJavaInfos to the vector
     //Make sure that the contents are destroyed if this
     //function returns with an error
@@ -240,6 +239,17 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             if (pInfo)
                 vecInfoManual.push_back(pInfo);
         }
+    }
+    //Check which JavaInfo from vector vecInfoManual is already
+    //contained in vecInfo. If it already exists then remove it from
+    //vecInfoManual
+    for (it_info i = vecInfo.begin(); i != vecInfo.end(); i++)
+    {
+        it_info it_duplicate =
+            std::find_if(vecInfoManual.begin(), vecInfoManual.end(),
+                         std::bind2nd(std::ptr_fun(jfw_areEqualJavaInfo), *i));
+        if (it_duplicate != vecInfoManual.end())
+            vecInfoManual.erase(it_duplicate);
     }
     //create an fill the array of JavaInfo*
     sal_Int32 nSize = vecInfo.size() + vecInfoManual.size();
@@ -537,6 +547,28 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJava(JavaInfo **pInfo)
         errcode = JFW_E_NO_JAVA_FOUND;
     }
     return errcode;
+}
+sal_Bool SAL_CALL jfw_areEqualJavaInfo(
+    JavaInfo const * pInfoA,JavaInfo const * pInfoB)
+{
+    OSL_ASSERT(pInfoA != NULL && pInfoB != NULL);
+    if (pInfoA == pInfoB)
+        return sal_True;
+
+    rtl::OUString sVendor(pInfoA->sVendor);
+    rtl::OUString sLocation(pInfoA->sLocation);
+    rtl::OUString sVersion(pInfoA->sVersion);
+    rtl::ByteSequence sData(pInfoA->arVendorData);
+    if (sVendor.equals(pInfoB->sVendor) == sal_True
+        && sLocation.equals(pInfoB->sLocation) == sal_True
+        && sVersion.equals(pInfoB->sVersion) == sal_True
+        && pInfoA->nFeatures == pInfoB->nFeatures
+        && pInfoA->nRequirements == pInfoB->nRequirements
+        && sData == pInfoB->arVendorData)
+    {
+        return sal_True;
+    }
+    return sal_False;
 }
 
 

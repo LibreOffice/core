@@ -2,6 +2,7 @@ UDK_3_0_0 {
     global:
         # jvmfwk/framework.h:
     jfw_freeJavaInfo;
+    jfw_areEqualJavaInfo;
     jfw_findAllJREs;
     jfw_findAndSelectJava;
     jfw_startJava;
