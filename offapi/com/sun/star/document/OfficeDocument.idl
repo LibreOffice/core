@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 18:44:54 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ published service OfficeDocument
     //-------------------------------------------------------------------------
     /** allows for getting information about a print job
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional] interface com::sun::star::view::XPrintJobBroadcaster;
 
