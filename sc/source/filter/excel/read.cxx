@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
+ *  last change: $Author: dr $ $Date: 2002-09-27 09:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,6 @@ FltError ImportExcel::Read( void )
                             case Biff5:
                                 eAkt = Z_Biff5Pre;  // Shrfmla Prefetch, Row-Prefetch
                                 pColRowBuff->Reset();
-                                pCellStyleBuffer->Reset();
                                 nBofLevel = 0;
 
                                 aIn.StoreUserPosition();    // und Position merken
@@ -1375,7 +1374,6 @@ FltError ImportExcel8::Read( void )
                             case Biff8:
                                 eAkt = Z_Biff8Pre;  // Shrfmla Prefetch, Row-Prefetch
                                 pColRowBuff->Reset();
-                                pCellStyleBuffer->Reset();
                                 nBofLevel = 0;
 
                                 aIn.StoreUserPosition();

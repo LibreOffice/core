@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-17 10:55:57 $
+ *  last change: $Author: dr $ $Date: 2002-09-27 09:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2018,7 +2018,6 @@ void ImportExcel::Bof5( void )
 void ImportExcel::ResetBof( void )
 {   // setzt alle Einstellungen fuer neuen Tabellenbeginn zurueck
     pColRowBuff->Reset();
-    pCellStyleBuffer->Reset();
 }
 
 
