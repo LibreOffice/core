@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:07:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "¼­¹ö·ÎºÎÅÍÀÇ ¸Ş½ÃÁö";
         Text[ arabic ] = "ÑÓÇáÉ ãä ÇáãÒæøÏ";
         Text[ turkish ] = "Sunucudan ileti";
+        Text[ catalan ] = "Mensaje del servidor";
     };
     FixedText INFO_LOGIN_REQUEST
     {
@@ -132,6 +133,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "¿©±â¿¡ %1ÀÇ »ç¿ëÀÚ ÀÌ¸§°ú ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À.";
         Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ áÜ %1 åäÇ.";
         Text[ turkish ] = "%1 için buraya kullanıcı adı ve şifre girin.";
+        Text[ catalan ] = "Especifique su nombre de usuario y su contraseña para %1.";
     };
     FixedText FT_LOGIN_PATH
     {
@@ -157,6 +159,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "°æ·Î(~P)";
         Text[ arabic ] = "ÇáãÓÇÑ";
         Text[ turkish ] = "Veri yolu";
+        Text[ catalan ] = "~Ruta";
     };
     Edit ED_LOGIN_PATH
     {
@@ -200,6 +203,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
         Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı adı";
+        Text[ catalan ] = "~Usuario";
     };
     Edit ED_LOGIN_USERNAME
     {
@@ -237,6 +241,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "ÆĞ½º¿öµå(~W)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "Şifre";
+        Text[ catalan ] = "~Contraseña";
     };
     Edit ED_LOGIN_PASSWORD
     {
@@ -269,6 +274,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "°èÁ¤(~C)";
         Text[ arabic ] = "ÇÔÊÑÇß";
         Text[ turkish ] = "Hesap";
+        Text[ catalan ] = "~Cuenta";
     };
     Edit ED_LOGIN_ACCOUNT
     {
@@ -301,6 +307,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "ÆĞ½º¿öµå ÀúÀå(~S)";
         Text[ arabic ] = "ÍİÙ ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "Şifreyi kaydet";
+        Text[ catalan ] = "Guardar ~contraseña";
     };
     GroupBox GB_LOGIN_LOGIN
     {
@@ -326,6 +333,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "·Î±×ÀÎ";
         Text[ arabic ] = "ÊÓÌíá ÇáÏÎæá";
         Text[ turkish ] = "Oturum aç";
+        Text[ catalan ] = "Registrarse";
     };
     OKButton BTN_LOGIN_OK
     {
@@ -365,6 +373,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ korean ] = "..¿¡ ";
         Text[ arabic ] = "Úáì ";
         Text[ turkish ] = "yeri ";
+        Text[ catalan ] = "en  ";
     };
     Text [ english_us ] = "User Name and Password Required" ;
     Text [ portuguese_brazilian ] = "Benutzername und Passwort erforderlich" ;
@@ -384,5 +393,6 @@ ModalDialog DLG_UUI_LOGIN
     Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§°ú ÆĞ½º¿öµå°¡ ÇÊ¿äÇÕ´Ï´Ù.";
     Text[ arabic ] = "ãØáæÈ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ";
     Text[ turkish ] = "Kullanıcı adı ve şifre gerekli";
+    Text[ catalan ] = "Se requieren el nombre de usuario y la contraseña";
 };
 
