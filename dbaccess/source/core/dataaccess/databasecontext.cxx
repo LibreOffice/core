@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:02:59 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
