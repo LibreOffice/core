@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 09:23:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 13:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,7 +1718,32 @@ namespace xmloff
                 return new OControlImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
         }
     }
+    //---------------------------------------------------------------------
+    OControlImport* OColumnWrapperImport::implCreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            OControlElement::ElementType _eType)
+    {
+        OSL_ENSURE( (OControlElement::TEXT == _eType)
+                ||  (OControlElement::TEXT_AREA == _eType)
+                ||  (OControlElement::FORMATTED_TEXT == _eType)
+                ||  (OControlElement::CHECKBOX == _eType)
+                ||  (OControlElement::LISTBOX == _eType)
+                ||  (OControlElement::COMBOBOX == _eType),
+                "OColumnWrapperImport::implCreateChildContext: invalid or unrecognized sub element!");
 
+        switch (_eType)
+        {
+            case OControlElement::COMBOBOX:
+            case OControlElement::LISTBOX:
+                return new OColumnImport<OListAndComboImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
+
+            case OControlElement::PASSWORD:
+                return new OColumnImport<OPasswordImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
+
+            default:
+                return new OColumnImport<OControlImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
+        }
+    }
 
     //=====================================================================
     //= OGridImport
