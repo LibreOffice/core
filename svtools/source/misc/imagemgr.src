@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:38:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,35 +468,7 @@ String STR_DESCRIPTION_MATHML_DOC
     Text [ en-US ] = "MathML Document" ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Bitmap BMP_PLUGIN
+{
+    File = "plugin.png" ;
+};
