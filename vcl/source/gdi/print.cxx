@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 
 #include <unohelp.hxx>
 
+#else /* REMOTE_APPSERVER */
 
-#else
 #include "rvp.hxx"
 #include "rmoutdev.hxx"
 #include "rmwindow.hxx"
@@ -113,8 +113,12 @@ struct SalPrinterQueueInfo
 
 using namespace com::sun::star::portal::client;
 
-#ifdef DEBUG
-#undef DEBUG
+#if OSL_DEBUG_LEVEL > 1
+#ifdef PRODUCT
+#define OSL_DEBUG_LEVEL 0
+#else
+#define OSL_DEBUG_LEVEL 1
+#endif
 #endif
 
 #endif
@@ -2151,12 +2155,12 @@ void Printer::GetRemotePageSetup( ULONG nPage, RmJobSetup& rSetup )
 
 void Printer::PrintRemotePage( ULONG nPage )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "printing page %d of %d\n", nPage, mpRemotePages->size() );
 #endif
     if ( mpPrinter && mpPrinter->mxRemotePrinter.is() )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "have printer\n", nPage );
 #endif
         if( nPage >=  mpRemotePages->size() )
@@ -2187,13 +2191,13 @@ void Printer::PrintRemotePage( ULONG nPage )
         try
         {
             mpPrinter->mxRemotePrinter->StartPage();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "page started\n" );
 #endif
         }
         catch( RuntimeException &e )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "page started exception\n" );
 #endif
             rvpExceptionHandler();
@@ -2211,7 +2215,7 @@ void Printer::PrintRemotePage( ULONG nPage )
         pPage->GetGDIMetaFile()->WindStart();
         pPage->GetGDIMetaFile()->Play( this );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "metafile played %d actions\n", pPage->GetGDIMetaFile()->GetActionCount() );
 #endif
 
@@ -2219,13 +2223,13 @@ void Printer::PrintRemotePage( ULONG nPage )
         try
         {
             mpPrinter->mxRemotePrinter->EndPage();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "page ended\n" );
 #endif
         }
         catch( RuntimeException &e )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "page ended exception\n" );
 #endif
             rvpExceptionHandler();
