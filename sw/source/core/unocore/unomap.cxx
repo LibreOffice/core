@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:16:15 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_HIDE_FIELD_TIPS), WID_DOC_HIDE_TIPS,            CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_REDLINE_DISPLAY_TYPE), WID_DOC_REDLINE_DISPLAY,     CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_REDLINE_PROTECTION_KEY), WID_DOC_CHANGES_PASSWORD,      CPPU_E2T(CPPUTYPE_SEQINT8), PROPERTY_NONE, 0 },
-                    { SW_PROP_NMID(UNO_NAME_FORBIDDEN_CHARACTERS), WID_DOC_FORBIDDEN_CHARS,    CPPU_E2T(CPPUTYPE_REFFORBCHARS), PropertyAttribute::READONLY,   0},
+                    { SW_PROP_NMID(UNO_NAME_FORBIDDEN_CHARACTERS), WID_DOC_FORBIDDEN_CHARS,    CPPU_E2T(CPPUTYPE_REFFORBCHARS), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_TWO_DIGIT_YEAR), WID_DOC_TWO_DIGIT_YEAR,    CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_AUTOMATIC_CONTROL_FOCUS),       WID_DOC_AUTOMATIC_CONTROL_FOCUS,    CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_APPLY_FORM_DESIGN_MODE),        WID_DOC_APPLY_FORM_DESIGN_MODE,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
