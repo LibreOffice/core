@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:04:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,14 @@
 #include "document.hxx"
 #include "shtabdlg.hxx"
 #include "scresid.hxx"
-#include "instbdlg.hxx"
+//CHINA001 #include "instbdlg.hxx"
 #include "globstr.hrc"
-#include "strindlg.hxx"
-#include "mvtabdlg.hxx"
+//CHINA001 #include "strindlg.hxx"
+//CHINA001 #include "mvtabdlg.hxx"
 #include "docfunc.hxx"
 
 
+#include "scabstdlg.hxx" //CHINA001
 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
@@ -197,7 +198,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
+                    //CHINA001 ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                    AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), ResId(RID_SCDLG_SHOW_TAB));
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     String aTabName;
                     BOOL bFirst = TRUE;
@@ -260,10 +266,16 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else                                // Dialog
                 {
-                    ScInsertTableDlg* pDlg = new ScInsertTableDlg(
-                                                    GetDialogParent(),
-                                                    *pViewData,nTabSelCount);
+//CHINA001                  ScInsertTableDlg* pDlg = new ScInsertTableDlg(
+//CHINA001                  GetDialogParent(),
+//CHINA001                  *pViewData,nTabSelCount);
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+                    AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg( GetDialogParent(), *pViewData,
+                                                                                    nTabSelCount,
+                                                                                    ResId(RID_SCDLG_INSERT_TABLE));
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                     if ( RET_OK == pDlg->Execute() )
                     {
                         if (pDlg->GetTablesFromFile())
@@ -448,12 +460,21 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             break;
                     }
 
-                    ScStringInputDlg* pDlg =
-                        new ScStringInputDlg( GetDialogParent(),
-                                              aDlgTitle,
-                                              String(ScResId(SCSTR_NAME)),
-                                              aName,
-                                              nSlot );
+//CHINA001                  ScStringInputDlg* pDlg =
+//CHINA001                  new ScStringInputDlg( GetDialogParent(),
+//CHINA001                  aDlgTitle,
+//CHINA001                  String(ScResId(SCSTR_NAME)),
+//CHINA001                  aName,
+//CHINA001                  nSlot );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                    AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg( GetDialogParent(),
+                                                                                    aDlgTitle,
+                                                                                    String(ScResId(SCSTR_NAME)),
+                                                                                    aName,
+                                                                                    nSlot,ResId(RID_SCDLG_STRINPUT));
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     while ( !bDone && nRet == RET_OK )
                     {
@@ -567,7 +588,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScMoveTableDlg* pDlg = new ScMoveTableDlg( GetDialogParent() );
+                    //CHINA001 ScMoveTableDlg* pDlg = new ScMoveTableDlg( GetDialogParent() );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(), ResId(RID_SCDLG_MOVETAB) );
+                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     USHORT nTableCount = pDoc->GetTableCount();
                     ScMarkData& rMark       = GetViewData()->GetMarkData();
