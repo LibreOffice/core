@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:49:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ private:
     ~SvxBackgroundTabPage();
 
     // Hintergrundfarbe ------------------------------------
-    Window                  aBorderWin;
+    Control                 aBorderWin;
     ValueSet                aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
     BackgroundPreviewImpl*  pPreviewWin1;
