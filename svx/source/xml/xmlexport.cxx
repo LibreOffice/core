@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-17 14:29:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
     }
     catch(uno::Exception e)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno Exception caught while exporting:\n" );
         aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -345,7 +345,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
     }
     catch( xml::sax::SAXParseException& r )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX parse exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -353,7 +353,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
     }
     catch( xml::sax::SAXException& r )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -361,7 +361,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
     }
     catch( io::IOException& r )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -369,7 +369,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
     }
     catch( uno::Exception& r )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
