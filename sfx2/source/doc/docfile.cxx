@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 10:53:47 $
+ *  last change: $Author: dv $ $Date: 2001-03-29 11:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,44 +1159,42 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
                 DBG_ASSERT( aSub.Is() && !aSub->GetError(), "Versionsliste, aber keine Versionen!" );
 
-                // try to open the version stream as sub storage, first ( the new 6.0 format )
-                // if it's not a storage then it's hopefully a compressed stream ( the old 5.x format )
+                // Dort ist die Version als gepackter Stream gespeichert
+                SvStorageStreamRef aStream =
+                    aSub->OpenStream( aVersionStream, SFX_STREAM_READONLY );
 
-                nStorOpenMode = SFX_STREAM_READONLY | STREAM_NOCREATE;
-                aStorage = aSub->OpenStorage( aVersionStream, nStorOpenMode );
-
-                if( aStorage.Is() && ! aStorage->GetError() )
-                    GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-                else
+                if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
                 {
-                    // Dort ist die Version als gepackter Stream gespeichert
-                    SvStorageStreamRef aStream =
-                        aSub->OpenStream( aVersionStream, SFX_STREAM_READONLY );
+                    // Stream ins TempDir auspacken
+                    ::utl::TempFile aTempFile;
+                    String          aTmpName = aTempFile.GetURL();
+                    SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
 
-                    if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
+                    // The new file format uses UCB storages instead of OLE storages.
+                    // These storages aren't compressed.
+                    if ( !aSub->IsOLEStorage() )
                     {
-                        // Stream ins TempDir auspacken
-                        ::utl::TempFile        aTempFile;
-                        String          aTmpName = aTempFile.GetURL();
-                        SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
-
+                        *aStream >> aTmpStream;
+                    }
+                    else
+                    {
                         ZCodec aCodec;
                         aCodec.BeginCompression();
                         aCodec.Decompress( *aStream, aTmpStream );
                         aCodec.EndCompression();
-                        aTmpStream.Close();
-
-                        // Datei als Storage "offnen
-                        nStorOpenMode = SFX_STREAM_READONLY;
-                        aStorage = new SvStorage( aTmpName, nStorOpenMode );
-                        SetPhysicalName( aTmpName );
-                        pImp->bIsTemp = sal_True;
-                        GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-                        DELETEZ( pImp->pVersions );
                     }
-                    else
-                        bResetSorage = TRUE;
+                    aTmpStream.Close();
+
+                    // Datei als Storage "offnen
+                    nStorOpenMode = SFX_STREAM_READONLY;
+                    aStorage = new SvStorage( aTmpName, nStorOpenMode );
+                    SetPhysicalName( aTmpName );
+                    pImp->bIsTemp = sal_True;
+                    GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+                    DELETEZ( pImp->pVersions );
                 }
+                else
+                    bResetSorage = TRUE;
             }
             else
                 bResetSorage = TRUE;
