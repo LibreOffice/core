@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 06:31:06 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,13 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
+#include <com/sun/star/sdbcx/PrivilegeObject.hpp>
+#endif
+
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
@@ -74,9 +81,11 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
 
+
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 
 
 #define MYADOID(l) {l, 0,0x10,0x80,0,0,0xAA,0,0x6D,0x2E,0xA4};
@@ -256,6 +265,89 @@ sal_Bool ADOS::isJetEngine(sal_Int32 _nEngineType)
     }
     return bRet;
 }
+// -----------------------------------------------------------------------------
+ObjectTypeEnum ADOS::mapObjectType2Ado(sal_Int32 objType)
+{
+    ObjectTypeEnum eType = adPermObjTable;
+    switch(objType)
+    {
+        case PrivilegeObject::TABLE:
+            eType = adPermObjTable;
+            break;
+        case PrivilegeObject::VIEW:
+            eType = adPermObjView;
+            break;
+        case PrivilegeObject::COLUMN:
+            eType = adPermObjColumn;
+            break;
+    }
+    return eType;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 ADOS::mapAdoType2Object(ObjectTypeEnum objType)
+{
+    sal_Int32 nType = PrivilegeObject::TABLE;
+    switch(objType)
+    {
+        case adPermObjTable:
+            nType = PrivilegeObject::TABLE;
+            break;
+        case adPermObjView:
+            nType = PrivilegeObject::VIEW;
+            break;
+        case adPermObjColumn:
+            nType = PrivilegeObject::COLUMN;
+            break;
+    }
+    return nType;
+}
+#ifdef DELETE
+#undef DELETE
+#endif
+// -----------------------------------------------------------------------------
+sal_Int32 ADOS::mapAdoRights2Sdbc(RightsEnum eRights)
+{
+    sal_Int32 nRights = 0;
+    if((eRights & adRightInsert) == adRightInsert)
+        nRights |= Privilege::INSERT;
+    if((eRights & adRightDelete) == adRightDelete)
+        nRights |= ::com::sun::star::sdbcx::Privilege::DELETE;
+    if((eRights & adRightUpdate) == adRightUpdate)
+        nRights |= Privilege::UPDATE;
+    if((eRights & adRightWriteDesign) == adRightWriteDesign)
+        nRights |= Privilege::ALTER;
+    if((eRights & adRightRead) == adRightRead)
+        nRights |= Privilege::SELECT;
+    if((eRights & adRightReference) == adRightReference)
+        nRights |= Privilege::REFERENCE;
+    if((eRights & adRightDrop) == adRightDrop)
+        nRights |= Privilege::DROP;
+
+    return nRights;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 ADOS::mapRights2Ado(sal_Int32 nRights)
+{
+    sal_Int32 eRights = adRightNone;
+
+    if((nRights & Privilege::INSERT) == Privilege::INSERT)
+        eRights |= adRightInsert;
+    if((nRights & Privilege::DELETE) == Privilege::DELETE)
+        eRights |= adRightDelete;
+    if((nRights & Privilege::UPDATE) == Privilege::UPDATE)
+        eRights |= adRightUpdate;
+    if((nRights & Privilege::ALTER) == Privilege::ALTER)
+        eRights |= adRightWriteDesign;
+    if((nRights & Privilege::SELECT) == Privilege::SELECT)
+        eRights |= adRightRead;
+    if((nRights & Privilege::REFERENCE) == Privilege::REFERENCE)
+        eRights |= adRightReference;
+    if((nRights & Privilege::DROP) == Privilege::DROP)
+        eRights |= adRightDrop;
+
+    return eRights;
+}
+// -----------------------------------------------------------------------------
 
 
 

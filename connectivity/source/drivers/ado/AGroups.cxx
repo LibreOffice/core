@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroups.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 Reference< XNamed > OGroups::createObject(const ::rtl::OUString& _rName)
 {
         Reference< XNamed > xRet = NULL;
-    OAdoGroup* pRet = new OAdoGroup(isCaseSensitive(),_rName);
+    OAdoGroup* pRet = new OAdoGroup(m_pCatalog,isCaseSensitive(),_rName);
     xRet = pRet;
     return xRet;
 }
@@ -106,7 +106,7 @@ void OGroups::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OGroups::createEmptyObject()
 {
-    OAdoGroup* pNew = new OAdoGroup(isCaseSensitive());
+    OAdoGroup* pNew = new OAdoGroup(m_pCatalog,isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------

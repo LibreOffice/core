@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroups.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:32 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
+#endif
 
 namespace connectivity
 {
@@ -81,17 +84,19 @@ namespace connectivity
         class OGroups : public sdbcx::OCollection
         {
             ADOGroups*  m_pCollection;
+            OCatalog*   m_pCatalog;
         protected:
 
                         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
                         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
                         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         public:
-            OGroups(::cppu::OWeakObject& _rParent,
+            OGroups(OCatalog* _pParent,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector,
-                     ADOGroups* _pCollection,sal_Bool _bCase) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
+                     ADOGroups* _pCollection,sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                     ,m_pCollection(_pCollection)
+                    ,m_pCatalog(_pParent)
             {
                 if(m_pCollection)
                     m_pCollection->AddRef();

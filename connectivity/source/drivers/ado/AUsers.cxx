@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUsers.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:33:30 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OUsers::createObject(const ::rtl::OUString& _rName)
 {
-    OAdoUser* pRet = new OAdoUser(isCaseSensitive(),_rName);
-        Reference< XNamed > xRet = pRet;
+    OAdoUser* pRet = new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);
+    Reference< XNamed > xRet = pRet;
     return xRet;
 }
 // -------------------------------------------------------------------------
@@ -102,7 +102,7 @@ void OUsers::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OUsers::createEmptyObject()
 {
-    OUserExtend* pNew = new OUserExtend(isCaseSensitive());
+    OUserExtend* pNew = new OUserExtend(m_pCatalog,isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------

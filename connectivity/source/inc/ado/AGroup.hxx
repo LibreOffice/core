@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,12 @@ namespace connectivity
     namespace ado
     {
         typedef sdbcx::OGroup OGroup_ADO;
+        class OCatalog;
 
         class OAdoGroup :   public OGroup_ADO
         {
             WpADOGroup      m_aGroup;
+            OCatalog*       m_pCatalog;
 
             sal_Int32       MapRight(RightsEnum _eNum);
             RightsEnum      Map2Right(sal_Int32 _eNum);
@@ -89,8 +91,8 @@ namespace connectivity
         public:
             virtual void refreshUsers();
         public:
-            OAdoGroup(sal_Bool _bCase, ADOGroup* _pGroup=NULL);
-            OAdoGroup(sal_Bool _bCase, const ::rtl::OUString& _Name);
+            OAdoGroup(OCatalog* _pParent,sal_Bool _bCase, ADOGroup* _pGroup=NULL);
+            OAdoGroup(OCatalog* _pParent,sal_Bool _bCase, const ::rtl::OUString& _Name);
 
             virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);

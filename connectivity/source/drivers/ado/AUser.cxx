@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@
 #ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
+#include "ado/Awrapado.hxx"
+#endif
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -88,7 +94,9 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 // -------------------------------------------------------------------------
-OAdoUser::OAdoUser(sal_Bool _bCase, ADOUser* _pUser) : OUser_TYPEDEF(_bCase)
+OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase, ADOUser* _pUser)
+    : OUser_TYPEDEF(_bCase)
+    ,m_pCatalog(_pParent)
 {
     construct();
 
@@ -99,7 +107,9 @@ OAdoUser::OAdoUser(sal_Bool _bCase, ADOUser* _pUser) : OUser_TYPEDEF(_bCase)
     refreshGroups();
 }
 // -------------------------------------------------------------------------
-OAdoUser::OAdoUser(sal_Bool _bCase,   const ::rtl::OUString& _Name) : OUser_TYPEDEF(_Name,_bCase)
+OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const ::rtl::OUString& _Name)
+    : OUser_TYPEDEF(_Name,_bCase)
+    , m_pCatalog(_pParent)
 {
     construct();
     m_aUser.Create();
@@ -134,7 +144,7 @@ void OAdoUser::refreshGroups()
     if(m_pGroups)
         m_pGroups->reFill(aVector);
     else
-        m_pGroups = new OGroups(*this,m_aMutex,aVector,pGroups,isCaseSensitive());
+        m_pGroups = new OGroups(m_pCatalog,m_aMutex,aVector,pGroups,isCaseSensitive());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
@@ -194,11 +204,13 @@ void OAdoUser::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     }
 }
 // -------------------------------------------------------------------------
-OUserExtend::OUserExtend(sal_Bool _bCase,   ADOUser* _pUser) : OAdoUser(_bCase,_pUser)
+OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase,    ADOUser* _pUser)
+    : OAdoUser(_pParent,_bCase,_pUser)
 {
 }
 // -------------------------------------------------------------------------
-OUserExtend::OUserExtend(sal_Bool _bCase, const ::rtl::OUString& _Name) : OAdoUser(_bCase,_Name)
+OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase, const ::rtl::OUString& _Name)
+    : OAdoUser(_pParent,_bCase,_Name)
 {
 }
 
@@ -221,16 +233,64 @@ cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoUser::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoUser::acquire() throw(RuntimeException)
 {
     OUser_TYPEDEF::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoUser::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoUser::release() throw(RuntimeException)
 {
     OUser_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL OAdoUser::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+
+    return ADOS::mapAdoRights2Sdbc(m_aUser.GetPermissions(objName, ADOS::mapObjectType2Ado(objType)));
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+
+    sal_Int32 nRights = 0;
+    RightsEnum eRights = m_aUser.GetPermissions(objName, ADOS::mapObjectType2Ado(objType));
+    if((eRights & adRightWithGrant) == adRightWithGrant)
+        nRights = ADOS::mapAdoRights2Sdbc(eRights);
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+    return nRights;
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OAdoUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessGrant,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OAdoUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessRevoke,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+}
+// -----------------------------------------------------------------------------
+// XUser
+void SAL_CALL OAdoUser::changePassword( const ::rtl::OUString& objPassword, const ::rtl::OUString& newPassword ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    m_aUser.ChangePassword(objPassword,newPassword);
+    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+}
+// -----------------------------------------------------------------------------
+
+
 
 
 

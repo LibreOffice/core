@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:28 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,10 @@ void OAdoTable::refreshColumns()
         }
     }
 
-    m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive(),m_pCatalog->getConnection());
+    if(m_pColumns)
+        m_pColumns->reFill(aVector);
+    else
+        m_pColumns = new OColumns(*this,m_aMutex,aVector,pColumns,isCaseSensitive(),m_pCatalog->getConnection());
 }
 // -------------------------------------------------------------------------
 void OAdoTable::refreshKeys()
@@ -194,7 +197,10 @@ void OAdoTable::refreshKeys()
         }
     }
 
-    m_pKeys = new OKeys(*this,m_aMutex,aVector,pKeys,isCaseSensitive(),m_pCatalog->getConnection());
+    if(m_pKeys)
+        m_pKeys->reFill(aVector);
+    else
+        m_pKeys = new OKeys(*this,m_aMutex,aVector,pKeys,isCaseSensitive(),m_pCatalog->getConnection());
 }
 // -------------------------------------------------------------------------
 void OAdoTable::refreshIndexes()
@@ -219,8 +225,10 @@ void OAdoTable::refreshIndexes()
             }
         }
     }
-
-    m_pIndexes = new OIndexes(*this,m_aMutex,aVector,pIndexes,isCaseSensitive(),m_pCatalog->getConnection());
+    if(m_pIndexes)
+        m_pIndexes->reFill(aVector);
+    else
+        m_pIndexes = new OIndexes(*this,m_aMutex,aVector,pIndexes,isCaseSensitive(),m_pCatalog->getConnection());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()

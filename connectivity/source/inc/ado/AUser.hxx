@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,14 @@ namespace connectivity
 {
     namespace ado
     {
+        class OCatalog;
         typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
 
         class OAdoUser : public OUser_TYPEDEF
         {
         protected:
-            WpADOUser       m_aUser;
+            WpADOUser   m_aUser;
+            OCatalog*   m_pCatalog;
 
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                             sal_Int32 nHandle,
@@ -92,14 +94,22 @@ namespace connectivity
         public:
             virtual void refreshGroups();
         public:
-            OAdoUser(sal_Bool _bCase,   ADOUser* _pUser=NULL);
-            OAdoUser(sal_Bool _bCase,  const ::rtl::OUString& _Name);
+            OAdoUser(OCatalog* _pParent,sal_Bool _bCase,    ADOUser* _pUser=NULL);
+            OAdoUser(OCatalog* _pParent,sal_Bool _bCase,  const ::rtl::OUString& _Name);
 
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
             virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+
+            // XUser
+            virtual void SAL_CALL changePassword( const ::rtl::OUString& objPassword, const ::rtl::OUString& newPassword ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            // XAuthorizable
+            virtual sal_Int32 SAL_CALL getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             WpADOUser getImpl() const { return m_aUser;}
         };
@@ -117,8 +127,8 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
-            OUserExtend(sal_Bool _bCase,ADOUser* _pUser=NULL);
-            OUserExtend(sal_Bool _bCase,const ::rtl::OUString& _Name);
+            OUserExtend(OCatalog* _pParent,sal_Bool _bCase,ADOUser* _pUser=NULL);
+            OUserExtend(OCatalog* _pParent,sal_Bool _bCase,const ::rtl::OUString& _Name);
 
             virtual void construct();
             ::rtl::OUString getPassword() const { return m_Password;}

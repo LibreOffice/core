@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,9 @@ void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descr
     aSql = aSql + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                 + ::rtl::OUString::createFromAscii(" PASSWORD ")
                 + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)));
+    aSql += ::rtl::OUString::createFromAscii(" RESOURCE NOT EXCLUSIVE");
 
-        Reference< XStatement > xStmt = m_pConnection->createStatement(  );
+    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     xStmt->execute(aSql);
 
     OCollection_TYPE::appendByDescriptor(descriptor);
@@ -160,4 +161,6 @@ void SAL_CALL OUsers::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOu
 
     dropByName(m_aElements[index]->first);
 }
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:29 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #endif
 
+#ifndef _ADOCTINT_H_
+#include <ado/ADOCTINT.H>
+#endif
+
 struct ADOConnection;
 enum DataTypeEnum;
 namespace connectivity
@@ -118,6 +122,11 @@ namespace connectivity
             static sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
             static DataTypeEnum MapJdbc2ADOType(sal_Int32 _nType);
             static sal_Bool isJetEngine(sal_Int32 _nEngineType);
+
+            static ObjectTypeEnum   mapObjectType2Ado(sal_Int32 objType);
+            static sal_Int32        mapAdoType2Object(ObjectTypeEnum objType);
+            static sal_Int32        mapAdoRights2Sdbc(RightsEnum eRights);
+            static sal_Int32        mapRights2Ado(sal_Int32 nRights);
         };
 
 

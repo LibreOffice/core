@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ void WpADOGroup::Create()
         operator=(pCommand);
 }
 // -------------------------------------------------------------------------
-OAdoGroup::OAdoGroup(sal_Bool _bCase,   ADOGroup* _pGroup) : OGroup_ADO(_bCase)
+OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase,    ADOGroup* _pGroup) : OGroup_ADO(_bCase),m_pCatalog(_pParent)
 {
     construct();
     if(_pGroup)
@@ -121,7 +121,7 @@ OAdoGroup::OAdoGroup(sal_Bool _bCase,   ADOGroup* _pGroup) : OGroup_ADO(_bCase)
     refreshUsers();
 }
 // -------------------------------------------------------------------------
-OAdoGroup::OAdoGroup(sal_Bool _bCase, const ::rtl::OUString& _Name) : OGroup_ADO(_Name,_bCase)
+OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase, const ::rtl::OUString& _Name) : OGroup_ADO(_Name,_bCase),m_pCatalog(_pParent)
 {
     construct();
     m_aGroup.Create();
@@ -155,7 +155,7 @@ void OAdoGroup::refreshUsers()
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else
-        m_pUsers = new OUsers(*this,m_aMutex,aVector,pUsers,isCaseSensitive());
+        m_pUsers = new OUsers(m_pCatalog,m_aMutex,aVector,pUsers,isCaseSensitive());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoGroup::getUnoTunnelImplementationId()

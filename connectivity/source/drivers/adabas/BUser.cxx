@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,20 @@
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
+#include <com/sun/star/sdbcx/PrivilegeObject.hpp>
+#endif
 
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -156,6 +165,172 @@ cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
 cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
 {
     return *OUserExtend_PROP::getArrayHelper();
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL OAdabasUser::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+
+    sal_Int32 nRights = 0;
+    // first we need to create the sql stmt to select the privs
+    Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
+    ::rtl::OUString sCatalog,sSchema,sTable;
+    ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable);
+    Reference<XStatement> xStmt = m_pConnection->createStatement();
+    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("SELECT REFTABLENAME,PRIVILEGES FROM DOMAIN.USR_USES_TAB WHERE REFOBJTYPE <> 'SYSTEM' AND DEFUSERNAME = '");
+    sSql += m_Name;
+    sSql += ::rtl::OUString::createFromAscii("' AND REFTABLENAME = '");
+    sSql += sTable;
+    sSql += ::rtl::OUString::createFromAscii("'");
+    if(xStmt.is())
+    {
+        Reference<XResultSet> xRes = xStmt->executeQuery(sSql);
+        if(xRes.is())
+        {
+            Reference<XRow> xRow(xRes,UNO_QUERY);
+            if(xRow.is() && xRes->next())
+            {
+                ::rtl::OUString sPrivs = xRow->getString(2);
+                static const ::rtl::OUString sInsert    = ::rtl::OUString::createFromAscii("INS");
+                static const ::rtl::OUString sDelete    = ::rtl::OUString::createFromAscii("DEL");
+                static const ::rtl::OUString sUpdate    = ::rtl::OUString::createFromAscii("UPD");
+                static const ::rtl::OUString sAlter     = ::rtl::OUString::createFromAscii("ALT");
+                static const ::rtl::OUString sSelect    = ::rtl::OUString::createFromAscii("SEL");
+                static const ::rtl::OUString sReference = ::rtl::OUString::createFromAscii("REF");
+                if(sPrivs.indexOf(sInsert) != -1)
+                    nRights |= Privilege::INSERT;
+                if(sPrivs.indexOf(sDelete) != -1)
+                    nRights |= Privilege::DELETE;
+                if(sPrivs.indexOf(sUpdate) != -1)
+                    nRights |= Privilege::UPDATE;
+                if(sPrivs.indexOf(sAlter) != -1)
+                    nRights |= Privilege::ALTER;
+                if(sPrivs.indexOf(sSelect) != -1)
+                    nRights |= Privilege::SELECT;
+                if(sPrivs.indexOf(sReference) != -1)
+                    nRights |= Privilege::REFERENCE;
+            }
+        }
+    }
+
+    return nRights;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OAdabasUser::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+
+    sal_Int32 nRights = 0;
+
+    return nRights;
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
+    if(sPrivs.getLength())
+    {
+        ::rtl::OUString sGrant;
+        sGrant += ::rtl::OUString::createFromAscii("GRANT ");
+        sGrant += sPrivs;
+        sGrant += ::rtl::OUString::createFromAscii(" ON ");
+        Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
+        sGrant += ::dbtools::quoteTableName(xMeta,objName);
+        sGrant += ::rtl::OUString::createFromAscii(" TO ");
+        sGrant += m_Name;
+
+        Reference<XStatement> xStmt = m_pConnection->createStatement();
+        if(xStmt.is())
+            xStmt->execute(sGrant);
+    }
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OAdabasUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
+    if(sPrivs.getLength())
+    {
+        ::rtl::OUString sGrant;
+        sGrant += ::rtl::OUString::createFromAscii("GRANT ");
+        sGrant += sPrivs;
+        sGrant += ::rtl::OUString::createFromAscii(" ON ");
+        Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
+        sGrant += ::dbtools::quoteTableName(xMeta,objName);
+        sGrant += ::rtl::OUString::createFromAscii(" FROM ");
+        sGrant += m_Name;
+
+        Reference<XStatement> xStmt = m_pConnection->createStatement();
+        if(xStmt.is())
+            xStmt->execute(sGrant);
+    }
+}
+// -----------------------------------------------------------------------------
+// XUser
+void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, const ::rtl::OUString& newPassword ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    ::rtl::OUString sAlterPwd;
+    sAlterPwd = ::rtl::OUString::createFromAscii("ALTER PASSWORD ");
+    sAlterPwd += m_Name;
+    sAlterPwd += ::rtl::OUString::createFromAscii(" ") ;
+    sAlterPwd += objPassword;
+    sAlterPwd += ::rtl::OUString::createFromAscii(" TO ") ;
+    sAlterPwd += newPassword;
+    Reference<XStatement> xStmt = m_pConnection->createStatement();
+    if(xStmt.is())
+        xStmt->execute(sAlterPwd);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OAdabasUser::getPrivilegeString(sal_Int32 nRights) const
+{
+    ::rtl::OUString sPrivs;
+    if((nRights & Privilege::INSERT) == Privilege::INSERT)
+        sPrivs += ::rtl::OUString::createFromAscii("INSERT");
+
+    if((nRights & Privilege::DELETE) == Privilege::DELETE)
+    {
+        if(sPrivs.getLength())
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("DELETE");
+    }
+
+    if((nRights & Privilege::UPDATE) == Privilege::UPDATE)
+    {
+        if(sPrivs.getLength())
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("UPDATE");
+    }
+
+    if((nRights & Privilege::ALTER) == Privilege::ALTER)
+    {
+        if(sPrivs.getLength())
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("ALTER");
+    }
+
+    if((nRights & Privilege::SELECT) == Privilege::SELECT)
+    {
+        if(sPrivs.getLength())
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("SELECT");
+    }
+
+    if((nRights & Privilege::REFERENCE) == Privilege::REFERENCE)
+    {
+        if(sPrivs.getLength())
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("REFERENCES");
+    }
+
+    return sPrivs;
 }
 // -----------------------------------------------------------------------------
 

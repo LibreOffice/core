@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:41:55 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ void OCatalog::refreshGroups()
 
     if(m_pGroups)
         delete m_pGroups;
-    m_pGroups = new OGroups(*this,m_aMutex,aVector,pGroups,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    m_pGroups = new OGroups(this,m_aMutex,aVector,pGroups,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshUsers()
@@ -210,7 +210,7 @@ void OCatalog::refreshUsers()
 
     if(m_pUsers)
         delete m_pUsers;
-    m_pUsers = new OUsers(*this,m_aMutex,aVector,pUsers,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    m_pUsers = new OUsers(this,m_aMutex,aVector,pUsers,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 
