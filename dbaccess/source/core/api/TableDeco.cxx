@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:34:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,12 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
-
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -484,7 +489,7 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
         //  m_pTables->renameObject(_rNewName);
     }
     else // not supported
-        throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 }
 
 // XAlterTable,
@@ -499,8 +504,7 @@ void SAL_CALL ODBTableDecorator::alterColumnByName( const ::rtl::OUString& _rNam
         xAlter->alterColumnByName(_rName,_rxDescriptor);
     }
     else
-        // not supported
-        throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_ALTER_BY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
     if(m_pColumns)
         m_pColumns->refresh();
 }
@@ -518,7 +522,7 @@ void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Re
             m_pColumns->refresh();
     }
     else // not supported
-        throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_ALTER_BY_INDEX),*this,SQLSTATE_GENERAL,1000,Any() );
 }
 // -----------------------------------------------------------------------------
 Reference< XNameAccess> ODBTableDecorator::getIndexes() throw (RuntimeException)
