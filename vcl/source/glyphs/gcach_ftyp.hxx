@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hdu $ $Date: 2001-09-18 15:44:02 $
+ *  last change: $Author: hdu $ $Date: 2001-11-23 15:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,10 @@
 
 #include <glyphcache.hxx>
 #include <rtl/textcvt.h>
+
 typedef int FT_Int;
+struct FT_GlyphRec_;
+class FreetypeServerFont;
 
 // -----------------------------------------------------------------------
 
@@ -128,23 +131,23 @@ private:
 class FreetypeManager
 {
 public:
-                                FreetypeManager();
-                                ~FreetypeManager();
+                        FreetypeManager();
+                        ~FreetypeManager();
 
-    long                        AddFontDir( const String& rUrlName );
-    void                        AddFontFile( const rtl::OString& rNormalizedName,
-                                    int nFaceNum, int nFontId, const ImplFontData* );
-    long                        FetchFontList( ImplDevFontList* ) const;
-    void                        ClearFontList();
+    long                AddFontDir( const String& rUrlName );
+    void                AddFontFile( const rtl::OString& rNormalizedName,
+                            int nFaceNum, int nFontId, const ImplFontData* );
+    long                FetchFontList( ImplDevFontList* ) const;
+    void                ClearFontList();
 
-    class FreetypeServerFont*   CreateFont( const ImplFontSelectData& );
-    void*                       GetFontHandle (int nFontId);
+    FreetypeServerFont* CreateFont( const ImplFontSelectData& );
+    void*               GetFontHandle (int nFontId);
 
 private:
     struct std::hash<FtFontInfo*> { size_t operator()( const FtFontInfo* ) const; };
     struct std::equal_to<FtFontInfo*> { bool operator()( const FtFontInfo*, const FtFontInfo* ) const; };
     typedef ::std::hash_multiset<FtFontInfo*> FontList;
-    FontList                    maFontList;
+    FontList            maFontList;
 };
 
 // -----------------------------------------------------------------------
@@ -172,6 +175,7 @@ class FreetypeServerFont : public ServerFont
 protected:
 friend GlyphCache;
 
+    int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* );
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
     virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
@@ -182,9 +186,10 @@ private:
     struct FT_FaceRec_*         maFaceFT;
     FtFontInfo*                 mpFontInfo;
     FT_Int                      mnLoadFlags;
+    double                      mfStretch;
 
     typedef ::std::hash_map<int,int> GlyphSubstitution;
-    GlyphSubstitution           aGlyphSubstitution;
+    GlyphSubstitution           maGlyphSubstitution;
     rtl_UnicodeToTextConverter  maRecodeConverter;
 };
 

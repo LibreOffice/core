@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.61 $
- *  last change: $Author: hdu $ $Date: 2001-11-07 15:37:16 $
+ *  $Revision: 1.62 $
+ *  last change: $Author: hdu $ $Date: 2001-11-23 16:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
         mnWidth = rFSD.mnHeight;
+    mfStretch = (double)mnWidth / rFSD.mnHeight;
     rc = FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
 
     ApplyGSUB( rFSD );
@@ -645,7 +646,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 int SetVerticalFlags( sal_Unicode nChar )
 {
     if ( (nChar >= 0x1100 && nChar <= 0x11f9)   // Hangul Jamo
-    ||  (nChar >= 0x3000 && nChar <= 0xfaff) )  // other CJK
+    ||   (nChar >= 0x3000 && nChar <= 0xfaff) )  // other CJK
     {
         if( nChar == 0x2010 || nChar == 0x2015
         ||  nChar == 0x2016 || nChar == 0x2026
@@ -653,7 +654,7 @@ int SetVerticalFlags( sal_Unicode nChar )
         ||  nChar >= 0xFF00 )
             return 0;   // not rotated
         else if ( nChar == 0x30fc )
-            return +2;  // right
+            return +3;  // right
         return +1;      // left
     }
 
@@ -671,39 +672,70 @@ static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
     nGlyphIndex &= 0x00ffffff;
 }
 
-static void SetTransform( int nSin, int nCos, int nHeight, int nGlyphFlags, FT_Glyph& rGlyphFT )
+int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT )
 {
     FT_Vector aVector;
     FT_Matrix aMatrix;
+
+    int nAngle = GetFontSelData().mnOrientation;
+    const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
+
     switch( nGlyphFlags )
     {
-    case +1:    // left
-        aMatrix.xx = -nSin;
-        aMatrix.yy = -nSin;
-        aMatrix.xy = -nCos;
-        aMatrix.yx = +nCos;
-        aVector.x  = +(nHeight * nCos) >> 10;
-        aVector.y  = +(nHeight * nSin) >> 10;
-        break;
-    case +2:    // right
-        aMatrix.xx = -nSin;
-        aMatrix.yy = -nSin;
-        aMatrix.xy = +nCos;
-        aMatrix.yx = -nCos;
-        aVector.x  = -(nHeight * nCos) >> 10;
-        aVector.y  = -(nHeight * nSin) >> 10;
-        break;
     default:    // straight
+        aVector.x = 0;
+        aVector.y = 0;
         aMatrix.xx = +nCos;
         aMatrix.yy = +nCos;
         aMatrix.xy = -nSin;
         aMatrix.yx = +nSin;
-        aVector.x = 0;
+        break;
+    case +1:    // left
+        nAngle += 900;
+        aVector.x = +rMetrics.descender * mfStretch;
+        // for fonts without GSUB move glyph into middle
+        if( !maGlyphSubstitution.empty() )
+            aVector.x /= 2;
+        aVector.y = -rMetrics.ascender;
+        aMatrix.xx = -nSin / mfStretch;
+        aMatrix.yy = -nSin * mfStretch;
+        aMatrix.xy = -nCos * mfStretch;
+        aMatrix.yx = +nCos / mfStretch;
+        break;
+    case +3:    // right
+        nAngle -= 900;
+        aVector.x = -rMetrics.descender * mfStretch;
+        // for fonts without GSUB move glyph into middle
+        if( !maGlyphSubstitution.empty() )
+            aVector.x /= 2;
+        aVector.x -= maFaceFT->glyph->metrics.horiAdvance;
         aVector.y = 0;
+        aMatrix.xx = +nSin / mfStretch;
+        aMatrix.yy = +nSin * mfStretch;
+        aMatrix.xy = +nCos * mfStretch;
+        aMatrix.yx = -nCos / mfStretch;
         break;
     }
 
-    FT_Glyph_Transform( rGlyphFT, &aMatrix, &aVector );
+    if( pGlyphFT->format != ft_glyph_format_bitmap )
+        FT_Glyph_Transform( pGlyphFT, NULL, &aVector );
+    else
+    {
+        // FT<=205 ignores transforms for bitmaps, so do it manually
+        FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph&>(pGlyphFT);
+        rBmpGlyphFT->left += (aVector.x + 32) >> 6;
+        rBmpGlyphFT->top  += (aVector.y + 32) >> 6;
+    }
+
+    // orthogonal transforms are handled by bitmap operations
+    // apply other transforms here
+    if( (nAngle % 900) != 0 )
+    {
+        FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
+        nAngle = 0;
+     }
+
+    return nAngle;
 }
 
 // -----------------------------------------------------------------------
@@ -746,9 +778,9 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
 
     // do glyph substitution if necessary
-    GlyphSubstitution::const_iterator it = aGlyphSubstitution.find( nGlyphIndex );
+    GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
     // use OpenType substitution if available
-    if( it != aGlyphSubstitution.end() )
+    if( it != maGlyphSubstitution.end() )
         nGlyphIndex = (*it).second;
 
     // CJK vertical writing needs special treatment
@@ -769,6 +801,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
 
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, mnLoadFlags );
+
     if( rc != FT_Err_Ok )
     {
         // we get here e.g. when a PS font lacks the default glyph
@@ -779,19 +812,25 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
         return;
     }
 
-    rGD.SetCharWidth( (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6 );
+    int nCharWidth = maFaceFT->glyph->metrics.horiAdvance;
+    if( nGlyphFlags ) {  // for bVertical rotated glyphs
+        const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
+#if (FTVERSION < 200)
+        nCharWidth = (rMetrics.height - rMetrics.descender) * mfStretch;
+#else
+        nCharWidth = (rMetrics.height + rMetrics.descender) * mfStretch;
+#endif
+    }
+    rGD.SetCharWidth( (nCharWidth + 32) >> 6 );
 
-    FT_Glyph aGlyphFT;
-    rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
+    FT_Glyph pGlyphFT;
+    rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
-    if( (nCos!=0x10000) || (nGlyphFlags!=0) )
-        SetTransform( nSin, nCos, GetFontSelData().mnHeight,
-            nGlyphFlags, aGlyphFT );
-
-    rGD.SetDelta( (aGlyphFT->advance.x + 0x8000) >> 16, -((aGlyphFT->advance.y + 0x8000) >> 16) );
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+    rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
-    FT_Glyph_Get_CBox( aGlyphFT, ft_glyph_bbox_pixels, &aBbox );
+    FT_Glyph_Get_CBox( pGlyphFT, ft_glyph_bbox_pixels, &aBbox );
     if( aBbox.yMin > aBbox.yMax )   // circumvent freetype bug
     {
         int t=aBbox.yMin; aBbox.yMin=aBbox.yMax, aBbox.yMax=t;
@@ -799,7 +838,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     rGD.SetOffset( aBbox.xMin, -aBbox.yMax );
     rGD.SetSize( Size( (aBbox.xMax-aBbox.xMin+1), (aBbox.yMax-aBbox.yMin) ) );
 
-    FT_Done_Glyph( aGlyphFT );
+    FT_Done_Glyph( pGlyphFT );
 }
 
 // -----------------------------------------------------------------------
@@ -848,31 +887,26 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     if( rc != FT_Err_Ok )
         return false;
 
-    FT_Glyph aGlyphFT;
-    rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
+    FT_Glyph pGlyphFT;
+    rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
     if( rc != FT_Err_Ok )
         return false;
 
-    if( aGlyphFT->format != ft_glyph_format_bitmap )
-    {
-        if( (nCos!=0) && (nSin!=0) )
-            SetTransform( nSin, nCos, GetFontSelData().mnHeight,
-                nGlyphFlags, aGlyphFT );
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
 
-        if( aGlyphFT->format == ft_glyph_format_outline )
-            ((FT_OutlineGlyphRec*)aGlyphFT )->outline.flags |= ft_outline_high_precision;
-        rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_mono, NULL, TRUE );
+    if( pGlyphFT->format != ft_glyph_format_bitmap )
+    {
+        if( pGlyphFT->format == ft_glyph_format_outline )
+            ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= ft_outline_high_precision;
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, ft_render_mode_mono, NULL, TRUE );
         if( rc != FT_Err_Ok )
             return false;
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
+    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
     // autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
-
-    if( GetFontSelData().mbVertical && nGlyphFlags!=0 )
-        rRawBitmap.mnYOffset += GetFontSelData().mnHeight;
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
@@ -890,14 +924,9 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     memcpy( rRawBitmap.mpBits, rBitmapFT.buffer, nNeededSize );
 
-    FT_Done_Glyph( aGlyphFT );
+    FT_Done_Glyph( pGlyphFT );
 
-    int nAngle = GetFontSelData().mnOrientation;
-    switch( nGlyphFlags )
-    {
-        case +1: nAngle += 900; break;
-        case +2: nAngle -= 900; break;
-    }
+    // special case for 0/90/180/270 degree orientation
     switch( nAngle )
     {
         case  -900:
@@ -942,37 +971,31 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( rc != FT_Err_Ok )
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+
     if( rc != FT_Err_Ok )
         return false;
 
-    FT_Glyph aGlyphFT;
-    rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
+    FT_Glyph pGlyphFT;
+    rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
     if( rc != FT_Err_Ok )
         return false;
 
-    if( aGlyphFT->format == ft_glyph_format_outline )
-    {
-        if( (nCos!=0) && (nSin!=0) )
-            SetTransform( nSin, nCos, GetFontSelData().mnHeight,
-                nGlyphFlags, aGlyphFT );
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
 
-        ((FT_OutlineGlyph)aGlyphFT)->outline.flags |= ft_outline_high_precision;
-    }
+    if( pGlyphFT->format == ft_glyph_format_outline )
+        ((FT_OutlineGlyph)pGlyphFT)->outline.flags |= ft_outline_high_precision;
 
-    bool bEmbedded = (aGlyphFT->format == ft_glyph_format_bitmap);
+    bool bEmbedded = (pGlyphFT->format == ft_glyph_format_bitmap);
     if( !bEmbedded )
     {
-        rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_normal, NULL, TRUE );
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, ft_render_mode_normal, NULL, TRUE );
         if( rc != FT_Err_Ok )
             return false;
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
+    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
-
-    if( GetFontSelData().mbVertical && nGlyphFlags!=0 )
-        rRawBitmap.mnYOffset += GetFontSelData().mnHeight;
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
@@ -1016,14 +1039,9 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    FT_Done_Glyph( aGlyphFT );
+    FT_Done_Glyph( pGlyphFT );
 
-    int nAngle = GetFontSelData().mnOrientation;
-    switch( nGlyphFlags )
-    {
-        case +1: nAngle += 900; break;
-        case +2: nAngle -= 900; break;
-    }
+    // special case for 0/90/180/270 degree orientation
     switch( nAngle )
     {
         case  -900:
@@ -1644,7 +1662,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             DBG_ASSERT( (it == aSubstVector.end()), "lookup<->coverage table mismatch" );
             // now apply the glyph substitutions that have been collected in this subtable
             for( it = aSubstVector.begin(); it != aSubstVector.end(); ++it )
-                aGlyphSubstitution[ (*it).first ] =  (*it).second;
+                maGlyphSubstitution[ (*it).first ] =  (*it).second;
         }
     }
 
