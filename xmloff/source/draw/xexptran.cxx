@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-08 17:40:12 $
+ *  last change: $Author: aw $ $Date: 2001-03-16 12:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1456,7 +1456,7 @@ void SdXMLImExSvgDElement::AddPolygon(
             drawing::PolygonFlags* pFlagArray = pFlags->getArray();
 
             for(sal_Int32 a(0); !bFlagsUsed && a < nFlagCnt; a++)
-                if(drawing::PolygonFlags_NORMAL != *pFlagArray)
+                if(drawing::PolygonFlags_NORMAL != *pFlagArray++)
                     bFlagsUsed = sal_True;
 
             if(!bFlagsUsed)
