@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:26:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
+
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/EmbedMisc.hpp>
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -121,6 +124,8 @@
 #ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
@@ -2213,7 +2218,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
         if ( DLG_FRM_OLE == nDlgType && ! bNew )
         {
             // disable width and height for math objects
-            const SvGlobalName& rFactNm = *pSh->GetOLEObj()->GetSvFactory();
+            const SvGlobalName& rFactNm( pSh->GetOLEObject()->getClassID() );
 
             struct _GlobalNameId {
                 UINT32 n1;
@@ -2243,8 +2248,9 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
                     break;
                 }
             }
-            //disable "original size" button if necessary
-            if(0 != (pSh->GetOLEObj()->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE))
+
+            // TODO/LATER: get correct aspect
+            if(0 != (pSh->GetOLEObject()->getStatus( embed::Aspects::MSOLE_CONTENT ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
                 aRealSizeBT.Disable();
         }
     }
