@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 08:53:02 $
+ *  last change: $Author: oj $ $Date: 2002-05-24 13:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ void OJoinController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]        = ID_BROWSER_REDO;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]        = ID_BROWSER_SAVEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]        = ID_BROWSER_UNDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Close")]       = SID_CLOSEDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:CloseDoc")]    = SID_CLOSEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddTable")] = ID_BROWSER_ADDTABLE;
 }
 // -----------------------------------------------------------------------------

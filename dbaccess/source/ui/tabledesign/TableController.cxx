@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 08:45:10 $
+ *  last change: $Author: oj $ $Date: 2002-05-24 13:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,7 +803,7 @@ void OTableController::AddSupportedFeatures()
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/IndexDesign")]  = SID_INDEXDESIGN;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Close")]           = SID_CLOSEDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:CloseDoc")]        = SID_CLOSEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
 }
 // -----------------------------------------------------------------------------
