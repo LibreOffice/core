@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 14:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
             if (!pPropContainer->hasValue() || !_rValue.hasValue())
                 bModified = pPropContainer->hasValue() != _rValue.hasValue();
             else
-                bModified = !uno_equalData(const_cast<void*>(pPropContainer->getValue()), aPos->aType.getTypeLibType()->pType, const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType()->pType, cpp_queryInterface, cpp_release);
+                bModified = !uno_type_equalData(const_cast<void*>(pPropContainer->getValue()), aPos->aType.getTypeLibType(), const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType(), cpp_queryInterface, cpp_release);
 
             if (bModified)
             {
@@ -276,7 +276,7 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
             if (!_rValue.getValueType().equals(aPos->aType))
                 throw IllegalArgumentException();
 
-            bModified = !uno_equalData(aPos->aLocation.pDerivedClassMember, aPos->aType.getTypeLibType()->pType, const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType()->pType, cpp_queryInterface, cpp_release);
+            bModified = !uno_type_equalData(aPos->aLocation.pDerivedClassMember, aPos->aType.getTypeLibType(), const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType(), cpp_queryInterface, cpp_release);
             if (bModified)
             {
                 _rOldValue.setValue(aPos->aLocation.pDerivedClassMember, aPos->aType);
@@ -448,7 +448,5 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
  *  Revision 1.1  2000/09/21 08:52:22  fs
  *  base class for classes which are simple property containers
  *
- *
- *  Revision 1.0 21.09.00 08:23:50  fs
  ************************************************************************/
 
