@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ONumericModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:02 $
+ *  last change:$Date: 2003-05-27 12:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.form.XBoundComponent;
@@ -152,7 +153,7 @@ public class ONumericModel extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
@@ -200,7 +201,7 @@ public class ONumericModel extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         String objName = "NumericField";
 
         //get ListBoxModel
@@ -212,7 +213,7 @@ public class ONumericModel extends TestCase {
 
         XLoadable formLoader = null ;
         try {
-            DBTools dbTools = new DBTools(Param.getMSF()) ;
+            DBTools dbTools = new DBTools((XMultiServiceFactory)Param.getMSF()) ;
             dbTools.registerTestDB((String) System.getProperty("DOCPTH")) ;
 
             formLoader = FormTools.bindForm(xTextDoc,
