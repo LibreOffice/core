@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:05:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,6 @@
  ************************************************************************/
 
 #include <memory>
-
-#ifndef _SFX_IPFRM_HXX
-#include <sfx2/ipfrm.hxx>
-#endif
 
 #include <ide_pch.hxx>
 
@@ -707,9 +703,6 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     // ausser bei New/Record wird die Description durch LoseFocus uebernommen.
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
 
-    // #108283# check if view frame is a SfxInPlaceFrame
-    SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
-
     if ( pButton == &aRunButton )
     {
         StoreMacroDescription();
@@ -783,19 +776,13 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             if ( pEntry )
                 aInfoItem.SetMethod( aMacroBox.GetEntryText( pEntry ) );
             StoreMacroDescription();
-            if( pDispatcher )
-            {
-                pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-            }
-            else
-            {
-                SfxAllItemSet aArgs( SFX_APP()->GetPool() );
-                SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-                SFX_APP()->ExecuteSlot( aRequest );
-            }
+            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+            SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+            SFX_APP()->ExecuteSlot( aRequest );
+
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-            pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
                 pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
             EndDialog( MACRO_EDIT );
@@ -807,7 +794,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 DeleteMacro();
                 BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
                 pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
                 {
                     pDispatcher->Execute( SID_BASICIDE_UPDATEMODULESOURCE,
@@ -834,19 +821,13 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     aInfoItem.SetMethod( pMethod->GetName() );
                     aInfoItem.SetModule( pMethod->GetModule()->GetName() );
                     aInfoItem.SetLib( pMethod->GetModule()->GetParent()->GetName() );
-                    if ( pDispatcher )
-                    {
-                        pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-                    }
-                    else
-                    {
-                        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
-                        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-                        SFX_APP()->ExecuteSlot( aRequest );
-                    }
+                    SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                    SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+                    SFX_APP()->ExecuteSlot( aRequest );
+
                     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
                     pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                    pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+                    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                     if ( pDispatcher )
                         pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
                     StoreMacroDescription();
@@ -870,18 +851,11 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         DBG_ASSERT( pMethod, "Method?" );
         String aComment( GetInfo( pMethod ) );
         SfxMacroInfoItem aItem( SID_MACROINFO, pBasMgr, aLib, aMod, aSub, aComment );
-        if( pDispatcher )
-        {
-            pDispatcher->Execute( SID_CONFIG,
-                                  SFX_CALLMODE_SYNCHRON, &aItem, 0L );
-        }
-        else
-        {
-            SfxAllItemSet Args( SFX_APP()->GetPool() );
-            SfxRequest aRequest( SID_CONFIG, SFX_CALLMODE_SYNCHRON, Args );
-            aRequest.AppendItem( aItem );
-            SFX_APP()->ExecuteSlot( aRequest );
-        }
+        SfxAllItemSet Args( SFX_APP()->GetPool() );
+        SfxRequest aRequest( SID_CONFIG, SFX_CALLMODE_SYNCHRON, Args );
+        aRequest.AppendItem( aItem );
+        SFX_APP()->ExecuteSlot( aRequest );
+
         // Wenn jetzt ein FloatingWindow vom Config-Dlg hochgezogen wurde,
         // muss dieser modale Dlg verschwinden:
         SfxViewFrame* pCurFrame = SfxViewFrame::Current();
