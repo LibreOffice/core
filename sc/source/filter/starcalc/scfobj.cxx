@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:22:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <sch/memchrt.hxx>
 #include <sfx2/app.hxx>
 #include <sot/clsids.hxx>
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #include "scfobj.hxx"
 #include "document.hxx"
@@ -89,8 +92,8 @@
 
 //==================================================================
 
-void Sc10InsertObject::InsertChart( ScDocument* pDoc, USHORT nDestTab, const Rectangle& rRect,
-                                USHORT nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
+void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
+                                SCTAB nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
 {
     //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
     if ( !SvtModuleOptions().IsChart() )
@@ -110,7 +113,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, USHORT nDestTab, const Rec
             DBG_ASSERT(pModel,"DrawLayer ?");
         }
 
-        SdrPage* pPage = pModel->GetPage(nDestTab);
+        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nDestTab));
         DBG_ASSERT(pPage,"Page ?");
         pPage->InsertObject(pSdrOle2Obj);
 
@@ -123,7 +126,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, USHORT nDestTab, const Rec
             // Sc10Import dtor geholt.
 
         ScChartCollection* pColl = pDoc->GetChartCollection();
-        pColl->Insert( new ScChartArray( pDoc, nSrcTab, nX1, nY1, nX2, nY2, aName ) );
+        pColl->Insert( new ScChartArray( pDoc, nSrcTab, static_cast<SCCOL>(nX1), static_cast<SCROW>(nY1), static_cast<SCCOL>(nX2), static_cast<SCROW>(nY2), aName ) );
     }
 }
 
