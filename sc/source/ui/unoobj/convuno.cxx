@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:40:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ LanguageType ScUnoConversion::GetLanguage( const lang::Locale& rLocale )
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
-    String aLangStr = rLocale.Language;
-    String aCtryStr = rLocale.Country;
+    String aLangStr(rLocale.Language);
+    String aCtryStr(rLocale.Country);
     //  Variant is ignored
 
     LanguageType eRet = ConvertIsoNamesToLanguage( aLangStr, aCtryStr );
