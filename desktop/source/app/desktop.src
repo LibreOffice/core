@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:18:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 09:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,249 +61,47 @@
 
 #include "desktop.hrc"
 
-WarningBox WARNINGBOX_JAVANOTCONFIGURED
-{
-    Buttons = WB_OK_CANCEL ;
-    DefButton = WB_DEF_OK ;
-    Message ="%PRODUCTNAME %PRODUCTVERSION ist nicht f�r die Verwendung von Java konfiguriert.\nKlicken Sie auf 'OK', um das %PRODUCTNAME %PRODUCTVERSION Java-Setup zu starten. Mit dem Java-Setup k�nnen Sie ein Java Runtime Environment (JRE) installieren oder aus vorhandenen JREs eins ausw�hlen.\nUm die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
-    Message[ english_us ] ="%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation." ;
-    Message[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION is niet geconfigureerd om Java te gebruiken. Klik 'OK' om de Java Setup te starten, en installeer een Java Runtime Environment (JRE) of kies een reeds ge�nstalleerde JRE.\nAls u geen JRE wilt installeren, klik dan op 'Annuleren'. Dit breekt dan ook de huidige opdracht af.";
-    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'est pas configur� pour ex�cuter Java.\nCliquez sur 'OK' pour lancer le Setup de Java de PRODUCTNAME %PRODUCTVERSION et installer un environnement d'ex�cution Java (JRE), ou pour choisir parmi les JRE d�j� install�s.\nSi vous ne souhaitez pas installer de JRE, cliquez sur 'Annuler' (ceci annulera �galement l'op�ration en cours).";
-    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no est� configurado para ejecutar Java.\nPulse en 'Aceptar' para iniciar el programa de instalaci�n de Java de %PRODUCTNAME %PRODUCTVERSION e instalar un entorno de ejecuci�n Java (JRE) o seleccione 'JREs' ya instalados.\nSi no desea instalar ning�n entorno de ejecuci�n Java, pulse en 'Cancelar'. Se cancelar� la operaci�n actual.";
-    Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non � stato configurato per lanciare Java\n.Fate click su 'OK' per avviare il setup di Java di %PRODUCTNAME %PRODUCTVERSION e installare un JRE (Java Runtime Environment) oppure per sceglierne uno gi� installato.\nSe preferite non installare JRE fate click su 'Annulla'. Quest'azione eliminer� la presente operazione.";
-    Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION er ikke konfigureret til at k�re Java.\nKlik p� 'OK' for at starte %PRODUCTNAME %PRODUCTVERSION Java-installation, hvor du kan installere et Java Runtime Environment (JRE) eller v�lge et JRE, der allerede er installeret.\nKlik p� 'Afbryd', hvis du ikke �nsker at installere et JRE.";
-    Message[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION �r inte konfigurerad f�r att k�ra Java.\nKlicka p� 'OK' f�r att starta %PRODUCTNAME %PRODUCTVERSION Java Setup och installera en Java Runtime Environment (JRE) eller v�lja bland redan installerade JRE.\nKlicka p� 'Avbryt' om du inte vill installera en JRE. Detta avbryter i s� fall �ven den aktuella operationen.";
-    Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ portuguese_brazilian ] = "O %PRODUCTNAME %PRODUCTVERSION detectou uma configura��o errada do arquivo java.ini. O %PRODUCTNAME necessita do java.ini. Clique 'OK' para iniciar o setup do Java e instalar um ambiente de execu��o Java (JRE) ou escolha entre os JREs j� instalados.\n Se n�o quiser instalar um JRE, clique em 'Cancelar'. Esta a��o tamb�m cancelar� a opera��o atual.";
-    Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION は、Java を実行するように設定されていません。\nOK ボタンをクリックして Java セットアップを開始し、Java Runtime Environment (JRE) をインストールするか、すでにインストールされている JRE の中から 1 つ選択してください。\nJRE をインストールする必要がなければ、[キャンセル] ボタンをクリックします。この場合、現在の操作も終了します。";
-    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION은(는) Java가 실행되도록 구성되지 않았습니다.\n%PRODUCTNAME %PRODUCTVERSION Java 설치를 시작하려면 [OK] 버튼을 누릅니다. Java 설치를 사용하여 Java Runtime Environment(JRE)를 설치하거나 이미 설치된 JRE 중 하나를 선택할 수 있습니다.\nJRE의 설치가 필요하지 않은 경우 [취소] 버튼을 눌러 현재 작업을 취소합니다.  ";
-    Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 尚未配置 Java 。\n按一下“确定”，启动 %PRODUCTNAME %PRODUCTVERSION Java 安装程式来安装 Java 运行时间环境(JRE)。\n如果您不想安装 Java 运行时间环境，就点击“取消”。";
-    Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 尚未配置使用 Java 。\n按一下「確定」，啓動 %PRODUCTNAME %PRODUCTVERSION Java 安裝程式來安裝 Java 運行時間環境(JRE)。\n如果您不想安裝 Java 運行時間環境，就按一下「取消」。這樣也會取消目前的操作。";
-    Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION java.ini yap�land�rmas� i�inde hata tespit etti. %PRODUCTNAME  java.ini gerektiriyor. Java Ayarlar� i�in 'OK' bas�n ve bir JRE kurun veya se�ilmi� JRE'ler aras�ndan se�im yap�n. \nJRE kurmak istemezseniz 'Cancel' e bas�n. Bu i�lem ayn� zamanda ge�erli i�lemi sona erdirecektir.";
-    Message[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ thai ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION nebyl nakonfigurován pro spuštění Javy.\nKlepněte na 'OK' pro spuštění nástroje %PRODUCTNAME %PRODUCTVERSION pro nastavení Javy a nainstalujte Java Runtime Environment (JRE) nebo vyberte již nainstalované JRE.\nPokud nechcete nainstalovat JRE, klepněte na 'Zrušit'. Tento krok také ukončí právě probíhající operaci.";
-    Message[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini-Konfiguration gefunden. %PRODUCTNAME benötigt die java.ini. Klicken Sie 'OK' um das Java-Setup zu starten. Mit dem Java-Setup können Sie ein JRE installieren oder aus vorhandenen JREs eins auswählen.\nUm die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
-    Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION has not been configured to run Java.\nClick 'OK' to start the %PRODUCTNAME %PRODUCTVERSION Java Setup and install a Java Runtime Environment (JRE) or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
-    Message[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION nebol nakonfigurovaný pre Javu.\nKliknite na 'OK' pre štart %PRODUCTNAME %PRODUCTVERSION nastavenie Javy a nainštalujte Java Runtime Environment (JRE) alebo si vyberte medzí už nainštalovanými JRE.\nAk nechcete inštalovať JRE, kliknite na 'Cancel'. To zruší aj práve prebiehajúcu operáciu.";
-    Message[ hungarian ] = "Nincs beállítva a Java az %PRODUCTNAME %PRODUCTVERSION programhoz.\nAz %PRODUCTNAME %PRODUCTVERSION Java-beállító programjának indításához kattintson az 'OK' gombra, vagy válasszon egyet a már telepített Java futtatási környezetek (JRE) közül.\nHa nem akar Java futtatási környezetet telepíteni, kattintson a 'Mégsem' gombra. Ezzel megszakítja az elindított folyamatot.";
-    Message[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION ni konfiguraran za zagon Jave.\nKliknite 'V redu', da zaženete %PRODUCTNAME %PRODUCTVERSION program za namestitev Javein namestite javansko okolje Java Runtime Environment (JRE) ali izberite že obstoječi JRE.\nČe ne želite namestiti JRE, kliknite 'Prekliči'. Tako boste preklicali trenutno operacijo.";
-};
-
-WarningBox WARNINGBOX_JAVADISABLED
-{
-    Buttons = WB_OK_CANCEL ;
-    DefButton = WB_DEF_OK ;
-    Message = "F�r diese Operation ist Java erforderlich, aber die Java-Unterst�tzung wurde deaktiviert. Um die Java-Unterst�tzung zu reaktivieren, klicken Sie auf 'OK'. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
-    Message[ ENGLISH ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'." ;
-    Message[ english_us ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'." ;
-    Message[ portuguese ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ russian ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ greek ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ dutch ] = "Deze opdracht vereist Java, maar Java ondersteuning is uitgeschakeld. Om Java ondersteuning aan te zetten, klik 'OK'. Om de opdracht af te breken, klik op 'Annuleren'.";
-    Message[ french ] = "L'op�ration en cours requiert Java, mais le support Java a �t� d�sactiv�. Cliquez sur 'OK' pour activer le support Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
-    Message[ spanish ] = "Esta operaci�n requiere Java, sin embargo la admisi�n de Java est� desactivada. Para volver a activarla pulse en 'Aceptar'. Para finalizar la operaci�n actual pulse en 'Cancelar'. ";
-    Message[ finnish ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ italian ] = "Questa operazione richiede Java ma il supporto corrispondente � stato disattivato. Per riattivare il supporto Java fate click su 'OK'. Per interrompere l'operazione cliccate 'Annulla'.";
-    Message[ danish ] = "Denne handling kr�ver Java, men Java-underst�ttelse er deaktiveret. Klik p� 'OK' for at aktivere Java-underst�ttelse eller klik p� 'Afbryd' for at afbryde.";
-    Message[ swedish ] = "F�r den h�r operationen kr�vs Java men Java-st�det har deaktiverats. Klicka p� 'OK' f�r att aktivera Java-st�det. Klicka p� 'Avbryt' om du vill avbryta den aktuella operationen.";
-    Message[ polish ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ portuguese_brazilian ] = "Esta opera��o requer o Java, por�m o suporte ao Java foi desabilitado. Para habilitar o suporte ao Java, clique 'OK'. Para interromper a opera��o atual, clique em 'Cancelar'.";
-    Message[ japanese ] = "この操作には Java が必要ですが、Java 支援がオフになっています。Java 支援をオンにするには、OK ボタンを押します。[キャンセル]を押すと、現在の操作が終了します。";
-    Message[ korean ] = "이 작동을 위해서는 Java가 필요한데 Java 지원이 비활성화되어 있습니다. Java 지원을 활성화하려면 [OK] 버튼을 클릭해주십시오. 현재 작동을 중단하려면 [취소] 버튼을 클릭해주십시오.";
-    Message[ chinese_simplified ] = "这个操作需要 Java ，但是 Java 的支持没有启动。要使用 Java ，点击“确定”。如果要终止当前的操作，就点击“取消”。";
-    Message[ chinese_traditional ] = "這個動作需要 Java ，但是 Java 支援沒有啓動。要使用 Java 支援，按一下「確定」。要終止目前的動作，就按一下「取消」。";
-    Message[ turkish ] = "Bu i�lem i�in Java program�na ihtiya� var, ancak Java deste�i kapal� durumda. Java deste�ini etkinle�tirmek i�in 'Tamam' tu�una, bu i�lemi iptal etmek i�in '�ptal' tu�una t�klay�n.";
-    Message[ arabic ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ catalan ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ thai ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ czech ] = "Tato operace vyžaduje Javu, ale podpora pro Javu byla vypnuta. K zapnutí Javy klikněte na 'OK'. Kliknutím na 'Zrušit' přerušíte současnou operaci.";
-    Message[ hebrew ] = "Für diese Operation ist Java erforderlich, aber die Java-Unterstützung wurde deaktiviert. Um die Java-Unterstützung zu reaktivieren, klicken Sie auf 'OK'. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
-    Message[ hindi ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ slovak ] = "Táto operácia si vyžaduje Javu, ale podpora Javy bola vypnutá. Pre zapnutie podpory Javy, kliknite 'OK'. Pre zrušenie prebiehajúcej operácie kliknite  'Cancel'.";
-    Message[ hungarian ] = "Ehhez a művelethez Java szükséges, a Java-támogatás azonban le van tiltva. A Java-támogatás bekapcsolásához kattintson az 'OK' gombra. A művelet megszakításához kattintson a 'Mégsem' gombra.";
-    Message[ slovenian ] = "Ta funkcija zahteva Javo, vendar je javanska podpora onemogočena. Če jo želite ponovno omogočiti, kliknite 'V redu'. Za preklic trenutne operacije kliknite 'Prekliči'.";
-};
-
-WarningBox WARNINGBOX_MISSINGJAVARUNTIME
-{
-    Buttons = WB_OK_CANCEL ;
-    DefButton = WB_DEF_OK ;
-    Message = "F�r diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION wurde konfiguriert das JRE im Ordner %s zu verwenden. Dieses JRE wurde nicht gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
-    Message[ ENGLISH ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'." ;
-    Message[ english_us ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'." ;
-    Message[ portuguese ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ russian ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ greek ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ dutch ] = "Deze opdracht vereist een Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION is geconfigureerd om de JRE in directory %s te gebruiken, maar deze is niet gevonden.\nOm de Java Setup te starten, klik op 'OK'. Om de opdracht af te breken, klik op 'Annuleren'.";
-    Message[ french ] = "L'op�ration en cours requiert un environnement d'ex�cution Java (JRE). %PRODUCTNAME %PRODUCTVERSION a �t� configur� pour utiliser le JRE plac� dans le dossier %s. Il est cependant impossible de d�tecter ce JRE.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
-    Message[ spanish ] = "Esta operaci�n requiere un entorno de ejecuci�n de Java (JRE). %PRODUCTNAME %PRODUCTVERSION se configur� para utilizar el entorno de ejecuci�n Java (JRE) ubicado en la carpeta %s. Este JRE no se ha encontrado. Para iniciar el programa de instalaci�n de Java pulse en 'Aceptar'. Para finalizar la operaci�n actual pulse en 'Cancelar'.";
-    Message[ finnish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). La configurazione di %PRODUCTNAME %PRODUCTVERSION utilizza JRE nella cartella %s. JRE non � stato trovato.\nCliccate 'OK' per avviare l'installazione di Java. Per interrompere l'operazione fate click su 'Annulla'.";
-    Message[ danish ] = "Denne handling kr�ver et Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION er konfigureret til at bruge det JRE, der er placeret i %s. Dette JRE blev ikke fundet.\nKlik p� 'OK' for at starte Java-ops�tningen eller klik p� 'Afbryd' for at afbryde.";
-    Message[ swedish ] = "F�r den h�r operationen kr�vs en Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION har konfigurerats f�r att anv�nda JRE som finns i mappen %s. Denna JRE kunde inte hittas.\nKlicka p� 'OK' om du vill starta Java Setup. Klicka p� 'Avbryt' om du vill avbryta den aktuella operationen.";
-    Message[ polish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ portuguese_brazilian ] = "Esta opera��o necessita um Ambiente de Execu��o Java (JRE). O %PRODUCTNAME %PRODUCTVERSION foi configurado para usar o JRE localizado em %s. Este JRE n�o foi encontrado. Para iniciar o setup do Java, clique em 'OK'. Para interromper a opera��o atual, clique em 'Cancelar'.";
-    Message[ japanese ] = "この操作には、Java Runtime Environment (JRE)が必要です。%PRODUCTNAME %PRODUCTVERSION は、%s にある JRE を使用するように設定されています。この JRE は見つかりませんでした。\nOK ボタンを押すと、Java セットアップが開始します。[キャンセル]ボタンを押すと、現在の操作は終了します。";
-    Message[ korean ] = "이 작동을 위해서는 Java Runtime Environment (JRE)가 필요합니다. %PRODUCTNAME %PRODUCTVERSION은(는) %s 에 있는 JRE를 사용할 수 있도록 설정되어 있습니다. 이 JRE를 찾을 수 없습니다. Java 설치를 시작하기 위해 [OK] 버튼을 클릭해주십시오. 현재 작동을 중단하려면 [취소] 버튼을 클릭하십시오.";
-    Message[ chinese_simplified ] = "这个操作需要 Java 运行时间环境。%PRODUCTNAME %PRODUCTVERSION 的设定是用于安装在 %s 的 Java 运行时间环境。但是没有找到这个指定的  Java 运行时间环境。要安装 Java ，就点击“确定”。要终止当前的操作，则点击“取消”。";
-    Message[ chinese_traditional ] = "這個動作需要 Java 運行環境(JRE)。%PRODUCTNAME %PRODUCTVERSION的設定是使用位于 %s 的 JRE 。但是沒有找到這個 JRE 。要安裝 Java ，就按一下「確定」。要終止目前的動作，就按一下「取消」。";
-    Message[ turkish ] = "Bu operasyon Java Rubtime ortam� gerektirir. %PRODUCTNAME %PRODUCTVERSION %s de konumland�r�lm�� olan JRE'yi kullanmak �zere yap�land�r�ld�. Bu JRE bulunamad�. \nJava ayarlar�na ba�lamak i�in 'OK' e bas�n. Ge�erli operasyonu bitirmek i�in 'Cancel' e bas�n.";
-    Message[ arabic ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ catalan ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ thai ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ czech ] = "Tato operace vyžaduje Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION byl nakonfigurován k použití JRE umístěném v %s, ale toto JRE zde nebylo nalezeno.\nKe spuštění instalace JRE klikněte na 'OK'. Kliknutím na 'Zrušit' přerušíte současnou operaci.";
-    Message[ hebrew ] = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION wurde konfiguriert das JRE im Ordner %s zu verwenden. Dieses JRE wurde nicht gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
-    Message[ hindi ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ slovak ] = "Táto operácia vyžaduje Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION bol nakonfigurovaný používať JRE uložené v %s. Toto JRE nebolo nájdené.\nPre nastavenie Javy kliknite 'OK'. Pre zrušenie prebiehajúcej operácie kliknite 'Cancel'.";
-    Message[ hungarian ] = "Ehhez a művelethez szükség van Java futtatási környezetre (JRE). Az %PRODUCTNAME %PRODUCTVERSION úgy lett beállítva, hogy a(z) %s alatt található JRE-t használja. Ezen a helyen viszont nem található JRE.\nA Java beállításának indításához kattintson az 'OK' gombra. A művelet megszakításához kattintson a 'Mégsem' gombra.";
-    Message[ slovenian ] = "Ta operacija zahteva javansko okolje Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION je bil konfiguriran za uporabo JRE, ki se nahaja v %s. Tega JRE ni mogoče najti.\nČe želite zagnati program za namestitev Jave, kliknite 'V redu', za preklic trenutne operacije kliknite 'Prekliči'.";
-};
-
-WarningBox WARNINGBOX_JVMCREATIONFAILED
-{
-    Buttons = WB_OK_CANCEL ;
-    DefButton = WB_DEF_OK ;
-    Message = "F�r diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION hat ein fehlerhaftes JRE gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
-    Message[ ENGLISH ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'." ;
-    Message[ english_us ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'." ;
-    Message[ portuguese ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ russian ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ greek ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ dutch ] = "Deze opdracht vereist een Java Runtime Environment (JRE), maar de JRE die %PRODUCTNAME %PRODUCTVERSION heeft gedetecteerd is defect.\nOm de Java Setup te starten, klik op 'OK'. Om de opdracht af te breken, klik op 'Annuleren'.";
-    Message[ french ] = "L'op�ration en cours requiert un environnement d'ex�cution Java (JRE). Le JRE d�tect� par %PRODUCTNAME %PRODUCTVERSION est cependant d�fectueux.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
-    Message[ spanish ] = "Esta operaci�n requiere un entorno de ejecuci�n de Java (Java Runtime Environment -JRE). Sin embargo el JRE que %PRODUCTNAME %PRODUCTVERSION ha detectado es defectuoso.\nPara iniciar el programa de instalaci�n de Java pulse en 'Aceptar'. Para cancelar la operaci�n pulse en 'Cancelar'.";
-    Message[ finnish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). %PRODUCTNAME %PRODUCTVERSION ne ha rilevato una configurazione difettosa.\nFate click su 'OK' per avviare il setup di Java. Per interrompere l'operazione cliccate 'Annulla'.";
-    Message[ danish ] = "Denne handling kr�ver et Java Runtime Environment (JRE), men det JRE som %PRODUCTNAME %PRODUCTVERSION har detekteret er defekt.\nKlik p� 'OK' for at starte Java-installationen eller klik p� 'Afbryd' for at afbryde.";
-    Message[ swedish ] = "F�r den h�r operationen kr�vs en Java Runtime Environment (JRE). Men den JRE som %PRODUCTNAME %PRODUCTVERSION har hittat �r felaktig.\nKlicka p� 'OK' om du vill starta Java Setup. Klicka p� 'Avbryt' om du vill avbryta den aktuella operationen.";
-    Message[ polish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ portuguese_brazilian ] = "A atual opera��o necessita um Ambiente de Execu��o Java (JRE), por�m o JRE que o %PRODUCTNAME %PRODUCTVERSION detectou est� com defeito.\nPara iniciar o setup do Java, clique em 'OK'. Para interromper a opera��o atual, clique em 'Cancelar' .";
-    Message[ japanese ] = "現在の操作には、Java Runtime Environment (JRE)が必要ですが、%PRODUCTNAME %PRODUCTVERSION が検出した JRE は正しくありません。\nOK ボタンを押すと、Java セットアップが開始します。[キャンセル]を押すと、現在の操作は終了します。";
-    Message[ korean ] = "이 작동을 위해서는 Java Runtime Environment (JRE)가 필요한데 %PRODUCTNAME %PRODUCTVERSION 이 JRE에서 오류를 발견했습니다.\n Java 설치를 시작하기 위해 [OK] 버튼을 클릭해주십시오. 현재 작동을 중단하려면 [취소] 버튼을 클릭해주십시오.";
-    Message[ chinese_simplified ] = "这个操作需要 Java 运行时间环境。%PRODUCTNAME %PRODUCTVERSION 找到了一个损坏的 Java 运行时间环境。如果您要启动 Java 安装程序，就点击“确定”。如果要终止当前的操作，则点击“取消”。";
-    Message[ chinese_traditional ] = "這個動作需要 Java 運行時間環境。%PRODUCTNAME %PRODUCTVERSION 找到了一個損壞的 Java 運行時間環境。如果您要啟動 Java 安裝程式，就按一下「確定」。若要終止目前的動作，則按一下「取消」。";
-    Message[ turkish ] = "Bu operasyon Java Rubtime ortam� gerektirir. %PRODUCTNAME %PRODUCTVERSION %s de konumland�r�lm�� olan JRE'yi kullanmak �zere yap�land�r�ld�. Bu JRE bulunamad�. \nJava ayarlar�na ba�lamak i�in 'OK' e bas�n. Ge�erli operasyonu bitirmek i�in 'Cancel' e bas�n.";
-    Message[ arabic ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ catalan ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ thai ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ czech ] = "Tato operace vyžaduje Java Runtime Environment (JRE), ale %PRODUCTNAME %PRODUCTVERSION zjistil, že toto JRE je chybné.\nKe spuštění instalace JRE klikněte na 'OK'. Kliknutím na 'Zrušit' přerušíte současnou operaci.";
-    Message[ hebrew ] = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION hat ein fehlerhaftes JRE gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'.";
-    Message[ hindi ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ slovak ] = "Táto operácia vyžaduje Java Runtime Environment (JRE), ale JRE ktoré %PRODUCTNAME %PRODUCTVERSION zistil je porušené.\nPre nastavenie Javy kliknite 'OK'. Pre zrušenie prebiehajúcej operácie kliknite 'Cancel'.";
-    Message[ hungarian ] = "Ehhez a művelethez szükség van Java futtatási környezetre (JRE), de az %PRODUCTNAME %PRODUCTVERSION által talált Java hibás.\nA Java beállításának indításához kattintson az 'OK' gombra. A művelet megszakításához kattintson a 'Mégsem' gombra.";
-    Message[ slovenian ] = "Trenutna operacija zahteva javansko okolje Java Runtime Environment (JRE), vendar je JRE, ki ga je odkril %PRODUCTNAME %PRODUCTVERSION, okvarjen.\nZa preklic trenutne operacije kliknite 'Prekliči'.";
-};
-
-WarningBox WARNINGBOX_JVMSETUPNOTSTARTED
+WarningBox WARNINGBOX_JAVANOTFOUND
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION konnte das Java-Setup nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. W�hlen Sie 'Reparieren'." ;
-    Message[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
-    Message[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
-    Message[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION kon de Java Setup niet starten. Sluit %PRODUCTNAME af en start de %PRODUCTNAME %PRODUCTVERSION Setup. Kies 'Repareren'.";
-    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'a pas pu lancer le Setup de Java. Quittez %PRODUCTNAME et d�marrez le Setup de %PRODUCTNAME %PRODUCTVERSION. Choisissez 'R�paration'.";
-    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no pudo iniciar el programa de instalaci�n de Java. Cierre %PRODUCTNAME e inicie el programa de instalaci�n de %PRODUCTNAME %PRODUCTVERSION. Seleccione 'Reparar'.";
-    Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non � riuscito ad avviare l'installazione di Java. Chiudete %PRODUCTNAME e avviate il programma di installazione di %PRODUCTNAME %PRODUCTVERSION. Sceliete l'opzione 'Riparazione'.";
-    Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION kunne ikke starte Java-installationen. Afslut %PRODUCTNAME og start installationsprogrammet for %PRODUCTNAME %PRODUCTVERSION. V�lg 'Reparer'.";
-    Message[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION kunde inte starta Java Setup. Avsluta %PRODUCTNAME och starta %PRODUCTNAME %PRODUCTVERSION Setup. V�lj 'Reparera'.";
-    Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ portuguese_brazilian ] = "N�o foi poss�vel para o %PRODUCTNAME %PRODUCTVERSION iniciar o setup do Java. Termine o %PRODUCTNAME e inicie o setup do %PRODUCTNAME %PRODUCTVERSION. Selecione 'Reparar'.";
-    Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION は Java セットアップを開始できませんでした。%PRODUCTNAME を終了して、%PRODUCTNAME %PRODUCTVERSION セットアップを開始してください。[修復]を選択します。";
-    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION 은(는) Java 설치를 시작할 수 없습니다. %PRODUCTNAME을(를) 종료하고 %PRODUCTNAME %PRODUCTVERSION 의 설치 프로그램을 시작하십시오. [복구]를 선택하십시오.";
-    Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 无法启动 Java 安装程序。请关闭 %PRODUCTNAME 之后启动 %PRODUCTNAME %PRODUCTVERSION 安装程序，选择修复的安装选项。";
-    Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 無法啓動 Java 安裝程式。請關閉 %PRODUCTNAME ，然後啓動 %PRODUCTNAME %PRODUCTVERSION 安裝程式，選擇修復的選項。";
-    Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION , Java Setup'�n� ba�latamad�. %PRODUCTNAME 'den ��k�n ve %PRODUCTNAME %PRODUCTVERSION Kurulumunu ba�lat�n. 'Onar'� se�in.";
-    Message[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ thai ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION nemohl spustit instalaci Javy. Ukončete %PRODUCTNAME, spusťte instalaci %PRODUCTNAME %PRODUCTVERSION a zvolte 'Opravit'.";
-    Message[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION konnte das Java-Setup nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. Wählen Sie 'Reparieren'.";
-    Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION nemohol spustiť nastavenie Javy. Ukončite %PRODUCTNAME a spustite %PRODUCTNAME %PRODUCTVERSION Setup. Zvolte si možnosť 'Repair'.";
-    Message[ hungarian ] = "Az %PRODUCTNAME %PRODUCTVERSION Java-beállító indítása nem sikerült. Lépjen ki az %PRODUCTNAME programból, indítsa el az %PRODUCTNAME %PRODUCTVERSION telepítőjét, és válassza a 'Javítás' lehetőséget.";
-    Message[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION ni mogel zagnati programa za namestitev Jave. Zaprite %PRODUCTNAME in zaženite namestitveni program za %PRODUCTNAME %PRODUCTVERSION. Izberite 'Popravi'.";
+    Message ="%PRODUCTNAME ben�tigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchf�hren zu k�nnen. Bitte installieren Sie eine JRE und starten Sie dann %PRODUCTNAME neu.";
+    Message[ english_us ] ="%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.";
 };
 
-WarningBox WARNINGBOX_JAVALDXNOTSTARTED
+WarningBox WARNINGBOX_INVALIDJAVASETTINGS
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION konnte Java-LDX nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. W�hlen Sie 'Reparieren'." ;
-    Message[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
-    Message[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
-    Message[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ russian ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION kon Java LDX niet starten. Sluit %PRODUCTNAME af en start de %PRODUCTNAME %PRODUCTVERSION Setup. Kies 'Repareren'.";
-    Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'a pas pu lancer Java LDX. Quittez %PRODUCTNAME et d�marrez le Setup de %PRODUCTNAME %PRODUCTVERSION. Choisissez 'R�paration'.";
-    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no pudo iniciar Java LDX. Cierre %PRODUCTNAME e inicie el programa de instalaci�n de %PRODUCTNAME %PRODUCTVERSION. Seleccione 'Reparar'.";
-    Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non � riuscito ad avviare Java LDX. Uscite da %PRODUCTNAME e avviate il programma di installazione di %PRODUCTNAME %PRODUCTVERSION. Scegliete l'opzione 'Riparazione'.";
-    Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION kunne ikke starte JAVA LDX. Afslut %PRODUCTNAME og start installationsprogrammet for %PRODUCTNAME %PRODUCTVERSION. V�lg 'Reparer'.";
-    Message[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION kunde inte starta Java LDX. Avsluta %PRODUCTNAME och starta %PRODUCTNAME %PRODUCTVERSION Setup. V�lj 'Reparera'.";
-    Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ portuguese_brazilian ] = "N�o foi poss�vel para o %PRODUCTNAME %PRODUCTVERSION iniciar o LDX Java. Termine o %PRODUCTNAME e inicie o setup do %PRODUCTNAME %PRODUCTVERSION. Escolha 'Reparar'.";
-    Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION は Java LDX を開始できませんでした。%PRODUCTNAME を終了して %PRODUCTNAME %PRODUCTVERSION セットアップを開始してください。[修復]を選択します。";
-    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION은(는) Java LDX 를 시작하지 못했습니다. %PRODUCTNAME를 종료하고 %PRODUCTNAME %PRODUCTVERSION 설치 프로그램을 시작하십시오. [복구]를 선택하십시오.";
-    Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 无法启动 Java LDX 。请关闭 %PRODUCTNAME 之后启动 %PRODUCTNAME %PRODUCTVERSION 安装程序，选择修复安装的选项。";
-    Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 無法啓動 Java LDX 。請關閉 %PRODUCTNAME ，然後啓動 %PRODUCTNAME %PRODUCTVERSION 安裝程式，選擇修復的選項。";
-    Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION , Java Setup'�n� ba�latamad�. %PRODUCTNAME 'den ��k�n ve %PRODUCTNAME %PRODUCTVERSION Kurulumunu ba�lat�n. 'Onar'� se�in.";
-    Message[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ thai ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ czech ] = "%PRODUCTNAME %PRODUCTVERSION nemohl spustit Java LDX. Ukončete %PRODUCTNAME, spusťte instalaci %PRODUCTNAME %PRODUCTVERSION a zvolte 'Opravit'.";
-    Message[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION konnte Java-LDX nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. Wählen Sie 'Reparieren'.";
-    Message[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
-    Message[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION nemohol spustiť Java LDX. Ukončite %PRODUCTNAME a spustite %PRODUCTNAME %PRODUCTVERSION Setup. Zvolte si možnosť 'Repair'.";
-    Message[ hungarian ] = "Az %PRODUCTNAME %PRODUCTVERSION Java LDX indítása nem sikerült. Lépjen ki az %PRODUCTNAME programból, indítsa el az %PRODUCTNAME %PRODUCTVERSION telepítőjét, és válassza a 'Javítás' lehetőséget.";
-    Message[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION ni mogel zagnati Java LDX. Zaprite %PRODUCTNAME in zaženite namestitveni program za %PRODUCTNAME %PRODUCTVERSION. Izberite 'Popravi'.";
+    Message ="Die %PRODUCTNAME-Konfiguration wurde ge�ndert. Unter Extras - Optionen - %PRODUCTNAME - Java  w�hlen Sie eine Java-Laufzeitumgebung aus, die von %PRODUCTNAME benutzt werden soll.";
+    Message[ english_us ] ="The %PRODUCTNAME configuration has been changed. Under Tools - Options - %PRODUCTNAME - Java, select the Java runtime environment you want to have used by %PRODUCTNAME.";
 };
 
-InfoBox INFOBOX_PLEASERESTARTOFFICE
+QueryBox QBX_JAVADISABLED
 {
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message = "Damit die neuen Java Einstellungen wirksam werden, ist ein Neustart von %PRODUCTNAME %PRODUCTVERSION erforderlich." ;
-    Message[ ENGLISH ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect." ;
-    Message[ english_us ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect." ;
-    Message[ portuguese ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ russian ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ greek ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ dutch ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ french ] = "Vous devez red�marrer %PRODUCTNAME %PRODUCTVERSION afin que les nouveaux param�tres Java puissent �tre appliqu�s.";
-    Message[ spanish ] = "Debe reiniciar %PRODUCTNAME %PRODUCTVERSION para que la configuraci�n de Java tenga efecto.";
-    Message[ finnish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ italian ] = "Perch� le impostazioni di Java abbiano effetto dovete riavviare %PRODUCTNAME %PRODUCTVERSION.";
-    Message[ danish ] = "Du skal genstarte %PRODUCTNAME %PRODUCTVERSION for at Java-indstillinger tr�der i kraft.";
-    Message[ swedish ] = "Du m�sta starta om %PRODUCTNAME %PRODUCTVERSION f�r att Java-inst�llningarna ska tr�da i kraft.";
-    Message[ polish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ japanese ] = "Java の設定を有効にするには %PRODUCTNAME %PRODUCTVERSION を再起動する必要があります。";
-    Message[ korean ] = "Java의 새 설정 내용을 적용하려면 %PRODUCTNAME %PRODUCTVERSION을(를) 다시 시작해야 합니다.";
-    Message[ chinese_simplified ] = "为了让 Java 设定生效，您必须重新启动 %PRODUCTNAME %PRODUCTVERSION 。";
-    Message[ chinese_traditional ] = "您需要重新啟動 %PRODUCTNAME %PRODUCTVERSION，Java 設定才會生效。";
-    Message[ turkish ] = "Java ayarlar�ndaki de�i�ikliklerin etkin olmas� i�in %PRODUCTNAME %PRODUCTVERSION program�n� yeniden ba�latman�z gereklidir.";
-    Message[ arabic ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ catalan ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ thai ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ czech ] = "Pro uplatnění změn v nastavení Javy je nutné restartovat %PRODUCTNAME %PRODUCTVERSION.";
-    Message[ hebrew ] = "Damit die neuen Java Einstellungen wirksam werden, ist ein Neustart von %PRODUCTNAME %PRODUCTVERSION erforderlich.";
-    Message[ portuguese_brazilian ] = "Deve-se re-iniciar o %PRODUCTNAME %PRODUCTVERSION para que as configura��es do Java tenham efeito.";
-    Message[ hindi ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ slovak ] = "Musíte reštartovať %PRODUCTNAME %PRODUCTVERSION aby sa prejavili zmeny v nastaveniach Javy.";
-    Message[ hungarian ] = "A Java-beállítások alkalmazásához újra kell indítania az %PRODUCTNAME %PRODUCTVERSION programot.";
-    Message[ slovenian ] = "Ponovno zaženite %PRODUCTNAME %PRODUCTVERSION, da bodo nastavitve Jave začele veljati. ";
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message = "%PRODUCTNAME ben�tigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchf�hren zu k�nnen. Jedoch ist die Benutzung einer  JRE deaktiviert. M�chten Sie die Benutzung von einer JRE jetzt aktivieren?";
+    Message[ english_us ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. However, use of a JRE has been disabled. Do you want to enable the use of a JRE now?";
 };
+
+ErrorBox ERRORBOX_JVMCREATIONFAILED
+{
+    Buttons = WB_OK;
+    DefButton = WB_DEF_OK ;
+    Message = "%PRODUCTNAME ben�tigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchf�hren zu k�nnen. Die ausgew�hlte JRE ist defekt. Bitte w�hlen Sie eine andere Version oder installieren Sie eine neue JRE und aktivieren Sie sie unter Extras - Optionen - %PRODUCTNAME - Java.";
+    Message[ english_us ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. The selected JRE is defective. Please select another version or install a new JRE and select  it under Tools - Options - %PRODUCTNAME - Java.";
+};
+
+ErrorBox ERRORBOX_RESTARTREQUIRED
+{
+    Buttons = WB_OK;
+    DefButton = WB_DEF_OK ;
+    Message = "Damit die ausgew�hlte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden. Bitte starten Sie %PRODUCTNAME neu.";
+    Message[ english_us ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now.";
+};
+
+
 
 String STR_RECOVER_QUERY
 {
@@ -1275,203 +1073,37 @@ String STR_TITLE_CONFIG_MSGBOX
     Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
-
-String STR_WARNING_FAULTYJAVACFG
+String STR_WARNING_JAVANOTFOUND
 {
-    Text = "Nicht f�r Java konfiguriert" ;
-    Text[ english_us ] = "Defective java.ini Configuration" ;
-    Text[ portuguese ] = "Defective java.ini Configuration";
-    Text[ russian ] = "Defective java.ini Configuration";
-    Text[ greek ] = "Defective java.ini Configuration";
-    Text[ dutch ] = "Defecte java.ini Configuratie";
-    Text[ french ] = "Configuration d�fectueuse de java.ini";
-    Text[ spanish ] = "Configuraci�n defectuosa de java.ini ";
-    Text[ finnish ] = "Defective java.ini Configuration";
-    Text[ italian ] = "Configurazione difettossa di java.ini";
-    Text[ danish ] = "Defekt konfiguration af java.ini";
-    Text[ swedish ] = "Felaktig java.ini-konfiguration";
-    Text[ polish ] = "Defective java.ini Configuration";
-    Text[ portuguese_brazilian ] = "A configura��o java.ini est� com defeito";
-    Text[ japanese ] = "java.ini の設定は正しくありません";
-    Text[ korean ] = "java.ini 설정에 오류가 있습니다.";
-    Text[ chinese_simplified ] = "错误的 java.ini 配置";
-    Text[ chinese_traditional ] = "錯誤的 java.ini 配置";
-    Text[ turkish ] = "Eksiz java.ini Ayarlamas�";
-    Text[ arabic ] = "Defective java.ini Configuration";
-    Text[ catalan ] = "Defective java.ini Configuration";
-    Text[ thai ] = "Defective java.ini Configuration";
-    Text[ czech ] = "Poškozená konfigurace java.ini";
-    Text[ hebrew ] = "Fehlerhafte java.ini-Konfiguration";
-    Text[ hindi ] = "Defective java.ini Configuration";
-    Text[ slovak ] = "Vadná konfigurácia java.ini";
-    Text[ hungarian ] = "Hibás java.ini beállítás";
-    Text[ slovenian ] = "Pomanjkljiva konfiguracija java.ini";
+    Text = "JRE ist erforderlich" ;
+    Text[ english_us ] = "JRE Required" ;
 };
 
-String STR_WARNING_JAVADISABLED
+String STR_WARNING_INVALIDJAVASETTINGS
 {
-    Text = "Java-Unterst�tzung deaktiviert" ;
-    Text[ ENGLISH ] = "Java Support Disabled" ;
-    Text[ english_us ] = "Java Support Disabled" ;
-    Text[ portuguese ] = "Java Support Disabled";
-    Text[ russian ] = "Java Support Disabled";
-    Text[ greek ] = "� ���������� Java ����������������";
-    Text[ dutch ] = "Java Ondersteuning Uitgeschakeld";
-    Text[ french ] = "Support Java d�sactiv�";
-    Text[ spanish ] = "Admisi�n de Java desactivada";
-    Text[ finnish ] = "Java Support Disabled";
-    Text[ italian ] = "Supporto Java disattivato";
-    Text[ danish ] = "Java-underst�ttelse er deaktiveret";
-    Text[ swedish ] = "Java-st�d deaktiverat";
-    Text[ polish ] = "Java Support Disabled";
-    Text[ portuguese_brazilian ] = "O suporte ao Java est� desabilitado";
-    Text[ japanese ] = "Java 支援がオフになっています";
-    Text[ korean ] = "Java 지원이 비활성화되어 있습니다.";
-    Text[ chinese_simplified ] = "Java 支持已经关闭";
-    Text[ chinese_traditional ] = "Java 支援已經關閉";
-    Text[ turkish ] = "JAva Deste�i Kapal�";
-    Text[ arabic ] = "Java Support Disabled";
-    Text[ catalan ] = "Java Support Disabled";
-    Text[ thai ] = "Java Support Disabled";
-    Text[ czech ] = "Podpora pro Javu vypnuta";
-    Text[ hebrew ] = "Java-Unterstützung deaktiviert";
-    Text[ hindi ] = "Java Support Disabled";
-    Text[ slovak ] = "Podpora Javy vypnutá";
-    Text[ hungarian ] = "A Java támogatása tiltva van.";
-    Text[ slovenian ] = "Javanska podpora onemogočena";
+    Text = "JRE ausw�hlen" ;
+    Text[ english_us ] = "Select JRE";
 };
 
-String STR_WARNING_MISSINGJAVARUNTIME
+String STR_ERROR_RESTARTREQUIRED
 {
-    Text = "JRE wurde nicht gefunden" ;
-    Text[ ENGLISH ] = "Unable to Locate JRE" ;
-    Text[ english_us ] = "Unable to Locate JRE" ;
-    Text[ portuguese ] = "Unable to Locate JRE";
-    Text[ russian ] = "Unable to Locate JRE";
-    Text[ greek ] = "Unable to Locate JRE";
-    Text[ dutch ] = "Kan JRE niet vinden";
-    Text[ french ] = "Impossible de d�tecter le JRE";
-    Text[ spanish ] = "Imposible localizar el JRE (Java Runtime Environment)";
-    Text[ finnish ] = "Unable to Locate JRE";
-    Text[ italian ] = "Impossibile trovare JRE (Java Runtime Environment)";
-    Text[ danish ] = "Kan ikke finde JRE";
-    Text[ swedish ] = "JRE hittades inte";
-    Text[ polish ] = "Unable to Locate JRE";
-    Text[ portuguese_brazilian ] = "N�o foi poss�vel localizar o Ambiente de Execu��o Java (JRE)";
-    Text[ japanese ] = "JRE は見つかりません";
-    Text[ korean ] = "JRE 를 찾을 수 없습니다.";
-    Text[ chinese_simplified ] = "没有找到 JRE";
-    Text[ chinese_traditional ] = "沒有找到 JRE";
-    Text[ turkish ] = "JRE konumland�r�lamaz.";
-    Text[ arabic ] = "Unable to Locate JRE";
-    Text[ catalan ] = "Unable to Locate JRE";
-    Text[ thai ] = "Unable to Locate JRE";
-    Text[ czech ] = "Nelze najít JRE";
-    Text[ hebrew ] = "JRE wurde nicht gefunden";
-    Text[ hindi ] = "Unable to Locate JRE";
-    Text[ slovak ] = "Nebolo možné lokalizovať JRE";
-    Text[ hungarian ] = "Nem sikerült Java futtatási környezetet találni";
-    Text[ slovenian ] = "Ni mogoče najti okolja JRE";
+    Text = "Neustart ist erforderlich";
+    Text[ english_us ] = "Restart Required";
 };
 
-String STR_WARNING_FAULTYJAVAINSTALL
+String STR_QUESTION_JAVADISABLED
 {
-    Text = "Fehlerhafte Java-Installation" ;
-    Text[ ENGLISH ] = "Defective Java Installation" ;
-    Text[ english_us ] = "Defective Java Installation" ;
-    Text[ portuguese ] = "Defective Java Installation";
-    Text[ russian ] = "Defective Java Installation";
-    Text[ greek ] = "Defective Java Installation";
-    Text[ dutch ] = "Defecte Java Installatie";
-    Text[ french ] = "Installation d�fectueuse de Java";
-    Text[ spanish ] = "Instalaci�n de Java defectuosa";
-    Text[ finnish ] = "Defective Java Installation";
-    Text[ italian ] = "Installazione Java difettosa";
-    Text[ danish ] = "Defekt Java-installation";
-    Text[ swedish ] = "Felaktig Java-installation";
-    Text[ polish ] = "Defective Java Installation";
-    Text[ portuguese_brazilian ] = "Instala��o Java com defeito";
-    Text[ japanese ] = "Java インストールは正しく行なわれていません";
-    Text[ korean ] = "Java 설치에 오류가 있습니다.";
-    Text[ chinese_simplified ] = "错误的 Java 安装";
-    Text[ chinese_traditional ] = "錯誤的 Java 安裝";
-    Text[ turkish ] = "Eksik veya Hatal� Java Kurulumu";
-    Text[ arabic ] = "Defective Java Installation";
-    Text[ catalan ] = "Defective Java Installation";
-    Text[ thai ] = "Defective Java Installation";
-    Text[ czech ] = "Poškozená instalace Javy";
-    Text[ hebrew ] = "Fehlerhafte Java-Installation";
-    Text[ hindi ] = "Defective Java Installation";
-    Text[ slovak ] = "Vadná inštalácia Javy";
-    Text[ hungarian ] = "Hibás a telepített Java.";
-    Text[ slovenian ] = "Pomanjkljiva namestitev Jave";
+    Text = "JRE aktivieren" ;
+    Text[ english_us ] = "Enable JRE" ;
 };
 
-String STR_WARNING_CANNOTSTARTJVMSETUP
+
+String STR_ERROR_JVMCREATIONFAILED
 {
-    Text = "Java-Setup konnte nicht gestartet werden" ;
-    Text[ ENGLISH ] = "Could Not Start Java Setup" ;
-    Text[ english_us ] = "Could Not Start Java Setup" ;
-    Text[ portuguese ] = "Could Not Start Java Setup";
-    Text[ russian ] = "Could Not Start Java Setup";
-    Text[ greek ] = "Could Not Start Java Setup";
-    Text[ dutch ] = "Kan Java Setup Niet Starten";
-    Text[ french ] = "Impossible de lancer le Setup de Java !";
-    Text[ spanish ] = "No se pudo iniciar el programa de instalaci�n de Java";
-    Text[ finnish ] = "Could Not Start Java Setup";
-    Text[ italian ] = "Impossibile avviare l'installazione di Java";
-    Text[ danish ] = "Kunne ikke starte Java-Setup";
-    Text[ swedish ] = "Det gick inte att starta Java Setup";
-    Text[ polish ] = "Could Not Start Java Setup";
-    Text[ portuguese_brazilian ] = "N�o foi poss�vel iniciar o setup do Java";
-    Text[ japanese ] = "Java セットアップは開始できませんでした";
-    Text[ korean ] = "Java 설치를 시작하지 못했습니다.";
-    Text[ chinese_simplified ] = "无法启动 Java 安装程序";
-    Text[ chinese_traditional ] = "無法啟動 Java 安裝程式";
-    Text[ turkish ] = "Java Kurulum Ba�lat�lam�yor";
-    Text[ arabic ] = "Could Not Start Java Setup";
-    Text[ catalan ] = "Could Not Start Java Setup";
-    Text[ thai ] = "Could Not Start Java Setup";
-    Text[ czech ] = "Nelze spustit instalaci Javy";
-    Text[ hebrew ] = "Java-Setup konnte nicht gestartet werden";
-    Text[ hindi ] = "Could Not Start Java Setup";
-    Text[ slovak ] = "Nebolo možné spustiť Java Setup";
-    Text[ hungarian ] = "Nem sikerült elindítani a Java-beállító programot";
-    Text[ slovenian ] = "Ni mogoče zagnati programa za namestitev Jave";
+    Text = "JRE ist defekt" ;
+    Text[ english_us ] = "JRE is Defective" ;
 };
 
-String STR_WARNING_CANNOTSTARTJAVALDX
-{
-    Text = "Java-LDX konnte nicht gestartet werden" ;
-    Text[ ENGLISH ] = "Could Not Start Java LDX" ;
-    Text[ english_us ] = "Could Not Start Java LDX" ;
-    Text[ portuguese ] = "Could Not Start Java LDX";
-    Text[ russian ] = "Could Not Start Java LDX";
-    Text[ greek ] = "Could Not Start Java LDX";
-    Text[ dutch ] = "Kan Java LDX Niet Starten";
-    Text[ french ] = "Impossible de d�marrer Java LDX";
-    Text[ spanish ] = "No se pudo iniciar Java LDX";
-    Text[ finnish ] = "Could Not Start Java LDX";
-    Text[ italian ] = "Impossibile avviare Java LDX";
-    Text[ danish ] = "Kunne ikke starte Java-LDX";
-    Text[ swedish ] = "Det gick inte att starta Java LDX";
-    Text[ polish ] = "Could Not Start Java LDX";
-    Text[ portuguese_brazilian ] = "N�o foi poss�vel iniciar o Java LDX";
-    Text[ japanese ] = "Java LDX は開始できませんでした";
-    Text[ korean ] = "Java LDX 를 시작하지 못했습니다.";
-    Text[ chinese_simplified ] = "无法启动 Java LDX 。";
-    Text[ chinese_traditional ] = "無法啓動 Java LDX";
-    Text[ turkish ] = "Java LDX Ba�lat�lam�yor";
-    Text[ arabic ] = "Could Not Start Java LDX";
-    Text[ catalan ] = "Could Not Start Java LDX";
-    Text[ thai ] = "Could Not Start Java LDX";
-    Text[ czech ] = "Nelze spustit Java LDX";
-    Text[ hebrew ] = "Java-LDX konnte nicht gestartet werden";
-    Text[ hindi ] = "Could Not Start Java LDX";
-    Text[ slovak ] = "Nebolo možné spustiť Java LDX";
-    Text[ hungarian ] = "A Java LDX indítása nem sikerült";
-    Text[ slovenian ] = "Ni mogoče zagnati Java LDX";
-};
 
 String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
 {
