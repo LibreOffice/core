@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:10:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,40 +81,21 @@ namespace presentation
                                                 const NodeContext&                                  rContext ) :
             BaseNode( xNode, rParent, rContext ),
             mxAudioNode( xNode, uno::UNO_QUERY_THROW ),
+            maSoundURL(),
             mpPlayer()
         {
-            ::rtl::OUString aSoundURL;
-            mxAudioNode->getSource() >>= aSoundURL;
+            mxAudioNode->getSource() >>= maSoundURL;
 
-            OSL_ENSURE( aSoundURL.getLength(),
+            OSL_ENSURE( maSoundURL.getLength(),
                         "AnimationAudioNode::AnimationAudioNode(): could not extract sound source URL/empty URL string" );
 
             ENSURE_AND_THROW( getContext().mxComponentContext.is(),
                               "AnimationAudioNode::AnimationAudioNode(): Invalid component context" );
-
-            try
-            {
-                mpPlayer = SoundPlayer::create(
-                    getContext().mrEventMultiplexer,
-                    aSoundURL,
-                    getContext().mxComponentContext );
-            }
-            catch( lang::NoSupportException& )
-            {
-                // catch possible exceptions from SoundPlayer,
-                // since being not able to playback the sound
-                // is not a hard error here (remainder of the
-                // animations should still work).
-            }
         }
 
         void AnimationAudioNode::dispose()
         {
-            if (mpPlayer.get() != 0) {
-                mpPlayer->stopPlayback();
-                mpPlayer->dispose();
-                mpPlayer.reset();
-            }
+            resetPlayer();
 
             mxAudioNode.clear();
 
@@ -125,6 +106,8 @@ namespace presentation
         {
             if( !BaseNode::activate() )
                 return false;
+
+            createPlayer();
 
             // not having a player is not a hard error here
             // (remainder of the animations should still
@@ -153,6 +136,8 @@ namespace presentation
             if( mpPlayer.get() )
                 mpPlayer->stopPlayback();
 
+            resetPlayer();
+
             // notify state change
             getContext().mrEventMultiplexer.notifyAudioStopped( getSelf() );
 
@@ -171,6 +156,8 @@ namespace presentation
             }
             else
             {
+                createPlayer();
+
                 if( !mpPlayer.get() )
                 {
                     // no duration and no inherent media time
@@ -207,12 +194,41 @@ namespace presentation
             return true;
         }
 
+        void AnimationAudioNode::createPlayer() const
+        {
+            if( mpPlayer.get() )
+                return;
+
+            try
+            {
+                mpPlayer = SoundPlayer::create(  getContext().mrEventMultiplexer,
+                                                 maSoundURL,
+                                                 getContext().mxComponentContext );
+            }
+            catch( lang::NoSupportException& )
+            {
+                // catch possible exceptions from SoundPlayer,
+                // since being not able to playback the sound
+                // is not a hard error here (remainder of the
+                // animations should still work).
+            }
+        }
+
+        void AnimationAudioNode::resetPlayer() const
+        {
+            if( mpPlayer.get() )
+            {
+                mpPlayer->stopPlayback();
+                mpPlayer->dispose();
+                mpPlayer.reset();
+            }
+        }
+
         bool AnimationAudioNode::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
         {
             // TODO: for now we support only STOPAUDIO events.
             deactivate();
             return true;
         }
-
     }
 }
