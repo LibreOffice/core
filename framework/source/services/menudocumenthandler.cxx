@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
 #include <classes/menuconfiguration.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_ADDONMENU_HXX_
+#include <classes/addonmenu.hxx>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_ATTRIBUTELIST_HXX_
@@ -755,7 +759,8 @@ throw ( SAXException, RuntimeException )
 void OWriteMenuDocumentHandler::WriteMenu( Menu* pMenu )
 throw ( SAXException, RuntimeException )
 {
-    USHORT nItemCount = pMenu->GetItemCount();
+    USHORT  nItemCount = pMenu->GetItemCount();
+    BOOL    bSeparator = FALSE;
 
     for ( USHORT nItemPos = 0; nItemPos < nItemCount; nItemPos++ )
     {
@@ -771,6 +776,7 @@ throw ( SAXException, RuntimeException )
             {
                 // special popup menus (filled during runtime) must be saved as a menuitem!!!
                 WriteMenuItem( pMenu, nItemId );
+                bSeparator = FALSE;
             }
             else if ( nItemId == SID_FORMATMENU )
             {
@@ -802,8 +808,9 @@ throw ( SAXException, RuntimeException )
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                bSeparator = FALSE;
             }
-            else
+            else if ( !AddonPopupMenu::IsCommandURLPrefix ( aItemCommand ))
             {
                 AttributeListImpl* pListMenu = new AttributeListImpl;
                 Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
@@ -837,19 +844,28 @@ throw ( SAXException, RuntimeException )
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                bSeparator = FALSE;
             }
         }
         else
         {
             if ( pMenu->GetItemType( nItemPos ) != MENUITEM_SEPARATOR )
             {
-                // don't save special menu items for (window list and pickup list)
-                if ( nItemId < START_ITEMID_PICKLIST ||
-                     nItemId > END_ITEMID_WINDOWLIST )
+                // don't save special menu items for (window list and pickup list, add-ons )
+                if ( !MenuConfiguration::IsPickListItemId( nItemId ) &&
+                     !MenuConfiguration::IsWindowListItemId( nItemId ) &&
+                     !AddonMenuManager::IsAddonMenuId( nItemId ))
+                {
+                    bSeparator = FALSE;
                     WriteMenuItem( pMenu, nItemId );
+                }
             }
-            else
+            else if ( !bSeparator )
+            {
+                // Don't write two separators together
                 WriteMenuSeparator();
+                bSeparator = TRUE;
+            }
         }
     }
 }
