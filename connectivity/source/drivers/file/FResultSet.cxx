@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1520,7 +1520,7 @@ BOOL OResultSet::OpenImpl()
                     UINT16 nMaxRow = m_pFileSet->size();
                     if (nMaxRow)
                     {
-    #if DEBUG
+    #if OSL_DEBUG_LEVEL > 1
                         INT32 nFound=0;
     #endif
                         ::std::vector<sal_Int16> nWasAllwaysFound(nMaxRow,0);
@@ -1563,7 +1563,7 @@ BOOL OResultSet::OpenImpl()
                                     }
                                 }
                             }
-    #if DEBUG
+    #if OSL_DEBUG_LEVEL > 1
                             else
                                 nFound++;
     #endif
