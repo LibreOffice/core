@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:57:51 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
 #endif
-#ifndef _CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SB_SBMETH_HXX //autogen
 #include <basic/sbmeth.hxx>
@@ -227,9 +227,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::vos;
 
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
 #ifndef _SVTOOLS_CTYPEITM_HXX
 #include <svtools/ctypeitm.hxx>
 #endif
