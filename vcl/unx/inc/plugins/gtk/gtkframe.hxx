@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:37:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,21 +111,27 @@ class GtkSalFrame : public SalFrame
         guint32 time;
         guint   state;
         guint   keyval;
+        guint16 hardware_keycode;
+        guint8  group;
 
         PreviousKeyPress (GdkEventKey *event)
         :   window (NULL),
             send_event (0),
             time (0),
             state (0),
-            keyval (0)
+            keyval (0),
+            hardware_keycode (0),
+            group (0)
         {
             if (event)
             {
-                window = event->window;
-                send_event = event->send_event;
-                time = event->time;
-                state = event->state;
-                keyval = event->keyval;
+                window              = event->window;
+                send_event          = event->send_event;
+                time                = event->time;
+                state               = event->state;
+                keyval              = event->keyval;
+                hardware_keycode    = event->hardware_keycode;
+                group               = event->group;
             }
         }
 
@@ -134,7 +140,9 @@ class GtkSalFrame : public SalFrame
             send_event( rPrev.send_event ),
             time( rPrev.time ),
             state( rPrev.state ),
-            keyval( rPrev.keyval )
+            keyval( rPrev.keyval ),
+            hardware_keycode( rPrev.hardware_keycode ),
+            group( rPrev.group )
         {}
 
         bool PreviousKeyPress::operator== (GdkEventKey *event) const
@@ -144,6 +152,8 @@ class GtkSalFrame : public SalFrame
                 && (event->send_event == send_event)
                 && (event->state == state)
                 && (event->keyval == keyval)
+                && (event->hardware_keycode == hardware_keycode)
+                && (event->group == group)
                 && (event->time - time < 3)
                 ;
         }
@@ -172,6 +182,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWasPreedit;
+    bool                            m_bIgnoreCommit;
 
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
@@ -213,6 +224,19 @@ class GtkSalFrame : public SalFrame
     void            SetDefaultSize();
     void            setAutoLock( bool bLock );
     void            setScreenSaverTimeout( int nTimeout );
+    void            hardIMReset();
+    void            createIMContext();
+    void            deleteIMContext();
+
+    void            doKeyCallback( guint state,
+                                   guint keyval,
+                                   guint16 hardware_keycode,
+                                   guint8 group,
+                                   guint32 time,
+                                   bool bDown,
+                                   bool bSendRelease
+                                   );
+
 
     GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
 
