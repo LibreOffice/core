@@ -2081,3 +2081,9 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ?__copy@_STL@@YAPAVORowSetValue@connectivity@@PAV23@00U_Ra__ItT@1@PAH@Z
 ?copy@_STL@@YAPAU?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@1@PAU21@00@Z
 ?upper_bound@?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_S1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@2@ABJ@Z
+??0OPreparedStatement@file@connectivity@@QAE@PAVOConnection@12@@Z
+??0?$_STL_alloc_proxy@PAVString@@V1@V?$allocator@VString@@@_STL@@@_STL@@QAE@ABV?$allocator@VString@@@1@PAVString@@@Z
+?OpenImpl@OResultSet@file@connectivity@@UAEEXZ
+?_Atomic_swap@_STL@@YAKPAKK@Z
+?_M_bkt_num_key@?$hashtable@U?$pair@$$CBVType@uno@star@sun@com@@PAX@_STL@@VType@uno@star@sun@com@@UhashType_Impl@cppu@@U?$_S1st@U?$pair@$$CBVType@uno@star@sun@com@@PAX@_STL@@@2@U?$equal_to@VType@uno@star@sun@com@@@2@V?$allocator@U?$pair@$$CBVType@uno@star@sun@com@@PAX@_STL@@@2@@_STL@@ABEIABVType@uno@star@sun@com@@I@Z
+?size@?$vector@PAXV?$allocator@U?$pair@$$CBVType@uno@star@sun@com@@PAX@_STL@@@_STL@@@_STL@@QBEIXZ
