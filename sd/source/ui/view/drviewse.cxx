@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-13 14:28:36 $
+ *  last change: $Author: aw $ $Date: 2002-03-18 15:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,42 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
             rBindings.Invalidate( SID_ATTR_CHAR_VERTICAL );
             rBindings.Invalidate( SID_TEXT_FITTOSIZE );
             rBindings.Invalidate( SID_TEXT_FITTOSIZE_VERTICAL );
+
+            // #98198# evtl. feed characters to activated textedit
+            if(SID_ATTR_CHAR == nSId)
+            {
+                const SfxItemSet* pSet = rReq.GetArgs();
+
+                if(pSet)
+                {
+                    String aInputString;
+
+                    if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR))
+                        aInputString = ((SfxStringItem&)pSet->Get(SID_ATTR_CHAR)).GetValue();
+
+                    if(aInputString.Len())
+                    {
+                        if(pView->IsTextEdit())
+                        {
+                            OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+
+                            if(pOLV)
+                            {
+                                for(sal_uInt16 a(0); a < aInputString.Len(); a++)
+                                {
+                                    sal_Char aChar = aInputString.GetChar(a);
+                                    KeyCode aKeyCode;
+                                    KeyEvent aKeyEvent(aChar, aKeyCode);
+
+                                    // add actual character
+                                    pOLV->PostKeyEvent(aKeyEvent);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             rReq.Done();
         }
         break;
