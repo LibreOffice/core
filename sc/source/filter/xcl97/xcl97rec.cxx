@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2000-12-13 08:21:07 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,12 @@ XclSupbook::~XclSupbook()
         delete pXct;
 }
 
+const XclUnicodeString* XclSupbook::GetTableName( UINT16 nIndex ) const
+{
+    XclXct* pXct = _Get( nIndex );
+    return pXct ? &pXct->GetTableName() : NULL;
+}
+
 UINT16 XclSupbook::AddTableName( const String& rTabName )
 {
     DBG_ASSERT( !bSelf, "XclSupbook::AddTableName() - Don't insert table names here" );
@@ -547,6 +553,21 @@ void XclSupbookList::AddExt( UINT16 nScTab )
     pTableBuffer[ nInd ] = nPos;
 }
 
+const XclUnicodeString* XclSupbookList::GetDocumentName( UINT16 nExcTab )
+{
+    DBG_ASSERT( nExcTab < nRefdCnt, "XclSupbookList::GetDocumentName - out of range" );
+    XclSupbook* pSupbook = GetSupbook( nExcTab );
+    const XclUnicodeString* pString = pSupbook ? &pSupbook->GetEncName() : NULL;
+    return (pString && pString->GetLen()) ? pString : NULL;
+}
+
+const XclUnicodeString* XclSupbookList::GetTableName( UINT16 nExcTab )
+{
+    DBG_ASSERT( nExcTab < nRefdCnt, "XclSupbookList::GetTableName - out of range" );
+    XclSupbook* pSupbook = GetSupbook( nExcTab );
+    return pSupbook ? pSupbook->GetTableName( pTableBuffer[ nExcTab ] ) : NULL;
+}
+
 void XclSupbookList::StoreCellRange( const ScRange& rRange )
 {
     UINT16 nExcTab = pExcRoot->pTabBuffer->GetExcTable( rRange.aStart.Tab() );
@@ -560,20 +581,27 @@ void XclSupbookList::StoreCellRange( const ScRange& rRange )
 void XclSupbookList::WriteXtiInfo( SvStream& rStrm, UINT16 nTabFirst, UINT16 nTabLast )
 {
     DBG_ASSERT( (nTabFirst < nRefdCnt) && (nTabLast < nRefdCnt),
-        "XclSupbookList::WriteXliInfo() - Out of range!" );
+        "XclSupbookList::WriteXtiInfo - out of range!" );
 
-    UINT16  nSupb       = pSupbookBuffer[ nTabFirst ];
-    BOOL    bConflict   = FALSE;
-
-    // all tables in the same supbook?
-    for( UINT16 nTab = nTabFirst + 1; !bConflict && (nTab <= nTabLast); nTab++ )
+    if( (nTabFirst >= nRefdCnt) || (nTabLast >= nRefdCnt) )
     {
-        bConflict = (pSupbookBuffer[ nTab ] != nSupb);
-        if( bConflict )
-            nTabLast = nTab - 1;
+        rStrm << (UINT16) 0 << (UINT16) 0xFFFF << (UINT16) 0xFFFF;
     }
+    else
+    {
+        UINT16  nSupb       = pSupbookBuffer[ nTabFirst ];
+        BOOL    bConflict   = FALSE;
 
-    rStrm << nSupb << pTableBuffer[ nTabFirst ] << pTableBuffer[ nTabLast ];
+        // all tables in the same supbook?
+        for( UINT16 nTab = nTabFirst + 1; !bConflict && (nTab <= nTabLast); nTab++ )
+        {
+            bConflict = (pSupbookBuffer[ nTab ] != nSupb);
+            if( bConflict )
+                nTabLast = nTab - 1;
+        }
+
+        rStrm << nSupb << pTableBuffer[ nTabFirst ] << pTableBuffer[ nTabLast ];
+    }
 }
 
 void XclSupbookList::Save( SvStream& rStrm )
@@ -941,29 +969,6 @@ UINT16 ExcBundlesheet8::GetNum() const
 UINT16 ExcBundlesheet8::GetLen() const
 {   // Text max 255 chars
     return 8 + (UINT16) aUnicodeName.GetByteCount();
-}
-
-
-// --- class ExcTabid8 -----------------------------------------------
-
-void ExcTabid8::SaveCont( SvStream& rStrm )
-{
-    for ( UINT16 j=0; j<nTabs; j++ )
-    {
-        rStrm << UINT16(j+1);
-    }
-}
-
-
-UINT16 ExcTabid8::GetNum() const
-{
-    return 0x013d;
-}
-
-
-UINT16 ExcTabid8::GetLen() const
-{
-    return nTabs * 2;
 }
 
 
