@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:00:19 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 17:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace accessibility
         @see SvxEditSource
         @see SvxViewForwarder
     */
-    class AccessibleOutlineEditSource : public SvxEditSource, public SvxViewForwarder, public SfxBroadcaster
+    class AccessibleOutlineEditSource : public SvxEditSource, public SvxViewForwarder, public SfxBroadcaster, public SfxListener
     {
     public:
         /// Create an SvxEditSource interface for the given Outliner
@@ -131,13 +131,16 @@ namespace accessibility
         virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
         virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
+        // SfxListener
+        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
     private:
 
         DECL_LINK( NotifyHdl, EENotify* );
 
         SdrView&                        mrView;
         const Window&                   mrWindow;
-        SdrOutliner&                    mrOutliner;
+        SdrOutliner*                    mpOutliner;
 
         SvxOutlinerForwarder            mTextForwarder;
         SvxDrawOutlinerViewForwarder    mViewForwarder;

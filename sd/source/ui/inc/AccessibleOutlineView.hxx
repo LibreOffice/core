@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:00:31 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 17:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,19 @@ public:
         getAccessibleChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
+    //=====  XAccessibleEventBroadcaster  ========================================
+
+    virtual void SAL_CALL
+        addEventListener (
+            const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        removeEventListener (
+            const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
+        throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 
@@ -131,14 +144,6 @@ public:
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
-
-    //=====  XFrameActionListener  ============================================
-
-    virtual void SAL_CALL
-        frameAction (const ::com::sun::star::frame::FrameActionEvent& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException);
-
-
     //=====  XPropertyChangeListener  =========================================
 
     virtual void SAL_CALL
@@ -148,12 +153,15 @@ public:
 
 protected:
 
+    // overridden, as we hold the listeners ourselves
+    void FireEvent (const ::drafts::com::sun::star::accessibility::AccessibleEventObject& aEvent);
+
     // declared, but not defined
     AccessibleOutlineView( const AccessibleOutlineView& );
     AccessibleOutlineView& operator= ( const AccessibleOutlineView& );
 
-    /// @dyn
-    ::std::auto_ptr< AccessibleTextHelper > mpTextHelper;
+    // This method is called from the component helper base class while disposing.
+    virtual void SAL_CALL disposing (void);
 
     /// Create an accessible name that contains the current view mode.
     virtual ::rtl::OUString
@@ -166,8 +174,14 @@ protected:
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 
+private:
+
     /// Invalidate text helper, updates visible children
     void UpdateChildren();
+
+    /// @dyn
+    ::std::auto_ptr< AccessibleTextHelper > mpTextHelper;
+
 };
 
 } // end of namespace accessibility

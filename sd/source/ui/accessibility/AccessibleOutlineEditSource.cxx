@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:42:39 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 17:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace accessibility
                                                               const Window& rViewWindow ) :
         mrView( rView ),
         mrWindow( rViewWindow ),
-        mrOutliner( rOutliner ),
+        mpOutliner( &rOutliner ),
         mTextForwarder( rOutliner ),
         mViewForwarder( rOutlView )
     {
@@ -88,7 +88,8 @@ namespace accessibility
 
     AccessibleOutlineEditSource::~AccessibleOutlineEditSource()
     {
-        mrOutliner.SetNotifyHdl( Link() );
+        if( mpOutliner )
+            mpOutliner->SetNotifyHdl( Link() );
         Broadcast( TextHint( SFX_HINT_DYING ) );
     }
 
@@ -135,7 +136,9 @@ namespace accessibility
         {
             Rectangle aVisArea = mrView.GetVisibleArea( mrView.FindWin( const_cast< Window* > (&mrWindow) ) );
 
-            return mrWindow.LogicToPixel( aVisArea );
+            MapMode aMapMode(mrWindow.GetMapMode());
+            aMapMode.SetOrigin(Point());
+            return mrWindow.LogicToPixel( aVisArea, aMapMode );
         }
 
         return Rectangle();
@@ -143,18 +146,50 @@ namespace accessibility
 
     Point AccessibleOutlineEditSource::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
     {
-        if( IsValid() )
-            return mrWindow.LogicToPixel( rPoint, rMapMode );
+        if( IsValid() && mrView.GetModel() )
+        {
+            Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
+                                                      MapMode(mrView.GetModel()->GetScaleUnit()) ) );
+            MapMode aMapMode(mrWindow.GetMapMode());
+            aMapMode.SetOrigin(Point());
+            return mrWindow.LogicToPixel( aPoint, aMapMode );
+        }
 
         return Point();
     }
 
     Point AccessibleOutlineEditSource::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
     {
-        if( IsValid() )
-            return mrWindow.PixelToLogic( rPoint, rMapMode );
+        if( IsValid() && mrView.GetModel() )
+        {
+            MapMode aMapMode(mrWindow.GetMapMode());
+            aMapMode.SetOrigin(Point());
+            Point aPoint( mrWindow.PixelToLogic( rPoint, aMapMode ) );
+            return OutputDevice::LogicToLogic( aPoint,
+                                               MapMode(mrView.GetModel()->GetScaleUnit()),
+                                               rMapMode );
+        }
 
         return Point();
+    }
+
+    void AccessibleOutlineEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    {
+        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+        if( pSdrHint )
+        {
+            switch( pSdrHint->GetKind() )
+            {
+                case HINT_MODELCLEARED:
+                    // model is dying under us, going defunc
+                    if( mpOutliner )
+                        mpOutliner->SetNotifyHdl( Link() );
+                    mpOutliner = NULL;
+                    Broadcast( TextHint( SFX_HINT_DYING ) );
+                    break;
+            }
+        }
     }
 
     IMPL_LINK(AccessibleOutlineEditSource, NotifyHdl, EENotify*, aNotify)
