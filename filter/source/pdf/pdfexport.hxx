@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 14:59:41 $
+ *  last change: $Author: sj $ $Date: 2002-09-10 15:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@ class GDIMetaFile;
 class VirtualDevice;
 class PolyPolygon;
 class Gradient;
+class BitmapEx;
+class Point;
+class Size;
 namespace vcl { class PDFWriter; }
 
 // -------------
@@ -84,6 +87,8 @@ private:
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf, sal_Int32 nCompressMode );
     sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode );
     void                    ImplWriteGradient( ::vcl::PDFWriter& rWriter, const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode );
+    void                    ImplWriteBitmapEx( ::vcl::PDFWriter& rWriter, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode,
+                                                                const Point& rPoint, const Size& rSize, const BitmapEx& rBitmap );
 
 public:
 

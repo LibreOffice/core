@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-04 15:55:58 $
+ *  last change: $Author: sj $ $Date: 2002-09-10 15:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/poly.hxx>
+#include <vcl/salbtype.hxx>
 #include <so3/embobj.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -454,44 +455,52 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
             case( META_BMP_ACTION ):
             {
                 const MetaBmpAction* pA = (const MetaBmpAction*) pAction;
-                rWriter.DrawBitmap( pA->GetPoint(), pA->GetBitmap() );
+                BitmapEx aBitmapEx( pA->GetBitmap() );
+                Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
+                        aBitmapEx.GetPrefMapMode(), rDummyVDev.GetMapMode() ) );
+                ImplWriteBitmapEx( rWriter, rDummyVDev, nCompressMode, pA->GetPoint(), aSize, aBitmapEx );
             }
             break;
 
             case( META_BMPSCALE_ACTION ):
             {
                 const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
-                rWriter.DrawBitmap( pA->GetPoint(), pA->GetSize(), pA->GetBitmap() );
+                ImplWriteBitmapEx( rWriter, rDummyVDev, nCompressMode , pA->GetPoint(), pA->GetSize(), BitmapEx( pA->GetBitmap() ) );
             }
             break;
 
             case( META_BMPSCALEPART_ACTION ):
             {
                 const MetaBmpScalePartAction* pA = (const MetaBmpScalePartAction*) pAction;
-                rWriter.DrawBitmap( pA->GetDestPoint(), pA->GetDestSize(),
-                                    pA->GetSrcPoint(), pA->GetSrcSize(), pA->GetBitmap() );
+                BitmapEx aBitmapEx( pA->GetBitmap() );
+                aBitmapEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+                ImplWriteBitmapEx( rWriter, rDummyVDev, nCompressMode, pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx );
             }
             break;
 
             case( META_BMPEX_ACTION ):
             {
                 const MetaBmpExAction*  pA = (const MetaBmpExAction*) pAction;
-                rWriter.DrawBitmapEx( pA->GetPoint(), pA->GetBitmapEx() );
+                BitmapEx aBitmapEx( pA->GetBitmapEx() );
+                Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
+                        aBitmapEx.GetPrefMapMode(), rDummyVDev.GetMapMode() ) );
+                ImplWriteBitmapEx( rWriter, rDummyVDev, nCompressMode, pA->GetPoint(), aSize, aBitmapEx );
             }
             break;
 
             case( META_BMPEXSCALE_ACTION ):
             {
                 const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
-                rWriter.DrawBitmapEx( pA->GetPoint(), pA->GetSize(), pA->GetBitmapEx() );
+                ImplWriteBitmapEx( rWriter, rDummyVDev, nCompressMode, pA->GetPoint(), pA->GetSize(), pA->GetBitmapEx() );
             }
             break;
 
             case( META_BMPEXSCALEPART_ACTION ):
             {
                 const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pAction;
-                rWriter.DrawBitmapEx( pA->GetDestPoint(), pA->GetDestSize(),
-                                      pA->GetSrcPoint(), pA->GetSrcSize(), pA->GetBitmapEx() );
+                BitmapEx aBitmapEx( pA->GetBitmapEx() );
+                aBitmapEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+                ImplWriteBitmapEx( rWriter, rDummyVDev, nCompressMode, pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx );
             }
             break;
 
@@ -709,4 +718,56 @@ void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyP
     rWriter.IntersectClipRegion( rPolyPoly );
     ImplWriteActions( rWriter, aTmpMtf, rDummyVDev, nCompressMode );
     rWriter.Pop();
+}
+
+// -----------------------------------------------------------------------------
+
+void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode,
+                                  const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx )
+{
+    if ( !rBitmapEx.IsEmpty() )
+    {
+        BitmapEx aBitmapEx( rBitmapEx );
+
+        sal_Int32 nMaxBmpDPI = nCompressMode ? 300 : 72;
+
+        // do downsampling if neccessary
+        const Size      aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
+        const Size      aBmpSize( aBitmapEx.GetSizePixel() );
+        const double    fBmpPixelX = aBmpSize.Width();
+        const double    fBmpPixelY = aBmpSize.Height();
+        const double    fMaxPixelX = aDstSizeTwip.Width() * nMaxBmpDPI / 1440.0;
+        const double    fMaxPixelY = aDstSizeTwip.Height() * nMaxBmpDPI / 1440.0;
+
+        // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+        if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
+              ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
+            ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
+        {
+            // do scaling
+            Size            aNewBmpSize;
+            const double    fBmpWH = fBmpPixelX / fBmpPixelY;
+            const double    fMaxWH = fMaxPixelX / fMaxPixelY;
+
+            if( fBmpWH < fMaxWH )
+            {
+                aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
+                aNewBmpSize.Height() = FRound( fMaxPixelY );
+            }
+            else if( fBmpWH > 0.0 )
+            {
+                aNewBmpSize.Width() = FRound( fMaxPixelX );
+                aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
+            }
+
+            if( aNewBmpSize.Width() && aNewBmpSize.Height() )
+                aBitmapEx.Scale( aNewBmpSize );
+            else
+                aBitmapEx.SetEmpty();
+        }
+        if ( aBitmapEx.IsTransparent() )
+            rWriter.DrawBitmapEx( rPoint, rSize, aBitmapEx );
+        else
+            rWriter.DrawBitmap( rPoint, rSize, aBitmapEx.GetBitmap() );
+    }
 }
