@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLParagraphContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *  last change: $Author: bm $ $Date: 2001-06-21 11:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,16 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
+using namespace rtl;
+using namespace com::sun::star;
 
 SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
-                                                const rtl::OUString& rLocalName,
-                                                rtl::OUString& rText ) :
+                                                const OUString& rLocalName,
+                                                OUString& rText ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName ),
         mrText( rText )
 {
@@ -77,8 +83,32 @@ SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
 SchXMLParagraphContext::~SchXMLParagraphContext()
 {}
 
-void SchXMLParagraphContext::Characters( const rtl::OUString& rChars )
+void SchXMLParagraphContext::EndElement()
 {
-    mrText = rChars;
+    mrText = maBuffer.makeStringAndClear();
 }
 
+SvXMLImportContext* SchXMLParagraphContext::CreateChildContext(
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    if( nPrefix == XML_NAMESPACE_TEXT )
+    {
+        if( rLocalName.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP )))
+        {
+            maBuffer.append( sal_Unicode( 0x0009 ));  // tabulator
+        }
+        else if( rLocalName.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK )))
+        {
+            maBuffer.append( sal_Unicode( 0x000A ));  // linefeed
+        }
+    }
+
+    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+}
+
+void SchXMLParagraphContext::Characters( const OUString& rChars )
+{
+    maBuffer.append( rChars );
+}
