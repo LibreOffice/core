@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:46:30 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 10:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,15 +1312,20 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             BOOL bFrameRTL;
             BOOL bFrameHasVerticalColumns =  rSh.IsFrmVertical(FALSE, bFrameRTL) && bFrmSelection;
+            BOOL bHasTable = ( IsTabColFromDoc() ||
+                    ( rSh.GetTableFmt() && !bFrmSelection &&
+                    !(nFrmType & FRMTYPE_COLSECT ) ) );
+
+            BOOL bTableVertical = bHasTable && rSh.IsTableVertical();
 
             if((SID_RULER_BORDERS_VERTICAL == nWhich) &&
-                    ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
+                    ((bHasTable && !bTableVertical)||
+                        (!bVerticalWriting && !bFrmSelection && !bHasTable ) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
                 ((SID_RULER_BORDERS == nWhich) &&
-                    ((bVerticalWriting && !bFrmSelection) || bFrameHasVerticalColumns)))
+                    ((bHasTable && bTableVertical)||
+                        (bVerticalWriting && !bFrmSelection&& !bHasTable) || bFrameHasVerticalColumns)))
                 rSet.DisableItem(nWhich);
-            else if ( IsTabColFromDoc() ||
-                    ( rSh.GetTableFmt() && !bFrmSelection &&
-                    !(nFrmType & FRMTYPE_COLSECT ) ) )
+            else if ( bHasTable )
             {
                 SwTabCols aTabCols;
                 USHORT    nNum;
@@ -1342,7 +1347,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                   USHORT(DOCUMENTBORDER) +
                                   aTabCols.GetLeft();
 
-                int nRgt = (USHORT)(bVerticalWriting ? nPageHeight : nPageWidth) -
+                int nRgt = (USHORT)(bTableVertical ? nPageHeight : nPageWidth) -
                                   (aTabCols.GetLeftMin() +
                                   aTabCols.GetRight() -
                                   USHORT(DOCUMENTBORDER) );
