@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-20 11:08:38 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,13 +133,13 @@ rtl::OUString convertPath( rtl::OUString const& _suSysPath )
     sal_Char cFileSep[] = "/";
 #endif
 
-    if ( _suSysPath.indexOf(rtl::OUString::createFromAscii("..")) != -1 )
+    if ( _suSysPath.indexOf(rtl::OUString::createFromAscii("..")) == 0 )
     {
         bRelativ = true;
     }
-    else if ( _suSysPath.indexOf(rtl::OUString::createFromAscii(cFileSep)) == -1 )
+    else if ( _suSysPath.indexOf(rtl::OUString::createFromAscii(cFileSep)) != 0 )
     {
-        // no fileseparator found, must be relative
+        // no fileseparator found at first position found, must be relative
         bRelativ = true;
     }
 
