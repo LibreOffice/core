@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 09:09:32 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 13:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,8 +893,12 @@ namespace xmloff
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
                 return new OListAndComboImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
+
             case OControlElement::RADIO:
                 return new ORadioImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
+
+            case OControlElement::PASSWORD:
+                return new OPasswordImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
 
             case OControlElement::FRAME:
             case OControlElement::FIXED_TEXT:
@@ -936,6 +940,9 @@ namespace xmloff
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
                 return new OColumnImport<OListAndComboImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
+
+            case OControlElement::PASSWORD:
+                return new OColumnImport<OPasswordImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
 
             default:
                 return new OColumnImport<OControlImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType, m_xOwnAttributes);
@@ -1087,6 +1094,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/02/13 09:09:32  fs
+ *  #83529# introducing ORadioImport - need special handling for DefaultState / State
+ *
  *  Revision 1.9  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *
