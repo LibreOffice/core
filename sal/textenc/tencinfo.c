@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-10 20:18:11 $
+ *  last change: $Author: cp $ $Date: 2000-12-12 14:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,11 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { NULL, RTL_TEXTENCODING_SYMBOL }
     };
 
+    static ImplStrCharsetDef const aUnixCharsetKoreanEUCTab[] =
+    {
+        { NULL, RTL_TEXTENCODING_EUC_KR }
+    };
+
     static ImplStrFirstPartCharsetDef const aUnixCharsetFirstPartTab[] =
     {
         { "iso8859", aUnixCharsetISOTab },
@@ -588,7 +593,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "sunolcursor", aUnixCharsetSymbolTab },
         { "sunolglyph", aUnixCharsetSymbolTab },
         { "iso10646", aUnixCharsetUNICODETab },
-/*        { "ksc5601.1992", },          */
+        { "ksc5601.1992", aUnixCharsetKoreanEUCTab },
 /*        { "tis620.2553",  },          */
 /*        { "sunudcja.1997",  },        */
 /*        { "sunudcko.1997",  },        */
