@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:50:54 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ ModalDialog DLG_INSERT_TABLE
         Text [ ENGLISH ] = "Autoformat..." ;
         Text [ norwegian ] = "Autoformat..." ;
         Text [ italian ] = "~Formatt. auto..." ;
-        Text [ portuguese_brazilian ] = "Formatação Automática..." ;
+        Text [ portuguese_brazilian ] = "Formata??o Autom?tica..." ;
         Text [ portuguese ] = "~AutoFormato..." ;
         Text [ finnish ] = "~Automaattinen muotoilu" ;
         Text [ danish ] = "AutoFormat..." ;
