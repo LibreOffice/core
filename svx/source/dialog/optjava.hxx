@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:57:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ private:
 
     FixedText               m_aAssignedLabel;
     ListBox                 m_aAssignedList;
+    FixedText               m_aExampleText;
     PushButton              m_aRemoveBtn;
 
     FixedLine               m_aButtonsLine;
@@ -187,6 +188,7 @@ private:
     DECL_LINK(              ModifyHdl_Impl, Edit * );
     DECL_LINK(              AssignHdl_Impl, PushButton * );
     DECL_LINK(              SelectHdl_Impl, ListBox * );
+    DECL_LINK(              DblClickHdl_Impl, ListBox * );
     DECL_LINK(              RemoveHdl_Impl, PushButton * );
 
     inline void             EnableRemoveButton()
