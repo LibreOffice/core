@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dic $ $Date: 2001-02-23 11:34:33 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 10:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,17 +86,28 @@ void SAL_CALL osl_breakDebug()
     DebugBreak();
 }
 
+
+
+/* Uncomment this define to get profiling time output */
+/* #define OSL_PROFILING */
+
 void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 {
     va_list args;
 
     va_start(args, lpszFormat);
 
+#if defined(OSL_PROFILING)
+    fprintf(stderr, "time : %06lu : ", osl_getGlobalTimer() );
+#else
     fprintf(stderr,"Trace Message : ");
+#endif
 
     vfprintf(stderr,lpszFormat, args);
 
     fprintf(stderr,"\n");
+
+    fflush(stderr);
 
     va_end(args);
 }

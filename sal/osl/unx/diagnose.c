@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-28 09:54:50 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 09:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@ void SAL_CALL osl_breakDebug()
     exit(0);
 }
 
-#define OSL_PROFILING
+
+/* Uncomment this define to get profiling time output */
+/* #define OSL_PROFILING */
 
 void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 {
