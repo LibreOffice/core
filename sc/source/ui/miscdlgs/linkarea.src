@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-16 12:56:46 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text [ ENGLISH ] = "External Data Source Location" ;
         Text[ english_us ] = "URL of ~external data source";
         Text[ portuguese ] = "~URL da fonte de dados externa";
-        Text[ russian ] = "URL внешних исходных данных";
+        Text[ russian ] = "URL внешних источников данных";
         Text[ greek ] = "~URL фзт еощфесйкёт рспЁлехузт фщн дедпмЁнщн";
         Text[ dutch ] = "~URL van de externe gegevensbron";
         Text[ french ] = "~URL de la source de donnйes externe";
@@ -136,9 +136,9 @@ ModalDialog RID_SCDLG_LINKAREA
         Text [ ENGLISH ] = "(Insert a local file location or an URL from a web site here)" ;
         Text[ english_us ] = "(Enter the URL of the source document in the local file system or Internet here.)";
         Text[ portuguese ] = "(URL do documento-fonte no sistema local de ficheiros ou na Internet)";
-        Text[ russian ] = "(URL исходного документа в локалной системе файлов или в »нтернете)";
+        Text[ russian ] = "(¬ведите URL исходного документа в локальной файловой системе или в »нтернете)";
         Text[ greek ] = "(≈йубгщгё фпх Ёггсбцпх рспЁлехузт брь фп фпрйкь уэуфзмб бсчеящн ё брь фп Internet)";
-        Text[ dutch ] = "(URL van het brondocument in het lokale bestandssysteem of in Internet)";
+        Text[ dutch ] = "(URL van het brondocument in het lokale bestandssysteem of op het internet)";
         Text[ french ] = "(URL du document source dans le systиme de fichiers local ou dans l'Internet)";
         Text[ spanish ] = "(URL del documento fuente en el sistema de archivos local o en Internet)";
         Text[ italian ] = "(URL del documento sorgente nel sistema di dati locale oppure in Internet)";
@@ -164,7 +164,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text [ ENGLISH ] = "Available Tables/Ranges" ;
         Text[ english_us ] = "~Available tables/ranges";
         Text[ portuguese ] = "~Tabelas/Ѕreas disponнveis";
-        Text[ russian ] = "ƒоступные листы/области";
+        Text[ russian ] = "ƒоступные таблицы/диапазоны";
         Text[ greek ] = "ƒйбиЁуймпй рянбкет/ресйпчЁт";
         Text[ dutch ] = "~Beschikbare tabellen/Bereiken";
         Text[ french ] = "Feuilles/plages dis~ponibles";
@@ -203,7 +203,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ portuguese ] = "A~ctualizar cada";
         Text[ russian ] = "ќбновление каждые";
         Text[ greek ] = "≈~нзмЁсщуз ьлщн";
-        Text[ dutch ] = "~Actualisering alle";
+        Text[ dutch ] = "~Bijwerken alle";
         Text[ french ] = "~Actualisation toutes les";
         Text[ spanish ] = "Actuali~zar cada";
         Text[ italian ] = "Aggiorna ogni";
@@ -279,7 +279,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ turkish ] = "External Data Source";
     Text[ arabic ] = "External Data Source";
     Text[ catalan ] = "Font de dades externa";
-    Text[ finnish ] = "Ulkoinen tietolдhde";
+    Text[ finnish ] = "Ulkoiset tiedot";
     Text[ thai ] = "аєБаЄЂаЄ•аєИаЄЗаЄВаєЙаЄ≠аЄ°аЄєаЄ•аЄ†аЄ≤аЄҐаЄЩаЄ≠аЄБ";
 };
 
