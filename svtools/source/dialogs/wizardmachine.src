@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:21:15 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@ String STR_WIZDLG_FINISH
     Text[ swedish ] = "~F‰rdigst‰ll";
     Text[ polish ] = "UtwÛrz";
     Text[ portuguese_brazilian ] = "~Finish";
-    Text[ japanese ] = "äÆóπ(~R)";
-    Text[ korean ] = "∏∂ƒß(~R)";
-    Text[ chinese_simplified ] = "ÕÍ≥…(~R)";
-    Text[ chinese_traditional ] = "ßπ¶®(~R)";
+    Text[ japanese ] = "ÂÆå‰∫Ü(~R)";
+    Text[ korean ] = "ÎßàÏπ®(~R)";
+    Text[ chinese_simplified ] = "ÂÆåÊàê(~R)";
+    Text[ chinese_traditional ] = "ÂÆåÊàê(~R)";
     Text[ turkish ] = "~Finish";
     Text[ arabic ] = "≈‰‘«¡";
     Text[ catalan ] = "~Crear";
@@ -107,10 +107,10 @@ String STR_WIZDLG_NEXT
     Text[ swedish ] = "~N‰sta >>";
     Text[ polish ] = "Dalej >>";
     Text[ portuguese_brazilian ] = "~Next >>";
-    Text[ japanese ] = "éüÇ÷  (~N) >>";
-    Text[ korean ] = "¥Ÿ¿Ω (~N) >>";
-    Text[ chinese_simplified ] = "ºÃ–¯  (~N) >>";
-    Text[ chinese_traditional ] = "ƒ~ƒÚ (~N) >>";
+    Text[ japanese ] = "Ê¨°„Å∏  (~N) >>";
+    Text[ korean ] = "Îã§Ïùå (~N) >>";
+    Text[ chinese_simplified ] = "ÁªßÁª≠  (~N) >>";
+    Text[ chinese_traditional ] = "ÁπºÁ∫å (~N) >>";
     Text[ turkish ] = "~Next >>";
     Text[ arabic ] = "«· «·Ì <<";
     Text[ catalan ] = "~Siguiente >>";
@@ -134,10 +134,10 @@ String STR_WIZDLG_PREVIOUS
     Text[ swedish ] = "<< T~illbaka";
     Text[ polish ] = "<< Wstecz";
     Text[ portuguese_brazilian ] = "<< ~Previous";
-    Text[ japanese ] = "<< ñﬂÇÈ(~K)";
-    Text[ korean ] = "<< µ⁄∑Œ(~K)";
-    Text[ chinese_simplified ] = "<< ∑µªÿ(~K)";
-    Text[ chinese_traditional ] = "<< ™¶^(~K)";
+    Text[ japanese ] = "<< Êàª„Çã(~K)";
+    Text[ korean ] = "<< Îí§Î°ú(~K)";
+    Text[ chinese_simplified ] = "<< ËøîÂõû(~K)";
+    Text[ chinese_traditional ] = "<< ËøîÂõû(~K)";
     Text[ turkish ] = "<< ~Previous";
     Text[ arabic ] = "<< ~Previous";
     Text[ catalan ] = "<< ~Anterior";
@@ -147,6 +147,9 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/07/13 20:21:15  kz
+ *  Merge SRC638: 13.07.01 - 22:20:19
+ *
  *  Revision 1.15  2001/07/03 21:47:23  kz
  *  Merge SRC633: 07/03/01 - 23:46:38
  *
@@ -195,6 +198,7 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
 
 
 
