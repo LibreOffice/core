@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instance.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-28 09:55:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,11 @@ namespace {
 
     Code:
 
+      #include "rtl/instance.hxx"
+      #include "osl/getglobalmutex.hxx"
+
       namespace {
-          struct Init()
+          struct Init
           {
               T * operator()()
               {
@@ -139,8 +142,11 @@ namespace {
 
     Code:
 
+      #include "rtl/instance.hxx"
+      #include "osl/getglobalmutex.hxx"
+
       namespace {
-          struct Init()
+          struct Init
           {
               T * operator()()
               {
@@ -177,8 +183,10 @@ namespace {
 
     Code:
 
+      #include "rtl/instance.hxx"
+
       namespace {
-          struct InitInstance()
+          struct InitInstance
           {
               T * operator()()
               {
@@ -187,7 +195,7 @@ namespace {
               }
           };
 
-          struct InitGuard()
+          struct InitGuard
           {
               SomeMutex * operator()()
               {
@@ -225,8 +233,11 @@ namespace {
 
     Code:
 
+      #include "rtl/instance.hxx"
+      #include "osl/getglobalmutex.hxx"
+
       namespace {
-          struct InitInstance()
+          struct InitInstance
           {
               T * operator()()
               {
@@ -235,7 +246,7 @@ namespace {
               }
           }
 
-          struct InitData()
+          struct InitData
           {
               Data const & operator()()
               {
@@ -350,8 +361,11 @@ private:
 
 #if !defined _MSC_VER
 template< typename Inst, typename InstCtor,
-          typename Guard, typename GuardCtor >
-Inst * rtl_Instance< Inst, InstCtor, Guard, GuardCtor >::m_pInstance = 0;
+          typename Guard, typename GuardCtor,
+          typename Data, typename DataCtor >
+Inst *
+rtl_Instance< Inst, InstCtor, Guard, GuardCtor, Data, DataCtor >::m_pInstance
+= 0;
 #endif // _MSC_VER
 
 }
