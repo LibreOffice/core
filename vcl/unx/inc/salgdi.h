@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:25:03 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,34 +100,18 @@ class   ImplLayoutArgs;
 class   X11FontLayout;
 class   ServerFontLayout;
 
-#ifndef _USE_PRINT_EXTENSION_
-namespace psp { struct JobData; class PrinterGfx; }
-#endif
-
-#ifndef _SV_SALDISP_HXX
-typedef SalColormap         *SalColormapRef;
-#endif
-
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 class X11SalGraphics : public SalGraphics
 {
-    friend class            PspSalPrinter;
-    friend class            PspSalInfoPrinter;
     friend class            X11FontLayout;
     friend class            ServerFontLayout;
 
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
     X11SalVirtualDevice*    m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
-#ifndef _USE_PRINT_EXTENSION_
-    ::psp::JobData*         m_pJobData;
-    ::psp::PrinterGfx*      m_pPrinterGfx;
-    String*                 m_pPhoneNr;
-    bool                    m_bSwallowFaxNo;
-#endif
-
-    SalColormapRef  xColormap_;
+    SalColormap    *m_pColormap;
+    SalColormap    *m_pDeleteColormap;
     Drawable        hDrawable_;     // use
 
     XLIB_Region     pPaintRegion_;
@@ -143,7 +127,6 @@ class X11SalGraphics : public SalGraphics
 
     SalColor        nTextColor_;
     Pixel           nTextPixel_;
-    short           nFontOrientation_;
     BOOL            bFontVertical_;
 
     GC              pBrushGC_;      // Brush attributes
@@ -182,7 +165,6 @@ class X11SalGraphics : public SalGraphics
     GC              GetInvert50GC();
     GC              CreateGC( Drawable      hDrawable,
                               unsigned long nMask = GCGraphicsExposures );
-
     GC              SelectPen();
     GC              SelectBrush();
     void            DrawLines( ULONG              nPoints,
@@ -237,7 +219,7 @@ public:
                             X11SalGraphics();
     virtual             ~X11SalGraphics();
 
-            void            Init( SalFrame *pFrame );
+            void            Init( SalFrame *pFrame, Drawable aDrawable );
             void            Init( X11SalVirtualDevice *pVirtualDevice );
             void            Init( class ImplSalPrinterData *pPrinter );
             void            DeInit();
@@ -247,12 +229,8 @@ public:
     inline  SalVisual       *GetVisual() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     inline  void            SetDrawable( Drawable d ) { hDrawable_ = d; }
-    inline  SalColormap    &GetColormap() const { return *xColormap_; }
-    inline  BOOL            IsCompatible( USHORT nDepth,
-                                          SalColormap *pMap ) const;
+    inline  SalColormap    &GetColormap() const { return *m_pColormap; }
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
-
-            String            FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop ) const;
 
     // overload all pure virtual methods
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
@@ -359,12 +337,6 @@ inline SalVisual *X11SalGraphics::GetVisual() const
 
 inline Display *X11SalGraphics::GetXDisplay() const
 { return GetColormap().GetXDisplay(); }
-
-inline BOOL X11SalGraphics::IsCompatible( USHORT       nDepth,
-                                          SalColormap *pMap ) const
-{
-    return (GetDisplay()->GetImageDepths() & (1 << (nDepth-1))) != 0 && &xColormap_ == pMap;
-}
 
 inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 { return GetColormap().GetPixel( nSalColor ); }
