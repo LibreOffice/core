@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 07:21:37 $
+ *  last change: $Author: os $ $Date: 2001-05-30 12:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,7 +760,7 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
                 bDelete = TRUE;
             }
             pWrtShell->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet()));
+                                aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetAttr(nFontWhich);
             if(bDelete)
