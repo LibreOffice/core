@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:02:22 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 11:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,7 @@ LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
     if ( xMgr.is() )
     {
         xDesktop = Reference< XComponent > ( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM (
-                            "com.sun.star.frame.Desktop" ) ) ), UNO_QUERY ) ;
+                OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) ) ), UNO_QUERY ) ;
         if (xDesktop.is())
             xDesktop->addEventListener( this );
     }
