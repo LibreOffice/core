@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 09:12:30 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ ModalDialog DLG_VECTORIZE
         Text[ spanish ] = "~Tamaño de azulejo:";
         Text[ chinese_simplified ] = "Æ½ÆÌ´óÐ¡£º";
         Text[ russian ] = "~Ðàçìåð ïëèòêè:";
-        Text[ polish ] = "Wielko?æ p³ytek:";
+        Text[ polish ] = "Wielkoœæ p³ytek:";
         Text[ japanese ] = "À²Ù‚Ì»²½Þ:";
         Text[ chinese_traditional ] = "¥­¾Q¤j¤p¡G";
         Text[ arabic ] = "ÍÌã ÇáÈáÇØ:";
