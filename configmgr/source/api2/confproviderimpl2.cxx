@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-08 09:43:54 $
+ *  last change: $Author: lla $ $Date: 2000-11-09 14:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,14 @@ namespace configmgr
             }
             else
             {
-                OSL_ENSHURE(false, "operator >>= failed.");
+                if (pCurrent->getValueTypeClass() == uno::TypeClass_STRING ||
+                    pCurrent->getValueTypeClass() == uno::TypeClass_LONG)
+                {
+                }
+                else
+                {
+                    OSL_ENSHURE(false, "parameter has unsupported format.");
+                }
             }
         }
         return true;
