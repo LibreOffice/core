@@ -2,9 +2,9 @@
  *
  *  $RCSfile: migration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:48:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,7 @@ void Migration::cancelMigration()
 
 sal_Bool Migration::checkMigration()
 {
-#ifdef PRODUCT
-    return sal_False;
-#else
     return getImpl()->checkMigration();
-#endif
 }
 
 OUString Migration::getOldVersionName()
@@ -417,6 +413,7 @@ strings_vr MigrationImpl::compileFileList()
     return vrResult;
 }
 
+
 void MigrationImpl::copyConfig()
 {
     try {
@@ -467,10 +464,11 @@ void MigrationImpl::copyConfig()
             {
                 OUString component = seqComponents[i];
                 importerArgs[2].Value = makeAny(seqComponents[i]);
-                Any aResult = xImporter->execute(importerArgs);
-                Exception aException;
-                if (aResult >>= aException)
-                {
+                try {
+                    Any aResult = xImporter->execute(importerArgs);
+                    Exception myException;
+                    if (aResult >>= myException) throw myException;
+                } catch(Exception& aException) {
                     OString aMsg("Exception in config layer import.\ncomponent: ");
                     aMsg += OUStringToOString(seqComponents[i], RTL_TEXTENCODING_ASCII_US);
                     aMsg += "\nmessage: ";
