@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-23 13:56:05 $
+#   last change: $Author: vg $ $Date: 2003-04-24 12:51:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..
 
-PRJNAME=BASCTL
+PRJNAME=basctl
 TARGET=basicide
 
 PROJECTPCH4DLL=TRUE
