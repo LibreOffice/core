@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 12:02:52 $
+ *  last change: $Author: er $ $Date: 2001-01-30 15:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -134,6 +137,7 @@ LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 International*  ScGlobal::pScInternational = NULL;
 ::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
 CharClass*  ScGlobal::pCharClass = NULL;
+LocaleDataWrapper* ScGlobal::pLocaleData = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
 String*         ScGlobal::pStrClipDocName = NULL;
@@ -624,7 +628,8 @@ void ScGlobal::Init()
     String aLanguage, aCountry;
     ConvertLanguageToIsoNames( International::GetRealLanguage( eLnge ), aLanguage, aCountry );
     pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
-    pCharClass = new CharClass( *pLocale );
+    pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), *pLocale );
+    pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
 
     ppRscString = new String *[ STR_COUNT+1 ];
     for( USHORT nC = 0 ; nC <= STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
@@ -729,6 +734,7 @@ void ScGlobal::Clear()
     DELETEZ(pOutlineBitmaps);
 //  DELETEZ(pAnchorBitmap);
 //  DELETEZ(pGrayAnchorBitmap);
+    DELETEZ(pLocaleData);
     DELETEZ(pCharClass);
     DELETEZ(pLocale);
     DELETEZ(pScInternational);
