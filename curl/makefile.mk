@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2004-12-23 09:45:37 $
+#   last change: $Author: rt $ $Date: 2005-01-28 16:06:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,8 +91,9 @@ BUILD_DIR=$(CONFIGURE_DIR)$/lib
 .IF "$(OS)"=="IRIX"
 BUILD_ACTION=gmake
 .ELSE
-BUILD_ACTION=make
+BUILD_ACTION=$(GNUMAKE)
 .ENDIF
+BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)*
 .ENDIF			# "$(GUI)"=="UNX"
