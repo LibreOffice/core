@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 14:01:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <map>
 #include <hash_map>
 #include <stack>
+#include <set>
 
 using namespace std;
 
@@ -196,6 +197,14 @@ public:
 
 #define DECLARE_STL_USTRINGACCESS_MAP(valuetype, classname)                 \
     DECLARE_STL_MAP(::rtl::OUString, valuetype, ::comphelper::UStringLess, classname)   \
+
+#define DECLARE_STL_STDKEY_SET(valuetype, classname)    \
+    typedef ::std::set< valuetype > classname;          \
+    DECLARE_STL_ITERATORS(classname)                    \
+
+#define DECLARE_STL_SET(valuetype, comparefct, classname)               \
+    typedef ::std::set< valuetype, comparefct > classname;  \
+    DECLARE_STL_ITERATORS(classname)                        \
 
 #endif
 
