@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:56:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,18 @@ FmFormPageImpl::~FmFormPageImpl()
 }
 
 //------------------------------------------------------------------------------
+void FmFormPageImpl::validateCurForm()
+{
+    if ( !xCurrentForm.is() )
+        return;
+
+    Reference< XChild > xAsChild( xCurrentForm, UNO_QUERY );
+    DBG_ASSERT( xAsChild.is(), "FmFormPageImpl::validateCurForm: a form which is no child??" );
+    if ( !xAsChild.is() || !xAsChild->getParent().is() )
+        xCurrentForm.clear();
+}
+
+//------------------------------------------------------------------------------
 void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xForm)
 {
     xCurrentForm = xForm;
@@ -277,6 +289,8 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
 
     try
     {
+        validateCurForm();
+
         // wenn noch kein TargetForm gefunden, dann aktuelle oder Default
         if (!xCurrentForm.is())
         {
@@ -368,7 +382,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
                                      const ::rtl::OUString& rCursorSource,
                                      sal_Int32 nCommandType)
 {
-    // Ist das Control bereits einer ::com::sun::star::form zugeordnet
+    // if the control already is child of a form, don't do anything
     if (!rContent.is() || rContent->getParent().is())
         return NULL;
 
@@ -380,6 +394,8 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
     // und die StandardForm
     if (rDatabase.is() && rCursorSource.getLength())
     {
+        validateCurForm();
+
         // erst in der aktuellen form suchen
         xForm = FindForm(xCurrentForm, rDatabase, rCursorSource, nCommandType);
 
