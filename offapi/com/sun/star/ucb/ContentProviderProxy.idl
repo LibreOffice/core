@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProviderProxy.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com { module sun { module star { module ucb {
 
     @see XContentProviderProxyFactory
 */
-service ContentProviderProxy
+published service ContentProviderProxy
 {
     //-------------------------------------------------------------------------
     /** The implementation of
