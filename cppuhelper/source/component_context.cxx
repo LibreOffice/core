@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:54:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,11 +332,6 @@ static inline void try_dispose( Reference< lang::XComponent > const & xComp )
 
 //==================================================================================================
 
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-// Initialize static template data here to break circular reference to libstatic
-ClassData1 WeakImplHelper1< lang::XEventListener >::s_aCD(1);
-#endif
-
 class DisposingForwarder
     : public WeakImplHelper1< lang::XEventListener >
 {
@@ -381,11 +376,6 @@ struct MutexHolder
     Mutex m_mutex;
 };
 //==================================================================================================
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-// Initialize static template data here to break circular reference to libstatic
-ClassData1 WeakComponentImplHelper1< XComponentContext >::s_aCD(1);
-#endif
 
 class ComponentContext
     : public MutexHolder
