@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:16:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 #ifndef _SC_CSVSPLITS_HXX
 #include "csvsplits.hxx"
 #endif
@@ -100,7 +103,7 @@ const sal_Int32 CSV_SCROLL_DIST         = 3;
 //! TODO make string array dynamic
 const sal_Int32 CSV_PREVIEW_LINES       = 32; // maximum count of preview lines
 /** Maximum count of columns. */
-const sal_Int32 CSV_MAXCOLCOUNT         = MAXCOL + 1;
+const sal_Int32 CSV_MAXCOLCOUNT         = MAXCOLCOUNT;
 
 /** Default column data type. */
 const sal_Int32 CSV_TYPE_DEFAULT        = 0;
