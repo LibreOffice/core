@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandLineTools.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:49 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,23 +78,43 @@ public class CommandLineTools {
     private static final String PARCEL_XML_FILE =
         ParcelZipper.PARCEL_DESCRIPTOR_XML;
 
+    private static String officePath = null;
+
     public static void main(String[] args) {
         CommandLineTools driver = new CommandLineTools();
         Command command = driver.parseArgs(args);
 
         // Get the URL for the Office DTD directory and pass it to the
         // XMLParserFactory so that Office xml files can be parsed
-        try {
-            SVersionRCFile sv = SVersionRCFile.createInstance();
-            String office = sv.getDefaultVersion().getPath();
+        if (officePath == null)
+        {
+            try {
+                SVersionRCFile sv = SVersionRCFile.createInstance();
+                if (sv.getDefaultVersion() != null)
+                {
+                    officePath = sv.getDefaultVersion().getPath();
+                }
+            }
+            catch (IOException ioe) {
+                System.err.println("Error getting Office directory");
+            }
+        }
 
-            OfficeInstallation oi = new OfficeInstallation(office);
-            String url = oi.getURL("share/dtd/officedocument/1_0/");
-            XMLParserFactory.setOfficeDTDURL(url);
+        if (officePath == null)
+        {
+            driver.fatalUsage("Error: Office Installation path not set");
         }
-        catch (IOException ioe) {
-            System.err.println("Error getting Office DTD directory");
+
+        File officeDir = new File(officePath);
+        if (officeDir.exists() == false || officeDir.isDirectory() == false)
+        {
+            driver.fatalUsage(
+                "Error: Office Installation path not valid: " + officePath);
         }
+
+        OfficeInstallation oi = new OfficeInstallation(officePath);
+        String url = oi.getURL("share/dtd/officedocument/1_0/");
+        XMLParserFactory.setOfficeDTDURL(url);
 
         if (command == null)
             driver.printUsage();
@@ -115,11 +135,13 @@ public class CommandLineTools {
     private void printUsage() {
         System.out.println("java " + getClass().getName() + " -h " +
             "prints this message");
-        System.out.println("java " + getClass().getName() + " -d " +
-            "<script parcel zip file> " +
+        System.out.println("java " + getClass().getName() +
+            " [-o Path to Office Installation] " +
+            "-d <script parcel zip file> " +
             "<destination document or directory>");
-        System.out.println("java " + getClass().getName() + " -g " +
-            "[parcel root directory] [options] [script names]");
+        System.out.println("java " + getClass().getName() +
+            " [-o Path to Office Installation] " +
+            "-g [parcel root directory] [options] [script names]");
         System.out.println("options:");
         System.out.println("\t[-l language[=supported extension 1[" +
             File.pathSeparator + "supported extension 2]]]");
@@ -132,6 +154,12 @@ public class CommandLineTools {
         System.exit(-1);
     }
 
+    private void fatalUsage(String message) {
+        System.err.println(message);
+        System.err.println();
+        printUsage();
+        System.exit(-1);
+    }
     private Command parseArgs(String[] args) {
 
         if (args.length < 1) {
@@ -144,19 +172,27 @@ public class CommandLineTools {
                 }
             };
         }
-        else if(args[0].equals("-d")) {
-            if (args.length != 3)
+
+        int i = 0;
+
+        if(args[0].equals("-o")) {
+            officePath = args[i+1];
+            i += 2;
+        }
+
+        if(args[i].equals("-d")) {
+            if ((args.length - i) != 3)
                 return null;
             else
-                return new DeployCommand(args[1], args[2]);
+                return new DeployCommand(args[i+1], args[i+2]);
         }
-        else if(args[0].equals("-g")) {
+        else if(args[i].equals("-g")) {
 
-            if (args.length == 1)
+            if ((args.length - i) == 1)
                 return new GenerateCommand(System.getProperty("user.dir"));
 
             GenerateCommand command;
-            int i = 1;
+            i++;
             if (!args[i].startsWith("-"))
                 command = new GenerateCommand(args[i++]);
             else
