@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 08:28:58 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 07:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,52 +490,56 @@ namespace
         // data about the tab win
         Point aUpperLeft = _rPoint;
         // normalize with respect to visibility
-        aUpperLeft.X() -= _pView->GetScrollOffset().X();
-        aUpperLeft.Y() -= _pView->GetScrollOffset().Y();
+        aUpperLeft -= _pView->GetScrollOffset();
+        //  aUpperLeft.Y() -= _pView->GetScrollOffset().Y();
         Point aLowerRight(aUpperLeft.X() + _rSize.Width(), aUpperLeft.Y() + _rSize.Height());
-        //  aLowerRight.Y() -= GetScrollOffset().Y();
 
         // data about ourself
         Size aSize = _pView->getRealOutputSize(); //GetOutputSizePixel();
 
         BOOL bVisbile = TRUE;
         BOOL bFitsHor = (aUpperLeft.X() >= 0) && (aLowerRight.X() <= aSize.Width());
-        BOOL bFitsVert = (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
+        BOOL bFitsVert= (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
         if (!bFitsHor || !bFitsVert)
         {
+            // #100386# OJ
             if (!bFitsHor)
             {
                 // ensure the visibility of the right border
-                if (aLowerRight.X() > aSize.Width())
-                    _nScrollX = (aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X);
+                if ( aLowerRight.X() > aSize.Width() )
+                    _nScrollX = aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X;
 
-                // ensure the cisibility of the left border (higher priority)
-                if (aUpperLeft.X() - _nScrollX < 0)
+                // ensure the visibility of the left border (higher priority)
+                if ( (aUpperLeft.X() - _nScrollX) < 0 )
                     _nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
             }
 
             if (!bFitsVert)
             {
                 // lower border
-                if (aLowerRight.Y() > aSize.Height())
-                    _nScrollY = (aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y);
-
+                if ( aLowerRight.Y() > aSize.Height() )
+                    _nScrollY = aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y;
                 // upper border
-                if (aUpperLeft.Y() - _nScrollY < 0)
+                if ( (aUpperLeft.Y() - _nScrollY) < 0 )
                     _nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
             }
 
-            if (aSize.Width() > _rSize.Width() && _nScrollX)
+            if (aSize.Width() > _rSize.Width() && _nScrollX )
                 bVisbile = isScrollAllowed(_pView,_nScrollX, TRUE);
 
-            if (aSize.Height() > _rSize.Height() && _nScrollY)
+            if (aSize.Height() > _rSize.Height() && _nScrollY )
                 bVisbile = bVisbile && isScrollAllowed(_pView,_nScrollY, FALSE);
 
-            if( (_rPoint.X() + _rSize.Width() +_nScrollX + 1) >= _pView->GetHScrollBar()->GetRangeMax() )
-                bVisbile = FALSE;
-            else if( (_rPoint.Y() + _rSize.Height() + _nScrollY + 1) >= _pView->GetVScrollBar()->GetRangeMax() )
-                bVisbile = FALSE;
+            if ( bVisbile )
+            {
+                sal_Int32 nHRangeMax = _pView->GetHScrollBar()->GetRangeMax();
+                sal_Int32 nVRangeMax = _pView->GetVScrollBar()->GetRangeMax();
 
+                if ( aSize.Width() + _pView->GetHScrollBar()->GetThumbPos() + _nScrollX > nHRangeMax )
+                    bVisbile = FALSE;
+                if ( bVisbile && aSize.Height() + _pView->GetVScrollBar()->GetThumbPos() + _nScrollY > nVRangeMax )
+                    bVisbile = FALSE;
+            }
         }
 
 
@@ -1020,6 +1024,10 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     DBG_CHKTHIS(OJoinTableView,NULL);
     DeselectConn(GetSelectedConn());
 
+    pConn->Select();
+    m_pSelectedConn = pConn;
+    GrabFocus(); // has to be called here because a table window may still be focused
+
     // die betroffenene Eintraege in den Windows selektieren
     OTableWindow* pConnSource = pConn->GetSourceWin();
     OTableWindow* pConnDest = pConn->GetDestWin();
@@ -1066,9 +1074,6 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
                 Invalidate(INVALIDATE_NOCHILDREN);
         }
     }
-
-    pConn->Select();
-    m_pSelectedConn = pConn;
 }
 //------------------------------------------------------------------------------
 void OJoinTableView::Paint( const Rectangle& rRect )
@@ -1692,10 +1697,16 @@ void OJoinTableView::lookForUiActivities()
 {
 }
 // -----------------------------------------------------------------------------
+void OJoinTableView::LoseFocus()
+{
+    DeselectConn(GetSelectedConn());
+    Window::LoseFocus();
+}
+// -----------------------------------------------------------------------------
 void OJoinTableView::GetFocus()
 {
     Window::GetFocus();
-    if ( !m_aTableMap.empty() )
+    if ( !m_aTableMap.empty() && !GetSelectedConn() )
         GrabTabWinFocus();
 }
 // -----------------------------------------------------------------------------

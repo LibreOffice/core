@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-11 07:33:43 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 07:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,14 +522,6 @@ void OTableWindow::MouseButtonDown( const MouseEvent& rEvt )
 void OTableWindow::Resize()
 {
     //////////////////////////////////////////////////////////////////////
-    // Modify Flag des Documents nicht beim ersten Resize setzen
-    if( IsVisible() )
-    {
-        OJoinTableView* pTabWinCont = getTableView();
-//      pTabWinCont->GetViewShell()->GetShell->SetModified( TRUE );
-    }
-
-    //////////////////////////////////////////////////////////////////////
     // Das Fenster darf nicht verschwinden, deshalb min. Groesse setzen
     Size    aOutSize = GetOutputSizePixel();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
@@ -609,18 +601,11 @@ BOOL OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
 
     BOOL bHandle = FALSE;
 
-//  if ( rCode.IsMod2() )
-//  {
-//      m_nMoveCount        = 0; // reset our move ment count
-//      m_nMoveIncrement    = 1;
-//  }
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         Remove();
         bHandle = TRUE;
     }
-//  else
-//      Window::KeyInput( rEvt );
     return bHandle;
 }
 
@@ -734,6 +719,12 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
             if ( rCode.IsMod1() )
             {
                 Point aStartPoint = GetPosPixel();
+                if ( rCode.IsShift() )
+                {
+                    aStartPoint.X() = GetSizePixel().Width();
+                    aStartPoint.Y() = GetSizePixel().Height();
+                }
+
                 switch( rCode.GetCode() )
                 {
                     case KEY_DOWN:
@@ -753,40 +744,57 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                         aStartPoint.X()  += m_nMoveIncrement;
                         break;
                 }
-                if( bHandled )//&& aStartPoint.X() > -1 && aStartPoint.Y() > -1 )
+                if ( bHandled )
                 {
-                    // remember how often the user moved our window
-                    ++m_nMoveCount;
-                    if( m_nMoveCount == 5 )
-                        m_nMoveIncrement = 10;
-                    else if( m_nMoveCount > 15 )
-                        m_nMoveCount = m_nMoveIncrement = 20;
-
-                    Point aOldDataPoint = GetData()->GetPosition();
-                    Point aNewDataPoint = aStartPoint + getTableView()->GetScrollOffset();
-                    if ( aNewDataPoint.X() > -1 && aNewDataPoint.Y() > -1 )
+                    if ( rCode.IsShift() )
                     {
-                        OJoinTableView* pView = getTableView();
-                        if ( pView->isMovementAllowed(aNewDataPoint, GetData()->GetSize()) )
-                        {
-                            SetPosPixel(aStartPoint);
+//                      OJoinTableView* pView = getTableView();
+//                      Size aNewSize(aStartPoint.X(),aStartPoint.Y());
+//                      if ( pView->isMovementAllowed(GetData()->GetPosition(), aNewSize) )
+//                      {
+//                          Size aOldSize = GetData()->GetSize();
+//                          SetSizePixel(aNewSize);
+//                          pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
+//                          pView->TabWinSized(this,GetData()->GetPosition(),aOldSize);
+//                          Invalidate(INVALIDATE_NOCHILDREN);
+//                          getDesignView()->getController()->setModified( sal_True );
+//                      }
+                    }
+                    else
+                    {
+                        // remember how often the user moved our window
+                        ++m_nMoveCount;
+                        if( m_nMoveCount == 5 )
+                            m_nMoveIncrement = 10;
+                        else if( m_nMoveCount > 15 )
+                            m_nMoveCount = m_nMoveIncrement = 20;
 
-                            // aNewDataPoint can not be used here because SetPosPixel reset it
-                            pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
-                            pView->TabWinMoved(this,aOldDataPoint);
-                            Invalidate(INVALIDATE_NOCHILDREN);
-                            getDesignView()->getController()->setModified( sal_True );
+                        Point aOldDataPoint = GetData()->GetPosition();
+                        Point aNewDataPoint = aStartPoint + getTableView()->GetScrollOffset();
+                        if ( aNewDataPoint.X() > -1 && aNewDataPoint.Y() > -1 )
+                        {
+                            OJoinTableView* pView = getTableView();
+                            if ( pView->isMovementAllowed(aNewDataPoint, GetData()->GetSize()) )
+                            {
+                                SetPosPixel(aStartPoint);
+
+                                // aNewDataPoint can not be used here because SetPosPixel reset it
+                                pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
+                                pView->TabWinMoved(this,aOldDataPoint);
+                                Invalidate(INVALIDATE_NOCHILDREN);
+                                getDesignView()->getController()->setModified( sal_True );
+                            }
+                            else
+                            {
+                                m_nMoveCount        = 0; // reset our movement count
+                                m_nMoveIncrement    = 1;
+                            }
                         }
                         else
                         {
                             m_nMoveCount        = 0; // reset our movement count
                             m_nMoveIncrement    = 1;
                         }
-                    }
-                    else
-                    {
-                        m_nMoveCount        = 0; // reset our movement count
-                        m_nMoveIncrement    = 1;
                     }
                 }
                 else

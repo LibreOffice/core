@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 12:58:56 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 07:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1204,13 +1204,23 @@ void OSelectionBrowseBox::KeyInput( const KeyEvent& rEvt )
 sal_Int8 OSelectionBrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
+    sal_Int8 nDropAction = DND_ACTION_NONE;
     if  (   (rEvt.GetColumnId() >= 0)
         &&  (rEvt.GetRow() >= -1)
-        &&  OJoinExchObj::isFormatAvailable(GetDataFlavors())
         )
-        return DND_ACTION_LINK;
+    {
+        if ( IsEditing() )
+        {
+            // #100271# OJ allow the asterix again
+            SaveModified();
+            DeactivateCell();
+        }
+        // check if the format is already supported, if not deactivate the current cell and try again
+        if ( OJoinExchObj::isFormatAvailable(GetDataFlavors()) )
+            nDropAction = DND_ACTION_LINK;
+    }
 
-    return DND_ACTION_NONE;
+    return nDropAction;
 }
 
 //------------------------------------------------------------------------------

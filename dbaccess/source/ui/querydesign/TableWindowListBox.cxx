@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 10:52:13 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 07:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,18 +262,16 @@ void OTableWindowListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->isConnected())
     {
-        sal_Bool bFirst = FirstSelected() != First();
+        // #100271# OJ asterix was not allowed to be copied to selection browsebox
+        sal_Bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
         EndSelection();
-        if ( !m_pTabWin->GetData()->IsShowAll() || bFirst)
-        {
-            // eine Beschreibung der Source
-            OJoinExchangeData jxdSource(this);
-            m_bDragSource = sal_True;
-            // in ein Exchange-Objekt packen
-            OJoinExchObj* pJoin = new OJoinExchObj(jxdSource);
-            Reference< XTransferable > xEnsureDelete(pJoin);
-            pJoin->StartDrag(this, DND_ACTION_LINK, this);
-        }
+        // create a description of the source
+        OJoinExchangeData jxdSource(this);
+        m_bDragSource = sal_True;
+        // put it into a exchange object
+        OJoinExchObj* pJoin = new OJoinExchObj(jxdSource,bFirstNotAllowed);
+        Reference< XTransferable > xEnsureDelete(pJoin);
+        pJoin->StartDrag(this, DND_ACTION_LINK, this);
     }
 }
 
@@ -282,7 +280,9 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
-    if (!m_bDragSource && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()))
+    if ( !m_bDragSource
+        && !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
+        && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
     {   // don't drop into the window if it's the drag source itself
 
         // remove the selection if the dragging operation is leaving the window
@@ -365,15 +365,16 @@ void OTableWindowListBox::GetFocus()
 
     if (GetCurEntry() != NULL)
     {
-        if (GetSelectionCount() == 0)
+        if ( GetSelectionCount() == 0 || GetCurEntry() != FirstSelected() )
+        {
+            if ( FirstSelected() )
+                Select(FirstSelected(), FALSE);
             Select(GetCurEntry(), TRUE);
+        }
         else
             ShowFocusRect(FirstSelected());
     }
     SvTreeListBox::GetFocus();
-
-//  if(m_pTabWin)
-//      m_pTabWin->GrabFocus();
 }
 
 //------------------------------------------------------------------------------
