@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-02 12:00:22 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 15:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,20 +98,14 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#ifndef  _COM_SUN_STAR_UI_FILEDIALOGRESULTS_HPP_
-#include <com/sun/star/ui/FileDialogResults.hpp>
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/FilePickerElementID.hpp>
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 
 #pragma hdrstop
@@ -178,7 +172,7 @@ extern sal_uInt32 CheckPasswd_Impl( Window*, SfxItemPool&, SfxMedium* );
 
 
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::cppu;
@@ -1546,7 +1540,8 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         {
             // get the filename by dialog ...
             // create the file dialog
-            sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
+            sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
+                                             0L, GetFactory() );
 
             if ( HasName() )
             {
@@ -1615,7 +1610,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             {
                 try
                 {
-                    Any aValue = xExtFileDlg->getValue( FilePickerElementID::CBX_SELECT_FILTER );
+                    Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
                     sal_Bool bSelectFilter = sal_False;
 
                     aValue >>= bSelectFilter;
@@ -1656,7 +1651,8 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     {
         // get the filename by dialog ...
         // create the file dialog
-        sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
+        sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
+                                         0L, GetFactory() );
 
         if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
         {
