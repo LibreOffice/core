@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:53:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,18 @@
 #ifndef SW_WRITERHELPER
 #   include "writerhelper.hxx"
 #endif
+#ifndef SW_MS_MSFILTER_HXX
+#   include <msfilter.hxx>
+#endif
 
 #include <algorithm>                //std::swap
 #include <functional>               //std::binary_function
 
+#ifndef _SFXITEMITER_HXX
+#   include <svtools/itemiter.hxx>  //SfxItemIter
+#endif
 #ifndef _SVDOBJ_HXX
-#    include <svx/svdobj.hxx>       //SdrObject
+#   include <svx/svdobj.hxx>        //SdrObject
 #endif
 #ifndef _SVDOOLE2_HXX
 #   include <svx/svdoole2.hxx>      //SdrOle2Obj
@@ -81,19 +87,19 @@
 #   include <svx/brkitem.hxx>       //SvxFmtBreakItem
 #endif
 #ifndef _SVX_TSPTITEM_HXX
-#    include <svx/tstpitem.hxx>     //SvxTabStopItem
+#   include <svx/tstpitem.hxx>      //SvxTabStopItem
 #endif
 #ifndef _SVDOBJ_HXX
-#    include <svx/svdobj.hxx>       //SdrObject
+#   include <svx/svdobj.hxx>        //SdrObject
 #endif
 #ifndef _DOC_HXX
-#    include <doc.hxx>              //SwDoc
+#   include <doc.hxx>               //SwDoc
 #endif
 #ifndef _NDTXT_HXX
-#    include <ndtxt.hxx>            //SwTxtNode
+#   include <ndtxt.hxx>             //SwTxtNode
 #endif
 #ifndef _NDNOTXT_HXX
-#     include <ndnotxt.hxx>         //SwNoTxtNode
+#    include <ndnotxt.hxx>          //SwNoTxtNode
 #endif
 #ifndef _FMTCNTNT_HXX
 #    include <fmtcntnt.hxx>         //SwFmtCntnt
@@ -123,13 +129,16 @@
 #    include <fmtfsize.hxx>         //SwFmtFrmSize
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
-#   include<SwStyleNameMapper.hxx>  //SwStyleNameMapper
+#   include <SwStyleNameMapper.hxx> //SwStyleNameMapper
 #endif
 #ifndef _DOCARY_HXX
 #   include <docary.hxx>            //SwCharFmts
 #endif
 #ifndef _CHARFMT_HXX
-#    include <charfmt.hxx>          //SwCharFmt
+#   include <charfmt.hxx>           //SwCharFmt
+#endif
+#ifndef _FCHRFMT_HXX
+#   include <fchrfmt.hxx>           //SwFmtCharFmt
 #endif
 #ifdef DEBUGDUMP
 #   ifndef _SV_SVAPP_HXX
@@ -232,26 +241,6 @@ namespace
             return (mnNode == rFrame.GetPosition().nNode.GetNode().GetIndex());
         }
     };
-
-    Size GetSwappedInSize(const SwNoTxtNode& rNd)
-    {
-        Size aGrTwipSz(rNd.GetTwipSize());
-        if ((!aGrTwipSz.Width() || !aGrTwipSz.Height()))
-        {
-            SwGrfNode *pGrfNode = const_cast<SwGrfNode*>(rNd.GetGrfNode());
-            if (pGrfNode && (GRAPHIC_NONE != pGrfNode->GetGrf().GetType()))
-            {
-                bool bWasSwappedOut = pGrfNode->GetGrfObj().IsSwappedOut();
-                pGrfNode->SwapIn();
-                aGrTwipSz = pGrfNode->GetTwipSize();
-                if (bWasSwappedOut)
-                    pGrfNode->SwapOut();
-            }
-        }
-
-        ASSERT(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
-        return aGrTwipSz;
-    }
 }
 
 namespace sw
@@ -268,6 +257,7 @@ namespace sw
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     const SwNode &rNd = aIdx.GetNode();
+                    using sw::util::GetSwappedInSize;
                     switch (rNd.GetNodeType())
                     {
                         case ND_GRFNODE:
@@ -536,6 +526,44 @@ namespace sw
         }
         //SetLayer boilerplate end
 
+        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems)
+        {
+            if (rSet.Count())
+            {
+                SfxItemIter aIter(rSet);
+                if (const SfxPoolItem *pItem = aIter.GetCurItem())
+                {
+                    do
+                        rItems[pItem->Which()] = pItem;
+                    while (!aIter.IsAtEnd() && (pItem = aIter.NextItem()));
+                }
+            }
+        }
+
+        const SfxPoolItem *SearchPoolItems(const PoolItems &rItems,
+            sal_uInt16 eType)
+        {
+            sw::cPoolItemIter aIter = rItems.find(eType);
+            if (aIter != rItems.end())
+                return aIter->second;
+            return 0;
+        }
+
+        void ClearOverridesFromSet(const SwFmtCharFmt &rFmt, SfxItemSet &rSet)
+        {
+            if (const SwCharFmt* pCharFmt = rFmt.GetCharFmt())
+            {
+                if (pCharFmt->GetAttrSet().Count())
+                {
+                    SfxItemIter aIter(pCharFmt->GetAttrSet());
+                    const SfxPoolItem *pItem = aIter.GetCurItem();
+                    do
+                        rSet.ClearItem(pItem->Which());
+                    while (!aIter.IsAtEnd() && (pItem = aIter.NextItem()));
+                }
+            }
+        }
+
         ParaStyles GetParaStyles(const SwDoc &rDoc)
         {
             ParaStyles aStyles;
@@ -755,6 +783,25 @@ namespace sw
             }
         }
 
+        Size GetSwappedInSize(const SwNoTxtNode& rNd)
+        {
+            Size aGrTwipSz(rNd.GetTwipSize());
+            if ((!aGrTwipSz.Width() || !aGrTwipSz.Height()))
+            {
+                SwGrfNode *pGrfNode = const_cast<SwGrfNode*>(rNd.GetGrfNode());
+                if (pGrfNode && (GRAPHIC_NONE != pGrfNode->GetGrf().GetType()))
+                {
+                    bool bWasSwappedOut = pGrfNode->GetGrfObj().IsSwappedOut();
+                    pGrfNode->SwapIn();
+                    aGrTwipSz = pGrfNode->GetTwipSize();
+                    if (bWasSwappedOut)
+                        pGrfNode->SwapOut();
+                }
+            }
+
+            ASSERT(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
+            return aGrTwipSz;
+        }
     }
 }
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
