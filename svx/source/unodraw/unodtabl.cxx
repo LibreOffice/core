@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodtabl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:08 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include "xlndsit.hxx"
 #endif
 
+#ifndef _SVX_UNOMID_HXX
+#include "unomid.hxx"
+#endif
+
 #include "xdash.hxx"
 #include "svdmodel.hxx"
 
@@ -105,7 +109,7 @@ public:
 };
 
 SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
-: SvxUnoNameItemTable( pModel, XATTR_LINEDASH )
+: SvxUnoNameItemTable( pModel, XATTR_LINEDASH, MID_LINEDASH )
 {
 }
 
