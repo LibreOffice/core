@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-19 12:45:03 $
+ *  last change: $Author: os $ $Date: 2001-01-24 11:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,11 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aContentConfig(bWeb, *this),
     aLayoutConfig(bWeb, *this),
-    aGridConfig(bWeb, *this)
+    aGridConfig(bWeb, *this),
+    bFldUpdateInCurrDoc(sal_False),
+    nFldUpdateFlags(0),
+    bLinkUpdateInCurrDoc(sal_False),
+    nLinkUpdateMode(0)
 {
     aContentConfig.Load();
     aLayoutConfig.Load();
@@ -149,9 +153,13 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
             "NonprintingCharacter/HiddenParagraph", // 16
             "Update/Link",                          // 17
             "Update/Field",                         // 18
-            "Update/Chart"                          // 19
+            "Update/Chart",                         // 19
+            "Update/LinkDocument",                  // 20
+            "Update/FieldChartDocument"             // 21
+
+
     };
-    const int nCount = bWeb ? 11 : 20;
+    const int nCount = bWeb ? 11 : 22;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -219,6 +227,8 @@ void SwContentViewConfig::Commit()
             case 17: pValues[nProp] <<= rParent.GetUpdateLinkMode();    break;// "Update/Link",
             case 18: bVal = rParent.IsUpdateFields(); break;// "Update/Field",
             case 19: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
+            case 20: bVal = rParent.IsUpdateFieldsToCurrDoc(); break; //LinkDocument
+            case 21: bVal = rParent.IsUpdateLinksToCurrDoc(); break; //FieldChartDocument
         }
         if(nProp != 17)
             pValues[nProp].setValue(&bVal, ::getBooleanCppuType());
@@ -269,6 +279,8 @@ void SwContentViewConfig::Load()
                     break;// "Update/Link",
                     case 18: rParent.SetUpdateFields(bSet); break;// "Update/Field",
                     case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
+                    case 20: rParent.SetUpdateFieldsToCurrDoc(bSet); break; //LinkDocument
+                    case 21: rParent.SetUpdateLinksToCurrDoc(bSet); break; //FieldChartDocument
                 }
             }
         }

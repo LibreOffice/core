@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:23:17 $
+ *  last change: $Author: os $ $Date: 2001-01-24 11:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,6 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bRet = FALSE;
     SwModule* pMod = SW_MOD();
-//  SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     BOOL bFldDocOnly = aFldDocOnlyCB.IsChecked();
     BOOL bLinkDocOnly = aLinkDocOnlyCB.IsChecked();
 
@@ -167,6 +166,9 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 
     USHORT nFldFlags = aAutoUpdateFields.IsChecked() ?
         aAutoUpdateCharts.IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
+
+    if(pWrtShell)
+        pMod->ApplyLinkFieldToDocMode(bFldDocOnly, bLinkDocOnly);
 
     if(aAutoUpdateFields.IsChecked() != aAutoUpdateFields.GetSavedValue() ||
             aAutoUpdateCharts.IsChecked() != aAutoUpdateCharts.GetSavedValue())
@@ -221,8 +223,8 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
     USHORT nFldFlags = AUTOUPD_GLOBALSETTING;
     nOldLinkMode = GLOBALSETTING;
-    BOOL bFldDocOnly = TRUE;
-    BOOL bLinkDocOnly = TRUE;
+    BOOL bFldDocOnly = pUsrPref->IsUpdateFieldsToCurrDoc() ;
+    BOOL bLinkDocOnly = pUsrPref->IsUpdateLinksToCurrDoc();
     if (pWrtShell)
     {
         nFldFlags = pWrtShell->GetFldUpdateFlags(TRUE);
@@ -233,15 +235,18 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
         aMergeDistCB.SaveValue();
         aMergeDistPageStartCB.SaveValue();
     }
+    else
+    {
+        bLinkDocOnly = FALSE;
+        bFldDocOnly = FALSE;
+    }
     if(nOldLinkMode == GLOBALSETTING)
     {
         nOldLinkMode = pUsrPref->GetUpdateLinkMode();
-        bLinkDocOnly = FALSE;
     }
     if(nFldFlags == AUTOUPD_GLOBALSETTING)
     {
         nFldFlags = pUsrPref->GetFldUpdateFlags();
-        bFldDocOnly = FALSE;
     }
 
     aAutoUpdateFields.Check(nFldFlags != AUTOUPD_OFF);
@@ -270,6 +275,9 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 /*--------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/28 15:23:17  os
+    use of configuration service in view options
+
     Revision 1.1.1.1  2000/09/18 17:14:33  hr
     initial import
 

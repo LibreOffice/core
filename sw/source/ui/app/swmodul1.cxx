@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:44:59 $
+ *  last change: $Author: os $ $Date: 2001-01-24 11:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,6 +961,16 @@ void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
     if(!pUsrPref)
         GetUsrPref(sal_False);
     pUsrPref->SetUpdateLinkMode(nNewLinkMode);
+}
+/* -----------------------------24.01.01 11:42--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwModule::ApplyLinkFieldToDocMode(BOOL bFldDocOnly, BOOL bLinkDocOnly)
+{
+    if(!pUsrPref)
+        GetUsrPref(sal_False);
+    pUsrPref->SetUpdateFieldsToCurrDoc(bFldDocOnly);
+    pUsrPref->SetUpdateLinksToCurrDoc(bLinkDocOnly);
 }
 /* ---------------------------------------------------------------------------
 

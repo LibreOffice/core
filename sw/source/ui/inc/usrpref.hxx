@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-19 12:44:17 $
+ *  last change: $Author: os $ $Date: 2001-01-24 11:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@ class SwMasterUsrPref : public SwViewOption
     SwGridConfig        aGridConfig;
 
     sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
+    sal_Bool    bFldUpdateInCurrDoc;
     sal_Int32   nLinkUpdateMode;
+    sal_Bool    bLinkUpdateInCurrDoc;
     FieldUnit   eUserMetric;
 
     sal_Int32   nDefTab;            //default tab stop distance
@@ -165,6 +167,13 @@ public:
 
     void SetUpdateLinkMode(sal_Int32 nSet)  {nLinkUpdateMode = nSet; SetModified();}
     sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
+
+    sal_Bool    IsUpdateLinksToCurrDoc() const {return bLinkUpdateInCurrDoc;}
+    void        SetUpdateLinksToCurrDoc(sal_Bool bSet){ bLinkUpdateInCurrDoc = bSet; SetModified();}
+
+    sal_Bool    IsUpdateFieldsToCurrDoc() const {return bFldUpdateInCurrDoc;}
+    void        SetUpdateFieldsToCurrDoc(sal_Bool bSet){ bFldUpdateInCurrDoc = bSet; SetModified();}
+
 
     void SetUpdateFields(BOOL bSet)
         {
