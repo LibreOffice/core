@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediash.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:15:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@
 #include <popup.hrc>
 #endif
 
+#include <sfx2/objface.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediaitem.hxx>
