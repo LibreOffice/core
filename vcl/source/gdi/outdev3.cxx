@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:23:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <cmath>
 #include <cstring>
 
@@ -5888,66 +5887,19 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
 
 // -----------------------------------------------------------------------
 
-SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
-                                     xub_StrLen nMinIndex,
-                                     xub_StrLen nLen,
-                                     const Point& rLogicalPos,
-                                     long nLogicalWidth,
-                                     const sal_Int32* pDXArray,
-                                     bool bFilter
-                                     ) const
+ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( const String& rStr,
+                                       xub_StrLen nMinIndex, xub_StrLen nLen,
+                                       long nPixelWidth, const sal_Int32* pDXArray ) const
 {
-    SalLayout* pSalLayout = NULL;
-
-    // we need a graphics
-    if( !mpGraphics )
-        if( !ImplGetGraphics() )
-            return NULL;
-
-    if( bFilter )
-    {
-        String aStr;
-        xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
-        bool bFiltered = mpGraphics->filterText( rOrigStr, aStr, nMinIndex, nLen, nCutStart, nCutStop );
-        if( ! nLen )
-            return NULL;
-
-        if( bFiltered && nCutStop != nCutStart && pDXArray )
-        {
-            if( nLen )
-            {
-                sal_Int32* pAry = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
-                if( nCutStart > nMinIndex )
-                    memcpy( pAry, pDXArray, sizeof(sal_Int32)*(nCutStart-nMinIndex) );
-                memcpy( pAry+nCutStart-nMinIndex, pDXArray + nOrgLen - (nCutStop-nMinIndex), nLen - (nCutStop-nMinIndex) );
-                pDXArray = pAry;
-                return ImplLayout( aStr, nMinIndex, nLen, rLogicalPos, nLogicalWidth, pDXArray, false );
-            }
-            pDXArray = NULL;
-        }
-        return ImplLayout( rOrigStr, nMinIndex, nLen, rLogicalPos, nLogicalWidth, pDXArray, false );
-    }
-
-    // initialize font if needed
-    if( mbNewFont )
-        if( !ImplNewFont() )
-            return NULL;
-    if( mbInitFont )
-        ImplInitFont();
-
+    String aStr( rStr );
     // get string length for calculating extents
-    xub_StrLen nEndIndex = rOrigStr.Len();
+    xub_StrLen nEndIndex = aStr.Len();
     if( (ULONG)nMinIndex + nLen < nEndIndex )
         nEndIndex = nMinIndex + nLen;
 
     // don't bother if there is nothing to do
-    if( nMinIndex >= nEndIndex )
-        return NULL;
-
-    // recode string if needed
-    String aStr = rOrigStr;
-    if( mpFontEntry->mpConversion )
-        ImplRecodeString( mpFontEntry->mpConversion, aStr, 0, aStr.Len() );
+    if( nEndIndex < nMinIndex )
+        nEndIndex = nMinIndex;
 
     int nLayoutFlags = 0;
     if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
@@ -6035,30 +5987,81 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
 
-    Point aPixelPos = ImplLogicToDevicePixel( rLogicalPos );
+    aLayoutArgs.SetLayoutWidth( nPixelWidth );
+    aLayoutArgs.SetDXArray( pDXArray );
 
-    long nPixelWidth = 0;
-    if( nLogicalWidth )
+    return aLayoutArgs;
+}
+
+// -----------------------------------------------------------------------
+
+SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
+                                     xub_StrLen nMinIndex,
+                                     xub_StrLen nLen,
+                                     const Point& rLogicalPos,
+                                     long nLogicalWidth,
+                                     const sal_Int32* pDXArray,
+                                     bool bFilter ) const
+{
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return NULL;
+
+    String aStr = rOrigStr;
+    if( bFilter )
     {
-        nPixelWidth = ImplLogicWidthToDevicePixel( nLogicalWidth );
-        aLayoutArgs.SetLayoutWidth( nPixelWidth );
+        xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
+        bool bFiltered = mpGraphics->filterText( rOrigStr, aStr, nMinIndex, nLen, nCutStart, nCutStop );
+        if( !nLen )
+            return NULL;
+
+        if( bFiltered && nCutStop != nCutStart && pDXArray )
+        {
+            if( !nLen )
+                pDXArray = NULL;
+            else
+            {
+                sal_Int32* pAry = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
+                if( nCutStart > nMinIndex )
+                    memcpy( pAry, pDXArray, sizeof(sal_Int32)*(nCutStart-nMinIndex) );
+                memcpy( pAry+nCutStart-nMinIndex, pDXArray + nOrgLen - (nCutStop-nMinIndex), nLen - (nCutStop-nMinIndex) );
+                pDXArray = pAry;
+            }
+        }
     }
 
-    int nLength = nEndIndex - nMinIndex;
+    // initialize font if needed
+    if( mbNewFont )
+        if( !ImplNewFont() )
+            return NULL;
+    if( mbInitFont )
+        ImplInitFont();
+
+    // convert from logical units to physical units
+    // recode string if needed
+    if( mpFontEntry->mpConversion )
+        ImplRecodeString( mpFontEntry->mpConversion, aStr, 0, aStr.Len() );
+
+    long nPixelWidth = nLogicalWidth;
+    if( nLogicalWidth && mbMap )
+        nPixelWidth = ImplLogicWidthToDevicePixel( nLogicalWidth );
     if( pDXArray && mbMap )
     {
         // convert from logical units to font units using a temporary array
-        sal_Int32* pTempDXAry = (sal_Int32*)alloca( nLength * sizeof(sal_Int32) );
+        sal_Int32* pTempDXAry = (sal_Int32*)alloca( nLen * sizeof(sal_Int32) );
         // using base position for better rounding a.k.a. "dancing characters"
         int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
-        for( int i = 0; i < nLength; ++i )
+        for( int i = 0; i < nLen; ++i )
             pTempDXAry[i] = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
 
         pDXArray = pTempDXAry;
     }
-    aLayoutArgs.SetDXArray( pDXArray );
+
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXArray );
 
     // get matching layout object for base font
+    SalLayout* pSalLayout = NULL;
     if( mpPDFWriter )
         pSalLayout = mpPDFWriter->GetTextLayout( aLayoutArgs, &mpFontEntry->maFontSelData );
 
@@ -6072,123 +6075,143 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         pSalLayout = NULL;
     }
 
-    ImplLayoutRuns aLayoutRuns = aLayoutArgs.maRuns;
+    if( !pSalLayout )
+        return NULL;
+
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
-    if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6)
-    && (pSalLayout && aLayoutArgs.PrepareFallback()) )
+    if( aLayoutArgs.PrepareFallback() )
+        if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6) )
+            pSalLayout = ImplGlyphFallbackLayout( pSalLayout, aLayoutArgs );
+
+    // position, justify, etc. the layout
+    pSalLayout->AdjustLayout( aLayoutArgs );
+    pSalLayout->DrawBase() = ImplLogicToDevicePixel( rLogicalPos );
+    // adjust to right alignment if necessary
+    if( aLayoutArgs.mnFlags & SAL_LAYOUT_RIGHT_ALIGN )
     {
-#if defined(HDU_DEBUG)
-        {
-            int nCharPos = -1;
-            bool bRTL = false;
-            fprintf(stderr,"OD:ImplLayout Glyph Fallback for");
-            for( int i=0; i<8 && aLayoutArgs.GetNextPos( &nCharPos, &bRTL); ++i )
-                fprintf(stderr," U+%04X", aLayoutArgs.mpStr[ nCharPos ] );
-            fprintf(stderr,"\n");
-            aLayoutArgs.ResetPos();
-        }
-#endif
-
-        // prepare multi level glyph fallback
-        MultiSalLayout* pMultiSalLayout = NULL;
-        aLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
-
-        ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
-        Size aFontSize( aFontSelData.mnWidth, aFontSelData.mnHeight );
-
-        // when device specific font substitution may have been performed
-        // the originally selected font then make sure that a fallback to
-        // this font is performed first
-        int nDevSpecificFallback = 0;
-        if( mpOutDevData && mpOutDevData->mpFirstFontSubstEntry )
-            nDevSpecificFallback = 1;
-
-        // try if fallback fonts support the missing unicodes
-        for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
-        {
-            // find a font family suited for glyph fallback
-            ImplFontEntry* pFallbackFont = mpFontCache->GetFallback( mpFontList,
-                maFont, aFontSize, nFallbackLevel-nDevSpecificFallback );
-            if( !pFallbackFont )
-                break;
-
-            aFontSelData.mpFontEntry = pFallbackFont;
-            aFontSelData.mpFontData = pFallbackFont->maFontSelData.mpFontData;
-            if( mpFontEntry )
-            {
-                // ignore falling font if it is the same as the original font
-                if( mpFontEntry->maFontSelData.mpFontData == aFontSelData.mpFontData )
-                {
-                    mpFontCache->Release( pFallbackFont );
-                    continue;
-                }
-            }
-
-#if defined(HDU_DEBUG)
-            {
-                ByteString aOrigFontName( maFont.GetName(), RTL_TEXTENCODING_UTF8);
-                ByteString aFallbackName( aFontSelData.mpFontData->GetFamilyName(),
-                    RTL_TEXTENCODING_UTF8);
-                fprintf(stderr,"\tGlyphFallback[lvl=%d] \"%s\" -> \"%s\" (q=%d)\n",
-                    nFallbackLevel, aOrigFontName.GetBuffer(), aFallbackName.GetBuffer(),
-                    aFontSelData.mpFontData->GetQuality());
-            }
-#endif
-
-            pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
-
-            // create and add glyph fallback layout to multilayout
-            aLayoutArgs.ResetPos();
-            SalLayout* pFallback = mpGraphics->GetTextLayout( aLayoutArgs, nFallbackLevel );
-            if( pFallback )
-            {
-                if( pFallback->LayoutText( aLayoutArgs ) )
-                {
-                    if( !pMultiSalLayout )
-                        pMultiSalLayout = new MultiSalLayout( *pSalLayout );
-                    pMultiSalLayout->AddFallback( *pFallback,
-                        aLayoutArgs.maRuns, aFontSelData.mpFontData );
-                }
-                else
-                    pFallback->Release();
-            }
-
-            mpFontCache->Release( pFallbackFont );
-
-            // break when this fallback was sufficient
-            if( !aLayoutArgs.PrepareFallback() )
-                break;
-        }
-
-        // restore orig font settings
-        pSalLayout->InitFont();
-
-        if( pMultiSalLayout && pMultiSalLayout->LayoutText( aLayoutArgs ) )
-            pSalLayout = pMultiSalLayout;
-    }
-
-    if( pSalLayout )
-    {
-        // position, justify, etc. the layout
-        aLayoutArgs.maRuns = aLayoutRuns;
-        pSalLayout->AdjustLayout( aLayoutArgs );
-        pSalLayout->DrawBase() = aPixelPos;
-        // adjust to right alignment if necessary
-        if( bRightAlign )
-        {
-            long nRTLOffset;
-            if( pDXArray )
-                nRTLOffset = pDXArray[ nLength-1 ];
-            else if( nPixelWidth )
-                nRTLOffset = nPixelWidth;
-            else
-                nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
-            pSalLayout->DrawOffset().X() = -nRTLOffset;
-        }
+        long nRTLOffset;
+        if( pDXArray )
+            nRTLOffset = pDXArray[ nLen - 1 ];
+        else if( nPixelWidth )
+            nRTLOffset = nPixelWidth;
+        else
+            nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
+        pSalLayout->DrawOffset().X() = -nRTLOffset;
     }
 
     return pSalLayout;
+}
+
+// -----------------------------------------------------------------------
+
+SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLayoutArgs& rLayoutArgs ) const
+{
+#if defined(HDU_DEBUG)
+    {
+        int nCharPos = -1;
+        bool bRTL = false;
+        fprintf(stderr,"OD:ImplLayout Glyph Fallback for");
+        for( int i=0; i<8 && rLayoutArgs.GetNextPos( &nCharPos, &bRTL); ++i )
+            fprintf(stderr," U+%04X", rLayoutArgs.mpStr[ nCharPos ] );
+        fprintf(stderr,"\n");
+        rLayoutArgs.ResetPos();
+    }
+#endif
+
+    // prepare multi level glyph fallback
+    MultiSalLayout* pMultiSalLayout = NULL;
+    rLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
+
+    ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
+    Size aFontSize( aFontSelData.mnWidth, aFontSelData.mnHeight );
+
+    // when device specific font substitution may have been performed
+    // the originally selected font then make sure that a fallback to
+    // this font is performed first
+    int nDevSpecificFallback = 0;
+    if( mpOutDevData && mpOutDevData->mpFirstFontSubstEntry )
+        nDevSpecificFallback = 1;
+
+    // try if fallback fonts support the missing unicodes
+    ImplLayoutRuns aLayoutRuns = rLayoutArgs.maRuns;
+    for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
+    {
+        // find a font family suited for glyph fallback
+        ImplFontEntry* pFallbackFont = mpFontCache->GetFallback( mpFontList,
+            maFont, aFontSize, nFallbackLevel-nDevSpecificFallback );
+        if( !pFallbackFont )
+            break;
+
+        aFontSelData.mpFontEntry = pFallbackFont;
+        aFontSelData.mpFontData = pFallbackFont->maFontSelData.mpFontData;
+        if( mpFontEntry )
+        {
+            // ignore falling font if it is the same as the original font
+            if( mpFontEntry->maFontSelData.mpFontData == aFontSelData.mpFontData )
+            {
+                mpFontCache->Release( pFallbackFont );
+                continue;
+            }
+        }
+
+#if defined(HDU_DEBUG)
+        {
+            ByteString aOrigFontName( maFont.GetName(), RTL_TEXTENCODING_UTF8);
+            ByteString aFallbackName( aFontSelData.mpFontData->GetFamilyName(),
+                RTL_TEXTENCODING_UTF8);
+            fprintf(stderr,"\tGlyphFallback[lvl=%d] \"%s\" -> \"%s\" (q=%d)\n",
+                nFallbackLevel, aOrigFontName.GetBuffer(), aFallbackName.GetBuffer(),
+                aFontSelData.mpFontData->GetQuality());
+        }
+#endif
+
+        pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
+
+        // create and add glyph fallback layout to multilayout
+        rLayoutArgs.ResetPos();
+        SalLayout* pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
+        if( pFallback )
+        {
+            if( pFallback->LayoutText( rLayoutArgs ) )
+            {
+                if( !pMultiSalLayout )
+                    pMultiSalLayout = new MultiSalLayout( *pSalLayout );
+                pMultiSalLayout->AddFallback( *pFallback,
+                    rLayoutArgs.maRuns, aFontSelData.mpFontData );
+            }
+            else
+                pFallback->Release();
+        }
+
+        mpFontCache->Release( pFallbackFont );
+
+        // break when this fallback was sufficient
+        if( !rLayoutArgs.PrepareFallback() )
+            break;
+    }
+
+    // restore orig font settings
+    pSalLayout->InitFont();
+    rLayoutArgs.maRuns = aLayoutRuns;
+
+    if( pMultiSalLayout && pMultiSalLayout->LayoutText( rLayoutArgs ) )
+        pSalLayout = pMultiSalLayout;
+
+    return pSalLayout;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::GetTextIsRTL(
+            const String& rString,
+            xub_StrLen nIndex, xub_StrLen nLen ) const
+{
+    ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( rString, nIndex, nLen, 0, NULL );
+    bool bRTL = false;
+    int nCharPos = -1;
+    aArgs.GetNextPos( &nCharPos, &bRTL);
+    return (nCharPos != nIndex) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -7565,8 +7588,6 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     {
         int nWidthFactor = pSalLayout->GetUnitsPerPixel();
         bRet = pSalLayout->GetOutline( *mpGraphics, rVector );
-        pSalLayout->Release();
-
         if( bRet )
         {
             PolyPolyVector::iterator aIt;
@@ -7578,7 +7599,6 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
                 for( aIt = rVector.begin(); aIt != rVector.end(); ++aIt )
                     aIt->Move( aRotatedOfs.X(), aRotatedOfs.Y() );
             }
-
             if( nWidthFactor > 1 )
             {
                 double fFactor = 1.0 / nWidthFactor;
@@ -7586,6 +7606,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
                     aIt->Scale( fFactor, fFactor );
             }
         }
+        pSalLayout->Release();
     }
 
     if( bOldMap )
