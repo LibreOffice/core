@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:38:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,15 +422,24 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
         // --> OD 2004-12-03 #i38126# - own action for event LOADFINISHED
         // in order to avoid a modified document.
+        // --> OD 2005-02-01 #i41679# - Also for the instance of <SwDoc>
+        // it has to be assured, that it's not modified.
         // Perform the same as for action id 1, but disable <SetModified>.
         case 3:
             {
                 const bool bResetModified = IsEnableSetModified();
                 if ( bResetModified )
                     EnableSetModified( FALSE );
+                // --> OD 2005-02-01 #i41679#
+                const bool bIsDocModified = pDoc->IsModified();
+                // <--
 
                 pDoc->DocInfoChgd( GetDocInfo() );
 
+                // --> OD 2005-02-01 #i41679#
+                if ( !bIsDocModified )
+                    pDoc->ResetModified();
+                // <--
                 if ( bResetModified )
                     EnableSetModified( TRUE );
             }
