@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:39:04 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ String STR_SVT_NEWDOC
     Text[ french ] = "Nouveau document";
     Text[ spanish ] = "Nuevo documento";
     Text[ finnish ] = "Uusi asiakirja";
-    Text[ italian ] = "New Document";
+    Text[ italian ] = "Nuovo documento";
     Text[ danish ] = "New Document";
     Text[ swedish ] = "Nytt dokument";
     Text[ polish ] = "Nowy dokument";
@@ -115,7 +115,7 @@ String STR_SVT_MYDOCS
     Text[ french ] = "Mes documents";
     Text[ spanish ] = "Mis documentos";
     Text[ finnish ] = "Eigene Dateien";
-    Text[ italian ] = "My Documents";
+    Text[ italian ] = "Documenti";
     Text[ danish ] = "My Documents";
     Text[ swedish ] = "Mina dokument";
     Text[ polish ] = "Moje dokumenty";
@@ -146,7 +146,7 @@ String STR_SVT_TEMPLATES
     Text[ french ] = "ModËles";
     Text[ spanish ] = "Plantillas";
     Text[ finnish ] = "Tyylit";
-    Text[ italian ] = "Templates";
+    Text[ italian ] = "Modelli";
     Text[ danish ] = "Templates";
     Text[ swedish ] = "Mallar";
     Text[ polish ] = "Szablony";
@@ -176,7 +176,7 @@ String STR_SVT_SAMPLES
     Text[ dutch ] = "Samples";
     Text[ french ] = "Exemples";
     Text[ spanish ] = "Ejemplos";
-    Text[ italian ] = "Samples";
+    Text[ italian ] = "Esempi";
     Text[ danish ] = "Samples";
     Text[ swedish ] = "Exempel";
     Text[ polish ] = "Przyk≥ady";
@@ -208,7 +208,7 @@ String STR_SVT_CATEGORY
     Text[ french ] = "CatÈgorie";
     Text[ spanish ] = "CategorÌa";
     Text[ finnish ] = "Category";
-    Text[ italian ] = "Category";
+    Text[ italian ] = "Categoria";
     Text[ danish ] = "Category";
     Text[ swedish ] = "Kategori";
     Text[ polish ] = "Kategoria";
@@ -242,7 +242,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ dutch ] = "Back";
             Text[ french ] = "PrÈcÈdent";
             Text[ spanish ] = "Regresar";
-            Text[ italian ] = "Back";
+            Text[ italian ] = "Indietro";
             Text[ danish ] = "Back";
             Text[ swedish ] = "Tillbaka";
             Text[ polish ] = "Wstecz";
@@ -270,7 +270,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ dutch ] = "Higher";
             Text[ french ] = "Au rÈpertoire supÈrieur";
             Text[ spanish ] = "Subir un nivel";
-            Text[ italian ] = "Higher";
+            Text[ italian ] = "Alla cartella superiore";
             Text[ danish ] = "Higher";
             Text[ swedish ] = "En nivÂ hˆgre";
             Text[ polish ] = "Katalog wyøej";
@@ -302,7 +302,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ dutch ] = "Print";
             Text[ french ] = "Imprimer";
             Text[ spanish ] = "Imprimir";
-            Text[ italian ] = "Print";
+            Text[ italian ] = "Stampa";
             Text[ danish ] = "Print";
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
@@ -341,15 +341,15 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ french ] = "PropriÈtÈs du document";
             Text[ spanish ] = "Propiedades del documento";
             Text[ finnish ] = "Docinfo";
-            Text[ italian ] = "Docinfo";
+            Text[ italian ] = "Propriet‡ documento";
             Text[ danish ] = "Docinfo";
             Text[ swedish ] = "Dokumentegenskaper";
             Text[ polish ] = "W≥aúciwoúci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
             Text[ japanese ] = "ƒﬁ∑≠“›ƒÇÃëÆê´";
             Text[ korean ] = "Docinfo";
-            Text[ chinese_simplified ] = "Œƒµµ Ù–‘";
-            Text[ chinese_traditional ] = "Docinfo";
+            Text[ chinese_simplified ] = "Œƒµµµƒ Ù–‘";
+            Text[ chinese_traditional ] = "§Â•Û™∫ƒ›© ";
             Text[ turkish ] = "Docinfo";
             Text[ arabic ] = "Docinfo";
             Text[ catalan ] = "Docinfo";
@@ -370,7 +370,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ french ] = "AperÁu";
             Text[ spanish ] = "PrevisualizaciÛn";
             Text[ finnish ] = "Preview";
-            Text[ italian ] = "Preview";
+            Text[ italian ] = "Anteprima";
             Text[ danish ] = "Preview";
             Text[ swedish ] = "Fˆrhandsvisning";
             Text[ polish ] = "Podglπd";
@@ -378,7 +378,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
             Text[ korean ] = "Preview";
             Text[ chinese_simplified ] = "‘§¿¿";
-            Text[ chinese_traditional ] = "Preview";
+            Text[ chinese_traditional ] = "πwƒ˝";
             Text[ turkish ] = "Preview";
             Text[ arabic ] = "Preview";
             Text[ catalan ] = "Preview";
@@ -414,7 +414,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ dutch ] = "Manage...";
         Text[ french ] = "~GÈrer...";
         Text[ spanish ] = "~Administrar...";
-        Text[ italian ] = "Manage...";
+        Text[ italian ] = "Gestisci...";
         Text[ danish ] = "Manage...";
         Text[ swedish ] = "~Administrera...";
         Text[ polish ] = "Zarzπdzaj...";
@@ -440,7 +440,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ dutch ] = "Edit";
         Text[ french ] = "~…diter";
         Text[ spanish ] = "Edi~tar";
-        Text[ italian ] = "Edit";
+        Text[ italian ] = "Modifica";
         Text[ danish ] = "Edit";
         Text[ swedish ] = "~Redigera";
         Text[ polish ] = "~Edytuj";
@@ -467,7 +467,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ dutch ] = "Open";
         Text[ french ] = "~Ouvrir";
         Text[ spanish ] = "~Abrir";
-        Text[ italian ] = "Open";
+        Text[ italian ] = "~Apri";
         Text[ danish ] = "Open";
         Text[ swedish ] = "÷~ppna";
         Text[ polish ] = "OtwÛrz";
@@ -497,7 +497,7 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ dutch ] = "Templates and Documents";
     Text[ french ] = "ModËles et documents";
     Text[ spanish ] = "Plantillas y documentos";
-    Text[ italian ] = "Templates and Documents";
+    Text[ italian ] = "Modelli e documenti";
     Text[ danish ] = "Templates and Documents";
     Text[ swedish ] = "Mallar och dokument";
     Text[ polish ] = "Szablony i dokumenty";
@@ -555,7 +555,7 @@ ItemList [ language_user1 ] =
         < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "ZL : \"Gedruckt von\" bedeutet hier am \"DATUM\"" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
         < "Grˆﬂe" ; DI_SIZE ; > ;
     };
@@ -666,16 +666,16 @@ ItemList [ language_user1 ] =
     };
     ItemList [ italian ] =
     {
-             < "Titolo3" ; DI_TITLE ; > ;
-        < "di" ; DI_FROM ; > ;
+             < "Titolo" ; DI_TITLE ; > ;
+        < "da" ; DI_FROM ; > ;
         < "Data" ; DI_DATE ; > ;
         < "Parole chiave" ; DI_KEYWORDS ; > ;
         < "Descrizione" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Tipo:" ; DI_MIMETYPE ; > ;
+        < "Data modifica" ; DI_MODIFIEDDATE ; > ;
+        < "Cambiato:" ; DI_MODIFIEDBY ; > ;
+        < "Stampato il" ; DI_PRINTDATE ; > ;
+        < "Stampato:" ; DI_PRINTBY ; > ;
         < "Argomento" ; DI_THEME ; > ;
         < "Dimensioni" ; DI_SIZE ; > ;
     };
@@ -750,7 +750,7 @@ ItemList [ language_user1 ] =
         < "çXêVì˙éû" ; DI_MODIFIEDDATE ; > ;
         < "çXêVé“" ; DI_MODIFIEDBY ; > ;
         < "àÛç¸ì˙éû" ; DI_PRINTDATE ; > ;
-        < "àÛç¸é“" ; DI_PRINTBY ; > ;
+        < "àÛç¸ì˙éû" ; DI_PRINTBY ; > ;
         < "√∞œ" ; DI_THEME ; > ;
         < "ª≤Ωﬁ" ; DI_SIZE ; > ;
     };
@@ -772,7 +772,7 @@ ItemList [ language_user1 ] =
     ItemList [ chinese_simplified ] =
     {
              < "¥Û±ÍÃ‚" ; DI_TITLE ; > ;
-        < "”…" ; DI_FROM ; > ;
+        < "◊˜’ﬂ" ; DI_FROM ; > ;
         < "»’∆⁄" ; DI_DATE ; > ;
         < "πÿº¸◊÷" ; DI_KEYWORDS ; > ;
         < "Àµ√˜" ; DI_DESCRIPTION ; > ;
@@ -788,16 +788,16 @@ ItemList [ language_user1 ] =
     {
              < "§jº–√D" ; DI_TITLE ; > ;
         < "±q" ; DI_FROM ; > ;
-        < "DATE" ; DI_DATE ; > ;
-        < "Schl?selwˆrter" ; DI_KEYWORDS ; > ;
+        < "§È¥¡" ; DI_DATE ; > ;
+        < "√ˆ¡‰¶r" ; DI_KEYWORDS ; > ;
         < "¥y≠z" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "?Æe√˛´¨" ; DI_MIMETYPE ; > ;
+        < "≠◊ßÔ™∫§È¥¡" ; DI_MODIFIEDDATE ; > ;
+        < "ΩsøË≠◊ßÔ™Ã" ; DI_MODIFIEDBY ; > ;
+        < "¶C¶L™∫§È¥¡" ; DI_PRINTDATE ; > ;
+        < "¶C¶L™∫§È¥¡" ; DI_PRINTBY ; > ;
         < "•D√D" ; DI_THEME ; > ;
-        < "Grˆﬂe" ; DI_SIZE ; > ;
+        < "§j§p" ; DI_SIZE ; > ;
     };
     ItemList [ turkish ] =
     {
@@ -845,5 +845,6 @@ ItemList [ language_user1 ] =
         < "Grˆﬂe" ; DI_SIZE ; > ;
     };
     };
+
 
 
