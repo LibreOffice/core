@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryListEvent.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com { module sun { module star { module linguistic2 {
     @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
     @see    <type scope="com::sun::star::lang">EventObject</type>
 */
-struct DictionaryListEvent : com::sun::star::lang::EventObject
+published struct DictionaryListEvent : com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /** the combined type of the accumulated events.
