@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-04 13:00:01 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 14:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,9 @@ ModalDialog DLG_SAVE_AS
         Text [ english ] = "Please enter the name of the object to be created:";
         Text [ english_us ] = "Please enter a name for the object to be created:";
         Text[ portuguese ] = "Indique o nome para o objecto a ser criado:";
-        Text[ russian ] = "Çàäàéòå, ïîæàëóéñòà, èìÿ äëÿ ñîçäàâàåìîãî îáúåêòà:";
+        Text[ russian ] = "Ââåäèòå èìÿ ñîçäàâàåìîãî îáúåêòà:";
         Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ôïõ áíôéêåéìİíïõ ğïõ èá äçìéïõñãçèåß:";
-        Text[ dutch ] = "Vul een naam in voor het object dat u wil  creëren:";
+        Text[ dutch ] = "Vul een naam in voor het object dat u wilt maken:";
         Text[ french ] = "Saisissez un nom pour l'objet à créer :";
         Text[ spanish ] = "Introduzca un nombre para el objeto que crear:";
         Text[ italian ] = "Indicate il nome dell'oggetto da creare:";
@@ -232,7 +232,7 @@ ModalDialog DLG_SAVE_AS
         Text [ italian ] = "~Nome della tabella" ;
         Text [ spanish ] = "~Nombre de la tabla" ;
         Text [ french ] = "~Nom de la table" ;
-        Text [ dutch ] = "~Naam van de tabel" ;
+        Text [ dutch ] = "~Naam tabel" ;
         Text[ chinese_simplified ] = "è¡¨æ ¼åç§°(~T)";
         Text[ russian ] = "Èìÿ òàáëèöû";
         Text[ polish ] = "Nazwa tabeli";
@@ -243,7 +243,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "ì‹œíŠ¸ ì´ë¦„(~T)";
         Text[ turkish ] = "Tablo adı";
         Text[ catalan ] = "Nom de la ~taula";
-        Text[ finnish ] = "~Taulukon nimi";
+        Text[ finnish ] = "Ta~ulukon nimi";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­~à¸•à¸²à¸£à¸²à¸‡";
     };
     String STR_VW_LABEL
@@ -258,7 +258,7 @@ ModalDialog DLG_SAVE_AS
         Text [ italian ] = "Nome della ~vista tabella" ;
         Text [ spanish ] = "Nombre del ~modo tabla" ;
         Text [ french ] = "~Nom de la vue" ;
-        Text [ dutch ] = "~Naam van de tabelmodus" ;
+        Text [ dutch ] = "~Naam tabelmodus" ;
         Text[ chinese_simplified ] = "è¡¨æ ¼è§†å›¾åç§°(~N)";
         Text[ russian ] = "Èìÿ âèäà òàáëèöû";
         Text[ polish ] = "Nazwa widoku tabeli";
@@ -269,7 +269,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "ì‹œíŠ¸ ë³´ê¸° ì´ë¦„(~N)";
         Text[ turkish ] = "Tablo görünümü adı";
         Text[ catalan ] = "~Nom de la vista de la taula";
-        Text[ finnish ] = "~Taulukkonäkymän nimi";
+        Text[ finnish ] = "Taulu~näkymän nimi";
         Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡";
     };
     String STR_QRY_LABEL
@@ -284,7 +284,7 @@ ModalDialog DLG_SAVE_AS
         Text [ italian ] = "Nome della ~ricerca" ;
         Text [ spanish ] = "Nombre de la ~consulta" ;
         Text [ french ] = "~Nom de la requête" ;
-        Text [ dutch ] = "~Naam van de query" ;
+        Text [ dutch ] = "~Naam query" ;
         Text[ chinese_simplified ] = "æŸ¥è¯¢åç§°(~Q)";
         Text[ russian ] = "Èìÿ çàïğîñà";
         Text[ polish ] = "Nazwa kwerendy";
@@ -295,7 +295,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "ì§ˆì˜ ì´ë¦„(~Q)";
         Text[ turkish ] = "Sorgu adı";
         Text[ catalan ] = "Nom de la ~consulta";
-        Text[ finnish ] = "~Kyselyn nimi";
+        Text[ finnish ] = "K~yselyn nimi";
         Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡";
     };
     String STR_FRM_LABEL
@@ -310,7 +310,7 @@ ModalDialog DLG_SAVE_AS
         Text [ italian ] = "Nome del ~formulario" ;
         Text [ spanish ] = "Nombre del form~ulario" ;
         Text [ french ] = "~Nom du formulaire" ;
-        Text [ dutch ] = "~Naam van het formulier" ;
+        Text [ dutch ] = "~Naam formulier" ;
         Text[ chinese_simplified ] = "è¡¨å•åç§°(~O)";
         Text[ russian ] = "Èìÿ ôîğìóëÿğà";
         Text[ polish ] = "Nazwa formularza";
@@ -321,7 +321,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "ì–‘ì‹ ì´ë¦„(~O)";
         Text[ turkish ] = "Form adı";
         Text[ catalan ] = "Nom del f~ormulari";
-        Text[ finnish ] = "~Lomakkeen nimi";
+        Text[ finnish ] = "L~omakkeen nimi";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹~à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
     };
     String STR_RPT_LABEL
@@ -336,7 +336,7 @@ ModalDialog DLG_SAVE_AS
         Text [ italian ] = "Nome del ra~pporto" ;
         Text [ spanish ] = "Nombre del inform~e" ;
         Text [ french ] = "~Nom de l'état" ;
-        Text [ dutch ] = "~Naam van het bericht" ;
+        Text [ dutch ] = "~Naam bericht" ;
         Text[ chinese_simplified ] = "æŠ¥è¡¨åç§°(~R)";
         Text[ russian ] = "Èìÿ îò÷åòà";
         Text[ polish ] = "Nazwa raportu";
@@ -347,7 +347,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "ë³´ê³ ì„œ ì´ë¦„(~R)";
         Text[ turkish ] = "Rapor adı";
         Text[ catalan ] = "Nom de l'~informe";
-        Text[ finnish ] = "~Raportin nimi";
+        Text[ finnish ] = "R~aportin nimi";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­~à¸£à¸²à¸¢à¸‡à¸²à¸™";
     };
     String STR_OBJECT_EXISTS_ALREADY
@@ -357,9 +357,9 @@ ModalDialog DLG_SAVE_AS
         Text [ english_us ] = "The name '$#$' already exists.\nPlease enter another name." ;
         Text[ language_user1 ] = " ";
         Text[ portuguese ] = "O nome '$#$' já existe.\nIndique outro.";
-        Text[ russian ] = "Èìÿ '$#$' óæå ñóùåñòâóåò.\nÂâåäèòå, ïîæàëóéñòà, äğóãîå èìÿ.";
+        Text[ russian ] = "Èìÿ '$Name: not supported by cvs2svn $' óæå ñóùåñòâóåò.\nÂâåäèòå äğóãîå èìÿ.";
         Text[ greek ] = "Ôï üíïìá '$#$' õğÜñ÷åé Şäç.\nĞáñáêáëş åéóÜãåôå İíá íİï üíïìá.";
-        Text[ dutch ] = "De naam '$#$' bestaat reeds.\nTyp een nieuwe naam.";
+        Text[ dutch ] = "De naam '$Name: not supported by cvs2svn $' bestaat reeds.\nTyp een nieuwe naam.";
         Text[ french ] = "Le nom '$#$' existe déjà.\nIndiquez-en un autre !";
         Text[ spanish ] = "Ya existe el nombre '$#$'.\nIntroduzca otro.";
         Text[ italian ] = "Il nome '$#$' esiste già.\nSceglietene un altro.";
@@ -374,7 +374,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "The name '$#$' already exists.\nPlease enter a new name.";
         Text[ arabic ] = "ÇáÇÓã'$#$' ãæÌæÏ ÈÇáİÚá.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
         Text[ catalan ] = "El nom '$#$' ja existeix.\nIntroduïu-ne un altre.";
-        Text[ finnish ] = "Nimi '$#$' on jo käytössä.\nSyötä toinen nimi.";
+        Text[ finnish ] = "Nimi '$Name: not supported by cvs2svn $' on jo olemassa.\nAnna toinen nimi.";
         Text[ thai ] = "à¸¡à¸µà¸Šà¸·à¹ˆà¸­ '$#$' à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\nà¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸­à¸·à¹ˆà¸™";
     };
     String STR_OBJECT_EXISTS_ALREADY_OVERWRITE
@@ -384,9 +384,9 @@ ModalDialog DLG_SAVE_AS
         Text [ english_us ] = "The name '$#$' already exists.\nDo you want to overwrite it?" ;
         Text[ language_user1 ] = " ";
         Text[ portuguese ] = "O nome '$#$' já existe.\nSubstituir?";
-        Text[ russian ] = "Èìÿ '$#$' óæå ñóùåñòâóåò.\nÇàìåíèòü åãî?";
+        Text[ russian ] = "Èìÿ '$Name: not supported by cvs2svn $' óæå ñóùåñòâóåò.\nÇàìåíèòü?";
         Text[ greek ] = "Ôï üíïìá '$#$' õğÜñ÷åé Şäç.\nÈİëåôå íá áíôéêáôáóôáèåß;";
-        Text[ dutch ] = "De naam '$#$' bestaat reeds.\nWilt u deze overschrijven?";
+        Text[ dutch ] = "De naam '$Name: not supported by cvs2svn $' bestaat reeds.\nWilt u deze overschrijven?";
         Text[ french ] = "Le nom '$#$' existe déjà.\nVoulez-vous l'écraser ?";
         Text[ spanish ] = "El nombre '$#$' existe ya.\n¿Desea sobrescribirlo?";
         Text[ italian ] = "Il nome '$#$' esiste già.\nVolete soprascriverlo?";
@@ -401,7 +401,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "The name '$#$' already exists.\nDo you want to overwrite it?";
         Text[ arabic ] = "ÇáÇÓã '$#$' ãæÌæÏ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
         Text[ catalan ] = "El nom '$#$' ja existeix.\nVoleu sobreescriure'l?";
-        Text[ finnish ] = "Nimi '$#$' on jo käytössä.\nHaluatko korvata sen?";
+        Text[ finnish ] = "Nimi '$Name: not supported by cvs2svn $' on jo olemassa.\nHaluatko korvata sen?";
         Text[ thai ] = "The name '$#$' already exists.\nDo you want to overwrite it?";
     };
     String STR_TITLE_PASTE_AS
@@ -410,7 +410,7 @@ ModalDialog DLG_SAVE_AS
         Text [ english ] = "Paste as";
         Text [ english_us ] = "Insert as";
         Text[ portuguese ] = "Inserir como";
-        Text[ russian ] = "Âñòàâèòü êàê";
+        Text[ russian ] = "Ñîõğàíèòü êàê";
         Text[ greek ] = "ÅéóáãùãŞ ùò";
         Text[ dutch ] = "Invoegen als";
         Text[ french ] = "Insérer comme";
