@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 15:30:33 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 15:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 using namespace ::dbaui;
@@ -2206,13 +2209,9 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
 {
     try
     {
-        String sLanguage, sCountry;
-        ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
-        m_aLocale = Locale(sLanguage, sCountry, ::rtl::OUString());
-
-        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(_rFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
-        LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
-        m_sDecimalSep = aData.decimalSeparator;
+        SvtSysLocale aSysLocale;
+        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+        m_sDecimalSep = aSysLocale.GetLocaleData().getNumDecimalSep();
     }
     catch(Exception&)
     {
