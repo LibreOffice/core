@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 14:00:25 $
+ *  last change: $Author: sab $ $Date: 2001-12-12 18:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,59 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
             ScChartListenerCollection* pChartListener = aDocument.GetChartListenerCollection();
             if (pChartListener)
                 pChartListener->UpdateDirtyCharts();
+
+            // #95582#; set the table names of linked tables to the new path
+            USHORT nTabCount = aDocument.GetTableCount();
+            for (USHORT i = 0; i < nTabCount; ++i)
+            {
+                if (aDocument.IsLinked( i ))
+                {
+                    String aName;
+                    aDocument.GetName(i, aName);
+                    String aLinkTabName = aDocument.GetLinkTab(i);
+                    sal_Int32 nLinkTabNameLength = aLinkTabName.Len();
+                    sal_Int32 nNameLength = aName.Len();
+                    if (nLinkTabNameLength < nNameLength)
+                    {
+
+                        // remove the quottes on begin and end of the docname and restore the escaped quotes
+                        const sal_Unicode* pNameBuffer = aName.GetBuffer();
+                        if ( *pNameBuffer == '\'' && // all docnames have to have a ' character on the first pos
+                            ScGlobal::UnicodeStrChr( pNameBuffer, SC_COMPILER_FILE_TAB_SEP ) )
+                        {
+                            rtl::OUStringBuffer aDocURLBuffer;
+                            BOOL bQuote = TRUE;         // Dokumentenname ist immer quoted
+                            ++pNameBuffer;
+                            while ( bQuote && *pNameBuffer )
+                            {
+                                if ( *pNameBuffer == '\'' && *(pNameBuffer-1) != '\\' )
+                                    bQuote = FALSE;
+                                else if( !(*pNameBuffer == '\\' && *(pNameBuffer+1) == '\'') )
+                                    aDocURLBuffer.append(*pNameBuffer);     // falls escaped Quote: nur Quote in den Namen
+                                ++pNameBuffer;
+                            }
+
+
+                            if( *pNameBuffer == SC_COMPILER_FILE_TAB_SEP )  // after the last quote of the docname should be the # char
+                            {
+                                sal_Int32 nIndex = nNameLength - nLinkTabNameLength;
+                                INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
+                                if( aName.Equals(aLinkTabName, nIndex, nLinkTabNameLength) &&
+                                    (aName.GetChar(nIndex - 1) == '#') && // before the table name should be the # char
+                                    !aINetURLObject.HasError()) // the docname should be a valid URL
+                                {
+                                    aName = ScGlobal::GetDocTabName( aDocument.GetLinkDoc( i ), aDocument.GetLinkTab( i ) );
+                                    aDocument.RenameTab(i, aName, TRUE, TRUE);
+                                }
+                                // else;  nothing has to happen, because it is a user given name
+                            }
+                            // else;  nothing has to happen, because it is a user given name
+                        }
+                        // else;  nothing has to happen, because it is a user given name
+                    }
+                    // else;  nothing has to happen, because it is a user given name
+                }
+            }
         }
         ScColumn::bDoubleAlloc = sal_False;
     }
