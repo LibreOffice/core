@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:13:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ String STR_PAGEFMT_HEADER
     TEXT[ chinese_traditional ] = "(­¶­±¼Ë¦¡¡G ";
     TEXT[ arabic ] = "(ŞÇáÈ ÇáÕİÍÉ: ";
     TEXT[ greek ] = "(Ğñüôõğï óåëßäáò: ";
-    TEXT[ korean ] = "(ÂÊ À¯Çü: ";
+    TEXT[ korean ] = " (ÂÊ À¯Çü: ";
     TEXT[ turkish ] = "(Sayfa biçimi: ";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "(Estilo de página:  ";
@@ -161,7 +161,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE [ english_us ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
     MESSAGE[ chinese_simplified ] = "ÎŞ·¨Éè¶¨Ò³Âë¡£ÔÚ×óÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÅ¼ÊıÒ³Âë£¬ÔÚÓÒÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÆæÊıÒ³Âë¡£";
     MESSAGE[ russian ] = "Íîìåğà ñòğàíèö ïğîñòàâèòü íåâîçìîæíî. Ñ ëåâîé ñòîğîíû ìîãóò áûòü ïğîñòàâëåíû òîëüêî ÷åòíûå, ñ ïğàâîé - òîëüêî íå÷åòíûå öèôğû.";
-    MESSAGE[ polish ] = "Nie mo¿na nanie?æ numeru stron. Na lewych stronach mo¿na nanie?æ tylko parzyste numery stron, na prawych tylko nieparzyste numery stron.";
+    MESSAGE[ polish ] = "Nie mo¿na nanieœæ numeru stron. Na lewych stronach mo¿na nanieœæ tylko parzyste numery stron, na prawych tylko nieparzyste numery stron.";
     MESSAGE[ japanese ] = "Íß°¼Ş”Ô†‚Í“K—p‚Å‚«‚Ü‚¹‚ñB¶Íß°¼Ş‚É‚Í‹ô”A‰EÍß°¼Ş‚É‚ÍŠï”‚ğg—p‚µ‚Ü‚·B";
     MESSAGE[ chinese_traditional ] = "µLªk³]©w­¶½X¡C¦b¥ª­¶¥u¯à°÷³]©w°¸¼Æ¡A¦b¥k­¶¥u¯à³]©w©_¼Æ¡C";
     MESSAGE[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÃÑŞÇã ÇáÕİÍÇÊ İí ÇáÕİÍÉ ÇáÍÇáíÉ. Úáì ÇáÕİÍÇÊ ÇáíÓÑì¡ íÓãÍ ÈÇÓÊÎÏÇã ÃÑŞÇã ÒæÌíÉ İŞØ¡ æÚáì ÇáÕİÍÇÊ Çáíãäì¡ ÃÑŞÇã İÑÏíÉ İŞØ.";
