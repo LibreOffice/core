@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:16:33 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #define BTN_AUTOSAVEPROMPT      16
 #define BTN_NOPRETTYPRINTING    17
 #define FI_BACKUP               18
+#define BTN_WARNALIENFORMAT     19
 
 #define GB_RELATIVE         40
 #define BTN_RELATIVE_FSYS   41
@@ -84,6 +85,7 @@
 #define FT_FILTER           46
 #define LB_FILTER           47
 #define FI_FILTER           48
+#define FT_WARN             49
 
 #define APP_WRITER          0
 #define APP_WRITER_WEB      1
