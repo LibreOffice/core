@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:55:24 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 
         if ( m_pChildCommitListen )
         {
+            m_pChildCommitListen->dispose();
             m_pChildCommitListen->release();
             m_pChildCommitListen = NULL;
         }
@@ -1103,6 +1104,7 @@ void ODatabaseDocument::disposing()
         notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
         if ( m_pChildCommitListen )
         {
+            m_pChildCommitListen->dispose();
             m_pChildCommitListen->release();
             m_pChildCommitListen = NULL;
         }
