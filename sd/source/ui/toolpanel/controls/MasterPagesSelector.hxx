@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:32:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ public:
 
     virtual void Fill (void);
     virtual void Clear (void);
+
+    void    SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
 
 protected:
     SdDrawDocument& mrDocument;
