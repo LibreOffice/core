@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-05 13:53:45 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 17:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,12 +247,16 @@ namespace starregistry  = ::com::sun::star::registry;
 namespace staruno       = ::com::sun::star::uno;
 namespace starlang      = ::com::sun::star::lang;
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::registry;
+
 //---------------------------------------------------------------------------------------
 //.......................................................................................
 #define DECLARE_SERVICE_INFO(classImplName) \
     namespace frm { \
-        extern ::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> SAL_CALL \
-            classImplName##_CreateInstance(const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) \
+        extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL \
+            classImplName##_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) \
                 throw (::com::sun::star::uno::RuntimeException); \
     }
 
