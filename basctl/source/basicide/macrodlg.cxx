@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-06 09:12:19 $
+ *  last change: $Author: ab $ $Date: 2002-11-01 11:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,6 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 {
     // ausser bei New/Record wird die Description durch LoseFocus uebernommen.
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
 
     if ( pButton == &aRunButton )
@@ -753,11 +752,18 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             if( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-                pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-                pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-                pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
             }
+            else
+            {
+                SfxAllItemSet Args( SFX_APP()->GetPool() );
+                SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, Args );
+                SFX_APP()->ExecuteSlot( aRequest );
+            }
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+            if( pDispatcher )
+                pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
             EndDialog( MACRO_EDIT );
         }
         else
