@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:27:15 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,17 @@ using namespace com::sun;
 
    ; RFC 1738
    telnet-url = "TELNET://" login ["/"]
+
+
+   ; private
+   vnd-sun-star-expand-url = "VND.SUN.STAR.EXPAND:" opaque_part
+   opaque_part = uric_no_slash *uric
+   uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
+
+
+   ; private
+   vnd-sun-star-tdoc-url = "VND.SUN.STAR.TDOC:/" segment *("/" segment)
+   segment = *pchar
  */
 
 //============================================================================
@@ -444,7 +455,11 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "vnd.sun.star.odma", "vnd.sun.star.odma:", 0, false, false, false,
           false, false, false, true, false },
         { "telnet", "telnet://", 23, true, true, false, true, true, true, true,
-          false } };
+          false },
+        { "vnd.sun.star.expand", "vnd.sun.star.expand:", 0, false, false, false,
+          false, false, false, false, false },
+        { "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", 0, false, false, false,
+          false, false, false, true, false } };
 
 // static
 inline INetURLObject::SchemeInfo const &
@@ -2058,6 +2073,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::INTERNAL },
             { "vnd.sun.star.cmd:", 0, INET_PROT_VND_SUN_STAR_CMD,
               PrefixInfo::OFFICIAL },
+            { "vnd.sun.star.expand:", 0, INET_PROT_VND_SUN_STAR_EXPAND,
+              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.help:", 0, INET_PROT_VND_SUN_STAR_HELP,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.hier:", 0, INET_PROT_VND_SUN_STAR_HIER,
@@ -2065,6 +2082,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "vnd.sun.star.odma:", 0, INET_PROT_VND_SUN_STAR_ODMA,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.pkg:", 0, INET_PROT_VND_SUN_STAR_PKG,
+              PrefixInfo::OFFICIAL },
+            { "vnd.sun.star.tdoc:", 0, INET_PROT_VND_SUN_STAR_TDOC,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
               PrefixInfo::OFFICIAL },
@@ -2753,6 +2772,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         }
 
         case INET_PROT_VND_SUN_STAR_CMD:
+        case INET_PROT_VND_SUN_STAR_EXPAND:
         {
             if (pPos == pEnd || *pPos == nFragmentDelimiter)
                 return false;
@@ -2796,6 +2816,23 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 ++pPos;
             }
             aTheSynPath = '/';
+            break;
+
+        case INET_PROT_VND_SUN_STAR_TDOC:
+            if (pPos == pEnd || *pPos != '/')
+                return false;
+            while (pPos < pEnd && *pPos != nFragmentDelimiter)
+            {
+                EscapeType eEscapeType;
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                             '%', eMechanism,
+                                             eCharset, eEscapeType);
+                if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
+                    aTheSynPath += '/';
+                else
+                    appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
+                               PART_PCHAR, '%', eCharset, false);
+            }
             break;
     }
 
