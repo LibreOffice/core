@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-18 15:42:37 $
+ *  last change: $Author: ssa $ $Date: 2002-10-28 12:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2987,6 +2987,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
                     USHORT h,s,b;
                     ImplRGBtoHSB( aMaskCol, h, s, b );
                     if( s > 20 ) s=20;
+                    if( b > 5 ) b-=5;
                     aMaskCol = ImplHSBtoRGB( h, s, b );
                     DrawMask( Point( nTempOffX, nTempOffY ), pImage->GetMaskBitmap(), aMaskCol );
                 }
