@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:22:19 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,
 void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
 {
     if( nLen < 0 )
-        pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_FRAMEDIR);
+        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_FRAMEDIR);
     else
     {
         SvxFrameDirection eDir =
@@ -1683,12 +1683,16 @@ WW8FlyPara::WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc /* = 0 */)
 
 bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 {
-    //Compare the parts that word seems to compare for equivalence
+    /*
+     Compare the parts that word seems to compare for equivalence.
+     Interestingly being autoheight or absolute height (the & 0x7fff) doesn't
+     matter to word e.g. #110507#
+    */
     return
        (
          (nSp26 == rSrc.nSp26) &&
          (nSp27 == rSrc.nSp27) &&
-         (nSp45 == rSrc.nSp45) &&
+         ((nSp45 & 0x7fff) == (rSrc.nSp45 & 0x7fff)) &&
          (nSp28 == rSrc.nSp28) &&
          (nLeMgn == rSrc.nLeMgn) &&
          (nRiMgn == rSrc.nRiMgn) &&
@@ -2671,19 +2675,19 @@ void SwWW8ImplReader::Read_PicLoc(USHORT , const BYTE* pData, short nLen )
     }
 }
 
-
 void SwWW8ImplReader::Read_POutLvl(USHORT, const BYTE* pData, short nLen )
 {
-    if( pAktColl && (0 < nLen) )
+    if (pAktColl && (0 < nLen))
     {
-        SwWW8StyInf* pSI = &pCollA[nAktColl];
-        pSI->nOutlineLevel =
-              ( (1 <= pSI->GetWWStyleId()) && (9 >= pSI->GetWWStyleId()) )
+        if (SwWW8StyInf* pSI = GetStyle(nAktColl))
+        {
+            pSI->nOutlineLevel =
+            ( (1 <= pSI->GetWWStyleId()) && (9 >= pSI->GetWWStyleId()) )
             ? pSI->GetWWStyleId()-1
             : (pData ? *pData : 0);
+        }
     }
 }
-
 
 void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
 {
@@ -2718,6 +2722,11 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
             }
         }
     }
+}
+
+SwWW8StyInf *SwWW8ImplReader::GetStyle(USHORT nColl) const
+{
+    return nColl < nColls ? &pCollA[nColl] : 0;
 }
 
 /***************************************************************************
@@ -2758,35 +2767,42 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
     }
     // Wert: 0 = Aus, 1 = An, 128 = Wie Style, 129 entgegen Style
     bool bOn = *pData & 1;
-    SwWW8StyInf* pSI = nAktColl < nColls ? &pCollA[nAktColl] : 0;
+    SwWW8StyInf* pSI = GetStyle(nAktColl);
     if (pPlcxMan)
     {
         const BYTE *pCharIstd =
             pPlcxMan->GetChpPLCF()->HasSprm(bVer67 ? 80 : 0x4A30);
         if (pCharIstd)
-            pSI = &pCollA[SVBT16ToShort( pCharIstd )];
+            pSI = GetStyle(SVBT16ToShort(pCharIstd));
     }
 
     if( pAktColl )                          // StyleDef -> Flags merken
     {
-        if( pSI->nBase < nColls             // Style Based on
-            && ( *pData & 0x80 )            // Bit 7 gesetzt ?
-            && ( pCollA[pSI->nBase].n81Flags & nMask ) ) // BasisMaske ?
-            bOn = !bOn;                     // umdrehen
+        if (pSI)
+        {
+            // The style based on has Bit 7 set ?
+            if (
+                pSI->nBase < nColls && (*pData & 0x80) &&
+                (pCollA[pSI->nBase].n81Flags & nMask)
+               )
+            {
+                bOn = !bOn;                     // umdrehen
+            }
 
-        if( bOn )
-            pSI->n81Flags |= nMask;         // Flag setzen
-        else
-            pSI->n81Flags &= ~nMask;        // Flag loeschen
+            if (bOn)
+                pSI->n81Flags |= nMask;         // Flag setzen
+            else
+                pSI->n81Flags &= ~nMask;        // Flag loeschen
+       }
     }
     else
     {
 
         // im Text -> Flags abfragen
-        if( *pData & 0x80 )                 // Bit 7 gesetzt ?
+        if (*pData & 0x80)                  // Bit 7 gesetzt ?
         {
-            if (pSI && pSI->n81Flags & nMask)       // und in StyleDef an ?
-                bOn = !bOn;                 // dann invertieren
+            if (pSI && pSI->n81Flags & nMask) // und in StyleDef an ?
+                bOn = !bOn;                   // dann invertieren
             // am Stack vermerken, das dieses ein Toggle-Attribut ist
             pCtrlStck->SetToggleAttr(nI, true);
         }
@@ -2799,14 +2815,12 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
 void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
     short nLen)
 {
-    ASSERT(!bVer67, "Completely impossible");
-
     static const USHORT nEndIds[2] =
     {
         RES_CHRATR_CTL_WEIGHT, RES_CHRATR_CTL_POSTURE,
     };
 
-    BYTE nI = nId - 0x085C;     // Index 0..2 (for now)
+    BYTE nI = bVer67 ? nId - 111 : nId - 0x085C;     // Index 0..2 (for now)
 
     ASSERT(nI <= 1, "not happening");
     if (nI > 1)
@@ -2821,35 +2835,38 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
         return;
     }
     bool bOn = *pData & 1;
-    SwWW8StyInf* pSI = &pCollA[nAktColl];
+    SwWW8StyInf* pSI = GetStyle(nAktColl);
     if (pPlcxMan)
     {
         const BYTE *pCharIstd =
             pPlcxMan->GetChpPLCF()->HasSprm(bVer67 ? 80 : 0x4A30);
         if (pCharIstd)
-            pSI = &pCollA[SVBT16ToShort(pCharIstd)];
+            pSI = GetStyle(SVBT16ToShort(pCharIstd));
     }
 
     if (pAktColl)                           // StyleDef -> Flags merken
     {
-        if( pSI->nBase < nColls             // Style Based on
-            && ( *pData & 0x80 )            // Bit 7 gesetzt ?
-            && ( pCollA[pSI->nBase].n81BiDiFlags & nMask ) ) // BasisMaske ?
-            bOn = !bOn;                     // umdrehen
+        if (pSI)
+        {
+            if( pSI->nBase < nColls             // Style Based on
+                && ( *pData & 0x80 )            // Bit 7 gesetzt ?
+                && ( pCollA[pSI->nBase].n81BiDiFlags & nMask ) ) // BasisMaske ?
+                    bOn = !bOn;                     // umdrehen
 
-        if( bOn )
-            pSI->n81BiDiFlags |= nMask;         // Flag setzen
-        else
-            pSI->n81BiDiFlags &= ~nMask;        // Flag loeschen
+            if( bOn )
+                pSI->n81BiDiFlags |= nMask;         // Flag setzen
+            else
+                pSI->n81BiDiFlags &= ~nMask;        // Flag loeschen
+        }
     }
     else
     {
 
         // im Text -> Flags abfragen
-        if( *pData & 0x80 )                 // Bit 7 gesetzt ?
+        if (*pData & 0x80)                  // Bit 7 gesetzt ?
         {
-            if( pSI->n81BiDiFlags & nMask )     // und in StyleDef an ?
-                bOn = !bOn;                 // dann invertieren
+            if (pSI && pSI->n81BiDiFlags & nMask) // und in StyleDef an ?
+                bOn = !bOn;                     // dann invertieren
             // am Stack vermerken, das dieses ein Toggle-Attribut ist
             pCtrlStck->SetToggleBiDiAttr(nI, true);
         }
@@ -3337,8 +3354,19 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
     {
         if( pAktColl ) // StyleDef
         {
-            if (RES_CHRATR_CJK_FONT != nWhich )
-                pCollA[nAktColl].eFontSrcCharSet = eSrcCharSet;
+            switch(nWhich)
+            {
+                default:
+                case RES_CHRATR_FONT:
+                    pCollA[nAktColl].eLTRFontSrcCharSet = eSrcCharSet;
+                    break;
+                case RES_CHRATR_CTL_FONT:
+                    pCollA[nAktColl].eRTLFontSrcCharSet = eSrcCharSet;
+                    break;
+                case RES_CHRATR_CJK_FONT:
+                    pCollA[nAktColl].eCJKFontSrcCharSet = eSrcCharSet;
+                    break;
+            }
         }
         else if (!pAktItemSet)
         {
@@ -4897,7 +4925,7 @@ SprmReadInfo aSprmReadTab[] = {
      {61, (FNReadRecord)0},                      //"??61",
      {62, (FNReadRecord)0},                      //"??62",
      {63, (FNReadRecord)0},                      //"??63",
-     {64, (FNReadRecord)0},                      //"??64",
+     {64, &SwWW8ImplReader::Read_ParaBiDi},      //"rtl bidi ?
      {65, &SwWW8ImplReader::Read_CFRMarkDel},    //"sprmCFStrikeRM",
                                                  //chp.fRMarkDel 1 or 0 bit
      {66, &SwWW8ImplReader::Read_CFRMark},       //"sprmCFRMark", chp.fRMark
@@ -4985,8 +5013,8 @@ SprmReadInfo aSprmReadTab[] = {
                                                  //percentage to grow hps short
     {110, (FNReadRecord)0},                      //"sprmCCondHyhen", chp.ysri
                                                  //ysri short
-    {111, (FNReadRecord)0},                      //"??111",
-    {112, (FNReadRecord)0},                      //"??112",
+    {111, &SwWW8ImplReader::Read_BoldBiDiUsw},   //"111 bidi bold ?",
+    {112, &SwWW8ImplReader::Read_BoldBiDiUsw},   //"112 bidi italic ?",
     {113, &SwWW8ImplReader::Read_FontCode},      //ww7 rtl font
     {114, (FNReadRecord)0},                      //"??114",
     {115, &SwWW8ImplReader::Read_TxtColor},      //ww7 rtl colour ?
@@ -5152,6 +5180,7 @@ SprmReadInfo aSprmReadTab[] = {
                                                  //5 bytes
     {200, (FNReadRecord)0},                      //"sprmTSetShd", tap.rgshd
                                                  //complex 4 bytes
+    {207, (FNReadRecord)0},                      //dunno
 
 //- new with Ver8 ------------------------------------------------------------
 
