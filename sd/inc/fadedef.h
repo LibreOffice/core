@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fadedef.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 15:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SD_FADEDEF_H
 
 // muss angepasst werden!
-#define FADE_EFFECT_COUNT 43
+#define FADE_EFFECT_COUNT 57
 
 enum FadeSpeed
 {

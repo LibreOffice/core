@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:48:33 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,7 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
         m_pPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
 
     m_pPage3EffectLB->Fill();
-    m_pPage3EffectLB->SelectEntryPos( 0 );
+    m_pPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
     m_pPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     m_pPage3EffectLB->SetDropDownLineCount( 12 );
 
@@ -1165,7 +1165,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
             SdPage* pPage = pDoc->GetSdPage( nPgRelNum, PK_STANDARD );
             if( m_pPage5PageListCT->IsPageChecked(nPgAbsNum) )
             {
-                pPage->SetFadeEffect( (presentation::FadeEffect)m_pPage3EffectLB->GetSelectEntryPos() );
+                pPage->SetFadeEffect( m_pPage3EffectLB->GetSelectedEffect() );
                 pPage->SetFadeSpeed( (FadeSpeed)m_pPage3SpeedLB->GetSelectEntryPos() );
                 if(bKiosk)
                 {
@@ -1314,7 +1314,7 @@ IMPL_LINK( AssistentDlgImpl, SelectEffectHdl, void*, EMPTYARG )
 IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
 {
     if(m_bPreview && xDocShell.Is() )
-        m_aPreview.ShowEffect( (presentation::FadeEffect)m_pPage3EffectLB->GetSelectEntryPos(), (FadeSpeed)m_pPage3SpeedLB->GetSelectEntryPos() );
+        m_aPreview.ShowEffect( m_pPage3EffectLB->GetSelectedEffect(), (FadeSpeed)m_pPage3SpeedLB->GetSelectEntryPos() );
     return 0;
 }
 

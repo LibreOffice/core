@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ DiaEffectControl::DiaEffectControl( Window* pParent, SfxBindings& rBdx, WinBits 
     aLbEffect.SetPosPixel( Point( aSize.Width(), 0 ) );
     aLbEffect.SetSizePixel( Size( aXSize.Width() * 21, aXSize.Height() * 10 ) ); // 155/180
     aLbEffect.Fill();
-    aLbEffect.SelectEntryPos( 0 );
+    aLbEffect.SelectEffect( presentation::FadeEffect_NONE );
     aLbEffect.Show();
 
     Size aDescSize = aFtDescr.GetSizePixel();
@@ -148,23 +148,11 @@ __EXPORT DiaEffectControl::~DiaEffectControl()
 
 IMPL_LINK( DiaEffectControl, SelectDiaEffectHdl, void *, p )
 {
-    presentation::FadeEffect eFE = (presentation::FadeEffect) aLbEffect.GetSelectEntryPos();
-    DiaEffectItem aDiaEffectItem( eFE );
-
-/*
-    if( eFE == FADE_EFFECT_NONE )
-    {
-    // andere Controls der Toolbar disablen
-    }
-    else
-    {
-    // andere Controls der Toolbar enablen
-    }
- */
+    DiaEffectItem aDiaEffectItem( aLbEffect.GetSelectedEffect() );
 
     if( p )
-        rBindings.GetDispatcher()->Execute(
-            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaEffectItem, (void*) NULL, 0L );
+        rBindings.GetDispatcher()->Execute( SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaEffectItem, (void*) NULL, 0L );
+
     return( 0L );
 }
 
@@ -521,7 +509,7 @@ void __EXPORT SdTbxCtlDiaEffect::StateChanged( USHORT nSId,
             else
             {
                 presentation::FadeEffect eFE = (presentation::FadeEffect) ( (const DiaEffectItem*) pState )->GetValue();
-                pFadeEffectLB->SelectEntryPos( eFE );
+                pFadeEffectLB->SelectEffect( eFE );
             }
         }
         else

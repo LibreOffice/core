@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrls.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 15:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,15 +87,18 @@
 class FadeEffectLB : public ListBox
 {
 private:
-    USHORT  GetSdResId( ::com::sun::star::presentation::FadeEffect eFE );
 
+    USHORT                      GetSelectEntryPos() const { return ListBox::GetSelectEntryPos(); }
+    void                        SelectEntryPos( USHORT nPos ) { ListBox::SelectEntryPos( nPos ); }
 
 public:
-         FadeEffectLB( Window* pParent, SdResId Id ) : ListBox( pParent, Id ) {}
-         FadeEffectLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+                                FadeEffectLB( Window* pParent, SdResId Id ) : ListBox( pParent, Id ) {}
+                                FadeEffectLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
 
-    virtual void Fill();
+    virtual void                Fill();
+
+    void                                        SelectEffect( ::com::sun::star::presentation::FadeEffect eFE );
+    ::com::sun::star::presentation::FadeEffect  GetSelectedEffect() const;
 };
 
 #endif // SD_DLGCTRLS_HXX
-
