@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:20:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,21 +365,7 @@ SfxPrintProgress::~SfxPrintProgress()
 
     // EndPrint-Notification an Frame
     //pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(FALSE);
-    if ( pImp->pViewShell->GotOwnerShip_Impl() )
-    {
-        com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xModel( pImp->pViewShell->GetObjectShell()->GetModel(), com::sun::star::uno::UNO_QUERY );
-        if ( xModel.is() )
-        {
-            try
-            {
-                xModel->close( sal_True );
-            }
-            catch ( com::sun::star::util::CloseVetoException& )
-            {
-            }
-        }
-    }
-
+    pImp->pViewShell->CheckOwnerShip_Impl();
     delete pImp;
 }
 
