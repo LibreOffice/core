@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:04:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _NUMRULE_HXX
 #define _NUMRULE_HXX
 
-
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
 #endif
@@ -74,7 +73,13 @@
 #ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
 #endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
+#endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -87,11 +92,9 @@
 #ifndef _SWERROR_H
 #include <error.h>          // Fuer die inline-ASSERTs
 #endif
-#ifndef _SVX_NUMITEM_HXX
-#include <svx/numitem.hxx>
-#endif
-
+#ifndef _SW_BIT_ARRAY_HXX
 #include <SwBitArray.hxx> // #i27615#
+#endif
 
 class Font;
 class SvxBrushItem;
@@ -114,12 +117,13 @@ void SetNoNum( BYTE * nLvl, BOOL nVal = TRUE );
 
 const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
 
-class SwNumFmt : public SvxNumberFormat, public SwClient
+class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
 {
     SwFmtVertOrient* pVertOrient;
 
-    void UpdateNumNodes( SwDoc* pDoc );
-    virtual void NotifyGraphicArrived();
+    SW_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
+    SW_DLLPRIVATE virtual void NotifyGraphicArrived();
+
 public:
     SwNumFmt();
     SwNumFmt( const SwNumFmt& );
@@ -151,7 +155,7 @@ public:
 };
 
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
-class SwNumRule
+class SW_DLLPUBLIC SwNumRule
 {
     friend void _FinitCore();
 
@@ -178,10 +182,14 @@ class SwNumRule
     BOOL bContinusNum : 1;  // Fortlaufende Numerierung - ohne Ebenen
     BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
 
-    static void _MakeDefBulletFont();
+    SW_DLLPRIVATE static void _MakeDefBulletFont();
+
+    // forbidden and not implemented.
+    SwNumRule();
 
 public:
-    SwNumRule( const String& rNm, SwNumRuleType = NUM_RULE,
+    // single argument constructors shall be explicit.
+    explicit SwNumRule( const String& rNm, SwNumRuleType = NUM_RULE,
                 BOOL bAutoFlg = TRUE );
 
     SwNumRule( const SwNumRule& );
@@ -296,7 +304,7 @@ public:
 };
 
 
-class SwNodeNum
+class SW_DLLPUBLIC SwNodeNum
 {
     USHORT nLevelVal[ MAXLEVEL ];       // Nummern aller Levels
     USHORT nSetValue;                   // vorgegeben Nummer
