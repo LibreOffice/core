@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara_PreviewCell.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-01-05 18:43:36 $
+ *  last change:$Date: 2004-03-19 15:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,12 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
+        //AccessibilityTools.printAccessibleTree(log,xRoot);
+        AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL,true);
 
         xRoot = AccessibilityTools.SearchedAccessible;
 
-        AccessibilityTools.printAccessibleTree(log,xRoot);
+        //AccessibilityTools.printAccessibleTree(log,xRoot);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PARAGRAPH);
 
