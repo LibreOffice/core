@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-23 13:16:01 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 18:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3509,6 +3509,20 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     if ( aProp >>= xSupplier )
                         rSet.Put( SfxBoolItem( nWhich, xSupplier.is() ) );
                     else
+                        rSet.DisableItem( nWhich );
+                    break;
+                }
+
+                case SID_STOP_RECORDING :
+                {
+                    ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
+                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                            GetFrame()->GetFrameInterface(),
+                            com::sun::star::uno::UNO_QUERY);
+
+                    com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
+                    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+                    if ( !(aProp >>= xSupplier) || !xSupplier.is() )
                         rSet.DisableItem( nWhich );
                     break;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 15:08:45 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 18:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,13 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     sal_Bool bReadOnlyTest = sal_False;
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
+        if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        {
+            ::rtl::OUString sTemp;
+            rArgs[nProperty].Value >>= sTemp;
+            rURL = sTemp;
+        }
+        else if( !rURL.Len() && rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
         {
             ::rtl::OUString sTemp;
             rArgs[nProperty].Value >>= sTemp;
@@ -453,7 +459,12 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
-        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
+        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        {
+            lDescriptor[nProperty].Value >>= sTemp;
+            aURL = sTemp;
+        }
+        else if( !aURL.Len() && lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
