@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,13 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
         pOpt->SetReadonly( TRUE );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
-    if( GetPrt( TRUE ^ pDoc->IsBrowseMode() ) )
+
+    // Setup the printer. This has to be done even if we use the virtual
+    // device for formatting, because the default page format is obtained
+    // from the printer
+    if( GetPrt( ! pDoc->IsBrowseMode() ) )
         InitPrt( GetPrt() );
+
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - after InitPrt" );
 
     if( GetWin() )
@@ -211,7 +216,6 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
                             : (OutputDevice*)rDocument.GetPrt(TRUE)),
-    pRef( 0 ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
     pSfxViewShell( 0 ),
@@ -267,7 +271,6 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
                             : (OutputDevice*)rShell.GetDoc()->GetPrt(TRUE)),
-    pRef( 0 ),
     pOpt( 0 ),
     pAccOptions( new SwAccessibilityOptions ),
     nStartAction( 0 ),
@@ -379,7 +382,6 @@ ViewShell::~ViewShell()
     if ( pDoc )
         GetLayout()->DeRegisterShell( this );
 
-    delete pRef;
     delete pAccOptions;
 }
 
