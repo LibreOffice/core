@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:18:56 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@ namespace dbaui
         void SetAutoIncrement(sal_Bool _bAuto)                              { m_bIsAutoIncrement = _bAuto; }
         void SetPrimaryKey(sal_Bool _bPKey)                                 { m_bIsPrimaryKey = _bPKey; }
         void SetCurrency(sal_Bool _bIsCurrency)                             { m_bIsCurrency = _bIsCurrency; }
+
+        void FillFromTypeInfo(const OTypeInfo* _pType,sal_Bool _bForce,sal_Bool _bReset);
 
         ::rtl::OUString             GetName()               const { return m_sName; }
         ::rtl::OUString             GetDescription()        const { return m_sDescription; }
