@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:13:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1968,7 +1968,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_PAGE )
             {
-                BOOL bLayer = pDrawViewSh->GetLayerMode();
+                BOOL bLayer = pDrawViewSh->IsLayerModeActive();
 
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );
@@ -2665,7 +2665,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& aName )
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_MASTERPAGE )
             {
-                BOOL bLayer = pDrawViewSh->GetLayerMode();
+                BOOL bLayer = pDrawViewSh->IsLayerModeActive();
 
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );
