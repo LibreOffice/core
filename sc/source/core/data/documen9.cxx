@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:43:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,17 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -88,7 +99,7 @@
 #include <sfx2/printer.hxx>
 #include <svtools/saveopt.hxx>
 #include <svtools/pathoptions.hxx>
-#include <so3/ipobj.hxx>
+//REMOVE    #include <so3/ipobj.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 
@@ -106,6 +117,8 @@
 #include "detfunc.hxx"      // for UpdateAllComments
 #include "editutil.hxx"
 
+
+using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
@@ -205,11 +218,22 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 
                 if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
                 {
-                    //  test if it's a chart with HasID, because GetChartData always loads the DLL
-                    SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
-                    if ( aIPObj.Is() && SotExchange::IsChart( *aIPObj->GetSvFactory() ) )
+                    uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
+                    uno::Reference< embed::XClassifiedObject > xClassified( xIPObj, uno::UNO_QUERY );
+                    SvGlobalName aObjectClassName;
+                    if ( xClassified.is() )
                     {
-                        SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                        try {
+                            aObjectClassName = SvGlobalName( xClassified->getClassID() );
+                        } catch( uno::Exception& )
+                        {
+                            // TODO: handle error?
+                        }
+                    }
+
+                    if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
+                    {
+                        SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
                         if ( pChartData )
                         {
                             ScChartArray aArray( this, *pChartData );   // parses range description
@@ -227,7 +251,8 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 
                                 SchMemChart* pMemChart = aArray.CreateMemChart();
                                 ScChartArray::CopySettings( *pMemChart, *pChartData );
-                                SchDLL::Update( aIPObj, pMemChart );
+                                SchDLL::Update( xIPObj, pMemChart );
+                                ((SdrOle2Obj*)pNewObject)->GetNewReplacement();
                                 delete pMemChart;
                             }
                         }
