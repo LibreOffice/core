@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-05-17 12:06:08 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 17:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,12 +382,41 @@ String ScCompiler::MakeColStr( USHORT nCol )
     }
 }
 
+void ScCompiler::MakeColStr( rtl::OUStringBuffer& rBuffer, USHORT nCol )
+{
+    if ( nCol > MAXCOL )
+        rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+    else
+    {
+        if (nCol < 26)
+            rBuffer.append(  sal_Unicode('A' + (sal_uChar) nCol));
+        else
+        {
+            sal_Unicode* pCol = new sal_Unicode[2];
+            USHORT nLoCol = nCol % 26;
+            USHORT nHiCol = (nCol / 26) - 1;
+            pCol[0] = 'A' + (sal_uChar)nHiCol;
+            pCol[1] = 'A' + (sal_uChar)nLoCol;
+            // terminating null character is set in AllocBuffer
+            rBuffer.append(pCol, 2);
+        }
+    }
+}
+
 String ScCompiler::MakeRowStr( USHORT nRow )
 {
     if ( nRow > MAXROW )
         return ScGlobal::GetRscString(STR_NO_REF_TABLE);
     else
         return String::CreateFromInt32( nRow + 1 );
+}
+
+void ScCompiler::MakeRowStr( rtl::OUStringBuffer& rBuffer, USHORT nRow )
+{
+    if ( nRow > MAXROW )
+        rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+    else
+        rBuffer.append(sal_Int32(nRow + 1));
 }
 
 String ScCompiler::MakeTabStr( USHORT nTab, String& aDoc )
@@ -521,6 +550,90 @@ String ScCompiler::MakeRefStr( ComplRefData& rRef, BOOL bSingleRef )
     if (bCompileXML)
         aNewRef += ']';
     return aNewRef;
+}
+
+void ScCompiler::MakeRefStr( rtl::OUStringBuffer& rBuffer, ComplRefData& rRef, BOOL bSingleRef )
+{
+    if (bCompileXML)
+        rBuffer.append(sal_Unicode('['));
+    ComplRefData aRef( rRef );
+    // falls abs/rel nicht separat: Relativ- in Abs-Referenzen wandeln!
+//  AdjustReference( aRef.Ref1 );
+//  if( !bSingleRef )
+//      AdjustReference( aRef.Ref2 );
+    aRef.Ref1.CalcAbsIfRel( aPos );
+    if( !bSingleRef )
+        aRef.Ref2.CalcAbsIfRel( aPos );
+    if( aRef.Ref1.IsFlag3D() )
+    {
+        if (aRef.Ref1.IsTabDeleted())
+        {
+            if (!aRef.Ref1.IsTabRel())
+                rBuffer.append(sal_Unicode('$'));
+            rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+            rBuffer.append(sal_Unicode('.'));
+        }
+        else
+        {
+            String aDoc;
+            String aRefStr( MakeTabStr( aRef.Ref1.nTab, aDoc ) );
+            rBuffer.append(aDoc);
+            if (!aRef.Ref1.IsTabRel()) rBuffer.append(sal_Unicode('$'));
+            rBuffer.append(aRefStr);
+        }
+    }
+    else if (bCompileXML)
+        rBuffer.append(sal_Unicode('.'));
+    if (!aRef.Ref1.IsColRel())
+        rBuffer.append(sal_Unicode('$'));
+    if ( aRef.Ref1.IsColDeleted() )
+        rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+    else
+        MakeColStr(rBuffer, aRef.Ref1.nCol );
+    if (!aRef.Ref1.IsRowRel())
+        rBuffer.append(sal_Unicode('$'));
+    if ( aRef.Ref1.IsRowDeleted() )
+        rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+    else
+        MakeRowStr( rBuffer, aRef.Ref1.nRow );
+    if (!bSingleRef)
+    {
+        rBuffer.append(sal_Unicode(':'));
+        if (aRef.Ref2.IsFlag3D() || aRef.Ref2.nTab != aRef.Ref1.nTab)
+        {
+            if (aRef.Ref2.IsTabDeleted())
+            {
+                if (!aRef.Ref2.IsTabRel())
+                    rBuffer.append(sal_Unicode('$'));
+                rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+                rBuffer.append(sal_Unicode('.'));
+            }
+            else
+            {
+                String aDoc;
+                String aRefStr( MakeTabStr( aRef.Ref1.nTab, aDoc ) );
+                rBuffer.append(aDoc);
+                if (!aRef.Ref1.IsTabRel()) rBuffer.append(sal_Unicode('$'));
+                rBuffer.append(aRefStr);
+            }
+        }
+        else if (bCompileXML)
+            rBuffer.append(sal_Unicode('.'));
+        if (!aRef.Ref2.IsColRel())
+            rBuffer.append(sal_Unicode('$'));
+        if ( aRef.Ref2.IsColDeleted() )
+            rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+        else
+            MakeColStr( rBuffer, aRef.Ref2.nCol );
+        if (!aRef.Ref2.IsRowRel())
+            rBuffer.append(sal_Unicode('$'));
+        if ( aRef.Ref2.IsRowDeleted() )
+            rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+        else
+            MakeRowStr( rBuffer, aRef.Ref2.nRow );
+    }
+    if (bCompileXML)
+        rBuffer.append(sal_Unicode(']'));
 }
 
 //---------------------------------------------------------------------------
@@ -3498,6 +3611,173 @@ ScToken* ScCompiler::CreateStringFromToken( String& rFormula, ScToken* pToken,
     return pToken;
 }
 
+ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToken* pToken,
+        BOOL bAllowArrAdvance )
+{
+    BOOL bNext = TRUE;
+    BOOL bSpaces = FALSE;
+    ScToken* t = pToken;
+    OpCode eOp = t->GetOpCode();
+    if( eOp >= ocAnd && eOp <= ocOr )
+    {
+        // AND, OR infix?
+        if ( bAllowArrAdvance )
+            t = pArr->Next();
+        else
+            t = pArr->PeekNext();
+        bNext = FALSE;
+        bSpaces = ( !t || t->GetOpCode() != ocOpen );
+    }
+    if( bSpaces )
+        rBuffer.append(sal_Unicode(' '));
+
+    if( eOp == ocSpaces )
+//      rFormula.Expand( rFormula.Len() + t->GetByte() );
+    {}
+    else if( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
+        rBuffer.appendAscii( pInternal[ eOp - ocInternalBegin ] );
+    else if( (USHORT) eOp < nAnzStrings)        // Keyword:
+        rBuffer.append(pSymbolTable[eOp]);
+    else
+    {
+        DBG_ERROR("Unbekannter OpCode");
+        rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+    }
+    if( bNext ) switch( t->GetType() )
+    {
+        case svDouble:
+        {
+            String aStr;
+            if ( pSymbolTable == pSymbolTableEnglish )
+            {   // Don't go via number formatter, slows down XML export
+                // significantly because on every formula the number formatter
+                // has to switch to/from English/native language.
+                SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
+                    '.', TRUE );
+            }
+            else
+            {
+                SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
+                    ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                    TRUE );
+            }
+            rBuffer.append(aStr);
+        }
+        break;
+        case svString:
+            if( eOp == ocBad )
+                rBuffer.append(t->GetString());
+            else
+            {
+                if (bImportXML)
+                    rBuffer.append(t->GetString());
+                else
+                {
+                    rBuffer.append(sal_Unicode('"'));
+                    if ( ScGlobal::UnicodeStrChr( t->GetString().GetBuffer(), '"' ) == NULL )
+                        rBuffer.append(t->GetString());
+                    else
+                    {
+                        String aStr( t->GetString() );
+                        xub_StrLen nPos = 0;
+                        while ( (nPos = aStr.Search( '"', nPos)) != STRING_NOTFOUND )
+                        {
+                            aStr.Insert( '"', nPos );
+                            nPos += 2;
+                        }
+                        rBuffer.append(aStr);
+                    }
+                    rBuffer.append(sal_Unicode('"'));
+                }
+            }
+            break;
+        case svSingleRef:
+        {
+            SingleRefData& rRef = t->GetSingleRef();
+            ComplRefData aRef;
+            aRef.Ref1 = aRef.Ref2 = rRef;
+            if ( eOp == ocColRowName )
+            {
+                rRef.CalcAbsIfRel( aPos );
+                if ( pDoc->HasStringData( rRef.nCol, rRef.nRow, rRef.nTab ) )
+                {
+                    String aStr;
+                    pDoc->GetString( rRef.nCol, rRef.nRow, rRef.nTab, aStr );
+                    EnQuote( aStr );
+                    rBuffer.append(aStr);
+                }
+                else
+                {
+                    rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                    MakeRefStr( rBuffer, aRef, TRUE );
+                }
+            }
+            else
+                MakeRefStr( rBuffer, aRef, TRUE );
+        }
+            break;
+        case svDoubleRef:
+            MakeRefStr( rBuffer, t->GetDoubleRef(), FALSE );
+            break;
+        case svIndex:
+        {
+            String aStr;
+            switch ( eOp )
+            {
+                case ocName:
+                {
+                    ScRangeData* pData = pDoc->GetRangeName()->FindIndex(t->GetIndex());
+                    if (pData)
+                    {
+                        if (pData->HasType(RT_SHARED))
+                            pData->UpdateSymbol( aStr, aPos,
+                                        pSymbolTable == pSymbolTableEnglish,
+                                        bCompileXML );
+                        else
+                            pData->GetName(aStr);
+                    }
+                }
+                break;
+                case ocDBArea:
+                {
+                    ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex(t->GetIndex());
+                    if (pDBData)
+                        pDBData->GetName(aStr);
+                }
+                break;
+            }
+            if ( !aStr.Len() )
+                rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+            else
+                rBuffer.append(aStr);
+            break;
+        }
+        case svExternal:
+        {
+            //  show translated name of StarOne AddIns
+            String aAddIn( t->GetExternal() );
+            if ( pSymbolTable != pSymbolTableEnglish )
+                ScGlobal::GetAddInCollection()->LocalizeString( aAddIn );
+            rBuffer.append(aAddIn);
+        }
+            break;
+        case svByte:
+        case svJump:
+        case svMissing:
+            break;      // Opcodes
+        default:
+            DBG_ERROR("ScCompiler:: GetStringFromToken errUnknownVariable");
+    }                                           // of switch
+    if( bSpaces )
+        rBuffer.append(sal_Unicode(' '));
+    if ( bAllowArrAdvance )
+    {
+        if( bNext )
+            t = pArr->Next();
+        return t;
+    }
+    return pToken;
+}
 
 void ScCompiler::CreateStringFromTokenArray( String& rFormula )
 {
@@ -3511,6 +3791,17 @@ void ScCompiler::CreateStringFromTokenArray( String& rFormula )
         t = CreateStringFromToken( rFormula, t, TRUE );
 }
 
+void ScCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
+{
+    rBuffer.setLength(0);
+    if( !pArr->GetLen() )
+        return;
+    if ( pArr->IsRecalcModeForced() )
+        rBuffer.append(sal_Unicode('='));
+    ScToken* t = pArr->First();
+    while( t )
+        t = CreateStringFromToken( rBuffer, t, TRUE );
+}
 
 BOOL ScCompiler::EnQuote( String& rStr )
 {

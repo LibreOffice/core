@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:29:35 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 17:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML ) cons
                 pCell = NULL;
             if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                ((ScFormulaCell*)pCell)->GetEnglishFormula(rFormula);
+                ((ScFormulaCell*)pCell)->GetEnglishFormula(rFormula, bCompileXML);
                 return;
             }
             else
@@ -322,6 +322,65 @@ void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML ) cons
     {
         rFormula.Insert('{', 0);
         rFormula += '}';
+    }
+}
+
+void ScFormulaCell::GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML ) const
+{
+    //! mit GetFormula zusammenfassen !!!
+
+    if( pCode->GetError() && !pCode->GetLen() )
+    {
+        rBuffer = rtl::OUStringBuffer(ScGlobal::GetErrorString( pCode->GetError() )); return;
+    }
+    else if( cMatrixFlag == MM_REFERENCE )
+    {
+        // Referenz auf eine andere Zelle, die eine Matrixformel enthaelt
+        pCode->Reset();
+        ScToken* p = pCode->GetNextReferenceRPN();
+        if( p )
+        {
+            ScBaseCell* pCell;
+            SingleRefData& rRef = p->GetSingleRef();
+            rRef.CalcAbsIfRel( aPos );
+            if ( rRef.Valid() )
+                pCell = pDocument->GetCell( ScAddress( rRef.nCol,
+                    rRef.nRow, rRef.nTab ) );
+            else
+                pCell = NULL;
+            if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+            {
+                ((ScFormulaCell*)pCell)->GetEnglishFormula(rBuffer, bCompileXML);
+                return;
+            }
+            else
+            {
+                ScCompiler aComp( pDocument, aPos, *pCode );
+                aComp.SetCompileEnglish( TRUE );
+                aComp.SetCompileXML( bCompileXML );
+                aComp.CreateStringFromTokenArray( rBuffer );
+            }
+        }
+        else
+        {
+            DBG_ERROR("ScFormulaCell::GetEnglishFormula: Keine Matrix");
+        }
+    }
+    else
+    {
+        ScCompiler aComp( pDocument, aPos, *pCode );
+        aComp.SetCompileEnglish( TRUE );
+        aComp.SetCompileXML( bCompileXML );
+        aComp.CreateStringFromTokenArray( rBuffer );
+    }
+
+    sal_Unicode ch('=');
+    rBuffer.insert( 0, &ch, 1 );
+    if( cMatrixFlag )
+    {
+        sal_Unicode ch2('{');
+        rBuffer.insert(0, &ch2, 1);
+        rBuffer.append(sal_Unicode('}'));
     }
 }
 

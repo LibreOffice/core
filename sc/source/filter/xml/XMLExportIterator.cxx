@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 16:14:19 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 17:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,18 +648,15 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
     rMyCell.bIsMatrixCovered = sal_False;
     rMyCell.bIsMatrixBase = sal_False;
 
-    if( xCellRange.is() )
-    {
-        sal_Bool bIsMatrixBase(sal_False);
-        rMyCell.nType = rMyCell.xCell->getType();
-        if (rMyCell.nType == table::CellContentType_FORMULA)
-            if( rExport.IsMatrix( xCellRange, xTable, rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
-                    rMyCell.aMatrixRange, bIsMatrixBase ) )
-            {
-                rMyCell.bIsMatrixBase = bIsMatrixBase;
-                rMyCell.bIsMatrixCovered = !bIsMatrixBase;
-            }
-    }
+    sal_Bool bIsMatrixBase(sal_False);
+    rMyCell.nType = rMyCell.xCell->getType();
+    if (rMyCell.nType == table::CellContentType_FORMULA)
+        if( rExport.IsMatrix( rMyCell.xCell, xTable, rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
+                rMyCell.aMatrixRange, bIsMatrixBase ) )
+        {
+            rMyCell.bIsMatrixBase = bIsMatrixBase;
+            rMyCell.bIsMatrixCovered = !bIsMatrixBase;
+        }
 }
 
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 17:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #endif
 #ifndef SC_COMPILER_HXX
 #include "compiler.hxx"
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #define USE_MEMPOOL
@@ -313,6 +317,7 @@ public:
 
     void            GetFormula( String& rFormula ) const;
     void            GetEnglishFormula( String& rFormula, BOOL bCompileXML = FALSE ) const;
+    void            GetEnglishFormula( rtl::OUStringBuffer& rBuffer, BOOL bCompileXML = FALSE ) const;
 
     void            Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-05-29 18:39:00 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 17:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include <unotools/charclass.hxx>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 //-----------------------------------------------
 
@@ -519,9 +522,12 @@ private:
     OpCode Expression();
 
     String MakeColStr( USHORT nCol );
+    void MakeColStr( rtl::OUStringBuffer& rBuffer, USHORT nCol );
     String MakeRowStr( USHORT nRow );
+    void MakeRowStr( rtl::OUStringBuffer& rBuffer, USHORT nRow );
     String MakeTabStr( USHORT nTab, String& aDoc );
     String MakeRefStr( ComplRefData& rRefData, BOOL bSingleRef );
+    void MakeRefStr( rtl::OUStringBuffer& rBuffer, ComplRefData& rRefData, BOOL bSingleRef );
 
     void SetError(USHORT nError);
     xub_StrLen NextSymbol();
@@ -573,7 +579,10 @@ public:
 
     ScToken* CreateStringFromToken( String& rFormula, ScToken* pToken,
                                     BOOL bAllowArrAdvance = FALSE );
+    ScToken* CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToken* pToken,
+                                    BOOL bAllowArrAdvance = FALSE );
     void CreateStringFromTokenArray( String& rFormula );
+    void CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer );
 
     void MoveRelWrap();
     static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,

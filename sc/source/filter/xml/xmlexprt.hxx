@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 17:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,10 @@ public:
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
     sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
+        const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
+        const sal_Int32 nCol, const sal_Int32 nRow,
+        com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
+    sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
         const sal_Int32 nCol, const sal_Int32 nRow,
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;

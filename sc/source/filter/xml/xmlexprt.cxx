@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-15 11:44:30 $
+ *  last change: $Author: sab $ $Date: 2001-06-15 17:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2041,6 +2041,51 @@ sal_Bool ScXMLExport::IsMatrix (const uno::Reference <table::XCellRange>& xCellR
     return sal_False;
 }
 
+sal_Bool ScXMLExport::IsMatrix (const uno::Reference <table::XCell>& xCell,
+                            const uno::Reference <sheet::XSpreadsheet>& xTable,
+                            const sal_Int32 nCol, const sal_Int32 nRow,
+                            table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const
+{
+    bIsFirst = sal_False;
+    uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange (xCell, uno::UNO_QUERY);
+    if (xArrayFormulaRange.is())
+    {
+        rtl::OUString sArrayFormula = xArrayFormulaRange->getArrayFormula();
+        if (sArrayFormula.getLength())
+        {
+            uno::Reference<sheet::XSheetCellRange> xMatrixSheetCellRange (xCell, uno::UNO_QUERY);
+            if (xMatrixSheetCellRange.is())
+            {
+                uno::Reference<sheet::XSheetCellCursor> xMatrixSheetCursor = xTable->createCursorByRange(xMatrixSheetCellRange);
+                if (xMatrixSheetCursor.is())
+                {
+                    xMatrixSheetCursor->collapseToCurrentArray();
+                    uno::Reference<sheet::XCellRangeAddressable> xMatrixCellAddress (xMatrixSheetCursor, uno::UNO_QUERY);
+                    if (xMatrixCellAddress.is())
+                    {
+                        aCellAddress = xMatrixCellAddress->getRangeAddress();
+                        if ((aCellAddress.StartColumn == nCol && aCellAddress.StartRow == nRow) &&
+                            (aCellAddress.EndColumn > nCol || aCellAddress.EndRow > nRow))
+                        {
+                            bIsFirst = sal_True;
+                            return sal_True;
+                        }
+                        else if (aCellAddress.StartColumn != nCol || aCellAddress.StartRow != nRow ||
+                            aCellAddress.EndColumn != nCol || aCellAddress.EndRow != nRow)
+                            return sal_True;
+                        else
+                        {
+                            bIsFirst = sal_True;
+                            return sal_True;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return sal_False;
+}
+
 sal_Bool ScXMLExport::GetCellText (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
         rtl::OUString& sOUTemp) const
 {
@@ -2128,7 +2173,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         break;
     case table::CellContentType_FORMULA :
         {
-            String sFormula;
+            rtl::OUStringBuffer sFormula;
             ScCellObj* pCellObj = (ScCellObj*) ScCellRangesBase::getImplementation( aCell.xCell );
             if ( pCellObj )
             {
@@ -2139,7 +2184,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                     if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
                     {
                         pFormulaCell->GetEnglishFormula(sFormula, sal_True);
-                        rtl::OUString sOUFormula(sFormula);
+                        rtl::OUString sOUFormula(sFormula.makeStringAndClear());
                         if (!bIsMatrix)
                             AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sOUFormula);
                         else
