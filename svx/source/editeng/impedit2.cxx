@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
+ *  last change: $Author: mt $ $Date: 2001-06-13 10:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,12 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     {
         pView->DeleteSelected();
         delete mpIMEInfos;
-        mpIMEInfos = new ImplIMEInfos( pView->GetImpEditView()->GetEditSelection().Max() );
+        EditPaM aPaM = pView->GetImpEditView()->GetEditSelection().Max();
+        String aOldTextAfterStartPos = aPaM.GetNode()->Copy( aPaM.GetIndex() );
+        USHORT nMax = aOldTextAfterStartPos.Search( CH_FEATURE );
+        if ( nMax != STRING_NOTFOUND )  // don't overwrite features!
+            aOldTextAfterStartPos.Erase( nMax );
+        mpIMEInfos = new ImplIMEInfos( aPaM, aOldTextAfterStartPos );
         mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
@@ -555,6 +560,35 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 aSel = DeleteSelected( aSel );
                 aSel = ImpInsertText( aSel, pData->GetText() );
 
+                if ( mpIMEInfos->bWasCursorOverwrite )
+                {
+                    USHORT nOldIMETextLen = mpIMEInfos->nLen;
+                    USHORT nNewIMETextLen = pData->GetText().Len();
+
+                    if ( ( nOldIMETextLen > nNewIMETextLen ) &&
+                         ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                    {
+                        // restore old characters
+                        USHORT nRestore = nOldIMETextLen - nNewIMETextLen;
+                        EditPaM aPaM( mpIMEInfos->aPos );
+                        aPaM.GetIndex() += nNewIMETextLen;
+                        ImpInsertText( aPaM, mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
+                    }
+                    else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
+                              ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                    {
+                        // overwrite
+                        USHORT nOverwrite = nNewIMETextLen - nOldIMETextLen;
+                        if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.Len() )
+                            nOverwrite = mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
+                        DBG_ASSERT( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
+                        EditPaM aPaM( mpIMEInfos->aPos );
+                        aPaM.GetIndex() += nNewIMETextLen;
+                        EditSelection aSel( aPaM );
+                        aSel.Max().GetIndex() += nOverwrite;
+                        DeleteSelected( aSel );
+                    }
+                }
                 if ( pData->GetTextAttr() )
                 {
                     mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );

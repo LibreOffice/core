@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-31 11:32:00 $
+ *  last change: $Author: mt $ $Date: 2001-06-13 10:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,13 +170,14 @@ struct DragAndDropInfo
 
 struct ImplIMEInfos
 {
+    String      aOldTextAfterStartPos;
     sal_uInt16* pAttribs;
     EditPaM     aPos;
     sal_uInt16  nLen;
     sal_Bool    bCursor;
     sal_Bool    bWasCursorOverwrite;
 
-            ImplIMEInfos( const EditPaM& rPos );
+            ImplIMEInfos( const EditPaM& rPos, const String& rOldTextAfterStartPos );
             ~ImplIMEInfos();
 
     void    CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
