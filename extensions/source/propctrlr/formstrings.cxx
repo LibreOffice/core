@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:28:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,4 @@
 #include "formstrings.hxx"
 #undef PCR_IMPLEMENT_STRINGS
 #endif
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 08.01.01 14:19:51  fs
- ************************************************************************/
 

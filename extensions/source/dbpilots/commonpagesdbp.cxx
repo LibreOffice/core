@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 10:49:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,23 +442,4 @@ namespace dbp
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/04/03 12:43:12  fs
- *  #85223# share the connection with the wizard as a whole
- *
- *  Revision 1.3  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:21:36  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 11:03:33  fs
- ************************************************************************/
 

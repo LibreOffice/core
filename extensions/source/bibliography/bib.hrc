@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-25 09:45:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef BIB_HRC
 #define BIB_HRC
 
-#include <svtools/solar.hrc>
+#include <extensio.hrc>
 
 #ifndef RID_BIB_START
 #define RID_BIB_START                   RID_EXTENSIONS_START
@@ -139,12 +139,5 @@
 #define ST_CUSTOM4                  (RID_BIB_STRING +  35)
 #define ST_CUSTOM5                  (RID_BIB_STRING +  36)
 
-// HelpIDs *** nicht bestaetigt ***
-#ifndef HID_BIB_START
-#define HID_BIB_START                   5000
-#define HID_DLG_MAPPING                 (HID_BIB_START + 1)
-#define HID_DLG_DBCHANGE                (HID_BIB_START + 2)
-#define HID_SELECTION_TLB               (HID_BIB_START + 3)
-#endif
 
 #endif

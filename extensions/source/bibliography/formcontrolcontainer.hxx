@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontrolcontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:33:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,4 @@ namespace bib
 //.........................................................................
 
 #endif // EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 18.10.01 18:39:10  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-17 05:44:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,11 +413,18 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
             rtl::OUString aURL = pDatMan->CreateDBChangeDialog(pParent);
             if(aURL.getLength())
             {
-                uno::Sequence< beans::PropertyValue >   aArgs(2);
-                beans::PropertyValue* pProps = aArgs.getArray();
-                pProps[0].Value <<= rtl::OUString();
-                pProps[1].Value <<= aURL;
-                ChangeDataSource(aArgs);
+                try
+                {
+                    uno::Sequence< beans::PropertyValue >   aArgs(2);
+                    beans::PropertyValue* pProps = aArgs.getArray();
+                    pProps[0].Value <<= rtl::OUString();
+                    pProps[1].Value <<= aURL;
+                    ChangeDataSource(aArgs);
+                }
+                catch(const Exception&)
+                {
+                    DBG_ERROR("Exception catched while changing the data source");
+                }
             }
         }
         else if(aCommand.EqualsAscii("Bib/autoFilter"))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-16 22:41:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,9 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ chinese_traditional ] = "è³‡æ–™";
         Text[ turkish ] = "Data";
         Text[ arabic ] = "ÇáÈíÇäÇÊ";
-        Text[ catalan ] = "Datos";
+        Text[ catalan ] = "Dades";
         Text[ finnish ] = "Tiedot";
+        Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     FixedText FT_EXPLANATION
     {
@@ -112,24 +113,25 @@ TabPage RID_PAGE_TABLESELECTION
             "Please note that the settings made on this page will take effect immediately upon leaving the page.";
         Text [ english_us ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ portuguese ] = "O formulário do controlo ainda não está ligado (ou então só parcialmente) a nenhuma fonte de dados.\n\nSeleccione uma fonte de dados e uma tabela.\n\n\nNão esqueça que a configuração do formulário efectuada nesta página passa a estar activa logo que sair dela.";
-        Text[ russian ] = "Ôîğìóëÿğ, ê êîòîğîìó îòíîñèòñÿ ıëåìåíò óïğàâëåíèÿ, â íàñòîÿùèé ìîìåíò íå ñâÿçàí (èëè íåïîëíîñòüş ñâÿçàí) ñ èñõîäíûìè äàííûìè. \n\nÂûáåğèòå, ïîæàëóéñòà, èñõîäíûå äàííûå èëè òàáëèöó.\n\n\nÎáğàòèòå âíèìàíèå íà òî, ÷òî èçìåíåíèÿ, âûïîëíåííûå íà ıòîé ñòğàíèöå, âñòóïàşò â ñèëó ñğàçó æå ïîñëå óõîäà ñ ıòîé ñòğàíèöû.";
+        Text[ russian ] = "Ôîğìà, ê êîòîğîé îòíîñèòñÿ ıëåìåíò óïğàâëåíèÿ, â íàñòîÿùèé ìîìåíò íå ñâÿçàíà (èëè íå ïîëíîñòüş ñâÿçàíà) ñ èñõîäíûìè äàííûìè áàçû. \n\nÂûáåğèòå èñòî÷íèê äàííûõ èëè òàáëèöó.\n\n\nÎáğàòèòå âíèìàíèå íà òî, ÷òî èçìåíåíèÿ, âûïîëíåííûå íà ıòîé ñòğàíèöå, âñòóïàşò â ñèëó ñğàçó æå ïîñëå òîãî, êàê âû ïîêèíåòå ıòó ñòğàíèöó.";
         Text[ greek ] = "Äåí õğÜñ÷åé óıíäåóç (Ş äåí İ÷åé ïëïêëçñùèåß áêüìç ç óıíäåóç) ôçò öüñìáò óôçí ïğïßá áíŞêåé ôï ğåäßï åëİã÷ïõ ìå ìéá ğñïİëåõóç äåäïìİíùí.\n\nĞáñáêáëş åğéëİîôå ìéá ğñïİëåõóç äåäïìİíùí êáé İíáí ğßíáêá.\n\n\nĞñïóï÷Ş: Ïé ñõèìßóåéò ôéò ïğïßåò åğéëİãåôå óå áõôŞ ôç óåëßäá ãéá ôçí öüñìá èá éó÷ıóïõí áìİóùò ìåôÜ ôï êëåßóéìï áõôŞò ôçò óåëßäáò.";
-        Text[ dutch ] = "Het formulier dat behoort tot het controleveld is op het ogenblik nog niet (of nog niet compleet) verbonden met een gegevensbron.\n\nKies een gegevensbron en een tabel.\n\n\nAttentie: de opties die u op deze pagina instelt treden onmiddellijk in werking bij het verlaten van de pagina.";
+        Text[ dutch ] = "Het formulier dat tot het controleveld behoort, is op het ogenblik nog niet (of nog niet volledig) verbonden met een gegevensbron.\n\nKies een gegevensbron en een tabel.\n\n\nLet op: de opties die u op deze pagina instelt, treden onmiddellijk in werking bij het verlaten van de pagina.";
         Text[ french ] = "Le formulaire, auquel appartient le contrôle, n'est actuellement pas (du moins pas complètement) connecté à une source de données.\n\nSélectionnez une source de données, ainsi qu'une table.\n\n\nEn outre, notez que les paramètres spécifiés ici pour le formulaire seront immédiatement pris en compte dès que vous quitterez cette page.";
         Text[ spanish ] = "De momento, el formulario al que pertenece el campo de control no está (quizás no totalmente) conectado a una fuente de datos.\n\nSeleccione una fuente de datos y una tabla.\n\n\nNo olvide que la configuración que realice en este registro tendrá validez inmediatamente después de que abandone el registro.";
         Text[ italian ] = "Il formulario a cui appartiene il campo di controllo non è ancora (oppure del tutto) collegato a una sorgente dati.\n\nSelezionate una sorgente dati e una tabella .\n\nVi preghiamo di osservare  che le impostazioni scelte per il formulario in questa pagina verranno applicate dopo aver chiuso la pagina stessa.";
-        Text[ danish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
-        Text[ swedish ] = "Formuläret som kontrollfältet tillhör är för närvarande ännu inte (eller inte fullständigt) knutet till en datakälla.\n\nVälj ut en datakälla och en tabell.\n\n\nObservera att inställningarna som du gör på den här sidan för formuläret får effekt direkt när du lämnar sidan.";
+        Text[ danish ] = "Den formular, som kontrolelementet hører til, er i øjeblikket endnu ikke (eller ikke helt) bundet til en datakilde.\n\nVælg en datakilde og en tabel.\n\n\nVær opmærksom på, at de indstillinger, du foretager for formularen på denne side, træder i kraft, så snart siden forlades.";
+        Text[ swedish ] = "Formuläret som kontrollfältet tillhör är för närvarande ännu inte (eller inte fullständigt) knutet till en datakälla.\n\nVälj ut en datakälla och en tabell.\n\n\nObservera att inställningarna som du gör för formuläret på den här sidan får effekt direkt när du lämnar sidan.";
         Text[ polish ] = "Formularz, który nale¿y do pola kontrolnego, nie jest na razie (lub nie jest ca³kowicie) pod³¹czony do Ÿród³a danych.\n\nNale¿y wybraæ Ÿród³o danych oraz tabelê.\n\n\nNale¿y uwzglêdniæ, ¿e ustawienia formularza dokonane na tej stronie, bêd¹ aktywne natychmiast od momentu opuszczenia strony.";
         Text[ portuguese_brazilian ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
-        Text[ japanese ] = "ï½ºï¾ï¾„ï¾›ï½°ï¾™ã«ã‚ã‚‹ï¾Œï½«ï½°ï¾‘ã¯ã€ç¾æ™‚ç‚¹ã§ã¾ã ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã«æ¥ç¶šã•ã‚Œã¦ã„ãªã„ã‹ã€å®Œå…¨ã«çµ‚ã‚ã£ã¦ã„ãªã„å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚\n\nï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã¨ï¾ƒï½°ï¾Œï¾ï¾™ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚\n\n\nã¾ãŸã€ã“ã®ï¾ï¾Ÿï½°ï½¼ï¾ã§ï¾Œï½«ï½°ï¾‘ã®è¨­å®šã‚’è¡Œã†ã¨ã€ï¾ï¾Ÿï½°ï½¼ï¾ã‚’é–‰ã˜ã‚‹ã¨ã™ãæœ‰åŠ¹ã«ãªã‚Šã¾ã™ã®ã§ã€ã”æ³¨æ„ãã ã•ã„ã€‚";
-        Text[ korean ] = "ì»¨íŠ¸ë¡¤ í•„ë“œì— ì†í•´ ìˆëŠ” ì–‘ì‹ì€, í˜„ì¬ ë°ì´í„° ì†ŒìŠ¤ì™€ ì•„ì§ ê´€ë ¨ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤ (ë˜ëŠ” ì™„ì „íˆ ê´€ë ¨ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤).\n\në°ì´í„° ì†ŒìŠ¤ì™€ í…Œì´ë¸”ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.\n\n\nì´ í˜ì´ì§€ì—ì„œ ë§Œë“¤ì–´ì§„ ì„¤ì •ì€ ì´ í˜ì´ì§€ë¥¼ ë‹«ì€ í›„ë¶€í„° ì¦‰ì‹œ ì ìš©ëœë‹¤ëŠ” ì ì— ìœ ì˜í•˜ì‹­ì‹œì˜¤.";
+        Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«ã‚ã‚‹ãƒ•ã‚©ãƒ¼ãƒ ã¯ã€ç¾æ™‚ç‚¹ã§ã¾ã ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã«æ¥ç¶šã•ã‚Œã¦ã„ãªã„ã‹ã€å®Œå…¨ã«çµ‚ã‚ã£ã¦ã„ãªã„å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚\n\nãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¨ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚\n\n\nã¾ãŸã€ã“ã®ãƒšãƒ¼ã‚¸ã§ãƒ•ã‚©ãƒ¼ãƒ ã®è¨­å®šã‚’è¡Œã†ã¨ã€ãƒšãƒ¼ã‚¸ã‚’é–‰ã˜ã‚‹ã¨ã™ãæœ‰åŠ¹ã«ãªã‚Šã¾ã™ã®ã§ã€ã”æ³¨æ„ãã ã•ã„ã€‚";
+        Text[ korean ] = "ì»¨íŠ¸ë¡¤ì— ì†í•´ ìˆëŠ” ì–‘ì‹ì€ í˜„ì¬ ë°ì´í„° ì›ë³¸ê³¼ ì•„ì§ ê´€ë ¨ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤ (ë˜ëŠ” ì™„ì „í•˜ê²Œ ê´€ë ¨ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤).\n\në°ì´í„° ì›ë³¸ ë° í…Œì´ë¸”ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.\n\n\nì´ í˜ì´ì§€ì—ì„œ ë§Œë“¤ì–´ì§„ ì„¤ì •ì€ ì´ í˜ì´ì§€ë¥¼ ë‹«ì€ í›„ë¶€í„° ì¦‰ì‹œ ì ìš©ëœë‹¤ëŠ” ì ì— ìœ ì˜í•˜ì‹­ì‹œì˜¤.";
         Text[ chinese_simplified ] = "å½“å‰ä»å±äºè¿™ä¸ªè¡¨å•çš„æ§åˆ¶å°šæœª(æˆ–æ²¡æœ‰å®Œå…¨)å’Œä¸€ä¸ªæ•°æ®æºè¿ç»“ã€‚\n\n\nè¯·é€‰æ‹©ä¸€ä¸ªæ•°æ®æºå’Œä¸€ä¸ªæ•°æ®è¡¨æ ¼ã€‚\n\n\nè¯·æ³¨æ„ï¼šç¦»å¼€è¿™ä¸ªè¡¨å•é¡µé¢æ—¶æ‰€æœ‰çš„æ–°è®¾å®šå°±ä¼šç«‹åˆ»ç”Ÿæ•ˆã€‚";
-        Text[ chinese_traditional ] = "ç•¶å‰å¾å±¬æ–¼é€™å€‹è¡¨å–®çš„æ§è£½é …å°šæœª(æˆ–æ²’æœ‰å®Œå…¨)å’Œä¸€å€‹è³‡æ–™æºé€£çµã€‚\n\n\nè«‹æ‚¨é¸æ“‡ä¸€å€‹è³‡æ–™æºå’Œä¸€å€‹è³‡æ–™è¡¨æ ¼ã€‚\n\n\nè«‹æ³¨æ„ï¼šç¦»é–‹é€™å€‹è¡¨å–®é é¢æ™‚æ‰€æœ‰çš„æ–°è¨­å®šå°±æœƒç«‹åˆ»ç”Ÿæ•ˆã€‚";
+        Text[ chinese_traditional ] = "ç›®å‰å¾å±¬æ–¼é€™å€‹è¡¨å–®çš„æ§åˆ¶é …å°šæœª(æˆ–æ²’æœ‰å®Œå…¨)å’Œä¸€å€‹è³‡æ–™æºé€£çµã€‚\n\n\nè«‹æ‚¨é¸æ“‡ä¸€å€‹è³‡æ–™æºå’Œä¸€å€‹è³‡æ–™è¡¨æ ¼ã€‚\n\n\nè«‹æ³¨æ„ï¼šç¦»é–‹é€™å€‹è¡¨å–®é é¢æ™‚æ‰€æœ‰çš„æ–°è¨­å®šå°±æœƒç«‹åˆ»ç”Ÿæ•ˆã€‚";
         Text[ turkish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ arabic ] = "ÇáÇÓÊãÇÑÉ ÇáÊí íäÊãí ÅáíåÇ ÚäÕÑ ÇáÊÍßã ÛíÑ ãÑÊÈØÉ ÇáÂä ÈãÕÏÑ ÈíÇäÇÊ¡ Ãæ áã ÊßÊãá ÚãáíÉ ÇÑÊÈÇØåÇ ÈÚÏ.\n\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÕÏÑ ÈíÇäÇÊ æÌÏæá.\n\n\nÇ?";
-        Text[ catalan ] = "De momento, el formulario al que pertenece el campo de control no está (quizás no totalmente) conectado a una fuente de datos.\n\nSeleccione una fuente de datos y una tabla.\n\n\nNo olvide que la configuración que realice en este registro tendrá validez inmediatamente después de que abandone el registro.";
-        Text[ finnish ] = "Das Formular, zu dem das Kontrollfeld gehört, ist im Augenblick noch nicht (oder noch nicht vollständig) an eine Datenquelle gebunden.\n\nBitte wählen Sie eine Datenquelle und eine Tabelle aus.\n\n\nBitte beachten Sie, dass die Einstellungen, die sie auf dieser Seiter für das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
+        Text[ catalan ] = "Actualment, el formulari a què pertany el control no està vinculat (o no ho està completament) a una font de dades.\n\nSi us plau, trieu una font de dades i una taula.\n\nTingueu en compte que els paràmetres aplicats a aquesta pàgina tindran efecte immediatament en deixar-la.";
+        Text[ finnish ] = "Tällä hetkellä lomaketta, johon ohjausobjekti kuuluu, ei ole sidottu tietolähteeseen (tai ei ole täysin sidottu).\n\n\\Valitse tietolähde ja taulukko.\n\n\nHuomaa, että tällä sivulla tehdyt asetukset tulevat voimaan heti sivulta siirryttäessä.";
+        Text[ thai ] = "à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸à¸²à¸£à¸„à¸§à¸šà¸„à¸¸à¸¡à¹„à¸¡à¹ˆà¸¡à¸µà¸à¸±à¸™à¸˜à¸°(à¸«à¸£à¸·à¸­à¸­à¸¢à¹ˆà¸²à¸‡à¹„à¸¡à¹ˆà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ)à¸à¸±à¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥\n\nà¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸¥à¸°à¸•à¸²à¸£à¸²à¸‡\n\n\nà¸à¸£à¸¸à¸“à¸²à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸à¸§à¹ˆà¸²à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²à¸—à¸³à¸—à¸µà¹ˆà¸«à¸™à¹‰à¸²à¸™à¸µà¹‰à¸ˆà¸°à¸¡à¸µà¸œà¸¥à¹ƒà¸™à¸—à¸±à¸™à¸—à¸µà¸—à¸±à¸™à¹ƒà¸”à¹€à¸¡à¸·à¹ˆà¸­à¸à¸³à¸¥à¸±à¸‡à¸­à¸­à¸à¸ˆà¸²à¸à¸«à¸™à¹‰à¸²";
     };
     FixedText FT_DATASOURCE
     {
@@ -140,24 +142,25 @@ TabPage RID_PAGE_TABLESELECTION
         Text [ english ] = "~Data source:";
         Text [ english_us ] = "~Data source:";
         Text[ portuguese ] = "~Fonte de dados:";
-        Text[ russian ] = "~Èñõîäíûå äàííûå:";
+        Text[ russian ] = "~Èñòî÷íèê äàííûõ:";
         Text[ greek ] = "Ğñïİëåõóç ~äåäïìİíùí:";
         Text[ dutch ] = "~Gegevensbron:";
         Text[ french ] = "~Source de données :";
         Text[ spanish ] = "~Fuente de datos:";
         Text[ italian ] = "~Sorgente dati:";
-        Text[ danish ] = "~Data source:";
+        Text[ danish ] = "~Datakilde:";
         Text[ swedish ] = "~Datakälla:";
         Text[ polish ] = "ród³o danych:";
         Text[ portuguese_brazilian ] = "~Data source:";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½(~D):";
-        Text[ korean ] = "ë°ì´í„°ì†ŒìŠ¤(~D):";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹(~D):";
+        Text[ korean ] = "ë°ì´í„° ì›ë³¸(~D):";
         Text[ chinese_simplified ] = "æ•°æ®æº(~D)ï¼š";
         Text[ chinese_traditional ] = "è³‡æ–™æº(~D)ï¼š";
         Text[ turkish ] = "~Data source:";
         Text[ arabic ] = "äæÚ ãÕÏÑ ÇáÈíÇäÇÊ:";
-        Text[ catalan ] = "~Fuente de datos:";
-        Text[ finnish ] = "~Datenquelle:";
+        Text[ catalan ] = "Font de les ~dades:";
+        Text[ finnish ] = "~Tietolähde:";
+        Text[ thai ] = "à¹~à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
     };
     ListBox LB_DATASOURCE
     {
@@ -183,18 +186,19 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ french ] = "~Table :";
         Text[ spanish ] = "~Tabla:";
         Text[ italian ] = "~Tabella:";
-        Text[ danish ] = "~Table:";
+        Text[ danish ] = "T~abel:";
         Text[ swedish ] = "~Tabell:";
         Text[ polish ] = "Tabela:";
         Text[ portuguese_brazilian ] = "~Table:";
-        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™(~T):";
+        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«(~T):";
         Text[ korean ] = "í…Œì´ë¸”(~T):";
         Text[ chinese_simplified ] = "è¡¨æ ¼(~T)ï¼š";
         Text[ chinese_traditional ] = "è¡¨æ ¼(~T)";
         Text[ turkish ] = "~Table:";
         Text[ arabic ] = "ÌÏæá:";
-        Text[ catalan ] = "~Tabla:";
+        Text[ catalan ] = "~Taula:";
         Text[ finnish ] = "~Taulukko:";
+        Text[ thai ] = "~à¸•à¸²à¸£à¸²à¸‡:";
     };
     ListBox LB_TABLE
     {
@@ -221,8 +225,9 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ chinese_traditional ] = "è³‡æ–™";
     Text[ turkish ] = "Data";
     Text[ arabic ] = "ÇáÈíÇäÇÊ";
-    Text[ catalan ] = "Datos";
+    Text[ catalan ] = "Dades";
     Text[ finnish ] = "Tiedot";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
 TabPage RID_PAGE_OPTION_DBFIELD
@@ -234,7 +239,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
     Text [ english_us ] = "Database Field";
     Text [ portuguese ] = "Campo da base de dados";
     Text [ russian ] = "Ïîëå áàçû äàííûõ";
-    Text [ dutch ] = "database-veld";
+    Text [ dutch ] = "databaseveld";
     Text [ french ] = "Champ de BD";
     Text [ spanish ] = "Campo de base de datos";
     Text [ italian ] = "Campo database";
@@ -242,11 +247,11 @@ TabPage RID_PAGE_OPTION_DBFIELD
     Text [ swedish ] = "Databasfält";
     Text [ polish ] = "Pole bazy danych";
     Text [ portuguese_brazilian ] = "Datenbankfeld";
-    Text [ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ï¾Œï½¨ï½°ï¾™ï¾„ï¾";
+    Text [ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
     Text [ chinese_simplified ] = "æ•°æ®åº“å­—æ®µ";
     Text [ chinese_traditional ] = "è³‡æ–™åº«æ¬„ä½";
     Text [ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text [ dutch ] = "database-veld";
+    Text [ dutch ] = "databaseveld";
     Text [ chinese_simplified ] = "æ•°æ®åº“å­—æ®µ";
     Text [ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
     Text [ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œ";
@@ -272,26 +277,27 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ english ] = "Do you want to save the value in a database field?";
         Text [ english_us ] = "Do you want to save the value in a database field?";
         Text [ portuguese ] = "Guardar o valor num campo da base de dados?";
-        Text [ russian ] = "Ñîõğàíèòü ıòî çíà÷åíèå â ïîëå áàçû äàííûõ?";
+        Text [ russian ] = "Ñîõğàíèòü çíà÷åíèå â ïîëå áàçû äàííûõ?";
         Text [ dutch ] = "Wilt u de waarde opslaan in een databaseveld?";
         Text [ french ] = "Souhaitez-vous enregistrer la valeur dans un champ de base de données ?";
         Text [ spanish ] = "¿Desea guardar el valor en un campo de base de datos?";
         Text [ italian ] = "Volete salvare il valore in un campo database ?";
-        Text [ danish ] = "Vil du gemme værdien i et databasefelt?";
+        Text [ danish ] = "Skal værdien gemmes i et databasefelt?";
         Text [ swedish ] = "Vill du spara värdet i ett databasfält ?";
         Text [ polish ] = "Czy zapisaæ wartoœæ w polu bazy danych ?";
         Text [ portuguese_brazilian ] = "M?hten Sie den Wert in einem Datenbankfeld speichern ?";
-        Text [ japanese ] = "å€¤ã‚’ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã«ä¿å­˜ã—ã¾ã™ã‹ã€‚";
+        Text [ japanese ] = "å€¤ã‚’ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ä¿å­˜ã—ã¾ã™ã‹ã€‚";
         Text [ chinese_simplified ] = "æ‚¨è¦å°†è¿™ä¸ªæ•°å€¼å­˜ç›˜åˆ°ä¸€ä¸ªæ•°æ®åº“å­—æ®µå†…ï¼Ÿ";
         Text [ chinese_traditional ] = "æ‚¨è¦å°‡é€™å€‹æ•¸å€¼å„²å­˜åˆ°ä¸€å€‹è³‡æ–™åº«æ¬„ä½ï¼Ÿ";
         Text [ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáŞíãÉ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¿";
         Text [ dutch ] = "Wilt u de waarde opslaan in een databaseveld?";
         Text [ chinese_simplified ] = "æ‚¨è¦å°†è¿™ä¸ªæ•°å€¼å­˜ç›˜åˆ°ä¸€ä¸ªæ•°æ®åº“å­—æ®µå†…ï¼Ÿ";
         Text [ greek ] = "Èİëåôå íá áğïèçêåõôåß ç ôéìŞ óå İíá ğåäßï âÜóçò äåäïìİíùí;";
-        Text [ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œì˜ ê°’ì„ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+        Text [ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œì˜ ê°’ì„ ì €ì¥í•˜ê² ìŠµë‹ˆê¹Œ?";
         Text [ turkish ] = "Değeri bir veritabanı alanında kaydetmek istiyor musunuz?";
-        Text[ catalan ] = "¿Desea guardar el valor en un campo de base de datos?";
+        Text[ catalan ] = "Voleu desar el valor en un camp de la base de dades?";
         Text[ finnish ] = "Haluatko tallentaa arvon tietokannan kenttään?";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸„à¹ˆà¸²à¹ƒà¸™à¹à¸Ÿà¹‰à¸¡à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
     };
     RadioButton RB_STOREINFIELD_YES
     {
@@ -303,26 +309,27 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ english ] = "~Yes, in the following database field:";
         Text [ english_us ] = "~Yes, I want to save it in the following database field:";
         Text [ portuguese ] = "Sim, no seguinte:";
-        Text [ russian ] = "Äà. Â ñëåäóşùåì ïîëå áàçû äàííûõ:";
-        Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
+        Text [ russian ] = "Äà. Ñîõğàíèòü â ñëåäóşùåì ïîëå áàçû äàííûõ:";
+        Text [ dutch ] = "Ja, en wel in het volgende databaseveld:";
         Text [ french ] = "~Oui, dans le champ suivant :";
         Text [ spanish ] = "Sí, en el siguiente campo :";
         Text [ italian ] = "~Sì, nel seguente campo database:";
-        Text [ danish ] = "Ja, den skal gemmes i følgende databasefelt:";
+        Text [ danish ] = "~Ja, og det skal være i følgende databasefelt:";
         Text [ swedish ] = "~Ja, i följande databasfält :";
         Text [ polish ] = "Tak, a mianowicie w nastêpuj¹cym polu bazy danych:";
         Text [ portuguese_brazilian ] = "Ja, und zwar in folgendem Datenbankfeld :";
-        Text [ japanese ] = "ã¯ã„ã€ä¿å­˜å…ˆï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ï¾Œï½¨ï½°ï¾™ï¾„ï¾(~Y):";
+        Text [ japanese ] = "ã¯ã„ã€ä¿å­˜å…ˆãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~Y):";
         Text [ chinese_simplified ] = "æ˜¯ï¼Œåœ¨ä»¥ä¸‹çš„æ•°æ®åº“å­—æ®µ(~Y)ï¼š";
         Text [ chinese_traditional ] = "æ˜¯ï¼Œåœ¨ä¸‹åˆ—çš„è³‡æ–™åº«æ¬„ä½(~Y)ï¼š";
         Text [ arabic ] = "äÚã¡ İí ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÊÇáí:";
-        Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
+        Text [ dutch ] = "Ja, en wel in het volgende databaseveld:";
         Text [ chinese_simplified ] = "æ˜¯ï¼Œåœ¨ä»¥ä¸‹çš„æ•°æ®åº“å­—æ®µ(~Y)ï¼š";
         Text [ greek ] = "Íáé, óôï áêüëïõèï ğåäßï âÜóçò äåäïìİíùí:";
         Text [ korean ] = "ì˜ˆ, ë‹¤ìŒ ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œì— ì €ì¥í•˜ì‹­ì‹œì˜¤(~Y):";
         Text [ turkish ] = "Evet, aşağıdaki veritabanı alanında kaydedebilirsiniz :";
-        Text[ catalan ] = "Sí, en el siguiente campo :";
-        Text[ finnish ] = "~Ja, und zwar in folgendem Datenbankfeld :";
+        Text[ catalan ] = "~Sí, vull desar-lo en el camp següent:";
+        Text[ finnish ] = "~Kyllä, tallennan arvon seuraavaan tietokannan kenttään:";
+        Text[ thai ] = "à¹ƒ~à¸Šà¹ˆ à¸‰à¸±à¸™à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸¡à¸±à¸™à¹ƒà¸™à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸™à¸µà¹‰:";
     };
     ListBox LB_STOREINFIELD
     {
@@ -343,16 +350,16 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ english ] = "~No, I only want to save the value in the form.";
         Text [ english_us ] = "~No, I only want to save the value in the form.";
         Text [ portuguese ] = "Não. Guardar apenas no formulário.";
-        Text [ russian ] = "Íåò. Ñîõğàíèòü ıòî çíà÷åíèå òîëüêî â ôîğìóëÿğå.";
+        Text [ russian ] = "Íåò. Ñîõğàíèòü çíà÷åíèå òîëüêî â ôîğìå.";
         Text [ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
         Text [ french ] = "~Non, je souhaite enregistrer la valeur uniquement dans le formulaire.";
         Text [ spanish ] = "No, deseo guardar el valor sólo en el formulario.";
         Text [ italian ] = "~No, salva il valore solo nel formulario.";
-        Text [ danish ] = "Nej, jeg vil kun gemme værdien i formularen.";
+        Text [ danish ] = "~Nej, værdien skal kun gemmes i formularen.";
         Text [ swedish ] = "~Nej, jag vill bara spara värdet i formuläret.";
         Text [ polish ] = "Nie, zapisz wartoœæ tylko w formularzu.";
         Text [ portuguese_brazilian ] = "Nein, ich m?hte den Wert nur im Formular speichern.";
-        Text [ japanese ] = "ã„ã„ãˆã€å€¤ã¯ï¾Œï½«ï½°ï¾‘ã«ã—ã‹ä¿å­˜ã—ãªã„(~N)";
+        Text [ japanese ] = "ã„ã„ãˆã€å€¤ã¯ãƒ•ã‚©ãƒ¼ãƒ ã«ã—ã‹ä¿å­˜ã—ãªã„(~N)";
         Text [ chinese_simplified ] = "å¦ï¼Œæˆ‘åªæƒ³å°†è¿™ä¸ªæ•°å€¼å­˜å…¥è¡¨å•(~N)ã€‚";
         Text [ chinese_traditional ] = "å¦ï¼Œæ•¸å€¼åƒ…å­˜å…¥ä¸€å€‹è¡¨å–®å…§(~N)ã€‚";
         Text [ arabic ] = "ßáÇ¡ ÃÑíÏ ÍİÙ ÇáŞíãÉ İí ÇáÇÓÊãÇÑÉ İŞØ.";
@@ -361,11 +368,13 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ greek ] = "¼÷é, èİëù ~íá ãßíåé ç áğïèŞêåõóç ôçò ôéìŞò ìüíï óôç öüñìá.";
         Text [ korean ] = "ì•„ë‹ˆì˜¤, ê°’ì„ ìˆ˜ì‹ì—ë§Œ ì €ì¥í•˜ê² ìŠµë‹ˆë‹¤(~N).";
         Text [ turkish ] = "Hayır, değeri yalnızca form içinde kaydetmek istiyorum.";
-        Text[ catalan ] = "No, deseo guardar el valor sólo en el formulario.";
-        Text[ finnish ] = "~Nein, ich möchte den Wert nur im Formular speichern.";
+        Text[ catalan ] = "~No, només vull desar el valor en el formulari.";
+        Text[ finnish ] = "~Ei, haluan tallentaa vain lomakkeen arvon.";
+        Text[ thai ] = "à¹„~à¸¡à¹ƒà¸Šà¹ˆà¹ˆ  à¸‰à¸±à¸™à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸„à¹ˆà¸²à¹ƒà¸™à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
     };
-    Text[ catalan ] = "Campo de base de datos";
+    Text[ catalan ] = "Camp de la base de dades";
     Text[ finnish ] = "Tietokantakenttä";
+    Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
 TabPage RID_PAGE_FORM_DATASOURCE_STATUS
@@ -378,24 +387,25 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text [ english ] = "Form";
         Text [ english_us ] = "Form";
         Text[ portuguese ] = "Formulário";
-        Text[ russian ] = "Ôîğìóëÿğ";
+        Text[ russian ] = "Ôîğìà";
         Text[ greek ] = "Form";
         Text[ dutch ] = "Formulier";
         Text[ french ] = "Formulaire";
         Text[ spanish ] = "Formulario";
-        Text[ finnish ] = "Form";
+        Text[ finnish ] = "muoto";
         Text[ italian ] = "Formulario";
-        Text[ danish ] = "Form";
+        Text[ danish ] = "Formular";
         Text[ swedish ] = "Formulär";
         Text[ polish ] = "Formularz";
         Text[ portuguese_brazilian ] = "Form";
-        Text[ japanese ] = "ï¾Œï½«ï½°ï¾‘";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ";
         Text[ korean ] = "ì–‘ì‹";
         Text[ chinese_simplified ] = "è¡¨å•";
         Text[ chinese_traditional ] = "è¡¨å–®";
         Text[ turkish ] = "Form";
         Text[ arabic ] = "Form";
-        Text[ catalan ] = "Form";
+        Text[ catalan ] = "Formulari";
+        Text[ thai ] = "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
     };
     FixedText FT_FORMDATASOURCELABEL
     {
@@ -405,24 +415,25 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text [ english ] = "Data Source" ;
         Text [ english_us ] = "Data source";
         Text[ portuguese ] = "Fonte de dados";
-        Text[ russian ] = "Èñõîäíûå äàííûå";
+        Text[ russian ] = "Èñòî÷íèê äàííûõ";
         Text[ greek ] = "Data source";
-        Text[ dutch ] = "Data source";
+        Text[ dutch ] = "Gegevensbron";
         Text[ french ] = "Source de données";
         Text[ spanish ] = "Fuente de datos";
-        Text[ finnish ] = "Data source";
+        Text[ finnish ] = "Tietolähde";
         Text[ italian ] = "Sorgente dati";
-        Text[ danish ] = "Data source";
+        Text[ danish ] = "Datakilde";
         Text[ swedish ] = "Datakälla";
         Text[ polish ] = "ród³o danych";
         Text[ portuguese_brazilian ] = "Data source";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½";
-        Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
+        Text[ korean ] = "ë°ì´í„° ì›ë³¸";
         Text[ chinese_simplified ] = "æ•°æ®æº";
         Text[ chinese_traditional ] = "è³‡æ–™æº";
         Text[ turkish ] = "Data source";
         Text[ arabic ] = "Data source";
-        Text[ catalan ] = "Data source";
+        Text[ catalan ] = "Font de les dades";
+        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     FixedText FT_FORMDATASOURCE
     {
@@ -443,9 +454,9 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ dutch ] = "Soort inhoud";
         Text[ french ] = "Type de contenu";
         Text[ spanish ] = "Tipo de contenido";
-        Text[ finnish ] = "Content type";
+        Text[ finnish ] = "Sisältölaji";
         Text[ italian ] = "Tipo di contenuto";
-        Text[ danish ] = "Content type";
+        Text[ danish ] = "Indholdstype";
         Text[ swedish ] = "Typ av innehåll";
         Text[ polish ] = "Rodzaj zawartoœci";
         Text[ portuguese_brazilian ] = "Content type";
@@ -455,7 +466,8 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ chinese_traditional ] = "å…§å®¹é¡å‹";
         Text[ turkish ] = "Content type";
         Text[ arabic ] = "Content type";
-        Text[ catalan ] = "Content type";
+        Text[ catalan ] = "Tipus de contingut";
+        Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸‚à¸­à¸‡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
     };
     FixedText FT_FORMCONTENTTYPE
     {
@@ -476,9 +488,9 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ dutch ] = "Inhoud";
         Text[ french ] = "Contenu";
         Text[ spanish ] = "Contenido";
-        Text[ finnish ] = "Content";
+        Text[ finnish ] = "Sisältö";
         Text[ italian ] = "Contenuto";
-        Text[ danish ] = "Content";
+        Text[ danish ] = "Indhold";
         Text[ swedish ] = "Innehåll";
         Text[ polish ] = "Zawartoœæ";
         Text[ portuguese_brazilian ] = "Content";
@@ -488,7 +500,8 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ chinese_traditional ] = "å…§å®¹";
         Text[ turkish ] = "Content";
         Text[ arabic ] = "Content";
-        Text[ catalan ] = "Content";
+        Text[ catalan ] = "Contingut";
+        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
     };
     FixedText FT_FORMTABLE
     {
@@ -508,19 +521,20 @@ String RID_STR_TYPE_TABLE
     Text[ dutch ] = "Tabel";
     Text[ french ] = "Table";
     Text[ spanish ] = "Tabla";
-    Text[ finnish ] = "Table";
+    Text[ finnish ] = "Taulukko";
     Text[ italian ] = "Tabella";
-    Text[ danish ] = "Table";
+    Text[ danish ] = "Tabel";
     Text[ swedish ] = "Tabell";
     Text[ polish ] = "Tabela";
     Text[ portuguese_brazilian ] = "Table";
-    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™";
+    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
     Text[ korean ] = "í…Œì´ë¸”";
     Text[ chinese_simplified ] = "è¡¨æ ¼";
     Text[ chinese_traditional ] = "è¡¨æ ¼";
     Text[ turkish ] = "Table";
     Text[ arabic ] = "Table";
-    Text[ catalan ] = "Table";
+    Text[ catalan ] = "Taula";
+    Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡";
 };
 
 String RID_STR_TYPE_QUERY
@@ -534,19 +548,20 @@ String RID_STR_TYPE_QUERY
     Text[ dutch ] = "Query";
     Text[ french ] = "Requête";
     Text[ spanish ] = "Consulta";
-    Text[ finnish ] = "Query";
+    Text[ finnish ] = "Kysely";
     Text[ italian ] = "Ricerca";
-    Text[ danish ] = "Query";
+    Text[ danish ] = "Forespørgsel";
     Text[ swedish ] = "Sökning";
     Text[ polish ] = "Kwerenda";
     Text[ portuguese_brazilian ] = "Query";
-    Text[ japanese ] = "ï½¸ï½´ï¾˜ï½°";
+    Text[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼";
     Text[ korean ] = "ì¿¼ë¦¬";
     Text[ chinese_simplified ] = "æŸ¥è¯¢";
     Text[ chinese_traditional ] = "æŸ¥è©¢";
     Text[ turkish ] = "Query";
     Text[ arabic ] = "Query";
-    Text[ catalan ] = "Query";
+    Text[ catalan ] = "Consulta";
+    Text[ thai ] = "à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡";
 };
 
 String RID_STR_TYPE_COMMAND
@@ -559,45 +574,72 @@ String RID_STR_TYPE_COMMAND
     Text[ greek ] = "SQL command";
     Text[ dutch ] = "SQL-opdracht";
     Text[ french ] = "Instruction SQL";
-    Text[ spanish ] = "Comando SQL";
-    Text[ finnish ] = "SQL command";
+    Text[ spanish ] = "Orden SQL";
+    Text[ finnish ] = "SQL-lause";
     Text[ italian ] = "Comando SQL";
-    Text[ danish ] = "SQL command";
+    Text[ danish ] = "SQL-kommando";
     Text[ swedish ] = "SQL-kommando";
     Text[ polish ] = "Polecenie SQL";
     Text[ portuguese_brazilian ] = "SQL command";
-    Text[ japanese ] = "SQL ï½ºï¾ï¾ï¾„ï¾";
+    Text[ japanese ] = "SQL ã‚³ãƒãƒ³ãƒ‰";
     Text[ korean ] = "SQL ëª…ë ¹";
     Text[ chinese_simplified ] = "SQL å‘½ä»¤";
     Text[ chinese_traditional ] = "SQL æŒ‡ä»¤";
     Text[ turkish ] = "SQL command";
     Text[ arabic ] = "SQL command";
-    Text[ catalan ] = "SQL command";
+    Text[ catalan ] = "Comanda SQL";
+    Text[ thai ] = "à¸„à¸³à¸ªà¸±à¹ˆà¸‡ SQL ";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.27  2001/10/22 20:17:36  kz
- *  Merge SRC638: 22.10.01 - 22:17:26
+ *  Revision 1.20.2.8.4.4.2.1  2003/02/22 16:36:12  hr
+ *  INTEGRATION: CWS mergep (1.20.2.8.4.4.20); FILE MERGED
+ *  2003/02/22 10:35:02 nf 1.20.2.8.4.4.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
+ *  2003/01/31 12:52:34 hjs 1.20.2.8.4.4.20.1: #107113# merge on SRX644p
  *
- *  Revision 1.26  2001/09/26 20:29:50  kz
- *  Merge SRC638: 26.09.01 - 22:29:05
+ *  Revision 1.20.2.8.4.4.20.2  2003/02/22 10:35:02  nf
+ *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
  *
- *  Revision 1.25  2001/08/29 20:53:41  kz
- *  Merge SRC638: 29.08.01 - 22:52:37
+ *  Revision 1.20.2.8.4.4.20.1  2003/01/31 12:52:34  hjs
+ *  #107113# merge on SRX644p
  *
- *  Revision 1.24  2001/08/29 09:14:51  vg
- *  Merge SRC638: 29.08.01 - 11:14:54
+ *  Revision 1.20.2.8.4.4  2002/11/27 16:58:54  kz
+ *  Merge SRX644: 27.11.02 - 17:54:59
  *
- *  Revision 1.23  2001/08/24 20:39:12  kz
- *  Merge SRC638: 08/24/01 - 22:39:47
+ *  Revision 1.20.2.8.4.3  2002/08/02 20:26:03  kz
+ *  Merge SRX643: 02.08.02 - 22:22:55
  *
- *  Revision 1.22  2001/08/21 20:59:37  kz
- *  Merge SRC638: 21.08.01 - 22:59:02
+ *  Revision 1.20.2.8.4.2  2002/05/16 14:36:44  kz
+ *  Merge SRX642: 16.05.02 - 16:36:29
  *
- *  Revision 1.21  2001/08/14 15:05:11  kz
- *  Merge SRC638: 14.08.01 - 17:04:39
+ *  Revision 1.20.2.8.4.1  2002/04/29 20:25:05  rt
+ *  Merge SRX642: 29.04.02 - 22:24:32
+ *
+ *  Revision 1.20.2.8  2001/11/22 23:35:36  rt
+ *  Merge SRC641: 22.11.01 - 23:34:24
+ *
+ *  Revision 1.20.2.7  2001/11/13 23:02:02  kz
+ *  Merge SRC641: 11/13/01 - 23:02:50
+ *
+ *  Revision 1.20.2.6  2001/10/31 21:52:44  kz
+ *  Merge SRC641: 31.10.01 - 22:52:51
+ *
+ *  Revision 1.20.2.5  2001/10/19 21:49:28  vg
+ *  Merge SRC641: 19.10.01 - 23:49:46
+ *
+ *  Revision 1.20.2.4  2001/10/17 21:16:23  kz
+ *  Merge SRC641: 17.10.01 - 23:16:00
+ *
+ *  Revision 1.20.2.3  2001/10/11 21:00:54  rt
+ *  Merge SRC641: 11.10.01 - 23:00:05
+ *
+ *  Revision 1.20.2.2  2001/09/27 20:34:30  kz
+ *  Merge SRC641: 27.09.01 - 22:33:38
+ *
+ *  Revision 1.20.2.1  2001/09/24 20:33:01  kz
+ *  Merge SRC641: 09/24/01 - 22:32:35
  *
  *  Revision 1.20  2001/08/07 15:05:41  kz
  *  Merge SRC638: 07.08.01 - 17:05:12
@@ -662,6 +704,8 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
+
 
 
 

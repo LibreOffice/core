@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: cpptest.cpp,v $
+ *  $RCSfile: cpptest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:04:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,17 @@
 // cpptest.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
-
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+#include <comdef.h>
+#include <tchar.h>
+#include<atlbase.h>
 CComModule _Module;
+#include<atlcom.h>
+#include<atlimpl.cpp>
+
+//CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 

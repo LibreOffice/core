@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontrolcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-02 10:33:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,14 +213,4 @@ namespace bib
 //.........................................................................
 }   // namespace bib
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/10/22 07:32:53  fs
- *  initial checkin - base class for a window which contains controls which's design mode should be XLoadable dependent
- *
- *
- *  Revision 1.0 18.10.01 18:41:07  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardcontext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:52:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,4 @@ namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_WIZARDCONTEXT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 05.03.01 13:40:41  fs
- ************************************************************************/
 

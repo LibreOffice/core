@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pcrservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:33:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,14 +139,4 @@ extern "C" void* SAL_CALL component_getFactory(
         xRet->acquire();
     return xRet.get();
 };
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/01/12 11:30:30  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 11.01.01 09:14:45  fs
- ************************************************************************/
 

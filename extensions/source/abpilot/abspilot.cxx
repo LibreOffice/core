@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-08 15:41:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,20 +437,4 @@ namespace abp
 //.........................................................................
 }   // namespace abp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/08/08 14:55:41  fs
- *  #90716# layout changes
- *
- *  Revision 1.2  2001/08/02 10:45:28  fs
- *  #88530# layout changes
- *
- *  Revision 1.1  2001/08/01 11:06:28  fs
- *  initial checkin - address book auto pilot - the dialog itself
- *
- *
- *  Revision 1.0 26.07.01 08:45:44  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 09:19:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,20 +142,4 @@ namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_BROWSERVIEW_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/05/30 13:44:49  fs
- *  #86838# forward the GetFocus event to the property box
- *
- *  Revision 1.2  2001/02/19 14:08:31  fs
- *  #84041# infrastructure for activating pages from outside
- *
- *  Revision 1.1  2001/01/12 11:26:24  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 11:01:16  fs
- ************************************************************************/
 

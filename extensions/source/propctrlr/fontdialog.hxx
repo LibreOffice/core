@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:29:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,4 @@ namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_FONTDIALOG_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/03/21 15:41:58  fs
- *  initial checkin - font dialog for form controls
- *
- *
- *  Revision 1.0 21.03.01 10:13:24  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:08:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,11 +714,4 @@ namespace abp
 //.........................................................................
 }   // namespace abp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 27.07.01 09:09:35  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 09:18:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,17 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    OBrowserPage::~OBrowserPage()
+    {
+    }
+
+    //------------------------------------------------------------------
     void OBrowserPage::Resize()
     {
-        Size aSize(GetOutputSizePixel());
+        Size aSize( GetOutputSizePixel() );
         aSize.Width() -= 6;
         aSize.Height() -= 6;
-
-        m_aListBox.SetSizePixel(aSize);
+        m_aListBox.SetPosSizePixel( Point( 3, 3 ), aSize );
     }
 
     //------------------------------------------------------------------
@@ -115,13 +119,4 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/01/12 11:25:49  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 17:09:37  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 09:18:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace pcr
         sal_uInt16                  m_nSelectedLine;
         sal_uInt16                  m_nTheNameSize;
         sal_uInt16                  m_nRowHeight;
-        sal_Bool                    m_bIsActiv : 1;
+        sal_Bool                    m_bIsActive : 1;
         sal_Bool                    m_bUpdate : 1;
 
     protected:
@@ -134,6 +134,7 @@ namespace pcr
                 virtual sal_uInt16          CalcVisibleLines();
                 virtual void                EnableUpdate();
                 virtual void                DisableUpdate();
+                virtual long                Notify( NotifyEvent& _rNEvt );
 
                 virtual void                setListener(IPropertyLineListener* _pPLL);
 
@@ -161,6 +162,10 @@ namespace pcr
                 // #95343# --------------------------
                 sal_Int32                   GetMinimumWidth();
 
+
+                sal_Bool    IsModified( ) const;
+                void        CommitModified( );
+
     protected:
         DECL_LINK( ScrollHdl, ScrollBar* );
         DECL_LINK( ClickHdl, PushButton* );
@@ -179,13 +184,4 @@ namespace pcr
 
 #endif // _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/01/12 11:25:36  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 15:48:58  fs
- ************************************************************************/
 

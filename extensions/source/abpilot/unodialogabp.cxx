@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-12-05 13:28:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,26 +220,4 @@ namespace abp
 //.........................................................................
 }   // namespace abp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/09/28 09:57:18  fs
- *  #91062# forgot the return value ...
- *
- *  Revision 1.3  2001/09/25 14:17:40  fs
- *  #91062# signature of XJob::execute slightly changed
- *
- *  Revision 1.2  2001/09/14 09:56:05  fs
- *  #91062# support the XJob interface
- *
- *  Revision 1.1  2001/08/01 11:10:07  fs
- *  initial checkin - address book auto pilot - uno wrapper for the pilot
- *
- *  Revision 1.1  2001/02/12 07:16:13  fs
- *  initial checkin - importing StarOffice 5.2 database files
- *
- *
- *  Revision 1.0 30.01.01 15:33:22  fs
- ************************************************************************/
 

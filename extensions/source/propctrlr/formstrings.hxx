@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-08 17:37:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,53 +217,4 @@ namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.14  2001/11/08 11:37:43  fs
- *  #94300# removed ShowCentury property
- *
- *  Revision 1.13  2001/10/19 12:58:51  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.12  2001/08/07 08:46:10  fs
- *  #87690# +ACTIVE_CONNECTION
- *
- *  Revision 1.11  2001/08/06 14:51:43  fs
- *  #87690# PROPERTY_URL/PROPERTY_PASSWORD / removed some unused strings
- *
- *  Revision 1.10  2001/06/06 10:37:16  fs
- *  #86837# +PROPERTY_IMAGEALIGN
- *
- *  Revision 1.9  2001/06/06 08:14:59  fs
- *  #86096# +FontRelief/FontEmphasisMark/TextLineColor
- *
- *  Revision 1.8  2001/05/02 12:43:12  tbe
- *  added scrollbar properties
- *
- *  Revision 1.7  2001/04/26 09:16:34  tbe
- *  added progressbar properties
- *
- *  Revision 1.6  2001/03/21 15:40:37  fs
- *  #82696# +FontWordLineMode
- *
- *  Revision 1.5  2001/03/07 14:37:34  tbe
- *  added step property
- *
- *  Revision 1.4  2001/02/22 09:32:45  tbe
- *  added properties for dialog controls
- *
- *  Revision 1.3  2001/02/06 10:18:10  fs
- *  #83479# reintroduced the HasNavigationBar property
- *
- *  Revision 1.2  2001/01/17 08:44:07  fs
- *  #82726# removed an obsolete string
- *
- *  Revision 1.1  2001/01/12 11:29:10  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 14:17:16  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontitemids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:28:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,4 @@ namespace pcr
 //........................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/06/11 11:25:49  fs
- *  initial checkin - item ids for changing a control font
- *
- *
- *  Revision 1.0 11.06.01 10:17:20  fs
- ************************************************************************/
 

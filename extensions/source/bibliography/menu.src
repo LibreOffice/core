@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:30:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ Menu RID_MAIN_MENU
                 Text[ dutch ] = "~Sluiten";
                 Text[ chinese_simplified ] = "å…³é—­(~C)";
                 Text[ greek ] = "Êëåß~óéìï";
-                Text[ korean ] = "ì¢…ë£Œ(~C)";
+                Text[ korean ] = "ë‹«ê¸°(~C)";
                 Text[ turkish ] = "Kapa~t";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "~Tanca";
@@ -277,14 +277,14 @@ Menu RID_MAIN_MENU
                         Text[ greek ] = "Áíôéóôïß÷éóç ~óôŞëçò...";
                         Text[ dutch ] = "~Kolomindeling...";
                         Text[ french ] = "~Assignation de colonnes...";
-                        Text[ spanish ] = "~Asignación de columnas...";
+                        Text[ spanish ] = "~Disposición de columnas...";
                         Text[ italian ] = "A~ssegnazione colonne...";
                         Text[ danish ] = "~Kolonnetildeling...";
                         Text[ swedish ] = "~Kolumntilldelning...";
                         Text[ polish ] = "Przyporz¹dkowanie kolumn...";
                         Text[ portuguese_brazilian ] = "~Column assignment...";
                         Text[ japanese ] = "åˆ—ã®åˆ†é¡(~C)...";
-                        Text[ korean ] = "ì—´ ì§€ì •(~C)...";
+                        Text[ korean ] = "ì—´ ë°°ì¹˜(~C)...";
                         Text[ chinese_simplified ] = "ç¼–æ’åˆ—(~C)...";
                         Text[ chinese_traditional ] = "ç·¨æ’æ¬„(~C)...";
                         Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ...";
@@ -304,7 +304,7 @@ Menu RID_MAIN_MENU
                 Text[ english_us ] = "~Choose Data Source...";
                    Text[ swedish ] = "Välj ut ~datakälla...";
                         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®é¸æŠ...";
-                        Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ êµí™˜(~D)...";
+                        Text[ korean ] = "ë°ì´í„° ì›ë³¸ ì„ íƒ(~D)...";
                         Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº...";
                         Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº...";
                         Text[ portuguese ] = "~Fonte de dados...";
@@ -336,7 +336,7 @@ Menu RID_MAIN_MENU
                         Text[ greek ] = "Delete ~Record";
                         Text[ dutch ] = "Delete ~Record";
                         Text[ french ] = "Supprimer l'en~registrement";
-                        Text[ spanish ] = "Eliminar ~registro";
+                        Text[ spanish ] = "Borrar ~registro";
                         Text[ finnish ] = "Delete ~Record";
                         Text[ italian ] = "Elimina record di dati";
                         Text[ danish ] = "Delete ~Record";
@@ -473,7 +473,7 @@ Menu RID_MAIN_MENU
                         Text[ polish ] = "Filtruj...";
                         Text[ portuguese_brazilian ] = "Filter...";
                         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿(~F)...";
-                        Text[ korean ] = "í•„í„°ë§(~F)...";
+                        Text[ korean ] = "í•„í„°(~F)...";
                         Text[ chinese_simplified ] = "ç­›é€‰(~F)...";
                         Text[ chinese_traditional ] = "ç¯©é¸(~F)...";
                         Text[ arabic ] = "ÊÕİíÉ...";
@@ -516,4 +516,8 @@ Menu RID_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
+
+
+
 

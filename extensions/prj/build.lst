@@ -1,4 +1,4 @@
-ex	extensions	:	offmgr rdbmaker svx sane offuh np_sdk NULL
+ex	extensions	:	offmgr rdbmaker svx sane twain offuh np_sdk NULL
 ex	extensions					usr1	-	all	ex_mkout NULL
 ex	extensions\inc					get		-	all	ex_inc NULL
 ex	extensions\inc\ucbhelper			get		-	all	ex_incucbh NULL
@@ -8,7 +8,7 @@ ex	extensions\source\plugin\inc\plugin\unx		get	-	all	ex_piux NULL
 ex	extensions\source\plugin\inc\plugin\os2		get	-	all	ex_pios2 NULL
 ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl NULL
 ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w NULL
-ex	extensions\source\ole				nmake	-	w	ex_ole NULL
+ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr NULL
 ex	extensions\source\resource			nmake	-	all	ex_resrc NULL
 ex	extensions\source\installation			nmake	-	w	ex_inst NULL
 ex	extensions\source\installation\office\instchk		nmake	-	all	ex_ichk NULL
@@ -18,12 +18,12 @@ ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase NULL
 ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx NULL
 ex	extensions\source\plugin\os2			nmake	-	p	ex_plos2 NULL
 ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plos2.p ex_plunx.u ex_plwin.w NULL
-ex	extensions\source\scanner			nmake	-	all	ex_scan NULL
-ex	extensions\source\svg				nmake	-	all	ex_svg NULL
+ex	extensions\source\scanner			nmake	-	all	ex_scan ex_resrc NULL
+ex	extensions\source\svg				nmake	-	all	ex_svg ex_scan NULL
 ex	extensions\source\packer			nmake	-	all	ex_pck NULL
 ex	extensions\source\bibliography			nmake	-	all	ex_bib NULL
-ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr NULL
-ex	extensions\source\propctrlr			nmake	-	all	ex_propctrlr NULL
+ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr ex_svg NULL
+ex	extensions\source\propctrlr			nmake	-	all	ex_propctrlr ex_bib NULL
 ex	extensions\source\dbimport			nmake	-	all	ex_dbimport NULL
 ex	extensions\source\dbpilots			nmake	-	all	ex_dbpilots NULL
 ex	extensions\source\abpilot			nmake	-	all	ex_abpilot NULL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlfontdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:31:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,4 @@ namespace pcr
 //........................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 11.06.01 09:36:41  fs
- ************************************************************************/
 

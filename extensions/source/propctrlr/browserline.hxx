@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-05 09:56:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,14 +162,4 @@ namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/01/12 11:25:14  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 16:36:15  fs
- ************************************************************************/
 

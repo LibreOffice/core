@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:31:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ greek ] = "Autopilot Address Book Data Source";
     Text[ dutch ] = "Autopiloot Adresgegevensbron";
     Text[ french ] = "AutoPilote de source de donnйes des adresses";
-    Text[ spanish ] = "AutoPiloto de fuente de datos de la libreta de direcciones";
+    Text[ spanish ] = "Piloto automбtico de fuente de datos de la libreta de direcciones";
     Text[ finnish ] = "Ohjattu yhteystietojen tuominen";
     Text[ italian ] = "Pilota automatico della sorgente dati della Rubrica";
     Text[ danish ] = "AutoPilot for adressedatakilde";
@@ -90,7 +90,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ polish ] = "AutoPilot: Џrуdіo danych adresowych";
     Text[ portuguese_brazilian ] = "Autopilot Address Book Data Source";
     Text[ japanese ] = "г‚Єгѓјгѓ€гѓ‘г‚¤гѓ­гѓѓгѓ€ г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їг‚Ѕгѓјг‚№";
-    Text[ korean ] = "мћђлЏ™ нЊЊмќјлџї мЈјм†Њ- лЌ°мќґн„° м†ЊмЉ¤";
+    Text[ korean ] = "мЈјм†Њ лЌ°мќґн„° м›ђліё мћђлЏ™ нЊЊмќјлџї";
     Text[ chinese_simplified ] = "и‡ЄеЉЁж–‡жЎЈеЉ©зђ† йЂљи®Їз°їж•°жЌ®жєђ";
     Text[ chinese_traditional ] = "и‡Єе‹•жЄ”жЎ€еЉ©зђ† йЂљиЁЉйЊ„иі‡ж–™жєђ";
     Text[ turkish ] = "Autopilot Address Book Data Source";
@@ -127,7 +127,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ greek ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ dutch ] = "Met %PRODUCTNAME heeft u toegang tot adresgegevens die reeds op uw systeem beschikbaar zijn. Daartoe wordt er een %PRODUCTNAME-gegevensbron gemaakt via welke u toegang heeft tot uw adresboeken als tabellen.\n\nDeze AutoPiloot ondersteunt u bij het inrichten van deze gegevensbron.";
         Text[ french ] = "%PRODUCTNAME permet l'accиs aux donnйes des adresses prйsentes dans votre systиme. Cette fonction nйcessite la crйation d'une source de donnйes %PRODUCTNAME dans laquelle vos carnets d'adresses existeront sous forme de tables.\n\nCet AutoPilote vous assite lors du paramйtrage de cette source de donnйes.";
-        Text[ spanish ] = "%PRODUCTNAME le permite acceder a las direcciones que se encuentren en su sistema.\nPara ello se crearб una fuente de datos %PRODUCTNAME en la que las libretas de direcciones estarбn disponibles en tablas.\n\nEste AutoPiloto le apoya durante la creaciуn de esta fuente de datos.";
+        Text[ spanish ] = "%PRODUCTNAME le permite acceder a las direcciones que se encuentren en su sistema.\nPara ello se crearб una fuente de datos %PRODUCTNAME en la que las libretas de direcciones estarбn disponibles en tablas.\n\nEl Piloto automбtico le apoya durante la creaciуn de esta fuente de datos.";
         Text[ finnish ] = "%PRODUCTNAME antaa sinun kдyttдд osoitetietoja, jotka ovat jo jдrjestelmдssд. Tдtд varten luodaan %PRODUCTNAMEn tietolдhde, jossa osoitetietosi ovat taulukkomuodossa.\n\nTдllд ohjatulla toiminnolla voit luoda tietolдhteen.";
         Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della Rubrica giа presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle Rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi aiuterа ad impostare la sorgente dati.";
         Text[ danish ] = "%PRODUCTNAME giver dig adgang til adressedata, som allerede findes pе computeren. Dette gшr du ved at oprette en %PRODUCTNAME-datakilde, hvor du har adgang til dine adressekartoteker som tabeller.\n\nDenne AutoPilot hjжlper dig med konfigurationen af denne datakilde.";
@@ -135,7 +135,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ polish ] = "%PRODUCTNAME umoїliwia dostкp do danych adresowych istniej№cych juї w systemie komputera. Utworzone zostanie w tym celu џrуdіo danych programu %PRODUCTNAME, udostкpniaj№ce ksi№їki adresowe uїytkownika, wyњwietlane w postaci tabel.\n\nW tworzeniu џrуdіa danych pomocny bкdzie niniejszy AutoPilot.";
         Text[ portuguese_brazilian ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ japanese ] = "%PRODUCTNAME гЃЇг‚·г‚№гѓ†гѓ дёЉгЃ®ж—ўе­гЃ®г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їгЃ«г‚ўг‚Їг‚»г‚№гЃ§гЃЌгЃѕгЃ™гЂ‚\nг‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їгЃ«г‚ўг‚Їг‚»г‚№гЃ™г‚‹гЃ«гЃЇгЂЃгѓ†гѓјгѓ–гѓ«еЅўејЏгЃ§г‚ўг‚Їг‚»г‚№гЃ§гЃЌг‚‹ %PRODUCTNAME гѓ‡гѓјг‚їг‚Ѕгѓјг‚№г‚’дЅњж€ђгЃ—гЃѕгЃ™гЂ‚\n\nгЃ“гЃ®гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ®иЁ­е®љг‚’г‚Єгѓјгѓ€гѓ‘г‚¤гѓ­гѓѓгѓ€гЃЊгЃЉж‰‹дјќгЃ„гЃ—гЃѕгЃ™гЂ‚";
-        Text[ korean ] = "%PRODUCTNAMEм—ђм„њлЉ” м‚¬мљ©мћђмќ м‹њмЉ¤н…њмќґ мћ€лЉ” мЈјм†Њ лЌ°мќґн„°лҐј м•Ўм„ёмЉ¤н•  м€ мћ€мЉµл‹€л‹¤.\nмќґ мћ‘м—…мќ„ мњ„н•ґ мѓ€ %PRODUCTNAME лЌ°мќґн„° м†ЊмЉ¤к°Ђ мѓќм„±лђл©°, мќґ лЌ°мќґн„° м†ЊмЉ¤м—ђм„њ мЈјм†Њ лЌ°мќґн„°лҐј н‘њлЎњ м‚¬мљ©н•  м€ мћ€мЉµл‹€л‹¤.\n\nмќґ мћђлЏ™ нЊЊмќјлџїмќґ мќґ лЌ°мќґн„° м†ЊмЉ¤мќ мѓќм„± мћ‘м—…мќ„ м§Ђм›ђн•©л‹€л‹¤.";
+        Text[ korean ] = "%PRODUCTNAMEлҐј н†µн•ґ м‚¬мљ©мћђмќ м‹њмЉ¤н…њм—ђ мќґлЇё мћ€лЉ” мЈјм†Њ лЌ°мќґн„°м—ђ м•Ўм„ёмЉ¤н•  м€ мћ€мЉµл‹€л‹¤. м•Ўм„ёмЉ¤н•кё° мњ„н•ґм„њлЉ” м‚¬мљ©мћђмќ мЈјм†Њ лЌ°мќґн„°лҐј \nн…Њмќґлё” н•м‹ќмњјлЎњ м‚¬мљ©н•  м€ мћ€лЉ” %PRODUCTNAME лЌ°мќґн„° м›ђліёмќґ л§Њл“¤м–ґм§‘л‹€л‹¤.\n\nмћђлЏ™ нЊЊмќјлџї кё°лЉҐмќ„ м‚¬мљ©н•м—¬ лЌ°мќґн„° м›ђліёмќ„ л§Њл“¤ м€ мћ€мЉµл‹€л‹¤.";
         Text[ chinese_simplified ] = "%PRODUCTNAME е…Ѓи®ёж‚ЁиЇ»еЏ–зі»з»џдёЉзЋ°жњ‰зљ„йЂљи®Їз°їж•°жЌ®гЂ‚еЇ№ж­¤зЁ‹еєЏдјље»єз«‹дёЂдёЄ %PRODUCTNAME ж•°жЌ®жєђпјЊиї™ж ·ж‚Ёзљ„йЂљи®Їз°їдѕїдјљеЏж€ђж­¤ж•°жЌ®жєђдё­зљ„дёЂдёЄе·ҐдЅњиЎЁд»Ґдѕ›иЇ»еЏ–гЂ‚\n\nи‡ЄеЉЁж–‡жЎЈеЉ©зђ†дјљеё®еЉ©ж‚Ёе»єз«‹иї™дёЄж•°жЌ®жєђгЂ‚";
         Text[ chinese_traditional ] = "%PRODUCTNAME еђ‘ж‚ЁжЏђдѕ›дёЂеЂ‹е­еЏ–зі»зµ±зљ„йЂљиЁЉйЊ„иі‡ж–™зљ„еЉџиѓЅгЂ‚ењЁеџ·иЎЊйЂ™еЂ‹еЉџиѓЅж™‚жњѓе»єз«‹дёЂеЂ‹ж–°зљ„ %PRODUCTNAME иі‡ж–™жєђпјЊйЂљиЁЉйЊ„е°±жњѓи®Љж€ђйЂ™еЂ‹иі‡ж–™еє«зљ„дёЂеЂ‹иі‡ж–™иЎЁгЂ‚\n\nж‚ЁйЂЏйЃЋйЂ™еЂ‹и‡Єе‹•жЄ”жЎ€еЉ©зђ†е°±еЏЇд»Ґе»єз«‹йЂ™жЁЈзљ„дёЂеЂ‹иі‡ж–™жєђгЂ‚";
         Text[ turkish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
@@ -165,7 +165,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ polish ] = "Wybierz typ swojej zewnкtrznej ksi№їki adresowej:";
         Text[ portuguese_brazilian ] = "Please choose the type of your external address book:";
         Text[ japanese ] = "гЃЉдЅїгЃ„гЃ®е¤–йѓЁг‚ўгѓ‰гѓ¬г‚№еёігЃ®зЁ®йЎћг‚’йЃёжЉћгЃ—гЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
-        Text[ korean ] = "м™ёл¶Ђ мЈјм†ЊлЎќмќ мњ н•мќ„ м„ нѓќн•м‹­м‹њм¤:";
+        Text[ korean ] = "м™ёл¶Ђ мЈјм†ЊлЎќ мњ н•мќ„ м„ нѓќн•м‹­м‹њм¤.";
         Text[ chinese_simplified ] = "иЇ·йЂ‰ж‹©е¤–жќҐйЂљи®Їз°їзљ„з±»ећ‹пјљ";
         Text[ chinese_traditional ] = "и«‹йЃёж“‡дёЂеЂ‹е¤–дѕ†йЂљиЁЉйЊ„зљ„йЎћећ‹пјљ";
         Text[ turkish ] = "Please choose the type of your external address book:";
@@ -184,21 +184,21 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english_us ] = "Mozilla / Netscape";
         Group = TRUE;
         Text[ portuguese ] = "Mozilla / Netscape 6.x";
-        Text[ russian ] = "Mozilla / Netscape 6.x";
+        Text[ russian ] = "Адресная книга Mozilla / Netscape 6.x";
         Text[ greek ] = "Mozilla / Netscape";
         Text[ dutch ] = "Mozilla / Netscape 6.x";
-        Text[ french ] = "Mozilla / Netscape 6.x";
-        Text[ spanish ] = "Mozilla / Netscape 6.x";
+        Text[ french ] = "Mozilla / Netscape";
+        Text[ spanish ] = "Mozilla / Netscape";
         Text[ finnish ] = "Mozilla / Netscape 6.x";
-        Text[ italian ] = "Mozilla / Netscape 6.x";
+        Text[ italian ] = "Mozilla / Netscape";
         Text[ danish ] = "Mozilla / Netscape 6.x";
-        Text[ swedish ] = "Mozilla/Netscape 6.x";
+        Text[ swedish ] = "Mozilla/Netscape";
         Text[ polish ] = "Mozilla / Netscape 6.x";
         Text[ portuguese_brazilian ] = "Mozilla / Netscape";
-        Text[ japanese ] = "Mozilla / Netscape 6.x";
-        Text[ korean ] = "Mozilla / Netscape 6.x";
-        Text[ chinese_simplified ] = "Mozilla / Netscape 6.x";
-        Text[ chinese_traditional ] = "Mozilla / Netscape 6.x";
+        Text[ japanese ] = "Mozilla / Netscape";
+        Text[ korean ] = "Mozilla / Netscape";
+        Text[ chinese_simplified ] = "Mozilla / Netscape";
+        Text[ chinese_traditional ] = "Mozilla / Netscape";
         Text[ turkish ] = "Mozilla / Netscape";
         Text[ arabic ] = "Mozilla / Netscape";
         Text[ catalan ] = "Mozilla / Netscape 6.x";
@@ -270,7 +270,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english ] = "Windows system address book";
         Text [ english_us ] = "Windows system address book";
         Text[ portuguese ] = "Livro de endereзos do sistema Windows";
-        Text[ russian ] = "Адресная книга системы Windows";
+        Text[ russian ] = "Адресная книга Windows";
         Text[ greek ] = "Windows system address book";
         Text[ dutch ] = "Windows-systeemadresboek";
         Text[ french ] = "Carnet d'adresses du systиme Windows";
@@ -299,7 +299,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english ] = "other external data source";
         Text [ english_us ] = "Other external data source";
         Text[ portuguese ] = "Outra fonte de dados externa";
-        Text[ russian ] = "Другие внешние источники данных";
+        Text[ russian ] = "Другой внешний источник данных";
         Text[ greek ] = "other external data source";
         Text[ dutch ] = "andere externe gegevensbron";
         Text[ french ] = "Autre source de donnйes externe";
@@ -311,7 +311,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ polish ] = "inne zewnкtrzne џrуdіo danych";
         Text[ portuguese_brazilian ] = "other external data source";
         Text[ japanese ] = "гЃќгЃ®д»–гЃ®е¤–йѓЁгѓ‡гѓјг‚їг‚Ѕгѓјг‚№";
-        Text[ korean ] = "кё°нѓЂ м™ёл¶Ђ лЌ°мќґн„° м†ЊмЉ¤";
+        Text[ korean ] = "кё°нѓЂ м™ёл¶Ђ лЌ°мќґн„° м›ђліё";
         Text[ chinese_simplified ] = "е…¶е®ѓзљ„е¤–йѓЁж•°жЌ®жєђ";
         Text[ chinese_traditional ] = "е…¶е®ѓзљ„иі‡ж–™жєђ";
         Text[ turkish ] = "other external data source";
@@ -320,11 +320,11 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ thai ] = "а№Ѓаё«аёҐа№€аё‡аё‚а№‰аё­аёЎаё№аёҐаё аёІаёўаё™аё­аёЃаё­аё·а№€аё™ а№†";
     };
     Text[ portuguese ] = "Bem-vindo ao AutoPiloto da fonte de dados dos endereзos!";
-    Text[ russian ] = "Добро пожаловать в Мастера исходных адресов!";
+    Text[ russian ] = "Добро пожаловать в Мастер источников данных адресов!";
     Text[ greek ] = "Welcome to the Address Data Source AutoPilot";
     Text[ dutch ] = "Welkom bij de AutoPiloot voor het inrichten van adresgegevensbronnen";
     Text[ french ] = "Bienvenue dans l'AutoPilote pour le paramйtrage des sources de donnйes des adresses !";
-    Text[ spanish ] = "Bienvenido al AutoPiloto de fuentes de datos de direcciones";
+    Text[ spanish ] = "Bienvenido al Piloto automбtico de fuentes de datos de direcciones";
     Text[ finnish ] = "Tдmд on ohjattu yhteystietojen tuominen";
     Text[ italian ] = "Benvenuti nel Pilota automatico per impostare la sorgente dati della Rubrica";
     Text[ danish ] = "Velkommen til AutoPilot til konfiguration af adressedatakilder.";
@@ -332,7 +332,7 @@ TabPage RID_PAGE_SELECTABTYPE
     Text[ polish ] = "Wita AutoPilot, sіuї№cy do tworzenia џrуdeі danych adresowych.";
     Text[ portuguese_brazilian ] = "Welcome to the Address Data Source AutoPilot";
     Text[ japanese ] = "г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ®г‚Єгѓјгѓ€гѓ‘г‚¤гѓ­гѓѓгѓ€гЃёг‚€гЃ†гЃ“гЃќ";
-    Text[ korean ] = "мЈјм†Њ лЌ°мќґн„° м†ЊмЉ¤ мћђлЏ™ нЊЊмќјлџїм—ђ м¤м‹  кІѓмќ„ н™мЃн•©л‹€л‹¤.";
+    Text[ korean ] = "мЈјм†Њ лЌ°мќґн„° м›ђліёмќ мћђлЏ™ нЊЊмќјлџїм—ђ м¤м‹  кІѓмќ„ н™мЃн•©л‹€л‹¤.";
     Text[ chinese_simplified ] = "ж¬ўиїЋдЅїз”Ёз”ЁдєЋе»єз«‹йЂљи®Їз°їж•°жЌ®жєђзљ„и‡ЄеЉЁж–‡жЎЈеЉ©зђ†гЂ‚";
     Text[ chinese_traditional ] = "ж­ЎиїЋдЅїз”Ёз”Ёж–је»єз«‹йЂљиЁЉйЊ„иі‡ж–™жєђзљ„и‡Єе‹•жЄ”жЎ€еЉ©зђ†";
     Text[ turkish ] = "Welcome to the Address Data Source AutoPilot";
@@ -376,7 +376,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ polish ] = "Konfiguracja nowego џrуdіa danych wymaga dodatkowych ustawieс.\n\nNaleїy w tym celu klikn№ж poniїszy przycisk. Wyњwietlone zostanie okno dialogowe, w ktуrym naleїy dokonaж brakuj№cych ustawieс.";
         Text[ portuguese_brazilian ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
         Text[ japanese ] = "ж–°гЃ—гЃ„гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ®иЁ­е®љгЃ«гЃЇгЂЃгЃѕгЃ гЃ„гЃЏгЃ¤гЃ‹гЃ®й …з›®г‚’жЊ‡е®љгЃ™г‚‹еї…и¦ЃгЃЊгЃ‚г‚ЉгЃѕгЃ™гЂ‚\n\nдё‹гЃ«гЃ‚г‚‹гѓњг‚їгѓіг‚’г‚ЇгѓЄгѓѓг‚ЇгЃ—гЃ¦ж¬ЎгЃ®гѓЂг‚¤г‚ўгѓ­г‚°г‚’й–‹гЃЌгЂЃгЃќгЃ“гЃ§гЃѕгЃ жЊ‡е®љгЃ•г‚ЊгЃ¦гЃЄгЃ„й …з›®гЃ®иЁ­е®љг‚’иЎЊгЃ„гЃѕгЃ™гЂ‚";
-        Text[ korean ] = "мѓ€ лЌ°мќґн„° м†ЊмЉ¤лҐј м„¤м •н•л ¤л©ґ м¶”к°Ђ м •ліґк°Ђ н•„мљ”н•©л‹€л‹¤.\n\nм•„лћ мћ€лЉ” лІ„нЉјмќ„ л€„лҐґл©ґ мќґ мћ‘м—…мќ„ м€н–‰н•  лђ н•л‚мќ лЊЂн™”мѓЃмћђк°Ђ н‘њм‹њлђ©л‹€л‹¤. мќґ лЊЂн™”мѓЃмћђм—ђм„њ м•„м§Ѓ м„¤м •н•м§Ђ м•ЉмќЂ м„¤м • н•­лЄ©л“¤мќ„ м§Ђм •н•м‹­м‹њм¤.";
+        Text[ korean ] = "мѓ€ лЌ°мќґн„° м›ђліёмќ„ м„¤м •н•л ¤л©ґ м¶”к°Ђ м •ліґк°Ђ н•„мљ”н•©л‹€л‹¤.\n\nм•„лћ мћ€лЉ” лІ„нЉјмќ„ л€„лҐґл©ґ мќґ мћ‘м—…мќ„ м€н–‰н•  лђ н•л‚мќ лЊЂн™”мѓЃмћђк°Ђ н‘њм‹њлђ©л‹€л‹¤. мќґ лЊЂн™”мѓЃмћђм—ђм„њ м•„м§Ѓ м„¤м •н•м§Ђ м•ЉмќЂ л‚ґмљ©мќ„ м§Ђм •н•м‹­м‹њм¤.";
         Text[ chinese_simplified ] = "ж–°е»єж•°жЌ®жєђж—¶иїеї…йЎ»еЃље…¶е®ѓи®ѕе®љгЂ‚\n\nжЊ‰е‡»дё‹ж–№зљ„жЊ‰й’®еђЋдѕїдјље‡єзЋ°дёЂдёЄеЇ№иЇќжЎ†гЂ‚ењЁж­¤еЇ№иЇќжЎ†е†…ж‚ЁеЏЇд»ҐеЃљиїжњЄе®Њж€ђзљ„и®ѕе®љгЂ‚";
         Text[ chinese_traditional ] = "ж–°е»єдёЂеЂ‹иі‡ж–™жєђй‚„еї…й €еЃље…¶е®ѓзљ„иЁ­е®љгЂ‚\n\nжЊ‰дёЂдё‹дё‹ж–№зљ„жЊ‰й€•пјЊе°±жњѓй–‹е•“дёЂеЂ‹е°Ќи©±ж–№еЎЉгЂ‚ењЁйЂ™еЂ‹е°Ќи©±ж–№еЎЉд№‹дё­е°±еЏЇд»ҐеЃљж‰Ђжњ‰жњЄе®Њж€ђзљ„иЁ­е®љгЂ‚";
         Text[ turkish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
@@ -429,7 +429,7 @@ TabPage RID_PAGE_ADMININVOKATION
             "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text [ english_us ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
         Text[ portuguese ] = "Foi impossнvel estabelecer a ligaзгo а fonte de dados.\nAntes de continuar, verifique as definiзхes ou seleccione outro tipo (pбgina anterior) para a fonte de dados dos endereзos.";
-        Text[ russian ] = "Невозможно установить соединение с источником данных.\nПрежде, чем продолжить процесс, проверьте настройки или выберите (на предыдущей странице) другой тип исходных адресов.";
+        Text[ russian ] = "Невозможно установить соединение с источником данных.\nПрежде, чем продолжить процесс, проверьте настройки или выберите (на предыдущей странице) другой тип источника.";
         Text[ greek ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ dutch ] = "De verbinding met de gegevensbron kan niet tot stand worden gebracht.\nControleer eerst de gedefinieerde instellingen of kies (op de vorige pagina) een ander type adresgegevensbron.";
         Text[ french ] = "La connexion а la source de donnйes n'a pas pu кtre йtablie.\nAvant de poursuivre, vйrifiez le paramйtrage effectuй ou choisissez (sur la page prйcйdente) un autre type pour la source de donnйes des adresses.";
@@ -441,7 +441,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ polish ] = "Brak poі№czenia ze џrуdіem danych.\nPrzed kontynuacj№ operacji naleїy sprawdziж dokonane ustawienia lub wybraж (na poprzedniej stronie) inny typ џrуdіa danych adresowych.";
         Text[ portuguese_brazilian ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ japanese ] = "гѓ‡гѓјг‚їгѓ™гѓјг‚№гЃёгЃЇжЋҐз¶љгЃ§гЃЌгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚\nз¶љиЎЊгЃ™г‚‹е‰ЌгЃ«гЂЃг‚‚гЃ†дёЂеє¦йЃёжЉћгЃ—гЃџиЁ­е®љг‚’зўєиЄЌгЃ™г‚‹гЃ‹гЂЃгЃ‚г‚‹гЃ„гЃЇе‰Ќгѓљгѓјг‚ёгЃ«ж€»гЃЈгЃ¦гЂЃг‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ«е€ҐгЃ®зЁ®йЎћг‚’йЃёжЉћгЃ—гЃѕгЃ™гЂ‚";
-        Text[ korean ] = "лЌ°мќґн„° м†ЊмЉ¤ м—°кІ°мќґ м„¤м •лђм§Ђ лЄ»н–€мЉµл‹€л‹¤.\nм§„н–‰н•кё° м „м—ђ м„¤м • лЄЁл“њлҐј н™•мќён•к±°л‚ мќґм „ нЋмќґм§Ђм—ђм„њ л‹¤лҐё мЈјм†Њ лЌ°мќґн„° н•м‹ќмќ„ м„ нѓќн•м‹­м‹њм¤.";
+        Text[ korean ] = "лЌ°мќґн„° м›ђліёмњјлЎњ м—°кІ°н•м§Ђ лЄ»н–€мЉµл‹€л‹¤.\nкі„м†Ќ м§„н–‰н•кё° м „м—ђ м„¤м • лЄЁл“њлҐј н™•мќён•к±°л‚ мќґм „ нЋмќґм§Ђм—ђм„њ л‹¤лҐё мЈјм†Њ лЌ°мќґн„° м›ђліё мњ н•мќ„ м„ нѓќн•м‹­м‹њм¤.";
         Text[ chinese_simplified ] = "ж— жі•дёЋж•°жЌ®жєђе»єз«‹иїћжЋҐгЂ‚\nењЁз»§з»­ж‰§иЎЊе‘Ѕд»¤д№‹е‰ЌпјЊиЇ·жЈЂжџҐдёЂдё‹ж‰Ђжњ‰е·Із»Џе®Њж€ђзљ„и®ѕе®љпјЊж€–иЂ…иї”е›ће€°дёЉдёЂйЎµпјЊйЂ‰ж‹©е…¶е®ѓзљ„йЂљи®Їз°їж•°жЌ®жєђз±»ећ‹гЂ‚";
         Text[ chinese_traditional ] = "з„Ўжі•е’Њиі‡ж–™жєђйЂЈз·љгЂ‚\nењЁз№јзєЊеџ·иЎЊжЊ‡д»¤д№‹е‰ЌпјЊи«‹жЄўжџҐж‰Ђжњ‰е®Њж€ђзљ„иЁ­е®љпјЊж€–иЂ…иї”е›ће€°дёЉдёЂй ЃпјЊйЃёж“‡еЏ¦е¤–дёЂеЂ‹ењ°еќЂиі‡ж–™жєђгЂ‚";
         Text[ turkish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
@@ -505,7 +505,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ polish ] = "Podane zewnкtrzne џrуdіo danych zawiera kilka zbiorуw adresуw.\nNaleїy wybraж zbiуr, ktуry bкdzie gіownie uїywany:";
         Text[ portuguese_brazilian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
         Text[ japanese ] = "йЃёжЉћгЃ—гЃџе¤–йѓЁгѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ«гЃЇи¤‡ж•°гЃ®г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їгЃЊеђ«гЃѕг‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚\nдё»гЃ«дЅњжҐ­гЃ«еї…и¦ЃгЃЄг‚‚гЃ®г‚’гЃќгЃ®дё­гЃ‹г‚‰йЃёжЉћгЃ—гЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
-        Text[ korean ] = "м„ нѓќн•њ м™ёл¶Ђ лЌ°мќґн„° м†ЊмЉ¤м—ђ л‘ђ к°њ мќґмѓЃмќ мЈјм†ЊлЎќ(лђлЉ” к°Ѓ н‘њ)мќґ л“¤м–ґ мћ€мЉµл‹€л‹¤.\nкё°ліёмњјлЎњ м‚¬мљ©н•  мЈјм†ЊлЎќмќ„ м„ нѓќн•м‹­м‹њм¤:";
+        Text[ korean ] = "м„ нѓќн•њ м™ёл¶Ђ лЌ°мќґн„° м›ђліём—ђ л‘ђ к°њ мќґмѓЃмќ мЈјм†ЊлЎќмќґ л“¤м–ґ мћ€мЉµл‹€л‹¤.\nкё°ліёмњјлЎњ м‚¬мљ©н•  мЈјм†ЊлЎќмќ„ м„ нѓќн•м‹­м‹њм¤:";
         Text[ chinese_simplified ] = "ж‚ЁйЂ‰е®љзљ„е¤–йѓЁж•°жЌ®жєђе†…еђ«жњ‰е¤љдёЄењ°еќЂиµ„ж–™иЎЁж јгЂ‚\nиЇ·йЂ‰ж‹©дёЂдёЄж‚Ёз»Џеёёи¦ЃдЅїз”Ёзљ„иЎЁж јпјљ";
         Text[ chinese_traditional ] = "е·Із¶“йЃёеЏ–зљ„е¤–дѕ†иі‡ж–™жєђе…§еђ«е¤љеЂ‹ењ°еќЂиі‡ж–™(д№џе°±жЇе¤љеЂ‹иі‡ж–™иЎЁж ј)гЂ‚\nи«‹йЃёж“‡е…¶дё­дёЂеЂ‹е¤§йѓЅжњѓи¦ЃдЅїз”Ёзљ„иЎЁж јпјљ";
         Text[ turkish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
@@ -537,7 +537,7 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ polish ] = "Wybierz tabelк";
     Text[ portuguese_brazilian ] = "Select Table";
     Text[ japanese ] = "гѓ†гѓјгѓ–гѓ«гЃ®йЃёжЉћ";
-    Text[ korean ] = "н‘њ м„ нѓќ";
+    Text[ korean ] = "н…Њмќґлё” м„ нѓќ";
     Text[ chinese_simplified ] = "йЂ‰ж‹©иЎЁж ј";
     Text[ chinese_traditional ] = "йЃёж“‡иЎЁж ј";
     Text[ turkish ] = "Select Table";
@@ -574,11 +574,11 @@ TabPage RID_PAGE_FIELDMAPPING
             "data source.";
         Text [ english_us ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the settings for your data source.";
         Text[ portuguese ] = "Para poder utilizar os dados dos endereзos nos seus modelos de documentos, o %PRODUCTNAME tem de reconhecer os campos que contкm os dados concretos.\n\nExemplo: os endereзos electrуnicos podem estar guardados num determinado campo com o nome que lhe parecer mais conveniente (e-mail, email ou EM, etc.)\n\nUtilize o botгo abaixo para abrir outra caixa de diбlogo que lhe permite definir estes parвmetros para a fonte de dados.";
-        Text[ russian ] = "Для возможности использования адресных данных в шаблонах, %PRODUCTNAME должен знать поля и конкретные данные, которые содержатся в этих полях.\n\nНапример, адреса электронной почты могут быть сохранены в поле с именем \"E-Mail\" или \"Электронная почта\" или с каким-либо другим именем.\n\nНажав на кнопку, находящуюся внизу, можно выполнить эти настройки.";
+        Text[ russian ] = "Для использования адресов в шаблонах, %PRODUCTNAME должен знать поля и конкретные данные, которые содержатся в этих полях.\n\nНапример, адреса электронной почты могут быть сохранены в поле с именем \"E-Mail\" или \"Электронная почта\" или с каким-либо другим именем.\n\nНажав на кнопку, находящуюся внизу, можно выполнить эти настройки.";
         Text[ greek ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ dutch ] = "Om de adresgegevens in uw sjabloondocumenten te kunnen gebruiken, moet %PRODUCTNAME weten welke velden welke concrete gegevens bevatten.\n\nU kunt bijvoorbeeld de e-mailadressen hebben opgeslagen in een veld met de naam \"E-mail\", \"EMail\", of \"EM\", of onder een andere naam.\n\nAls u op de knop hieronder klikt, wordt er een dialoogvenster geopend waarin u de instellingen voor uw gegevensbron kunt opgeven.";
         Text[ french ] = "Afin de pouvoir utiliser les donnйes des adresses dans les modиles, %PRODUCTNAME doit reconnaоtre les champs contenant les donnйes concrиtes.\n\nExemple : les adresses e-mail pourront avoir йtй stockйes dans un champ prйcis que vous pouvez nommer comme bon vous semble (e-mail, email, EM ...).\n\nUtilisez le bouton ci-dessous pour appeler une autre boоte de dialogue permettant de dйfinir ces paramиtres pour la source de donnйes.";
-        Text[ spanish ] = "Para poder incorporar los datos de las direcciones en las plantillas, %PRODUCTNAME debe saber quй campos contienen quй datos.\n\nPor ejemplo, usted puede haber guardado las direcciones electrуnicas en un campo con el nombre \"e-mail\", E-mail\", \"em\" o con un nombre completamente distinto.\n\nSi pulsa el botуn que se encuentra mбs abajo, se abrirб otro diбlogo en el que podrб configurar la fuente de datos.";
+        Text[ spanish ] = "Para poder incorporar los datos de las direcciones en las plantillas, %PRODUCTNAME debe saber quй campos contienen quй datos.\n\nPor ejemplo, usted puede haber guardado las direcciones electrуnicas en un campo con el nombre \"correo-e\", Correo e\", \"email\" o con un nombre completamente distinto.\n\nSi pulsa el botуn que se encuentra mбs abajo, se abrirб otro diбlogo en el que podrб configurar la fuente de datos.";
         Text[ finnish ] = "Jotta osoitetietojen yhdistдminen malleihin onnistuisi, %PRODUCTNAMEn on tiedettдvд, missд kentissд on mitдkin tietoa.\n\nSдhkцpostiosoitteet voivat olla esimerkiksi kentдssд \"sдhkцposti\", \"s-posti\" tai \"email\" tms.\n\nAvaa alla olevaa painiketta napsauttamalla toinen valintaikkuna, johon voit syцttдд tietolдhteen asetukset.";
         Text[ italian ] = "Per poter utilizzare i dati della Rubrica nei vostri modelli и necessario che %PRODUCTNAME riconosca i campi contenenti dati concreti.\n\nSupponiamo che abbiate salvato i vostri indirizzi eMail in un campo chiamato \"E-Mail\", \"eMail\", \"EM\" o un qualsiasi altro nome.\n\nPremendo il pulsante in basso si aprirа un altro dialogo in cui potrete impostare la sorgente dati.";
         Text[ danish ] = "\"For at kunne bruge adressedataene i dine skabelondokumenter skal %PRODUCTNAME vide, hvilke felter der indeholder hvilke konkrete data.\n\nFor eksempel kunne du have gemt e-mail-adresserne i et felt ved navn \"\"E-mail\"\", \"\"Email\"\" eller \"\"EM\"\" – eller under et helt andet navn.\n\nSе snart du trykker pе knappen nedenfor, еbnes en yderligere dialog, hvor du kan foretage indstillingerne for din datakilde.\"";
@@ -586,7 +586,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ polish ] = "Aby mуc zastoswaж dane adresowe w szablonach, program %PRODUCTNAME musi wiedzieж, w jakich polach znajduj№ siк okreњlone dane.\n\nMoїna np. zapisaж adresy uїywane w poczcie elektronicznej w polu \"e-mail\" lub w polu o innej nazwie.\n\nPo klikniкciu poniїszego przycisku wyњwietlone zostanie nowe okno dialogowe, w ktуrym moїna dokonaж odpowiednich ustawieс џrуdіa danych.";
         Text[ portuguese_brazilian ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ japanese ] = "г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їгЃЊгѓ†гѓігѓ—гѓ¬гѓјгѓ€гЃ®гѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ«г‚‚дЅїз”ЁгЃ§гЃЌг‚‹г‚€гЃ†гЃ«гЂЃгЃ©гЃ®гѓ•г‚Јгѓјгѓ«гѓ‰гЃ«гЃ©гЃ®гѓ‡гѓјг‚їг‚’е…ҐеЉ›гЃ™г‚‹гЃ‹ %PRODUCTNAME гЃЊиЄ­гЃїеЏ–г‚Њг‚‹г‚€гЃ†гЃ«гЃ—гЃ¦гЃЉгЃЏеї…и¦ЃгЃЊгЃ‚г‚ЉгЃѕгЃ™гЂ‚\n\nгЃџгЃЁгЃ€гЃ°гЂЃE-mail г‚ўгѓ‰гѓ¬г‚№гЃ®еђЌе‰ЌгЃЊгЂЊE-MailгЂЌгЂЃгЂЊEMailгЂЌгЂЃгЂЊEMгЂЌгЂЃгЃ‚г‚‹гЃ„гЃЇе…ЁгЃЏз•°гЃЄгЃЈгЃџеђЌе‰ЌгЃ§дїќе­гЃ•г‚ЊгЃ¦гЃ„г‚‹еЏЇиѓЅжЂ§г‚‚гЃ‚г‚ЉгЃѕгЃ™гЂ‚\n\nдё‹гЃ®гѓњг‚їгѓіг‚’г‚ЇгѓЄгѓѓг‚ЇгЃ™г‚‹гЃЁгЂЃгѓ‡гѓјг‚їг‚Ѕгѓјг‚№иЁ­е®љз”ЁгЃ®гѓЂг‚¤г‚ўгѓ­г‚°гЃЊй–‹гЃЌгЃѕгЃ™гЂ‚";
-        Text[ korean ] = "м„њм‹ќ нЊЊмќј л¬ём„њ м•€м—ђ мЈјм†Њ лЌ°мќґн„°лҐј н†µн•©н•л ¤л©ґ м–ґл–¤ н•„л“њк°Ђ м–ґл–¤ кµ¬мІґм Ѓмќё лЌ°мќґн„°лҐј нЏ¬н•Ён•лЉ”м§Ђ %PRODUCTNAMEм—ђм„њ м–ґл–¤ н•„л“њм—ђ кµ¬мІґм Ѓмќё лЌ°мќґн„°к°Ђ нЏ¬н•ЁлђлЉ”м§Ђ м•Њм•„м•ј н•©л‹€л‹¤.\n\nм€лҐј л“¤л©ґ, E л©”мќј мЈјм†ЊлҐј \"E-Mail\", \"E-Mail\", \"EM\" лђлЉ” м „нЂ л‹¤лҐё мќґл¦„мќ н•„л“њм—ђ м ЂмћҐн–€мќ„ м€ мћ€мЉµл‹€л‹¤.\n\nм•„лћ лІ„нЉјмќ„ л€„лҐґл©ґ лђ н•л‚мќ лЊЂн™”мѓЃмћђк°Ђ м—ґл¦Ѕл‹€л‹¤. мќґ лЊЂн™”мѓЃмћђм—ђм„њлЉ” лЌ°мќґн„° м†ЊмЉ¤м—ђ лЊЂн•ґ мќґ н•„л“њ н• л‹№мќ„ м€н–‰н•  м€ мћ€мЉµл‹€л‹¤.";
+        Text[ korean ] = "м„њм‹ќ нЊЊмќј л¬ём„њлЎњ мЈјм†Њ лЌ°мќґн„°лҐј н†µн•©н•л ¤л©ґ м–ґл–¤ н•„л“њк°Ђ м–ґл–¤ кµ¬мІґм Ѓмќё лЌ°мќґн„°лҐј нЏ¬н•Ён•лЉ”м§ЂлҐј %PRODUCTNAMEм—ђ м•Њл ¤м•ј н•©л‹€л‹¤.\n\nм€лҐј л“¤л©ґ, м „мћђ л©”мќј мЈјм†ЊлҐј \"E-Mail\", \"EMail\", \"EM\" лђлЉ” м „нЂ л‹¤лҐё мќґл¦„мќ н•„л“њм—ђ м ЂмћҐн–€мќ„ м€ мћ€мЉµл‹€л‹¤.\n\nм•„лћм—ђ мћ€лЉ” лІ„нЉјмќ„ л€„лҐґл©ґ лђ н•л‚мќ лЊЂн™” мѓЃмћђк°Ђ м—ґл¦Ѕл‹€л‹¤. мќґ лЊЂн™” мѓЃмћђм—ђм„њ лЌ°мќґн„° м›ђліёмќ м„¤м •мќ„ н•  м€ мћ€мЉµл‹€л‹¤.";
         Text[ chinese_simplified ] = "и¦ЃењЁж–‡жЎЈж ·ејЏе†…ж­ЈзЎ®дЅїз”ЁйЂљи®Їз°їж•°жЌ®пјЊе°±еї…йЎ»и®© %PRODUCTNAME зџҐйЃ“е“Єдє›е­—ж®µеђ«жњ‰дЅ•з§Ќж•°жЌ®гЂ‚\n\nдѕ‹е¦‚пјЊж‚ЁеЏЇд»ҐењЁдёЂдёЄи‡Єе·±и®ѕе®љеђЌз§°зљ„е­—ж®µе†…пјЊж€–иЂ…ењЁдёЂдёЄй‡‡з”Ёе­—ж®µеђЌз§°\"EMail\"пјЊж€–\"E-Mail\" ж€–\"EM\"зљ„е­—ж®µд№‹е†…дїќе­з”µе­ђй‚®д»¶ењ°еќЂгЂ‚\n\nз‚№е‡»дё‹ж–№зљ„жЊ‰й’®еђЋпјЊе°±дјљж‰“ејЂдёЂдёЄжЏђдѕ›иї›иЎЊж•°жЌ®жєђи®ѕе®љзљ„еЇ№иЇќжЎ†гЂ‚";
         Text[ chinese_traditional ] = "и¦ЃењЁж–‡д»¶жЁЈејЏд№‹дё­ж­ЈзўєдЅїз”ЁйЂљиЁЉйЊ„иі‡ж–™е°±еї…й €и®“ %PRODUCTNAME зџҐйЃ“е“Єдє›ж¬„дЅЌеђ«жњ‰дЅ•зЁ®иі‡ж–™гЂ‚\n\nдѕ‹е¦‚пјЊеЏЇд»ҐењЁдёЂеЂ‹и‡ЄиЁ‚еђЌзЁ±зљ„ж¬„дЅЌд№‹е…§ж€–ењЁдёЂеЂ‹жЋЎз”Ёж¬„дЅЌеђЌзЁ±<EMail>пјЊж€–<E-Mail>ж€–<EM>ж¬„дЅЌд№‹е…§е„Іе­й›»е­ђйѓµд»¶ењ°еќЂгЂ‚\n\nжЊ‰дё‹ж–№зљ„жЊ‰й€•пјЊе°±жњѓй–‹е•“дёЂеЂ‹жЏђдѕ›иЁ­е®љиі‡ж–™жєђзљ„е°Ќи©±ж–№еЎЉгЂ‚";
         Text[ turkish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
@@ -604,7 +604,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text [ english ] = "Field assignment";
         Text [ english_us ] = "Field Assignment";
         Text[ portuguese ] = "Atribuir campos";
-        Text[ russian ] = "Назначение поля";
+        Text[ russian ] = "Назначение полей";
         Text[ greek ] = "Field assignment";
         Text[ dutch ] = "Veldindeling";
         Text[ french ] = "Assignation des champs";
@@ -675,7 +675,7 @@ TabPage RID_PAGE_FINAL
             "Now, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text [ english_us ] = "That was all the information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name under which you want to register the data source in %PRODUCTNAME.";
         Text[ portuguese ] = "Estas sгo todas as informaзхes necessбrias para a integraзгo dos seus dados relacionados com endereзos no %PRODUCTNAME.\n\nAgora sу falta indicar o nome para o registo da fonte de dados no %PRODUCTNAME.";
-        Text[ russian ] = "Информация, необходимая для интеграции адресных данных в %PRODUCTNAME собрана.\n\nОсталось ввести имя, под которым источник данных будет зарегистрирован в %PRODUCTNAME.";
+        Text[ russian ] = "Информация, необходимая для интеграции данных в %PRODUCTNAME собрана.\n\nОсталось ввести имя, под которым источник данных будет зарегистрирован в %PRODUCTNAME.";
         Text[ greek ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ dutch ] = "Dat waren alle vereiste gegevens voor de integratie van uw adresgegevens in %PRODUCTNAME.\n\nVoer nu nog de naam in waaronder de gegevensbron in %PRODUCTNAME moet worden geregistreerd.";
         Text[ french ] = "Toutes les informations requises pour l'intйgration des donnйes des adresses dans %PRODUCTNAME sont а prйsent rйunies.\n\nSaisissez maintenant le nom sous lequel enregistrer la source de donnйes dans %PRODUCTNAME.";
@@ -687,7 +687,7 @@ TabPage RID_PAGE_FINAL
         Text[ polish ] = "Podano wszystkie dane wymagane do integracji danych adresowych w programie %PRODUCTNAME.\n\nTeraz naleїy wpisaж jeszcze nazwк, pod ktуr№ џrуdіo danych zarejestrowane zostanie w programie %PRODUCTNAME.";
         Text[ portuguese_brazilian ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ japanese ] = "гЃ“г‚ЊгЃ§гЃЉдЅїгЃ„гЃ®г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їг‚’ %PRODUCTNAME гЃ«зµ±еђ€гЃ™г‚‹жє–е‚™гЃЊж•ґгЃ„гЃѕгЃ—гЃџгЂ‚\n\nжњЂеѕЊгЃ« %PRODUCTNAME гЃ®гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ«з™»йЊІгЃ™г‚‹еђЌе‰Ќг‚’е…ҐеЉ›гЃ—гЃѕгЃ™гЂ‚";
-        Text[ korean ] = "мќґ м •ліґ лЄЁл‘ђк°ЂлЉ” %PRODUCTNAMEм—ђ мЈјм†Њ лЌ°мќґн„°лҐј н†µн•©н•лЉ”лЌ° н•„мљ”н•њ лЌ°мќґн„°мћ…л‹€л‹¤.\n\nмќґм њ %PRODUCTNAMEм—ђ лЌ°мќґн„° м†ЊмЉ¤лҐј л“±лЎќн•лЉ” лЌ° м‚¬мљ©н•  мќґл¦„мќ„ мћ…л Ґн•м‹­м‹њм¤.";
+        Text[ korean ] = "мќґ лЄЁл“  м‚¬н•­мќЂ %PRODUCTNAME(мњј)лЎњ мЈјм†Њ лЌ°мќґн„°лҐј н†µн•©н•лЉ”лЌ° н•„мљ”н•њ м •ліґмћ…л‹€л‹¤.\n\nмќґм њ %PRODUCTNAMEм—ђ лЌ°мќґн„° м›ђліёмќ„ л“±лЎќн•лЉ”лЌ° м‚¬мљ©н•  мќґл¦„мќ„ мћ…л Ґн•м‹­м‹њм¤.";
         Text[ chinese_simplified ] = "ж‚Ёе·Із»Џе®Њж€ђж‰Ђжњ‰зљ„ %PRODUCTNAME ж•ґеђ€йЂљи®Їз°їж•°жЌ®зљ„и®ѕе®љгЂ‚\n\nзЋ°ењЁж‚ЁеЏЄйњЂи¦Ѓиѕ“е…Ґ %PRODUCTNAME з”ЁжќҐз™»и®°иї™дёЄж•°жЌ®жєђзљ„еђЌз§°гЂ‚";
         Text[ chinese_traditional ] = "ж‚Ёе·Із¶“е®Њж€ђж‰Ђжњ‰еї…й €зљ„ %PRODUCTNAME ж•ґеђ€йЂљиЁЉйЊ„иі‡ж–™зљ„иЁ­е®љгЂ‚\n\nзЏѕењЁж‚ЁеЏЄйњЂи¦Ѓијёе…Ґ %PRODUCTNAME з”Ёдѕ†з™»иЁе’ЊдЅїз”ЁйЂ™еЂ‹иі‡ж–™жєђзљ„еђЌзЁ±гЂ‚";
         Text[ turkish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
@@ -718,7 +718,7 @@ TabPage RID_PAGE_FINAL
         Text[ polish ] = "Nazwa";
         Text[ portuguese_brazilian ] = "Title";
 Text[ japanese ] = "г‚їг‚¤гѓ€гѓ«";
-        Text[ korean ] = "м њлЄ©";
+        Text[ korean ] = "мќґл¦„";
         Text[ chinese_simplified ] = "ж ‡йў";
         Text[ chinese_traditional ] = "жЁ™йЎЊ";
         Text[ turkish ] = "Title";
@@ -758,7 +758,7 @@ Text[ japanese ] = "г‚їг‚¤гѓ€гѓ«";
         Text [ polish ] = "Istnieje inne џrуdіo danych o tej samej nazwie. Naleїy wybraж inn№ nazwк.";
         Text [ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ japanese ] = "гЃ“гЃ®еђЌе‰ЌгЃ®д»гЃ„гЃџе€ҐгЃ®гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃЊгЃ™гЃ§гЃ«гЃ‚г‚ЉгЃѕгЃ™гЂ‚гѓ‡гѓјг‚їг‚Ѕгѓјг‚№еђЌг‚’гЃЇгЃЈгЃЌг‚ЉгЃЁеЊєе€ҐгЃ™г‚‹гЃџг‚ЃгЃ«гЃЇгЂЃгЃ»гЃ‹гЃ®еђЌе‰Ќг‚’йЃёжЉћгЃ™г‚‹еї…и¦ЃгЃЊгЃ‚г‚ЉгЃѕгЃ™гЂ‚";
-        Text [ korean ] = "мќґлЇё лЏ™мќјн•њ мќґл¦„мќ л‹¤лҐё лЌ°мќґн„° м†ЊмЉ¤к°Ђ мћ€мЉµл‹€л‹¤. лЌ°мќґн„° м†ЊмЉ¤ мќґл¦„мќЂ м „м„ёкі„м ЃмњјлЎњ мњ мќјн•ґм•ј н•лЇЂлЎњ л‹¤лҐё мќґл¦„мќ„ м„ нѓќн•ґм•ј н•©л‹€л‹¤.";
+        Text [ korean ] = "мќґлЇё к°™мќЂ мќґл¦„мќ лЌ°мќґн„° м›ђліёмќґ мћ€мЉµл‹€л‹¤. лЌ°мќґн„° м›ђліёмќ мќґл¦„мќЂ н•­мѓЃ кі мњ н•ґм•ј н•©л‹€л‹¤. л‹¤лҐё мќґл¦„мќ„ м„ нѓќн•ґмЈјм‹­м‹њм¤.";
         Text [ chinese_simplified ] = "е·Із»Џе­ењЁдёЂдёЄеђЊеђЌзљ„ж•°жЌ®жєђгЂ‚е› дёєж•°жЌ®жєђеђЌз§°еї…йЎ»жЇењЁж•°жЌ®еє“иЊѓе›ґе†…еЌ•дёЂжЋзЎ®зљ„гЂ‚иЇ·дЅїз”ЁеЏ¦дёЂдёЄеђЌз§°гЂ‚";
         Text [ chinese_traditional ] = "е·Із¶“е­ењЁдёЂеЂ‹еђЊеђЌзљ„иі‡ж–™жєђгЂ‚е› з‚єдёЂеЂ‹иі‡ж–™жєђеђЌзЁ±еї…й €жЇењЁиі‡ж–™еє«зЇ„ењЌе…§е–®дёЂжЋзўєзљ„гЂ‚и«‹жЋЎз”ЁеЏ¦е¤–дёЂеЂ‹жњ‰ж•€зљ„еђЌзЁ±гЂ‚";
         Text [ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
@@ -780,7 +780,7 @@ Text[ japanese ] = "г‚їг‚¤гѓ€гѓ«";
     Text[ polish ] = "Nazwa џrуdіa danych";
     Text[ portuguese_brazilian ] = "Data Source Title";
     Text[ japanese ] = "гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ®г‚їг‚¤гѓ€гѓ«";
-    Text[ korean ] = "лЌ°мќґн„° м†ЊмЉ¤ м њлЄ©";
+    Text[ korean ] = "лЌ°мќґн„° м›ђліё мќґл¦„";
     Text[ chinese_simplified ] = "ж•°жЌ®жєђеђЌз§°";
     Text[ chinese_traditional ] = "иі‡ж–™жєђзљ„еђЌзЁ±";
     Text[ turkish ] = "Data Source Title";
@@ -810,7 +810,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message[ polish ] = "Wybierz typ ksi№їki adresowej";
     Message[ portuguese_brazilian ] = "Bitte wдhlen sie einen Adressbuch-Typ aus";
     Message[ japanese ] = "г‚ўгѓ‰гѓ¬г‚№еёігЃ®зЁ®йЎћг‚’гЃІгЃЁгЃ¤йЃёжЉћгЃ—гЃ¦гЃЏгЃ гЃ•гЃ„";
-    Message[ korean ] = "мЈјм†ЊлЎќ мњ н•мќ„ м„ нѓќн•м‹­м‹њм¤";
+    Message[ korean ] = "мЈјм†ЊлЎќ мњ н•мќ„ м„ нѓќн•м‹­м‹њм¤.";
     Message[ chinese_simplified ] = "иЇ·йЂ‰ж‹©дёЂдёЄйЂљи®Їз°їз±»ећ‹";
     Message[ chinese_traditional ] = "и«‹йЃёж“‡дёЂеЂ‹еђ€йЃ©зљ„йЂљиЁЉйЊ„йЎћећ‹гЂ‚";
     Message[ turkish ] = "Bitte wдhlen sie einen Adressbuch-Typ aus";
@@ -831,7 +831,7 @@ QueryBox RID_QRY_NOTABLES
         "Do you want to install it as address data source, anyway?";
     Message [ english_us ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
     Message[ portuguese ] = "A fonte de dados nгo contйm nenhuma tabela.\nMesmo assim, configurб-la como fonte de dados dos endereзos?";
-    Message[ russian ] = "Эти исходные данные не содержат ни одной таблицы.\nУстановить их в качестве исходных данных адресов?";
+    Message[ russian ] = "Эти исходные данные не содержат ни одной таблицы.\nУстановить их в качестве источников данных адресов?";
     Message[ greek ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ dutch ] = "De gegevensbron bevat geen tabel.\nWilt u deze toch als adresgegevensbron inrichten?";
     Message[ french ] = "La source de donnйes ne contient aucune table.\nVoulez-vous tout de mкme la paramйtrer comme source de donnйes des adresses ?";
@@ -843,7 +843,7 @@ QueryBox RID_QRY_NOTABLES
     Message[ polish ] = "Џrуdіo danych nie zawiera їadnych tabel.\nCzy pomimo tego utworzyж џrуdіo danych adresowych?";
     Message[ portuguese_brazilian ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ japanese ] = "гЃ“гЃ®гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ«гѓ†гѓјгѓ–гѓ«гЃЇгЃІгЃЁгЃ¤г‚‚гЃ‚г‚ЉгЃѕгЃ›г‚“гЂ‚\nгЃќг‚ЊгЃ§г‚‚г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃЁгЃ—гЃ¦иЁ­е®љгЃ—гЃѕгЃ™гЃ‹гЂ‚";
-    Message[ korean ] = "лЌ°мќґн„° м†ЊмЉ¤м—ђ н‘њк°Ђ л“¤м–ґ мћ€м§Ђ м•ЉмЉµл‹€л‹¤.\nк·ёлџјм—ђлЏ„ л¶€кµ¬н•кі  лЌ°мќґн„° м†ЊмЉ¤лҐј мЈјм†Њ лЌ°мќґн„° м†ЊмЉ¤лЎњм„њ м„¤м№н•кІ мЉµл‹€к№Њ?";
+    Message[ korean ] = "лЌ°мќґн„° м›ђліём—ђ н…Њмќґлё”мќґ м—†мЉµл‹€л‹¤.\nк·ёлћлЏ„ лЌ°мќґн„° м›ђліёмќ„ мЈјм†Њ лЌ°мќґн„° м›ђліёмњјлЎњ м„¤м№н•м‹њкІ мЉµл‹€к№Њ?";
     Message[ chinese_simplified ] = "иї™дёЄж•°жЌ®жєђжІЎжњ‰еЊ…еђ«д»»дЅ•иЎЁж јгЂ‚\nж‚ЁиїжЇи¦Ѓи®ѕе®љиЇҐж•°жЌ®жєђдёєйЂљи®Їз°їж•°жЌ®жєђпјџ";
     Message[ chinese_traditional ] = "йЂ™еЂ‹иі‡ж–™жєђжІ’жњ‰д»»дЅ•зљ„иі‡ж–™иЎЁж јгЂ‚\nй‚„жЇи¦Ѓе»єз«‹йЂ™еЂ‹йЂљиЁЉйЊ„иі‡ж–™жєђпјџ";
     Message[ turkish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
@@ -898,7 +898,7 @@ String RID_STR_ADMINDIALOGTITLE
     Text[ polish ] = "Utwуrz џrуdіo danych adresowych";
     Text[ portuguese_brazilian ] = "Create Address Data Source";
     Text[ japanese ] = "г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ®ж јзґЌ";
-    Text[ korean ] = "мЈјм†Њ лЌ°мќґн„° м†ЊмЉ¤ л§Њл“¤кё°";
+    Text[ korean ] = "мЈјм†Њ лЌ°мќґн„° м›ђліё л§Њл“¤кё°";
     Text[ chinese_simplified ] = "е»єз«‹ењ°еќЂж•°жЌ®жєђ";
     Text[ chinese_traditional ] = "е»єз«‹ењ°еќЂиі‡ж–™жєђ";
     Text[ turkish ] = "Create Address Data Source";
@@ -952,7 +952,7 @@ String RID_STR_PLEASECHECKSETTINGS
     Text[ polish ] = "Sprawdџ ustawienia џrуdіa danych.";
     Text[ portuguese_brazilian ] = "Please check the settings made for the data source.";
     Text[ japanese ] = "гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃ®иЁ­е®љй …з›®г‚’г‚‚гЃ†дёЂеє¦зўєиЄЌгЃ—гЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
-    Text[ korean ] = "лЌ°мќґн„° м†ЊмЉ¤ м„¤м •мќ„ н™•мќён•м‹­м‹њм¤.";
+    Text[ korean ] = "лЌ°мќґн„° м›ђліё м„¤м •мќ„ кІЂм‚¬н•м‹­м‹њм¤.";
     Text[ chinese_simplified ] = "иЇ·жЈЂжџҐдёЂдё‹ж•°жЌ®жєђи®ѕе®љгЂ‚";
     Text[ chinese_traditional ] = "и«‹жЄўжџҐиі‡ж–™жєђзљ„иЁ­е®љгЂ‚";
     Text[ turkish ] = "Please check the settings made for the data source.";
@@ -999,7 +999,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text [ english_us ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
     Text [ language_user1 ] = "The last line of this text refers to a menu entry. Please use the same translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
     Text[ portuguese ] = "Nгo hб campos atribuнdos.\nSe nгo pretender atribuir os campos agora, poderб fazк-lo mais tarde em:\nmenu \"Ficheiro - Modelos - Fonte do livro de endereзos...\"";
-    Text[ russian ] = "В настоящий момент поля не присвоены.\n Их можно присвоить либо сейчас, либо позже,\nв меню \"Документ - Шаблон - Источник адресной книги...\"";
+    Text[ russian ] = "В настоящий момент поля не присвоены.\n Их можно присвоить либо сейчас, либо позже,\nв меню \"Файл - Шаблоны - Источник адресной книги...\"";
     Text[ greek ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ dutch ] = "Momenteel zijn er geen velden toegewezen.\nAls u op dit moment geen velden wilt toewijzen, kunt u dit op een later tijdstip doen:\nMenu \"Bestand - Sjabloon - Adresboekbron...\"";
     Text[ french ] = "Aucun champ n'est assignй.\nSi vous ne souhaitez pas procйder а l'assignation pour le moment, vous pourrez le faire plus tard sous :\n\"Fichier - Modиle de document - Source du carnet d'adresses ...\"";
@@ -1011,7 +1011,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ polish ] = "Brak przyporz№dkowanych pуl.\nPola moїna przyporz№dkowaж rуwnieї pуџniej,\nwybieraj№c sekwencjк \"Plik - Szablon dokumentu - Џrуdіo danych adresowych...\"";
     Text[ portuguese_brazilian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ japanese ] = "зЏѕењЁгЂЃгѓ•г‚Јгѓјгѓ«гѓ‰гЃ®е‰Іг‚ЉеЅ“гЃ¦гЃЇгЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ›г‚“гЂ‚\nд»ЉгЃ™гЃђгЃ«е‰Іг‚ЉеЅ“гЃ¦гЃЊж±єг‚Ѓг‚‰г‚ЊгЃЄгЃ‘г‚ЊгЃ°гЂЃгЃ‚гЃЁгЃ‹г‚‰гЃ§г‚‚е‰Іг‚ЉеЅ“гЃ¦гЃ§гЃЌгЃѕгЃ™гЂ‚\nгЃќгЃ®гЃЁгЃЌгЃЇгѓЎгѓ‹гѓҐгѓјгЃ® гѓ•г‚Ўг‚¤гѓ« в†’ гѓ‰г‚­гѓҐгѓЎгѓігѓ€гѓ†гѓігѓ—гѓ¬гѓјгѓ€ в†’ г‚ўгѓ‰гѓ¬г‚№еёіг‚Ѕгѓјг‚№... г‚ігѓћгѓігѓ‰гЃ§е®џиЎЊгЃ—гЃѕгЃ™гЂ‚";
-    Text[ korean ] = "н„мћ¬лЉ” н• л‹№лђњ н•„л“њк°Ђ м—†мЉµл‹€л‹¤.\nм§Ђкё€ н• л‹№н•м§Ђ м•Љмќ„ кІЅмљ° л‚м¤‘м—ђ м–ём њлќјлЏ„\nл©”л‰ґ \"нЊЊмќј - н…њн”Њл¦ї - мЈјм†ЊлЎќ ...\" л©”л‰ґлҐј м‚¬мљ©н•м—¬ н• л‹№н•  м€ мћ€мЉµл‹€л‹¤.";
+    Text[ korean ] = "н„мћ¬лЉ” н• л‹№лђњ н•„л“њк°Ђ м—†мЉµл‹€л‹¤.\nм§Ђкё€ н• л‹№н•м§Ђ м•Љмќ„ кІЅмљ° л‚м¤‘м—ђ м–ём њлќјлЏ„\nл©”л‰ґ [нЊЊмќј] - [м„њм‹ќ нЊЊмќј] - [мЈјм†ЊлЎќ]... л©”л‰ґлҐј м‚¬мљ©н•м—¬ н• л‹№н•  м€ мћ€мЉµл‹€л‹¤.";
     Text[ chinese_simplified ] = "и‡ід»ЉиїжњЄжЊ‡е®љд»»дЅ•зљ„е­—ж®µгЂ‚\nе¦‚жћњзЋ°ењЁдёЌжЊ‡е®ље­—ж®µпјЊд№џеЏЇд»Ґд»ҐеђЋе†ЌеЃљиї™дёЄи®ѕе®љпјљ\nз‚№е‡»иЏњеЌ•\"ж–‡д»¶ - ж–‡жЎЈж ·ејЏ - йЂљи®Їз°їж•°жЌ®жєђ...\"";
     Text[ chinese_traditional ] = "и‡ід»Љй‚„жњЄжЊ‡е®љд»»дЅ•ж¬„дЅЌгЂ‚\nе¦‚жћњзЏѕењЁдёЌжЊ‡е®љж¬„дЅЌпјЊд№џеЏЇд»Ґд»ҐеѕЊе†ЌеЃљйЂ™еЂ‹иЁ­е®љпјљ\nжЊ‰еЉџиѓЅиЎЁ<жЄ”жЎ€>-<ж–‡д»¶жЁЈејЏ>-<йЂљиЁЉйЊ„иі‡ж–™жєђ...>гЂ‚";
     Text[ turkish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
@@ -1026,21 +1026,21 @@ String RID_STR_ABP_SUCCESS
     Text [ english ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
     Text [ english_us ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
     Text[ portuguese ] = "O seu livro de endereзos externo foi registado no %PRODUCTNAME.\nOs dados dos endereзos podem ser agora utilizados como qualquer outra fonte de dados.";
-    Text[ russian ] = "Регистрация внешней адресной книги в %PRODUCTNAME прошла успешно.\nТеперь адресные данные доступны также как и любые другие источники данных.";
+    Text[ russian ] = "Регистрация внешней адресной книги в %PRODUCTNAME прошла успешно.\nТеперь адреса доступны наряду с другими источниками данных.";
     Text[ greek ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ dutch ] = "Uw externe adresboek is in %PRODUCTNAME geregistreerd.\nNu kunt u uw adresgegevens als gegevensbron gebruiken.";
-    Text[ french ] = "Le carnet d'adresses externe a йtй enregistrй dans %PRODUCTNAME.\nLes donnйes des adresses sont а prйsent utilisables comme les autres sources de donnйes.";
+    Text[ french ] = "Vous pouvez dйsormais accйder aux donnйes des adresses depuis %PRODUCTNAME. La touche F4 permet par ex. d'ouvrir la vue de la source de donnйes correspondante.";
     Text[ spanish ] = "La libreta de direcciones externa se ha registrado en %PRODUCTNAME.\nAhora puede utilizar los datos de las direcciones como cualquier otra fuente de datos.";
     Text[ finnish ] = "Ulkoisen osoitekirjan rekisterцiminen onnistui %PRODUCTNAMEssa.\nVoit nyt kдyttдд osoitetietojasi muiden tietolдhteiden tapaan.";
-    Text[ italian ] = "La vostra Rubrica esterna и stata registrata in %PRODUCTNAME.\nAdesso potete utilizzare i dati della Rubrica come qualsiasi altra sorgente dati.";
+    Text[ italian ] = "Potete accedere alla Rubrica direttamente da %PRODUCTNAME. Premendo il tasto F4 si aprirа la sorgente dati in cui potete eleborare i dati relativi alla Rubrica.";
     Text[ danish ] = "Registreringen af det eksterne adressekartotek i %PRODUCTNAME er gennemfшrt.\nDu kan nu bruge dine adressedata som enhver anden datakilde.";
-    Text[ swedish ] = "Din externa adressbok har registrerats i %PRODUCTNAME.\nDu kan nu anvдnda dina adressdata som vilken annan datakдlla som helst.";
+    Text[ swedish ] = "Nu kan du anvдnda dina adressdata i %PRODUCTNAME.\nDu kan till exempel цppna datakдllvyn genom att trycka pе F4 och arbeta med dina adressdata dдr.";
     Text[ polish ] = "Zewnкtrzna ksi№їka adresowa zostaіa zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych moїna teraz uїywaж tak jak innego џrуdіa danych.";
     Text[ portuguese_brazilian ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ japanese ] = "е¤–йѓЁг‚ўгѓ‰гѓ¬г‚№еёігЃ® %PRODUCTNAME гЃёгЃ®з™»йЊІгЃЇж­ЈеёёгЃ«е®Њдє†гЃ—гЃѕгЃ—гЃџгЂ‚\nгЃ“г‚ЊгЃ‹г‚‰гЃЇг‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їг‚‚гЃ»гЃ‹гЃ®гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гЃЁеђЊгЃг‚€гЃ†гЃ«дЅїз”ЁгЃЊеЏЇиѓЅгЃ§гЃ™гЂ‚";
-    Text[ korean ] = "м™ёл¶Ђ мЈјм†ЊлЎќмќґ м„±кіµм ЃмњјлЎњ %PRODUCTNAMEм—ђ л“±лЎќлђм—€мЉµл‹€л‹¤.\nмќґм њ мЈјм†Њ лЌ°мќґн„°лҐј л‹¤лҐё лЄЁл“  лЌ°мќґн„° м†ЊмЉ¤мІлџј м•Ўм„ёмЉ¤н•  м€ мћ€мЉµл‹€л‹¤.";
-    Text[ chinese_simplified ] = "е¤–жќҐзљ„йЂљи®Їз°їе·Із»Џж€ђеЉџењ°з™»и®°е€° %PRODUCTNAME й‡ЊгЂ‚\nиї™ж ·пјЊж‚Ёе°±иѓЅе¤џе¦‚еђЊдЅїз”Ёд»»дЅ•дёЂдёЄе…¶д»–зљ„ж•°жЌ®жєђдёЂж ·йљЏж„ЏдЅїз”Ёж‚Ёзљ„йЂљи®Їз°їгЂ‚";
-    Text[ chinese_traditional ] = "%PRODUCTNAME е·Із¶“ж€ђеЉџењ°з™»иЁйЂ™еЂ‹е¤–дѕ†зљ„йЂљиЁЉйЊ„гЂ‚\nеѕћзЏѕењЁиµ·ж‚Ёе°±иѓЅе¤ е¦‚еђЊдЅїз”Ёд»»дЅ•дёЂеЂ‹е…¶д»–зљ„иі‡ж–™жєђдёЂжЁЈж–№дѕїењ°дЅїз”ЁйЂ™еЂ‹йЂљиЁЉйЊ„гЂ‚";
+    Text[ japanese ] = "гЃ“г‚ЊгЃ§ %PRODUCTNAME гЃ‹г‚‰г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їгЃёг‚ўг‚Їг‚»г‚№гЃ§гЃЌг‚‹г‚€гЃ†гЃ«гЃЄг‚ЉгЃѕгЃ—гЃџгЂ‚дѕ‹гЃ€гЃ°гЂЃF4г‚­гѓјг‚’жЉјгЃ—гЃ¦гѓ‡гѓјг‚їг‚Ѕгѓјг‚№гѓ“гѓҐгѓјг‚’й–‹гЃЏгЃЁгЂЃгЃќгЃ“гЃ‹г‚‰г‚ўгѓ‰гѓ¬г‚№еёігѓ‡гѓјг‚їгЃ«г‚ўг‚Їг‚»г‚№гЃ™г‚‹гЃ“гЃЁгЃЊгЃ§гЃЌгЃѕгЃ™гЂ‚";
+    Text[ korean ] = "мќґм њ %PRODUCTNAMEм—ђм„њ м‚¬мљ©мћђмќ мЈјм†Њ лЌ°мќґн„°лЎњ м•Ўм„ёмЉ¤н•  м€ мћ€мЉµл‹€л‹¤.\nм€лҐј л“¤м–ґ F4лҐј л€Њлџ¬ лЌ°мќґн„° м›ђліё ліґкё°лҐј м—¬м‹­м‹њм¤. мќґм њ мЈјм†Њ лЌ°мќґн„°лЎњ м›ђн•м‹њлЉ” мћ‘м—…мќ„ н•  м€ мћ€мЉµл‹€л‹¤. ";
+    Text[ chinese_simplified ] = "зЋ°ењЁпјЊе¤–жќҐзљ„йЂљи®Їз°їе·Із»Џж€ђеЉџењ°з™»и®°е€° %PRODUCTNAME й‡ЊгЂ‚\nиї™ж ·пјЊж‚Ёе°±иѓЅе¤џе¦‚еђЊдЅїз”Ёд»»дЅ•дёЂдёЄе…¶д»–зљ„ж•°жЌ®жєђдёЂж ·йљЏж„ЏдЅїз”Ёж‚Ёзљ„йЂљи®Їз°їпјЊдѕ‹е¦‚жЊ‰ F4 е°±еЏЇд»Ґж‰“ејЂж•°жЌ®жєђгЂ‚";
+    Text[ chinese_traditional ] = "зЏѕењЁж‚Ёе°‡еЏЇд»Ґеѕћ %PRODUCTNAME дё­е­еЏ–ж‚Ёзљ„ењ°еќЂиі‡ж–™гЂ‚дѕ‹е¦‚пјЊжЊ‰дёЂдё‹ F4 жњѓй–‹е•џиі‡ж–™жєђжЄўи¦–пјЊж‚ЁеЏЇд»ҐдЅїз”Ёе…¶дё­зљ„ењ°еќЂиі‡ж–™гЂ‚";
     Text[ turkish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ arabic ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ catalan ] = "La font d'adreces extern s'ha registrat correctament a %PRODUCTNAME.\nPodeu accedir a aquestes dades de la mateixa manera que qualsevol altra base de dades.";
@@ -1052,130 +1052,6 @@ Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
 };
-
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.35  2002/11/25 15:12:02  kz
- *  Merge SRX644: 25.11.02 - 16:08:10
- *
- *  Revision 1.34  2002/11/04 17:45:34  rt
- *  Merge SRX644: 04.11.02 - 18:41:19
- *
- *  Revision 1.33  2002/10/28 08:55:31  fs
- *  #i8720# not referring to 'Netscape 6.x', but to 'Netscape' only
- *
- *  Revision 1.32  2002/10/04 07:36:02  fs
- *  #101089# changed the success message of the pilot
- *
- *  Revision 1.31  2002/09/05 18:50:45  kz
- *  Merge SRC641: 05.09.02 - 20:47:18
- *
- *  Revision 1.30  2002/02/22 21:06:41  kz
- *  Merge SRC641: 22.02.02 - 22:06:22
- *
- *  Revision 1.29  2002/02/21 21:06:42  vg
- *  Merge SRC641: 21.02.02 - 22:06:20
- *
- *  Revision 1.28  2002/02/08 21:06:38  kz
- *  Merge SRC641: 08.02.02 - 22:06:25
- *
- *  Revision 1.27  2002/01/14 21:13:17  kz
- *  Merge SRC641: 14.01.02 - 22:07:42
- *
- *  Revision 1.26  2002/01/09 10:43:34  fs
- *  #96349# WordBreak for the second fixed text on the field assignment page
- *
- *  Revision 1.25  2001/12/19 17:53:21  kz
- *  Merge SRC641: 19.12.01 - 18:51:53
- *
- *  Revision 1.24  2001/12/14 16:45:31  kz
- *  Merge SRC641: 14.12.01 - 17:43:23
- *
- *  Revision 1.23  2001/11/01 21:38:56  obo
- *  Merge SRC641: 01.11.01 - 22:39:39
- *
- *  Revision 1.22  2001/10/25 20:32:03  rt
- *  Merge SRC641: 25.10.01 - 22:32:24
- *
- *  Revision 1.21  2001/10/19 21:46:09  kz
- *  Merge SRC641: 10/19/01 - 23:46:27
- *
- *  Revision 1.20  2001/10/12 20:59:32  kz
- *  Merge SRC641: 10/12/01 - 22:59:34
- *
- *  Revision 1.19  2001/10/02 21:03:30  kz
- *  Merge SRC641: 10/02/01 - 23:03:17
- *
- *  Revision 1.18  2001/09/28 15:11:50  fs
- *  #92550# small corrections in the german text
- *
- *  Revision 1.17  2001/09/27 20:28:07  kz
- *  Merge SRC641: 09/27/01 - 22:27:34
- *
- *  Revision 1.16  2001/09/24 12:51:14  fs
- *  #92121# corrected some german spellings
- *
- *  Revision 1.15  2001/09/13 14:35:08  fs
- *  #92121# corrected some german spellings
- *
- *  Revision 1.14  2001/09/06 20:25:28  kz
- *  Merge SRC640: 06.09.01 - 22:26:44 (NoBranch)
- *
- *  Revision 1.13  2001/08/30 12:28:35  fs
- *  #91359# spelling
- *
- *  Revision 1.12  2001/08/28 06:25:57  fs
- *  #90840# small spelling errors
- *
- *  Revision 1.11  2001/08/27 10:25:51  nf
- *  Fixes for merge #87134#
- *
- *  Revision 1.10  2001/08/24 10:53:00  rt
- *  Merge SRC638: 24.08.01 - 12:52:46
- *
- *  Revision 1.9  2001/08/23 08:12:47  nf
- *  Fixes for merge #87134#
- *
- *  Revision 1.8  2001/08/21 14:29:43  fs
- *  #91359# small spell corrections
- *
- *  Revision 1.7  2001/08/17 20:17:31  kz
- *  Merge SRC638: 17.08.01 - 22:23:52
- *
- *  Revision 1.6  2001/08/10 14:14:28  fs
- *  #90480# small changes to some texts
- *
- *  Revision 1.5  2001/08/10 11:46:17  fs
- *  #90480# small changes to the text on the second page
- *
- *  Revision 1.4  2001/08/08 14:55:20  fs
- *  #90716# layout changes
- *
- *  Revision 1.3  2001/08/07 15:09:17  rt
- *  Merge SRC638: 07.08.01 - 17:08:29
- *
- *  Revision 1.2  2001/08/02 10:46:00  fs
- *  #88530# layout changes
- *
- *  Revision 1.1  2001/08/01 11:06:48  fs
- *  initial checkin - address book auto pilot - the dialog itself
- *
- *
- *  Revision 1.0 26.07.01 09:03:45  fs
- ************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
 
 
 

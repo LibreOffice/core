@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-15 11:31:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,35 +812,4 @@ namespace dbp
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.8  2001/11/08 10:48:16  fs
- *  #94407# setFormConnection allows to be called without auto disposing
- *
- *  Revision 1.7  2001/11/02 14:42:19  fs
- *  #94077# use an AutoDisposer when setting a Connection on the RowSet
- *
- *  Revision 1.6  2001/05/30 16:46:47  fs
- *  #86714# functionality for displaying the form data source in a wizard page
- *
- *  Revision 1.5  2001/04/03 12:42:48  fs
- *  #85223# get-/setFormConnection
- *
- *  Revision 1.4  2001/03/05 14:53:13  fs
- *  finished the grid control wizard
- *
- *  Revision 1.3  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:22:07  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 10:02:44  fs
- ************************************************************************/
 

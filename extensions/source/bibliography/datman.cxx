@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-29 13:03:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@
 #include "datman.hrc"
 #ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
 #include "extensio.hrc"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -776,7 +779,6 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         aSelectionHB.SetSizePixel(aSelectionHB.CalcWindowSizePixel());
         aSelectionHB.Show();
 
-        aSelectionLB.SetHelpId(HID_SELECTION_TLB);
         aSelectionLB.SetTabs( &nTabs[0], MAP_PIXEL );
         aSelectionLB.SetWindowBits(WB_CLIPCHILDREN|WB_SORT);
         aSelectionLB.GetModel()->SetSortMode(SortAscending);
@@ -1154,9 +1156,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 m_xParser = xFactory->createQueryComposer();
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
-                aString += aQuoteChar;
-                aString += aActiveDataTable;
-                aString += aQuoteChar;
+                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation);
                 m_xParser->setQuery(aString);
                 BibConfig* pConfig = BibModul::GetConfig();
                 pConfig->setQueryField(getQueryField());
@@ -1342,9 +1342,10 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
             aVal <<= aActiveDataTable;
             aPropertySet->setPropertyValue(C2U("Command"), aVal);
             rtl::OUString aString(C2U("SELECT * FROM "));
-            aString+=aQuoteChar;
-            aString+=aActiveDataTable;
-            aString+=aQuoteChar;
+            // quote the table name which may contain catalog.schema.table
+            Reference<XDatabaseMetaData> xMetaData(xConnection->getMetaData(),UNO_QUERY);
+            aQuoteChar = xMetaData->getIdentifierQuoteString();
+            aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation);
             m_xParser->setQuery(aString);
             BibConfig* pConfig = BibModul::GetConfig();
             pConfig->setQueryField(getQueryField());
@@ -1410,9 +1411,7 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                 m_xParser = xFactory->createQueryComposer();
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
-                aString+=aQuoteChar;
-                aString+=aActiveDataTable;
-                aString+=aQuoteChar;
+                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation);
                 m_xParser->setQuery(aString);
 
                 BibConfig* pConfig = BibModul::GetConfig();

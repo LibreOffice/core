@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,20 +142,4 @@ extern "C" void* SAL_CALL component_getFactory(
     return xRet.get();
 };
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:23:00  fs
- *  initial checkin - form control auto pilots
- *
- *  Revision 1.1  2001/02/12 07:11:01  fs
- *  initial checkin - importing StarOffice 5.2 database files
- *
- *
- *  Revision 1.0 30.01.01 15:00:51  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 12:12:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,8 +283,17 @@ namespace pcr
     //------------------------------------------------------------------------
     sal_Bool SAL_CALL OPropertyBrowserController::suspend( sal_Bool bSuspend ) throw(RuntimeException)
     {
+        OSL_ENSURE( haveView(), "OPropertyBrowserController::suspend: don't have a view anymore!" );
+        OSL_ENSURE( NULL != getPropertyBox(), "OPropertyBrowserController::suspend: don't have a property box anymore!" );
+
+        // commit the editor's content
+        if ( haveView() && getPropertyBox() )
+            getPropertyBox()->CommitModified();
+
+        // stop listening
         stopContainerWindowListening();
-        // TODO
+
+        // outtahere
         return sal_True;
     }
 
@@ -700,10 +709,14 @@ namespace pcr
     {
         try
         {
-            if (haveView())
+            if ( haveView() && getPropertyBox() )
             {
+                // commit the editor's content
+                getPropertyBox()->CommitModified();
+
                 // hide the property box so that it does not flicker
                 getPropertyBox()->Hide();
+
                 // clear the property box
                 getPropertyBox()->ClearAll();
             }
@@ -1069,64 +1082,4 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.18  2002/01/09 14:01:46  fs
- *  removed the implementation of XInitialization (obsolete since a long time ago, as I discovered during #96068#)
- *
- *  Revision 1.17  2001/12/13 09:14:26  fs
- *  preparations for #95343# - support the XLayoutConstraints interface
- *
- *  Revision 1.16  2001/10/19 12:58:51  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.15  2001/08/06 14:52:59  fs
- *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
- *
- *  Revision 1.14  2001/06/11 11:33:04  fs
- *  #86096# changed the implementation name for consistency
- *
- *  Revision 1.13  2001/05/30 13:41:46  fs
- *  #86838# be a focus listener on the container window, forward the focus to the property box
- *
- *  Revision 1.12  2001/03/22 10:04:09  fs
- *  when binding to a new object, _first_ destroy the view, _then_ stop listening
- *
- *  Revision 1.11  2001/03/20 08:37:11  fs
- *  #85148# when inspecting the control, care for a NULL access
- *
- *  Revision 1.10  2001/03/15 09:02:28  fs
- *  cppuhelper/extract -> comphelper/extract
- *
- *  Revision 1.9  2001/02/23 15:08:45  tbe
- *  AnyToString didn't get property id
- *
- *  Revision 1.8  2001/02/20 08:50:31  fs
- *  do a syncViewToProperty when selecting a page
- *
- *  Revision 1.7  2001/02/19 16:56:58  fs
- *  UpdateUI: do default page selection
- *
- *  Revision 1.6  2001/02/19 14:08:05  fs
- *  #83649# correctly eval the return value of getIntrospecteeProperty / #84041# infrastructure for activating pages from outside
- *
- *  Revision 1.5  2001/02/05 08:58:27  fs
- *  #83468# +m_nClassId
- *
- *  Revision 1.4  2001/01/24 14:14:18  fs
- *  bindToObject: pass non-form-related objects to setObject, too
- *
- *  Revision 1.3  2001/01/18 14:45:10  rt
- *  #65293# semicolon removed
- *
- *  Revision 1.2  2001/01/12 14:44:49  fs
- *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
- *
- *  Revision 1.1  2001/01/12 11:31:03  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 09:33:47  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 12:06:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,29 +201,4 @@ namespace pcr
 //............................................................................
 } // namespace pcr
 //............................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6  2002/11/06 09:19:27  fs
- *  #95343# (on behalf of SleepyBear@openoffice.org) changes for calculating layout
- *
- *  Revision 1.5  2002/08/06 08:13:10  oj
- *  #102058# use auto_ptr in dtor
- *
- *  Revision 1.4  2001/05/30 13:44:49  fs
- *  #86838# forward the GetFocus event to the property box
- *
- *  Revision 1.3  2001/02/19 14:08:31  fs
- *  #84041# infrastructure for activating pages from outside
- *
- *  Revision 1.2  2001/01/18 14:45:10  rt
- *  #65293# semicolon removed
- *
- *  Revision 1.1  2001/01/12 11:26:10  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 11:05:54  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 15:00:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,26 +702,4 @@ namespace pcr
 //............................................................................
 }   // namespace pcr
 //............................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/07/20 13:02:44  fs
- *  #90040# use LocaleDataWrapper instead of International class
- *
- *  Revision 1.4  2001/06/27 07:48:59  fs
- *  #88275# correctly initialize the SvxFontItems
- *
- *  Revision 1.3  2001/06/11 11:29:45  fs
- *  #86096# added functionallity to allow to use this dialog as UNO service
- *
- *  Revision 1.2  2001/06/06 08:16:00  fs
- *  #86096# don't disable underline color anymore
- *
- *  Revision 1.1  2001/03/21 15:41:36  fs
- *  initial checkin - font dialog for form controls
- *
- *
- *  Revision 1.0 21.03.01 10:17:26  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,26 +763,26 @@ void BibGeneralPage::InitFixedTexts( void )
     aFixedTexts[0] = &aIdentifierFT;
     aFixedTexts[1] = &aAuthTypeFT;
     aFixedTexts[2] = &aAuthorFT;
-    aFixedTexts[3] = &aMonthFT;
-    aFixedTexts[4] = &aYearFT;
-    aFixedTexts[5] = &aPublisherFT;
+    aFixedTexts[3] = &aTitleFT;
+    aFixedTexts[4] = &aMonthFT;
+    aFixedTexts[5] = &aYearFT;
     aFixedTexts[6] = &aISBNFT;
-    aFixedTexts[7] = &aAddressFT;
-    aFixedTexts[8] = &aAnnoteFT;
-    aFixedTexts[9] = &aBooktitleFT;
-    aFixedTexts[10] = &aChapterFT;
-    aFixedTexts[11] = &aEditionFT;
-    aFixedTexts[12] = &aEditorFT;
-    aFixedTexts[13] = &aHowpublishedFT;
-    aFixedTexts[14] = &aInstitutionFT;
-    aFixedTexts[15] = &aJournalFT;
-    aFixedTexts[16] = &aNoteFT;
-    aFixedTexts[17] = &aNumberFT;
-    aFixedTexts[18] = &aOrganizationsFT;
-    aFixedTexts[19] = &aPagesFT;
-    aFixedTexts[20] = &aSchoolFT;
-    aFixedTexts[21] = &aSeriesFT;
-    aFixedTexts[22] = &aTitleFT;
+    aFixedTexts[7] = &aBooktitleFT;
+    aFixedTexts[8] = &aChapterFT;
+    aFixedTexts[9] = &aEditionFT;
+    aFixedTexts[10] = &aEditorFT;
+    aFixedTexts[11] = &aHowpublishedFT;
+    aFixedTexts[12] = &aInstitutionFT;
+    aFixedTexts[13] = &aJournalFT;
+    aFixedTexts[14] = &aNoteFT;
+    aFixedTexts[15] = &aAnnoteFT;
+    aFixedTexts[16] = &aNumberFT;
+    aFixedTexts[17] = &aOrganizationsFT;
+    aFixedTexts[18] = &aPagesFT;
+    aFixedTexts[19] = &aPublisherFT;
+    aFixedTexts[20] = &aAddressFT;
+    aFixedTexts[21] = &aSchoolFT;
+    aFixedTexts[22] = &aSeriesFT;
     aFixedTexts[23] = &aReportTypeFT;
     aFixedTexts[24] = &aVolumeFT;
     aFixedTexts[25] = &aURLFT;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:33:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,11 +294,4 @@ namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 09.01.01 10:26:52  fs
- ************************************************************************/
 

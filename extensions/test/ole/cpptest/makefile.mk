@@ -1,10 +1,10 @@
 #*************************************************************************
 #
-#   $RCSfile: makefile.pmk,v $
+#   $RCSfile: makefile.mk,v $
 #
 #   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 16:03:44 $
+#   last change: $Author: hr $ $Date: 2003-03-25 16:04:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,11 +59,79 @@
 #
 #
 #*************************************************************************
-PDBTARGET=pl
-NOUNODOC=true
 
-.INCLUDE :  svpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
+PRJ=..$/..$/..$/
 
+PRJNAME=extensions
+TARGET=cppTest
+TARGETTYPE=CUI
+LIBTARGET=NO
+
+#USE_DEFFILE=	TRUE
+NO_BSYMBOLIC=	TRUE
+ENABLE_EXCEPTIONS=TRUE
+BOOTSTRAP_SERVICE=FALSE
+
+# --- Settings ---
+
+.INCLUDE : svpre.mk
+.INCLUDE : settings.mk
+.INCLUDE : sv.mk
+
+# --- Files ---
+
+#UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
+#UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
+
+.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
+UNOUCROUT=	$(OUT)$/inc$/comprehensive
+INCPRE+=	$(OUT)$/inc$/comprehensive
+CPPUMAKERFLAGS += -C
+.ELSE
+UNOUCROUT=	$(OUT)$/inc
+INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
+.ENDIF
+
+UNOTYPES= com.sun.star.bridge.ModelDependent \
+          com.sun.star.lang.XMultiServiceFactory \
+          com.sun.star.bridge.XBridgeSupplier2
+
+
+
+.IF "$(depend)" != ""
+
+.ENDIF # depend
+
+APP1TARGET=	$(TARGET)
+APP1OBJS=	$(OBJ)$/cppTest.obj
+LIBCMT=msvcrt.lib
+            
+
+APP1STDLIBS= \
+    $(SALLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    user32.lib	\
+    kernel32.lib \
+    ole32.lib	\
+    oleaut32.lib	\
+    uuid.lib		\
+    comdlg32.lib	\
+    comsupp.lib
+
+    
+
+#gdi32.lib winspool.lib  advapi32.lib shell32.lib    odbc32.lib odbccp32.lib 
+
+
+.IF "$(GUI)"=="WNT"
+APP1STDLIBS += $(LIBCIMT)
+APP2STDLIBS += $(LIBCIMT)
+.ENDIF
+
+APP1DEF=	$(MISC)\$(APP1TARGET).def
+
+# --- Targets ---
+
+.INCLUDE : target.mk
 

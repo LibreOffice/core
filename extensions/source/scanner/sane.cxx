@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-03 13:24:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,8 @@ Sane::~Sane()
 void Sane::Init()
 {
     pSaneLib = dlopen( "libsane.so", RTLD_LAZY );
+    if( ! pSaneLib )
+        pSaneLib = dlopen( "libsane.so.1", RTLD_LAZY );
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
         pSaneLib = dlopen( "/usr/local/lib/libsane.so", RTLD_LAZY );

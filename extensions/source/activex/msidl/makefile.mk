@@ -1,12 +1,12 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/msidl/makefile.mk,v 1.1 2002-08-14 14:33:50 mav Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/msidl/makefile.mk,v 1.2 2003-03-25 16:01:04 hr Exp $
 #
 # =========================================================================
 #
-#     $Date: 2002-08-14 14:33:50 $
-#     $Author: mav $
-#     $Revision: 1.1 $
+#     $Date: 2003-03-25 16:01:04 $
+#     $Author: hr $
+#     $Revision: 1.2 $
 #
 # =========================================================================
 #
@@ -36,7 +36,7 @@ MTL_PROJ=
 
 SOURCE=so_activex.idl
 
-MTL_SWITCHES=/tlb $(MISC)\so_activex.tlb /h $(MISC)\so_activex.h /iid $(MISC)\so_activex_i.c /Oicf
+MTL_SWITCHES=/tlb $(MISC)\so_activex.tlb /h $(MISC)\so_activex.h /iid $(MISC)\so_activex_i.c /dlldata $(MISC)\so_activex_dll.c /proxy $(MISC)\so_activex_p.c /Oicf
 
 activex_component : $(SOURCE) 
     $(MTL) $(MTL_SWITCHES) $(SOURCE) 

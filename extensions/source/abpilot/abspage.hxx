@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:07:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,11 +114,4 @@ namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_ABSPAGE_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 26.07.01 09:13:58  fs
- ************************************************************************/
 

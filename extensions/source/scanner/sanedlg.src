@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:27:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,19 +95,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Information sur le ~périphérique" ;
         Text [ dutch ] = "Info over\n~apparaat" ;
         Text [ portuguese ] = "~Informação sobre\nperiféricos" ;
-        Text[ chinese_simplified ] = "Éè±¸\nĞÅÏ¢(~I)";
+        Text[ chinese_simplified ] = "è®¾å¤‡\nä¿¡æ¯(~I)";
         Text[ russian ] = "Èíôîğìàöèÿ îá\nóñòğîéñòâå";
         Text[ polish ] = "Informacja \no urz¹dzeniu";
-        Text[ japanese ] = "ÃŞÊŞ²½\nî•ñ(~I)";
-        Text[ chinese_traditional ] = "³]³Æ»¡©ú¸ê®Æ(~I)";
+        Text[ japanese ] = "ãƒ‡ãƒã‚¤ã‚¹\næƒ…å ±(~I)";
+        Text[ chinese_traditional ] = "è¨­å‚™èªªæ˜è³‡æ–™(~I)";
         Text[ arabic ] = "ãÚáæãÇÊ\nÇáÌåÇÒ";
         Text[ dutch ] = "Info over\n~apparaat";
-        Text[ chinese_simplified ] = "Éè±¸\nĞÅÏ¢(~I)";
+        Text[ chinese_simplified ] = "è®¾å¤‡\nä¿¡æ¯(~I)";
         Text[ greek ] = "Ğëçñïöïñßåò\nóõóêåõŞò";
-        Text[ korean ] = "ÀåÄ¡ Á¤º¸(~I)";
+        Text[ korean ] = "ì¥ì¹˜ ì •ë³´(~I)";
         Text[ turkish ] = "Cihaz hakkında";
-        Text[ catalan ] = "Información sobre\n ~dispositivo";
+        Text[ catalan ] = "Quant al\n d~ispositiu";
         Text[ finnish ] = "Tietoja\n la~itteesta";
+        Text[ thai ] = "à¹€à¸à¸µà¹ˆà¸¢à¸§à¸à¸±à¸š~à¸­à¸¸à¸›à¸à¸£à¸“à¹Œ\n ";
     };
     PushButton RID_PREVIEW_BTN
     {
@@ -121,23 +122,24 @@ ModalDialog RID_SANE_DIALOG
         Text [ danish ] = "Opret\neksempel" ;
         Text [ italian ] = "Crea\nanteprima" ;
         Text [ spanish ] = "Crear\n~Previsualización" ;
-        Text [ french ] = "Créer\nun ~aperçu" ;
+        Text [ french ] = "Créer\nun aperçu" ;
         Text [ dutch ] = "~Voorbeeld\nmaken" ;
         Text [ portuguese ] = "Criar\n~previsualização" ;
-        Text[ chinese_simplified ] = "½¨Á¢Ô¤ÀÀ";
-        Text[ russian ] = "Ñîçäàòü\n ïğîñìîòğ";
+        Text[ chinese_simplified ] = "ç”Ÿæˆé¢„è§ˆ";
+        Text[ russian ] = "Ñîçäàòü\n Ïğåäâàğèòåëüíûé ïğîñìîòğ";
         Text[ polish ] = "Utwórz\n podgl¹d";
-        Text[ japanese ] = "ÌßÚËŞ­°\nì¬";
-        Text[ chinese_traditional ] = "«Ø¥ß¹wÄı";
+        Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼\nä½œæˆ";
+        Text[ chinese_traditional ] = "ç”Ÿæˆé è¦½";
         Text[ arabic ] = "ÅäÔÇÁ\nãÚÇíäÉ";
         Text[ dutch ] = "~Voorbeeld\nmaken";
-        Text[ chinese_simplified ] = "½¨Á¢Ô¤ÀÀ";
+        Text[ chinese_simplified ] = "ç”Ÿæˆé¢„è§ˆ";
         Text[ greek ] = "Äçìéïõñãßá\nğñïåğéóêüğçóçò";
-        Text[ korean ] = "¹Ì¸®º¸±â\nÀÛ¼º";
+        Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°\në§Œë“¤ê¸°";
         Text[ turkish ] = "Önizleme\noluştur";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Crear\n~Previsualización";
+        Text[ catalan ] = "Crea\nPrevisualitza";
         Text[ finnish ] = "Luo\nesikatselu";
+        Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡\nà¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
     };
     FixedLine RID_PREVIEW_BOX
     {
@@ -154,19 +156,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ spanish ] = "Previsualización" ;
         Text [ french ] = "Aperçu" ;
         Text [ dutch ] = "Voorbeeld" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ chinese_simplified ] = "é¢„è§ˆ";
+        Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËŞ­°";
-        Text[ chinese_traditional ] = "¹wÄı";
+        Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
+        Text[ chinese_traditional ] = "é è¦½";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ dutch ] = "Voorbeeld";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
+        Text[ chinese_simplified ] = "é¢„è§ˆ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
+        Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸°";
         Text[ turkish ] = "Önizleme";
-        Text[ catalan ] = "Previsualización";
+        Text[ catalan ] = "Previsualització";
         Text[ finnish ] = "Esikatselu";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
     };
     FixedLine RID_SCANAREA_BOX
     {
@@ -183,19 +186,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Zone à scanner" ;
         Text [ dutch ] = "Scanbereik" ;
         Text [ portuguese ] = "Área a digitalizar" ;
-        Text[ chinese_simplified ] = "É¨ÃèµÄÇøÓò";
+        Text[ chinese_simplified ] = "æ‰«æçš„åŒºåŸŸ";
         Text[ russian ] = "Îáëàñòü ñêàíèğîâàíèÿ";
         Text[ polish ] = "Skanowany obszar";
-        Text[ japanese ] = "½·¬İ”ÍˆÍ";
-        Text[ chinese_traditional ] = "±½´y°Ï°ì";
+        Text[ japanese ] = "ã‚¹ã‚­ãƒ£ãƒ³ç¯„å›²";
+        Text[ chinese_traditional ] = "æƒæå€åŸŸ";
         Text[ arabic ] = "äØÇŞ ÇáãÓÍ ÇáÖæÆí";
         Text[ dutch ] = "Scanbereik";
-        Text[ chinese_simplified ] = "É¨ÃèµÄÇøÓò";
+        Text[ chinese_simplified ] = "æ‰«æçš„åŒºåŸŸ";
         Text[ greek ] = "Ğåñéï÷Ş óÜñùóçò";
-        Text[ korean ] = "½ºÄµ ¿µ¿ª";
+        Text[ korean ] = "ìŠ¤ìº” ì˜ì—­";
         Text[ turkish ] = "Tarama alanı";
-        Text[ catalan ] = "Área de escaneado";
+        Text[ catalan ] = "Àrea a digitalitzar";
         Text[ finnish ] = "Skannausalue";
+        Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸«à¸²à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
     };
     FixedText RID_SCAN_LEFT_TXT
     {
@@ -212,19 +216,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ spanish ] = "I~zquierda:" ;
         Text [ french ] = "À gauche :" ;
         Text [ dutch ] = "~Links:" ;
-        Text[ chinese_simplified ] = "×ó:";
+        Text[ chinese_simplified ] = "å·¦:";
         Text[ russian ] = "Ñëåâà:";
         Text[ polish ] = "Z lewej:";
-        Text[ japanese ] = "¶:";
-        Text[ chinese_traditional ] = "¥ª¡G";
+        Text[ japanese ] = "å·¦:";
+        Text[ chinese_traditional ] = "å·¦ï¼š";
         Text[ arabic ] = "íÓÇÑ:";
         Text[ dutch ] = "~Links:";
-        Text[ chinese_simplified ] = "×ó:";
+        Text[ chinese_simplified ] = "å·¦:";
         Text[ greek ] = "ÁñéóôåñÜ:";
-        Text[ korean ] = "¿ŞÂÊ:";
+        Text[ korean ] = "ì™¼ìª½:";
         Text[ turkish ] = "Sol:";
-        Text[ catalan ] = "I~zquierda:";
+        Text[ catalan ] = "Esquerra:";
         Text[ finnish ] = "Vasen:";
+        Text[ thai ] = "à¸‹à¹‰à¸²à¸¢:";
     };
     MetricField RID_SCAN_LEFT_BOX
     {
@@ -249,20 +254,21 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "En haut :" ;
         Text [ dutch ] = "~Boven:" ;
         Text [ portuguese ] = "Em ~cima:" ;
-        Text[ chinese_simplified ] = "ÉÏ:";
+        Text[ chinese_simplified ] = "ä¸Š:";
         Text[ russian ] = "Ñâåğõó:";
         Text[ polish ] = "W górze:";
-        Text[ japanese ] = "ã:";
-        Text[ chinese_traditional ] = "¤W¡G";
+        Text[ japanese ] = "ä¸Š:";
+        Text[ chinese_traditional ] = "ä¸Šï¼š";
         Text[ arabic ] = "ÃÚáì:";
         Text[ dutch ] = "~Boven:";
-        Text[ chinese_simplified ] = "ÉÏ:";
+        Text[ chinese_simplified ] = "ä¸Š:";
         Text[ greek ] = "ĞÜíù:";
-        Text[ korean ] = "À§:";
+        Text[ korean ] = "ìœ„:";
         Text[ turkish ] = "Üst:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Arriba:";
-        Text[ finnish ] = "Yläosa:";
+        Text[ catalan ] = "Superior:";
+        Text[ finnish ] = "Yläreuna:";
+        Text[ thai ] = "à¸šà¸™:";
     };
     MetricField RID_SCAN_TOP_BOX
     {
@@ -287,20 +293,21 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "À droite :" ;
         Text [ dutch ] = "~Rechts:" ;
         Text [ portuguese ] = "~Direita:" ;
-        Text[ chinese_simplified ] = "ÓÒ:";
+        Text[ chinese_simplified ] = "å³:";
         Text[ russian ] = "Ñïğàâà:";
         Text[ polish ] = "Z prawej:";
-        Text[ japanese ] = "‰E:";
-        Text[ chinese_traditional ] = "¥k¡G";
+        Text[ japanese ] = "å³:";
+        Text[ chinese_traditional ] = "å³ï¼š";
         Text[ arabic ] = "íãíä:";
         Text[ dutch ] = "~Rechts:";
-        Text[ chinese_simplified ] = "ÓÒ:";
+        Text[ chinese_simplified ] = "å³:";
         Text[ greek ] = "ÄåîéÜ:";
-        Text[ korean ] = "¿À¸¥ÂÊ:";
+        Text[ korean ] = "ì˜¤ë¥¸ìª½:";
         Text[ turkish ] = "Sağ:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Derecha:";
+        Text[ catalan ] = "Dreta:";
         Text[ finnish ] = "Oikea:";
+        Text[ thai ] = "à¸‚à¸§à¸²:";
     };
     MetricField RID_SCAN_RIGHT_BOX
     {
@@ -325,19 +332,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "En bas :" ;
         Text [ dutch ] = "~Beneden:" ;
         Text [ portuguese ] = "Em ~baixo:" ;
-        Text[ chinese_simplified ] = "ÏÂ:";
+        Text[ chinese_simplified ] = "ä¸‹:";
         Text[ russian ] = "Ñíèçó:";
         Text[ polish ] = "W dole:";
-        Text[ japanese ] = "‰º:";
-        Text[ chinese_traditional ] = "¤U¡G";
+        Text[ japanese ] = "ä¸‹:";
+        Text[ chinese_traditional ] = "ä¸‹ï¼š";
         Text[ arabic ] = "ÃÓİá:";
         Text[ dutch ] = "~Beneden:";
-        Text[ chinese_simplified ] = "ÏÂ:";
+        Text[ chinese_simplified ] = "ä¸‹:";
         Text[ greek ] = "ÊÜôù:";
-        Text[ korean ] = "¾Æ·¡:";
+        Text[ korean ] = "ì•„ë˜:";
         Text[ turkish ] = "Alt:";
-        Text[ catalan ] = "~Abajo:";
-        Text[ finnish ] = "Alaosa:";
+        Text[ catalan ] = "Inferior:";
+        Text[ finnish ] = "Alareuna:";
+        Text[ thai ] = "à¸¥à¹ˆà¸²à¸‡:";
     };
     MetricField RID_SCAN_BOTTOM_BOX
     {
@@ -362,19 +370,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Périphérique utilisé :" ;
         Text [ dutch ] = "~Gebruikte apparatuur:" ;
         Text [ portuguese ] = "~Periférico usado:" ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃµÄÉè±¸:";
+        Text[ chinese_simplified ] = "ä½¿ç”¨çš„è®¾å¤‡:";
         Text[ russian ] = "Èñïîëüçóåìîå óñòğîéñòâî:";
         Text[ polish ] = "Zastosowane urz¹dzenie:";
-        Text[ japanese ] = "g—p’†‚ÌÃŞÊŞ²½:";
-        Text[ chinese_traditional ] = "¨Ï¥Îªº³]³Æ¡G";
+        Text[ japanese ] = "ä½¿ç”¨ä¸­ã®ãƒ‡ãƒã‚¤ã‚¹:";
+        Text[ chinese_traditional ] = "ä½¿ç”¨çš„è¨­å‚™ï¼š";
         Text[ arabic ] = "ÇáÌåÇÒ ÇáãÓÊÎÏã:";
         Text[ dutch ] = "~Gebruikte apparatuur:";
-        Text[ chinese_simplified ] = "Ê¹ÓÃµÄÉè±¸:";
+        Text[ chinese_simplified ] = "ä½¿ç”¨çš„è®¾å¤‡:";
         Text[ greek ] = "×ñçóéìïğïéïıçìåíç óõóêåõŞ:";
-        Text[ korean ] = "»ç¿ëÇÑ ÀåÄ¡:";
+        Text[ korean ] = "ì‚¬ìš©í•œ ì¥ì¹˜:";
         Text[ turkish ] = "Kullanılan cihaz:";
-        Text[ catalan ] = "Dispositivo ~utilizado:";
+        Text[ catalan ] = "Dispositu utilitzat:";
         Text[ finnish ] = "Käytetty laite:";
+        Text[ thai ] = "à¸­à¸¸à¸›à¸à¸£à¸“à¹Œà¸–à¸¹à¸à¹ƒà¸Šà¹‰à¸‡à¸²à¸™:";
     };
     ListBox RID_DEVICE_BOX
     {
@@ -399,17 +408,18 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Résolution [~DPI]" ;
         Text [ dutch ] = "Resolutie [~DPI]:" ;
         Text [ portuguese ] = "Resolução [~DPI]:" ;
-        Text[ chinese_simplified ] = "·Ö±æÂÊ[~DPI]";
+        Text[ chinese_simplified ] = "åˆ†è¾¨ç‡[~DPI]";
         Text[ russian ] = "Ğàçğåøåíèå [DPI]:";
         Text[ polish ] = "Rozdzielczoœæ [~DPI]:";
-        Text[ japanese ] = "‰ğ‘œ“x [~DPI]";
+        Text[ japanese ] = "è§£åƒåº¦ [~DPI]";
         Text[ greek ] = "ÁíÜëõóç [~DPI]:";
-        Text[ korean ] = "ÇØ»óµµ [~DPI]:";
-        Text[ chinese_traditional ] = "¸ÑªR«× [~DPI]";
+        Text[ korean ] = "í•´ìƒë„[~DPI]:";
+        Text[ chinese_traditional ] = "è§£æåº¦ [~DPI]";
         Text[ arabic ] = "ÇÓÊÈÇäÉ [~DPI]";
         Text[ turkish ] = "Çözünürlük [~DPI]";
-        Text[ catalan ] = "Resolución [~DPI]:";
+        Text[ catalan ] = "Resolució [~DPI]";
         Text[ finnish ] = "Tarkkuus [~DPI]";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¥à¸°à¹€à¸­à¸µà¸¢à¸” [~DPI]";
     };
     NumericBox RID_SCAN_RESOLUTION_BOX
     {
@@ -432,19 +442,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ spanish ] = "Mostrar otras ~opciones" ;
         Text [ french ] = "Afficher les options avancées" ;
         Text [ dutch ] = "~Verdere opties weergeven" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾¸ß¼¶Ñ¡Ïî";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºé«˜çº§é€‰é¡¹";
         Text[ russian ] = "Ïîêàçàòü ğàñøèğåííûå ïàğàìåòğû";
         Text[ polish ] = "Poka¿ opcje zaawansowane";
-        Text[ japanese ] = "Ú×µÌß¼®İ‚Ì•\\¦";
-        Text[ chinese_traditional ] = "Åã¥Ü¶i¶¥¿ï¶µ";
+        Text[ japanese ] = "è©³ç´°ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®è¡¨ç¤º";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºé€²éšé¸é …";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÎíÇÑÇÊ ÇáãÊŞÏãÉ";
         Text[ dutch ] = "~Verdere opties weergeven";
-        Text[ chinese_simplified ] = "ÏÔÊ¾¸ß¼¶Ñ¡Ïî";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºé«˜çº§é€‰é¡¹";
         Text[ greek ] = "ÅìöÜíéóç ğåñéóóüôåñùí åğéëïãşí";
-        Text[ korean ] = "È®ÀåµÈ ¿É¼Ç ³ªÅ¸³»±â";
+        Text[ korean ] = "í™•ì¥ëœ ì˜µì…˜ í‘œì‹œ";
         Text[ turkish ] = "Ek seçenekleri görüntüle";
-        Text[ catalan ] = "Mostrar otras ~opciones";
+        Text[ catalan ] = "Mostra les opcions avançades";
         Text[ finnish ] = "Näytä lisäasetukset";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸‚à¸±à¹‰à¸™à¸ªà¸¹à¸‡";
     };
     CheckBox RID_SCAN_ADVANCED_BOX
     {
@@ -467,20 +478,21 @@ ModalDialog RID_SANE_DIALOG
         Text [ spanish ] = "Opciones:" ;
         Text [ french ] = "Options :" ;
         Text [ dutch ] = "Opties:" ;
-        Text[ chinese_simplified ] = "Ñ¡Ïî:";
+        Text[ chinese_simplified ] = "é€‰é¡¹:";
         Text[ russian ] = "Ïàğàìåòğû:";
         Text[ polish ] = "Opcje:";
-        Text[ japanese ] = "µÌß¼®İ:";
-        Text[ chinese_traditional ] = "¿ï¶µ¡G";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³:";
+        Text[ chinese_traditional ] = "é¸é …ï¼š";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ:";
         Text[ dutch ] = "Opties:";
-        Text[ chinese_simplified ] = "Ñ¡Ïî:";
+        Text[ chinese_simplified ] = "é€‰é¡¹:";
         Text[ greek ] = "Åğéëïãİò:";
-        Text[ korean ] = "¿É¼Ç:";
+        Text[ korean ] = "ì˜µì…˜:";
         Text[ turkish ] = "Seçenekler:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones:";
-        Text[ finnish ] = "Asetukset";
+        Text[ catalan ] = "Opcions:";
+        Text[ finnish ] = "Asetukset:";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸:";
     };
     Control RID_SCAN_OPTION_BOX
     {
@@ -546,19 +558,20 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Élément vectoriel" ;
         Text [ dutch ] = "Vectorelement" ;
         Text [ portuguese ] = "Elemento vectorial" ;
-        Text[ chinese_simplified ] = "Ê¸Á¿Í¼¼ş";
+        Text[ chinese_simplified ] = "çŸ¢é‡å›¾ä»¶";
         Text[ russian ] = "Âåêòîğíûé ıëåìåíò";
         Text[ polish ] = "Element wektorowy";
-        Text[ japanese ] = "ÍŞ¸À—v‘f";
-        Text[ chinese_traditional ] = "¦V¶q¹Ï¥ó";
+        Text[ japanese ] = "ãƒ™ã‚¯ã‚¿è¦ç´ ";
+        Text[ chinese_traditional ] = "å‘é‡åœ–ä»¶";
         Text[ arabic ] = "ÚäÕÑ Vector";
         Text[ dutch ] = "Vectorelement";
-        Text[ chinese_simplified ] = "Ê¸Á¿Í¼¼ş";
+        Text[ chinese_simplified ] = "çŸ¢é‡å›¾ä»¶";
         Text[ greek ] = "Óôïé÷åßï äéáíıóìáôïò";
-        Text[ korean ] = "º¤ÅÍ ¿ä¼Ò";
+        Text[ korean ] = "ë²¡í„° ìš”ì†Œ";
         Text[ turkish ] = "Vektör öğesi";
-        Text[ catalan ] = "Elemento vectorial";
+        Text[ catalan ] = "Element vectorial";
         Text[ finnish ] = "Vektorielementti";
+        Text[ thai ] = "à¸­à¸‡à¸„à¹Œà¸›à¸£à¸°à¸à¸­à¸šà¹€à¸§à¸„à¹€à¸•à¸­à¸£à¹Œ";
     };
     NumericField RID_SCAN_NUMERIC_VECTOR_BOX
     {
@@ -580,22 +593,23 @@ ModalDialog RID_SANE_DIALOG
         Text [ danish ] = "Definer" ;
         Text [ italian ] = "Imposta" ;
         Text [ spanish ] = "Definir" ;
-        Text [ french ] = "Appliquer" ;
+        Text [ french ] = "Définir" ;
         Text [ dutch ] = "Overnemen" ;
         Text [ portuguese ] = "Definir" ;
-        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_simplified ] = "è®¾å®š";
         Text[ russian ] = "Óñòàíîâèòü";
         Text[ polish ] = "OsadŸ";
-        Text[ japanese ] = "İ’è";
-        Text[ chinese_traditional ] = "³]©w";
+        Text[ japanese ] = "è¨­å®š";
+        Text[ chinese_traditional ] = "è¨­å®š";
         Text[ arabic ] = "ÊÚííä";
         Text[ dutch ] = "Overnemen";
-        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_simplified ] = "è®¾å®š";
         Text[ greek ] = "Ïñéóìüò";
-        Text[ korean ] = "¼³Á¤";
+        Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Tanımla";
-        Text[ catalan ] = "Definir";
+        Text[ catalan ] = "Defineix";
         Text[ finnish ] = "Määritä";
+        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²";
     };
     Bitmap RID_SCAN_BITMAP_PLUS
     {
@@ -614,19 +628,20 @@ ModalDialog RID_SANE_DIALOG
     Text [ french ] = "Scanner" ;
     Text [ dutch ] = "Scanner" ;
     Text [ portuguese ] = "Digitalizador" ;
-    Text[ chinese_simplified ] = "É¨Ãè»ú";
+    Text[ chinese_simplified ] = "æ‰«ææœº";
     Text[ russian ] = "Ñêàíåğ";
     Text[ polish ] = "Skaner";
-    Text[ japanese ] = "½·¬Å°";
-    Text[ chinese_traditional ] = "±½´y»ö";
+    Text[ japanese ] = "ã‚¹ã‚­ãƒ£ãƒŠãƒ¼";
+    Text[ chinese_traditional ] = "æƒæå„€";
     Text[ arabic ] = "ãÇÓÍÉ ÖæÆíÉ";
     Text[ dutch ] = "Scanner";
-    Text[ chinese_simplified ] = "É¨Ãè»ú";
+    Text[ chinese_simplified ] = "æ‰«ææœº";
     Text[ greek ] = "ÓáñùôŞò";
-    Text[ korean ] = "½ºÄ³³Ê";
+    Text[ korean ] = "ìŠ¤ìºë„ˆ";
     Text[ turkish ] = "Tarayıcı";
-    Text[ catalan ] = "Escáner";
+    Text[ catalan ] = "Escàner";
     Text[ finnish ] = "Skanneri";
+    Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸•à¸£à¸§à¸ˆà¸«à¸²";
 };
 String RID_SANE_DEVICEINFO_TXT
 {
@@ -641,19 +656,20 @@ String RID_SANE_DEVICEINFO_TXT
     Text [ french ] = "Périphérique : %s\nFabricant : %s\nModèle : %s\nType : %s" ;
     Text [ dutch ] = "Apparaat: %s\nProducent: %s\nModel: %s\nType: %s" ;
     Text [ portuguese ] = "Periférico: %s\nFabricante: %s\nModelo: %s\nTipo: %s" ;
-    Text[ chinese_simplified ] = "Éè±¸: %s\nÖÆÔìÉÌ: %s\nĞÍºÅ: %s\nÀàĞÍ: %s";
+    Text[ chinese_simplified ] = "è®¾å¤‡: %s\nåˆ¶é€ å•†: %s\nå‹å·: %s\nç±»å‹: %s";
     Text[ russian ] = "Óñòğîéñòâî: %s\nÈçãîòîâèòåëü: %s\nÌîäåëü: %s\nÒèï: %s";
     Text[ polish ] = "Urz¹dzenie: %s\nProducent: %s\nModel: %s\nTyp: %s";
-    Text[ japanese ] = "ÃŞÊŞ²½: %s\n»‘¢Œ³: %s\nÓÃŞÙ: %s\nÀ²Ìß: %s";
-    Text[ chinese_traditional ] = "³]³Æ¡G%s\n»s³y°Ó¡G%s\n«¬¸¹¡G%s\nÃş«¬¡G%s";
+    Text[ japanese ] = "ãƒ‡ãƒã‚¤ã‚¹: %s\nè£½é€ å…ƒ: %s\nãƒ¢ãƒ‡ãƒ«: %s\nã‚¿ã‚¤ãƒ—: %s";
+    Text[ chinese_traditional ] = "è¨­å‚™ï¼š%s\nè£½é€ å•†ï¼š%s\nå‹è™Ÿï¼š%s\né¡å‹ï¼š%s";
     Text[ arabic ] = "ÇáÌåÇÒ: \n%sÇáãäÊÌ: \n%sÇáØÑÇÒ: %s\nÇáäæÚ: %s";
     Text[ dutch ] = "Apparaat: %s\nProducent: %s\nModel: %s\nType: %s";
-    Text[ chinese_simplified ] = "Éè±¸: %s\nÖÆÔìÉÌ: %s\nĞÍºÅ: %s\nÀàĞÍ: %s";
+    Text[ chinese_simplified ] = "è®¾å¤‡: %s\nåˆ¶é€ å•†: %s\nå‹å·: %s\nç±»å‹: %s";
     Text[ greek ] = "ÓõóêåõŞ: %s\nÊáôáóêåõáóôŞò: %s\nÌïíôİëï: %s\nÔığïò: %s";
-    Text[ korean ] = "ÀåÄ¡: %s\nÁ¦Á¶¾÷Ã¼: %s\n¸ğµ¨: %s\nÀ¯Çü: %s";
+    Text[ korean ] = "ì¥ì¹˜: %s\nì œì¡°ì—…ì²´: %s\nëª¨ë¸: %s\nìœ í˜•: %s";
     Text[ turkish ] = "Cihaz: %s\nÜretici: %s\nModel: %s\nTip: %s";
-    Text[ catalan ] = "Dispositivo: %s\nFabricante: %s\nModelo: %s\nTipo: %s";
+    Text[ catalan ] = "Dispositiu: %s\nProveïdor: %s\nModel: %s\nTipus: %s";
     Text[ finnish ] = "Laite: %s\nToimittaja: %s\nMalli: %s\nTyyppi: %s";
+    Text[ thai ] = "à¸­à¸¸à¸›à¸à¸£à¸“à¹Œ: %s\nà¸œà¸¹à¹‰à¸‚à¸²à¸¢: %s\nà¸£à¸¸à¹ˆà¸™: %s\nà¸Šà¸™à¸´à¸”: %s";
 };
 String RID_SANE_SCANERROR_TXT
 {
@@ -662,25 +678,26 @@ String RID_SANE_SCANERROR_TXT
     Text [ portuguese ] = "Surgiu um erro durante a digitalização." ;
     Text [ english_us ] = "An error occurred while scanning." ;
     Text [ portuguese_brazilian ] = "W?rend des Scans ist ein Fehler aufgetreten." ;
-    Text [ swedish ] = "Ett fel uppstod när Du skannade." ;
+    Text [ swedish ] = "Ett fel uppstod när du skannade." ;
     Text [ danish ] = "Der opstod en fejl under scanning." ;
     Text [ italian ] = "Durante la scansione si è verificato un errore." ;
     Text [ spanish ] = "Se ha producido un error durante el escaneado." ;
     Text [ french ] = "Une erreur s'est produite durant la lecture au scanner." ;
     Text [ dutch ] = "Tijdens het scannen is er een fout opgetreden." ;
-    Text[ chinese_simplified ] = "ÔÚÉ¨ÃèÊ±·¢Éú´íÎó¡£";
-    Text[ russian ] = "Âî âğåìÿ ñêàíèğîâàíèÿ ïğîèçîøëà îøèáêà.";
+    Text[ chinese_simplified ] = "åœ¨æ‰«ææ—¶å‘ç”Ÿé”™è¯¯ã€‚";
+    Text[ russian ] = "Îøèáêà ñêàíèğîâàíèÿ.";
     Text[ polish ] = "Podczas skanowania wyst¹pi³ b³¹d.";
-    Text[ japanese ] = "½·¬İ’†‚É´×°”­¶¡";
-    Text[ chinese_traditional ] = "¦b±½´y®Éµo¥Í¤@­Ó¿ù»~¡C";
+    Text[ japanese ] = "ã‚¹ã‚­ãƒ£ãƒ³ä¸­ã«ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿï½¡";
+    Text[ chinese_traditional ] = "åœ¨æƒææ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÚãáíÉ ÇáãÓÍ ÇáÖæÆí.";
     Text[ dutch ] = "Tijdens het scannen is er een fout opgetreden.";
-    Text[ chinese_simplified ] = "ÔÚÉ¨ÃèÊ±·¢Éú´íÎó¡£";
+    Text[ chinese_simplified ] = "åœ¨æ‰«ææ—¶å‘ç”Ÿé”™è¯¯ã€‚";
     Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí óÜñùóç.";
-    Text[ korean ] = "½ºÄµÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ korean ] = "ìŠ¤ìº”í•  ë•Œ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Tarama sırasında hata oluştu.";
-    Text[ catalan ] = "Se ha producido un error durante el escaneado.";
+    Text[ catalan ] = "S'ha produït un error en escanejar.";
     Text[ finnish ] = "Skannauksessa on ilmennyt virhe.";
+    Text[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸“à¸°à¸•à¸£à¸§à¸ˆà¸«à¸²";
 };
 String RID_SANE_NORESOLUTIONOPTION_TXT
 {
@@ -695,19 +712,20 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text [ spanish ] = "El dispositivo no está preparado para ofrecer opción de previsualización. En lugar de esta se utilizará un escaneado normal, que puede tardar considerablemente más." ;
     Text [ french ] = "Le périphérique utilisé ne permet pas de créer un aperçu. Il permet uniquement une digitalisation normale en guise d'aperçu, ce qui peut durer nettement plus longtemps." ;
     Text [ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren." ;
-    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
-    Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ñîçäàíèå ïğåäâàğèòåëüíîãî ïğîñìîòğà. Âìåñòî ıòîãî â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà èñïîëüçóåòñÿ îáû÷íîå ñîñêàíèğîâàííîå èçîáğàæåíèå, ÷òî çàéìåò çíà÷èòåëüíî áîëüøå âğåìåíè.";
+    Text[ chinese_simplified ] = "è¿™ä¸ªè®¾å¤‡æ²¡æœ‰é¢„è§ˆåŠŸèƒ½ã€‚é‡‡ç”¨æ™®é€šæ‰«ææ–¹å¼é¢„è§ˆå¯èƒ½éœ€è¦è¾ƒé•¿çš„æ—¶é—´ã€‚";
+    Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ïğåäâàğèòåëüíûé ïğîñìîòğ. Âìåñòî ıòîãî â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà èñïîëüçóåòñÿ îáû÷íîå îòñêàíèğîâàííîå èçîáğàæåíèå, ÷òî çàíèìàåò çíà÷èòåëüíî áîëüøå âğåìåíè.";
     Text[ polish ] = "Urz¹dzenie to nie dysponuje opcj¹ podgl¹du. Zastosowany zostanie wzamian zwyk³y tryb przegl¹du. Operacja ta mo¿e trochê d³u¿ej potrwaæ.";
-    Text[ japanese ] = "‚±‚ÌÃŞÊŞ²½‚ÍÌßÚËŞ­°‚Ìì¬‚É‚Í“K‚µ‚Ä‚¢‚Ü‚¹‚ñB‚©‚í‚è‚ÉÌßÚËŞ­°‚Æ‚µ‚Ä•’Ê‚Ì½·¬İ‚ªg—p‚³‚ê‚Ü‚·‚ªŠÔ‚ª­‚µ‚©‚©‚è‚Ü‚·B";
-    Text[ chinese_traditional ] = "³o­Ó³]³Æ¨S¦³³]©w¹wµø¥\\¯à¡C¦]¦¹±Ä¥Î´¶³qªº±½´y¤è¦¡¹wÄı·|»İ­n¸ûªøªº®É¶¡¡C";
+    Text[ japanese ] = "ã“ã®ãƒ‡ãƒã‚¤ã‚¹ã¯ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆã«ã¯é©ã—ã¦ã„ã¾ã›ã‚“ã€‚ã‹ã‚ã‚Šã«ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã¨ã—ã¦æ™®é€šã®ã‚¹ã‚­ãƒ£ãƒ³ãŒä½¿ç”¨ã•ã‚Œã¾ã™ãŒæ™‚é–“ãŒå°‘ã—ã‹ã‹ã‚Šã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹è¨­å‚™æ²’æœ‰è¨­å®šé è¦–åŠŸèƒ½ã€‚å› æ­¤æ¡ç”¨æ™®é€šçš„æƒææ–¹å¼é è¦½æœƒéœ€è¦è¼ƒé•·çš„æ™‚é–“ã€‚";
     Text[ arabic ] = "ÇáÌåÇÒ ÛíÑ ãõÚÏ áÅäÔÇÁ ãÚÇíäÉ. ÈÏáÇğ ãä åĞÇ¡ Óæİ íÊã ÇÓÊÎÏÇã ãÓÍ ÚÇÏí ßãÚÇíäÉ. íãßä Ãä íÓÊÛÑŞ Ğáß İÊÑÉ ÃØæá ÈßËíÑ.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
-    Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
+    Text[ chinese_simplified ] = "è¿™ä¸ªè®¾å¤‡æ²¡æœ‰é¢„è§ˆåŠŸèƒ½ã€‚é‡‡ç”¨æ™®é€šæ‰«ææ–¹å¼é¢„è§ˆå¯èƒ½éœ€è¦è¾ƒé•¿çš„æ—¶é—´ã€‚";
     Text[ greek ] = "Ç óõóêåõŞ äåí İ÷åé ñõèìéóôåß ãéá ôçí åìöÜíéóç ğñïåğéóêüğçóçò. Áíôß áõôïı ÷ñçóéìïğïéåßôáé ìéá êáíïíéêŞ óÜñùóç. Ç äéáäéêáóßá áõôŞ ìğïñåß íá ? ";
-    Text[ korean ] = "ÀåÄ¡´Â ¹Ì¸®º¸±â ¿É¼ÇÀ» Á¦°øÇÏÁö ¾Ê½À´Ï´Ù. ±× ´ë½Å ÀÏ¹İ ½ºÄµÀÌ ¹Ì¸®º¸±â·Î ÀÌ¿ëµÉ °ÍÀÔ´Ï´Ù. ÀÌ ½ºÄµÀº ½Ã°£ÀÌ ÈÎ¾À ´õ ¿À·¡ °É¸± ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "ì¥ì¹˜ëŠ” ë¯¸ë¦¬ë³´ê¸° ì˜µì…˜ì„ ì œê³µí•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ê·¸ ëŒ€ì‹  ì¼ë°˜ ìŠ¤ìº”ì´ ë¯¸ë¦¬ë³´ê¸°ë¡œ ì‚¬ìš©ë  ê²ƒì…ë‹ˆë‹¤. ì´ ìŠ¤ìº”ì€ ì‹œê°„ì´ í›¨ì”¬ ë” ì˜¤ë˜ ê±¸ë¦´ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Cihaz önizleme işlevine desteklemiyor. Bunun yerine önizleme olarak normal bir tarama görüntüsü kullanılacak. Bu işlem daha fazla zaman alabilir.";
-    Text[ catalan ] = "El dispositivo no está preparado para ofrecer opción de previsualización. En lugar de esta se utilizará un escaneado normal, que puede tardar considerablemente más.";
+    Text[ catalan ] = "El dispositiu no ofereix l'opció de previsualització i, per tant, es procedirà a un escanejat normal. Això pot trigar força temps.";
     Text[ finnish ] = "Laitteessa ei ole esikatselutoimintoa. Tavallista skannausta käytetään esikatseluskannauksen sijasta. Tavallinen skannaus saattaa kestää huomattavan kauan.";
+    Text[ thai ] = "à¸­à¸¸à¸›à¸à¸£à¸“à¹Œà¹„à¸¡à¹ˆà¸¡à¸µà¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡ à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸à¸ˆà¸°à¹ƒà¸Šà¹‰à¸•à¸£à¸§à¸ˆà¸«à¸²à¹à¸šà¸šà¸›à¸à¸•à¸´à¹à¸—à¸™à¸à¸²à¸£à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡ à¸‹à¸¶à¹ˆà¸‡à¹ƒà¸Šà¹‰à¹€à¸§à¸¥à¸²à¸¡à¸²à¸à¹ƒà¸™à¸à¸²à¸£à¸à¸´à¸ˆà¸²à¸£à¸“à¸²";
 };
 String RID_SANE_NOSANELIB_TXT
 {
@@ -721,21 +739,34 @@ String RID_SANE_NOSANELIB_TXT
     Text [ italian ] = "Non è stato possibile inizializzare l'interfaccia SANE. Non è possibile eseguire lo scanning." ;
     Text [ spanish ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningún proceso de digitalización." ;
     Text [ french ] = "L'interface SANE n'a pas pu être initialisée. Impossible de scanner." ;
-    Text [ dutch ] = "Het SANE interface kon niet worden geïnitialiseerd. Scannen is niet mogelijk." ;
-    Text[ chinese_simplified ] = "ÎŞ·¨³õÊ¼»¯ SANE ½çÃæ¡£ÎŞ·¨Ö´ĞĞÉ¨Ãè×÷Òµ¡£";
-    Text[ russian ] = "Èíòåğôåéñ SANE íå óäåòñÿ èíèöèàëèçèğîâàòü. Ïğîöåññ ñêàíèğîâàíèÿ íåâîçìîæåí.";
+    Text [ dutch ] = "Het SANE interface kan niet worden geïnitialiseerd. Scannen is niet mogelijk." ;
+    Text[ chinese_simplified ] = "æ— æ³•åˆå§‹åŒ– SANE ç•Œé¢ã€‚æ— æ³•æ‰§è¡Œæ‰«æä½œä¸šã€‚";
+    Text[ russian ] = "Íåâîçìîæíî èíèöèàëèçèğîâàòü èíòåğôåéñ SANE. Ñêàíèğîâàíèå íåâîçìîæíî.";
     Text[ polish ] = "Interfejsu SANE nie mo¿na zainincjowaæ. Skanowanie niemo¿liwe.";
-    Text[ japanese ] = "‚±‚Ì SANE ²İÀ°Ìª²½‚Í‰Šú‰»‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B½·¬İˆ—‚ÍÀs‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "µLªkªì©l¤Æ SANE ¬É­±¡CµLªk°õ¦æ±½´y§@·~¡C";
+    Text[ japanese ] = "ã“ã® SANE ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã¯åˆæœŸåŒ–ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚ã‚¹ã‚­ãƒ£ãƒ³å‡¦ç†ã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•åˆå§‹åŒ– SANE ç•Œé¢ã€‚ç„¡æ³•åŸ·è¡Œæƒæä½œæ¥­ã€‚";
     Text[ arabic ] = "ÊÚĞÑ ÊËÈíÊ ÇáæÇÌåÉ SANE. áåĞÇ İÅäå ãä ÛíÑ Çáããßä ÅÌÑÇÁ ÚãáíÉ ÇáãÓÍ ÇáÖæÆí.";
-    Text[ dutch ] = "Het SANE interface kon niet worden geïnitialiseerd. Scannen is niet mogelijk.";
-    Text[ chinese_simplified ] = "ÎŞ·¨³õÊ¼»¯ SANE ½çÃæ¡£ÎŞ·¨Ö´ĞĞÉ¨Ãè×÷Òµ¡£";
+    Text[ dutch ] = "Het SANE interface kan niet worden geïnitialiseerd. Scannen is niet mogelijk.";
+    Text[ chinese_simplified ] = "æ— æ³•åˆå§‹åŒ– SANE ç•Œé¢ã€‚æ— æ³•æ‰§è¡Œæ‰«æä½œä¸šã€‚";
     Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíáãíşñéóç ôçò äéáóıíäåóçò SANE. Áäıíáôïí íá ãßíåé óÜñùóç.";
-    Text[ korean ] = "SANE ÀÎÅÍÆäÀÌ½º¸¦ ÃÊ±âÈ­ÇÏÁö ¸øÇØ ½ºÄµ°úÁ¤À» ÁøÇàÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "SANE ì¸í„°í˜ì´ìŠ¤ë¥¼ ì´ˆê¸°í™”í•˜ì§€ ëª»í•´ ìŠ¤ìº” ê³¼ì •ì„ ì§„í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "SANE arabirimi başlatılamadı. Tarama işlemi yürütülemez.";
-    Text[ catalan ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningún proceso de digitalización.";
+    Text[ catalan ] = "No s'ha pogut inicialitzar la interfície SANE. L'escanejat no és possible.";
     Text[ finnish ] = "SANE-liittymää ei voitu alustaa. Skannausta ei voida suorittaa.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸£à¸´à¹ˆà¸¡à¸ªà¹ˆà¸§à¸™à¸•à¹ˆà¸­à¸›à¸£à¸°à¸ªà¸²à¸™ SANE  à¸à¸²à¸£à¸•à¸£à¸§à¸ˆà¸«à¸²à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸”à¹‰";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

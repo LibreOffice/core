@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selectlabeldialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,14 +362,4 @@ namespace pcr
 //............................................................................
 }   // namespace pcr
 //............................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/01/12 11:32:49  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 09.01.01 14:06:16  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:15:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,20 +263,4 @@ namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_LISTCOMBOWIZARD_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/03/05 14:53:13  fs
- *  finished the grid control wizard
- *
- *  Revision 1.2  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.1  2001/02/23 15:20:18  fs
- *  initial checkin - list-/combobox wizard (not comlpletely finished yet)
- *
- *
- *  Revision 1.0 21.02.01 15:46:59  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 12:12:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ namespace pcr
         // bind the browser to a new object (a more comprehensive version of setObject)
         void bindToObject(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
-        void SetCursorSource(sal_Bool _bInit = sal_False);
+        void SetCursorSource( sal_Bool _bConnect, sal_Bool _bInit );
         void SetListSource(sal_Bool _bInit = sal_False);
         void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
 
@@ -429,56 +429,4 @@ namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.15  2002/01/09 14:01:46  fs
- *  removed the implementation of XInitialization (obsolete since a long time ago, as I discovered during #96068#)
- *
- *  Revision 1.14  2001/12/13 09:14:26  fs
- *  preparations for #95343# - support the XLayoutConstraints interface
- *
- *  Revision 1.13  2001/10/19 12:58:51  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.12  2001/08/13 15:45:53  fs
- *  #90958# +getRowSet / +ensureRowsetConnection
- *
- *  Revision 1.11  2001/08/06 14:52:59  fs
- *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
- *
- *  Revision 1.10  2001/06/11 11:32:48  fs
- *  #86096# changed the property ids
- *
- *  Revision 1.9  2001/06/06 08:14:28  fs
- *  #86096# +implGetInt32FontProperty / +implInvalidateItem
- *
- *  Revision 1.8  2001/05/30 13:41:46  fs
- *  #86838# be a focus listener on the container window, forward the focus to the property box
- *
- *  Revision 1.7  2001/05/29 10:44:32  fs
- *  #87461# +OnImageURLClicked
- *
- *  Revision 1.6  2001/04/12 06:28:14  fs
- *  #84694# +recalcConnection
- *
- *  Revision 1.5  2001/03/21 15:42:29  fs
- *  #82696# new helper methods for font handling
- *
- *  Revision 1.4  2001/02/19 14:08:05  fs
- *  #83649# correctly eval the return value of getIntrospecteeProperty / #84041# infrastructure for activating pages from outside
- *
- *  Revision 1.3  2001/02/05 08:58:27  fs
- *  #83468# +m_nClassId
- *
- *  Revision 1.2  2001/01/12 14:44:49  fs
- *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
- *
- *  Revision 1.1  2001/01/12 11:31:14  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 09:33:46  fs
- ************************************************************************/
 

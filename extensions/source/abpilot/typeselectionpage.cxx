@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,14 +214,4 @@ namespace abp
 //.........................................................................
 }   // namespace abp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/08/01 11:03:10  fs
- *  initial checkin - address book auto pilot - type selection page
- *
- *
- *  Revision 1.0 26.07.01 09:11:48  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optiongrouplayouter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:28:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,20 +274,4 @@ namespace dbp
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/03/05 14:53:13  fs
- *  finished the grid control wizard
- *
- *  Revision 1.2  2001/02/21 12:11:58  fs
- *  +disambiguateName
- *
- *  Revision 1.1  2001/02/21 09:24:28  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 15.02.01 14:24:31  fs
- ************************************************************************/
 

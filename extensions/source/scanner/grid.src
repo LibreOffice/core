@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:40:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,14 @@ ModalDialog GRID_DIALOG
         Text[ polish ] = "OsadŸ";
         Text[ portuguese_brazilian ] = "Set";
         Text[ japanese ] = "è¨­å®š";
-        Text[ korean ] = "ì§€ì •";
+        Text[ korean ] = "ì„¤ì •";
         Text[ chinese_simplified ] = "è®¾å®š";
         Text[ chinese_traditional ] = "æŒ‡å®š";
         Text[ arabic ] = "ÊÚííä";
         Text[ turkish ] = "Tanımla";
-        Text[ catalan ] = "Definir";
-        Text[ finnish ] = "M??rit?";
+        Text[ catalan ] = "Defineix";
+        Text[ finnish ] = "Määritä";
+        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²";
     };
     Bitmap GRID_DIALOG_HANDLE_BMP
     {
@@ -140,8 +141,9 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "ç·šæ€§ä¸Šæ˜‡";
         Text[ arabic ] = "ÎØí ÊÕÇÚÏí";
         Text[ turkish ] = "Doğrusal artış";
-        Text[ catalan ] = "Lineal ascendente";
+        Text[ catalan ] = "Ascensió lineal";
         Text[ finnish ] = "Lineaarinen nouseva";
+        Text[ thai ] = "à¸ˆà¸²à¸à¸™à¹‰à¸­à¸¢à¹„à¸›à¸¡à¸²à¸à¹à¸šà¸šà¹€à¸ªà¹‰à¸™à¸•à¸£à¸‡";
     };
     String RESET_TYPE_LINEAR_DESCENDING
     {
@@ -165,8 +167,9 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "ç·šæ€§ä¸‹é™";
         Text[ arabic ] = "ÎØí ÊäÇÒáí";
         Text[ turkish ] = "Doğrusal düşüş";
-        Text[ catalan ] = "Lineal descendente";
+        Text[ catalan ] = "Descens lineal";
         Text[ finnish ] = "Lineaarinen laskeva";
+        Text[ thai ] = "à¸ˆà¸²à¸à¸¡à¸²à¸à¹„à¸›à¸™à¹‰à¸­à¸¢à¹à¸šà¸šà¹€à¸ªà¹‰à¸™à¸•à¸£à¸‡";
     };
     String RESET_TYPE_RESET
     {
@@ -184,14 +187,15 @@ ModalDialog GRID_DIALOG
         Text[ swedish ] = "Originalvärden";
         Text[ polish ] = "Wartoœci oryginalne";
         Text[ portuguese_brazilian ] = "Original values";
-        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™å€¤";
+        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«å€¤";
         Text[ korean ] = "ì›ë˜ê°’";
         Text[ chinese_simplified ] = "åŸå§‹æ•°å€¼";
         Text[ chinese_traditional ] = "åŸå§‹å€¼";
         Text[ arabic ] = "ÇáŞíã ÇáÃÕáíÉ";
         Text[ turkish ] = "Asıl değerler";
-        Text[ catalan ] = "Valores originales";
-        Text[ finnish ] = "Alkuper?iset arvot";
+        Text[ catalan ] = "Valors originals";
+        Text[ finnish ] = "Alkuperäiset arvot";
+        Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸”à¸´à¸¡";
     };
     String RESET_TYPE_EXPONENTIAL
     {
@@ -199,7 +203,7 @@ ModalDialog GRID_DIALOG
         Text [ English ] = "Exponential raise";
         Text[ english_us ] = "Exponential increasing";
         Text[ portuguese ] = "Exponencial crescente";
-        Text[ russian ] = "İêñïîíåíöèàëüíîå âîçğàñòàíèå";
+        Text[ russian ] = "Âîçğàñòàíèå ïî ıêñïîíåíòå";
         Text[ greek ] = "ÅêèåôéêŞ áıîçóç";
         Text[ dutch ] = "Exponentiele groei";
         Text[ french ] = "Croissance exponentielle";
@@ -215,10 +219,16 @@ ModalDialog GRID_DIALOG
         Text[ chinese_traditional ] = "å†ªæ•¸å¼éå¢";
         Text[ arabic ] = "ÊÒÇíÏ ÃÓí";
         Text[ turkish ] = "Üstel artış";
-        Text[ catalan ] = "Exponencial aumentando";
-        Text[ finnish ] = "Eksponentiaalinen lis?ys";
+        Text[ catalan ] = "Increment exponencial";
+        Text[ finnish ] = "Eksponentiaalinen lisäys";
+        Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸‚à¸¶à¹‰à¸™à¹à¸šà¸šà¸¢à¸à¸à¸³à¸¥à¸±à¸‡";
     };
 };
+
+
+
+
+
 
 
 

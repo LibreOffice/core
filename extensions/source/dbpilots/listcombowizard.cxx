@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-10 10:30:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,38 +617,4 @@ namespace dbp
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.9  2001/08/01 09:34:54  fs
- *  onFinish: check the result before doing anything
- *
- *  Revision 1.8  2001/07/04 06:05:02  oj
- *  #89191# sLinkedListField isn't used when combobox
- *
- *  Revision 1.7  2001/05/30 16:48:06  fs
- *  #86714# show the data source of the form on the first not data source related page
- *
- *  Revision 1.6  2001/03/30 13:15:43  fs
- *  added a description to the laste page of the list box wizard
- *
- *  Revision 1.5  2001/03/21 16:28:28  fs
- *  #85234# by default, create a drop down control
- *
- *  Revision 1.4  2001/03/20 15:45:51  fs
- *  #85200# added missing help ids
- *
- *  Revision 1.3  2001/03/05 14:53:13  fs
- *  finished the grid control wizard
- *
- *  Revision 1.2  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.1  2001/02/23 15:20:11  fs
- *  initial checkin - list-/combobox wizard (not comlpletely finished yet)
- *
- *
- *  Revision 1.0 21.02.01 15:51:07  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:55:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text [ English ] = "Table;Query;Sql;Sql [Native]" ;
     Text[ english_us ] = "Table;Query;Sql;Sql [Native]";
     Text[ portuguese ] = "Tabela; Consulta; Sql;Sql [Native]";
-    Text[ russian ] = "Òàáëèöà;Çàïğîñ;Sql;Sql [\"ğîäíîé\"]";
+    Text[ russian ] = "Òàáëèöà;Çàïğîñ;Sql;Sql [Native]";
     Text[ greek ] = "Ğßíáêáò;Åñşôçìá;Sql;Sql [Native]";
     Text[ dutch ] = "Tabel;Query;Sql;Sql [Native]";
     Text[ french ] = "Table;Requête;Sql;Sql [Natif]";
@@ -105,7 +105,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ polish ] = "Tabela;Kwerenda;Sql;Sql [Native]";
     Text[ portuguese_brazilian ] = "Table;Query;Sql;Sql [Native]";
     Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«;ã‚¯ã‚¨ãƒªãƒ¼;Sql;Sql [Native]";
-    Text[ korean ] = "í‘œ;ì§ˆì˜;Sql;Sql [Native]";
+    Text[ korean ] = "í…Œì´ë¸”;ì¿¼ë¦¬;Sql;Sql [Native]";
     Text[ chinese_simplified ] = "è¡¨æ ¼;æŸ¥è¯¢;Sql;Sql [Native]";
     Text[ chinese_traditional ] = "è¡¨æ ¼;æŸ¥è©¢;Sql;Sql [Native]";
     Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;Sql;Sql [Native]";
@@ -157,7 +157,7 @@ String RID_MAP_QUESTION
     Text[ polish ] = "Chcesz edytowaæ przyporz¹dkowanie kolumn?";
     Text[ portuguese_brazilian ] = "Dow you want to edit the column arrangement";
     Text[ japanese ] = "åˆ—ã®åˆ†é¡ã‚’ç·¨é›†ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì—´ ë°°ì—´ì„ í¸ì§‘í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "ì—´ ë°°ì¹˜ë¥¼ í¸ì§‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ chinese_simplified ] = "æ‚¨è¦ç¼–è¾‘åˆ—çš„æ’åˆ—é¡ºåºï¼Ÿ";
     Text[ chinese_traditional ] = "æ‚¨è¦ç·¨æ’æ¬„ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÊÍÑíÑ ÊÚííä ÇáÚãæÏ¿";
@@ -166,6 +166,8 @@ String RID_MAP_QUESTION
     Text[ finnish ] = "Haluatko muokata sarakejärjestystä?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 09:20:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,22 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    void OPropertyEditor::CommitModified()
+    {
+        // commit all of my pages, if necessary
+
+        sal_uInt16 nCount = m_aTabControl.GetPageCount();
+        for ( sal_uInt16 i=0; i<nCount; ++i )
+        {
+            sal_uInt16 nID = m_aTabControl.GetPageId( i );
+            OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( nID ) );
+
+            if ( pPage && pPage->getListBox() && pPage->getListBox()->IsModified() )
+                pPage->getListBox()->CommitModified();
+        }
+    }
+
+    //------------------------------------------------------------------
     void OPropertyEditor::GetFocus()
     {
         m_aTabControl.GrabFocus();
@@ -166,12 +182,10 @@ namespace pcr
     //------------------------------------------------------------------
     void OPropertyEditor::Resize()
     {
-        Point aPos(3,3);
-        Size aSize(GetOutputSizePixel());
-        aSize.Width()-=6;
-        aSize.Height()-=6;
-
-        m_aTabControl.SetPosSizePixel(aPos, aSize);
+        Size aSize( GetOutputSizePixel() );
+        aSize.Width() -= 6;
+        aSize.Height() -= 6;
+        m_aTabControl.SetPosSizePixel( Point( 3, 3 ), aSize );
 
     }
 
@@ -446,22 +460,4 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/05/30 13:43:32  fs
- *  #86838# forward the GetFocus event to the tab control
- *
- *  Revision 1.3  2001/02/19 14:08:31  fs
- *  #84041# infrastructure for activating pages from outside
- *
- *  Revision 1.2  2001/01/18 14:45:10  rt
- *  #65293# semicolon removed
- *
- *  Revision 1.1  2001/01/12 11:31:24  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 15:38:46  fs
- ************************************************************************/
 

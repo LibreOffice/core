@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoautopilot.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:24:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,14 +149,4 @@ namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_UNOAUTOPILOT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/02/12 07:16:22  fs
- *  initial checkin - importing StarOffice 5.2 database files
- *
- *
- *  Revision 1.0 30.01.01 15:33:23  fs
- ************************************************************************/
 

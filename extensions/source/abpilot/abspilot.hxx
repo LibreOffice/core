@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:06:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,4 @@ namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABSPILOT_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 26.07.01 08:45:43  fs
- ************************************************************************/
 

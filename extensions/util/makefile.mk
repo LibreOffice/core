@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: gh $ $Date: 2002-11-07 15:14:09 $
+#   last change: $Author: hr $ $Date: 2003-03-25 16:04:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,25 +64,11 @@ PRJ=..
 PRJNAME=extensions
 TARGET=ext
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings ----------------------------------
 
 .INCLUDE :	settings.mk
 
 .INCLUDE : target.mk
-
-.IF "$(GUI)$(CPU)"=="WNTI"
-.IF "$(BUILD_SOSL)"==""
-ALLTAR : $(SRS)$/hidother.hid
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-
-$(MISC)$/$(PRJNAME).hid : buildmealways
-buildmealways:
-    @+echo >& $(NULLDEV)
-.ENDIF
-.ENDIF
 

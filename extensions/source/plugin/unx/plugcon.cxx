@@ -2,33 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.2 2002-02-21 16:59:30 hr Exp $
-
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1  2001/10/23 17:31:20  pl
-      #92403# move plugins into own executable like SO5.2
-
-      Revision 1.5  2000/03/22 12:01:07  pl
-      #74086# do not wait indefinitely on dead mediators
-
-      Revision 1.4  1999/02/26 17:47:47  pl
-      #55825# Einige Bugs gefixed
-
-      Revision 1.3  1999/02/22 17:53:03  pl
-      #55825# Servicename geandert, OS/2 Implementation, NPP_SetWindow oefter rufen
-
-      Revision 1.2  1999/02/15 16:12:22  pl
-      #55825# Model fuers Plugin
-
-      Revision 1.1  1999/02/08 18:10:49  dbo
-      #55825# Netscape Plugins
-
-      Revision 1.1.1.1  1999/02/02 17:52:37  nup
-      Unterstuetzung fuer Netscape Plugins
-
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.3 2003-03-25 16:03:42 hr Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbptools.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:51:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,4 @@ namespace dbp
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 05.03.01 15:09:30  fs
- ************************************************************************/
 

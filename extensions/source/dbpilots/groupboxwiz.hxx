@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,23 +265,4 @@ namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_GROUPBOXWIZ_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/03/02 09:42:40  fs
- *  #84540# #84541# corrected the Next button behaviour on the first and last tab page
- *
- *  Revision 1.3  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:24:04  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 10:39:33  fs
- ************************************************************************/
 

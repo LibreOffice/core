@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentmodule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-23 07:41:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,14 +325,4 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 //.........................................................................
 
 #endif // _EXTENSIONS_COMPONENT_MODULE_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/02/12 07:06:08  fs
- *  initial checkin - helper class for implementing module-functionality in SFX-less components
- *
- *
- *  Revision 1.0 30.01.01 15:07:32  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-08 17:36:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,44 +266,4 @@ namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.11  2001/11/08 11:37:20  fs
- *  #94300# removed ShowCentury property
- *
- *  Revision 1.10  2001/10/19 12:58:51  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.9  2001/06/06 10:37:54  fs
- *  #86837# +PROPERTY_IMAGEALIGN
- *
- *  Revision 1.8  2001/05/02 12:42:11  tbe
- *  added scrollbar properties
- *
- *  Revision 1.7  2001/04/26 09:15:54  tbe
- *  added progressbar properties
- *
- *  Revision 1.6  2001/03/07 14:35:42  tbe
- *  added step property
- *
- *  Revision 1.5  2001/03/02 16:28:16  tbe
- *  added title property
- *
- *  Revision 1.4  2001/02/22 09:31:55  tbe
- *  added properties for dialog controls
- *
- *  Revision 1.3  2001/02/06 10:18:10  fs
- *  #83479# reintroduced the HasNavigationBar property
- *
- *  Revision 1.2  2001/01/17 08:42:10  fs
- *  tightened the property id range
- *
- *  Revision 1.1  2001/01/12 11:28:36  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 12:09:11  fs
- ************************************************************************/
 

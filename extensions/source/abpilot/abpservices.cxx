@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abpservices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:07:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,15 +137,4 @@ extern "C" void* SAL_CALL component_getFactory(
         xRet->acquire();
     return xRet.get();
 };
-
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/02/12 07:11:01  fs
- *  initial checkin - importing StarOffice 5.2 database files
- *
- *
- *  Revision 1.0 30.01.01 15:00:51  fs
- ************************************************************************/
 

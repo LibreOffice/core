@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-18 15:14:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -218,10 +218,9 @@ namespace pcr
             return m_sStandardString;
         else
         {
-            String sReturn;
-            SolarMath::DoubleToString(
-                sReturn, const_cast<OFormattedNumericControl*>(this)->GetValue(), 'F', m_nLastDecimalDigits,
-                '.', sal_True);
+            ::rtl::OUString sReturn( ::rtl::math::doubleToUString(
+                const_cast<OFormattedNumericControl*>(this)->GetValue(), rtl_math_StringFormat_F,
+                m_nLastDecimalDigits, '.', sal_True));
                 // always use a '.' (instead of the decimal separator given by m_aUsedInternational) :
                 // when the returned string is interpreted nobody knows about this control or the used
                 // international, so by convention we always use '.' for describing floating point numbers
@@ -283,17 +282,4 @@ namespace pcr
 //............................................................................
 } // namespace pcr
 //............................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/02/13 15:36:13  fs
- *  #83843# SetFormatDescription: correctly calculate m_nLastDecimalDigits
- *
- *  Revision 1.1  2001/01/12 11:34:02  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 09.01.01 10:23:42  fs
- ************************************************************************/
 

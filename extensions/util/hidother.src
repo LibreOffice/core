@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:53:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,5 +138,24 @@ hidspecial HID_DBIWIZARD                        { HelpId = HID_DBIWIZARD; }
 hidspecial UID_DBIWIZARD_HELP                   { HelpId = UID_DBIWIZARD_HELP; }
 hidspecial HID_DBIWIZARD_FILESELECTION          { HelpId = HID_DBIWIZARD_FILESELECTION; }
 
-hidspecial HID_BIB_DELETE_RECORD               { HelpId = HID_BIB_DELETE_RECORD; }
-hidspecial HID_BIB_INSERT_RECORD               { HelpId = HID_BIB_INSERT_RECORD; }
+hidspecial HID_BIB_DELETE_RECORD                { HelpId = HID_BIB_DELETE_RECORD; }
+hidspecial HID_BIB_INSERT_RECORD                { HelpId = HID_BIB_INSERT_RECORD; }
+
+hidspecial HID_PROP_TITLE                       { HelpId = HID_PROP_TITLE; }
+hidspecial HID_PROP_STEP                        { HelpId = HID_PROP_STEP; }
+hidspecial HID_PROP_VALUE                       { HelpId = HID_PROP_VALUE; }
+hidspecial HID_PROP_PROGRESSVALUE               { HelpId = HID_PROP_PROGRESSVALUE; }
+hidspecial HID_PROP_PROGRESSVALUE_MIN           { HelpId = HID_PROP_PROGRESSVALUE_MIN; }
+hidspecial HID_PROP_PROGRESSVALUE_MAX           { HelpId = HID_PROP_PROGRESSVALUE_MAX; }
+hidspecial HID_PROP_SCROLLVALUE                 { HelpId = HID_PROP_SCROLLVALUE; }
+hidspecial HID_PROP_SCROLLVALUE_MAX             { HelpId = HID_PROP_SCROLLVALUE_MAX; }
+hidspecial HID_PROP_LINEINCREMENT               { HelpId = HID_PROP_LINEINCREMENT; }
+hidspecial HID_PROP_BLOCKINCREMENT              { HelpId = HID_PROP_BLOCKINCREMENT; }
+hidspecial HID_PROP_VISIBLESIZE                 { HelpId = HID_PROP_VISIBLESIZE; }
+hidspecial HID_PROP_ORIENTATION                 { HelpId = HID_PROP_ORIENTATION; }
+hidspecial HID_PROP_POSITIONX                   { HelpId = HID_PROP_POSITIONX; }
+hidspecial HID_PROP_POSITIONY                   { HelpId = HID_PROP_POSITIONY; }
+hidspecial HID_PROP_PUSHBUTTONTYPE              { HelpId = HID_PROP_PUSHBUTTONTYPE; }
+hidspecial HID_PROP_STATE                       { HelpId = HID_PROP_STATE; }
+hidspecial HID_PROP_SCALEIMAGE                  { HelpId = HID_PROP_SCALEIMAGE; }
+

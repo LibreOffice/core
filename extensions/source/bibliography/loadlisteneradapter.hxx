@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadlisteneradapter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 13:20:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,14 +229,4 @@ namespace bib
 //.........................................................................
 
 #endif // EXTENSIONS_BIB_LOADLISTENERADAPTER_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/10/22 07:32:20  fs
- *  initial checkin - UNO-to-nonUNO bridge for (load)listeners
- *
- *
- *  Revision 1.0 17.10.01 12:15:24  fs
- ************************************************************************/
 

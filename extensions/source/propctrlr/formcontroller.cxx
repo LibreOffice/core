@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-10 17:51:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,112 +804,14 @@ namespace pcr
                 ::rtl::OUString aDatabaseName = ::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_DATASOURCE));
                 sal_Int32 nObjectType = ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_COMMANDTYPE));
 
-                // Festellen des Feldes
-                Reference< XNameAccess >  xFields;
-                Reference< XPropertySet >  xField;
-                try
-                {
-                    Reference< XConnection > xConnection = ensureRowsetConnection();
-                    if (!xConnection.is())
-                        return;
+                Reference< XConnection > xConnection = ensureRowsetConnection();
+                Sequence< ::rtl::OUString > aFields;
+                if ( xConnection.is() )
+                    aFields = getFieldNamesByCommandDescriptor( xConnection, nObjectType, aObjectName );
 
-                    switch (nObjectType)
-                    {
-                        case 0:
-                        {
-                            Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
-                            Reference< XColumnsSupplier >  xSupplyColumns;
-                            xSupplyTables->getTables()->getByName(aObjectName) >>= xSupplyColumns;
-                            xFields = xSupplyColumns->getColumns();
-                        }
-                        break;
-                        case 1:
-                        {
-                            Reference< XQueriesSupplier >  xSupplyQueries(xConnection, UNO_QUERY);
-                            Reference< XColumnsSupplier >  xSupplyColumns;
-                            xSupplyQueries->getQueries()->getByName(aObjectName) >>= xSupplyColumns;
-                            xFields = xSupplyColumns->getColumns();
-                        }
-                        break;
-                        default:
-                        {
-                            ::rtl::OUString sStatementToExecute( aObjectName );
-
-                            // try to let a query composer analyze the statement
-                            try
-                            {
-                                Reference< XSQLQueryComposerFactory > xComposerFac( xConnection, UNO_QUERY );
-                                Reference< XSQLQueryComposer > xComposer;
-                                if ( xComposerFac.is() )
-                                    xComposer = xComposerFac->createQueryComposer( );
-                                if ( xComposer.is() )
-                                {
-                                    xComposer->setQuery( sStatementToExecute );
-
-                                    // Now set the filter to a dummy restriction which will result in an empty
-                                    // result set.
-
-                                    // Unfortunately, if the statement already has a non-empty filter it is not
-                                    // removed when setting a new one. Instead, everything set with "setQuery",
-                                    // counts as base, everything added later (setQuery/setOrder and such) is
-                                    // _added_. So we need to strip the original WHERE clause (if there is one)
-                                    // manually
-                                    {
-                                        ::rtl::OUString sComplete = xComposer->getComposedQuery( );
-                                            // this way we norm it: now there's really a "WHERE", not only a "where" or such ...
-                                        sal_Int32 nWherePos = sComplete.lastIndexOf( ::rtl::OUString::createFromAscii( "WHERE" ) );
-                                        if ( -1 < nWherePos )
-                                        {
-                                            sComplete = sComplete.copy( 0, nWherePos );
-                                                // this is not correct. The "WHERE" may have been a part of e.g. a filter itself
-                                                // (something like "WHERE <field> = 'WHERE'"), but without an API
-                                                // for _analyzing_ (and not only _composing_) queries, we don't have
-                                                // much of a chance ...
-                                            try
-                                            {
-                                                xComposer->setQuery( sComplete );
-                                            }
-                                            catch( const Exception& )
-                                            {
-                                                // just in case we found the wrong WHERE substring ....
-                                            }
-                                        }
-                                    }
-
-                                    xComposer->setFilter( ::rtl::OUString::createFromAscii( "0=1" ) );
-                                    sStatementToExecute = xComposer->getComposedQuery( );
-                                    // We're interested in columns only. And this "WHERE 0=1" restriction we applied
-                                    // on the statement allows the driver to calc the columns only, without
-                                    // retrieving any data (which would be expensive)
-                                }
-                            }
-                            catch( const Exception& )
-                            {
-                                // silent this error, this was just a try
-                            }
-
-                            xStatement = xConnection->prepareStatement( sStatementToExecute );
-                            // not interested in any results
-                            Reference< XPropertySet > (xStatement,UNO_QUERY)->setPropertyValue( ::rtl::OUString::createFromAscii("MaxRows"),makeAny(sal_Int32(0)));
-                            Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
-                            if (xSupplyCols.is())
-                                xFields = xSupplyCols->getColumns();
-                        }
-                    }
-                }
-                catch (Exception&)
-                {
-                    DBG_ERROR("OPropertyBrowserController::SetFields: Exception occured!");
-                }
-
-
-                if (!xFields.is())
-                    return;
-
-                Sequence< ::rtl::OUString> aFields(xFields->getElementNames());
                 const ::rtl::OUString* pFields = aFields.getConstArray();
-                for (sal_Int32 i=0; i<aFields.getLength(); i++,++pFields )
-                    rProperty.aListValues.push_back(*pFields);
+                for ( sal_Int32 i = 0; i < aFields.getLength(); ++i, ++pFields )
+                    rProperty.aListValues.push_back( *pFields );
             }
         }
         catch (Exception&)
@@ -1126,7 +1028,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::SetCursorSource(sal_Bool bInit)
+    void OPropertyBrowserController::SetCursorSource( sal_Bool _bConnect, sal_Bool _bInit )
     {
         try
         {
@@ -1155,20 +1057,17 @@ namespace pcr
             aProperty.bHasBrowseButton = sal_False;
             aProperty.bIsHyperlink = sal_False;
             aProperty.bIsLocked = sal_False;
-
             aProperty.nHelpId = m_pPropertyInfo->getPropertyHelpId(PROPERTY_ID_COMMAND);
-            if (bInit)
+            if ( _bInit )
                 aProperty.sValue = sCommand;
-            else
-                aProperty.sValue = String();
 
-            if ( bInit )
+            if ( _bConnect )
                 connectRowset();
 
             ////////////////////////////////////////////////////////////
             // Enums setzen
 
-            sal_Bool bFailedToConnect = bInit && !haveRowsetConnection();
+            sal_Bool bFailedToConnect = _bConnect && !haveRowsetConnection();
             if ( !bFailedToConnect )
             {
                 Sequence< ::rtl::OUString > aCommandTypes = m_pPropertyInfo->getPropertyEnumRepresentations(PROPERTY_ID_COMMANDTYPE);
@@ -2323,8 +2222,8 @@ namespace pcr
                 delete pProperty;
             }
 
-            SetCursorSource(sal_True);
-            SetListSource(sal_True);
+            SetCursorSource( sal_True, sal_True );
+            SetListSource( sal_True );
 
             if (bRemoveDatPage && !m_bHasCursorSource && !m_bHasListSource)
             {
@@ -2356,7 +2255,7 @@ namespace pcr
             if (PROPERTY_ID_COMMANDTYPE == nPropId)
             {
                 Commit( aName, aVal, pData );
-                SetCursorSource();
+                SetCursorSource( sal_False, sal_False );
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -2641,7 +2540,7 @@ namespace pcr
 
                 // propagate the changes to the min/max/default fields
                 Any aCurrentProp;
-                ::rtl::OUString aAffectedProps[] = { PROPERTY_DEFAULT_VALUE, PROPERTY_VALUEMIN, PROPERTY_VALUEMAX };
+                ::rtl::OUString aAffectedProps[] = { PROPERTY_VALUE, PROPERTY_DEFAULT_VALUE, PROPERTY_VALUEMIN, PROPERTY_VALUEMAX };
                 for (sal_uInt16 i=0; i<sizeof(aAffectedProps)/sizeof(aAffectedProps[0]); ++i)
                 {
                     OFormattedNumericControl* pField = (OFormattedNumericControl*)getPropertyBox()->GetPropertyControl(aAffectedProps[i]);
@@ -2718,7 +2617,7 @@ namespace pcr
                 // don't display errors, and we want to have an error message.
                 connectRowset();
 
-                SetCursorSource(sal_False);
+                SetCursorSource( sal_False, sal_True );
                 SetListSource();
             }
         }
@@ -2743,31 +2642,4 @@ namespace pcr
 //............................................................................
 } // namespace pcr
 //............................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.52  2002/12/02 13:16:38  fs
- *  #105726# properly EnableEmptyFieldValue (broken in 1.44)
- *
- *  Revision 1.51  2002/10/25 12:49:51  fs
- *  #104512# fixed some controls leaking
- *
- *  Revision 1.50  2002/08/22 10:49:52  oj
- *  #96105# set the modified flag at the model
- *
- *  Revision 1.49  2002/08/06 08:14:05  oj
- *  #102058# set control type to BCT_COMBOBOX
- *
- *  Revision 1.48  2001/12/10 07:13:25  fs
- *  #95263# when retrieving the columns of a SQL-command form, use a '0=1' filter instead of the one supplied with the statement
- *
- *  Revision 1.47  2001/12/07 11:12:31  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.46  2001/11/09 13:35:20  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.0 10.01.01 08:51:55  fs
- ************************************************************************/
 

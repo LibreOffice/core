@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 09:18:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace pcr
             ,m_pLineListener(NULL)
             ,m_bUpdate(sal_True)
             ,m_aStandard(ModuleRes(RID_STR_STANDARD))
-            ,m_bIsActiv(sal_False)
+            ,m_bIsActive(sal_False)
             ,m_nYOffset(0)
             ,m_nSelectedLine(0)
             ,m_nTheNameSize(0)
@@ -122,11 +122,12 @@ namespace pcr
     //------------------------------------------------------------------
     OBrowserListBox::~OBrowserListBox()
     {
-        if (m_bIsActiv && (m_aLines.size() > m_nSelectedLine))
-        {
-            IBrowserControl* pControl = m_aLines[m_nSelectedLine]->getControl();
-            pControl->CommitModified();
-        }
+        OSL_ENSURE( !IsModified(), "OBrowserListBox::~OBrowserListBox: still modified - should have been committed before!" );
+            // doing the commit here, while we, as well as our owner, as well as some other components,
+            // are already "half dead" (means within their dtor) is potentially dangerous.
+            // By definition, CommitModified has to be called (if necessary) before destruction
+            // #105868# - 2002-12-13 - fs@openoffice.org
+
         Hide();
         Clear();
 
@@ -134,10 +135,37 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
+    sal_Bool OBrowserListBox::IsModified( ) const
+    {
+        sal_Bool bModified = sal_False;
+
+        if ( m_bIsActive && ( m_aLines.size() > m_nSelectedLine ) )
+        {   // we have an active line at least
+            IBrowserControl* pControl = m_aLines[ m_nSelectedLine ]->getControl();
+            // and the control in this line is modified
+            bModified = ( NULL != pControl ) && ( pControl->IsModified() );
+        }
+        return bModified;
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserListBox::CommitModified( )
+    {
+        if ( IsModified() )
+        {
+            if ( m_aLines.size() > m_nSelectedLine )
+            {
+                IBrowserControl* pControl = m_aLines[ m_nSelectedLine ]->getControl();
+                pControl->CommitModified();
+            }
+        }
+    }
+
+    //------------------------------------------------------------------
     void OBrowserListBox::Activate(sal_Bool _bActive)
     {
-        m_bIsActiv = _bActive;
-        if (m_bIsActiv)
+        m_bIsActive = _bActive;
+        if (m_bIsActive)
         {
             // TODO: what's the sense of this?
             m_aVScroll.SetThumbPos(100);
@@ -891,20 +919,29 @@ namespace pcr
         }
     }
 
+    //------------------------------------------------------------------
+    long OBrowserListBox::Notify( NotifyEvent& _rNEvt )
+    {
+        // interested in scroll events if we have a scrollbar
+        if ( m_aVScroll.IsVisible() )
+        {
+            if ( EVENT_COMMAND == _rNEvt.GetType() )
+            {
+                const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
+                if  (   ( COMMAND_WHEEL == pCommand->GetCommand() )
+                    ||  ( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
+                    ||  ( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
+                    )
+                {
+                    HandleScrollCommand( *pCommand, NULL, &m_aVScroll );
+                }
+            }
+        }
+        return Control::Notify( _rNEvt );
+    }
+
 //............................................................................
 } // namespace pcr
 //............................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/01/18 14:45:10  rt
- *  #65293# semicolon removed
- *
- *  Revision 1.1  2001/01/12 11:25:25  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 15:59:04  fs
- ************************************************************************/
 

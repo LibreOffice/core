@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-24 08:58:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,9 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
         }
         catch(Exception& rEx)
         {
+#ifndef GCC
             rEx;    // make compiler happy
+#endif
             DBG_ERROR("BibliographyLoader::GetDataCursor : could not execute the result set !");
             bSuccess = sal_False;
         }
@@ -693,7 +695,9 @@ Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
     }
     catch(Exception& rEx)
     {
+#ifndef GCC
         rEx;    // make compiler happy
+#endif
         DBG_ERROR("Exception in BibliographyLoader::getByName")
     }
     return aRet;
@@ -707,8 +711,6 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
     int nRealNameCount = 0;
     try
     {
-        BibDataManager* pDatMan = ((BibliographyLoader*)this)->GetDataManager();
-
         Reference< XResultSet >  xCursor(GetDataCursor());
         Reference< sdb::XColumn >  xIdColumn(GetIdentifierColumn());
         if (xIdColumn.is()) // implies xCursor.is()
@@ -719,7 +721,7 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
                 if (sTemp.getLength() && !xIdColumn->wasNull())
                 {
                     int nLen = aRet.getLength();
-                    if (nLen = nRealNameCount)
+                    if(nLen == nRealNameCount)
                         aRet.realloc(nLen + 10);
                     rtl::OUString* pArray = aRet.getArray();
                     pArray[nRealNameCount] = sTemp;
@@ -731,7 +733,9 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
     }
     catch(Exception& rEx)
     {
+#ifndef GCC
         rEx;    // make compiler happy
+#endif
         DBG_ERROR("Exception in BibliographyLoader::getElementNames")
     }
 
@@ -746,7 +750,6 @@ sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( Runti
     sal_Bool bRet = sal_False;
     try
     {
-        BibDataManager* pDatMan = GetDataManager();
         Reference< XResultSet >  xCursor = GetDataCursor();
         Reference< sdb::XColumn >  xIdColumn = GetIdentifierColumn();
 
@@ -766,7 +769,9 @@ sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( Runti
     }
     catch(Exception& rEx)
     {
+#ifndef GCC
         rEx;    // make compiler happy
+#endif
         DBG_ERROR("Exception in BibliographyLoader::getElementNames")
     }
     return bRet;
@@ -859,7 +864,6 @@ Any BibliographyLoader::getPropertyValue(const rtl::OUString& rPropertyName)
     {
         Sequence<PropertyValue> aSeq(COLUMN_COUNT);
         PropertyValue* pArray = aSeq.getArray();
-        BibDataManager* pDatMan = GetDataManager();
         BibConfig* pConfig = BibModul::GetConfig();
         for(sal_uInt16 i = 0; i <= text::BibliographyDataField::ISBN ; i++)
         {

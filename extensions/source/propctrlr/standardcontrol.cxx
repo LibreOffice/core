@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-09 09:00:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "brwcontrollistener.hxx"
 #endif
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
@@ -383,8 +383,7 @@ namespace pcr
         {
             if (rString.getLength())
             {
-                int nErr = 0;
-                double nValue = SolarMath::StringToDouble(rString, '.', ',', nErr);
+                double nValue = ::rtl::math::stringToDouble(rString, '.', ',', NULL, NULL);
                 BigInt aBInt = ImplCalcLongValue(nValue, GetDecimalDigits());
                 SetValue(aBInt);
             }
@@ -399,11 +398,10 @@ namespace pcr
     {
         if (GetText().Len()>0)
         {
-            String aBuffer;
             BigInt aBInt=GetValue();
             double nValue = ImplCalcDoubleValue(aBInt, GetDecimalDigits());
-            SolarMath::DoubleToString(aBuffer, nValue, 'F', GetDecimalDigits(), '.');
-
+            ::rtl::OUString aBuffer( ::rtl::math::doubleToUString(nValue,
+                        rtl_math_StringFormat_F, GetDecimalDigits(), '.') );
             return aBuffer;
         }
         else
@@ -1254,32 +1252,4 @@ namespace pcr
 //............................................................................
 } // namespace pcr
 //............................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2002/08/06 08:18:39  oj
- *  #102058# use auto_ptr in dtor and insert SUPD < 650 for SetExtDateFormat change
- *
- *  Revision 1.6  2002/02/19 14:04:22  hr
- *  #65293#: SetExtFormar() -> SetExtDateFormat()
- *
- *  Revision 1.5  2001/07/23 06:33:17  fs
- *  #90040# use LocaleDataWrapper instead of International class
- *
- *  Revision 1.4  2001/02/19 16:32:29  fs
- *  OColorControl: insert the standard entry at position 0
- *
- *  Revision 1.3  2001/02/05 12:24:09  tbe
- *  get standard color table if SID_COLOR_TABLE item not available
- *
- *  Revision 1.2  2001/01/24 14:12:53  fs
- *  recognize and tolerate a missing SID_COLOR_TABLE item
- *
- *  Revision 1.1  2001/01/12 11:33:20  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 09.01.01 10:28:46  fs
- ************************************************************************/
 

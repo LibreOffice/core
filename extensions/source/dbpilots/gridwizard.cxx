@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 09:34:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
@@ -353,9 +350,6 @@ namespace dbp
         if (!OControlWizard::onFinish(_nResult))
             return sal_False;
 
-        if (RET_OK != _nResult)
-            return sal_True;
-
         implApplySettings();
 
         return sal_True;
@@ -544,26 +538,4 @@ namespace dbp
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/07/16 16:32:48  fs
- *  #88333# improve behaviour of the arrow buttons
- *
- *  Revision 1.4  2001/06/15 11:52:55  fs
- *  enhanced the focus behaviour
- *
- *  Revision 1.3  2001/05/30 16:48:06  fs
- *  #86714# show the data source of the form on the first not data source related page
- *
- *  Revision 1.2  2001/03/20 15:45:51  fs
- *  #85200# added missing help ids
- *
- *  Revision 1.1  2001/03/05 14:52:24  fs
- *  initial checkin - grid auto pilot implementations
- *
- *
- *  Revision 1.0 05.03.01 09:24:22  fs
- ************************************************************************/
 

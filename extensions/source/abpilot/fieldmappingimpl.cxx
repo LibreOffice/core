@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldmappingimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 11:20:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,12 +423,3 @@ namespace abp
 }   // namespace abp
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/08/01 11:09:02  fs
- *  initial checkin - address book auto pilot - exception enabled code for dealing with the field mapping / configuration access
- *
- *
- *  Revision 1.0 30.07.01 16:00:50  fs
- ************************************************************************/

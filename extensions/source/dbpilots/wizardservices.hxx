@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardservices.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,17 +115,4 @@ namespace dbp
 //.........................................................................
 
 #endif _EXTENSIONS_DBW_WIZARDSERVICES_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:25:07  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 10:27:36  fs
- ************************************************************************/
 

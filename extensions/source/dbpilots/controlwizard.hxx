@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 10:48:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,29 +233,4 @@ namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_CONTROLWIZARD_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6  2001/05/30 16:46:47  fs
- *  #86714# functionality for displaying the form data source in a wizard page
- *
- *  Revision 1.5  2001/04/03 12:42:48  fs
- *  #85223# get-/setFormConnection
- *
- *  Revision 1.4  2001/03/05 14:53:13  fs
- *  finished the grid control wizard
- *
- *  Revision 1.3  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:22:18  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 10:02:52  fs
- ************************************************************************/
 

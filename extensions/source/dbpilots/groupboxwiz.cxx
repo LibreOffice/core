@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 09:34:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,11 +244,8 @@ namespace dbp
     //---------------------------------------------------------------------
     sal_Bool OGroupBoxWizard::onFinish(sal_Int32 _nResult)
     {
-        if (!OControlWizard::onFinish(_nResult))
-            return sal_False;
-
         if (RET_OK != _nResult)
-            return sal_True;
+            return OControlWizard::onFinish(_nResult);
 
         // commit the basic control setttings
         commitControlSettings(&m_aSettings);
@@ -619,38 +616,4 @@ namespace dbp
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.9  2001/05/30 16:48:05  fs
- *  #86714# show the data source of the form on the first not data source related page
- *
- *  Revision 1.8  2001/03/20 15:45:51  fs
- *  #85200# added missing help ids
- *
- *  Revision 1.7  2001/03/06 15:09:00  fs
- *  adjust the focus on the RadioSelectionPage
- *
- *  Revision 1.6  2001/03/06 09:50:06  fs
- *  #84643# clear aValues
- *
- *  Revision 1.5  2001/03/05 14:53:13  fs
- *  finished the grid control wizard
- *
- *  Revision 1.4  2001/03/02 09:42:40  fs
- *  #84540# #84541# corrected the Next button behaviour on the first and last tab page
- *
- *  Revision 1.3  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.2  2001/02/23 15:19:08  fs
- *  some changes / centralizations - added the list-/combobox wizard
- *
- *  Revision 1.1  2001/02/21 09:23:55  fs
- *  initial checkin - form control auto pilots
- *
- *
- *  Revision 1.0 14.02.01 10:41:21  fs
- ************************************************************************/
 

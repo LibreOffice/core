@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:53:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,4 +161,27 @@
 
 #define HID_BIB_DELETE_RECORD                   (HID_EXTENSIONS_START + 72)
 #define HID_BIB_INSERT_RECORD                   (HID_EXTENSIONS_START + 73)
+
+#define HID_DLG_MAPPING                         (HID_EXTENSIONS_START + 74)
+#define HID_DLG_DBCHANGE                        (HID_EXTENSIONS_START + 75)
+#define HID_SELECTION_TLB                       (HID_EXTENSIONS_START + 76)
+
+#define HID_PROP_TITLE                          (HID_FORMS_START +  115)
+#define HID_PROP_STEP                           (HID_FORMS_START +  116)
+#define HID_PROP_VALUE                          (HID_FORMS_START +  117)
+#define HID_PROP_PROGRESSVALUE                  (HID_FORMS_START +  118)
+#define HID_PROP_PROGRESSVALUE_MIN              (HID_FORMS_START +  119)
+#define HID_PROP_PROGRESSVALUE_MAX              (HID_FORMS_START +  120)
+#define HID_PROP_SCROLLVALUE                    (HID_FORMS_START +  121)
+#define HID_PROP_SCROLLVALUE_MAX                (HID_FORMS_START +  122)
+#define HID_PROP_LINEINCREMENT                  (HID_FORMS_START +  123)
+#define HID_PROP_BLOCKINCREMENT                 (HID_FORMS_START +  124)
+#define HID_PROP_VISIBLESIZE                    (HID_FORMS_START +  125)
+#define HID_PROP_ORIENTATION                    (HID_FORMS_START +  126)
+#define HID_PROP_POSITIONX                      (HID_FORMS_START +  127)
+#define HID_PROP_POSITIONY                      (HID_FORMS_START +  128)
+#define HID_PROP_PUSHBUTTONTYPE                 (HID_FORMS_START +  129)
+#define HID_PROP_STATE                          (HID_FORMS_START +  130)
+#define HID_PROP_SCALEIMAGE                     (HID_FORMS_START +  131)
+
 #endif

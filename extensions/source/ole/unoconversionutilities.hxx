@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-13 06:23:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ sal_Bool UnoConversionUtilities<T>::variantToAny2( const VARIANTARG* pArg, Any& 
     HRESULT hr;
     sal_Bool retVal= sal_True;
 
-    VARIANT var;
+    CComVariant var;
     VariantInit( &var);
     // There is no need to support indirect values, since they're not supported by UNO
     if( FAILED(hr= VariantCopyInd( &var, const_cast<VARIANTARG*>(pArg)))) // remove VT_BYREF

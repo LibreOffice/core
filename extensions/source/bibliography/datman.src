@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:54:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ ModalDialog RID_DLG_DBCHANGE
         Text [ENGLISH] = "Entry";
         Text[ english_us ] = "Entry";
         Text[ portuguese ] = "Entrada";
-        Text[ russian ] = "İëåìåíò";
+        Text[ russian ] = "Èñòî÷íèê äàííûõ";
         Text[ greek ] = "Êáôá÷şñéóç";
         Text[ dutch ] = "Item";
         Text[ french ] = "Entrée";
@@ -566,6 +566,7 @@ ModalDialog RID_DLG_DBCHANGE
         Size = MAP_APPFONT ( 223 , 100 ) ;
         Border = TRUE;
         TabStop = TRUE;
+        HelpId = HID_SELECTION_TLB;
     };
     Window HB_SELECTION
     {
@@ -586,7 +587,7 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ polish ] = "Wybór Ÿród³a danych";
     Text[ portuguese_brazilian ] = "Select data source";
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®é¸æŠ";
-    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ì„ íƒ";
+    Text[ korean ] = "ë°ì´í„° ì›ë³¸ ì„ íƒ";
     Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº";
     Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
     Text[ turkish ] = "Veri kaynağı seçimi";
@@ -594,3 +595,5 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ catalan ] = "Seleccioneu la font de dades";
     Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+

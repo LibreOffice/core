@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
+#   last change: $Author: hr $ $Date: 2003-03-25 16:03:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,11 @@ APP1STDLIBS=\
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO" || "$(OS)"=="HPUX"
 APP1STDLIBS+=-lXm -lXt -lX11 -ldl
 .ELSE
+.IF "$(OS)"=="FREEBSD"
+APP1STDLIBS+=-lXaw -lXt -lX11
+.ELSE
 APP1STDLIBS+=-lXaw -lXt -lX11 -ldl
+.ENDIF
 .ENDIF
 
 APP1DEF=	$(MISC)$/$(TARGET).def

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-09 10:43:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 16:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,17 +168,4 @@ namespace abp
 //.........................................................................
 }   // namespace abp
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/08/02 10:45:28  fs
- *  #88530# layout changes
- *
- *  Revision 1.1  2001/08/01 11:05:09  fs
- *  initial checkin - address book auto pilot - page for invoking the field mapping
- *
- *
- *  Revision 1.0 27.07.01 14:17:48  fs
- ************************************************************************/
 
