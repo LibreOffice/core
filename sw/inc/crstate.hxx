@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@ struct SwCrsrMoveState
     BOOL bRealWidth     :1;     // Calculation of the width required
     BOOL b2Lines        :1;     // Check 2line portions and fill p2Lines
     BOOL bNoScroll      :1;     // No scrolling of undersized textframes
+    BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
+                                // position if screen position is inside second
+                                // have of bound rect
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
         pFill( NULL ),
@@ -202,7 +205,8 @@ struct SwCrsrMoveState
         bSetInReadOnly( FALSE ),
         bRealWidth( FALSE ),
         b2Lines( FALSE ),
-        bNoScroll( FALSE )
+        bNoScroll( FALSE ),
+        bPosMatchesBounds( FALSE )
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         pFill( pInitFill ),
@@ -218,7 +222,8 @@ struct SwCrsrMoveState
         bSetInReadOnly( FALSE ),
         bRealWidth( FALSE ),
         b2Lines( FALSE ),
-        bNoScroll( FALSE )
+        bNoScroll( FALSE ),
+        bPosMatchesBounds( FALSE )
     {}
 };
 
