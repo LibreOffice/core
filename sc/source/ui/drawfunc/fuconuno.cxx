@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:52:10 $
+ *  last change: $Author: tbe $ $Date: 2000-11-28 14:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,6 @@
 //------------------------------------------------------------------------
 
 #include <svx/svdview.hxx>
-//#include <svx/vcsbxdef.hxx>
 
 #include "fuconuno.hxx"
 #include "tabvwsh.hxx"
