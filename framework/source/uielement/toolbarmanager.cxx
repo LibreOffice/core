@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:34:54 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_xFrame( rFrame ),
     m_pToolBar( pToolBar ),
     m_bDisposed( sal_False ),
-    m_bIsHiContrast( pToolBar->GetBackground().GetColor().IsDark() ),
+    m_bIsHiContrast( pToolBar->GetDisplayBackground().GetColor().IsDark() ),
     m_bSmallSymbols( GetCurrentSymbolSize() == SFX_SYMBOLS_SMALL ),
     m_bModuleIdentified( sal_False ),
     m_aResourceName( rResourceName ),
@@ -394,7 +394,7 @@ void ToolBarManager::CheckAndUpdateImages()
     sal_Bool bRefreshImages = sal_False;
 
     // Check if high contrast/normal mode have changed
-    if ( m_pToolBar->GetBackground().GetColor().IsDark() )
+    if ( m_pToolBar->GetDisplayBackground().GetColor().IsDark() )
     {
         if ( !m_bIsHiContrast )
         {
@@ -1374,7 +1374,7 @@ void ToolBarManager::RequestImages()
         ++pIter;
     }
 
-    m_bIsHiContrast = m_pToolBar->GetBackground().GetColor().IsDark();
+    m_bIsHiContrast = m_pToolBar->GetDisplayBackground().GetColor().IsDark();
     sal_Int16 j = getImageTypeFromBools( ( nSymbolSet == SFX_SYMBOLS_LARGE ), m_bIsHiContrast );
 
     if ( m_xDocImageManager.is() )
