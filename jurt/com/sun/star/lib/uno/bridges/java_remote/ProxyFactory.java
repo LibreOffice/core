@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProxyFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 17:03:38 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * A factory for proxies specific to the <code>java_remote_bridge</code>.
@@ -80,11 +81,20 @@ final class ProxyFactory {
     }
 
     public Object create(String oid, Type type) {
-        return java.lang.reflect.Proxy.newProxyInstance(
+        return Proxy.newProxyInstance(
             getClass().getClassLoader(),
             new Class[] { com.sun.star.lib.uno.Proxy.class,
                           IQueryInterface.class, type.getZClass() },
             new Handler(oid, type));
+    }
+
+    public boolean isProxy(Object obj) {
+        if (Proxy.isProxyClass(obj.getClass())) {
+            InvocationHandler h = Proxy.getInvocationHandler(obj);
+            return h instanceof Handler && ((Handler) h).matches(this);
+        } else {
+            return false;
+        }
     }
 
     static int getDebugCount() {
@@ -110,6 +120,10 @@ final class ProxyFactory {
             this.oid = oid;
             this.type = type;
             incrementDebugCount();
+        }
+
+        public boolean matches(ProxyFactory factory) {
+            return ProxyFactory.this == factory;
         }
 
         public Object invoke(Object proxy, Method method, Object[] args)
