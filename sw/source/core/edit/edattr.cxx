@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-23 14:29:28 $
+ *  last change: $Author: jp $ $Date: 2001-02-23 17:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,8 +538,7 @@ USHORT SwEditShell::GetScriptType() const
         FOREACHPAM_END()
     }
     if( !nRet )
-        nRet = SCRIPTTYPE_LATIN;        // which is the correct init value???
-
+        nRet = GetScriptTypeOfLanguage( LANGUAGE_SYSTEM );
     return nRet;
 }
 
