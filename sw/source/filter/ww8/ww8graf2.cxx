@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-09 10:57:19 $
+ *  last change: $Author: cmc $ $Date: 2002-12-12 09:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 
 #ifndef _SVX_IMPGRF_HXX //autogen
@@ -331,13 +335,14 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
 
     ULONG nPosFc = nFilePos + rPic.cbHeader;
 
-    switch( rPic.MFP.mm )
+    switch (rPic.MFP.mm)
     {
         case 94: // BMP-File ( nicht embeddet ) oder GIF
         case 99: // TIFF-File ( nicht embeddet )
-            pSt->Seek( nPosFc );
+            pSt->Seek(nPosFc);
             // Name als P-String einlesen
-            rFileName = WW8ReadPString( *pSt, eStructCharSet, 0 );
+            rFileName = URIHelper::SmartRelToAbs(
+                WW8ReadPString(*pSt, eStructCharSet, 0));
             *pbInDoc = false;       // Datei anschliessend nicht loeschen
             return rFileName.Len() != 0;        // Einlesen OK
     }
