@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 13:14:10 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 16:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
                     aAxisProperties.m_pfExrtaLinePositionAtOtherAxis =
                         new double(nDim==1?fCoordinateOrigin[0]:fCoordinateOrigin[1]);
                     aAxisProperties.m_bTESTTEST_HorizontalAdjustmentIsLeft = sal_False;
+                    aAxisProperties.m_aReferenceSize = rSize;
                     //-------------------
                     VAxis aAxis(aAxisProperties,pNumberFormatterWrapper);
                     aAxis.setMeterData( rExplicitScales[nDim], rExplicitIncrements[nDim] );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 13:12:03 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 16:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ AxisProperties::AxisProperties()
     , m_nOrthogonalAxisExtraLineScreenPosition(0)
     */
     , m_eRelativeLabelPosition(LEFTORBOTTOM_OF_AXIS)
+    , m_aReferenceSize()
     , m_nMajorTickmarks(1)
     , m_nMinorTickmarks(1)
     , m_aTickmarkPropertiesList()
@@ -211,6 +212,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_pfMainLinePositionAtOtherAxis( NULL )
     , m_pfExrtaLinePositionAtOtherAxis( NULL )
     , m_eRelativeLabelPosition( rAxisProperties.m_eRelativeLabelPosition )
+    , m_aReferenceSize( rAxisProperties.m_aReferenceSize )
     , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
     , m_aTickmarkPropertiesList( rAxisProperties.m_aTickmarkPropertiesList )
