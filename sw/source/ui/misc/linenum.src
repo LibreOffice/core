@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:23:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_traditional ] = "Åã¥Ü½s¸¹(~S)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÑŞíã";
         Text[ greek ] = "Åíåñãïğïßçóç áñßèìçóçò";
-        Text[ korean ] = "¹øÈ£¸Å±â±â¡¡Àû¿ë(~S)";
+        Text[ korean ] = "¹øÈ£¸Å±â±â Àû¿ë(~S)";
         Text[ turkish ] = "~Numaralamayı etkinleştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar ~numeración";
@@ -120,7 +120,7 @@ TabPage TP_LINENUMBERING
         Text [ portuguese_brazilian ] = "Zeichenvorlage" ;
         Text [ swedish ] = "~Teckenformatmall" ;
         Text [ danish ] = "Tegntypografi" ;
-        Text [ italian ] = "~Modelli di carattere" ;
+        Text [ italian ] = "~Modello di carattere" ;
         Text [ spanish ] = "Est~ilo de caracteres" ;
         Text [ french ] = "Style de ~caractères" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
@@ -437,11 +437,11 @@ TabPage TP_LINENUMBERING
         Text [ french ] = "~Intervalle" ;
         Text [ dutch ] = "~Interval" ;
         Text [ portuguese ] = "~Intervalo" ;
-        Text[ chinese_simplified ] = "¼ä¸ô";
+        Text[ chinese_simplified ] = "Çø¼ä";
         Text[ russian ] = "Èíòåğâàë";
         Text[ polish ] = "Przedzia³";
         Text[ japanese ] = "”Ô†•t‚¯‚ÌŠÔŠu";
-        Text[ chinese_traditional ] = "¶¡¹j";
+        Text[ chinese_traditional ] = "°Ï¶¡";
         Text[ arabic ] = "ÇáİÇÕá";
         Text[ greek ] = "ÄéÜóôçìá";
         Text[ korean ] = "±¸°£";
@@ -475,7 +475,7 @@ TabPage TP_LINENUMBERING
         Text [ portuguese_brazilian ] = "Zeilen" ;
         Text [ swedish ] = "rader" ;
         Text [ danish ] = "linjer" ;
-        Text [ italian ] = "Righe" ;
+        Text [ italian ] = "righe" ;
         Text [ spanish ] = "Líneas" ;
         Text [ french ] = "lignes" ;
         Text [ dutch ] = "Regels" ;
@@ -567,7 +567,7 @@ TabPage TP_LINENUMBERING
         Text [ portuguese_brazilian ] = "Alle" ;
         Text [ swedish ] = "~Var" ;
         Text [ danish ] = "Alle" ;
-        Text [ italian ] = "~Tutti" ;
+        Text [ italian ] = "~Ogni" ;
         Text [ spanish ] = "Ca~da" ;
         Text [ french ] = "~Toutes les" ;
         Text [ dutch ] = "~Alle" ;
@@ -611,7 +611,7 @@ TabPage TP_LINENUMBERING
         Text [ portuguese_brazilian ] = "Zeilen" ;
         Text [ swedish ] = "rad" ;
         Text [ danish ] = "linjer" ;
-        Text [ italian ] = "Righe" ;
+        Text [ italian ] = "righe" ;
         Text [ spanish ] = "Líneas" ;
         Text [ french ] = "lignes" ;
         Text [ dutch ] = "Regels" ;
@@ -735,7 +735,7 @@ TabPage TP_LINENUMBERING
         Text[ polish ] = "Ponowne uruchomienie na pocz¹tku strony";
         Text[ portuguese_brazilian ] = "~Restart each new page";
         Text[ japanese ] = "Íß°¼Ş‚²‚Æ‚É‚P‚©‚ç(~R)";
-        Text[ korean ] = "»õ ÂÊ Ã³À½ºÎºĞ¿¡¼­ ´Ù½Ã½ÃÀÛ(~R)";
+        Text[ korean ] = "ÂÊ Ã¹ ºÎºĞ¿¡¼­ ´Ù½Ã ½ÃÀÛ(~R)";
         Text[ chinese_simplified ] = "ÔÚÒ³Ê×ÖØĞÂ¿ªÊ¼(~R)";
         Text[ chinese_traditional ] = "±q­¶­º­«·s¶}©l(~R)";
         Text[ turkish ] = "~Restart each new page";
@@ -793,6 +793,7 @@ TabPage TP_LINENUMBERING
     Text[ catalan ] = "Numeración de líneas";
     Text[ finnish ] = "Rivien numerointi";
 };
+
 
 
 
