@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 09:58:45 $
+#   last change: $Author: obo $ $Date: 2003-09-05 11:23:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,7 +143,7 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)
-        
+
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEPN=		$(SLB)$/$(TARGET).lib
@@ -186,4 +186,5 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Making: $@
     @echo lcl > $@
     @echo component > $@
+    @echo __CT >> $@
 
