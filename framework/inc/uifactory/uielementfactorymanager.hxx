@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uielementfactorymanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:10:05 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,16 +108,16 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
-#include <drafts/com/sun/star/ui/XUIElementFactory.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
+#include <com/sun/star/ui/XUIElementFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTFACTORYREGISTRATION_HPP_
-#include <drafts/com/sun/star/ui/XUIElementFactoryRegistration.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTFACTORYREGISTRATION_HPP_
+#include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include "drafts/com/sun/star/frame/XModuleManager.hpp"
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include "com/sun/star/frame/XModuleManager.hpp"
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -138,8 +138,8 @@ namespace framework
 class ConfigurationAccess_UIElementFactoryManager;
 class UIElementFactoryManager :  public com::sun::star::lang::XTypeProvider                         ,
                                  public com::sun::star::lang::XServiceInfo                          ,
-                                 public drafts::com::sun::star::ui::XUIElementFactory               ,
-                                 public drafts::com::sun::star::ui::XUIElementFactoryRegistration   ,
+                                 public ::com::sun::star::ui::XUIElementFactory               ,
+                                 public ::com::sun::star::ui::XUIElementFactoryRegistration   ,
                                  private ThreadHelpBase                                             ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                  public ::cppu::OWeakObject
 {
@@ -153,11 +153,11 @@ class UIElementFactoryManager :  public com::sun::star::lang::XTypeProvider     
         DECLARE_XSERVICEINFO
 
         // XUIElementFactory
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         // XUIElementFactoryRegistration
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIElementFactory > SAL_CALL getFactory( const ::rtl::OUString& ResourceURL, const ::rtl::OUString& ModuleIdentifier ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElementFactory > SAL_CALL getFactory( const ::rtl::OUString& ResourceURL, const ::rtl::OUString& ModuleIdentifier ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL registerFactory( const ::rtl::OUString& aType, const ::rtl::OUString& aName, const ::rtl::OUString& aModuleIdentifier, const ::rtl::OUString& aFactoryImplementationName ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL deregisterFactory( const ::rtl::OUString& aType, const ::rtl::OUString& aName, const ::rtl::OUString& aModuleIdentifier ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
@@ -166,7 +166,7 @@ class UIElementFactoryManager :  public com::sun::star::lang::XTypeProvider     
 
         sal_Bool                                                                            m_bConfigRead;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
         ConfigurationAccess_UIElementFactoryManager*                                        m_pConfigAccess;
 };
 
