@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:24:43 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@
 #ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
 #include <connectivity/sdbcx/VTable.hxx>
 #endif
+
+using namespace dbaccess;
 
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
 class OServerComponent;
