@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-24 20:31:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ TabPage PAGE_GENERAL
         Text[ japanese ] = "...";
         Text[ korean ] = "...";
         Text[ chinese_simplified ] = "...";
-        Text[ chinese_traditional ] = "...";
+        Text[ chinese_traditional ] = "~...";
         Text[ turkish ] = "Tara...";
         Text[ arabic ] = "...";
         Text[ catalan ] = "...";
@@ -941,7 +941,7 @@ TabPage PAGE_DBASE
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "Te~ckenuppsättning" ;
         Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
-        Text [ chinese_simplified ] = "×ÖÌå(~C)";
+        Text [ chinese_simplified ] = "×Ö·û¼¯(~C)";
         Text [ russian ] = "Íàáîğ çíàêîâ";
         Text [ polish ] = "Zbiór znaków";
         Text [ japanese ] = "•¶š—ñ(~C)";
@@ -1320,7 +1320,7 @@ TabPage PAGE_JDBC
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "Te~ckenuppsättning" ;
         Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
-        Text [ chinese_simplified ] = "×ÖÌå(~C)£º" ;
+        Text [ chinese_simplified ] = "×Ö·û¼¯(~C)£º" ;
         Text [ russian ] = "Íàáîğ çíàêîâ:" ;
         Text [ polish ] = "Zbiór znaków:" ;
         Text [ japanese ] = "•¶š—ñ(~C)" ;
@@ -1477,7 +1477,7 @@ TabPage PAGE_ODBC
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "~Teckenuppsättning" ;
         Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
-        Text [ chinese_simplified ] = "×ÖÌå(~C)";
+        Text [ chinese_simplified ] = "×Ö·û¼¯(~C)";
         Text [ russian ] = "Íàáîğ çíàêîâ";
         Text [ polish ] = "Zbiór znaków";
         Text [ japanese ] = "•¶š—ñ(~C)";
@@ -2080,7 +2080,7 @@ TabPage PAGE_TEXT
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "~Teckenuppsättning" ;
         Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
-        Text [ chinese_simplified ] = "×ÖÌå(~C)";
+        Text [ chinese_simplified ] = "×Ö·û¼¯(~C)";
         Text [ russian ] = "Íàáîğ çíàêîâ";
         Text [ polish ] = "Zbiór znaków";
         Text [ japanese ] = "•¶š—ñ(~C)";
@@ -2666,8 +2666,8 @@ String STR_ERR_EMPTY_DSN_NAME
     Text [ greek ] = "Ôï üíïìá ôçò ğñïİëåõóçò ôùí äåäïìİíùí äåí åğéôñİğåôáé íá åßíáé êåíü!";
     Text [ dutch ] = "De naam van de gegevensbron moet worden aangegeven!";
     Text [ french ] = "Le nom de la source de données ne peut pas être vide !";
-    Text [ spanish ] = "¡El nombre de la fuente de datos no puede quedar vacío!";
-    Text [ italian ] = "The data source name must not be empty!";
+    Text [ spanish ] = "¡Debe existir un nombre de fuente de datos!";
+    Text [ italian ] = "È necessario indicare il nome della sorgente dati.";
     Text [ danish ] = "The data source name must not be empty!";
     Text [ swedish ] = "Namnet på datakällan får inte vara tomt!";
     Text [ polish ] = "Nazwa Ÿród³a danych nie mo¿e byæ pusta!";
@@ -3279,11 +3279,34 @@ String STR_CALCDOC_DOESNOTEXIST
 {
     Text = "Die Datei \"$file$\" existiert nicht.";
     Text [ english ] = "The file \"$file$\" does not exist.";
+    Text[ english_us ] = "The file \"$file$\" does not exist.";
+    Text[ portuguese ] = "The file \"$file$\" does not exist.";
+    Text[ russian ] = "The file \"$file$\" does not exist.";
+    Text[ greek ] = "The file \"$file$\" does not exist.";
+    Text[ dutch ] = "Bestand \"$file$\" bestaat niet.";
+    Text[ french ] = "The file \"$file$\" does not exist.";
+    Text[ spanish ] = "The file \"$file$\" does not exist.";
+    Text[ finnish ] = "The file \"$file$\" does not exist.";
+    Text[ italian ] = "Il file $(FILE) non esiste.";
+    Text[ danish ] = "The file \"$file$\" does not exist.";
+    Text[ swedish ] = "Filen $(FILE) finns inte.";
+    Text[ polish ] = "Plik \"$file$\" nie istnieje.";
+    Text[ portuguese_brazilian ] = "The file \"$file$\" does not exist.";
+    Text[ japanese ] = "Ì§²Ù \"$file$\" ‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Text[ korean ] = "The file \"$file$\" does not exist.";
+    Text[ chinese_simplified ] = "The file \"$file$\" does not exist.";
+    Text[ chinese_traditional ] = "ÀÉ®×\"$file$\"¤£¦s¦b¡C";
+    Text[ turkish ] = "The file \"$file$\" does not exist.";
+    Text[ arabic ] = "The file \"$file$\" does not exist.";
+    Text[ catalan ] = "The file \"$file$\" does not exist.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.67  2001/07/24 20:31:37  rt
+ *  Merge SRC638: 24.07.01 - 22:30:48
+ *
  *  Revision 1.66  2001/07/24 06:39:56  oj
  *  #89358# enable single line for tabcontrol
  *
@@ -3373,6 +3396,7 @@ String STR_CALCDOC_DOESNOTEXIST
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
