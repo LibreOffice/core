@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:00:09 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,22 +756,23 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
         {
             bDel = FALSE;
             SWRECTFN( pTab )
-
             const SwPageFrm* pPage = pTab->FindPageFrm();
-            ULONG nLeftMin = (*fnRect->fnYDiff)(
-                                        (pTab->Frm().*fnRect->fnGetTop)(),
-                                        (pPage->Frm().*fnRect->fnGetTop)() );
-            nLeftMin += DOCUMENTBORDER;
-            const ULONG nRightMax = LONG_MAX;
+            const long nLeftMin  = DOCUMENTBORDER +
+                                   ( bVert ?
+                                     pTab->GetPrtLeft() - pPage->Frm().Left() :
+                                     pTab->GetPrtTop() - pPage->Frm().Top() );
+            const long nLeft     = bVert ? LONG_MAX : 0;
+            const long nRight    = (pTab->Prt().*fnRect->fnGetHeight)();
+            const long nRightMax = bVert ? nRight : LONG_MAX;
 
             if ( pRowCacheLastTabFrm != pTab ||
                  pRowCacheLastCellFrm != pBox )
                 bDel = TRUE;
 
             if ( !bDel &&
-                 pLastRows->GetLeftMin () == (USHORT)nLeftMin &&
-                 pLastRows->GetLeft    () == (USHORT)(pTab->Prt().*fnRect->fnGetTop)() &&
-                 pLastRows->GetRight   () == (USHORT)(pTab->Prt().*fnRect->fnGetBottom)()&&
+                 pLastRows->GetLeftMin () == nLeftMin &&
+                 pLastRows->GetLeft    () == nLeft &&
+                 pLastRows->GetRight   () == nRight &&
                  pLastRows->GetRightMax() == nRightMax )
             {
                 rToFill = *pLastRows;
