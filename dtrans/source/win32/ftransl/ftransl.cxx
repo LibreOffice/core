@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 08:39:00 $
+ *  last change: $Author: dr $ $Date: 2002-11-04 15:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable( )
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(CNT_MSGATTACHFILE_FORMAT) ) );//SOT_FORMATSTR_ID_CNT_MSGATTACHFILE
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Biff5) ) );    //SOT_FORMATSTR_ID_BIFF_5
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Biff 5) ) );   //SOT_FORMATSTR_ID_BIFF__5
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Biff8) ) );    //SOT_FORMATSTR_ID_BIFF_8
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Sylk) ) ); //SOT_FORMATSTR_ID_SYLK
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(SYLK) ) ); //SOT_FORMATSTR_ID_SYLK_BIGCAPS
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Link) ) );//SOT_FORMATSTR_ID_LINK

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 08:25:59 $
+ *  last change: $Author: dr $ $Date: 2002-11-04 15:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,6 +1026,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Move[] =  \
         { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
         { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { SOT_FORMATSTR_ID_BIFF_8, EXCHG_IN_ACTION_MOVE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
         { 0xffff }                                                          \
     };                                                                      \
 static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =  \
@@ -1051,6 +1052,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =  \
         { SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, EXCHG_OUT_ACTION_INSERT_OLE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 }, \
         { SOT_FORMATSTR_ID_LINK, EXCHG_OUT_ACTION_INSERT_DDE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
+        { SOT_FORMATSTR_ID_BIFF_8, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
         { 0xffff }                                                          \
     };                                                                      \
 static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Link[] =  \
