@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:41 $
+ *  last change: $Author: jb $ $Date: 2002-09-02 17:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,12 +474,14 @@ void LocalSingleBackend::getLayerDirectories(sal_Int32 aLayerIndex,
 }
 //------------------------------------------------------------------------------
 
-static const sal_Char *kImplementation =
+static const sal_Char * const kImplementation =
                 "com.sun.star.comp.configuration.backend.LocalSingleBackend" ;
-static const sal_Char *kService =
+static const sal_Char * const kBackendService =
                 "com.sun.star.configuration.backend.SingleBackend" ;
+static const sal_Char * const kLocalService =
+                "com.sun.star.configuration.backend.LocalSingleBackend" ;
 
-static AsciiServiceName kServiceNames [] = { kService, 0 } ;
+static AsciiServiceName kServiceNames [] = { kLocalService, kBackendService, 0 } ;
 static const ServiceInfo kServiceInfo = { kImplementation, kServiceNames } ;
 
 const ServiceInfo *getLocalBackendServiceInfo(void) { return &kServiceInfo ; }
@@ -505,19 +507,20 @@ rtl::OUString SAL_CALL LocalSingleBackend::getImplementationName(void)
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kSingleBackendServiceName(
-                            RTL_CONSTASCII_USTRINGPARAM(kService)) ;
-
 sal_Bool SAL_CALL LocalSingleBackend::supportsService(
                                         const rtl::OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    return aServiceName.equals(kSingleBackendServiceName) ;
+    return  aServiceName.equalsAscii(kLocalService) ||
+            aServiceName.equalsAscii(kBackendService);
 }
 //------------------------------------------------------------------------------
 
 uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::getServices(void) {
-    return uno::Sequence<rtl::OUString>(&kSingleBackendServiceName, 1) ;
+    uno::Sequence< OUString > ret(2);
+    ret[0] = OUString::createFromAscii(kLocalService);
+    ret[1] = OUString::createFromAscii(kBackendService);
+    return ret;
 }
 //------------------------------------------------------------------------------
 

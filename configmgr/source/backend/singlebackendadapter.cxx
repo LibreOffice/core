@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:30 $
+ *  last change: $Author: jb $ $Date: 2002-09-02 17:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include "serviceinfohelper.hxx"
 #endif // CONFIGMGR_SERVICEINFOHELPER_HXX_
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_CANNOTLOADCONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
+#endif
+
 namespace configmgr { namespace backend {
 
 //==============================================================================
@@ -98,11 +102,9 @@ void SAL_CALL SingleBackendAdapter::initialize(
 
     if (!mBackend.is())
     {
-        const rtl::OUString kSingleBackend(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.backend.SingleBackend")) ;
-
-        mBackend.set( mFactory->createInstanceWithArguments(kSingleBackend, aParameters),
-                        uno::UNO_QUERY) ;
+        throw com::sun::star::configuration::CannotLoadConfigurationException(
+            OUString::createFromAscii("Online Backend Adapter: Cannot operate without real (Single)Backend"),
+            *this);
     }
 }
 //------------------------------------------------------------------------------
@@ -170,11 +172,14 @@ SAL_CALL SingleBackendAdapter::getUpdateHandler(const rtl::OUString& aComponent,
 }
 //------------------------------------------------------------------------------
 
-static const sal_Char *kService = "com.sun.star.configuration.backend.Backend" ;
-static const sal_Char *kImplementation =
+static const sal_Char * const kBackendService = "com.sun.star.configuration.backend.Backend" ;
+static const sal_Char * const kAdapterService = "com.sun.star.configuration.backend.BackendAdapter" ;
+static const sal_Char * const kOnlineService  = "com.sun.star.configuration.backend.OnlineBackend" ;
+
+static const sal_Char * const kImplementation =
                 "com.sun.star.comp.configuration.backend.SingleBackendAdapter" ;
 
-static AsciiServiceName kServiceNames [] = { kService, 0 } ;
+static const AsciiServiceName kServiceNames [] = { kOnlineService, kAdapterService, kBackendService, 0 } ;
 static const ServiceInfo kServiceInfo = { kImplementation, kServiceNames } ;
 
 const ServiceInfo *getSingleBackendAdapterServiceInfo(void) {
@@ -202,20 +207,22 @@ rtl::OUString SAL_CALL SingleBackendAdapter::getImplementationName(void)
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kBackendServiceName(
-                                        RTL_CONSTASCII_USTRINGPARAM(kService)) ;
-
-sal_Bool SAL_CALL SingleBackendAdapter::supportsService(
-                                        const rtl::OUString& aServiceName)
+sal_Bool SAL_CALL SingleBackendAdapter::supportsService(const rtl::OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    return aServiceName.equals(kBackendServiceName) ;
+    return  aServiceName.equalsAscii(kOnlineService) ||
+            aServiceName.equalsAscii(kAdapterService) ||
+            aServiceName.equalsAscii(kBackendService) ;
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL SingleBackendAdapter::getServices(void) {
-    return uno::Sequence<rtl::OUString>(
-                                    &kBackendServiceName, 1) ;
+uno::Sequence<rtl::OUString> SAL_CALL SingleBackendAdapter::getServices()
+{
+    uno::Sequence< OUString > ret(3);
+    ret[0] = OUString::createFromAscii(kOnlineService);
+    ret[1] = OUString::createFromAscii(kAdapterService);
+    ret[2] = OUString::createFromAscii(kBackendService);
+    return ret;
 }
 //------------------------------------------------------------------------------
 
