@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-08 14:45:18 $
+ *  last change: $Author: nf $ $Date: 2001-02-09 09:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 //
 
 /*****************************************************************************/
-SimpleConfig::SimpleConfig( UniString aSimpleConfigFileName )
+SimpleConfig::SimpleConfig( String aSimpleConfigFileName )
 /*****************************************************************************/
 {
     nLine = 0;
@@ -493,7 +493,7 @@ Star::Star()
 }
 
 /*****************************************************************************/
-Star::Star(UniString aFileName, USHORT nMode )
+Star::Star(String aFileName, USHORT nMode )
 /*****************************************************************************/
                 : nStarMode( nMode )
 {
@@ -522,7 +522,7 @@ Star::Star( SolarFileList *pSolarFiles )
                 : nStarMode( STAR_MODE_MULTIPLE_PARSE )
 {
     // this ctor is used by StarBuilder to get the information for the whole workspace
-    while(  pSolarFiles->Count());
+    while(  pSolarFiles->Count()) {
         ByteString aString;
 
         SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
@@ -540,12 +540,12 @@ Star::~Star()
 }
 
 /*****************************************************************************/
-UniString Star::CreateFileName( UniString sProject )
+String Star::CreateFileName( String sProject )
 /*****************************************************************************/
 {
     // this method is used to find solarlist parts of nabours (other projects)
-    UniString sPrjDir( UniString::CreateFromAscii( "prj" ));
-    UniString sSolarFile( UniString::CreateFromAscii( "build.lst" ));
+    String sPrjDir( String::CreateFromAscii( "prj" ));
+    String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
     DirEntry aEntry( sSourceRoot );
     aEntry += DirEntry( sProject );
@@ -556,11 +556,11 @@ UniString Star::CreateFileName( UniString sProject )
 }
 
 /*****************************************************************************/
-void Star::InsertSolarList( UniString sProject )
+void Star::InsertSolarList( String sProject )
 /*****************************************************************************/
 {
     // inserts a new solarlist part of another project
-    UniString sFileName( CreateFileName( sProject ));
+    String sFileName( CreateFileName( sProject ));
 
     for ( ULONG i = 0; i < aFileList.Count(); i++ ) {
         if (( *aFileList.GetObject( i )) == sFileName )
@@ -571,7 +571,7 @@ void Star::InsertSolarList( UniString sProject )
     if ( HasProject( ssProject ))
         return;
 
-    aFileList.Insert( new UniString( sFileName ), LIST_APPEND );
+    aFileList.Insert( new String( sFileName ), LIST_APPEND );
 }
 
 /*****************************************************************************/
@@ -762,7 +762,7 @@ void Star::InsertToken ( char *yytext )
                         pPrj->HasHardDependencies( bHardDep );
 
                         if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
-                            UniString sItem( aItem, RTL_TEXTENCODING_ASCII_US );
+                            String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
                             InsertSolarList( sItem );
                         }
                     }
@@ -874,29 +874,49 @@ ByteString Star::GetPrjName( DirEntry &aPath )
 //
 
 /*****************************************************************************/
-StarWriter::StarWriter( UniString aFileName, BOOL bReadComments )
+StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
 /*****************************************************************************/
 {
-    Read ( aFileName, bReadComments );
+    Read ( aFileName, bReadComments, nMode );
 }
 
+/*****************************************************************************/
+StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
+/*****************************************************************************/
+{
+    Read( pSolarFiles, bReadComments );
+}
 
 /*****************************************************************************/
 void StarWriter::CleanUp()
+/*****************************************************************************/
 {
     Expand_Impl();
 }
 
 /*****************************************************************************/
-/*****************************************************************************/
-USHORT StarWriter::Read( UniString aFileName, BOOL bReadComments )
+USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 /*****************************************************************************/
 {
-    ByteString aString;
+    nStarMode = nMode;
 
-    SimpleConfig aSolarConfig ( aFileName );
-    while ( (aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "")
-        InsertTokenLine ( aString );
+    ByteString aString;
+    aFileList.Insert( new String( aFileName ));
+
+    DirEntry aEntry( aFileName );
+    aEntry.ToAbs();
+    aEntry = aEntry.GetPath().GetPath().GetPath();
+    sSourceRoot = aEntry.GetFull();
+
+    while( aFileList.Count()) {
+        SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+        delete aFileList.Remove(( ULONG ) 0 );
+
+        while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
+            InsertTokenLine ( aString );
+    }
+    // resolve all dependencies recursive
+    Expand_Impl();
 
     // Die gefundenen Abhaengigkeiten rekursiv aufloesen
     Expand_Impl();
@@ -904,106 +924,164 @@ USHORT StarWriter::Read( UniString aFileName, BOOL bReadComments )
 }
 
 /*****************************************************************************/
-USHORT StarWriter::Write( UniString aFileName )
+USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
 /*****************************************************************************/
 {
-    Prj* pPrj = NULL;
+    nStarMode = STAR_MODE_MULTIPLE_PARSE;
+
+    // this ctor is used by StarBuilder to get the information for the whole workspace
+    while(  pSolarFiles->Count()) {
+        ByteString aString;
+
+        SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+        while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
+            InsertTokenLine ( aString );
+    }
+
+    Expand_Impl();
+    return 0;
+}
+
+/*****************************************************************************/
+USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
+/*****************************************************************************/
+{
     ByteString aDataString;
     ByteString aTab('\t');
     ByteString aSpace(' ');
     ByteString aEmptyString("");
-
-    CommandData* pCmdData = NULL;
-    SvFileStream aFileStream;
     SByteStringList* pCmdDepList;
     SByteStringList* pPrjDepList;
+
+    CommandData* pCmdData = NULL;
+    if ( pPrj->Count() > 0 )
+    {
+        pCmdData = pPrj->First();
+        if ( pPrjDepList = pPrj->GetDependencies( FALSE ))
+        {
+            aDataString = pPrj->GetPreFix();
+            aDataString += aTab;
+            aDataString += pPrj->GetProjectName();
+            aDataString += aTab;
+            if ( pPrj->HasHardDependencies())
+                aDataString+= ByteString("::");
+            else
+                aDataString+= ByteString(":");
+            aDataString += aTab;
+            for ( USHORT i = 0; i< pPrjDepList->Count(); i++ ) {
+                aDataString += *pPrjDepList->GetObject( i );
+                aDataString += aSpace;
+            }
+            aDataString+= "NULL";
+
+            rStream.WriteLine( aDataString );
+
+            pCmdData = pPrj->Next();
+        }
+        if ( pCmdData ) {
+            do
+            {
+                if (( aDataString = pCmdData->GetComment()) == aEmptyString )
+                {
+                    aDataString = pPrj->GetPreFix();
+                    aDataString += aTab;
+
+                    aDataString+= pCmdData->GetPath();
+                    aDataString += aTab;
+                    USHORT nPathLen = pCmdData->GetPath().Len();
+                    if ( nPathLen < 40 )
+                        for ( int i = 0; i < 9 - pCmdData->GetPath().Len() / 4 ; i++ )
+                            aDataString += aTab;
+                    else
+                        for ( int i = 0; i < 12 - pCmdData->GetPath().Len() / 4 ; i++ )
+                            aDataString += aTab;
+                    aDataString += pCmdData->GetCommandTypeString();
+                    aDataString += aTab;
+                    if ( pCmdData->GetCommandType() == COMMAND_GET )
+                        aDataString += aTab;
+                    if ( pCmdData->GetCommandPara() == aEmptyString )
+                        aDataString+= ByteString("-");
+                    else
+                        aDataString+= pCmdData->GetCommandPara();
+                    aDataString += aTab;
+                    aDataString+= pCmdData->GetOSTypeString();
+                    if ( pCmdData->GetClientRestriction().Len()) {
+                        aDataString += ByteString( "," );
+                        aDataString += pCmdData->GetClientRestriction();
+                    }
+                    aDataString += aTab;
+                    aDataString += pCmdData->GetLogFile();
+                    aDataString += aSpace;
+
+                    pCmdDepList = pCmdData->GetDependencies();
+                    if ( pCmdDepList )
+                        for ( USHORT i = 0; i< pCmdDepList->Count(); i++ ) {
+                            aDataString += *pCmdDepList->GetObject( i );
+                            aDataString += aSpace;
+                    }
+                    aDataString += "NULL";
+                }
+
+                rStream.WriteLine( aDataString );
+
+                pCmdData = pPrj->Next();
+            } while ( pCmdData );
+        }
+    }
+    return 0;
+}
+
+/*****************************************************************************/
+USHORT StarWriter::Write( String aFileName )
+/*****************************************************************************/
+{
+    SvFileStream aFileStream;
 
     aFileStream.Open( aFileName, STREAM_WRITE | STREAM_TRUNC);
 
     if ( Count() > 0 )
     {
-        pPrj = First();
+        Prj* pPrj = First();
         do
         {
-            if ( pPrj->Count() > 0 )
-            {
-                pCmdData = pPrj->First();
-                if ( pPrjDepList = pPrj->GetDependencies( FALSE ))
-                {
-                    aDataString = pPrj->GetPreFix();
-                    aDataString += aTab;
-                    aDataString += pPrj->GetProjectName();
-                    aDataString += aTab;
-                    if ( pPrj->HasHardDependencies())
-                        aDataString+= ByteString("::");
-                    else
-                        aDataString+= ByteString(":");
-                    aDataString += aTab;
-                    for ( USHORT i = 0; i< pPrjDepList->Count(); i++ ) {
-                        aDataString += *pPrjDepList->GetObject( i );
-                        aDataString += aSpace;
-                    }
-                    aDataString+= "NULL";
-
-                    aFileStream.WriteLine( aDataString );
-
-                    pCmdData = pPrj->Next();
-                }
-                if ( pCmdData )
-                    do
-                    {
-                        if (( aDataString = pCmdData->GetComment()) == aEmptyString )
-                        {
-                            aDataString = pPrj->GetPreFix();
-                            aDataString += aTab;
-
-                            aDataString+= pCmdData->GetPath();
-                            aDataString += aTab;
-                            USHORT nPathLen = pCmdData->GetPath().Len();
-                            if ( nPathLen < 40 )
-                                for ( int i = 0; i < 9 - pCmdData->GetPath().Len() / 4 ; i++ )
-                                    aDataString += aTab;
-                            else
-                                for ( int i = 0; i < 12 - pCmdData->GetPath().Len() / 4 ; i++ )
-                                    aDataString += aTab;
-                            aDataString += pCmdData->GetCommandTypeString();
-                            aDataString += aTab;
-                            if ( pCmdData->GetCommandType() == COMMAND_GET )
-                                aDataString += aTab;
-                            if ( pCmdData->GetCommandPara() == aEmptyString )
-                                aDataString+= ByteString("-");
-                            else
-                                aDataString+= pCmdData->GetCommandPara();
-                            aDataString += aTab;
-                            aDataString+= pCmdData->GetOSTypeString();
-                            if ( pCmdData->GetClientRestriction().Len()) {
-                                aDataString += ByteString( "," );
-                                aDataString += pCmdData->GetClientRestriction();
-                            }
-                            aDataString += aTab;
-                            aDataString += pCmdData->GetLogFile();
-                            aDataString += aSpace;
-
-                            pCmdDepList = pCmdData->GetDependencies();
-                            if ( pCmdDepList )
-                                for ( USHORT i = 0; i< pCmdDepList->Count(); i++ ) {
-                                    aDataString += *pCmdDepList->GetObject( i );
-                                    aDataString += aSpace;
-                            }
-                            aDataString += "NULL";
-                        }
-
-                        aFileStream.WriteLine( aDataString );
-
-                        pCmdData = pPrj->Next();
-                    } while ( pCmdData );
-
-            }
+            WritePrj( pPrj, aFileStream );
             pPrj = Next();
         } while ( pPrj );
     }
 
     aFileStream.Close();
+    return 0;
+}
+
+/*****************************************************************************/
+USHORT StarWriter::WriteMultiple( String rSourceRoot )
+/*****************************************************************************/
+{
+    if ( Count() > 0 )
+    {
+        String sPrjDir( String::CreateFromAscii( "prj" ));
+        String sSolarFile( String::CreateFromAscii( "build.lst" ));
+
+        Prj* pPrj = First();
+        do
+        {
+            String sName( pPrj->GetProjectName(), RTL_TEXTENCODING_ASCII_US );
+
+            DirEntry aEntry( rSourceRoot );
+            aEntry += DirEntry( sName );
+            aEntry += DirEntry( sPrjDir );
+            aEntry += DirEntry( sSolarFile );
+
+            SvFileStream aFileStream;
+            aFileStream.Open( aEntry.GetFull(), STREAM_WRITE | STREAM_TRUNC);
+
+              WritePrj( pPrj, aFileStream );
+
+            aFileStream.Close();
+
+            pPrj = Next();
+        } while ( pPrj );
+    }
     return 0;
 }
 
@@ -1072,7 +1150,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                         else if ( aWhat == "get" )
                             nCommandType = COMMAND_GET;
                         else {
-                            USHORT nOffset = aWhat.Copy( 3 ).ToInt32();
+                            ULONG nOffset = aWhat.Copy( 3 ).ToInt32();
                             nCommandType = COMMAND_USER_START + nOffset - 1;
                         }
                     }
@@ -1166,8 +1244,10 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                             pPrj->AddDependencies( aItem );
                             pPrj->HasHardDependencies( bHardDep );
 
-//                          if ( nMode == STAR_MODE_RECURSIVE_PARSE )
-//                              InsertSolarList( aItem );
+                            if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
+                                String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
+                                InsertSolarList( sItem );
+                            }
                         }
 
                     }
@@ -1242,8 +1322,8 @@ Prj* StarWriter::RemoveProject ( ByteString aProjectName )
             if ( pPrjDeps )
             {
                 ByteString* pString;
-                USHORT nPrjDepsCount = pPrjDeps->Count();
-                for ( USHORT j = nPrjDepsCount; j > 0; j-- )
+                ULONG nPrjDepsCount = pPrjDeps->Count();
+                for ( ULONG j = nPrjDepsCount; j > 0; j-- )
                 {
                     pString = pPrjDeps->GetObject( j - 1 );
                     if ( pString->GetToken( 0, '.') == aProjectName )
