@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:26:36 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ String STR_SVT_COLLATE_NORMAL
     Text[ turkish ] = ", standart";
     Text[ arabic ] = "ÚÇÏí";
     Text[ catalan ] = "Normal";
-    Text[ finnish ] = "tavallinen";
+    Text[ finnish ] = "Normaali";
 };
 
 String STR_SVT_COLLATE_CHARSET
@@ -191,7 +191,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ turkish ] = "Character Set";
     Text[ arabic ] = "ãÌãæÚÉ ÃÍÑÝ";
     Text[ catalan ] = "Character Set";
-    Text[ finnish ] = "Charset";
+    Text[ finnish ] = "Merkistö";
 };
 
 String STR_SVT_COLLATE_DICTIONARY
@@ -218,7 +218,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ turkish ] = "Dictionary";
     Text[ arabic ] = "Dictionary";
     Text[ catalan ] = "Dictionary";
-    Text[ finnish ] = "Dictionary";
+    Text[ finnish ] = "Sanasto";
 };
 
 String STR_SVT_COLLATE_PINYIN
@@ -272,7 +272,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ turkish ] = "Stroke";
     Text[ arabic ] = "Stroke";
     Text[ catalan ] = "Stroke";
-    Text[ finnish ] = "Stroke";
+    Text[ finnish ] = "Viiva";
 };
 
 String STR_SVT_COLLATE_RADICAL
@@ -299,7 +299,7 @@ String STR_SVT_COLLATE_RADICAL
     Text[ turkish ] = "Radical";
     Text[ arabic ] = "Radical";
     Text[ catalan ] = "Radical";
-    Text[ finnish ] = "Radical";
+    Text[ finnish ] = "Juurimerkki";
 };
 
 String STR_SVT_COLLATE_UNICODE
@@ -355,6 +355,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
 };
+
 
 
 
