@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
 
 //------------------------------------------------------------------------
@@ -117,7 +117,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 /* TODO:
    =====
@@ -599,7 +599,7 @@ namespace accessibility
         return uno::Reference< XAccessible >();
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleAt( const awt::Point& _aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (uno::RuntimeException)
     {
         // no children at all
         return uno::Reference< XAccessible >();
@@ -634,20 +634,22 @@ namespace accessibility
         return mpImpl->GetParagraph( aPos.nPara ).getCharacter( aPos.nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         EPosition aPos( mpImpl->Index2Internal(nIndex) );
 
-        return mpImpl->GetParagraph( aPos.nPara ).getCharacterAttributes( aPos.nIndex );
+        return mpImpl->GetParagraph( aPos.nPara ).getCharacterAttributes( aPos.nIndex, aRequestedAttributes );
     }
 
     awt::Rectangle SAL_CALL AccessibleStaticTextBase::getCharacterBounds( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        EPosition aPos( mpImpl->Index2Internal(nIndex) );
+        // #108900# Allow ranges for nIndex, as one-past-the-end
+        // values are now legal, too.
+        EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         return mpImpl->GetParagraph( aPos.nPara ).getCharacterBounds( aPos.nIndex );
     }
