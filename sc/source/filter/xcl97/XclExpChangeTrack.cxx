@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:11:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,12 @@
 #include "XclExpChangeTrack.hxx"
 #endif
 
-#ifndef SC_XLTOOLS_HXX
-#include "xltools.hxx"
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
 #endif
+
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
-#endif
-#ifndef _EXCUPN_HXX
-#include "excupn.hxx"
 #endif
 #ifndef _XCL97REC_HXX
 #include "xcl97rec.hxx"
@@ -656,10 +654,24 @@ ULONG XclExpChTrAction::GetLen() const
 
 //___________________________________________________________________
 
+XclExpChTrData::XclExpChTrData() :
+    pString( NULL ),
+    fValue( 0.0 ),
+    nRKValue( 0 ),
+    nType( EXC_CHTR_TYPE_EMPTY ),
+    nSize( 0 )
+{
+}
+
+XclExpChTrData::~XclExpChTrData()
+{
+    Clear();
+}
+
 void XclExpChTrData::Clear()
 {
     DELETEZ( pString );
-    DELETEZ( pUPN );
+    mxTokArr.reset();
     aRefLog.clear();
     fValue = 0.0;
     nRKValue = 0;
@@ -672,10 +684,8 @@ void XclExpChTrData::WriteFormula(
         const RootData& rRootData,
         const XclExpChTrTabIdBuffer& rTabIdBuffer )
 {
-    DBG_ASSERT( pUPN && pUPN->GetData(), "XclExpChTrData::Write - no formula" );
-    sal_uInt16 nFmlSize = pUPN->GetLen();
-    rStrm << nFmlSize;
-    rStrm.Write( pUPN->GetData(), nFmlSize );
+    DBG_ASSERT( mxTokArr.is() && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
+    rStrm << *mxTokArr;
 
     XclExpRefLogVec::const_iterator aEnd = aRefLog.end();
     for( XclExpRefLogVec::const_iterator aIter = aRefLog.begin(); aIter != aEnd; ++aIter )
@@ -821,11 +831,10 @@ void XclExpChTrCellContent::GetCellData(
                 XclExpLinkManager& rLinkMan = pExcRoot->pER->GetLinkManager();
 
                 rTabInfo.StartRefLog();
-                EC_Codetype eDummy;
-                rpData->pUPN = new ExcUPN( pExcRoot, *pTokenArray, eDummy, &pFmlCell->aPos );
+                rpData->mxTokArr = pExcRoot->pER->GetFormulaCompiler().CreateCellFormula( *pTokenArray, pFmlCell->aPos );
                 rpData->aRefLog = rTabInfo.EndRefLog();
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
-                sal_uInt32 nSize = rpData->pUPN->GetLen() + 3;
+                sal_uInt32 nSize = rpData->mxTokArr->GetSize() + 3;
 
                 XclExpRefLogVec::const_iterator aEnd = rpData->aRefLog.end();
                 for( XclExpRefLogVec::const_iterator aIter = rpData->aRefLog.begin(); aIter != aEnd; ++aIter )
