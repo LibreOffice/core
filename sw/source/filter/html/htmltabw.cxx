@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:57:09 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ class SwHTMLWrtTable : public SwWriteTable
 
 public:
     SwHTMLWrtTable( const SwTableLines& rLines, long nWidth, sal_uInt16 nBWidth,
-                    sal_Bool bRel, sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0 );
+                    sal_Bool bRel, USHORT nNumOfRowsToRepeat,
+                    sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0 );
     SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 
     void Write( SwHTMLWriter& rWrt, SwHoriOrient eAlign=HORI_NONE,
@@ -236,9 +237,9 @@ public:
 
 
 SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
-                                sal_uInt16 nBWidth, sal_Bool bRel,
+                                sal_uInt16 nBWidth, sal_Bool bRel, USHORT nNumOfRowsToRepeat,
                                 sal_uInt16 nLSub, sal_uInt16 nRSub )
-    : SwWriteTable( rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub )
+    : SwWriteTable( rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub, nNumOfRowsToRepeat )
 {
     PixelizeBorders();
 }
@@ -1328,15 +1329,15 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     if( pLayout && pLayout->IsExportable() )
     {
         SwHTMLWrtTable aTableWrt( pLayout );
-        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTbl.IsHeadlineRepeat(),
+        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTbl.GetRowsToRepeat() > 0,
                          pFmt, pCaption, bTopCaption,
                          nFlyHSpace, nFlyVSpace );
     }
     else
     {
         SwHTMLWrtTable aTableWrt( rTbl.GetTabLines(), nWidth,
-                                  nBaseWidth, bRelWidths );
-        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTbl.IsHeadlineRepeat(),
+                                  nBaseWidth, bRelWidths, rTbl.GetRowsToRepeat() );
+        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTbl.GetRowsToRepeat() > 0,
                          pFmt, pCaption, bTopCaption,
                          nFlyHSpace, nFlyVSpace );
     }
