@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 12:20:43 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 09:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,6 +1242,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 }
                 pObj->SetItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
                 pObj->SetItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
+                return;
             }
             while(0);
             break;
@@ -1287,8 +1288,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                     double nSin=sin(nAngle*nPi180);
                     double nCos=cos(nAngle*nPi180);
                     pObj->Rotate(aRef1,nAngle,nSin,nCos);
-                    return;
                 }
+                return;
             }
 
             break;
