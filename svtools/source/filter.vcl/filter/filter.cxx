@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:43:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,10 +236,7 @@ BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
         ::ucb::Content  aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-        aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
-
-        if( aTitle.getLength() )
-            bExists = TRUE;
+        bExists = aCnt.isDocument();
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
@@ -251,9 +248,8 @@ BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
     }
     catch( ... )
     {
-        DBG_ERRORFILE( "Any other exception" );
+//      DBG_ERRORFILE( "Any other exception" );
     }
-
     return bExists;
 }
 
