@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:58:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 #ifndef _BIB_FRAMECTR_HXX
 #include "framectr.hxx"
 #endif
@@ -137,6 +140,9 @@
 #ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_COMMANDGROUP_HPP_
+#include <com/sun/star/frame/CommandGroup.hpp>
+#endif
 
 using namespace osl;
 using namespace cppu;
@@ -148,7 +154,73 @@ using namespace com::sun::star;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
+struct DispatchInfo
+{
+    const char*   pCommand;
+    sal_Int16     nGroupId;
+    sal_Bool      bActiveConnection;
+};
+
+struct CacheDispatchInfo
+{
+    sal_Int16     nGroupId;
+    sal_Bool      bActiveConnection;
+};
+
+// Attention: commands must be sorted by command groups. Implementation is dependent
+// on this!!
+static DispatchInfo SupportedCommandsArray[] =
+{
+    { ".uno:Undo"               ,   frame::CommandGroup::EDIT       , sal_False },
+    { ".uno:Cut"                ,   frame::CommandGroup::EDIT       , sal_False },
+    { ".uno:Copy"               ,   frame::CommandGroup::EDIT       , sal_False },
+    { ".uno:Paste"              ,   frame::CommandGroup::EDIT       , sal_False },
+    { ".uno:SelectAll"          ,   frame::CommandGroup::EDIT       , sal_False },
+    { ".uno:CloseDoc"           ,   frame::CommandGroup::DOCUMENT   , sal_False },
+    { ".uno:StatusBarVisible"   ,   frame::CommandGroup::VIEW       , sal_False },
+    { ".uno:AvailableToolbars"  ,   frame::CommandGroup::VIEW       , sal_False },
+    { ".uno:Bib/standardFilter" ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/DeleteRecord"   ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/InsertRecord"   ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/query"          ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/autoFilter"     ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/standardFilter" ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/removeFilter"   ,   frame::CommandGroup::DATA       , sal_True  },
+    { 0                         ,   0                               , sal_False }
+};
+
+typedef ::std::hash_map< ::rtl::OUString, CacheDispatchInfo, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > CmdToInfoCache;
+
 SV_IMPL_PTRARR( BibStatusDispatchArr, BibStatusDispatchPtr );
+
+const CmdToInfoCache& GetCommandToInfoCache()
+{
+    static sal_Bool       bCacheInitialized = sal_False;
+    static CmdToInfoCache aCmdToInfoCache;
+
+    if ( !bCacheInitialized )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !bCacheInitialized )
+        {
+            sal_Int32 i( 0 );
+            while ( SupportedCommandsArray[i].pCommand != 0 )
+            {
+                rtl::OUString aCommand( rtl::OUString::createFromAscii( SupportedCommandsArray[i].pCommand ));
+
+                CacheDispatchInfo aDispatchInfo;
+                aDispatchInfo.nGroupId          = SupportedCommandsArray[i].nGroupId;
+                aDispatchInfo.bActiveConnection = SupportedCommandsArray[i].bActiveConnection;
+                aCmdToInfoCache.insert( CmdToInfoCache::value_type( aCommand, aDispatchInfo ));
+                ++i;
+            }
+            bCacheInitialized = sal_True;
+        }
+    }
+
+    return aCmdToInfoCache;
+}
+
 
 class BibFrameCtrl_Impl : public cppu::WeakImplHelper1 < XFrameActionListener >
 {
@@ -329,22 +401,13 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
 {
     if ( !bDisposing )
     {
-        String aCommand( aURL.Path );
-        if (    aCommand.EqualsAscii("Undo") || aCommand.EqualsAscii("Cut") ||
-                aCommand.EqualsAscii("Copy") || aCommand.EqualsAscii("Paste") ||
-                aCommand.EqualsAscii("SelectAll") || aCommand.Copy(0,4).EqualsAscii("Bib/")||
-                aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")) ||
-                aCommand.EqualsAscii("CloseDoc"))
-        if( pDatMan->HasActiveConnection() ||
-            (!aCommand.EqualsAscii("Bib/standardFilter") &&
-            !aCommand.EqualsAscii("Bib/DeleteRecord") &&
-            !aCommand.EqualsAscii("Bib/InsertRecord") &&
-            !aCommand.EqualsAscii("Bib/query") &&
-            !aCommand.EqualsAscii("Bib/autoFilter") &&
-            !aCommand.EqualsAscii("Bib/standardFilter") &&
-            !aCommand.EqualsAscii("Bib/removeFilter") ))
+        const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
+        CmdToInfoCache::const_iterator pIter = rCmdCache.find( aURL.Complete );
+        if ( pIter != rCmdCache.end() )
         {
-            return (frame::XDispatch*) this;
+            if (( pDatMan->HasActiveConnection() ) ||
+                ( !pIter->second.bActiveConnection ))
+                return (frame::XDispatch*) this;
         }
     }
 
@@ -355,6 +418,58 @@ uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispat
 {
     return uno::Sequence<uno::Reference< XDispatch > >();
 }
+
+uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedCommandGroups()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Sequence< ::sal_Int16 > aDispatchInfo( 4 );
+
+    aDispatchInfo[0] = frame::CommandGroup::EDIT;
+    aDispatchInfo[1] = frame::CommandGroup::DOCUMENT;
+    aDispatchInfo[2] = frame::CommandGroup::DATA;
+    aDispatchInfo[3] = frame::CommandGroup::VIEW;
+
+    return aDispatchInfo;
+}
+
+uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
+
+    sal_Int32                                   i( 0 );
+    sal_Bool                                    bGroupFound( sal_False );
+    frame::DispatchInformation                  aDispatchInfo;
+    std::list< frame::DispatchInformation >     aDispatchInfoList;
+
+    if (( nCommandGroup == frame::CommandGroup::EDIT ) ||
+        ( nCommandGroup == frame::CommandGroup::DOCUMENT ) ||
+        ( nCommandGroup == frame::CommandGroup::DATA ) ||
+        ( nCommandGroup == frame::CommandGroup::VIEW ))
+    {
+        CmdToInfoCache::const_iterator pIter = rCmdCache.begin();
+        while ( pIter != rCmdCache.end() )
+        {
+            if ( pIter->second.nGroupId == nCommandGroup )
+            {
+                bGroupFound = sal_True;
+                aDispatchInfo.Command = pIter->first;
+                aDispatchInfo.GroupId = pIter->second.nGroupId;
+                aDispatchInfoList.push_back( aDispatchInfo );
+            }
+            else if ( bGroupFound )
+                break;
+
+            ++pIter;
+        }
+    }
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > aSeq =
+        comphelper::containerToSequence< std::list< ::com::sun::star::frame::DispatchInformation >, ::com::sun::star::frame::DispatchInformation >( aDispatchInfoList );
+
+    return aSeq;
+}
+
 sal_Bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
 {
     sal_Int32 nPriv = 0;
@@ -654,7 +769,17 @@ void BibFrameController_Impl::addStatusListener(
     aStatusListeners.Insert( new BibStatusDispatch( aURL, aListener ), aStatusListeners.Count() );
 
     // den ersten Status synchron zusenden
-    if ( aURL.Path == C2U("Bib/hierarchical") )
+    if ( aURL.Path == C2U("StatusBarVisible") )
+    {
+        FeatureStateEvent aEvent;
+        aEvent.FeatureURL = aURL;
+        aEvent.IsEnabled  = sal_False;
+        aEvent.Requery    = sal_False;
+        aEvent.Source     = (XDispatch *) this;
+        aEvent.State <<= sal_Bool( sal_False );
+        aListener->statusChanged( aEvent );
+    }
+    else if ( aURL.Path == C2U("Bib/hierarchical") )
     {
         FeatureStateEvent aEvent;
         aEvent.FeatureURL = aURL;
