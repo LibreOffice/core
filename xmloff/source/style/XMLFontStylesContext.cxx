@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFontStylesContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-14 10:19:45 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,9 @@ XMLFontStyleContext_Impl::XMLFontStyleContext_Impl( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         XMLFontStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_FONT ),
     xStyles( &rStyles )
 {
-    SetFamily( XML_STYLE_FAMILY_FONT );
     OUString sEmpty;
     aFamilyName <<= sEmpty;
     aStyleName <<= sEmpty;

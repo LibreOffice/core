@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,17 +112,9 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey &&
-        rLocalName.compareToAscii( sXML_family ) == 0 )
+    if( XML_NAMESPACE_STYLE == nPrefixKey && rLocalName.compareToAscii( sXML_family ) == 0 )
     {
-#ifndef PRODUCT
-        sal_uInt16 nOldFam = GetFamily();
-#endif
-        SetFamily( ((SvXMLStylesContext *)&xStyles)->GetFamily( rValue ) );
-#ifndef PRODUCT
-        DBG_ASSERT( 0 == nOldFam || GetFamily() == nOldFam,
-                    "unexpected style family" );
-#endif
+        DBG_ASSERT( GetFamily() == ((SvXMLStylesContext *)&xStyles)->GetFamily( rValue ), "unexpected style family" );
     }
     else
     {

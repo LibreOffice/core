@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 16:58:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#include <tools/debug.hxx>
+
 #include "xmlkywd.hxx"
 
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
@@ -98,10 +99,8 @@ XMLShapeStyleContext::XMLShapeStyleContext(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
-:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles)
+:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
 {
-    // set Family
-    SetFamily(nFamily);
 }
 
 XMLShapeStyleContext::~XMLShapeStyleContext()
@@ -134,7 +133,7 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
     return pContext;
 }
 
-void XMLShapeStyleContext::Filter()
+void XMLShapeStyleContext::Finish( sal_Bool bOverwrite )
 {
     const UniReference< XMLPropertySetMapper >&rMapper = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
@@ -155,6 +154,7 @@ void XMLShapeStyleContext::Filter()
                 uno::Reference< container::XIndexReplace > xNumRule;
                 const SvxXMLListStyleContext *pListStyle = GetImport().GetTextImport()->FindAutoListStyle( sName );
 
+                DBG_ASSERT( pListStyle, "list-style not found for shape style" );
                 if( pListStyle )
                 {
                     xNumRule = pListStyle->CreateNumRule( GetImport().GetModel() );
@@ -166,3 +166,4 @@ void XMLShapeStyleContext::Filter()
         }
     }
 }
+

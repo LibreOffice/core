@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,8 @@ public:
                           const ::rtl::OUString& rLName,
                           const com::sun::star::uno::Reference<
                               com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                          SvXMLStylesContext& rStyles );
+                          SvXMLStylesContext& rStyles,
+                          sal_uInt16 nFamily=0 );
     virtual ~XMLChartStyleContext();
 
     virtual SvXMLImportContext* CreateChildContext(

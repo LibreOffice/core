@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,6 @@ public:
 
     SvXMLStyleContext *GetStyle( sal_uInt32 i )
     {
-        FlushIndex();
         return i < aStyles.Count() ? aStyles.GetObject(i) : 0;
     }
 
@@ -656,11 +655,11 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
         case XML_STYLE_FAMILY_TEXT_RUBY:
             pStyle = new XMLPropStyleContext( GetImport(), nPrefix, rLocalName,
-                                              xAttrList, *this );
+                                              xAttrList, *this, nFamily );
             break;
         case XML_STYLE_FAMILY_SCH_CHART_ID:
             pStyle = new XMLChartStyleContext( GetImport(), nPrefix, rLocalName,
-                                               xAttrList, *this );
+                                               xAttrList, *this, nFamily );
             break;
         case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         case XML_STYLE_FAMILY_SD_PRESENTATION_ID:

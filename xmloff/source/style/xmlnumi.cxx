@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 10:05:57 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,7 +863,7 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Bool bOutl ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST ),
     pLevelStyles( 0 ),
     nLevels( 0 ),
     bConsecutive( sal_False ),
@@ -874,8 +874,6 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
     sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
     sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) )
 {
-    SetFamily( bOutline ? XML_STYLE_FAMILY_TEXT_OUTLINE :
-                          XML_STYLE_FAMILY_TEXT_LIST );
 }
 
 SvxXMLListStyleContext::~SvxXMLListStyleContext()

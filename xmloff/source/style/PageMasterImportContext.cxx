@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-09 11:45:50 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,9 @@ PageStyleContext::PageStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const rtl::OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles ),
+    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER ),
     sPageUsage()
 {
-    SetFamily(XML_STYLE_FAMILY_PAGE_MASTER);
 }
 
 PageStyleContext::~PageStyleContext()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,9 @@ XMLChartStyleContext::XMLChartStyleContext(
     SvXMLImport& rImport, sal_uInt16 nPrefix,
     const ::rtl::OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-    SvXMLStylesContext& rStyles ) :
-        XMLPropStyleContext( rImport, nPrefix, rLName, xAttrList, rStyles )
+    SvXMLStylesContext& rStyles,
+    sal_uInt16 nFamily ) :
+        XMLPropStyleContext( rImport, nPrefix, rLName, xAttrList, rStyles, nFamily )
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 16:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList),
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID),
     mnBorderBottom( 0L ),
     mnBorderLeft( 0L ),
     mnBorderRight( 0L ),
@@ -137,7 +137,6 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
-    SetFamily(XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -208,12 +207,11 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList),
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID),
     mpPageMasterStyle( 0L )
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
-    SetFamily(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -286,12 +284,11 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList),
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
     mnTypeId( 20 ) // AUTOLAYOUT_NONE
 {
     // set family to somethiong special at SvXMLStyleContext
     // for differences in search-methods
-    SetFamily(XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -973,7 +970,7 @@ void SdXMLStylesContext::EndElement()
             if(pStyle && pStyle->ISA(XMLShapeStyleContext))
             {
                 XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
-                pDocStyle->Filter();
+//              pDocStyle->Filter();
 
                 pStyle = GetSdImport().GetShapeImport()->GetStylesContext()->FindStyleChildContext(
                     pStyle->GetFamily(), pStyle->GetParent());
@@ -988,6 +985,8 @@ void SdXMLStylesContext::EndElement()
                 }
             }
         }
+
+        FinishStyles( false );
     }
     else
     {
