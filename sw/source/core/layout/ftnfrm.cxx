@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:12:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2045,48 +2045,62 @@ void SwFtnBossFrm::ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *pAttr,
 |*************************************************************************/
 
 
-void SwFtnBossFrm::CollectFtns( const SwCntntFrm *pRef, SwFtnBossFrm *pOld,
-                                SvPtrarr &rFtnArr )
+/// OD 03.04.2003 #108446# - add parameter <_bCollectOnlyPreviousFtns> in
+/// order to control, if only footnotes, which are positioned before the
+/// footnote boss frame <this> have to be collected.
+void SwFtnBossFrm::CollectFtns( const SwCntntFrm* _pRef,
+                                SwFtnBossFrm*     _pOld,
+                                SvPtrarr&         _rFtnArr,
+                                const sal_Bool    _bCollectOnlyPreviousFtns )
 {
-    SwFtnFrm *pFtn = pOld->FindFirstFtn();
+    SwFtnFrm *pFtn = _pOld->FindFirstFtn();
     while( !pFtn )
     {
-        if( pOld->IsColumnFrm() )
+        if( _pOld->IsColumnFrm() )
         {   // Spalten abklappern
-            while ( !pFtn && pOld->GetPrev() )
+            while ( !pFtn && _pOld->GetPrev() )
             {
                 //Wenn wir keine Fussnote gefunden haben, ist noch nicht alles zu
                 //spaet. Die Schleife wird beim Aufnehmen von Follow-Zeilen durch
                 //Tabellen benoetigt. Fuer alle anderen Faelle ist sie in der Lage
                 //'krumme' Verhaeltnisse zu korrigieren.
-                pOld = (SwFtnBossFrm*)pOld->GetPrev();
-                pFtn = pOld->FindFirstFtn();
+                _pOld = (SwFtnBossFrm*)_pOld->GetPrev();
+                pFtn = _pOld->FindFirstFtn();
             }
         }
         if( !pFtn )
         {
             //  vorherige Seite
             SwPageFrm* pPg;
-            for( SwFrm* pTmp = pOld;
-                    0 != ( pPg = (SwPageFrm*)pTmp->FindPageFrm()->GetPrev())
-                    && pPg->IsEmptyPage() ; )
+            for ( SwFrm* pTmp = _pOld;
+                  0 != ( pPg = (SwPageFrm*)pTmp->FindPageFrm()->GetPrev())
+                    && pPg->IsEmptyPage() ;
+                )
+            {
                 pTmp = pPg;
+            }
             if( !pPg )
                 return;
 
             SwLayoutFrm* pBody = pPg->FindBodyCont();
             if( pBody->Lower() && pBody->Lower()->IsColumnFrm() )
             {   // mehrspaltige Seite => letzte Spalte suchen
-                pOld = (SwFtnBossFrm*)pBody->Lower();
-                while ( pOld->GetNext() )
-                    pOld = (SwFtnBossFrm*)pOld->GetNext();
+                _pOld = (SwFtnBossFrm*)pBody->Lower();
+                while ( _pOld->GetNext() )
+                    _pOld = (SwFtnBossFrm*)_pOld->GetNext();
             }
             else
-                pOld = pPg; // einspaltige Seite
-            pFtn = pOld->FindFirstFtn();
+                _pOld = pPg; // einspaltige Seite
+            pFtn = _pOld->FindFirstFtn();
         }
     }
-    _CollectFtns( pRef, pFtn, rFtnArr );
+    // OD 03.04.2003 #108446# - consider new parameter <_bCollectOnlyPreviousFtns>
+    SwFtnBossFrm* pRefBossFrm = NULL;
+    if ( _bCollectOnlyPreviousFtns )
+    {
+        pRefBossFrm = this;
+    }
+    _CollectFtns( _pRef, pFtn, _rFtnArr, _bCollectOnlyPreviousFtns, pRefBossFrm );
 }
 
 
@@ -2104,9 +2118,24 @@ inline void FtnInArr( SvPtrarr& rFtnArr, SwFtnFrm* pFtn )
         rFtnArr.Insert( (VoidPtr)pFtn, rFtnArr.Count() );
 }
 
-void SwFtnBossFrm::_CollectFtns( const SwCntntFrm *pRef, SwFtnFrm *pFtn,
-                                 SvPtrarr &rFtnArr )
+/// OD 03.04.2003 #108446# - add parameters <_bCollectOnlyPreviousFtns> and
+/// <_pRefFtnBossFrm> in order to control, if only footnotes, which are positioned
+/// before the given reference footnote boss frame have to be collected.
+/// Note: if parameter <_bCollectOnlyPreviousFtns> is true, then parameter
+/// <_pRefFtnBossFrm> have to be referenced to an object.
+/// Adjust parameter names.
+void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
+                                 SwFtnFrm*           _pFtn,
+                                 SvPtrarr&           _rFtnArr,
+                                 sal_Bool            _bCollectOnlyPreviousFtns,
+                                 const SwFtnBossFrm* _pRefFtnBossFrm)
 {
+    // OD 03.04.2003 #108446# - assert, that no reference footnote boss frame
+    // is set, in spite of the order, that only previous footnotes has to be
+    // collected.
+    ASSERT( !_bCollectOnlyPreviousFtns || _pRefFtnBossFrm,
+            "<SwFtnBossFrm::_CollectFtns(..)> - No reference footnote boss frame for collecting only previous footnotes set.\nCrash will be caused!" );
+
     //Alle Fussnoten die von pRef referenziert werden nacheinander
     //einsammeln (Attribut fuer Attribut), zusammengefuegen
     //(der Inhalt zu einem Attribut kann ueber mehrere Seiten verteilt sein)
@@ -2123,24 +2152,24 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm *pRef, SwFtnFrm *pFtn,
     //Hier sollte keiner mit einer Follow-Ftn ankommen, es sei denn er hat
     //ernste Absichten (:-)); spricht er kommt mit einer Ftn an die vor der
     //ersten der Referenz liegt.
-    ASSERT( !pFtn->GetMaster() || pFtn->GetRef() != pRef, "FollowFtn moven?" );
-    while ( pFtn->GetMaster() )
-        pFtn = pFtn->GetMaster();
+    ASSERT( !_pFtn->GetMaster() || _pFtn->GetRef() != _pRef, "FollowFtn moven?" );
+    while ( _pFtn->GetMaster() )
+        _pFtn = _pFtn->GetMaster();
 
     BOOL bFound = FALSE;
 
-    while ( pFtn )
+    while ( _pFtn )
     {
         //Erstmal die naechste Fussnote der Spalte/Seite suchen, damit wir nicht
         //nach dem Cut jeder Fussnote von vorn anfangen muessen.
-        SwFtnFrm *pNxtFtn = pFtn;
+        SwFtnFrm *pNxtFtn = _pFtn;
         while ( pNxtFtn->GetFollow() )
             pNxtFtn = pNxtFtn->GetFollow();
         pNxtFtn = (SwFtnFrm*)pNxtFtn->GetNext();
 
         if ( !pNxtFtn )
         {
-            SwFtnBossFrm* pBoss = pFtn->FindFtnBossFrm();
+            SwFtnBossFrm* pBoss = _pFtn->FindFtnBossFrm();
             SwPageFrm* pPage = pBoss->FindPageFrm();
             do
             {
@@ -2155,7 +2184,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm *pRef, SwFtnFrm *pFtn,
                         {
                             while( pNxtFtn->GetMaster() )
                                 pNxtFtn = pNxtFtn->GetMaster();
-                            if( pNxtFtn == pFtn )
+                            if( pNxtFtn == _pFtn )
                                 pNxtFtn = NULL;
                         }
                     }
@@ -2167,16 +2196,38 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm *pRef, SwFtnFrm *pFtn,
             while ( pNxtFtn->GetMaster() )
                 pNxtFtn = pNxtFtn->GetMaster();
         }
-        if ( pNxtFtn == pFtn )
+        if ( pNxtFtn == _pFtn )
         {
             ASSERT( FALSE, "_CollectFtn: Devil's circle" );
             pNxtFtn = 0;
         }
 
-        if ( pFtn->GetRef() == pRef && !pFtn->GetAttr()->GetFtn().IsEndNote() )
+        // OD 03.04.2003 #108446# - determine, if found footnote has to be collected.
+        sal_Bool bCollectFoundFtn = sal_False;
+        if ( _pFtn->GetRef() == _pRef && !_pFtn->GetAttr()->GetFtn().IsEndNote() )
         {
-            ASSERT( !pFtn->GetMaster(), "FollowFtn moven?" );
-            SwFtnFrm *pNxt = pFtn->GetFollow();
+            if ( _bCollectOnlyPreviousFtns )
+            {
+                SwFtnBossFrm* pBossOfFoundFtn = _pFtn->FindFtnBossFrm( sal_True );
+                ASSERT( pBossOfFoundFtn,
+                        "<SwFtnBossFrm::_CollectFtns(..)> - footnote boss frame of found footnote frame missing.\nWrong layout!" );
+                if ( !pBossOfFoundFtn ||    // don't crash, if no footnote boss is found.
+                     pBossOfFoundFtn->IsBefore( _pRefFtnBossFrm )
+                   )
+                {
+                    bCollectFoundFtn = sal_True;
+                }
+            }
+            else
+            {
+                bCollectFoundFtn = sal_True;
+            }
+        }
+
+        if ( bCollectFoundFtn )
+        {
+            ASSERT( !_pFtn->GetMaster(), "FollowFtn moven?" );
+            SwFtnFrm *pNxt = _pFtn->GetFollow();
             while ( pNxt )
             {
                 SwFrm *pCnt = pNxt->ContainsAny();
@@ -2185,7 +2236,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm *pRef, SwFtnFrm *pFtn,
                     do
                     {   SwFrm *pNxtCnt = pCnt->GetNext();
                         pCnt->Cut();
-                        pCnt->Paste( pFtn );
+                        pCnt->Paste( _pFtn );
                         pCnt = pNxtCnt;
                     } while ( pCnt );
                 }
@@ -2194,22 +2245,22 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm *pRef, SwFtnFrm *pFtn,
                     pNxt->Cut();
                     delete pNxt;
                 }
-                pNxt = pFtn->GetFollow();
+                pNxt = _pFtn->GetFollow();
             }
-            pFtn->Cut();
-            FtnInArr( rFtnArr, pFtn );
+            _pFtn->Cut();
+            FtnInArr( _rFtnArr, _pFtn );
             bFound = TRUE;
         }
         else
         {
-            FtnInArr( aNotFtnArr, pFtn );
+            FtnInArr( aNotFtnArr, _pFtn );
             if( bFound )
                 break;
         }
         if ( pNxtFtn &&
-             USHRT_MAX == rFtnArr.GetPos( (VoidPtr)pNxtFtn ) &&
+             USHRT_MAX == _rFtnArr.GetPos( (VoidPtr)pNxtFtn ) &&
              USHRT_MAX == aNotFtnArr.GetPos( (VoidPtr)pNxtFtn ) )
-            pFtn = pNxtFtn;
+            _pFtn = pNxtFtn;
         else
             break;
     }
@@ -2778,7 +2829,14 @@ BOOL SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
     while ( IsAnLower( pStart ) )
     {
         if ( ((SwTxtFrm*)pStart)->HasFtn() )
-            pNewBoss->CollectFtns( pStart, pOldBoss, aFtnArr );
+        {
+            // OD 03.04.2003 #108446# - To avoid unnecessary moves of footnotes
+            // use new parameter <_bCollectOnlyPreviousFtn> (4th parameter of
+            // method <SwFtnBossFrm::CollectFtn(..)>) to control, that only
+            // footnotes have to be collected, that are positioned before the
+            // new dedicated footnote boss frame.
+            pNewBoss->CollectFtns( pStart, pOldBoss, aFtnArr, sal_True );
+        }
         pStart = pStart->GetNextCntntFrm();
     }
 
@@ -2889,7 +2947,8 @@ BOOL SwCntntFrm::MoveFtnCntFwd( BOOL bMakePage, SwFtnBossFrm *pOldBoss )
         SwFtnBossFrm * const pNewBoss = pNewUpper->FindFtnBossFrm();
         //Wechseln wir die Spalte/Seite?
         if ( FALSE == ( bSameBoss = pNewBoss == pOldBoss ) )
-        {   bSamePage = pOldBoss->FindPageFrm() == pNewBoss->FindPageFrm(); // Seitenwechsel?
+        {
+            bSamePage = pOldBoss->FindPageFrm() == pNewBoss->FindPageFrm(); // Seitenwechsel?
             pNewUpper->Calc();
         }
 
