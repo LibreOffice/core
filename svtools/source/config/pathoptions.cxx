@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-13 12:19:31 $
+ *  last change: $Author: mba $ $Date: 2000-11-14 16:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         // YES; Get the next variable for replace.
         OUString aReplacement;
         OUString aSubString = aWorkText.copy( nPosition, nLength );
-        aSubString.toLowerCase();
+        aSubString = aSubString.toLowerCase();
         sal_Int32 nReplaceLength = 0;
 
         // -------------------------------------------------------------------------------------------------------------------
@@ -699,7 +699,15 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALLURL );
     if ( aAny >>= aOfficePath )
+    {
         m_aInstURL = aOfficePath;
+        if ( !m_aInstURL.Len() )
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aInstPath, m_aInstURL );
+    }
+    else if ( !aAny.hasValue() )
+    {
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aInstPath, m_aInstURL );
+    }
     else
         DBG_ERRORFILE( "wrong any type" );
 
@@ -712,7 +720,15 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
 
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::USERINSTALLURL );
     if ( aAny >>= aUserPath )
+    {
         m_aUserURL = aUserPath;
+        if ( !m_aUserURL.Len() )
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aUserPath, m_aUserURL );
+    }
+    else if ( !aAny.hasValue() )
+    {
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aUserPath, m_aUserURL );
+    }
     else
         DBG_ERRORFILE( "wrong any type" );
 
