@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:38:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@
                     Text [ English ] = "~Left" ; \
                     Text [ norwegian ] = "~Left" ; \
                     Text [ italian ] = "A ~sinistra" ; \
-                    Text [ portuguese_brazilian ] = "~Esquerda" ; \
+                    Text [ portuguese_brazilian ] = "ΰ ~Esquerda" ; \
                     Text [ portuguese ] = "~Esquerda" ; \
                     Text [ finnish ] = "~Vasen:" ; \
                     Text [ danish ] = "~Venstre" ; \
@@ -307,7 +307,7 @@
                     Text [ English ] = "~Right" ; \
                     Text [ norwegian ] = "~Right" ; \
                     Text [ italian ] = "A dest~ra" ; \
-                    Text [ portuguese_brazilian ] = "~Direita" ; \
+                    Text [ portuguese_brazilian ] = "ΰ ~Direita" ; \
                     Text [ portuguese ] = "~Direita" ; \
                     Text [ finnish ] = "~Oikea" ; \
                     Text [ danish ] = "H~ψjre" ; \
@@ -574,7 +574,7 @@
         Text[ english_us ] = "~Name Object...";\
         Text[ portuguese ] = "~Name Object...";\
         Text[ russian ] = "~Θμÿ ξαϊεκςΰ...";\
-        Text[ greek ] = "~Name Object...";\
+        Text[ greek ] = "Ονομασία αντι~κειμένου...";\
         Text[ dutch ] = "Na~am geven aan object...";\
         Text[ french ] = "~Nommer l'objet...";\
         Text[ spanish ] = "~Nombrar objeto...";\
@@ -584,10 +584,10 @@
         Text[ swedish ] = "Namnge ob~jekt...";\
         Text[ polish ] = "Nazwij obiek~t...";\
         Text[ portuguese_brazilian ] = "~Nomear Objeto...";\
-        Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ«εε‰γ‚’δ»γ‘γ‚‹...";\
+        Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ«εε‰γ‚’δ»γ‘γ‚‹(~N)...";\
         Text[ korean ] = "κ°μ²΄ μ΄λ¦„ μ§€μ •(~N)...";\
-        Text[ chinese_simplified ] = "ε‘½εε―Ήθ±΅...";\
-        Text[ chinese_traditional ] = "ε‘½εη‰©δ»¶...";\
+        Text[ chinese_simplified ] = "ε‘½εε―Ήθ±΅(~N)...";\
+        Text[ chinese_traditional ] = "ε‘½εη‰©δ»¶(~N)...";\
         Text[ turkish ] = "~Nesne Adlandύr...";\
         Text[ arabic ] = "~Name Object...";\
         Text[ catalan ] = "~Nom de l'objecte...";\
@@ -628,7 +628,7 @@
                     Text [ ENGLISH ] = "~Vertical" ; \
                     Text [ norwegian ] = "~Vertikal" ; \
                     Text [ italian ] = "~Verticale" ; \
-                    Text [ portuguese_brazilian ] = "~Verticalmente" ; \
+                    Text [ portuguese_brazilian ] = "~Vertical" ; \
                     Text [ portuguese ] = "~Vertical" ; \
                     Text [ finnish ] = "~Pystytaso" ; \
                     Text [ danish ] = "~Lodret" ; \
@@ -696,7 +696,7 @@
         Text[ japanese ] = "εθ»Ά(~F)";\
         Text[ chinese_traditional ] = "ηΏ»θ½‰(~F)";\
         Text[ arabic ] = "ΗδΪίΗ~Σ";\
-        Text[ greek ] = "Κατόπτρ~ιση";\
+        Text[ greek ] = "Οριζόντια αναστροφή";\
         Text[ korean ] = "λ€μΉ­(~F)";\
         Text[ turkish ] = "~Yansύt";\
         Text[ language_user1 ] = " ";\
@@ -2264,6 +2264,7 @@ Menu RID_POPUP_DRAWTEXT
         };
     };
 };
+
 
 
 
