@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:46:10 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,6 @@ SwSearchProperties_Impl::SwSearchProperties_Impl() :
         pMap++;
     }
     pValueArr = new PropertyValue*[nArrLen];
-    *pValueArr = new PropertyValue[nArrLen];
     for(sal_uInt16 i = 0; i < nArrLen; i++)
         pValueArr[i] = 0;
 }
