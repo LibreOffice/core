@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-23 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,13 @@ using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 
+
+//--> TRA
+
+extern Reference< XTransferable > g_XTransferable;
+
+//<-- TRA
+
 DWORD WINAPI DndOleSTAFunc(LPVOID pParams);
 
 
@@ -164,6 +171,11 @@ void SAL_CALL DragSource::startDrag( const DragGestureEvent& trigger,
                       static_cast<DragSource*>(this), listener ) );
 
     // Convert the XTransferable data object into an IDataObject object;
+
+    //--> TRA
+    g_XTransferable = trans;
+    //<-- TRA
+
     m_spDataObject= m_aDataConverter.createDataObjFromTransferable(
                     m_serviceFactory, trans);
 
@@ -307,6 +319,11 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
             static_cast<IDropSource*>(pSource),
             dndActionsToDropEffects( pSource->m_sourceActions),
             &dwEffect);
+
+        //--> TRA
+        // clear the global transferable again
+        g_XTransferable = Reference< XTransferable >( );
+        //<-- TRA
 
         OSL_ENSURE( hr != E_INVALIDARG, "IDataObject impl does not contain valid data");
 

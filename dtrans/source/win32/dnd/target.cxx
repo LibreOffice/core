@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-08 08:09:16 $
+ *  last change: $Author: tra $ $Date: 2001-03-23 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@ using namespace osl;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
+
+//--> TRA
+
+extern Reference< XTransferable > g_XTransferable;
+
+//<-- TRA
 
 DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
                         m_hWnd( NULL),
@@ -239,9 +245,21 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
 
         m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
             static_cast<DropTarget*>(this) ) );
-        // Convert the IDataObject to a XTransferable
-        m_currentData= m_aDataConverter.createTransferableFromDataObj(
-                                        m_serviceFactory, pDataObj);
+
+        //--> TRA
+
+        // shortcut
+        if ( g_XTransferable.is( ) )
+            m_currentData = g_XTransferable;
+        else
+        {
+            // Convert the IDataObject to a XTransferable
+            m_currentData= m_aDataConverter.createTransferableFromDataObj(
+                                            m_serviceFactory, pDataObj);
+        }
+
+        //<-- TRA
+
         if( m_nListenerDropAction != ACTION_NONE)
         {
             DropTargetDragEnterEvent e;

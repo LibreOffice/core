@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: tra $ $Date: 2001-03-23 09:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,16 @@
 #endif
 
 #include "globals.hxx"
+
+//--> TRA
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+
+// used as shortcut when drag-source and drop-target are the same
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > g_XTransferable;
+
+//<-- TRA
 
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 16:07:46 $
+ *  last change: $Author: tra $ $Date: 2001-03-23 09:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,6 @@
 #define DNDTARGET_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDropTarget"
 #define DNDTARGET_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
 #define DNDTARGET_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDropTarget"
-
-
 
 // This maps key states as occur as parameter, e.g. in IDropTarget::DragEnter,
 // IDropSource::QueryContinueDrag, to actions as are declared in
