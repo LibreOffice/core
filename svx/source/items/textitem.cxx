@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:43:51 $
+ *  last change: $Author: mib $ $Date: 2001-03-28 08:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4204,6 +4204,14 @@ sal_Bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
     }
     return bRet;
 }
+
+int SvxCharRotateItem::operator==( const SfxPoolItem& rItem ) const
+{
+    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    return SfxUInt16Item::operator==( rItem ) &&
+           IsFitToLine() == ((const SvxCharRotateItem&)rItem).IsFitToLine();
+}
+
 
 /*************************************************************************
 |*    class SvxCharScaleItem
