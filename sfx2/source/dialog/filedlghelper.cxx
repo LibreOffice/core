@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-09 14:12:49 $
+ *  last change: $Author: mav $ $Date: 2002-07-17 15:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,9 @@
 #ifndef SFX2_FILTERGROUPING_HXX
 #include "filtergrouping.hxx"
 #endif
+#ifndef SFX2_REQUEST_HXX
+#include "request.hxx"
+#endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
@@ -357,7 +360,8 @@ public:
 
     ErrCode                 execute( SvStringsDtor*& rpURLList,
                                      SfxItemSet *&   rpSet,
-                                     String&         rFilter );
+                                     String&         rFilter,
+                                     sal_Bool        bHadPass);
     ErrCode                 execute();
 
     void                    setPath( const OUString& rPath );
@@ -652,6 +656,9 @@ struct CheckPasswordCapability
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::enablePasswordBox()
 {
+    static sal_Bool bCurrentBoxState = sal_False;
+    sal_Bool bWasEnabled = mbIsPwdEnabled;
+
     if ( ! mbHasPassword )
         return;
 
@@ -659,6 +666,22 @@ void FileDialogHelper_Impl::enablePasswordBox()
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
         CheckPasswordCapability()( getCurentSfxFilter() )
     );
+
+    if( bWasEnabled && !mbIsPwdEnabled )
+    {
+        // remember user settings until checkbox is enabled
+        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
+        sal_Bool bPassWord = sal_False;
+        bCurrentBoxState = ( aValue >>= bPassWord ) && bPassWord;
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_False ) );
+    }
+    else if( !bWasEnabled && mbIsPwdEnabled )
+    {
+        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        if( bCurrentBoxState )
+            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1280,8 +1303,15 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
-                                        String&         rFilter )
+                                        String&         rFilter,
+                                        sal_Bool        bHadPath )
 {
+    Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+
+    // check password checkbox if the document had password before
+    if( mbHasPassword && bHadPath && xCtrlAccess.is() )
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( sal_True ) );
+
     rpSet = NULL;
     rpURLList = NULL;
 
@@ -1292,8 +1322,6 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     {
         // create an itemset
         rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-
-        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
         // check, wether or not we have to display a password box
         if ( mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
@@ -2031,11 +2059,12 @@ void FileDialogHelper::SetDialogHelpId( const sal_Int32 _nHelpId )
 ErrCode FileDialogHelper::Execute( const String&   rPath,
                                    SvStringsDtor*& rpURLList,
                                    SfxItemSet *&   rpSet,
-                                   String&         rFilter )
+                                   String&         rFilter,
+                                   sal_Bool        bHadPass )
 {
     SetDisplayDirectory( rPath );
 
-    return mpImp->execute( rpURLList, rpSet, rFilter );
+    return mpImp->execute( rpURLList, rpSet, rFilter, bHadPass );
 }
 
 // ------------------------------------------------------------------------
@@ -2046,12 +2075,13 @@ ErrCode FileDialogHelper::Execute()
 
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
-                                   String&         rFilter)
+                                   String&         rFilter,
+                                   sal_Bool        bHadPass )
 {
     ErrCode nRet;
     SvStringsDtor* pURLList;
 
-    nRet = mpImp->execute( pURLList, rpSet, rFilter );
+    nRet = mpImp->execute( pURLList, rpSet, rFilter, bHadPass );
 
     delete pURLList;
 

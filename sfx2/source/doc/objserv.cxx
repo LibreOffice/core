@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 16:27:51 $
+ *  last change: $Author: mav $ $Date: 2002-07-17 15:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,8 +462,11 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
             }
 
+            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
+            sal_Bool bHadPass = ( pPassItem != NULL );
+
             SfxItemSet* pTempSet = NULL;
-            if ( aFileDlg.Execute( pTempSet, aFilterName ) != ERRCODE_NONE )
+            if ( aFileDlg.Execute( pTempSet, aFilterName, bHadPass ) != ERRCODE_NONE )
             {
                 SetError(ERRCODE_IO_ABORT);
                 return sal_False;
