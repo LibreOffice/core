@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:56:51 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,22 +84,22 @@ TabDialog TAB_DLG_VALIDATION
                 PageResID = TP_VALIDATION_VALUES ;
                 Text = "Kriterien" ;
                 Text [ ENGLISH ] = "Criteria" ;
-                Text[ english_us ] = "Values";
+                Text[ english_us ] = "Criteria";
                 Text[ portuguese ] = "Valores";
-                Text[ russian ] = "Çíà÷åíèÿ";
+                Text[ russian ] = "Êğèòåğèè";
                 Text[ greek ] = "Ôéìİò";
                 Text[ dutch ] = "Waarden";
-                Text[ french ] = "Valeurs";
-                Text[ spanish ] = "Valores";
+                Text[ french ] = "Critères";
+                Text[ spanish ] = "Criterios";
                 Text[ finnish ] = "Arvot";
-                Text[ italian ] = "Valori";
+                Text[ italian ] = "Criteri";
                 Text[ danish ] = "Værdier";
                 Text[ swedish ] = "Kriterier";
-                Text[ polish ] = "Wartoœci";
+                Text[ polish ] = "Kryteria";
                 Text[ portuguese_brazilian ] = "Werte";
-                Text[ japanese ] = "’l";
+                Text[ japanese ] = "ğŒ";
                 Text[ korean ] = "°ª";
-                Text[ chinese_simplified ] = "ÊıÖµ";
+                Text[ chinese_simplified ] = "Ìõ¼ş";
                 Text[ chinese_traditional ] = "¼Æ­È";
                 Text[ turkish ] = "Değerler";
                 Text[ arabic ] = "ÇáŞíã";
@@ -273,7 +273,7 @@ TabPage TP_VALIDATION_VALUES
         };
         stringlist [ swedish ] =
         {
-            < "Varje värde" ; Default ; > ;
+            < "Alla värden" ; Default ; > ;
             < "Heltal" ; Default ; > ;
             < "Decimal" ; Default ; > ;
             < "Datum" ; Default ; > ;
@@ -894,7 +894,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ portuguese_brazilian ] = "Inhalt" ;
         Text[ chinese_simplified ] = "ÄÚÈİ";
         Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawarto?æ";
+        Text[ polish ] = "Zawartoœæ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -1000,7 +1000,7 @@ TabPage TP_VALIDATION_ERROR
         Text [ portuguese_brazilian ] = "Inhalt" ;
         Text[ chinese_simplified ] = "ÄÚÈİ";
         Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawarto?æ";
+        Text[ polish ] = "Zawartoœæ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -1023,13 +1023,13 @@ TabPage TP_VALIDATION_ERROR
         Text [ swedish ] = "Visa fel~meddelande när ogiltiga värden matas in" ;
         Text [ danish ] = "Vis fejlmelding ved input af ugyldige værdier" ;
         Text [ italian ] = "~Mostra messaggio di errore se si digitano dei valori non validi" ;
-        Text [ spanish ] = "Mostrar mensaje de ~error al entrar valores incorrectos" ;
-        Text [ french ] = "Afficher un ~message d'erreur en cas de saisie de valeurs incorrectes" ;
+        Text [ spanish ] = "Mostrar mensaje de ~error al introducir valores incorrectos" ;
+        Text [ french ] = "~Message d'erreur en cas de saisie de valeurs incorrectes" ;
         Text [ portuguese_brazilian ] = "~Fehlermeldung bei Eingabe ung?tiger Werte anzeigen" ;
         Text [ portuguese ] = "~Mostrar mensagem de erro na entrada de valores incorrectos." ;
         Text[ chinese_simplified ] = "ÊäÈëÎŞĞ§ÊıÖµÊ±ÏÔÊ¾´íÎó±¨¸æ(~M)";
         Text[ russian ] = "Âûäàâàòü ñîîáùåíèå îá îøèáêå ïğè ââîäå íåäîïóñòèìûõ çíà÷åíèé";
-        Text[ polish ] = "Poka¿ ko~munikat o b³êdzie przy wpisywaniu nieprawid³owych wartoœci";
+        Text[ polish ] = "Poka¿ ko~munikat o b³êdzie po wpisaniu nieprawid³owych wartoœci";
         Text[ japanese ] = "–³Œø‚È’l‚Ì“ü—Í‚É´×°Ò¯¾°¼Ş‚ğ•\\¦‚·‚é(~M)";
         Text[ chinese_traditional ] = "¦b¿é¤JµL®Ä¼Æ­È®ÉÅã¥Ü¿ù»~³ø§i(~M)";
         Text[ arabic ] = "ÅÙåÇÑ ÑÓÇáÉ ÎØÃ ÚäÏ ÅÏÎÇá Şíã ÛíÑ ÕÇáÍÉ";
