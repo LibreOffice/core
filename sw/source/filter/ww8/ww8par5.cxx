@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:02 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,6 +667,8 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat)
 
         return NUMBERFORMAT_DATE;
     }
+
+    sParams.EraseAllChars('\'');
 
     const SvxLanguageItem& rLang = (const SvxLanguageItem&)(rDoc.GetAttrPool().
         GetDefaultItem( RES_CHRATR_LANGUAGE ));
