@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,23 +65,32 @@
 
 #pragma hdrstop
 
-#include "clview.hxx"
+#ifndef SD_CLIENT_VIEW_HXX
+#include "ClientView.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "sdpage.hxx"
 
-class SdDrawDocShell;
-class SdDrawViewShell;
+class DrawDocShell;
+
+namespace sd {
+
+class DrawViewShell;
 
 
 /*************************************************************************
 |*
-|* Ctor: Die SdClientView wird fuer SdDrawDocShell::Draw() verwendet
+|* Ctor: Die ClientView wird fuer DrawDocShell::Draw() verwendet
 |*
 \************************************************************************/
 
-SdClientView::SdClientView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
-                           SdDrawViewShell* pShell) :
-    SdDrawView(pDocSh, pOutDev, pShell)
+ClientView::ClientView(
+    DrawDocShell* pDocSh,
+    OutputDevice* pOutDev,
+    DrawViewShell* pShell)
+    : DrawView (pDocSh, pOutDev, pShell)
 {
 }
 
@@ -92,7 +101,7 @@ SdClientView::SdClientView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
 |*
 \************************************************************************/
 
-SdClientView::~SdClientView()
+ClientView::~ClientView()
 {
 }
 
@@ -103,7 +112,7 @@ SdClientView::~SdClientView()
 |*
 \************************************************************************/
 
-void SdClientView::InvalidateOneWin(Window& rWin)
+void ClientView::InvalidateOneWin(::Window& rWin)
 {
     Region aRegion;
     InitRedraw(&rWin, aRegion);
@@ -116,7 +125,7 @@ void SdClientView::InvalidateOneWin(Window& rWin)
 |*
 \************************************************************************/
 
-void SdClientView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
+void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 {
     InitRedraw(&rWin, rRect);
 }
@@ -128,9 +137,9 @@ void SdClientView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void SdClientView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void ClientView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
-    SdDrawView::InitRedraw(pOutDev, rReg);
+    DrawView::InitRedraw(pOutDev, rReg);
 
     // Stets Demo-Output auf dem ganzen Fenster ausgeben
     Rectangle aRect( Point(0, 0), pOutDev->GetOutputSize() );
@@ -138,4 +147,4 @@ void SdClientView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 }
 
 
-
+} // end of namespace sd
