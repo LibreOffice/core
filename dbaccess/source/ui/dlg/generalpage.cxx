@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
+ *  last change: $Author: oj $ $Date: 2002-12-06 14:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,6 +611,7 @@ namespace dbaui
         }
 
         m_aBrowseConnection.Enable(bValid && isBrowseable(m_eCurrentSelection));
+        m_aConnection.Enable(bValid && (m_eCurrentSelection != DST_MYSQL_ODBC) && (m_eCurrentSelection != DST_MYSQL_JDBC) );
         checkCreateDatabase(m_eCurrentSelection);
 
         // select the correct datasource type
@@ -1411,6 +1412,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2002/11/21 15:23:01  oj
+ *  #105213# impl new feature of rown mysql driver page
+ *
  *  Revision 1.28  2002/08/19 07:40:33  oj
  *  #99473# change string resource files
  *
