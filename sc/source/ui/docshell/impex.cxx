@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:54:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
     pUndoDoc = NULL;
     pExtOptions = NULL;
 
-    USHORT nTab = ScDocShell::GetCurTab();
+    SCTAB nTab = ScDocShell::GetCurTab();
     aRange.aStart.SetTab( nTab );
     String aPos( rPos );
     //  Benannter Bereich?
@@ -723,10 +723,10 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
 {
     BOOL bOk = TRUE;
 
-    USHORT nStartCol = aRange.aStart.Col();
-    USHORT nStartRow = aRange.aStart.Row();
-    USHORT nEndCol = aRange.aEnd.Col();
-    USHORT nEndRow = aRange.aEnd.Row();
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
     ULONG  nOldPos = rStrm.Tell();
     if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
         rStrm.StartReadingUnicodeText();
@@ -738,14 +738,14 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
     {
         ByteString aByteLine;
         String aLine, aCell;
-        USHORT nRow = nStartRow;
+        SCROW nRow = nStartRow;
         rStrm.Seek( nOldPos );
         for( ;; )
         {
             rStrm.ReadUniOrByteStringLine( aLine );
             if( rStrm.IsEof() )
                 break;
-            USHORT nCol = nStartCol;
+            SCCOL nCol = nStartCol;
             const sal_Unicode* p = aLine.GetBuffer();
             while( *p )
             {
@@ -767,7 +767,7 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
                     if( *p )
                         p++;
                 }
-                if (nCol<=MAXCOL && nRow<=MAXROW )
+                if (ValidCol(nCol) && ValidRow(nRow) )
                 {
                     if( bSingle )
                     {
@@ -804,14 +804,14 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
         //
 
 
-void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
+void lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                     const String& rStr, BYTE nColFormat,
                     ::utl::TransliterationWrapper& rTransliteration,
                     CalendarWrapper& rCalendar,
                     ::utl::TransliterationWrapper* pSecondTransliteration,
                     CalendarWrapper* pSecondCalendar )
 {
-    if ( nColFormat == SC_COL_SKIP || !rStr.Len() || nCol > MAXCOL || nRow > MAXROW )
+    if ( nColFormat == SC_COL_SKIP || !rStr.Len() || !ValidCol(nCol) || !ValidRow(nRow) )
         return;
 
     if ( nColFormat == SC_COL_TEXT )
@@ -1040,9 +1040,9 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     ScColumn::bDoubleAlloc = TRUE;
 
     DBG_ASSERT( !bUndo, "ExtText2Doc mit Undo noch nicht implementiert!" );
-    USHORT nStartCol = aRange.aStart.Col();
-    USHORT nStartRow = aRange.aStart.Row();
-    USHORT nTab = aRange.aStart.Tab();
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nTab = aRange.aStart.Tab();
 
     BOOL    bFixed          = pExtOptions->IsFixedLen();
     const sal_Unicode* pSeps = pExtOptions->GetFieldSeps().GetBuffer();
@@ -1077,7 +1077,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     String aLine, aCell;
     USHORT i;
-    USHORT nRow = nStartRow;
+    SCROW nRow = nStartRow;
 
     while(--nSkipLines>0)
     {
@@ -1092,7 +1092,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
             break;
 
         xub_StrLen nLineLen = aLine.Len();
-        USHORT nCol = nStartCol;
+        SCCOL nCol = nStartCol;
         if ( bFixed )               //  Feste Satzlaenge
         {
             for ( i=0; i<nInfoCount; i++ )
@@ -1110,7 +1110,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
         }
         else                        //  Nach Trennzeichen suchen
         {
-            USHORT nSourceCol = 0;
+            SCCOL nSourceCol = 0;
             USHORT nInfoStart = 0;
             const sal_Unicode* p = aLine.GetBuffer();
             while (*p)
@@ -1194,12 +1194,12 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
 
 BOOL ScImportExport::Doc2Text( SvStream& rStrm )
 {
-    USHORT nCol;
-    USHORT nRow;
-    USHORT nStartCol = aRange.aStart.Col();
-    USHORT nStartRow = aRange.aStart.Row();
-    USHORT nEndCol = aRange.aEnd.Col();
-    USHORT nEndRow = aRange.aEnd.Row();
+    SCCOL nCol;
+    SCROW nRow;
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
     String aCell;
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
@@ -1275,10 +1275,10 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
     sal_Unicode cDecSep = '.';
     sal_Unicode cGrpSep = ',';
 
-    USHORT nStartCol = aRange.aStart.Col();
-    USHORT nStartRow = aRange.aStart.Row();
-    USHORT nEndCol = aRange.aEnd.Col();
-    USHORT nEndRow = aRange.aEnd.Row();
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
     ULONG nOldPos = rStrm.Tell();
     BOOL bData = BOOL( !bSingle );
     SvULongs aFormats;
@@ -1291,10 +1291,10 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
         String aLine;
         String aText;
         ByteString aByteLine;
-        USHORT nCol = nStartCol;
-        USHORT nRow = nStartRow;
-        USHORT nRefCol, nRefRow;
-        nRefCol = nRefRow = 1;
+        SCCOL nCol = nStartCol;
+        SCROW nRow = nStartRow;
+        SCCOL nRefCol = 1;
+        SCROW nRefRow = 1;
         rStrm.Seek( nOldPos );
         for( ;; )
         {
@@ -1316,13 +1316,13 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = String( p ).ToInt32() + nStartCol - 1;
+                            nCol = static_cast<SCCOL>(String( p ).ToInt32()) + nStartCol - 1;
                             break;
                         case 'Y':
                             nRow = String( p ).ToInt32() + nStartRow - 1;
                             break;
                         case 'C':
-                            nRefCol = String( p ).ToInt32() + nStartCol - 1;
+                            nRefCol = static_cast<SCCOL>(String( p ).ToInt32()) + nStartCol - 1;
                             break;
                         case 'R':
                             nRefRow = String( p ).ToInt32() + nStartRow - 1;
@@ -1435,7 +1435,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = String( p ).ToInt32() + nStartCol - 1;
+                            nCol = static_cast<SCCOL>(String( p ).ToInt32()) + nStartCol - 1;
                             break;
                         case 'Y':
                             nRow = String( p ).ToInt32() + nStartRow - 1;
@@ -1524,12 +1524,12 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
 
 BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
 {
-    USHORT nCol;
-    USHORT nRow;
-    USHORT nStartCol = aRange.aStart.Col();
-    USHORT nStartRow = aRange.aStart.Row();
-    USHORT nEndCol = aRange.aEnd.Col();
-    USHORT nEndRow = aRange.aEnd.Row();
+    SCCOL nCol;
+    SCROW nRow;
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
     String aCellStr;
     String aValStr;
     lcl_WriteSimpleString( rStrm,
@@ -1543,8 +1543,8 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
             String aBufStr;
             double nVal;
             BOOL bForm = FALSE;
-            USHORT r = nRow - nStartRow + 1;
-            USHORT c = nCol - nStartCol + 1;
+            SCROW r = nRow - nStartRow + 1;
+            SCCOL c = nCol - nStartCol + 1;
             ScBaseCell* pCell;
             pDoc->GetCell( nCol, nRow, aRange.aStart.Tab(), pCell );
             CellType eType = (pCell ? pCell->GetCellType() : CELLTYPE_NONE);
@@ -1615,7 +1615,8 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                         {
                             case MM_FORMULA :
                             {   // diff expression with 'M' M$-extension
-                                USHORT nC, nR;
+                                SCCOL nC;
+                                SCROW nR;
                                 pFCell->GetMatColsRows( nC, nR );
                                 nC += c - 1;
                                 nR += r - 1;
@@ -1686,14 +1687,15 @@ BOOL ScImportExport::Doc2Dif( SvStream& rStrm )
 
 BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
 {
-    USHORT nTab = aRange.aStart.Tab();
+    SCTAB nTab = aRange.aStart.Tab();
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used
     ScImportDif( rStrm, pImportDoc, aRange.aStart, RTL_TEXTENCODING_IBM_850 );
 
-    USHORT nEndCol, nEndRow;
+    SCCOL nEndCol;
+    SCROW nEndRow;
     pImportDoc->GetCellArea( nTab, nEndCol, nEndRow );
     aRange.aEnd = ScAddress( nEndCol, nEndRow, nTab );
 
