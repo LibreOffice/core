@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:44:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ public class FilterComponent{
     final int SOTXTVALUE = 5;
     final int SOOPTORMODE = 100;
     final int SOOPTANDMODE = 101;
-
     QueryMetaData oQueryMetaData;
     int iDateTimeFormat;
     int iDateFormat;
@@ -210,6 +209,7 @@ public class FilterComponent{
         String sName = getControlName(EventObject.Source);
         togglefollowingControlRow(sName);
     }
+
 
     public void disposing(com.sun.star.lang.EventObject eventObject) {
     }
@@ -427,13 +427,11 @@ public class FilterComponent{
         }
     }
 
-
     public void addNumberFormats(){
         try {
             iDateFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD");
             iTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("HH:MM:SS");
             iDateTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD HH:MM:SS");
-
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
