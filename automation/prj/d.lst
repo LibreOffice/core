@@ -2,7 +2,7 @@ mkdir: %_DEST%\inc%_EXT%\automation
 
 ..\%__SRC%\bin\sts?????.dll %_DEST%\bin%_EXT%\sts?????.dll
 ..\%__SRC%\lib\libsts* %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\automation.lib %_DEST%\lib%_EXT%\automation.lib
+..\%__SRC%\lib\ists.lib %_DEST%\lib%_EXT%\ists.lib
 
 hedabu: ..\inc\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
 
