@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseContext.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-08-02 17:56:24 $
+ *  last change:$Date: 2005-03-29 11:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 import com.sun.star.frame.XStorable;
+import com.sun.star.sdb.XDocumentDataSource;
 import util.utils;
 
 /**
@@ -154,8 +155,12 @@ public class ODatabaseContext extends TestCase {
 
             xDSProps.setPropertyValue("URL", "sdbc:dbase:file:///.") ;
 
-            XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, oInterface);
+            XDocumentDataSource xDDS = (XDocumentDataSource)
+            UnoRuntime.queryInterface(XDocumentDataSource.class, oInterface);
+            XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+            xDDS.getDatabaseDocument ());
             String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DatabaseContext.odb";
+            log.println("store to '" + aFile + "'");
             store.storeAsURL(aFile,new PropertyValue[]{});
 
             tEnv.addObjRelation("XNamingService.RegisterObject", oInterface) ;
@@ -176,4 +181,3 @@ public class ODatabaseContext extends TestCase {
     } // finish method getTestEnvironment
 
 }
-
