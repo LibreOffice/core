@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>DIF</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Data Interchange Format</value>
+            <value>Data Interchange Format</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
