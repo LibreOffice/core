@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:41:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using ::com::sun::star::frame::XDispatchProviderInterceptor;
 
 //==================================================================
 //= OButtonModel
@@ -114,7 +115,7 @@ InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceF
 
 //------------------------------------------------------------------
 OButtonModel::OButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OImageModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON )
+    :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON )
                                     // use the old control name for compatibility reasons
 {
     DBG_CTOR( OButtonModel, NULL );
@@ -123,7 +124,7 @@ OButtonModel::OButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
 
 //------------------------------------------------------------------
 OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
-    :OImageModel( _pOriginal, _rxFactory )
+    :OClickableImageBaseModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OButtonModel, NULL );
     implInitializeImageURL();
@@ -147,7 +148,7 @@ void OButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 5, OImageModel )
+    BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
         DECL_PROP1(BUTTONTYPE,      FormButtonType,             BOUND);
         DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,               BOUND);
         DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
@@ -169,11 +170,12 @@ IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 //------------------------------------------------------------------------------
 StringSequence  OButtonModel::getSupportedServiceNames() throw()
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
+    aSupported.realloc( aSupported.getLength() + 1 );
 
-    ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_COMMANDBUTTON;
+    ::rtl::OUString* pArray = aSupported.getArray();
+    pArray[ aSupported.getLength() - 1 ] = FRM_SUN_COMPONENT_COMMANDBUTTON;
+
     return aSupported;
 }
 
@@ -186,7 +188,7 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    OImageModel::write(_rxOutStream);
+    OClickableImageBaseModel::write(_rxOutStream);
 
     _rxOutStream->writeShort(0x0003);   // Version
 
@@ -207,7 +209,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 //------------------------------------------------------------------------------
 void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    OImageModel::read(_rxInStream);
+    OClickableImageBaseModel::read(_rxInStream);
 
     sal_uInt16 nVersion = _rxInStream->readShort();     // Version
     switch (nVersion)
@@ -278,7 +280,7 @@ Sequence<Type> OButtonControl::_getTypes()
 {
     return ::comphelper::concatSequences(
         OButtonControl_BASE::getTypes(),
-        OImageControl::_getTypes(),
+        OClickableImageBaseControl::_getTypes(),
         OFormNavigationHelper::getTypes()
     );
 }
@@ -286,7 +288,7 @@ Sequence<Type> OButtonControl::_getTypes()
 //------------------------------------------------------------------------------
 StringSequence  OButtonControl::getSupportedServiceNames() throw()
 {
-    StringSequence aSupported = OControl::getSupportedServiceNames();
+    StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
     ::rtl::OUString*pArray = aSupported.getArray();
@@ -296,7 +298,7 @@ StringSequence  OButtonControl::getSupportedServiceNames() throw()
 
 //------------------------------------------------------------------------------
 OButtonControl::OButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
-                 :OImageControl(_rxFactory, VCL_CONTROL_COMMANDBUTTON)
+                 :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_COMMANDBUTTON)
                  ,OFormNavigationHelper( _rxFactory )
                  ,m_nClickEvent( 0 )
                  ,m_nTargetUrlFeatureId( -1 )
@@ -331,7 +333,7 @@ Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (Runtime
         aReturn = OButtonControl_BASE::queryInterface( _rType );
 
     if ( !aReturn.hasValue() )
-        aReturn = OImageControl::queryAggregation( _rType );
+        aReturn = OClickableImageBaseControl::queryAggregation( _rType );
 
     if ( !aReturn.hasValue() )
         aReturn = OFormNavigationHelper::queryInterface( _rType );
@@ -344,7 +346,7 @@ void SAL_CALL OButtonControl::disposing()
 {
     startOrStopModelPropertyListening( false );
 
-    OImageControl::disposing();
+    OClickableImageBaseControl::disposing();
     OFormNavigationHelper::dispose();
 }
 
@@ -375,15 +377,9 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 
     if (m_aApproveActionListeners.getLength())
     {
-        // Wenn es ApproveAction-Lisener gibt, muss ein eigener Thread
-        // aufgemacht werden.
-        if( !m_pThread )
-        {
-            m_pThread = new OImageControlThread_Impl( this );
-            m_pThread->acquire();
-            m_pThread->create();
-        }
-        m_pThread->addEvent();
+        // if there are listeners, start the action in an own thread, to not allow
+        // them to block us here (we're in the application's main thread)
+        getImageProducerThread()->addEvent();
     }
     else
     {
@@ -450,7 +446,7 @@ void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::co
         }
     }
 
-    OImageControl::actionPerformed_Impl( _bNotifyListener, _rEvt );
+    OClickableImageBaseControl::actionPerformed_Impl( _bNotifyListener, _rEvt );
 }
 
 // XButton
@@ -542,7 +538,7 @@ void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
 sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel ) throw ( RuntimeException )
 {
     startOrStopModelPropertyListening( false );
-    sal_Bool bResult = OImageControl::setModel( _rxModel );
+    sal_Bool bResult = OClickableImageBaseControl::setModel( _rxModel );
     startOrStopModelPropertyListening( true );
 
     m_bEnabledByPropertyValue = sal_True;
@@ -583,8 +579,6 @@ void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent
     {
         _rEvent.NewValue >>= m_bEnabledByPropertyValue;
     }
-
-    OImageControl::propertyChange( _rEvent );
 }
 
 //------------------------------------------------------------------------------
@@ -631,7 +625,7 @@ sal_Int32 OButtonControl::getModelUrlFeatureId( ) const
 //------------------------------------------------------------------
 void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
 {
-    OImageControl::setDesignMode( _bOn  );
+    OClickableImageBaseControl::setDesignMode( _bOn  );
 
     if ( _bOn )
         disconnectDispatchers();
@@ -685,6 +679,20 @@ bool OButtonControl::isEnabled( sal_Int32 _nFeatureId ) const
        return true;
 
     return OFormNavigationHelper::isEnabled( _nFeatureId );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
+{
+    OClickableImageBaseControl::registerDispatchProviderInterceptor( _rxInterceptor );
+    OFormNavigationHelper::registerDispatchProviderInterceptor( _rxInterceptor );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
+{
+    OClickableImageBaseControl::releaseDispatchProviderInterceptor( _rxInterceptor );
+    OFormNavigationHelper::releaseDispatchProviderInterceptor( _rxInterceptor );
 }
 
 //.........................................................................
