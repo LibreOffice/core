@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 13:57:11 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public class FormWizard extends WizardDialog{
         super.addResourceHandler("FormWizard", "dbw");
         Helper.setUnoPropertyValues(xDialogModel,
             new String[] { "Height","Moveable","Name","PositionX","PositionY","Step","TabIndex","Title","Width"},
-            new Object[] { new Integer(210),Boolean.TRUE, "DialogForm", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), "FormWizard", new Integer(310)}  );
+            new Object[] { new Integer(210),Boolean.TRUE, "DialogForm", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), oResource.getResText(UIConsts.RID_FORM), new Integer(310)}  );
         drawNaviBar();
         if (getFormResources() == true)
             setRightPaneHeaders(oResource, UIConsts.RID_FORM + 90, 8);
@@ -163,7 +163,7 @@ public class FormWizard extends WizardDialog{
          switch (nOldStep){
             case SOMAINPAGE:
                 curFormDocument.oMainFormDBMetaData.setFieldNames(curDBCommandFieldSelection.getSelectedFieldNames());
-                curFormDocument.oMainFormDBMetaData.setFieldColumns(true);
+                curFormDocument.oMainFormDBMetaData.setFieldColumns(true, curDBCommandFieldSelection.getSelectedCommandName());
                 curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oMainFormDBMetaData.FieldNames, 1);
                 break;
             case SOSUBFORMPAGE:
@@ -190,7 +190,7 @@ public class FormWizard extends WizardDialog{
 
 
     public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
     PropertyValue[] curproperties = null;
     try {
         XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
@@ -199,6 +199,7 @@ public class FormWizard extends WizardDialog{
             System.out.println("Connected to "+ ConnectStr);
             curproperties = new PropertyValue[1];
             curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/LDAP Directory.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
             CurFormWizard.startFormWizard(xLocMSF, curproperties);
         }
     }
