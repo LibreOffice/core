@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storlckb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-26 21:38:56 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORLCKB_CXX_ "$Revision: 1.3 $"
+#define _STORE_STORLCKB_CXX_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -124,7 +124,8 @@ inline sal_Int32 __store_convertTextToUnicode (
     const sal_Char *pSrcBuffer, sal_Int32 nSrcLength,
     sal_Unicode    *pDstBuffer, sal_Int32 nDstLength)
 {
-    sal_uInt32 nCvtInfo, nCvtBytes = 0;
+    sal_uInt32 nCvtInfo = 0;
+    sal_Size nCvtBytes = 0;
     return rtl_convertTextToUnicode (
         hConverter, 0,
         pSrcBuffer, nSrcLength,
