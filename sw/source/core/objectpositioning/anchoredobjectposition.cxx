@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:01:31 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
+#endif
+// OD 2004-03-16 #i11860#
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 using namespace objectpositioning;
@@ -260,6 +264,37 @@ SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
     return 0L;
 }
 
+/** helper method to determine top of a frame for the vertical
+    object positioning
+
+    OD 2004-03-11 #i11860#
+
+    @author OD
+*/
+SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrm& _rFrm,
+                                                    const SwRectFn& _fnRect,
+                                                    const bool _bVert ) const
+{
+    SwTwips nTopOfFrmForObjPos = (_rFrm.Frm().*_fnRect->fnGetTop)();
+
+    if ( _rFrm.IsTxtFrm() )
+    {
+        const SwTxtFrm& rTxtFrm = static_cast<const SwTxtFrm&>(_rFrm);
+        if ( _bVert )
+        {
+            nTopOfFrmForObjPos -=
+                rTxtFrm.GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        }
+        else
+        {
+            nTopOfFrmForObjPos +=
+                rTxtFrm.GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        }
+    }
+
+    return nTopOfFrmForObjPos;
+}
+
 void SwAnchoredObjectPosition::_GetVertAlignmentValues(
                                         const SwFrm& _rVertOrientFrm,
                                         const SwFrm& _rPageAlignLayFrm,
@@ -270,18 +305,31 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
     SwTwips nHeight = 0;
     SwTwips nOffset = 0;
     SWRECTFN( (&_rVertOrientFrm) )
+    // OD 2004-03-11 #i11860# - top of <_rVertOrientFrm> for object positioning
+    const SwTwips nVertOrientTop = _GetTopForObjPos( _rVertOrientFrm, fnRect, bVert );
+    // OD 2004-03-11 #i11860# - upper space amount of <_rVertOrientFrm> considered
+    // for previous frame
+    const SwTwips nVertOrientUpperSpaceForPrevFrmAndPageGrid =
+            _rVertOrientFrm.IsTxtFrm()
+            ? static_cast<const SwTxtFrm&>(_rVertOrientFrm).
+                        GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid()
+            : 0;
     switch ( _eRelOrient )
     {
         case FRAME:
         {
-            nHeight = (_rVertOrientFrm.Frm().*fnRect->fnGetHeight)();
+            // OD 2004-03-11 #i11860# - consider upper space of previous frame
+            nHeight = (_rVertOrientFrm.Frm().*fnRect->fnGetHeight)() -
+                      nVertOrientUpperSpaceForPrevFrmAndPageGrid;
             nOffset = 0;
         }
         break;
         case PRTAREA:
         {
             nHeight = (_rVertOrientFrm.Prt().*fnRect->fnGetHeight)();
-            nOffset = (_rVertOrientFrm.*fnRect->fnGetTopMargin)();
+            // OD 2004-03-11 #i11860# - consider upper space of previous frame
+            nOffset = (_rVertOrientFrm.*fnRect->fnGetTopMargin)() -
+                      nVertOrientUpperSpaceForPrevFrmAndPageGrid;
             // if aligned to page in horizontal layout, consider header and
             // footer frame height appropriately.
             if( _rVertOrientFrm.IsPageFrm() && !bVert )
@@ -309,7 +357,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             nHeight = (_rPageAlignLayFrm.Frm().*fnRect->fnGetHeight)();
             nOffset = (*fnRect->fnYDiff)(
                         (_rPageAlignLayFrm.Frm().*fnRect->fnGetTop)(),
-                        (_rVertOrientFrm.Frm().*fnRect->fnGetTop)() );
+                        nVertOrientTop );
         }
         break;
         case REL_PG_PRTAREA:
@@ -318,7 +366,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             nOffset = (_rPageAlignLayFrm.*fnRect->fnGetTopMargin)() +
                       (*fnRect->fnYDiff)(
                         (_rPageAlignLayFrm.Frm().*fnRect->fnGetTop)(),
-                        (_rVertOrientFrm.Frm().*fnRect->fnGetTop)() );
+                        nVertOrientTop );
             // if aligned to page in horizontal layout, consider header and
             // footer frame height appropriately.
             if( _rPageAlignLayFrm.IsPageFrm() && !bVert )
@@ -347,8 +395,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             if ( IsAnchoredToChar() )
             {
                 nHeight = 0;
-                nOffset = (*fnRect->fnYDiff)( ToCharTopOfLine(),
-                                              (_rVertOrientFrm.Frm().*fnRect->fnGetTop)() );
+                nOffset = (*fnRect->fnYDiff)( ToCharTopOfLine(), nVertOrientTop );
             }
             else
             {
@@ -363,7 +410,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             {
                 nHeight = (ToCharRect()->*fnRect->fnGetHeight)();
                 nOffset = (*fnRect->fnYDiff)( (ToCharRect()->*fnRect->fnGetTop)(),
-                                           (_rVertOrientFrm.Frm().*fnRect->fnGetTop)() );
+                                              nVertOrientTop );
             }
             else
             {
