@@ -417,7 +417,7 @@ Dim s as Integer
 		FirstList(i,1) = SecList(s,1)
 		sLocExtension = lcase(FirstList(i,1))
 		Select Case sLocExtension
-			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;xls&quot;, &quot;ppt&quot;
+			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;xls&quot;, &quot;ppt&quot;, &quot;pps&quot;
 				AbsDocuFound = AbsDocuFound + 1
 			Case else
 				AbsTemplateFound = AbsTemplateFound + 1
