@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-29 13:02:58 $
+ *  last change: $Author: dg $ $Date: 2001-02-13 16:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,24 @@
 #ifndef CONFIGMGR_DISPOSETIMER_HXX
 #define CONFIGMGR_DISPOSETIMER_HXX
 
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+
 #include "apitypes.hxx"
 #include "timestamp.hxx"
 #include "options.hxx"
 #include <osl/mutex.hxx>
 #include <vos/timer.hxx>
 #include <map>
-// #include <queue>
 #include <list>
+
+namespace uno   = ::com::sun::star::uno;
+namespace lang  = ::com::sun::star::lang;
 
 namespace configmgr
 {
@@ -221,16 +231,13 @@ namespace configmgr
         // TimeInterval m_aCleanupDelay;
         TimeInterval m_aCleanupInterval;
 
-        bool                m_bSyncron;          // if true, write syncron only, no timer thread
-
     public:
     //-------- Construction and destruction -----------------------------------
         explicit
-        OTreeCacheWriteScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay, bool _bSyncron)
+        OTreeCacheWriteScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
             : m_xTimer(0)
             , m_rTreeManager(_rTreeManager)
             , m_aCleanupInterval(_aCleanupDelay)
-            , m_bSyncron(_bSyncron)
         {}
         ~OTreeCacheWriteScheduler();
 
@@ -251,9 +258,7 @@ namespace configmgr
             return aBaseTime + aDelay;
         }
     //-------- Control of execution  ------------------------------------------
-        /// stop and discard pending activities for _xOptions
-        // void writeCache(vos::ORef< OOptions > const& _xOptions);
-        void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bSync = false);
+        void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bASync = false) throw ( lang::WrappedTargetException, uno::RuntimeException);
 
         /// stop and discard pending activities
         void stopAndWriteCache();
@@ -261,9 +266,9 @@ namespace configmgr
         // vos::OTimer
         void onTimerShot();
 
-        void runDisposer();
+        void runWriter();
         void implStartBefore(TimeStamp const& _aTime);
-        sal_Int32 writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOption);
+        void writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOption) throw (lang::WrappedTargetException, uno::RuntimeException);
     };
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace configmgr

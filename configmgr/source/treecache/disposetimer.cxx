@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-29 13:02:58 $
+ *  last change: $Author: dg $ $Date: 2001-02-13 16:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ void OTreeCacheWriteScheduler::stopAndWriteCache()
         m_xTimer->stop(); // just to be sure
         m_xTimer.unbind(); // just to be sure
     }
-    runDisposer();
+    runWriter();
 }
 // -------------------------------------------------------------------------
 void OTreeCacheWriteScheduler::Timer::onShot()
@@ -415,7 +415,7 @@ void OTreeCacheWriteScheduler::onTimerShot()
 
     try
     {
-        runDisposer();
+        runWriter();
     }
     catch (...)
     {
@@ -428,7 +428,7 @@ void OTreeCacheWriteScheduler::onTimerShot()
     implStartBefore(aNewTime);
 }
 // -------------------------------------------------------------------------
-void OTreeCacheWriteScheduler::runDisposer()
+void OTreeCacheWriteScheduler::runWriter()
 {
     // Write Cache
     CFG_TRACE_INFO("Starting lasy write");
@@ -441,13 +441,17 @@ void OTreeCacheWriteScheduler::runDisposer()
         vos::ORef< OOptions > xTaskOption = *it;
         if (xTaskOption.isValid())
         {
-            sal_Int32 nErrorCount = writeOneTreeFoundByOption(xTaskOption);
-            if (nErrorCount == 0)
+            try
+            {
+                writeOneTreeFoundByOption(xTaskOption);
+            }
+            catch (uno::Exception&)
             {
                 it = m_aWriteList.erase(it);
             }
-            else
-                ++it;
+
+            // TODO error handling not correct at the moment
+            it = m_aWriteList.erase(it);
         }
         else
         {
@@ -459,17 +463,14 @@ void OTreeCacheWriteScheduler::runDisposer()
 }
 
 // -----------------------------------------------------------------------------
-sal_Int32 OTreeCacheWriteScheduler::writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOptions)
+void OTreeCacheWriteScheduler::writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Int32 nErrorCount = 0;
     if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(_xOptions,false))
     {
         CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
-
-        nErrorCount = pInfo->syncPending(_xOptions, m_rTreeManager);
+        pInfo->syncPending(_xOptions, m_rTreeManager);
         // we got a pending list with pointers from TreeInfo.
     }
-    return nErrorCount;
 }
 
 // -----------------------------------------------------------------------------
@@ -505,7 +506,7 @@ void OTreeCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
 }
 
 // -----------------------------------------------------------------------------
-void OTreeCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bSync)
+void OTreeCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bAsync)  throw (lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ASSERT(_xOptions.isValid());
     OSL_ENSURE(_xOptions->getLocale().getLength() >0, "ERROR: OTreeDisposeScheduler: cannot handle complete user scheduling");
@@ -517,7 +518,7 @@ void OTreeCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOpti
 
     CFG_TRACE_INFO_NI("- cache write will be started in about %d seconds", int(m_aCleanupInterval.getTimeValue().Seconds));
 
-    if (_bSync || m_bSyncron)
+    if (_bAsync)
     {
         // lasy writing
         m_aWriteList.push_back(_xOptions);
