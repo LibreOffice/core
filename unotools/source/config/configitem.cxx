@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:39:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( !(pImpl->nMode!=CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
 
     sal_Int32                   nSourceCounter      ;   // used to step during input lists
     sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
@@ -470,10 +470,13 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                 {
                     #ifdef DEBUG
                     // Sometimes it's better to see what's going on :-)
-                    OUString sName = lPropertyNames[nPropertyCounter];
+                    OUString sPropName   = lInNames[nSourceCounter];
+                    OUString sLocaleName = lPropertyNames[nPropertyCounter];
                     #endif
                     lProperties[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter]                            ;
-                    lProperties[nPropertyCounter].Value <<= xSetAccess->getByName( lPropertyNames[nPropertyCounter] )   ;
+                    OUString sLocaleValue;
+                    xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue  ;
+                    lProperties[nPropertyCounter].Value <<= sLocaleValue;
                 }
 
                 lOutValues[nDestinationCounter] <<= lProperties;
@@ -497,7 +500,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( !(pImpl->nMode!=CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
 
     sal_Int32                   nSourceCounter      ;   // used to step during input lists
     sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
@@ -700,7 +703,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
         }
 
         // In special mode "ALL_LOCALES" we must convert localized values to Sequence< PropertyValue >.
-        if( pImpl->nMode == CONFIG_MODE_ALL_LOCALES )
+        if((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES)
         {
             Sequence< Any > lValues;
             impl_packLocalizedProperties( rNames, aRet, lValues );
@@ -726,7 +729,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         const OUString*         pNames  = NULL  ;
         const Any*              pValues = NULL  ;
         sal_Int32               nNameCount      ;
-        if( pImpl->nMode == CONFIG_MODE_ALL_LOCALES )
+        if(( pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES )
         {
             // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
             // as value of an localized configuration entry!
@@ -762,13 +765,18 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                     if (splitLastFromConfigurationPath(pNames[i],sNode, sProperty))
                     {
                         Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
+
                         Reference<XNameAccess> xNodeAcc;
                         aNode >>= xNodeAcc;
-                        Reference<XNameReplace> xNodeReplace(xNodeAcc, UNO_QUERY);
-                        if(xNodeReplace.is())
-                        {
+                        Reference<XNameReplace>   xNodeReplace(xNodeAcc, UNO_QUERY);
+                        Reference<XNameContainer> xNodeCont   (xNodeAcc, UNO_QUERY);
+
+                        sal_Bool bExist = (xNodeAcc.is() && xNodeAcc->hasByName(sProperty));
+                        if (bExist && xNodeReplace.is())
                             xNodeReplace->replaceByName(sProperty, pValues[i]);
-                        }
+                        else
+                        if (!bExist && xNodeCont.is())
+                            xNodeCont->insertByName(sProperty, pValues[i]);
                         else
                             bRet = sal_False;
                     }
