@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-04 13:18:18 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 08:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ using namespace com::sun::star::container;
 IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
-                        ,connectivity::OSimplePropertyContainer(OResultSet_BASE::rBHelper)
+                        ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
                         ,m_aStatement((OWeakObject*)pStmt)
                         ,m_nRowPos(-1)
                         ,m_bLastRecord(sal_False)
