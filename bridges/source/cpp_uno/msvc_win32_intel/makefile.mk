@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2001-07-02 11:53:44 $
+#   last change: $Author: dbo $ $Date: 2001-07-26 11:46:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 .IF "$(COM)" == "MSC"
 
-.IF "$(debug)" == ""
-CFLAGS += /O2gityb2 /Gs
-.ELSE
+.IF "$(debug)" != ""
 CFLAGS += /Ob0
 .ENDIF
 
@@ -89,6 +87,9 @@ CFLAGS += -DLEAK_STATIC_DATA
 SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
+    $(SLO)$/except.obj
+
+NOOPTFILES= \
     $(SLO)$/except.obj
 
 SHL1TARGET= $(TARGET)
