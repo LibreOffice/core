@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:39:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     BOOL            IsTopmostApplicationMenu();
     BOOL            registerAccessibleParent();
-    void            revokeAccessibleParent();
 };
 
 // To get the transparent mouse-over look, the closer is actually a toolbox
@@ -2856,9 +2855,6 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     {
         pWin->Execute();
 
-        if( bNativeFrameRegistered )
-            pWin->revokeAccessibleParent();
-
         // Focus wieder herstellen (kann schon im Select wieder
         // hergestellt wurden sein
         nFocusId = pWin->GetFocusId();
@@ -4080,7 +4076,7 @@ BOOL MenuFloatingWindow::registerAccessibleParent()
         // after registration which is triggered by VCLEVENT_WINDOW_SHOW)
         // we must register after the menu window is visible (StartPopupMode), otherwise it cannot
         // answer important accessibility request
-        if( mpBorderWindow && mpBorderWindow->ImplRegisterAccessibleNativeFrame() )
+        if( mpBorderWindow )
         {
             ImplCallEventListeners( VCLEVENT_WINDOW_SHOW );
             return TRUE;
@@ -4088,14 +4084,6 @@ BOOL MenuFloatingWindow::registerAccessibleParent()
         else
             return FALSE;
     }
-}
-
-void MenuFloatingWindow::revokeAccessibleParent()
-{
-    if( !IsTopmostApplicationMenu() || !mpBorderWindow )
-        return;
-    else
-        mpBorderWindow->ImplRevokeAccessibleNativeFrame();
 }
 
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
