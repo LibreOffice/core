@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:22:00 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2444,6 +2444,11 @@ TabPage PAGE_QUERYADMINISTRATION
                 MID_QUERY_DROP
                 ItemBitmap = Bitmap { File = "querydrop_sc.bmp"; };
             };
+            ToolBoxItem
+            {
+                MID_RENAME_ENTRY
+                ItemBitmap = Bitmap { File = "rename_sc.bmp"; };
+            };
         };
     };
     Control CTL_COLLECTION
@@ -3356,6 +3361,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.71  2001/09/06 20:22:00  kz
+ *  Merge SRC640: 06.09.01 - 22:22:04 (NoBranch)
+ *
  *  Revision 1.70  2001/08/28 08:21:37  fs
  *  #91573# STR_HINT_READONLY_CONNECTION / STR_HINT_CONNECTION_NOT_CAPABL
  *

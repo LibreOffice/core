@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 08:19:41 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,7 @@
 #define STR_COULDNOTCONNECT_DATASOURCE      RID_STRING_START + 188
 #define STR_HINT_READONLY_CONNECTION        RID_STRING_START + 189
 #define STR_HINT_CONNECTION_NOT_CAPABLE     RID_STRING_START + 190
+#define STR_OBJECT_ALREADY_EXISTS           RID_STRING_START + 191
 
 //========================================================================
 // untyped resources
@@ -465,6 +466,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.61  2001/08/28 08:19:41  fs
+ *  #91573# STR_HINT_READONLY_CONNECTION / STR_HINT_CONNECTION_NOT_CAPABL
+ *
  *  Revision 1.60  2001/08/16 10:37:03  fs
  *  #90573# +RID_MENU_REFRESH_DATA
  *

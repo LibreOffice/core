@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:04:40 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ Type OQueryContainer::getElementType(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 sal_Bool OQueryContainer::hasElements(void) throw( RuntimeException )
 {
-    return getCount() != 0;
+    return !m_aQueriesIndexed.empty();
 }
 
 // ::com::sun::star::container::XEnumerationAccess
@@ -613,7 +613,26 @@ void SAL_CALL OQueryContainer::removeContainerListener( const Reference< XContai
     if (_rxListener.is())
         m_aContainerListeners.removeInterface(_rxListener);
 }
+// -----------------------------------------------------------------------------
+// XPropertyChangeListener
+void SAL_CALL OQueryContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
+{
+    MutexGuard aGuard(m_rMutex);
 
+    ::rtl::OUString sNewName,sOldName;
+    evt.OldValue >>= sOldName;
+    evt.NewValue >>= sNewName;
+    // the index within my structures
+    sal_Int32 nMyIndex = implGetIndex(sOldName);
+    QueriesIterator aMapPos = m_aQueriesIndexed[ nMyIndex ];
+    OQuery* pQuery = aMapPos->second;
+    implRemove(nMyIndex);
+    pQuery->setWarningsContainer( m_pWarnings );
+    pQuery->setConfigurationNode(implGetObjectKey(sNewName,sal_True).cloneAsRoot());
+
+    // insert an own new element
+    m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sNewName, pQuery)).first);
+}
 //--------------------------------------------------------------------------
 void OQueryContainer::flush_NoBroadcast_NoCommit()
 {
@@ -670,6 +689,8 @@ OQuery* OQueryContainer::implCreateWrapper(const Reference< XPropertySet >& _rxC
     ::rtl::OUString sName;
     pNewObject->getPropertyValue(PROPERTY_NAME) >>= sName;
     pNewObject->loadFrom( implGetObjectKey( sName, sal_True ) );
+
+    pNewObject->addPropertyChangeListener(PROPERTY_NAME, this);
 
     return pNewObject;
 }

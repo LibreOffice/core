@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:18:32 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #include "browserids.hxx"
 #endif
 //  #include <sfx2/sfx.hrc>
+#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
+#endif
 
 #ifndef DBAUI_TOOLBOX_HXX
 #include "toolbox.hrc"
@@ -806,6 +808,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
         {
             Separator = TRUE;
         };
+        MenuItem { MID_RENAME_ENTRY     };
         MenuItem
         {
             MID_QUERY_DROP
@@ -881,6 +884,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Separator = TRUE;
         };
         MenuItem { MID_DROP_TABLE       };
+        MenuItem { MID_RENAME_ENTRY     };
         MenuItem
         {
             Identifier = ID_TREE_TABLE_COPY ;
@@ -980,7 +984,8 @@ Menu MENU_BROWSER_VIEWCONTEXT
         {
             Separator = TRUE;
         };
-        MenuItem { MID_DBAUI_DROP_VIEW };
+        MenuItem { MID_DBAUI_DROP_VIEW  };
+        MenuItem { MID_RENAME_ENTRY     };
         MenuItem
         {
             Identifier = ID_TREE_VIEW_COPY ;

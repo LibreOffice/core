@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@ namespace com { namespace sun { namespace star { namespace lang { class XMultiSe
 
 namespace dbaui
 {
+    struct DBTreeEditedEntry
+    {
+        SvLBoxEntry*    pEntry;
+        XubString       aNewText;
+    };
     //========================================================================
     //= DBTreeListModel
     //========================================================================

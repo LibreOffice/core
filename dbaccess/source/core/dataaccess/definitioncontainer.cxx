@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:58:20 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ void ODefinitionContainer::dispose()
         Reference< XComponent > xComp(aLoop->xObject, UNO_QUERY);
         if (xComp.is())
         {
-            xComp->removeEventListener(this);
+            xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
             xComp->dispose();
         }
     }
@@ -249,6 +249,24 @@ Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNa
 void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
+
+    implInsert(_rName,aElement);
+
+    // notify the listeners
+    if (m_aContainerListeners.getLength())
+    {
+        Reference< XPropertySet > xNewElement;
+        aElement >>= xNewElement;
+
+        ContainerEvent aEvent(*this, makeAny(_rName), makeAny(xNewElement), Any());
+        OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
+        while (aListenerIterator.hasMoreElements())
+            static_cast< XContainerListener* >(aListenerIterator.next())->elementInserted(aEvent);
+    }
+}
+// -----------------------------------------------------------------------------
+void ODefinitionContainer::implInsert(const ::rtl::OUString& _rName, const Any& aElement)
+{
     checkValid(sal_True);
 
     if (checkExistence(_rName))
@@ -286,17 +304,7 @@ void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName,
 
     pNewElement->inserted(static_cast<OWeakObject*>(this), _rName, aObjectNode.cloneAsRoot());
     xNewFlushable->flush();
-
-    // notify the listeners
-    if (m_aContainerListeners.getLength())
-    {
-        ContainerEvent aEvent(*this, makeAny(_rName), makeAny(xNewElement), Any());
-        OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
-        while (aListenerIterator.hasMoreElements())
-            static_cast< XContainerListener* >(aListenerIterator.next())->elementInserted(aEvent);
-    }
 }
-
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -513,7 +521,7 @@ Reference< XPropertySet > ODefinitionContainer::implGetByName(const ::rtl::OUStr
                 aSearch->xObject = aMapPos->second;
                 Reference< XComponent > xComp(aSearch->xObject, UNO_QUERY);
                 if (xComp.is())
-                    xComp->addEventListener(this);
+                    xComp->addEventListener(static_cast<XPropertyChangeListener*>(this));
                 break;
             }
         }
@@ -566,7 +574,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
             Reference< XComponent > xComp(aLoop->xObject, UNO_QUERY);
             DBG_ASSERT(xComp.is(), "ODefinitionContainer::disposing : a 'disposing' call from a non-XCompoent object ?");
             // stop all listening
-            xComp->removeEventListener(this);
+            xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
             // and clear our document map/vector, so the object will be recreated on next access
             aLoop->xObject.clear();
             m_aDocumentMap[aLoop->sName].clear();
@@ -646,7 +654,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
 
         Reference< XComponent > xComp(_rxNewObject, UNO_QUERY);
         if (xComp.is())
-            xComp->addEventListener(this);
+            xComp->addEventListener(static_cast<XPropertyChangeListener*>(this));
     }
     catch(Exception&)
     {
@@ -669,13 +677,13 @@ void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Refe
         {
             Reference< XComponent > xComp(aSearch->xObject, UNO_QUERY);
             if (xComp.is())
-                xComp->removeEventListener(this);
+                xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
 
             aSearch->xObject = _rxNewObject;
 
             xComp = Reference< XComponent >(_rxNewObject, UNO_QUERY);
             if (xComp.is())
-                xComp->addEventListener(this);
+                xComp->addEventListener(static_cast<XPropertyChangeListener*>(this));
 
             break;
         }
@@ -742,6 +750,47 @@ void SAL_CALL ODefinitionContainer::setParent( const Reference< XInterface >& Pa
 {
     throw NoSupportException();
 }
+// -----------------------------------------------------------------------------
+// XPropertyChangeListener
+void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
+{
+    MutexGuard aGuard(m_rMutex);
+    checkValid(sal_True);
+    if(evt.PropertyName == PROPERTY_NAME)
+    {
+        try
+        {
+            ::rtl::OUString sNewName,sOldName;
+            evt.OldValue >>= sOldName;
+            evt.NewValue >>= sNewName;
+            Reference< XComponent > xComp(evt.Source, UNO_QUERY);
+            if (xComp.is())
+                xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+            implRemove(sOldName);
+            implInsert(sNewName,makeAny(evt.Source));
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(0,"Exception catched!");
+            throw RuntimeException();
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+// XVetoableChangeListener
+void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& aEvent ) throw (PropertyVetoException, RuntimeException)
+{
+    MutexGuard aGuard(m_rMutex);
+    checkValid(sal_True);
+    if(aEvent.PropertyName == PROPERTY_NAME)
+    {
+        ::rtl::OUString sNewName;
+        aEvent.NewValue >>= sNewName;
+        if(hasByName(sNewName))
+            throw PropertyVetoException();
+    }
+}
+// -----------------------------------------------------------------------------
 
 //........................................................................
 }   // namespace dbaccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-24 14:03:49 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include "configurationflushable.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
@@ -82,7 +82,10 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _MAP_
+#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
+#include <com/sun/star/sdbcx/XRename.hpp>
+#endif
+#ifndef INCLUDED_MAP
 #include <map>
 #endif
 
@@ -95,8 +98,9 @@ namespace dbaccess
 //==========================================================================
 //= OQuery - an object implementing the sdb.Query service
 //==========================================================================
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                ::com::sun::star::beans::XPropertyChangeListener
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                                ::com::sun::star::beans::XPropertyChangeListener,
+                                ::com::sun::star::sdbcx::XRename
                             >   OQuery_Base;
 class OQuery;
 class OColumn;
@@ -200,6 +204,9 @@ public:
 // OQueryDescriptor
     void    storeTo( const ::utl::OConfigurationNode& _rConfigLocation );
     void    loadFrom( const ::utl::OConfigurationNode& _rConfigLocation );
+
+    // XRename
+    virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
 protected:
 // OConfigurationFlushable

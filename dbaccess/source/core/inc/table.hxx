@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:53:40 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,13 +159,13 @@ namespace dbaccess
             @param          _rType          the type of the table, as supplied by the driver
             @param          _rDesc          the description of the table, as supplied by the driver
         */
-        ODBTable(const ::utl::OConfigurationNode& _rTableConfig,
+        ODBTable(connectivity::sdbcx::OCollection* _pTables,const ::utl::OConfigurationNode& _rTableConfig,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
                 const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
                 const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)
             throw(::com::sun::star::sdbc::SQLException);
 
-        ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn)
+        ODBTable(connectivity::sdbcx::OCollection* _pTables,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn)
                 throw(::com::sun::star::sdbc::SQLException);
         virtual ~ODBTable();
 

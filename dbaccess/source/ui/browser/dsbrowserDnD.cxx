@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
+#include <com/sun/star/sdbcx/XRename.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -932,6 +935,117 @@ namespace dbaui
         return 0;
     }
     // -----------------------------------------------------------------------------
+    IMPL_LINK(SbaTableQueryBrowser, OnEditingEntry, SvLBoxEntry*, _pEntry)
+    {
+        EntryType eType = getEntryType(_pEntry);
+        long nRet = 0;
+        switch(eType)
+        {
+            case etQuery:
+            case etView:
+            case etTable:
+                try
+                {
+                    if(eType == etQuery || isConnectionWriteAble(_pEntry))
+                    {
+                        ensureObjectExists(_pEntry);
+                        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pEntry->GetUserData());
+                        if(pData && pData->xObject.is())
+                        {
+                            Reference<XRename> xRename(pData->xObject,UNO_QUERY);
+                            if(xRename.is())
+                            {
+                                ::rtl::OUString sName;
+                                Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
+                                xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
+                                m_pTreeView->getListBox()->SetEntryText(_pEntry,sName);
+                                nRet =  1;
+                            }
+                        }
+                    }
+                }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(0,"Exception catched!");
+                }
+                break;
+            default:
+                OSL_ENSURE(0,"Try to rename wrong entry!");
+        }
+        return nRet;
+    }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK(SbaTableQueryBrowser, OnEditedEntry, DBTreeEditedEntry*, _aEntry)
+    {
+        EntryType eType = getEntryType(_aEntry->pEntry);
+        ::rtl::OUString sOldName;
+        long nRet = 0;
+        try
+        {
+            switch(eType)
+            {
+                case etView:
+                case etTable:
+                case etQuery:
+                    if(etQuery == eType || isConnectionWriteAble(_aEntry->pEntry))
+                    {
+                        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_aEntry->pEntry->GetUserData());
+                        OSL_ENSURE(pData && pData->xObject.is(),"Error in editing!");
+                        if(pData && pData->xObject.is())
+                        {
+                            ::rtl::OUString sName,sSchema,sCatalog;
+                            ::rtl::OUString sNewName = _aEntry->aNewText;
+                            Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
+                            xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
+                            Reference<XConnection> xConnection = getConnectionFromEntry(_aEntry->pEntry);
+                            Reference<XDatabaseMetaData> xMeta = xConnection.is() ? xConnection->getMetaData() : Reference<XDatabaseMetaData>();
+                            if(etQuery == eType)
+                                sOldName = sName;
+                            else
+                                ::dbaui::composeTableName(xMeta,xProp,sOldName,sal_False);
+
+                            if((etQuery == eType || (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers())) ? sName != sNewName : !sNewName.equalsIgnoreAsciiCase(sName))
+                            {
+                                Reference<XRename> xRename(pData->xObject,UNO_QUERY);
+                                OSL_ENSURE(xRename.is(),"No Xrename interface!");
+                                if(xRename.is())
+                                {
+                                    xRename->rename(sNewName);
+                                     nRet = 1;
+                                    if(etQuery != eType)
+                                    {// special handling for tables and views
+                                         xProp->getPropertyValue(PROPERTY_SCHEMANAME)  >>= sSchema;
+                                        xProp->getPropertyValue(PROPERTY_CATALOGNAME) >>= sCatalog;
+                                        ::dbtools::composeTableName(xMeta,sCatalog,sSchema,sNewName,sName,sal_False);
+                                        sOldName = sName;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+        catch(const SQLException& e)
+        {
+            showError(SQLExceptionInfo(e));
+        }
+        catch(const ElementExistException& e)
+        {
+            static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("S1000");
+            String sMsg = String(ModuleRes(STR_OBJECT_ALREADY_EXISTS));
+            sMsg.SearchAndReplace('#',e.Message);
+            showError(SQLExceptionInfo(SQLException(sMsg, e.Context, sStatus, 0, Any())));
+        }
+        catch(const Exception& )
+        {
+            OSL_ENSURE(0,"Exception catched!");
+        }
+        _aEntry->aNewText = sOldName;
+
+        return nRet;
+    }
+    // -----------------------------------------------------------------------------
     IMPL_LINK(SbaTableQueryBrowser, OnDeleteEntry, SvLBoxEntry*, _pEntry)
     {
         EntryType eType = getEntryType(_pEntry);
@@ -944,22 +1058,7 @@ namespace dbaui
             case etTable:
                 {
                     // check if connection is readonly
-                    DBTreeListModel::DBTreeListUserData* pDSData = NULL;
-                    DBTreeListModel::DBTreeListUserData* pEntryData = NULL;
-                    SvLBoxEntry* pDSEntry = NULL;
-                    pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(_pEntry);
-                    pDSData =   pDSEntry
-                            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
-                            :   NULL;
-
-                    sal_Bool bIsConnectionWriteAble = sal_False;
-                    if(pDSData && pDSData->xObject.is())
-                    {
-                        Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
-                        if(xCon.is())
-                            bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
-                    }
-                    if(bIsConnectionWriteAble && (eType == etTable || eType == etView))
+                    if(isConnectionWriteAble(_pEntry))
                         implDropTable(_pEntry);
                 }
                 break;
@@ -1014,22 +1113,7 @@ namespace dbaui
             case etTableContainer:
                 {
                     // check if connection is readonly
-                    DBTreeListModel::DBTreeListUserData* pDSData = NULL;
-                    DBTreeListModel::DBTreeListUserData* pEntryData = NULL;
-                    SvLBoxEntry* pDSEntry = NULL;
-                    pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(_pEntry);
-                    pDSData =   pDSEntry
-                            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
-                            :   NULL;
-
-                    sal_Bool bIsConnectionWriteAble = sal_False;
-                    if(pDSData && pDSData->xObject.is())
-                    {
-                        Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
-                        if(xCon.is())
-                            bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
-                    }
-                    bAllowed = bIsConnectionWriteAble && ((eType == etTable || eType == etView || eType == etTableContainer) && isTableFormat());
+                    bAllowed = isConnectionWriteAble(_pEntry) && isTableFormat();
                 }
                 break;
         }
@@ -1071,6 +1155,32 @@ namespace dbaui
         }
     }
     // -----------------------------------------------------------------------------
+    Reference<XConnection> SbaTableQueryBrowser::getConnectionFromEntry(SvLBoxEntry* _pEntry) const
+    {
+        DBTreeListModel::DBTreeListUserData* pDSData = NULL;
+        DBTreeListModel::DBTreeListUserData* pEntryData = NULL;
+        SvLBoxEntry* pDSEntry = NULL;
+        pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(_pEntry);
+        pDSData =   pDSEntry
+                ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
+                :   NULL;
+
+        sal_Bool bIsConnectionWriteAble = sal_False;
+        Reference<XConnection> xCon;
+        if(pDSData && pDSData->xObject.is())
+            xCon = Reference<XConnection>(pDSData->xObject,UNO_QUERY);
+        return xCon;
+    }
+    // -----------------------------------------------------------------------------
+    sal_Bool SbaTableQueryBrowser::isConnectionWriteAble(SvLBoxEntry* _pEntry) const
+    {
+        // check if connection is readonly
+        sal_Bool bIsConnectionWriteAble = sal_False;
+        Reference<XConnection> xCon = getConnectionFromEntry(_pEntry);
+        if(xCon.is())
+            bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
+        return bIsConnectionWriteAble;
+    }
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
@@ -1078,6 +1188,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/09/20 12:56:17  oj
+ *  #92232# fixes for BIGINT type and new property HELPTEXT
+ *
  *  Revision 1.27  2001/08/27 06:57:24  oj
  *  #90015# some speedup's
  *

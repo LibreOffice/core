@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 11:33:57 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@ namespace dbaui
         Link    getPasteHandler() const;
         void    setDeleteHandler(const Link& _rHdl);
         Link    getDeleteHandler() const;
+        void    setEditingHandler(const Link& _rHdl);
+        Link    getEditingHandler() const;
+        void    setEditedHandler(const Link& _rHdl);
+        Link    getEditedHandler() const;
 
 
         DBTreeListModel*    getModel() const;

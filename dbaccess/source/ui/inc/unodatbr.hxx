@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:14:47 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ namespace dbaui
 
     class DBTreeView;
     class DBTreeListModel;
+    struct DBTreeEditedEntry;
     // =====================================================================
     typedef ::cppu::ImplHelper2 <   ::com::sun::star::frame::XStatusListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
@@ -332,6 +333,7 @@ namespace dbaui
         void    implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction );
         void    implRemoveQuery( SvLBoxEntry* _pApplyTo );
         void    implDropTable( SvLBoxEntry* _pApplyTo );
+        void    implRenameEntry( SvLBoxEntry* _pApplyTo );
         void    implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData );
         void    implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData );
 
@@ -359,6 +361,8 @@ namespace dbaui
         DECL_LINK( OnCopyEntry, SvLBoxEntry* );
         DECL_LINK( OnPasteEntry, SvLBoxEntry* );
         DECL_LINK( OnDeleteEntry, SvLBoxEntry* );
+        DECL_LINK( OnEditingEntry, SvLBoxEntry* );
+        DECL_LINK( OnEditedEntry, DBTreeEditedEntry* );
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
         DECL_LINK( OnAsyncDrop, void* );
@@ -450,6 +454,11 @@ namespace dbaui
         void cutEntry(SvLBoxEntry* _pEntry);
         void copyEntry(SvLBoxEntry* _pEntry);
         void pasteEntry(SvLBoxEntry* _pEntry);
+        // check if the connection where this entry belongs to is writeable
+        // Entry must be table or view type
+        sal_Bool isConnectionWriteAble(SvLBoxEntry* _pEntry) const;
+        void ensureObjectExists(SvLBoxEntry* _pApplyTo);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnectionFromEntry(SvLBoxEntry* _pEntry) const;
     };
 
 // .........................................................................

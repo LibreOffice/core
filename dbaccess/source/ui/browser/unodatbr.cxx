@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,8 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
         m_pTreeView->setPasteHandler(LINK(this, SbaTableQueryBrowser, OnPasteEntry));
         m_pTreeView->setDeleteHandler(LINK(this, SbaTableQueryBrowser, OnDeleteEntry));
+        m_pTreeView->setEditingHandler(LINK(this, SbaTableQueryBrowser, OnEditingEntry));
+        m_pTreeView->setEditedHandler(LINK(this, SbaTableQueryBrowser, OnEditedEntry));
 
         m_pTreeView->getListBox()->setControlActionListener(this);
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
@@ -3268,32 +3270,7 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
             if (pQueryTextItem)
                 sCurrentObject = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
 
-            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pApplyTo->GetUserData());
-            if(!pData->xObject.is())
-            {
-                // the query has not been accessed before -> create it's user data
-
-                Reference<XNameAccess> xNameAccess;
-                if(ID_EDIT_TABLE == _nAction)
-                {
-                    Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
-                    if(xSup.is())
-                        xNameAccess = xSup->getTables();
-                }
-                else
-                {
-                    Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
-                    if(xSup.is())
-                        xNameAccess = xSup->getQueries();
-                }
-
-                SvLBoxItem* pTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    sCurrentObject = static_cast<SvLBoxString*>(pTextItem)->GetText();
-
-                if(xNameAccess.is() && xNameAccess->hasByName(sCurrentObject))  // remember the table or query object
-                    xNameAccess->getByName(sCurrentObject) >>= pData->xObject;
-            }
+            ensureObjectExists(_pApplyTo);
         }
 
         ODesignAccess* pDispatcher = NULL;
@@ -3398,7 +3375,11 @@ void SbaTableQueryBrowser::implRemoveQuery( SvLBoxEntry* _pApplyTo )
         }
     }
 }
-
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implRenameEntry( SvLBoxEntry* _pApplyTo )
+{
+    m_pTreeView->getListBox()->EditEntry(_pApplyTo);
+}
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
 {
@@ -3589,6 +3570,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 // 1.3 actions on existing tables
                 aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType && bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_DROP_TABLE,      etTable == eType && bIsConnectionWriteAble);
+                aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_TREE_TABLE_COPY, etTable == eType);
                 // these have to be disabled if the connection is readonly
                 if(!bIsConnectionWriteAble)
@@ -3607,6 +3589,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
                 // 2.3 actions on existing tables
                 aContextMenu.EnableItem(ID_DROP_VIEW,       bIsConnectionWriteAble);
+                aContextMenu.EnableItem(ID_RENAME_ENTRY,    bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_TREE_VIEW_COPY,  sal_True);
 
                 // these have to be disabled if the connection is readonly
@@ -3629,6 +3612,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 aContextMenu.EnableItem(ID_EDIT_QUERY_DESIGN,   etQuery == eType);
                 aContextMenu.EnableItem(ID_DROP_QUERY,          etQuery == eType);
                 aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     etQuery == eType);
+                aContextMenu.EnableItem(ID_RENAME_ENTRY,        etQuery == eType);
             }
             break;
 
@@ -3707,6 +3691,9 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         case ID_DROP_TABLE:
         case ID_DROP_VIEW:
             implDropTable( pEntry );
+            break;
+        case ID_RENAME_ENTRY:
+            implRenameEntry(pEntry);
             break;
 
         case ID_TREE_QUERY_COPY:
@@ -3900,6 +3887,30 @@ sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand
     }
 
     return sal_False;
+}
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::ensureObjectExists(SvLBoxEntry* _pApplyTo)
+{
+    // get the name of the object
+    DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pApplyTo->GetUserData());
+    if(!pData->xObject.is())
+    {
+        // the object has not been accessed before -> create it's user data
+        SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox()->GetParent(_pApplyTo);
+        DBTreeListModel::DBTreeListUserData* pParentData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryParent->GetUserData());
+        if(pParentData && pParentData->xObject.is())
+        {
+            Reference<XNameAccess> xNameAccess(pParentData->xObject,UNO_QUERY);
+
+            ::rtl::OUString sCurrentObject;
+            SvLBoxItem* pTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+            if (pTextItem)
+                sCurrentObject = static_cast<SvLBoxString*>(pTextItem)->GetText();
+
+            if(xNameAccess.is() && xNameAccess->hasByName(sCurrentObject))  // remember the table or query object
+                xNameAccess->getByName(sCurrentObject) >>= pData->xObject;
+        }
+    }
 }
 
 // .........................................................................

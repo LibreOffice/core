@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:58:20 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,12 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -109,7 +112,7 @@ DBG_NAME(OCommandDefinition)
 //--------------------------------------------------------------------------
 void OCommandDefinition::registerProperties()
 {
-    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY,
+    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY|PropertyAttribute::CONSTRAINED,
                     &m_sElementName, ::getCppuType(&m_sElementName));
 
     registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND,
@@ -305,6 +308,26 @@ void OCommandDefinition::initializeFromConfiguration()
 
     OCommandBase::loadFrom( m_aConfigurationNode );
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+
+    try
+    {
+        sal_Int32 nHandle = PROPERTY_ID_NAME;
+        Any aOld = makeAny(m_sElementName);
+        Any aNew = makeAny(newName);
+        fire(&nHandle, &aNew, &aOld, 1, sal_True );
+        fire(&nHandle, &aNew, &aOld, 1, sal_False );
+    }
+    catch(const PropertyVetoException&)
+    {
+        throw ElementExistException(newName,*this);
+    }
+
+}
+// -----------------------------------------------------------------------------
 
 //........................................................................
 }   // namespace dbaccess

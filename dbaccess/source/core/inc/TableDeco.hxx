@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:53:40 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ namespace dbaccess
         sal_Int32                                                                       m_nPrivileges;
     // </properties>
         ::connectivity::sdbcx::OCollection*                                             m_pColumns;
+        ::connectivity::sdbcx::OCollection*                                             m_pTables;
 
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,14 +162,12 @@ ODBTableDecorator::ODBTableDecorator(
     m_nPrivileges = -1;
     osl_decrementInterlockedCount( &m_refCount );
 
-    // TODO : think about collecting the privileges here, as we can't ensure that in getFastPropertyValue, where
-    // we do this at the moment, the statement needed can be supplied by the connection (for example the SQL-Server
-    // ODBC driver does not allow more than one statement per connection, and in getFastPropertyValue it's more
-    // likely that it's already used up than it's here.)
 }
 // -----------------------------------------------------------------------------
-ODBTableDecorator::ODBTableDecorator(   const Reference< XDatabaseMetaData >& _rxMetaData,
-        const Reference< XColumnsSupplier >& _rxNewTable, const Reference< XNumberFormatsSupplier >& _rxNumberFormats ) throw(SQLException)
+ODBTableDecorator::ODBTableDecorator(
+                                     const Reference< XDatabaseMetaData >& _rxMetaData,
+        const Reference< XColumnsSupplier >& _rxNewTable,
+        const Reference< XNumberFormatsSupplier >& _rxNumberFormats ) throw(SQLException)
     :OTableDescriptor_BASE(m_aMutex)
     ,ODataSettings(OTableDescriptor_BASE::rBHelper)
     ,OConfigurationFlushable(m_aMutex)
@@ -216,6 +214,7 @@ void SAL_CALL ODBTableDecorator::disposing()
     MutexGuard aGuard(m_aMutex);
     m_xTable        = NULL;
     m_xMetaData     = NULL;
+    m_pTables       = NULL;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
@@ -450,7 +449,11 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
     if(xRename.is())
     {
+//      ::rtl::OUString sOldName;
+//      Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
+//      xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
         xRename->rename(_rNewName);
+        //  m_pTables->renameObject(_rNewName);
     }
     else // not supported
         throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());

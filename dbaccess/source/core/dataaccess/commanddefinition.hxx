@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:48:33 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include "apitools.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
+#include <com/sun/star/sdbcx/XRename.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -88,8 +91,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
@@ -107,9 +110,10 @@ namespace dbaccess
 //= OCommandDefinition - a database "document" which describes a query
 //=========================================================================
 
-typedef ::cppu::WeakImplHelper2<
+typedef ::cppu::WeakImplHelper3<
                     ::com::sun::star::lang::XUnoTunnel,
-                    ::com::sun::star::lang::XServiceInfo
+                    ::com::sun::star::lang::XServiceInfo,
+                    ::com::sun::star::sdbcx::XRename
                     > OCommandDefinition_Base;
 
 class OCommandDefinition    :public OCommandDefinition_Base
@@ -161,6 +165,9 @@ public:
     static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+
+    // XRename
+    virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

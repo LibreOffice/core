@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 10:45:27 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ OQuery::OQuery(const Reference< XPropertySet >& _rxCommandDefinition, const Refe
     if (m_xCommandDefinition.is())
     {
         m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);
+        //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
 
         // TODO : be a listener on the configuration node which is responsible for my properties not belonging
@@ -308,7 +309,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -419,6 +420,15 @@ OColumn* OQuery::createColumn(const ::rtl::OUString& _rName) const
 ::utl::OConfigurationNode OQuery::getObjectLocation() const
 {
     return m_aConfigurationNode;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    Reference<XRename> xRename(m_xCommandDefinition,UNO_QUERY);
+    OSL_ENSURE(xRename.is(),"No XRename interface!");
+    if(xRename.is())
+        xRename->rename(newName);
 }
 
 // -----------------------------------------------------------------------------

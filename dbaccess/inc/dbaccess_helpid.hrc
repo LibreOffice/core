@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:57:02 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,7 @@
 #define HID_QUERY_SQLMODE                           (HID_DBACCESS_START + 208)
 
 #define HID_BROWSER_REFRESH_REBUILDVIEW             (HID_DBACCESS_START + 209)
+#define HID_BROWSER_RENAME_ENTRY                    (HID_DBACCESS_START + 210)
 
 // don't forget to update the file util/hidother.src
 
@@ -312,6 +313,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2001/08/16 10:57:02  fs
+ *  #90573# +HID_BROWSER_REFRESH_REBUILDVIEW
+ *
  *  Revision 1.42  2001/08/06 11:58:31  oj
  *  #90563# new helpid for sql mode
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,8 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     try
     {
         xTables = xTablesSup->getTables();
-        OSL_ENSURE(xTables.is(),"The queries can't be null!");
+        OSL_ENSURE(xTables.is(),"The tables can't be null!");
+        bNew = bNew || (xTables.is() && !xTables->hasByName(m_sName));
 
         // first we need a name for our query so ask the user
         if(bNew)

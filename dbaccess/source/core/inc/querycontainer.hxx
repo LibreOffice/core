@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 13:13:37 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_CORE_QUERYCONTAINER_HXX_
 #define _DBA_CORE_QUERYCONTAINER_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
-#include <cppuhelper/implbase9.hxx>
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -114,6 +114,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#endif
 
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -130,7 +133,7 @@ namespace dbaccess
 {
 //........................................................................
 
-    typedef ::cppu::WeakImplHelper9< ::com::sun::star::container::XEnumerationAccess,
+    typedef ::cppu::WeakImplHelper10< ::com::sun::star::container::XEnumerationAccess,
                                      ::com::sun::star::container::XContainerListener,
                                      ::com::sun::star::container::XNameAccess,
                                      ::com::sun::star::container::XIndexAccess,
@@ -138,6 +141,7 @@ namespace dbaccess
                                      ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                      ::com::sun::star::sdbcx::XAppend,
                                      ::com::sun::star::sdbcx::XDrop,
+                                     ::com::sun::star::beans::XPropertyChangeListener,
                                      ::com::sun::star::lang::XServiceInfo > OQueryContainer_Base;
 
     //==========================================================================
@@ -266,6 +270,8 @@ namespace dbaccess
     // ::com::sun::star::sdbcx::XDrop
         virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    // XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
         // sets the new confignode at his children
         void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);

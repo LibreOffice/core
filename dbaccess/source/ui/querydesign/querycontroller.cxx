@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:43:18 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             }
 
         }
-        else
+        if(!m_pSqlIterator)
             setQueryComposer();
         if(!m_xFormatter.is() && haveDataSource())
         {
@@ -686,6 +686,9 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             }
             OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
+
+        OSL_ENSURE(m_pSqlIterator,"No SQLIterator set!");
+
         getContainer()->initialize();
         getUndoMgr()->Clear();
         if(m_bDesign && !m_sName.getLength())
@@ -1038,7 +1041,7 @@ String OQueryController::getMenu() const
 void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sal_Bool _bSaveAs)
 {
     sal_Bool bNew = 0 == m_sName.getLength();
-    bNew = bNew || _bSaveAs;
+    bNew = bNew || _bSaveAs || (_xElements.is() && !_xElements->hasByName(m_sName));
     if(bNew)
     {
         Reference<XDatabaseMetaData> xMetaData;
@@ -1072,6 +1075,8 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
                 m_sUpdateSchemaName = aDlg.getSchema();
             }
         }
+        else
+            m_sName = ::rtl::OUString(); // reset the name because we don't want to save it
     }
 }
 // -----------------------------------------------------------------------------
@@ -1095,7 +1100,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
             if(sTranslatedStmt.getLength())
             {
                 sal_Bool bNew = 0 == m_sName.getLength();
-                bNew = bNew || _bSaveAs;
+                bNew = bNew || _bSaveAs || !xElements->hasByName(m_sName);
                 // first we need a name for our query so ask the user
                 askForNewName(xElements,_bSaveAs);
 
@@ -1106,7 +1111,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     try
                     {
                         Reference<XPropertySet> xProp;
-                        if(bNew || !xElements->hasByName(m_sName)) // just to make sure the query already exists
+                        if(bNew) // just to make sure the query already exists
                         {
                             if(xElements->hasByName(m_sName))
                             {

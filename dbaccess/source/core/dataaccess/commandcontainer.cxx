@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:58:20 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -104,13 +107,19 @@ OCommandContainer::~OCommandContainer()
 //--------------------------------------------------------------------------
 Reference< XPropertySet > OCommandContainer::createObject()
 {
-    return new OCommandDefinition(OCommandDefinition::AccessControl());
+    Reference< XPropertySet > xProp = new OCommandDefinition(OCommandDefinition::AccessControl());
+    xProp->addPropertyChangeListener(PROPERTY_NAME, this);
+    xProp->addVetoableChangeListener(PROPERTY_NAME, this);
+    return xProp;
 }
 
 //--------------------------------------------------------------------------
 Reference< XPropertySet > OCommandContainer::createObject( const ::rtl::OUString& _rName,  const OConfigurationNode& _rObjectNode)
 {
-    return new OCommandDefinition(static_cast<OWeakObject*>(this), _rName, _rObjectNode.cloneAsRoot());
+    Reference< XPropertySet > xProp = new OCommandDefinition(static_cast<OWeakObject*>(this), _rName, _rObjectNode.cloneAsRoot());
+    xProp->addPropertyChangeListener(PROPERTY_NAME, this);
+    xProp->addVetoableChangeListener(PROPERTY_NAME, this);
+    return xProp;
 }
 
 //........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-06 12:40:39 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >
     m_pTreeListBox = new DBTreeListBox(this, _rxORB ,WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
-    m_pTreeListBox->EnableInplaceEditing( sal_False );
+    m_pTreeListBox->EnableInplaceEditing( sal_True );
     m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);
     m_pTreeListBox->Show();
 }
@@ -169,6 +169,26 @@ Link    DBTreeView::getDeleteHandler() const
     return m_pTreeListBox->getDeleteHandler();
 }
 // -----------------------------------------------------------------------------
+void    DBTreeView::setEditingHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->setEditingHandler(_rHdl);
+}
+// -----------------------------------------------------------------------------
+Link    DBTreeView::getEditingHandler() const
+{
+    return m_pTreeListBox->getEditingHandler();
+}
+// -----------------------------------------------------------------------------
+void    DBTreeView::setEditedHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->setEditedHandler(_rHdl);
+}
+// -----------------------------------------------------------------------------
+Link    DBTreeView::getEditedHandler() const
+{
+    return m_pTreeListBox->getEditedHandler();
+}
+// -----------------------------------------------------------------------------
 void DBTreeView::Resize()
 {
     Window::Resize();
@@ -204,7 +224,7 @@ void DBTreeView::setSelectHdl(const Link& _rHdl)
 long DBTreeView::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0L;
-    if(rNEvt.GetType() == EVENT_GETFOCUS && m_pTreeListBox)
+    if(rNEvt.GetType() == EVENT_GETFOCUS && m_pTreeListBox && !m_pTreeListBox->HasChildPathFocus())
     {
         m_pTreeListBox->GrabFocus();
         nDone = 1L;
