@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-13 09:05:02 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 09:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,10 @@ void SwTxtFrm::CalcLineSpace()
         pPage->InvalidateAutoCompleteWords(); \
     }
 
+#define SET_SCRIPT_INVAL( nPos )\
+    if( GetPara() )\
+        GetPara()->GetScriptInfo()->SetInvalidity( nPos );
+
 void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
 {
     if( nLen < 0 )
@@ -585,6 +589,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             nPos = ((SwInsChr*)pNew)->nPos;
             InvalidateRange( SwCharRange( nPos, 1 ), 1 );
             SET_WRONG( nPos, 1, Move )
+            SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = sal_True;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, 1 );
@@ -608,6 +613,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     _InvalidateRange( SwCharRange( nPos, nLen ), nLen );
             }
             SET_WRONG( nPos, nLen, Move )
+            SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = sal_True;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, nLen );
@@ -618,6 +624,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             nPos = ((SwDelChr*)pNew)->nPos;
             InvalidateRange( SwCharRange( nPos, 1 ), -1 );
             SET_WRONG( nPos, -1, Move )
+            SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = bRecalcFtnFlag = sal_True;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, -1 );
@@ -637,6 +644,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     InvalidateRange( SwCharRange( nPos, 1 ), m );
             }
             SET_WRONG( nPos, m, Move )
+            SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = bRecalcFtnFlag = sal_True;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, nLen );

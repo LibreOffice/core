@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:04:26 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 09:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_SHORTS
+#define _SVSTDARR_USHORTS
+#define _SVSTDARR_XUB_STRLEN
 #include <svtools/svstdarr.hxx>
 #endif
 #ifndef _STRING_HXX //autogen
@@ -71,6 +73,7 @@
 
 #include "swrect.hxx"   // SwRepaint
 #include "portxt.hxx"
+#include "swfont.hxx"
 
 class SwMarginPortion;
 class SwDropPortion;
@@ -126,6 +129,64 @@ public:
     SwTwips GetRightOfst() const { return nRightOfst; }
     void   SetRightOfst( const SwTwips nNew ) { nRightOfst = nNew; }
 };
+
+/*************************************************************************
+ *                      class SwScriptInfo
+ *
+ * encapsultes information about script changes
+ *************************************************************************/
+
+class SwScriptInfo
+{
+private:
+    SvXub_StrLens aScriptChg;
+    SvUShorts aScriptType;
+    xub_StrLen nInvalidityPos;
+
+    inline void InsertScriptChg( const xub_StrLen nChg, const USHORT nCnt );
+    inline void InsertScriptType( const USHORT nScript, const USHORT nCnt );
+
+public:
+    inline SwScriptInfo() : nInvalidityPos( 0 ) {};
+
+    // determines script changes
+    void InitScriptInfo( const String& rTxt );
+    // set/get position from which data is invalid
+    inline void SetInvalidity( const xub_StrLen nPos );
+    inline xub_StrLen GetInvalidity() { return nInvalidityPos; };
+
+    // array operations, nCnt refers to array position
+    inline USHORT CountScriptChg() const;
+    inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
+    inline USHORT GetScriptType( const USHORT nCnt ) const;
+
+    // "high" level operations, nPos refers to string position
+    xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
+    USHORT ScriptType( const xub_StrLen nPos ) const;
+};
+
+inline void SwScriptInfo::InsertScriptChg( const xub_StrLen nChg, const USHORT nCnt )
+{
+    aScriptChg.Insert( nChg, nCnt );
+}
+inline void SwScriptInfo::InsertScriptType( const USHORT nScript, const USHORT nCnt )
+{
+    aScriptType.Insert( nScript, nCnt );
+}
+inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
+{
+    if ( nPos < nInvalidityPos )
+        nInvalidityPos = nPos;
+};
+inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
+inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
+{
+    return aScriptChg[ nCnt ];
+}
+inline USHORT SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
+{
+    return aScriptType[ nCnt ];
+}
 
 /*************************************************************************
  *                      class SwLineLayout
@@ -245,6 +306,7 @@ class SwParaPortion : public SwLineLayout
     SwRepaint aRepaint;
     // neu zu formatierender Bereich
     SwCharRange aReformat;
+    SwScriptInfo aScriptInfo;
     long nDelta;
 
     // Wenn ein SwTxtFrm gelocked ist, werden keine Veraenderungen an den
@@ -269,7 +331,7 @@ class SwParaPortion : public SwLineLayout
     sal_Bool bFlag16    : 1; //
 
 public:
-            SwParaPortion();
+    SwParaPortion();
 
     // setzt alle Formatinformationen zurueck (ausser bFlys wg. 9916)
     inline void FormatReset();
@@ -284,7 +346,7 @@ public:
     inline const SwCharRange *GetReformat() const { return &aReformat; }
     inline long *GetDelta() { return &nDelta; }
     inline const long *GetDelta() const { return &nDelta; }
-
+    inline SwScriptInfo* GetScriptInfo() { return &aScriptInfo; }
     // fuer SwTxtFrm::Format: liefert die aktuelle Laenge des Absatzes
     xub_StrLen GetParLen() const;
 

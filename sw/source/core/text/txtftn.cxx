@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-06 15:23:10 $
+ *  last change: $Author: ama $ $Date: 2001-02-20 09:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,7 +976,8 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     SwTxtFtn* pTxtFtn = rFtn.GetTxtFtn();
     if( pTxtFtn )
     {
-        SwAttrIter aIter( (SwTxtNode&)pTxtFtn->GetTxtNode() );
+        SwScriptInfo aScriptInfo;
+        SwAttrIter aIter( (SwTxtNode&)pTxtFtn->GetTxtNode(), &aScriptInfo );
         aIter.Seek( *pTxtFtn->GetStart() );
         // Achtung: Wenn die Kriterien, nach denen der FtnReferenz-Font
         // auf den FtnNumerierungsfont wirkt, geaendert werden, muss die
