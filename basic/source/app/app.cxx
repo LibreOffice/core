@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-06 10:35:44 $
+ *  last change: $Author: gh $ $Date: 2001-03-13 15:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,7 +1001,7 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
 
 IMPL_LINK_INLINE_START( BasicFrame, DeInitMenu, Menu *, pMenu )
 {
-    pMenu->EnableItem( RID_RUNCOMPILE );
+/*  pMenu->EnableItem( RID_RUNCOMPILE );
 
     pMenu->EnableItem( RID_FILECLOSE );
     pMenu->EnableItem( RID_FILESAVE );
@@ -1014,7 +1014,7 @@ IMPL_LINK_INLINE_START( BasicFrame, DeInitMenu, Menu *, pMenu )
     pMenu->EnableItem( RID_RUNNEXTERR );
     pMenu->EnableItem( RID_RUNPREVERR );
     if( pWork ) pWork->DeInitMenu( pMenu );
-
+*/
 
     SetAutoRun( FALSE );
     String aString;
