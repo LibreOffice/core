@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:43:55 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 {
     WW8FormulaEditBox aFormula(*this);
 
-    if (0x01 == rStr.GetChar( pF->nLCode-1 ))
+    if (0x01 == rStr.GetChar(pF->nLCode-1))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
 
     /* #80205#
@@ -571,7 +571,10 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     if( !bLVLOkB )
         return false;
 
-    rSt.SeekRel( 1 );
+    sal_uInt8 ixchFollow;
+    rSt >> ixchFollow;
+    if (ixchFollow == 0)
+        rReader.maTracer.Log(sw::log::eTabInNumbering);
     rSt >> aLVL.nV6DxaSpace;
     rSt >> aLVL.nV6Indent;
     rSt >> aLVL.nLenGrpprlChpx;
@@ -627,7 +630,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
                         {
                             USHORT nDesired = aLVL.nDxaLeft + aLVL.nDxaLeft1;
 
-                               aLVL.nDxaLeft = (0 < nTabPos) ? (sal_uInt16)nTabPos
+                            aLVL.nDxaLeft = (0 < nTabPos) ? (sal_uInt16)nTabPos
                                 : (sal_uInt16)(-nTabPos);
 
                             aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
@@ -1454,9 +1457,6 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
                 RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
                     rStyleInfo.nListLevel, false);
             }
-
-            if (rStyleInfo.bHasStyNumRule && pTxtNode)
-                pTxtNode->SetNumLSpace(false);
         }
     }
     return bRes;
@@ -1464,30 +1464,26 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
 
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    rStyle.nLeftParaMgn = rFmt.GetAbsLSpace();
-    rStyle.nTxtFirstLineOfst = GetListFirstLineIndent(rFmt);
+    long nAbsLSpace = rFmt.GetAbsLSpace();
+    long nListFirstLineIndent = GetListFirstLineIndent(rFmt);
     SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
-    aLR.SetTxtLeft(rStyle.nLeftParaMgn);
-    aLR.SetTxtFirstLineOfst(rStyle.nTxtFirstLineOfst);
+    aLR.SetTxtLeft(nAbsLSpace);
+    aLR.SetTxtFirstLineOfst(nListFirstLineIndent);
     rStyle.pFmt->SetAttr(aLR);
     rStyle.bListReleventIndentSet = true;
 }
 
 void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
+    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
     if (rStyle.bListReleventIndentSet)
-    {
-        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
-        SyncStyleIndentWithList(aLR, rFmt);
-        rStyle.pFmt->SetAttr(aLR);
-    }
+        SyncIndentWithList(aLR, rFmt);
     else
     {
-        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
         aLR.SetTxtLeft(0);
         aLR.SetTxtFirstLineOfst(0);
-        rStyle.pFmt->SetAttr(aLR);
     }
+    rStyle.pFmt->SetAttr(aLR);
 }
 
 void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
@@ -1517,7 +1513,8 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
                 {
                     std::vector<sal_uInt8> aParaSprms;
                     SwNumRule *pNmRule =
-                        pLstManager->GetNumRuleForActivation(nActLFO,nActLevel, aParaSprms);
+                        pLstManager->GetNumRuleForActivation(nActLFO,
+                            nActLevel, aParaSprms);
                     if (pNmRule)
                         UseListIndent(rStyleInf, pNmRule->Get(nActLevel));
                 }
@@ -1526,12 +1523,15 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
     }
 }
 
-
 void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
 {
-    SwWW8StyInf &rStyleInf = pCollA[ nStyle ];
-    if (rStyleInf.bValid)
+    SwWW8StyInf &rStyleInf = pCollA[nStyle];
+    if (rStyleInf.bValid && rStyleInf.pFmt)
     {
+        //Save old pre-list modified indent, which are the word indent values
+        rStyleInf.maWordLR =
+            ItemGet<SvxLRSpaceItem>(*rStyleInf.pFmt, RES_LR_SPACE);
+
         // Phase 2: aktualisieren der StyleDef nach einlesen aller Listen
         SwNumRule* pNmRule = 0;
         sal_uInt16 nLFO = rStyleInf.nLFOIndex;
@@ -1585,10 +1585,15 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
             if (bSetAttr)
                 pTxtNode->SwCntntNode::SetAttr(SwNumRuleItem(pRule->GetName()));
-
-            pTxtNode->SetNumLSpace(bSetAttr);
-
             pTxtNode->UpdateNum(SwNodeNum(nActLevel));
+
+            SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
+                    RES_LR_SPACE);
+            const SvxLRSpaceItem *pItem = (const SvxLRSpaceItem*)(
+                GetFmtAttr(RES_LR_SPACE));
+            ASSERT(pItem, "impossible");
+            if (pItem)
+                aListIndent.Put(*pItem);
 
             /*
              Take the original paragraph sprms attached to this list level
@@ -1598,18 +1603,26 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             if (short nLen = aParaSprms.size())
             {
                 SfxItemSet* pOldAktItemSet = pAktItemSet;
-                sal_uInt8* pSprms1  = &aParaSprms[0];
-                SfxItemSet aListIndent(rDoc.GetAttrPool(),
-                    RES_LR_SPACE, RES_LR_SPACE);
                 SetAktItemSet(&aListIndent);
+
+                sal_uInt8* pSprms1  = &aParaSprms[0];
                 while (0 < nLen)
                 {
                     sal_uInt16 nL1 = ImportSprm(pSprms1);
                     nLen -= nL1;
                     pSprms1 += nL1;
                 }
+
                 SetAktItemSet(pOldAktItemSet);
-                pTxtNode->SwCntntNode::SetAttr(aListIndent);
+            }
+
+            const SvxLRSpaceItem *pLR =
+                HasItem<SvxLRSpaceItem>(aListIndent, RES_LR_SPACE);
+            ASSERT(pLR, "Impossible");
+            if (pLR)
+            {
+                pCtrlStck->NewAttr(*pPaM->GetPoint(), *pLR);
+                pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
             }
         }
     }
@@ -1717,7 +1730,10 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 }
                 if (pTxtNode->GetOutlineNum())
                     pTxtNode->UpdateOutlineNum(SwNodeNum(NO_NUM));
-                pTxtNode->SwCntntNode::SetAttr(SvxLRSpaceItem()); //#94672#
+
+                //#94672#
+                pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxLRSpaceItem());
+                pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
             }
             nLFOPosition = USHRT_MAX;
         }
@@ -1907,17 +1923,17 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                           : WW8Read_xstz(*pDataStream, 0, true);
 
     sFormatting = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
-                           : WW8Read_xstz(*pDataStream, 0, true);
+                         : WW8Read_xstz(*pDataStream, 0, true);
 
     sHelp = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
-                     : WW8Read_xstz(*pDataStream, 0, true);
+                   : WW8Read_xstz(*pDataStream, 0, true);
 
     if (nWhich == WW8_CT_DROPDOWN)      //is this the case ?
         fToolTip = true;
 
     if( fToolTip )
         sToolTip = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
-                               : WW8Read_xstz(*pDataStream, 0, true);
+                          : WW8Read_xstz(*pDataStream, 0, true);
 
     if (nWhich == WW8_CT_DROPDOWN)
     {
