@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:36:32 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,16 +831,13 @@ bool XclExpExtNameDde::InsertDde(
 {
     ScDocument& rDoc = rRoot.GetDoc();
     sal_uInt16 nPos;
-
-    bool bRet = (rDoc.FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos ) == TRUE);
+    bool bRet = rDoc.FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos );
     if( bRet )
     {
-        // try to find results, not necessary for success (return value of this function)
-        ScMatrix* pMatrix = NULL;
-        sal_uInt16 nCols, nRows;
-        if( rDoc.GetDdeLinkResultDimension( nPos, nCols, nRows, pMatrix ) && pMatrix )
+        // try to find results, but it is not necessary for success of this func (bRet remains true)
+        if( const ScMatrix* pScMatrix = rDoc.GetDdeLinkResultMatrix( nPos ) )
         {
-            mpMatrix.reset( new XclExpCachedMatrix( rDoc, nCols, nRows, pMatrix, true ) );
+            mpMatrix.reset( new XclExpCachedMatrix( *pScMatrix ) );
             SetRecSize( mnBaseSize + mpMatrix->GetSize() );
         }
         else
