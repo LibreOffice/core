@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-15 13:55:27 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,7 +1088,8 @@ SvStorage* SfxMedium::GetOutputStorage( BOOL bUCBStorage )
 
 SvStorage* SfxMedium::GetStorage()
 {
-    return GetStorage_Impl( FALSE );
+    BOOL bIsOwnFormat = ( pFilter && pFilter->IsOwnFormat() && pFilter->UsesStorage() );
+    return GetStorage_Impl( bIsOwnFormat && SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() );
 }
 
 SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
