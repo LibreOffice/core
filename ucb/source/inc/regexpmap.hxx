@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regexpmap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ template< typename Val > class RegexpMapIterImpl;
 template< typename Val >
 class RegexpMapConstIter
 {
-    friend RegexpMap< Val >; // to access m_pImpl, ctor
-    friend RegexpMapIter< Val >; // to access m_pImpl, ctor
+    friend class RegexpMap< Val >; // to access m_pImpl, ctor
+    friend class RegexpMapIter< Val >; // to access m_pImpl, ctor
 
 public:
     RegexpMapConstIter();
@@ -135,7 +135,7 @@ private:
 template< typename Val >
 class RegexpMapIter: public RegexpMapConstIter< Val >
 {
-    friend RegexpMap< Val >; // to access ctor
+    friend class RegexpMap< Val >; // to access ctor
 
 public:
     RegexpMapIter() {}
