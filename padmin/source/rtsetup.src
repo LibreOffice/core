@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:36:16 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 00:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ polish ] = "Dodatkowe ustawienia";
                 Text[ portuguese_brazilian ] = "Other settings";
                 Text[ japanese ] = "‚»‚Ì‘¼‚Ìİ’è";
-                Text[ korean ] = "±âÅ¸¡¡¼³Á¤";
+                Text[ korean ] = "±âÅ¸ ¼³Á¤";
                 Text[ chinese_simplified ] = "ÆäËüÉî¶È";
                 Text[ chinese_traditional ] = "¨ä¥L³]©w";
                 Text[ turkish ] = "Other settings";
@@ -269,7 +269,7 @@ TabDialog RID_RTS_RTSDIALOG
     Text[ polish ] = "W³aœciwoœci %s";
     Text[ portuguese_brazilian ] = "Properties of %s";
     Text[ japanese ] = "%s ‚Ì‘®«";
-    Text[ korean ] = "%sÀÇ¡¡¼³Á¤";
+    Text[ korean ] = "%sÀÇ µî·Ï Á¤º¸";
     Text[ chinese_simplified ] = "%s µÄÊôĞÔ";
     Text[ chinese_traditional ] = "%s ªºÄİ©Ê";
     Text[ turkish ] = "Properties of %s";
@@ -302,8 +302,8 @@ TabPage RID_RTS_PAPERPAGE
         Text[ portuguese_brazilian ] = "~Papersize";
         Text[ japanese ] = "—p†»²½Ş(~P)";
         Text[ korean ] = "¿ëÁö Æ÷¸Ë(~P)";
-        Text[ chinese_simplified ] = "Ö½ÕÅ´óĞ¡(~P)";
-        Text[ chinese_traditional ] = "¯È±i¤j¤p(~P)";
+        Text[ chinese_simplified ] = "Ö½ÕÅ¸ñÊ½(~P)";
+        Text[ chinese_traditional ] = "¯È±i®æ¦¡(~P)";
         Text[ turkish ] = "~Papersize";
         Text[ arabic ] = "ÍÌã ÇáæÑŞ";
         Text[ finnish ] = "~Paper size";
@@ -369,7 +369,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ polish ] = "~Dupleks";
         Text[ portuguese_brazilian ] = "~Duplex";
         Text[ japanese ] = "—¼–Êˆóü(~D)";
-        Text[ korean ] = "Áßº¹";
+        Text[ korean ] = "Áßº¹(~D)";
         Text[ chinese_simplified ] = "Ë«Ïò(~D)";
         Text[ chinese_traditional ] = "Âù¦V(~D)";
         Text[ turkish ] = "~Duplex";
@@ -403,7 +403,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ polish ] = "Zasobnik papieru";
         Text[ portuguese_brazilian ] = "~Input slot";
         Text[ japanese ] = "‹‹†—p–@(~I)";
-        Text[ korean ] = "¿ëÁö¡¡°ø±ŞÇÔ(~I)";
+        Text[ korean ] = "¿ëÁö °ø±ŞÇÔ(~I)";
         Text[ chinese_simplified ] = "Ö½ÕÅÀ´Ô´(~I)";
         Text[ chinese_traditional ] = "¯È±i¨Ó·½(~I)";
         Text[ turkish ] = "~Input slot";
@@ -503,7 +503,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ japanese ] = "¸ŞÚ°½¹°Ù";
         Text[ korean ] = "È¸»öµµ";
         Text[ chinese_simplified ] = "»Ò¶È";
-        Text[ chinese_traditional ] = "¦Ç«×";
+        Text[ chinese_traditional ] = "¦Ç¶¥";
         Text[ turkish ] = "Grayscale";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
         Text[ finnish ] = "Grayscale";
@@ -596,7 +596,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ polish ] = "Poziom PostScript";
         Text[ portuguese_brazilian ] = "PostScript ~Level";
         Text[ japanese ] = "PostScript ÚÍŞÙ(~L)";
-        Text[ korean ] = "Æ÷½ºÆ®½ºÅ©¸³Æ®¡¡¼öÁØl(~L)";
+        Text[ korean ] = "Æ÷½ºÆ®½ºÅ©¸³Æ® ¼öÁØ(~L)";
         Text[ chinese_simplified ] = "PostScript ¼¶(~L)";
         Text[ chinese_traditional ] = "PostScript ¯Å(~L)";
         Text[ turkish ] = "PostScript düzeyi";
@@ -662,7 +662,7 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ polish ] = "G³êbia koloru";
         Text[ portuguese_brazilian ] = "Color ~depth";
         Text[ japanese ] = "F‚Ì[‚İ(~D)";
-        Text[ korean ] = "»ö»ó¡¡±íÀÌ(~D)";
+        Text[ korean ] = "»ö»ó ±íÀÌ(~D)";
         Text[ chinese_simplified ] = "ÑÕÉ«Éî¶È(~D)";
         Text[ chinese_traditional ] = "ÃC¦â²`«×(~D)";
         Text[ turkish ] = "Color ~depth";
@@ -707,7 +707,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ polish ] = "Uaktywnij zamianê czcionek";
         Text[ portuguese_brazilian ] = "~Enable font substitution";
         Text[ japanese ] = "Ì«İÄ‚Ì’uŠ·‚ğµİ‚É‚·‚é(~E)";
-        Text[ korean ] = "±Û²Ã ´ëÃ¼ °¡´É";
+        Text[ korean ] = "±Û²Ã ´ëÃ¼ °¡´É(~E)";
         Text[ chinese_simplified ] = "Ê¹ÓÃ¸üÌæ×ÖÌå(~E)";
         Text[ chinese_traditional ] = "¨Ï¥Î¥N´À¦r«¬(~E)";
         Text[ turkish ] = "~Enable font substitution";
@@ -735,7 +735,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ polish ] = "Zamieñ czcionki";
         Text[ portuguese_brazilian ] = "Substituted ~fonts";
         Text[ japanese ] = "’uŠ·‚·‚éÌ«İÄ(~F)";
-        Text[ korean ] = "´ëÃ¼µÈ ±Û²Ã";
+        Text[ korean ] = "´ëÃ¼µÈ ±Û²Ã(~F)";
         Text[ chinese_simplified ] = "±»¸üÌæµÄ×ÖÌå(~F)";
         Text[ chinese_traditional ] = "­n¥N´Àªº¦r«¬(~F)";
         Text[ turkish ] = "Substituted ~fonts";
@@ -771,7 +771,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ polish ] = "Dodaj";
         Text[ portuguese_brazilian ] = "~Add";
         Text[ japanese ] = "’Ç‰Á(~A)";
-        Text[ korean ] = "Ãß°¡";
+        Text[ korean ] = "Ãß°¡(~A)";
         Text[ chinese_simplified ] = "¼ÓÈë(~A)";
         Text[ chinese_traditional ] = "¥[¤J(~A)";
         Text[ turkish ] = "~Add";
@@ -798,7 +798,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Remove";
         Text[ japanese ] = "íœ(~R)";
-        Text[ korean ] = "Á¦°Å";
+        Text[ korean ] = "Á¦°Å(~R)";
         Text[ chinese_simplified ] = "É¾³ı(~R)";
         Text[ chinese_traditional ] = "²¾°£(~R)";
         Text[ turkish ] = "~Remove";
@@ -817,7 +817,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ russian ] = "~Çàìåíèòü òèï øğèôòà";
         Text[ greek ] = "~Substitute font";
         Text[ dutch ] = "~Vervang lettertype";
-        Text[ french ] = "Substitution de p~olice";
+        Text[ french ] = "Substitution de la police";
         Text[ spanish ] = "~Sustituir fuente";
         Text[ italian ] = "Tipi di carattere sostituiti";
         Text[ danish ] = "~Substitute font";
@@ -827,7 +827,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ japanese ] = "Ì«İÄ‚ğ’uŠ·‚·‚é(~C)";
         Text[ korean ] = "´ëÃ¼µÈ ±Û²Ã(~C)";
         Text[ chinese_simplified ] = "¸üÌæ×ÖÌå(~C)";
-        Text[ chinese_traditional ] = "¥N´À¦r«¬";
+        Text[ chinese_traditional ] = "¥N´À¦r«¬(~C)";
         Text[ turkish ] = "~Substitute font";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÎØ";
         Text[ finnish ] = "Ersetze Sc~hriftart";
@@ -860,7 +860,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ polish ] = "na czcionkê drukarki";
         Text[ portuguese_brazilian ] = "by ~printer font";
         Text[ japanese ] = "ÌßØİÀ—p‚ÌÌ«İÄ‚É’uŠ·(~P)";
-        Text[ korean ] = "ÇÁ¸°ÅÍ ±Û²ÃÀ» ÅëÇØ";
+        Text[ korean ] = "ÇÁ¸°ÅÍ ±Û²ÃÀ» ÅëÇØ(~P)";
         Text[ chinese_simplified ] = "²ÉÓÃ´òÓ¡»ú×ÖÌå¡£(~P)";
         Text[ chinese_traditional ] = "¥N´À¨Ï¥Î¦C¦L¦r«¬(~P)";
         Text[ turkish ] = "by ~printer font";
@@ -1008,20 +1008,20 @@ TabPage RID_RTS_COMMANDPAGE
         Text [ english ] = "~Configure as";
         Text[ english_us ] = "~Configure as";
         Text[ portuguese ] = "~Configurar como";
-        Text[ russian ] = "Êîíôèãóğèğîâàòü êàê :";
+        Text[ russian ] = "Êîíôèãóğèğîâàòü êàê";
         Text[ greek ] = "Configure as : ";
         Text[ dutch ] = "~Configureren als";
-        Text[ french ] = "~Configurer comme :";
+        Text[ french ] = "Configurer comme";
         Text[ spanish ] = "Con~figurar como";
         Text[ italian ] = "Configura come :";
         Text[ danish ] = "Configure as : ";
         Text[ swedish ] = "~Konfigurera som";
         Text[ polish ] = "Konfiguruj jako";
         Text[ portuguese_brazilian ] = "Configure as : ";
-        Text[ japanese ] = "İ’è‘ÎÛ";
-        Text[ korean ] = "Configure as : ";
-        Text[ chinese_simplified ] = "ÅäÖÃ³É";
-        Text[ chinese_traditional ] = "°t¸m¦¨";
+        Text[ japanese ] = "İ’è‘ÎÛ(~C)";
+        Text[ korean ] = "·Î ÄÁÇÇ±Ô·¹ÀÌ¼Ç: (~C)";
+        Text[ chinese_simplified ] = "ÅäÖÃ³É(~C)";
+        Text[ chinese_traditional ] = "°t¸m¦¨(~C)";
         Text[ turkish ] = "Configure as : ";
         Text[ arabic ] = "Êßæíä ßÜ :";
         Text[ finnish ] = "Konfigurieren als :";
@@ -1048,9 +1048,9 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ polish ] = "Numer faksu zostanie usuniêty z wyjœcia";
         Text[ portuguese_brazilian ] = "~fax number will be removed from output";
         Text[ japanese ] = "~Fax ”Ô†‚ğ±³ÄÌß¯Ä‚©‚çíœ";
-        Text[ korean ] = "~fax number will be removed from output";
-        Text[ chinese_simplified ] = "²»´òÓ¡´«ÕæºÅÂë";
-        Text[ chinese_traditional ] = "¤£¦C¦L¶Ç¯u¸¹½X";
+        Text[ korean ] = "ÆÑ½º ¹øÈ£°¡ Ãâ·Â¿¡¼­ »èÁ¦µË´Ï´Ù(~F)";
+        Text[ chinese_simplified ] = "²»´òÓ¡´«ÕæºÅÂë(~F)";
+        Text[ chinese_traditional ] = "¤£¦C¦L¶Ç¯u¸¹½X(~F)";
         Text[ turkish ] = "~fax number will be removed from output";
         Text[ arabic ] = "~fax number will be removed from output";
         Text[ catalan ] = "~fax number will be removed from output";
@@ -1172,9 +1172,9 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ polish ] = "Pomoc";
         Text[ portuguese_brazilian ] = "~Help";
         Text[ japanese ] = "ÍÙÌß(~H)";
-        Text[ korean ] = "µµ¿ò¸»";
-        Text[ chinese_simplified ] = "°ïÖú";
-        Text[ chinese_traditional ] = "»¡©ú";
+        Text[ korean ] = "µµ¿ò¸»(~H)";
+        Text[ chinese_simplified ] = "°ïÖú(~H)";
+        Text[ chinese_traditional ] = "»¡©ú(~H)";
         Text[ turkish ] = "~Help";
         Text[ arabic ] = "ãÓÇÚÏÉ";
         Text[ finnish ] = "~Ohje";
@@ -1199,9 +1199,9 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Remove";
         Text[ japanese ] = "íœ(~R)";
-        Text[ korean ] = "Á¦°Å";
-        Text[ chinese_simplified ] = "É¾³ı";
-        Text[ chinese_traditional ] = "²¾°£";
+        Text[ korean ] = "Á¦°Å(~R)";
+        Text[ chinese_simplified ] = "É¾³ı(~R)";
+        Text[ chinese_traditional ] = "²¾°£(~R)";
         Text[ turkish ] = "~Remove";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ finnish ] = "~Poista";
@@ -1211,26 +1211,26 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Text = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
         Text [ English ] = "The command line for PDF converters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ english_us ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command ";
-        Text[ portuguese ] = "A linha de comando dos conversores PDF é executada da seguinte maneira: em todos os documentos impressos, o \"(TMP)\" é substituído por um ficheiro temporário e o \"(OUTFILE)\" pelo ficheiro a ser criado. Quando \"(TMP)\" aparece na linha de comando, o c";
-        Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ïğåîáğàçîâàòåëåé PDF îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: äëÿ êàæäîãî ïå÷àòàåìîãî äîêóìåíòà â êîìàíäíîé ñòğîêå \"(TMP)\" çàì";
-        Text[ greek ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScrip";
-        Text[ dutch ] = "De commandoregel voor PDF-converters wordt als volgt uitgevoerd: bij ieder afgedrukt document wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(OUTFILE)\" door het aan te leggen bestand. Als er \"(TMP)\" ";
-        Text[ french ] = "Traitement de la ligne de commande pour les convertisseurs PDF : pour chaque document imprimé, \"(TMP)\" est remplacé par un fichier temporaire et \"(OUTFILE)\" par le fichier PDF à générer. Si \"(TMP)\" apparaît dans la ligne de commande, le code PostS";
-        Text[ spanish ] = "La fila de comando en convertidores PDF se ejecutará de la siguiente forma: con cada documento que se imprima se sustituirá \"(TMP)\" en la línea de comandos por un archivo temporal y \"(OUTFILE)\" por el archivo PDF que se vaya a crear. Si \"(TMP)\" apare";
-        Text[ italian ] = "La riga di comando nei convertitori PDF viene modificata come segue: per ogni documento stampato viene sostituito rispettivamente il file \"(TMP)\" da un file temporaneo e \"(OUTFILE)\" da un un file PDF. Se \"(TMP)\" appare nella riga comandi, il codice Post";
-        Text[ danish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScrip";
-        Text[ swedish ] = "Kommandoraden för PDF-konverterare bearbetas på följande sätt: på varje utskrivet dokument ersätts \"(TMP)\" och \"(OUTFILE)\" i kommandoraden av en temporär fil resp. av PDF-filen som ska skapas. Om \"(TMP)\" förekommer i kommandoraden överförs Pos";
-        Text[ polish ] = "Wiersz poleceñ konwerterów PDF przetwarzany jest w nastêpuj¹cy sposób: Podczas drukowania dokumentu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(OUTFILE)\" na plik PDF, który ma byæ utworzony. Je¿eli wiersz poleceñ zawiera";
-        Text[ portuguese_brazilian ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScrip";
-        Text[ japanese ] = "PDF ºİÊŞ°À‚Å‚ÌºÏİÄŞs‚ÍŸ‚Ì‚æ‚¤‚ÉÀs‚³‚ê‚Ü‚·: ÄŞ·­ÒİÄ‚ğˆóü‚·‚é‚½‚Ñ‚ÉAºÏİÄŞs‚Å \"(TMP)\" ‚ÍˆêÌ§²Ù‚ÅA\"(OUTFILE)\" ‚Íì¬‚³‚ê‚é PDF Ì§²Ù‚É’uŠ·‚³‚ê‚";
-        Text[ korean ] = "PDF ÄÁ¹öÅÍÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ¹®¼­ ÀÎ¼â½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", »ı¼ºµÇ¾î¾ß ÇÏ´Â PDF ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(OUTFILE)\"·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostSc";
-        Text[ chinese_simplified ] = "PDF ×ª»»Æ÷µÄÃüÁî´¦Àí·½Ê½ÈçÏÂ£ºÁĞÓ¡Ã¿¸öÎÄµµÊ±Ö¸ÁîĞĞÖ®ÖĞ·Ö±ğÓÃÒ»¸öÔİÊ±ÎÄ¼şÀ´Ìæ´ú \"(TMP)\" ºÍÓÃÒ»¸öÄ¿±ê PDF ÎÄ¼şÃû³ÆÀ´Ìæ´ú \"(OUTFILE)\" ¡£Èç¹û \"(TMP)\" ÒÑ¾­´æÔÚÓÚÃüÁîĞĞÖ®ÖĞ£¬PostScript ´úÂë¾Í";
-        Text[ chinese_traditional ] = "PDF Âà´«¾¹ªº«ü¥O³B²z¤è¦¡¦p¤U¡G¦C¦L¨C­Ó¤å¥ó®É«ü¥O¦æ¤§¤¤¤À§O¥Î¤@­Ó¼È®ÉÀÉ®×¨Ó´À¥N \"(TMP)\" ©M¥Î¤@­Ó¥Ø¼Ğ PDF ÀÉ®×¦WºÙ¨Ó´À¥N \"(OUTFILE)\" ¡C¦pªG \"(TMP)\" ¤w¸g¦s¦b©ó«ü¥O¦æ¤§¤¤¡APostScript ¥N½X´N¡";
-        Text[ turkish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScrip";
-        Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ãÍæáÇÊ PDF ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ØÈÇÚÉ ãÓÊäÏ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" Èãáİ ãÄŞÊ æ \"(OUTFILE)\" Èãáİ PDF ÇáãÑÇÏ ÅäÔÇÄå. ÅĞÇ æÑ";
-        Text[ finnish ] = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandoz";
-        Text[ catalan ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScrip";
+        Text[ english_us ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
+        Text[ portuguese ] = "A linha de comando dos conversores PDF é executada da seguinte maneira: em todos os documentos impressos, o \"(TMP)\" é substituído por um ficheiro temporário e o \"(OUTFILE)\" pelo ficheiro a ser criado. Quando \"(TMP)\" aparece na linha de comando, o código PostScript é transmitido para um ficheiro; caso contrário é transmitido para a entrada padrão (na forma de pipe).";
+        Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ïğåîáğàçîâàòåëåé PDF îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: äëÿ êàæäîãî ïå÷àòàåìîãî äîêóìåíòà â êîìàíäíîé ñòğîêå \"(TMP)\" çàìåíÿåòñÿ âğåìåííûì ôàéëîì, à \"(OUTFILE)\" ôàéëîì PDF, êîòîğûé íåîáõîäèìî ñîçäàòü. Åñëè \"(TMP)\" óæå ñóùåñòâóåò â êîìàíäíîé ñòğîêå, òî êîä PostScript ïåğåäàåòñÿ â ôàéë, â ïğîòèâíîì ñëó÷àå ïîñğåäñòâîì ñòàíäàğòíîãî ââîäà (ò .å. êàê pipe).";
+        Text[ greek ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ dutch ] = "De commandoregel voor PDF-converters wordt als volgt uitgevoerd: bij ieder afgedrukt document wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(OUTFILE)\" door het aan te leggen bestand. Als er \"(TMP)\" staat in de commandoregel wordt de PostScript-code in een bestand opgeslagen, in het andere geval via de standaardinvoer (bijv. als Pipe) doorgegeven.";
+        Text[ french ] = "Traitement de la ligne de commande pour les convertisseurs PDF : pour chaque document imprimé, \"(TMP)\" est remplacé par un fichier temporaire et \"(OUTFILE)\" par le fichier PDF à générer. Si \"(TMP)\" apparaît dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrée par défaut (c'est-à-dire comme tube (pipe)).";
+        Text[ spanish ] = "La fila de comando en convertidores PDF se ejecutará de la siguiente forma: con cada documento que se imprima se sustituirá \"(TMP)\" en la línea de comandos por un archivo temporal y \"(OUTFILE)\" por el archivo PDF que se vaya a crear. Si \"(TMP)\" aparece en la línea de comando, el código PostScript se transferirá en un archivo, si no, a través de una entrada estándar, o sea, como pipe";
+        Text[ italian ] = "La riga di comando nei convertitori PDF viene modificata come segue: per ogni documento stampato viene sostituito rispettivamente il file \"(TMP)\" da un file temporaneo e \"(OUTFILE)\" da un un file PDF. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrà trasmesso a un file, altrimenti verrà trasemsso come immissione standard (cioè come pipe).";
+        Text[ danish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ swedish ] = "Kommandoraden för PDF-konverterare bearbetas på följande sätt: på varje utskrivet dokument ersätts \"(TMP)\" och \"(OUTFILE)\" i kommandoraden av en temporär fil resp. av PDF-filen som ska skapas. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
+        Text[ polish ] = "Wiersz poleceñ konwerterów PDF przetwarzany jest w nastêpuj¹cy sposób: Podczas drukowania dokumentu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(OUTFILE)\" na plik PDF, który ma byæ utworzony. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlne (tzn jako potok (pipe)).";
+        Text[ portuguese_brazilian ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ japanese ] = "PDF ºİÊŞ°À‚Å‚ÌºÏİÄŞs‚ÍŸ‚Ì‚æ‚¤‚ÉÀs‚³‚ê‚Ü‚·: ÄŞ·­ÒİÄ‚ğˆóü‚·‚é‚½‚Ñ‚ÉAºÏİÄŞs‚Å \"(TMP)\" ‚ÍˆêÌ§²Ù‚ÅA\"(OUTFILE)\" ‚Íì¬‚³‚ê‚é PDF Ì§²Ù‚É’uŠ·‚³‚ê‚Ü‚·BºÏİÄŞs‚É \"(TMP)\" ‚ª‚ ‚é‚ÆAPostScript º°ÄŞ‚ÍÌ§²Ù‚É“Ç‚İ‚Ü‚ê‚Ü‚·B‚»‚¤‚Å‚È‚¢ê‡‚ÍA•W€‰ñ˜H‚Ì“ü—ÍA‚Â‚Ü‚èÊß²Ìß×²İˆ—‚ªs‚í‚ê‚Ü‚·B";
+        Text[ korean ] = "PDF ÄÁ¹öÅÍÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ¹®¼­ ÀÎ¼â½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", »ı¼ºµÇ¾î¾ß ÇÏ´Â PDF ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(OUTFILE)\"·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostScript ÄÚµå°¡ ÆÄÀÏ¿¡ Á¦°øµÇ°í, ±× ¿ÜÀÇ °æ¿ì¿¡´Â ±âº» ÀÔ·ÂÀ» ÅëÇØ Á¦°øµË´Ï´Ù (ÆÄÀÌÇÁ·Î¼­).";
+        Text[ chinese_simplified ] = "PDF ×ª»»Æ÷µÄÃüÁî´¦Àí·½Ê½ÈçÏÂ£ºÁĞÓ¡Ã¿¸öÎÄµµÊ±Ö¸ÁîĞĞÖ®ÖĞ·Ö±ğÓÃÒ»¸öÔİÊ±ÎÄ¼şÀ´Ìæ´ú \"(TMP)\" ºÍÓÃÒ»¸öÄ¿±ê PDF ÎÄ¼şÃû³ÆÀ´Ìæ´ú \"(OUTFILE)\" ¡£Èç¹û \"(TMP)\" ÒÑ¾­´æÔÚÓÚÃüÁîĞĞÖ®ÖĞ£¬PostScript ´úÂë¾Í»áÊäÈë³ÉÒ»¸öÎÄ¼ş£¬·ñÔò¾Í»áµ±×÷±ê×¼ÊäÈë(µ±×÷pipe)¡£";
+        Text[ chinese_traditional ] = "PDF Âà´«¾¹ªº«ü¥O³B²z¤è¦¡¦p¤U¡G¦C¦L¨C­Ó¤å¥ó®É«ü¥O¦æ¤§¤¤¤À§O¥Î¤@­Ó¼È®ÉÀÉ®×¨Ó´À¥N \"(TMP)\" ©M¥Î¤@­Ó¥Ø¼Ğ PDF ÀÉ®×¦WºÙ¨Ó´À¥N \"(OUTFILE)\" ¡C¦pªG \"(TMP)\" ¤w¸g¦s¦b©ó«ü¥O¦æ¤§¤¤¡APostScript ¥N½X´N·|¿é¤J¦¨¤@­ÓÀÉ®×¡A§_«h·|·í§@¼Ğ·Ç¿é¤J(·í§@pipe)¡C";
+        Text[ turkish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ãÍæáÇÊ PDF ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ØÈÇÚÉ ãÓÊäÏ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" Èãáİ ãÄŞÊ æ \"(OUTFILE)\" Èãáİ PDF ÇáãÑÇÏ ÅäÔÇÄå. ÅĞÇ æÑÏÊ \"(TMP)\" İí ÓØÑ ÇáÃæÇãÑ¡ íÊã ÊãÑíÑ ÔíİÑÉ PostScript  İí ãáİ¡ İíãÇ ÚÏÇ Ğáß¡ íÊã ÊãÑíÑåÇ ßÅÏÎÇá ŞíÇÓí (åĞÇ íÚäí ßÜ Pipe).";
+        Text[ finnish ] = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe).";
+        Text[ catalan ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
     };
     String RID_RTS_CMD_STR_PRINTERHELP
     {
@@ -1238,7 +1238,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text [ English ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
         Text[ english_us ] = "The command line for printer devices is executed as follows: the generated PostScript code is supplied as standard input (i.e. as a pipe) to the command line.";
         Text[ portuguese ] = "A linha de comando para impressoras é executada da seguinte forma: o código PostScript gerado é transmitido à linha de comando como entrada padrão (como Pipe).";
-        Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ïğèíòåğîâ îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: ñîçäàííûé êîä PostScript ïåğåäàåòñÿ êîìàíäíîé ñòğîêå êàê ñòàíäàğòíûé âõîä  (";
+        Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ïğèíòåğîâ îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: ñîçäàííûé êîä PostScript ïåğåäàåòñÿ êîìàíäíîé ñòğîêå êàê ñòàíäàğòíûé âõîä  (ò.å. êàê Pipe).";
         Text[ greek ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
         Text[ dutch ] = "De commandoregel bij printers wordt als PostScript-code (standaardinvoer ofwel Pipe) verwerkt.";
         Text[ french ] = "Traitement de la ligne de commande pour les imprimantes : le code PostScript généré est transmis à la ligne de commande comme entrée par défaut (c'est-à-dire comme tube (pipe)).";
@@ -1261,26 +1261,26 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Text = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
         Text [ English ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ english_us ] = "The command line for fax devices is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScri";
-        Text[ portuguese ] = "A linha de comando para aparelhos de telefax é executada da seguinte forma: em todos os faxes enviados o \"(TMP)\" é substituído por um ficheiro temporário e \"(PHONE)\" pelo número de fax. Quando \"(TMP)\" aparece na linha de comando, o código PostScri";
-        Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ôàêñîâ îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: âî âğåìÿ ïåğåäà÷è êàæäîãî ôàêñà â êîìàíäíîé ñòğîêå \"(TMP)\" çàìåíÿåòñÿ âğåìåíí";
-        Text[ greek ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be deliv";
-        Text[ dutch ] = "De commandoregel voor fax wordt als volgt uitgevoerd: op iedere fax die wordt verzonden wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commando";
-        Text[ french ] = "Traitement de la ligne de commande pour les périphériques fax : pour chaque envoi de fax, \"(TMP)\" est remplacé par un fichier temporaire et \"(PHONE)\" par le numéro de fax. Si \"(TMP)\" apparaît dans la ligne de commande, le code PostScript est transm";
-        Text[ spanish ] = "La línea de comando en dispositivos de fax se ejecutará de esta forma: Para cada fax enviado se sustituirá en la fila de comando \"(TMP)\" por un archivo temporal y \"(PHONE)\" por un número de fax. Si \"(TMP)\" aparece en la fila de comando se transmitir";
-        Text[ italian ] = "La riga comandi degli apparecchi fax verrà impostata come segue: per ogni fax inviato ogni \"(TMP)\" della riga comandi verrà sostituito da un file temporaneo e \"(PHONE)\" sarà sostituito dal numero di fax. Se \"(TMP)\" appare nella riga comandi, il codic";
-        Text[ danish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be deliv";
-        Text[ swedish ] = "Kommandoraden för faxar bearbetas på följande sätt: för varje fax som skickas ersätts \"(TMP)\" och \"(PHONE)\" med en temporär fil resp. av faxnumret. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via stan";
-        Text[ polish ] = "Wiersz poleceñ w faksach przetwarzany jest w nastêpuj¹cy sposób: Podczas wysy³ania faksu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany z";
-        Text[ portuguese_brazilian ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be deliv";
-        Text[ japanese ] = "Fax ‹@‚ÌºÏİÄŞs‚ÍŸ‚Ì‚æ‚¤‚ÉÀs‚³‚ê‚Ü‚·:  Fax ‘—M‚·‚é‚½‚Ñ‚ÉAºÏİÄŞs‚Ì \"(TMP)\" ‚ÍˆêÌ§²Ù‚ÅA\"(PHONE)\" ‚ÍÌ§¯¸½”Ô†‚Å’uŠ·‚³‚ê‚Ü‚·B\"(TMP)\" ‚ªºÏİÄŞs‚É‚ ‚é‚Æ";
-        Text[ korean ] = "ÆÑ½º ±â±âÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ÆÑ½º ¼Û½Å½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", ÆÑ½º ¹øÈ£¿¡ ÀÇÇØ¼­´Â \"(PHONE)\"À¸·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostScript ÄÚµå°¡ ÀÓ";
-        Text[ chinese_simplified ] = "´«Õæ»úµ¥ÏîÃüÁîµÄ´¦Àí·½Ê½ÈçÏÂ£º¼Ä·¢´«ÕæÊ±Í¨¹ıÃüÁîÊäÈëĞĞÓÃÒ»¸öÔİÊ±ÎÄ¼şÌæ´ú\"(TMP)\" £¬ÓÃ´«ÕæºÅÂëÌæ´ú \"(PHONE)\" ¡£Èç¹ûÃüÁîĞĞº¬ÓĞ \"(TMP)\" £¬PostScript Ô´´úÂë¾Í»á×ª»»³ÉÒ»¸öÎÄ¼ş£¬·ñÔò¾Í»áµ±";
-        Text[ chinese_traditional ] = "¶Ç¯uÉó³æ¶µ«ü¥Oªº³B²z¤è¦¡¦p¤U¡G±Hµo¶Ç¯u®É³q¹L«ü¥O¦æ¥Î¤@­Ó¼È®ÉÀÉ®×´À¥N\"(TMP)\" ¡A¥Î¶Ç¯u¸¹½X´À¥N \"(PHONE)\" ¡C¦pªG«ü¥O¦æ§t¦³ \"(TMP)\" ¡APostScript ·½¥N½X´N·|Âà´«¦¨¤@­ÓÀÉ®×¡A§_«h´N·|·í§@¼Ğ¡";
-        Text[ turkish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be deliv";
-        Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ÃÌåÒÉ ÇáİÇßÓ ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ÅÑÓÇá ÑÓÇáÉ İÇßÓ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" Èãáİ ãÄŞÊ æ \"(PHONE)\" ÈÑŞã ÇáİÇßÓ. ÅĞÇ æÑÏÊ";
-        Text[ finnish ] = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der P";
-        Text[ catalan ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be deliv";
+        Text[ english_us ] = "The command line for fax devices is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
+        Text[ portuguese ] = "A linha de comando para aparelhos de telefax é executada da seguinte forma: em todos os faxes enviados o \"(TMP)\" é substituído por um ficheiro temporário e \"(PHONE)\" pelo número de fax. Quando \"(TMP)\" aparece na linha de comando, o código PostScript é transmitido para um ficheiro, caso contrário para a entrada padrão (como Pipe).";
+        Text[ russian ] = "Êîìàíäíàÿ ñòğîêà äëÿ ôàêñîâ îáğàáàòûâàåòñÿ ñëåäóşùèì îáğàçîì: âî âğåìÿ ïåğåäà÷è êàæäîãî ôàêñà â êîìàíäíîé ñòğîêå \"(TMP)\" çàìåíÿåòñÿ âğåìåííûì ôàéëîì, à \"(PHONE)\" - íîìåğîì ôàêñà. Åñëè \"(TMP)\" óæå ñóùåñòâóåò â êîìàíäíîé ñòğîêå, òî êîä PostScript ïåğåäàåòñÿ â ôàéëå, â ïğîòèâíîì ñëó÷àå ïîñğåäñòâîì ñòàíäàğòíîãî ââîäà (ò. å. êàê  pipe).";
+        Text[ greek ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ dutch ] = "De commandoregel voor fax wordt als volgt uitgevoerd: op iedere fax die wordt verzonden wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commandoregel dan wordt de PostScript-code opgenomen in een bestand, zo niet dan als standaardinvoer (d.w.z. als Pipe) behandeld.";
+        Text[ french ] = "Traitement de la ligne de commande pour les périphériques fax : pour chaque envoi de fax, \"(TMP)\" est remplacé par un fichier temporaire et \"(PHONE)\" par le numéro de fax. Si \"(TMP)\" apparaît dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrée par défaut (c'est-à-dire comme tube (pipe)).";
+        Text[ spanish ] = "La línea de comando en dispositivos de fax se ejecutará de esta forma: Para cada fax enviado se sustituirá en la fila de comando \"(TMP)\" por un archivo temporal y \"(PHONE)\" por un número de fax. Si \"(TMP)\" aparece en la fila de comando se transmitirá el código PostScript a un archivo; en caso contrario se hará mediante entrada estándar (es decir, como pipe).";
+        Text[ italian ] = "La riga comandi degli apparecchi fax verrà impostata come segue: per ogni fax inviato ogni \"(TMP)\" della riga comandi verrà sostituito da un file temporaneo e \"(PHONE)\" sarà sostituito dal numero di fax. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrà trasmesso a un file, altrimenti verrà trasemsso come immissione standard (cioè come pipe).";
+        Text[ danish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ swedish ] = "Kommandoraden för faxar bearbetas på följande sätt: för varje fax som skickas ersätts \"(TMP)\" och \"(PHONE)\" med en temporär fil resp. av faxnumret. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
+        Text[ polish ] = "Wiersz poleceñ w faksach przetwarzany jest w nastêpuj¹cy sposób: Podczas wysy³ania faksu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlnie (tzn jako potok (pipe)).";
+        Text[ portuguese_brazilian ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ japanese ] = "Fax ‹@‚ÌºÏİÄŞs‚ÍŸ‚Ì‚æ‚¤‚ÉÀs‚³‚ê‚Ü‚·:  Fax ‘—M‚·‚é‚½‚Ñ‚ÉAºÏİÄŞs‚Ì \"(TMP)\" ‚ÍˆêÌ§²Ù‚ÅA\"(PHONE)\" ‚ÍÌ§¯¸½”Ô†‚Å’uŠ·‚³‚ê‚Ü‚·B\"(TMP)\" ‚ªºÏİÄŞs‚É‚ ‚é‚ÆAPostScript º°ÄŞ‚ÍÌ§²Ù‚É“Ç‚İ‚Ü‚ê‚Ü‚·B‚»‚¤‚Å‚È‚¯‚ê‚Î•W€‰ñ˜H‚Ì“ü—ÍA‚Â‚Ü‚èÊß²Ìß×²İˆ—‚ªs‚í‚ê‚Ü‚·B";
+        Text[ korean ] = "ÆÑ½º ±â±âÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ÆÑ½º ¼Û½Å½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", ÆÑ½º ¹øÈ£¿¡ ÀÇÇØ¼­´Â \"(PHONE)\"À¸·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostScript ÄÚµå°¡ ÆÄÀÏ¿¡ Á¦°øµÇ°í, ±× ¿ÜÀÇ °æ¿ì¿¡´Â ±âº» ÀÔ·ÂÀ» ÅëÇØ Á¦°øµË´Ï´Ù (ÆÄÀÌÇÁ·Î¼­).";
+        Text[ chinese_simplified ] = "´«Õæ»úµ¥ÏîÃüÁîµÄ´¦Àí·½Ê½ÈçÏÂ£º¼Ä·¢´«ÕæÊ±Í¨¹ıÃüÁîÊäÈëĞĞÓÃÒ»¸öÔİÊ±ÎÄ¼şÌæ´ú\"(TMP)\" £¬ÓÃ´«ÕæºÅÂëÌæ´ú \"(PHONE)\" ¡£Èç¹ûÃüÁîĞĞº¬ÓĞ \"(TMP)\" £¬PostScript Ô´´úÂë¾Í»á×ª»»³ÉÒ»¸öÎÄ¼ş£¬·ñÔò¾Í»áµ±×÷±ê×¼ÊäÈë(µ±×÷pipe)¡£";
+        Text[ chinese_traditional ] = "¶Ç¯uÉó³æ¶µ«ü¥Oªº³B²z¤è¦¡¦p¤U¡G±Hµo¶Ç¯u®É³q¹L«ü¥O¦æ¥Î¤@­Ó¼È®ÉÀÉ®×´À¥N\"(TMP)\" ¡A¥Î¶Ç¯u¸¹½X´À¥N \"(PHONE)\" ¡C¦pªG«ü¥O¦æ§t¦³ \"(TMP)\" ¡APostScript ·½¥N½X´N·|Âà´«¦¨¤@­ÓÀÉ®×¡A§_«h´N·|·í§@¼Ğ­ã¿é¤J(·í§@pipe)¡C";
+        Text[ turkish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ÃÌåÒÉ ÇáİÇßÓ ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ÅÑÓÇá ÑÓÇáÉ İÇßÓ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" Èãáİ ãÄŞÊ æ \"(PHONE)\" ÈÑŞã ÇáİÇßÓ. ÅĞÇ æÑÏÊ \"(TMP)\" İí ÓØÑ ÇáÃæÇãÑ¡ íÊã ÊãÑíÑ ÔíİÑÉPostScript  İí ãáİ¡ İíãÇ ÚÏÇ Ğáß¡ íÊã ÊãÑíÑåÇ ßÅÏÎÇá ŞíÇÓí (åĞÇ íÚäí ßÜ Pipe).";
+        Text[ finnish ] = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe).";
+        Text[ catalan ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
     };
 };
 
@@ -1297,10 +1297,10 @@ TabPage RID_RTS_OTHERPAGE
         Text [ English ] = "~Left margin adjustment" ;
         Text[ english_us ] = "~Left margin adjustment";
         Text[ portuguese ] = "~Ajuste da margem esquerda";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñëåâà :";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñëåâà";
         Text[ greek ] = "Äéüñèùóç áñéóôåñïı ğåñéèùñßïõ :";
         Text[ dutch ] = "~Linker marge corrigeren";
-        Text[ french ] = "Correction de la marge ~gauche :";
+        Text[ french ] = "Correction de la marge gauche";
         Text[ spanish ] = "~Corrección del margen izquierdo";
         Text[ italian ] = "Correggi margine ~sinistro:";
         Text[ danish ] = "~Left margin adjustment :";
@@ -1308,7 +1308,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyrównanie lewego marginesu";
         Text[ portuguese_brazilian ] = "~Left margin adjustment :";
         Text[ japanese ] = "¶—]”’‚Ì’²®(~L)";
-        Text[ korean ] = "¿ŞÂÊ¡¡¿©¹é¡¡Á¶Á¤(~L)";
+        Text[ korean ] = "¿ŞÂÊ ¿©¹é Á¶Á¤(~L)";
         Text[ chinese_simplified ] = "µ÷Õû×ó±ß¾à(~L)";
         Text[ chinese_traditional ] = "½Õ¾ã¥ªÃä¶Z(~L)";
         Text[ turkish ] = "~Left margin adjustment :";
@@ -1335,10 +1335,10 @@ TabPage RID_RTS_OTHERPAGE
         Text [ English ] = "~Top margin adjustment" ;
         Text[ english_us ] = "~Top margin adjustment";
         Text[ portuguese ] = "Aju~ste da margem superior";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñâåğõó :";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñâåğõó";
         Text[ greek ] = "Äéüñèùóç ğÜíù ğåñéèùñß~ïõ :";
         Text[ dutch ] = "~Marge boven corrigeren";
-        Text[ french ] = "Correction de la marge ~supérieure :";
+        Text[ french ] = "Correction de la marge supérieure";
         Text[ spanish ] = "~Corrección del margen superior";
         Text[ italian ] = "Correggi margine s~uperiore:";
         Text[ danish ] = "~Top margin adjustment :";
@@ -1346,7 +1346,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyrównanie górnego marginesu";
         Text[ portuguese_brazilian ] = "~Top margin adjustment :";
         Text[ japanese ] = "ã—]”’‚Ì’²®(~T)";
-        Text[ korean ] = "À§¡¡¿©¹é¡¡Á¶Á¤(~T):";
+        Text[ korean ] = "À§ ¿©¹é Á¶Á¤(~T):";
         Text[ chinese_simplified ] = "µ÷ÕûÉÏ±ß¾à(~T)";
         Text[ chinese_traditional ] = "½Õ¾ã¤WÃä¶Z(~T)";
         Text[ turkish ] = "~Top margin adjustment :";
@@ -1373,10 +1373,10 @@ TabPage RID_RTS_OTHERPAGE
         Text [ English ] = "~Right margin adjustment" ;
         Text[ english_us ] = "~Right margin adjustment";
         Text[ portuguese ] = "Ajuste ~da margem direita";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñïğàâà :";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñïğàâà";
         Text[ greek ] = "Äéüñèùóç äåîéïı ğå~ñéèùñßïõ :";
         Text[ dutch ] = "~Rechter marge corrigeren";
-        Text[ french ] = "Correction de la marge ~droite :";
+        Text[ french ] = "Correction de la marge droite";
         Text[ spanish ] = "~Corrección del margen derecho";
         Text[ italian ] = "Correzione margine ~destro:";
         Text[ danish ] = "~Right margin adjustment :";
@@ -1384,7 +1384,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyrównanie prawego marginesu";
         Text[ portuguese_brazilian ] = "~Right margin adjustment :";
         Text[ japanese ] = "‰E—]”’‚Ì’²®(~R)";
-        Text[ korean ] = "~¿À¸¥ÂÊ¡¡¿©¹é¡¡Á¶Á¤:";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é Á¶Á¤(~R):";
         Text[ chinese_simplified ] = "µ÷ÕûÓÒ±ß¾à(~R)";
         Text[ chinese_traditional ] = "½Õ¾ã¥kÃä¶Z(~R)";
         Text[ turkish ] = "~Right margin adjustment :";
@@ -1411,10 +1411,10 @@ TabPage RID_RTS_OTHERPAGE
         Text [ English ] = "~Bottom margin adjustment" ;
         Text[ english_us ] = "~Bottom margin adjustment";
         Text[ portuguese ] = "Ajuste da margem ~inferior";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñíèçó :";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñíèçó";
         Text[ greek ] = "Äéüñèùóç êÜôù ğåñéèùñßï~õ :";
         Text[ dutch ] = "M~arge beneden corrigeren";
-        Text[ french ] = "Correction de la marge ~inférieure :";
+        Text[ french ] = "Correction de la marge inférieure";
         Text[ spanish ] = "~Corrección del margen inferior";
         Text[ italian ] = "Correggi margine ~inferiore:";
         Text[ danish ] = "~Bottom margin adjustment :";
@@ -1422,7 +1422,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Wyrównanie dolnego marginesu";
         Text[ portuguese_brazilian ] = "~Bottom margin adjustment :";
         Text[ japanese ] = "‰º—]”’‚Ì’²®(~B)";
-        Text[ korean ] = "¾Æ·¡¡¡¿©¹é¡¡Á¶Á¤ (~B):";
+        Text[ korean ] = "¾Æ·¡ ¿©¹é Á¶Á¤ (~B):";
         Text[ chinese_simplified ] = "µ÷ÕûÏÂ±ß¾à(~B)";
         Text[ chinese_traditional ] = "½Õ¾ã¤pÃä¶Z(~B)";
         Text[ turkish ] = "~Bottom margin adjustment :";
@@ -1449,10 +1449,10 @@ TabPage RID_RTS_OTHERPAGE
         Text [ English ] = "~Comment" ;
         Text[ english_us ] = "~Comment";
         Text[ portuguese ] = "~Comentário";
-        Text[ russian ] = "~Êîììåíòàğèé :";
+        Text[ russian ] = "~Êîììåíòàğèé";
         Text[ greek ] = "ĞáñáôŞñçóç :";
         Text[ dutch ] = "~Commentaar";
-        Text[ french ] = "Co~mmentaire :";
+        Text[ french ] = "Commentaire";
         Text[ spanish ] = "~Comentario";
         Text[ italian ] = "Co~mmento:";
         Text[ danish ] = "~Comment :";
@@ -1462,7 +1462,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ japanese ] = "ºÒİÄ(~C)";
         Text[ korean ] = "ÁÖ¼® (~C):";
         Text[ chinese_simplified ] = "±¸×¢(~C)";
-        Text[ chinese_traditional ] = "³Æª`";
+        Text[ chinese_traditional ] = "³Æª`(~C)";
         Text[ turkish ] = "~Comment :";
         Text[ arabic ] = "ÇáÊÚáíŞ :";
         Text[ finnish ] = "~Comment :";
@@ -1482,10 +1482,10 @@ TabPage RID_RTS_OTHERPAGE
         Text [ English ] = "~Standard";
         Text[ english_us ] = "~Default";
         Text[ portuguese ] = "~Padrão";
-        Text[ russian ] = "~Ñòàíäàğòíûå çíà÷åíèÿ";
+        Text[ russian ] = "~Ñòàíäàğò";
         Text[ greek ] = "Ôéìİ~ò ğñïåğéëïãŞò";
         Text[ dutch ] = "~Standaard";
-        Text[ french ] = "~Valeurs par défaut";
+        Text[ french ] = "Par défaut";
         Text[ spanish ] = "~Estándar";
         Text[ finnish ] = "~Default Values";
         Text[ italian ] = "Standard";
@@ -1494,9 +1494,9 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Standard";
         Text[ portuguese_brazilian ] = "~Default values";
         Text[ japanese ] = "•W€(~D)";
-        Text[ korean ] = "~±âº»°ª";
+        Text[ korean ] = "±âº»°ª(~D)";
         Text[ chinese_simplified ] = "Ä¬ÈÏÖµ(~D)";
-        Text[ chinese_traditional ] = "¼Ğ·Ç";
+        Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
         Text[ turkish ] = "~Default values";
         Text[ arabic ] = "Şíã ÇİÊÑÇÖíÉ";
         Text[ catalan ] = "~Valores estándar";
@@ -1520,7 +1520,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ polish ] = "Nale¿y podaæ numer faksu.";
     Text[ portuguese_brazilian ] = "Please enter the fax number.";
     Text[ japanese ] = "Fax ”Ô†‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-    Text[ korean ] = "ÆÑ½º¹øÈ£¸¦¡¡ÀÔ·ÂÇÏ½Ê½Ã¿À";
+    Text[ korean ] = "ÆÑ½º ¹øÈ£¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À";
     Text[ chinese_simplified ] = "ÇëÄúÊäÈë´«ÕæºÅÂë¡£";
     Text[ chinese_traditional ] = "½Ğ±z¿é¤J¶Ç¯u¸¹½X¡C";
     Text[ turkish ] = "Please enter the fax number.";
@@ -1528,6 +1528,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "Please enter the fax number.";
     Text[ catalan ] = "Indique el número de fax";
 };
+
 
 
 
