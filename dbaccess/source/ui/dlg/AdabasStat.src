@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:14:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "Datenbankdateien";
         Text[ hindi ] = "लेखासंचय फाइलें";
         Text[ slovak ] = "Databázové súbory";
+        Text[ hungarian ] = "Adatbázisfájlok";
+        Text[ slovenian ] = "Datoteke zbirke podatkov";
     };
 
     FixedText FT_SYSDEVSPACE
@@ -141,6 +143,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ thai ] = "S~YSDEVSPACE:";
         Text[ hindi ] = "S~YSDEVSPACE:";
         Text[ slovak ] = "S~YSDEVSPACE:";
+        Text[ hungarian ] = "S~YSDEVSPACE:";
+        Text[ slovenian ] = "S~YSDEVSPACE:";
     };
 
     Edit ET_SYSDEVSPACE
@@ -166,7 +170,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ french ] = "~TRANSACTIONLOG :";
         Text[ spanish ] = "~TRANSACTIONLOG:";
         Text[ italian ] = "~TRANSACTIONLOG:";
-        Text[ danish ] = "~TRANSACTIONLOG:";
+        Text[ danish ] = "~TRANSAKTIONSLOG:";
         Text[ swedish ] = "~TRANSACTIONLOG:";
         Text[ polish ] = "~REJESTRTRANSAKCJI:";
         Text[ portuguese_brazilian ] = "~TRANSACTIONLOG:";
@@ -183,6 +187,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ thai ] = "~TRANSACTIONLOG:";
         Text[ hindi ] = "~TRANSACTIONLOG:";
         Text[ slovak ] = "~TRANSACTIONLOG:";
+        Text[ hungarian ] = "~TRANZAKCIÓ NAPLÓFÁJL";
+        Text[ slovenian ] = "~TRANSACTIONLOG:";
     };
 
     Edit ET_TRANSACTIONLOG
@@ -225,6 +231,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ thai ] = "DATAD~EVSPACE:";
         Text[ hindi ] = "DATAD~EVSPACE:";
         Text[ slovak ] = "DATAD~EVSPACE:";
+        Text[ hungarian ] = "DATAD~EVSPACE:";
+        Text[ slovenian ] = "DATAD~EVSPACE:";
     };
 
     ListBox LB_DATADEVS
@@ -268,6 +276,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "Datenbankgrößen";
         Text[ hindi ] = "लेखासंचय परिमाण";
         Text[ slovak ] = "Veľkosť databázy";
+        Text[ hungarian ] = "Adatbázis méretei";
+        Text[ slovenian ] = "Velikosti zbirk podatkov";
     };
 
     FixedText FT_SIZE
@@ -284,7 +294,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ french ] = "~Taille totale (Mo) :";
         Text[ spanish ] = "Tama�o ~total (MB):";
         Text[ italian ] = "Dimensione (MB):";
-        Text[ danish ] = "~Samlet st�rrelse (MB):";
+        Text[ danish ] = "~St�rrelse (MB):";
         Text[ swedish ] = "T~otalstorlek (MB):";
         Text[ polish ] = "Rozm~iar (MB):";
         Text[ portuguese_brazilian ] = "~Tamanho (MB):";
@@ -301,6 +311,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "~Gesamtgröße (MB):";
         Text[ hindi ] = "~परिमाण (MB):";
         Text[ slovak ] = "V~eľkosť (MB):";
+        Text[ hungarian ] = "~Méret (MB):";
+        Text[ slovenian ] = "Vel~ikost (MB):";
     };
 
     Edit ET_SIZE
@@ -343,6 +355,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "~Freier Speicher (MB):";
         Text[ hindi ] = "~खाली मेमरी जगह (MB):";
         Text[ slovak ] = "Voľné mi~esto v pamäti (MB):";
+        Text[ hungarian ] = "~Szabad memóriaterület (MB):";
+        Text[ slovenian ] = "Pr~osti pomnilnik (MB):";
     };
 
     Edit ET_FREESIZE
@@ -368,7 +382,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ french ] = "M�moire ~utilis�e (en %) :";
         Text[ spanish ] = "~Memoria utilizada (en %):";
         Text[ italian ] = "Memoria utilizzata (in %):";
-        Text[ danish ] = "H~ukommelsesbrug (i %):";
+        Text[ danish ] = "~Hukommelsesbrug (i %):";
         Text[ swedish ] = "~Minnesutnyttjande (i %):";
         Text[ polish ] = "Wykorzystanie ~pami�ci (procentowo):";
         Text[ portuguese_brazilian ] = "~Mem�ria utilizada (em %):";
@@ -385,6 +399,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "S~peicherausnutzung (in %):";
         Text[ hindi ] = "~मेमरी उपयोग (% में):";
         Text[ slovak ] = "Využitie pa~mäti (v %):";
+        Text[ hungarian ] = "~Memóriakihasználtság (%):";
+        Text[ slovenian ] = "Zasedenost po~mnilnika (v %):";
     };
 
     NumericField ET_MEMORYUSING
@@ -431,6 +447,8 @@ ModalDialog DLG_ADABASSTAT
     Text[ hebrew ] = "Datenbank Statistiken";
     Text[ hindi ] = "लेखासंचय अँकडे";
     Text[ slovak ] = "Databázová štatistika";
+    Text[ hungarian ] = "Adatbázis-statisztikák";
+    Text[ slovenian ] = "Statistika zbirke podatkov";
 };
 
 String STR_ADABAS_HELP_SYSDEVSPACE
@@ -462,6 +480,8 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text[ hebrew ] = "Enthält die Systemtabellen";
     Text[ hindi ] = "सिस्टम् सारणियाँ सम्मिलित है";
     Text[ slovak ] = "Obsahuje systémové tabuľky";
+    Text[ hungarian ] = "Tartalmazza a rendszertáblákat";
+    Text[ slovenian ] = "Vsebuje sistemske tabele";
 };
 
 String STR_ADABAS_HELP_TRANSACT
@@ -493,6 +513,8 @@ String STR_ADABAS_HELP_TRANSACT
     Text[ hebrew ] = "Enthält Information über Transaktion";
     Text[ hindi ] = "व्यवहार के बारे में जानकारी सम्मिलित है";
     Text[ slovak ] = "Obsahuje informácie o transakciách";
+    Text[ hungarian ] = "Információkat tartalmaz a tranzakcióról";
+    Text[ slovenian ] = "Vsebuje podatke o transakciji";
 };
 
 String STR_ADABAS_HELP_DATADEVSPACES
@@ -524,6 +546,8 @@ String STR_ADABAS_HELP_DATADEVSPACES
     Text[ hebrew ] = "Enthält alle Daten Dateien";
     Text[ hindi ] = "सभी ड़ॉटा फाइलें सम्मिलित है";
     Text[ slovak ] = "Obsahuje všetky dátové súbory";
+    Text[ hungarian ] = "Minden adatfájlt tartalmaz";
+    Text[ slovenian ] = "Vsebuje vse podatkovne datoteke";
 };
 
 String STR_ADABAS_HELP_SIZE
@@ -555,6 +579,8 @@ String STR_ADABAS_HELP_SIZE
     Text[ hebrew ] = "Gesamt Größe der Datenbank Dateien";
     Text[ hindi ] = "लेखासंचय फाइलों का कुल परिमाण";
     Text[ slovak ] = "Celková veľkosť databázových súborov";
+    Text[ hungarian ] = "Az adatbázisfájlok összesített mérete";
+    Text[ slovenian ] = "Skupna velikost datotek zbirke podatkov";
 };
 
 String STR_ADABAS_HELP_FREESIZE
@@ -565,11 +591,11 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ portuguese ] = "Mem�ria ainda dispon�vel antes de criar um novo ficheiro Datadev.";
     Text[ russian ] = "�������� ������ ����� ��������� ������ ����� datadev.";
     Text[ greek ] = "���������� ����� ���� ��� ���������� ���� ���� ������� Datadev.";
-    Text[ dutch ] = "Nog beschikbare vrije ruimte voordat een nieuw Datadev-bestand wordt gemaakt.";
+    Text[ dutch ] = "Nog beschikbare vrije ruimte voordat een nieuw Datadev-bestand wordt aangemaakt.";
     Text[ french ] = "M�moire encore disponible avant g�n�ration d'un nouveau fichier Datadev.";
     Text[ spanish ] = "Memoria a�n disponible antes de crear un nuevo archivo datadev.";
     Text[ italian ] = "Memoria ancora disponibile prima di creare un nuovo file Datadev.";
-    Text[ danish ] = "Yderligere harddiskplads til r�dighed, f�r der oprettes en ny Datadev-fil.";
+    Text[ danish ] = "Harddiskplads til r�dighed, f�r der oprettes en ny Datadev-fil.";
     Text[ swedish ] = "Minne som �r tillg�ngligt innan en ny datadev-fil skapas.";
     Text[ polish ] = "Miejsce dost�pne przed utworzeniem nowego pliku datadev.";
     Text[ portuguese_brazilian ] = "Mem�ria dispon�vel atualmente antes de criar um novo arquivo datadev.";
@@ -586,6 +612,8 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ hebrew ] = "Noch zur Verfügung stehender Speicher bevor eine neue Datadev Datei erzeugt wird.";
     Text[ hindi ] = "वर्तमान में नया datadev फाइल उत्पन्न करने से पहिले का उपलब्ध जगह ।";
     Text[ slovak ] = "Voľné miesto pred vytvorením nového dátového súboru.";
+    Text[ hungarian ] = "A rendelkezésre álló szabad hely mennyisége az új datadev fájl létrehozása előtt.";
+    Text[ slovenian ] = "Trenutno razpoložljivi prostor, preden se ustvari nova datoteka datadev.";
 };
 
 String STR_ADABAS_HELP_MEMORYUSING
@@ -600,7 +628,7 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ french ] = "M�moire actuellement utilis�e";
     Text[ spanish ] = "Memoria utilizada actualmente";
     Text[ italian ] = "Memoria attualmente in uso";
-    Text[ danish ] = "Anvendt harddiskplads i �jeblikket";
+    Text[ danish ] = "Anvendt hukommelse i �jeblikket";
     Text[ swedish ] = "Minne som anv�nds f�r n�rvarande";
     Text[ polish ] = "Aktualnie zaj�ta pami��";
     Text[ portuguese_brazilian ] = "Mem�ria em uso";
@@ -617,6 +645,8 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ hebrew ] = "Zur Zeit verbrauchter Speicherplatz";
     Text[ hindi ] = "वर्तमान में उपयोग की हुयी मेमरी";
     Text[ slovak ] = "Práve používaná pamäť";
+    Text[ hungarian ] = "Jelenleg használt memória";
+    Text[ slovenian ] = "Trenutno porabljeni pomnilnik";
 };
 
 String STR_ADABAS_ERROR_SYSTEMTABLES
@@ -632,7 +662,7 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ spanish ] = "No se puede mostrar ninguna informaci�n porque no existe derecho de acceso a las tablas de sistema necesarias.";
     Text[ finnish ] = "Tietoja ei voitu n�ytt��, koska vaadituille j�rjestelm�tauluille ei ole k�ytt�oikeuksia.";
     Text[ italian ] = "Impossibile visualizzare le informazioni poich� manca l'autorizzazione alle tabelle di sistema richieste";
-    Text[ danish ] = "Oplysninger kan ikke vises, da du ikke har adgangsrettigheder til de n�dvendige systemtabeller!";
+    Text[ danish ] = "Information kan ikke vises, da du ikke har adgangsrettigheder til de n�dvendige systemtabeller!";
     Text[ swedish ] = "Det g�r inte att visa n�gon information eftersom det saknas �tkomstbeh�righet till de n�dv�ndiga systemtabellerna.";
     Text[ polish ] = "Nie mo�na wy�wietli� informacji, poniewa� brak praw dost�pu do wymaganych tabel systemu.";
     Text[ portuguese_brazilian ] = "Nenhuma informa��o pode ser mostrada por que n�o existem direitos de acesso para as tabelas do sistema.  ";
@@ -648,7 +678,10 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ hebrew ] = "Es können keine Informationen angezeigt werden, da keine Zugriffsberechtigung auf die benötigten Systemtabellen besteht";
     Text[ hindi ] = "सिस्टम सारणी केलिए प्रवेश अधिकार न होने के कारण कोई जानकारी को नहीं दिखा सकते है ।";
     Text[ slovak ] = "Nebola zobrazená žiadna informácia, pretože neexistujú prístupové práva k požadovaným systémovým tabuľkám.";
+    Text[ hungarian ] = "Semmilyen információ nem jeleníthető meg, mert nincs hozzáférési joga a szükséges rendszertáblákhoz.";
+    Text[ slovenian ] = "Ni mogoče prikazati informacij, ker ne obstajajo dostopne pravice za zahtevane sistemske tabele.";
 };
+
 
 
 
