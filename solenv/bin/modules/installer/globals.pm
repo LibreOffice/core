@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.7 $
-#   last change: $Author: rt $ $Date: 2004-07-12 12:58:41 $
+#   $Revision: 1.8 $
+#   last change: $Author: rt $ $Date: 2004-07-23 15:10:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,7 +169,7 @@ BEGIN
 
     @environmentvariables = ( "SOLARVERSION", "GUI", "COMMON_OUTDIR", "ENV_ROOT", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
-    @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "sandbox.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
+    @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
     @selfreglibraries = ("shlxthdl.dll");               # to be removed after scp changes, see parameter.pm
     @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca");   # to be removed after scp changes, see parameter.pm
