@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-08-15 09:56:44 $
+ *  last change: $Author: os $ $Date: 2002-09-24 07:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,13 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
 // Kontextmenue fuer GlobalTree
 #define CTX_INSERT_ANY_INDEX 10
 //#define CTX_INSERT_CNTIDX   11
@@ -903,78 +908,102 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
                                 const String* pFileName )
 {
-    String sFileName;
+    Sequence<OUString> aFileNames;
     SwView *pView = GetParentWindow()->GetCreateView();
     SwWrtShell &rSh = pView->GetWrtShell();
     String sFilePassword;
     if(!pFileName)
     {
-        String sFilterName;
-        if( GetFileFilterNameDlg( *this, sFileName, &sFilePassword, &sFilterName ))
+        Window* pDefDlgParent = Application::GetDefDialogParent();
+        Application::SetDefDialogParent( this );
+        SfxMediumList*  pMedList = SFX_APP()->InsertDocumentsDialog( 0, SwDocShell::Factory());
+        if(pMedList)
         {
-            sFileName += so3::cTokenSeperator;
-            sFileName += sFilterName;
-            sFileName += so3::cTokenSeperator;
+            aFileNames.realloc(pMedList->Count());
+            OUString* pFileNames = aFileNames.getArray();
+
+            SfxMedium* pMed = pMedList->First();
+            sal_Int32 nPos = 0;
+            while(pMed)
+            {
+                String sFileName = URIHelper::SmartRelToAbs( pMed->GetName() );
+                sFileName += so3::cTokenSeperator;
+                sFileName += pMed->GetFilter()->GetFilterName();
+                sFileName += so3::cTokenSeperator;
+                pFileNames[nPos++] = sFileName;
+                pMed = pMedList->Next();
+            }
+            delete pMedList;
         }
+        Application::SetDefDialogParent( pDefDlgParent );
     }
     else if(pFileName->Len())
     {
-        sFileName = URIHelper::SmartRelToAbs( *pFileName );
+        aFileNames.realloc(1);
+        aFileNames.getArray()[0] = URIHelper::SmartRelToAbs( *pFileName );
     }
 
-    if(sFileName.Len())
+    sal_Int32 nFiles = aFileNames.getLength();
+    if(nFiles)
     {
-        INetURLObject aFileUrl(sFileName);
-        String sSectionName(aFileUrl.GetLastName(INetURLObject::DECODE_UNAMBIGUOUS).
-                                             GetToken(0, so3::cTokenSeperator));
-        USHORT nSectCount = rSh.GetSectionFmtCount();
-        String sTempSectionName(sSectionName);
-        USHORT nAddNumber = 0;
-        USHORT nCount = 0;
-        // evtl : und Index anhaengen, wenn der Bereichsname schon vergeben ist
-        while(nCount < nSectCount)
-        {
-            const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);
-            if( rFmt.GetSection()->GetName() == sTempSectionName &&
-                    rFmt.IsInNodesArr())
-            {
-                nCount = 0;
-                nAddNumber++;
-                sTempSectionName = sSectionName;
-                sTempSectionName += ':';
-                sTempSectionName += String::CreateFromInt32( nAddNumber );
-            }
-            else
-                nCount++;
-        }
-        if(nAddNumber)
-                sSectionName = sTempSectionName;
-
-        SwSection   aSection(CONTENT_SECTION, sSectionName);
-        aSection.SetProtect(TRUE);
-        aSection.SetHidden(FALSE);
-
-        aSection.SetLinkFileName(sFileName);
-        aSection.SetType( FILE_LINK_SECTION);
-        aSection.SetLinkFilePassWd( sFilePassword );
-
-        if(pCont)
-            rSh.InsertGlobalDocContent( *pCont, aSection );
-        else
+        BOOL bMove = FALSE;
+        if(!pCont)
         {
             SvLBoxEntry* pLast = (SvLBoxEntry*)LastVisible();
-            rSh.StartAction();
-            rSh.InsertGlobalDocContent( *(SwGlblDocContent*)pLast->GetUserData(),
-                                        aSection );
-            Update();
-            USHORT nEntryCount = (USHORT)GetEntryCount();
-            if( rSh.MoveGlobalDocContent(
-                *pSwGlblDocContents, nEntryCount, nEntryCount + 1, nEntryCount - 1) &&
-                Update())
-            rSh.EndAction();
-            Display();
-
+            pCont = (SwGlblDocContent*)pLast->GetUserData();
+            bMove = TRUE;
         }
+        USHORT nEntryCount = (USHORT)GetEntryCount();
+        const OUString* pFileNames = aFileNames.getConstArray();
+        rSh.StartAction();
+        for(sal_Int32 nFile = nFiles; nFile; nFile--)
+        {
+            String sFileName(pFileNames[nFile - 1]);
+            INetURLObject aFileUrl(sFileName);
+            String sSectionName(aFileUrl.GetLastName(INetURLObject::DECODE_UNAMBIGUOUS).
+                                                 GetToken(0, so3::cTokenSeperator));
+            USHORT nSectCount = rSh.GetSectionFmtCount();
+            String sTempSectionName(sSectionName);
+            USHORT nAddNumber = 0;
+            USHORT nCount = 0;
+            // evtl : und Index anhaengen, wenn der Bereichsname schon vergeben ist
+            while(nCount < nSectCount)
+            {
+                const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);
+                if( rFmt.GetSection()->GetName() == sTempSectionName &&
+                        rFmt.IsInNodesArr())
+                {
+                    nCount = 0;
+                    nAddNumber++;
+                    sTempSectionName = sSectionName;
+                    sTempSectionName += ':';
+                    sTempSectionName += String::CreateFromInt32( nAddNumber );
+                }
+                else
+                    nCount++;
+            }
+            if(nAddNumber)
+                    sSectionName = sTempSectionName;
+
+            SwSection   aSection(CONTENT_SECTION, sSectionName);
+            aSection.SetProtect(TRUE);
+            aSection.SetHidden(FALSE);
+
+            aSection.SetLinkFileName(sFileName);
+            aSection.SetType( FILE_LINK_SECTION);
+            aSection.SetLinkFilePassWd( sFilePassword );
+
+            rSh.InsertGlobalDocContent( *pCont, aSection );
+        }
+        if(bMove)
+        {
+            Update();
+            rSh.MoveGlobalDocContent(
+                *pSwGlblDocContents, nEntryCount, nEntryCount + nFiles, nEntryCount - nFiles);
+        }
+        rSh.EndAction();
+        Update();
+        Display();
     }
 }
 
