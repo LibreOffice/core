@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MSOfficePrint.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-12-10 16:58:33 $
+ *  last change: $Date: 2005-02-24 17:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,26 +261,37 @@ public class MSOfficePrint
 
     public void realStartCommand(ArrayList _aStartCommand) throws ConvWatchCancelException
         {
-            // This is really the latest point where we can check if we are running within windows environment
-            if (! OSHelper.isWindows())
-            {
-// TODO: use a better Exception!!!
-                throw new ConvWatchCancelException/*WrongEnvironmentException*/("We doesn't work within windows environment.");
-            }
-
             if (_aStartCommand.isEmpty())
             {
                 throw new ConvWatchCancelException/*WrongEnvironmentException*/("Given list is empty.");
             }
 
-
             try
             {
-                String[] aList = new String[_aStartCommand.size()];
-                for (int i=0;i<_aStartCommand.size();i++)
+                // Convert the StartCommand ArrayList to a String List
+                int nValues = _aStartCommand.size();
+                String[] aList = new String[nValues];
+                for (int i=0;i<nValues;i++)
                 {
-                    aList[i] = new String((String) _aStartCommand.get(i));
+                    String aStr = (String) _aStartCommand.get(i);
+                    if (aStr == null)
+                    {
+                        aStr = "";
+                    }
+                    if (aStr.length() == 0)
+                    {
+                        aStr = "\"\"";
+                    }
+                    aList[i] = new String(aStr);
                 }
+
+                // This is really the latest point where we can check if we are running within windows environment
+                if (! OSHelper.isWindows())
+                {
+                    // TODO: use a better Exception!!!
+                    throw new ConvWatchCancelException/*WrongEnvironmentException*/("We doesn't work within windows environment.");
+                }
+
 
                 ProcessHandler aHandler = new ProcessHandler(aList);
                 boolean bBackValue = aHandler.executeSynchronously();
@@ -383,10 +394,18 @@ public class MSOfficePrint
 
             ArrayList aList = new ArrayList();
             File aPerlScript = new File(userdir + fs + _sScriptName);
-            System.out.println("Search for " + aPerlScript.getAbsolutePath());
+            if (FileHelper.isDebugEnabled())
+            {
+                System.out.println("Search for local existance of " + aPerlScript.getAbsolutePath());
+            }
+
             if (aPerlScript.exists())
             {
-                System.out.println("OK, found it, use this instead the internal one.");
+                if (FileHelper.isDebugEnabled())
+                {
+                    System.out.println("OK, found it, use this instead the internal one.");
+                }
+
                 String sName = aPerlScript.getAbsolutePath();
                 // String sCommand = "perl " + sName;
                 // System.out.println(sCommand);
@@ -414,6 +433,11 @@ public class MSOfficePrint
             }
 
             String sName = sTmpPath + fs + sSaveViaWord;
+            if (FileHelper.isDebugEnabled())
+            {
+                System.out.println("No local found, create a perl script: " + sName);
+            }
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -488,6 +512,11 @@ public class MSOfficePrint
                 return aList;
             }
             String sName = sTmpPath + fs + sPrintViaExcel;
+            if (FileHelper.isDebugEnabled())
+            {
+                System.out.println("No local found, create a perl script: " + sName);
+            }
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -509,7 +538,7 @@ public class MSOfficePrint
             out.write( "# ------ usage ------                                                                                            " + ls );
             out.write( "sub print_usage()                                                                                                " + ls );
             out.write( "{                                                                                                                " + ls );
-            out.write( "    print STDERR \"Usage: excel_print.pl  <Excel file> <name of printer> <output file> .\\n                       " + ls );
+            out.write( "    print STDERR \"Usage: printViaExcel.pl  <Excel file> <name of printer> <output file> .\\n                       " + ls );
             out.write( "                  Please use the same string for the name of the printer as you can find \\n                      " + ls );
             out.write( "                  under Start-Control Panel-Printer and Faxes  \\n                                            " + ls );
             out.write( "                  The name could look like the the following line: \\n                                            " + ls );
@@ -525,7 +554,10 @@ public class MSOfficePrint
             out.write( "                                                                                                                 " + ls );
             out.write( "if ($#ARGV != 2)                                                                                                 " + ls );
             out.write( "{                                                                                                                " + ls );
-            out.write( "   print \"Too less arguments.\\n\";                                                                              " + ls );
+            out.write( "   print STDERR \"Too less arguments.\\n\";                                                                      " + ls );
+            out.write( "   print STDERR \"ARGV[0] $ARGV[0]\\n\";                                                                         " + ls );
+            out.write( "   print STDERR \"ARGV[1] $ARGV[1]\\n\";                                                                         " + ls );
+            out.write( "   print STDERR \"ARGV[2] $ARGV[2]\\n\";                                                                         " + ls );
             out.write( "   print_usage();                                                                                                " + ls );
             out.write( "   exit(1);                                                                                                      " + ls );
             out.write( "}                                                                                                                " + ls );
@@ -565,6 +597,11 @@ public class MSOfficePrint
                 return aList;
             }
             String sName = sTmpPath + fs + sSaveViaExcel;
+            if (FileHelper.isDebugEnabled())
+            {
+                System.out.println("No local found, create a script: " + sName);
+            }
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -579,7 +616,7 @@ public class MSOfficePrint
             out.write( "# ------ usage ------                                                                                            " + ls );
             out.write( "sub print_usage()                                                                                                " + ls );
             out.write( "{                                                                                                                " + ls );
-            out.write( "    print STDERR \"Usage: excel_print.pl  <Excel file> <filefilter> <output file> .\\n                       " + ls );
+            out.write( "    print STDERR \"Usage: savaViaExcel.pl  <Excel file> <filefilter> <output file> .\\n                       " + ls );
             out.write( "                  execl_print.pl  c:\\book1.xls Apple LaserWriter II NT v47.0 c:\\output\\book1.ps \\n\";     " + ls );
             out.write( "}                                                                                                                " + ls );
             out.write( "                                                                                                                 " + ls );
@@ -648,6 +685,11 @@ public class MSOfficePrint
                 return aList;
             }
             String sName = sTmpPath + fs + sPrintViaPowerPoint;
+            if (FileHelper.isDebugEnabled())
+            {
+                System.out.println("No local found, create a script: " + sName);
+            }
+
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
