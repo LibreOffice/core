@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-13 08:02:54 $
+ *  last change: $Author: mav $ $Date: 2002-05-13 13:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,7 @@ public:
                                                                         // this class is close to be unusable
                                                                         // since it can not read and write
     void                        SetError( long nError );
+    void                        PrepareCachedForReopen( StreamMode nMode );
 };
 
 SV_DECL_IMPL_REF( UCBStorageStream_Impl );
@@ -1312,6 +1313,31 @@ void UCBStorageStream_Impl::Free()
     m_nRepresentMode = nonset;
     m_rSource = Reference< XInputStream >();
     DELETEZ( m_pStream );
+}
+
+void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
+{
+    sal_Bool bIsWritable = ( m_nMode & STREAM_WRITE );
+    if ( bIsWritable )
+    {
+        // once stream was writable, never reset to readonly
+        nMode |= STREAM_WRITE;
+    }
+
+    m_nMode = nMode;
+    Free();
+
+    if ( nMode & STREAM_TRUNC )
+    {
+        m_bSourceRead = 0; // usually it should be 0 already but just in case...
+
+        if ( m_aTempURL.Len() )
+        {
+            ::utl::UCBContentHelper::Kill( m_aTempURL );
+            m_aTempURL.Erase();
+        }
+    }
+
 }
 
 UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey )
@@ -2778,14 +2804,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
                     aKey = *pKey;
                 if ( pElement->m_xStream->m_aKey == aKey )
                 {
-                    BOOL bIsWritable = ( pElement->m_xStream->m_nMode & STREAM_WRITE );
-                    if ( bIsWritable )
-                        // once stream was writable, never reset to readonly
-                        nMode |= STREAM_WRITE;
-
-                    pElement->m_xStream->m_nMode = nMode;
-                    pElement->m_xStream->Free();
-                    //pElement->m_xStream->Init();
+                    pElement->m_xStream->PrepareCachedForReopen( nMode );
 
     //              DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
                     return new UCBStorageStream( pElement->m_xStream );
@@ -2884,14 +2903,8 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
             delete pStream;
         }
 
-        BOOL bIsWritable = ( pElement->m_xStream->m_nMode & STREAM_WRITE );
-        if ( bIsWritable )
-            // once stream was writable, never reset to readonly
-            nMode |= STREAM_WRITE;
-
-        pElement->m_xStream->m_nMode = nMode;
-        //pElement->m_xStream->Free();
-        //pElement->m_xStream->Init();
+        pElement->m_xStream->PrepareCachedForReopen( nMode );
+        pElement->m_xStream->Init();
 
         pElement->m_bIsStorage = TRUE;
         return pElement->m_xStream->CreateStorage();  // can only be created in transacted mode
