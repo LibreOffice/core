@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:01:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "½s¸¹(~N)";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "¹øÈ£¸Å±â±â";
+        Text[ korean ] = "¹øÈ£¸Å±â±â(~N)";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -788,14 +788,14 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
         Text [ portuguese_brazilian ] = "Zeichenv~orlage" ;
         Text [ portuguese ] = "~Estilo de caracteres:" ;
-        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½:";
+        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½(~C):";
         Text[ russian ] = "Ñòèëü òåêñòà:";
         Text[ polish ] = "Styl znaku:";
-        Text[ japanese ] = "•¶š½À²Ù:";
-        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡¡G";
+        Text[ japanese ] = "•¶š½À²Ù(~C):";
+        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~C)¡G";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ:";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí:";
-        Text[ korean ] = "¹®ÀÚ À¯Çü:";
+        Text[ korean ] = "¹®ÀÚ À¯Çü(~C):";
         Text[ turkish ] = "Karakter şablonu:";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
@@ -857,14 +857,14 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ dutch ] = "~Relatieve grootte:";
         Text[ spanish ] = "~Tamaño relativo:";
         Text[ english_us ] = "~Relative size:";
-        Text[ chinese_simplified ] = "Ïà¶ÔµÄ´óĞ¡:";
+        Text[ chinese_simplified ] = "Ïà¶ÔµÄ´óĞ¡(~R):";
         Text[ russian ] = "Îòíîñèò. ğàçìåğ:";
         Text[ polish ] = "Rozmiar wzglêdny:";
-        Text[ japanese ] = "”äŠr»²½Ş:";
-        Text[ chinese_traditional ] = "¬Û¹ïªº¤j¤p¡G";
+        Text[ japanese ] = "”äŠr»²½Ş(~R):";
+        Text[ chinese_traditional ] = "¬Û¹ïªº¤j¤p(~R)¡G";
         Text[ arabic ] = ":ÍÌã äÓÈí";
         Text[ greek ] = "Ó÷åôéêü ìİãåèïò:";
-        Text[ korean ] = "»ó´ëÀû Å©±â:";
+        Text[ korean ] = "»ó´ëÀû Å©±â(~R):";
         Text[ turkish ] = "Orantılı boyut:";
         Text[ language_user1 ] = " ";
     };
@@ -1023,7 +1023,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "¹ï»ô(~A)";
         Text[ arabic ] = "ãÍÇĞÇÉ";
         Text[ greek ] = "Óôïß÷éóç";
-        Text[ korean ] = "¸ÂÃã";
+        Text[ korean ] = "¸ÂÃã(~A)";
         Text[ turkish ] = "Hizalama";
         Text[ language_user1 ] = " ";
     };
@@ -1743,7 +1743,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ chinese_traditional ] = "³sÄò½s¸¹(~C)";
         Text[ arabic ] = "ÇáÊÑŞíã ÈÔßá ãÊÓáÓá";
         Text[ greek ] = "Óõíå÷üìåíç áñßèìçóç";
-        Text[ korean ] = "¿¬¼ÓÀûÀ¸·Î ¹øÈ£¸Å±â±â";
+        Text[ korean ] = "¿¬¼ÓÀûÀ¸·Î ¹øÈ£¸Å±â±â(~C)";
         Text[ turkish ] = "Sürekli numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -1794,7 +1794,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ swedish ] = "Det finns ingen grafik i Gallery-temat 'Punkter'.";
         Text[ polish ] = "Brak grafik w temacie Galerii 'Znaki wypunktowania'.";
         Text[ portuguese_brazilian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
-        Text[ japanese ] = "·Ş¬×ØÃ°Ïu‰Óğ‘‚«¼İÎŞÙv‚É‚Í¸Ş×Ì¨¯¸‚Í‚ ‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "·Ş¬×ØÃ°Ïu‰Óğ‘‚«‹L†v‚É}‚Í‚ ‚è‚Ü‚¹‚ñB";
         Text[ korean ] = "°¶·¯¸®-ÁÖÁ¦  '±Û¸Ó¸®±âÈ£'¿¡ ±×·¡ÇÈÀÌ ¾ø½À´Ï´Ù.";
         Text[ chinese_simplified ] = "»­ÀÈÎÄ¼ş¡®¸÷Ê½Í¼±ê¡¯ÄÚ²»´æÔÚÍ¼ĞÎ¡£";
         Text[ chinese_traditional ] = "µe´Y¥DÃD[¶µ¥Ø½s¸¹]¤¤¨S¦³¹Ï§Î¡C";
@@ -1920,14 +1920,14 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ spanish ] = "Relati~vo" ;
         Text [ french ] = "~Relatif" ;
         Text [ dutch ] = "Relati~ef" ;
-        Text[ chinese_simplified ] = "Ïà¶ÔµÄ";
+        Text[ chinese_simplified ] = "Ïà¶ÔµÄ(~V)";
         Text[ russian ] = "Îòíîñèòåëüíî";
         Text[ polish ] = "Wzglêd~ny";
-        Text[ japanese ] = "‘OÚÍŞÙ‚©‚ç";
-        Text[ chinese_traditional ] = "¬Û¹ïªº";
+        Text[ japanese ] = "‘OÚÍŞÙ‚©‚ç(~V)";
+        Text[ chinese_traditional ] = "¬Û¹ïªº(~V)";
         Text[ arabic ] = "äÓÈí";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "ºñ·Ê";
+        Text[ korean ] = "ºñ·Ê(~V)";
         Text[ turkish ] = "Göreceli";
         Text[ language_user1 ] = " ";
     };
@@ -2061,7 +2061,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ chinese_traditional ] = "½s¸¹¹ï»ô(~U)";
         Text[ arabic ] = "ãÍÇĞÇÉ ÇáÊÑŞíã";
         Text[ greek ] = "Óôïß÷éóç áñßèìçóçò";
-        Text[ korean ] = "¹øÈ£¸Å±â±â ¸ÂÃã";
+        Text[ korean ] = "¹øÈ£¸Å±â±â ¸ÂÃã(~U)";
         Text[ turkish ] = "Numara hizalama";
         Text[ language_user1 ] = " ";
     };
