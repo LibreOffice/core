@@ -37,7 +37,7 @@ Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
         BasicLibraries.LoadLibrary( &quot;Tools&quot; )
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
 		If IsMissing(oDocument) Then
-			oDocument = StarDesktop.ActiveFrame.Controller.Model
+      oDocument = ThisComponent
 		End If
 		If oDocument.IsReadOnly then
 			MMessage = GetResText(SAMPLES)
@@ -77,7 +77,7 @@ Dim t as Integer
 Dim MaxIndex as Integer
         BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
-		oDocument = StarDesktop.ActiveFrame.Controller.Model
+    oDocument = ThisComponent
 		If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then
 			ToggleWindow(False)
 			oUcbObject = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
@@ -91,7 +91,7 @@ Dim MaxIndex as Integer
 			DialogModel.Title = GetResText(STYLES)
 			DialogModel.cmdCancel.Label = GetResText(STYLES+2)
 			DialogModel.cmdOk.Label = GetResText(STYLES+3)
-			Stylenames() = ReadDirectories(StylesDir, False, False, True,)			
+			Stylenames() = ReadDirectories(StylesDir, False, False, True,)
 			MaxIndex = Ubound(Stylenames())
 			BubbleSortList(Stylenames(),True)
 			Dim cStyles(MaxIndex)

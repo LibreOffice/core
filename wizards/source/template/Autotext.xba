@@ -18,7 +18,7 @@ Sub Main()
 	Dim FieldStringThere as String
 	Dim ULStringThere as String
 	Dim PHStringThere as String
-	
+
 	&apos; Initialization...
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 
@@ -46,7 +46,7 @@ Sub Main()
 	BulletList(6) = 79
 	BulletList(7) = 58
 
-	oDocAuto = StarDesktop.ActiveFrame.Controller.Model
+  oDocAuto = ThisComponent
 	oStyles = oDocAuto.Stylefamilies.NumberingStyles
 
 	&apos; Prepare the Search-Descriptor
@@ -91,7 +91,7 @@ Sub	CreateUserDatafield(oCursor, sFoundContent as String)
 	Dim oUserfield as Object
 	Dim UserInfo as String
 	Dim UserIndex as Integer
-	
+
 	oUserfield = oDocAuto.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
 	sFoundList() = ArrayoutofString(sFoundContent,&quot;:&quot;,MaxIndex)
 	UserInfo = UCase(LTrim(sFoundList(1)))

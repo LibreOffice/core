@@ -45,7 +45,7 @@ Sub ModifyTemplate()
 Dim oDocument, oBookmarks, oBookmark, oBookmarkCursor, oTextField as Object
 Dim i as Integer
 
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
+  oDocument = ThisComponent
 	oBookMarks = oDocument.Bookmarks
 
 	On Local Error Goto NOBOOKMARK
@@ -88,7 +88,7 @@ Dim oDocument, oBookmarks, oBookmark, oBookmarkCursor, oTextField as Object
 Dim oBaustein, oAutoText, oAutoGroup as Object
 Dim i as Integer
 
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
+  oDocument = ThisComponent
 	oBookMarkCursor = CreateBookMarkCursor(oDocument, &quot;NextTopic&quot;)
 	oTextField = oBookMarkCursor.TextField
 	oAutoText = CreateUnoService(&quot;com.sun.star.text.AutoTextContainer&quot;)
@@ -117,7 +117,7 @@ Dim oFormats, oLocale as Object
 Dim iDateTimeKey as Integer
 
         BasicLibraries.LoadLibrary( &quot;Tools&quot; )
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
+  oDocument = ThisComponent
 
 	oUserField = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
 	oUserField.UserDatatype = com.sun.star.text.UserDataPart.SHORTCUT
@@ -158,7 +158,7 @@ Dim AgendaFinished As Boolean
 Dim BtnAddAgendaTopic As Object
 Dim BtnFinishAgenda As Object
 
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
+  oDocument = ThisComponent
 
 	BtnAddAgendaTopic = getControlModel(oDocument, &quot;BtnAddAgendaTopic&quot;)
 	BtnFinishAgenda = getControlModel(oDocument, &quot;BtnFinishAgenda&quot;)
