@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:41:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ namespace dbaui
         getFlags(_rSet, bValid, bReadonly);
 
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
+        OConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
         OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
         switch( m_eType )
@@ -330,11 +331,10 @@ namespace dbaui
                     sText.SearchAndReplaceAscii("~",sTemp);
                     m_aFT_Connection.SetText(sText);
                 }
-                m_aFT_Connection.Hide();
+                m_aET_Connection.Hide();
                 break;
             case DST_JDBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
-                m_aET_Connection.ShowPrefix(TRUE);
                 // run through
             default:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
@@ -349,6 +349,7 @@ namespace dbaui
 
         // collect the items
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, sal_True);
+
         SFX_ITEMSET_GET(_rSet, pPwdItem, SfxStringItem, DSID_PASSWORD, sal_True);
         SFX_ITEMSET_GET(_rSet, pJdbcDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
@@ -379,7 +380,6 @@ namespace dbaui
             m_aET_Connection.ClearModifyFlag();
             m_aJavaDriver.ClearModifyFlag();
         }
-        OConnectionHelper::implInitControls( _rSet, _bSaveValue);
     }
     // -----------------------------------------------------------------------
     void OConnectionTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
