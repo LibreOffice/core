@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthandlerfactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:34:10 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 09:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ class ContentHandlerFactory :   // interfaces
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance             ( const ::rtl::OUString&                        sTypeName   ) throw( css::uno::Exception        ,
                                                                                                                                                                      css::uno::RuntimeException );
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString&                        sTypeName   ,
-                                                                                                  const css::uno::Sequence< css::uno::Any >&    lArguments  ) throw( css::uno::Exception        );
+                                                                                                  const css::uno::Sequence< css::uno::Any >&    lArguments  ) throw( css::uno::Exception, css::uno::RuntimeException );
         virtual css::uno::Sequence< ::rtl::OUString >       SAL_CALL getAvailableServiceNames   (                                                           ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
