@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:32:55 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 12:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2160,7 +2160,7 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw( Exception )
 {
     switch (nHandle)
     {
@@ -2795,7 +2795,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
 //==============================================================================
 // smartXChild
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent)
+void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
 {
     ReusableMutexGuard aGuard(m_aMutex);
 
