@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-19 08:59:36 $
+#   last change: $Author: armin $ $Date: 2001-06-12 07:54:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJ=..
 TARGETTYPE=CUI
 LIBTARGET=NO
 NO_DEFAULT_STL=TRUE
+nodep=true
 
 .INCLUDE : settings.mk
 

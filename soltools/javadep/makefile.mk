@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-23 11:19:16 $
+#   last change: $Author: armin $ $Date: 2001-06-12 07:55:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ TARGET=javadep
 TARGETTYPE=CUI
 TARGETTHREAD=MT
 NO_DEFAULT_STL=TRUE
+nodep=true
 
 # --- Settings -----------------------------------------------------
 

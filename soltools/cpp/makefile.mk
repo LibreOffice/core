@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-07 09:44:08 $
+#   last change: $Author: armin $ $Date: 2001-06-12 07:55:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=soltools
 TARGET=cpp
 TARGETTYPE=CUI
 NO_DEFAULT_STL=TRUE
+nodep=true
 
 # --- Settings -----------------------------------------------------
 
