@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,7 @@ EditLine::EditLine()
     nTxtHeight = 0;
     nCrsrHeight = 0;
     nMaxAscent = 0;
+    bHangingPunctuation = FALSE;
     bInvalid = TRUE;
 }
 
@@ -445,6 +446,7 @@ EditLine::EditLine( const EditLine& r )
     nStart = r.nStart;
     nStartPortion = r.nStartPortion;
     nEndPortion = r.nEndPortion;
+    bHangingPunctuation = r.bHangingPunctuation;
 
     nHeight = 0;
     nStartPosX = 0;
@@ -539,7 +541,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             }
             break;
             case PORTIONKIND_TAB:
-            case PORTIONKIND_EXTRASPACE:
+//          case PORTIONKIND_EXTRASPACE:
             {
                 aSz.Width() += pPortion->GetSize().Width();
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-24 16:41:16 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,6 +970,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
                 if( bScriptSpace && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nTmpPos+pPortion->GetLen() ) ) )
                 {
+                    // MT 05/2001: Don't create extra portion, add space to prev portion...
+                    /*
                     USHORT nSpacePortion = nTmpPortion+1;
                     TextPortion* pSpacePortion = NULL;
 
@@ -987,6 +989,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                     nTmpPortion++;  // Skip this Portion
                     pSpacePortion->GetSize().Width() = pPortion->GetSize().Height()/5;
                     nTmpWidth += pSpacePortion->GetSize().Width();
+                    */
+                    long nExtraSpace = pPortion->GetSize().Height()/5;
+                    pPortion->GetSize().Width() += nExtraSpace;
+                    nTmpWidth += nExtraSpace;
                 }
             }
 
@@ -1089,7 +1095,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 default:
                 {
                     // Ein Feature wird nicht umgebrochen:
-                    DBG_ASSERT( ( pPortion->GetKind() == PORTIONKIND_LINEBREAK ) /*|| ( pPortion->GetKind() == PORTIONKIND_EXTRASPACE )*/, "Was fuer ein Feature ?" );
+                    DBG_ASSERT( ( pPortion->GetKind() == PORTIONKIND_LINEBREAK ), "Was fuer ein Feature ?" );
                     bEOL = sal_True;
                     bFixedEnd = sal_True;
                 }
@@ -1219,9 +1225,6 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 //          }
 //      }
 
-        // Zeilenhoehe auf Window-Pixel alignen?
-        // Nein, waere Positionsabhaengig.
-
         if ( ( !IsVertical() && aStatus.AutoPageWidth() ) ||
              ( IsVertical() && aStatus.AutoPageHeight() ) )
         {
@@ -1234,6 +1237,20 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             if ( aTextSize.Width() < nMaxLineWidthFix )
                 nMaxLineWidth = nMaxLineWidthFix;
         }
+
+        if ( pLine->IsHangingPunctuation() )
+        {
+            // Width from HangingPunctuation was set to 0 in ImpBreakLine,
+            // check for rel width now, maybe create compression...
+            long n = nMaxLineWidth - aTextSize.Width();
+            TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( pLine->GetEndPortion() );
+            sal_uInt16 nPosInArray = pLine->GetEnd()-1-pLine->GetStart();
+            long nNewValue = ( nPosInArray ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0 ) + n;
+            pLine->GetCharPosArray()[ nPosInArray ] = nNewValue;
+            pTP->GetSize().Width() += n;
+
+        }
+
         switch ( eJustification )
         {
             case SVX_ADJUST_CENTER:
@@ -1562,9 +1579,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         }
     }
 
-    sal_uInt16 nBreakPos = nMaxBreakPos;
-
-    lang::Locale aLocale = GetLocale( EditPaM( pNode, nBreakPos ) );
+    lang::Locale aLocale = GetLocale( EditPaM( pNode, nMaxBreakPos ) );
 
     Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     OUString aText( *pNode );
@@ -1578,28 +1593,38 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
     aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
     aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
-    aUserOptions.allowPunctuationOutsideMargin = FALSE; // ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
+    aUserOptions.allowPunctuationOutsideMargin = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
     aUserOptions.allowHyphenateEnglish = FALSE;
 
-    i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
-    nBreakPos = (USHORT)aLBR.breakIndex;
+    i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
+    sal_uInt16 nBreakPos = (USHORT)aLBR.breakIndex;
 
+    // BUG in I18N - the japanese dot is in the next line!
+    // !!!  Testen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if ( (nBreakPos + ( aUserOptions.allowPunctuationOutsideMargin ? 0 : 1 ) ) <= nMaxBreakPos )
+    {
+        sal_Unicode cFirstInNextLine = ( (nBreakPos+1) < pNode->Len() ) ? pNode->GetChar( nBreakPos ) : 0;
+        if ( cFirstInNextLine == 12290 )
+            nBreakPos++;
+    }
+
+    sal_Bool bHangingPunctuation = ( nBreakPos > nMaxBreakPos ) ? sal_True : sal_False;
+    pLine->SetHangingPunctuation( bHangingPunctuation );
+
+    sal_Bool bHyphenated = sal_False;
+    sal_Unicode cAlternateReplChar = 0;
+    sal_Unicode cAlternateExtraChar = 0;
     sal_Bool bBlankSeparator = ( ( nBreakPos >= pLine->GetStart() ) &&
-                    ( pNode->GetChar( nBreakPos ) == ' ' ) ) ? sal_True : sal_False;
+                        ( pNode->GetChar( nBreakPos ) == ' ' ) ) ? sal_True : sal_False;
 
+#ifndef SVX_LIGHT
     // Egal ob Trenner oder nicht: Das Wort nach dem Trenner durch
     // die Silbentrennung jagen...
     // nMaxBreakPos ist das letzte Zeichen was in die Zeile passt,
     // nBreakPos ist der Wort-Anfang
     // Ein Problem gibt es, wenn das Dok so schmal ist, dass ein Wort
     // auf mehr als Zwei Zeilen gebrochen wird...
-
-    sal_Bool bHyphenated = sal_False;
-    sal_Unicode cAlternateReplChar = 0;
-    sal_Unicode cAlternateExtraChar = 0;
-
-#ifndef SVX_LIGHT
-    if ( bCanHyphenate && GetHyphenator().is() )
+    if ( !bHangingPunctuation && bCanHyphenate && GetHyphenator().is() )
     {
         // MT: I18N Umstellen auf getWordBoundary !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         sal_uInt16 nWordStart = nBreakPos;
@@ -1704,14 +1729,14 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     // die angeknackste Portion ist die End-Portion
     pLine->SetEnd( nBreakPos );
     sal_uInt16 nEndPortion = SplitTextPortion( pParaPortion, nBreakPos, pLine );
-    if ( bBlankSeparator /* && ( eJustification == SVX_ADJUST_RIGHT ) */ )
+    if ( bBlankSeparator || bHangingPunctuation )
     {
         // Blanks am Zeilenende generell unterdruecken...
         TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( nEndPortion );
         DBG_ASSERT( pTP->GetKind() == PORTIONKIND_TEXT, "BlankRubber: Keine TextPortion!" );
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion am Anfang der Zeile?" );
-        sal_uInt16 nBlankPosInArray = nBreakPos-1-pLine->GetStart();
-        pTP->GetSize().Width() = ( nBlankPosInArray && ( pTP->GetLen() > 1 ) ) ? pLine->GetCharPosArray()[ nBlankPosInArray-1 ] : 0;
+        sal_uInt16 nPosInArray = nBreakPos-1-pLine->GetStart();
+        pTP->GetSize().Width() = ( nPosInArray && ( pTP->GetLen() > 1 ) ) ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0;
     }
     else if ( bHyphenated )
     {
@@ -1770,8 +1795,8 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
             if ( nTmpPos == nPos )  // dann braucht nichts geteilt werden
             {
                 // Skip Portions with ExtraSpace
-                while ( ( (nSplitPortion+1) < nPortions ) && (pPortion->GetTextPortions().GetObject(nSplitPortion+1)->GetKind() == PORTIONKIND_EXTRASPACE ) )
-                    nSplitPortion++;
+//              while ( ( (nSplitPortion+1) < nPortions ) && (pPortion->GetTextPortions().GetObject(nSplitPortion+1)->GetKind() == PORTIONKIND_EXTRASPACE ) )
+//                  nSplitPortion++;
 
                 return nSplitPortion;
             }
@@ -2525,7 +2550,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aTmpPos.Y() += nTxtWidth;
                             }
                             break;
-                            case PORTIONKIND_EXTRASPACE:
+//                          case PORTIONKIND_EXTRASPACE:
                             case PORTIONKIND_TAB:
                             {
                                 if ( pTextPortion->GetExtraValue() && ( pTextPortion->GetExtraValue() != ' ' ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-19 14:38:01 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2227,5 +2227,8 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
     }
 
     if ( bChanges )
+    {
+        SetModifyFlag( sal_True );
         FormatAndUpdate();
+    }
 }

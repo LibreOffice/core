@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-21 12:02:04 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ public:
 #define PORTIONKIND_LINEBREAK   2
 #define PORTIONKIND_FIELD       3
 #define PORTIONKIND_HYPHENATOR  4
-#define PORTIONKIND_EXTRASPACE  5
+// #define PORTIONKIND_EXTRASPACE   5
 
 #define DELMODE_SIMPLE          0
 #define DELMODE_RESTOFWORD      1
@@ -441,6 +441,7 @@ private:
     USHORT          nTxtHeight; // Reine Texthoehe
     USHORT          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu groá.
     USHORT          nMaxAscent;
+    BOOL            bHangingPunctuation;
     BOOL            bInvalid;   // fuer geschickte Formatierung
 
 public:
@@ -481,6 +482,9 @@ public:
 
     void            SetMaxAscent( USHORT n )        { nMaxAscent = n; }
     USHORT          GetMaxAscent() const            { return nMaxAscent; }
+
+    void            SetHangingPunctuation( BOOL b )     { bHangingPunctuation = b; }
+    BOOL            IsHangingPunctuation() const        { return bHangingPunctuation; }
 
     USHORT          GetLen() const                  { return nEnd - nStart; }
 

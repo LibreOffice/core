@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 08:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ long ParaPortion::GetXPos( EditLine* pLine, USHORT nIndex )
                 case PORTIONKIND_TEXT:
                 case PORTIONKIND_HYPHENATOR:
                 case PORTIONKIND_TAB:
-                case PORTIONKIND_EXTRASPACE:
+//              case PORTIONKIND_EXTRASPACE:
                 {
                     nX += pPortion->GetSize().Width();
                 }
@@ -416,7 +416,7 @@ USHORT ParaPortion::GetChar( EditLine* pLine, long nXPos, BOOL bSmart )
             case PORTIONKIND_FIELD:
             case PORTIONKIND_HYPHENATOR:
             case PORTIONKIND_TAB:
-            case PORTIONKIND_EXTRASPACE:
+//          case PORTIONKIND_EXTRASPACE:
             {
                 nLastWidth = pPortion->GetSize().Width();
                 nTmpX += nLastWidth;
