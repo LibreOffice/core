@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-24 13:01:28 $
+ *  last change: $Author: mt $ $Date: 2002-08-23 10:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,14 +991,11 @@ IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
         DoSyntaxHighlight( nLine );
         p = aSyntaxLineTable.Next();
     }
-    if ( aSyntaxLineTable.Count() > 3 )                 // Ohne VDev
-    {
-        pEditEngine->SetUpdateMode( TRUE );
-        pEditView->ShowCursor( TRUE, TRUE );
-    }
-    else
-        pEditEngine->SetUpdateMode( TRUE );             // ! Mit VDev
-//  pEditView->ForceUpdate();
+
+    pEditView->SetAutoScroll( FALSE );  // #101043# Don't scroll because of syntax highlight
+    pEditEngine->SetUpdateMode( TRUE );
+    pEditView->ShowCursor( FALSE, TRUE );
+    pEditView->SetAutoScroll( TRUE );
 
     pEditEngine->SetModified( bWasModified );
 
