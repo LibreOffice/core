@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="TypeDetection" oor:package="org.openoffice.Office">
+ <node oor:name="Types">
+  <node oor:name="ascii" oor:op="replace">
+   <prop oor:name="Data" oor:type="xs:string">
+    <value>0,text/plain,,,txt,0</value>
+   </prop>
+   <prop oor:name="UIName" oor:type="xs:string">
+    <value xml:lang="en-US">ASCII</value>
+   </prop>
+  </node>
+ </node>
+ <node oor:name="Filters">
+  <node oor:name="Ascii_Replace" oor:op="replace">
+   <prop oor:name="Data" oor:type="xs:string">
+    <value>0,ascii,com.sun.star.text.TextDocument,OfficeDev.samples.Filter.AsciiReplaceFilter,268959747,,0,,</value>
+   </prop>
+   <prop oor:name="Installed" oor:type="xs:boolean">
+    <value>true</value>
+   </prop>
+   <prop oor:name="UIName" oor:type="xs:string">
+    <value xml:lang="en-US">ASCII Replace</value>
+    <value xml:lang="de">ASCII Konvertierung</value>
+   </prop>
+  </node>
+ </node>
+</oor:component-data>
