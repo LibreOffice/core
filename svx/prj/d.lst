@@ -596,6 +596,7 @@ hedabu: ..\inc\unomaster.hxx %_DEST%\inc%_EXT%\svx\unomaster.hxx
 hedabu: ..\inc\frmdiritem.hxx %_DEST%\inc%_EXT%\svx\frmdiritem.hxx
 hedabu: ..\inc\AccessibleContextBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleContextBase.hxx
 hedabu: ..\inc\AccessibleComponentBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleComponentBase.hxx
+hedabu: ..\inc\AccessibleSelectionBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleSelectionBase.hxx
 hedabu: ..\inc\AccessibleShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleShape.hxx
 hedabu: ..\inc\AccessibleGraphicShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleGraphicShape.hxx
 hedabu: ..\inc\AccessibleOLEShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleOLEShape.hxx
