@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.51 $
- *  last change: $Author: hdu $ $Date: 2001-07-11 15:03:29 $
+ *  $Revision: 1.52 $
+ *  last change: $Author: hdu $ $Date: 2001-07-11 16:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,7 +729,20 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
 
-    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+    FT_Error rc = -1;
+#if (FTVERSION < 205)
+    // #88364# freetype<=204 prefers autohinting to embedded bitmaps
+    // => first we have to try without hinting
+    if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
+    {
+        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
+        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=ft_glyph_format_bitmap) )
+            rc = -1; // mark as "loading embedded bitmap" was unsuccessful
+    }
+#endif
+
+    if( rc != FT_Err_Ok )
+        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
 
