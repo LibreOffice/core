@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:49:30 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:12:47 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -150,8 +150,8 @@ ProUNOCppBindingExample : $(APP1_BINARY) $(APP2_BINARY)
 	@echo -----
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP2_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP2_NAME).run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/%$(EXE_EXT) 
