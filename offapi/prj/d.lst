@@ -30,6 +30,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\bootstrap
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\backend
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\backend\xml
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\deployment
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\deployment\ui
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard
@@ -103,6 +104,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 ..\com\sun\star\configuration\backend\xml\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\configuration\backend\xml
 ..\com\sun\star\datatransfer\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer
 ..\com\sun\star\deployment\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\deployment
+..\com\sun\star\deployment\ui\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\deployment\ui
 ..\com\sun\star\datatransfer\clipboard\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard
 ..\com\sun\star\datatransfer\dnd\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd
 ..\com\sun\star\document\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\document
