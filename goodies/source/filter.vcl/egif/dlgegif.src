@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:46:30 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ czech ] = "Režim";
         Text[ hebrew ] = "‮מצב עבודה‬";
         Text[ hindi ] = "प्रकार";
+        Text[ slovak ] = "Režim";
     };
     CheckBox CBX_INTERLACED
     {
@@ -165,6 +166,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ czech ] = "Prokládaný";
         Text[ hebrew ] = "‮גרפיקה משולבת‬";
         Text[ hindi ] = "~मिला हुआ";
+        Text[ slovak ] = "P~rekladaný";
     };
     FixedLine GRP_DRAW
     {
@@ -203,6 +205,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ czech ] = "Grafické objekty";
         Text[ hebrew ] = "‮עצמי סרטוט‬";
         Text[ hindi ] = "रेखाचित्र वस्तु";
+        Text[ slovak ] = "Grafické objekty";
     };
     CheckBox CBX_TRANSLUCENT
     {
@@ -238,6 +241,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ czech ] = "Uložit průhlednost";
         Text[ hebrew ] = "‮שמירת שקף‬";
         Text[ hindi ] = "~पारदर्शकता संचित करो";
+        Text[ slovak ] = "Uložiť p~riehľadnosť";
     };
     Text[ chinese_simplified ] = "GIF 选项";
     Text[ russian ] = "��������� GIF";
@@ -257,7 +261,10 @@ ModalDialog DLG_EXPORT_GIF
     Text[ czech ] = "Volby pro formát GIF";
     Text[ hebrew ] = "‮אפשרויות GIF‬";
     Text[ hindi ] = "GIF विकल्प";
+    Text[ slovak ] = "Voľby pre formát GIF";
 };
+
+
 
 
 
