@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-28 11:46:13 $
+ *  last change: $Author: cl $ $Date: 2001-03-29 12:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,6 +1510,16 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
         rIn >> bTmp; bMirrored = bTmp;
 
         rIn.ReadByteString(aName);
+        // #85414# since there seems to be some documents wich have an illegal
+        // character inside the name of a graphic object we have to fix this
+        // here on load time or it will crash our xml later.
+        const xub_StrLen nLen = aName.Len();
+        for( xub_StrLen nIndex = 0; nIndex < nLen; nIndex++ )
+        {
+            if( aName.GetChar( nIndex ) < ' ' )
+                aName.SetChar( nIndex, '?' );
+        }
+
         rIn.ReadByteString(aFileNameRel);
 
         if( aFileNameRel.Len() )
