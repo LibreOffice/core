@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 08:46:09 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,10 @@ using namespace ::com::sun::star::script;
 
 //------------------------------------------------------------------------------
 Date DBTypeConversion::STANDARD_DB_DATE(1, 1, 1900);
-
+::com::sun::star::util::Date DBTypeConversion::getStandardDate()
+{
+    return STANDARD_DB_DATE;
+}
 //------------------------------------------------------------------------------
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Reference<XNumberFormatter>& xFormatter,
@@ -787,6 +790,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/11/09 08:46:09  oj
+ *  some new methods for db's
+ *
  *  Revision 1.6  2000/11/08 09:28:45  oj
  *  forget assignment of return value
  *

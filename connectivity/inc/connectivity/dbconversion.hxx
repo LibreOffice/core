@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 08:41:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,11 @@ namespace dbtools
 
     class DBTypeConversion
     {
-    public:
+    protected:
         static ::com::sun::star::util::Date STANDARD_DB_DATE;
 
     public:
+        static ::com::sun::star::util::Date getStandardDate();
         static void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                     const ::com::sun::star::util::Date& rNullDate,
@@ -162,20 +163,20 @@ namespace dbtools
                                         sal_Int32 nKey,
                                         sal_Int16 nKeyType);
 
-        static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
+        static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
         static ::com::sun::star::util::Time     toTime(double dVal);
-        static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
+        static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
         /** return the given DateTime as JDBC compliant 64 bit value
         */
         static sal_Int64 toINT64(const ::com::sun::star::util::DateTime& rVal);
         static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal);
 
-        static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
+        static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
-        static double   toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
+        static double   toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
         static double   toDouble(const ::com::sun::star::util::Time& rVal);
-        static double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
+        static double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
         static sal_Int32    toINT32(const ::com::sun::star::util::Date& rVal);
         static sal_Int32    toINT32(const ::com::sun::star::util::Time& rVal);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 08:32:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,7 @@ DbGridControl::DbGridControl(
               ,m_bSynchDisplay(sal_True)
               ,m_bForceROController(sal_False)
               ,m_bHandle(sal_False)
-              ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
+              ,m_aNullDate(DBTypeConversion::getStandardDate())
               ,m_nAsynAdjustEvent(0)
               ,m_pDataSourcePropMultiplexer(NULL)
               ,m_pDataSourcePropListener(NULL)
@@ -1004,7 +1004,7 @@ DbGridControl::DbGridControl(
               ,m_bSynchDisplay(sal_True)
               ,m_bForceROController(sal_False)
               ,m_bHandle(sal_False)
-              ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
+              ,m_aNullDate(DBTypeConversion::getStandardDate())
               ,m_pDataSourcePropMultiplexer(NULL)
               ,m_pDataSourcePropListener(NULL)
               ,m_pFieldListeners(NULL)
