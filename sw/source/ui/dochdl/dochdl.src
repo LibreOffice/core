@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-30 20:22:22 $
+ *  last change: $Author: mtg $ $Date: 2001-09-27 12:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,12 @@ String STR_DDEFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vínculo DDE";
 };
+Bitmap BMP_SW_TEAM_MUGSHOT
+{
+    File ="writerteam.bmp";
+};
 
-
-
-
+String STR_SW_TEAM_NAMES
+{
+    TEXT = "Michael Brauer, Martin Gallwey, Thomas Lange, Andreas Martens, Caolan McNamara, Frank Meies, Juergen Pingel, Oliver Specht, Daniel Vogelheim";
+};
