@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:31:24 $
+ *  last change: $Author: nn $ $Date: 2001-04-11 14:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,7 +478,7 @@ ScDocument::~ScDocument()
     {
         // BaseLinks freigeben
         for ( USHORT n = pLinkManager->GetServers().Count(); n; )
-            ( (SvPseudoObject*) pLinkManager->GetServers()[ --n ])->Closed();
+            pLinkManager->GetServers()[ --n ]->Closed();
 
         if ( pLinkManager->GetLinks().Count() )
             pLinkManager->Remove( 0, pLinkManager->GetLinks().Count() );
