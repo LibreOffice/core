@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:17:45 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 09:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         break;
         case FN_REDLINE_PROTECT :
         {
+            BOOL bMode = (( pWrtShell->GetRedlineMode() & REDLINE_ON ) != 0);
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ) && ((SfxBoolItem*)pItem)->GetValue() == bMode )
+                break;
             Sequence <sal_Int8> aPasswd =
                         pWrtShell->GetDoc()->GetRedlinePasswd();
             SfxPasswordDialog aPasswdDlg(&GetViewFrame()->GetWindow());
@@ -405,7 +408,11 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 }
                 USHORT nMode = pWrtShell->GetRedlineMode();
                 pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
+                rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&REDLINE_ON)==0) ) );
+                rReq.Done();
             }
+            else
+                rReq.Ignore();
         }
         break;
         case FN_REDLINE_SHOW:
