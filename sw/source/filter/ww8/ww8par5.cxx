@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:36:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 
     if (pB->GetIsEnd())
     {
-        pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true,
+        pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true,
             pB->GetHandle());
         return 0;
     }
@@ -538,7 +538,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         aStart = rTest.maStartPos;
     }
 
-    pRefStck->NewAttr(aStart, SwFltBookmark(BookmarkToWriter(*pName), aVal,
+    pReffedStck->NewAttr(aStart, SwFltBookmark(BookmarkToWriter(*pName), aVal,
         pB->GetHandle(), 0));
     return 0;
 }
@@ -1316,13 +1316,13 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     else
     {
         sName = CREATE_CONST_ASC("WWSetBkmk");
-        nNo = pRefStck->aFieldVarNames.size()+1;
+        nNo = pReffingStck->aFieldVarNames.size()+1;
         sName += String::CreateFromInt32(nNo);
         nNo += pPlcxMan->GetBook()->GetIMax();
     }
-    pRefStck->NewAttr(*pPaM->GetPoint(),SwFltBookmark(BookmarkToWriter(sName),
-        rData,nNo,0));
-    pRefStck->aFieldVarNames[rOrigName] = sName;
+    pReffedStck->NewAttr(*pPaM->GetPoint(),
+        SwFltBookmark(BookmarkToWriter(sName), rData, nNo, 0));
+    pReffingStck->aFieldVarNames[rOrigName] = sName;
     return nNo;
 }
 
@@ -1369,9 +1369,9 @@ String SwWW8ImplReader::GetMappedBookmark(const String &rOrigName)
     //See if there has been a variable set with this name, if so get
     //the pseudo bookmark name that was set with it.
     ::std::map<String,String,SwWW8FltRefStack::ltstr>::const_iterator aResult =
-            pRefStck->aFieldVarNames.find(sName);
+            pReffingStck->aFieldVarNames.find(sName);
 
-    const String &rBkmName = (aResult == pRefStck->aFieldVarNames.end())
+    const String &rBkmName = (aResult == pReffingStck->aFieldVarNames.end())
         ? sName : (*aResult).second;
 
     return rBkmName;
@@ -1428,7 +1428,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
 
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
 
-    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
+    pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
     return FLD_OK;
 }
 
@@ -2017,7 +2017,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
 
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
 
-    pRefStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
+    pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
 
     return FLD_OK;
 }
@@ -2078,8 +2078,8 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             SwGetRefField aFld(
                 (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
                 sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
-            pRefStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
-            pRefStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
+            pReffingStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
+            pReffingStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
         }
     }
 
@@ -2129,15 +2129,15 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
     SwGetRefField aFld( (SwGetRefFieldType*)
         rDoc.GetSysFldType( RES_GETREFFLD ), aBkmName, REF_FOOTNOTE, 0,
         REF_ONLYNUMBER );
-    pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld));
-    pRefStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
+    pReffingStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld));
+    pReffingStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
     if (bAboveBelow)
     {
         SwGetRefField aFld2( (SwGetRefFieldType*)
             rDoc.GetSysFldType( RES_GETREFFLD ),aBkmName, REF_FOOTNOTE, 0,
             REF_UPDOWN );
-        pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld2));
-        pRefStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
+        pReffingStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld2));
+        pReffingStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
     }
     return FLD_OK;
 }
@@ -3279,7 +3279,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
         aFltTOX.SetHadPageDescItem(true);
 
     // Setze Anfang in Stack
-    pRefStck->NewAttr( *pPos, aFltTOX );
+    pReffedStck->NewAttr( *pPos, aFltTOX );
 
     rDoc.InsertTableOf(*pPaM->GetPoint(), *aFltTOX.GetBase());
 
@@ -3302,7 +3302,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     }
 
     // Setze Ende in Stack
-    pRefStck->SetAttr( *pPos, RES_FLTR_TOX );
+    pReffedStck->SetAttr( *pPos, RES_FLTR_TOX );
 
     if (!maApos.back()) //a para end in apo doesn't count
         bWasParaEnd = true;
