@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 14:56:39 $
+ *  last change: $Author: er $ $Date: 2001-06-26 14:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,10 +749,6 @@ String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageTyp
             DBG_ERROR( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
             eTmpFormat = SVXTIMEFORMAT_STANDARD;
         break;
-        case SVXTIMEFORMAT_12_HMSH:
-            DBG_ERROR( "SVXTIMEFORMAT_12_HMSH: not implemented" );
-            eTmpFormat = SVXTIMEFORMAT_24_HMSH;
-        break;
     }
 
     ULONG nFormatKey;
@@ -761,6 +757,18 @@ String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageTyp
     {
         case SVXTIMEFORMAT_12_HM:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMAMPM, eLang );
+        break;
+        case SVXTIMEFORMAT_12_HMSH:
+        {   // no builtin format available, try to insert or reuse
+            String aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS,00 AM/PM" ) );
+            xub_StrLen nCheckPos;
+            short nType;
+            BOOL bInserted = rFormatter.PutandConvertEntry( aFormatCode,
+                nCheckPos, nType, nFormatKey, LANGUAGE_ENGLISH_US, eLang );
+            DBG_ASSERT( nCheckPos == 0, "SVXTIMEFORMAT_12_HMSH: could not insert format code" );
+            if ( nCheckPos )
+                nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HH_MMSS00, eLang );
+        }
         break;
         case SVXTIMEFORMAT_24_HM:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMM, eLang );
