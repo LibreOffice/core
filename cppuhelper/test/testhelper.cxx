@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-15 13:13:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,34 +106,6 @@ int __cdecl main( int argc, char * argv[] )
     sal_Bool bSucc = sal_False;
     try
     {
-        Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstanceWithContext(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ),
-                xContext ),
-            UNO_QUERY );
-        OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
-
-#ifdef UNX
-#define REG_PREFIX      "lib"
-#ifdef MACOSX
-#define DLL_POSTFIX     ".dylib"
-#else
-#define DLL_POSTFIX     ".so"
-#endif
-#else
-#define REG_PREFIX      ""
-#define DLL_POSTFIX     ".dll"
-#endif
-        OString aLibName( REG_PREFIX );
-        aLibName += "corefl";
-#ifndef OS2
-        aLibName += DLL_POSTFIX;
-#endif
-        xImplReg->registerImplementation(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") ),
-            OUString::createFromAscii( aLibName.getStr() ),
-            Reference< XSimpleRegistry >() );
-
         Reference< XMultiServiceFactory > x( xMgr, UNO_QUERY );
         test_ImplHelper( x );
         testPropertyTypeHelper();

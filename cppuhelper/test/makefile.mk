@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dbo $ $Date: 2001-11-09 13:49:16 $
+#   last change: $Author: hr $ $Date: 2003-03-19 17:23:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,6 +169,7 @@ $(BIN)$/cpputest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
+    +regcomp -register -r $@ -c $(DLLPRE)corefl$(DLLPOST)
     touch $@
 
 unoheader: $(BIN)$/cpputest.rdb

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: dbo $ $Date: 2002-12-06 10:12:29 $
+#   last change: $Author: hr $ $Date: 2003-03-19 17:23:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,8 +169,8 @@ SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 .ENDIF # UNIXVERSIONNAMES
 
 SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(SALLIB)
+        $(SALLIB)		\
+        $(CPPULIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
@@ -193,6 +193,10 @@ SHL1VERSIONMAP=cc5_solaris_sparc.map
 SHL1VERSIONMAP=gcc2_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
+.ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc2"
+#SHL1VERSIONMAP=gcc2_freebsd_intel.map
+.ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc3"
+#SHL1VERSIONMAP=gcc3_freebsd_intel.map
 .ENDIF
 
 # --- Targets ------------------------------------------------------

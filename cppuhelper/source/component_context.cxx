@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-12 14:00:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,8 +427,7 @@ protected:
 public:
     ComponentContext(
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-        Reference< XComponentContext > const & xDelegate )
-        SAL_THROW( () );
+        Reference< XComponentContext > const & xDelegate );
     virtual ~ComponentContext()
         SAL_THROW( () );
 
@@ -556,6 +555,10 @@ Any ComponentContext::lookupMap( OUString const & rName )
                         }
                     }
                 }
+            }
+            catch (RuntimeException &)
+            {
+                throw;
             }
             catch (Exception & exc) // rethrow as RuntimeException
             {
@@ -696,7 +699,6 @@ void ComponentContext::disposing()
 ComponentContext::ComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
-    SAL_THROW( () )
     : WeakComponentImplHelper1< XComponentContext >( m_mutex )
     , m_xDelegate( xDelegate )
 {
@@ -782,7 +784,6 @@ public:
     inline ConfigurationComponentContext(
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
         Reference< XComponentContext > const & xDelegate )
-        SAL_THROW( () )
         : ComponentContext( pEntries, nEntries, xDelegate )
         {}
 
@@ -835,6 +836,10 @@ Reference< container::XNameAccess > ConfigurationComponentContext::getCfgNode(
         Reference< container::XNameAccess > xNA( m_xCfgProvider->createInstanceWithArguments(
             OUSTR("com.sun.star.configuration.ConfigurationAccess"), args ), UNO_QUERY );
         return xNA;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
     }
     catch (Exception & exc)
     {
@@ -920,6 +925,13 @@ Reference< XInterface > ConfigurationComponentContext::createSingletonFromCfg(
         {
             return xInstance;
         }
+        throw_RT( OUSTR("no service object raising singleton \""), rName );
+        // is here for dummy
+        return Reference< XInterface >();
+    }
+    catch (RuntimeException &)
+    {
+        throw;
     }
     catch (Exception & exc)
     {
@@ -927,11 +939,6 @@ Reference< XInterface > ConfigurationComponentContext::createSingletonFromCfg(
             OUSTR("exception occured raising singleton \""), rName,
             OUSTR("\": "), exc.Message );
     }
-
-    throw_RT(
-        OUSTR("no service object raising singleton \""), rName );
-    // is here for dummy
-    return Reference< XInterface >();
 }
 //__________________________________________________________________________________________________
 Any ConfigurationComponentContext::getValueByName( OUString const & rName )
@@ -1020,6 +1027,10 @@ Any ConfigurationComponentContext::getValueByName( OUString const & rName )
                 {
                     return xNA->getByName( rName.copy( last +1 ) );
                 }
+                catch (RuntimeException &)
+                {
+                    throw;
+                }
                 catch (Exception & exc)
                 {
 #ifdef CONTEXT_DIAG
@@ -1097,12 +1108,19 @@ Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
     Reference< XComponentContext > const & xDelegate )
     SAL_THROW( () )
 {
-    ConfigurationComponentContext * p =
-        new ConfigurationComponentContext( pEntries, nEntries, xDelegate );
-    Reference< XComponentContext > xContext( p );
-    // listen delegate for disposing, to dispose this (wrapping) context first.
-    DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
-    return xContext;
+    try
+    {
+        ConfigurationComponentContext * p =
+            new ConfigurationComponentContext( pEntries, nEntries, xDelegate );
+        Reference< XComponentContext > xContext( p );
+        // listen delegate for disposing, to dispose this (wrapping) context first.
+        DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
+        return xContext;
+    }
+    catch (...)
+    {
+        return Reference< XComponentContext >();
+    }
 }
 
 //##################################################################################################
@@ -1113,11 +1131,18 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
 {
     if (nEntries > 0)
     {
-        ComponentContext * p = new ComponentContext( pEntries, nEntries, xDelegate );
-        Reference< XComponentContext > xContext( p );
-        // listen delegate for disposing, to dispose this (wrapping) context first.
-        DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
-        return xContext;
+        try
+        {
+            ComponentContext * p = new ComponentContext( pEntries, nEntries, xDelegate );
+            Reference< XComponentContext > xContext( p );
+            // listen delegate for disposing, to dispose this (wrapping) context first.
+            DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
+            return xContext;
+        }
+        catch (...)
+        {
+            return Reference< XComponentContext >();
+        }
     }
     else
     {

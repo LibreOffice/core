@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-18 09:59:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,20 +394,23 @@ OWeakRefListener::OWeakRefListener() SAL_THROW( () )
 }
 
 OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () )
-    : m_aRefCount( 0 )
+    : m_aRefCount( 1 )
 {
     try
     {
     m_XWeakConnectionPoint = rRef.m_XWeakConnectionPoint;
 
     if (m_XWeakConnectionPoint.is())
+    {
         m_XWeakConnectionPoint->addReference((XReference*)this);
     }
+    }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    osl_decrementInterlockedCount( &m_aRefCount );
 }
 
 OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW( () )
-    : m_aRefCount( 0 )
+    : m_aRefCount( 1 )
 {
     try
     {
@@ -424,15 +427,18 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THRO
     }
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    osl_decrementInterlockedCount( &m_aRefCount );
 }
 
 OWeakRefListener::~OWeakRefListener() SAL_THROW( () )
 {
     try
     {
-    acquire(); // dont die again
     if (m_XWeakConnectionPoint.is())
+    {
+        acquire(); // dont die again
         m_XWeakConnectionPoint->removeReference((XReference*)this);
+    }
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
 }
