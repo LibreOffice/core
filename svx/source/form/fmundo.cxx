@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 10:51:48 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 13:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,21 +799,24 @@ void FmXUndoEnvironment::firing_Impl( const ::com::sun::star::script::ScriptEven
             evt.Helper >>= xSet;
             Reference< ::com::sun::star::form::XForm >  xForm(xSet, UNO_QUERY);
 
-            if ( xForm.is())
-            {
-                // these events can't be called form a database ::com::sun::star::form::Form
-                if (evt.MethodName == ::rtl::OUString::createFromAscii("errorOccured"))
-                    return;
-                else if (evt.MethodName == ::rtl::OUString::createFromAscii("approveCursorMove") ||
-                         evt.MethodName == ::rtl::OUString::createFromAscii("approveRowChange") ||
-                         evt.MethodName == ::rtl::OUString::createFromAscii("approveRowSetChange") ||
-                         evt.MethodName == ::rtl::OUString::createFromAscii("approveParameter"))
-                {
-                    sal_Bool bB = sal_True;
-                    pSyncRet->setValue(&bB,::getBooleanCppuType());
-                    return;
-                }
-            }
+            // ??? why has this code below made it in ???
+            // 86110 - 18.04.2001 - frank.schoenheit@germany.sun.com
+//          if ( xForm.is())
+//          {
+//              // these events can't be called for a database form
+//              if (evt.MethodName == ::rtl::OUString::createFromAscii("errorOccured"))
+//                  return;
+//              else if (evt.MethodName == ::rtl::OUString::createFromAscii("approveCursorMove") ||
+//                       evt.MethodName == ::rtl::OUString::createFromAscii("approveRowChange") ||
+//                       evt.MethodName == ::rtl::OUString::createFromAscii("approveRowSetChange") ||
+//                       evt.MethodName == ::rtl::OUString::createFromAscii("approveParameter"))
+//              {
+//                  sal_Bool bB = sal_True;
+//                  pSyncRet->setValue(&bB,::getBooleanCppuType());
+//                  return;
+//              }
+//          }
+
             xThis = Reference< XInterface > (xSet, UNO_QUERY);
         }
         else if( evt.Helper.getValueType() ==
