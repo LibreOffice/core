@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:25:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 pCombinedFilters = pCont->GetAnyFilter( nMust, nDont );
             }
 
+            SFX_ITEMSET_ARG( &aSet, pDocumentTitleItem, SfxStringItem, SID_DOCINFO_TITLE, FALSE );
+
             if ( pCombinedFilters )
             {
                 INetURLObject aObj( rURL );
@@ -349,6 +351,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                     // wether their slot is called directly (like from Autopilot menue) or as part
                     // of a "NewDocument" request
                     aReq.AppendItem( SfxBoolItem ( SID_NEWDOCDIRECT, TRUE ) );
+
+                    if ( pDocumentTitleItem )
+                        aReq.AppendItem( *pDocumentTitleItem );
 
                     const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
                     if ( pRet )
@@ -391,6 +396,10 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                     SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
                     aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
                     aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, String::CreateFromAscii(pFactory->GetShortName()) ) );
+
+                    if ( pDocumentTitleItem )
+                        aReq.AppendItem( *pDocumentTitleItem );
+
                     const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
                     if (pRet)
                     {
