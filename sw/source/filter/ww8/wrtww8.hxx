@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:23 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,14 +209,14 @@ struct WW8_SepInfo
     USHORT nPgRestartNo;
 
     WW8_SepInfo()
-        : pPageDesc(0), pSectionFmt(0), pNumNd(0), pPDNd(0), nPgRestartNo(0),
-          nLnNumRestartNo(0)
+        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), nPgRestartNo(0)
+
     {}
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFmt* pFmt,
         ULONG nLnRestart )
-        : pPageDesc(pPD), pSectionFmt(pFmt), pNumNd(0), nPgRestartNo(0),
-          nLnNumRestartNo( nLnRestart ), pPDNd( 0 )
+        : pPageDesc(pPD), pSectionFmt(pFmt), pPDNd(0), pNumNd(0),
+        nLnNumRestartNo(nLnRestart), nPgRestartNo(0)
     {}
 };
 SV_DECL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo, 4, 4 )
@@ -333,15 +333,15 @@ public:
     DrawObj(const SwFrmFmt &rCntnt, WW8_CP nCp, Point aParentPos, short nDir)
         : mnCp(nCp), mnShapeId(0), mrCntnt(rCntnt), maParentPos(aParentPos),
         mnThick(0), mnDirection(nDir) {}
+private:
+    //No assignment
+    DrawObj& operator=(const DrawObj&);
 };
 
 class PlcDrawObj // PC for DrawObjects and Text-/OLE-/GRF-Boxes
 {
 private:
     ::std::vector<DrawObj> maDrawObjs;  // vector of drawobjs
-    //No copying
-    PlcDrawObj(const PlcDrawObj&);
-    PlcDrawObj& operator=(const PlcDrawObj&);
 protected:
     virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
         sal_uInt32 nLen) const = 0;
@@ -355,22 +355,38 @@ public:
     const ::std::vector<DrawObj> &GetObjArr() const { return maDrawObjs; }
     void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, INT32 nThick );
     virtual ~PlcDrawObj();
+private:
+    //No copying
+    PlcDrawObj(const PlcDrawObj&);
+    PlcDrawObj& operator=(const PlcDrawObj&);
 };
 
 class MainTxtPlcDrawObj : public PlcDrawObj
 {
+public:
+    MainTxtPlcDrawObj() {}
 private:
     virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
         sal_uInt32 nLen) const;
-    virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const;
+    virtual WW8_CP GetCpOffset(const WW8Fib &) const;
+private:
+    //No copying
+    MainTxtPlcDrawObj(const MainTxtPlcDrawObj&);
+    MainTxtPlcDrawObj& operator=(const MainTxtPlcDrawObj&);
 };
 
 class HdFtPlcDrawObj : public PlcDrawObj
 {
+public:
+    HdFtPlcDrawObj() {}
 private:
     virtual void RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
         sal_uInt32 nLen) const;
     virtual WW8_CP GetCpOffset(const WW8Fib &rFib) const;
+private:
+    //No copying
+    HdFtPlcDrawObj(const HdFtPlcDrawObj&);
+    HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&);
 };
 
 // der WW8-Writer
@@ -640,6 +656,10 @@ public:
     void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
 
     static bool NoPageBreakSection(const SfxItemSet *pSet);
+private:
+    //No copying
+    SwWW8Writer(const SwWW8Writer&);
+    SwWW8Writer& operator=(const SwWW8Writer&);
 };
 
 class WW8_WrPlcSubDoc   // Doppel-Plc fuer Foot-/Endnotes und Postits
@@ -654,7 +674,7 @@ protected:
     WW8_WrPlc0* pTxtPos;            // Pos der einzelnen Texte
 
     WW8_WrPlcSubDoc();
-    ~WW8_WrPlcSubDoc();
+    virtual ~WW8_WrPlcSubDoc();
 
     bool WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp, long& rCount);
     void WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp, long& rTxtStt,
@@ -695,12 +715,11 @@ public:
     void WritePlc( SwWW8Writer& rWrt ) const;
 };
 
-class WW8_WrPlcTxtBoxes : public WW8_WrPlcSubDoc    // Doppel-Plc fuer Textboxen
-{                                                   // Rahmen/DrawTextboxes!
+class WW8_WrPlcTxtBoxes : public WW8_WrPlcSubDoc // Doppel-Plc fuer Textboxen
+{                        // Rahmen/DrawTextboxes!
 private:
-
     BYTE nTyp;
-    SvULongs aShapeIds;             // VARARR of ShapeIds for the SwFrmFmts
+    SvULongs aShapeIds;        // VARARR of ShapeIds for the SwFrmFmts
     virtual const SvULongs* GetShapeIdArr() const;
 
     //No copying
@@ -853,7 +872,7 @@ protected:
     SwWW8Writer& rWrt;
 public:
     WW8_AttrIter( SwWW8Writer& rWrt );
-    ~WW8_AttrIter();
+    virtual ~WW8_AttrIter();
 
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const = 0;
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const = 0;

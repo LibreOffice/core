@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-14 14:24:31 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,8 @@ using namespace ::com::sun::star::i18n;
 
 /*  */
 
-WW8_AttrIter::WW8_AttrIter( SwWW8Writer& rWr )
-    : rWrt( rWr ), pOld( rWr.pChpIter )
+WW8_AttrIter::WW8_AttrIter(SwWW8Writer& rWr)
+    : pOld(rWr.pChpIter), rWrt(rWr)
 {
     rWrt.pChpIter = this;
 }
@@ -352,8 +352,8 @@ public:
 };
 
 WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
-    : WW8_AttrIter(rWr), rNd(rTxtNd), nAktSwPos(0), nTmpSwPos(0),
-    nCurRedlinePos(USHRT_MAX), pCurRedline(0), mbCharIsRTL(false)
+    : WW8_AttrIter(rWr), rNd(rTxtNd), pCurRedline(0), nAktSwPos(0),
+    nTmpSwPos(0), nCurRedlinePos(USHRT_MAX), mbCharIsRTL(false)
 {
     SwPosition aPos(rTxtNd);
     if (FRMDIR_HORI_RIGHT_TOP == rWr.pDoc->GetTextDirection(aPos))
@@ -377,10 +377,10 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
 
     if (rTxt.Len())
     {
-        const BYTE nDefaultDir = mbParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
+        UBiDiDirection eDefaultDir = mbParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
-        ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(), nDefaultDir, NULL,
+        ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(), eDefaultDir, NULL,
             &nError);
 
         sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
@@ -454,16 +454,15 @@ rtl_TextEncoding WW8_SwAttrIter::GetNextCharSet() const
 
 xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
 {
-    register xub_StrLen nPos;
-    register xub_StrLen nMinPos = STRING_MAXLEN;
-    register xub_StrLen i;
+    xub_StrLen nPos;
+    xub_StrLen nMinPos = STRING_MAXLEN;
+    xub_StrLen i=0;
 
     // first the redline, then the attributes
     if( pCurRedline )
     {
         const SwPosition* pEnd = pCurRedline->End();
-        if( pEnd->nNode == rNd &&
-            ( i = pEnd->nContent.GetIndex() ) >= nStartPos )
+        if (pEnd->nNode == rNd && ((i = pEnd->nContent.GetIndex()) >= nStartPos))
             nMinPos = i;
     }
 
@@ -526,8 +525,9 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
                 }
             }
             else
-            {                                   // Attr ohne Ende
-                nPos = *pHt->GetStart() + 1;    // Laenge 1 wegen CH_TXTATR im Text
+            {
+                // Attr ohne Ende Laenge 1 wegen CH_TXTATR im Text
+                nPos = *pHt->GetStart() + 1;
                 if( nPos >= nStartPos && nPos <= nMinPos )
                 {
                     nMinPos = nPos;
@@ -576,7 +576,7 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
 void WW8_SwAttrIter::SetCharSet(const SwTxtAttr& rAttr, bool bStart)
 {
     const SwTxtAttr* p = 0;
-    rtl_TextEncoding eChrSet;
+    rtl_TextEncoding eChrSet(RTL_TEXTENCODING_DONTKNOW);
     const SfxPoolItem& rItem = rAttr.GetAttr();
     switch(rItem.Which())
     {
@@ -591,8 +591,8 @@ void WW8_SwAttrIter::SetCharSet(const SwTxtAttr& rAttr, bool bStart)
                     ((SwFmtCharFmt&)rItem).GetCharFmt()->GetItemState(
                         RES_CHRATR_FONT, true, &pItem ))
                 {
-                    eChrSet = ((const SvxFontItem*)pItem)->GetCharSet();
                     p = &rAttr;
+                    eChrSet = ((const SvxFontItem*)pItem)->GetCharSet();
                 }
             }
             break;

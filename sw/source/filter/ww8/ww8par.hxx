@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-04 12:19:10 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,10 @@ public:
     void close(const SwPosition& rPos, SwRedlineType eType);
     void closeall(const SwPosition& rPos);
     ~wwRedlineStack();
+private:
+    //No copying
+    wwRedlineStack(const wwRedlineStack&);
+    wwRedlineStack& operator=(const wwRedlineStack&);
 };
 
 //The only thing this is for is RES_FLTR_ANCHOR, anything else is an error.
@@ -346,6 +350,10 @@ public:
     void AddAnchor(const SwPosition& rPos,SwFrmFmt *pFmt);
     void RemoveAnchor(const SwFrmFmt *pFmt);
     void Flush();
+private:
+    //No copying
+    SwWW8FltAnchorStack(const SwWW8FltAnchorStack&);
+    SwWW8FltAnchorStack& operator=(const SwWW8FltAnchorStack&);
 };
 
 //For fields whose handling cannot be fully resolved until we hit the end of
@@ -448,13 +456,12 @@ class SwWW8Shade
 public:
     Color aColor;
     SwWW8Shade(bool bVer67, const WW8_SHD& rSHD);
-    SwWW8Shade(bool bVer67, ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
+    SwWW8Shade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
     {
-        SetShade(bVer67, nFore, nBack, nIndex);
+        SetShade(nFore, nBack, nIndex);
     }
 private:
-    void SetShade(bool bVer67, ColorData nFore,
-        ColorData nBack, sal_uInt16 nIndex);
+    void SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex);
 };
 
 
@@ -898,7 +905,7 @@ friend class WW8FormulaControl;
         bool bCallProcessSpecial);
     long ReadTextAttr(long& rTxtPos, bool& rbStartLine);
     void ReadAttrs(long& rNext, long& rTxtPos, bool& rbStartLine);
-    void ReadAttrEnds( long& rNext, long& rTxtPos );
+    void CloseAttrEnds();
     bool ReadText(long nStartCp, long nTextLen, short nType);
 
     void ReadRevMarkAuthorStrTabl( SvStream& rStrm, INT32 nTblPos,
@@ -990,8 +997,7 @@ friend class WW8FormulaControl;
     SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
     void RemoveAutoAnchor(const SwFrmFmt *pFmt);
     SwFrmFmt* ImportGraf1(WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos);
-    SwFrmFmt* ImportGraf(SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0,
-        bool bSetToBackground = false);
+    SwFrmFmt* ImportGraf(SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0);
     bool ImportURL(String &sURL,String &sMark,WW8_CP nStart);
 
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,

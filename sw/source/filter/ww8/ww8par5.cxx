@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-29 13:45:02 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
         'E', 'O', 'A', 'e', 'a', 'o', 'g', 'G'
     };
 
-    for (int i=0; i < sizeof(aJapanese); ++i)
+    for (size_t i = 0; i < sizeof(aJapanese); ++i)
     {
         if (STRING_NOTFOUND != rParams.Search(aJapanese[i]))
         {
@@ -2160,24 +2160,24 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     {
         switch( nRet )
         {
-        case -2:
-            if( !aPara.Len() )
-                aPara = aReadParam.GetResult();
-            else if( !aBook.Len() )
-                aBook = aReadParam.GetResult();
-            break;
-        case '*':
-            //Skip over MERGEFORMAT
-            aReadParam.SkipToNextToken();
-            break;
+            case -2:
+                if( !aPara.Len() )
+                    aPara = aReadParam.GetResult();
+                else if( !aBook.Len() )
+                    aBook = aReadParam.GetResult();
+                break;
+            case '*':
+                //Skip over MERGEFORMAT
+                aReadParam.SkipToNextToken();
+                break;
         }
     }
     ConvertFFileName(aPara, aPara);
 
-    if( aBook.Len() && aBook.GetChar( 0 ) != '\\' )
+    if (aBook.Len() && aBook.GetChar( 0 ) != '\\')
     {
         // Bereich aus Quelle ( kein Switch ) ?
-        ConvertUFName( aBook );
+        ConvertUFName(aBook);
         aPara += so3::cTokenSeperator;
         aPara += so3::cTokenSeperator;
         aPara += aBook;
@@ -3021,7 +3021,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
 eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 {
-    eF_ResT eRet = FLD_OK;
     String sURL, sTarget, sMark;
     bool bDataImport = false;
     //HYPERLINk "filename" [switches]

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:50 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,8 +513,8 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
 
     for (rTypo.reserved1=8;rTypo.reserved1>0;rTypo.reserved1-=2)
     {
-        if (pForbidden = pDoc->GetForbiddenCharacters(rTypo.GetConvertedLang(),
-            false))
+        if ((pForbidden = pDoc->GetForbiddenCharacters(rTypo.GetConvertedLang(),
+            false)))
         {
             int nIdx = (rTypo.reserved1-2)/2;
             if( lcl_CmpBeginEndChars( pForbidden->endLine,
@@ -823,7 +823,7 @@ ULONG SwWW8Writer::FillUntil( SvStream& rStrm, ULONG nEndPos )
 /*  */
 
 WW8_WrPlcPn::WW8_WrPlcPn( SwWW8Writer& rWr, ePLCFT ePl, WW8_FC nStartFc )
-    : rWrt( rWr ), ePlc( ePl ), nFkpStartPage( 0 ), nMark(0)
+    : rWrt(rWr), nFkpStartPage(0), ePlc(ePl), nMark(0)
 {
     WW8_FkpPtr pF = new WW8_WrFkp( ePlc, nStartFc, rWrt.bWrtWW8 );
     aFkps.Insert( pF, aFkps.Count() );
@@ -836,9 +836,8 @@ WW8_WrPlcPn::~WW8_WrPlcPn()
 
 BYTE *WW8_WrPlcPn::CopyLastSprms(BYTE &rLen)
 {
-    BYTE *pRet=0;
-    WW8_FkpPtr pF = aFkps.GetObject(aFkps.Count()-1);
-    return pF->CopyLastSprms(rLen,rWrt.bWrtWW8);
+    WW8_FkpPtr pF = aFkps.GetObject(aFkps.Count() - 1);
+    return pF->CopyLastSprms(rLen, rWrt.bWrtWW8);
 }
 
 void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const BYTE* pSprms)
@@ -947,9 +946,9 @@ void WW8_WrPlcPn::WritePlc()
 /*  */
 
 WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8)
-    : nItemSize( ( CHP == ePl ) ? 1 : ( bWrtWW8 ? 13 : 7 )),
-         nIMax( 0 ), ePlc( ePl ), bCombined(false), nStartGrp( 511 ),
-    nOldStartGrp( 511 ), nOldVarLen( 0 ), nMark(0)
+    : ePlc(ePl), nStartGrp(511), nOldStartGrp(511),
+    nItemSize( ( CHP == ePl ) ? 1 : ( bWrtWW8 ? 13 : 7 )),
+    nIMax(0), nOldVarLen(0), nMark(0), bCombined(false)
 {
     pFkp = (BYTE*)new INT32[128];           // 512 Byte
     pOfs = (BYTE*)new INT32[128];           // 512 Byte
@@ -1042,8 +1041,8 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
 
     BYTE nOldP = ( nVarLen ) ? SearchSameSprm( nVarLen, pSprms ) : 0;
                                             // Kombinieren gleicher Eintraege
-    short nOffset, nPos = nStartGrp;
-    if( nVarLen && !nOldP )
+    short nOffset=0, nPos = nStartGrp;
+    if (nVarLen && !nOldP)
     {
         nPos = PAP == ePlc
                 ? ( 13 == nItemSize     // HACK: PAP und bWrtWW8 !!
@@ -1200,7 +1199,7 @@ WW8_FC WW8_WrFkp::GetEndFc() const
 //--------------------------------------------------------------------------
 
 WW8_WrPct::WW8_WrPct(WW8_FC nfcMin, bool bSaveUniCode)
-    : nOldFc( nfcMin ), bIsUni( bSaveUniCode ), pPcts( new WW8_WrPcPtrs )
+    : pPcts(new WW8_WrPcPtrs), nOldFc(nfcMin), bIsUni(bSaveUniCode)
 {
     AppendPc( nOldFc, bIsUni );
 }
@@ -2424,12 +2423,12 @@ ULONG SwWW8Writer::WriteStorage()
     return nRet;
 }
 
-SwWW8Writer::SwWW8Writer( const String& rFltName )
-    : pChpIter( 0 ), aMainStg( sMainStream ), pPapPlc( 0 ), pChpPlc( 0 ),
-    pO( 0 ), pAktPageDesc( 0 ), pISet( 0 ), pUsedNumTbl( 0 ), pBmpPal( 0 ),
-    pKeyMap( 0 ), pOLEExp( 0 ), pOCXExp(0), pOleMap(0), nUniqueList(0)
+SwWW8Writer::SwWW8Writer(const String& rFltName)
+    : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), pBmpPal(0),
+    pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0), nUniqueList(0),
+    pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0)
 {
-    bWrtWW8 = rFltName.EqualsAscii( FILTER_WW8 );
+    bWrtWW8 = rFltName.EqualsAscii(FILTER_WW8);
 }
 
 SwWW8Writer::~SwWW8Writer()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-04 12:19:12 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ void wwRedlineStack::close(const SwPosition& rPos, SwRedlineType eType)
         (*aResult)->SetEndPos(rPos);
 }
 
-class CloseIfOpen
+class CloseIfOpen       //Subclass from something ?
 {
 private:
     const SwPosition &mrPos;
@@ -566,6 +566,9 @@ public:
         if (pEntry->bLocked)
             pEntry->SetEndPos(mrPos);
     }
+private:
+   //No assignment
+   CloseIfOpen& operator=(const CloseIfOpen&);
 };
 
 void wwRedlineStack::closeall(const SwPosition& rPos)
@@ -580,6 +583,9 @@ private:
 public:
     explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
     void operator()(SwFltStackEntry *pEntry);
+private:
+   //No assignment
+   SetInDocAndDelete& operator=(const SetInDocAndDelete&);
 };
 
 void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)

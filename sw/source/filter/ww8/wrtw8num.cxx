@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:54 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,6 @@ void SwWW8Writer::OutListTab()
                         }
 #endif
                     }
-                    const char *pName=0;
                     sal_Unicode cChar = sNumStr.GetChar(0);
                     String sFont = pConvert->ConvertChar(cChar);
                     if (sFont.Len())
@@ -609,9 +608,8 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
             && (rFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // UEberhaupt Nummerierung ?
         {                                               // -> suche, ob noch Zahlen davor
             BYTE nUpper = rFmt.GetIncludeUpperLevels();
-            if( (nUpper >= 0 )
-                && (nUpper <= WW8ListManager::nMaxLevel )
-                && (rRul.Get(nUpper).GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // Nummerierung drueber ?
+            if( (nUpper <= WW8ListManager::nMaxLevel) &&
+                (rRul.Get(nUpper).GetNumberingType() != SVX_NUM_NUMBER_NONE ) ) // Nummerierung drueber ?
             {
                                                     // dann Punkt einfuegen
                 SwWw8_InsertAnlText( aDotStr, rpCh, rCharLen,

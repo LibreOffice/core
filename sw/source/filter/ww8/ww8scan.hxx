@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-06 15:47:38 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,10 @@ public:
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : 0; }
     const BYTE* GetAktParams() const { return pAktParams; }
     USHORT GetAktId() const { return nAktId; }
+private:
+    //No copying
+    WW8SprmIter(const WW8SprmIter&);
+    WW8SprmIter& operator=(const WW8SprmIter&);
 };
 
 /* u.a. fuer FKPs auf normale Attr., also ein Attr weniger als Positionen */
@@ -391,7 +395,7 @@ private:
     WW8PLCFx& operator=(const WW8PLCFx&);
 public:
     WW8PLCFx(BYTE nFibVersion, bool bSprm)
-        : bIsSprm(bSprm), nVersion(nFibVersion), bDirty(false) {}
+        : nVersion(nFibVersion), bIsSprm(bSprm), bDirty(false) {}
     bool IsSprm() const { return bIsSprm; }
     virtual ULONG GetIdx() const = 0;
     virtual void SetIdx( ULONG nIdx ) = 0;

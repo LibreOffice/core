@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-04 12:19:08 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ bool SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
 }
 
 SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
-    SwFrmFmt* pOldFlyFmt, bool bSetToBackground)
+    SwFrmFmt* pOldFlyFmt)
 {
     SwFrmFmt* pRet = 0;
     if (

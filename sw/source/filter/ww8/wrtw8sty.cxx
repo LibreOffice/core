@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:54 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,7 +811,7 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
         pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
-    if (pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT))
+    if ((pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT)))
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
             pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
@@ -904,8 +904,7 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
 //      behandelt auch Header und Footer
 //------------------------------------------------------------------------------
 
-WW8_WrPlcSepx::WW8_WrPlcSepx()
-    : pTxtPos( 0 ), aCps( 4, 4 ), aSects( 4, 4 ), pAttrs( 0 )
+WW8_WrPlcSepx::WW8_WrPlcSepx() : aSects(4, 4), aCps(4, 4), pAttrs(0), pTxtPos(0)
 {
 }
 
@@ -1143,7 +1142,6 @@ int WW8_WrPlcSepx::HasBorderItem( const SwFmt& rFmt )
 
 bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 {
-    bool bRet = false;
     pAttrs = new WW8_PdAttrDesc[ aSects.Count() ];
     WW8Bytes* pO = rWrt.pO;
     ULONG nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );

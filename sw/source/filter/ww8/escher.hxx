@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:19 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,13 @@ public:
     SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
-    virtual void WriteFrmExtraData(const SwFrmFmt& rFmt);
+    virtual void WriteFrmExtraData(const SwFrmFmt&);
     virtual void WritePictures();
     virtual ~SwBasicEscherEx();
+private:
+    //No copying
+    SwBasicEscherEx(const SwBasicEscherEx&);
+    SwBasicEscherEx& operator=(const SwBasicEscherEx&);
 };
 
 class SwEscherEx : public SwBasicEscherEx
@@ -136,10 +140,6 @@ private:
         com::sun::star::drawing::XShape > &,UINT32);
     virtual void SetPicId(const SdrObject &rSdrObj, UINT32 nShapeId,
         EscherPropertyContainer &rPropOpt);
-
-    //No copying
-    SwEscherEx(const SwEscherEx&);
-    SwEscherEx &operator=(const SwEscherEx&);
 public:
     SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt );
     virtual ~SwEscherEx();
@@ -150,6 +150,10 @@ public:
 
     EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > &) {return &aHostData;}
+private:
+    //No copying
+    SwEscherEx(const SwEscherEx&);
+    SwEscherEx &operator=(const SwEscherEx&);
 };
 
 #endif

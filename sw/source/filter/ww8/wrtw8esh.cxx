@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:20 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ void MainTxtPlcDrawObj::RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
     rFib.lcbPlcfspaMom = nLen;
 }
 
-WW8_CP MainTxtPlcDrawObj::GetCpOffset(const WW8Fib &rFib) const
+WW8_CP MainTxtPlcDrawObj::GetCpOffset(const WW8Fib &) const
 {
     return 0;
 }
@@ -419,11 +419,14 @@ class HasThisFrame: public std::unary_function<const DrawObj &, bool>
 private:
     const SwFrmFmt& mrFmt;
 public:
-    HasThisFrame(const SwFrmFmt& rFmt) : mrFmt(rFmt) {}
+    explicit HasThisFrame(const SwFrmFmt& rFmt) : mrFmt(rFmt) {}
     bool operator()(const DrawObj &rIn) const
     {
         return (&rIn.mrCntnt == &mrFmt);
     }
+private:
+    //No assignment
+    HasThisFrame& operator=(const HasThisFrame&);
 };
 
 void PlcDrawObj::SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId,
@@ -512,27 +515,27 @@ static bool lcl_IsFlyInFlyHere(const SwFrmFmt* pFmt, ULONG nStart, ULONG nEnd)
     return bRet;
 }
 
-void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
-                                    const Point& rNdTopLeft )
+void SwWW8Writer::AppendFlyInFlys(WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
+    const Point& rNdTopLeft)
 {
-    ASSERT( !pEscher, "der EscherStream wurde schon geschrieben!" );
-    if( pEscher )
+    ASSERT(!pEscher, "der EscherStream wurde schon geschrieben!");
+    if (pEscher)
         return ;
     bool bExportAsTable = false;
-    USHORT nArrLen = 0, nLastFmt;
-    ULONG nStart, nEnd;
+    USHORT nArrLen = 0, nLastFmt = 0;
+    ULONG nStart = 0, nEnd = 0;
 
-    if( RES_FLYFRMFMT == rFrmFmt.Which() )
+    if (RES_FLYFRMFMT == rFrmFmt.Which())
     {
         const SwNodeIndex* pNdIdx = rFrmFmt.GetCntnt().GetCntntIdx();
         ASSERT( pNdIdx, "wo ist der NodeIndex geblieben?" );
         nStart = pNdIdx->GetIndex();
         nEnd = pNdIdx->GetNode().EndOfSectionIndex();
         nArrLen = pDoc->GetSpzFrmFmts()->Count();
-        for( nLastFmt = 0; nLastFmt < nArrLen; ++nLastFmt )
+        for (nLastFmt = 0; nLastFmt < nArrLen; ++nLastFmt)
         {
             if (lcl_IsFlyInFlyHere(
-                (*pDoc->GetSpzFrmFmts())[nLastFmt],nStart,nEnd))
+                (*pDoc->GetSpzFrmFmts())[nLastFmt], nStart, nEnd))
             {
                 bExportAsTable = true;
                 break;
@@ -542,7 +545,6 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
 
     if (bExportAsTable)
     {
-        SwTwips nTblSz = rFrmFmt.GetFrmSize().GetWidth();
         SwTwips nTblOffset=0;
         WW8Bytes aAt( 128, 128 );
         USHORT nStdAtLen = StartTableFromFrmFmt(aAt,&rFrmFmt,nTblOffset);
@@ -662,7 +664,7 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
             rCP += 1;       // to next charakter position
             pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
 
-            if( RES_FLYFRMFMT == rFrmFmt.Which() )
+            if (RES_FLYFRMFMT == rFrmFmt.Which())
             {
                 // search all Flys/DrawObj in Flys and put it after this text
                 // position. The test to change the parent fly frame into a
@@ -671,7 +673,7 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
                 for( ; nLastFmt < nArrLen; ++nLastFmt )
                 {
                     const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[nLastFmt];
-                    if (lcl_IsFlyInFlyHere(pFmt,nStart,nEnd))
+                    if (lcl_IsFlyInFlyHere(pFmt, nStart, nEnd))
                         AppendFlyInFlys( rCP, *pFmt, rNdTopLeft );
                 }
             }
@@ -723,9 +725,9 @@ public:
 
 WW8_SdrAttrIter::WW8_SdrAttrIter(SwWW8Writer& rWr,
     const EditTextObject& rEditObj, BYTE nTyp)
-    : WW8_AttrIter( rWr ), pEditObj( &rEditObj ),
+    : WW8_AttrIter( rWr ), pEditObj(&rEditObj), pEditPool(0),
     aTxtAtrArr( 0, 4 ), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ),
-    pEditPool( 0 ), mnTyp(nTyp)
+    mnTyp(nTyp)
 {
     NextPara( 0 );
 }
@@ -858,8 +860,7 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
         const SwModify* pOldMod = rWrt.pOutFmtNode;
         rWrt.pOutFmtNode = 0;
 
-        const SfxItemPool* pSrcPool = pEditPool,
-                            * pDstPool = &rWrt.pDoc->GetAttrPool();
+        const SfxItemPool* pSrcPool = pEditPool;
 
         nTmpSwPos = nSwPos;
         register USHORT i, nWhich, nSlotId;
@@ -1157,7 +1158,7 @@ SwBasicEscherEx::~SwBasicEscherEx()
 {
 }
 
-void SwBasicEscherEx::WriteFrmExtraData(const SwFrmFmt& rFmt)
+void SwBasicEscherEx::WriteFrmExtraData(const SwFrmFmt&)
 {
     AddAtom(4, ESCHER_ClientAnchor);
     GetStream() << 0x80000000;
@@ -1482,7 +1483,7 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
 
-    if (pItem = rWrt.TrueFrameBgBrush(rFmt))
+    if ((pItem = rWrt.TrueFrameBgBrush(rFmt)))
     {
         const SvxBrushItem *pBrush= (const SvxBrushItem*)pItem;
         bool bSetOpacity = false;
@@ -1516,7 +1517,7 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
                     rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
             }
 
-            if (nOpaque = pGraphicObject->GetAttr().GetTransparency())
+            if ((nOpaque = pGraphicObject->GetAttr().GetTransparency()))
                 bSetOpacity = true;
 
             rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
@@ -1530,7 +1531,7 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
             rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
             rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
 
-            if (nOpaque = pBrush->GetColor().GetTransparency())
+            if ((nOpaque = pBrush->GetColor().GetTransparency()))
                 bSetOpacity = true;
         }
 
@@ -2276,7 +2277,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
 
 void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
 {
-    aWinwordAnchoring.SetAnchoring(rFmt );
+    aWinwordAnchoring.SetAnchoring(rFmt);
     aWinwordAnchoring.WriteData(*this);
 
     AddAtom(4, ESCHER_ClientAnchor);
@@ -2377,7 +2378,7 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
     switch (nDirection)
     {
         default:
-            ASSERT(0,"unknown direction type");
+            ASSERT(!this, "unknown direction type");
         case FRMDIR_HORI_LEFT_TOP:
             nFlow=mso_txflHorzN;
         break;
@@ -2414,7 +2415,6 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
         Size aSz( pSdrObj->GetLogicRect().GetSize() );
         aSz.Width() = DrawModelToEmu( aSz.Width() );
         aSz.Height() = DrawModelToEmu( aSz.Height() );
-        Rectangle aRect( Point(0,0), aSz );
 
         SetPicId(*pSdrObj, nShapeId, aPropOpt);
 

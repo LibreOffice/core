@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:41 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
             if (pB && *pB == 1)
             {
                 const BYTE *pLevel = 0;
-                if (pLevel = pPap->HasSprm(0x6649))
+                if ((pLevel = pPap->HasSprm(0x6649)))
                 {
                     if (nLevel + 1 == *pLevel)
                         return true;
@@ -1046,94 +1046,6 @@ void SwWW8ImplReader::StopAnl(bool bGoBack)
     bAnl = false;
 }
 
-
-// Bei der Zaehlung der Tabellenzellen gibt es einige Merkwuerdigkeiten:
-// 1) Ist in einer Zeile eine besondere Zellenumrandung vorhanden, dann werden
-//    die WW8_TCell's vom WW generiert, sonst nicht.
-// 2) Existieren die TCs, dann ist bei nicht existenten Zellen fMerged gesetzt.
-//    Im Text existieren diese Zellen nicht, d.h. die Indices muessen nicht
-//    korrigiert werden. ( Im sprmTDefTable sind die nicht existenten Zellen
-//    jedoch vorhanden ). Fuer diese Zellen ist bExist[] true, da keine
-//    Anpassung der Indices beim Einlesen der Inhalte passieren muss.
-// 3) Existieren die TCs einer Zeile nicht, dann werden nicht existente Zellen
-//    als Zellen mit 0-Breite dargestellt, die auch jeweils einen leeren Absatz
-//    beinhalten. Werden diese Zellen mit Breite 0 nicht importiert ( was sehr
-//    empfehlenswert ist ), dann muessen die ZellenNummern korrigiert werden.
-//    Der Index kann ueber nTransCell[] nachgesehen werden. Fuer diese Zellen
-//    ist bExist[] false.
-// 4) Da WW Zellen mit ausgefransten Raendern darstellen kann, der SW aber
-//    nicht, werden hier ggfs. leere Zellen links und rechts angefuegt. Auch
-//    hier muessen die Zellennummern korrigiert werden.
-//
-// -> bExist[] enthaelt Info darueber, ob im WW vorhandene Zellen im SW fehlen
-//    ( Fall 3 )
-// -> nTransCell[] ist die UEbersetzung von WW-Indices auf SW-Indizes
-//    ( unterschiedlich bei Fall 3 und 4 )
-
-static bool IsEqual(WW8TabBandDesc* p1, WW8TabBandDesc* p2)
-{
-#if 1
-    //#i3862# This isn't such a great idea
-    return false;
-#else
-    if( !p1 || !p2 )
-        return false;
-
-    if( p1->nWwCols != p2->nWwCols )
-        return false;
-
-    if( p1->nLineHeight != p2->nLineHeight )
-        return false;
-
-    // koennte auch mit Toleranz arbeiten ( noetig ? )
-    if( p1->nGapHalf != p2->nGapHalf )
-        return false;
-
-    if( p1->mbHasSpacing != p2->mbHasSpacing )
-        return false;
-    if( p1->mnDefaultLeft != p2->mnDefaultLeft )
-        return false;
-    if( p1->mnDefaultRight != p2->mnDefaultRight )
-        return false;
-    if( p1->mnDefaultTop != p2->mnDefaultTop )
-        return false;
-    if( p1->mnDefaultBottom != p2->mnDefaultBottom )
-        return false;
-
-
-    for( int i = 0; i <= p1->nWwCols; i++ )     // nCols+1 Angaben
-        if( p1->nCenter[i] != p2->nCenter[i] )  // Toleranz bei nCenter ?
-            return false;
-
-    if( p1->pTCs || p2->pTCs ){         // mindestens einer mit TCs
-        if( !p1->pTCs || !p2->pTCs )
-            return false;                   // einer ohne TCs
-
-        if( memcmp( p1->pTCs, p2->pTCs, ( p1->nWwCols ) * sizeof( WW8_TCell ) ) )
-            return false;
-    }
-    if( p1->pSHDs || p2->pSHDs )
-    {
-        // mindestens einer mit SHDs
-        if( !p1->pSHDs || !p2->pSHDs )
-            return false;                   // einer ohne SHDs
-
-        if( memcmp( p1->pSHDs, p2->pSHDs, ( p1->nWwCols ) * sizeof( WW8_SHD ) ) )
-            return false;
-    }
-    if( p1->pNewSHDs || p2->pNewSHDs )
-    {
-        // mindestens einer mit SHDs
-        if( !p1->pNewSHDs || !p2->pNewSHDs )
-            return false;                   // einer ohne SHDs
-
-        if( memcmp( p1->pNewSHDs, p2->pNewSHDs, ( p1->nWwCols ) * sizeof(sal_uInt32) ) )
-            return false;
-    }
-    return true;
-#endif
-}
-
 WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
 {
     *this = rBand;
@@ -1415,13 +1327,11 @@ void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
     mbHasSpacing=true;
     BYTE nWhichCell = *pParams++;
     ASSERT(nWhichCell == 0, "Expected cell to be 0!");
-    BYTE nUnknown1 = *pParams++;
-//    ASSERT(nUnknown1 == 0x1, "Unexpected value for spacing1");
+    *pParams++; //unknown byte
 
     BYTE nSideBits = *pParams++;
     ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
-    BYTE nUnknown2 = *pParams++;
-//    ASSERT(nUnknown2 == 0x3, "Unexpected value for spacing2");
+    *pParams++; //unknown byte
     USHORT nValue =  SVBT16ToShort( pParams );
     for (int i = wwTOP; i <= wwRIGHT; i++)
     {
@@ -1459,7 +1369,7 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
     if (nWhichCell >= nWwCols)
         return;
 
-    BYTE nUnknown1 = *pParams++;
+    *pParams++; //unknown byte
     BYTE nSideBits = *pParams++;
     ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
     nOverrideSpacing[nWhichCell] |= nSideBits;
@@ -1571,14 +1481,13 @@ void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
 #endif
 }
 
-WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
-    : pIo( pIoClass ), pFirstBand( 0 ), pActBand( 0 ), pTmpPos( 0 ),
-    pTable( 0 ), pTblNd( 0 ), pTabLines( 0 ), pTabLine( 0 ), pTabBoxes( 0 ),
-    pTabBox( 0 ), pMergeGroups( 0 ), pAktWWCell( 0 ), nRows( 0 ),
-    nDefaultSwCols( 0 ), nBands( 0 ), nMinLeft( 0 ), nConvertedLeft(0),
-    nMaxRight( 0 ), nSwWidth( 0 ), bOk(true), bHeader(false),
-    bClaimLineFmt(false), eOri( HORI_NONE ), bIsBiDi(false), nAktRow( 0 ),
-    nAktBandRow( 0 ), nAktCol( 0 ), pParentPos(0), pFlyFmt(0),
+WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
+    : pIo(pIoClass), pFirstBand(0), pActBand(0), pTmpPos(0), pTblNd(0),
+    pTabLines(0), pTabLine(0), pTabBoxes(0), pTabBox(0), pMergeGroups(0),
+    pAktWWCell(0), nRows(0), nDefaultSwCols(0), nBands(0), nMinLeft(0),
+    nConvertedLeft(0), nMaxRight(0), nSwWidth(0), bOk(true), bHeader(false),
+    bClaimLineFmt(false), eOri(HORI_NONE), bIsBiDi(false), nAktRow(0),
+    nAktBandRow(0), nAktCol(0), pTable(0), pParentPos(0), pFlyFmt(0),
     aItemSet(pIo->rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     pIo->bAktAND_fNumberAcross = false;
@@ -1779,21 +1688,14 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                 *pCenter += nTabeDxaNew; // Shift left x-position
         }
 
-     // Bei Unterschieden gibt es ein neues Band
-     // Zweite Zeile bekommt immer ein neues Band, damit die erste allein ist
-        if( nRows == 1 || !IsEqual( pNewBand, pActBand ) )
-        {
-            if( !pActBand )
-                pActBand = pFirstBand = pNewBand;
-            else
-            {
-                pActBand->pNextBand = pNewBand;
-                pActBand = pNewBand;
-            }
-            nBands++;
-        }
+        if (!pActBand)
+            pActBand = pFirstBand = pNewBand;
         else
-            delete pNewBand;
+        {
+            pActBand->pNextBand = pNewBand;
+            pActBand = pNewBand;
+        }
+        nBands++;
 
         pNewBand = new WW8TabBandDesc;
 
@@ -2100,14 +2002,15 @@ void WW8TabDesc::CalcDefaults()
             nMinCols = pR->nSwCols;
     }
 
-    // 4. Ausrichtung der Tabelle
-    long nMidTab  = ( (long)nMinLeft  + nMaxRight ) / 2; // TabellenMitte
-    long nRight   = pIo->nPgWidth - pIo->nPgRight - pIo->nPgLeft;
 #if 1
     if (nMinLeft && (HORI_LEFT == eOri))
         eOri = HORI_LEFT_AND_WIDTH; //  absolutely positioned
 #else
-     // set Position if not on adjusted to left border
+    // 4. Ausrichtung der Tabelle
+    long nMidTab  = ( (long)nMinLeft  + nMaxRight ) / 2; // TabellenMitte
+    long nRight   = pIo->nPgWidth - pIo->nPgRight - pIo->nPgLeft;
+
+    // set Position if not on adjusted to left border
     if (nMinLeft && (HORI_LEFT == eOri))
     {
         if(MINLAY > abs(nMidTab - nRight/2))
@@ -2715,7 +2618,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     if ((USHORT)nAktRow >= pTabLines->Count())
     {
-        ASSERT( 0, "Actual row bigger than expected." );
+        ASSERT(!this, "Actual row bigger than expected." );
         return false;
     }
 
@@ -3363,9 +3266,9 @@ void WW8RStyle::ImportGrupx(short nLen, bool bPara, bool bOdd)
     ImportUPX(nLen, false, bOdd);                   // Grupx.Chpx
 }
 
-WW8RStyle::WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI )
-    : WW8Style( *pI->pTableStream, rFib ), maSprmParser(rFib.nVersion),
-    pIo( pI ), pStStrm( pI->pTableStream ), nWwNumLevel( 0 ), pStyRule( 0 )
+WW8RStyle::WW8RStyle(WW8Fib& rFib, SwWW8ImplReader* pI)
+    : WW8Style(*pI->pTableStream, rFib), maSprmParser(rFib.nVersion),
+    pIo(pI), pStStrm(pI->pTableStream), pStyRule(0), nWwNumLevel(0)
 {
     pIo->pCollA = new SwWW8StyInf[ cstd ]; // Style-UEbersetzung WW->SW
     pIo->nColls = cstd;

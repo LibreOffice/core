@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-30 16:15:30 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             }
             break;
         case RES_TXTATR_FIELD:
-            ASSERT(0,"What is a field doing in the control stack,"
+            ASSERT(!this, "What is a field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
         case RES_TXTATR_INETFMT:
@@ -447,7 +447,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     //If we have just one single inline graphic then
                     //don't insert a field for the single frame, set
                     //the frames hyperlink field attribute directly.
-                    if (pFrm = rReader.ContainsSingleInlineGraphic(aRegion))
+                    if ((pFrm = rReader.ContainsSingleInlineGraphic(aRegion)))
                     {
                         const SwFmtINetFmt *pAttr = (const SwFmtINetFmt *)
                             pEntry->pAttr;
@@ -619,7 +619,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
             break;
         default:
-            ASSERT(0,"EndStck used with non field, not what we want");
+            ASSERT(!this, "EndStck used with non field, not what we want");
             SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
             break;
     }
@@ -1142,12 +1142,14 @@ void SwWW8ImplReader::Read_HdFt1( BYTE nPara, BYTE nWhichItems, SwPageDesc* pPD 
     }
 }
 
+#if 0
 static BYTE ReadBSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, BYTE nDefaultVal )
 {
     const BYTE* pS = pSep->HasSprm( nId );          // sprm da ?
     BYTE nVal = ( pS ) ? SVBT8ToByte( pS ) : nDefaultVal;
     return nVal;
 }
+#endif
 
 void SwWW8ImplReader::SetHdFt( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
     BYTE nIPara )
@@ -1699,7 +1701,7 @@ bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
 {
     long nEnd = ( nNextAttr < nTextEnd ) ? nNextAttr : nTextEnd;
 
-    if( bSymbol || bIgnoreText )
+    if (bSymbol || bIgnoreText)
     {
         if( bSymbol )   // Spezialzeichen einfuegen
         {
@@ -1711,6 +1713,7 @@ bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
         rPos = nEnd;    // ignoriere bis Attributende
         return false;
     }
+
     while (true)
     {
         if (ReadPlainChars(rPos, nEnd, nCpOfs))
@@ -1718,7 +1721,7 @@ bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
 
         bool bStartLine = ReadChar(rPos, nCpOfs);
         rPos++;
-        if( bPgSecBreak || bStartLine || rPos == nEnd ) // CR oder Fertig
+        if (bPgSecBreak || bStartLine || rPos == nEnd)  // CR oder Fertig
             return bStartLine;
     }
 }
@@ -2084,10 +2087,10 @@ void SwWW8ImplReader::ReadAttrs(long& rNext, long& rTxtPos, bool& rbStartLine)
     }
 }
 
-// ReadAttrEnds zum Lesen nur der Attributenden am Ende eines Textes oder
+// CloseAttrEnds zum Lesen nur der Attributenden am Ende eines Textes oder
 // Textbereiches ( Kopfzeile, Fussnote, ...). Attributanfaenge, Felder
 // werden ignoriert.
-void SwWW8ImplReader::ReadAttrEnds( long& rNext, long& rTxtPos )
+void SwWW8ImplReader::CloseAttrEnds()
 {
     //If there are any unclosed sprms then copy them to
     //another stack and close the ones that must be closed
@@ -2222,7 +2225,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     if (pPaM->GetPoint()->nContent.GetIndex())
         AppendTxtNode(*pPaM->GetPoint());
 
-    ReadAttrEnds( nNext, l );
+    CloseAttrEnds();
     if (!bInHyperlink)
         bJoined = JoinNode( pPaM );
     if( nType == MAN_MAINTEXT )
@@ -2236,12 +2239,12 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 #           class SwWW8ImplReader
 #**************************************************************************/
 
-SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, bool bNewDoc )
-    : pStg( pStorage ), rDoc( rD ), pStrm( pSt ), mbNewDoc(bNewDoc),
-    pMSDffManager( 0 ), mpAtnNames( 0 ), pAuthorInfos( 0 ), pOleMap(0),
-    pTabNode(0), pLastPgDeskIdx( 0 ), pDataStream( 0 ), pTableStream( 0 ),
-    aGrfNameGenerator(bNewDoc,String('G'))
+SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
+    SvStream* pSt, SwDoc& rD, bool bNewDoc)
+    : pStg(pStorage), pStrm(pSt),  pTableStream(0), pDataStream(0), rDoc(rD),
+    aGrfNameGenerator(bNewDoc,String('G')), pMSDffManager(0), mpAtnNames(0),
+    pAuthorInfos(0), pOleMap(0), pTabNode(0), pLastPgDeskIdx(0),
+    mbNewDoc(bNewDoc)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -2249,17 +2252,17 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     mpRedlineStack = 0;
     pRefStck = 0;
     pAnchorStck = 0;
-    pFonts          = 0;
-    pSBase          = 0;
-    pPlcxMan        = 0;
-    pStyles         = 0;
-    pAktColl        = 0;
+    pFonts = 0;
+    pSBase = 0;
+    pPlcxMan = 0;
+    pStyles = 0;
+    pAktColl = 0;
     pLstManager = 0;
     pAktItemSet = 0;
-    pCollA          = 0;
-    pHdFt           = 0;
-    pWFlyPara       = 0;
-    pSFlyPara       = 0;
+    pCollA = 0;
+    pHdFt = 0;
+    pWFlyPara = 0;
+    pSFlyPara = 0;
     pFlyFmtOfJustInsertedGraphic   = 0;
     pFmtOfJustInsertedApo = 0;
     nColls = nAktColl = 0;
@@ -3062,8 +3065,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 }
 
 
-ULONG WW8Reader::Read( SwDoc &rDoc, SwPaM &rPam,
-                    const String & /* FileName, falls benoetigt wird */ )
+ULONG WW8Reader::Read(SwDoc &rDoc, SwPaM &rPam, const String & /* FileName */)
 {
     USHORT nOldBuffSize = 32768;
     bool bNew = !bInsertMode;               // Neues Doc ( kein Einfuegen )
@@ -3082,7 +3084,7 @@ ULONG WW8Reader::Read( SwDoc &rDoc, SwPaM &rPam,
             nVersion = 6;
         else
         {
-            ASSERT(false, "WinWord 95 Reader-Read ohne Stream");
+            ASSERT(!this, "WinWord 95 Reader-Read ohne Stream");
             nRet = ERR_SWG_READ_ERROR;
         }
     }
@@ -3100,7 +3102,7 @@ ULONG WW8Reader::Read( SwDoc &rDoc, SwPaM &rPam,
         }
         else
         {
-            ASSERT(false, "WinWord 95/97 Reader-Read ohne Storage");
+            ASSERT(!this, "WinWord 95/97 Reader-Read ohne Storage");
             nRet = ERR_SWG_READ_ERROR;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-04 14:39:08 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
                 for( BYTE i = 0; i < 4; ++i )
                 {
                     const SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
-                    WW8_BRC aBrc={0};
+                    WW8_BRC aBrc;
                     if (pLn)
                     {
                         aBrc = rWrt.TranslateBorderLine( *pLn,
@@ -771,7 +771,6 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const SwNoTxtNode* pNd,
             GDIMetaFile aMtf;
             rObj->GetGDIMetaFile(aMtf);
 
-            Size aS(aMtf.GetPrefSize());
             aMtf.WindStart();
             aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
                 Size(2880, 2880));

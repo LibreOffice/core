@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-01 13:24:02 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     pPlcxMan = new WW8PLCFMan(pSBase, pPlcxMan->GetManType(), nStartCp, true);
 
     WW8_CP nStart = pPlcxMan->Where();
-    WW8_CP nNext,nEnd,nStartReplace;
+    WW8_CP nNext, nEnd, nStartReplace=0;
 
     bool bDoingSymbol = false;
     sal_Unicode cReplaceSymbol = cSymbol;
@@ -765,7 +765,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
                     {
                         bDoingSymbol = false;
                         String sTemp;
-                        sTemp.Fill(nTxtStart-nStartReplace,cReplaceSymbol);
+                        sTemp.Fill(nTxtStart - nStartReplace, cReplaceSymbol);
                         pDrawEditEngine->QuickInsertText(sTemp,
                             GetESelection(nStartReplace - nStartCp,
                             nTxtStart - nStartCp ) );
@@ -1129,9 +1129,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         {
                             InsertTxbxAttrs(nNewStartCp,nNewStartCp+1,true);
                             pFlyFmt = ImportGraf(bMakeSdrGrafObj ? pTextObj : 0,
-                                pOldFlyFmt,
-                                pTextObj ?  (nDrawHell == pTextObj->GetLayer())
-                                : false);
+                                pOldFlyFmt);
                         }
                     }
                     break;
@@ -1820,25 +1818,25 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     rInnerDist.Bottom()+=nLineThick;
 
     const SvxBorderLine *pLine;
-    if (pLine = aBox.GetLine(BOX_LINE_LEFT))
+    if ((pLine = aBox.GetLine(BOX_LINE_LEFT)))
     {
         rInnerDist.Left() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
     }
 
-    if (pLine = aBox.GetLine(BOX_LINE_TOP))
+    if ((pLine = aBox.GetLine(BOX_LINE_TOP)))
     {
         rInnerDist.Top() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
     }
 
-    if (pLine = aBox.GetLine(BOX_LINE_RIGHT))
+    if ((pLine = aBox.GetLine(BOX_LINE_RIGHT)))
     {
         rInnerDist.Right() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
     }
 
-    if (pLine = aBox.GetLine(BOX_LINE_BOTTOM))
+    if ((pLine = aBox.GetLine(BOX_LINE_BOTTOM)))
     {
         rInnerDist.Bottom() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
@@ -2222,10 +2220,10 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     // nXRelTo - Page printable area, Page,  Column,    Character
     // nYRelTo - Page printable area, Page,  Paragraph, Line
 
-    const int nCntXAlign = 6;
-    const int nCntYAlign = 6;
+    const UINT32 nCntXAlign = 6;
+    const UINT32 nCntYAlign = 6;
 
-    const int nCntRelTo  = 4;
+    const UINT32 nCntRelTo  = 4;
 
 /*
     // our anchor settings

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:13 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
         rStrm->Seek(0);
 
-        if (nStrings = aStrings.size())
+        if ((nStrings = aStrings.size()))
         {
             SfxObjectShellRef xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
             if (xDocSh->DoInitNew(0))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 14:41:49 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,11 +414,9 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
     BYTE bUsedInDoc :1;// Flag, ob diese NumRule im Doc verwendet wird,
                                                      //   oder beim Reader-Ende geloescht werden sollte
 
-    WW8LSTInfo(SwNumRule* pNumRule_, WW8LST& aLST) :
-        nIdLst(         aLST.nIdLst         ),
-        pNumRule(       pNumRule_               ),
-        bSimpleList(aLST.bSimpleList),
-        bUsedInDoc( 0 )
+    WW8LSTInfo(SwNumRule* pNumRule_, WW8LST& aLST)
+        : pNumRule(pNumRule_), nIdLst(aLST.nIdLst),
+        bSimpleList(aLST.bSimpleList), bUsedInDoc(0)
     {
         memcpy( aIdSty, aLST.aIdSty, sizeof( aIdSty   ));
         memset(&aItemSet, 0,  sizeof( aItemSet ));
@@ -448,14 +446,11 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
                                                      //   oder beim Reader-Ende geloescht werden sollte
     BYTE bLSTbUIDSet    :1;// Flag, ob bUsedInDoc in maLSTInfos gesetzt wurde,
                                                      //   und nicht nochmals gesetzt zu werden braucht
-    WW8LFOInfo( const WW8LFO& rLFO ):
-        nIdLst(         rLFO.nIdLst             ),
-        pNumRule(       rLFO.pNumRule           ),// hier bloss die Parent NumRule
-        nLfoLvl(        rLFO.nLfoLvl            ),
-        bOverride(rLFO.nLfoLvl ? true : false),
-        bSimpleList(rLFO.bSimpleList            ),
-        bUsedInDoc(             0               ),
-        bLSTbUIDSet(            0               ){}
+    WW8LFOInfo(const WW8LFO& rLFO)
+        : pNumRule(rLFO.pNumRule), // hier bloss die Parent NumRule
+          nIdLst(rLFO.nIdLst), nLfoLvl(rLFO.nLfoLvl),
+          bOverride(rLFO.nLfoLvl ? true : false), bSimpleList(rLFO.bSimpleList),
+          bUsedInDoc(0), bLSTbUIDSet(0) {}
 };
 
 SV_IMPL_PTRARR( WW8LFOInfos, WW8LFOInfo_Ptr );
@@ -512,7 +507,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     sal_uInt16      nStartNo    = 0;    // Start-Nr. fuer den Writer
     SvxExtNumType   eType;              // Writer-Num-Typ
     SvxAdjust       eAdj;               // Ausrichtung (Links/rechts/zent.)
-    sal_Unicode     cBullet;
+    sal_Unicode     cBullet(0x2190);    // default safe bullet
     String          sPrefix;
     String          sPostfix;
     WW8LVL          aLVL;
@@ -570,7 +565,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             return false;
         // "sprmPDxaLeft"  pap.dxaLeft;dxa;word;
         sal_uInt8* pSprm;
-        if (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx))
+        if ((pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
         {
             short nDxaLeft = SVBT16ToShort( pSprm );
             aLVL.nDxaLeft = (0 < nDxaLeft) ? (sal_uInt16)nDxaLeft
@@ -697,11 +692,11 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             break;
     }
 
-    if( SVX_NUM_CHAR_SPECIAL == eType )
+    if (SVX_NUM_CHAR_SPECIAL == eType)
     {
-        cBullet = sNumString.Len() ? sNumString.GetChar( 0 ) : 0x2190;
+        cBullet = sNumString.Len() ? sNumString.GetChar(0) : 0x2190;
 
-        if( !cBullet )  // unsave control code?
+        if (!cBullet)  // unsave control code?
             cBullet = 0x2190;
 
         sPrefix  = aEmptyStr;
@@ -759,7 +754,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     if( SVX_NUM_CHAR_SPECIAL == eType )
     {
         // first character of the Prefix-Text is the Bullet
-        rNumFmt.SetBulletChar( cBullet );
+        rNumFmt.SetBulletChar(cBullet);
         // Don't forget: unten, nach dem Bauen eventueller Styles auch noch
         // SetBulletFont() rufen !!!
     }
@@ -942,9 +937,9 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 // oeffentliche Methoden /////////////////////////////////////////////////////
 //
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-    : maSprmParser(rReader_.GetFib().nVersion), pLFOInfos( 0 ), nUniqueList(1),
-    rSt( rSt_ ), rReader( rReader_ ), rDoc( rReader.GetDoc() ),
-    rFib( rReader.GetFib() )
+    : maSprmParser(rReader_.GetFib().nVersion), rReader(rReader_),
+    rDoc(rReader.GetDoc()), rFib(rReader.GetFib()), rSt(rSt_), pLFOInfos(0),
+    nUniqueList(1)
 {
     // LST und LFO gibts erst ab WW8
     if(    ( 8 > rFib.nVersion )
@@ -1078,16 +1073,16 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     //
     // 2. PLF LFO auslesen und speichern
     //
-    long nLfoCount;
-    if( bOk )
+    long nLfoCount(0);
+    if (bOk)
     {
-        nLfoCount = 0;
-        rSt.Seek( rFib.fcPlfLfo );
+        rSt.Seek(rFib.fcPlfLfo);
         rSt >> nLfoCount;
-        if( 0 >= nLfoCount )
+        if (0 >= nLfoCount)
             bOk = false;
     }
-    if( bOk )
+
+    if(bOk)
     {
         WW8LFO aLFO;
         //
@@ -1214,8 +1209,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     // (siehe Kommentar oben bei "struct
                     // WW8LFOInfo")
                     aLFOLVL.nLevel = aBits1 & 0x0F;
-                    if( (0xFF > aBits1) && (0 <= aLFOLVL.nLevel)
-                        && (nMaxLevel > aLFOLVL.nLevel) )
+                    if( (0xFF > aBits1) &&
+                        (nMaxLevel > aLFOLVL.nLevel) )
                     {
                         if( aBits1 & 0x10 )
                             aLFOLVL.bStartAt = true;
@@ -1816,10 +1811,10 @@ sal_Bool SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
     awt::Size aSz;
     uno::Reference< form::XFormComponent> xFComp;
 
-    if (bRet = rFormula.Import(rServiceFactory, xFComp, aSz))
+    if ((bRet = rFormula.Import(rServiceFactory, xFComp, aSz)))
     {
         uno::Reference <drawing::XShape> xShapeRef;
-        if (bRet = InsertControl(xFComp, aSz, &xShapeRef, FALSE))
+        if ((bRet = InsertControl(xFComp, aSz, &xShapeRef, FALSE)))
             GetShapes()->add(xShapeRef);
     }
     return bRet;

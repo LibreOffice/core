@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:28 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,15 @@
 #include <tools/string.hxx>
 #endif
 
+#if defined  __BIGENDIAN || __ALIGNMENT4 > 2 || defined UNX
+#define __WW8_NEEDS_COPY
+#else
+#if defined WNT || defined WIN || defined OS2
+#define __WW8_NEEDS_PACK
+#pragma pack(2)
+#endif
+#endif
+
 inline void Set_UInt8( BYTE *& p, UINT8 n )
 {
     ByteToSVBT8( n, *(SVBT8*)p );
@@ -83,15 +92,6 @@ inline void Set_UInt32( BYTE *& p, UINT32 n )
     LongToSVBT32( n, *(SVBT32*)p );
     p+= 4;
 }
-
-#if defined  __BIGENDIAN || __ALIGNMENT4 > 2 || defined UNX
-#define __WW8_NEEDS_COPY
-#else
-#if defined WNT || defined WIN || defined OS2
-#define __WW8_NEEDS_PACK
-#pragma pack(2)
-#endif
-#endif
 
 typedef INT16 WW8_PN;
 typedef INT32 WW8_FC;
@@ -188,8 +188,9 @@ struct WW8_BRCVer6  // alter Border Code
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
 };
 
-struct WW8_BRC      // Border Code
+class WW8_BRC      // Border Code
 {
+public:
     SVBT16 aBits1;
     SVBT16 aBits2;
 //  UINT16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
@@ -201,6 +202,11 @@ struct WW8_BRC      // Border Code
 //  UINT16 ico : 5;         // 07C0 color code (see chp.ico)
 //  UINT16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
+    WW8_BRC()
+    {
+        memset(aBits1, 0, sizeof(aBits1));
+        memset(aBits2, 0, sizeof(aBits2));
+    }
     short DetermineBorderProperties (bool bVer67, short *pSpace=0,
         BYTE *pCol=0, short *pIdx=0) const;
     bool IsEmpty(bool bVer67) const;
@@ -441,31 +447,47 @@ struct WW8_TCellVer8    // wird aus der Datei gelesen
 struct WW8_SHD              // struct SHD fehlt in der Beschreibung
 {
 private:
-    UINT16 aBits;
+    UINT16 maBits;
 //  UINT16 nFore : 5;       // 0x001f ForegroundColor
 //  UINT16 nBack : 5;       // 0x03e0 BackgroundColor
 //  UINT16 nStyle : 5;      // 0x7c00 Percentage and Style
 //  UINT16 nDontKnow : 1;   // 0x8000 ???   ab Ver8: ebenfalls fuer Style
 
 public:
-    WW8_SHD(){ aBits = 0; }
+    WW8_SHD() : maBits(0) {}
 
-    BYTE GetFore() const                { return (BYTE)( aBits & 0x1f); }
-    BYTE GetBack() const                { return (BYTE)((aBits >> 5 ) & 0x1f); }
+    BYTE GetFore() const { return (BYTE)( maBits & 0x1f); }
+    BYTE GetBack() const { return (BYTE)((maBits >> 5 ) & 0x1f); }
     BYTE GetStyle(bool bVer67)  const
-        { return (BYTE)((aBits >> 10) & ( bVer67?0x1f:0x3f ) ); }
+        { return (BYTE)((maBits >> 10) & ( bVer67 ? 0x1f : 0x3f ) ); }
 
-    UINT16 GetValue() const { return aBits; }
+    UINT16 GetValue() const { return maBits; }
 
-    void SetValue( UINT16 nVal ){ aBits = nVal; }
-    void SetWWValue( SVBT16 nVal ){ aBits = (UINT16)SVBT16ToShort(nVal); }
+    void SetValue(UINT16 nVal) { maBits = nVal; }
+    void SetWWValue(SVBT16 nVal) { maBits = SVBT16ToShort(nVal); }
 
-    void SetFore( BYTE nVal ){ aBits = (aBits & 0xffe0) | (nVal & 0x1f); }
-    void SetBack( BYTE nVal ){ aBits = (aBits & 0xfc1f) | ((nVal & 0x1f)<<5); }
+    void SetFore(BYTE nVal)
+    {
+        maBits &= 0xffe0;
+        maBits |= (nVal & 0x1f);
+    }
+    void SetBack(BYTE nVal)
+    {
+        maBits &= 0xfc1f;
+        maBits |= (nVal & 0x1f) << 5;
+    }
     void SetStyle(bool bVer67, BYTE nVal)
     {
-        aBits = (aBits & ( bVer67?0x83ff:0x03ff ) )
-            | ((nVal & ( bVer67?0x1f:0x2f ))<<10);
+        if (bVer67)
+        {
+            maBits &= 0x83ff;
+            maBits |= (nVal & 0x1f) << 10;
+        }
+        else
+        {
+            maBits &= 0x03ff;
+            maBits |= (nVal & 0x2f) << 10;
+        }
     }
 };
 

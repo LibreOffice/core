@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:26 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
             //No explicit adjust set ?
             if (SFX_ITEM_SET != rSet.GetItemState(RES_PARATR_ADJUST, false))
             {
-                if (pItem = rSet.GetItem(RES_PARATR_ADJUST))
+                if ((pItem = rSet.GetItem(RES_PARATR_ADJUST)))
                 {
                     // then set the adjust used by the parent format
                     pOut = aWW8AttrFnTab[RES_PARATR_ADJUST - RES_CHRATR_BEGIN];
@@ -1902,7 +1902,7 @@ bool SwWW8Writer::GetNumberFmt(const SwField& rFld, String& rStr)
 
 void WW8_GetNumberPara( String& rStr, const SwField& rFld )
 {
-    switch( rFld.GetFormat() )
+    switch(rFld.GetFormat())
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
         case SVX_NUM_CHARS_UPPER_LETTER_N:
@@ -1919,7 +1919,8 @@ void WW8_GetNumberPara( String& rStr, const SwField& rFld )
             rStr.APPEND_CONST_ASC("\\*r\xf6misch ");
             break;
         default:
-            ASSERT(0,"Unknown numbering type exported as default\n");
+            ASSERT(rFld.GetFormat() == SVX_NUM_ARABIC,
+                "Unknown numbering type exported as default\n");
         case SVX_NUM_ARABIC:
             rStr.APPEND_CONST_ASC("\\*Arabisch ");
             break;
@@ -2445,8 +2446,7 @@ static Writer& OutWW8_SvxParaGridItem(Writer& rWrt, const SfxPoolItem& rHt)
     return rWrt;
 }
 
-static Writer& OutWW8_SvxParaVertAlignItem( Writer& rWrt,
-    const SfxPoolItem& rHt )
+static Writer& OutWW8_SvxParaVertAlignItem(Writer& rWrt, const SfxPoolItem& rHt)
 {
 // sprmPWAlignFont
 
@@ -2478,7 +2478,7 @@ static Writer& OutWW8_SvxParaVertAlignItem( Writer& rWrt,
             break;
         default:
             nVal = 4;
-            ASSERT(false,"Unknown vert alignment");
+            ASSERT(!(&rWrt), "Unknown vert alignment");
             break;
     }
     rWrtWW8.InsUInt16( nVal );
@@ -3029,7 +3029,7 @@ static Writer& OutWW8_SwTextGrid( Writer& rWrt, const SfxPoolItem& rHt )
         switch (rItem.GetGridType())
         {
             default:
-                ASSERT(0,"Unknown grid type");
+                ASSERT(!(&rWrt), "Unknown grid type");
             case GRID_NONE:
                 nGridType = 0;
                 break;
@@ -3487,7 +3487,7 @@ static Writer& OutWW8_SwFmtBackground( Writer& rWrt, const SfxPoolItem& rHt )
 WW8_BRC SwWW8Writer::TranslateBorderLine(const SvxBorderLine& rLine,
     USHORT nDist, bool bShadow)
 {
-    WW8_BRC aBrc={0};
+    WW8_BRC aBrc;
     UINT16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth();
     BYTE brcType = 0, nColCode = 0;
 
@@ -3571,7 +3571,7 @@ void SwWW8Writer::Out_BorderLine(WW8Bytes& rO, const SvxBorderLine* pLine,
             ((0x702b - 0x6424) <= nOffset && nOffset <= (0x702e - 0x6424)),
                 "SprmOffset ausserhalb des Bereichs" );
 
-    WW8_BRC aBrc={0};
+    WW8_BRC aBrc;
 
     if (pLine)
         aBrc = TranslateBorderLine( *pLine, nDist, bShadow );
@@ -3992,7 +3992,7 @@ static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
     {
         default:
             //Can't get an unknown type here
-            ASSERT(0,"Unknown frame direction");
+            ASSERT(!(&rWrt), "Unknown frame direction");
         case FRMDIR_HORI_LEFT_TOP:
             nTextFlow = 0;
             break;
