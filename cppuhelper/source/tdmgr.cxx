@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-31 08:41:51 $
+ *  last change: $Author: vg $ $Date: 2001-10-15 16:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ inline static typelib_TypeDescription * createCTD(
     return pRet;
 }
 //==================================================================================================
-inline static typelib_TypeDescription * createCTD(
+static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceMethodTypeDescription > & xMethod )
 {
     typelib_TypeDescription * pRet = 0;
