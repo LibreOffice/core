@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,13 @@
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 
 using namespace osl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::lang;
 
 namespace cppu
@@ -80,19 +83,38 @@ namespace cppu
 //  ----------------------------------------------------
 //  class OComponentHelper
 //  ----------------------------------------------------
+
 OComponentHelper::OComponentHelper( Mutex & rMutex ) SAL_THROW( () )
     : rBHelper( rMutex )
 {
 }
-
-/**
- * Call dispose if not previous called.
- */
 OComponentHelper::~OComponentHelper() SAL_THROW( (RuntimeException) )
 {
 }
 
-// XInterface
+Any OComponentHelper::queryInterface( Type const & rType ) throw (RuntimeException)
+{
+    return OWeakAggObject::queryInterface( rType );
+}
+Any OComponentHelper::queryAggregation( Type const & rType ) throw (RuntimeException)
+{
+    if (rType == ::getCppuType( (Reference< lang::XComponent > const *)0 ))
+    {
+        void * p = static_cast< lang::XComponent * >( this );
+        return Any( &p, rType );
+    }
+    else if (rType == ::getCppuType( (Reference< lang::XTypeProvider > const *)0 ))
+    {
+        void * p = static_cast< lang::XTypeProvider * >( this );
+        return Any( &p, rType );
+    }
+    return OWeakAggObject::queryAggregation( rType );
+}
+void OComponentHelper::acquire() throw ()
+{
+    OWeakAggObject::acquire();
+}
+
 void OComponentHelper::release() throw()
 {
     Reference<XInterface > x( xDelegator );
@@ -123,6 +145,25 @@ void OComponentHelper::release() throw()
         osl_incrementInterlockedCount( &m_refCount );
     }
     OWeakAggObject::release();
+}
+
+Sequence< Type > OComponentHelper::getTypes() throw (RuntimeException)
+{
+    static OTypeCollection * s_pTypes = 0;
+    if (! s_pTypes)
+    {
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        if (! s_pTypes)
+        {
+            static OTypeCollection s_aTypes(
+                ::getCppuType( (const Reference< lang::XComponent > *)0 ),
+                ::getCppuType( (const Reference< lang::XTypeProvider > *)0 ),
+                ::getCppuType( (const Reference< XAggregation > *)0 ),
+                ::getCppuType( (const Reference< XWeak > *)0 ) );
+            s_pTypes = &s_aTypes;
+        }
+    }
+    return s_pTypes->getTypes();
 }
 
 // XComponent

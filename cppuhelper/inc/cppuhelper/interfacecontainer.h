@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
+ *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,10 +429,89 @@ struct hashType_Impl
 };
 
 
-typedef OMultiTypeInterfaceContainerHelperVar<
-    ::com::sun::star::uno::Type,
-    hashType_Impl,
-    std::equal_to< ::com::sun::star::uno::Type > > OMultiTypeInterfaceContainerHelper;
+/** Specialized class for key type com::sun::star::uno::Type,
+    without explicit usage of STL symbols.
+*/
+class OMultiTypeInterfaceContainerHelper
+{
+public:
+    // these are here to force memory de/allocation to sal lib.
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+        { return ::rtl_allocateMemory( nSize ); }
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+        { ::rtl_freeMemory( pMem ); }
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+        {}
+
+    /**
+      Create a container of interface containers.
+
+      @param rMutex the mutex to protect multi thread access.
+                         The lifetime must be longer than the lifetime
+                         of this object.
+     */
+    OMultiTypeInterfaceContainerHelper( ::osl::Mutex & ) SAL_THROW( () );
+    /**
+      Delete all containers.
+     */
+    ~OMultiTypeInterfaceContainerHelper() SAL_THROW( () );
+
+    /**
+      Return all id's under which at least one interface is added.
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getContainedTypes() const SAL_THROW( () );
+
+    /**
+      Return the container created under this key.
+      @return the container created under this key. If the container
+                 was not created, null was returned.
+     */
+    OInterfaceContainerHelper * SAL_CALL getContainer( const ::com::sun::star::uno::Type & rKey ) const SAL_THROW( () );
+
+    /**
+      Insert an element in the container specified with the key. The position is not specified.
+      @param rKey       the id of the container.
+      @param rxIFace    the added interface. It is allowed to insert null or
+                         the same pointer more than once.
+      @return the new count of elements in the container.
+     */
+    sal_Int32 SAL_CALL addInterface(
+        const ::com::sun::star::uno::Type & rKey,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r )
+        SAL_THROW( () );
+
+    /**
+      Remove an element from the container specified with the key.
+      It uses the equal definition of uno objects to remove the interfaces.
+      @param rKey       the id of the container.
+      @param rxIFace    the removed interface.
+      @return the new count of elements in the container.
+     */
+    sal_Int32 SAL_CALL removeInterface(
+        const ::com::sun::star::uno::Type & rKey,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace )
+        SAL_THROW( () );
+
+    /**
+      Call disposing on all object in the container that
+      support XEventListener. Than clear the container.
+     */
+    void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW( () );
+    /**
+      Remove all elements of all containers. Does not delete the container.
+     */
+    void SAL_CALL clear() SAL_THROW( () );
+
+    typedef ::com::sun::star::uno::Type keyType;
+private:
+    void *m_pMap;
+    ::osl::Mutex &  rMutex;
+
+    inline OMultiTypeInterfaceContainerHelper( const OMultiTypeInterfaceContainerHelper & ) SAL_THROW( () );
+    inline OMultiTypeInterfaceContainerHelper & operator = ( const OMultiTypeInterfaceContainerHelper & ) SAL_THROW( () );
+};
 
 typedef OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper , OMultiTypeInterfaceContainerHelper::keyType > OBroadcastHelper;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:53 $
+ *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,14 @@ void WeakComponentImplHelperBase::release()
 {
     if (1 == m_refCount && !rBHelper.bDisposed)
     {
-        dispose();
+        try
+        {
+            dispose();
+        }
+        catch (...)
+        {
+            OSL_ENSURE( 0, "### unexpected exception caught!" );
+        }
     }
     OWeakObject::release();
 }
@@ -298,9 +305,18 @@ void WeakComponentImplHelperBase::dispose()
     {
         rBHelper.bInDispose = sal_True;
         aGuard.clear();
-        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
-        rBHelper.aLC.disposeAndClear( aEvt );
-        disposing();
+        try
+        {
+            lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
+            rBHelper.aLC.disposeAndClear( aEvt );
+            disposing();
+        }
+        catch (...)
+        {
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+            throw;
+        }
         rBHelper.bDisposed = sal_True;
         rBHelper.bInDispose = sal_False;
     }
@@ -310,7 +326,15 @@ void WeakComponentImplHelperBase::addEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)
 {
-    rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
+        xListener->disposing( aEvt );
+    }
+    else
+    {
+        rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+    }
 }
 //__________________________________________________________________________________________________
 void WeakComponentImplHelperBase::removeEventListener(
@@ -366,7 +390,14 @@ void WeakAggComponentImplHelperBase::release()
     Reference< XInterface > x( xDelegator );
     if (!x.is() && 1 == m_refCount && !rBHelper.bDisposed)
     {
-        dispose();
+        try
+        {
+            dispose();
+        }
+        catch (...)
+        {
+            OSL_ENSURE( 0, "### unexpected exception caught!" );
+        }
     }
     OWeakAggObject::release();
 }
@@ -379,9 +410,18 @@ void WeakAggComponentImplHelperBase::dispose()
     {
         rBHelper.bInDispose = sal_True;
         aGuard.clear();
-        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
-        rBHelper.aLC.disposeAndClear( aEvt );
-        disposing();
+        try
+        {
+            lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
+            rBHelper.aLC.disposeAndClear( aEvt );
+            disposing();
+        }
+        catch (...)
+        {
+            rBHelper.bDisposed = sal_True;
+            rBHelper.bInDispose = sal_False;
+            throw;
+        }
         rBHelper.bDisposed = sal_True;
         rBHelper.bInDispose = sal_False;
     }
@@ -391,7 +431,15 @@ void WeakAggComponentImplHelperBase::addEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException)
 {
-    rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
+        xListener->disposing( aEvt );
+    }
+    else
+    {
+        rBHelper.addListener( ::getCppuType( &xListener ), xListener );
+    }
 }
 //__________________________________________________________________________________________________
 void WeakAggComponentImplHelperBase::removeEventListener(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear(
 
     while( iter != end )
     {
-        ((OInterfaceContainerHelper*)(*iter)).second->clear();
+        ((OInterfaceContainerHelper*)(*iter).second)->clear();
         ++iter;
     }
 }

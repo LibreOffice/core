@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,13 @@
 namespace cppu
 {
 
-/**
-   The helper implementation for a basic broadcaster. This implementation
-   supports aggregation and weak references.
-
-   @author  Markus Meyer
-   @since   98/04/12
- */
-class OComponentHelper : public ::cppu::WeakAggImplHelper1< ::com::sun::star::lang::XComponent >
+/** The helper implementation for a basic broadcaster. This implementation
+    supports aggregation and weak references.
+*/
+class OComponentHelper
+    : public ::cppu::OWeakAggObject
+    , public ::com::sun::star::lang::XTypeProvider
+    , public ::com::sun::star::lang::XComponent
 {
 public:
     /**
@@ -106,13 +105,25 @@ public:
        double delete and than call dispose.<BR> Note in this situation no destructor
        of derived classes are called.
      */
-    ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    virtual ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
     // XInterface
-    virtual void SAL_CALL release() throw();
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire()
+        throw ();
+    virtual void SAL_CALL release()
+        throw ();
 
     // XTypeProvider getImplementationId() has to be implemented separately!
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
     virtual void SAL_CALL dispose()
@@ -129,17 +140,17 @@ protected:
        Called in the dispose method after the listeners are notified.
        In this situation rBHelper.bDisposed is false
        and rBHelper.bDisposing is true.
-     */
+    */
     virtual void SAL_CALL disposing();
 
     /**
        Contains a mutex, a listener container and the dispose states.
        Subclasses should only modify the listener container.
-     */
+    */
     OBroadcastHelper    rBHelper;
 private:
-                        OComponentHelper( const OComponentHelper & ) SAL_THROW( () );
-    OComponentHelper &  operator = ( const OComponentHelper & ) SAL_THROW( () );
+    inline OComponentHelper( const OComponentHelper & ) SAL_THROW( () );
+    inline OComponentHelper & operator = ( const OComponentHelper & ) SAL_THROW( () );
 };
 
 }
