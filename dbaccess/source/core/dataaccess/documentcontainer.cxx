@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:10:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ Reference< XStorage> ODocumentContainer::getStorage() const
 {
     static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
     static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
-    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bFormsContainer ? s_sForms : s_sReports) : NULL;
+    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bFormsContainer ? s_sForms : s_sReports) : Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
