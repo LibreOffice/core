@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-17 10:50:02 $
+#   last change: $Author: vg $ $Date: 2005-03-10 16:10:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,7 +153,11 @@ IDLFILES=\
     Forms.idl \
     Reports.idl \
     DocumentContainer.idl \
-    XSQLQueryComposerFactory.idl
+    XSQLQueryComposerFactory.idl \
+    XDocumentDataSource.idl \
+    DocumentDataSource.idl \
+    XOfficeDatabaseDocument.idl \
+    OfficeDatabaseDocument.idl
 
 # ------------------------------------------------------------------
 .INCLUDE :  target.mk
