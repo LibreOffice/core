@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SbaXGridControl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-04-28 12:24:22 $
+ *  last change:$Date: 2003-05-27 12:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ public class SbaXGridControl extends TestCase {
     * Creates Writer document.
     */
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -190,7 +190,7 @@ public class SbaXGridControl extends TestCase {
         //closing the appearing dialog before disposing the document
         XInterface toolkit = null;
         try {
-            toolkit = (XInterface) tParam.getMSF().createInstance
+            toolkit = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -410,7 +410,7 @@ public class SbaXGridControl extends TestCase {
 
         com.sun.star.frame.XDispatch ad = (com.sun.star.frame.XDispatch)
             UnoRuntime.queryInterface(com.sun.star.frame.XDispatch.class,oObj);
-        FormTools.switchDesignOf(Param.getMSF(),xTextDoc);
+        FormTools.switchDesignOf((XMultiServiceFactory)Param.getMSF(),xTextDoc);
 
         // adding relation for XUpdateBroadcaster
         final XInterface ctrl = oObj ;
