@@ -273,6 +273,7 @@ hedabu: ..\inc\svdhdl.hxx %_DEST%\inc%_EXT%\svx\svdhdl.hxx
 hedabu: ..\inc\svdhlpln.hxx %_DEST%\inc%_EXT%\svx\svdhlpln.hxx
 hedabu: ..\inc\svdio.hxx %_DEST%\inc%_EXT%\svx\svdio.hxx
 hedabu: ..\inc\svditer.hxx %_DEST%\inc%_EXT%\svx\svditer.hxx
+hedabu: ..\inc\svdviter.hxx %_DEST%\inc%_EXT%\svx\svdviter.hxx
 hedabu: ..\inc\svdmark.hxx %_DEST%\inc%_EXT%\svx\svdmark.hxx
 hedabu: ..\inc\svdmodel.hxx %_DEST%\inc%_EXT%\svx\svdmodel.hxx
 hedabu: ..\inc\svdmrkv.hxx %_DEST%\inc%_EXT%\svx\svdmrkv.hxx
