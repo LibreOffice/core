@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySet.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:43 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ interface XPropertySet: com::sun::star::uno::XInterface
         a vetoable event is fired before the property value can be
         changed.  </p>
 
-        @raises com::sun::star::beans::PropertyVetoException
+        @throws com::sun::star::beans::PropertyVetoException
             if the property is read-only or vetoable
             and one of the listeners throws this exception
             because of an unaccepted new value.
