@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:45:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
+#ifndef _SWCRSR_HXX
+#include <swcrsr.hxx>
+#endif
 
 inline void SwWrtShell::OpenMark()
 {
@@ -259,13 +261,33 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
                 break;
             }
         }
-        else if (SwCrsrShell::IsEndPara() &&
-                 SwCrsrShell::Right(1, CRSR_SKIP_CHARS))
+        else
         {
-            if (IsCrsrInTbl() || (pWasInTblNd != IsCrsrInTbl()))
-                break;
+            /* #108049# Save the startnode of the current cell */
+            const SwStartNode * pSNdOld;
+            pSNdOld = GetSwCrsr()->GetNode()->
+                FindTableBoxStartNode();
 
-            SwCrsrShell::Left(1, CRSR_SKIP_CHARS);
+            if (SwCrsrShell::IsEndPara() &&
+                SwCrsrShell::Right(1, CRSR_SKIP_CHARS))
+            {
+                if (IsCrsrInTbl() || (pWasInTblNd != IsCrsrInTbl()))
+                {
+                    /* #108049# Save the startnode of the current
+                        cell. May be different to pSNdOld as we have
+                        moved. */
+                    const SwStartNode * pSNdNew = GetSwCrsr()
+                        ->GetNode()->FindTableBoxStartNode();
+
+                    /* #108049# Only move instead of deleting if we
+                        have moved to a different cell */
+                    if (pSNdOld != pSNdNew)
+                        break;
+                }
+
+                SwCrsrShell::Left(1, CRSR_SKIP_CHARS);
+
+            }
         }
 
         OpenMark();
