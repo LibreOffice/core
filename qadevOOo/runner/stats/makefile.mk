@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2003-03-26 14:53:55 $
+#   last change: $Date: 2003-03-31 17:07:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,9 +62,9 @@
 
 PRJ=..$/..
 
-PRJNAME = Runner
+PRJNAME = OOoRunner
 PACKAGE = stats
-TARGET  = $(PRJNAME)
+TARGET = runner_stats
 
 # --- Settings -----------------------------------------------------
 
@@ -78,7 +78,8 @@ JAVAFILES =	\
             SimpleOutProducer.java	\
             SimpleFileOutProducer.java	\
             SimpleLogWriter.java    \
-            Summarizer.java
+            Summarizer.java \
+            InternalLogWriter.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
