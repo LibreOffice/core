@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hro $ $Date: 2001-12-04 13:42:27 $
+ *  last change: $Author: pl $ $Date: 2001-12-19 14:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,6 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 #ifdef REMOTE_APPSERVER
     // create condition now to avoid race
     pSVData->mpStartUpCond = new vos::OCondition;
-    pSVData->mpUserInfo = new UserOnPrintServer;
 #endif
 
     // Sal initialisieren
@@ -366,7 +365,6 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     Reference< XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
 
     pSVData->mpRmEventQueue = new RmEventQueue;
-    pSVData->mpRemotePrinterList = new RemotePrinterList( rSMgr );
     pSVData->mpWindowObjectMutex = new vos::OMutex;
     pSVData->maAppData.mpSolarMutex = new ImplRemoteYieldMutex;
 
@@ -488,39 +486,6 @@ void DeInitVCL()
     }
 
 #ifdef REMOTE_APPSERVER
-    if( pSVData->mpUserInfo )
-    {
-        try
-        {
-            delete pSVData->mpUserInfo;
-        }
-        catch(::com::sun::star::uno::Exception&)
-        {
-        }
-        pSVData->mpUserInfo = NULL;
-    }
-    if( pSVData->mpRemotePrinterList )
-    {
-        try
-        {
-            delete pSVData->mpRemotePrinterList;
-        }
-        catch(::com::sun::star::uno::Exception&)
-        {
-        }
-        pSVData->mpRemotePrinterList = NULL;
-    }
-    if ( pSVData->mpClientPrintersInfo )
-    {
-        try
-        {
-            delete pSVData->mpClientPrintersInfo;
-        }
-        catch (::com::sun::star::uno::Exception&)
-        {
-        }
-        pSVData->mpClientPrintersInfo;
-    }
     if( pSVData->mxClientFactory.is() )
     {
         try

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-12-04 13:34:10 $
+ *  last change: $Author: pl $ $Date: 2001-12-19 15:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@ void ImplInitSVData()
 
     // init global instance data
     memset( pSVData, 0, sizeof( ImplSVData ) );
+#ifdef REMOTE_APPSERVER
+    pSVData->mpPrinterEnvironment = new NMSP_CLIENT::PrinterEnvironment();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -172,6 +175,9 @@ void ImplDeInitSVData()
         delete pSVData->maAppData.mpMSFTempFileName;
         pSVData->maAppData.mpMSFTempFileName = NULL;
     }
+#ifdef REMOTE_APPSERVER
+    delete pSVData->mpPrinterEnvironment;
+#endif
 }
 
 // -----------------------------------------------------------------------
