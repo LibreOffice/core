@@ -134,9 +134,9 @@ Sub createAndPopulateKeyArrays()
 	&apos;Create SHIFT + CONTROL + F keys array
 	&apos;Dim keyGroupProp as new com.sun.star.beans.PropertyValue
 
-	Dim SCFKey( 10 )
-	for FKey = 2 to 12
-		SCFKey( FKey - 2 ) = &quot;SHIFT + CONTROL + F&quot; + FKey
+	Dim SCFKey( 11 )
+	for FKey = 1 to 12
+		SCFKey( FKey - 1 ) = &quot;SHIFT + CONTROL + F&quot; + FKey
 	next FKey
 	
 	KeyBindArrayOfArrays(0) = SCFKey()
@@ -157,9 +157,9 @@ Sub createAndPopulateKeyArrays()
 	KeyBindArrayOfArrays(2) = SCLKey()
 
 	&apos;Create CONTROL + F keys	
-	Dim CFKey( 10 )
-	for FKey = 2 to 12
-		CFKey( Fkey - 2 ) = &quot;CONTROL + F&quot; + FKey
+	Dim CFKey( 11 )
+	for FKey = 1 to 12
+		CFKey( Fkey - 1 ) = &quot;CONTROL + F&quot; + FKey
 	next FKey
 	KeyBindArrayOfArrays(3) = CFKey()
 	
@@ -178,17 +178,42 @@ Sub createAndPopulateKeyArrays()
 	KeyBindArrayOfArrays(5) = CLKey()
 		
 	&apos;Create SHIFT + F Keys
-	Dim SFKey( 10 )
-	for FKey = 2 to 12
-		SFKey( Fkey - 2 ) = &quot;SHIFT + F&quot; + FKey
+	Dim SFKey( 11 )
+	for FKey = 1 to 12
+		SFKey( Fkey - 1 ) = &quot;SHIFT + F&quot; + FKey
 	next FKey
 	KeyBindArrayOfArrays(6) = SFKey()
 	
 End Sub 
 
+Sub updateMapWithDisabledKeys()
+	&apos;disable CONTROL + F1 &amp;
+	keyAllocationMap( 3, 0 ).Value = 1
+	keyAllocationMap( 3, 0 ).Name = &quot;&quot;
+	&apos;disable CONTROL + F4 &amp;
+	keyAllocationMap( 3, 3 ).Value = 1
+	keyAllocationMap( 3, 3 ).Name = &quot;&quot;	
+	&apos;disable CONTROL + F6 
+	keyAllocationMap( 3, 5 ).Value = 1
+	keyAllocationMap( 3, 5 ).Name = &quot;&quot;
+
+
+	&apos;disable SHIFT + F1 &amp;
+	keyAllocationMap( 6, 0 ).Value = 1
+	keyAllocationMap( 6, 0 ).Name = &quot;&quot;
+	&apos;disable SHIFT + F2 &amp;
+	keyAllocationMap( 6, 1 ).Value = 1
+	keyAllocationMap( 6, 1 ).Name = &quot;&quot;
+	&apos;disable SHIFT + F6 &amp;
+	keyAllocationMap( 6, 5 ).Value = 1
+	keyAllocationMap( 6, 5 ).Name = &quot;&quot;
+
+End Sub
+
 Sub ExecuteKeyBinding()
 	dialogName = &quot;Key&quot;
     createAndPopulateKeyArrays()
+    updateMapWithDisabledKeys()
 	xmlFileName = GetDocumentType( &quot;Key&quot; )
 
 	if not (ReadXMLToArray( &quot;Key&quot; )) then
@@ -623,7 +648,7 @@ function getKeyGroupIndex( key as String, offset as Integer ) as Integer
 	select case offset
 	case 0:
 			num = cint( cutKey )
-			getKeyGroupIndex() = num - 2
+			getKeyGroupIndex() = num - 1
 			exit function
 	case 1:	
 			num = asc( key ) - 48
@@ -648,7 +673,7 @@ Sub processKeyXMLLine( lineCount as Integer, xmlline as String )
 		if instr( xmlFile( lineCount ), &quot;accel:mod1=&quot;+chr$(34)+&quot;true&quot;+chr$(34) ) &gt; 0 then
 			control = true
 		end if
-		offsetIntoArrayOfArrays = 0 &apos;default to &quot;SHIFT + CONTROL&quot; set of arrays
+		offsetIntoArrayOfArrays = -1 &apos;default unknown
 		if ( control AND shift ) then
 			offsetIntoArrayOfArrays = 0
 		elseif ( control ) then
@@ -663,6 +688,10 @@ Sub processKeyXMLLine( lineCount as Integer, xmlline as String )
 		
 		&apos; Calculate from the key the offset into key group array we need to point to
 		KeyGroupIndex = getKeyGroupIndex( key, keyTypeOffset )
+		if ( offsetIntoArrayOfArrays = -1 ) then
+			&apos;Unknown key group, no processing necessary
+			Exit Sub
+		end if 
 		if ( KeyGroupIndex &gt; -1 ) then
 		
 			&apos; Determine if a script framework binding is present or not	
