@@ -115,7 +115,7 @@ dnl ===================================================================
 dnl checking the os
 AC_MSG_CHECKING([the operating system])
 _os=`uname`
-if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin" -o "$_os" = "FreeBSD" -o "$_os" = "OSF1" -o "$_os" = "NetBSD" ; then
+if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin" -o "$_os" = "FreeBSD" -o "$_os" = "OSF1" -o "$_os" = "NetBSD" -o "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
    AC_MSG_RESULT([checked ($_os)])
 else
    AC_MSG_ERROR([$_os operating system is not suitable to build OpenOffice!])
@@ -146,7 +146,7 @@ fi
 dnl ===================================================================
 dnl Checks for compilers. 
 dnl ===================================================================
-if test "$_os" = "SunOS"; then
+if test "$_os" = "SunOS" -o "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
    CC=cc; export CC;
 fi   
 if test "$_os" != "WINNT" && test -z "$with_gcc_home"; then
@@ -333,7 +333,31 @@ if test "$_os" = "Darwin"; then
       fi
    fi
 fi     
-
+if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
+   if test "$CC" = "cc"; then
+      AC_PATH_PROGS(_cc, cc)
+      COMPATH=`echo $_cc | $SED -n "s/\/usr\/bin\/cc//p"`
+      AC_MSG_CHECKING([the SGI MIPSpro C compiler version])
+      dnl cc -version outputs to standard error!!!!
+      _mipspro_version=`$CC -version 2>&1 | $AWK '{ print $4 }'`
+      _mipspro_major=`echo $_mipspro_version | $AWK -F. '{ print $1 }'`
+      if test "$_mipspro_major" != "7"; then
+         AC_MSG_WARN([found version "$_mipspro_version", use version 7.2+ of the SGI MIPSpro C compiler])
+         AC_MSG_WARN([found version "$_mipspro_version", use version 7.2+ of the SGI MIPSpro C compiler]) >> warn
+         COMPATH="NO_COMPATH"
+      else
+         _mipspro_minor=`echo $_mipspro_version | $AWK -F. '{ if ($2 <= 1) print "false"; else print "true" }'`
+         if test "$_mipspro_minor" = "false"; then
+            AC_MSG_WARN([found version "$_mipspro_version", use version 7.2+ of the SGI MIPSpro C compiler])
+            AC_MSG_WARN([found version "$_mipspro_version", use version 7.2+ of the SGI MIPSpro C compiler]) >> warn
+            COMPATH="NO_COMPATH"
+         else
+            dnl compiler will do
+            AC_MSG_RESULT([checked])
+         fi
+      fi
+   fi
+fi
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
    dnl Check if there is a Microsoft C/C++ compiler.
@@ -406,6 +430,19 @@ if test "$_os" = "Darwin"; then
       fi
    fi 
 fi 
+if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
+   CXX=CC; export CXX;
+   dnl MIPSpro C++ compiler packaged with MIPSpro C compiler
+   if test "$CC" = "cc"; then
+   AC_MSG_CHECKING([SGI MIPSpro C++ Compiler])
+      if test "$CXX" != "CC"; then
+         AC_MSG_WARN([SGI MIPSpro C++ was not found])
+         AC_MSG_WARN([SGI MIPSpro C++ was not found]) >> warn
+      else
+         AC_MSG_RESULT([checked])
+      fi
+   fi
+fi
 
 dnl **************************************************************
 dnl Testing for required  Solaris and workshop compiler patches...
@@ -547,7 +584,7 @@ if test "$JAVA"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
    if test "$_jdk_middle" = "true"; then
-      if test "$_os" = "SunOS"; then
+      if test "$_os" = "SunOS" -o "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
          _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
       fi
       if test "$_os" = "FreeBSD"; then
@@ -664,7 +701,14 @@ dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
 if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
+   AC_PATH_X
    AC_PATH_XTRA
+   if test "x$x_includes" = "x"; then
+     x_includes="/usr/include"
+   fi
+   if test "x$x_libraries" = "x"; then
+     x_libraries="/usr/lib"
+   fi
    dnl The variables $x_libraries and $x_includes are set.
    if test -z "$x_libraries"; then
       AC_MSG_ERROR([No X libraries found]) # Exit
@@ -672,8 +716,9 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
    if test -z "$x_includes"; then
       AC_MSG_ERROR([No X includes found]) # Exit
    fi
-   LDFLAGS=$X_LIBS
-   AC_CHECK_LIB(X11, XOpenDisplay, , [AC_MSG_ERROR([X Development libraries not found])])
+   CFLAGS=$X_CFLAGS
+   LDFLAGS="$X_LDFLAGS $X_LIBS"
+   AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", [AC_MSG_ERROR([X Development libraries not found])])
 else
    x_includes="no_x_includes"
    x_libraries="no_x_libraries"
