@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:51:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2283,7 +2283,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
 //--------------------------------------------------------------------------
 
-const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
     // TODO: how to get access to Type 1 font files on this platform?
     return NULL;
