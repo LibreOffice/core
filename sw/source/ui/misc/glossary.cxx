@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:28:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,9 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
         BOOL bIsWritable = FALSE;
         for(USHORT nPath = 0; nPath < nPaths; nPath++)
         {
-            String sPath = URIHelper::SmartRelToAbs(sGlosPath.GetToken(nPath, ';'));
+            String sPath = URIHelper::SmartRel2Abs(
+                INetURLObject(), sGlosPath.GetToken(nPath, ';'),
+                URIHelper::GetMaybeFileHdl());
             try
             {
                 Content aTestContent( sPath,
