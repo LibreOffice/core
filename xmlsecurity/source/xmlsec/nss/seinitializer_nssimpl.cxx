@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-23 04:53:50 $
+ *  last change: $Author: mt $ $Date: 2004-07-23 08:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,35 +229,30 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     PK11SlotInfo*       pSlot = NULL ;
 
     rtl::OString sCertDir;
-    if( sCertDB.getLength() > 0 )
+    if( sCertDB.getLength() )
     {
         sCertDir = rtl::OString(sCertDB, sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
     }
     else
     {
-        rtl::OUString ouCertDir;
-        if (!getMozillaCurrentProfile(ouCertDir))
+        static rtl::OString* pDefaultCertDir = NULL;
+        if ( !pDefaultCertDir )
         {
-            return NULL;
+            pDefaultCertDir = new rtl::OString;
+            rtl::OUString ouCertDir;
+            if ( getMozillaCurrentProfile(ouCertDir) )
+            {
+                *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
+                DBG_ERROR( pDefaultCertDir->getStr() );
+            }
         }
+        sCertDir = *pDefaultCertDir;
 
-        sCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
-
-        DBG_ASSERT(0, sCertDir.getStr());
-        /*
-        char *pCurrentProfilePath = getCurrentProfilePath();
-
-        if (pCurrentProfilePath == NULL)
-        {
-            return NULL;
-        }
-        else
-        {
-            sCertDir = rtl::OString(pCurrentProfilePath);
-            free(pCurrentProfilePath);
-        }
-        */
     }
+
+    if( !sCertDir.getLength() )
+        return NULL;
+
 
     /* Initialize NSPR and NSS */
     PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
