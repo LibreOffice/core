@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 11:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,8 +468,14 @@ BOOL ODbaseIndex::DropImpl()
     INetURLObject aIndexEntry(getEntry());
     aIndexEntry.setExtension(String::CreateFromAscii("ndx"));
 
-    Content aContent(aIndexEntry.GetMainURL(),Reference<XCommandEnvironment>());
-    aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+    try
+    {
+        Content aContent(aIndexEntry.GetMainURL(),Reference<XCommandEnvironment>());
+        aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+    }
+    catch(Exception&) // a execption is thrown when no file exists
+    {
+    }
 
 //  ULONG nErrorCode = aIndexEntry.Kill();
 //  if (nErrorCode != SVSTREAM_OK && nErrorCode != SVSTREAM_FILE_NOT_FOUND)
@@ -518,10 +524,16 @@ BOOL ODbaseIndex::CreateImpl()
     aEntry.setExtension(String::CreateFromAscii("ndx"));
 
     Content aContent(aEntry.GetMainURL(),Reference<XCommandEnvironment>());
-    if (aContent.isDocument())
+    try
     {
-        //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,INDEX,aEntry.GetFull());
-        return FALSE;
+        if (aContent.isDocument())
+        {
+            //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,INDEX,aEntry.GetFull());
+            return FALSE;
+        }
+    }
+    catch(Exception&) // a execption is thrown when no file exists
+    {
     }
 
     // Index ist nur einstufig
@@ -598,8 +610,13 @@ BOOL ODbaseIndex::CreateImpl()
     if (!xSet.is())
     {
         m_aFileStream.Close();
-        //  aEntry.Kill();
-        aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+        try
+        {
+            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+        }
+        catch(Exception&) // a execption is thrown when no file exists
+        {
+        }
         return FALSE;
     }
 
