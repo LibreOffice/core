@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkfilt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oisin $ $Date: 2000-11-03 13:39:54 $
+ *  last change: $Author: hjs $ $Date: 2002-04-05 12:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,9 @@ void MkFilter::Filter()
                 {
                     MkLine *pMkLine = pLine->pPrivateTnrLst->GetObject(i);
                     ByteString aLine = pMkLine->aLine;
-                    if ( pMkLine->bOut );
+//                  maybe once used to filter comments??? trailing ';'
+//                  makes it useless.
+//                  if ( pMkLine->bOut );
                     {
                         while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 );
                         fputs( aLine.GetBuffer(), pOut );
