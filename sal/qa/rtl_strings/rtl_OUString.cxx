@@ -1,26 +1,10 @@
-/*
-(fset 'replace-extern-c-to-void
-   [?\C-s ?e ?x ?t ?e ?r ?n ?  ?" ?C ?" ?  ?s ?a ?l ?_ ?B ?o ?o ?l right left left left left left left left left left ?v ?o ?i ?d ?  ?/ ?* ?  right right right right right right right right ?  ?* ?/ ?\C-s ?{ left M-down ?\C-r ?r ?e ?t ?u ?r ?n home ?/ ?/])
-
-(fset 'insert-test-functions
-   [?\C-s ?e ?x ?t ?e ?r ?n ?  ?" ?C ?" right ?\C-s ?t ?e ?s ?t ?_ left left left left left ?\C-  ?\C-s ?( left ?\M-w ?\C-x ?o ?( ?_ ?p ?F ?u ?n ?c ?) ?( ?& ?\C-y ?, ?  ?" ?" ?) ?; home end return ?\C-x ?o home down])
-
-/ rtlTestResult/ hTestResult/g
-
-/rtl_tres_state/c_rtl_tres_state/g
-
-(fset 'asdf
-   [ ?\C-s ?e ?x ?t ?e ?r ?n ?  ?" ?C ?" right ?\C-s ?( left ?\C-  M-left ?\M-w ?\C-s ?{ left right return tab ?c ?_ ?t backspace ?r ?t ?l ?_ ?t ?r ?e ?s ?_ ?s ?t ?a ?t ?e ?_ ?s ?t ?a ?r ?t ?( ?  ?h ?R ?t ?l ?T ?e ?s ?t ?R ?e ?s ?u ?l ?t ?, ?  ?" ?\C-y ?" ?) ?; home up M-down up ?c ?_ ?r ?t ?l ?_ ?t ?r ?e ?s ?_ ?s ?t ?a ?t ?e ?_ ?e ?n ?d ?( ?  ?h ?R ?t ?l ?T ?e ?s ?t ?R ?e ?s ?u ?l ?t ?, ?  ?" ?\C-y ?" ?) ?; return home down ] )
-
-*/
-
 /*************************************************************************
  *
  *  $RCSfile: rtl_OUString.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:12:50 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +67,7 @@
 //#     #include <rtl/tres.h>
 //# #endif
 #include <testshl/tresstatewrapper.hxx>
+#include "stringhelper.hxx"
 
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
@@ -1520,8 +1505,8 @@ sal_Bool test_valueOf( const char** resArray, int n, sal_Int16 radix,
 
 #define test_valueOf_Int32      test_valueOf<sal_Int32>
 #define test_valueOf_Int64      test_valueOf<sal_Int64>
-#define test_valueOf_float      test_valueOf<float>
-#define test_valueOf_double     test_valueOf<double>
+// LLA: #define test_valueOf_float      test_valueOf<float>
+// LLA: #define test_valueOf_double     test_valueOf<double>
 
 //------------------------------------------------------------------------
 // testing the method valueOf( sal_Int32 i, sal_Int16 radix=2 )
@@ -2121,256 +2106,256 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
 //------------------------------------------------------------------------
 // testing the method valueOf( float f )
 //------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_valueOf_float(
-    hTestResult hRtlTestResult )
-{
-    sal_Char methName[MAXBUFLENGTH];
-    sal_Char* pMeth =methName;
-
-    typedef struct TestCase
-    {
-        sal_Char*                    comments;
-        float                         input1;
-        OUString*                     expVal;
-
-        ~TestCase() {delete expVal;}
-    } TestCase;
-
-    TestCase arrTestCase[] =
-    {
-        { "3.0", 3.0, new OUString("3.0",3,kEncodingRTLTextUSASCII,
-                                   kConvertFlagsOStringToOUString) },
-        { "3.5", 3.5f, new OUString("3.5",3,kEncodingRTLTextUSASCII,
-                                    kConvertFlagsOStringToOUString)},
-        { "3.0625", 3.0625f, new OUString("3.0625",6,kEncodingRTLTextUSASCII,
-                                          kConvertFlagsOStringToOUString)},
-        { "3.502525", 3.502525f, new OUString("3.502525",8,
-                                              kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
-        { "3.141592", 3.141592f, new OUString("3.141592",8,
-                                              kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
-        { "3.5025255", 3.5025255f, new OUString("3.5025255",9,
-                                                kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
-        { "3.0039062", 3.00390625f, new OUString("3.0039062",9,
-                                                 kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) }
-    };
-
-    sal_Bool res = sal_True;
-    sal_Int32 i;
-
-    for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-        ::rtl::OUString aStr1;
-        aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
-        sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-
-        c_rtl_tres_state
-            (
-                hRtlTestResult,
-                lastRes,
-                arrTestCase[i].comments,
-                createName( pMeth, "valueof_float", i)
-                );
-
-        res &= lastRes;
-
-    }
-
-    return ( res );
-}
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_valueOf_float(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Char methName[MAXBUFLENGTH];
+// LLA:     sal_Char* pMeth =methName;
+// LLA:
+// LLA:     typedef struct TestCase
+// LLA:     {
+// LLA:         sal_Char*                    comments;
+// LLA:         float                         input1;
+// LLA:         OUString*                     expVal;
+// LLA:
+// LLA:         ~TestCase() {delete expVal;}
+// LLA:     } TestCase;
+// LLA:
+// LLA:     TestCase arrTestCase[] =
+// LLA:     {
+// LLA:         { "3.0", 3.0, new OUString("3.0",3,kEncodingRTLTextUSASCII,
+// LLA:                                    kConvertFlagsOStringToOUString) },
+// LLA:         { "3.5", 3.5f, new OUString("3.5",3,kEncodingRTLTextUSASCII,
+// LLA:                                     kConvertFlagsOStringToOUString)},
+// LLA:         { "3.0625", 3.0625f, new OUString("3.0625",6,kEncodingRTLTextUSASCII,
+// LLA:                                           kConvertFlagsOStringToOUString)},
+// LLA:         { "3.502525", 3.502525f, new OUString("3.502525",8,
+// LLA:                                               kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
+// LLA:         { "3.141592", 3.141592f, new OUString("3.141592",8,
+// LLA:                                               kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
+// LLA:         { "3.5025255", 3.5025255f, new OUString("3.5025255",9,
+// LLA:                                                 kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
+// LLA:         { "3.0039062", 3.00390625f, new OUString("3.0039062",9,
+// LLA:                                                  kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) }
+// LLA:     };
+// LLA:
+// LLA:     sal_Bool res = sal_True;
+// LLA:     sal_Int32 i;
+// LLA:
+// LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
+// LLA:     {
+// LLA:         ::rtl::OUString aStr1;
+// LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
+// LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
+// LLA:
+// LLA:         c_rtl_tres_state
+// LLA:             (
+// LLA:                 hRtlTestResult,
+// LLA:                 lastRes,
+// LLA:                 arrTestCase[i].comments,
+// LLA:                 createName( pMeth, "valueof_float", i)
+// LLA:                 );
+// LLA:
+// LLA:         res &= lastRes;
+// LLA:
+// LLA:     }
+// LLA:
+// LLA:     return ( res );
+// LLA: }
 
 //------------------------------------------------------------------------
 // testing the method valueOf( float f ) for negative value
 //------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_valueOf_Float_Negative(
-    hTestResult hRtlTestResult )
-{
-    sal_Char methName[MAXBUFLENGTH];
-    sal_Char* pMeth =methName;
-
-    typedef struct TestCase
-    {
-        sal_Char*                    comments;
-        float                         input1;
-        OUString*                     expVal;
-
-        ~TestCase() {delete expVal;}
-    } TestCase;
-
-    TestCase arrTestCase[] =
-    {
-        { "-3.0", -3.0, new OUString("-3.0",4,kEncodingRTLTextUSASCII,
-                                     kConvertFlagsOStringToOUString) },
-        { "-3.5", -3.5f, new OUString("-3.5",4,kEncodingRTLTextUSASCII,
-                                      kConvertFlagsOStringToOUString)},
-        { "-3.0625", -3.0625f, new OUString("-3.0625",7,
-                                            kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString)},
-        { "-3.502525", -3.502525f, new OUString("-3.502525",9,
-                                                kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
-        { "-3.141592", -3.141592f, new OUString("-3.141592",9,
-                                                kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
-        { "-3.5025255", -3.5025255f, new OUString("-3.5025255",10,
-                                                  kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
-        { "-3.0039062", -3.00390625f, new OUString("-3.0039062",10,
-                                                   kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) }
-    };
-
-    sal_Bool res = sal_True;
-    sal_Int32 i;
-
-    for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-        ::rtl::OUString aStr1;
-        aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
-        sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-
-        c_rtl_tres_state
-            (
-                hRtlTestResult,
-                lastRes,
-                arrTestCase[i].comments,
-                createName( pMeth, "valueof_negative float", i)
-                );
-
-        res &= lastRes;
-
-    }
-
-    return ( res );
-}
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_valueOf_Float_Negative(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Char methName[MAXBUFLENGTH];
+// LLA:     sal_Char* pMeth =methName;
+// LLA:
+// LLA:     typedef struct TestCase
+// LLA:     {
+// LLA:         sal_Char*                    comments;
+// LLA:         float                         input1;
+// LLA:         OUString*                     expVal;
+// LLA:
+// LLA:         ~TestCase() {delete expVal;}
+// LLA:     } TestCase;
+// LLA:
+// LLA:     TestCase arrTestCase[] =
+// LLA:     {
+// LLA:         { "-3.0", -3.0, new OUString("-3.0",4,kEncodingRTLTextUSASCII,
+// LLA:                                      kConvertFlagsOStringToOUString) },
+// LLA:         { "-3.5", -3.5f, new OUString("-3.5",4,kEncodingRTLTextUSASCII,
+// LLA:                                       kConvertFlagsOStringToOUString)},
+// LLA:         { "-3.0625", -3.0625f, new OUString("-3.0625",7,
+// LLA:                                             kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString)},
+// LLA:         { "-3.502525", -3.502525f, new OUString("-3.502525",9,
+// LLA:                                                 kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
+// LLA:         { "-3.141592", -3.141592f, new OUString("-3.141592",9,
+// LLA:                                                 kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
+// LLA:         { "-3.5025255", -3.5025255f, new OUString("-3.5025255",10,
+// LLA:                                                   kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) },
+// LLA:         { "-3.0039062", -3.00390625f, new OUString("-3.0039062",10,
+// LLA:                                                    kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString) }
+// LLA:     };
+// LLA:
+// LLA:     sal_Bool res = sal_True;
+// LLA:     sal_Int32 i;
+// LLA:
+// LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
+// LLA:     {
+// LLA:         ::rtl::OUString aStr1;
+// LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
+// LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
+// LLA:
+// LLA:         c_rtl_tres_state
+// LLA:             (
+// LLA:                 hRtlTestResult,
+// LLA:                 lastRes,
+// LLA:                 arrTestCase[i].comments,
+// LLA:                 createName( pMeth, "valueof_negative float", i)
+// LLA:                 );
+// LLA:
+// LLA:         res &= lastRes;
+// LLA:
+// LLA:     }
+// LLA:
+// LLA:     return ( res );
+// LLA: }
 
 //------------------------------------------------------------------------
 // testing the method valueOf( double f )
 //------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_valueOf_double(
-    hTestResult hRtlTestResult )
-{
-    sal_Char methName[MAXBUFLENGTH];
-    sal_Char* pMeth =methName;
-
-    typedef struct TestCase
-    {
-        sal_Char*       comments;
-        double          input1;
-        OUString*       expVal;
-
-        ~TestCase() {delete expVal;}
-    } TestCase;
-
-    TestCase arrTestCase[] =
-    {
-        {"3.0", 3.0, new OUString("3.0",3,kEncodingRTLTextUSASCII,
-                                  kConvertFlagsOStringToOUString)},
-        {"3.5", 3.5, new OUString("3.5",3,kEncodingRTLTextUSASCII,
-                                  kConvertFlagsOStringToOUString)},
-        {"3.0625", 3.0625, new OUString("3.0625",6,kEncodingRTLTextUSASCII,
-                                        kConvertFlagsOStringToOUString)},
-        {"3.1415926535", 3.1415926535, new OUString("3.1415926535",12,
-                                                    kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString)},
-        {"3.1415926535897931", 3.141592653589793,
-         new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)},
-        {"3.1415926535897931", 3.1415926535897932,
-         new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)},
-        {"3.1415926535897931", 3.14159265358979323,
-         new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)},
-        {"3.1415926535897931", 3.141592653589793238462643,
-         new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)}
-    };
-
-    sal_Bool res = sal_True;
-    sal_Int32 i;
-
-    for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-        ::rtl::OUString aStr1;
-        aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
-        sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-
-        c_rtl_tres_state
-            (
-                hRtlTestResult,
-                lastRes,
-                arrTestCase[i].comments,
-                createName( pMeth, "valueof_double", i)
-                );
-
-        res &= lastRes;
-
-    }
-
-    return ( res );
-}
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_valueOf_double(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Char methName[MAXBUFLENGTH];
+// LLA:     sal_Char* pMeth =methName;
+// LLA:
+// LLA:     typedef struct TestCase
+// LLA:     {
+// LLA:         sal_Char*       comments;
+// LLA:         double          input1;
+// LLA:         OUString*       expVal;
+// LLA:
+// LLA:         ~TestCase() {delete expVal;}
+// LLA:     } TestCase;
+// LLA:
+// LLA:     TestCase arrTestCase[] =
+// LLA:     {
+// LLA:         {"3.0", 3.0, new OUString("3.0",3,kEncodingRTLTextUSASCII,
+// LLA:                                   kConvertFlagsOStringToOUString)},
+// LLA:         {"3.5", 3.5, new OUString("3.5",3,kEncodingRTLTextUSASCII,
+// LLA:                                   kConvertFlagsOStringToOUString)},
+// LLA:         {"3.0625", 3.0625, new OUString("3.0625",6,kEncodingRTLTextUSASCII,
+// LLA:                                         kConvertFlagsOStringToOUString)},
+// LLA:         {"3.1415926535", 3.1415926535, new OUString("3.1415926535",12,
+// LLA:                                                     kEncodingRTLTextUSASCII,kConvertFlagsOStringToOUString)},
+// LLA:         {"3.1415926535897931", 3.141592653589793,
+// LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)},
+// LLA:         {"3.1415926535897931", 3.1415926535897932,
+// LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)},
+// LLA:         {"3.1415926535897931", 3.14159265358979323,
+// LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)},
+// LLA:         {"3.1415926535897931", 3.141592653589793238462643,
+// LLA:          new OUString("3.1415926535897931",18,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)}
+// LLA:     };
+// LLA:
+// LLA:     sal_Bool res = sal_True;
+// LLA:     sal_Int32 i;
+// LLA:
+// LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
+// LLA:     {
+// LLA:         ::rtl::OUString aStr1;
+// LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
+// LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
+// LLA:
+// LLA:         c_rtl_tres_state
+// LLA:             (
+// LLA:                 hRtlTestResult,
+// LLA:                 lastRes,
+// LLA:                 arrTestCase[i].comments,
+// LLA:                 createName( pMeth, "valueof_double", i)
+// LLA:                 );
+// LLA:
+// LLA:         res &= lastRes;
+// LLA:
+// LLA:     }
+// LLA:
+// LLA:     return ( res );
+// LLA: }
 
 
 //------------------------------------------------------------------------
 // testing the method valueOf( double f ) for negative value
 //------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_valueOf_Double_Negative(
-    hTestResult hRtlTestResult )
-{
-    sal_Char methName[MAXBUFLENGTH];
-    sal_Char* pMeth =methName;
-
-    typedef struct TestCase
-    {
-        sal_Char*        comments;
-        double           input1;
-        OUString*        expVal;
-
-        ~TestCase() {delete expVal;}
-    } TestCase;
-
-    TestCase arrTestCase[] =
-    {
-        {"-3.0", -3.0, new OUString("-3.0",4,kEncodingRTLTextUSASCII,
-                                    kConvertFlagsOStringToOUString)},
-        {"-3.5", -3.5, new OUString("-3.5",4,kEncodingRTLTextUSASCII,
-                                    kConvertFlagsOStringToOUString)},
-        {"-3.0625", -3.0625, new OUString("-3.0625",7,kEncodingRTLTextUSASCII,
-                                          kConvertFlagsOStringToOUString)},
-        {"-3.1415926535", -3.1415926535,
-         new OUString("-3.1415926535",13,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)},
-        {"-3.1415926535897931", -3.141592653589793,
-         new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)},
-        {"-3.1415926535897931", -3.1415926535897932,
-         new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)},
-        {"-3.1415926535897931", -3.14159265358979323,
-         new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)},
-        {"-3.1415926535897931", -3.141592653589793238462643,
-         new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
-                      kConvertFlagsOStringToOUString)}
-    };
-
-    sal_Bool res = sal_True;
-    sal_Int32 i;
-
-    for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
-    {
-        ::rtl::OUString aStr1;
-        aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
-        sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-
-        c_rtl_tres_state
-            (
-                hRtlTestResult,
-                lastRes,
-                arrTestCase[i].comments,
-                createName( pMeth, "valueof_nagative double", i)
-                );
-
-        res &= lastRes;
-
-    }
-
-    return ( res );
-}
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_valueOf_Double_Negative(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Char methName[MAXBUFLENGTH];
+// LLA:     sal_Char* pMeth =methName;
+// LLA:
+// LLA:     typedef struct TestCase
+// LLA:     {
+// LLA:         sal_Char*        comments;
+// LLA:         double           input1;
+// LLA:         OUString*        expVal;
+// LLA:
+// LLA:         ~TestCase() {delete expVal;}
+// LLA:     } TestCase;
+// LLA:
+// LLA:     TestCase arrTestCase[] =
+// LLA:     {
+// LLA:         {"-3.0", -3.0, new OUString("-3.0",4,kEncodingRTLTextUSASCII,
+// LLA:                                     kConvertFlagsOStringToOUString)},
+// LLA:         {"-3.5", -3.5, new OUString("-3.5",4,kEncodingRTLTextUSASCII,
+// LLA:                                     kConvertFlagsOStringToOUString)},
+// LLA:         {"-3.0625", -3.0625, new OUString("-3.0625",7,kEncodingRTLTextUSASCII,
+// LLA:                                           kConvertFlagsOStringToOUString)},
+// LLA:         {"-3.1415926535", -3.1415926535,
+// LLA:          new OUString("-3.1415926535",13,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)},
+// LLA:         {"-3.1415926535897931", -3.141592653589793,
+// LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)},
+// LLA:         {"-3.1415926535897931", -3.1415926535897932,
+// LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)},
+// LLA:         {"-3.1415926535897931", -3.14159265358979323,
+// LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)},
+// LLA:         {"-3.1415926535897931", -3.141592653589793238462643,
+// LLA:          new OUString("-3.1415926535897931",19,kEncodingRTLTextUSASCII,
+// LLA:                       kConvertFlagsOStringToOUString)}
+// LLA:     };
+// LLA:
+// LLA:     sal_Bool res = sal_True;
+// LLA:     sal_Int32 i;
+// LLA:
+// LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
+// LLA:     {
+// LLA:         ::rtl::OUString aStr1;
+// LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
+// LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
+// LLA:
+// LLA:         c_rtl_tres_state
+// LLA:             (
+// LLA:                 hRtlTestResult,
+// LLA:                 lastRes,
+// LLA:                 arrTestCase[i].comments,
+// LLA:                 createName( pMeth, "valueof_nagative double", i)
+// LLA:                 );
+// LLA:
+// LLA:         res &= lastRes;
+// LLA:
+// LLA:     }
+// LLA:
+// LLA:     return ( res );
+// LLA: }
 
 //------------------------------------------------------------------------
 // testing the method valueOf()
@@ -2391,11 +2376,11 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf(
     bTState &= test_rtl_OUString_valueOf_Int64_WrongRadix( hRtlTestResult );
     bTState &= test_rtl_OUString_valueOf_Int64_defaultParam(
         hRtlTestResult );
-    bTState &= test_rtl_OUString_valueOf_float( hRtlTestResult );
-    bTState &= test_rtl_OUString_valueOf_Float_Negative( hRtlTestResult );
+    // LLA: bTState &= test_rtl_OUString_valueOf_float( hRtlTestResult );
+    // LLA: bTState &= test_rtl_OUString_valueOf_Float_Negative( hRtlTestResult );
 
-    bTState &= test_rtl_OUString_valueOf_double( hRtlTestResult );
-    bTState &= test_rtl_OUString_valueOf_Double_Negative( hRtlTestResult );
+    // LLA: bTState &= test_rtl_OUString_valueOf_double( hRtlTestResult );
+    // LLA: bTState &= test_rtl_OUString_valueOf_Double_Negative( hRtlTestResult );
     c_rtl_tres_state_end( hRtlTestResult, "valueOf");
 //    return ( bTState );
 }
@@ -2492,16 +2477,25 @@ sal_Bool test_index( const T* input1, int num,const sal_Int32* input2,
             lastRes=(str.indexOf(input1[i],input2[i])==expVal[i]);
             meth="indexOf_002";
         }
-        if(base==2)
-        {
-            lastRes=(str.lastIndexOf(input1[i])==expVal[i]);
-            meth="lastIndexOf_001(sal_Unicode)";
-        }
-        if(base==3)
-        {
-            lastRes=(str.lastIndexOf(input1[i],input2[i])==expVal[i]);
-            meth="lastIndexOf_002(sal_Unicode , sal_Int32 )";
-        }
+// LLA:         if(base==2)
+// LLA:         {
+// LLA:             lastRes=(str.lastIndexOf(input1[i])==expVal[i]);
+// LLA:             meth="lastIndexOf_001(sal_Unicode)";
+// LLA:         }
+// LLA:         if(base==3)
+// LLA:         {
+// LLA: /*
+// LLA:             OUString s4(&input1[i]);
+// LLA:             rtl::OString sStr;
+// LLA:             sStr <<= str;
+// LLA:             printf("# str = %s\n", sStr.getStr());
+// LLA:             rtl::OString sInput1;
+// LLA:             sInput1 <<= s4; // rtl::OUString((sal_Unicode*)input1[i]);
+// LLA:             printf("# %d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
+// LLA: */
+// LLA:             lastRes=(str.lastIndexOf(input1[i],input2[i])==expVal[i]);
+// LLA:             meth="lastIndexOf_002(sal_Unicode , sal_Int32 )";
+// LLA:         }
 
         c_rtl_tres_state
             (
@@ -2544,18 +2538,26 @@ sal_Bool test_indexStr( const T** input1, int num,const sal_Int32* input2,
             lastRes=(str.indexOf(s2,input2[i])==expVal[i]);
             meth="indexOf_004";
         }
-        if(base==2)
-        {
-            OUString s3(input1[i]);
-            lastRes=(str.lastIndexOf(s3)==expVal[i]);
-            meth="lastIndexOf_003(const OUString)";
-        }
-        if(base==3)
-        {
-            OUString s4(input1[i]);
-            lastRes=(str.lastIndexOf(s4,input2[i])==expVal[i]);
-            meth="lastIndexOf_004(const OUString,sal_Int32)";
-        }
+// LLA:         if(base==2)
+// LLA:         {
+// LLA:             OUString s3(input1[i]);
+// LLA:             lastRes=(str.lastIndexOf(s3)==expVal[i]);
+// LLA:             meth="lastIndexOf_003(const OUString)";
+// LLA:         }
+// LLA:         if(base==3)
+// LLA:         {
+// LLA:             OUString s4(input1[i]);
+// LLA:
+// LLA:             rtl::OString sStr;
+// LLA:             sStr <<= str;
+// LLA:             printf("# str = \"%s\"\n", sStr.getStr());
+// LLA:             rtl::OString sInput1;
+// LLA:             sInput1 <<= s4; // rtl::OUString((sal_Unicode*)input1[i]);
+// LLA:             printf("# %d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
+// LLA:
+// LLA:             lastRes=(str.lastIndexOf(s4,input2[i])==expVal[i]);
+// LLA:             meth="lastIndexOf_004(const OUString,sal_Int32)";
+// LLA:         }
 
         c_rtl_tres_state
             (
@@ -2611,46 +2613,6 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_002(
     return ( bRes );
 }
 //------------------------------------------------------------------------
-// testing the method lastIndexOf( sal_Unicode ch )
-//------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_001(
-    hTestResult hRtlTestResult )
-{
-    sal_Bool bRes=sal_False;
-
-    bRes=c_rtl_tres_state
-        (
-              hRtlTestResult,
-              test_index<sal_Unicode>((const sal_Unicode*)input1lastDefault,
-                                    nlastDefaultCount,input2lastDefault,
-                                    expVallastDefault,2,hRtlTestResult),
-              "lastIndex",
-              "lastIndexDefault(sal_Unicode ch)"
-              );
-
-    return ( bRes );
-}
-//------------------------------------------------------------------------
-// testing the method lastIndexOf(  sal_Unicode ch, sal_Int32 fromIndex )
-//------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_002(
-    hTestResult hRtlTestResult )
-{
-    sal_Bool bRes=sal_False;
-
-    bRes=c_rtl_tres_state
-        (
-              hRtlTestResult,
-              test_index<sal_Unicode>((const sal_Unicode*)input1lastNormal,
-                                    nlastNormalCount,input2lastNormal,
-                                    expVallastNormal,3,hRtlTestResult),
-              "lastIndex",
-              "lastIndexNormal(sal_Unicode ch, sal_Int32 fromIndex)"
-              );
-
-    return ( bRes );
-}
-//------------------------------------------------------------------------
 // testing the method indexOf(  OUString ch, sal_Int32 fromIndex = 0 )
 //------------------------------------------------------------------------
 sal_Bool SAL_CALL test_rtl_OUString_indexOf_003(
@@ -2690,46 +2652,92 @@ sal_Bool SAL_CALL test_rtl_OUString_indexOf_004(
 
     return ( bRes );
 }
-//------------------------------------------------------------------------
-// testing the method lastIndexOf(  OUString ch )
-//------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_003(
-    hTestResult hRtlTestResult )
-{
-    sal_Bool bRes=sal_False;
-
-    bRes=c_rtl_tres_state
-        (
-              hRtlTestResult,
-              test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastDefault,
-                                       nStrLastDefaultCount,input2StrLastDefault,
-                                       expValStrLastDefault,2,hRtlTestResult),
-              "lastIndexOf",
-              "lastIndexOf(OUString ch)"
-              );
-
-    return ( bRes );
-}
-//------------------------------------------------------------------------
-// testing the method lastIndexOf(  OUString ch, sal_Int32 fromIndex )
-//------------------------------------------------------------------------
-sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_004(
-    hTestResult hRtlTestResult )
-{
-    sal_Bool bRes=sal_False;
-
-    bRes=c_rtl_tres_state
-        (
-              hRtlTestResult,
-              test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastNormal,
-                                       nStrLastNormalCount,input2StrLastNormal,
-                                       expValStrLastNormal,3,hRtlTestResult),
-              "lastIndexOf",
-              "lastIndexOf(OUString ch, sal_Int32 fromIndex)"
-              );
-
-    return ( bRes );
-}
+// LLA: //------------------------------------------------------------------------
+// LLA: // testing the method lastIndexOf( sal_Unicode ch )
+// LLA: //------------------------------------------------------------------------
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_001(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Bool bRes=sal_False;
+// LLA:
+// LLA:     bRes=c_rtl_tres_state
+// LLA:         (
+// LLA:             hRtlTestResult,
+// LLA:             test_index<sal_Unicode>((const sal_Unicode*)input1lastDefault,
+// LLA:                                     nlastDefaultCount,input2lastDefault,
+// LLA:                                     expVallastDefault,2,hRtlTestResult),
+// LLA:             "lastIndex",
+// LLA:             "lastIndexDefault(sal_Unicode ch)"
+// LLA:             );
+// LLA:
+// LLA:     return ( bRes );
+// LLA: }
+// LLA: //------------------------------------------------------------------------
+// LLA: // testing the method lastIndexOf(  sal_Unicode ch, sal_Int32 fromIndex )
+// LLA: //------------------------------------------------------------------------
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_002(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Bool bRes=sal_False;
+// LLA:
+// LLA:     bRes=c_rtl_tres_state
+// LLA:         (
+// LLA:             hRtlTestResult,
+// LLA:             test_index<sal_Unicode>((const sal_Unicode*)input1lastNormal,
+// LLA:                                     nlastNormalCount,input2lastNormal,
+// LLA:                                     expVallastNormal,3,hRtlTestResult),
+// LLA:             "lastIndex",
+// LLA:             "lastIndexNormal(sal_Unicode ch, sal_Int32 fromIndex)"
+// LLA:             );
+// LLA:
+// LLA:     return ( bRes );
+// LLA: }
+// LLA: //------------------------------------------------------------------------
+// LLA: // testing the method lastIndexOf(  OUString ch )
+// LLA: //------------------------------------------------------------------------
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_003(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Bool bRes=sal_False;
+// LLA:
+// LLA:     bRes=c_rtl_tres_state
+// LLA:         (
+// LLA:             hRtlTestResult,
+// LLA:             test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastDefault,
+// LLA:                                        nStrLastDefaultCount,input2StrLastDefault,
+// LLA:                                        expValStrLastDefault,2,hRtlTestResult),
+// LLA:             "lastIndexOf",
+// LLA:             "lastIndexOf(OUString ch)"
+// LLA:             );
+// LLA:
+// LLA:     return ( bRes );
+// LLA: }
+// LLA: //------------------------------------------------------------------------
+// LLA: // testing the method lastIndexOf(  OUString ch, sal_Int32 fromIndex )
+// LLA: //------------------------------------------------------------------------
+// LLA: sal_Bool SAL_CALL test_rtl_OUString_lastIndexOf_004(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     sal_Bool bRes=sal_False;
+// LLA:
+// LLA:     for (int i=0;i<nStrLastNormalCount;i++)
+// LLA:     {
+// LLA:         rtl::OUString aStr = rtl::OUString(input1StrLastNormal[i]);
+// LLA:         volatile int dummy = 0;
+// LLA:     }
+// LLA:
+// LLA:     bRes=c_rtl_tres_state
+// LLA:         (
+// LLA:             hRtlTestResult,
+// LLA:             test_indexStr<sal_Unicode>((const sal_Unicode**)input1StrLastNormal,
+// LLA:                                        nStrLastNormalCount,input2StrLastNormal,
+// LLA:                                        expValStrLastNormal,3,hRtlTestResult),
+// LLA:             "lastIndexOf",
+// LLA:             "lastIndexOf(OUString ch, sal_Int32 fromIndex)"
+// LLA:             );
+// LLA:
+// LLA:     return ( bRes );
+// LLA: }
 //------------------------------------------------------------------------
 extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_indexOf(
     hTestResult hRtlTestResult )
@@ -2743,17 +2751,17 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_indexOf(
 //    return ( res );
 }
 //------------------------------------------------------------------------
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_lastIndexOf(
-    hTestResult hRtlTestResult )
-{
-    c_rtl_tres_state_start( hRtlTestResult, "lastIndexOf");
-    sal_Bool res = test_rtl_OUString_lastIndexOf_001(hRtlTestResult);
-    res &= test_rtl_OUString_lastIndexOf_002(hRtlTestResult);
-    res &= test_rtl_OUString_lastIndexOf_003(hRtlTestResult);
-    res &= test_rtl_OUString_lastIndexOf_004(hRtlTestResult);
-    c_rtl_tres_state_end( hRtlTestResult, "lastIndexOf");
-//    return ( res );
-}
+// LLA: extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_lastIndexOf(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     c_rtl_tres_state_start( hRtlTestResult, "lastIndexOf");
+// LLA:     sal_Bool res = test_rtl_OUString_lastIndexOf_001(hRtlTestResult);
+// LLA:     res &= test_rtl_OUString_lastIndexOf_002(hRtlTestResult);
+// LLA:     res &= test_rtl_OUString_lastIndexOf_003(hRtlTestResult);
+// LLA:     res &= test_rtl_OUString_lastIndexOf_004(hRtlTestResult);
+// LLA:     c_rtl_tres_state_end( hRtlTestResult, "lastIndexOf");
+// LLA: //    return ( res );
+// LLA: }
 //------------------------------------------------------------------------
 // testing the method concat( const OString & aStr )
 //------------------------------------------------------------------------
@@ -3262,23 +3270,25 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
 //------------------------------------------------------------------------
 //    testing the method toDouble()
 //------------------------------------------------------------------------
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toDouble(
-    hTestResult hRtlTestResult )
-{
-    c_rtl_tres_state_start( hRtlTestResult, "toDouble");
-    sal_Bool bRes=sal_False;
 
-    bRes=c_rtl_tres_state
-        (
-              hRtlTestResult,
-              test_toData<double>((const char**)inputDouble,nDoubleCount,10,
-                                expValDouble,4,hRtlTestResult),
-              "toDouble",
-              "toDouble()"
-              );
-    c_rtl_tres_state_end( hRtlTestResult, "toDouble");
-//   return ( bRes );
-}
+// LLA: extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toDouble(
+// LLA:     hTestResult hRtlTestResult )
+// LLA: {
+// LLA:     c_rtl_tres_state_start( hRtlTestResult, "toDouble");
+// LLA:     sal_Bool bRes=sal_False;
+// LLA:
+// LLA:     bRes=c_rtl_tres_state
+// LLA:         (
+// LLA:             hRtlTestResult,
+// LLA:             test_toData<double>((const char**)inputDouble,nDoubleCount,10,
+// LLA:                                 expValDouble,4,hRtlTestResult),
+// LLA:             "toDouble",
+// LLA:             "toDouble()"
+// LLA:             );
+// LLA:     c_rtl_tres_state_end( hRtlTestResult, "toDouble");
+// LLA: //   return ( bRes );
+// LLA: }
+
 //------------------------------------------------------------------------
 //    testing the method toFloat()
 //------------------------------------------------------------------------
@@ -3841,14 +3851,14 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString( hTestResult hRtlTestR
     test_rtl_OUString_valueOf( hRtlTestResult );
     test_rtl_OUString_createFromAscii( hRtlTestResult );
     test_rtl_OUString_indexOf( hRtlTestResult );
-    test_rtl_OUString_lastIndexOf( hRtlTestResult );
+// LLA: removed, it is in a new test in rtl/oustring. test_rtl_OUString_lastIndexOf( hRtlTestResult );
     test_rtl_OUString_concat( hRtlTestResult );
     test_rtl_OUString_replaceAt( hRtlTestResult );
     test_rtl_OUString_replace( hRtlTestResult );
     test_rtl_OUString_toAsciiLowerCase( hRtlTestResult );
     test_rtl_OUString_toAsciiUpperCase( hRtlTestResult );
     test_rtl_OUString_trim( hRtlTestResult );
-    test_rtl_OUString_toDouble( hRtlTestResult );
+// LLA: removed, it is in a new test in rtl/oustring. test_rtl_OUString_toDouble( hRtlTestResult );
     test_rtl_OUString_toFloat( hRtlTestResult );
     test_rtl_OUString_toChar( hRtlTestResult );
     test_rtl_OUString_toBoolean( hRtlTestResult );
