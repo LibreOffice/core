@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-19 13:19:50 $
+ *  last change: $Author: aw $ $Date: 2000-10-31 16:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,7 +1244,8 @@ void ScDrawLayer::Store( SvStream& rStream ) const
 {
     ScWriteHeader aHdr( rStream );
 
-    const_cast<ScDrawLayer*>(this)->PrepareStore();     // non-const
+//-/    const_cast<ScDrawLayer*>(this)->PrepareStore();     // non-const
+    const_cast<ScDrawLayer*>(this)->PreSave();      // non-const
 
     {
         rStream << (USHORT) SCID_DRAWPOOL;
@@ -1257,6 +1258,8 @@ void ScDrawLayer::Store( SvStream& rStream ) const
         ScWriteHeader aDrawHdr( rStream );
         rStream << *this;
     }
+
+    const_cast<ScDrawLayer*>(this)->PostSave();     // non-const
 }
 
 BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const
