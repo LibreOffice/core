@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 18:02:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,10 +270,11 @@ TabPage TP_PRINT_OPTIONS
     CheckBox CBX_PAPERBIN
     {
         Pos = MAP_APPFONT ( 136 , 153  ) ;
-        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 30 ) ;
         Text [ de ] = "Papierschacht aus ~Druckereinstellung" ;
         Text [ en-US ] = "Paper tray from printer s~ettings" ;
         Text [ x-comment ] = " ";
+        WordBreak = TRUE ;
     };
     Text [ x-comment ] = " ";
 };
