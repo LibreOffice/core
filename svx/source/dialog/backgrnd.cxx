@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:39:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,10 @@
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
 #endif
-
+#include "svxids.hrc" //CHINA001
+#include "flagsdef.hxx" //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#include <sfx2/request.hxx> //CHINA001
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
@@ -2054,3 +2057,19 @@ void SvxBackgroundTabPage::EnableTransparency(BOOL bColor, BOOL bGraphic)
     }
 }
 
+void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    if (pFlagItem)
+    {
+        UINT32 nFlags=pFlagItem->GetValue();
+        if ( ( nFlags & SVX_SHOW_TBLCTL ) == SVX_SHOW_TBLCTL )
+            ShowTblControl();
+        if ( ( nFlags & SVX_SHOW_PARACTL ) == SVX_SHOW_PARACTL )
+            ShowParaControl();
+        if ( ( nFlags & SVX_SHOW_SELECTOR ) == SVX_SHOW_SELECTOR )
+            ShowSelector();
+        if ( ( nFlags & SVX_ENABLE_TRANSPARENCY ) == SVX_ENABLE_TRANSPARENCY )
+            EnableTransparency(TRUE, TRUE);
+    }
+}
