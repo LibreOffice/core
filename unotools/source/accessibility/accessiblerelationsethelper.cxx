@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 07:23:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 using namespace ::utl;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 class AccessibleRelationSetHelperImpl
 {
