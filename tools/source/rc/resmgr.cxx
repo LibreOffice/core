@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-27 08:09:42 $
+ *  last change: $Author: nf $ $Date: 2002-04-16 12:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,7 +1130,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
                 return "61";
 
             case LANGUAGE_FINNISH:
-                return "05";
+                return "35";
 
             case LANGUAGE_FRENCH_CANADIAN:
                 return "02";
