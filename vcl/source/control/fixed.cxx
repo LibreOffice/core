@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:39:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,10 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
     USHORT                  nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+    Point                   aPos = rPos;
+
+    if ( nWinStyle & WB_EXTRAOFFSET )
+        aPos.X() += 2;
 
     if ( nWinStyle & WB_PATHELLIPSIS )
     {
@@ -294,7 +298,7 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     if( bFillLayout )
     {
         mpLayoutData->m_aDisplayText = String();
-        pDev->DrawText( Rectangle( rPos, rSize ),
+        pDev->DrawText( Rectangle( aPos, rSize ),
                         aText,
                         nTextStyle,
                         &mpLayoutData->m_aUnicodeBoundRects,
@@ -302,7 +306,7 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                         );
     }
     else
-        pDev->DrawText( Rectangle( rPos, rSize ), aText, nTextStyle );
+        pDev->DrawText( Rectangle( aPos, rSize ), aText, nTextStyle );
 }
 
 // -----------------------------------------------------------------------
@@ -427,6 +431,9 @@ Size FixedText::CalcMinimumSize( long nMaxWidth ) const
 
     Size aSize = GetTextRect( Rectangle( Point(), Size( (nMaxWidth ? nMaxWidth : 0x7fffffff), 0x7fffffff ) ),
                               GetText(), nStyle ).GetSize();
+
+    if ( GetStyle() & WB_EXTRAOFFSET )
+        aSize.Width() += 2;
 
     // GetTextRect verkraftet keinen leeren String:
     if ( aSize.Width() < 0 )
