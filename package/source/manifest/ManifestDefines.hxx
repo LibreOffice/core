@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestDefines.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:53:48 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 #define ATTRIBUTE_SIZE "manifest:size"
 
 #define ELEMENT_ENCRYPTION_DATA "manifest:encryption-data"
+#define ATTRIBUTE_CHECKSUM_TYPE "manifest:checksum-type"
+#define ATTRIBUTE_CHECKSUM "manifest:checksum"
 
 #define ELEMENT_ALGORITHM "manifest:algorithm"
 #define ATTRIBUTE_ALGORITHM_NAME "manifest:algorithm-name"
@@ -82,6 +84,5 @@
 #define ATTRIBUTE_KEY_DERIVATION_NAME "manifest:key-derivation-name"
 #define ATTRIBUTE_SALT "manifest:salt"
 #define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
-
 
 #endif
