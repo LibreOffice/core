@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
+ *  last change: $Author: mt $ $Date: 2001-01-25 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,60 +92,6 @@ StdTabController::~StdTabController()
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  StdTabController::ImplFindControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rCtrls,
- const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rxCtrlModel ) const
-{
-
-/*
-     // MT: Funktioniert nicht mehr, weil ich nicht mehr bei mir angemeldet bin,
-    // weil DG das abfaengt.
-
-    // #54677# Beim Laden eines HTML-Dokuments wird nach jedem Control ein
-    // activateTabOrder gerufen und jede Menge Zeit in dieser Methode verbraten.
-    // Die Anzahl dieser Schleifendurchlaufe steigt quadratisch, also versuchen
-    // das Control direkt vom Model zu erhalten.
-    // => Wenn genau ein Control als PropertyChangeListener angemeldet ist,
-    // dann muss das auch das richtige sein.
-
-    UnoControlModel* pUnoCtrlModel = UnoControlModel::GetImplementation( rxCtrlModel );
-
-
-    if ( pUnoCtrlModel )
-    {
-        ListenerIterator aIt( pUnoCtrlModel->maPropertiesListeners );
-        while( aIt.hasMoreElements() )
-        {
-            XEventListener* pL = aIt.next();
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xC( pL, ::com::sun::star::uno::UNO_QUERY );
-            if ( xC.is() )
-            {
-                if( xC->getContext() == mxControlContainer )
-                {
-                    xCtrl = xC;
-                    break;
-                }
-            }
-        }
-    }
-    if ( !xCtrl.is() && rxCtrlModel.is())
-*/
-    DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - welches ?!" );
-
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > * pCtrls = rCtrls.getConstArray();
-    sal_Int32 nCtrls = rCtrls.getLength();
-    for ( sal_uInt32 n = 0; n < nCtrls; n++ )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xModel(pCtrls[n].is() ? pCtrls[n]->getModel() : ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ());
-        if ( (::com::sun::star::awt::XControlModel*)xModel.get() == (::com::sun::star::awt::XControlModel*)rxCtrlModel.get() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCtrl( pCtrls[n] );
-            ::comphelper::removeElementAt( rCtrls, n );
-            return xCtrl;
-        }
-    }
-    return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > ();
-}
-
 sal_Bool StdTabController::ImplCreateComponentSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rControls, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rModels, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& rComponents, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>* pTabStops, sal_Bool bPeerComponent ) const
 {
     sal_Bool bOK = sal_True;
@@ -163,7 +109,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence( ::com::sun::star::uno::S
         for (sal_Int32 n = 0; n < nModels; ++n)
         {
             xCurrentModel = pModels[n];
-            xCurrentControl = ImplFindControl(rControls, xCurrentModel);
+            xCurrentControl = FindControl(rControls, xCurrentModel);
             if (xCurrentControl.is())
                 aSeq.getArray()[nRealControls++] = xCurrentControl;
         }
@@ -306,7 +252,7 @@ void StdTabController::setContainer( const ::com::sun::star::uno::Reference< ::c
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xCtrlModel = pModels[n];
             // Zum Model passendes Control suchen
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCtrl = ImplFindControl( xCtrls, xCtrlModel );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCtrl = FindControl( xCtrls, xCtrlModel );
             aSeq.getArray()[n] = xCtrl;
         }
     }
@@ -440,3 +386,57 @@ void StdTabController::activateLast(  ) throw(::com::sun::star::uno::RuntimeExce
     ImplActivateControl( sal_False );
 }
 
+
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  StdTabController::FindControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rCtrls,
+ const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rxCtrlModel )
+{
+
+/*
+     // MT: Funktioniert nicht mehr, weil ich nicht mehr bei mir angemeldet bin,
+    // weil DG das abfaengt.
+
+    // #54677# Beim Laden eines HTML-Dokuments wird nach jedem Control ein
+    // activateTabOrder gerufen und jede Menge Zeit in dieser Methode verbraten.
+    // Die Anzahl dieser Schleifendurchlaufe steigt quadratisch, also versuchen
+    // das Control direkt vom Model zu erhalten.
+    // => Wenn genau ein Control als PropertyChangeListener angemeldet ist,
+    // dann muss das auch das richtige sein.
+
+    UnoControlModel* pUnoCtrlModel = UnoControlModel::GetImplementation( rxCtrlModel );
+
+
+    if ( pUnoCtrlModel )
+    {
+        ListenerIterator aIt( pUnoCtrlModel->maPropertiesListeners );
+        while( aIt.hasMoreElements() )
+        {
+            XEventListener* pL = aIt.next();
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xC( pL, ::com::sun::star::uno::UNO_QUERY );
+            if ( xC.is() )
+            {
+                if( xC->getContext() == mxControlContainer )
+                {
+                    xCtrl = xC;
+                    break;
+                }
+            }
+        }
+    }
+    if ( !xCtrl.is() && rxCtrlModel.is())
+*/
+    DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - welches ?!" );
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > * pCtrls = rCtrls.getConstArray();
+    sal_Int32 nCtrls = rCtrls.getLength();
+    for ( sal_Int32 n = 0; n < nCtrls; n++ )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xModel(pCtrls[n].is() ? pCtrls[n]->getModel() : ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ());
+        if ( (::com::sun::star::awt::XControlModel*)xModel.get() == (::com::sun::star::awt::XControlModel*)rxCtrlModel.get() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCtrl( pCtrls[n] );
+            ::comphelper::removeElementAt( rCtrls, n );
+            return xCtrl;
+        }
+    }
+    return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > ();
+}

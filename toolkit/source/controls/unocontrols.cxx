@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
+ *  last change: $Author: mt $ $Date: 2001-01-25 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
+#include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/unomemorystream.hxx>
@@ -350,11 +351,14 @@ void UnoControlDialogModel::replaceByName( const ::rtl::OUString& aName, const u
     UnoControlModelHolder* pE = ImplFindElement( aName );
     if ( pE )
     {
-        aElement >>= pE->xModel;
-
         container::ContainerEvent aEvent;
         aEvent.Source = *this;
         aEvent.Element <<= aElement;
+        aEvent.ReplacedElement <<= pE->xModel;
+        aEvent.Accessor <<= aName;
+
+        aElement >>= pE->xModel;
+
         maContainerListeners.elementReplaced( aEvent );
     }
 }
@@ -396,6 +400,7 @@ void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const un
     container::ContainerEvent aEvent;
     aEvent.Source = *this;
     aEvent.Element <<= aElement;
+    aEvent.Accessor <<= aName;
     maContainerListeners.elementInserted( aEvent );
 }
 
@@ -407,6 +412,7 @@ void UnoControlDialogModel::removeByName( const ::rtl::OUString& aName ) throw(c
         container::ContainerEvent aEvent;
         aEvent.Source = *this;
         aEvent.Element <<= pE->xModel;
+        aEvent.Accessor <<= aName;
         maContainerListeners.elementRemoved( aEvent );
 
         mpModels->Remove( pE );
@@ -443,6 +449,60 @@ UnoControlContainer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 
+void UnoDialogControl::ImplInsertControl( uno::Reference< awt::XControlModel >& rxModel, const ::rtl::OUString& rName )
+{
+    uno::Reference< beans::XMultiPropertySet > xMP( rxModel, uno::UNO_QUERY );
+    if ( xMP.is() )
+    {
+        uno::Sequence< ::rtl::OUString > aNames( 4 );
+        ::rtl::OUString* pNames = aNames.getArray();
+        pNames[0] = ::rtl::OUString::createFromAscii( "PositionX" );
+        pNames[1] = ::rtl::OUString::createFromAscii( "PositionY" );
+        pNames[2] = ::rtl::OUString::createFromAscii( "Width" );
+        pNames[3] = ::rtl::OUString::createFromAscii( "Height" );
+
+        xMP->addPropertiesChangeListener( aNames, (beans::XPropertiesChangeListener*)this );
+    }
+
+    uno::Reference< beans::XPropertySet > xP( rxModel, uno::UNO_QUERY );
+
+    ::rtl::OUString aDefCtrl;
+    xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference < awt::XControl > xCtrl( xMSF->createInstance( aDefCtrl ), uno::UNO_QUERY );
+
+    xCtrl->setModel( rxModel );
+    addControl( rName, xCtrl );
+
+    ImplSetPosSize( xCtrl );
+}
+
+void UnoDialogControl::ImplRemoveControl( uno::Reference< awt::XControlModel >& rxModel )
+{
+    uno::Reference< beans::XMultiPropertySet > xMP( rxModel, uno::UNO_QUERY );
+    if ( xMP.is() )
+        xMP->removePropertiesChangeListener( (beans::XPropertiesChangeListener*)this );
+
+    uno::Sequence< uno::Reference< awt::XControl > > aControls = getControls();
+    uno::Reference< awt::XControl > xCtrl = StdTabController::FindControl( aControls, rxModel );
+    if ( xCtrl.is() )
+        removeControl( xCtrl );
+}
+
+void UnoDialogControl::ImplSetPosSize( uno::Reference< awt::XControl >& rxCtrl )
+{
+    uno::Reference< beans::XPropertySet > xP( rxCtrl->getModel(), uno::UNO_QUERY );
+
+    sal_Int32 nX, nY, nWidth, nHeight;
+    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nX;
+    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nY;
+    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
+    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
+
+    uno::Reference < awt::XWindow > xW( rxCtrl, uno::UNO_QUERY );
+    xW->setPosSize( nX, nY, nWidth, nHeight, awt::PosSize::POSSIZE );
+}
+
 void UnoDialogControl::dispose() throw(uno::RuntimeException)
 {
     UnoControlContainer::dispose();
@@ -452,93 +512,101 @@ sal_Bool UnoDialogControl::setModel( const ::com::sun::star::uno::Reference< ::c
 {
     if ( getModel().is() )
     {
+        uno::Sequence< uno::Reference< awt::XControl > > aControls = getControls();
+        const uno::Reference< awt::XControl > * pCtrls = aControls.getConstArray();
+        sal_Int32 nCtrls = aControls.getLength();
+        for ( sal_Int32 n = 0; n < nCtrls; n++ )
+            removeControl( pCtrls[n] );
+
         uno::Reference< container::XContainer > xC( getModel(), uno::UNO_QUERY );
         if ( xC.is() )
-        {
             xC->removeContainerListener( (container::XContainerListener*)this );
-        }
     }
 
     sal_Bool bRet = UnoControl::setModel( rxModel );
 
     if ( getModel().is() )
     {
+        uno::Reference< container::XNameAccess > xNA( getModel(), uno::UNO_QUERY );
+        if ( xNA.is() )
+        {
+            uno::Sequence< ::rtl::OUString > aNames = xNA->getElementNames();
+            const ::rtl::OUString* pNames = aNames.getConstArray();
+            sal_uInt32 nCtrls = aNames.getLength();
+
+            for( sal_uInt32 n = 0; n < nCtrls; n++ )
+            {
+                uno::Any aA = xNA->getByName( pNames[n] );
+                uno::Reference< awt::XControlModel > xCtrlModel;
+                aA >>= xCtrlModel;
+                ImplInsertControl( xCtrlModel, pNames[n] );
+            }
+        }
+
         uno::Reference< container::XContainer > xC( getModel(), uno::UNO_QUERY );
         if ( xC.is() )
-            xC->removeContainerListener( (container::XContainerListener*)this );
+            xC->addContainerListener( (container::XContainerListener*)this );
     }
     return bRet;
 }
 
 void UnoDialogControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    if ( !getPeer().is() )
-    {
-        // Create controls for the models, peers
-        uno::Reference< container::XNameAccess > xC( getModel(), uno::UNO_QUERY );
-        if ( xC.is() )
-        {
-            ::rtl::OUString sPosX( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
-            ::rtl::OUString sPosY( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );
-            ::rtl::OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
-            ::rtl::OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
-
-            uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-
-            uno::Sequence< ::rtl::OUString > aNames = xC->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
-            sal_uInt32 nCtrls = aNames.getLength();
-
-            for( sal_uInt32 n = 0; n < nCtrls; n++ )
-            {
-                uno::Any aA = xC->getByName( pNames[n] );
-                uno::Reference< awt::XControlModel > xCtrlModel;
-                aA >>= xCtrlModel;
-
-                uno::Reference< beans::XPropertySet > xP( xCtrlModel, uno::UNO_QUERY );
-                   ::rtl::OUString aDefCtrl;
-                xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
-
-                uno::Reference < awt::XControl > xCtrl( xMSF->createInstance( aDefCtrl ), uno::UNO_QUERY );
-                xCtrl->setModel( xCtrlModel );
-                addControl( pNames[n], xCtrl );
-
-                sal_Int32 nX, nY, nWidth, nHeight;
-                xP->getPropertyValue( sPosX ) >>= nX;
-                xP->getPropertyValue( sPosY ) >>= nY;
-                xP->getPropertyValue( sWidth ) >>= nWidth;
-                xP->getPropertyValue( sHeight ) >>= nHeight;
-
-                uno::Reference < awt::XWindow > xW( xCtrl, uno::UNO_QUERY );
-                xW->setPosSize( nX, nY, nWidth, nHeight, awt::PosSize::POSSIZE );
-            }
-        }
-
-        UnoControlContainer::createPeer( rxToolkit, rParentPeer );
-    }
+    UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 }
 
 void UnoDialogControl::elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( getPeer().is() )
-    {
-        // ...............
-    }
+    uno::Reference< awt::XControlModel > xModel;
+    ::rtl::OUString aName;
+
+    Event.Accessor >>= aName;
+    Event.Element >>= xModel;
+    ImplInsertControl( xModel, aName );
 }
 
 void UnoDialogControl::elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( getPeer().is() )
-    {
-        // ...............
-    }
+    uno::Reference< awt::XControlModel > xModel;
+    Event.Element >>= xModel;
+    if ( xModel.is() )
+        ImplRemoveControl( xModel );
 }
 
 void UnoDialogControl::elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( getPeer().is() )
+    uno::Reference< awt::XControlModel > xModel;
+    Event.ReplacedElement >>= xModel;
+    if ( xModel.is() )
+        ImplRemoveControl( xModel );
+
+    ::rtl::OUString aName;
+    Event.Accessor >>= aName;
+    Event.Element >>= xModel;
+    ImplInsertControl( xModel, aName );
+}
+
+// beans::XPropertiesChangeListener
+void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if( !IsUpdatingModel() )
     {
-        // ...............
+        ::rtl::OUString s1( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
+        ::rtl::OUString s2( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );
+        ::rtl::OUString s3( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
+        ::rtl::OUString s4( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
+
+        sal_Int32 nLen = rEvents.getLength();
+        for( sal_Int32 i = 0; i < nLen; i++ )
+        {
+            const beans::PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
+            if ( ( rEvt.PropertyName == s1 ) || ( rEvt.PropertyName == s2 ) || ( rEvt.PropertyName == s3 ) || ( rEvt.PropertyName == s4 ) )
+            {
+                uno::Reference< awt::XControlModel > xModel( rEvt.Source, uno::UNO_QUERY );
+                ImplSetPosSize( StdTabController::FindControl( getControls(), xModel ) );
+                break;
+            }
+        }
     }
 }
 
@@ -561,13 +629,26 @@ sal_Int16 UnoDialogControl::execute() throw(uno::RuntimeException)
     {
         uno::Reference< awt::XDialog > xDlg( getPeer(), uno::UNO_QUERY );
         if( xDlg.is() )
+        {
+            GetComponentInfos().bVisible = sal_True;
             nDone = xDlg->execute();
+            GetComponentInfos().bVisible = sal_False;
+        }
     }
     return nDone;
 }
 
 void UnoDialogControl::endExecute() throw(uno::RuntimeException)
 {
+    if ( getPeer().is() )
+    {
+        uno::Reference< awt::XDialog > xDlg( getPeer(), uno::UNO_QUERY );
+        if( xDlg.is() )
+        {
+            xDlg->endExecute();
+            GetComponentInfos().bVisible = sal_False;
+        }
+    }
 }
 
 

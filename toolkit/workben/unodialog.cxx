@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:34:09 $
+ *  last change: $Author: mt $ $Date: 2001-01-25 13:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,16 @@ void MyApp::Main()
     aAny <<= xCtrl1;
     xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Control1" ) ), aAny );
 
-    // Create a EditModel
+    uno::Reference< beans::XPropertySet > xDlgPSet( xC, uno::UNO_QUERY );
+    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test-Dialog" ) );
+    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aValue );
+
+    // Create a Dialog
+    uno::Reference< awt::XControl > xDlg( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), uno::UNO_QUERY );
+    uno::Reference< awt::XControlModel > xDlgMod( xC, uno::UNO_QUERY );
+    xDlg->setModel( xDlgMod );
+
+     // Create a EditModel
     uno::Reference< awt::XControlModel > xCtrl2( xModFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ) ) ), uno::UNO_QUERY );
     xPSet = uno::Reference< beans::XPropertySet >( xCtrl2, uno::UNO_QUERY );
     aValue <<= (sal_Int32) 10;
@@ -238,17 +247,11 @@ void MyApp::Main()
     aAny <<= xCtrl2;
     xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Control2" ) ), aAny );
 
+    // test if listener works...
+    aValue <<= (sal_Int32) 20;
+    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
 
-    uno::Reference< beans::XPropertySet > xDlgPSet( xC, uno::UNO_QUERY );
-    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test-Dialog" ) );
-    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aValue );
-
-    // Create a Dialog
-    uno::Reference< awt::XControl > xDlg( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), uno::UNO_QUERY );
-    uno::Reference< awt::XControlModel > xDlgMod( xC, uno::UNO_QUERY );
-    xDlg->setModel( xDlgMod );
-    xDlg->createPeer( xToolkit, NULL );
-
+//  xDlg->createPeer( xToolkit, NULL );
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
     xD->execute();
 
