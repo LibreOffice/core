@@ -3,9 +3,9 @@
 #*
 #*  $RCSfile: filter.pl,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: rt $ $Date: 2003-12-01 18:18:24 $
+#*  last change: $Author: rt $ $Date: 2004-09-20 12:25:26 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -63,179 +63,42 @@
 $debug = "";
 $ctrue = 1;
 $cfalse = 0;
-$cskip = $ctrue;
-$cread = $cfalse;
-
-# keine umlaute
-# Berechnet den Ausdruck der durch den 1. Parameter Uebergeben wird.
-# Falls symbole nicht ersetzt werden koennen findet behandlung als Makro statt
-# Bricht im Fehlerfall das Programm ab
-#
-# computes the expression by the 1. Parameter handing over becomes.
-# If symbols not to be replaced can find treatment as macro instead of break off
-# in the event of an error the program
-sub calc_value {
-  $_ = $_[0];
-  s/(\||\+|\-|\*|\/|\(|\)|\<=|\>=|\!=|\>{1,2}|\<{1,2}|\={1,2})/ $1 /g;          # Insert blanks around operators
-  s/^ *(.*) *$/$1/;                             # blanks vorn und hinten weg
-  s/\( *[a-zA-Z]* *\)//;            # Casts auf Typen raus
-  @ops = split;
-  print join(",",@ops),"\n" if $debug;
-  @neuop = "";
-  foreach $op (@ops) {
-    if ($op !~ /^(\||\+|\-|\*|\/|\(|\)|\>{1,2}|\<{1,2}|\<=|\>=|\!=|\={1,2}|\d+|0[xX][0-9a-fA-F]+)$/) {
-      print "replace $op through",$symbol {$op},"\n" if $debug;
-                                # If no operand or number or clip
-      $op = $symbol {$op};      # also accessed associative array also {}
-
-    }                           # ersetzen des Symbols durch seinen Wert
-    if ( defined ($op) ) {
-      push(@neuop,$op);
-    } else {                    # Symbol not found -> Als Text uebernehmen
-      print "aborting calc_value : \"$_\"\n" if $debug;
-      return $_;
-    }
-  }
-  print @neuop,"\n" if $debug;
-  $_ = join(" ",@neuop);
-  print "$_\n" if $debug;
-  eval "\$value = $_";              # Actual computation of the value
-  if ($@) { die "$@ ($_)"; }        # Error message in $ @ evaluate (abort)
-  $value;
-}
-
 # reads a block
 # Parameter:   FileHandle
-#              Flag $$skip whether block .bersprungen to become is or interpreted
-#              Flag $$BlindSkip whether if or else branch (then examines further if-then-else)
-#              those expressions represent the end of block.
-#   with # ifdef block would then be ("^#else\$", "^#endif\$")
+#              list of Regular Expressions which terminate the block.
+#   for '#ifdef' block would then be ("^#else\$", "^#endif\$")
 
 sub read_block {
 
-  local($file,$skip,$BlindSkip,@patterns) = @_;
-  print "reading block '$file' $skip $BlindSkip @patterns ",scalar(@_),"\n" if $debug;
-  while (<$file>) {
+  local($file) = @_;
+  print "reading block '$file' ",scalar(@_),"\n" if $debug;
+  while ( <$file> ) {
     chop;
     s/\s*$//;             # remove trailing whitespaces
-    s/\(USHORT\)//;             # remove (USHORT)
-    s/SAL_CONST_INT64(\([^)]+\))/\1/;             # remove (USHORT)
+    s/^\s*//;             # remove leading whitespaces
     print "Input : \"$_\"\n" if $debug;
     s/\/\/.*//;         # Remove line comment
-#    s/\/\*.*?\*\///g;   # Kommentare inerhalb einer Zeile entfernen
-#   erst ab perl 5
+    s/\/\*.*?\*\///g;   # remove comments within one line
     s/\s+/ /g;          # Change all whitespace into a single blank
     s/ *$//;            # Remove whitespace at end
-
-# Tests whether last line is reached
-# Liefert auch im falle der ganzen Datei, also ohne RegExp das gewuenschte
-# Ergebnis.
-
-    foreach $patt (@patterns) {     # Fuer jede der Expressions testen
-      print "Testing against $patt\n" if $debug;
-      print "Pattern fits: $patt\n" if $debug && /$patt/;
-      return $& if /$patt/;         # Ruecksprung wenn die Zeile auf das Muster passt.
-    }
-
-    if ( $skip eq $cread || !$BlindSkip ) {
-
-      if ( /\/\*/ ) {             # kommentarbeginn entdecken
-        $_ = $`;                  # Zeile auf restzeile vor kommantar setzen
-        $comment = $ctrue;
-        print "Kommantar erkannt\n" if $debug;
-      }
-      @line = split(/ /,$_,3);   # Zeile Parsen und in @line speichern
-
-      $_ = $line[0];             # Default patternspace setzen
-      if (/^#/) {                # Zeile faengt mit '#' an -> Praeprozessorbefehl
-        print "Bearbeite Zeile: @line\n" if $debug;
-        SELECT: {                # SELECT ist hier frei gewaehlt
-
-          if (/#if/) {    # Alle Ifbefehle (#if,#ifdef und #ifndef)
-            if ($skip) {
-              print "skipping nested if\n" if $debug;
-              $ende = &read_block ($file,$cskip,$cfalse,'^#else$','^#endif$');
-              print "skipping nested else\n" if $debug && $ende eq "#else";
-              &read_block ($file,$cskip,$cfalse,'^#endif$') if $ende eq "#else";
-              last SELECT;
-            }
-            if (/#if$/) {
-              $isif = &calc_value (join(" ",@line[1,2]));
-            } else {
-              $isif = defined ($symbol {$line[1]});
-              if (/#ifndef/) { $isif = ! $isif; }
-            }
-            if ( $isif ) {
-              print "if\n" if $debug;
-              $ende = &read_block ($file,$cread,$cfalse,'^#else$','^#endif$');
-              print "skipping else\n" if $debug && $ende eq "#else";
-              &read_block ($file,$cskip,$cfalse,'^#endif$') if $ende eq "#else";
-            } else {
-              print "skipping if\n" if $debug;
-              $ende = &read_block ($file,$cskip,$cfalse,'^#else$','^#endif$');
-              print "else\n" if $debug && $ende eq "#else";
-              &read_block ($file,$cread,$cfalse,'^#endif$') if $ende eq "#else";
-            }
-            print "endif\n" if $debug;
-            last SELECT;
-          }
-
-          last SELECT if $skip eq $cskip;    #Der Rest ist egal (Skip von if und else)
-
-          if (/#define/) {
-#            print join(",",%symbol),"\n";
-            if (defined ($symbol {$line[1]}) ) {
-              print "Symbol schon definiert: $line[1]\n";
-            }
-            else {
-              if (defined ($line[2])) {
-                $symbol {$line[1]} = &calc_value ($line[2]);
-              } else {
-                $symbol {$line[1]} = "";
-              }
-              print "setze $line[1] = ",$symbol {$line[1]},"\n" if $debug;
-              if ( $line[1] =~ /^$namefilter/ )
-              {
-                $mykey = $line[1];
-                $mykey =~ s/^$namefilter//;
-                $count += 1;
-                print OUT "$mykey    ",$symbol {$line[1]},"\n";
-                print OUT2 "\t{ \"$mykey\", ",$symbol {$line[1]}," },\n";
-              }
-            }
-            last SELECT;
-          }
+    s/^# /#/;           # Change # <command> to #<command>
 
 
-          if (/#include/) {
-             $_ = $line[1];
-             s/<(.*)>/$1/;       # < .. > entfernen
-             s/"(.*)"/$1/;       # " .. " entfernene
-             &read_file ($_,$file);
-#             print "Include abgeklemmt!!!\n" if $debug;
-             last SELECT;
-          }
+    @line = split(/ /,$_,3);
 
-
-          if (/#pragma/) {
-             print "Pragma Ignoriert!!!\n" if $debug;
-             last SELECT;
-          }
-
-
-          if (/#error/)  { die "Error: @line[1,2]\n";}
-
-          # Ansonsten Fehlermeldung
-          print "unbekannter Praeprozessorbefehl : \"$_\"\n";
+    $_ = $line[0];
+    if ( $_ && /^#/ ) {                # Line starts with '#' -> preprocessor command
+      print "proccessing line: @line\n" if $debug;
+      if (/#define/)
+      {
+        if ( $line[1] =~ /^$namefilter/ )
+        {
+          $mykey = $line[1];
+          $mykey =~ s/^$namefilter//;
+          $count += 1;
+          print OUT "$mykey    ", $line[2], "\n";
+          print OUT2 "\t{ \"$mykey\", ", $line[2] ," },\n";
         }
-      }
-
-      if ($comment) {
-        &read_block ($file,$cskip,$ctrue,'\*\/');
-        print "After comment $skip\n" if $debug;
-        $comment = $cfalse;
-#        redo main;        # Schleifenrumpf mit Restzeile neu Durchlaufen
-#        kann hier entfallen, da nur Praeprozessorbefehle vorhanden.
       }
     }
   }
@@ -257,36 +120,25 @@ sub convert_path {
   $_;
 }
 
-# Einlesen einer Datei.
-# der erste Parameter ist der Dateiname
-# Globale Variable %symbols enthaelt die Symboltabelle
+# Read a file.
+# first parameter ist the filename
 sub read_file {
 
   local ($filename,$file) = @_;
-  $comment = $cfalse;   # Am Dateianfang immer ausserhalb eines Kommentares
   $file++;                           # String increment
-  local $TempFileName = &convert_path ($basename."/".$filename);
+  local $TempFileName = &convert_path( $basename."/".$filename );
   print "reading file $TempFileName as $file\n" if $debug;
-  if ( ! open($file, $TempFileName ))
-  {
-    print "Warning: Could not open file $TempFileName. ";
-    $TempFileName = &convert_path ($basename."/../".$filename);
-    print "Trying $TempFileName\n";
-    open($file, $TempFileName ) || print "Warning: Could not open file $TempFileName. Ignoring.\n" || return; #( die $basename."/../$filename $!" ) ;    # Oeffnen der Datei zum lesen
-  }
+  open($file, $TempFileName) || die "error: Could not open file $TempFileName. ";
 
-  &read_block($file,$cread,$cfalse);         # Daten lesen
+  &read_block($file);         # read data
   close($file);
   print "done reading $filename\n" if $debug;
 }
 
-# Hauptprogramm beginnt hier
+# main starts here
 
+print &convert_path ("/\n\n\n") if ( $debug );
 
-print &convert_path ("//\n\n\n");
-
-
-%symbol = "";                     # Assotiatives Array initialisieren
 
 $basename = ".";
 $basename = $ARGV[0] if defined($ARGV[0]);
@@ -295,19 +147,20 @@ $filename = "app.hrc";
 $filename = $ARGV[1] if defined($ARGV[1]);
 
 
-$filebase = $filename;
-$filebase =~ s/\.[^.]+$//;           # Schneidet den suffix ab
-$filebase = $ARGV[2] if defined($ARGV[2]);
+$outfilebase = $filename;
+$outfilebase =~ s/\.[^.]+$//;           # cut off suffix
+$outfilebase = $ARGV[2] if defined($ARGV[2]);
 
 
 $namefilter = $ARGV[3] if defined($ARGV[3]);
 
-print "Generating $filebase:\n";
+
+print "Generating $outfilebase:\n";
 
 $count = 0;
 
-open(OUT,">$filebase");
-open(OUT2,">$filebase.hxx");
+open(OUT,">$outfilebase");
+open(OUT2,">$outfilebase.hxx");
 print OUT2 "\{\n";
 
 &read_file ($filename,"f00");
@@ -319,5 +172,6 @@ close(OUT2);
 
 if ( $count == 0 )
 {
-  die "Error: No Entries Found generating \"$filebase.hxx\". Testtool will not work!"
+  die "Error: No Entries Found generating \"$outfilebase.hxx\". Testtool will not work!"
 }
+
