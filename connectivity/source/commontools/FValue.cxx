@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-10 10:50:26 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,85 @@ namespace {
 }
 
 // -----------------------------------------------------------------------------
+#ifdef DBG_UTIL
+
+#include <vector>
+#include <rtl/string.h>
+
+namespace tracing
+{
+    struct AllocationType
+    {
+        const sal_Char* pName;
+        sal_Int32       nAllocatedUnits;
+
+        AllocationType( ) : pName( NULL ), nAllocatedUnits( 0 ) { }
+    };
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
+    class AllocationTracer
+    {
+    public:
+        typedef ::std::vector< AllocationType > AllocationState;
+        static AllocationState                  s_aAllocated;
+        static ::osl::Mutex                     s_aMutex;
+
+    public:
+        static void registerUnit( const sal_Char* _pName );
+        static void revokeUnit( const sal_Char* _pName );
+
+    private:
+        static AllocationState::iterator    getLocation( const sal_Char* _pName );
+    };
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
+    AllocationTracer::AllocationState::iterator AllocationTracer::getLocation( const sal_Char* _pName )
+    {
+        AllocationState::iterator aLookFor = s_aAllocated.begin();
+        for (   ;
+                aLookFor != s_aAllocated.end();
+                ++aLookFor
+            )
+        {
+            if ( 0 == rtl_str_compare( aLookFor->pName, _pName ) )
+                // found
+                return aLookFor;
+        }
+        // not found
+        s_aAllocated.push_back( AllocationType() );
+        aLookFor = s_aAllocated.end(); --aLookFor;
+        aLookFor->pName = _pName;   // note that this assumes that _pName is a constant string ....
+        return aLookFor;
+    }
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
+    AllocationTracer::AllocationState           AllocationTracer::s_aAllocated;
+    ::osl::Mutex                                AllocationTracer::s_aMutex;
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
+    void AllocationTracer::registerUnit( const sal_Char* _pName )
+    {
+        ::osl::MutexGuard aGuard( s_aMutex );
+
+        AllocationState::iterator aPos = getLocation( _pName );
+        ++aPos->nAllocatedUnits;
+    }
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
+    void AllocationTracer::revokeUnit( const sal_Char* _pName )
+    {
+        ::osl::MutexGuard aGuard( s_aMutex );
+
+        AllocationState::iterator aPos = getLocation( _pName );
+        --aPos->nAllocatedUnits;
+    }
+
+#define TRACE_ALLOC( type ) tracing::AllocationTracer::registerUnit( #type );
+#define TRACE_FREE( type )  tracing::AllocationTracer::revokeUnit( #type );
+}
+#endif
+
+// -----------------------------------------------------------------------------
 void ORowSetValue::setTypeKind(sal_Int32 _eType)
 {
     if (!m_bNull)
@@ -215,27 +294,33 @@ void ORowSetValue::free()
                 break;
             case DataType::BIGINT:
                 delete (sal_Int64*)m_aValue.m_pValue;
+                TRACE_FREE( sal_Int64 )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::FLOAT:
                 delete (float*)m_aValue.m_pValue;
+                TRACE_FREE( float )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
                 delete (double*)m_aValue.m_pValue;
+                TRACE_FREE( double )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::DATE:
                 delete (::com::sun::star::util::Date*)m_aValue.m_pValue;
+                TRACE_FREE( Date )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::TIME:
                 delete (::com::sun::star::util::Time*)m_aValue.m_pValue;
+                TRACE_FREE( Time )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::TIMESTAMP:
                 delete (::com::sun::star::util::DateTime*)m_aValue.m_pValue;
+                TRACE_FREE( DateTime )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::BINARY:
@@ -243,10 +328,12 @@ void ORowSetValue::free()
             case DataType::LONGVARBINARY:
             case DataType::LONGVARCHAR:
                 delete (Sequence<sal_Int8>*)m_aValue.m_pValue;
+                TRACE_FREE( Sequence_sal_Int8 )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::OBJECT:
                 delete (Any*)m_aValue.m_pValue;
+                TRACE_FREE( Any )
                 m_aValue.m_pValue = NULL;
                 break;
 
@@ -279,28 +366,35 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 break;
             case DataType::BIGINT:
                 m_aValue.m_pValue   = new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( sal_Int64 )
                 break;
             case DataType::FLOAT:
                 m_aValue.m_pValue   = new float(*(float*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( float )
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
                 m_aValue.m_pValue   = new double(*(double*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( double )
                 break;
             case DataType::DATE:
                 m_aValue.m_pValue   = new Date(*(Date*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( Date )
                 break;
             case DataType::TIME:
                 m_aValue.m_pValue   = new Time(*(Time*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( Time )
                 break;
             case DataType::TIMESTAMP:
                 m_aValue.m_pValue   = new DateTime(*(DateTime*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( DateTime )
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
             case DataType::LONGVARCHAR:
                 m_aValue.m_pValue   = new Sequence<sal_Int8>(*(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( Sequence_sal_Int8 )
                 break;
             case DataType::BIT:
                 m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
@@ -316,6 +410,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 break;
             default:
                 m_aValue.m_pValue   = new Any(*(Any*)_rRH.m_aValue.m_pValue);
+                TRACE_ALLOC( Any )
         }
     }
     else if(!_rRH.m_bNull)
@@ -386,6 +481,7 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new Date(_rRH);
+        TRACE_ALLOC( Date )
         m_eTypeKind = DataType::DATE;
         m_bNull = sal_False;
     }
@@ -403,6 +499,7 @@ ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new Time(_rRH);
+        TRACE_ALLOC( Time )
         m_eTypeKind = DataType::TIME;
         m_bNull = sal_False;
     }
@@ -419,6 +516,7 @@ ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new DateTime(_rRH);
+        TRACE_ALLOC( DateTime )
         m_eTypeKind = DataType::TIMESTAMP;
         m_bNull = sal_False;
     }
@@ -453,6 +551,7 @@ ORowSetValue& ORowSetValue::operator=(const double& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new double(_rRH);
+        TRACE_ALLOC( double )
         m_eTypeKind = DataType::DOUBLE;
         m_bNull = sal_False;
     }
@@ -470,6 +569,7 @@ ORowSetValue& ORowSetValue::operator=(const float& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new float(_rRH);
+        TRACE_ALLOC( float )
         m_eTypeKind = DataType::FLOAT;
         m_bNull = sal_False;
     }
@@ -536,7 +636,10 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
         free();
 
     if(m_bNull)
+    {
         m_aValue.m_pValue = new sal_Int64(_rRH);
+        TRACE_ALLOC( sal_Int64 )
+    }
     else
         *static_cast<sal_Int64*>(m_aValue.m_pValue) = _rRH;
 
@@ -552,7 +655,10 @@ ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
         free();
 
     if (m_bNull)
+    {
         m_aValue.m_pValue = new Sequence<sal_Int8>(_rRH);
+        TRACE_ALLOC( Sequence_sal_Int8 )
+    }
     else
         *static_cast< Sequence< sal_Int8 >* >(m_aValue.m_pValue) = _rRH;
 
@@ -568,7 +674,10 @@ ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
         free();
 
     if(m_bNull)
+    {
         m_aValue.m_pValue = new Any(_rAny);
+        TRACE_ALLOC( Any )
+    }
     else
         *static_cast<Any*>(m_aValue.m_pValue) = _rAny;
 
@@ -1200,28 +1309,35 @@ void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
             break;
         case DataType::BIGINT:
             m_aValue.m_pValue = new sal_Int64((sal_Int64)_rVal);
+            TRACE_ALLOC( sal_Int64 )
             break;
         case DataType::LONGVARCHAR:
             {
                 ::rtl::OUString aVal = ::rtl::OUString::valueOf(_rVal);
                 m_aValue.m_pValue = new Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aVal.getStr()),sizeof(sal_Unicode)*aVal.getLength());
+                TRACE_ALLOC( Sequence_sal_Int8 )
             }
             break;
         case DataType::FLOAT:
             m_aValue.m_pValue = new float((float)_rVal);
+            TRACE_ALLOC( float )
             break;
         case DataType::DOUBLE:
         case DataType::REAL:
             m_aValue.m_pValue = new double(_rVal);
+            TRACE_ALLOC( double )
             break;
         case DataType::DATE:
             m_aValue.m_pValue = new Date(dbtools::DBTypeConversion::toDate(_rVal));
+            TRACE_ALLOC( Date )
             break;
         case DataType::TIME:
             m_aValue.m_pValue = new Time(dbtools::DBTypeConversion::toTime(_rVal));
+            TRACE_ALLOC( Time )
             break;
         case DataType::TIMESTAMP:
             m_aValue.m_pValue = new DateTime(dbtools::DBTypeConversion::toDateTime(_rVal));
+            TRACE_ALLOC( DateTime )
             break;
         case DataType::BINARY:
         case DataType::VARBINARY:
