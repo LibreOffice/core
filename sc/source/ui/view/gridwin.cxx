@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:16:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
+#include <svx/svditer.hxx>
+#include <svx/svdpagv.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -415,6 +417,38 @@ BOOL lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
     const ScBaseCell* pCell = pDoc->GetCell( rRange.aEnd );
     return ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA &&
             ((ScFormulaCell*)pCell)->GetMatrixOrigin(aPos) && aPos == rRange.aStart );
+
+}
+
+void lcl_UnLockComment( SdrView* pView, SdrPageView* pPV, SdrModel* pDoc, const Point& rPos )
+{
+    if (!pView && !pPV && !pDoc)
+        return ;
+
+    SdrObject* pFoundObj = NULL;
+
+    SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
+    SdrObject* pObject = aIter.Next();
+    while (pObject && !pFoundObj)
+    {
+        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj)
+            && pObject->GetLogicRect().IsInside( rPos ) )
+        {
+            pFoundObj = pObject;
+        }
+        pObject = aIter.Next();
+    }
+
+    if ( pFoundObj )
+    {
+        SdrLayer* pLockLayer = NULL;
+
+        // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
+        pLockLayer = pDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
+        if (pLockLayer)
+            pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
+    }
+
 }
 
 //==================================================================
@@ -2937,6 +2971,9 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
         if ( pDrawView )
         {
             pDrawView->UnmarkAllObj();
+            // Unlock the Internal Layer in order to activate the context menu.
+            // re-lock in ScDrawView::MarkListHasChanged()
+            lcl_UnLockComment( pDrawView, pDrawView->GetPageViewPvNum(0), pDrawView->GetModel(), aLogicPos );
             bHitDraw = pDrawView->MarkObj( aLogicPos );
             // draw shell is activated in MarkListHasChanged
         }
