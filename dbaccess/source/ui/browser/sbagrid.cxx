@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 14:49:43 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 11:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,9 +1700,9 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 
     aCopyData   += sField;
 
-    //  ByteString aData(aCopyData,gsl_getSystemTextEncoding());
     DragServer::Clear();
-    if (!DragServer::CopyData(aCopyData.GetBuffer(), 2*(aCopyData.Len() + 1), RegisterColumnExchangeFormatName()))
+    ByteString aStr( aCopyData, gsl_getSystemTextEncoding() );
+    if (!DragServer::CopyData(aStr.GetBuffer(), aStr.Len()+1, RegisterColumnExchangeFormatName()))
         return;
 
     Pointer aMovePtr(POINTER_MOVEDATA),
@@ -1932,7 +1932,8 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
 
     // feed the drag server with the format just built
     DragServer::Clear();
-    if (!DragServer::CopyData(aCopyData.GetBuffer(), aCopyData.Len() + 1, RegisterFieldExchangeFormatName()))
+    ByteString aStr( aCopyData, gsl_getSystemTextEncoding() );
+    if (!DragServer::CopyData(aStr.GetBuffer(), aStr.Len() + 1, RegisterFieldExchangeFormatName()))
         return;
 
     // and supply - as an additional pure-text format - the cell contents
