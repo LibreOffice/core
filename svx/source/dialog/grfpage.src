@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "Uitknippen" ;
         Text [ swedish ] = "Beskär" ;
         Text [ danish ] = "Beskær" ;
-        Text [ portuguese_brazilian ] = "Zuschneiden" ;
+        Text [ portuguese_brazilian ] = "Podar" ;
         Text [ portuguese ] = "Recortar" ;
         Text[ chinese_simplified ] = "è£å‰ª";
         Text[ russian ] = "Êàäğèğîâàòü";
@@ -104,6 +104,9 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ catalan ] = "Retalla";
         Text[ finnish ] = "Rajaa";
         Text[ thai ] = "à¸„à¸£à¸­à¸šà¸•à¸±à¸”";
+        Text[ czech ] = "OÅ™Ã­znout";
+        Text[ hebrew ] = "Zuschneiden";
+        Text[ hindi ] = "à¤•à¥à¤°à¥‰à¤ª";
     };
     FixedText FT_LEFT
     {
@@ -118,20 +121,23 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ french ] = "À gauche" ;
         Text [ swedish ] = "~Vänster" ;
         Text [ danish ] = "Venstre" ;
-        Text [ portuguese_brazilian ] = "~Links" ;
+        Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
         Text[ chinese_simplified ] = "å·¦(~L)";
         Text[ russian ] = "Ñëåâà";
-        Text[ polish ] = "Z lewej";
+        Text[ polish ] = "Od ~lewej";
         Text[ japanese ] = "å·¦(~L)";
         Text[ chinese_traditional ] = "å·¦(~L)";
         Text[ arabic ] = "ÇáíÓÇÑ";
         Text[ greek ] = "ÁñéóôåñÜ";
         Text[ korean ] = "ì™¼ìª½(~L)";
-        Text[ turkish ] = "So~l";
+        Text[ turkish ] = "~Sol";
         Text[ catalan ] = "~Esquerra";
         Text[ finnish ] = "~Vasen";
         Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "~Links";
+        Text[ hindi ] = "~à¤¬à¤¾à¤¯à¤¾à¤";
     };
     MetricField MF_LEFT
     {
@@ -165,20 +171,23 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "~Rechts" ;
         Text [ swedish ] = "Höge~r" ;
         Text [ danish ] = "Højre" ;
-        Text [ portuguese_brazilian ] = "Rechts" ;
+        Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
         Text[ chinese_simplified ] = "å³(~R)";
         Text[ russian ] = "Ñïğàâà";
-        Text[ polish ] = "Z prawej";
+        Text[ polish ] = "Od ~prawej";
         Text[ japanese ] = "å³(~R)";
         Text[ chinese_traditional ] = "å³(~R)";
         Text[ arabic ] = "Çáíãíä";
         Text[ greek ] = "ÄåîéÜ";
         Text[ korean ] = "ì˜¤ë¥¸ìª½(~R)";
-        Text[ turkish ] = "S~ağ";
+        Text[ turkish ] = "~Sağ";
         Text[ catalan ] = "~Dreta";
         Text[ finnish ] = "~Oikea";
         Text[ thai ] = "~à¸‚à¸§à¸²";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "~Rechts";
+        Text[ hindi ] = "~à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
     };
     MetricField MF_RIGHT
     {
@@ -210,20 +219,23 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "~Boven" ;
         Text [ swedish ] = "~Uppe" ;
         Text [ danish ] = "Øverst" ;
-        Text [ portuguese_brazilian ] = "Oben" ;
+        Text [ portuguese_brazilian ] = "Em ~Cima" ;
         Text [ portuguese ] = "Em ~cima" ;
         Text[ chinese_simplified ] = "ä¸Š(~T)";
         Text[ russian ] = "Ñâåğõó";
-        Text[ polish ] = "Na górze";
+        Text[ polish ] = "Od ~góry";
         Text[ japanese ] = "ä¸Š(~T)";
         Text[ chinese_traditional ] = "ä¸Š(~T)";
         Text[ arabic ] = "ÃÚáì";
         Text[ greek ] = "ĞÜíù";
         Text[ korean ] = "ìœ„(~T)";
-        Text[ turkish ] = "Ü~st";
+        Text[ turkish ] = "~Üst";
         Text[ catalan ] = "Part ~superior";
         Text[ finnish ] = "~Yläreuna";
         Text[ thai ] = "~à¸šà¸™";
+        Text[ czech ] = "NahoÅ™e";
+        Text[ hebrew ] = "~Oben";
+        Text[ hindi ] = "~à¤Šà¤ªà¤°";
     };
     MetricField MF_TOP
     {
@@ -258,19 +270,22 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ swedish ] = "~Nere" ;
         Text [ danish ] = "Nederst" ;
         Text [ portuguese ] = "Em ~baixo" ;
-        Text [ portuguese_brazilian ] = "Unten" ;
+        Text [ portuguese_brazilian ] = "Em ~Baixo" ;
         Text[ chinese_simplified ] = "ä¸‹(~B)";
         Text[ russian ] = "Ñíèçó";
-        Text[ polish ] = "Na dole";
+        Text[ polish ] = "~Od do³u";
         Text[ japanese ] = "ä¸‹(~B)";
         Text[ chinese_traditional ] = "ä¸‹(~B)";
         Text[ arabic ] = "ÃÓİá";
         Text[ greek ] = "ÊÜôù";
         Text[ korean ] = "ì•„ë˜(~B)";
-        Text[ turkish ] = "A~lt";
+        Text[ turkish ] = "~Alt";
         Text[ catalan ] = "Part ~inferior";
         Text[ finnish ] = "~Alareuna";
         Text[ thai ] = "~à¸¥à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Dole";
+        Text[ hebrew ] = "~Unten";
+        Text[ hindi ] = "~à¤¤à¤²";
     };
     MetricField MF_BOTTOM
     {
@@ -302,7 +317,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "M~et behoud van grootte" ;
         Text [ swedish ] = "Bibehåll bilds~torlek" ;
         Text [ danish ] = "Bevar billedst~ørrelse" ;
-        Text [ portuguese_brazilian ] = "Gr?e beibehalten" ;
+        Text [ portuguese_brazilian ] = "Manter o ~tamanho da imagem" ;
         Text [ portuguese ] = "~Manter tamanho" ;
         Text[ chinese_simplified ] = "ä¿æŒç”»é¢å¤§å°(~Z)";
         Text[ russian ] = "Ñîõğàíèòü ğàçìåğ ~êàğòèíêè";
@@ -312,10 +327,13 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáÍÌã";
         Text[ greek ] = "Äéá~ôŞñçóç ìåãİèïõò";
         Text[ korean ] = "ì´ë¯¸ì§€ í¬ê¸° ìœ ì§€(~Z)";
-        Text[ turkish ] = "Boyutu kor~u";
+        Text[ turkish ] = "Resim bo~yutunu koru";
         Text[ catalan ] = "Conserva la mi~da";
         Text[ finnish ] = "Säilytä kuvan ko~ko";
         Text[ thai ] = "à¸£à¸±à¸à¸©à¸²à¸‚~à¸™à¸²à¸”à¸ à¸²à¸";
+        Text[ czech ] = "Zachovat velikost obrÃ¡zku";
+        Text[ hebrew ] = "BildgrÃ¶ÃŸe beibehal~ten";
+        Text[ hindi ] = "à¤šà¤¿à¤¤à¥à¤° à¤ªà¤°à¤¿~à¤®à¤¾à¤£ à¤°à¤–à¥‹";
     };
     RadioButton RB_ZOOMCONST
     {
@@ -331,7 +349,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "~Met behoud van schaal (maatstaf)" ;
         Text [ swedish ] = "Bibehåll ~skalning" ;
         Text [ danish ] = "Bevar ~skalering" ;
-        Text [ portuguese_brazilian ] = "Ma?stab beibehalten" ;
+        Text [ portuguese_brazilian ] = "Manter a e~scala" ;
         Text [ portuguese ] = "Manter ~escala" ;
         Text[ chinese_simplified ] = "ä¿æŒæ˜¾ç¤ºæ¯”ä¾‹(~S)";
         Text[ russian ] = "Ñîõğàíèòü ìàñøòàá";
@@ -341,10 +359,13 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáãŞíÇÓ";
         Text[ greek ] = "ÄéáôŞñçóç êëß~ìáêáò";
         Text[ korean ] = "ë°°ìœ¨ ìœ ì§€(~S)";
-        Text[ turkish ] = "~Orantıyı koru";
+        Text[ turkish ] = "~Ölçeği tut";
         Text[ catalan ] = "Conserva l'~escala";
         Text[ finnish ] = "Säilytä ~skaala";
         Text[ thai ] = "à¸£à¸±à¸à¸©à¸²à¸ª~à¹€à¸à¸¥";
+        Text[ czech ] = "Zachovat mÄ›Å™Ã­tko";
+        Text[ hebrew ] = "~Skalierung beibehalten";
+        Text[ hindi ] = "~à¤¸à¥à¤•à¥‡à¤² à¤°à¤–à¥‹";
     };
     Window WN_BSP
     {
@@ -365,7 +386,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "Op schaal brengen" ;
         Text [ swedish ] = "Skalning" ;
         Text [ danish ] = "Skalering" ;
-        Text [ portuguese_brazilian ] = "Ma?stab" ;
+        Text [ portuguese_brazilian ] = "Escala" ;
         Text [ portuguese ] = "Escala" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
         Text[ russian ] = "Ìàñøòàá";
@@ -375,10 +396,13 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ arabic ] = "ÊßÈíÑ/ÊÕÛíÑ";
         Text[ greek ] = "Êëßìáêá";
         Text[ korean ] = "ë°°ìœ¨";
-        Text[ turkish ] = "Ölçek";
+        Text[ turkish ] = "Ölçekle";
         Text[ catalan ] = "Escala";
         Text[ finnish ] = "Skaalaa";
         Text[ thai ] = "à¸ªà¹€à¸à¸¥";
+        Text[ czech ] = "MÄ›Å™Ã­tko";
+        Text[ hebrew ] = "â€®×”×ª×××ª ×’×•×“×œâ€¬";
+        Text[ hindi ] = "à¤¸à¥à¤•à¥‡à¤²";
     };
     FixedText FT_WIDTHZOOM
     {
@@ -400,15 +424,18 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "~Width" ;
         Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "~Szerokoœæ";
         Text[ japanese ] = "å¹…(~W)";
         Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "ë„ˆë¹„(~W)";
-        Text[ turkish ] = "G~enişlik";
+        Text[ turkish ] = "~Genişlik";
         Text[ catalan ] = "~Amplada";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
+        Text[ czech ] = "Å Ã­Å™ka";
+        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
+        Text[ hindi ] = "~à¤šà¥Œà¤¡à¤¼à¤¾à¤ˆ";
     };
     MetricField MF_WIDTHZOOM
     {
@@ -450,15 +477,18 @@ TabPage RID_SVXPAGE_GRFCROP
         Left = TRUE ;
         Text[ chinese_simplified ] = "é«˜åº¦(~E)";
         Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "~Wysokoœæ";
         Text[ japanese ] = "é«˜ã•(~E)";
         Text[ chinese_traditional ] = "é«˜(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
         Text[ korean ] = "ë†’ì´(~E)";
-        Text[ turkish ] = "Y~ükseklik";
+        Text[ turkish ] = "~Yükseklik";
         Text[ catalan ] = "A~lçada";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹~à¸‡";
+        Text[ czech ] = "VÃ½Å¡ka";
+        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
+        Text[ hindi ] = "~à¤Šà¤à¤šà¤¾à¤ˆ";
     };
     MetricField MF_HEIGHTZOOM
     {
@@ -487,7 +517,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ ENGLISH ] = "Image size" ;
         Text [ norwegian ] = "Størrelse" ;
         Text [ italian ] = "Dimensione" ;
-        Text [ portuguese_brazilian ] = "Tamanho" ;
+        Text [ portuguese_brazilian ] = "Tamanho da imagem" ;
         Text [ portuguese ] = "Tamanho" ;
         Text [ finnish ] = "Kuvan koko" ;
         Text [ danish ] = "Billedstørrelse" ;
@@ -504,9 +534,12 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
         Text[ korean ] = "ì´ë¯¸ì§€ í¬ê¸°";
-        Text[ turkish ] = "Boyut";
+        Text[ turkish ] = "Resim boyutu";
         Text[ catalan ] = "Mida";
         Text[ thai ] = "à¸‚à¸™à¸²à¸”à¸ à¸²à¸";
+        Text[ czech ] = "Velikost obrÃ¡zku";
+        Text[ hebrew ] = "BildgrÃ¶ÃŸe";
+        Text[ hindi ] = "à¤šà¤¿à¤¤à¥à¤° à¤ªà¤°à¤¿à¤®à¤¾à¤£";
     };
     FixedText FT_WIDTH
     {
@@ -528,7 +561,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "~Width" ;
         Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "S~zerokoœæ";
         Text[ japanese ] = "å¹…(~W)";
         Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -537,6 +570,9 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ turkish ] = "~Genişlik";
         Text[ catalan ] = "~Amplada";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
+        Text[ czech ] = "Å Ã­Å™ka";
+        Text[ hebrew ] = "â€®×¨×•×—×‘â€¬";
+        Text[ hindi ] = "~à¤šà¥Œà¤¡à¤¼à¤¾à¤ˆ";
     };
     MetricField MF_WIDTH
     {
@@ -576,15 +612,18 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ english_us ] = "H~eight" ;
         Text[ chinese_simplified ] = "é«˜åº¦(~E)";
         Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "W~ysokoœæ";
         Text[ japanese ] = "é«˜ã•(~E)";
         Text[ chinese_traditional ] = "é«˜åº¦(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
         Text[ korean ] = "ë†’ì´(~E)";
-        Text[ turkish ] = "~Yükseklik";
+        Text[ turkish ] = "Yü~kseklik";
         Text[ catalan ] = "A~lçada";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹~à¸‡";
+        Text[ czech ] = "VÃ½Å¡ka";
+        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
+        Text[ hindi ] = "~à¤Šà¤à¤šà¤¾à¤ˆ";
     };
     MetricField MF_HEIGHT
     {
@@ -622,22 +661,38 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "Reële gr~ootte" ;
         Text [ swedish ] = "Ori~ginalstorlek" ;
         Text [ danish ] = "Oprindelig st." ;
-        Text [ portuguese_brazilian ] = "Originalgr?e" ;
+        Text [ portuguese_brazilian ] = "Tamanho ~Original" ;
         Text [ portuguese ] = "Tamanho ~original" ;
         Text[ chinese_simplified ] = "åŸä»¶å¤§å°(~O)";
         Text[ russian ] = "Èñõîäíûé ğàçìåğ";
-        Text[ polish ] = "~Rozmiar oryginalny";
-        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚µã‚¤ã‚º(~O)";
+        Text[ polish ] = "Rozmi~ar oryginalny";
+        Text[ japanese ] = "åŸå¯¸å¤§(~O)";
         Text[ chinese_traditional ] = "åŸä»¶å¤§å°(~O)";
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";
         Text[ greek ] = "Áñ÷éêü ìİ~ãåèïò";
         Text[ korean ] = "ì›ë˜ í¬ê¸°(~O)";
-        Text[ turkish ] = "İ~lk boyut";
+        Text[ turkish ] = "~Özgün Boyut";
         Text[ catalan ] = "Mida ~original";
         Text[ finnish ] = "~Alkuperäinen koko";
         Text[ thai ] = "à¸‚à¸™à¸²à¸”~à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
+        Text[ czech ] = "PÅ¯vodnÃ­ velikost";
+        Text[ hebrew ] = "Ori~ginalgrÃ¶ÃŸe";
+        Text[ hindi ] = "~à¤¯à¤¥à¤¾à¤°à¥à¤¥ à¤ªà¤°à¤¿à¤®à¤¾à¤£";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
