@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NoSuchFieldException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 12:21:42 $
+ *  last change: $Author: mi $ $Date: 2000-11-06 13:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@ exception NoSuchFieldException: com::sun::star::uno::Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
-    Revision 1.1  2000/11/03 15:07:09  mi
-    moved from api module
-
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

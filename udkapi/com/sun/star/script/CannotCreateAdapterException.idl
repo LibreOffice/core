@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CannotCreateAdapterException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 12:21:53 $
+ *  last change: $Author: mi $ $Date: 2000-11-06 13:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,6 @@ exception CannotCreateAdapterException: com::sun::star::uno::Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
-    Revision 1.1  2000/11/03 15:07:34  mi
-    moved from api module
-
     Revision 1.2  2000/10/09 14:24:58  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

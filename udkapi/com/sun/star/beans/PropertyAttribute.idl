@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyAttribute.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-06 12:21:18 $
+ *  last change: $Author: mi $ $Date: 2000-11-06 13:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,6 @@ constants PropertyAttribute
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
-    Revision 1.1  2000/11/03 14:51:22  mi
-    moved from api module
-
     Revision 1.1.1.1  2000/09/18 23:34:55  hjs
     initial import
 
