@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:07:47 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ class OfficeIPCThread : public vos::OThread
 
     vos::OPipe                  maPipe;
     vos::OStreamPipe            maStreamPipe;
-    static vos::OSecurity       maSecurity;
     rtl::OUString               maPipeIdent;
     sal_Bool                    mbBlockRequests;
     int                         mnPendingRequests;
