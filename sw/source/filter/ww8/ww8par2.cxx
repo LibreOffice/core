@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-08 11:05:29 $
+ *  last change: $Author: cmc $ $Date: 2001-08-23 12:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1578,10 +1578,15 @@ void WW8TabDesc::CalcDefaults()
            /*
             #74387# If the margins are so large as to make the displayable
             area inside them smaller than the minimum allowed then adjust the
-            width to fit.
+            width to fit. But only do it if the two cells are not the exact
+            same value, if they are then the cell does not really exist and will
+            be blended together into the same cell through the use of the
+            nTrans(late) array.
             */
-            if ( (pR->nCenter[i+1] - pR->nCenter[i] - pR->nGapHalf * 2)
-                < MINLAY)
+            if (
+                (pR->nCenter[i+1] - pR->nCenter[i]) &&
+                ((pR->nCenter[i+1] - pR->nCenter[i] - pR->nGapHalf * 2) < MINLAY)
+               )
             {
                 pR->nCenter[i+1] = pR->nCenter[i]+MINLAY+pR->nGapHalf * 2;
             }
@@ -1821,35 +1826,67 @@ void WW8TabDesc::CreateSwTable()
 
 void WW8TabDesc::MergeCells()
 {
-    WW8TabBandDesc *pBand;
     short nRow;
 
-    for (pBand=pFirstBand, nRow=0; pBand; pBand=pBand->pNextBand)
+    for (pActBand=pFirstBand, nRow=0; pActBand; pActBand=pActBand->pNextBand)
     {
         //
         // ggfs. aktuelle Box in entsprechende Merge-Gruppe eintragen
         //
-        if( pBand->pTCs )
+        if( pActBand->pTCs )
         {
-            for( short j = 0; j < pBand->nRows; j++, nRow++ )
-                for( short i = 0; i < pBand->nWwCols; i++ )
+            for( short j = 0; j < pActBand->nRows; j++, nRow++ )
+                for( short i = 0; i < pActBand->nWwCols; i++ )
                 {
                     SwTableBox* pTargetBox;
                     WW8SelBoxInfoPtr pActMGroup = 0;
                     //
                     // ggfs. eine neue Merge-Gruppe beginnen
                     //
-                    USHORT nCol = pBand->nTransCell[ i ];
+                    USHORT nCol = pActBand->nTransCell[ i ];
                     pTabLine = (*pTabLines)[ nRow ];
                     pTabBoxes = &pTabLine->GetTabBoxes();
                     pTabBox = (*pTabBoxes)[nCol];
-                    WW8_TCell& rCell = pBand->pTCs[ i ];
+                    WW8_TCell& rCell = pActBand->pTCs[ i ];
                     // ist dies die obere, linke-Zelle einer Merge-Gruppe ?
-                    if ( rCell.bFirstMerged ||
-                        ( rCell.bVertRestart && !rCell.bMerged ) )
+
+                    BOOL bMerge = FALSE;
+                    if ( rCell.bVertRestart && !rCell.bMerged )
+                        bMerge = TRUE;
+                    else if (rCell.bFirstMerged && pActBand->bExist[i])
                     {
-                        short nX1    = pBand->nCenter[ i ];
-                        short nWidth = pBand->nWidth[ i ];
+                        //#91211# Some tests to avoid merging cells
+                        //which previously were declared invalid because
+                        //of sharing the exact same dimensions as their
+                        //previous cell
+
+                        //If theres anything underneath/above we're ok.
+                        if (rCell.bVertMerge || rCell.bVertRestart)
+                            bMerge = TRUE;
+                        else
+                        {
+                        //If its a hori merge only, and the only things in
+                        //it are invalid cells then its already taken care
+                        //of, so don't merge.
+                            for (USHORT i2 = i+1; i2 < pActBand->nWwCols; i2++ )
+                                if (pActBand->pTCs[ i2 ].bMerged &&
+                                    !pActBand->pTCs[ i2 ].bFirstMerged  )
+                                {
+                                    if (pActBand->bExist[i2])
+                                    {
+                                        bMerge = TRUE;
+                                        break;
+                                    }
+                                }
+                                else
+                                    break;
+                        }
+                    }
+
+                    if (bMerge)
+                    {
+                        short nX1    = pActBand->nCenter[ i ];
+                        short nWidth = pActBand->nWidth[ i ];
 
                         // 0. falls noetig das Array fuer die Merge-Gruppen
                         // anlegen
@@ -1898,12 +1935,12 @@ void WW8TabDesc::MergeCells()
                         // Targetbox
                         pNewFrmFmt->SetAttr( pTabBox->GetFrmFmt()->GetBox() );
                         // Gesamtbreite ermitteln und zuweisen
-                        short nSizCell = pBand->nWidth[ i ];
-                        for (USHORT i2 = i+1; i2 < pBand->nWwCols; i2++ )
-                            if (pBand->pTCs[ i2 ].bMerged &&
-                                !pBand->pTCs[ i2 ].bFirstMerged )
+                        short nSizCell = pActBand->nWidth[ i ];
+                        for (USHORT i2 = i+1; i2 < pActBand->nWwCols; i2++ )
+                            if (pActBand->pTCs[ i2 ].bMerged &&
+                                !pActBand->pTCs[ i2 ].bFirstMerged  )
                             {
-                                nSizCell += pBand->nWidth[ i2 ];
+                                nSizCell += pActBand->nWidth[ i2 ];
                             }
                             else
                                 break;
@@ -1975,8 +2012,10 @@ void WW8TabDesc::FinishSwTable()
                 // abfangen!
                 USHORT nMergeTest;
                 if( 2 == nActBoxCount )
+                {
                     // nur 1 Zelle in der Merge-Gruppe: wahrscheinlich Word-Bug
                     nMergeTest = TBLMERGE_TOOCOMPLEX;
+                }
                 else
                 {   //
                     // Vorsicht: erstmal austesten,
@@ -2023,8 +2062,8 @@ void WW8TabDesc::FinishSwTable()
                     for (USHORT n=1;n<pActMGroup->Count();n++)
                     {
                         SwPaM aPamTest( pIo->rDoc.GetNodes() );
-                        //If theres nothing in the cell ignore it
-                        if (IsEmptyBox( *(*pActMGroup)[n], aPamTest ))
+                        //If theres nothing in the cell (after the first) ignore it
+                        if ((n > 1) && (IsEmptyBox( *(*pActMGroup)[n], aPamTest)))
                             continue;
                         aPam.GetPoint()->nNode.Assign( *(*pActMGroup)[n]->
                             GetSttNd()->EndOfSectionNode(), -1 );
@@ -2183,13 +2222,14 @@ BOOL WW8TabDesc::SetPamInCell( short nWwCol, BOOL bPam )
 {
     ASSERT( pActBand, "pActBand ist 0" );
 
-    if( !IsValidCell( nWwCol ) )
-        return FALSE;
-
     USHORT nCol = pActBand->nTransCell[nWwCol];
 
     pTabLine = (*pTabLines)[nAktRow];
     pTabBoxes = &pTabLine->GetTabBoxes();
+
+    if ((USHORT)nAktRow >= pTabLines->Count())
+        return FALSE;
+
     if ( nCol >= pTabBoxes->Count() )
         return FALSE;
     pTabBox = (*pTabBoxes)[nCol];
@@ -2201,17 +2241,24 @@ BOOL WW8TabDesc::SetPamInCell( short nWwCol, BOOL bPam )
     if( bPam )
     {
         pAktWWCell = &pActBand->pTCs[ nWwCol ];
-        pIo->pPaM->GetPoint()->nNode = pTabBox->GetSttIdx() + 1;
-        pIo->pPaM->GetPoint()->nContent.Assign( pIo->pPaM->GetCntntNode(), 0 );
+        //We need to set the pPaM on the first cell, invalid
+        //or not so that we can collect paragraph proproties over
+        //all the cells, but in that case on the valid cell we do not
+        //want to reset the fmt properties
+        if (pIo->pPaM->GetPoint()->nNode != pTabBox->GetSttIdx() + 1)
+        {
+            pIo->pPaM->GetPoint()->nNode = pTabBox->GetSttIdx() + 1;
+            pIo->pPaM->GetPoint()->nContent.Assign( pIo->pPaM->GetCntntNode(), 0 );
 
-        // Zur Sicherheit schon jetzt setzen, da bei den Zellen, die
-        // zum Randausgleich eingefuegt werden, sonst der Style
-        // nicht gesetzt wird.
-        pIo->rDoc.SetTxtFmtColl( *pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl );
-        // uebrigens: da diese Zellen unsichtbare Hilfskonstruktionen sind,
-        //            und nur dazu dienen, zerfranste Aussehen der WW-Tabelle
-        //            nachzuahmen, braucht NICHT SetTxtFmtCollAndListLevel()
-        //            verwendet zu werden.
+            // Zur Sicherheit schon jetzt setzen, da bei den Zellen, die
+            // zum Randausgleich eingefuegt werden, sonst der Style
+            // nicht gesetzt wird.
+            pIo->rDoc.SetTxtFmtColl( *pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl );
+            // uebrigens: da diese Zellen unsichtbare Hilfskonstruktionen sind,
+            //            und nur dazu dienen, zerfranste Aussehen der WW-Tabelle
+            //            nachzuahmen, braucht NICHT SetTxtFmtCollAndListLevel()
+            //            verwendet zu werden.
+        }
     }
     return TRUE;
 }
@@ -2375,6 +2422,52 @@ void WW8TabDesc::AdjustNewBand( SwWW8ImplReader* pReader )
 
     SwFmtFrmSize aFS( ATT_FIX_SIZE );
     j = -pActBand->bLEmptyCol;
+#if 1
+    for( i = 0; i < pActBand->nSwCols; i++ )
+    {
+        // setze Zellenbreite
+        if( j < 0 )
+            nW = pActBand->nCenter[0] - nMinLeft;
+        else
+        {
+            //Set j to first non invalid cell
+            while ((j < pActBand->nWwCols) && (!pActBand->bExist[j]))
+                j++;
+
+            if( j < pActBand->nWwCols )
+                nW = pActBand->nCenter[j+1] - pActBand->nCenter[j];
+            else
+                nW = nMaxRight - pActBand->nCenter[j];
+            pActBand->nWidth[ j ] = nW;
+        }
+
+        register SwTableBox* pBox = (*pTabBoxes)[i];
+        pBox->ClaimFrmFmt();    // liesse sich durch intelligentes Umhaengen
+                                                    // der FrmFmts noch weiter verringern
+        // naemlich so: pFrmFmt->Add( pBox );
+        // gibt der Box pBox das FrameFormat pFrmFmt
+
+
+        //pMergeCtrl[ j ].nRowWidth = nW;
+        aFS.SetWidth( nW );
+        pBox->GetFrmFmt()->SetAttr( aFS );
+
+                                            // setze Umrandung und Hintergrund
+        SetTabBorders( pBox, j );           // und Abstand
+        SetTabVertAlign( pBox, j );
+        if( pActBand->pSHDs )
+            SetTabShades( pBox, j );
+        j++;
+        // ueberspringe nicht existente Zellen
+        while( ( j < pActBand->nWwCols ) && !pActBand->bExist[j] )
+        {
+            //pActBand->nWidth[  j ] =    0;
+            pActBand->nWidth[  j ] = pActBand->nCenter[j+1] - pActBand->nCenter[j];
+//          pActBand->nCenter[ j ] = -999;
+            j++;
+        }
+    }
+#else
     for( i = 0; i < pActBand->nSwCols; i++ )
     {
         // setze Zellenbreite
@@ -2415,6 +2508,7 @@ void WW8TabDesc::AdjustNewBand( SwWW8ImplReader* pReader )
             j++;
         }
     }
+#endif
 }
 
 void WW8TabDesc::TableCellEnd()
@@ -2497,10 +2591,11 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
     SwTableBox* pResult = 0;
 
     // pruefen, ob die Box zu mergen ist
-    if(    rCell.bFirstMerged
+    if( pActBand->bExist[ nCol ] &&
+        (rCell.bFirstMerged
         || rCell.bMerged
         || rCell.bVertMerge
-        || rCell.bVertRestart )
+        || rCell.bVertRestart) )
     {
         // passende Merge-Gruppe ermitteln
         WW8SelBoxInfo* pTheMergeGroup = 0;
@@ -3302,11 +3397,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.21 2001-08-08 11:05:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.22 2001-08-23 12:50:09 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/08/08 11:05:29  cmc
+      #90420# support for extended word 6 unicode documents
+
       Revision 1.20  2001/07/30 09:18:10  cmc
       #i1353# Import Vertical Cell Alignment
 
