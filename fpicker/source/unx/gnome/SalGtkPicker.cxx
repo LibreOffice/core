@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:25:26 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,29 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+
+gboolean rundialog(RunDialog *pDialog)
+{
+    pDialog->run();
+    return false;
+}
+
+void RunDialog::run()
+{
+    mnStatus = gtk_dialog_run( GTK_DIALOG( m_pDialog ) );
+    gtk_widget_hide( m_pDialog );
+    bFinished = true;
+}
+
+gint RunDialog::runandwaitforresult()
+{
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)rundialog, this, NULL);
+    do {
+        Application::Yield();
+    }
+    while (!bFinished);
+    return mnStatus;
+}
 
 SalGtkPicker::~SalGtkPicker()
 {
