@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 14:45:07 $
+ *  last change: $Author: sab $ $Date: 2001-05-28 12:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,8 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const rtl::OUStrin
             aItr->xRanges->Join(rRange);
         }
     }
+    else
+        aItr->xRanges->Join(rRange);
 }
 
 void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const sal_Int16 nDx, const sal_Int16 nDy,
