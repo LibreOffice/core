@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:37:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,7 @@
 #include "macfix.hxx"
 
 
-#if defined(MACOSX) && (__GNUC__ < 3)
-static char* pOp1[] = {
-#else
 static const char* pOp1[] = {
-#endif
     "NOP",
 
     // Operatoren
@@ -129,11 +125,7 @@ static const char* pOp1[] = {
     "REDIMP_ERASE"
 };
 
-#if defined(MACOSX) && (__GNUC__ < 3)
-static char* pOp2[] = {
-#else
 static const char* pOp2[] = {
-#endif
     "NUMBER",           // Laden einer numerischen Konstanten (+ID)
     "STRING",           // Laden einer Stringkonstanten (+ID)
     "CONST",            // Immediate Load (+Wert)
@@ -161,11 +153,7 @@ static const char* pOp2[] = {
     "ARGTYP",           // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
-#if defined(MACOSX) && (__GNUC__ < 3)
-static char* pOp3[] = {
-#else
 static const char* pOp3[] = {
-#endif
     // Alle Opcodes mit zwei Operanden
     "RTL",              // Laden aus RTL (+StringID+Typ)
     "FIND",             // Laden (+StringID+Typ)
@@ -192,19 +180,11 @@ static const char* pOp3[] = {
     "DCREATE_REDIMP",   // User defined Objekt-Array redimensionieren (+StringId+StringId)
 };
 
-#if defined(MACOSX) && (__GNUC__ < 3)
-static char** pOps[3] = { pOp1, pOp2, pOp3 };
-#else
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
-#endif
 
 typedef void( SbiDisas::*Func )( String& );     // Verarbeitungsroutine
 
-#if defined(MACOSX) && (__GNUC__ < 3)
-static Func pOperand2[] = {
-#else
 static const Func pOperand2[] = {
-#endif
     MEMBER(SbiDisas::StrOp),    // Laden einer numerischen Konstanten (+ID)
     MEMBER(SbiDisas::StrOp),    // Laden einer Stringkonstanten (+ID)
     MEMBER(SbiDisas::ImmOp),    // Immediate Load (+Wert)
@@ -231,11 +211,7 @@ static const Func pOperand2[] = {
     MEMBER(SbiDisas::TypeOp),   // Letzten Parameter in Argv konvertieren (+Typ)
 };
 
-#if defined(MACOSX) && (__GNUC__ < 3)
-static Func pOperand3[] = {
-#else
 static const Func pOperand3[] = {
-#endif
     // Alle Opcodes mit zwei Operanden
     MEMBER(SbiDisas::VarOp),    // Laden aus RTL (+StringID+Typ)
     MEMBER(SbiDisas::VarOp),    // Laden (+StringID+Typ)
