@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-15 17:39:50 $
+ *  last change: $Author: sb $ $Date: 2002-01-17 15:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,7 @@ BOOL Printer::SetJobSetup( const JobSetup& rSetup )
     {
         RmJobSetup aRmJobSetup;
 
-        maJobSetup.SetRmJobSetup( aRmJobSetup );
+        aJobSetup.SetRmJobSetup( aRmJobSetup );
         if ( mpInfoPrinter->SetJobSetup( aRmJobSetup ) )
         {
             mbNewJobSetup = TRUE;
