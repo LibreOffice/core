@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commitlistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:45:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,9 @@ void SAL_CALL OChildCommitListen_Impl::commited( const ::com::sun::star::lang::E
         throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // ChildIsCommited must not contain any locking!
+    // StorageIsModified_Impl must not contain any locking!
     if ( m_pModel )
-        m_pModel->ChildIsCommited();
+        m_pModel->StorageIsModified_Impl();
 }
 
 void SAL_CALL OChildCommitListen_Impl::preRevert( const ::com::sun::star::lang::EventObject& aEvent )
