@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:26:08 $
+ *  last change: $Author: jp $ $Date: 2001-02-01 14:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 
 
 #define _LIBRARYNAME "int"
-#define _SERVICENAME "com.sun.star.util.Transliteration"
+#define _SERVICENAME "com.sun.star.i18n.Transliteration"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -127,7 +127,7 @@ TransliterationWrapper::TransliterationWrapper(
             DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
         }
     }
-    DBG_ASSERT( xTrans .is(), "TransliterationWrapper: no Transliteraion avaible" );
+    DBG_ASSERT( xTrans.is(), "TransliterationWrapper: no Transliteraion avaible" );
 }
 
 
@@ -142,35 +142,38 @@ String TransliterationWrapper::transliterate(
                                 Sequence <long>* pOffset )
 {
     String sRet;
-    try
+    if( xTrans.is() )
     {
-        sal_Bool bLoad = bFirstCall;
-        bFirstCall = sal_False;
-
-        if( nLanguage != nLang )
+        try
         {
-            nLanguage = nLang;
-            String aLangStr, aCtryStr;
-            if( LANGUAGE_NONE == nLanguage )
-                nLanguage = LANGUAGE_SYSTEM;
-            ConvertLanguageToIsoNames( nLanguage, aLangStr, aCtryStr );
-            aLocale.Language = aLangStr;
-            aLocale.Country = aCtryStr;
-            if( !bLoad )
-                bLoad = needLanguageForTheMode();
+            sal_Bool bLoad = bFirstCall;
+            bFirstCall = sal_False;
+
+            if( nLanguage != nLang )
+            {
+                nLanguage = nLang;
+                String aLangStr, aCtryStr;
+                if( LANGUAGE_NONE == nLanguage )
+                    nLanguage = LANGUAGE_SYSTEM;
+                ConvertLanguageToIsoNames( nLanguage, aLangStr, aCtryStr );
+                aLocale.Language = aLangStr;
+                aLocale.Country = aCtryStr;
+                if( !bLoad )
+                    bLoad = needLanguageForTheMode();
+            }
+            if( bLoad )
+                xTrans->loadModule( (TransliterationModules)nType, aLocale );
+
+            Sequence <long> aOffset;
+            if( !pOffset )
+                pOffset = &aOffset;
+
+            sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
         }
-        if( bLoad )
-            xTrans->loadModule( (TransliterationModules)nType, aLocale );
-
-        Sequence <long> aOffset;
-        if( !pOffset )
-            pOffset = &aOffset;
-
-        sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
-    }
-    catch( Exception&  )
-    {
-        DBG_ERRORFILE( "transliterate: Exception caught!" );
+        catch( Exception&  )
+        {
+            DBG_ERRORFILE( "transliterate: Exception caught!" );
+        }
     }
     return sRet;
 }
