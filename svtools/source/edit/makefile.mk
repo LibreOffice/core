@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 14:38:05 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:41:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=edit
 LIBTARGET=NO
 
@@ -71,8 +71,6 @@ LIBTARGET=NO
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
 
 SLOFILES=   \
             $(SLO)$/textdata.obj	\
@@ -111,8 +109,6 @@ LIB1OBJFILES=  $(SLOFILES)
 
 LIB2TARGET= $(LB)$/$(TARGET).lib
 LIB2OBJFILES=  $(OBJFILES)
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
