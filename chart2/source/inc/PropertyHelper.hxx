@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-11 12:18:54 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 09:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,20 @@
  *
  *
  ************************************************************************/
-#ifndef CHART2_PROPERTYHELPER_HXX
-#define CHART2_PROPERTYHELPER_HXX
+#ifndef CHART_PROPERTYHELPER_HXX
+#define CHART_PROPERTYHELPER_HXX
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+
+#include <map>
 
 namespace chart
 {
@@ -83,7 +91,23 @@ private:
     PropertyHelper();
 };
 
+namespace helper
+{
+
+struct PropertyNameLess
+{
+    inline bool operator() ( const ::com::sun::star::beans::Property & first,
+                             const ::com::sun::star::beans::Property & second )
+    {
+        return ( first.Name.compareTo( second.Name ) < 0 );
+    }
+};
+
+typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any >
+    tPropertyValueMap;
+
+} //  namespace helper
 } //  namespace chart
 
-// CHART2_PROPERTYHELPER_HXX
+// CHART_PROPERTYHELPER_HXX
 #endif
