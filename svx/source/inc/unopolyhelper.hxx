@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopolyhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 11:37:24 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,25 @@ namespace com { namespace sun { namespace star { namespace drawing {
 } } } }
 
 class XPolygon;
+class XPolyPolygon;
 
 /** convert a drawing::PolyPolygonBezierCoords to a XPolygon
 */
 void SvxConvertPolyPolygonBezierToXPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
     throw( com::sun::star::lang::IllegalArgumentException );
 
+/** convert a drawing::PolyPolygonBezierCoords to a XPolyPolygon
+*/
+void SvxConvertPolyPolygonBezierToXPolyPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolyPolygon& rNewPolygon )
+    throw( com::sun::star::lang::IllegalArgumentException );
+
 /** convert a XPolygon to a drawing::PolyPolygonBezierCoords
 */
 void SvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval )
     throw();
+
+void SvxPolyPolygonToPolyPolygonBezierCoords( const XPolyPolygon& rPolyPoly, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval );
+
 
 #endif
 
