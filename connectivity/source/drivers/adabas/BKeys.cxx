@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:56:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -103,9 +103,9 @@ using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 // -------------------------------------------------------------------------
-Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeys::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
 
     if(_rName.getLength())
     {
@@ -141,10 +141,7 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
         }
     }
     else
-    {
-        OAdabasKey* pRet = new OAdabasKey(m_pTable,_rName,::rtl::OUString(),KeyType::PRIMARY,KeyRule::NO_ACTION,KeyRule::NO_ACTION);
-        xRet = pRet;
-    }
+        xRet = new OAdabasKey(m_pTable,_rName,::rtl::OUString(),KeyType::PRIMARY,KeyRule::NO_ACTION,KeyRule::NO_ACTION);
 
     return xRet;
 }
@@ -218,16 +215,16 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
             switch(nDeleteRule)
             {
                 case KeyRule::CASCADE:
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
+                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
                     break;
                 case KeyRule::RESTRICT:
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
+                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
                     break;
                 case KeyRule::SET_NULL:
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
+                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
                     break;
                 case KeyRule::SET_DEFAULT:
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
+                    aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
                     break;
                 default:
                     ;
@@ -292,21 +289,18 @@ void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    Reference< XNamed > xName;
+    sdbcx::ObjectType xName;
     if(!m_pTable->isNew())
     {
-        xName = Reference< XNamed >(_xDescriptor,UNO_QUERY);
-        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-        xName = xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+        xName = OCollection_TYPE::cloneObject(_xDescriptor);
     }
     else
     {
         OAdabasKey* pKey = new OAdabasKey(m_pTable);
         xName = pKey;
-        Reference<XPropertySet> xProp = pKey;
-        ::comphelper::copyProperties(_xDescriptor,xProp);
+        ::comphelper::copyProperties(_xDescriptor,xName);
         Reference<XColumnsSupplier> xSup(_xDescriptor,UNO_QUERY);
         Reference<XIndexAccess> xIndex(xSup->getColumns(),UNO_QUERY);
         Reference<XAppend> xAppend(pKey->getColumns(),UNO_QUERY);
