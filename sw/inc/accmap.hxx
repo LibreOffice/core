@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:53:13 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,23 +89,26 @@ struct SwAccessibleEvent_Impl;
 class SwRect;
 class ViewShell;
 
+// real states for events
 #define ACC_STATE_EDITABLE 0x01
 #define ACC_STATE_OPAQUE 0x02
+
+// pseudo states for events
 #define ACC_STATE_CARET 0x80
 
 #define ACC_STATE_MASK 0x7F
 
 class SwAccessibleMap
 {
-    ::vos::OMutex aMutex;
-    ::vos::OMutex aEventMutex;
-    SwAccessibleContextMap_Impl *pMap;
-    SwAccessibleEventList_Impl *pEvents;
-    SwAccessibleEventMap_Impl *pEventMap;
-    ViewShell *pVSh;
-    sal_Int32 nPara;
-    sal_Int32 nFootnote;
-    sal_Int32 nEndnote;
+    ::vos::OMutex maMutex;
+    ::vos::OMutex maEventMutex;
+    SwAccessibleContextMap_Impl *mpMap;
+    SwAccessibleEventList_Impl *mpEvents;
+    SwAccessibleEventMap_Impl *mpEventMap;
+    ViewShell *mpVSh;
+    sal_Int32 mnPara;
+    sal_Int32 mnFootnote;
+    sal_Int32 mnEndnote;
 
     static void FireEvent( const SwAccessibleEvent_Impl& rEvent );
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
@@ -130,8 +133,8 @@ public:
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
 
-    ViewShell *GetShell() const { return pVSh; }
-    const SwRect& GetVisArea() const { return pVSh->VisArea(); }
+    ViewShell *GetShell() const { return mpVSh; }
+    const SwRect& GetVisArea() const { return mpVSh->VisArea(); }
 
     void RemoveContext( const SwFrm *pFrm );
 
