@@ -38,7 +38,7 @@ public class MethodThread extends Thread {
      */
     public void run() {
         try {
-            mTestMethod.invoke(mInvokeClass, null);
+            mTestMethod.invoke(mInvokeClass, new Object[]{});
         }
         catch(IllegalAccessException e) {
             e.printStackTrace(mLog);
