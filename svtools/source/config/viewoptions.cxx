@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-10 14:55:55 $
+ *  last change: $Author: as $ $Date: 2000-11-15 09:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,7 +963,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, const OUString& sViewName )
                                     // Increase ref count for dialog data container first.
                                     ++m_nRefCount_Dialogs;
                                     // If these instance the first user of the dialog data container - create these impl static container!
-                                    if( m_nRefCount_Dialogs <= 0 )
+                                    if( m_nRefCount_Dialogs == 1 )
                                     {
                                         m_pDataContainer_Dialogs = new SvtViewDialogOptions_Impl;
                                     }
@@ -973,7 +973,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, const OUString& sViewName )
                                     // Increase ref count for tab-dialog data container first.
                                     ++m_nRefCount_TabDialogs;
                                     // If these instance the first user of the tab-dialog data container - create these impl static container!
-                                    if( m_nRefCount_TabDialogs <= 0 )
+                                    if( m_nRefCount_TabDialogs == 1 )
                                     {
                                         m_pDataContainer_TabDialogs = new SvtViewTabDialogOptions_Impl;
                                     }
@@ -983,7 +983,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, const OUString& sViewName )
                                     // Increase ref count for tab-page data container first.
                                     ++m_nRefCount_TabPages;
                                     // If these instance the first user of the tab-page data container - create these impl static container!
-                                    if( m_nRefCount_TabPages <= 0 )
+                                    if( m_nRefCount_TabPages == 1 )
                                     {
                                         m_pDataContainer_TabPages = new SvtViewTabPageOptions_Impl;
                                     }
@@ -993,7 +993,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, const OUString& sViewName )
                                     // Increase ref count for window data container first.
                                     ++m_nRefCount_Windows;
                                     // If these instance the first user of the window data container - create these impl static container!
-                                    if( m_nRefCount_Windows <= 0 )
+                                    if( m_nRefCount_Windows == 1 )
                                     {
                                         m_pDataContainer_Windows = new SvtViewWindowOptions_Impl;
                                     }
@@ -1018,7 +1018,7 @@ SvtViewOptions::~SvtViewOptions()
                                     // Decrease ref count for dialog data container first.
                                     --m_nRefCount_Dialogs;
                                     // If these instance the last user of the dialog data container - delete these impl static container!
-                                    if( m_nRefCount_Dialogs <= 0 )
+                                    if( m_nRefCount_Dialogs == 0 )
                                     {
                                         delete m_pDataContainer_Dialogs;
                                         m_pDataContainer_Dialogs = NULL;
@@ -1029,7 +1029,7 @@ SvtViewOptions::~SvtViewOptions()
                                     // Decrease ref count for tab-dialog data container first.
                                     --m_nRefCount_TabDialogs;
                                     // If these instance the last user of the tab-dialog data container - delete these impl static container!
-                                    if( m_nRefCount_TabDialogs <= 0 )
+                                    if( m_nRefCount_TabDialogs == 0 )
                                     {
                                         delete m_pDataContainer_TabDialogs;
                                         m_pDataContainer_TabDialogs = NULL;
@@ -1040,7 +1040,7 @@ SvtViewOptions::~SvtViewOptions()
                                     // Decrease ref count for tab-page data container first.
                                     --m_nRefCount_TabPages;
                                     // If these instance the last user of the tab-page data container - delete these impl static container!
-                                    if( m_nRefCount_TabPages <= 0 )
+                                    if( m_nRefCount_TabPages == 0 )
                                     {
                                         delete m_pDataContainer_TabPages;
                                         m_pDataContainer_TabPages = NULL;
@@ -1051,7 +1051,7 @@ SvtViewOptions::~SvtViewOptions()
                                     // Decrease ref count for window data container first.
                                     --m_nRefCount_Windows;
                                     // If these instance the last user of the window data container - delete these impl static container!
-                                    if( m_nRefCount_Windows <= 0 )
+                                    if( m_nRefCount_Windows == 0 )
                                     {
                                         delete m_pDataContainer_Windows;
                                         m_pDataContainer_Windows = NULL;
