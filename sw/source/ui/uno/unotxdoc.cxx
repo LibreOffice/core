@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 14:27:26 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1730,27 +1730,27 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 {
                     if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
                     {
-                        xRet = SvxUnoDashTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                        xRet = SvxUnoDashTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
                     }
                     if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
                     {
-                        xRet = SvxUnoGradientTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                        xRet = SvxUnoGradientTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
                     }
                     if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
                     {
-                        xRet = SvxUnoHatchTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                        xRet = SvxUnoHatchTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
                     }
                     if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
                     {
-                        xRet = SvxUnoBitmapTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                        xRet = SvxUnoBitmapTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
                     }
                     if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
                     {
-                        xRet = SvxUnoTransGradientTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                        xRet = SvxUnoTransGradientTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
                     }
                     if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
                     {
-                        xRet = SvxUnoMarkerTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                        xRet = SvxUnoMarkerTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
                     }
                 }
                 if(!xRet.is())
