@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowUpdater.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:17:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,25 @@
 
 #include "WindowUpdater.hxx"
 
-#include "viewshel.hxx"
-#include "sdwindow.hxx"
-#include "preview.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "showwin.hxx"
-#include "sdview.hxx"
+#ifndef SD_SHOW_WINDOW_HXX
+#include "ShowWindow.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 
 #ifndef _SPLIT_HXX
 #include <vcl/split.hxx>
@@ -103,7 +116,7 @@ WindowUpdater::~WindowUpdater (void) throw ()
 
 
 
-void WindowUpdater::RegisterWindow (Window* pWindow)
+void WindowUpdater::RegisterWindow (::Window* pWindow)
 {
     if (pWindow != NULL)
     {
@@ -122,7 +135,7 @@ void WindowUpdater::RegisterWindow (Window* pWindow)
 
 
 
-void WindowUpdater::UnregisterWindow (Window* pWindow)
+void WindowUpdater::UnregisterWindow (::Window* pWindow)
 {
     tWindowList::iterator aWindowIterator (
         ::std::find (
@@ -135,7 +148,7 @@ void WindowUpdater::UnregisterWindow (Window* pWindow)
 
 
 
-void WindowUpdater::SetViewShell (SdViewShell& rViewShell)
+void WindowUpdater::SetViewShell (ViewShell& rViewShell)
 {
     mpViewShell = &rViewShell;
 }
@@ -167,21 +180,22 @@ void WindowUpdater::UnregisterPreview (void)
 
 
 
-Window* WindowUpdater::GetPreviewWindow (void) const
+::Window* WindowUpdater::GetPreviewWindow (void) const
 {
-    SdShowWindow* pShowWindow = NULL;
+    ShowWindow* pShowWindow = NULL;
 
     // Get the show window of the preview.
     if (mpViewShell != NULL)
     {
         SfxChildWindow* pPreviewChildWindow =
             mpViewShell->GetViewFrame()->GetChildWindow (
-                SdPreviewChildWindow::GetChildWindowId());
+                PreviewChildWindow::GetChildWindowId());
         if (pPreviewChildWindow != NULL)
         {
-            SdPreviewWin* pPreviewWindow =
-                static_cast<SdPreviewWin*> (pPreviewChildWindow->GetWindow());
-            if (pPreviewWindow!=NULL && pPreviewWindow->GetDoc()==mpViewShell->GetDoc())
+            PreviewWindow* pPreviewWindow =
+                static_cast<PreviewWindow*> (pPreviewChildWindow->GetWindow());
+            if (pPreviewWindow!=NULL
+                && pPreviewWindow->GetDoc()==mpViewShell->GetDoc())
                 pShowWindow = pPreviewWindow->GetShowWindow();
         }
     }
@@ -246,8 +260,8 @@ void WindowUpdater::Notify (SfxBroadcaster& rBC, const SfxHint& rHint)
     const SfxSimpleHint& rSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
     if (rSimpleHint.GetId() == SFX_HINT_CTL_SETTINGS_CHANGED)
     {
-        // Clear the master page cache so that master pages will be redrawn.
         // #110094#-7
+        // Clear the master page cache so that master pages will be redrawn.
         //if (mpViewShell != NULL)
         //{
         //    SdView* pView = mpViewShell->GetView();
