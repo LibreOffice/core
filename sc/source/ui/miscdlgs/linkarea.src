@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:39:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ english_us ] = "External Data";
     Text[ portuguese ] = "Dados externos";
     Text[ russian ] = "Βνεψνθε δΰννϋε";
-    Text[ greek ] = "Εξωτερικό αρχείο προέλευσης";
+    Text[ greek ] = "Εξωτερικά δεδομένα";
     Text[ dutch ] = "Externe gegevens";
     Text[ french ] = "Donnιes externes";
     Text[ spanish ] = "Datos externos";
@@ -306,6 +306,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ hindi ] = "ΰ¤¬ΰ¤Ύΰ¤Ήΰ¤°ΰ¥€ ΰ¤΅ΰ¤Όΰ¥‰ΰ¤ΰ¤Ύ";
     Text[ slovak ] = "ExternΓ© dΓ΅ta";
 };
+
 
 
 
