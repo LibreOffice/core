@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 13:58:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@ protected:
 
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
         { mxShapes = rNew; }
+
+    /** sets the page style on this page */
+    void SetStyle( rtl::OUString& rStyleName );
 
     /** sets the presentation layout at this page. It is used for drawing pages and for the handout master */
     void SetLayout();
