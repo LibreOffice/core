@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBar.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 20:38:44 $
+ *  last change:$Date: 2004-11-02 12:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ public class AccessibleStatusBar extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(
+        XWindow xWindow = at.getCurrentContainerWindow(
                                   (XMultiServiceFactory) tParam.getMSF(),
                                   aModel);
 
