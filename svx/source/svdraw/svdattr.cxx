@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-05 16:25:09 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 10:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,9 +422,9 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
             ByteString aStr("PoolDefaultItem not set: ");
 
             aStr += "Num=";
-            aStr += nNum;
+            aStr += ByteString::CreateFromInt32( nNum );
             aStr += "Which=";
-            aStr += nNum + 1000;
+            aStr += ByteString::CreateFromInt32( nNum + 1000 );
 
             DBG_ERROR(aStr.GetBuffer());
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-13 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 10:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2444,7 +2444,7 @@ SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
                     String aStr("Lesen der PageView fuer ");
                     if (bMaster) aStr+="Master";
                     aStr+="Page ";
-                    aStr+=nPgNum+1;
+                    aStr+=String::CreateFromInt32( nPgNum+1 );
                     DebWriteln(aStr);
 #endif
                 } break;
@@ -2460,7 +2460,7 @@ SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
                     rIn>>rPageView.aHelpLines;
 #ifdef JOEDEBUG
                     String aStr("Lesen der Hilfsliniendefinitionen (");
-                    aStr+=rPageView.aHelpLines.GetCount();
+                    aStr+=String::CreateFromInt32( rPageView.aHelpLines.GetCount() );
                     aStr+=" Stueck)";
                     DebWriteln(aStr);
 #endif

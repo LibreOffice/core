@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-29 11:40:36 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 10:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
                         aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
                         aName += sal_Unicode(' ');
                         String aStr(aName);
-                        aStr+=i;
+                        aStr+=String::CreateFromInt32( i );
                         while( pDestPers->Find( aStr ) )
                         {
                             i++;
@@ -670,7 +670,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                     aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
                     aName += sal_Unicode(' ');
                     String aStr(aName);
-                    aStr+=i;
+                    aStr+=String::CreateFromInt32( i );
                     while(pDestPers->Find(aStr)) {
                         i++;
                         aStr=aName;
