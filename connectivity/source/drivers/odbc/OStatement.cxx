@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 12:39:57 $
+ *  last change: $Author: oj $ $Date: 2001-01-23 08:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,9 @@ void OStatement_Base::reset() throw (SQLException)
     if (m_xResultSet.get().is())
     {
         clearMyResultSet();
-        OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    }
+    if(m_aStatementHandle)
+    {
         THROW_SQL(N3SQLFreeStmt(m_aStatementHandle, SQL_CLOSE));
     }
 }
