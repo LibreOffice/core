@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: cd $ $Date: 2001-11-09 08:05:25 $
+#   last change: $Author: cd $ $Date: 2001-12-04 07:49:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,14 @@ LIB1OBJFILES=	$(SLO)$/attributelist.obj					\
                 $(SLO)$/toolboxlayoutdocumenthandler.obj	\
                 $(SLO)$/imagesconfiguration.obj				\
                 $(SLO)$/imagesdocumenthandler.obj			\
-                $(SLO)$/xmlnamespaces.obj					
+                $(SLO)$/xmlnamespaces.obj					\
+                $(SLO)$/actiontriggerpropertyset.obj		\
+                $(SLO)$/actiontriggerseparatorpropertyset.obj		\
+                $(SLO)$/actiontriggercontainer.obj			\
+                $(SLO)$/propertysetcontainer.obj			\
+                $(SLO)$/rootactiontriggercontainer.obj		\
+                $(SLO)$/actiontriggerhelper.obj				\
+                $(SLO)$/imagewrapper.obj
 
 # --- internal import -------------------------------------------------
 
@@ -229,7 +236,7 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/taskcreator.obj		  		\
                  $(SLO)$/timerhelper.obj				\
                 $(SLO)$/urltransformer.obj			\
-                                $(SLO)$/documentlist.obj                      \
+                $(SLO)$/documentlist.obj			\
                 $(SLO)$/xmldocproperties.obj
 
 SHL4STDLIBS=	$(CPPULIB)							\

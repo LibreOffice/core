@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: cd $ $Date: 2001-11-09 08:02:50 $
+#   last change: $Author: cd $ $Date: 2001-12-04 07:44:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,13 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/eventsdocumenthandler.obj				\
                     $(SLO)$/converter.obj							\
                     $(SLO)$/imagesconfiguration.obj					\
-                    $(SLO)$/imagesdocumenthandler.obj
+                    $(SLO)$/imagesdocumenthandler.obj				\
+                    $(SLO)$/actiontriggerpropertyset.obj			\
+                    $(SLO)$/actiontriggerseparatorpropertyset.obj	\
+                    $(SLO)$/actiontriggercontainer.obj				\
+                    $(SLO)$/imagewrapper.obj						\
+                    $(SLO)$/rootactiontriggercontainer.obj				\
+                    $(SLO)$/actiontriggerhelper.obj
 
 # --- Targets ------------------------------------------------------
 

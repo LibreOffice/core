@@ -21,6 +21,7 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\inc\classes\statusbarconfiguration.hxx %_DEST%\inc%_EXT%\framework\statusbarconfiguration.hxx
 ..\inc\classes\eventsconfiguration.hxx %_DEST%\inc%_EXT%\framework\eventsconfiguration.hxx
 ..\inc\classes\imagesconfiguration.hxx %_DEST%\inc%_EXT%\framework\imagesconfiguration.hxx
+..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

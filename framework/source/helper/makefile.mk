@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: as $ $Date: 2001-08-10 11:55:01 $
+#   last change: $Author: cd $ $Date: 2001-12-04 07:46:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,9 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/statusindicatorfactory.obj				\
                     $(SLO)$/statusindicator.obj						\
                     $(SLO)$/imageproducer.obj						\
-                    $(SLO)$/xmldocproperties.obj
+                    $(SLO)$/xmldocproperties.obj					\
+                    $(SLO)$/propertysetcontainer.obj				\
+                    $(SLO)$/actiontriggerhelper.obj
 
 # --- Targets ------------------------------------------------------
 
