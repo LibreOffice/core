@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormsCollection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 16:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(Runtim
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.form.OFormsCollection");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.OFormsCollection");
 }
 
 //------------------------------------------------------------------------------
