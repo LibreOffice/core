@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:36:46 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ russian ] = "Îáğàáîòêà ïîìåòêè";
         Text[ polish ] = "Edytuj notatkê";
         Text[ japanese ] = "ºÒİÄ‚Ì•ÒW";
-        Text[ chinese_traditional ] = "½s¿è³Æª`";
+        Text[ chinese_traditional ] = "½s¿è³Æµù";
         Text[ arabic ] = "ÊÍÑíÑ ãáÇÍÙÉ";
         Text[ greek ] = "Åğåîåñãáóßá óçìåßùóçò";
         Text[ korean ] = "¸Ş¸ğ ÆíÁı";
@@ -286,7 +286,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ russian ] = "Âñòàâèòü ïîìåòêó";
         Text[ polish ] = "Wstaw notatkê";
         Text[ japanese ] = "ºÒİÄ‚Ì‘}“ü";
-        Text[ chinese_traditional ] = "´¡¤J³Æª`";
+        Text[ chinese_traditional ] = "´¡¤J³Æµù";
         Text[ arabic ] = "ÅÏÑÇÌ ãáÇÍÙÉ";
         Text[ greek ] = "ÅéóáãùãŞ óçìåßùóçò";
         Text[ korean ] = "¸Ş¸ğ »ğÀÔ";
@@ -296,7 +296,7 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ russian ] = "Ïîìåòêà";
     Text[ polish ] = "Notatka";
     Text[ japanese ] = "ÒÓ";
-    Text[ chinese_traditional ] = "³Æª`";
+    Text[ chinese_traditional ] = "³Æµù";
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ greek ] = "Óçìåßùóç";
     Text[ korean ] = "¸Ş¸ğ";
