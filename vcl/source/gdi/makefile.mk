@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: th $ $Date: 2001-06-21 21:09:06 $
+#   last change: $Author: pl $ $Date: 2001-10-25 09:23:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,10 @@ TARGET=gdi
 
 .IF "$(COM)"=="ICC"
 CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
+.ENDIF
+
+.IF "$(BUILD_SOSL)"==""
+CDEFS+=-DDO_TAB_CHECK
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -149,6 +153,7 @@ EXCEPTIONSFILES=	$(SLO)$/bitmap.obj		\
 .ELSE
 EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/gfxlink.obj		\
+                    $(SLO)$/print.obj		\
                     $(SLO)$/impgraph.obj	
 .ENDIF
 

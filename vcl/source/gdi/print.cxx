@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-11 15:37:11 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 09:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,9 @@
 #include "rmwindow.hxx"
 #include "rvp.hxx"
 #include <vos/mutex.hxx>
-#include <comphelper/processfactory.hxx>
 #ifndef _VCL_UNOHELP_HXX
 #include <vcl/unohelp.hxx>
 #endif
-
-using namespace ::com::sun::star::uno;
 
 struct SalPrinterQueueInfo
 {
@@ -159,6 +156,118 @@ struct SalPrinterQueueInfo
 #endif
 #ifndef _SV_PRINT_HXX
 #include <print.hxx>
+#endif
+
+#include <comphelper/processfactory.hxx>
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+#ifdef DO_TAB_CHECK
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+using namespace com::sun::star::beans;
+
+static const char* pHead = "StarOffice 6.0";
+static const char* pFoot = "sun.com/staroffice";
+
+static const char* pLines[] =
+{
+    "Evaluation Version",
+    "Testversion",
+    "Version d\'évaluation",
+    "Versión de prueba",
+    "Versione per valutazione",
+    "Testversion"
+};
+
+static void doTab( Printer* pPrinter )
+{
+    static bool bChecked    = false;
+    static bool bDoTab      = true;
+    if( ! bChecked )
+    {
+        try
+        {
+            Reference< XMultiServiceFactory > xFac( ::comphelper::getProcessServiceFactory() );
+            if( xFac.is() )
+            {
+                Reference< XMaterialHolder > xHolder( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
+                if( xHolder.is() )
+                {
+                    Any aMaterial( xHolder->getMaterial() );
+                    sal_Bool bIs = sal_False;
+                    aMaterial >>= bIs;
+                    bDoTab = ! bIs;
+                }
+            }
+        }
+        catch(...)
+        {
+        }
+    }
+    if( bDoTab )
+    {
+        pPrinter->Push( PUSH_ALL );
+
+        pPrinter->SetMapMode( MapMode( MAP_10TH_MM ) );
+        pPrinter->SetTextColor( Color( COL_BLACK ) );
+        pPrinter->SetLineColor( Color( COL_BLACK ) );
+        pPrinter->SetFillColor( Color( COL_WHITE ) );
+
+        Size aPaperSize( pPrinter->GetOutputSize() );
+        Font aNormalFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 40 ) );
+        Font aBigBoldFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 60 ) );
+        aBigBoldFont.SetWeight( WEIGHT_BOLD );
+
+        String aHeader( ByteString( pHead ), RTL_TEXTENCODING_ISO_8859_1 );
+        String aFooter( ByteString( pFoot ), RTL_TEXTENCODING_ISO_8859_1 );
+
+        // calculate size of box
+        int nWidth = 0, nHeight = 0, w, i;
+        pPrinter->SetFont( aBigBoldFont );
+        int nBigHeight = pPrinter->GetTextHeight();
+        nWidth = pPrinter->GetTextWidth( aHeader );
+        w = pPrinter->GetTextWidth( aFooter );
+        nWidth = w > nWidth ? w : nWidth;
+
+        nHeight = 3*nBigHeight;
+
+        pPrinter->SetFont( aNormalFont );
+        int nNormHeigth = pPrinter->GetTextHeight();
+        for( i = 0; i < sizeof( pLines )/sizeof( pLines[0] ); i++ )
+        {
+            String aLine( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
+            w = pPrinter->GetTextWidth( aLine );
+            nWidth = w > nWidth ? w : nWidth;
+        }
+        nWidth += 100;
+        nHeight += nNormHeigth * (sizeof(pLines)/sizeof( pLines[0] ) + 1);
+
+        Point aTopLeft( aPaperSize.Width() - nWidth - 100,
+                        aPaperSize.Height() - nHeight - 100 );
+        pPrinter->DrawRect( Rectangle( aTopLeft, Size( nWidth, nHeight ) ) );
+        pPrinter->DrawLine( Point( aTopLeft.X(), aTopLeft.Y() + (3*nBigHeight/2) ),
+                            Point( aTopLeft.X()+nWidth-1, aTopLeft.Y() + (3*nBigHeight/2) ) );
+        pPrinter->DrawLine( Point( aTopLeft.X(), aTopLeft.Y() + nHeight - (3*nBigHeight/2) ),
+                            Point( aTopLeft.X()+nWidth-1, aTopLeft.Y() + nHeight - (3*nBigHeight/2) ) );
+
+        int nY = aTopLeft.Y() + (nHeight-nNormHeigth*sizeof(pLines)/sizeof(pLines[0]))/2;
+        for( i = 0; i < sizeof( pLines )/sizeof( pLines[0] ); i++ )
+        {
+            String aLine( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
+            w = pPrinter->GetTextWidth( aLine );
+            pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, nY ), aLine );
+            nY += nNormHeigth;
+        }
+        pPrinter->SetFont( aBigBoldFont );
+        w = pPrinter->GetTextWidth( aHeader );
+        pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, aTopLeft.Y()+nBigHeight/4 ), aHeader );
+        w = pPrinter->GetTextWidth( aFooter );
+        pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, aTopLeft.Y()+nHeight-(5*nBigHeight/4) ), aFooter );
+
+        pPrinter->Pop();
+    }
+}
 #endif
 
 int nImplSysDialog = 0;
@@ -2037,6 +2146,10 @@ BOOL Printer::EndPage()
 {
     if ( !IsJobActive() )
         return FALSE;
+
+#ifdef DO_TAB_CHECK
+    doTab( this );
+#endif
 
     mbInPrintPage = FALSE;
 
