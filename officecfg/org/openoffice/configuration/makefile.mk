@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dg $ $Date: 2001-03-30 13:16:23 $
+#   last change: $Author: dg $ $Date: 2001-06-19 16:44:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,10 @@ PACKAGE=org$/openoffice$/configuration
 EXTRAJARFILES = jaxp.jar parser.jar xt.jar
 
 JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/SchemaImport.class 
+    $(CLASSDIR)$/$(PACKAGE)$/XMLDefaultGenerator.class \
+    $(CLASSDIR)$/$(PACKAGE)$/Generator.class \
+    $(CLASSDIR)$/$(PACKAGE)$/Trim.class \
+    $(CLASSDIR)$/$(PACKAGE)$/Inspector.class 
 
 JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
