@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:58:16 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ String RID_STR_PROPTITLE_EDIT
     Text [ spanish ] = "Campo de texto" ;
     Text [ french ] = "Zone de texte" ;
     Text [ dutch ] = "Tekstveld" ;
-    Text[ chinese_simplified ] = "ÎÄ×Ö¿ò";
+    Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
     Text[ russian ] = "Òåêñòîâîå ïîëå";
     Text[ polish ] = "Pole tekstowe";
     Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
@@ -2931,7 +2931,7 @@ String RID_STR_SUBMIT_ENCODING
     Text [ dutch ] = "Codering bij de submissie" ;
     Text[ chinese_simplified ] = "Ìá½»Ê±Ö´ĞĞ±àÂë´¦Àí";
     Text[ russian ] = "Êîäèğîâàíèå ïğè ïåğåäà÷å";
-    Text[ polish ] = "Kodowanie submitu";
+    Text[ polish ] = "Kodowanie podczas submitu";
     Text[ japanese ] = "»ÌŞĞ¯Ä‚Ì´İº°ÄŞ";
     Text[ chinese_traditional ] = "´£¥æ®É°õ¦æ½s½X³B²z";
     Text[ greek ] = "Êùäéêïğïßçóç êáôÜ ôçí õğïâïëŞ";
@@ -3452,7 +3452,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ italian ] = "Prima della modifica dei record di dati";
     Text[ danish ] = "Inden datapostændring";
     Text[ swedish ] = "Före datapoståtgärd";
-    Text[ polish ] = "Przed operacj¹ rekordów";
+    Text[ polish ] = "Przed operacj¹ rekordu";
     Text[ portuguese_brazilian ] = "Before row change";
     Text[ japanese ] = "Úº°ÄŞ‚Ì±¸¼®İÀs‘O";
     Text[ chinese_simplified ] = "ÔÚ¸ü¸ÄÊı¾İÌõÄ¿Ö®Ç°";
@@ -3477,7 +3477,7 @@ String RID_STR_EVT_ROWCHANGE
     Text[ italian ] = "Dopo la modifica dei record di dati";
     Text[ danish ] = "Efter datapostændring";
     Text[ swedish ] = "Efter datapoståtgärd";
-    Text[ polish ] = "Po operacji rekordów";
+    Text[ polish ] = "Po operacji rekordu";
     Text[ portuguese_brazilian ] = "After row change";
     Text[ japanese ] = "Úº°ÄŞ‚Ì±¸¼®İÀsŒã";
     Text[ chinese_simplified ] = "ÔÚ±à¼­Êı¾İÌõÄ¿Ö®ºó";
@@ -3554,7 +3554,7 @@ String RID_STR_EVT_FOCUSGAINED
     Text [ dutch ] = "Indien focus bereikt" ;
     Text[ chinese_simplified ] = "ÔÚÃé×¼Ê±";
     Text[ russian ] = "Ïğè ïîëó÷åíèè ôîêóñà";
-    Text[ polish ] = "Przy otrzymaniu ogniska";
+    Text[ polish ] = "Po otrzymaniu ogniska";
     Text[ japanese ] = "Ì«°¶½‚ğ“¾‚½";
     Text[ chinese_traditional ] = "¦bºË·Ç®É";
     Text[ greek ] = "Óå ğåñßğôùóç åóôßáóçò";
@@ -3580,7 +3580,7 @@ String RID_STR_EVT_FOCUSLOST
     Text [ dutch ] = "Bij focusverlies" ;
     Text[ chinese_simplified ] = "ÔÚÆ«ÀëÄ¿±êÊ±";
     Text[ russian ] = "Ïğè ïîòåğå ôîêóñà";
-    Text[ polish ] = "Przy utracie ogniska";
+    Text[ polish ] = "Po utracie ogniska";
     Text[ japanese ] = "Ì«°¶½‚ğ¸‚Á‚½";
     Text[ chinese_traditional ] = "¦b°¾Â÷¥Ø¼Ğ®É";
     Text[ greek ] = "Óôçí ğåñßğôùóç áğşëåéáò åóôßáò";
@@ -3658,7 +3658,7 @@ String RID_STR_EVT_KEYUP
     Text [ dutch ] = "Toets losgelaten" ;
     Text[ chinese_simplified ] = "ËÉ¿ª°´¼ü";
     Text[ russian ] = "Îòïóùåííàÿ êëàâèøà";
-    Text[ polish ] = "Zwolniony przycisk";
+    Text[ polish ] = "Po zwolnieniu klawisza";
     Text[ japanese ] = "·°‚©‚ç—£‚ê‚½";
     Text[ chinese_traditional ] = "©ñ¶}«öÁä";
     Text[ greek ] = "ĞëŞêôñï áğåëåõèåñùìİíï";
@@ -3864,7 +3864,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text [ dutch ] = "Muistoets ingedrukt" ;
     Text[ chinese_simplified ] = "°´×¡Êó±ê¼ü";
     Text[ russian ] = "Íàæàòàÿ êëàâèøà ìûøè";
-    Text[ polish ] = "Naciœniêty przycisk myszy";
+    Text[ polish ] = "Przycisk myszy naciœniêty";
     Text[ japanese ] = "Ï³½ÎŞÀİ‚ğ‰Ÿ‚µ‚½";
     Text[ chinese_traditional ] = "«ö¦í·Æ¹«Áä";
     Text[ greek ] = "ĞëŞêôñï ğïíôéêéïı ğéåóìİíï";
@@ -3890,7 +3890,7 @@ String RID_STR_EVT_MOUSERELEASED
     Text [ dutch ] = "Muistoetst losgelaten" ;
     Text[ chinese_simplified ] = "ËÉ¿ªÊó±ê¼ü";
     Text[ russian ] = "Îòïóùåííàÿ êàâèøà ìûøè";
-    Text[ polish ] = "Zwolnij przycisk myszy";
+    Text[ polish ] = "Po zwolnieniu przycisku myszy";
     Text[ japanese ] = "Ï³½ÎŞÀİ‚©‚ç—£‚ê‚½";
     Text[ chinese_traditional ] = "©ñ¶}·Æ¹«Áä";
     Text[ greek ] = "ĞëŞêôñï ğïíôéêéïı áğåëåõèåñùìİíï";
@@ -4268,7 +4268,7 @@ String RID_STR_TITLE
     Text[ portuguese ] = "Título";
     Text[ russian ] = "Çàãîëîâîê";
     Text[ greek ] = "Ôßôëïò";
-    Text[ dutch ] = "Title";
+    Text[ dutch ] = "Titel";
     Text[ french ] = "Titre";
     Text[ spanish ] = "Título";
     Text[ italian ] = "Titolo";
@@ -4659,6 +4659,9 @@ String RID_STR_ENUM_ORIENTATION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/07/13 20:58:16  kz
+ *  Merge SRC638: 13.07.01 - 22:56:55
+ *
  *  Revision 1.24  2001/06/29 02:11:47  kz
  *  Merge SRC633: 06/29/01 - 04:12:08
  *
@@ -4734,6 +4737,7 @@ String RID_STR_ENUM_ORIENTATION
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
 
