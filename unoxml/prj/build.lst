@@ -2,4 +2,4 @@ ux	unoxml	:	offuh cppuhelper libxml2 sfx2 NULL
 ux	unoxml\source\dom			nmake	-	all	ux_dom      NULL
 ux	unoxml\source\xpath			nmake	-	all	ux_xpath    ux_dom NULL
 ux	unoxml\source\events		nmake	-	all	ux_events   ux_dom NULL
-ux	unoxml\source\service		nmake	-	all ux_service  ux_dom ux_xpath NULL
+ux	unoxml\source\service		nmake	-	all ux_service  ux_dom ux_xpath ux_events NULL
