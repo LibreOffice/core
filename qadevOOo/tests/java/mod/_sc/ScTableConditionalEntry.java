@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableConditionalEntry.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:17:36 $
+ *  last change:$Date: 2004-01-05 19:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ public class ScTableConditionalEntry extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     /**
