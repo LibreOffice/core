@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,8 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSub, ULONG 
     }
     if (IsFixed())
     {
-        Time aTime;
-        Date aDate;
-        SetDateTime(aDate.GetDate(), aTime.GetTime());
+        DateTime aDateTime;
+        SetDateTime(aDateTime);
     }
 }
 
@@ -144,9 +143,8 @@ String SwDateTimeField::Expand() const
 
     if (!(IsFixed()))
     {
-        Time aTime;
-        Date aDate;
-        fVal = GetDateTime(GetDoc(), aDate.GetDate(), aTime.GetTime());
+        DateTime aDateTime;
+        fVal = GetDateTime(GetDoc(), aDateTime);
     }
     else
         fVal = GetValue();
@@ -216,32 +214,23 @@ String SwDateTimeField::GetPar2() const
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwDateTimeField::SetDateTime(ULONG nDate, ULONG nTime)
+void SwDateTimeField::SetDateTime(const DateTime& rDT)
 {
-    SetValue(GetDateTime(GetDoc(), nDate, nTime));
+    SetValue(GetDateTime(GetDoc(), rDT));
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-double SwDateTimeField::GetDateTime(SwDoc* pDoc, ULONG nDate, ULONG nTime)
+double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
 {
-    Date aDate(nDate);
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
     Date* pNullDate = pFormatter->GetNullDate();
 
-    if (!nDate) // Damit wirklich das Jahr auf 0 gesetzt wird...
-        aDate.SetDate(pNullDate->GetDate());
+    double fResult = rDT - DateTime(*pNullDate);
 
-    double fResult = aDate - *pNullDate;
-
-    Time aTime(nTime);
-
-    ULONG nNumFmtTime = (ULONG)aTime.GetSec() + (ULONG)aTime.GetMin() * 60L +
-                  (ULONG)aTime.GetHour() * 3600L;
-
-    return fResult + ((double)nNumFmtTime + 0.5) / 86400.0;
+    return fResult;
 }
 
 /*--------------------------------------------------------------------
@@ -253,14 +242,14 @@ double SwDateTimeField::GetValue() const
     if (IsFixed())
         return SwValueField::GetValue();
     else
-        return GetDateTime(GetDoc(), Date().GetDate(), Time().GetTime());
+        return GetDateTime(GetDoc(), DateTime());
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ULONG SwDateTimeField::GetDate(BOOL bUseOffset) const
+Date SwDateTimeField::GetDate(BOOL bUseOffset) const
 {
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
     Date* pNullDate = pFormatter->GetNullDate();
@@ -272,29 +261,22 @@ ULONG SwDateTimeField::GetDate(BOOL bUseOffset) const
 
     Date aDate = *pNullDate + nVal;
 
-    return aDate.GetDate();
+    return aDate;
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ULONG SwDateTimeField::GetTime(BOOL bUseOffset) const
+Time SwDateTimeField::GetTime(BOOL bUseOffset) const
 {
     double fDummy;
     double fFract = modf(GetValue(), &fDummy);
-
-    ULONG nTime = (ULONG)(fFract * 86400.0);
-    ULONG nHour = nTime / 3600L;
-    ULONG nMin  = (nTime - 3600L * nHour) / 60L;
-    ULONG nSec  = nTime - 3600L * nHour - 60L * nMin;
-
+    DateTime aDT((long)fDummy, 0);
+    aDT += fFract;
     if (bUseOffset)
-        nMin += nOffset;
-
-    Time aTime(nHour, nMin, nSec);
-
-    return aTime.GetTime();
+         aDT += Time(0, nOffset);
+    return (Time)aDT;
 }
 
 /*-----------------04.03.98 11:05-------------------
@@ -325,9 +307,7 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
         break;
     case FIELD_PROP_DATE_TIME:
         {
-            DateTime aDateTime;
-            aDateTime.SetDate(GetDate());
-            aDateTime.SetTime(GetTime());
+            DateTime aDateTime(GetDate(), GetTime());
 
             util::DateTime DateTimeValue;
             DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
@@ -385,7 +365,7 @@ BOOL SwDateTimeField::PutValue( const uno::Any& rVal, BYTE nMId )
             aDateTime.SetDay(aDateTimeValue.Day);
             aDateTime.SetMonth(aDateTimeValue.Month);
             aDateTime.SetYear(aDateTimeValue.Year);
-            SetDateTime(aDateTime.GetDate(), aDateTime.GetTime());
+            SetDateTime(aDateTime);
         }
         break;
         default:
