@@ -1,0 +1,7 @@
+PPTEXPORTER_1_0 {
+        global:
+                ExportPPT;
+
+        local:
+                *;
+};
