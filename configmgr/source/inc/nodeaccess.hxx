@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,61 +84,6 @@ namespace configmgr
     // -------------------------------------------------------------------------
         using memory::Accessor;
     // -------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-    // -------------------------------------------------------------------------
-        class NodeAccess
-        {
-        public:
-            typedef configuration::Name     Name;
-            typedef node::Attributes        Attributes;
-
-            typedef NodeAddress                     NodeAddressType;
-            typedef NodeAddress::AddressType        AddressType;
-            typedef NodeAddress::DataType const     DataType;
-            typedef DataType * NodePointerType;
-
-            static NodeAccess emptyNode() { return NodeAccess(); }
-
-            NodeAccess(Accessor const& _aAccessor, NodeAddressType const& _aNodeRef)
-            : m_aAccessor(_aAccessor)
-            , m_pData(_aNodeRef.m_pData)
-            {}
-
-            NodeAccess(Accessor const& _aAccessor, NodePointerType _pNode)
-            : m_aAccessor(_aAccessor)
-            , m_pData(_aAccessor.address(_pNode))
-            {}
-
-            bool isValid() const { return m_pData.is(); }
-
-            Name getName() const { return wrapName( data().getName() ); }
-            Attributes getAttributes() const { return data().getAttributes(); }
-
-            bool isDefault()   const { return data().isDefault(); }
-            bool isLocalized() const { return data().isLocalized(); }
-
-            NodeAddressType address() const { return NodeAddressType(m_pData); }
-            Accessor accessor() const { return m_aAccessor; }
-
-            DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
-            NodePointerType getDataPtr() const { return static_cast<NodePointerType>(m_aAccessor.access(m_pData)); }
-
-            AddressType rawAddress() const { return m_pData; }
-
-            static Name wrapName(rtl::OUString const& _aNameString)
-            { return configuration::makeName( _aNameString, Name::NoValidate() ); }
-
-            static NodeAddress::DataType* access(NodeAddressType const& _aNodeRef, memory::UpdateAccessor& _rUpdateAccess);
-            static NodeAddress::DataType const* access(NodeAddressType const& _aNodeRef, Accessor const& _rReaderAccess)
-            { return static_cast<NodePointerType>(_rReaderAccess.access(_aNodeRef.m_pData)); }
-        private:
-            NodeAccess() : m_aAccessor(NULL), m_pData() {}
-
-            Accessor    m_aAccessor;
-            AddressType m_pData;
-        };
-    // -------------------------------------------------------------------------
-#else // SHARABLE_DATA
     // -------------------------------------------------------------------------
         class NodeAccess
         {
@@ -196,8 +141,6 @@ namespace configmgr
         NodeAccess  getSubnode(NodeAccess const & _aNode, NodeAccess::Name const & _aName);
         NodeAddress getSubnodeAddress(memory::Accessor const& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName);
         NodeAddress getSubnodeAddress(memory::UpdateAccessor& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName);
-    // -------------------------------------------------------------------------
-#endif // SHARABLE_DATA
     // -------------------------------------------------------------------------
     }
 // -----------------------------------------------------------------------------

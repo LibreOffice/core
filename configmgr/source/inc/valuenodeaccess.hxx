@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenodeaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,36 +143,7 @@ namespace configmgr
         ValueNodeAddress toValueNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr);
         ValueNodeAddress toValueNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr);
     // -------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-        inline
-        NodeAccess::Name ValueNodeAccess::getName() const
-        { return NodeAccess::wrapName( data().getName() ); }
 
-        inline
-        NodeAccess::Attributes ValueNodeAccess::getAttributes() const
-        { return data().getAttributes(); }
-
-        inline
-        bool ValueNodeAccess::isDefault()   const
-        { return data().isDefault(); }
-
-        inline
-        bool ValueNodeAccess::isLocalized()   const
-        { return data().isLocalized(); }
-
-        inline
-        uno::Any    ValueNodeAccess::getValue()      const
-        { return data().getValue(); }
-
-        inline
-        uno::Any    ValueNodeAccess::getUserValue()    const
-        { return data().getUserValue(); }
-
-        inline
-        uno::Any    ValueNodeAccess::getDefaultValue()    const
-        { return data().getDefault(); }
-
-#else  // SHARABLE_DATA
         inline
         NodeAccess::Name ValueNodeAccess::getName() const
         { return NodeAccess::wrapName( data().info.getName(m_aAccessor) ); }
@@ -200,7 +171,6 @@ namespace configmgr
         inline
         uno::Any    ValueNodeAccess::getDefaultValue()    const
         { return data().getDefaultValue(m_aAccessor); }
-#endif // SHARABLE_DATA
 
     // -------------------------------------------------------------------------
     }

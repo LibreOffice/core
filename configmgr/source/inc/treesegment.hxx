@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treesegment.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,10 @@ namespace configmgr
             typedef configuration::Name  Name;
             typedef std::auto_ptr<INode> RawTreeData;
             typedef rtl::OUString        RawName;
-#ifdef NON_SHARABLE_DATA
-            typedef INode const             * NodeDataPtr;
-            typedef INode const             * TreeDataPtr;
-            typedef INode                   * TreeDataUpdatePtr;
-#else  // SHARABLE_DATA
+
             typedef sharable::Node const         * NodeDataPtr;
             typedef sharable::TreeFragment const * TreeDataPtr;
             typedef sharable::TreeFragment       * TreeDataUpdatePtr;
-#endif // SHARABLE_DATA
 
             static TreeSegment createNew(RawTreeData _aTree, RawName const & _aTypeName)
             { return createNewSegment(_aTree,_aTypeName); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,6 @@ namespace configmgr
     namespace data      { class NodeAddress; class NodeAccess; }
 
 //..........................................................................
-#ifdef NON_SHARABLE_DATA
-
-// adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, ISubtree const& _aTargetTree);
-
-// apply a already matching set of changes to the target tree
-    void applyUpdateToTree(SubtreeChange& _anUpdateTree, ISubtree& _aTree);
-
-// apply a set of changes to the target tree
-    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, ISubtree& _aTree);
-
-#else  // SHARABLE_DATA
 
 // adjust a set of changes to the target tree, return true, if there are changes left
     bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode);
@@ -98,9 +86,6 @@ namespace configmgr
 
 // apply a set of changes to the target tree
     void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
-
-
-#endif // SHARABLE_DATA
 
 // apply a set of changes to the target tree, return true, if there are changes found
     bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeaccessor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,21 +148,6 @@ namespace configmgr
             DataAddressType     m_pBase;
         };
     // -------------------------------------------------------------------------
-    #ifdef NON_SHARABLE_DATA
-    // -------------------------------------------------------------------------
-        inline
-        TreeAccessor::Name TreeAccessor::getName() const
-        {
-            return wrapName( data().getName() );
-        }
-    // -------------------------------------------------------------------------
-        inline
-        NodeAddress TreeAccessor::rootAddress(DataAddressType const& p) const
-        {
-            return NodeAddress(p.m_pData);
-        }
-    // -------------------------------------------------------------------------
-    #else  // SHARABLE_DATA
     // -------------------------------------------------------------------------
         inline
         TreeAccessor::Name TreeAccessor::getName() const
@@ -180,7 +165,6 @@ namespace configmgr
             return NodeAddress( memory::Pointer(aAddr) );
         }
     // -------------------------------------------------------------------------
-    #endif // SHARABLE_DATA
     }
 // -----------------------------------------------------------------------------
 } // namespace configmgr

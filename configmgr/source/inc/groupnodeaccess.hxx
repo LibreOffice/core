@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupnodeaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,20 +139,6 @@ namespace configmgr
         GroupNodeAddress toGroupNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr);
         GroupNodeAddress toGroupNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr);
     // -------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-        inline
-        NodeAccess::Name GroupNodeAccess::getName() const
-        { return NodeAccess::wrapName( data().getName() ); }
-
-        inline
-        NodeAccess::Attributes GroupNodeAccess::getAttributes() const
-        { return data().getAttributes(); }
-
-        inline
-        bool GroupNodeAccess::isDefault()   const
-        { return data().isDefault(); }
-
-#else  // SHARABLE_DATA
         inline
         NodeAccess::Name GroupNodeAccess::getName() const
         { return NodeAccess::wrapName( data().info.getName(m_aAccessor) ); }
@@ -164,8 +150,6 @@ namespace configmgr
         inline
         bool GroupNodeAccess::isDefault()   const
         { return data().info.isDefault(); }
-
-#endif // SHARABLE_DATA
 
     // -------------------------------------------------------------------------
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,31 +149,6 @@ namespace configmgr
         SetNodeAddress toSetNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr);
         SetNodeAddress toSetNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr);
     // -------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-        inline
-        NodeAccess::Name SetNodeAccess::getName() const
-        { return NodeAccess::wrapName( data().getName() ); }
-
-        inline
-        NodeAccess::Name SetNodeAccess::getElementTemplateName()   const
-        { return NodeAccess::wrapName( data().getElementTemplateName() ); }
-
-        inline
-        NodeAccess::Name SetNodeAccess::getElementTemplateModule() const
-        { return NodeAccess::wrapName( data().getElementTemplateModule() ); }
-
-        inline
-        NodeAccess::Attributes SetNodeAccess::getAttributes() const
-        { return data().getAttributes(); }
-
-        inline
-        bool SetNodeAccess::isDefault()   const
-        { return data().isDefault(); }
-
-        inline
-        bool SetNodeAccess::isLocalizedValueSetNode() const
-        { return isLocalizedValueSet(data()); }
-#else  // SHARABLE_DATA
         inline
         NodeAccess::Name SetNodeAccess::getName() const
         { return NodeAccess::wrapName( data().info.getName(m_aAccessor) ); }
@@ -197,8 +172,6 @@ namespace configmgr
         inline
         bool SetNodeAccess::isLocalizedValueSetNode() const
         { return data().isLocalizedValue(); }
-#endif // SHARABLE_DATA
-
     // -------------------------------------------------------------------------
     }
 // -----------------------------------------------------------------------------

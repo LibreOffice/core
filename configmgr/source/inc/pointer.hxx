@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pointer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,9 @@
 #include <sal/types.h>
 #endif
 
-#ifndef NON_SHARABLE_DATA
-    #ifndef INCLUDED_SHARABLE_BASETYPES_HXX
-    #include "types.hxx"
-    #endif
-#endif // SHARABLE_DATA
+#ifndef INCLUDED_SHARABLE_BASETYPES_HXX
+#include "types.hxx"
+#endif
 
 namespace configmgr
 {
@@ -87,11 +85,7 @@ namespace configmgr
             friend class Accessor;
             friend class UpdateAccessor;
 
-#ifdef NON_SHARABLE_DATA
-            typedef void const * AddressType;
-#else  // SHARABLE_DATA
             typedef sharable::Address AddressType;
-#endif // SHARABLE_DATA
 
             AddressType m_value;
 
