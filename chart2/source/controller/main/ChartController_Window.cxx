@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 18:29:23 $
+ *  last change: $Author: iha $ $Date: 2003-12-10 19:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,9 +460,10 @@ public:
         Rectangle           m_aReferenceRect;
         Point               m_aStartPos;
 
-        drawing::Direction3D    m_aRotationAxis;
-        double                  m_fStartRotationAngleDegree;
-        Matrix4D                m_aParentTransform;
+        double              m_fXAngleDegree;
+        double              m_fYAngleDegree;
+        double              m_fZAngleDegree;
+        Matrix4D            m_aParentTransform;
 
         Matrix4D            m_aCurrentTransform;
         Polygon3D           m_aWireframePoly;
@@ -474,8 +475,9 @@ RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrap
     , m_pScene(0)
     , m_aReferenceRect(100,100,100,100)
     , m_aStartPos(0,0)
-    , m_aRotationAxis(0,1,0)
-    , m_fStartRotationAngleDegree(0.0)
+    , m_fXAngleDegree(0.0)
+    , m_fYAngleDegree(0.0)
+    , m_fZAngleDegree(0.0)
     , m_aParentTransform()
     , m_aCurrentTransform()
     , m_aWireframePoly()
@@ -491,31 +493,22 @@ RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrap
             pE3dObject->CreateWireframe(m_aWireframePoly, NULL, E3DDETAIL_DEFAULT ); //E3DDETAIL_ONEBOX, E3DDETAIL_ALLBOXES, E3DDETAIL_ALLLINES
             m_pScene = pE3dObject->GetScene();
 
-            //m_aCurrentTransform = m_pScene->GetFullTransform();
-            //--
+            //get pure rotation matrix
             Matrix4D aPureRotateMatrix = m_pScene->GetTransform();
             Matrix4D aTranslateM4Inverse;
             aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
             aPureRotateMatrix = aPureRotateMatrix*aTranslateM4Inverse;
-            //--
-            Matrix4D aSceneFullM4 = m_pScene->GetFullTransform();
-            Matrix4D aSceneM4 = m_pScene->GetTransform();
-            Matrix4D aObjM4 = pE3dObject->GetTransform();
-            Matrix4D aObjFullM4 = pE3dObject->GetFullTransform();
-            Rotation::getRotationAxisAngleFromMatrixRepresentation( m_aRotationAxis, m_fStartRotationAngleDegree, aPureRotateMatrix );
+
+            //get euler angles from pure rotation matrix
+            drawing::Direction3D aAxis; double fAngle;
+            Rotation::getRotationAxisAngleFromMatrixRepresentation( aAxis, fAngle, aPureRotateMatrix );
+            Rotation::getEulerFromAxisAngleRepresentation( aAxis, fAngle, m_fXAngleDegree, m_fYAngleDegree, m_fZAngleDegree );
 
             if(pE3dObject->GetParentObj())
             {
                 E3dObject* pParent = pE3dObject->GetParentObj();
                 m_aReferenceRect = pParent->GetLogicRect();
                 m_aParentTransform = pParent->GetTransform();
-
-                Matrix4D aParentM4 = pParent->GetTransform();
-                Matrix4D aParentFullM4 = pParent->GetFullTransform();
-                int i;
-                int j=i;
-                //m_aCurrentTransform = pParent->GetFullTransform();
-                //Rotation::getRotationAxisAngleFromMatrixRepresentation( m_aRotationAxis, m_fStartRotationAngleDegree, m_aCurrentTransform );
             }
 
             Matrix4D aTranslateM4;
@@ -540,17 +533,15 @@ void RotateDiagramDragMethod::Mov(const Point& rPnt)
     if( DragStat().CheckMinMoved(rPnt) )
     {
         //calculate new angle
-        double fWAngle = 180.0 * (double)(m_aStartPos.X() - rPnt.X())
+        double fWAngle = 180.0 * (double)(rPnt.X() - m_aStartPos.X())
             / (double)m_aReferenceRect.GetWidth();
-        double fHAngle = 180.0 * (double)(m_aStartPos.Y() - rPnt.Y())
+        double fHAngle = 90.0 * (double)(rPnt.Y() - m_aStartPos.Y())
             / (double)m_aReferenceRect.GetHeight();
 
-        //get new transformation from axis angle representation
-        Matrix4D aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( m_aRotationAxis, m_fStartRotationAngleDegree+fWAngle );
-        /*
-        Matrix4D aTranslateM4;
-        aTranslateM4.Translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
-        */
+        //get new transformation matrix from euler angles
+        drawing::Direction3D aAxis; double fAngle;
+        Rotation::getAxisAngleFromEulerRepresentation( aAxis, fAngle, m_fXAngleDegree+fHAngle, m_fYAngleDegree+fWAngle, m_fZAngleDegree );
+        Matrix4D aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aAxis, fAngle );
 
         //use new matrix
         Hide();
@@ -731,39 +722,22 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
     {
         if( pDrawViewWrapper->EndDragObj(false) )
         {
-            //@todo ... cleanup
             try
             {
                 SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
-                Rectangle aObjectRect = pObj->GetSnapRect();
-                Rectangle aPageRect( Point(0,0),m_pChartWindow->GetOutputSize() );
+                SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
 
-                //----------------
-
-                uno::Reference< beans::XPropertySet > xProp = ObjectIdentifier::getObjectPropertySet(
-                    m_aSelectedObjectCID, m_aModel->getModel() );
-                if( xProp.is() )
+                if( SDRDRAG_ROTATE==eDragMode )
                 {
-                    SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
-                    if( SDRDRAG_ROTATE==eDragMode )
+                    if(pObj->ISA(E3dObject))
                     {
-                        Matrix4D aSceneMatrix;
-                        if(pObj->ISA(E3dObject))
-                        {
-                            E3dObject* pE3dObject = (E3dObject*)pObj;
-                            E3dScene* pScene = pE3dObject->GetScene();
-                            aSceneMatrix = pScene->GetFullTransform();
-                            /*
-                            if(pE3dObject->GetParentObj())
-                                aSceneMatrix = pE3dObject->GetParentObj()->GetFullTransform();
-                                */
-                            Matrix4D aTranslateM4Inverse;
-                            aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+                        Matrix4D aSceneMatrix(((E3dObject*)pObj)->GetScene()->GetFullTransform());
+                        Matrix4D aTranslateM4Inverse;
+                        aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+                        aSceneMatrix = aSceneMatrix*aTranslateM4Inverse;
 
-                            aSceneMatrix = aSceneMatrix*aTranslateM4Inverse;
-                        }
                         SceneDescriptor aSceneDescriptor;
-                        xProp = uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( m_aModel->getModel() ), uno::UNO_QUERY );
+                        uno::Reference< beans::XPropertySet > xProp = uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( m_aModel->getModel() ), uno::UNO_QUERY );
                         if( xProp.is() && (xProp->getPropertyValue( C2U( "SceneProperties" ) )>>=aSceneDescriptor) )
                         {
                             Rotation::getRotationAxisAngleFromMatrixRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle, aSceneMatrix );
@@ -771,17 +745,20 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             xProp->setPropertyValue( C2U( "SceneProperties" ), uno::makeAny(aSceneDescriptor) );
                         }
                     }
-                    else
-                    {
-                        if(pObj->ISA(E3dObject))
-                            aObjectRect = ((E3dObject*)pObj)->GetScene()->GetSnapRect();
+                }
+                else //end move or size
+                {
+                    Rectangle aObjectRect = pObj->GetSnapRect();
+                    Rectangle aPageRect( Point(0,0),m_pChartWindow->GetOutputSize() );
 
-                        PositionAndSizeHelper::moveObject( m_aSelectedObjectCID
-                                        , m_aModel->getModel()
-                                        , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
-                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
-                                        );
-                    }
+                    if(pObj->ISA(E3dObject))
+                        aObjectRect = ((E3dObject*)pObj)->GetScene()->GetSnapRect();
+
+                    PositionAndSizeHelper::moveObject( m_aSelectedObjectCID
+                                    , m_aModel->getModel()
+                                    , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
+                                    , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
+                                    );
                 }
             }
             catch( uno::Exception & ex )
