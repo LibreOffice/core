@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericpropertyset.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 19:51:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace comphelper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GenericPropertySet_CreateInstance( PropertySetInfo* pInfo );
+    COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GenericPropertySet_CreateInstance( PropertySetInfo* pInfo );
 }
 
 #endif // _COMPHELPER_GENERICPROPERTYSET_HXX_
