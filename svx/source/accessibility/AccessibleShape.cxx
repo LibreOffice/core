@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
+ *  last change: $Author: af $ $Date: 2002-06-07 08:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,10 @@ uno::Reference<XAccessible> SAL_CALL
 
     uno::Reference<XAccessible> xChild;
 
-    if ((mpChildrenManager != NULL) && (nIndex < mpChildrenManager->GetChildCount()))
+    // Depending on the index decide whether to delegate this call to the
+    // children manager or the edit engine.
+    if ((mpChildrenManager != NULL)
+        && (nIndex < mpChildrenManager->GetChildCount()))
     {
         xChild = mpChildrenManager->GetChild (nIndex);
     }
