@@ -298,7 +298,7 @@ STDAPI DllUnregisterServerNative( BOOL bForAllUsers )
 // DllRegisterServerDoc - Adds entries to the system registry
 
 #define SUPPORTED_MSEXT_NUM 6
-const char* aMSFileExt[] = { ".doc", ".dot", ".xls", ".xlt", ".ppt", ".pot" };
+const char* aMSFileExt[] = { ".dot", ".doc", ".xlt", ".xls", ".pot", ".ppt" };
 const char* aMSMimeType[] = { "application/msword",
                           "application/msword",
                           "application/msexcell",
@@ -344,20 +344,21 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers )
     }
 
     wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-    if ( aResult && ERROR_SUCCESS == RegOpenKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey) )
+    if ( aResult && ERROR_SUCCESS == RegCreateKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey )
+      && createKey( hkey, "EnableFullPage" ) )
     {
-        for( ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
-        {
+           for( ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
+           {
             if( nForModes[ind] & nMode )
             {
-                wsprintf( aSubKey, "EnableFullPage\\%s", aMSFileExt[ind] );
-                if ( ERROR_SUCCESS != RegCreateKey( hkey, aSubKey, &hkey1 ) )
-                    aResult = FALSE;
+                   wsprintf( aSubKey, "EnableFullPage\\%s", aMSFileExt[ind] );
+                   if ( ERROR_SUCCESS != RegCreateKey( hkey, aSubKey, &hkey1 ) )
+                       aResult = FALSE;
 
-                if ( hkey1 )
-                    RegCloseKey(hkey1);
+                   if ( hkey1 )
+                       RegCloseKey(hkey1);
             }
-         }
+           }
     }
     else
         aResult = FALSE;
