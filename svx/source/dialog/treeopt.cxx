@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:50:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,9 @@ sal_uInt16  OfaTreeOptionsDialog::nLastDialogPageId = USHRT_MAX;
 // some stuff for easier changes for SvtViewOptions
 static const sal_Char*      pViewOptDataName = "page data";
 #define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
+
+//BFS01
+static XOutdevItemPool* mpStaticXOutdevItemPool = 0L;
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
 {
@@ -802,8 +805,15 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
             {
                 if(!pColorPageItemSet)
                 {
-                    pColorPageItemSet = new SfxItemSet( *XOutdevItemPool::Get(),
-                                            XATTR_FILLSTYLE, XATTR_FILLCOLOR );
+                    //BFS01
+                    // Move usage of a static XOutdevItemPool instance here
+                    if(!mpStaticXOutdevItemPool)
+                    {
+                        mpStaticXOutdevItemPool = new XOutdevItemPool();
+                    }
+//BFS01                 pColorPageItemSet = new SfxItemSet( *XOutdevItemPool::Get(),
+//BFS01                                         XATTR_FILLSTYLE, XATTR_FILLCOLOR );
+                    pColorPageItemSet = new SfxItemSet( *mpStaticXOutdevItemPool, XATTR_FILLSTYLE, XATTR_FILLCOLOR);
                     pColorPageItemSet->Put( XFillColorItem() );
                 }
             }
