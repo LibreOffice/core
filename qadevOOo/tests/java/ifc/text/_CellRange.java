@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CellRange.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:24 $
+ *  last change:$Date: 2003-09-08 11:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,7 @@
 
 package ifc.text;
 
-import com.sun.star.container.XNameContainer;
-import com.sun.star.xml.AttributeData;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 
 /**
 * Testing <code>com.sun.star.text.CellRange</code>
