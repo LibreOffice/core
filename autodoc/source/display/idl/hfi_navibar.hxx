@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_navibar.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ class HF_IdlNavigationBar : public HtmlFactory_Idl
     virtual             ~HF_IdlNavigationBar();
 
     void                Produce_CeMainRow(
-                            const client &      i_ce );
+                            const client &      i_ce,
+                            bool                i_bNoUsePage = false );
     void                Produce_CeXrefsMainRow(
                             const client &      i_ce );
     void                Produce_ModuleMainRow(
