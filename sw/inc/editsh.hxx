@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:58:12 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 14:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,8 +602,10 @@ public:
      * SwGrfNode zeigt (und Mark nicht gesetzt ist oder auf die
      * gleiche Graphic zeigt), sonst gibt's was auf die Finger
      */
-    const Graphic &GetGraphic( BOOL bWait = TRUE ) const;
-    const GraphicObject &GetGraphicObj() const;
+    // --> OD 2005-02-09 #119353# - robust
+    const Graphic* GetGraphic( BOOL bWait = TRUE ) const;
+    const GraphicObject* GetGraphicObj() const;
+    // <--
     BOOL IsGrfSwapOut( BOOL bOnlyLinked = FALSE ) const;
     USHORT GetGraphicType() const;
 
