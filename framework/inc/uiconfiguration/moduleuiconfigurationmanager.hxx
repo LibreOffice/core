@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:04:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ namespace framework
             void            impl_reloadElementTypeData( UIElementType& rUserElementType, UIElementType& rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
 
             UIElementTypesVector                                                            m_aUIElements[LAYER_COUNT];
+            PresetHandler*                                                                  m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::COUNT];
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xDefaultConfigStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserConfigStorage;
             bool                                                                            m_bReadOnly;
@@ -316,7 +317,6 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
-            PresetHandler                                                                   m_aStorageHandler;
             com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xModuleImageManager;
    };
 }
