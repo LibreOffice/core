@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMimeContentTypeFactory.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ module com { module sun { module star { module datatransfer {
     <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>).
 
 */
-interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
+published interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Creates an object that implements <type>XMimeContentType</type>.
