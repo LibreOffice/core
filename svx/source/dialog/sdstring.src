@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:37:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ String RID_SVXSTR_SOLID
     Text[ czech ] = "Spojitě";
     Text[ hebrew ] = "Durchgängig";
     Text[ hindi ] = "निरन्तर";
+    Text[ slovak ] = "Spojitý";
 };
 String RID_SVXSTR_GRADIENT
 {
@@ -126,6 +127,7 @@ String RID_SVXSTR_GRADIENT
     Text[ czech ] = "Přechod";
     Text[ hebrew ] = "Farbverlauf";
     Text[ hindi ] = "ग्रेडिऐन्ट्";
+    Text[ slovak ] = "Prechod";
 };
 String RID_SVXSTR_DESC_GRADIENT
 {
@@ -159,6 +161,7 @@ String RID_SVXSTR_DESC_GRADIENT
     Text[ czech ] = "Prosím zadejte název přechodu:";
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für den Farbverlauf ein:";
     Text[ hindi ] = "कृपया ग्रेडिऐन्ट् केलिए एक नाम प्रविष्ट कीजिए:";
+    Text[ slovak ] = "Prosím zadajte názov prechodu:";
 };
 String RID_SVXSTR_DEL_GRADIENT
 {
@@ -192,6 +195,7 @@ String RID_SVXSTR_DEL_GRADIENT
     Text[ czech ] = "Odstranit přechod";
     Text[ hebrew ] = "Farbverlauf löschen";
     Text[ hindi ] = "ग्रेडिऐन्ट् मिटाओ";
+    Text[ slovak ] = "Odstrániť farebný prechod";
 };
 String RID_SVXSTR_ASK_DEL_GRADIENT
 {
@@ -225,6 +229,7 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
     Text[ czech ] = "Chcete odstranit přechod?";
     Text[ hebrew ] = "Soll der Farbverlauf wirklich gelöscht werden?";
     Text[ hindi ] = "आप ग्रेडिऐन्ट् को मिटाना चाहते है?";
+    Text[ slovak ] = "Chcete odstrániť prechod?";
 };
 String RID_SVXSTR_ASK_CHANGE_GRADIENT
 {
@@ -258,6 +263,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text[ czech ] = "Přechod byl změněn bez uložení.\nZměnit vybraný přechod nebo přidat nový?";
     Text[ hebrew ] = "Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen.";
     Text[ hindi ] = "संचित किये बिना ग्रेडिऐन्ट् को सुधार किया है । \nचुने हुए ग्रेडिऐन्ट् को सुधारो अथवा एक नया ग्रेडिऐन्ट् को जोड़ो ।";
+    Text[ slovak ] = "Prechod bol zmenený bez uloženia.\nZmente zvolený prechod alebo pridajte nový.";
 };
 String RID_SVXSTR_BITMAP
 {
@@ -269,7 +275,7 @@ String RID_SVXSTR_BITMAP
     Text[ greek ] = "Bitmap";
     Text[ dutch ] = "Bitmap";
     Text[ french ] = "Bitmap";
-    Text[ spanish ] = "Bitmap";
+    Text[ spanish ] = "Mapa de bits";
     Text[ finnish ] = "Bittikartta";
     Text[ italian ] = "Bitmap";
     Text[ danish ] = "Bitmap";
@@ -287,6 +293,7 @@ String RID_SVXSTR_BITMAP
     Text[ czech ] = "Bitová mapa";
     Text[ hebrew ] = "Bitmap";
     Text[ hindi ] = "बिटमॉप्";
+    Text[ slovak ] = "Bitová mapa";
 };
 String RID_SVXSTR_DESC_NEW_BITMAP
 {
@@ -300,7 +307,7 @@ String RID_SVXSTR_DESC_NEW_BITMAP
     Text [ portuguese ] = "Por favor introduza um nome para o mapa de bits:" ;
     Text [ french ] = "Saisissez un nom pour le bitmap :" ;
     Text [ dutch ] = "Typ hier een naam voor de bitmap:" ;
-    Text [ spanish ] = "Introduzca aqu� un nombre para la bitmap:" ;
+    Text [ spanish ] = "Introduzca aqu� un nombre para el mapa de bits:" ;
     Text [ danish ] = "Indtast venligst et navn til denne bitmap:" ;
     Text [ swedish ] = "Ange ett namn f�r bitmappen:" ;
     Text [ finnish ] = "Kirjoita bittikartan nimi:" ;
@@ -320,6 +327,7 @@ String RID_SVXSTR_DESC_NEW_BITMAP
     Text[ czech ] = "Prosím zadejte název bitmapy:";
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für die Bitmap ein:";
     Text[ hindi ] = "कृपया बिटमॉप् केलिए एक नाम प्रविष्ट कीजिए:";
+    Text[ slovak ] = "Prosím zadajte názov bitmapy:";
 };
 String RID_SVXSTR_DESC_EXT_BITMAP
 {
@@ -336,7 +344,7 @@ String RID_SVXSTR_DESC_EXT_BITMAP
     Text [ french ] = "Saisissez un nom pour le bitmap externe :" ;
     Text [ swedish ] = "Ange namn f�r extern bitmap:" ;
     Text [ dutch ] = "Typ hier een naam voor de externe bitmap:" ;
-    Text [ spanish ] = "Introduzca aqu� un nombre para la bitmap externa:" ;
+    Text [ spanish ] = "Introduzca aqu� un nombre para el mapa de bits externo:" ;
     Text [ english_us ] = "Please enter a name for the external bitmap:" ;
     Text[ chinese_simplified ] = "请您在此为新的外来位图输入一个名称:";
     Text[ russian ] = "������� ��� �������� ������:";
@@ -353,6 +361,7 @@ String RID_SVXSTR_DESC_EXT_BITMAP
     Text[ czech ] = "Prosím zadejte název externí bitmapy:";
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für die externe Bitmap ein:";
     Text[ hindi ] = "कृपया बाहरी बिटमॉप् केलिए एक नाम प्रविष्ट कीजिए:";
+    Text[ slovak ] = "Prosím zadajte názov externej bitmapy:";
 };
 String RID_SVXSTR_DEL_BITMAP
 {
@@ -369,7 +378,7 @@ String RID_SVXSTR_DEL_BITMAP
     Text [ french ] = "Supprimer le bitmap" ;
     Text [ swedish ] = "Radera bitmap" ;
     Text [ dutch ] = "Bitmap wissen" ;
-    Text [ spanish ] = "Borrar bitmap" ;
+    Text [ spanish ] = "Borrar mapa de bits" ;
     Text [ english_us ] = "Delete bitmap" ;
     Text[ chinese_simplified ] = "删除位图";
     Text[ russian ] = "������� �����";
@@ -386,6 +395,7 @@ String RID_SVXSTR_DEL_BITMAP
     Text[ czech ] = "Odstranit bitovou mapu";
     Text[ hebrew ] = "Bitmap löschen";
     Text[ hindi ] = "बिटमॉप् मिटाओ";
+    Text[ slovak ] = "Odstrániť bitovú mapu";
 };
 String RID_SVXSTR_ASK_DEL_BITMAP
 {
@@ -402,7 +412,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text [ french ] = "Confirmez-vous la suppression du bitmap ?" ;
     Text [ swedish ] = "Skall bitmappen verkligen raderas?" ;
     Text [ dutch ] = "Wilt u de bitmap werkelijk verwijderen?" ;
-    Text [ spanish ] = "�Desea realmente borrar el bitmap?" ;
+    Text [ spanish ] = "�Desea realmente borrar el mapa de bits?" ;
     Text [ english_us ] = "Are you sure you want to delete the bitmap?" ;
     Text[ chinese_simplified ] = "真要删除这个位图吗？";
     Text[ russian ] = "�� ������������� ������ ������� ���� �����?";
@@ -419,6 +429,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text[ czech ] = "Opravdu chcete odstranit bitmapu?";
     Text[ hebrew ] = "Soll die Bitmap wirklich gelöscht werden?";
     Text[ hindi ] = "आप सचमुच में बिटमॉप् को मिटाना चाहते है?";
+    Text[ slovak ] = "Naozaj chcete odstrániť bitmapu?";
 };
 String RID_SVXSTR_ASK_CHANGE_BITMAP
 {
@@ -435,7 +446,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text [ french ] = "Le bitmap a �t� modifi� sans avoir �t� sauvegard�.\nVous pouvez modifier le bitmap s�lectionn� ou en ajouter un nouveau." ;
     Text [ swedish ] = "Bitmappen �ndrades utan att sparas. \nDu kan �ndra den markerade bitmappen\neller l�gga till en ny." ;
     Text [ dutch ] = "In de bitmap zijn wijzigingen aangebracht en niet opgeslagen. \nU kunt de geselecteerde bitmap wijzigen \nof een nieuwe bitmap toevoegen." ;
-    Text [ spanish ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no a�adir uno nuevo." ;
+    Text [ spanish ] = "El mapa de bits se ha modificado sin guardar.\nPuede modificar el mapa de bits seleccionado\no a�adir uno nuevo." ;
     Text [ english_us ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
     Text[ chinese_simplified ] = "这个位图样式已经更改，但是没有保存。 \n您能够更改选中的位图\n或者新增一个新位图。";
     Text[ russian ] = "����� ��� ������� ��� ����������. \n�������� ��������� \n��� �������� ����� �����.";
@@ -452,6 +463,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text[ czech ] = "Bitmapa byla změněna bez uložení.\nZměnit vybranou bitmapu nebo přidat novou?";
     Text[ hebrew ] = "Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen.";
     Text[ hindi ] = "संचित किये बिना बिटमॉप् को सुधार किया है ।\nचुने हुए बिटमॉप् को सुधारो अथवा एक नया बिटमॉप् को जोड़ो ।";
+    Text[ slovak ] = "Bitmapa bola zmenená bez uloženia. \nZmente zvolenú bitmapu alebo pridajte novú.";
 };
 String RID_SVXSTR_LINESTYLE
 {
@@ -483,6 +495,7 @@ String RID_SVXSTR_LINESTYLE
     Text[ czech ] = "Styl čáry";
     Text[ hebrew ] = "‮סגנון קו‬";
     Text[ hindi ] = "रेखा शैली";
+    Text[ slovak ] = "Štýl čiary";
 };
 String RID_SVXSTR_DESC_LINESTYLE
 {
@@ -516,6 +529,7 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text[ czech ] = "Prosím zadejte název stylu čáry:";
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für den Linienstil ein:";
     Text[ hindi ] = "कृपया रेखा शैली केलिए एक नाम प्रविष्ट कीजिए:";
+    Text[ slovak ] = "Prosím zadajte názov štýlu čiary:";
 };
 String RID_SVXSTR_DEL_LINESTYLE
 {
@@ -549,6 +563,7 @@ String RID_SVXSTR_DEL_LINESTYLE
     Text[ czech ] = "Odstranit styl čáry";
     Text[ hebrew ] = "Linienstil löschen";
     Text[ hindi ] = "रेखा शैली मिटाओ";
+    Text[ slovak ] = "Odstrániť štýl čiary";
 };
 String RID_SVXSTR_ASK_DEL_LINESTYLE
 {
@@ -582,6 +597,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text[ czech ] = "Přejete si odstranit styl čáry?";
     Text[ hebrew ] = "Soll der Linienstil wirklich gelöscht werden?";
     Text[ hindi ] = "आप रेखा शैली को मिटाना चाहते है?";
+    Text[ slovak ] = "Prajete si odstrániť štýl čiary?";
 };
 String RID_SVXSTR_ASK_CHANGE_LINESTYLE
 {
@@ -615,6 +631,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text[ czech ] = "Styl čáry byl změněn bez uložení.\nZměnit vybraný styl čáry nebo přidat nový?";
     Text[ hebrew ] = "Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen.";
     Text[ hindi ] = "संचित किये बिना रेखा शैली को सुधार किया है ।\nचुने हुए रेखा शैली को सुधारो अथवा एक नया रेखा शैली को जोड़ो ।";
+    Text[ slovak ] = "Štýl čiary bol zmenený bez uloženia. \nZmente zvolený štýl čiary alebo pridajte nový.";
 };
 String RID_SVXSTR_INVISIBLE
 {
@@ -646,6 +663,7 @@ String RID_SVXSTR_INVISIBLE
     Text[ czech ] = "Neviditelná";
     Text[ hebrew ] = "Unsichtbar";
     Text[ hindi ] = "अदृष्टिगोचर";
+    Text[ slovak ] = "Neviditeľný";
 };
 String RID_SVXSTR_COLOR
 {
@@ -677,6 +695,7 @@ String RID_SVXSTR_COLOR
     Text[ czech ] = "Barva";
     Text[ hebrew ] = "‮צבע‬";
     Text[ hindi ] = "रंग";
+    Text[ slovak ] = "Farba";
 };
 String RID_SVXSTR_HATCH
 {
@@ -708,6 +727,7 @@ String RID_SVXSTR_HATCH
     Text[ czech ] = "Šrafování";
     Text[ hebrew ] = "Schraffur";
     Text[ hindi ] = "हाचिंग";
+    Text[ slovak ] = "Šrafovanie";
 };
 String RID_SVXSTR_DESC_HATCH
 {
@@ -741,6 +761,7 @@ String RID_SVXSTR_DESC_HATCH
     Text[ czech ] = "Prosím zadejte název šrafování:";
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für die Schraffur ein:";
     Text[ hindi ] = "कृपया हाचिंग केलिए एक नाम प्रविष्ट कीजिए:";
+    Text[ slovak ] = "Prosím zadajte názov šrafovania:";
 };
 String RID_SVXSTR_DEL_HATCH
 {
@@ -774,6 +795,7 @@ String RID_SVXSTR_DEL_HATCH
     Text[ czech ] = "Odstranit šrafování";
     Text[ hebrew ] = "Schraffur löschen";
     Text[ hindi ] = "हाचिंग मिटाओ";
+    Text[ slovak ] = "Odstrániť šráfovanie";
 };
 String RID_SVXSTR_ASK_DEL_HATCH
 {
@@ -807,6 +829,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text[ czech ] = "Chcete odstranit šrafování?";
     Text[ hebrew ] = "Soll die Schraffur wirklich gelöscht werden?";
     Text[ hindi ] = "आप हाचिंग को मिटाना चाहते है?";
+    Text[ slovak ] = "Chcete odstrániť šrafovanie?";
 };
 String RID_SVXSTR_ASK_CHANGE_HATCH
 {
@@ -840,6 +863,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text[ czech ] = "Šrafování bylo změněno bez uložení.\nZměnit vybrané šrafování nebo přidat nové?";
     Text[ hebrew ] = "Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen.";
     Text[ hindi ] = "संचित किये बिना हाचिंग वर्ग को सुधार किया है ।\nचुने हुए हाचिंग वर्ग को सुधारो अथवा एक नया हाचिंग वर्ग को जोड़ो ।";
+    Text[ slovak ] = "Šrafovanie bolo zmenené bez uloženia. \nZmente zvolené šrafovanie alebo pridajte nové.";
 };
 String RID_SVXSTR_CHANGE
 {
@@ -873,6 +897,7 @@ String RID_SVXSTR_CHANGE
     Text[ czech ] = "Změnit";
     Text[ hebrew ] = "‮שינוי‬";
     Text[ hindi ] = "सुधारो";
+    Text[ slovak ] = "Upraviť";
 };
 String RID_SVXSTR_ADD
 {
@@ -906,6 +931,7 @@ String RID_SVXSTR_ADD
     Text[ czech ] = "Přidat";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
+    Text[ slovak ] = "Pridať";
 };
 String RID_SVXSTR_DESC_COLOR
 {
@@ -939,6 +965,7 @@ String RID_SVXSTR_DESC_COLOR
     Text[ czech ] = "Prosím zadejte název pro novou barvu:";
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für die neue Farbe ein:";
     Text[ hindi ] = "कृपया नया रंग केलिए एक नाम को प्रविष्ट कीजिए:";
+    Text[ slovak ] = "Prosím zadajte názov pre novú farbu:";
 };
 String RID_SVXSTR_DEL_COLOR
 {
@@ -972,6 +999,7 @@ String RID_SVXSTR_DEL_COLOR
     Text[ czech ] = "Odstranit barvu";
     Text[ hebrew ] = "Farbe löschen";
     Text[ hindi ] = "रंग मिटाओ";
+    Text[ slovak ] = "Odstrániť farbu";
 };
 String RID_SVXSTR_ASK_DEL_COLOR
 {
@@ -1005,6 +1033,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text[ czech ] = "Chcete odstranit barvu?";
     Text[ hebrew ] = "Soll die Farbe wirklich gelöscht werden?";
     Text[ hindi ] = "आप रंग को मिटाना चाहते है?";
+    Text[ slovak ] = "Chcete odstrániť farbu?";
 };
 String RID_SVXSTR_ASK_CHANGE_COLOR
 {
@@ -1038,6 +1067,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text[ czech ] = "Barva byla změněna bez uložení.\nZměnit vybranou barvu nebo přidat novou?";
     Text[ hebrew ] = "Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen.";
     Text[ hindi ] = "संचित किये बिना रंग को सुधार किया है ।\nचुने हुए रंग को सुधारो अथवा एक नया रंग को जोड़ो ।";
+    Text[ slovak ] = "Farba bola zmenená bez uloženia.\nZmente zvolenú farbu alebo pridajte novú.";
 };
 String RID_SVXSTR_TABLE
 {
@@ -1069,6 +1099,7 @@ String RID_SVXSTR_TABLE
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "Tabelle";
     Text[ hindi ] = "सारणी";
+    Text[ slovak ] = "Tabuľka";
 };
 String RID_SVXSTR_WRITE_DATA_ERROR
 {
@@ -1078,7 +1109,7 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text [ italian ] = "Non � stato possibile salvare il file!" ;
     Text [ portuguese_brazilian ] = "N�o foi poss�vel salvar o arquivo!" ;
     Text [ portuguese ] = "Foi imposs�vel guardar o ficheiro!" ;
-    Text [ french ] = "Impossible de sauvegarder ce fichier." ;
+    Text [ french ] = "Impossible d'enregistrer ce fichier !" ;
     Text [ dutch ] = "Het bestand kan niet worden opgeslagen!" ;
     Text [ spanish ] = "�No se pudo guardar el archivo!" ;
     Text [ danish ] = "Det var ikke muligt at gemme filen!" ;
@@ -1100,6 +1131,7 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text[ czech ] = "Nelze uložit soubor!";
     Text[ hebrew ] = "Die Datei konnte nicht gesichert werden";
     Text[ hindi ] = "फाइल को संचित नहीं कर सकते है!";
+    Text[ slovak ] = "Nie je možné uložiť súbor!";
 };
 String RID_SVXSTR_READ_DATA_ERROR
 {
@@ -1131,6 +1163,7 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text[ czech ] = "Nelze načíst soubor!";
     Text[ hebrew ] = "Die Datei konnte nicht geladen werden";
     Text[ hindi ] = "फाइल को लोड़ नहीं कर सकते है!";
+    Text[ slovak ] = "Nie je možné načítať súbor!";
 };
 String RID_SVXSTR_WARN_TABLE_OVERWRITE
 {
@@ -1164,6 +1197,7 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
     Text[ czech ] = "Seznam byl změněn bez uložení. Přejete si seznam nyní uložit?";
     Text[ hebrew ] = "Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden?";
     Text[ hindi ] = "सूची को संचित किये बिना सुधार किया है । आप अभी सूची को संचित करना चाहते है?";
+    Text[ slovak ] = "Zoznam bol zmenený bez uloženia. Prajete si zoznam teraz uložiť ?";
 };
 String RID_SVXSTR_WARN_NAME_DUPLICATE
 {
@@ -1195,6 +1229,7 @@ String RID_SVXSTR_WARN_NAME_DUPLICATE
     Text[ czech ] = "Zadaný název již existuje.\nProsím zvolte jiný.";
     Text[ hebrew ] = "Der von Ihnen eingegebene Name ist schon vorhanden. \nGeben Sie bitte einen anderen Namen ein.";
     Text[ hindi ] = "आपने जो नाम प्रविष्ट किया है, वह पहिले से ही अस्तित्व में है ।\nकृपया किसी दूसरा नाम को प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Uvedený názov už existuje. \nProsím zvoľte iný.";
 };
 String RID_SVXSTR_LINEEND
 {
@@ -1226,6 +1261,7 @@ String RID_SVXSTR_LINEEND
     Text[ czech ] = "Kótovací šipky";
     Text[ hebrew ] = "Linienende";
     Text[ hindi ] = "तीर की चोटी";
+    Text[ slovak ] = "Kótovacie šípky";
 };
 String RID_SVXSTR_DESC_LINEEND
 {
@@ -1259,6 +1295,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text[ czech ] = "Prosím zadejte název pro novou šipkou:";
     Text[ hebrew ] = "Geben Sie hier bitte den Namen für das neue Linienende ein:";
     Text[ hindi ] = "कृपया नया तीर की चोटी केलिए एक नाम प्रविष्ट कीजिए:";
+    Text[ slovak ] = "Prosím zadajte názov pre novú šípku:";
 };
 String RID_SVXSTR_DEL_LINEEND
 {
@@ -1292,6 +1329,7 @@ String RID_SVXSTR_DEL_LINEEND
     Text[ czech ] = "Odstranit konce čar";
     Text[ hebrew ] = "Linienende löschen";
     Text[ hindi ] = "रेखा के अंत को मिटाओ";
+    Text[ slovak ] = "Odstrániť konce čiar";
 };
 String RID_SVXSTR_ASK_DEL_LINEEND
 {
@@ -1325,6 +1363,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text[ czech ] = "Chcete odstranit šipku?";
     Text[ hebrew ] = "Soll das Linienende wirklich gelöscht werden?";
     Text[ hindi ] = "आप तीर की चोटी को मिटाना चाहते है?";
+    Text[ slovak ] = "Chcete odstrániť šípku?";
 };
 String RID_SVXSTR_ASK_CHANGE_LINEEND
 {
@@ -1336,7 +1375,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text [ english_us ] = "The arrowhead was modified without saving.\nWould you like to save the arrowhead now?" ;
     Text [ italian ] = "L'estremit� della linea � stata modificata ma non salvata \nSalvarla adesso?" ;
     Text [ spanish ] = "El final de l�nea ha sido modificado pero no guardado. \n�Desea guardar ahora el final de l�nea?" ;
-    Text [ french ] = "L'extr�mit� de la ligne a �t� modifi�e sans avoir �t� sauvegard�e.\nVoulez-vous la sauvegarder maintenant ?" ;
+    Text [ french ] = "L'extr�mit� de la ligne a �t� modifi�e sans avoir �t� enregistr�e.\nVoulez-vous l'enregistrer maintenant ?" ;
     Text [ swedish ] = "Linjeslutet �ndrades utan att sparas.\nVill du spara det nu?" ;
     Text [ danish ] = "Piltypen er blevet �ndret, men ikke gemt. \nDu kan �ndre den markerede pil\n eller tilf�je en ny." ;
     Text [ portuguese ] = "O fim de linha foi modificado e n�o guardado.\nGuardar agora?" ;
@@ -1357,6 +1396,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text[ czech ] = "Šipka byla změněna bez uložení.\nZměnit vybranou šipku nebo přidat novou?";
     Text[ hebrew ] = "Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern?";
     Text[ hindi ] = "तीर की चोटी को संचित किये बिना सुधार किया है । आप अभी तीर की चोटी को संचित करना चाहते है?";
+    Text[ slovak ] = "Šípka bola zmenená bez uloženia.\nChcete uložiť šípku?";
 };
 String RID_SVXSTR_CLOSE
 {
@@ -1390,6 +1430,7 @@ String RID_SVXSTR_CLOSE
     Text[ czech ] = "Zavřít";
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "बन्द करो";
+    Text[ slovak ] = "Zavrieť";
 };
 String RID_SVXSTR_BLACK
 {
@@ -1421,6 +1462,7 @@ String RID_SVXSTR_BLACK
     Text[ czech ] = "Černá";
     Text[ hebrew ] = "Schwarz";
     Text[ hindi ] = "काला";
+    Text[ slovak ] = "Čierna";
 };
 String RID_SVXSTR_BLUE
 {
@@ -1452,6 +1494,7 @@ String RID_SVXSTR_BLUE
     Text[ czech ] = "Modrá";
     Text[ hebrew ] = "Blau";
     Text[ hindi ] = "नीला";
+    Text[ slovak ] = "Modrá";
 };
 String RID_SVXSTR_GREEN
 {
@@ -1485,6 +1528,7 @@ String RID_SVXSTR_GREEN
     Text[ czech ] = "Zelená";
     Text[ hebrew ] = "Grün";
     Text[ hindi ] = "हरा";
+    Text[ slovak ] = "Zelená";
 };
 String RID_SVXSTR_CYAN
 {
@@ -1518,6 +1562,7 @@ String RID_SVXSTR_CYAN
     Text[ czech ] = "Tyrkysová";
     Text[ hebrew ] = "Türkis";
     Text[ hindi ] = "टर्कोइस";
+    Text[ slovak ] = "Tyrkysová";
 };
 String RID_SVXSTR_RED
 {
@@ -1549,6 +1594,7 @@ String RID_SVXSTR_RED
     Text[ czech ] = "Červená";
     Text[ hebrew ] = "Rot";
     Text[ hindi ] = "लाल";
+    Text[ slovak ] = "Červená";
 };
 String RID_SVXSTR_MAGENTA
 {
@@ -1581,6 +1627,7 @@ String RID_SVXSTR_MAGENTA
     Text[ czech ] = "Purpurová";
     Text[ hebrew ] = "Magenta";
     Text[ hindi ] = "मेजन्टा";
+    Text[ slovak ] = "Purpurová";
 };
 String RID_SVXSTR_BROWN
 {
@@ -1612,6 +1659,7 @@ String RID_SVXSTR_BROWN
     Text[ czech ] = "Hnědá";
     Text[ hebrew ] = "Braun";
     Text[ hindi ] = "भूरा";
+    Text[ slovak ] = "Hnedá";
 };
 String RID_SVXSTR_GREY
 {
@@ -1643,6 +1691,7 @@ String RID_SVXSTR_GREY
     Text[ czech ] = "Šedá";
     Text[ hebrew ] = "Grau";
     Text[ hindi ] = "ग्रे";
+    Text[ slovak ] = "Šedá";
 };
 String RID_SVXSTR_LIGHTGREY
 {
@@ -1674,6 +1723,7 @@ String RID_SVXSTR_LIGHTGREY
     Text[ czech ] = "Světle šedá";
     Text[ hebrew ] = "Hellgrau";
     Text[ hindi ] = "हल्का ग्रे";
+    Text[ slovak ] = "Svetlo sivá";
 };
 String RID_SVXSTR_LIGHTBLUE
 {
@@ -1705,6 +1755,7 @@ String RID_SVXSTR_LIGHTBLUE
     Text[ czech ] = "Světle modrá";
     Text[ hebrew ] = "Hellblau";
     Text[ hindi ] = "हल्का नीला";
+    Text[ slovak ] = "Svetlo modrá";
 };
 String RID_SVXSTR_LIGHTGREEN
 {
@@ -1738,6 +1789,7 @@ String RID_SVXSTR_LIGHTGREEN
     Text[ czech ] = "Světle zelená";
     Text[ hebrew ] = "Hellgrün";
     Text[ hindi ] = "हल्का हरा";
+    Text[ slovak ] = "Svetlo zelená";
 };
 String RID_SVXSTR_LIGHTCYAN
 {
@@ -1771,6 +1823,7 @@ String RID_SVXSTR_LIGHTCYAN
     Text[ czech ] = "Světle modrozelená";
     Text[ hebrew ] = "Helltürkis";
     Text[ hindi ] = "हल्का सियान";
+    Text[ slovak ] = "Svetlo modrozelená";
 };
 String RID_SVXSTR_LIGHTRED
 {
@@ -1802,6 +1855,7 @@ String RID_SVXSTR_LIGHTRED
     Text[ czech ] = "Světle červená";
     Text[ hebrew ] = "Hellrot";
     Text[ hindi ] = "हल्का लाल";
+    Text[ slovak ] = "Svetlo červená";
 };
 String RID_SVXSTR_LIGHTMAGENTA
 {
@@ -1834,6 +1888,7 @@ String RID_SVXSTR_LIGHTMAGENTA
     Text[ czech ] = "Světle purpurová";
     Text[ hebrew ] = "Hellmagenta";
     Text[ hindi ] = "हल्का मेजन्टा";
+    Text[ slovak ] = "Svetlo purpurová";
 };
 String RID_SVXSTR_YELLOW
 {
@@ -1865,6 +1920,7 @@ String RID_SVXSTR_YELLOW
     Text[ czech ] = "Žlutá";
     Text[ hebrew ] = "Gelb";
     Text[ hindi ] = "पीला";
+    Text[ slovak ] = "Žltá";
 };
 String RID_SVXSTR_WHITE
 {
@@ -1898,6 +1954,7 @@ String RID_SVXSTR_WHITE
     Text[ czech ] = "Bílá";
     Text[ hebrew ] = "Weiß";
     Text[ hindi ] = "सफ़ेद";
+    Text[ slovak ] = "Biela";
 };
 String RID_SVXSTR_BLUEGREY
 {
@@ -1929,6 +1986,7 @@ String RID_SVXSTR_BLUEGREY
     Text[ czech ] = "Modrošedá";
     Text[ hebrew ] = "Blaugrau";
     Text[ hindi ] = "नीला ग्रे";
+    Text[ slovak ] = "Modrošedá";
 };
 String RID_SVXSTR_ORANGE
 {
@@ -1960,6 +2018,7 @@ String RID_SVXSTR_ORANGE
     Text[ czech ] = "Oranžová";
     Text[ hebrew ] = "Orange";
     Text[ hindi ] = "नारंगी";
+    Text[ slovak ] = "Oranžová";
 };
 String RID_SVXSTR_ARROW
 {
@@ -1991,6 +2050,7 @@ String RID_SVXSTR_ARROW
     Text[ czech ] = "Šipka";
     Text[ hebrew ] = "Pfeil";
     Text[ hindi ] = "तीर";
+    Text[ slovak ] = "Šípka";
 };
 String RID_SVXSTR_SQUARE
 {
@@ -2022,6 +2082,7 @@ String RID_SVXSTR_SQUARE
     Text[ czech ] = "Čtverec";
     Text[ hebrew ] = "Quadrat";
     Text[ hindi ] = "सम चतुर्भुज";
+    Text[ slovak ] = "Štvorec";
 };
 String RID_SVXSTR_CIRCLE
 {
@@ -2053,6 +2114,7 @@ String RID_SVXSTR_CIRCLE
     Text[ czech ] = "Kruh";
     Text[ hebrew ] = "Kreis";
     Text[ hindi ] = "वृत्त";
+    Text[ slovak ] = "Kruh";
 };
 String RID_SVXSTR_NONE
 {
@@ -2083,6 +2145,7 @@ String RID_SVXSTR_NONE
     Text[ czech ] = "- nic -";
     Text[ hebrew ] = "- kein -";
     Text[ hindi ] = "- कोई नहीं -";
+    Text[ slovak ] = "- nič -";
 };
 String RID_SVXSTR_TRANSPARENCE
 {
@@ -2113,6 +2176,7 @@ String RID_SVXSTR_TRANSPARENCE
     Text[ czech ] = "Průhlednost";
     Text[ hebrew ] = "Transparenz";
     Text[ hindi ] = "पारदर्शकता";
+    Text[ slovak ] = "Priehľadnosť";
 };
 String RID_SVXSTR_CENTERED
 {
@@ -2143,6 +2207,7 @@ String RID_SVXSTR_CENTERED
     Text[ czech ] = "Na střed";
     Text[ hebrew ] = "Zentriert";
     Text[ hindi ] = "केन्द्रित";
+    Text[ slovak ] = "Na stred";
 };
 String RID_SVXSTR_NOTCENTERED
 {
@@ -2173,6 +2238,7 @@ String RID_SVXSTR_NOTCENTERED
     Text[ czech ] = "Nevystředěno";
     Text[ hebrew ] = "Nicht Zentriert";
     Text[ hindi ] = "केन्द्रित नहीं";
+    Text[ slovak ] = "Bez centrovania";
 };
 String RID_SVXSTR_GRAFMODE_STANDARD
 {
@@ -2202,6 +2268,7 @@ String RID_SVXSTR_GRAFMODE_STANDARD
     Text[ czech ] = "Výchozí";
     Text[ hebrew ] = "‮ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति";
+    Text[ slovak ] = "Východzie";
 };
 String RID_SVXSTR_GRAFMODE_GREYS
 {
@@ -2232,6 +2299,7 @@ String RID_SVXSTR_GRAFMODE_GREYS
     Text[ czech ] = "Stupně šedi";
     Text[ hebrew ] = "Graustufen";
     Text[ hindi ] = "ग्रेस्केल";
+    Text[ slovak ] = "Stupne šedej";
 };
 String RID_SVXSTR_GRAFMODE_MONO
 {
@@ -2261,6 +2329,7 @@ String RID_SVXSTR_GRAFMODE_MONO
     Text[ czech ] = "Černobílá";
     Text[ hebrew ] = "Schwarz/Weiß";
     Text[ hindi ] = "काला/सफेद";
+    Text[ slovak ] = "Čiernobiela";
 };
 String RID_SVXSTR_GRAFMODE_WATERMARK
 {
@@ -2290,6 +2359,7 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
     Text[ czech ] = "Vodoznak";
     Text[ hebrew ] = "Wasserzeichen";
     Text[ hindi ] = "जलसंकेत";
+    Text[ slovak ] = "Vodoznak";
 };
 String STR_INSERT_VIDEO_EXTFILTER_IVF
 {
@@ -2319,6 +2389,7 @@ String STR_INSERT_VIDEO_EXTFILTER_IVF
     Text[ czech ] = "Intel Indeo Video (*.ivf)";
     Text[ hebrew ] = "Intel Indeo Video (*.ivf)";
     Text[ hindi ] = "Intel Indeo Video (*.ivf)";
+    Text[ slovak ] = "Intel Indeo Video (*.ivf)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_AVI
@@ -2349,6 +2420,7 @@ String STR_INSERT_VIDEO_EXTFILTER_AVI
     Text[ czech ] = "Video pro Windows (*.avi)";
     Text[ hebrew ] = "Video für Windows (*.avi)";
     Text[ hindi ] = "Video for Windows (*.avi)";
+    Text[ slovak ] = "Video pre Windows (*.avi)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MOV
@@ -2379,6 +2451,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MOV
     Text[ czech ] = "QuickTime Movie (*.mov)";
     Text[ hebrew ] = "QuickTime Movie (*.mov)";
     Text[ hindi ] = "QuickTime Movie (*.mov)";
+    Text[ slovak ] = "QuickTime Movie (*.mov)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MPEG
@@ -2409,6 +2482,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MPEG
     Text[ czech ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ hebrew ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ hindi ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ slovak ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
 };
 
 String STR_EXTFILTER_ALL
@@ -2439,6 +2513,7 @@ String STR_EXTFILTER_ALL
     Text[ czech ] = "<Vše>";
     Text[ hebrew ] = "<Alle>";
     Text[ hindi ] = "<सब>";
+    Text[ slovak ] = "<všetky>";
 };
 
 String STR_INSERT_SOUND_TITLE
@@ -2470,6 +2545,7 @@ String STR_INSERT_SOUND_TITLE
     Text[ czech ] = "Vložit zvuk";
     Text[ hebrew ] = "Klang einfügen";
     Text[ hindi ] = "ध्वनी जोड़ो";
+    Text[ slovak ] = "Vložiť zvuk";
 };
 
 String STR_INSERT_VIDEO_TITLE
@@ -2500,6 +2576,7 @@ String STR_INSERT_VIDEO_TITLE
     Text[ czech ] = "Vložit video";
     Text[ hebrew ] = "Video einfügen";
     Text[ hindi ] = "वीडियो जोड़ो";
+    Text[ slovak ] = "Vložiť video";
 };
 
 
@@ -2533,6 +2610,7 @@ String RID_SVXSTR_VIOLET
     Text[ czech ] = "Fialová";
     Text[ hebrew ] = "Lila";
     Text[ hindi ] = "बैंगनी";
+    Text[ slovak ] = "Fialová";
 };
 
 String RID_SVXSTR_BORDEAUX
@@ -2563,6 +2641,7 @@ String RID_SVXSTR_BORDEAUX
     Text[ czech ] = "Tmavě červená";
     Text[ hebrew ] = "Bordeaux";
     Text[ hindi ] = "बोर्डयक्स";
+    Text[ slovak ] = "Tmavo červená";
 };
 
 String RID_SVXSTR_PALE_YELLOW
@@ -2593,6 +2672,7 @@ String RID_SVXSTR_PALE_YELLOW
     Text[ czech ] = "Světle žlutá";
     Text[ hebrew ] = "Blassgelb";
     Text[ hindi ] = "फीका पीला";
+    Text[ slovak ] = "Svetložltá";
 };
 
 String RID_SVXSTR_PALE_GREEN
@@ -2623,6 +2703,7 @@ String RID_SVXSTR_PALE_GREEN
     Text[ czech ] = "Světle zelená";
     Text[ hebrew ] = "Blassgrün";
     Text[ hindi ] = "फीका हरा";
+    Text[ slovak ] = "Svetlozelená";
 };
 
 String RID_SVXSTR_DKVIOLET
@@ -2653,6 +2734,7 @@ String RID_SVXSTR_DKVIOLET
     Text[ czech ] = "Tmavě fialová";
     Text[ hebrew ] = "Dunkellila";
     Text[ hindi ] = "गहरा नीला";
+    Text[ slovak ] = "Tmavo fialová";
 };
 
 String RID_SVXSTR_SALMON
@@ -2683,6 +2765,7 @@ String RID_SVXSTR_SALMON
     Text[ czech ] = "Lososová";
     Text[ hebrew ] = "Lachs";
     Text[ hindi ] = "नारंगी";
+    Text[ slovak ] = "Lososová";
 };
 
 String RID_SVXSTR_SEABLUE
@@ -2713,6 +2796,7 @@ String RID_SVXSTR_SEABLUE
     Text[ czech ] = "Námořnická modř";
     Text[ hebrew ] = "Seeblau";
     Text[ hindi ] = "समुद्री नीला";
+    Text[ slovak ] = "Námornícka modrá";
 };
 
 String RID_SVXSTR_COLOR_SUN
@@ -2746,6 +2830,7 @@ String RID_SVXSTR_COLOR_SUN
     Text[ czech ] = "Zlatá";
     Text[ hebrew ] = "Sun";
     Text[ hindi ] = "Sun";
+    Text[ slovak ] = "Sun modrá";
 };
 
 String RID_SVXSTR_TBLAFMT_3D
@@ -2777,6 +2862,7 @@ String RID_SVXSTR_TBLAFMT_3D
     Text[ czech ] = "3D";
     Text[ hebrew ] = "3D";
     Text[ hindi ] = "3D";
+    Text[ slovak ] = "3D";
 };
 String RID_SVXSTR_TBLAFMT_BLACK1
 {
@@ -2807,6 +2893,7 @@ String RID_SVXSTR_TBLAFMT_BLACK1
     Text[ czech ] = "Černá 1";
     Text[ hebrew ] = "Schwarz 1";
     Text[ hindi ] = "काला 1";
+    Text[ slovak ] = "Čierna 1";
 };
 String RID_SVXSTR_TBLAFMT_BLACK2
 {
@@ -2837,6 +2924,7 @@ String RID_SVXSTR_TBLAFMT_BLACK2
     Text[ czech ] = "Černá 2";
     Text[ hebrew ] = "Schwarz 2";
     Text[ hindi ] = "काला 2";
+    Text[ slovak ] = "Čierna 2";
 };
 String RID_SVXSTR_TBLAFMT_BLUE
 {
@@ -2866,6 +2954,7 @@ String RID_SVXSTR_TBLAFMT_BLUE
     Text[ czech ] = "Modrá";
     Text[ hebrew ] = "Blau";
     Text[ hindi ] = "नीला";
+    Text[ slovak ] = "Modrá";
 };
 String RID_SVXSTR_TBLAFMT_BROWN
 {
@@ -2895,6 +2984,7 @@ String RID_SVXSTR_TBLAFMT_BROWN
     Text[ czech ] = "Hnědá";
     Text[ hebrew ] = "Braun";
     Text[ hindi ] = "भूरा";
+    Text[ slovak ] = "Hnedá";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY
 {
@@ -2924,6 +3014,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY
     Text[ czech ] = "Měna";
     Text[ hebrew ] = "Währung";
     Text[ hindi ] = "मुद्रा";
+    Text[ slovak ] = "Mena";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_3D
 {
@@ -2953,6 +3044,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ czech ] = "Měna, 3D";
     Text[ hebrew ] = "Währung 3D";
     Text[ hindi ] = "मुद्रा 3D";
+    Text[ slovak ] = "Mena 3D";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
 {
@@ -2982,6 +3074,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
     Text[ czech ] = "Měna, šedá";
     Text[ hebrew ] = "Währung Grau";
     Text[ hindi ] = "मुद्रा ग्रे";
+    Text[ slovak ] = "Šedá mena";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
 {
@@ -3011,6 +3104,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
     Text[ czech ] = "Měna, levandulová";
     Text[ hebrew ] = "Währung Flieder";
     Text[ hindi ] = "मुद्रा हल्का पीला";
+    Text[ slovak ] = "Levanduľová mena";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
 {
@@ -3040,6 +3134,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
     Text[ czech ] = "Měna, tyrkysová";
     Text[ hebrew ] = "Währung Türkis";
     Text[ hindi ] = "मुद्रा टर्कोइस";
+    Text[ slovak ] = "Tyrkysová mena";
 };
 String RID_SVXSTR_TBLAFMT_GRAY
 {
@@ -3069,6 +3164,7 @@ String RID_SVXSTR_TBLAFMT_GRAY
     Text[ czech ] = "Šedá";
     Text[ hebrew ] = "Grau";
     Text[ hindi ] = "ग्रे";
+    Text[ slovak ] = "Šedá";
 };
 String RID_SVXSTR_TBLAFMT_GREEN
 {
@@ -3098,6 +3194,7 @@ String RID_SVXSTR_TBLAFMT_GREEN
     Text[ czech ] = "Zelená";
     Text[ hebrew ] = "Grün";
     Text[ hindi ] = "हरा";
+    Text[ slovak ] = "Zelená";
 };
 String RID_SVXSTR_TBLAFMT_LAVENDER
 {
@@ -3127,6 +3224,7 @@ String RID_SVXSTR_TBLAFMT_LAVENDER
     Text[ czech ] = "Levandulová";
     Text[ hebrew ] = "Flieder";
     Text[ hindi ] = "हल्का पीला";
+    Text[ slovak ] = "Levanduľová";
 };
 String RID_SVXSTR_TBLAFMT_RED
 {
@@ -3156,6 +3254,7 @@ String RID_SVXSTR_TBLAFMT_RED
     Text[ czech ] = "Červená";
     Text[ hebrew ] = "Rot";
     Text[ hindi ] = "लाल";
+    Text[ slovak ] = "Červená";
 };
 String RID_SVXSTR_TBLAFMT_TURQUOISE
 {
@@ -3185,6 +3284,7 @@ String RID_SVXSTR_TBLAFMT_TURQUOISE
     Text[ czech ] = "Tyrkysová";
     Text[ hebrew ] = "Türkis";
     Text[ hindi ] = "टर्कोइस";
+    Text[ slovak ] = "Tyrkysová";
 };
 String RID_SVXSTR_TBLAFMT_YELLOW
 {
@@ -3214,6 +3314,7 @@ String RID_SVXSTR_TBLAFMT_YELLOW
     Text[ czech ] = "Žlutá";
     Text[ hebrew ] = "Gelb";
     Text[ hindi ] = "पीला";
+    Text[ slovak ] = "Žltá";
 };
 
 String RID_SVXSTR_LINEJOINT_MIDDLE
@@ -3244,6 +3345,7 @@ String RID_SVXSTR_LINEJOINT_MIDDLE
     Text[ czech ] = "Napojení čar - v půli";
     Text[ hebrew ] = "Linienübergang gemittelt";
     Text[ hindi ] = "रेखा सन्धि माध्य";
+    Text[ slovak ] = "Napojenie čiar - v polovici";
 };
 String RID_SVXSTR_LINEJOINT_BEVEL
 {
@@ -3273,6 +3375,7 @@ String RID_SVXSTR_LINEJOINT_BEVEL
     Text[ czech ] = "Napojení čar - úkosem";
     Text[ hebrew ] = "Linienübergang verbunden";
     Text[ hindi ] = "रेखा सन्धि तिरछा";
+    Text[ slovak ] = "Napojenie čiar - úkosom";
 };
 String RID_SVXSTR_LINEJOINT_MITER
 {
@@ -3302,6 +3405,7 @@ String RID_SVXSTR_LINEJOINT_MITER
     Text[ czech ] = "Napojení čar - pokosem";
     Text[ hebrew ] = "Linienübergang geschnitten";
     Text[ hindi ] = "रेखा सन्धि मैटर";
+    Text[ slovak ] = "Napojenie čiar - pokosom";
 };
 String RID_SVXSTR_LINEJOINT_ROUND
 {
@@ -3331,6 +3435,7 @@ String RID_SVXSTR_LINEJOINT_ROUND
     Text[ czech ] = "Napojení čar - zaoblené";
     Text[ hebrew ] = "Linienübergang rund";
     Text[ hindi ] = "रेखा सन्धि गोल";
+    Text[ slovak ] = "Napojenie čiar - zaoblený";
 };
 
 String RID_SVXSTR_GRFILTER_OPENERROR
@@ -3363,6 +3468,7 @@ String RID_SVXSTR_GRFILTER_OPENERROR
     TEXT[ czech ] = "Není možné otevřít grafický soubor";
     TEXT[ hebrew ] = "Grafikdatei kann nicht geöffnet werden";
     TEXT[ hindi ] = "सुचित्र फाइल को खोल नहीं सकते है";
+    TEXT[ slovak ] = "Nie je možné otvoriť grafický súbor";
 };
 String RID_SVXSTR_GRFILTER_IOERROR
 {
@@ -3394,6 +3500,7 @@ String RID_SVXSTR_GRFILTER_IOERROR
     TEXT[ czech ] = "Není možné načíst grafický soubor";
     TEXT[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
     TEXT[ hindi ] = "सुचित्र फाइल को पढ़ नहीं सकते है";
+    TEXT[ slovak ] = "Nie je možné načítať grafický súbor";
 };
 String RID_SVXSTR_GRFILTER_FORMATERROR
 {
@@ -3425,6 +3532,7 @@ String RID_SVXSTR_GRFILTER_FORMATERROR
     TEXT[ czech ] = "Neznámý grafický formát";
     TEXT[ hebrew ] = "Unbekanntes Grafikformat";
     TEXT[ hindi ] = "अज्ञात सुचित्र रचना";
+    TEXT[ slovak ] = "Neznámy grafický formát";
 };
 String RID_SVXSTR_GRFILTER_VERSIONERROR
 {
@@ -3456,6 +3564,7 @@ String RID_SVXSTR_GRFILTER_VERSIONERROR
     TEXT[ czech ] = "Tato verze obrázku není podporována";
     TEXT[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstützt";
     TEXT[ hindi ] = "सुचित्र फाइल का इस आवृत्ति समर्थित नहीं है";
+    TEXT[ slovak ] = "Táto verzia obrázku nieje podporovaná";
 };
 String RID_SVXSTR_GRFILTER_FILTERERROR
 {
@@ -3487,6 +3596,7 @@ String RID_SVXSTR_GRFILTER_FILTERERROR
     TEXT[ czech ] = "Grafický filtr nebyl nalezen";
     TEXT[ hebrew ] = "Grafikfilter nicht gefunden";
     TEXT[ hindi ] = "सुचित्र फिल्टर नहीं मिला";
+    TEXT[ slovak ] = "Grafický filter nebol nájdený";
 };
 String RID_SVXSTR_GRFILTER_TOOBIG
 {
@@ -3518,6 +3628,7 @@ String RID_SVXSTR_GRFILTER_TOOBIG
     TEXT[ czech ] = "Nedostatek paměti pro vložení obrázku";
     TEXT[ hebrew ] = "Nicht genug Speicher zum Einfügen der Grafik";
     TEXT[ hindi ] = "सुचित्र जोड़ने केलिए मेमरी पर्याप्त नहीं है";
+    TEXT[ slovak ] = "Nedostatok pamäti na vloženie obrázku";
 };
 
 
@@ -3742,6 +3853,7 @@ String RID_SVXSTR_GRDT0
     Text[ czech ] = "Přechod";
     Text[ hebrew ] = "Farbverlauf";
     Text[ hindi ] = "ग्रेडिऐन्ट्";
+    Text[ slovak ] = "Prechod";
 };
 String RID_SVXSTR_GRDT1
 {
@@ -3771,6 +3883,7 @@ String RID_SVXSTR_GRDT1
     Text[ czech ] = "Lineární modrá/bílá";
     Text[ hebrew ] = "Linear Blau/weiß";
     Text[ hindi ] = "संकुचित नीला/सफेद";
+    Text[ slovak ] = "Lineárna modrá/biela";
 };
 String RID_SVXSTR_GRDT2
 {
@@ -3800,6 +3913,7 @@ String RID_SVXSTR_GRDT2
     Text[ czech ] = "Lineární purpurová/zelená";
     Text[ hebrew ] = "Linear violett/grün";
     Text[ hindi ] = "संकुचित मेजन्टा/हरा";
+    Text[ slovak ] = "Lineárna purpurová/zelená";
 };
 String RID_SVXSTR_GRDT3
 {
@@ -3829,6 +3943,7 @@ String RID_SVXSTR_GRDT3
     Text[ czech ] = "Lineární žlutá/hnědá";
     Text[ hebrew ] = "Linear gelb/braun";
     Text[ hindi ] = "संकुचित पीला/भूरा";
+    Text[ slovak ] = "Lineárna žltá/hnedá";
 };
 String RID_SVXSTR_GRDT4
 {
@@ -3858,6 +3973,7 @@ String RID_SVXSTR_GRDT4
     Text[ czech ] = "Radiální zelená/černá";
     Text[ hebrew ] = "Radial grün/schwarz";
     Text[ hindi ] = "किरण-सम्बन्धी हरा/काला";
+    Text[ slovak ] = "Radiálna zelená/čierna";
 };
 String RID_SVXSTR_GRDT5
 {
@@ -3887,6 +4003,7 @@ String RID_SVXSTR_GRDT5
     Text[ czech ] = "Radiální červená/žlutá";
     Text[ hebrew ] = "Radial rot/gelb";
     Text[ hindi ] = "किरण-सम्बन्धी लाल/पीला";
+    Text[ slovak ] = "Radiálna červená/žltá";
 };
 String RID_SVXSTR_GRDT6
 {
@@ -3916,6 +4033,7 @@ String RID_SVXSTR_GRDT6
     Text[ czech ] = "Pravoúhlé červená/bílá";
     Text[ hebrew ] = "Rechteck rot/weiß";
     Text[ hindi ] = "आयताकार लाल/सफेद";
+    Text[ slovak ] = "Obdĺžnik červená/biela";
 };
 String RID_SVXSTR_GRDT7
 {
@@ -3945,6 +4063,7 @@ String RID_SVXSTR_GRDT7
     Text[ czech ] = "Čtverce žlutá/bílá";
     Text[ hebrew ] = "Quadratisch gelb/weiß";
     Text[ hindi ] = "समचतुर्भुज पीला/सफेद";
+    Text[ slovak ] = "Štvorec žltá/biela";
 };
 String RID_SVXSTR_GRDT8
 {
@@ -3974,6 +4093,7 @@ String RID_SVXSTR_GRDT8
     Text[ czech ] = "Oválné modrošedá/světle modrá";
     Text[ hebrew ] = "Ellipsoid blaugrau/hellblau";
     Text[ hindi ] = "दीर्घवृत्तज नीला ग्रे/हल्का नीला";
+    Text[ slovak ] = "Ovál modrošedý/svetlomodrý";
 };
 String RID_SVXSTR_GRDT9
 {
@@ -4003,6 +4123,7 @@ String RID_SVXSTR_GRDT9
     Text[ czech ] = "Axiální světle červená/bílá";
     Text[ hebrew ] = "Axial hellrot/weiß";
     Text[ hindi ] = "धुरी-सम्बन्धी हल्का लाल/सफेद";
+    Text[ slovak ] = "Svetlo osi červená/biela";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4094,6 +4215,7 @@ String RID_SVXSTR_HATCH0
     Text[ czech ] = "Černá 45 stupňů široká";
     Text[ hebrew ] = "Schwarz 45 Grad weit";
     Text[ hindi ] = "काला 45 डिग्रियाँ चौड़ाई";
+    Text[ slovak ] = "Čierna 45 stupňov široká";
 };
 String RID_SVXSTR_HATCH1
 {
@@ -4123,6 +4245,7 @@ String RID_SVXSTR_HATCH1
     Text[ czech ] = "Černá 45 stupňů";
     Text[ hebrew ] = "Schwarz 45 Grad";
     Text[ hindi ] = "काला 45 डिग्रियाँ";
+    Text[ slovak ] = "Čierna 45 stupňov";
 };
 String RID_SVXSTR_HATCH2
 {
@@ -4152,6 +4275,7 @@ String RID_SVXSTR_HATCH2
     Text[ czech ] = "Černá -45 stupňů";
     Text[ hebrew ] = "Schwarz -45 Grad";
     Text[ hindi ] = "काला -45 डिग्रियाँ";
+    Text[ slovak ] = "Čierna -45 stupňov";
 };
 String RID_SVXSTR_HATCH3
 {
@@ -4181,6 +4305,7 @@ String RID_SVXSTR_HATCH3
     Text[ czech ] = "Černá 90 stupňů";
     Text[ hebrew ] = "Schwarz 90 Grad";
     Text[ hindi ] = "काला 90 डिग्रियाँ";
+    Text[ slovak ] = "Čierna 90 stupňov";
 };
 String RID_SVXSTR_HATCH4
 {
@@ -4210,6 +4335,7 @@ String RID_SVXSTR_HATCH4
     Text[ czech ] = "Červené šrafování 45 stupňů";
     Text[ hebrew ] = "Rot Netz 45 Grad";
     Text[ hindi ] = "लाल कटा हुआ 45 डिग्रियाँ";
+    Text[ slovak ] = "Červené šrafovanie 45 stupňov";
 };
 String RID_SVXSTR_HATCH5
 {
@@ -4239,6 +4365,7 @@ String RID_SVXSTR_HATCH5
     Text[ czech ] = "Červené šrafování 0 stupňů";
     Text[ hebrew ] = "Rot Netz 0 Grad";
     Text[ hindi ] = "लाल कटा हुआ 0 डिग्रियाँ";
+    Text[ slovak ] = "Červené šrafovanie 0 stupňov";
 };
 String RID_SVXSTR_HATCH6
 {
@@ -4268,6 +4395,7 @@ String RID_SVXSTR_HATCH6
     Text[ czech ] = "Modré šrafování 45 stupňů";
     Text[ hebrew ] = "Blau Netz 45 Grad";
     Text[ hindi ] = "नीला कटा हुआ 45 डिग्रियाँ";
+    Text[ slovak ] = "Modré šrafovanie 45 stupňov";
 };
 String RID_SVXSTR_HATCH7
 {
@@ -4297,6 +4425,7 @@ String RID_SVXSTR_HATCH7
     Text[ czech ] = "Modré šrafování 0 stupňů";
     Text[ hebrew ] = "Blau Netz 0 Grad";
     Text[ hindi ] = "नीला कटा हुआ 0 डिग्रियाँ";
+    Text[ slovak ] = "Modré šrafovanie 0 stupňov";
 };
 String RID_SVXSTR_HATCH8
 {
@@ -4326,6 +4455,7 @@ String RID_SVXSTR_HATCH8
     Text[ czech ] = "Modrá třikrát 90 stupňů";
     Text[ hebrew ] = "Blau 3er Netz 90 Grad";
     Text[ hindi ] = "नीला तिगुना 90 डिग्रियाँ";
+    Text[ slovak ] = "Modrá trikrát 90 stupňov";
 };
 String RID_SVXSTR_HATCH9
 {
@@ -4355,6 +4485,7 @@ String RID_SVXSTR_HATCH9
     Text[ czech ] = "Černá 0 stupňů";
     Text[ hebrew ] = "Schwarz 0 Grad";
     Text[ hindi ] = "काला 0 डिग्रियाँ";
+    Text[ slovak ] = "Čierna 0 stupňov";
 };
 String RID_SVXSTR_HATCH10
 {
@@ -4386,6 +4517,7 @@ String RID_SVXSTR_HATCH10
     Text[ czech ] = "Šrafování";
     Text[ hebrew ] = "Schraffur";
     Text[ hindi ] = "हाचिंग";
+    Text[ slovak ] = "Šrafovanie";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4533,6 +4665,7 @@ String RID_SVXSTR_BMP0
     Text[ czech ] = "Prázdné";
     Text[ hebrew ] = "Leer";
     Text[ hindi ] = "खाली";
+    Text[ slovak ] = "Prázdny";
 };
 String RID_SVXSTR_BMP1
 {
@@ -4562,6 +4695,7 @@ String RID_SVXSTR_BMP1
     Text[ czech ] = "Obloha";
     Text[ hebrew ] = "Himmel";
     Text[ hindi ] = "आकाश";
+    Text[ slovak ] = "Obloha";
 };
 String RID_SVXSTR_BMP2
 {
@@ -4591,6 +4725,7 @@ String RID_SVXSTR_BMP2
     Text[ czech ] = "Voda";
     Text[ hebrew ] = "Wasser";
     Text[ hindi ] = "पानी";
+    Text[ slovak ] = "Voda";
 };
 String RID_SVXSTR_BMP3
 {
@@ -4620,6 +4755,7 @@ String RID_SVXSTR_BMP3
     Text[ czech ] = "Hrubozrnný";
     Text[ hebrew ] = "Grobkörnig";
     Text[ hindi ] = "कोऐर्स ग्रेइन्ड";
+    Text[ slovak ] = "Hrubozrnný";
 };
 String RID_SVXSTR_BMP4
 {
@@ -4649,6 +4785,7 @@ String RID_SVXSTR_BMP4
     Text[ czech ] = "Měděný";
     Text[ hebrew ] = "Quecksilber";
     Text[ hindi ] = "मर्कुरी";
+    Text[ slovak ] = "Medený";
 };
 String RID_SVXSTR_BMP5
 {
@@ -4678,6 +4815,7 @@ String RID_SVXSTR_BMP5
     Text[ czech ] = "Mezera";
     Text[ hebrew ] = "Weltraum";
     Text[ hindi ] = "अंतरिक्ष";
+    Text[ slovak ] = "Medzera";
 };
 String RID_SVXSTR_BMP6
 {
@@ -4707,6 +4845,7 @@ String RID_SVXSTR_BMP6
     Text[ czech ] = "Kov";
     Text[ hebrew ] = "Metall";
     Text[ hindi ] = "लोहा";
+    Text[ slovak ] = "Kov";
 };
 String RID_SVXSTR_BMP7
 {
@@ -4736,6 +4875,7 @@ String RID_SVXSTR_BMP7
     Text[ czech ] = "Kapky";
     Text[ hebrew ] = "Tropfen";
     Text[ hindi ] = "ड्रोप्लेट्स्";
+    Text[ slovak ] = "Kvapky";
 };
 String RID_SVXSTR_BMP8
 {
@@ -4765,6 +4905,7 @@ String RID_SVXSTR_BMP8
     Text[ czech ] = "Mramor";
     Text[ hebrew ] = "Marmor";
     Text[ hindi ] = "संगमरमर";
+    Text[ slovak ] = "Mramor";
 };
 String RID_SVXSTR_BMP9
 {
@@ -4794,6 +4935,7 @@ String RID_SVXSTR_BMP9
     Text[ czech ] = "Vlákna";
     Text[ hebrew ] = "Leinen";
     Text[ hindi ] = "लिनन";
+    Text[ slovak ] = "Plátno";
 };
 String RID_SVXSTR_BMP10
 {
@@ -4823,6 +4965,7 @@ String RID_SVXSTR_BMP10
     Text[ czech ] = "Kámen";
     Text[ hebrew ] = "Stein";
     Text[ hindi ] = "पत्थर";
+    Text[ slovak ] = "Kameň";
 };
 String RID_SVXSTR_BMP11
 {
@@ -4852,6 +4995,7 @@ String RID_SVXSTR_BMP11
     Text[ czech ] = "Štěrk";
     Text[ hebrew ] = "Schotter";
     Text[ hindi ] = "कंकड";
+    Text[ slovak ] = "Štrk";
 };
 String RID_SVXSTR_BMP12
 {
@@ -4881,6 +5025,7 @@ String RID_SVXSTR_BMP12
     Text[ czech ] = "Zeď";
     Text[ hebrew ] = "Mauer";
     Text[ hindi ] = "वॉल";
+    Text[ slovak ] = "Stena";
 };
 String RID_SVXSTR_BMP13
 {
@@ -4910,6 +5055,7 @@ String RID_SVXSTR_BMP13
     Text[ czech ] = "Drahokamy";
     Text[ hebrew ] = "Ziegelsteine";
     Text[ hindi ] = "ब्रउनस्टोन्";
+    Text[ slovak ] = "Drahokamy";
 };
 String RID_SVXSTR_BMP14
 {
@@ -4939,6 +5085,7 @@ String RID_SVXSTR_BMP14
     Text[ czech ] = "Pletivo";
     Text[ hebrew ] = "Geflecht";
     Text[ hindi ] = "नेट्टिंग";
+    Text[ slovak ] = "Pletivo";
 };
 String RID_SVXSTR_BMP15
 {
@@ -4968,6 +5115,7 @@ String RID_SVXSTR_BMP15
     Text[ czech ] = "Listí";
     Text[ hebrew ] = "Laub";
     Text[ hindi ] = "पत्ता";
+    Text[ slovak ] = "Lístie";
 };
 String RID_SVXSTR_BMP16
 {
@@ -4997,6 +5145,7 @@ String RID_SVXSTR_BMP16
     Text[ czech ] = "Pažit neboli trávník";
     Text[ hebrew ] = "Kunstrasen";
     Text[ hindi ] = "कृत्रिम ढेला";
+    Text[ slovak ] = "Umelý trávnik";
 };
 String RID_SVXSTR_BMP17
 {
@@ -5026,6 +5175,7 @@ String RID_SVXSTR_BMP17
     Text[ czech ] = "Sedmikráska";
     Text[ hebrew ] = "Gänseblümchen";
     Text[ hindi ] = "गुलबहार";
+    Text[ slovak ] = "Sedmikráska";
 };
 String RID_SVXSTR_BMP18
 {
@@ -5055,6 +5205,7 @@ String RID_SVXSTR_BMP18
     Text[ czech ] = "Oranžová";
     Text[ hebrew ] = "Orange";
     Text[ hindi ] = "नारंग";
+    Text[ slovak ] = "Oranžová";
 };
 String RID_SVXSTR_BMP19
 {
@@ -5084,6 +5235,7 @@ String RID_SVXSTR_BMP19
     Text[ czech ] = "Plameny";
     Text[ hebrew ] = "Feurig";
     Text[ hindi ] = "तीक्ष्ण";
+    Text[ slovak ] = "Plamenný";
 };
 String RID_SVXSTR_BMP20
 {
@@ -5113,6 +5265,7 @@ String RID_SVXSTR_BMP20
     Text[ czech ] = "Růže";
     Text[ hebrew ] = "Rosen";
     Text[ hindi ] = "गुलाब";
+    Text[ slovak ] = "Ruže";
 };
 
 String RID_SVXSTR_BMP21
@@ -5125,7 +5278,7 @@ String RID_SVXSTR_BMP21
     Text[ greek ] = "Bitmap";
     Text[ dutch ] = "Bitmap";
     Text[ french ] = "Bitmap";
-    Text[ spanish ] = "Bitmap";
+    Text[ spanish ] = "Mapa de bits";
     Text[ italian ] = "Bitmap";
     Text[ danish ] = "Bitmap";
     Text[ swedish ] = "Bitmap";
@@ -5143,6 +5296,7 @@ String RID_SVXSTR_BMP21
     Text[ czech ] = "Bitová mapa";
     Text[ hebrew ] = "Bitmap";
     Text[ hindi ] = "बिटमॉप्";
+    Text[ slovak ] = "Bitová mapa";
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -5219,7 +5373,7 @@ String RID_SVXSTR_DASH0
     Text[ russian ] = "����������� �����";
     Text[ greek ] = "������������ (���� �����)";
     Text[ dutch ] = "Extra fijne streepjes";
-    Text[ french ] = "Tirets ultrafins";
+    Text[ french ] = "Traits ultrafins";
     Text[ spanish ] = "Trazos ultrafinos";
     Text[ italian ] = "A tratti finissimi";
     Text[ danish ] = "Ultrafin stiplet";
@@ -5238,6 +5392,7 @@ String RID_SVXSTR_DASH0
     Text[ czech ] = "Velmi jemný nátěr";
     Text[ hebrew ] = "Ultrafein gestrichelt";
     Text[ hindi ] = "अत्यन्त सूक्ष्म बिन्दुओं से डॉश् की हुयी";
+    Text[ slovak ] = "Veľmi jemne čiarkovaný";
 };
 String RID_SVXSTR_DASH1
 {
@@ -5248,7 +5403,7 @@ String RID_SVXSTR_DASH1
     Text[ russian ] = "������ �����";
     Text[ greek ] = "������������ (�����)";
     Text[ dutch ] = "Streepjes";
-    Text[ french ] = "Tirets fins";
+    Text[ french ] = "Traits fins";
     Text[ spanish ] = "Trazos finos";
     Text[ italian ] = "A tratti fini";
     Text[ danish ] = "Fin stiplet";
@@ -5267,6 +5422,7 @@ String RID_SVXSTR_DASH1
     Text[ czech ] = "Jemný nátěr";
     Text[ hebrew ] = "Fein gestrichelt";
     Text[ hindi ] = "सूक्ष्म बिन्दुओं से डॉश् की हुयी";
+    Text[ slovak ] = "Jemne čiarkovaný";
 };
 String RID_SVXSTR_DASH2
 {
@@ -5296,6 +5452,7 @@ String RID_SVXSTR_DASH2
     Text[ czech ] = "Velmi jemné dvě tečky a tři nátěry";
     Text[ hebrew ] = "Ultrafein 2 Punkte 3 Striche";
     Text[ hindi ] = "अत्यन्त सूक्ष्म 2 बिन्दु 3 डॉश";
+    Text[ slovak ] = "Veľmi jemné dve bodky a tri čiarky";
 };
 String RID_SVXSTR_DASH3
 {
@@ -5325,6 +5482,7 @@ String RID_SVXSTR_DASH3
     Text[ czech ] = "Jemně tečkovaný";
     Text[ hebrew ] = "Fein gepunktet";
     Text[ hindi ] = "सूक्ष्म बिन्दी";
+    Text[ slovak ] = "Jemne bodkované";
 };
 String RID_SVXSTR_DASH4
 {
@@ -5354,6 +5512,7 @@ String RID_SVXSTR_DASH4
     Text[ czech ] = "Čára tvořená jemnými tečkami";
     Text[ hebrew ] = "Strich mit feinen Punkten";
     Text[ hindi ] = "सूक्ष बिन्दुओं सहित रेखा";
+    Text[ slovak ] = "Čiara tvorená jemnými bodkami";
 };
 String RID_SVXSTR_DASH5
 {
@@ -5364,7 +5523,7 @@ String RID_SVXSTR_DASH5
     Text[ russian ] = "������ ������� 2";
     Text[ greek ] = "������������ ����� (���������)";
     Text[ dutch ] = "Streepjes (variabel)";
-    Text[ french ] = "Tirets fins (variable)";
+    Text[ french ] = "Traits fins (variable)";
     Text[ spanish ] = "Trazos finos (variable)";
     Text[ italian ] = "A tratti fini (var)";
     Text[ danish ] = "Fin stiplet (variabel)";
@@ -5383,6 +5542,7 @@ String RID_SVXSTR_DASH5
     Text[ czech ] = "Jemný nátěr (proměnný)";
     Text[ hebrew ] = "Fein gestrichelt (variabel)";
     Text[ hindi ] = "सूक्ष्म रूप से डॉश की हुयी (वेरिऐबल्)";
+    Text[ slovak ] = "Jemne čiarkovaný (premenlivé)";
 };
 String RID_SVXSTR_DASH6
 {
@@ -5412,6 +5572,7 @@ String RID_SVXSTR_DASH6
     Text[ czech ] = "3 čárky 3 tečky (proměnné)";
     Text[ hebrew ] = "3 Striche 3 Punkte (variabel)";
     Text[ hindi ] = "3 डॉश 3 बिन्दु (वेरिऐबल्)";
+    Text[ slovak ] = "3 čiarky 3 bodky (premenlivé)";
 };
 String RID_SVXSTR_DASH7
 {
@@ -5441,6 +5602,7 @@ String RID_SVXSTR_DASH7
     Text[ czech ] = "Velmi jemně tečkovat (proměnné)";
     Text[ hebrew ] = "Ultrafein gepunktet (variabel)";
     Text[ hindi ] = "बिन्दुओं से चिह्नित अत्यन्य सूक्ष्म रेखा (वेरिऐबल्)";
+    Text[ slovak ] = "Veľmi jemne bodkované (premenlivé)";
 };
 String RID_SVXSTR_DASH8
 {
@@ -5470,6 +5632,7 @@ String RID_SVXSTR_DASH8
     Text[ czech ] = "Styl čáry 9";
     Text[ hebrew ] = "Linienstil 9";
     Text[ hindi ] = "रेखा शैली 9";
+    Text[ slovak ] = "Štýl čiary 9";
 };
 String RID_SVXSTR_DASH9
 {
@@ -5499,6 +5662,7 @@ String RID_SVXSTR_DASH9
     Text[ czech ] = "2 tečky 1 čárka";
     Text[ hebrew ] = "2 Punkte 1 Strich";
     Text[ hindi ] = "2 बिन्दु 1 डॉश";
+    Text[ slovak ] = "2 bodky 1 čiarka";
 };
 String RID_SVXSTR_DASH10
 {
@@ -5509,7 +5673,7 @@ String RID_SVXSTR_DASH10
     Text[ russian ] = "������� 2";
     Text[ greek ] = "������������ (���������)";
     Text[ dutch ] = "Streepjes (variabel)";
-    Text[ french ] = "Tirets (variable)";
+    Text[ french ] = "Traits (variable)";
     Text[ spanish ] = "Trazos (variable)";
     Text[ italian ] = "A tratti (var)";
     Text[ danish ] = "Stiplet (variabel)";
@@ -5528,6 +5692,7 @@ String RID_SVXSTR_DASH10
     Text[ czech ] = "Čárky (proměnné)";
     Text[ hebrew ] = "Gestrichelt (variabel)";
     Text[ hindi ] = "डॉश किया हुआ (वेरिऐबल्)";
+    Text[ slovak ] = "Čiarky (premenlivé)";
 };
 String RID_SVXSTR_DASH11
 {
@@ -5538,7 +5703,7 @@ String RID_SVXSTR_DASH11
     Text[ russian ] = "������� 1";
     Text[ greek ] = "������������";
     Text[ dutch ] = "Streepjes";
-    Text[ french ] = "Tirets";
+    Text[ french ] = "Traits";
     Text[ spanish ] = "Trazos";
     Text[ italian ] = "A tratti";
     Text[ danish ] = "Stiplet";
@@ -5557,6 +5722,7 @@ String RID_SVXSTR_DASH11
     Text[ czech ] = "Čárky";
     Text[ hebrew ] = "Gestrichelt";
     Text[ hindi ] = "डॉश की हुयी";
+    Text[ slovak ] = "Čiarkované";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5653,6 +5819,7 @@ String RID_SVXSTR_LEND0
     Text[ czech ] = "Konkávní šipka";
     Text[ hebrew ] = "Pfeil konkav";
     Text[ hindi ] = "तीर नतोदर";
+    Text[ slovak ] = "Konkávna šípka";
 };
 String RID_SVXSTR_LEND1
 {
@@ -5682,6 +5849,7 @@ String RID_SVXSTR_LEND1
     Text[ czech ] = "Čtverec 45";
     Text[ hebrew ] = "Quadrat 45";
     Text[ hindi ] = "समचतुर्भुज 45";
+    Text[ slovak ] = "Štvorec 45";
 };
 String RID_SVXSTR_LEND2
 {
@@ -5711,6 +5879,7 @@ String RID_SVXSTR_LEND2
     Text[ czech ] = "Malá šipka";
     Text[ hebrew ] = "Schmaler Pfeil";
     Text[ hindi ] = "छोटा तीर";
+    Text[ slovak ] = "Malá šípka";
 };
 String RID_SVXSTR_LEND3
 {
@@ -5740,6 +5909,7 @@ String RID_SVXSTR_LEND3
     Text[ czech ] = "Kótovací čáry";
     Text[ hebrew ] = "Bemaßungsenden";
     Text[ hindi ] = "परिमाण सम्बन्धी रेखाएँ";
+    Text[ slovak ] = "Kótovacie čiary";
 };
 String RID_SVXSTR_LEND4
 {
@@ -5769,6 +5939,7 @@ String RID_SVXSTR_LEND4
     Text[ czech ] = "Dvojitá šipka";
     Text[ hebrew ] = "Doppelpfeil";
     Text[ hindi ] = "द्विगुणित तीर";
+    Text[ slovak ] = "Dvojitá šípka";
 };
 String RID_SVXSTR_LEND5
 {
@@ -5798,6 +5969,7 @@ String RID_SVXSTR_LEND5
     Text[ czech ] = "Zaoblená krátká šipka";
     Text[ hebrew ] = "Abgerundeter kurzer Pfeil";
     Text[ hindi ] = "गोल आकार का छोटा तीर";
+    Text[ slovak ] = "Zaoblená krátká šípka";
 };
 String RID_SVXSTR_LEND6
 {
@@ -5827,6 +5999,7 @@ String RID_SVXSTR_LEND6
     Text[ czech ] = "Souměrná šipka";
     Text[ hebrew ] = "Symmetrischer Pfeil";
     Text[ hindi ] = "समरूप का तीर";
+    Text[ slovak ] = "Súmerná šípka";
 };
 String RID_SVXSTR_LEND7
 {
@@ -5856,6 +6029,7 @@ String RID_SVXSTR_LEND7
     Text[ czech ] = "Čárová šipka";
     Text[ hebrew ] = "Linien-Pfeil";
     Text[ hindi ] = "रेखा तीर";
+    Text[ slovak ] = "Šípka čiary";
 };
 String RID_SVXSTR_LEND8
 {
@@ -5885,6 +6059,7 @@ String RID_SVXSTR_LEND8
     Text[ czech ] = "Zaoblená velká šipka";
     Text[ hebrew ] = "Abgerundeter langer Pfeil";
     Text[ hindi ] = "गोल आकार का बड़ा तीर";
+    Text[ slovak ] = "Zaoblená veľká šípka";
 };
 String RID_SVXSTR_LEND9
 {
@@ -5914,6 +6089,7 @@ String RID_SVXSTR_LEND9
     Text[ czech ] = "Kruh";
     Text[ hebrew ] = "Kreis";
     Text[ hindi ] = "वृत्त";
+    Text[ slovak ] = "Kruh";
 };
 String RID_SVXSTR_LEND10
 {
@@ -5943,6 +6119,7 @@ String RID_SVXSTR_LEND10
     Text[ czech ] = "Čtverec";
     Text[ hebrew ] = "Quadrat";
     Text[ hindi ] = "समचतुर्भुज";
+    Text[ slovak ] = "Štvorec";
 };
 String RID_SVXSTR_LEND11
 {
@@ -5972,6 +6149,7 @@ String RID_SVXSTR_LEND11
     Text[ czech ] = "Šipka";
     Text[ hebrew ] = "Pfeil";
     Text[ hindi ] = "तीर";
+    Text[ slovak ] = "Šípka";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -6015,9 +6193,12 @@ String RID_SVXSTR_TRASNGR0
     Text[ czech ] = "Průhlednost";
     Text[ hebrew ] = "Flächentransparenz";
     Text[ hindi ] = "पारदर्शकता";
+    Text[ slovak ] = "Priehľadnosť";
 };
 
  // ********************************************************************** EOF
+
+
 
 
 
