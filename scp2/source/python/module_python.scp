@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_python.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:19 $
+ *  last change: $Author: is $ $Date: 2004-02-10 17:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ Module gid_Module_Pyuno
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
     ParentID = gid_Module_Optional;
     Procedures = (gid_Procedure_Python_Install);
-    Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_unohelper,gid_File_Py_uno,gid_File_Py_pythonloader,gid_File_Py_python_core,gid_File_python_sh,gid_File_Python_dll,gid_File_Lib_Python_so );
+    Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_Unohelper,gid_File_Py_Uno,gid_File_Py_Pythonloader,gid_File_Py_Python_Core,gid_File_Python_Sh,gid_File_Python_Dll,gid_File_Lib_Python_So, gid_File_Py_Scriptprovider,gid_File_Py_Pythonscript,gid_File_Scripts_Python);
     Minimal = NO;
     Default = NO;
     Styles = ( );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:18 $
+ *  last change: $Author: is $ $Date: 2004-02-10 17:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,39 @@ File gid_File_Py_Python_Core
     Styles = (ARCHIVE);
 End
 
+// Items for Python Scripting Framework Runtime 
+// Scripting Framework ScriptProvider for Python
+
+File gid_File_Py_Scriptprovider
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT5(pyprov,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT5(pyprov,OFFICEUPD,DLLSUFFIX,.uno,.dll));
+  #endif
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Styles = (PACKED,UNO_COMPONENT);
+End
+ 
+// Scripting Framework Python script proxy
+
+File gid_File_Py_Pythonscript
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "pythonscript.py";
+    Styles = (PACKED);
+End
+ 
+//Scripting Framework Python example scripts
+
+File gid_File_Scripts_Python
+    TXT_FILE_BODY; 
+    Styles = (ARCHIVE);
+    Dir = gid_Dir_Share_Scripts;
+    Name = "ScriptsPython.zip";
+End
+
 #ifdef WNT
 
 File gid_File_Python_Dll
@@ -124,7 +157,6 @@ End
 #endif
 
 #ifdef UNX
-
 #ifndef MACOSX
 
 File gid_File_Lib_Python_So
@@ -134,6 +166,12 @@ File gid_File_Lib_Python_So
     Styles = (PACKED);
 End
 
+#endif
+#endif
+
+#ifdef UNX
+#ifndef MACOSX
+
 Shortcut gid_Shortcut_Lib_Python_1
     FileID = gid_File_Lib_Python_So;
     Dir = gid_Dir_Program;
@@ -142,7 +180,9 @@ Shortcut gid_Shortcut_Lib_Python_1
 End
 
 #endif
+#endif
 
+#ifdef UNX
 #ifdef MACOSX
 
 File gid_File_Lib_Python_So
@@ -152,6 +192,12 @@ File gid_File_Lib_Python_So
     Styles = (PACKED);
 End
 
+#endif
+#endif
+
+#ifdef UNX
+#ifdef MACOSX
+
 Shortcut gid_Shortcut_Lib_Python_1
     FileID = gid_File_Lib_Python_So;
     Dir = gid_Dir_Program;
@@ -160,6 +206,9 @@ Shortcut gid_Shortcut_Lib_Python_1
 End
 
 #endif
+#endif
+
+#ifdef UNX
 
 Shortcut gid_Shortcut_Lib_Python_2
     FileID = gid_File_Lib_Python_So;
@@ -168,12 +217,20 @@ Shortcut gid_Shortcut_Lib_Python_2
     Styles = (NETWORK,RELATIVE);
 End
 
+#endif
+
+#ifdef UNX
+
 File gid_File_Pyuno
     TXT_FILE_BODY;
     Name = STRING(CONCAT2(pyuno,UNXSUFFIX));
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
+
+#endif
+
+#ifdef UNX
 
 File gid_File_Python_Sh
     BIN_FILE_BODY;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2004-02-05 18:10:19 $
+#   last change: $Author: is $ $Date: 2004-02-10 17:46:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,9 +77,11 @@ TARGETTYPE=CUI
 SCP_PRODUCT_TYPE=osl
 
 PARFILES=\
-        module_python.par       \
-        procedure_python.par    \
-        profileitem_python.par  \
+        module_python.par              \
+        procedure_python.par           \
+        profileitem_python.par         \
+        configurationitem_python.par   \
+        starregistryitem_python.par    \
         file_python.par
 
 LNGFILES= \
