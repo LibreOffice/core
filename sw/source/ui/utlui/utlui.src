@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:10:05 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Boþ paragraflarý kaldýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar párrafos vacíos";
+        Text[ finnish ] = "Poista tyhjät kappaleet";
     };
     String STR_AUTOFMTREDL_USE_REPLACE+1
     {
@@ -116,6 +117,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Deðiþtirme tablosunu kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usar tabla de sustitución";
+        Text[ finnish ] = "Käytä korvaustaulukkoa";
     };
     String STR_AUTOFMTREDL_CPTL_STT_WORD+1
     {
@@ -126,7 +128,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ italian ] = "COrreggi la doppia MAiuscola ad inizio PArola" ;
         Text [ portuguese_brazilian ] = "SUbstituir duas Letras Maiosculas no in¡cio da Palavra" ;
         Text [ portuguese ] = "COrrigir duas maiúsculas no INício da palavra" ;
-        Text [ finnish ] = "Korvaa kaksi ISoa kirjainta sanan alussa" ;
+        Text [ finnish ] = "Korjaa KAksi ISoa ALkukirjainta" ;
         Text [ danish ] = "REt andet bogstav i ORd til lille" ;
         Text [ french ] = "COrriger la 2e majuscule en DÉbut de mot" ;
         Text [ swedish ] = "KOrrigera två versaler i BÖrjan av ordet" ;
@@ -154,7 +156,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ italian ] = "Inizia ogni frase con la maiuscola" ;
         Text [ portuguese_brazilian ] = "Iniciar cada Sentença com uma Letra Maioscula" ;
         Text [ portuguese ] = "Iniciar todas as frases com uma letra maiúscula" ;
-        Text [ finnish ] = "Aloita jokainen virke isolla kirjaimella" ;
+        Text [ finnish ] = "Muuta virkkeen ensimmäinen kirjain isoksi kirjaimeksi" ;
         Text [ danish ] = "Første bogstav i sætninger med stort" ;
         Text [ french ] = "Majuscule en début de phrase" ;
         Text [ swedish ] = "Börja varje mening med stor bokstav" ;
@@ -181,7 +183,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ italian ] = "Sostituisci virgolette \"Standard\" con virgolette %1tipografiche%2" ;
         Text [ portuguese_brazilian ] = "Substituir Citaçäes\"Padrao\" por Citaçäes \\%1typogr ficoal\\%2" ;
         Text [ portuguese ] = "Substituir aspas \"padrão\" por aspas %1tipográficas%2" ;
-        Text [ finnish ] = "Korvaa \"vakio\"lainausmerkit %1typografisilla%2" ;
+        Text [ finnish ] = "Korvaa \"tavalliset\" lainausmerkit %1mukautetuilla%2 lainausmerkeillä" ;
         Text [ danish ] = "Erstat \"lige\" anførselstegn med %1typografiske%2" ;
         Text [ french ] = "Remplacer les guillemets \"standard\" par des guillemets %1typographiques%2" ;
         Text [ swedish ] = "Ersätt \"raka\" citationstecken med %1typografiska%2 citationstecken" ;
@@ -223,6 +225,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ korean ] = "»ç¿ëÀÚ ¼­½ÄÆÄÀÏ ´ëÃ¼";
         Text[ turkish ] = "Kullanýcý biçimini deðiþtir";
         Text[ catalan ] = "Reemplazar estilos del usuario";
+        Text[ finnish ] = "Korvaa mukautetut tyylit";
     };
     String STR_AUTOFMTREDL_BULLET+1
     {
@@ -248,6 +251,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ korean ] = "±Û¸Ó¸®±âÈ£ ´ëÃ¼";
         Text[ turkish ] = "Sýralama iþareti deðiþtirildi";
         Text[ catalan ] = "Viñeta reemplazada";
+        Text[ finnish ] = "Korvatut luettelomerkit";
     };
     String STR_AUTOFMTREDL_UNDER+1
     {
@@ -273,6 +277,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Altýný_otomatik_çiz_";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Subrayado_automático_";
+        Text[ finnish ] = "Automaattinen _alleviivaus_";
     };
     String STR_AUTOFMTREDL_BOLD+1
     {
@@ -298,6 +303,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Otomatik *kalýn*";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "*Negrita* automático";
+        Text[ finnish ] = "Automaattinen *lihavointi*";
     };
     String STR_AUTOFMTREDL_FRACTION+1
     {
@@ -323,6 +329,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "1/2 ... yazýldýðýnda ½ ... ile deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar 1/2 ... por ½ ...";
+        Text[ finnish ] = "Korvaa merkintä 1/2 ... merkinnällä 1/2 ...";
     };
     String STR_AUTOFMTREDL_DETECT_URL+1
     {
@@ -348,6 +355,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "URL taný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reconocer URL";
+        Text[ finnish ] = "URL-tunnistus";
     };
     String STR_AUTOFMTREDL_DASH+1
     {
@@ -373,6 +381,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Tireleri deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar comillas";
+        Text[ finnish ] = "Korvaa viivat";
     };
     String STR_AUTOFMTREDL_ORDINAL+1
     {
@@ -398,6 +407,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "1st ... yazýldýðýnda 1^st ... ile deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar 1st ... con 1^st ...";
+        Text[ finnish ] = "Korvaa merkintä 1st... merkinnällä 1^st...";
     };
     String STR_AUTOFMTREDL_RIGHT_MARGIN+1
     {
@@ -423,6 +433,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Tek satýrlý paragraflarý birleþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Unir párrafos de una línea";
+        Text[ finnish ] = "Yhdistä yksiriviset kappaleet";
     };
 
     String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
@@ -449,6 +460,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "\"Metin gövdesi\" biçimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Cuerpo de texto\"";
+        Text[ finnish ] = "Määritä tyyli \"Leipäteksti\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
     {
@@ -474,6 +486,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "\"Metin gövdesi - girinti\" biçimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Sangría de primera línea\"";
+        Text[ finnish ] = "Määritä tyyli \"Sisennetty leipäteksti\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
     {
@@ -499,6 +512,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "\"Asýlý girinti\" biçimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Sangría negativa de primera línea\"";
+        Text[ finnish ] = "Määritä tyyli \"Riippuva sisennys\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
     {
@@ -524,6 +538,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "\"Metin gövdesi - satýrbaþý\" biçimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Cuerpo de texto con sangría\"";
+        Text[ finnish ] = "Määritä tyyli \"Sisennetty leipäteksti\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
     {
@@ -549,6 +564,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "\"Baþlýk $(ARG1)\" biçimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Encabezado $(ARG1)\"";
+        Text[ finnish ] = "Määritä tyyli \"Otsikko $(ARG1)\"";
     };
     String STR_AUTOFMTREDL_SET_NUMBULET +1
     {
@@ -574,6 +590,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "\"Madde\" ya da \"numaralama\" biçimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Viñetas\" o \"Numeración\"";
+        Text[ finnish ] = "Määritä luettelomerkkien tai numeroinnin tyyli";
     };
 
     String STR_AUTOFMTREDL_DEL_MORELINES +1
@@ -600,6 +617,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Paragraflarý birleþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Unir párrafos";
+        Text[ finnish ] = "Yhdistä kappaleet";
     };
 
 };
@@ -631,6 +649,7 @@ String STR_EVENT_OBJECT_SELECT
     Text[ turkish ] = "Nesneye týkla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pulsar el objeto";
+    Text[ finnish ] = "Napsauta objektia";
 };
 String STR_EVENT_START_INS_GLOSSARY
 {
@@ -657,6 +676,7 @@ String STR_EVENT_START_INS_GLOSSARY
     TEXT[ turkish ] = "Otomatik metin eklemeden önce";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Antes de insertar el AutoTexto";
+    TEXT[ finnish ] = "Ennen automaattisen tekstin lisäämistä";
 };
 String STR_EVENT_END_INS_GLOSSARY
 {
@@ -683,6 +703,7 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ turkish ] = "Otomatik metin ekledikten sonra";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Tras insertar el AutoTexto";
+    TEXT[ finnish ] = "Automaattisen tekstin lisäämisen jälkeen";
 };
 String STR_EVENT_MOUSEOVER_OBJECT
 {
@@ -709,6 +730,7 @@ String STR_EVENT_MOUSEOVER_OBJECT
     Text[ turkish ] = "Fare oku nesne üzerinde";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ratón sobre objeto";
+    Text[ finnish ] = "Hiiri objektin kohdalla";
 };
 String STR_EVENT_MOUSECLICK_OBJECT
 {
@@ -735,6 +757,7 @@ String STR_EVENT_MOUSECLICK_OBJECT
     Text[ turkish ] = "Hyperlinki etkinleþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ejecutar hiperenlace";
+    Text[ finnish ] = "Käynnistä hyperlinkki";
 };
 String STR_EVENT_MOUSEOUT_OBJECT
 {
@@ -761,6 +784,7 @@ String STR_EVENT_MOUSEOUT_OBJECT
     Text[ turkish ] = "Ýmleç nesneden ayrýlýyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El ratón abandona el objeto";
+    Text[ finnish ] = "Hiiri poistuu objektista";
 };
 String STR_EVENT_IMAGE_LOAD
 {
@@ -786,6 +810,7 @@ String STR_EVENT_IMAGE_LOAD
     Text[ turkish ] = "Grafik baþarýyla yüklendi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La carga de la imagen ha finalizado con éxito";
+    Text[ finnish ] = "Kuvan lataus onnistunut";
 };
 String STR_EVENT_IMAGE_ABORT
 {
@@ -811,6 +836,7 @@ String STR_EVENT_IMAGE_ABORT
     Text[ turkish ] = "Grafik yüklemesi kesildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Interrumpida la carga de la imagen";
+    Text[ finnish ] = "Kuvan lataus päättynyt";
 };
 String STR_EVENT_IMAGE_ERROR
 {
@@ -836,6 +862,7 @@ String STR_EVENT_IMAGE_ERROR
     Text[ turkish ] = "Grafik yüklemede hata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al cargar la imagen";
+    Text[ finnish ] = "Virhe kuvan latauksessa";
 };
 String STR_EVENT_FRM_KEYINPUT_A
 {
@@ -861,6 +888,7 @@ String STR_EVENT_FRM_KEYINPUT_A
     Text[ turkish ] = "Alfa karakter giriþi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrada de caracteres alfanuméricos";
+    Text[ finnish ] = "alfa-merkkien syöttö";
 };
 String STR_EVENT_FRM_KEYINPUT_NOA
 {
@@ -886,6 +914,7 @@ String STR_EVENT_FRM_KEYINPUT_NOA
     Text[ turkish ] = "Alfa olmayan karakter giriþi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrada de caracteres no-alfanuméricos";
+    Text[ finnish ] = "Muiden kuin alfa-merkkien syöttö";
 };
 String STR_EVENT_FRM_RESIZE
 {
@@ -912,6 +941,7 @@ String STR_EVENT_FRM_RESIZE
     Text[ turkish ] = "Çerçeve boyutunu deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar el tamaño del marco";
+    Text[ finnish ] = "Muuta kehyksen kokoa";
 };
 String STR_EVENT_FRM_MOVE
 {
@@ -937,6 +967,7 @@ String STR_EVENT_FRM_MOVE
     Text[ turkish ] = "Çerçeveyi taþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar marco";
+    Text[ finnish ] = "Siirrä kehystä";
 };
 String STR_CONTENT_TYPE_OUTLINE
 {
@@ -963,6 +994,7 @@ String STR_CONTENT_TYPE_OUTLINE
     Text[ turkish ] = "Baþlýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezados";
+    Text[ finnish ] = "Otsikot";
 };
 String STR_CONTENT_TYPE_TABLE
 {
@@ -988,6 +1020,7 @@ String STR_CONTENT_TYPE_TABLE
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tablas";
+    Text[ finnish ] = "Taulukot";
 };
 String STR_CONTENT_TYPE_FRAME
 {
@@ -1013,6 +1046,7 @@ String STR_CONTENT_TYPE_FRAME
     Text[ turkish ] = "Metin kutusu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco de texto";
+    Text[ finnish ] = "Tekstikehys";
 };
 String STR_CONTENT_TYPE_GRAPHIC
 {
@@ -1038,6 +1072,7 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imágenes";
+    Text[ finnish ] = "Kuvat";
 };
 String STR_CONTENT_TYPE_OLE
 {
@@ -1063,6 +1098,7 @@ String STR_CONTENT_TYPE_OLE
     Text[ turkish ] = "OLE nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos OLE";
+    Text[ finnish ] = "OLE-objektit";
 };
 String STR_CONTENT_TYPE_BOOKMARK
 {
@@ -1088,6 +1124,7 @@ String STR_CONTENT_TYPE_BOOKMARK
     Text[ turkish ] = "Metin iþareti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcas de texto";
+    Text[ finnish ] = "Kirjanmerkit";
 };
 String STR_CONTENT_TYPE_REGION
 {
@@ -1113,6 +1150,7 @@ String STR_CONTENT_TYPE_REGION
     Text[ turkish ] = "Bölüm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Categorías";
+    Text[ finnish ] = "Osiot";
 };
 String STR_CONTENT_TYPE_URLFIELD
 {
@@ -1138,6 +1176,7 @@ String STR_CONTENT_TYPE_URLFIELD
     Text[ turkish ] = "Hyperlink";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hiperenlaces";
+    Text[ finnish ] = "Hyperlinkit";
 };
 String STR_CONTENT_TYPE_REFERENCE
 {
@@ -1163,6 +1202,7 @@ String STR_CONTENT_TYPE_REFERENCE
     Text[ turkish ] = "Referans";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Referencias";
+    Text[ finnish ] = "Viitteet";
 };
 String STR_CONTENT_TYPE_INDEX
 {
@@ -1188,6 +1228,7 @@ String STR_CONTENT_TYPE_INDEX
     Text[ turkish ] = "Dizin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Índices";
+    Text[ finnish ] = "Hakemistot";
 };
 String STR_CONTENT_TYPE_DRAWOBJECT
 {
@@ -1213,6 +1254,7 @@ String STR_CONTENT_TYPE_DRAWOBJECT
     Text[ turkish ] = "Çizim nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de dibujo";
+    Text[ finnish ] = "Piirrosobjektit";
 };
 String STR_CONTENT_TYPE_POSTIT
 {
@@ -1238,6 +1280,7 @@ String STR_CONTENT_TYPE_POSTIT
     Text[ turkish ] = "Not";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Notas";
+    Text[ finnish ] = "Huomautukset";
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
@@ -1264,6 +1307,7 @@ String STR_CONTENT_TYPE_SINGLE_OUTLINE
     Text[ turkish ] = "Baþlýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezado";
+    Text[ finnish ] = "Otsikko";
 };
 String STR_CONTENT_TYPE_SINGLE_TABLE
 {
@@ -1289,6 +1333,7 @@ String STR_CONTENT_TYPE_SINGLE_TABLE
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla";
+    Text[ finnish ] = "Taulukko";
 };
 String STR_CONTENT_TYPE_SINGLE_FRAME
 {
@@ -1314,6 +1359,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text[ turkish ] = "Metin kutusu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco de texto";
+    Text[ finnish ] = "Tekstikehys";
 };
 String STR_CONTENT_TYPE_SINGLE_GRAPHIC
 {
@@ -1339,6 +1385,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imagen";
+    Text[ finnish ] = "Kuvat";
 };
 String STR_CONTENT_TYPE_SINGLE_OLE
 {
@@ -1364,6 +1411,7 @@ String STR_CONTENT_TYPE_SINGLE_OLE
     Text[ turkish ] = "OLE nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto OLE";
+    Text[ finnish ] = "OLE-objekti";
 };
 String STR_CONTENT_TYPE_SINGLE_BOOKMARK
 {
@@ -1389,6 +1437,7 @@ String STR_CONTENT_TYPE_SINGLE_BOOKMARK
     Text[ turkish ] = "Metin iþareti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marca de texto";
+    Text[ finnish ] = "Kirjanmerkki";
 };
 String STR_CONTENT_TYPE_SINGLE_REGION
 {
@@ -1414,6 +1463,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     Text[ turkish ] = "Bölüm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Area";
+    Text[ finnish ] = "Osio";
 };
 String STR_CONTENT_TYPE_SINGLE_URLFIELD
 {
@@ -1439,6 +1489,7 @@ String STR_CONTENT_TYPE_SINGLE_URLFIELD
     Text[ turkish ] = "Hyperlink";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hiperenlace";
+    Text[ finnish ] = "Hyperlinkki";
 };
 String STR_CONTENT_TYPE_SINGLE_REFERENCE
 {
@@ -1464,6 +1515,7 @@ String STR_CONTENT_TYPE_SINGLE_REFERENCE
     Text[ turkish ] = "Referans";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Referencia";
+    Text[ finnish ] = "Viite";
 };
 String STR_CONTENT_TYPE_SINGLE_INDEX
 {
@@ -1489,6 +1541,7 @@ String STR_CONTENT_TYPE_SINGLE_INDEX
     Text[ turkish ] = "Dizin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Índice";
+    Text[ finnish ] = "Hakemisto";
 };
 String STR_CONTENT_TYPE_SINGLE_POSTIT
 {
@@ -1514,6 +1567,7 @@ String STR_CONTENT_TYPE_SINGLE_POSTIT
     Text[ turkish ] = "Not";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota";
+    Text[ finnish ] = "Huomautus";
 };
 String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
 {
@@ -1539,6 +1593,7 @@ String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
     Text[ turkish ] = "Çizim nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de dibujo";
+    Text[ finnish ] = "Piirrosobjekti";
 };
 String STR_DEFINE_NUMBERFORMAT
 {
@@ -1564,6 +1619,7 @@ String STR_DEFINE_NUMBERFORMAT
     Text[ turkish ] = "Diðer formatlar...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Otros formatos...";
+    Text[ finnish ] = "Lisämuotoilut";
 };
 String RID_STR_SYSTEM
 {
@@ -1588,6 +1644,7 @@ String RID_STR_SYSTEM
     Text[ arabic ] = "[äÙÇã]";
     Text[ turkish ] = "[Sistem]";
     Text[ catalan ] = "[Sistema]";
+    Text[ finnish ] = "[Järjestelmä]";
 };
 String STR_MULT_INTERACT_SPELL_WARN
 {
@@ -1612,6 +1669,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ arabic ] = "ÇáÊÏÞíÞ ÇáÅãáÇÆí ÇáÊÈÇÏáí\näÔØ ÈÇáÝÚá Ýí ãÓÊäÏ ÂÎÑ";
     Text[ turkish ] = "Etkileþimli yazým denetimi\nþu an baþka bir belgede etkin";
     Text[ catalan ] = "La corrección ortográfica interactiva\nya está activada en otro documento";
+    Text[ finnish ] = "Interaktiivinen oikoluku on jo käytössä\toisessa asiakirjassa";
 };
 String STR_MULT_INTERACT_HYPH_WARN
 {
@@ -1636,6 +1694,7 @@ String STR_MULT_INTERACT_HYPH_WARN
     Text[ arabic ] = "ÝÕá ÇáãÞÇØÚ ÇáÊÈÇÏáí\näÔØ ÈÇáÝÚá Ýí ãÓÊäÏ ÂÎÑ";
     Text[ turkish ] = "Etkileþimli heceleme\nþu an baþka bir belgede etkin";
     Text[ catalan ] = "La separación silábica interactiva\nya está activa en otro documento";
+    Text[ finnish ] = "Interaktiivinen tavutus on jo käytössä\toisessa asiakirjassa";
 };
 String STR_SPELL_TITLE
 {
@@ -1660,6 +1719,7 @@ String STR_SPELL_TITLE
     Text[ arabic ] = "ÇáÊÏÞíÞ ÇáÅãáÇÆí";
     Text[ turkish ] = "Yazým denetimi";
     Text[ catalan ] = "Corrección ortográfica";
+    Text[ finnish ] = "Oikeinkirjoituksen tarkistus";
 };
 String STR_HYPH_TITLE
 {
@@ -1684,5 +1744,6 @@ String STR_HYPH_TITLE
     Text[ arabic ] = "ÝÕá ÇáãÞÇØÚ";
     Text[ turkish ] = "Heceleme";
     Text[ catalan ] = "Separación silábica";
+    Text[ finnish ] = "Tavutus";
 };
 
