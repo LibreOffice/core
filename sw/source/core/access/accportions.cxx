@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:29:02 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,17 @@ void SwAccessiblePortionData::GetLineBoundary(
 {
     FillBoundary( rBound, aLineBreaks,
                   FindBreak( aLineBreaks, nPos ) );
+}
+
+void SwAccessiblePortionData::GetLastLineBoundary(
+    Boundary& rBound )
+{
+    DBG_ASSERT( aLineBreaks.size() >= 2, "need min + max value" );
+
+    // The last two positions except the two deleimiters are the ones
+    // we are looking for, except for empty paragraphs (nBreaks==3)
+    size_t nBreaks = aLineBreaks.size();
+    FillBoundary( rBound, aLineBreaks, nBreaks <= 3 ? 0 : nBreaks-4 );
 }
 
 USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
