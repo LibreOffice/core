@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:51:21 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,12 +372,13 @@ inline static void lcl_AddOnOff( ByteString& rString, bool bFlag )
     lcl_AddFlag( rString, bFlag, "on", "off" );
 }
 
+
 static void lcl_AddEnum(
-        ByteString& rString, sal_Int32 nValue, const sal_Char* ppcEnums[], sal_Int32 nSize,
-        const sal_Char* pcDefault = 0, sal_Int32 nOffset = 0 )
+        ByteString& rString, long nValue, const sal_Char* const ppcEnums[], long nSize,
+        const sal_Char* pcDefault = 0, long nOffset = 0 )
 {
     nValue -= nOffset;
-    const sal_Char* pcText = "!UNKNOWN!";
+    const sal_Char* pcText = "!unknown!";
     if( (0 <= nValue) && (nValue < nSize) && ppcEnums[ nValue ] )
         pcText = ppcEnums[ nValue ];
     else if( pcDefault )
@@ -385,7 +386,6 @@ static void lcl_AddEnum(
     if( *pcText )   // nonempty string
         rString.Append( " (" ).Append( pcText ).Append( ')' );
 }
-
 
 
 IdRangeList::~IdRangeList()
@@ -1212,6 +1212,106 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 }
             }
             break;
+            case 0x0023:        // EXTERNNAME
+            {
+                PreDump( rIn.GetRecSize() );
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0001, "builtin" );
+                ADDFLAG( 0x0002, "automatic" );
+                ADDFLAG( 0x0004, "wantcliprepr" );
+                ADDFLAG( 0x0008, "DDEstddocname" );
+                ADDFLAG( 0x0010, "OLE" );
+                ADDRESERVED( 0x8000 );
+                sal_uInt16 nClip = (__nFlags & 0x7FE0) >> 5;
+                ADDTEXT( "   clip-format=" );       __AddHex( t, nClip );
+                PRINT(); LINESTART();
+                bool bFormula = false, bArray = false;
+                if( (__nFlags & 0x0001) || !(__nFlags & 0x7FFE) )
+                {
+                    ADDTEXT( "type=external name" );
+                    ADDTEXT( "   table=" );             ADDDEC( 2 );
+                    ADDTEXT( "   reserved=" );          ADDHEX( 2 );
+                    bFormula = true;
+                }
+                else if( __nFlags & 0x0010 )
+                {
+                    ADDTEXT( "type=OLE" );
+                    ADDTEXT( "   stream-id=" );         ADDHEX( 4 );
+                }
+                else
+                {
+                    ADDTEXT( "type=DDE" );
+                    ADDTEXT( "   reserved=" );          ADDHEX( 4 );
+                    bArray = true;
+                }
+                PRINT(); LINESTART();
+                ADDTEXT( "name=" );                 AddUNICODEString( t, rIn, FALSE );
+                PRINT();
+                if( rIn.GetRecLeft() > 0 )
+                {
+                    LINESTART();
+                    if( bFormula )
+                    {
+                        sal_uInt16 nSize = rIn.ReaduInt16();
+                        ADDTEXT( "formula (size=" );    __AddDec( t, nSize );
+                        ADDTEXT( "):" );
+                        PRINT();
+                        FormulaDump( nSize, FT_RangeName );
+                    }
+                    else if( bArray && (rIn.GetRecLeft() >= 3) )
+                    {
+                        LINESTART();
+                        ADDTEXT( "constant array   width=" );   ADDDEC( 1 );
+                        ADDTEXT( "   height=" );                ADDDEC( 2 );
+                        PRINT();
+                        while( rIn.GetRecLeft() > 0 )
+                        {
+                            sal_uInt8 nType = rIn.ReaduInt8();
+                            LINESTART();
+                            ADDTEXT( "type=" );                 __AddHex( t, nType );
+                            ADDTEXT( " (" );
+                            switch( nType )
+                            {
+                                case 0x00:
+                                    ADDTEXT( "empty)    reserved=" );   ADDHEX( 4 );
+                                    ADDTEXT( " " );                     ADDHEX( 4 );
+                                break;
+                                case 0x01:
+                                    ADDTEXT( "double)   value=" );      ADDDOUBLE();
+                                break;
+                                case 0x02:
+                                    ADDTEXT( "string)   text=" );       AddUNICODEString( t, rIn );
+                                break;
+                                case 0x04:
+                                    ADDTEXT( "bool)     value=" );      lcl_AddFlag( t, rIn.ReaduInt8() );
+                                    ADDTEXT( "   reserved=" );          ADDHEX( 1 );
+                                    ADDTEXT( " " );                     ADDHEX( 2 );
+                                    ADDTEXT( " " );                     ADDHEX( 4 );
+                                break;
+                                case 0x10:
+                                    ADDTEXT( "error)    code=" );        ADDHEX( 1 );
+                                    ADDTEXT( "   reserved=" );          ADDHEX( 1 );
+                                    ADDTEXT( " " );                     ADDHEX( 2 );
+                                    ADDTEXT( " " );                     ADDHEX( 4 );
+                                break;
+                                default:
+                                    ADDTEXT( "!unknown!)" );
+                                    rIn.Ignore( 8 );
+                            }
+                            PRINT();
+                        }
+                    }
+                    if( rIn.GetRecLeft() > 0 )
+                    {
+                        LINESTART();
+                        ADDTEXT( "additional data:" );
+                        PRINT();
+                        ContDump( rIn.GetRecLeft() );
+                    }
+                }
+            }
+            break;
             case 0x0026:
             case 0x0027:
             case 0x0028:
@@ -1363,6 +1463,69 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( " (" );                __AddDec( t, nCodePage );
                 ADDTEXT( ")" );
                 PRINT();
+            }
+            break;
+            case 0x004D:        // PLS
+            {
+                LINESTART();
+                static const sal_Char* const ppcTypes[] = { "Win", "Mac" };
+                sal_uInt16 nType = rIn.ReaduInt16();
+                ADDTEXT( "environment=" );
+                lcl_AddEnum( t, nType, ppcTypes, STATIC_TABLE_SIZE( ppcTypes ) );
+                PRINT();
+                if( nType == 0 )
+                {
+                    String aData;
+                    sal_uInt32 __nFlags;
+                    LINESTART();
+                    aData = rIn.ReadRawUniString( 32, true );
+                    ADDTEXT( "device-name='" );         ADDTEXT( GETSTR( aData ) );
+                    ADDTEXT( "'" );
+                    PRINT(); LINESTART();
+                    ADDTEXT( "spec-version=" );         ADDDEC( 2 );
+                    ADDTEXT( "   driver-version=" );    ADDDEC( 2 );
+                    sal_uInt16 nOwnSize, nPrvSize;
+                    rIn >> nOwnSize >> nPrvSize;
+                    ADDTEXT( "   own-size=" );          __AddDec( t, nOwnSize );
+                    ADDTEXT( "   prv-size=" );          __AddDec( t, nPrvSize );
+                    PRINT(); LINESTART();
+                    rIn >> __nFlags;
+                    STARTFLAG();
+                    ADDFLAG( 0x00000001, "orient" );
+                    ADDFLAG( 0x00000002, "paper-size" );
+                    ADDFLAG( 0x00000004, "paper-height" );
+                    ADDFLAG( 0x00000008, "paper-width" );
+                    ADDFLAG( 0x00000010, "scale" );
+                    ADDFLAG( 0x00000100, "copies" );
+                    ADDRESERVED( 0xE0000080 );
+                    PRINT(); LINESTART();
+                    static const sal_Char* const ppcOrient[] = { 0, "portrait", "landsc" };
+                    sal_uInt16 nOrient = rIn.ReaduInt16();
+                    ADDTEXT( "orientation=" );
+                    lcl_AddEnum( t, nOrient, ppcOrient, STATIC_TABLE_SIZE( ppcOrient ) );
+                    ADDTEXT( "   paper-size=" );        ADDDEC( 2 );
+                    ADDTEXT( "   paper-width=" );       ADDDEC( 2 );
+                    ADDTEXT( "   paper-height=" );      ADDDEC( 2 );
+                    PRINT(); LINESTART();
+                    ADDTEXT( "scale=" );                ADDDEC( 2 );
+                    ADDTEXT( "   copies=" );            ADDDEC( 2 );
+                    PRINT();
+                    if( nOwnSize > 88 )
+                    {
+                        LINESTART(); ADDTEXT( "additional data:" ); PRINT();
+                        ContDump( nOwnSize - 88 );
+                    }
+                    if( nPrvSize > 0 )
+                    {
+                        LINESTART(); ADDTEXT( "private data:" ); PRINT();
+                        ContDump( nPrvSize );
+                    }
+                }
+                if( rIn.GetRecLeft() > 0 )
+                {
+                    LINESTART(); ADDTEXT( "unknown data:" ); PRINT();
+                    ContDump( rIn.GetRecLeft() );
+                }
             }
             break;
             case 0x51:
@@ -5402,18 +5565,16 @@ void Biff8RecDumper::ContDumpStream( SvStream& rStrm, const ULONG nL )
 }
 
 
+// Formula dumper =============================================================
 
-//_____________________________________________________________________________
-// Formula dumper
-
-/// Name and parameter count of an Excel function.
+/** Name and parameter count of an Excel function. */
 struct XclDumpFunc
 {
     const sal_Char*             pName;          /// Name of the function.
     sal_uInt16                  nParam;         /// Parameter count for fixed functions.
 };
 
-const XclDumpFunc pFuncData[] =
+static const XclDumpFunc pFuncData[] =
 {
 /*  0*/ { "COUNT",                  0 },
         { "IF",                     0 },
@@ -5803,54 +5964,47 @@ const XclDumpFunc* lcl_GetFuncData( sal_uInt16 nIndex )
     return (nIndex < STATIC_TABLE_SIZE( pFuncData )) ? (pFuncData + nIndex) : NULL;
 }
 
+// ----------------------------------------------------------------------------
 
-
-/// Stack to create a human readable formula from UPN.
-class XclDumpFormulaStack : private ScfDelStack< ByteString >
+/** Stack helper to create a human readable formula string from UPN. */
+class XclDumpFormulaStackImpl : private ScfDelStack< ByteString >
 {
 public:
-                                ScfDelStack< ByteString >::Top;
-
-    void                        PushOperand( const ByteString& rName );
-    void                        PushOperand( const sal_Char* pName );
-    void                        PushUnary( const sal_Char* pOperator, sal_Bool bInFront = sal_True );
-    void                        PushBinary( const sal_Char* pOperator );
-    void                        PushFunction( const ByteString& rName, sal_uInt16 nParam );
+    void                        PushOperand( const ByteString& rOperand );
+    void                        PushUnary( const ByteString& rOperator, bool bInFront );
+    void                        PushBinary( const ByteString& rOperator );
+    void                        PushFunction( const ByteString& rFuncName, sal_uInt16 nParamCount );
+    inline ByteString           GetString() const { return Top() ? *Top() : ByteString(); }
 };
 
-void XclDumpFormulaStack::PushOperand( const ByteString& rName )
+void XclDumpFormulaStackImpl::PushOperand( const ByteString& rOperand )
 {
-    Push( new ByteString( rName ) );
+    Push( new ByteString( rOperand ) );
 }
 
-void XclDumpFormulaStack::PushOperand( const sal_Char* pName )
-{
-    Push( new ByteString( pName ) );
-}
-
-void XclDumpFormulaStack::PushUnary( const sal_Char* pOperator, sal_Bool bInFront )
+void XclDumpFormulaStackImpl::PushUnary( const ByteString& rOperator, bool bInFront )
 {
     if( !Count() ) return;
     ByteString* pOp = Top();
-    pOp->Insert( pOperator, bInFront ? 0 : pOp->Len() );
+    pOp->Insert( rOperator, bInFront ? 0 : pOp->Len() );
 }
 
-void XclDumpFormulaStack::PushBinary( const sal_Char* pOperator )
+void XclDumpFormulaStackImpl::PushBinary( const ByteString& rOperator )
 {
     if( Count() < 2 ) return;
     // second operand is on top
     ByteString* pSecond = Pop();
     ByteString* pFirst = Top();
-    *pFirst += pOperator;
+    *pFirst += rOperator;
     *pFirst += *pSecond;
     delete pSecond;
 }
 
-void XclDumpFormulaStack::PushFunction( const ByteString& rName, sal_uInt16 nParam )
+void XclDumpFormulaStackImpl::PushFunction( const ByteString& rFuncName, sal_uInt16 nParamCount )
 {
-    if( Count() < nParam ) return;
+    if( Count() < nParamCount ) return;
     ByteString* pNew = new ByteString( ')' );
-    for( sal_uInt16 nIndex = 0; nIndex < nParam; ++nIndex )
+    for( sal_uInt16 nIndex = 0; nIndex < nParamCount; ++nIndex )
     {
         if( nIndex ) pNew->Insert( ';', 0 );
         ByteString* pOp = Pop();
@@ -5858,11 +6012,81 @@ void XclDumpFormulaStack::PushFunction( const ByteString& rName, sal_uInt16 nPar
         delete pOp;
     }
     pNew->Insert( '(', 0 );
-    pNew->Insert( rName, 0 );
+    pNew->Insert( rFuncName, 0 );
     Push( pNew );
 }
 
+// ----------------------------------------------------------------------------
 
+/** Stack to create a human readable formula and token class overview from UPN. */
+class XclDumpFormulaStack
+{
+public:
+    void                        PushOperand( const ByteString& rOperand, sal_uInt8 nToken );
+    inline void                 PushOperand( const sal_Char* pcOperand, sal_uInt8 nToken )
+                                    { PushOperand( ByteString( pcOperand ), nToken ); }
+
+    void                        PushUnary( const ByteString& rOperator, bool bInFront = true );
+    inline void                 PushUnary( const sal_Char* pcOperator, bool bInFront = true )
+                                    { PushUnary( ByteString( pcOperator ), bInFront ); }
+
+    void                        PushBinary( const ByteString& rOperator );
+    inline void                 PushBinary( const sal_Char* pcOperator )
+                                    { PushBinary( ByteString( pcOperator ) ); }
+
+    void                        PushFunction( const ByteString& rFuncName, sal_uInt16 nParamCount, sal_uInt8 nToken );
+    inline void                 PushFunction( const sal_Char* pcFuncName, sal_uInt16 nParamCount, sal_uInt8 nToken )
+                                    { PushFunction( ByteString( pcFuncName ), nParamCount, nToken ); }
+
+    inline ByteString           GetFormula() const { return maFmla.GetString(); }
+    inline ByteString           GetTokenClasses() const { return maClass.GetString(); }
+
+    static ByteString           GetTokenClass( sal_uInt8 nToken );
+
+private:
+    void                        PushTokenClass( sal_uInt8 nToken );
+
+    XclDumpFormulaStackImpl     maFmla;
+    XclDumpFormulaStackImpl     maClass;
+};
+
+void XclDumpFormulaStack::PushOperand( const ByteString& rOperand, sal_uInt8 nToken )
+{
+    maFmla.PushOperand( rOperand );
+    maClass.PushOperand( GetTokenClass( nToken ) );
+}
+
+void XclDumpFormulaStack::PushUnary( const ByteString& rOperator, bool bInFront )
+{
+    maFmla.PushUnary( rOperator, bInFront );
+    maClass.PushUnary( rOperator, bInFront );
+}
+
+void XclDumpFormulaStack::PushBinary( const ByteString& rOperator )
+{
+    maFmla.PushBinary( rOperator );
+    maClass.PushBinary( rOperator );
+}
+
+void XclDumpFormulaStack::PushFunction( const ByteString& rFuncName, sal_uInt16 nParamCount, sal_uInt8 nToken )
+{
+    maFmla.PushFunction( rFuncName, nParamCount );
+    maClass.PushFunction( GetTokenClass( nToken ), nParamCount );
+}
+
+ByteString XclDumpFormulaStack::GetTokenClass( sal_uInt8 nToken )
+{
+    sal_Char cClass = '-';
+    switch( nToken & 0xE0 )
+    {
+        case 0x20:  cClass = 'R';   break;
+        case 0x40:  cClass = 'V';   break;
+        case 0x60:  cClass = 'A';   break;
+    }
+    return ByteString( cClass );
+}
+
+// ----------------------------------------------------------------------------
 
 const sal_Char* lcl_GetErrorString( sal_uInt8 nErr )
 {
@@ -5884,23 +6108,15 @@ const sal_Char* lcl_GetErrorString( sal_uInt8 nErr )
 void lcl_StartToken( ByteString& rString, sal_uInt8 nToken, const sal_Char* pTokenName )
 {
     rString.Erase();
-    rString += "    ";
+    rString.Append( "    " );
     __AddHex( rString, nToken );
-    rString += " ptg";
-    rString += pTokenName;
-    rString.Expand( 24, ' ' );
+    rString.Append( " t" ).Append( pTokenName ).Expand( 24, ' ' );
 }
 
 void lcl_StartTokenClass( ByteString& rString, sal_uInt8 nToken, const sal_Char* pTokenName )
 {
     ByteString aToken( pTokenName );
-    switch( nToken & 0xE0 )
-    {
-        case 0x20:  aToken += 'R';  break;
-        case 0x40:  aToken += 'V';  break;
-        case 0x60:  aToken += 'A';  break;
-        default:    aToken += '?';
-    }
+    aToken.Append( XclDumpFormulaStack::GetTokenClass( nToken ) );
     lcl_StartToken( rString, nToken, aToken.GetBuffer() );
 }
 
@@ -5942,7 +6158,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 *pIn >> nRow >> nCol;
                 t += "array formula or shared formula, base-address=";
                 lcl_AddRef( t, nCol, nRow );
-                aStack.PushOperand( "ARRAY()" );
+                aStack.PushFunction( "ARRAY", 0, nOp );
             }
             break;
             case 0x02: // Data Table                            [325 277]
@@ -5952,7 +6168,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 *pIn >> nRow >> nCol;
                 t += "multiple operation, base-address=";
                 lcl_AddRef( t, nCol, nRow );
-                aStack.PushOperand( "MULTIPLE.OPERATIONS()" );
+                aStack.PushFunction( "MULTIPLE.OPERATIONS", 0, nOp );
             }
             break;
             case 0x03: // Addition                              [312 264]
@@ -6025,17 +6241,17 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             break;
             case 0x14: // Percent Sign                          [312 264]
                 STARTTOKEN( "Percent" );
-                aStack.PushUnary( "%", sal_False );
+                aStack.PushUnary( "%", false );
             break;
             case 0x15: // Parenthesis                           [326 278]
                 STARTTOKEN( "Paren" );
                 // simulate two unary operators to enclose operand
                 aStack.PushUnary( "(" );
-                aStack.PushUnary( ")", sal_False );
+                aStack.PushUnary( ")", false );
             break;
             case 0x16: // Missing Argument                      [314 266]
                 STARTTOKEN( "MissArg" );
-                aStack.PushUnary( "" );
+                aStack.PushOperand( "~", nOp );
             break;
             case 0x17: // ByteString Constant                       [314 266]
             {
@@ -6055,7 +6271,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                     pIn->Ignore( 1 );
                 aOperand += '"';
                 t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x18:
@@ -6066,7 +6282,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
 #define D(name,size,ext,type)   {t+="eptg ";__AddDec(t,(UINT16)nEptg);t+=": ";              \
                                 t+=name;t+=" [";__AddDec(t,(UINT16)size);t+="] ";t+=type;   \
-                                if(ext)t+=" + ext";PRINTTOKEN();ContDump(size);aStack.PushOperand(name);}
+                                if(ext)t+=" + ext";PRINTTOKEN();ContDump(size);aStack.PushOperand(name,nOp);}
                 switch( nEptg )
                 {                           //  name        size    ext     type
                     case 0x00:              //  res
@@ -6166,7 +6382,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 else if( nOpt & 0x10 )                      // AttrSum
                 {
                     t += " AttrSum";
-                    aStack.PushFunction( "SUM", 1 );
+                    aStack.PushFunction( "SUM*", 1, nOp );
                 }
                 else
                     t += " AttrMISC";
@@ -6179,33 +6395,33 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += "error value (";           __AddHex( t, nErr );
                 t += ") ";
                 t += lcl_GetErrorString( nErr );
-                aStack.PushOperand( lcl_GetErrorString( nErr ) );
+                aStack.PushOperand( lcl_GetErrorString( nErr ), nOp );
             }
             break;
             case 0x1D: // Boolean                               [315 266]
                 STARTTOKEN( "Bool" );
                 aOperand += pIn->ReaduInt8() ? "TRUE" : "FALSE";
                 t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             break;
             case 0x1E: // Integer                               [315 266]
                 STARTTOKEN( "Int" );
                 __AddDec( aOperand, pIn->ReaduInt16() );
                 t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             break;
             case 0x1F: // Number                                [315 266]
                 STARTTOKEN( "Num" );
                 __AddDouble( aOperand, pIn->ReadDouble() );
                 t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             break;
             case 0x20: // Array Constant                        [317 268]
             case 0x40:
             case 0x60:
                 STARTTOKENCLASS( "Array" );
                 pIn->Ignore( 7 );
-                aStack.PushOperand( "ConstArray" );
+                aStack.PushOperand( "{ConstArray}", nOp );
             break;
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
             case 0x41:
@@ -6219,7 +6435,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += "fix function: index=";    __AddHex( t, nInd );
                 t += " (";                      t += aOperand;
                 t += ')';
-                aStack.PushFunction( aOperand, pFunc ? pFunc->nParam : 0 );
+                aStack.PushFunction( aOperand, pFunc ? pFunc->nParam : 0, nOp );
             }
             break;
             case 0x22: // Function, Variable Number of Arg.     [333 283]
@@ -6240,7 +6456,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += ')';
                 if( nAnz & 0x8000 )
                     t += "   cmd-equiv.";
-                aStack.PushFunction( aOperand, nAnz & 0x7F );
+                aStack.PushFunction( aOperand, nAnz & 0x7F, nOp );
             }
             break;
             case 0x23: // Name                                  [318 269]
@@ -6253,7 +6469,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += aOperand;
                 pIn->Ignore( 2 );
                 aOperand.Insert( "NAME(", 0 ).Append( ')' );
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x24: // Cell Reference                        [319 270]
@@ -6274,7 +6490,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += "2D cell ref   C/R=";      __AddHex( t, nCol );
                 t += '/';                       __AddHex( t, nRow );
                 t += ' ';                       t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x25: // Area Reference                        [320 270]
@@ -6297,7 +6513,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += ':';                       __AddHex( t, nColLast );
                 t += '/';                       __AddHex( t, nRowLast );
                 t += ' ';                       t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x26: // Constant Reference Subexpression      [321 271]
@@ -6305,7 +6521,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             case 0x66:
                 STARTTOKENCLASS( "MemArea" );
                 pIn->Ignore( 6 );
-                aStack.PushOperand( "MemArea" );
+                aStack.PushOperand( "MemArea", nOp );
             break;
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
             case 0x47:
@@ -6336,7 +6552,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += "2D cell ref in name   C/R=";      __AddHex( t, nCol );
                 t += '/';                               __AddHex( t, nRow );
                 t += ' ';                               t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x2D: // Area Reference Within a Name/ShrdFmla [324 274]
@@ -6352,7 +6568,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += ':';                               __AddHex( t, nColLast );
                 t += '/';                               __AddHex( t, nRowLast );
                 t += ' ';                               t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x2E: // Reference Subexpression Within a Name [332 282]
@@ -6382,7 +6598,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 aOperand += "),";
                 __AddDec( aOperand, nName );
                 aOperand += ')';
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x3A: // 3-D Cell Reference                    [    275]
@@ -6404,7 +6620,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += '!';                       __AddHex( t, nCol );
                 t += '/';                       __AddHex( t, nRow );
                 t += ' ';                       t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             case 0x3B: // 3-D Area Reference                    [    276]
@@ -6428,7 +6644,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 t += ':';                               __AddHex( t, nCol2 );
                 t += '/';                               __AddHex( t, nRow2 );
                 t += ' ';                               t += aOperand;
-                aStack.PushOperand( aOperand );
+                aStack.PushOperand( aOperand, nOp );
             }
             break;
             default:
@@ -6437,9 +6653,10 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
         }
         PRINTTOKEN();
     }
-    t.Erase();
-    t += "  Formula = ";
-    if( aStack.Top() ) t += *aStack.Top(); else t += "ERROR IN STACK";
+    t.Assign( "  Formula = " );
+    if( aStack.GetFormula().Len() ) t += aStack.GetFormula(); else t += "ERROR IN STACK";
+    Print( t );
+    t.Assign( "  Tokencl = " ).Append( aStack.GetTokenClasses() );
     Print( t );
     pIn->Seek( nAfterPos );
 }
