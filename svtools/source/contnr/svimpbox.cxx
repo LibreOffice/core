@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 14:54:39 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3064,6 +3064,21 @@ void SvImpLBox::PaintDDCursor( SvLBoxEntry* pInsertionPos )
     pView->SetLineColor( aOldLineColor );
     pView->SetRasterOp( eOldOp );
 }
+/* -----------------26.08.2003 12:52-----------------
+    Delete all sub menues of a PopupMenu, recursively
+ --------------------------------------------------*/
+void lcl_DeleteSubPopups(PopupMenu* pPopup)
+{
+    for(USHORT i = 0; i < pPopup->GetItemCount(); i++)
+    {
+        PopupMenu* pSubPopup = pPopup->GetPopupMenu( pPopup->GetItemId( i ));
+        if(pSubPopup)
+        {
+            lcl_DeleteSubPopups(pSubPopup);
+            delete pSubPopup;
+        }
+    }
+}
 
 void SvImpLBox::Command( const CommandEvent& rCEvt )
 {
@@ -3162,6 +3177,7 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
         {
             // do action for selected entry in popup menu
             pView->ExcecuteContextMenuAction( pPopup->Execute( pView, aPopupPos ) );
+            lcl_DeleteSubPopups(pPopup);
             delete pPopup;
         }
         //added by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
