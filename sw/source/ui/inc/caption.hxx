@@ -2,9 +2,9 @@
  *
  *  $RCSfile: caption.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:56:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
-#endif
+//#ifndef _STREAM_HXX //autogen
+//#include <tools/stream.hxx>
+//#endif
 #ifndef _GLOBNAME_HXX //autogen
 #include <tools/globname.hxx>
 #endif
@@ -95,7 +95,10 @@ private:
     String       sCaption;
     USHORT       nPos;
     USHORT       nLevel;
-    sal_Unicode  cSeparator;
+//  sal_Unicode  cSeparator;
+    String       sSeparator;
+    String       sCharacterStyle;
+
     BOOL         bIgnoreSeqOpts;    // wird nicht gespeichert
     BOOL         bCopyAttributes;   //          -""-
 
@@ -128,8 +131,14 @@ public:
     inline USHORT           GetLevel() const                { return nLevel; }
     inline void             SetLevel(const USHORT nLvl)     { nLevel = nLvl; }
 
-    inline sal_Unicode      GetSeparator() const                { return cSeparator; }
-    inline void             SetSeparator(const sal_Unicode cSep){ cSeparator = cSep; }
+//  inline sal_Unicode      GetSeparator() const                { return cSeparator; }
+//  inline void             SetSeparator(const sal_Unicode cSep){ cSeparator = cSep; }
+    inline const String&    GetSeparator() const                { return sSeparator; }
+    inline void             SetSeparator(const String& rSep)    { sSeparator = rSep; }
+
+    const String&           GetCharacterStyle() const { return sCharacterStyle; }
+    void                    SetCharacterStyle(const String& rStyle)
+                                    { sCharacterStyle = rStyle; }
 
     inline BOOL&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
     inline BOOL             IgnoreSeqOpts() const           { return bIgnoreSeqOpts; }
@@ -141,8 +150,8 @@ public:
     InsCaptionOpt&          operator= ( const InsCaptionOpt& rOpt );
     inline BOOL             operator< ( const InsCaptionOpt & rObj ) const
                                                 { return aOleId < rObj.aOleId; }
-    friend SvStream&        operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt );
-    friend SvStream&        operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt );
+//  friend SvStream&        operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt );
+//  friend SvStream&        operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt );
 };
 
 #endif
