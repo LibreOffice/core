@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+#   last change: $Author: fs $ $Date: 2000-12-13 10:39:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        valueproperties.cxx \
         attriblistmerge.cxx \
         controlelement.cxx \
         elementimport.cxx \
@@ -92,6 +93,7 @@ CXXFILES = \
         strings.cxx
 
 SLOFILES =	\
+        $(SLO)$/valueproperties.obj \
         $(SLO)$/attriblistmerge.obj \
         $(SLO)$/controlelement.obj \
         $(SLO)$/elementimport.obj \
