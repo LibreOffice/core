@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-12 14:36:17 $
+ *  last change: $Author: od $ $Date: 2002-11-14 11:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4155,15 +4155,15 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay, const SwPageFrm *pPag
 void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                                         const SwRect &rRect ) const
 {
-    //Wenn die Linien der Zellen nicht durchgehen siehts irgendwie nicht so
-    //Toll aus; deswegen wird fuer die Zellen der Frm benutzt.
-    const FASTBOOL bCell = IsCellFrm();
-    const FASTBOOL bFlys = pPage->GetSortedObjs() ? TRUE : FALSE;
+    const bool bFlys = pPage->GetSortedObjs() ? true : false;
+
+    const bool bCell = IsCellFrm() ? true : false;
+    // use frame area for cells
     SwRect aOriginal( bCell ? Frm() : Prt() );
     if ( !bCell )
         aOriginal.Pos() += Frm().Pos();
-
     ::SwAlignRect( aOriginal, pGlobalShell );
+
     if ( !aOriginal.IsOver( rRect ) )
         return;
 
@@ -4195,40 +4195,59 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
         }
     }
 
+    // NOTE: for cell frames only left and right (horizontal layout) respectively
+    //      top and bottom (vertical layout) lines painted.
+    const bool bVert = IsVertical() ? true : false;
     if ( bFlys )
     {
-        if ( aOriginal.Left() == aOut.Left() )
-            ::lcl_RefreshLine( this, pPage, aOut.Pos(), aLB, nSubColor );
-        if ( aOriginal.Right() == nRight )
-            ::lcl_RefreshLine( this, pPage, aRT, aRB, nSubColor );
-        if ( !bCell )
+        // OD 14.11.2002 #104822# - add control for drawing left and right lines
+        if ( !bCell || !bVert )
+        {
+            if ( aOriginal.Left() == aOut.Left() )
+                ::lcl_RefreshLine( this, pPage, aOut.Pos(), aLB, nSubColor );
+            // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
+            if ( aOriginal.Right() == nRight )
+                ::lcl_RefreshLine( this, pPage, aRT, aRB,
+                                   (bBreak && bVert) ? SUBCOL_BREAK : nSubColor );
+        }
+        // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
+        if ( !bCell || bVert )
         {
             if ( aOriginal.Top() == aOut.Top() )
+                // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 ::lcl_RefreshLine( this, pPage, aOut.Pos(), aRT,
-                                   bBreak ? SUBCOL_BREAK : nSubColor );
+                                   (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor );
             if ( aOriginal.Bottom() == nBottom )
                 ::lcl_RefreshLine( this, pPage, aLB, aRB, nSubColor );
         }
     }
     else
     {
-        if ( aOriginal.Left() == aOut.Left() )
+        // OD 14.11.2002 #104822# - add control for drawing left and right lines
+        if ( !bCell || !IsVertical() )
         {
-            SwRect aRect( aOut.Pos(), aLB );
-            pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+            if ( aOriginal.Left() == aOut.Left() )
+            {
+                SwRect aRect( aOut.Pos(), aLB );
+                pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+            }
+            // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
+            if ( aOriginal.Right() == nRight )
+            {
+                SwRect aRect( aRT, aRB );
+                pSubsLines->AddLineRect( aRect, 0, 0,
+                        (bBreak && bVert) ? SUBCOL_BREAK : nSubColor );
+            }
         }
-        if ( aOriginal.Right() == nRight )
-        {
-            SwRect aRect( aRT, aRB );
-            pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
-        }
-        if ( !bCell )
+        // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
+        if ( !bCell || IsVertical() )
         {
             if ( aOriginal.Top() == aOut.Top() )
             {
+                // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 SwRect aRect( aOut.Pos(), aRT );
                 pSubsLines->AddLineRect( aRect, 0, 0,
-                                         bBreak ? SUBCOL_BREAK : nSubColor );
+                        (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
