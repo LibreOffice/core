@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-22 06:57:58 $
+ *  last change: $Author: tl $ $Date: 2002-07-29 10:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
       </prop>
     </group>
     <group oor:name="SizeType">
+      <info>
+        <desc xml:lang="en-US">Contains settings for width and height of an object or element.</desc>
+      </info>
       <prop oor:name="Width" oor:type="xs:int">
         <info>
           <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
@@ -132,6 +135,9 @@
       </prop>
     </group>
     <group oor:name="PositionType">
+      <info>
+        <desc xml:lang="en-US">Contains settings for the position of an object or element.</desc>
+      </info>
       <prop oor:name="Left" oor:type="xs:int">
         <info>
           <desc xml:lang="en-US">Left distance of the object  [UNIT=1/100 mm]</desc>
@@ -154,6 +160,9 @@
       </prop>
     </group>
     <group oor:name="AlignmentType">
+      <info>
+        <desc xml:lang="en-US">Contains settings for the alingment of an object or element.</desc>
+      </info>
       <prop oor:name="Position" oor:type="xs:int">
         <constraints>
           <enumeration oor:value="0">
@@ -205,24 +214,57 @@
       </prop>
     </group>
     <group oor:name="TextElementType">
+      <info>
+        <desc xml:lang="en-US"></desc>
+      </info>
       <prop oor:name="Visible" oor:type="xs:boolean">
         <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US"></desc>
+        </info>
       </prop>
-      <prop oor:name="Content" oor:type="xs:string" oor:localized="true"/>
+      <prop oor:name="Content" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc xml:lang="en-US"></desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="IntElementType">
-      <prop oor:name="Visible" oor:type="xs:boolean"/>
-      <prop oor:name="Content" oor:type="xs:int"/>
+      <info>
+        <desc xml:lang="en-US"></desc>
+      </info>
+      <prop oor:name="Visible" oor:type="xs:boolean">
+        <info>
+          <desc xml:lang="en-US"></desc>
+        </info>
+      </prop>
+      <prop oor:name="Content" oor:type="xs:int">
+        <info>
+          <desc xml:lang="en-US"></desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="FileType">
+      <info>
+        <desc xml:lang="en-US"></desc>
+      </info>
       <prop oor:name="Name" oor:type="xs:string">
         <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US"></desc>
+        </info>
       </prop>
       <prop oor:name="Filter" oor:type="xs:string">
         <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US"></desc>
+        </info>
       </prop>
     </group>
     <group oor:name="PositionXYType">
+      <info>
+        <desc xml:lang="en-US">Contains settings for a position defined by x and y coordinates.</desc>
+      </info>
       <prop oor:name="X" oor:type="xs:int">
         <info>
           <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
@@ -295,9 +337,16 @@
           <desc xml:lang="en-US">Specifies, if the table has an empty headline or if the headline contains the database column names.</desc>
         </info>
       </prop>
-      <set oor:name="ColumnSet" oor:node-type="ColumnSetType"/>
+      <set oor:name="ColumnSet" oor:node-type="ColumnSetType">
+        <info>
+          <desc xml:lang="en-US">Specifies the list of columns to be inserted.</desc>
+        </info>
+      </set>
     </group>
     <group oor:name="ColumnSetType">
+      <info>
+        <desc xml:lang="en-US">Specifies a column to be inserted.</desc>
+      </info>
       <prop oor:name="ColumnName" oor:type="xs:string">
         <info>
           <desc xml:lang="en-US">Specifies the column name</desc>
@@ -566,7 +615,13 @@
       </group>
     </group>
     <group oor:name="Layout">
+      <info>
+        <desc xml:lang="en-US">Contains layout specific settings.</desc>
+      </info>
       <group oor:name="Line">
+        <info>
+          <desc xml:lang="en-US">Contains settings for guiding lines or points (for example when selcting/moving an aobject or frame).</desc>
+        </info>
         <prop oor:name="Guide" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
@@ -602,6 +657,9 @@
         </prop>
       </group>
       <group oor:name="Window">
+        <info>
+          <desc xml:lang="en-US">Contains vaious settings for the window like scrollbars, rules, etc.</desc>
+        </info>
         <prop oor:name="HorizontalScroll" oor:type="xs:boolean">
           <!-- OldPath: Writer/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
@@ -780,6 +838,9 @@
         </prop>
       </group>
       <group oor:name="Other">
+        <info>
+            <desc xml:lang="en-US">Contains misceallenous settings.</desc>
+        </info>
         <prop oor:name="MeasureUnit" oor:type="xs:int">
           <!-- OldPath: Writer/Layout -->
           <!-- OldLocation: Soffice.cfg -->
@@ -852,6 +913,9 @@
         </prop>
       </group>
       <group oor:name="Zoom">
+        <info>
+          <desc xml:lang="en-US">Contains zoom specific settings.</desc>
+        </info>
         <prop oor:name="Type" oor:type="xs:int">
           <!-- Responsible: OS -->
           <!-- UIHints: (Status Bar) -->
@@ -890,7 +954,13 @@
       </group>
     </group>
     <group oor:name="Grid">
+      <info>
+        <desc xml:lang="en-US">Contains various for the grid that are not listed in other sections.</desc>
+      </info>
       <group oor:name="Option">
+        <info>
+          <desc xml:lang="en-US">Contains options settings for the grid.</desc>
+        </info>
         <prop oor:name="SnapToGrid" oor:type="xs:boolean">
           <!-- OldPath: Writer/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
@@ -926,6 +996,9 @@
         </prop>
       </group>
       <group oor:name="Resolution">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing the grid resolution.</desc>
+        </info>
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: Writer/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
@@ -950,6 +1023,9 @@
         </prop>
       </group>
       <group oor:name="Subdivision">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing the subdivision of the grid.</desc>
+        </info>
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: Writer/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1164,7 +1240,13 @@
       </prop>
     </group>
     <group oor:name="Print">
+      <info>
+        <desc xml:lang="en-US">Contains printing relevant settings.</desc>
+      </info>
       <group oor:name="Content">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing which content types hould be printed.</desc>
+        </info>
         <prop oor:name="Graphic" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1265,6 +1347,9 @@
         </prop>
       </group>
       <group oor:name="Page">
+        <info>
+          <desc xml:lang="en-US">Contains settings which or how pages should be printed.</desc>
+        </info>
         <prop oor:name="LeftPage" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1311,6 +1396,9 @@
         </prop>
       </group>
       <group oor:name="Output">
+        <info>
+          <desc xml:lang="en-US">Contains other output specific settings.</desc>
+        </info>
         <prop oor:name="SinglePrintJob" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Output -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1334,6 +1422,9 @@
         </prop>
       </group>
       <group oor:name="Papertray">
+        <info>
+          <desc xml:lang="en-US">Contains settings for printers with multiple paper trays.</desc>
+        </info>
         <prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
           <!-- OldPath: Writer/Print/Papertray -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1348,7 +1439,13 @@
       </group>
     </group>
     <group oor:name="Table">
+      <info>
+        <desc xml:lang="en-US">Contains settings for tables.</desc>
+      </info>
       <group oor:name="Shift">
+        <info>
+          <desc xml:lang="en-US">Contains settings used when shifting table rows/columns.</desc>
+        </info>
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Table/Shift -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1375,6 +1472,9 @@
         </prop>
       </group>
       <group oor:name="Insert">
+        <info>
+          <desc xml:lang="en-US">Contains settings used when insertimng table rows/columns.</desc>
+        </info>
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: Writer/Table/Insert -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1401,6 +1501,9 @@
         </prop>
       </group>
       <group oor:name="Change">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing the effect to the table when modifying rows/columns.</desc>
+        </info>
         <prop oor:name="Effect" oor:type="xs:int">
           <!-- OldPath: Writer/Table -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1430,6 +1533,9 @@
         </prop>
       </group>
       <group oor:name="Input">
+        <info>
+          <desc xml:lang="en-US">Contains settings used when inputing text or data in tables.</desc>
+        </info>
         <prop oor:name="NumberRecognition" oor:type="xs:boolean">
           <!-- OldPath: Writer/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1536,8 +1642,17 @@
       </group>
     </group>
     <group oor:name="Revision">
+      <info>
+        <desc xml:lang="en-US">Contains settings for change recording.</desc>
+      </info>
       <group oor:name="TextDisplay">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the display of the changed text itself.</desc>
+        </info>
         <group oor:name="Insert">
+          <info>
+            <desc xml:lang="en-US">Contains settings for new inserted text.</desc>
+          </info>
           <prop oor:name="Attribute" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Insert -->
             <!-- OldLocation: Soffice.cfg -->
@@ -1613,6 +1728,9 @@
           </prop>
         </group>
         <group oor:name="Delete">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the display of deleted text.</desc>
+          </info>
           <prop oor:name="Attribute" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Delete -->
             <!-- OldLocation: Soffice.cfg -->
@@ -1683,6 +1801,9 @@
           </prop>
         </group>
         <group oor:name="ChangedAttribute">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the display of modified text attributes.</desc>
+          </info>
           <prop oor:name="Attribute" oor:type="xs:int">
             <!-- OldPath: Writer/Changes/Text display/Changed_Attribute -->
             <!-- OldLocation: Soffice.cfg -->
@@ -1759,6 +1880,9 @@
         </group>
       </group>
       <group oor:name="LinesChanged">
+        <info>
+          <desc xml:lang="en-US">Contains settings defining how lines with changed text should be displayed.</desc>
+        </info>
         <prop oor:name="Mark" oor:type="xs:int">
           <!-- OldPath: Writer/Changes/Lines_changed -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1929,8 +2053,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2040,8 +2172,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2132,8 +2272,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2248,8 +2396,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2359,8 +2515,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2470,8 +2634,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2581,8 +2753,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2695,8 +2875,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2806,8 +2994,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -2917,8 +3113,16 @@
                   <label xml:lang="en-US">Level</label>
                 </info>
                 <constraints>
-                  <minInclusive oor:value="0"/>
-                  <maxInclusive oor:value="11"/>
+                  <minInclusive oor:value="0">
+                    <info>
+                      <desc xml:lang="en-US">Minimum value allowed.</desc>
+                    </info>
+                  </minInclusive>
+                  <maxInclusive oor:value="11">
+                    <info>
+                      <desc xml:lang="en-US">Maximum value allowed.</desc>
+                    </info>
+                  </maxInclusive>
                 </constraints>
               </prop>
               <prop oor:name="Delimiter" oor:type="xs:string">
@@ -3573,7 +3777,13 @@
       </group>
     </group>
     <group oor:name="Label">
+      <info>
+        <desc xml:lang="en-US">Contains various settings for labels.</desc>
+      </info>
       <group oor:name="Inscription">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the inscription of the labels text field.</desc>
+        </info>
         <prop oor:name="UseAddress" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3607,6 +3817,9 @@
         </prop>
       </group>
       <group oor:name="Medium">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the media type used for the label.</desc>
+        </info>
         <prop oor:name="Continous" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3640,6 +3853,9 @@
         </prop>
       </group>
       <group oor:name="Format">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the label format.</desc>
+        </info>
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Labels/Format -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3730,6 +3946,9 @@
         </prop>
       </group>
       <group oor:name="Option">
+        <info>
+          <desc xml:lang="en-US">Contains miscelleanous options for labels.</desc>
+        </info>
         <prop oor:name="Synchronize" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/Labels/Options -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4393,6 +4612,9 @@
       </group>
     </group>
     <group oor:name="Navigator">
+      <info>
+        <desc xml:lang="en-US">Contains settings used for the navigator.</desc>
+      </info>
       <prop oor:name="ShowListBox" oor:type="xs:boolean">
         <!-- OldPath: Writer/PIs/Navigator -->
         <!-- OldLocation: Soffice.cfg -->
@@ -4447,8 +4669,16 @@
           <label xml:lang="en-US">Heading levels shown</label>
         </info>
         <constraints>
-          <minInclusive oor:value="0"/>
-          <maxInclusive oor:value="10"/>
+          <minInclusive oor:value="0">
+            <info>
+              <desc xml:lang="en-US">Minimum value allowed.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="10">
+            <info>
+              <desc xml:lang="en-US">Maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
         </constraints>
       </prop>
       <prop oor:name="InsertMode" oor:type="xs:int">
@@ -4709,8 +4939,17 @@
       </set>
     </group>
     <group oor:name="Wizard">
+      <info>
+        <desc xml:lang="en-US">Contains wizard specific settings.</desc>
+      </info>
       <group oor:name="Agenda">
+        <info>
+          <desc xml:lang="en-US">Contains agenda wizard specific settings.</desc>
+        </info>
         <group oor:name="Template">
+          <info>
+            <desc xml:lang="en-US">Contains agenda wizard specific templates.</desc>
+          </info>
           <node-ref oor:name="Style" oor:node-type="StyleType">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -4721,6 +4960,9 @@
           </node-ref>
         </group>
         <group oor:name="Logo">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the logo.</desc>
+          </info>
           <prop oor:name="Visible" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -4731,9 +4973,16 @@
               <label xml:lang="en-US">Logo</label>
             </info>
           </prop>
-          <node-ref oor:name="GraphicFile" oor:node-type="FileType"/>
+          <node-ref oor:name="GraphicFile" oor:node-type="FileType">
+            <info>
+              <desc xml:lang="en-US">Specifies the file and filter to be used for the graphic.</desc>
+            </info>
+          </node-ref>
         </group>
         <group oor:name="Elements">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the agenda elements.</desc>
+          </info>
           <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -4909,7 +5158,11 @@
               <label xml:lang="en-US">-</label>
             </info>
             <constraints>
-              <minInclusive oor:value="0"/>
+              <minInclusive oor:value="0">
+                <info>
+                  <desc xml:lang="en-US">Minimum value allowed.</desc>
+                </info>
+              </minInclusive>
             </constraints>
           </prop>
           <set oor:name="AgendaList" oor:node-type="AgendaType">
@@ -5163,7 +5416,13 @@
         </group>
       </group>
       <group oor:name="Letter">
+        <info>
+          <desc xml:lang="en-US">Contains setting for the letter wizard.</desc>
+        </info>
         <group oor:name="Template">
+          <info>
+            <desc xml:lang="en-US">Contains letter wizard specific templates.</desc>
+          </info>
           <prop oor:name="Type" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5184,6 +5443,9 @@
           </node-ref>
         </group>
         <group oor:name="Logo">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the logo.</desc>
+          </info>
           <prop oor:name="Visible" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5213,7 +5475,11 @@
               <label xml:lang="en-US">Type of logo? - Text</label>
             </info>
           </prop>
-          <node-ref oor:name="GraphicFile" oor:node-type="FileType"/>
+          <node-ref oor:name="GraphicFile" oor:node-type="FileType">
+            <info>
+              <desc xml:lang="en-US">Specifies the file and filter to be used for the graphic.</desc>
+            </info>
+          </node-ref>
           <node-ref oor:name="Position" oor:node-type="PositionXYType">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5231,6 +5497,9 @@
             </info>
           </node-ref>
           <group oor:name="Alignment">
+            <info>
+              <desc xml:lang="en-US">Contains settings for alignment of the logo.</desc>
+            </info>
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5251,6 +5520,9 @@
           </group>
         </group>
         <group oor:name="Sender">
+          <info>
+            <desc xml:lang="en-US">Contains sender specific settings.</desc>
+          </info>
           <prop oor:name="Content" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5299,6 +5571,9 @@
             </info>
           </node-ref>
           <group oor:name="Alignment">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the alignment of the sender text frame.</desc>
+            </info>
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5319,6 +5594,9 @@
           </group>
         </group>
         <group oor:name="Recipient">
+          <info>
+            <desc xml:lang="en-US">Contains setting used for the recipient entries.</desc>
+          </info>
           <prop oor:name="Database" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5385,6 +5663,9 @@
             </info>
           </node-ref>
           <group oor:name="Alignment">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the alignment of the addressee text frame.</desc>
+            </info>
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5405,6 +5686,9 @@
           </group>
         </group>
         <group oor:name="Elements">
+          <info>
+            <desc xml:lang="en-US">Contains settings specifing which elements the letter should contain.</desc>
+          </info>
           <prop oor:name="Copy" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5425,6 +5709,9 @@
             </info>
           </prop>
           <group oor:name="Element1">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 1.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5436,6 +5723,9 @@
             </node-ref>
           </group>
           <group oor:name="Element2">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 2.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5447,6 +5737,9 @@
             </node-ref>
           </group>
           <group oor:name="Element3">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 3.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5458,6 +5751,9 @@
             </node-ref>
           </group>
           <group oor:name="Element4">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 4.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5469,6 +5765,9 @@
             </node-ref>
           </group>
           <group oor:name="Date">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the date.</desc>
+            </info>
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5480,6 +5779,9 @@
             </node-ref>
           </group>
           <group oor:name="Subject">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the subject.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5491,6 +5793,9 @@
             </node-ref>
           </group>
           <group oor:name="PageNumber">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the actual and total page number.</desc>
+            </info>
             <prop oor:name="Visible" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5519,6 +5824,9 @@
               </info>
             </prop>
             <group oor:name="TotalPageCount">
+              <info>
+                <desc xml:lang="en-US">Contains settings for the total page number.</desc>
+              </info>
               <prop oor:name="Visible" oor:type="xs:boolean">
                 <!-- OldLocation: wizard.ini -->
                 <!-- Responsible: OS -->
@@ -5541,6 +5849,9 @@
           </group>
         </group>
         <group oor:name="Header">
+          <info>
+            <desc xml:lang="en-US">Contains settings used for the header.</desc>
+          </info>
           <prop oor:name="FromTop" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5560,6 +5871,9 @@
             </info>
           </prop>
           <group oor:name="Sender">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the sender frame.</desc>
+            </info>
             <prop oor:name="Visible" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5588,6 +5902,9 @@
             </node-ref>
           </group>
           <group oor:name="Logo">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the logo frame.</desc>
+            </info>
             <prop oor:name="Visible" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5617,7 +5934,13 @@
           </group>
         </group>
         <group oor:name="Footer">
+          <info>
+            <desc xml:lang="en-US">Contains settings used for the footer.</desc>
+          </info>
           <group oor:name="OnPage1">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the footer used on the first page.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5666,6 +5989,9 @@
             </prop>
           </group>
           <group oor:name="OnContinuationPages">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the footer used on other pages than the first.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -5697,6 +6023,9 @@
           </group>
         </group>
         <group oor:name="PageMargin">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the page margin.</desc>
+          </info>
           <prop oor:name="Left" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5719,6 +6048,9 @@
           </prop>
         </group>
         <group oor:name="Save">
+          <info>
+            <desc xml:lang="en-US">Contains save options for the document created with this template.</desc>
+          </info>
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -5955,6 +6287,9 @@
           </prop>
         </group>
         <group oor:name="Print">
+          <info>
+            <desc xml:lang="en-US">Contains settings for printing.</desc>
+          </info>
           <prop oor:name="Sender" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6029,6 +6364,9 @@
             </info>
           </prop>
           <group oor:name="Tray">
+            <info>
+              <desc xml:lang="en-US">Contains settings for trays to be used for the first and continuation pages.</desc>
+            </info>
             <prop oor:name="Page1" oor:type="xs:string">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6055,7 +6393,13 @@
         </group>
       </group>
       <group oor:name="Fax">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the fax wizard.</desc>
+        </info>
         <group oor:name="Template">
+          <info>
+            <desc xml:lang="en-US">Contains fax wizard specific templates.</desc>
+          </info>
           <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6106,6 +6450,9 @@
             </info>
           </node-ref>
           <group oor:name="Format">
+            <info>
+              <desc xml:lang="en-US">Contains page format settings.</desc>
+            </info>
             <prop oor:name="Width" oor:type="xs:int">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6129,6 +6476,9 @@
           </group>
         </group>
         <group oor:name="Logo">
+          <info>
+            <desc xml:lang="en-US">Contains logo frame specific settings.</desc>
+          </info>
           <prop oor:name="Visible" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6183,6 +6533,9 @@
             </info>
           </node-ref>
           <group oor:name="Alignment">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the aliognment of the frame.</desc>
+            </info>
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6203,6 +6556,9 @@
           </group>
         </group>
         <group oor:name="Sender">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the sender frame.</desc>
+          </info>
           <prop oor:name="Content" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6251,6 +6607,9 @@
             </info>
           </node-ref>
           <group oor:name="Alignment">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the alignment of the sender frame.</desc>
+            </info>
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6270,6 +6629,9 @@
           </group>
         </group>
         <group oor:name="Recipient">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the recipient frame.</desc>
+          </info>
           <prop oor:name="Database" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6337,6 +6699,9 @@
             </info>
           </node-ref>
           <group oor:name="Alignment">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the alignment of the recipient frame.</desc>
+            </info>
             <node-ref oor:name="Type" oor:node-type="AlignmentType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6356,6 +6721,9 @@
           </group>
         </group>
         <group oor:name="Elements">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the content elemnts.</desc>
+          </info>
           <prop oor:name="Copy" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6367,6 +6735,9 @@
             </info>
           </prop>
           <group oor:name="Element1">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the element 1.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6378,6 +6749,9 @@
             </node-ref>
           </group>
           <group oor:name="Element2">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the element 2.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6389,6 +6763,9 @@
             </node-ref>
           </group>
           <group oor:name="Element3">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the element 3.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6400,6 +6777,9 @@
             </node-ref>
           </group>
           <group oor:name="Element4">
+            <info>
+              <desc xml:lang="en-US">Contains settings for the element 4.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6411,6 +6791,9 @@
             </node-ref>
           </group>
           <group oor:name="Date">
+            <info>
+              <desc xml:lang="en-US">Contains date specific settings.</desc>
+            </info>
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6422,6 +6805,9 @@
             </node-ref>
           </group>
           <group oor:name="Time">
+            <info>
+              <desc xml:lang="en-US">Contains time specific settings.</desc>
+            </info>
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6433,6 +6819,9 @@
             </node-ref>
           </group>
           <group oor:name="Subject">
+            <info>
+              <desc xml:lang="en-US">Contains subject specific settings.</desc>
+            </info>
             <node-ref oor:name="Value" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6445,6 +6834,9 @@
           </group>
         </group>
         <group oor:name="Footer">
+          <info>
+            <desc xml:lang="en-US">Contains footer specific settings.</desc>
+          </info>
           <prop oor:name="Enable" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6475,6 +6867,9 @@
           </prop>
         </group>
         <group oor:name="PageMargin">
+          <info>
+            <desc xml:lang="en-US">Contains settings for the page margin.</desc>
+          </info>
           <prop oor:name="Left" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6497,6 +6892,9 @@
           </prop>
         </group>
         <group oor:name="Save">
+          <info>
+            <desc xml:lang="en-US">Contains settings for saving of the document created with this template.</desc>
+          </info>
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6732,7 +7130,13 @@
         </group>
       </group>
       <group oor:name="Memo">
+        <info>
+          <desc xml:lang="en-US">Contains memo wizard specific settings.</desc>
+        </info>
         <group oor:name="Template">
+          <info>
+            <desc xml:lang="en-US">Contains memo wizard specific templates.</desc>
+          </info>
           <node-ref oor:name="Style" oor:node-type="StyleType">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6742,6 +7146,9 @@
             </info>
           </node-ref>
           <group oor:name="Title">
+            <info>
+              <desc xml:lang="en-US">Contains title specific settings.</desc>
+            </info>
             <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6788,6 +7195,9 @@
           </group>
         </group>
         <group oor:name="Elements">
+          <info>
+            <desc xml:lang="en-US">Contains settings specifing which elements the memo should contain.</desc>
+          </info>
           <prop oor:name="To" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6819,6 +7229,9 @@
             </info>
           </prop>
           <group oor:name="Element1">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 1.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6830,6 +7243,9 @@
             </node-ref>
           </group>
           <group oor:name="Element2">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 2.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6841,6 +7257,9 @@
             </node-ref>
           </group>
           <group oor:name="Element3">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 3.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6852,6 +7271,9 @@
             </node-ref>
           </group>
           <group oor:name="Element4">
+            <info>
+              <desc xml:lang="en-US">Contains settings for element 4.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6863,6 +7285,9 @@
             </node-ref>
           </group>
           <group oor:name="Date">
+            <info>
+              <desc xml:lang="en-US">Contains date specific settings.</desc>
+            </info>
             <node-ref oor:name="Value" oor:node-type="IntElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6874,6 +7299,9 @@
             </node-ref>
           </group>
           <group oor:name="Subject">
+            <info>
+              <desc xml:lang="en-US">Contains subject specific settings.</desc>
+            </info>
             <node-ref oor:name="Text" oor:node-type="TextElementType">
               <!-- OldLocation: wizard.ini -->
               <!-- Responsible: OS -->
@@ -6886,6 +7314,9 @@
           </group>
         </group>
         <group oor:name="Header">
+          <info>
+            <desc xml:lang="en-US">Contains header specific settings.</desc>
+          </info>
           <prop oor:name="Date" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6928,6 +7359,9 @@
           </prop>
         </group>
         <group oor:name="Footer">
+          <info>
+            <desc xml:lang="en-US">Contains footer specific settings.</desc>
+          </info>
           <prop oor:name="Date" oor:type="xs:boolean">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -6969,6 +7403,9 @@
           </node-ref>
         </group>
         <group oor:name="Save">
+          <info>
+            <desc xml:lang="en-US">Contains save options for the document created with this template.</desc>
+          </info>
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -7242,7 +7679,13 @@
       </group>
     </group>
     <group oor:name="Numbering">
+      <info>
+        <desc xml:lang="en-US">Contains Numbering/Bullets specific settings.</desc>
+      </info>
       <group oor:name="Graphic">
+        <info>
+          <desc xml:lang="en-US">Contains settings for graphics used for bullets.</desc>
+        </info>
         <prop oor:name="KeepRatio" oor:type="xs:boolean">
           <!--OldLocation: Soffice.cfg -->
           <!--Responsible: OS -->
@@ -7255,7 +7698,13 @@
       </group>
     </group>
     <group oor:name="Statistics">
+      <info>
+        <desc xml:lang="en-US">Contains settings relevant for the documents statistic.</desc>
+      </info>
       <group oor:name="WordNumber">
+        <info>
+          <desc xml:lang="en-US">Contains word number settings.</desc>
+        </info>
         <prop oor:name="Delimiter" oor:type="xs:string">
           <!--OldLocation: Soffice.cfg -->
           <!--Responsible: OS -->
@@ -7268,6 +7717,9 @@
       </group>
     </group>
     <group oor:name="Index">
+      <info>
+        <desc xml:lang="en-US">Contains settings for indices.</desc>
+      </info>
       <prop oor:name="ShowPreview" oor:type="xs:boolean">
         <!-- OldLocation: Soffice.cfg -->
         <!-- Responsible: OS -->
@@ -7375,6 +7827,9 @@
       </group>
     </group>
     <group oor:name="Misc">
+      <info>
+          <desc xml:lang="en-US">Contains miscellaneous settings not fitting anywhere else.</desc>
+      </info>
       <prop oor:name="GraphicToGalleryAsLink" oor:type="xs:boolean">
         <!-- OldLocation: Soffice.cfg -->
         <!-- Responsible: OS -->
