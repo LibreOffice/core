@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicExportHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:34:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include "xmltoken.hxx"
 #endif
 
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -88,6 +91,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::PropertyValue;
 
 
@@ -106,13 +110,16 @@ XMLStarBasicExportHandler::~XMLStarBasicExportHandler()
 
 void XMLStarBasicExportHandler::Export(
     SvXMLExport& rExport,
-    const OUString& rEventName,
+    const OUString& rEventQName,
     Sequence<PropertyValue> & rValues,
     sal_Bool bUseWhitespace)
 {
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE, sStarBasic);
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventName);
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
+                         rExport.GetNamespaceMap().GetQNameByKey(
+                             XML_NAMESPACE_OOO, sStarBasic ) );
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventQName);
 
+    OUString sLocation, sName;
     sal_Int32 nCount = rValues.getLength();
     for(sal_Int32 i = 0; i < nCount; i++)
     {
@@ -120,20 +127,33 @@ void XMLStarBasicExportHandler::Export(
         {
             OUString sTmp;
             rValues[i].Value >>= sTmp;
-            rExport.AddAttribute(
-                XML_NAMESPACE_SCRIPT, XML_LOCATION,
-                (sTmp.equalsIgnoreAsciiCase(sApplication) || sTmp.equalsIgnoreAsciiCase(sStarOffice) ) ? XML_APPLICATION
-                                                        : XML_DOCUMENT );
+            sLocation = GetXMLToken(
+                (sTmp.equalsIgnoreAsciiCase(sApplication) ||
+                 sTmp.equalsIgnoreAsciiCase(sStarOffice) ) ? XML_APPLICATION
+                                                           : XML_DOCUMENT );
         }
         else if (sMacroName.equals(rValues[i].Name))
         {
-            OUString sTmp;
-            rValues[i].Value >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, sTmp);
+            rValues[i].Value >>= sName;
         }
         // else: disregard
     }
 
-    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, XML_EVENT,
+    if( sLocation.getLength() )
+    {
+        OUStringBuffer sTmp( sLocation.getLength() + sName.getLength() + 1 );
+        sTmp = sLocation;
+        sTmp.append( sal_Unicode( ':' ) );
+        sTmp.append( sName );
+        rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME,
+                            sTmp.makeStringAndClear());
+    }
+    else
+    {
+        rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, sName );
+    }
+
+    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT,
+                                   XML_EVENT_LISTENER,
                                    bUseWhitespace, sal_False);
 }
