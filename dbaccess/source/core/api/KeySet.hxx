@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
+ *  last change: $Author: oj $ $Date: 2002-10-01 09:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@
 
 namespace dbaccess
 {
-    DECLARE_STL_MAP(::rtl::OUString,sal_Int32,::comphelper::UStringMixLess,OColumnNamePos);
+    typedef ::std::pair<sal_Int32,sal_Int32>    TPositionTypePair;
+    DECLARE_STL_MAP(::rtl::OUString, TPositionTypePair,::comphelper::UStringMixLess,OColumnNamePos);
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
@@ -102,6 +103,7 @@ namespace dbaccess
 
         connectivity::ORowVector< connectivity::ORowSetValue >  m_aParameterRow; // contains the parameters from rowset
         ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
+        ::std::vector< sal_Int32 >                              m_aKeyColumnTypes;
 
         OColumnNamePos*                                         m_pKeyColumnNames;  // contains all key column names
         OColumnNamePos*                                         m_pColumnNames;     // contains all column names
@@ -219,6 +221,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/12/05 14:56:24  oj
+    #95610# fetch autoincrement values after insert with max
+
     Revision 1.12  2001/10/30 14:22:10  oj
     #93939# add late ctor
 
