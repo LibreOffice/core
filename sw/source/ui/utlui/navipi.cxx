@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 10:11:29 $
+ *  last change: $Author: os $ $Date: 2002-05-08 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,6 @@ void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus
     rBind.ENTERREGISTRATIONS();
     SwScrollNaviPopup* pPopup = new
         SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
-                        SW_RES(RID_SCROLL_NAVIGATION_WIN),
                         rBind);
     rBind.LEAVEREGISTRATIONS();
 
