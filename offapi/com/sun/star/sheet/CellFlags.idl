@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellFlags.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:29:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,12 @@ published constants CellFlags
      */
     const long EDITATTR = 256;
 
+    //-------------------------------------------------------------------------
+
+    /** selects cells with formatting within the cells or cells with more than
+        one paragraph within the cells.
+     */
+    const long FORMATTED = 512;
 };
 
 //=============================================================================
