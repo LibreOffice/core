@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-27 20:25:31 $
+ *  last change: $Author: obo $ $Date: 2001-08-29 21:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabPage TP_COLUMN
         Text[ dutch ] = "~Aantal";
         Text[ french ] = "Colonnes";
         Text[ spanish ] = "~Columnas";
-        Text[ finnish ] = "~Määrä";
+        Text[ finnish ] = "Sarakkeet";
         Text[ italian ] = "~Colonne";
         Text[ danish ] = "Antal";
         Text[ swedish ] = "~Kolumner";
@@ -374,7 +374,7 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Aralýk";
         Text[ catalan ] = "Espacio";
-        Text[ finnish ] = "Välit";
+        Text[ finnish ] = "Objektiv?lit";
     };
     MetricField ED_DIST1
     {
@@ -537,7 +537,7 @@ TabPage TP_COLUMN
         };
         StringList [ finnish ] =
         {
-            < "Ei mitään" ; Default ; > ;
+            < "Ei mit??n" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -626,7 +626,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "Altezza" ;
         Text [ portuguese_brazilian ] = "Altu~ra" ;
         Text [ portuguese ] = "Altu~ra" ;
-        Text [ finnish ] = "~Korkeus" ;
+        Text [ finnish ] = "K~orkeus" ;
         Text [ danish ] = "Højde" ;
         Text [ french ] = "~Hauteur" ;
         Text [ swedish ] = "Hö~jd" ;
@@ -740,7 +740,7 @@ TabPage TP_COLUMN
         };
         StringList [ finnish ] =
         {
-            < "Yläosa" ; Default ; > ;
+            < "Yl?osa" ; Default ; > ;
             < "Keskitetty" ; Default ; > ;
             < "Alaosa" ; Default ; > ;
         };
@@ -959,7 +959,7 @@ ModalDialog DLG_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Uygulanacaðý yer:";
         Text[ catalan ] = "~Aplicar a:";
-        Text[ finnish ] = "~Käytä:";
+        Text[ finnish ] = "~K?yt?:";
     };
     ListBox LB_APPLY_TO
     {
@@ -1149,7 +1149,7 @@ ModalDialog DLG_COLUMN
             < "Nykyinen osio" ;     LISTBOX_SECTION     ; > ;
             < "Valittu osio" ;  LISTBOX_SECTIONS    ; > ;
             < "Kehys" ;                 LISTBOX_FRAME       ; > ;
-            < "Sivun tyyli:" ;          LISTBOX_PAGE        ; > ;
+            < "Sivun tyyli: " ;         LISTBOX_PAGE        ; > ;
         };
     };
     Text[ english_us ] = "Columns";
@@ -1174,6 +1174,7 @@ ModalDialog DLG_COLUMN
     Text[ catalan ] = "Columnas";
     Text[ finnish ] = "Sarakkeet";
 };
+
 
 
 
