@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: pb $ $Date: 2001-11-12 12:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         ZoomPopup_Impl aPop( nZoom, nValueSet );
         StatusBar& rStatusbar = GetStatusBar();
 
-        if ( aPop.Execute( &rStatusbar, rStatusbar.OutputToScreenPixel( rCEvt.GetMousePosPixel() ) ) &&
-             ( nZoom != aPop.GetZoom() || !nZoom ) )
+        if ( aPop.Execute( &rStatusbar, rCEvt.GetMousePosPixel() ) && ( nZoom != aPop.GetZoom() || !nZoom ) )
         {
             nZoom = aPop.GetZoom();
             SvxZoomItem aZoom( SVX_ZOOM_PERCENT, nZoom, GetId() );
