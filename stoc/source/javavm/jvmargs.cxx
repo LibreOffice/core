@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-08 10:39:53 $
+ *  last change: $Author: jl $ $Date: 2002-08-15 13:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ OUString JVM::getUserClasspath()
     }
 
     sal_Bool JVM::isEnabled() const throw() {
-        return _enabled && _systemClasspath.getLength() && _runtimeLib.getLength();
+        return _enabled;
     }
 
         const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
