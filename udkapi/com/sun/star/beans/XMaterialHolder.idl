@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMaterialHolder.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
     @see XIntrospectionAccess
  */
-interface XMaterialHolder: com::sun::star::uno::XInterface
+published interface XMaterialHolder: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** returns the material that is connected to this (tool-) object
