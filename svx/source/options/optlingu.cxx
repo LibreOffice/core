@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-30 12:01:03 $
+ *  last change: $Author: tl $ $Date: 2001-01-30 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,6 +1445,13 @@ void SvxLinguTabPage::UpdateBox_Impl()
 
 void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
 {
+    if ( 0 != ( GROUP_MODULES & nGrp ) )
+    {
+        aLinguModulesFT.Hide();
+        aLinguModulesCLB.Hide();
+        aLinguModulesEditPB.Hide();
+    }
+
 #ifdef NEVER
     if ( 0 != ( GROUP_SPELLING & nGrp ) )
     {
@@ -1465,32 +1472,6 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         aSpecialBtn.Hide();
         aRulesBox.Hide();
     }
-
-    if ( 0 != ( GROUP_LANGUAGE & nGrp ) )
-    {
-        aLanguageText.Hide();
-        aLanguageLB.Hide();
-    }
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-void SvxLinguTabPage::HideSpellCheckSpecial()
-{
-    //TL???
-    //aSpellSpecialBtn.Hide();
-}
-
-/* -----------------------------27.01.00 12:14--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SvxLinguTabPage::EnableAutoSpelling()
-{
-#ifdef NEVER
-    aAutoCheckBtn.Show();
-    aMarkOffBtn.Show();
-    aAutoSpellBox.Show();
 #endif
 }
 
