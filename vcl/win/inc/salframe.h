@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:26:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ public:
     virtual SalPointerState     GetPointerState();
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
+    virtual void                SetBackgroundBitmap( SalBitmap* );
 };
 
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
