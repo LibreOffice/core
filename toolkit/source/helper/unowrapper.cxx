@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-25 11:08:53 $
+ *  last change: $Author: mt $ $Date: 2002-09-04 08:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ void ImplSmartWindowCreated( Window* pNewWindow )
 
 sal_Bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild )
 {
-    Window* pWindow = pPossibleChild;
+    Window* pWindow = ( pPossibleChild != pParentWindow ) ? pPossibleChild : NULL;
     while ( pWindow && ( pWindow != pParentWindow ) )
         pWindow = pWindow->GetParent();
 
@@ -328,6 +328,27 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     {
         pWindow->GetWindowPeer()->SetWindow( NULL );
         pWindow->SetWindowPeer( NULL, NULL );
+    }
+
+    // #102132# Iterate over frames after setting Window peer to NULL,
+    // because while destroying other frames, we get get into the method again and try
+    // to destroy this window again...
+    USHORT nFrames = Application::GetTopWindowCount();
+    for ( USHORT nFrame = nFrames; nFrame;  )
+    {
+        Window* pFrameWindow = Application::GetTopWindow( --nFrame );
+        DBG_ASSERT( pFrameWindow, "TopWindow?" );
+        if ( pFrameWindow && pFrameWindow->GetWindowPeer() && ( pFrameWindow->GetParent() == pWindow ) )    // Only direct parents here!
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pFrameWindow->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
+            xComp->dispose();
+            // Loop again, we don't know what else happened while disposing:
+            if ( nFrame )
+            {
+                nFrames = Application::GetTopWindowCount();
+                nFrame = nFrames;
+            }
+        }
     }
 }
 
