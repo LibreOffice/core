@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:26:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,34 @@
 #include "xflftrit.hxx"
 #endif
 
+#ifndef _SDR_PROPERTIES_E3DSCENEPROPERTIES_HXX
+#include <svx/sdr/properties/e3dsceneproperties.hxx>
+#endif
+
+// #110094#
+#ifndef _SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
+#include <svx/sdr/contact/viewcontactofe3dscene.hxx>
+#endif
+
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+
+//////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
+
+sdr::properties::BaseProperties* E3dScene::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::E3dSceneProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #110094# DrawContact section
+
+sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfE3dScene(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(E3dScene, E3dObject);
 
@@ -247,8 +274,12 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     aCamera.SetProjection(GetPerspective());
     Vector3D aActualPosition = aCamera.GetPosition();
     double fNew = GetDistance();
+
     if(fabs(fNew - aActualPosition.Z()) > 1.0)
+    {
         aCamera.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
+    }
+
     fNew = GetFocalLength() / 100.0;
     aCamera.SetFocalLength(fNew);
 }
@@ -282,7 +313,7 @@ BOOL E3dScene::AreThereTransparentParts() const
         if(pObj->ISA(E3dCompoundObject))
         {
             // get const ItemSet reference
-            const SfxItemSet& rSet = pObj->GetItemSet();
+            const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
             // Flaechenattribut testen
             UINT16 nFillTrans = ((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue();
@@ -405,7 +436,8 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
 {
     // Alte Kamera setzen
     aCamera = rNewCamera;
-    ImpSetSceneItemsFromCamera();
+    ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
+
     SetRectsDirty();
 
     // Neue Kamera aus alter fuellen
@@ -875,17 +907,25 @@ void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             UINT16 nTmp;
             rIn >> nTmp;
             if(nTmp == (Base3DShadeModel)Base3DFlat)
-                mpObjectItemSet->Put(Svx3DShadeModeItem(0));
+            {
+                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(0));
+            }
             else if(nTmp == (Base3DShadeModel)Base3DPhong)
-                mpObjectItemSet->Put(Svx3DShadeModeItem(1));
+            {
+                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(1));
+            }
             else
-                mpObjectItemSet->Put(Svx3DShadeModeItem(2));
+            {
+                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(2));
+            }
         }
         if (aCompat.GetBytesLeft() >= sizeof(BOOL))
         {
             rIn >> bTmp;
             if(bTmp)
-                mpObjectItemSet->Put(Svx3DShadeModeItem(3));
+            {
+                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(3));
+            }
         }
 
         // SnapRects der Objekte ungueltig
@@ -898,8 +938,8 @@ void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         RebuildLists();
 
         // set items from combined read objects like lightgroup and camera
-        ImpSetLightItemsFromLightGroup();
-        ImpSetSceneItemsFromCamera();
+        ((sdr::properties::E3dSceneProperties&)GetProperties()).SetLightItemsFromLightGroup(aLightGroup);
+        ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
     }
 }
 
@@ -985,11 +1025,12 @@ void E3dScene::operator=(const SdrObject& rObj)
 
     // neu ab 377:
     aCameraSet = r3DObj.aCameraSet;
-    ImpSetSceneItemsFromCamera();
+    ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
 
     // neu ab 383:
     aLightGroup = r3DObj.aLightGroup;
-    ImpSetLightItemsFromLightGroup();
+    ((sdr::properties::E3dSceneProperties&)GetProperties()).SetLightItemsFromLightGroup(aLightGroup);
+
     bDither = r3DObj.bDither;
 
     bBoundVolValid = FALSE;
@@ -1075,61 +1116,6 @@ void E3dScene::SFX_NOTIFY(SfxBroadcaster &rBC,
 {
     SetRectsDirty();
     E3dObject::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
-}
-
-/*************************************************************************
-|*
-|* Compounds brauchen Defaults
-|*
-\************************************************************************/
-
-void E3dScene::ForceDefaultAttr()
-{
-    SdrAttrObj::ForceDefaultAttr();
-}
-
-/*************************************************************************
-|*
-|* Attribute setzen
-|*
-\************************************************************************/
-
-void E3dScene::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    E3dObjList* pOL = pSub;
-    ULONG nObjCnt = pOL->GetObjCount();
-
-    for ( ULONG i = 0; i < nObjCnt; i++ )
-        pOL->GetObj(i)->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
-
-    StructureChanged(this);
-}
-
-/*************************************************************************
-|*
-|* Attribute abfragen
-|*
-\************************************************************************/
-
-SfxStyleSheet* E3dScene::GetStyleSheet() const
-{
-    E3dObjList    *pOL          = pSub;
-    ULONG         nObjCnt       = pOL->GetObjCount();
-    SfxStyleSheet *pRet         = 0;
-
-    for ( ULONG i = 0; i < nObjCnt; i++ )
-    {
-        SfxStyleSheet *pSheet = pOL->GetObj(i)->GetStyleSheet();
-
-        if (!pRet)
-            pRet = pSheet;
-        else if (pSheet)
-        {
-            if(!pSheet->GetName().Equals(pRet->GetName()))
-                return 0;
-        }
-    }
-    return pRet;
 }
 
 /*************************************************************************
@@ -1456,359 +1442,6 @@ void E3dScene::RecalcSnapRect()
 
 /*************************************************************************
 |*
-|* Attribute abfragen
-|*
-\************************************************************************/
-
-void E3dScene::ImpSetLightItemsFromLightGroup()
-{
-    ImpForceItemSet();
-
-    // TwoSidedLighting
-    mpObjectItemSet->Put(Svx3DTwoSidedLightingItem(aLightGroup.GetModelTwoSide()));
-
-    // LightColors
-    mpObjectItemSet->Put(Svx3DLightcolor1Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0)));
-    mpObjectItemSet->Put(Svx3DLightcolor2Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1)));
-    mpObjectItemSet->Put(Svx3DLightcolor3Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2)));
-    mpObjectItemSet->Put(Svx3DLightcolor4Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3)));
-    mpObjectItemSet->Put(Svx3DLightcolor5Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4)));
-    mpObjectItemSet->Put(Svx3DLightcolor6Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5)));
-    mpObjectItemSet->Put(Svx3DLightcolor7Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6)));
-    mpObjectItemSet->Put(Svx3DLightcolor8Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7)));
-
-    // AmbientColor
-    mpObjectItemSet->Put(Svx3DAmbientcolorItem(aLightGroup.GetGlobalAmbientLight()));
-
-    // LightOn
-    mpObjectItemSet->Put(Svx3DLightOnOff1Item(aLightGroup.IsEnabled(Base3DLight0)));
-    mpObjectItemSet->Put(Svx3DLightOnOff2Item(aLightGroup.IsEnabled(Base3DLight1)));
-    mpObjectItemSet->Put(Svx3DLightOnOff3Item(aLightGroup.IsEnabled(Base3DLight2)));
-    mpObjectItemSet->Put(Svx3DLightOnOff4Item(aLightGroup.IsEnabled(Base3DLight3)));
-    mpObjectItemSet->Put(Svx3DLightOnOff5Item(aLightGroup.IsEnabled(Base3DLight4)));
-    mpObjectItemSet->Put(Svx3DLightOnOff6Item(aLightGroup.IsEnabled(Base3DLight5)));
-    mpObjectItemSet->Put(Svx3DLightOnOff7Item(aLightGroup.IsEnabled(Base3DLight6)));
-    mpObjectItemSet->Put(Svx3DLightOnOff8Item(aLightGroup.IsEnabled(Base3DLight7)));
-
-    // LightDirection
-    mpObjectItemSet->Put(Svx3DLightDirection1Item(aLightGroup.GetDirection( Base3DLight0 )));
-    mpObjectItemSet->Put(Svx3DLightDirection2Item(aLightGroup.GetDirection( Base3DLight1 )));
-    mpObjectItemSet->Put(Svx3DLightDirection3Item(aLightGroup.GetDirection( Base3DLight2 )));
-    mpObjectItemSet->Put(Svx3DLightDirection4Item(aLightGroup.GetDirection( Base3DLight3 )));
-    mpObjectItemSet->Put(Svx3DLightDirection5Item(aLightGroup.GetDirection( Base3DLight4 )));
-    mpObjectItemSet->Put(Svx3DLightDirection6Item(aLightGroup.GetDirection( Base3DLight5 )));
-    mpObjectItemSet->Put(Svx3DLightDirection7Item(aLightGroup.GetDirection( Base3DLight6 )));
-    mpObjectItemSet->Put(Svx3DLightDirection8Item(aLightGroup.GetDirection( Base3DLight7 )));
-}
-
-void E3dScene::ImpSetSceneItemsFromCamera()
-{
-    ImpForceItemSet();
-    Camera3D aSceneCam (GetCamera());
-
-    // ProjectionType
-    mpObjectItemSet->Put(Svx3DPerspectiveItem((UINT16)aSceneCam.GetProjection()));
-
-    // CamPos
-    mpObjectItemSet->Put(Svx3DDistanceItem((UINT32)(aSceneCam.GetPosition().Z() + 0.5)));
-
-    // FocalLength
-    mpObjectItemSet->Put(Svx3DFocalLengthItem((UINT32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-const SfxItemSet& E3dScene::GetItemSet() const
-{
-    // prepare ItemSet
-    if(mpObjectItemSet)
-    {
-        SfxItemSet aNew(*mpObjectItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
-        aNew.Put(*mpObjectItemSet);
-        mpObjectItemSet->ClearItem();
-        mpObjectItemSet->Put(aNew);
-    }
-    else
-        ((E3dScene*)this)->ImpForceItemSet();
-
-    // collect all ItemSets in mpGroupItemSet
-    sal_uInt32 nCount(pSub->GetObjCount());
-    for(sal_uInt32 a(0); a < nCount; a++)
-    {
-        const SfxItemSet& rSet = pSub->GetObj(a)->GetItemSet();
-        SfxWhichIter aIter(rSet);
-        sal_uInt16 nWhich(aIter.FirstWhich());
-
-        while(nWhich)
-        {
-            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
-                mpObjectItemSet->InvalidateItem(nWhich);
-            else
-                mpObjectItemSet->MergeValue(rSet.Get(nWhich), TRUE);
-
-            nWhich = aIter.NextWhich();
-        }
-    }
-
-    return *mpObjectItemSet;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-
-void E3dScene::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
-{
-    // handle local value change
-    if(!nWhich || (nWhich >= SDRATTR_3DSCENE_FIRST && nWhich <= SDRATTR_3DSCENE_LAST))
-        SdrAttrObj::ItemChange(nWhich, pNewItem);
-
-    // ItemChange at all contained objects
-    List aPostItemChangeList;
-    sal_uInt32 nCount(pSub->GetObjCount());
-
-    for(sal_uInt32 a(0); a < nCount; a++)
-    {
-        SdrObject* pObj = pSub->GetObj(a);
-        if(pObj->AllowItemChange(nWhich, pNewItem))
-        {
-            pObj->ItemChange(nWhich, pNewItem);
-            aPostItemChangeList.Insert((void*)pObj, LIST_APPEND);
-        }
-    }
-
-    for(a = 0; a < aPostItemChangeList.Count(); a++)
-    {
-        SdrObject* pObj = (SdrObject*)aPostItemChangeList.GetObject(a);
-        pObj->PostItemChange(nWhich);
-    }
-}
-
-void E3dScene::PostItemChange(const sal_uInt16 nWhich)
-{
-    // call parent
-    if(!nWhich || (nWhich >= SDRATTR_3DSCENE_FIRST && nWhich <= SDRATTR_3DSCENE_LAST))
-        SdrAttrObj::PostItemChange(nWhich);
-
-    // local changes
-    StructureChanged(this);
-
-    switch(nWhich)
-    {
-        case SDRATTR_3DSCENE_PERSPECTIVE            :
-        case SDRATTR_3DSCENE_DISTANCE               :
-        case SDRATTR_3DSCENE_FOCAL_LENGTH           :
-        {
-            // #83387#, #83391#
-            // one common function for the camera attributes
-            // since SetCamera() sets all three back to the ItemSet
-            Camera3D aSceneCam(GetCamera());
-            BOOL bChange(FALSE);
-
-            // for SDRATTR_3DSCENE_PERSPECTIVE:
-            if(aSceneCam.GetProjection() != GetPerspective())
-            {
-                aSceneCam.SetProjection(GetPerspective());
-                bChange = TRUE;
-            }
-
-            // for SDRATTR_3DSCENE_DISTANCE:
-            Vector3D aActualPosition = aSceneCam.GetPosition();
-            double fNew = GetDistance();
-            if(fNew != aActualPosition.Z())
-            {
-                aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
-                bChange = TRUE;
-            }
-
-            // for SDRATTR_3DSCENE_FOCAL_LENGTH:
-            fNew = GetFocalLength() / 100.0;
-            if(aSceneCam.GetFocalLength() != fNew)
-            {
-                aSceneCam.SetFocalLength(fNew);
-                bChange = TRUE;
-            }
-
-            // for all
-            if(bChange)
-                SetCamera(aSceneCam);
-
-            break;
-        }
-        case SDRATTR_3DSCENE_TWO_SIDED_LIGHTING     :
-        {
-            aLightGroup.SetModelTwoSide(GetTwoSidedLighting());
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_1           :
-        {
-            aLightGroup.SetIntensity( GetLightColor1(), Base3DMaterialDiffuse, Base3DLight0);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_2           :
-        {
-            aLightGroup.SetIntensity( GetLightColor2(), Base3DMaterialDiffuse, Base3DLight1);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_3           :
-        {
-            aLightGroup.SetIntensity( GetLightColor3(), Base3DMaterialDiffuse, Base3DLight2);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_4           :
-        {
-            aLightGroup.SetIntensity( GetLightColor4(), Base3DMaterialDiffuse, Base3DLight3);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_5           :
-        {
-            aLightGroup.SetIntensity( GetLightColor5(), Base3DMaterialDiffuse, Base3DLight4);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_6           :
-        {
-            aLightGroup.SetIntensity( GetLightColor6(), Base3DMaterialDiffuse, Base3DLight5);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_7           :
-        {
-            aLightGroup.SetIntensity( GetLightColor7(), Base3DMaterialDiffuse, Base3DLight6);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTCOLOR_8           :
-        {
-            aLightGroup.SetIntensity( GetLightColor8(), Base3DMaterialDiffuse, Base3DLight7);
-            break;
-        }
-        case SDRATTR_3DSCENE_AMBIENTCOLOR           :
-        {
-            aLightGroup.SetGlobalAmbientLight(GetGlobalAmbientColor());
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_1              :
-        {
-            aLightGroup.Enable( GetLightOnOff1(), Base3DLight0);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_2              :
-        {
-            aLightGroup.Enable( GetLightOnOff2(), Base3DLight1);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_3              :
-        {
-            aLightGroup.Enable( GetLightOnOff3(), Base3DLight2);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_4              :
-        {
-            aLightGroup.Enable( GetLightOnOff4(), Base3DLight3);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_5              :
-        {
-            aLightGroup.Enable( GetLightOnOff5(), Base3DLight4);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_6              :
-        {
-            aLightGroup.Enable( GetLightOnOff6(), Base3DLight5);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_7              :
-        {
-            aLightGroup.Enable( GetLightOnOff7(), Base3DLight6);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTON_8              :
-        {
-            aLightGroup.Enable( GetLightOnOff8(), Base3DLight7);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_1       :
-        {
-            aLightGroup.SetDirection( GetLightDirection1(), Base3DLight0);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_2       :
-        {
-            aLightGroup.SetDirection( GetLightDirection2(), Base3DLight1);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_3       :
-        {
-            aLightGroup.SetDirection( GetLightDirection3(), Base3DLight2);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_4       :
-        {
-            aLightGroup.SetDirection( GetLightDirection4(), Base3DLight3);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_5       :
-        {
-            aLightGroup.SetDirection( GetLightDirection5(), Base3DLight4);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_6       :
-        {
-            aLightGroup.SetDirection( GetLightDirection6(), Base3DLight5);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_7       :
-        {
-            aLightGroup.SetDirection( GetLightDirection7(), Base3DLight6);
-            break;
-        }
-        case SDRATTR_3DSCENE_LIGHTDIRECTION_8       :
-        {
-            aLightGroup.SetDirection( GetLightDirection8(), Base3DLight7);
-            break;
-        }
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// ItemSet was changed, maybe user wants to react
-
-void E3dScene::ItemSetChanged( const SfxItemSet& rSet )
-{
-    // call parent
-    E3dObject::ItemSetChanged( rSet );
-
-    // set at all contained objects
-    sal_uInt32 nCount(pSub->GetObjCount());
-    for(sal_uInt32 a(0); a < nCount; a++)
-        pSub->GetObj(a)->ItemSetChanged( rSet );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// pre- and postprocessing for objects for saving
-
-void E3dScene::PreSave()
-{
-    // call parent
-    E3dObject::PreSave();
-
-    // set at all contained objects
-    sal_uInt32 nCount(pSub->GetObjCount());
-    for(sal_uInt32 a(0); a < nCount; a++)
-        pSub->GetObj(a)->PreSave();
-}
-
-void E3dScene::PostSave()
-{
-    // call parent
-    E3dObject::PostSave();
-
-    // set at all contained objects
-    sal_uInt32 nCount(pSub->GetObjCount());
-    for(sal_uInt32 a(0); a < nCount; a++)
-        pSub->GetObj(a)->PostSave();
-}
-
-/*************************************************************************
-|*
 |* Aufbrechen
 |*
 \************************************************************************/
@@ -1831,34 +1464,6 @@ BOOL E3dScene::IsBreakObjPossible()
     return TRUE;
 }
 
-/*************************************************************************
-|*
-|* ItemPool fuer dieses Objekt wechseln
-|*
-\************************************************************************/
-
-void E3dScene::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel )
-{
-    if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-    {
-        // call parent
-        E3dObject::MigrateItemPool(pSrcPool, pDestPool, pNewModel);
-
-        // own reaction, but only with outmost scene
-        SdrObjList* pSubList = GetSubList();
-        if(pSubList && GetScene() == this)
-        {
-            SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-            while ( a3DIterator.IsMore() )
-            {
-                E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-                DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-                pObj->MigrateItemPool(pSrcPool, pDestPool, pNewModel);
-            }
-        }
-    }
-}
-
 Vector3D E3dScene::GetShadowPlaneDirection() const
 {
     double fWink = (double)GetShadowSlant() * F_PI180;
@@ -1870,8 +1475,7 @@ Vector3D E3dScene::GetShadowPlaneDirection() const
 void E3dScene::SetShadowPlaneDirection(const Vector3D& rVec)
 {
     UINT16 nSceneShadowSlant = (UINT16)((atan2(rVec.Y(), rVec.Z()) / F_PI180) + 0.5);
-    ImpForceItemSet();
-    mpObjectItemSet->Put(Svx3DShadowSlantItem(nSceneShadowSlant));
+    GetProperties().SetObjectItemDirect(Svx3DShadowSlantItem(nSceneShadowSlant));
 }
 
 // EOF
