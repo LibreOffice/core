@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-06 16:06:35 $
+ *  last change: $Author: jb $ $Date: 2001-11-02 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ namespace configmgr
             if (_bRequiresBootstrap)
             {
                 OSL_ASSERT(m_pPureSettings);
-                raiseBootstrapException(*m_pPureSettings, *this);
+                m_pPureSettings->raiseBootstrapException(*this);
 
                 OSL_ASSERT(m_pPureSettings->valid);
             }
@@ -423,6 +423,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/08/06 16:06:35  jb
+ *  #85017#,#81412# Moved common bootstrap code to unotools (utl::Bootstrap)
+ *
  *  Revision 1.12  2001/08/01 12:16:00  lla
  *  #90434# some logging code implemented.
  *
