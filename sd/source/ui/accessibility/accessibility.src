@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:39:34 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ String SID_SD_A11Y_D_DRAWVIEW_N
     Text[ hebrew ] = "Zeichnungsansicht";
     Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤¦à¥ƒà¤¶à¥à¤¯";
     Text[ slovak ] = "NÃ¡hÄ¾ad kresby";
+    Text[ hungarian ] = "RajzolÃ³nÃ©zet";
+    Text[ slovenian ] = "Risalni pogled";
 };
 
 String SID_SD_A11Y_D_DRAWVIEW_D
@@ -103,13 +105,13 @@ String SID_SD_A11Y_D_DRAWVIEW_D
     Text[ english_us ] = "This is where you create and edit drawings.";
     Text[ portuguese ] = "This is where you create and edit drawings.";
     Text[ russian ] = "This is where you create and edit drawings.";
-    Text[ greek ] = "This is where you create and edit drawings.";
-    Text[ dutch ] = "This is where you create and edit drawings.";
+    Text[ greek ] = "Åäş äçìéïõñãåßôå êáé åğåîåñãÜæåóôå ó÷İäéá.";
+    Text[ dutch ] = "Hier maakt en bewerkt u tekeningen.";
     Text[ french ] = "Création et édition des dessins";
     Text[ spanish ] = "Aquí puede crear y editar dibujos. ";
     Text[ finnish ] = "This is where you create and edit drawings.";
     Text[ italian ] = "Spazio per creare e modificare disegni.";
-    Text[ danish ] = "This is where you create and edit drawings.";
+    Text[ danish ] = "Her kan du oprette og redigere tegninger.";
     Text[ swedish ] = "Här kan du skapa och redigera teckningar.";
     Text[ polish ] = "This is where you create and edit drawings.";
     Text[ portuguese_brazilian ] = "Criação e edição de desenhos";
@@ -125,6 +127,8 @@ String SID_SD_A11Y_D_DRAWVIEW_D
     Text[ hebrew ] = "Hier kÃ¶nnen Sie Zeichnungen erzeugen und bearbeiten.";
     Text[ hindi ] = "This is where you create and edit drawings.";
     Text[ slovak ] = "Tu mÃ´Å¾ete vytvÃ¡raÅ¥ a upravovaÅ¥ kresby.";
+    Text[ hungarian ] = "Ebben a nÃ©zetben lehet lÃ©trehozni Ã©s szerkeszteni a rajzokat.";
+    Text[ slovenian ] = "Tukaj lahko ustvarjate in urejate risbe.";
 };
 
 String SID_SD_A11Y_I_DRAWVIEW_N
@@ -156,6 +160,8 @@ String SID_SD_A11Y_I_DRAWVIEW_N
     Text[ hebrew ] = "Zeichnungsansicht";
     Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤¦à¥ƒà¤¶à¥à¤¯";
     Text[ slovak ] = "NÃ¡hÄ¾ad kresby";
+    Text[ hungarian ] = "SzerkesztÃ©s nÃ©zet";
+    Text[ slovenian ] = "Risalni pogled";
 };
 
 String SID_SD_A11Y_I_DRAWVIEW_D
@@ -165,13 +171,13 @@ String SID_SD_A11Y_I_DRAWVIEW_D
     Text[ english_us ] = "This is where you create and edit slides.";
     Text[ portuguese ] = "This is where you create and edit slides.";
     Text[ russian ] = "This is where you create and edit slides.";
-    Text[ greek ] = "This is where you create and edit slides.";
-    Text[ dutch ] = "This is where you create and edit slides.";
+    Text[ greek ] = "Åäş äçìéïõñãåßôå êáé åğåîåñãÜæåóôå äéáöÜíåéåò.";
+    Text[ dutch ] = "Hier maakt en bewerkt u dia's.";
     Text[ french ] = "Création et édition des pages";
     Text[ spanish ] = "Aquí se pueden crear y editar diapositivas.";
     Text[ finnish ] = "This is where you create and edit slides.";
     Text[ italian ] = "Spazio per creare e modificare le presentazioni.";
-    Text[ danish ] = "This is where you create and edit slides.";
+    Text[ danish ] = "Her kan du oprette og redigere dias.";
     Text[ swedish ] = "Här kan du skapa och redigera sidor.";
     Text[ polish ] = "This is where you create and edit slides.";
     Text[ portuguese_brazilian ] = "Criação e edição de slides";
@@ -187,6 +193,8 @@ String SID_SD_A11Y_I_DRAWVIEW_D
     Text[ hebrew ] = "Hier kÃ¶nnen Sie Seiten erzeugen und bearbeiten.";
     Text[ hindi ] = "This is where you create and edit slides.";
     Text[ slovak ] = "Tu mÃ´Å¾ete vytvÃ¡raÅ¥ a upravovaÅ¥ snÃ­mky.";
+    Text[ hungarian ] = "Ebben a nÃ©zetben lehet lÃ©trehozni Ã©s szerkeszteni a diÃ¡kat.";
+    Text[ slovenian ] = "Tukaj oblikujete in urejate diapozitive.";
 };
 
 String SID_SD_A11Y_I_OUTLINEVIEW_N
@@ -218,6 +226,8 @@ String SID_SD_A11Y_I_OUTLINEVIEW_N
     Text[ hebrew ] = "Gliederungsansicht";
     Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¦à¥ƒà¤¶à¥à¤¯";
     Text[ slovak ] = "PohÄ¾ad s osnovou";
+    Text[ hungarian ] = "VÃ¡zlat nÃ©zet";
+    Text[ slovenian ] = "Orisni pogled";
 };
 
 String SID_SD_A11Y_I_OUTLINEVIEW_D
@@ -227,13 +237,13 @@ String SID_SD_A11Y_I_OUTLINEVIEW_D
     Text[ english_us ] = "This is where you enter or edit text in list form.";
     Text[ portuguese ] = "This is where you enter or edit text in list form.";
     Text[ russian ] = "This is where you enter or edit text in list form.";
-    Text[ greek ] = "This is where you enter or edit text in list form.";
-    Text[ dutch ] = "This is where you enter or edit text in list form.";
+    Text[ greek ] = "Åäş åéóÜãåôå Ş åğåîåñãÜæåóôå êåßìåíï óå ìïñöŞ ëßóôáò.";
+    Text[ dutch ] = "Hier voert u tekst in lijstvorm in of of bewerkt deze tekst.";
     Text[ french ] = "Saisie et édition du texte en mode Plan";
     Text[ spanish ] = "Aquí puede introducir y editar texto en forma de lista. ";
     Text[ finnish ] = "This is where you enter or edit text in list form.";
     Text[ italian ] = "Spazio per creare e modificare un testo nella vista struttura.";
-    Text[ danish ] = "This is where you enter or edit text in list form.";
+    Text[ danish ] = "Her kan du indtaste eller redigere tekst på listeform.";
     Text[ swedish ] = "Här kan du mata in och redigera text i dispositionsvyn.";
     Text[ polish ] = "This is where you enter or edit text in list form.";
     Text[ portuguese_brazilian ] = "Criação e edição do texto dos tópicos.";
@@ -249,6 +259,8 @@ String SID_SD_A11Y_I_OUTLINEVIEW_D
     Text[ hebrew ] = "Hier kÃ¶nnen Sie Text in der Gliederungsansicht eingeben und bearbeiten.";
     Text[ hindi ] = "This is where you enter or edit text in list form.";
     Text[ slovak ] = "Tu mÃ´Å¾ete zadÃ¡vaÅ¥ a upravovaÅ¥ text formulÃ¡ra.";
+    Text[ hungarian ] = "Ebben a nÃ©zetben listaformÃ¡ban Ã­rhatjuk be vagy szerkeszthetjÃ¼k a szÃ¶vegeket.";
+    Text[ slovenian ] = "Tukaj vnaÅ¡ate in urejate besedilo v obliki seznama.";
 };
 
 String SID_SD_A11Y_I_SLIDEVIEW_N
@@ -280,6 +292,8 @@ String SID_SD_A11Y_I_SLIDEVIEW_N
     Text[ hebrew ] = "Diaansicht";
     Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡ à¤¦à¥ƒà¤¶à¥à¤¯";
     Text[ slovak ] = "PohÄ¾ad na snÃ­mky";
+    Text[ hungarian ] = "Dia nÃ©zet";
+    Text[ slovenian ] = "Pogled diapozitivov";
 };
 
 String SID_SD_A11Y_I_SLIDEVIEW_D
@@ -289,13 +303,13 @@ String SID_SD_A11Y_I_SLIDEVIEW_D
     Text[ english_us ] = "This is where you sort slides.";
     Text[ portuguese ] = "This is where you sort slides.";
     Text[ russian ] = "This is where you sort slides.";
-    Text[ greek ] = "This is where you sort slides.";
-    Text[ dutch ] = "This is where you sort slides.";
+    Text[ greek ] = "Åäş ôáîéíïìåßôå ôéò äéáöÜíåéåò.";
+    Text[ dutch ] = "Hier sorteert u dia's.";
     Text[ french ] = "Tri des diapos";
     Text[ spanish ] = "Aquí puede ordenar las diapositivas.";
     Text[ finnish ] = "This is where you sort slides.";
     Text[ italian ] = "Spazio per ordinare le diapositive.";
-    Text[ danish ] = "This is where you sort slides.";
+    Text[ danish ] = "Her kan du sortere dine dias.";
     Text[ swedish ] = "Här kan du sortera sidor.";
     Text[ polish ] = "This is where you sort slides.";
     Text[ portuguese_brazilian ] = "Seleção de slides";
@@ -311,6 +325,8 @@ String SID_SD_A11Y_I_SLIDEVIEW_D
     Text[ hebrew ] = "Hier kÃ¶nnen Sie Seiten sortieren.";
     Text[ hindi ] = "This is where you sort slides.";
     Text[ slovak ] = "Tu mÃ´Å¾ete triediÅ¥ snÃ­mky.";
+    Text[ hungarian ] = "Ebben a nÃ©zetben rendezhetjÃ¼k a diÃ¡kat.";
+    Text[ slovenian ] = "Tukaj razvrÅ¡Äate diapozitive.";
 };
 
 String SID_SD_A11Y_I_NOTESVIEW_N
@@ -342,6 +358,8 @@ String SID_SD_A11Y_I_NOTESVIEW_N
     Text[ hebrew ] = "Notizansicht";
     Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€ à¤¦à¥ƒà¤¶à¥à¤¯";
     Text[ slovak ] = "PohÄ¾ad na poznÃ¡mky";
+    Text[ hungarian ] = "Jegyzet nÃ©zet";
+    Text[ slovenian ] = "Pogled opomb";
 };
 
 String SID_SD_A11Y_I_NOTESVIEW_D
@@ -351,13 +369,13 @@ String SID_SD_A11Y_I_NOTESVIEW_D
     Text[ english_us ] = "This is where you enter and view notes.";
     Text[ portuguese ] = "This is where you enter and view notes.";
     Text[ russian ] = "This is where you enter and view notes.";
-    Text[ greek ] = "This is where you enter and view notes.";
-    Text[ dutch ] = "This is where you enter and view notes.";
+    Text[ greek ] = "Åäş åéóÜãåôå êáé âëİğåôå óçìåéşóåéò.";
+    Text[ dutch ] = "Hier voert u aantekeningen in en bewerkt ze.";
     Text[ french ] = "Saisie et édition des notes";
     Text[ spanish ] = "Aquí puede introducir y editar anotaciones. ";
     Text[ finnish ] = "This is where you enter and view notes.";
     Text[ italian ] = "Spazio per scrivere le annotazioni.";
-    Text[ danish ] = "This is where you enter and view notes.";
+    Text[ danish ] = "Her kan du indtaste og vise noter.";
     Text[ swedish ] = "Här kan du mata in och redigera anteckningar.";
     Text[ polish ] = "This is where you enter and view notes.";
     Text[ portuguese_brazilian ] = "Digitação e edição de anotações";
@@ -373,6 +391,8 @@ String SID_SD_A11Y_I_NOTESVIEW_D
     Text[ hebrew ] = "Hier kÃ¶nnen Sie Notizen eingeben und bearbeiten.";
     Text[ hindi ] = "This is where you enter and view notes.";
     Text[ slovak ] = "Tu mÃ´Å¾ete zadÃ¡vaÅ¥ a prezeraÅ¥ poznÃ¡mky.";
+    Text[ hungarian ] = "Ebben a nÃ©zetben Ã­rhatjuk be Ã©s nÃ©zhetjÃ¼k meg a megjegyzÃ©seket.";
+    Text[ slovenian ] = "Tukaj vnaÅ¡ate in urejate opombe.";
 };
 
 String SID_SD_A11Y_I_HANDOUTVIEW_N
@@ -404,6 +424,8 @@ String SID_SD_A11Y_I_HANDOUTVIEW_N
     Text[ hebrew ] = "Handzettelansicht";
     Text[ hindi ] = "à¤¹à¤¾à¤¨à¥à¤¡à¥Œà¤Ÿà¥ à¤¦à¥ƒà¤¶à¥à¤¯";
     Text[ slovak ] = "PohÄ¾ad na tÃ©zu";
+    Text[ hungarian ] = "EmlÃ©keztetÅ‘ nÃ©zet";
+    Text[ slovenian ] = "Pogled izroÄka";
 };
 
 String SID_SD_A11Y_I_HANDOUTVIEW_D
@@ -413,13 +435,13 @@ String SID_SD_A11Y_I_HANDOUTVIEW_D
     Text[ english_us ] = "This is where you decide on the layout for handouts.";
     Text[ portuguese ] = "This is where you decide on the layout for handouts.";
     Text[ russian ] = "This is where you decide on the layout for handouts.";
-    Text[ greek ] = "This is where you decide on the layout for handouts.";
-    Text[ dutch ] = "This is where you decide on the layout for handouts.";
+    Text[ greek ] = "Åäş áğïöáóßæåôå ôç äéÜôáîç ôùí óçìåéùìÜôùí.";
+    Text[ dutch ] = "Hier bepaalt u de lay-out van hand-outs.";
     Text[ french ] = "Édition de la mise en page des prospectus";
     Text[ spanish ] = "Aquí puede editar el diseño de los volantes. ";
     Text[ finnish ] = "This is where you decide on the layout for handouts.";
     Text[ italian ] = "Spazio per modificare il layout di stampati.";
-    Text[ danish ] = "This is where you decide on the layout for handouts.";
+    Text[ danish ] = "Her bestemmer du layout for uddelingskopier.";
     Text[ swedish ] = "Här kan du redigera layout för flygblad.";
     Text[ polish ] = "This is where you decide on the layout for handouts.";
     Text[ portuguese_brazilian ] = "Edição do layout dos folhetos";
@@ -435,7 +457,12 @@ String SID_SD_A11Y_I_HANDOUTVIEW_D
     Text[ hebrew ] = "Hier kÃ¶nnen Sie das Layout der Handzettel bearbeiten.";
     Text[ hindi ] = "This is where you decide on the layout for handouts.";
     Text[ slovak ] = "Tu sa mÃ´Å¾ete rozhodnÃºÅ¥ pre rozloÅ¾enie tÃ©z.";
+    Text[ hungarian ] = "Ebben a nÃ©zetben hatÃ¡rozhatjuk meg az emlÃ©keztetÅ‘k elrendezÃ©sÃ©t.";
+    Text[ slovenian ] = "Tukaj doloÄite postavitev izroÄka.";
 };
+
+
+
 
 
 
