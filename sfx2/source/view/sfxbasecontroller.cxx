@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:24 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::disposing( const EVENT
 void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership ) throw (RUNTIMEEXCEPTION)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if  ( m_pController !=  NULL )
+    if  ( m_pController !=  NULL && m_pController->GetViewShell_Impl() )
     {
         BOOL bCanClose = (BOOL) m_pController->GetViewShell_Impl()->PrepareClose( FALSE );
         if ( !bCanClose )
