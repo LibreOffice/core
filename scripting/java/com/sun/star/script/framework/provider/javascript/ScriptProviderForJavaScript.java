@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJavaScript.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 14:07:07 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:12:49 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -91,11 +91,11 @@ import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.script.framework.log.LogUtils;
-import com.sun.star.script.framework.provider.PathUtils;
 import com.sun.star.script.framework.provider.ScriptContext;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
 import com.sun.star.script.framework.provider.ScriptProvider;
-import com.sun.star.script.framework.browse.ScriptMetaData;
+import com.sun.star.script.framework.provider.ScriptEditor;
+import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.log.*;
 
 import org.mozilla.javascript.Context;
@@ -129,7 +129,17 @@ public class ScriptProviderForJavaScript
             }
         }
 
-     }
+        public boolean hasScriptEditor()
+        {
+            return true;
+        }
+
+        public ScriptEditor getScriptEditor()
+        {
+            return ScriptEditorForJavaScript.getEditor();
+        }
+    }
+
     /**
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -214,7 +224,7 @@ class ScriptImpl implements XScript
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
             throw new com.sun.star.uno.RuntimeException(
                 "Error constructing  ScriptImpl: [javascript]");
         }
@@ -263,11 +273,6 @@ class ScriptImpl implements XScript
             aOutParam[0] = new Object[0];
 
 
-            String parcelURI = metaData.getParcelLocation();
-            if (!parcelURI.endsWith("/")) {
-                parcelURI += "/";
-            }
-
 
             ClassLoader cl = null;
             try {
@@ -279,18 +284,30 @@ class ScriptImpl implements XScript
             }
 
             try {
-                String script = parcelURI + metaData.getLanguageName();
-                InputStream is;
+                String editorURL = metaData.getSourceURL().toString();
                 Object result = null;
+                String source = null;
+                ScriptEditorForJavaScript editor =
+                    ScriptEditorForJavaScript.getEditor(
+                        metaData.getSourceURL() );
 
-                try {
-                    is = PathUtils.getScriptFileStream( script );
-                }
-                catch (IOException ioe) {
-                    throw new InvocationTargetException(ioe.getMessage());
+                if (editor != null)
+                {
+                    editorURL = editor.getURL();
                 }
 
-                if (is == null) {
+                if (editor != null && editor.isModified() == true)
+                {
+                    LogUtils.DEBUG("GOT A MODIFIED SOURCE");
+                    source = editor.getText();
+                }
+                else
+                {
+                    source =  metaData.getSource();
+
+                }
+
+                if ( source == null || source.length() == 0 ) {
                     throw new InvocationTargetException("Could not load script");
                 }
 
@@ -313,33 +330,33 @@ class ScriptImpl implements XScript
                  */
                 try {
                     ImporterTopLevel scope = new ImporterTopLevel(ctxt);
-                    Scriptable jsArgs = Context.toObject(
-                        ScriptContext.createContext(m_oInvokeContext, m_xContext,
-                            m_xMultiComponentFactory), scope);
-                    scope.put("XSCRIPTCONTEXT", scope, jsArgs);
 
-                    result = ctxt.evaluateReader(scope,
-                        new InputStreamReader(is), "script", 1, null);
+                    Scriptable jsCtxt = Context.toObject(
+                        ScriptContext.createContext(
+                            m_oInvokeContext, m_xContext,
+                            m_xMultiComponentFactory), scope);
+                    scope.put("XSCRIPTCONTEXT", scope, jsCtxt);
+
+                    Scriptable jsArgs = Context.toObject(params, scope);
+                    scope.put("ARGUMENTS", scope, jsArgs);
+
+                    result = ctxt.evaluateString(scope,
+                        source, editorURL, 1, null);
 
                     result = ctxt.toString(result);
                 }
                 catch (JavaScriptException jse) {
-                    jse.printStackTrace();
+                    LogUtils.DEBUG( LogUtils.getTrace( jse ) );
                     throw new InvocationTargetException(jse.getMessage());
-                }
-                catch (IOException ioe) {
-                    ioe.printStackTrace();
-                    throw new InvocationTargetException(ioe.getMessage());
                 }
                 finally {
                     Context.exit();
-                    try {is.close();} catch (IOException ignored) {}
                 }
 
                 return result;
             }
             catch (Exception ex) {
-                ex.printStackTrace();
+                LogUtils.DEBUG( LogUtils.getTrace( ex ) );
                 throw new InvocationTargetException(ex.getMessage());
             }
         }
