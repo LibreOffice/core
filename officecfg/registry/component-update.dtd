@@ -37,4 +37,5 @@
   xsi:nil (true | false) #IMPLIED
   oor:separator CDATA #IMPLIED
   xml:lang CDATA #IMPLIED
+  install:module NMTOKEN #IMPLIED
 >
