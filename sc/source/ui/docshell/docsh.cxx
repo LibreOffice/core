@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-04 15:49:33 $
+ *  last change: $Author: sab $ $Date: 2002-11-12 08:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,9 +537,6 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
         ScColumn::bDoubleAlloc = sal_True;
         bRet = aImport.Import(sal_False);
 
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-        nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
-
         UpdateLinks();
         // don't prevent establishing of listeners anymore
         aDocument.SetInsertingFromOtherDoc( FALSE );
@@ -647,6 +644,12 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
     BOOL bRet = SfxInPlaceObject::Load( pStor );
     if( bRet )
     {
+        if (GetMedium())
+        {
+            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+            nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+        }
+
         if (bXML)
         {
             //  prepare a valid document for XML filter
@@ -733,6 +736,12 @@ BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
 
     BOOL bRet = FALSE;
 
+    if (GetMedium())
+    {
+        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+        nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+    }
+
     if ( bXML )
     {
         //  until loading/saving only the styles in XML is implemented,
@@ -810,6 +819,9 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
     //  darum vorher per CreateFileStream dafuer sorgen, dass die komplette
     //  Datei uebertragen wird.
     rMedium.GetPhysicalName();  //! CreateFileStream direkt rufen, wenn verfuegbar
+
+    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+    nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
 
     const SfxFilter* pFilter = rMedium.GetFilter();
     if (pFilter)
