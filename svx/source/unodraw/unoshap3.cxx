@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:00:58 $
+ *  last change: $Author: aw $ $Date: 2000-11-30 17:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_DOUBLESEQUENCE_HPP_
 #include <com/sun/star/drawing/DoubleSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
+#include <com/sun/star/drawing/CameraGeometry.hpp>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -381,6 +384,25 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
+    else if(pObj
+        && pObj->ISA(E3dScene)
+        && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_CAMERA_GEOMETRY)) )
+    {
+        // set CameraGeometry at scene
+        E3dScene* pScene = (E3dScene*)pObj;
+        drawing::CameraGeometry aCamGeo;
+
+        if(aValue >>= aCamGeo)
+        {
+            Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
+            Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
+            Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
+
+            // set at scene
+            B3dCamera& aCameraSet = pScene->GetCameraSet();
+            aCameraSet.SetViewportValues(aVRP, aVPN, aVUP);
+        }
+    }
     else
     {
         SvxShape::setPropertyValue(aPropertyName, aValue);
@@ -397,6 +419,33 @@ uno::Any SAL_CALL Svx3DSceneObject::getPropertyValue( const OUString& PropertyNa
     {
         // Objekt in eine homogene 4x4 Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
+    }
+    else if(pObj
+        && pObj->ISA(E3dScene)
+        && PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_CAMERA_GEOMETRY)) )
+    {
+        // get CameraGeometry from scene
+        E3dScene* pScene = (E3dScene*)pObj;
+        drawing::CameraGeometry aCamGeo;
+
+        // fill Vectors from scene camera
+        B3dCamera& aCameraSet = pScene->GetCameraSet();
+        Vector3D aVRP = aCameraSet.GetVRP();
+        Vector3D aVPN = aCameraSet.GetVPN();
+        Vector3D aVUP = aCameraSet.GetVUV();
+
+        // transfer to structure
+        aCamGeo.vrp.PositionX = aVRP.X();
+        aCamGeo.vrp.PositionY = aVRP.Y();
+        aCamGeo.vrp.PositionZ = aVRP.Z();
+        aCamGeo.vpn.DirectionX = aVPN.X();
+        aCamGeo.vpn.DirectionY = aVPN.Y();
+        aCamGeo.vpn.DirectionZ = aVPN.Z();
+        aCamGeo.vup.DirectionX = aVUP.X();
+        aCamGeo.vup.DirectionY = aVUP.Y();
+        aCamGeo.vup.DirectionZ = aVUP.Z();
+
+        return uno::Any(&aCamGeo, ::getCppuType((const drawing::CameraGeometry*)0) );
     }
     else
     {
