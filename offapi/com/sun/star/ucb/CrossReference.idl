@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CrossReference.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
     contained in multiple groups. An article can have a sequence of
     cross references.
 */
-struct CrossReference
+published struct CrossReference
 {
     //-------------------------------------------------------------------------
     /** The name of a news group.
