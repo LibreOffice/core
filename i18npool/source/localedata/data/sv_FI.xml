@@ -84,11 +84,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN"den" D. MMM YY</FormatCode>
+<FormatCode>NN "den" D. MMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN"den" D. MMMM YYYY</FormatCode>
+<FormatCode>NN "den" D. MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
