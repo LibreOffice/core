@@ -28,6 +28,13 @@ in this Software without prior written authorization from the X Consortium.
 
 
 #include "def.h"
+#include <string.h>
+
+void remove_dotdot( char * );
+int isdot( char * );
+int isdotdot( char * );
+int issymbolic(char * dir, char * component);
+
 
 extern struct   inclist inclist[ MAXFILES ],
             *inclistp;
@@ -122,7 +129,7 @@ struct inclist *inc_path(file, include, dot)
  * Any of the 'x/..' sequences within the name can be eliminated.
  * (but only if 'x' is not a symbolic link!!)
  */
-remove_dotdot(path)
+void remove_dotdot(path)
     char    *path;
 {
     register char   *end, *from, *to, **cp;
@@ -191,7 +198,7 @@ remove_dotdot(path)
     strcpy(path, newpath);
 }
 
-isdot(p)
+int isdot(p)
     register char   *p;
 {
     if(p && *p++ == '.' && *p++ == '\0')
@@ -199,7 +206,7 @@ isdot(p)
     return(FALSE);
 }
 
-isdotdot(p)
+int isdotdot(p)
     register char   *p;
 {
     if(p && *p++ == '.' && *p++ == '.' && *p++ == '\0')
@@ -207,7 +214,7 @@ isdotdot(p)
     return(FALSE);
 }
 
-issymbolic(dir, component)
+int issymbolic(dir, component)
     register char   *dir, *component;
 {
 #ifdef S_IFLNK
@@ -253,10 +260,10 @@ struct inclist *newinclude(newfile, incstring)
     return(ip);
 }
 
-included_by(ip, newfile)
+void included_by(ip, newfile)
     register struct inclist *ip, *newfile;
 {
-    register i;
+    register int i;
 
     if (ip == NULL)
         return;
@@ -298,7 +305,7 @@ included_by(ip, newfile)
     ip->i_list[ ip->i_listlen-1 ] = newfile;
 }
 
-inc_clean ()
+void inc_clean ()
 {
     register struct inclist *ip;
 
