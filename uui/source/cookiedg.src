@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cookiedg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-07 13:04:45 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ String STR_COOKIES_RECV_COOKIES
     Text[ russian ] = "ƒÓÏÂÌ: ${DOMAIN}, œÛÚ¸: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ polish ] = "Domena: ${DOMAIN}, åcieøka: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ japanese ] = "ƒﬁ“≤›: ${DOMAIN}§ ﬂΩ: ${PATH}ÅA∏Ø∑∞: ${COOKIE}ÅB\n";
-    Text[ chinese_traditional ] = "∞Ï°G${DOMAIN}°A∏ÙÆ|°G${PATH}, Cookie°G${COOKIE}°C\n";
+    Text[ chinese_traditional ] = "ª‚∞Ï°G${DOMAIN}°A∏ÙÆ|°G${PATH}, Cookie°G${COOKIE}°C\n";
     Text[ greek ] = "‘ÔÏ›·Ú: ${DOMAIN}, ƒÈ·‰ÒÔÏﬁ: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ korean ] = "µµ∏ﬁ¿Œ: ${DOMAIN}, ∞Ê∑Œ: ${PATH}, ƒÌ≈∞: ${COOKIE}.\n";
     Text[ arabic ] = "«·‰ÿ«ﬁ: ${DOMAIN}, «·„”«—: ${PATH}, «·ﬂÊﬂÌ: ${COOKIE}.\n";
@@ -360,7 +360,7 @@ String STR_COOKIES_SEND_COOKIES
     Text[ russian ] = "ƒÓÏÂÌ: ${DOMAIN}, œÛÚ¸: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ polish ] = "Domena: ${DOMAIN}, åcieøka: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ japanese ] = "ƒﬁ“≤›: ${DOMAIN}ÅA ﬂΩ: ${PATH}ÅA∏Ø∑∞: ${COOKIE}ÅB\n";
-    Text[ chinese_traditional ] = "∞Ï°G${DOMAIN}°A∏ÙÆ|°G${PATH}°ACookie °G${COOKIE}°C\n";
+    Text[ chinese_traditional ] = "ª‚∞Ï°G${DOMAIN}°A∏ÙÆ|°G${PATH}°ACookie °G${COOKIE}°C\n";
     Text[ greek ] = "‘ÔÏ›·Ú: ${DOMAIN}, ƒÈ·‰ÒÔÏﬁ: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ korean ] = "µµ∏ﬁ¿Œ: ${DOMAIN}, ∞Ê∑Œ: ${PATH},ƒÌ≈∞: ${COOKIE}.\n";
     Text[ arabic ] = "«·‰ÿ«ﬁ: ${DOMAIN}, «·„”«—: ${PATH}, «·ﬂÊﬂÌ: ${COOKIE}.\n";
