@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: fs $ $Date: 2002-04-09 14:32:23 $
+#   last change: $Author: oj $ $Date: 2002-07-25 07:20:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ EXCEPTIONSFILES=\
 
 SLOFILES=\
         $(EXCEPTIONSFILES)								\
+        $(SLO)$/AutoRetrievingBase.obj					\
         $(SLO)$/TSortIndex.obj							\
         $(SLO)$/dbcharset.obj							\
         $(SLO)$/dbconversion.obj						\
