@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:48:17 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #ifndef _UIPARAM_HXX
@@ -106,11 +105,17 @@
 #ifndef _SVX_OPTGRID_HXX //autogen
 #include <svx/optgrid.hxx>
 #endif
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <svx/backgrnd.hxx>
-#endif
-#ifndef _OPTPAGE_HXX //autogen
-#include <optpage.hxx>
+//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
+//CHINA001 #include <svx/backgrnd.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+
+//CHINA001 #ifndef _OPTPAGE_HXX //autogen
+//CHINA001 #include <optpage.hxx>
+//CHINA001 #endif
+#ifndef _FONTCFG_HXX
+#include <fontcfg.hxx>
 #endif
 #ifndef _OPTLOAD_HXX
 #include <optload.hxx>
@@ -188,7 +193,14 @@
 #ifndef _SWLINGUCONFIG_HXX
 #include <swlinguconfig.hxx>
 #endif
-
+#ifndef _SFXSLSTITM_HXX //CHINA001
+#include <svtools/slstitm.hxx> //CHINA001
+#endif //CHINA001
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
+#include "swabstdlg.hxx" //CHINA001
+#include <swwrtshitem.hxx> //CHINA001
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
@@ -597,12 +609,22 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
-
+    SfxAllItemSet aSet(*(rSet.GetPool()));
     switch( nId )
     {
         case RID_SW_TP_CONTENT_OPT:
         case RID_SW_TP_HTML_CONTENT_OPT:
-        pRet = SwContentOptPage::Create(pParent, rSet); break;
+            //CHINA001 pRet = SwContentOptPage::Create(pParent, rSet); break;
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+            break;
+        }
         case RID_SW_TP_HTML_OPTGRID_PAGE:
         case RID_SVXPAGE_GRID:
             pRet = SvxGridTabPage::Create(pParent, rSet);
@@ -612,30 +634,60 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
         case RID_SW_TP_STD_FONT:
         case RID_SW_TP_STD_FONT_CJK:
         case RID_SW_TP_STD_FONT_CTL:
-            pRet = SwStdFontTabPage::Create(pParent, rSet);
+        {
+            //CHINA001 pRet = SwStdFontTabPage::Create(pParent, rSet);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
             if(RID_SW_TP_STD_FONT != nId)
-                ((SwStdFontTabPage*)pRet)->SetFontMode(
-                        RID_SW_TP_STD_FONT_CJK == nId ? FONT_GROUP_CJK : FONT_GROUP_CTL);
+//CHINA001                 ((SwStdFontTabPage*)pRet)->SetFontMode(
+//CHINA001 RID_SW_TP_STD_FONT_CJK == nId ? FONT_GROUP_CJK : FONT_GROUP_CTL);
+            {
+                aSet.Put (SfxUInt16Item(SID_FONTMODE_TYPE, RID_SW_TP_STD_FONT_CJK == nId ? FONT_GROUP_CJK : FONT_GROUP_CTL));
+                pRet->PageCreated(aSet);
+            }
+        }
         break;
         case RID_SW_TP_HTML_OPTPRINT_PAGE:
         case RID_SW_TP_OPTPRINT_PAGE:
         {
-            pRet = SwAddPrinterTabPage::Create(pParent, rSet);
-            SvStringsDtor aFaxList;
-            const USHORT nCount = Printer::GetQueueCount();
-            for (USHORT i = 0; i < nCount; ++i)
+            //CHINA001 pRet = SwAddPrinterTabPage::Create(pParent, rSet);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
             {
-                String* pString = new String( Printer::GetQueueInfo( i ).GetPrinterName());
-                String* &rpString = pString;
-                aFaxList.Insert(rpString, 0);
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
             }
-            (( SwAddPrinterTabPage* )pRet)->SetFax( aFaxList );
+//CHINA001          SvStringsDtor aFaxList;
+//CHINA001          const USHORT nCount = Printer::GetQueueCount();
+//CHINA001          for (USHORT i = 0; i < nCount; ++i)
+//CHINA001          {
+//CHINA001          String* pString = new String( Printer::GetQueueInfo( i ).GetPrinterName());
+//CHINA001          String* &rpString = pString;
+//CHINA001          aFaxList.Insert(rpString, 0);
+//CHINA001      }
+//CHINA001          (( SwAddPrinterTabPage* )pRet)->SetFax( aFaxList );
+            //CHINA001 It's difficult to transfer SvStringsDtor as Item, so move above code directly to SwAddPrinterTabPage::PageCreated()
+            aSet.Put (SfxBoolItem(SID_FAX_LIST, sal_True));
+            pRet->PageCreated(aSet);
         }
         break;
         case RID_SW_TP_HTML_OPTTABLE_PAGE:
         case RID_SW_TP_OPTTABLE_PAGE:
         {
-            pRet = SwTableOptionsTabPage::Create(pParent, rSet);
+            //CHINA001 pRet = SwTableOptionsTabPage::Create(pParent, rSet);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
             SwView* pView = GetView();
             if(pView)
             {
@@ -644,22 +696,54 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
                 {
-                    ((SwTableOptionsTabPage*)pRet)->SetWrtShell(pView->GetWrtShellPtr());
+                    //CHINA001 ((SwTableOptionsTabPage*)pRet)->SetWrtShell(pView->GetWrtShellPtr());
+                    aSet.Put (SwWrtShellItem(SID_WRT_SHELL,pView->GetWrtShellPtr()));
+                    pRet->PageCreated(aSet);
                 }
             }
         }
         break;
         case RID_SW_TP_OPTSHDWCRSR:
         case RID_SW_TP_HTML_OPTSHDWCRSR:
-            pRet = SwShdwCrsrOptionsTabPage::Create(pParent, rSet);
+            //CHINA001 pRet = SwShdwCrsrOptionsTabPage::Create(pParent, rSet);
+        //CHINA001 break;
+        case RID_SW_TP_REDLINE_OPT:     //CHINA001 pRet = SwRedlineOptionsTabPage::Create(pParent, rSet); break;
+        case RID_SW_TP_OPTLOAD_PAGE:    //CHINA001 pRet = SwLoadOptPage::Create(pParent, rSet); break;
+        case RID_SW_TP_OPTCOMPATIBILITY_PAGE:   //CHINA001 pRet = SwCompatibilityOptPage::Create(pParent, rSet); break;
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+        }
         break;
-        case RID_SW_TP_REDLINE_OPT:     pRet = SwRedlineOptionsTabPage::Create(pParent, rSet); break;
-        case RID_SW_TP_OPTLOAD_PAGE:    pRet = SwLoadOptPage::Create(pParent, rSet); break;
-        case RID_SW_TP_OPTCOMPATIBILITY_PAGE:   pRet = SwCompatibilityOptPage::Create(pParent, rSet); break;
 #ifndef PRODUCT
-        case  RID_SW_TP_OPTTEST_PAGE:   pRet = SwTestTabPage::Create(pParent, rSet); break;
+        case  RID_SW_TP_OPTTEST_PAGE:   //CHINA001 pRet = SwTestTabPage::Create(pParent, rSet); break;
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+            break;
+        }
 #endif
-        case  RID_SW_TP_BACKGROUND:     pRet = SvxBackgroundTabPage::Create(pParent, rSet); break;
+        case  RID_SW_TP_BACKGROUND:     //CHINA001 pRet = SvxBackgroundTabPage::Create(pParent, rSet); break;
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+            break;
+        }
     }
 
     DBG_ASSERT( pRet, "SwModule::CreateTabPage(): Unknown tabpage id" )
