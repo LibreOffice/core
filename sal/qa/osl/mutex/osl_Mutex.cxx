@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Mutex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:49:33 $
+ *  last change: $Author: rt $  $Date: 2004-05-03 08:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace ThreadHelper
     void thread_sleep( sal_Int32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
-        t_print("# wait %d seconds. ", _nSec );
+        // t_print("# wait %d seconds. ", _nSec );
         fflush(stdout);
 
 #ifdef WNT                               //Windows
@@ -109,7 +109,7 @@ namespace ThreadHelper
 #if ( defined UNX ) || ( defined OS2 )   //Unix
         sleep( _nSec );
 #endif
-        t_print("# done\n" );
+        // t_print("# done\n" );
     }
     void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
      {
@@ -228,7 +228,8 @@ protected:
         sal_Int8 nPos = pChain->pos;
         oslThreadIdentifier oId = getIdentifier( );
         //write data
-        for ( sal_Int8 i = 0; i < 5; i++ )
+                sal_Int8 i;
+        for ( i = 0; i < 5; i++ )
         {
             pChain->buffer[ nPos + i ] = oId;
             yield( );
@@ -725,9 +726,9 @@ protected:
     void SAL_CALL run( )
     {
         // acquire the mutex
-        t_print("# ClearGuardThread" );
+        // t_print("# ClearGuardThread" );
         ClearableMutexGuard aGuard( pMyMutex );
-        ThreadHelper::thread_sleep( 2 );
+        ThreadHelper::thread_sleep( 5 );
 
         // release the mutex
         aGuard.clear( );
@@ -793,17 +794,20 @@ namespace osl_ClearableGuard
             while (1)
             {
                 if (aMutex.tryToAcquire() == sal_True)
+                {
                     break;
+                }
+                ThreadHelper::thread_sleep(1);
             }
             TimeValue aTimeVal_after;
             osl_getSystemTime( &aTimeVal_after );
             sal_Int32 nSec = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
-            // t_print("nSec is %d\n", nSec);
+            t_print("nSec is %d\n", nSec);
 
             myThread.join();
 
             CPPUNIT_ASSERT_MESSAGE("ClearableGuard method: clear",
-                nSec < 4 && nSec > 1);
+                nSec < 7 && nSec > 1);
         }
 
         void clear_002( )
@@ -970,3 +974,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ResettableGuard::reset, "osl_Resettabl
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+// The following sets variables for GNU EMACS
+// Local Variables:
+// tab-width:4
+// End:
