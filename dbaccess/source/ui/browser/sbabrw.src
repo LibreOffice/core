@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:45:26 $
+ *  last change: $Author: vg $ $Date: 2001-11-07 21:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,7 +1440,7 @@ Menu RID_MENU_REFRESH_DATA
                 Text[ finnish ] = "reconstruct";
                 Text[ italian ] = "Ricostruisci";
                 Text[ danish ] = "reconstruct";
-                Text[ swedish ] = "Rekonstruera";
+                Text[ swedish ] = "�terskapa";
                 Text[ polish ] = "Od�wie�";
                 Text[ portuguese_brazilian ] = "reconstruct";
                 Text[ japanese ] = "最新の情報に更新";
@@ -1453,6 +1453,7 @@ Menu RID_MENU_REFRESH_DATA
             };
     };
 };
+
 
 
 
