@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-12 15:51:50 $
+ *  last change: $Author: mh $ $Date: 2002-04-09 18:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,11 @@ extern "C" {
 #define SAL_MODULENAME_WITH_VERSION(name, version) name version SAL_DLLEXTENSION
 
 #elif defined(SAL_UNX)
+#if defined(MACOSX)
+#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name ".dylib." version ".framework"
+#else
 #define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name SAL_DLLEXTENSION "." version
+#endif
 
 #endif
 
@@ -101,7 +105,7 @@ struct _oslModule
     void*       pModule;
     sal_Char*   pModuleName;
 };
-typedef struct _oslModule* oslModule;
+typedef struct _oslModule * oslModule;
 #else
 typedef void* oslModule;
 #endif
