@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_AxisLabel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2004-08-04 14:33:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,13 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-// header for SvxWinOrientation
+
+#ifndef SVX_DIALCONTROL_HXX
+#include <svx/dialcontrol.hxx>
+#endif
+#ifndef SVX_WRAPFIELD_HXX
+#include <svx/wrapfield.hxx>
+#endif
 #ifndef SVX_ORIENTHELPER_HXX
 #include <svx/orienthelper.hxx>
 #endif
@@ -91,12 +97,6 @@ class SchAxisLabelTabPage : public SfxTabPage
 {
 private:
     CheckBox            aCbShowDescription;
-#if 0 // DR: TODO new control types
-    svx::OrientationHelper  aWOAngle;
-#endif
-    FixedLine           aFlTextFlow;
-    CheckBox            aCbTextOverlap;
-    CheckBox            aCbTextBreak;
 
     FixedLine           aFlOrder;
     RadioButton         aRbSideBySide;
@@ -105,12 +105,24 @@ private:
     RadioButton         aRbAuto;
 
     FixedLine           aFlSeparator;
+    FixedLine           aFlTextFlow;
+    CheckBox            aCbTextOverlap;
+    CheckBox            aCbTextBreak;
+
+    FixedLine           aFlOrient;
+    svx::DialControl    aCtrlDial;
+    FixedText           aFtRotate;
+    svx::WrapField      aNfRotate;
+    TriStateBox         aCbStacked;
+    svx::OrientationHelper aOrientHlp;
 
     BOOL                m_bShowStaggeringControls;
 ////    BOOL                bAllowTextOverlap;
 
-    short               m_nInitialDegrees;
-    BOOL                m_bInitialStacking;
+    sal_Int32           m_nInitialDegrees;
+    bool                m_bHasInitialDegrees;       /// false = DialControl in tristate
+    bool                m_bInitialStacking;
+    bool                m_bHasInitialStacking;      /// false = checkbox in tristate
 
     DECL_LINK ( ToggleShowLabel, void* );
 
