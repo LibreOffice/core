@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 12:49:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-27 13:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,11 +98,10 @@ pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDeb
 #define OSL_TRACE           _OSL_TRACE
 #define OSL_ASSERT(c)       _OSL_ASSERT(c, OSL_THIS_FILE, __LINE__)
 #define OSL_VERIFY(c)       _OSL_VERIFY(c, OSL_THIS_FILE, __LINE__)
-#define OSL_ENSHURE(c, m)   _OSL_ENSHURE(c, OSL_THIS_FILE, __LINE__, m)
-#define OSL_ENSURE(c, m)   _OSL_ENSHURE(c, OSL_THIS_FILE, __LINE__, m)
+#define OSL_ENSURE(c, m)   _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
 
-#define OSL_PRECOND(c, m)   OSL_ENSHURE(c, m)
-#define OSL_POSTCOND(c, m)  OSL_ENSHURE(c, m)
+#define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
+#define OSL_POSTCOND(c, m)  OSL_ENSURE(c, m)
 
 
 #ifdef __cplusplus
@@ -135,18 +134,7 @@ pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDeb
         if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, 0)) \
             _OSL_GLOBAL osl_breakDebug(); \
     } while (0)
-#define _OSL_ENSHURE(c, f, l, m) \
-    do \
-    {  \
-        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, m)) \
-            _OSL_GLOBAL osl_breakDebug(); \
-    } while (0)
-#define _OSL_ENSHURE(c, f, l, m) \
-    do \
-    {  \
-        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, m)) \
-            _OSL_GLOBAL osl_breakDebug(); \
-    } while (0)
+
 #define _OSL_ENSURE(c, f, l, m) \
     do \
     {  \
@@ -160,7 +148,6 @@ pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDeb
 #define _OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
 #define _OSL_ASSERT(c, f, l)        ((void)0)
 #define _OSL_VERIFY(c, f, l)        ((void)(c))
-#define _OSL_ENSHURE(c, f, l, m)    ((void)0)
 #define _OSL_ENSURE(c, f, l, m)     ((void)0)
 
 #endif /* !_DEBUG */
