@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 07:25:02 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 11:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2090,9 +2090,6 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         // insert the new entry into the tree
         DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
         OSL_ENSURE(pContainerData, "elementInserted: There must be user data for this type!");
-
-        sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pContainerData->eType);
-        Image aImage = Image(ModuleRes(nImageResId));
 
         sal_Bool bIsTable = etTableContainer == pContainerData->eType;
         if (bIsTable)

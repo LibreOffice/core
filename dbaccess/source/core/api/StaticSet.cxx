@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 12:02:50 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 11:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,14 +264,14 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
 
         sal_Int32 nRow = getRow();
         nRow += row;
-        if(nRow <= m_aSet.size())
+        if(nRow <= (sal_Int32)m_aSet.size())
             m_aSetIter = m_aSet.begin() + nRow;
         else
             m_aSetIter = m_aSet.begin();
     }
     else if(row > 0)
     {
-        if(row >= m_aSet.size())
+        if(row >= (sal_Int32)m_aSet.size())
         {
             if(!m_bEnd)
             {
@@ -280,7 +280,7 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
                     bNext = fetchRow();
             }
 
-            if(row > m_aSet.size())
+            if(row > (sal_Int32)m_aSet.size())
                 m_aSetIter = m_aSet.end();  // check again
             else
                 m_aSetIter = m_aSet.begin() + row;
@@ -386,6 +386,9 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/05/18 12:02:50  oj
+    #86528# size changes
+
     Revision 1.8  2001/01/24 09:50:49  oj
     #82628# rowset modifications
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:02:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 11:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,9 +584,29 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
                 xColProp->getPropertyValue(PROPERTY_TYPE)       >>= nDataType;
                 xColProp->getPropertyValue(PROPERTY_PRECISION)  >>= nPrecision;
                 xColProp->getPropertyValue(PROPERTY_SCALE)      >>= nScale;
+                // look if we have to use precisions
+                sal_Bool bUseLiteral = sal_False;
+                {
+                    Reference<XResultSet> xRes = m_xMetaData->getTypeInfo();
+                    if(xRes.is())
+                    {
+                        Reference<XRow> xRow(xRes,UNO_QUERY);
+                        while(xRes->next())
+                        {
+                            ::rtl::OUString sTypeName = xRow->getString(1);
+                            sal_Int32 nType = xRow->getShort(2);
+                            ::rtl::OUString sLiteralPre = xRow->getString(4);
+                            if( sTypeName == sTypeName && nType == nDataType && sLiteralPre.getLength() && !xRow->wasNull())
+                            {
+                                bUseLiteral = sal_True;
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 aSql += sTypeName;
-                if(nPrecision > 0)
+                if(nPrecision > 0 && bUseLiteral)
                 {
                     aSql += ::rtl::OUString::createFromAscii("(");
                     aSql += ::rtl::OUString::valueOf(nPrecision);
@@ -627,7 +647,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
 
                     if(nKeyType == KeyType::PRIMARY)
                     {
-                        if(!bPKey)
+                        if(bPKey)
                             ::dbtools::throwFunctionSequenceException(*this);
 
                         bPKey = sal_True;
