@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:49:17 $
+ *  last change: $Author: ka $ $Date: 2001-03-23 11:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,6 +878,12 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
         aAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
 
+        if( bRota180 )
+        {
+            aLogPos.X() -= ( aLogSize.Width() - 1L );
+            aLogPos.Y() -= ( aLogSize.Height() - 1L );
+        }
+
         if( pGraphic->GetType() == GRAPHIC_BITMAP )
         {
             if( pGraphic->IsAnimated() )
@@ -914,12 +920,6 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
         {
             // MetaFiles
             const ULONG nOldDrawMode = pOutDev->GetDrawMode();
-
-            if( bRota180 )
-            {
-                aLogPos.X() -= ( aLogSize.Width() - 1L );
-                aLogPos.Y() -= ( aLogSize.Height() - 1L );
-            }
 
             // Falls Modus GRAYBITMAP, wollen wir auch Mtf's als Graustufen darstellen
             if( nOldDrawMode & DRAWMODE_GRAYBITMAP )
