@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-29 02:35:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   simpref.src  $
- //   $Author: obo $
- //     $Date: 2001-06-29 02:35:52 $
- // $Revision: 1.9 $
+ //   $Author: kz $
+ //     $Date: 2001-07-14 20:20:25 $
+ // $Revision: 1.10 $
  //  $Logfile:   T:/sc/source/ui/src/simpref.srv  $
  //----------------------------------------------------------------------------
 
@@ -166,5 +166,6 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         TabStop = TRUE ;
     };
 };
+
 
 
