@@ -40,9 +40,3 @@ hedabu: ..\inc\testtool.hxx %_DEST%\inc%_EXT%\basic\testtool.hxx
 hedabu: ..\inc\basicrt.hxx %_DEST%\inc%_EXT%\basic\basicrt.hxx
 hedabu: ..\inc\dispdefs.hxx %_DEST%\inc%_EXT%\basic\dispdefs.hxx
 hedabu: ..\inc\ttstrhlp.hxx %_DEST%\inc%_EXT%\basic\ttstrhlp.hxx
-
-
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
