@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: npower $ $Date: 2003-02-19 16:06:09 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-25 16:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,8 +290,8 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         {
             OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : IllegalArgumentException " );
-            throw RuntimeException( temp.concat( e.Message ),
-                Reference< XInterface > () );
+            throw lang::IllegalArgumentException( temp.concat( e.Message ),
+                Reference< XInterface > (), e.ArgumentPosition );
         }
     catch ( lang::WrappedTargetException & e )
         {
