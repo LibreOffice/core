@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-31 09:40:52 $
+ *  last change: $Author: aw $ $Date: 2001-09-24 12:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,6 +1530,9 @@ void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 #ifdef DBG_UTIL
     aCompat.SetID("SdrCircObj");
 #endif
+
+    // #92309# at once restore the remembered eKind here.
+    eKind = eRememberedKind;
 
     // #91764# use remembered eKind here
     if(eRememberedKind != OBJ_CIRC)
