@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:09:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,22 @@
 #include <svx/svdorect.hxx>
 #endif
 
-#ifndef _SD_FADER_HXX
+#ifndef SD_FADER_HXX
 #include "fader.hxx"
 #endif
 
 #include "docprev.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "viewshel.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_SHOW_VIEW_HXX
 #include "showview.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "sdpage.hxx"
 
 using namespace ::com::sun::star;
@@ -217,7 +223,9 @@ void SdDocPreviewWin::Paint( const Rectangle& rRect )
 {
     SvtAccessibilityOptions aAccOptions;
     bool bUseContrast = aAccOptions.GetIsForPagePreviews() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetDrawMode( bUseContrast
+        ? ::sd::ViewShell::OUTPUT_DRAWMODE_CONTRAST
+        : ::sd::ViewShell::OUTPUT_DRAWMODE_COLOR );
 
     ImpPaint( pMetaFile, (VirtualDevice*)this );
 }
@@ -261,7 +269,7 @@ void SdDocPreviewWin::ShowEffect( presentation::FadeEffect eEffect, FadeSpeed eS
     }
 
     // ein Fader zum Ueberblenden
-    Fader* pFader = new Fader(this);
+    ::sd::Fader* pFader = new ::sd::Fader(this);
     pFader->SetEffect( eEffect );
     pFader->SetSpeed( eSpeed );
     pFader->SetSource(Rectangle(aPoint, aSize));
@@ -330,7 +338,7 @@ long SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 
 void SdDocPreviewWin::updateViewSettings()
 {
-    SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,mpObj);
+    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell,mpObj);
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
     SvtAccessibilityOptions aAccOptions;
@@ -368,7 +376,7 @@ void SdDocPreviewWin::updateViewSettings()
 
         pMtf->Record( &aVDev );
 
-        SdDrawView* pView = new SdDrawView(pDocShell, this, NULL);
+        ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, NULL);
 
 
         const Size aSize( pPage->GetSize() );
