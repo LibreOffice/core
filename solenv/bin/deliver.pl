@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 13:42:21 $
+#   last change: $Author: hr $ $Date: 2003-07-16 18:19:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.49 $ ';
+$id_str = ' $Revision: 1.50 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -255,7 +255,7 @@ sub do_linklib
 
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
-        if ( $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)(\.(\d+))?$/ ) {
+        if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/ ) {
            push(@{$globbed_hash{$1}}, $lib);
         }
         else {
@@ -266,8 +266,8 @@ sub do_linklib
     foreach $lib_base ( sort keys %globbed_hash ) {
         $lib = get_latest_patchlevel(@{$globbed_hash{$lib_base}});
 
-        $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)(\.(\d+))?$/;
-        $lib_major = "$lib_base.$2";
+        $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/;
+        $lib_major = "$lib_base.$3";
 
         if ( $opt_check ) {
             if ( $opt_delete ) {
@@ -797,10 +797,10 @@ sub get_latest_patchlevel
     # comparison function for sorting
         my (@field_a, @field_b, $i);
 
-        $a =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
-        @field_a = ($2, $3, $4);
-        $b =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
-        @field_b = ($2, $3, $4);
+        $a =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)\.(\d+)$/;
+        @field_a = ($3, $4, $5);
+        $b =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)\.(\d+)$/;
+        @field_b = ($3, $4, $5);
 
         for ($i = 0; $i < 3; $i++)
           {
