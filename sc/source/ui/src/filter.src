@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:06:44 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "±¶®|";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
         Text[ greek ] = "Τελεστής";
-        Text[ korean ] = "Ώ¬»κΐΪ";
+        Text[ korean ] = "Ώ¬°α";
         Text[ turkish ] = "Baπlantύ";
         Text[ language_user1 ] = " ";
     };
@@ -1362,7 +1362,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "±ψ¥σ";
         Text[ arabic ] = "ΗαγΪΗννΡ";
         Text[ greek ] = "Κριτήρια";
-        Text[ korean ] = "±βΑΨ Α¤Ώ­";
+        Text[ korean ] = "±βΑΨ";
         Text[ turkish ] = "Φlηόtler";
         Text[ language_user1 ] = " ";
     };
@@ -1394,7 +1394,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "¤j¤pΌg(~S)";
         Text[ arabic ] = "ΗαίΚΗΘΙ ΘΓΝΡέ ίΘνΡΙ Γζ ΥΫνΡΙ";
         Text[ greek ] = "Πεζά-Κεφαλαία";
-        Text[ korean ] = "΄λ/ΌÒΉ®ΐΪ ±ΈΊΠ(~S)";
+        Text[ korean ] = "΄λ/ΌÒΉ®ΐΪ";
         Text[ turkish ] = "~Bόyόk/Kόηόk harf duyarlύ";
     };
     CheckBox BTN_REGEXP
@@ -1424,7 +1424,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "±`³WªνΉF(~E)";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική πα~ράσταση";
-        Text[ korean ] = "ΐΟΉέΐϋ Η¥Ηφ(~E)";
+        Text[ korean ] = "ΐΟΉέΐϋ Η¥Ηφ";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
     };
@@ -1455,7 +1455,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "°Ο°μ¥]§tΔζΌΠΓD(~C)";
         Text[ arabic ] = "ΗαγδΨήΙ ΚΚΦγδ ΡΔζΣ ΓΪγΟΙ";
         Text[ greek ] = "Περιοχή περιέχει κεφαλίδες στηλών";
-        Text[ korean ] = "Ήόΐ§Ώ΅ Ώ­ ΈΣΈ®±Ϋ ΖχΗΤ(~C)";
+        Text[ korean ] = "Ήόΐ§Ώ΅ Ώ­ ΈΣΈ®±Ϋ ΖχΗΤ";
         Text[ turkish ] = "Aralύk, ~sόtun baώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -1485,7 +1485,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "¤£²£¥Ν³Ζ¥χ(~N)";
         Text[ arabic ] = "ΘΟζδ δυΣΞ ΨΘή ΗαΓΥα";
         Text[ greek ] = "Όχι διπλά στοιχεία";
-        Text[ korean ] = "ΑίΊΉ ΗγΏλ ΎΘµΚ(~N)";
+        Text[ korean ] = "ΑίΊΉ Ύψΐ½";
         Text[ turkish ] = "Aynύ sonuηlarύ ~ayύkla";
         Text[ language_user1 ] = " ";
     };
@@ -1515,7 +1515,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "±NΏzΏοµ²ªG½Ζ»s¨μ(~R)...";
         Text[ arabic ] = "δΣΞ δΚνΜΙ ΗαΚΥένΙ Εαμ";
         Text[ greek ] = "Αντιγραφή αποτελεσμάτων στο";
-        Text[ korean ] = "Ώ΅ °α°ϊΈ¦ ΊΉ»η(~R)...";
+        Text[ korean ] = "ΗΚΕΝ°α°ϊ΅΅Γβ·Β";
         Text[ turkish ] = "Sonuηlarύn gφrόntόleneceπi ~yer";
         Text[ language_user1 ] = " ";
     };
@@ -1543,7 +1543,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "«O―dΏzΏο±ψ¥σ(~K)";
         Text[ arabic ] = "ΗΣΚγΡΗΡ γΪΗννΡ ΗαέαΚΡ";
         Text[ greek ] = "Διατήρηση ~κριτηρίων φίλτρου";
-        Text[ korean ] = "ΗΚΕΝ ±βΑΨ ΐ―Αφ(~K)";
+        Text[ korean ] = "ΐ―Αφ";
         Text[ turkish ] = "~Filtre φlηόtlerini koru";
         Text[ language_user1 ] = " ";
     };
@@ -1587,7 +1587,7 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -1714,7 +1714,7 @@ ModelessDialog RID_SCDLG_FILTER
     Text[ chinese_traditional ] = "ΌΠ·ΗΏzΏο";
     Text[ arabic ] = "έαΚΡ ήνΗΣν";
     Text[ greek ] = "Φίλτρο προεπιλογής";
-    Text[ korean ] = "Η¥ΑΨ ΗΚΕΝ";
+    Text[ korean ] = "Η¥ΑΨΗΚΕΝ";
     Text[ turkish ] = "Standart filtre";
     Text[ language_user1 ] = " ";
 };
@@ -1765,7 +1765,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "ΏzΏο±ψ¥σ¨Σ¦Ϋ(~F)";
         Text[ arabic ] = "γΪΗννΡ ΗαΚΥένΙ ΚζΜΟ έν";
         Text[ greek ] = "Τα κριτήρια αναζήτησης βρίσκονται στο";
-        Text[ korean ] = "Ώ΅Ό­ ΗΚΕΝ ±βΑΨ ΐΠ±β(~F)";
+        Text[ korean ] = "ΗΚΕΝ±βΑΨΐΊ£®£®Ώ΅΅΅ΐΦΐ½";
         Text[ turkish ] = "~Filtre φlηόtlerinin bulunduπu yer";
         Text[ language_user1 ] = " ";
     };
@@ -1807,7 +1807,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -1840,7 +1840,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "¤j¤pΌg(~C)";
         Text[ arabic ] = "ΗαίΚΗΘΙ ΘΓΝΡέ ίΘνΡΙ Γζ ΥΫνΡΙ";
         Text[ greek ] = "Πεζά-Κεφαλαία";
-        Text[ korean ] = "΄λ/ΌÒΉ®ΐΪ ±ΈΊΠ(~C)";
+        Text[ korean ] = "΄λ/ΌÒΉ®ΐΪ ±ΈΊΠ";
         Text[ turkish ] = "~Bόyόk/Kόηόk harf duyarlύ";
     };
     CheckBox BTN_REGEXP
@@ -1870,7 +1870,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "±`³WªνΉF(~E)";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική πα~ράσταση";
-        Text[ korean ] = "ΐΟΉέΐϋ Η¥Ηφ(~E)";
+        Text[ korean ] = "ΐΟΉέΐϋ Η¥Ηφ";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
     };
@@ -1901,7 +1901,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "°Ο°μ¥]§tΔζΌΠΓD(~H)";
         Text[ arabic ] = "ΗαγδΨήΙ ΚΚΦγδ ΡΔζΣ ΓΪγΟΙ";
         Text[ greek ] = "Περιοχή περιέχει κεφαλίδες στηλών";
-        Text[ korean ] = "Ώ­ ΈΣΈ®±Ϋ ΖχΗΤ(~O)";
+        Text[ korean ] = "Ώ­ ΈΣΈ®±Ϋ ΖχΗΤ";
         Text[ turkish ] = "Aralύk, ~sόtun baώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -1931,7 +1931,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "¤£²£¥Ν³Ζ¥χ(~N)";
         Text[ arabic ] = "ΘΟζδ δυΣΞ ΨΘή ΗαΓΥα";
         Text[ greek ] = "Όχι διπλά στοιχεία";
-        Text[ korean ] = "ΑίΊΉ ΗγΏλ ΎΘµΚ(~N)";
+        Text[ korean ] = "ΑίΊΉ Ύψΐ½";
         Text[ turkish ] = "Aynύ sonuηlarύ ~ayύkla";
         Text[ language_user1 ] = " ";
     };
@@ -1961,7 +1961,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "½Ζ»sΏzΏοµ²ªG¨μ(~R)...";
         Text[ arabic ] = "δΣΞ δΚνΜΙ ΗαΚΥένΙ Εαμ";
         Text[ greek ] = "Αντιγραφή αποτελεσμάτων στο";
-        Text[ korean ] = "Ώ΅ °α°ϊΈ¦ ΊΉ»η(~P)";
+        Text[ korean ] = "ΗΚΕΝ°α°ϊΈ¦ Γβ·Β";
         Text[ turkish ] = "Sonuηlarύn gφrόntόleneceπi ~yer";
         Text[ language_user1 ] = " ";
     };
@@ -1989,7 +1989,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "«O―dΏzΏο±ψ¥σ(~K)";
         Text[ arabic ] = "ΗΣΚγΡΗΡ γΪΗννΡ ΗαέαΚΡ";
         Text[ greek ] = "Διατήρηση ~κριτηρίων φίλτρου";
-        Text[ korean ] = "ΗΚΕΝ ±βΑΨ ΐ―Αφ(~K)";
+        Text[ korean ] = "ΐ―Αφ";
         Text[ turkish ] = "~Filtre φlηόtlerini koru";
         Text[ language_user1 ] = " ";
     };
@@ -2033,7 +2033,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -2160,7 +2160,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Text[ chinese_traditional ] = "―S®νΏzΏο";
     Text[ arabic ] = "έαΚΡ ΞΗΥ";
     Text[ greek ] = "Ειδικό φίλτρο";
-    Text[ korean ] = "°ν±ή ΗΚΕΝ";
+    Text[ korean ] = "°ν±ήΗΚΕΝ";
     Text[ turkish ] = "Φzel filtre";
     Text[ language_user1 ] = " ";
 };
@@ -2212,7 +2212,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "±¶®|";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
         Text[ greek ] = "Τελεστής";
-        Text[ korean ] = "Ώ¬»κΐΪ";
+        Text[ korean ] = "Ώ¬°α";
         Text[ turkish ] = "Baπlantύ";
         Text[ language_user1 ] = " ";
     };
@@ -3263,7 +3263,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "·j΄M±ψ¥σ";
         Text[ arabic ] = "ΗαγΪΗννΡ";
         Text[ greek ] = "Κριτήρια";
-        Text[ korean ] = "±βΑΨ °Λ»φ";
+        Text[ korean ] = "±βΑΨ";
         Text[ turkish ] = "Φlηόtler";
         Text[ language_user1 ] = " ";
     };
@@ -3295,7 +3295,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "¤j¤pΌg(~C)";
         Text[ arabic ] = "ΗαίΚΗΘΙ ΘΓΝΡέ ίΘνΡΙ Γζ ΥΫνΡΙ";
         Text[ greek ] = "Πεζά-Κεφαλαία";
-        Text[ korean ] = "΄λ/ΌÒΉ®ΐΪ ±ΈΊΠ(~C)";
+        Text[ korean ] = "΄λ/ΌÒΉ®ΐΪ ±ΈΊΠ";
         Text[ turkish ] = "~Bόyόk/Kόηόk harf duyarlύ";
     };
     CheckBox BTN_REGEXP
@@ -3325,7 +3325,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "±`³WªνΉF(~R)";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική πα~ράσταση";
-        Text[ korean ] = "ΐΟΉέΐϋ Η¥Ηφ(~R)";
+        Text[ korean ] = "ΐΟΉέΐϋ Η¥Ηφ";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
     };
@@ -3355,7 +3355,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "¤£²£¥Ν³Ζ¥χ(~N)";
         Text[ arabic ] = "ΘΟζδ δυΣΞ ΨΘή ΗαΓΥα";
         Text[ greek ] = "Όχι διπλά στοιχεία";
-        Text[ korean ] = "ΑίΊΉ ΗγΏλ ΎΘµΚ(~N)";
+        Text[ korean ] = "ΑίΊΉ Ύψΐ½";
         Text[ turkish ] = "Aynύ sonuηlarύ ~ayύkla";
         Text[ language_user1 ] = " ";
     };
