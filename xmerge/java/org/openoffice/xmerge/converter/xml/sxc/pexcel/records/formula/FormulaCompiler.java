@@ -103,6 +103,10 @@ public class FormulaCompiler {
     public FormulaCompiler() {
     }
 
+    private boolean isPercent(Token pt) {
+        return pt.getTokenID() == TokenConstants.TPERCENT;
+    }
+
     private boolean isOpenBrace(Token pt) {
         return pt.getTokenID() == TokenConstants.TPAREN;
     }
@@ -266,8 +270,13 @@ public class FormulaCompiler {
                 tmp.add(pt);
                 tmp.addAll((Vector)args.pop());
             } else if (pt.getNumArgs() == 1) {
-                tmp.add(pt);
-                tmp.addAll((Vector)args.elementAt(0));
+                if(isPercent(pt)) {
+                    tmp.addAll((Vector)args.elementAt(0));
+                    tmp.add(pt);
+                } else {
+                    tmp.add(pt);
+                    tmp.addAll((Vector)args.elementAt(0));
+                }
                 if (isOpenBrace(pt)) {
                     tmp.add(tf.getOperatorToken(")",1));
                 }
