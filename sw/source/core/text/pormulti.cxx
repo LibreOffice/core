@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-18 14:17:19 $
+ *  last change: $Author: fme $ $Date: 2002-11-19 08:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1624,9 +1624,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     sal_Bool bRest = pLay->IsRest();
     sal_Bool bFirst = sal_True;
 
-    // delete underline font
-    delete GetInfo().GetUnderFnt();
-    GetInfo().SetUnderFnt( 0 );
+    ASSERT( 0 == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
+            " Only BiDi portions are allowed to use the common underlining font" )
 
     do
     {
@@ -1699,23 +1698,13 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pNext->PrePaint( GetInfo(), pPor );
         }
 
-        if ( IsUnderlineBreak( *pPor, *pFnt ) )
+        CheckSpecialUnderline( pPor );
+        SwUnderlineFont* pUnderLineFnt = GetInfo().GetUnderFnt();
+        if ( pUnderLineFnt )
         {
-            // delete underline font
-            delete GetInfo().GetUnderFnt();
-            GetInfo().SetUnderFnt( 0 );
-        }
-        else
-        {
-            CheckSpecialUnderline( pPor );
-            SwUnderlineFont* pUnderLineFnt = GetInfo().GetUnderFnt();
-
-            if ( pUnderLineFnt )
-            {
-                if ( rMulti.IsDouble() )
-                    pUnderLineFnt->GetFont().SetProportion( 50 );
-                pUnderLineFnt->SetPos( GetInfo().GetPos() );
-            }
+            if ( rMulti.IsDouble() )
+                pUnderLineFnt->GetFont().SetProportion( 50 );
+            pUnderLineFnt->SetPos( GetInfo().GetPos() );
         }
 
 #ifdef BIDI
@@ -1790,8 +1779,11 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         GetInfo().SetSnapToGrid( bOldGridModeAllowed );
 
     // delete underline font
-    delete GetInfo().GetUnderFnt();
-    GetInfo().SetUnderFnt( 0 );
+    if ( ! rMulti.IsBidi() )
+    {
+        delete GetInfo().GetUnderFnt();
+        GetInfo().SetUnderFnt( 0 );
+    }
 
     GetInfo().SetIdx( nOldIdx );
     GetInfo().Y( nOldY );

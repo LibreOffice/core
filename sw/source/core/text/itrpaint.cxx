@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-14 08:55:19 $
+ *  last change: $Author: fme $ $Date: 2002-11-19 08:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,9 @@ sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 {
     return UNDERLINE_NONE == rFnt.GetUnderline() ||
            rPor.IsFlyPortion() || rPor.IsFlyCntPortion() ||
-           rPor.IsBreakPortion() || rPor.IsMultiPortion() ||
-           rPor.IsHolePortion() || rPor.IsMarginPortion() ||
+           rPor.IsBreakPortion() || rPor.IsMarginPortion() ||
+           rPor.IsHolePortion() ||
+          ( rPor.IsMultiPortion() && ! ((SwMultiPortion&)rPor).IsBidi() ) ||
            rFnt.GetEscapement() < 0 || rFnt.IsWordLineMode() ||
            SVX_CASEMAP_KAPITAELCHEN == rFnt.GetCaseMap();
 }
@@ -458,28 +459,18 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             pNext->PrePaint( GetInfo(), pPor );
         }
 
-        // We calculate a separate font for underlining. This font is valid for
-        // all underlined portions up to a portions with negative escapement,
-        // FlyPortions and FlyInCntPortions etc.
-        if ( IsUnderlineBreak( *pPor, *pFnt ) )
+        // We calculate a separate font for underlining.
+        CheckSpecialUnderline( pPor, bAdjustBaseLine ? nOldY : 0 );
+        SwUnderlineFont* pUnderLineFnt = GetInfo().GetUnderFnt();
+        if ( pUnderLineFnt )
         {
-            // delete underline font
-            delete GetInfo().GetUnderFnt();
-            GetInfo().SetUnderFnt( 0 );
+            const Point aTmpPoint( GetInfo().X(),
+                                   bAdjustBaseLine ?
+                                   pUnderLineFnt->GetPos().Y() :
+                                   nLineBaseLine );
+            pUnderLineFnt->SetPos( aTmpPoint );
         }
-        else
-        {
-            CheckSpecialUnderline( pPor, bAdjustBaseLine ? nOldY : 0 );
-            SwUnderlineFont* pUnderLineFnt = GetInfo().GetUnderFnt();
-            if ( pUnderLineFnt )
-            {
-                const Point aTmpPoint( GetInfo().X(),
-                                       bAdjustBaseLine ?
-                                       pUnderLineFnt->GetPos().Y() :
-                                       nLineBaseLine );
-                pUnderLineFnt->SetPos( aTmpPoint );
-            }
-        }
+
 
         // in extended input mode we do not want a common underline font.
         SwUnderlineFont* pOldUnderLineFnt = 0;
@@ -574,6 +565,23 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                                           long nAdjustBaseLine )
 {
+    // Check if common underline should not be continued.
+    if ( IsUnderlineBreak( *pPor, *pFnt ) )
+    {
+        // delete underline font
+        delete GetInfo().GetUnderFnt();
+        GetInfo().SetUnderFnt( 0 );
+        return;
+    }
+
+    // If current underline matches the common underline font, we continue
+    // to use the common underline font.
+    if ( GetInfo().GetUnderFnt() &&
+         GetInfo().GetUnderFnt()->GetFont().GetUnderline() ==
+         GetFnt()->GetUnderline() )
+         return;
+
+    // calculate the new common underline font
     SwFont* pUnderlineFnt = 0;
     Point aCommonBaseLine;
 
@@ -667,31 +675,21 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             break;
     }
 
+    // restrict start and end to current line
     if ( GetStart() > nUnderStart )
         nUnderStart = GetStart();
 
     if ( GetEnd() && GetEnd() <= nUnderEnd )
         nUnderEnd = GetEnd() - 1;
 
-    if ( nIndx > nUnderStart &&
-         ( nIndx <= nUnderEnd ||
-           // Special case: portion should be underlined but
-           // has no length. We choose the same underline font as for
-           // the last portion
-           ( nIndx == nUnderEnd + 1 && ! GetInfo().GetLen() ) ) &&
-         GetInfo().GetUnderFnt() )
-        // we do not need to build a new underlining font
-        return;
 
     // check, if underlining is not isolated
-    if ( ( nIndx != nUnderStart || nIndx + GetInfo().GetLen() != nUnderEnd + 1 ) &&
-           nUnderEnd > nIndx )
+    if ( nIndx + GetInfo().GetLen() < nUnderEnd + 1 )
     {
         //
         // here starts the algorithm for calculating the underline font
         //
         SwScriptInfo& rScriptInfo = GetInfo().GetParaPortion()->GetScriptInfo();
-//        SwScriptInfo aScriptInfo;
         SwAttrIter aIter( *(SwTxtNode*)GetInfo().GetTxtFrm()->GetTxtNode(),
                           rScriptInfo );
 
@@ -705,8 +703,9 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         while( nTmpIdx <= nUnderEnd && pPor )
         {
             if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
-                pPor->IsBreakPortion() || pPor->IsMultiPortion() ||
-                pPor->IsHolePortion() || pPor->IsMarginPortion() )
+                pPor->IsBreakPortion() || pPor->IsMarginPortion() ||
+                pPor->IsHolePortion() ||
+                ( pPor->IsMultiPortion() && ! ((SwMultiPortion*)pPor)->IsBidi() ) )
                 break;
 
             aIter.Seek( nTmpIdx );
