@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:31:25 $
+ *  last change: $Author: kz $ $Date: 2002-01-22 21:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "Ê†áÁ≠æ";
         Text[ russian ] = "Õ‡‰ÔËÒ¸";
         Text[ polish ] = "Napis";
-        Text[ japanese ] = "Ë°®Èù¢";
+        Text[ japanese ] = "Ë°®Êõ∏„Åç";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "Ê®ôÁ±§";
         Text[ arabic ] = "‰’ «·»ÿ«ﬁ…";
