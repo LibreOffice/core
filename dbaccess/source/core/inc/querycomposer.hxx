@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:58:32 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ namespace dbaccess
         ::rtl::OUString getComposedSort() const;
         ::rtl::OUString getComposedFilter() const;
         ::rtl::OUString getGroupBy() const;
+        ::rtl::OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
     public:
 
         OQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,
