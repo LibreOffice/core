@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:46:38 $
+ *  last change: $Author: mba $ $Date: 2002-03-14 10:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,7 +1286,18 @@ void SfxTopViewFrame::Activate( sal_Bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "Keine Shell");
     if ( bMDI && !pImp->bActive )
+    {
         pImp->bActive = sal_True;
+        SfxWorkWindow *pWorkWin = GetFrame()->GetWorkWindow_Impl();
+        SfxBindings *pBind = &GetBindings();
+        while ( pBind )
+        {
+            pBind->HidePopupCtrls_Impl( FALSE );
+            pBind = pBind->GetSubBindings_Impl();
+        }
+
+        pWorkWin->HidePopups_Impl( FALSE, FALSE, 1 );
+    }
 //(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
 
@@ -1294,7 +1305,18 @@ void SfxTopViewFrame::Deactivate( sal_Bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "Keine Shell");
     if ( bMDI && pImp->bActive )
+    {
         pImp->bActive = sal_False;
+        SfxWorkWindow *pWorkWin = GetFrame()->GetWorkWindow_Impl();
+        SfxBindings *pBind = &GetBindings();
+        while ( pBind )
+        {
+            pBind->HidePopupCtrls_Impl( TRUE );
+            pBind = pBind->GetSubBindings_Impl();
+        }
+
+        pWorkWin->HidePopups_Impl( TRUE, FALSE, 1 );
+    }
 //(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-28 18:00:34 $
+ *  last change: $Author: mba $ $Date: 2002-03-14 10:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,10 +382,6 @@ SfxWorkWindow::~SfxWorkWindow()
         delete p;
     }
 
-    // ObjectBars werden alle auf einmal released, da sie einen
-    // festen zusammenh"angenden  Bereich im Array pChilds belegen
-    pChilds->Remove(0, SFX_OBJECTBAR_MAX);
-
     // Hilfsstruktur f"ur Child-Windows l"oschen
     DBG_ASSERT( pChilds->Count() == 0, "dangling childs" );
     delete pChilds;
@@ -508,6 +504,10 @@ void SfxWorkWindow::DeleteControllers_Impl()
             delete(pTbx);
         }
     }
+
+    // ObjectBars werden alle auf einmal released, da sie einen
+    // festen zusammenh"angenden  Bereich im Array pChilds belegen
+    pChilds->Remove(0, SFX_OBJECTBAR_MAX);
 
     nChilds = 0;
 }
@@ -1686,7 +1686,7 @@ BOOL SfxWorkWindow::IsContainer_Impl() const
 //------------------------------------------------------------------------
 void SfxWorkWindow::HidePopups_Impl(BOOL bHide, BOOL bParent, USHORT nId )
 {
-    if ( nId )
+    if ( nId && pChilds->Count() )
     {
         for ( USHORT n = 0; n < SFX_OBJECTBAR_MAX; ++n )
         {

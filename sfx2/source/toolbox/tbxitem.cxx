@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:29:34 $
+ *  last change: $Author: mba $ $Date: 2002-03-14 10:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,11 +461,13 @@ void SfxPopupWindow::DeleteFloatingWindow()
                 break;
 
             case SFX_POPUP_HIDE:
-                Hide();
+            {
+                SfxStateCache* pCache = GetBindings().GetStateCache( GetId() );
+                pCache->SetState(SFX_ITEM_DISABLED, 0);
                 if ( GetParent() !=  SFX_APP()->GetTopWindow() )
                     SetParent( SFX_APP()->GetTopWindow() );
                 break;
-
+            }
             case SFX_POPUP_SHOW:
             {
                 if ( GetParent() !=  SFX_APP()->GetTopWindow() )
