@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:54:27 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,8 +756,8 @@ OutputDevice& SwDoc::GetRefDev() const
 OutputDevice* SwDoc::_GetRefDev() const
 {
     if ( com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
-        return pVirDev;
-    return pPrt;
+        return pPrt;
+    return pVirDev;
 }
 
 //---------------------------------------------------
