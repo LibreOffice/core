@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:00:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat )
     : SwUndoFlyBase( pFormat,
                      RES_DRAWFRMFMT == pFormat->Which() ?
-                     UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
-      pSdrObjLast(NULL), pSdrObjCopy(NULL), pSdrUndo(NULL)
+                     UNDO_INSDRAWFMT : UNDO_INSLAYFMT )
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     nRndId = rAnchor.GetAnchorId();
@@ -335,8 +334,6 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat )
 
 SwUndoInsLayFmt::~SwUndoInsLayFmt()
 {
-    delete pSdrUndo;
-    delete pSdrObjCopy;
 }
 
 void SwUndoInsLayFmt::Undo( SwUndoIter& rUndoIter )
@@ -417,25 +414,9 @@ String SwUndoInsLayFmt::GetComment() const
         if (pFrmFmt)
         {
             const SdrObject * pSdrObj = pFrmFmt->FindSdrObject();
-
-            // -> #i30295#
-            if (pSdrObj && pSdrObj != pSdrObjLast)
+            if ( pSdrObj )
             {
-                delete pSdrUndo;
-                delete pSdrObjCopy;
-
-                pSdrObjCopy = pSdrObj->Clone();
-
-                pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
-
-                pSdrObjLast = pSdrObj;
-            }
-            // <- #i30295#
-
-            if (pSdrUndo)
-            {
-                aResult = pSdrUndo->GetComment();
-
+                aResult = SdrUndoNewObj::GetComment( *pSdrObj );
                 bDone = true;
             }
         }
