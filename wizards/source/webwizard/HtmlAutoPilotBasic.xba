@@ -127,7 +127,7 @@ End Sub
 Sub LoadWebPageStyles()
 Dim CurIndex as Integer
 	ToggleDialogControls(False)
-&apos;	oBaseDocument.LockControllers
+	oBaseDocument.LockControllers
 	CurIndex = GetCurIndex(DialogModel.lbStyles, Style(), NumberofStyles%,8)
 	bWithBackGraphic = LoadNewStyles(oBaseDocument, DialogModel, CurIndex, FileStr, Style(), TextureDir)
 	CurrentBullet$ = BulletDir + Style(6, CurIndex)
@@ -144,7 +144,7 @@ Dim CurIndex as Integer
 	SetBulletAndGraphics()
 	CheckControls(oBaseDocument.DrawPage)
 	oViewCursor.GotoStart(False)
-&apos;	oBaseDocument.UnlockControllers
+	oBaseDocument.UnlockControllers
 	ToggleDialogControls(True)
 End Sub
 
@@ -282,6 +282,7 @@ Dim DirContent() as String
 Dim FileName as String
 Dim TemplatePath as String
 Dim FilterLen as Integer
+Dim MyArray()
 Dim i as Integer
 Dim m as Integer
 Dim n as Integer
@@ -293,7 +294,6 @@ Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
 	FileProperties(0).Name = &quot;Hidden&quot;
 	FileProperties(0).Value = True
 	oListboxControl = oDialog.GetControl(ListboxName)
-	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
@@ -301,14 +301,20 @@ Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
 	
 	LocMaxIndex = Ubound(DirContent())
 	
+	oDocInfo = createUNOService(&quot;com.sun.star.document.DocumentProperties&quot;)
+	
 	Dim SortList(LocMaxIndex,2)
 	For i = 0 to LocMaxIndex
 		SortList(i,0) = DirContent(i)
-		oComp = StarDesktop.LoadComponentFromURL(DirContent(i),&quot;_blank&quot;,0,FileProperties())
-		oRealDocInfo = oComp.getDocumentInfo()
-		oComp.dispose()
-		SortList(i,1) = oRealDocInfo.Title
-		SortList(i,2) = oRealDocInfo
+		oDocInfo.read(DirContent(i))
+		SortList(i,1) = oDocInfo.Title
+		If  Left(FileNameOutOfPath(DirContent(i),getPathSeparator()),3) = &quot;stl&quot; Then
+			oComp = StarDesktop.LoadComponentFromURL(DirContent(i),&quot;_blank&quot;,0,FileProperties())
+			oRealDocInfo = oComp.getDocumentInfo()
+	   		SortList(i,2) = oRealDocInfo 
+	   		oComp.dispose()
+   		End If
+    	
 	Next i
 	SortList() = BubbleSortList(SortList(),True)
 	
