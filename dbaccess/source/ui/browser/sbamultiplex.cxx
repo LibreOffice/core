@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbamultiplex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 15:42:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,40 +104,9 @@ IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXRowSetApproveMultiplexer, ::com::
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSQLErrorMultiplexer, ::com::sun::star::sdb::XSQLErrorListener)
 IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXSQLErrorMultiplexer, ::com::sun::star::sdb::XSQLErrorListener, errorOccured, ::com::sun::star::sdb::SQLErrorEvent)
 
-// ::com::sun::star::form::XPositioningListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXPositioningMultiplexer, ::com::sun::star::form::XPositioningListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXPositioningMultiplexer, ::com::sun::star::form::XPositioningListener, positioned, ::com::sun::star::lang::EventObject)
-
-// ::com::sun::star::form::XInsertListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXInsertMultiplexer, ::com::sun::star::form::XInsertListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXInsertMultiplexer, ::com::sun::star::form::XInsertListener, inserting, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXInsertMultiplexer, ::com::sun::star::form::XInsertListener, inserted, ::com::sun::star::lang::EventObject)
-
-// ::com::sun::star::form::XRestoreListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRestoreMultiplexer, ::com::sun::star::form::XRestoreListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRestoreMultiplexer, ::com::sun::star::form::XRestoreListener, restored, ::com::sun::star::lang::EventObject)
-
-// ::com::sun::star::form::XDeleteListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXDeleteMultiplexer, ::com::sun::star::form::XDeleteListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXDeleteMultiplexer, ::com::sun::star::form::XDeleteListener, approveDelete, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXDeleteMultiplexer, ::com::sun::star::form::XDeleteListener, deleted, ::com::sun::star::lang::EventObject)
-
-// ::com::sun::star::form::XUpdateListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXUpdateMultiplexer, ::com::sun::star::form::XUpdateListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXUpdateMultiplexer, ::com::sun::star::form::XUpdateListener, approveUpdate, ::com::sun::star::lang::EventObject)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXUpdateMultiplexer, ::com::sun::star::form::XUpdateListener, updated, ::com::sun::star::lang::EventObject)
-
-// ::com::sun::star::form::XErrorListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXErrorMultiplexer, ::com::sun::star::form::XErrorListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXErrorMultiplexer, ::com::sun::star::form::XErrorListener, errorOccured, ::com::sun::star::form::ErrorEvent)
-
 // ::com::sun::star::form::XDatabaseParameterListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXParameterMultiplexer, ::com::sun::star::form::XDatabaseParameterListener)
 IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXParameterMultiplexer, ::com::sun::star::form::XDatabaseParameterListener, approveParameter, ::com::sun::star::form::DatabaseParameterEvent)
-
-// ::com::sun::star::util::XRefreshListener
-IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXRefreshMultiplexer, ::com::sun::star::util::XRefreshListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXRefreshMultiplexer, ::com::sun::star::util::XRefreshListener, refreshed, ::com::sun::star::lang::EventObject)
 
 // ::com::sun::star::form::XSubmitListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXSubmitMultiplexer, ::com::sun::star::form::XSubmitListener)
@@ -153,9 +122,6 @@ IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, ::com::sun::star::
 
 // ::com::sun::star::beans::XVetoableChangeListener
 IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, ::com::sun::star::beans::XVetoableChangeListener, vetoableChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException))
-
-// ::com::sun::star::beans::XPropertyStateChangeListener
-IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXPropertyStateChangeMultiplexer, ::com::sun::star::beans::XPropertyStateChangeListener, propertyStateChange, ::com::sun::star::beans::PropertyStateChangeEvent, (::com::sun::star::uno::RuntimeException))
 
 // ::com::sun::star::beans::XPropertiesChangeListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXPropertiesChangeMultiplexer, ::com::sun::star::beans::XPropertiesChangeListener);
