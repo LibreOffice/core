@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frminf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:24 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 14:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,25 +201,38 @@ SwTwips SwTxtFrmInfo::GetLineStart() const
 // errechne die Position des Zeichens und gebe die Mittelposition zurueck
 SwTwips SwTxtFrmInfo::GetCharPos( xub_StrLen nChar, sal_Bool bCenter ) const
 {
+    SWRECTFN( pFrm )
+    SwFrmSwapper aSwapper( pFrm, sal_True );
+
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );
 
     SwTwips nStt, nNext;
     SwRect aRect;
     if( ((SwTxtCursor&)aLine).GetCharRect( &aRect, nChar ) )
-        nStt = aRect.Left();
+    {
+        if ( bVert )
+            pFrm->SwitchHorizontalToVertical( aRect );
+
+        nStt = (aRect.*fnRect->fnGetLeft)();
+    }
     else
         nStt = aLine.GetLineStart();
 
     if( !bCenter )
-        return nStt - pFrm->Frm().Left();
+        return nStt - (pFrm->Frm().*fnRect->fnGetLeft)();
 
     if( ((SwTxtCursor&)aLine).GetCharRect( &aRect, nChar+1 ) )
-        nNext = aRect.Left();
+    {
+        if ( bVert )
+            pFrm->SwitchHorizontalToVertical( aRect );
+
+        nNext = (aRect.*fnRect->fnGetLeft)();
+    }
     else
         nNext = aLine.GetLineStart();
 
-    return (( nNext + nStt ) / 2 ) - pFrm->Frm().Left();
+    return (( nNext + nStt ) / 2 ) - (pFrm->Frm().*fnRect->fnGetLeft)();
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-09-12 10:12:28 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 14:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,11 +978,17 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             {
                 const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
                 for( xub_StrLen nChPos = 0; *pTxt; ++nChPos, ++pTxt )
+                {
                     if( *pTxt == cCh )
+                    {
                         aPosArr.Insert( aFInfo.GetCharPos( nChPos+1, FALSE ),
                                         aPosArr.Count() );
+                    }
+                }
 
                 aPosArr.Insert( /*aFInfo.GetFrm()->Frm().Left() +*/
+                                aFInfo.GetFrm()->IsVertical() ?
+                                aFInfo.GetFrm()->Prt().Bottom() :
                                 aFInfo.GetFrm()->Prt().Right(),
                                 aPosArr.Count() );
             }
