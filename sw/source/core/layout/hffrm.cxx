@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:07:18 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,7 @@ void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
                         i < (int)pPage->GetSortedObjs()->Count(); ++i )
     {
         SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
             if ( pFrm->IsAnLower( pObj->GetFlyFrm() ) )
