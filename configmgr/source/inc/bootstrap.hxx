@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-19 10:52:36 $
+ *  last change: $Author: jb $ $Date: 2002-10-24 15:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,10 @@ namespace configmgr
         struct Impl;
         friend struct Impl;
     };
+// ===================================================================================
+
+    // a transition helper
+    BootstrapSettings::Context getBootstrapContext(const uno::Reference< lang::XMultiServiceFactory >& _xORB);
 
 // ===================================================================================
 }

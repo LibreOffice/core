@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-14 14:19:27 $
+ *  last change: $Author: jb $ $Date: 2002-10-24 15:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #include "bootstrap.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
@@ -102,7 +99,6 @@ namespace configmgr
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
     namespace csscfg = ::com::sun::star::configuration;
     using namespace ::cppu;
     using namespace ::osl;
@@ -132,31 +128,6 @@ namespace configmgr
     };
     //---------------------------------------------------------------------------------------
 
-    static BootstrapSettings::Context getBootstrapContext(const Reference< XMultiServiceFactory >& _xORB)
-    {
-        Reference< XComponentContext > xContext;
-
-        Reference< XPropertySet > xORBPS( _xORB, UNO_QUERY );
-        if (xORBPS.is())
-        try
-        {
-            OUString const k_CONTEXT(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"));
-
-            OSL_VERIFY( xORBPS->getPropertyValue(k_CONTEXT) >>= xContext );
-        }
-        catch (UnknownPropertyException & )
-        {
-            OSL_TRACE("Warning: Cannot get context - Service manager has no DefaultContext property");
-        }
-        catch (Exception& )
-        {
-            OSL_TRACE("Warning: Cannot get context - Unexpected exception retrieving DefaultContext");
-        }
-        else
-            OSL_TRACE("Warning: Cannot get context - ServiceManager is no PropertySet");
-
-        return xContext;
-    }
     //=======================================================================================
     //= OProviderFactory
     //=======================================================================================
@@ -482,6 +453,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2002/10/14 14:19:27  jb
+ *  #104043# Add/adjust log point for TIMELOG
+ *
  *  Revision 1.18  2002/09/19 10:52:06  jb
  *  #102850# Support for contexts to allow fallback initialization
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-23 14:41:41 $
+ *  last change: $Author: jb $ $Date: 2002-10-24 15:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 // ---------------------------------------------------------------------------------------
@@ -1242,6 +1245,32 @@ namespace {
 // ---------------------------------------------------------------------------------------
 // bootstrapping
 // ---------------------------------------------------------------------------------------
+
+BootstrapSettings::Context getBootstrapContext(const Reference< XMultiServiceFactory >& _xORB)
+{
+    Reference< XComponentContext > xContext;
+
+    Reference< XPropertySet > xORBPS( _xORB, UNO_QUERY );
+    if (xORBPS.is())
+    try
+    {
+        OUString const k_CONTEXT(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"));
+
+        OSL_VERIFY( xORBPS->getPropertyValue(k_CONTEXT) >>= xContext );
+    }
+    catch (UnknownPropertyException & )
+    {
+        OSL_TRACE("Warning: Cannot get context - Service manager has no DefaultContext property");
+    }
+    catch (Exception& )
+    {
+        OSL_TRACE("Warning: Cannot get context - Unexpected exception retrieving DefaultContext");
+    }
+    else
+        OSL_TRACE("Warning: Cannot get context - ServiceManager is no PropertySet");
+
+    return xContext;
+}
 // ---------------------------------------------------------------------------------------
 // class BootstrapSettings::Impl
 // ---------------------------------------------------------------------------------------
