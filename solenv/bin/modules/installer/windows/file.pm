@@ -2,9 +2,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:19:17 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:22:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -371,7 +371,13 @@ sub create_files_table
 
         $file{'Language'} = get_language_for_file($onefile);
 
-        $file{'Attributes'} = "16384";  # Sourcefile is packed
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+
+        if ( $styles =~ /\bDONT_PACK\b/ ) { $file{'Attributes'} = "8192"; }
+        else { $file{'Attributes'} = "16384"; }
+
+        # $file{'Attributes'} = "16384";    # Sourcefile is packed
         # $file{'Attributes'} = "8192";     # Sourcefile is unpacked
 
         $file{'Sequence'} = get_sequence_for_file($i);
