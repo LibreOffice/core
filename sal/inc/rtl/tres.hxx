@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sz $ $Date: 2001-05-18 13:58:35 $
+ *  last change: $Author: ganaya $ $Date: 2001-06-20 21:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class TestResult {
     sal_Char* m_msg;
     sal_Bool m_state;
     sal_Bool m_boom;
+    sal_Int32 nVerbosityLevel;
     // </private_members>
 
     // <private_ctors>
@@ -142,12 +143,13 @@ class TestResult {
 public:
 
     // <public_ctors>
-    TestResult( const sal_Char* meth, sal_Bool boom = sal_False )
+    TestResult( const sal_Char* meth, sal_Bool boom = sal_False, sal_Int32 nVerbosity = 0 )
             : m_name(0)
             , m_result(0)
             , m_msg(0)
             , m_state( sal_False )
-            , m_boom( boom ) {
+            , m_boom( boom )
+            , nVerbosityLevel(nVerbosity) {
 
         cpy( &m_name, meth );
     } // </public_ctors>
@@ -212,6 +214,32 @@ public:
     sal_Char* getMsg() {
         return m_msg;
     } // </method_getMsg>
+
+    // <method_getVerbosityLevel>
+    inline sal_Int32 getVerbosityLevel()
+    {
+        if ( ( nVerbosityLevel < 0 ) || ( nVerbosityLevel > 3 ) )
+         {
+              return 3;
+         }
+
+        return nVerbosityLevel;
+    } // </method_getVerbosityLevel>
+
+    // <method_setVerbosityLevel>
+    inline sal_Int32 setVerbosityLevel( const sal_Int32 nNewVerbosityLevel )
+    {
+      if ( ( nNewVerbosityLevel < 0 ) || ( nNewVerbosityLevel > 3 ) )
+      {
+    nVerbosityLevel = 3;
+      }
+      else
+      {
+    nVerbosityLevel = nNewVerbosityLevel;
+      }
+
+      return nVerbosityLevel;
+    }  // </method_setVerbosityLevel>
 
     // </public_methods>
 
