@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:33:33 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:56:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=index
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,14 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        cnttab.cxx \
-        cntex.cxx \
-        idxmrk.cxx \
-        multmrk.cxx \
-        toxmgr.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         cnttab.src \
         idxmrk.src \
         multmrk.src
