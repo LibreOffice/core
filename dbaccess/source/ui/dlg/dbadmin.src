@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 14:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3015,8 +3015,8 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
 };
 String STR_ADDRESSBOOK_SYSTEM
 {
-    Text = "System Adressbuch";
-    Text [ english ] = "System addressbook";
+    Text = "Windows Adressbuch";
+    Text [ english ] = "Windows addressbook";
 };
 String STR_ADDRESSBOOK_OUTLOOK
 {
@@ -3037,6 +3037,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.50  2001/05/29 13:33:12  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.49  2001/05/29 10:15:33  fs
  *  #86082# STR_UNSUPPORTED_DATASOURCE_TYPE
  *
