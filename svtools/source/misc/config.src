@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:06:46 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 08:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,20 @@ String STR_WARNING_ITEM
     TEXT [ dutch ] = "Verkeerde versie van item!" ;
     TEXT [ spanish ] = "¡La entrada contiene una versión incorrecta!" ;
     TEXT [ english_us ] = "Incorrect Version!" ;
-    TEXT[ chinese_simplified ] = "ÌõÄ¿°æ±¾ÎŞĞ§";
+    TEXT[ chinese_simplified ] = "æ¡ç›®ç‰ˆæœ¬æ— æ•ˆ";
     TEXT[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ ıëåìåíòà!";
     TEXT[ polish ] = "Wersja elementu jest nieprawid³owa!";
-    TEXT[ japanese ] = "ÊŞ°¼Ş®İ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
-    TEXT[ chinese_traditional ] = "±ø¥Øª©¥»µL®Ä";
+    TEXT[ japanese ] = "ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
+    TEXT[ chinese_traditional ] = "æ¢ç›®ç‰ˆæœ¬ç„¡æ•ˆ";
     TEXT[ arabic ] = "ÇáÅÏÎÇá áå ÅÕÏÇÑ ÎÇØÆ!";
     TEXT[ dutch ] = "Verkeerde versie van item!";
-    TEXT[ chinese_simplified ] = "ÌõÄ¿°æ±¾ÎŞĞ§";
+    TEXT[ chinese_simplified ] = "æ¡ç›®ç‰ˆæœ¬æ— æ•ˆ";
     TEXT[ greek ] = "Ç êáôá÷şñéóç õğÜñ÷åé óå ëÜèïò İêäïóç!";
-    TEXT[ korean ] = "¾ÆÀÌÅÛÀÌ Æ²¸° ¹öÀüÀ» °¡Áö°í ÀÖ½À´Ï´Ù!";
+    TEXT[ korean ] = "ì•„ì´í…œì´ í‹€ë¦° ë²„ì „ì„ ê°€ì§€ê³  ìˆìŠµë‹ˆë‹¤!";
     TEXT[ turkish ] = "Girişin sürümü yanlış!";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "¡La entrada contiene una versión incorrecta!";
 };
+
 
 
