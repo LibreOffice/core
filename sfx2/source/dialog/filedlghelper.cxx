@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-07 10:09:42 $
+ *  last change: $Author: pb $ $Date: 2002-08-20 09:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,11 +246,12 @@ using namespace ::cppu;
 
 #define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 #define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("FilePicker_Graph"))
-#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
+#define USERITEM_NAME           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserItem" ))
 
 //-----------------------------------------------------------------------------
 
-namespace sfx2 {
+namespace sfx2
+{
 
 String EncodeSpaces_Impl( const String& rSource );
 String DecodeSpaces_Impl( const String& rSource );
@@ -329,6 +330,8 @@ private:
     void                    setDialogHelpId( const sal_Int32 _nHelpId );
 
     sal_Bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
+
+    sal_Bool                isInOpenMode() const;
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
     DECL_LINK( HandleEvent, FileDialogHelper* );
@@ -599,13 +602,15 @@ sal_Bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const SfxFilter* _
                    ::rtl::OUString aServiceName;
                    sal_Int32 nPropertyCount = aProps.getLength();
                    for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                       if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                {
+                       if( aProps[nProperty].Name.equals( DEFINE_CONST_OUSTRING( "UIComponent") ) )
                        {
                         ::rtl::OUString aServiceName;
                            aProps[nProperty].Value >>= aServiceName;
                         if( aServiceName.getLength() )
                             bResult = sal_True;
                     }
+                }
             }
         }
         catch( Exception& )
@@ -614,6 +619,24 @@ sal_Bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const SfxFilter* _
     }
 
     return bResult;
+}
+
+// ------------------------------------------------------------------------
+sal_Bool FileDialogHelper_Impl::isInOpenMode() const
+{
+    sal_Bool bRet = sal_False;
+
+    switch ( m_nDialogType )
+    {
+        case FILEOPEN_SIMPLE:
+        case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
+        case FILEOPEN_PLAY:
+        case FILEOPEN_READONLY_VERSION:
+        case FILEOPEN_LINK_PREVIEW:
+            bRet = sal_True;
+    }
+
+    return bRet;
 }
 
 // ------------------------------------------------------------------------
@@ -961,7 +984,7 @@ sal_Bool lcl_isSystemFilePicker( const Reference< XFilePicker >& _rxFP )
     try
     {
         Reference< XServiceInfo > xSI( _rxFP, UNO_QUERY );
-        if ( xSI.is() && xSI->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" ) ) )
+        if ( xSI.is() && xSI->supportsService( DEFINE_CONST_OUSTRING( "com.sun.star.ui.dialogs.SystemFilePicker" ) ) )
             return sal_True;
     }
     catch( const Exception& )
@@ -1050,7 +1073,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         if( xFactory.is() )
         {
             mxFilterCFG = Reference< XNameAccess >(
-                xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
                 UNO_QUERY );
         }
 
@@ -1495,17 +1518,20 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
     if ( xFltMgr.is() )
         _rFilter = xFltMgr->getCurrentFilter();
 
-    if ( ! _rFilter.Len() )
+    if ( !_rFilter.Len() )
         _rFilter = maCurFilter;
 
     if ( _rFilter.Len() && mpMatcher )
     {
-        const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
-                                        _rFilter, m_nMustFlags, m_nDontFlags );
-        if ( pFilter )
-            _rFilter = pFilter->GetFilterName();
-        else
-            _rFilter = String();
+        // when we show the filter ui names, we added the extensions
+        // now we have to cut the extensions to find the filter
+        static const String sOpenExtension( DEFINE_CONST_UNICODE( " (*." ) );
+        static const String sSaveExtension( DEFINE_CONST_UNICODE( " (." ) );
+        _rFilter.Erase( _rFilter.Search( isInOpenMode() ? sOpenExtension : sSaveExtension ) );
+
+        const SfxFilter* pFilter =
+            mpMatcher->GetFilter4UIName( _rFilter, m_nMustFlags, m_nDontFlags );
+        _rFilter = pFilter ? pFilter->GetFilterName() : _rFilter.Erase();
     }
 }
 
@@ -1628,7 +1654,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     if ( WB_OPEN == ( nFlags & WB_OPEN ) )
         ::sfx2::appendFiltersForOpen( aIter, xFltMgr, sFirstFilter );
     else
-        ::sfx2::appendFilters( aIter, xFltMgr, sFirstFilter );
+        ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter );
 
     // set our initial selected filter (if we do not already have one)
     if ( maSelectFilter.getLength() )
@@ -1696,12 +1722,14 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
 #if defined(WIN) || defined(WNT)
     if ( aExtensions.Len() > 240 )
-        aExtensions = String::CreateFromAscii( FILEDIALOG_FILTER_ALL );
+        aExtensions = DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL );
 #endif
+    sal_Bool bIsInOpenMode = isInOpenMode();
 
     try
     {
         OUString aAllFilterName = String( SfxResId( STR_SFX_IMPORT_ALL ) );
+        aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode );
 
         xFltMgr->appendFilter( aAllFilterName, aExtensions );
         maSelectFilter = aAllFilterName;
@@ -1730,6 +1758,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
                 aExtensions += sWildcard;
             }
         }
+        aName = ::sfx2::addExtension( aName, aExtensions, bIsInOpenMode );
         try
         {
             xFltMgr->appendFilter( aName, aExtensions );
@@ -1756,7 +1785,7 @@ void FileDialogHelper_Impl::saveConfig()
     if ( mbHasPreview )
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData = String::CreateFromAscii( GRF_CONFIG_STR );
+        String aUserData = DEFINE_CONST_UNICODE( GRF_CONFIG_STR );
 
         try
         {
@@ -1787,7 +1816,7 @@ void FileDialogHelper_Impl::saveConfig()
     {
         sal_Bool bWriteConfig = sal_False;
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-        String aUserData = String::CreateFromAscii( STD_CONFIG_STR );
+        String aUserData = DEFINE_CONST_UNICODE( STD_CONFIG_STR );
 
         if ( aDlgOpt.Exists() )
         {
@@ -1935,7 +1964,7 @@ void FileDialogHelper_Impl::loadConfig()
         }
 
         if ( ! aUserData.Len() )
-            aUserData = String::CreateFromAscii( STD_CONFIG_STR );
+            aUserData = DEFINE_CONST_UNICODE( STD_CONFIG_STR );
 
         if ( ! maPath.getLength() )
             setPath( getInitPath( aUserData, 1 ) );
@@ -2249,19 +2278,17 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
 // ------------------------------------------------------------------------
 String EncodeSpaces_Impl( const String& rSource )
 {
-    String aRet( rSource );
-    aRet.SearchAndReplaceAll( String::CreateFromAscii( " " ),
-                              String::CreateFromAscii( "%20" ) );
-    return aRet;
+    String sRet( rSource );
+    sRet.SearchAndReplaceAll( DEFINE_CONST_UNICODE( " " ), DEFINE_CONST_UNICODE( "%20" ) );
+    return sRet;
 }
 
 // ------------------------------------------------------------------------
 String DecodeSpaces_Impl( const String& rSource )
 {
-    String aRet( rSource );
-    aRet.SearchAndReplaceAll( String::CreateFromAscii( "%20" ),
-                              String::CreateFromAscii( " " ) );
-    return aRet;
+    String sRet( rSource );
+    sRet.SearchAndReplaceAll( DEFINE_CONST_UNICODE( "%20" ), DEFINE_CONST_UNICODE( " " ) );
+    return sRet;
 }
 
 // ------------------------------------------------------------------------

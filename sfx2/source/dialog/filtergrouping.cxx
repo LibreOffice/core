@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-20 09:43:46 $
+ *  last change: $Author: pb $ $Date: 2002-08-20 09:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,8 +226,8 @@ namespace sfx2
     void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const ::rtl::OUString& _rLogicalClassName,
         FilterClass& /* [out] */ _rClass )
     {
-        static const ::rtl::OUString sDisplaNameNodeName = ::rtl::OUString::createFromAscii( "DisplayName" );
-        static const ::rtl::OUString sSubFiltersNodeName = ::rtl::OUString::createFromAscii( "Filters" );
+        static const ::rtl::OUString sDisplaNameNodeName( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" ) );
+        static const ::rtl::OUString sSubFiltersNodeName( RTL_CONSTASCII_USTRINGPARAM( "Filters" ) );
 
             // the description node for the current class
         OConfigurationNode aClassDesc = _rClassesNode.openNode( _rLogicalClassName );
@@ -306,7 +306,7 @@ namespace sfx2
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
         // get the list describing the order of all global classes
         Sequence< ::rtl::OUString > aGlobalClasses;
-        _rFilterClassification.getNodeValue( ::rtl::OUString::createFromAscii( "GlobalFilters/Order" ) ) >>= aGlobalClasses;
+        _rFilterClassification.getNodeValue( DEFINE_CONST_OUSTRING( "GlobalFilters/Order" ) ) >>= aGlobalClasses;
 
         const ::rtl::OUString* pNames = aGlobalClasses.getConstArray();
         const ::rtl::OUString* pNamesEnd = pNames + aGlobalClasses.getLength();
@@ -331,7 +331,8 @@ namespace sfx2
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
         // go for all the single class entries
-        OConfigurationNode aFilterClassesNode = _rFilterClassification.openNode( ::rtl::OUString::createFromAscii( "GlobalFilters/Classes" ) );
+        OConfigurationNode aFilterClassesNode =
+            _rFilterClassification.openNode( DEFINE_CONST_OUSTRING( "GlobalFilters/Classes" ) );
         Sequence< ::rtl::OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
         ::std::for_each(
             aFilterClasses.getConstArray(),
@@ -372,7 +373,8 @@ namespace sfx2
         _rLocalClasses.clear();
 
         // the node for the local classes
-        OConfigurationNode aFilterClassesNode = _rFilterClassification.openNode( ::rtl::OUString::createFromAscii( "LocalFilters/Classes" ) );
+        OConfigurationNode aFilterClassesNode =
+            _rFilterClassification.openNode( DEFINE_CONST_OUSTRING( "LocalFilters/Classes" ) );
         Sequence< ::rtl::OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
 
         ::std::for_each(
@@ -389,7 +391,7 @@ namespace sfx2
         // open our config node
         OConfigurationTreeRoot aFilterClassification = OConfigurationTreeRoot::createWithServiceFactory(
             ::comphelper::getProcessServiceFactory(),
-            ::rtl::OUString::createFromAscii( "org.openoffice.Office.UI/FilterClassification" ),
+            DEFINE_CONST_OUSTRING( "org.openoffice.Office.UI/FilterClassification" ),
             -1,
             OConfigurationTreeRoot::CM_READONLY
         );
@@ -823,7 +825,8 @@ namespace sfx2
         // operate on a single filter
         void operator() ( const FilterDescriptor& _rFilterEntry )
         {
-            m_xFilterManager->appendFilter( _rFilterEntry.First, _rFilterEntry.Second );
+            String sDisplayText = addExtension( _rFilterEntry.First, _rFilterEntry.Second, sal_True );
+            m_xFilterManager->appendFilter( sDisplayText, _rFilterEntry.Second );
         }
     };
 
@@ -925,6 +928,11 @@ namespace sfx2
                             _rGroup.end(),
                             aFilters.getArray()
                         );
+                        StringPair* pFilters = aFilters.getArray();
+                        StringPair* pEnd = pFilters + aFilters.getLength();
+                        int i = 0;
+                        for ( ; pFilters != pEnd; ++pFilters )
+                            pFilters->First = addExtension( pFilters->First, pFilters->Second, sal_True );
                         m_xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
                     }
                 }
@@ -945,9 +953,9 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
-    void appendFilters( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
+    void appendFiltersForSave( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
     {
-        DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFilters: invalid manager!" );
+        DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForSave: invalid manager!" );
         if ( !_rxFilterManager.is() )
             return;
 
@@ -955,10 +963,11 @@ namespace sfx2
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
-            sUIName = pFilter->GetUIName();
+            ::rtl::OUString sExtension = pFilter->GetWildcard().GetWildCard();
+            sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False );
             try
             {
-                _rxFilterManager->appendFilter( sUIName, pFilter->GetWildcard().GetWildCard() );
+                _rxFilterManager->appendFilter( sUIName, sExtension );
                 if ( !_rFirstNonEmpty.getLength() )
                     _rFirstNonEmpty = sUIName;
 
@@ -1018,6 +1027,26 @@ namespace sfx2
 #endif
     }
 
+    ::rtl::OUString addExtension( const ::rtl::OUString& _rDisplayText, const ::rtl::OUString& _rExtension, sal_Bool _bForOpen )
+    {
+        static ::rtl::OUString sAllFilter( RTL_CONSTASCII_USTRINGPARAM( "(*.*)" ) );
+        static ::rtl::OUString sOpenBracket( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+        static ::rtl::OUString sCloseBracket( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+        ::rtl::OUString sRet = _rDisplayText;
+
+        if ( sRet.indexOf( sAllFilter ) == -1 )
+        {
+            String sExt = _rExtension;
+            if ( !_bForOpen )
+                // show '*' in extensions only when opening a document
+                sExt.EraseAllChars( '*' );
+            sRet += sOpenBracket;
+            sRet += sExt;
+            sRet += sCloseBracket;
+        }
+        return sRet;
+    }
+
 //........................................................................
 }   // namespace sfx2
 //........................................................................
@@ -1025,6 +1054,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2002/06/20 09:43:46  aw
+ *  #100545# ++pGlobalClassNames may exceed aGlobalClassNames.end()
+ *
  *  Revision 1.10  2002/01/03 11:27:02  rt
  *  #65293# include corrected: don't use sfx2-path here
  *
@@ -1033,28 +1065,6 @@ namespace sfx2
  *
  *  Revision 1.8  2001/11/28 17:00:48  mba
  *  #78650#: filter names without module prefixes
- *
- *  Revision 1.7  2001/10/25 02:21:18  svesik
- *  Remove sfx2/ from #include statement so also builds in a fresh, from
- *  scratch build
- *
- *  Revision 1.6  2001/10/24 15:32:10  fs
- *  #93701# do not add global classes which are empty
- *
- *  Revision 1.5  2001/10/11 16:10:39  hr
- *  #92924#: lcl_GroupAndClassify(): clear FilterGroupList
- *
- *  Revision 1.4  2001/10/11 11:29:46  vg
- *  #65293# corrected for solaris' compiler
- *
- *  Revision 1.3  2001/10/09 08:42:06  fs
- *  finalized #91894# - filter grouping and classifying now works (hopefully :)
- *
- *  Revision 1.2  2001/10/02 12:37:54  fs
- *  #65293# include <algorithm> - needed for non-win platforms
- *
- *  Revision 1.1  2001/10/01 16:32:30  fs
- *  initial checkin - helpers for grouping and classifying filters in the file open dialog
  *
  *
  *  Revision 1.0 01.10.01 10:28:28  fs

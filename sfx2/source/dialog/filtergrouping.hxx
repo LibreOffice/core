@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-01 16:32:37 $
+ *  last change: $Author: pb $ $Date: 2002-08-20 09:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,23 +74,33 @@ namespace sfx2
 //........................................................................
 
     //--------------------------------------------------------------------
-    /** adds the given filters the the filter manager.
-        <p>To be used for all modes except when opening generic files.</p>
+    /** adds the given filters to the filter manager.
+        <p>To be used when saving generic files.</p>
     */
-    void appendFilters(
+    void appendFiltersForSave(
         SfxFilterMatcherIter& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
         ::rtl::OUString& /* [out] */ _rFirstNonEmpty
     );
 
     //--------------------------------------------------------------------
-    /** adds the given filters the the filter manager.
+    /** adds the given filters to the filter manager.
         <p>To be used when opening generic files.</p>
     */
     void appendFiltersForOpen(
         SfxFilterMatcherIter& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
         ::rtl::OUString& /* [out] */ _rFirstNonEmpty
+    );
+
+    //--------------------------------------------------------------------
+    /** adds the given extension to the display text.
+        <p>To be used when opening or save generic files.</p>
+    */
+    ::rtl::OUString addExtension(
+        const ::rtl::OUString& _rDisplayText,
+        const ::rtl::OUString& _rExtension,
+        sal_Bool _bForOpen
     );
 
 //........................................................................
@@ -102,6 +112,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/10/01 16:32:37  fs
+ *  initial checkin - helpers for grouping and classifying filters in the file open dialog
+ *
  *
  *  Revision 1.0 01.10.01 10:28:28  fs
  ************************************************************************/
