@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:28:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ namespace connectivity
             sal_Int32                               m_nFetchDirection;
             sal_Int32                               m_nResultSetConcurrency;
 
-            ::com::sun::star::uno::WeakReferenceHelper                                      m_aStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDBMetaData;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColNames; // table columns
