@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:17:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ namespace
     template < typename T> class OHardRefMap : public connectivity::sdbcx::IObjectCollection
     {
         typedef ::std::multimap< ::rtl::OUString, T , ::comphelper::UStringMixLess> ObjectMap;
-        typedef typename ObjectMap::iterator ObjectIter;
+        typedef typename ObjectMap::iterator   ObjectIter;
+        typedef typename ObjectMap::value_type ObjectEntry;
 
     //  private:
         // this combination of map and vector is used to have a fast name and index access
@@ -150,7 +151,7 @@ namespace
         // -----------------------------------------------------------------------------
         virtual void insert(const ::rtl::OUString& _sName,const Object_BASE& _xObject)
         {
-            m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(_sName,_xObject)));
+            m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(_sName,_xObject)));
         }
         // -----------------------------------------------------------------------------
         virtual void reFill(const TStringVector &_rVector)
@@ -159,19 +160,19 @@ namespace
             m_aElements.reserve(_rVector.size());
 
             for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
-                m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,WeakReference< XNamed >())));
+                m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,WeakReference< XNamed >())));
         }
         // -----------------------------------------------------------------------------
         virtual bool rename(const ::rtl::OUString _sOldName,const ::rtl::OUString _sNewName)
         {
             bool bRet = false;
-            ObjectMap::iterator aIter = m_aNameMap.find(_sOldName);
+            ObjectIter aIter = m_aNameMap.find(_sOldName);
             if ( aIter != m_aNameMap.end() )
             {
-                ::std::vector< ObjectIter >::iterator aFind = ::std::find(m_aElements.begin(),m_aElements.end(),aIter);
+                typename ::std::vector< ObjectIter >::iterator aFind = ::std::find(m_aElements.begin(),m_aElements.end(),aIter);
                 if(m_aElements.end() != aFind)
                 {
-                    (*aFind) = m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(_sNewName,(*aFind)->second));
+                    (*aFind) = m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(_sNewName,(*aFind)->second));
                     m_aNameMap.erase(aIter);
 
                     bRet = true;
@@ -191,7 +192,7 @@ namespace
             Sequence< ::rtl::OUString > aNameList(nLen);
 
             ::rtl::OUString* pStringArray = aNameList.getArray();
-            for(::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != m_aElements.end();++aIter,++pStringArray)
+            for(typename ::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != m_aElements.end();++aIter,++pStringArray)
                 *pStringArray = (*aIter)->first;
 
             return aNameList;
