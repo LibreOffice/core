@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:08:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ ScMyGenerated::~ScMyGenerated()
 }
 
 ScMyBaseAction::ScMyBaseAction(const ScChangeActionType nTempActionType)
-    : aDependences(),
+    : aDependencies(),
     aDeletedList(),
     nActionNumber(0),
     nRejectingNumber(0),
@@ -607,7 +607,7 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetDeletionDependences(ScMyDelAction* pAction, ScChangeActionDel* pDelAct)
+void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAction, ScChangeActionDel* pDelAct)
 {
     if (!pAction->aGeneratedList.empty())
     {
@@ -665,7 +665,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependences(ScMyDelAction* pAct
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetMovementDependences(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct)
+void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct)
 {
     if (!pAction->aGeneratedList.empty())
     {
@@ -687,7 +687,7 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependences(ScMyMoveAction* pAc
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetContentDependences(ScMyContentAction* pAction, ScChangeActionContent* pActContent)
+void ScXMLChangeTrackingImportHelper::SetContentDependencies(ScMyContentAction* pAction, ScChangeActionContent* pActContent)
 {
     if (pAction->nPreviousAction)
     {
@@ -715,18 +715,18 @@ void ScXMLChangeTrackingImportHelper::SetContentDependences(ScMyContentAction* p
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
+void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
 {
     ScChangeAction* pAct = pTrack->GetAction(pAction->nActionNumber);
     if (pAct)
     {
-        if (!pAction->aDependences.empty())
+        if (!pAction->aDependencies.empty())
         {
-            ScMyDependences::iterator aItr = pAction->aDependences.begin();
-            while(aItr != pAction->aDependences.end())
+            ScMyDependencies::iterator aItr = pAction->aDependencies.begin();
+            while(aItr != pAction->aDependencies.end())
             {
                 pAct->AddDependent(*aItr, pTrack);
-                aItr = pAction->aDependences.erase(aItr);
+                aItr = pAction->aDependencies.erase(aItr);
             }
         }
         if (!pAction->aDeletedList.empty())
@@ -756,11 +756,11 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
         }
         if ((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS))
-            SetDeletionDependences(static_cast<ScMyDelAction*>(pAction), static_cast<ScChangeActionDel*>(pAct));
+            SetDeletionDependencies(static_cast<ScMyDelAction*>(pAction), static_cast<ScChangeActionDel*>(pAct));
         else if (pAction->nActionType == SC_CAT_MOVE)
-            SetMovementDependences(static_cast<ScMyMoveAction*>(pAction), static_cast<ScChangeActionMove*>(pAct));
+            SetMovementDependencies(static_cast<ScMyMoveAction*>(pAction), static_cast<ScChangeActionMove*>(pAct));
         else if (pAction->nActionType == SC_CAT_CONTENT)
-            SetContentDependences(static_cast<ScMyContentAction*>(pAction), static_cast<ScChangeActionContent*>(pAct));
+            SetContentDependencies(static_cast<ScMyContentAction*>(pAction), static_cast<ScChangeActionContent*>(pAct));
     }
     else
         DBG_ERROR("could not find the action");
@@ -887,7 +887,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         aItr = aActions.begin();
         while (aItr != aActions.end())
         {
-            SetDependences(*aItr);
+            SetDependencies(*aItr);
 
             if ((*aItr)->nActionType == SC_CAT_CONTENT)
                 aItr++;
@@ -910,6 +910,8 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         }
         if (aProtect.getLength())
             pTrack->SetProtection(aProtect);
+        else if (pDoc->GetChangeTrack() && pDoc->GetChangeTrack()->IsProtected())
+            pTrack->SetProtection(pDoc->GetChangeTrack()->GetProtection());
 
         if ( pTrack->GetLast() )
             pTrack->SetLastSavedActionNumber(pTrack->GetLast()->GetActionNumber());
