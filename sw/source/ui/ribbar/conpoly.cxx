@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conpoly.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:38:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrView *pSdrView = pSh->GetDrawView();
 
                 long nCloseDist = pWin->PixelToLogic(Size(CLOSE_PIXDIST, 0)).Width();
-                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if (rMarkList.GetMark(0))
                 {
                     SdrPathObj* pPathObj = (SdrPathObj *)rMarkList.GetMark(0)->GetObj();
