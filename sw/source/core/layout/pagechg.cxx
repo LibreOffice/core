@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 11:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,18 +1072,21 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
     SwDoc* pDoc      = pStart->GetFmt()->GetDoc();
     const BOOL bFtns = 0 != pDoc->GetFtnIdxs().Count();
 
-    if ( pStart->GetPrev() && ((SwPageFrm*)pStart->GetPrev())->IsEmptyPage() )
-        pStart = (SwPageFrm*)pStart->GetPrev();
     SwPageFrm *pPage = pStart;
+    if( pPage->GetPrev() && ((SwPageFrm*)pPage->GetPrev())->IsEmptyPage() )
+        pPage = (SwPageFrm*)pPage->GetPrev();
     while ( pPage )
     {
         //gewuenschten PageDesc und FrmFmt festellen.
         SwPageDesc *pDesc = pPage->FindPageDesc();
-        const USHORT nPgNum = pPage->GetVirtPageNum();
-        BOOL bOdd = nPgNum % 2 ? TRUE : FALSE;
-        SwFrmFmt *pFmtWish = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
+        BOOL bCheckEmpty = pPage->IsEmptyPage();
+        BOOL bActOdd = pPage->OnRightPage();
+        BOOL bOdd = pPage->WannaRightPage();
+        SwFrmFmt *pFmtWish = bOdd ? pDesc->GetRightFmt()
+                                  : pDesc->GetLeftFmt();
 
-        if ( pDesc != pPage->GetPageDesc() ||       //falscher Desc
+        if ( bActOdd != bOdd ||
+             pDesc != pPage->GetPageDesc() ||       //falscher Desc
              (pFmtWish != pPage->GetFmt()  &&       //falsches Format und
              (!pPage->IsEmptyPage() || pFmtWish)))  //nicht Leerseite
         {
@@ -1115,7 +1118,8 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             //6. Wir haben kein Wunschformat erhalten, also nehmen wir das
             //   'andere' Format (rechts/links) des PageDesc.
 
-            if ( pPage->IsEmptyPage() && pFmtWish )         //1.
+            if ( pPage->IsEmptyPage() && ( pFmtWish ||          //1.
+                 ( !bOdd && !pPage->GetPrev() ) ) )
             {
                 SwPageFrm *pTmp = (SwPageFrm*)pPage->GetNext();
                 pPage->Cut();
@@ -1130,10 +1134,10 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             {
                 pPage->SetPageDesc( pDesc, 0 );
             }
-            else if ( !pPage->IsEmptyPage() && !pFmtWish && //3
-                      (!pPage->GetPrev() ||                 //nicht wenn Vorseite
-                       (pPage->GetPrev() &&                 //EmptyPage
-                        !((SwPageFrm*)pPage->GetPrev())->IsEmptyPage())))
+            else if ( !pPage->IsEmptyPage() && bActOdd != bOdd &&   //3
+                      ( ( !pPage->GetPrev() && !bOdd ) ||
+                        ( pPage->GetPrev() &&
+                        !((SwPageFrm*)pPage->GetPrev())->IsEmptyPage() ) ) )
             {
                 if ( pPage->GetPrev() )
                     pDesc = ((SwPageFrm*)pPage->GetPrev())->GetPageDesc();
@@ -1178,7 +1182,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             }
 #endif
         }
-        else if ( pPage->IsEmptyPage() )
+        if ( bCheckEmpty )
         {
             //Es kann noch sein, dass die Leerseite schlicht  ueberflussig ist.
             //Obiger Algorithmus kann dies leider nicht feststellen.
@@ -1189,38 +1193,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
             //genauer ansehen. Wir bestimmen den PageDesc und die virtuelle
             //Seitennummer manuell.
             SwPageFrm *pPg = (SwPageFrm*)pPage->GetNext();
-            BOOL bDel = FALSE;
-            if ( pPg )
-            {
-                SwFrm *pFlow = pPg->FindFirstBodyCntnt();
-                SwPageDesc *pDesc = 0;
-                USHORT nPgNum = 0;
-                if ( pFlow )
-                {
-                    if ( pFlow->IsInTab() )
-                        pFlow = pFlow->FindTabFrm();
-                    const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
-                    pDesc = (SwPageDesc*)rPgDesc.GetPageDesc();
-                    nPgNum = rPgDesc.GetNumOffset();
-                }
-                if ( !pDesc )
-                {
-                    if ( pPage->GetPrev() )
-                        pDesc = ((SwPageFrm*)pPage->GetPrev())->GetPageDesc()->
-                                                                    GetFollow();
-                    else
-                        pDesc = (SwPageDesc*)&pDoc->GetPageDesc( 0 );
-                }
-                if ( !nPgNum )
-                    nPgNum = pPage->GetVirtPageNum();
-                BOOL bOdd = nPgNum % 2 ? TRUE : FALSE;
-                SwFrmFmt *pFmt = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
-                bDel = pFmt ? TRUE : FALSE;
-            }
-            else
-                bDel = TRUE;
-
-            if ( bDel )
+            if( !pPg || pPage->OnRightPage() == pPg->WannaRightPage() )
             {
                 //Die Folgeseite hat kein Problem ein FrmFmt zu finden oder keinen
                 //Nachfolger, also ist die Leerseite ueberfluessig.
@@ -1289,45 +1262,42 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 |*************************************************************************/
 SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 {
-    SwPageFrm *pSibling = (SwPageFrm*)pPrevPage->GetNext();
     SwRootFrm *pRoot = (SwRootFrm*)pPrevPage->GetUpper();
+    SwPageFrm *pSibling = (SwPageFrm*)pRoot->GetLower();
+    SwPageDesc *pDesc = pSibling->GetPageDesc();
 
+    pSibling = (SwPageFrm*)pPrevPage->GetNext();
         //Rechte (ungerade) oder linke (gerade) Seite einfuegen?
-    BOOL bNumOfst = FALSE;
-    BOOL bOdd;
+    BOOL bNextOdd = !pPrevPage->OnRightPage();
+    BOOL bWishedOdd = bNextOdd;
 
     //Welcher PageDesc gilt?
     //Bei CntntFrm der aus dem Format wenn einer angegeben ist,
     //der Follow vom bereits in der PrevPage gueltigen sonst.
-    SwPageDesc *pDesc = 0;
+    pDesc = 0;
     if ( IsFlowFrm() && !SwFlowFrm::CastFlowFrm( this )->IsFollow() )
     {   SwFmtPageDesc &rDesc = (SwFmtPageDesc&)GetAttrSet()->GetPageDesc();
         pDesc = rDesc.GetPageDesc();
         if ( rDesc.GetNumOffset() )
-        {   //Wenn sich PageDesc und NumOfset wiedersprechen kann nur
-            //der PageDesc 'rechter haben'
-            bOdd = rDesc.GetNumOffset() % 2 ? TRUE : FALSE;
-            if ( !(bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
-                bOdd = !bOdd;
-            bNumOfst = TRUE;
+        {
+            bWishedOdd = rDesc.GetNumOffset() % 2 ? TRUE : FALSE;
             //Die Gelegenheit nutzen wir um das Flag an der Root zu pflegen.
             pRoot->SetVirtPageNum( TRUE );
         }
     }
-    if ( !bNumOfst )
-        bOdd = pPrevPage->GetVirtPageNum() % 2 ? FALSE : TRUE;
-
     if ( !pDesc )
         pDesc = pPrevPage->GetPageDesc()->GetFollow();
 
-    ASSERT( pDesc, "Kein PageDesc gefunden." );
+    ASSERT( pDesc, "Missing PageDesc" );
+    if( !(bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
+        bWishedOdd = !bWishedOdd;
 
     SwDoc *pDoc = pPrevPage->GetFmt()->GetDoc();
-    SwFrmFmt *pFmt = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
+    SwFrmFmt *pFmt;
     BOOL bCheckPages = FALSE;
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben eine
     //Leerseite einfuegen.
-    if ( !pFmt )
+    if( bWishedOdd != bNextOdd )
     {   pFmt = pDoc->GetEmptyPageFmt();
         SwPageDesc *pTmpDesc = pPrevPage->GetPageDesc();
         SwPageFrm *pPage = new SwPageFrm( pFmt, pTmpDesc );
@@ -1347,10 +1317,9 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
         }
         else
             bCheckPages = TRUE;
-        //Jetzt muss ich ein Format fuer die entsprechende Seite bekommen.
-        pFmt = bOdd ? pDesc->GetLeftFmt() : pDesc->GetRightFmt();
-        ASSERT( pFmt, "Descriptor gibt kein Format her." );
     }
+    pFmt = bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
+    ASSERT( pFmt, "Descriptor without format." );
     SwPageFrm *pPage = new SwPageFrm( pFmt, pDesc );
     pPage->Paste( pRoot, pSibling );
     pPage->PreparePage( bFtn );
@@ -1608,7 +1577,7 @@ void SwRootFrm::AssertFlyPages()
             if ( pPage )
             {
                 SwPageDesc *pDesc = pPage->FindPageDesc();
-                bOdd = pPage->GetVirtPageNum() % 2 ? TRUE : FALSE;
+                bOdd = pPage->OnRightPage();
                 if ( pPage->GetFmt() !=
                      (bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
                     RemoveFtns( pPage, FALSE, TRUE );
