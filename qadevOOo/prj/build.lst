@@ -17,6 +17,7 @@ qa  qadevOOo\tests\java\ifc\beans                        nmake   -   all ifc_bea
 qa  qadevOOo\tests\java\ifc\bridge                       nmake   -   all ifc_bridge runner NULL
 qa  qadevOOo\tests\java\ifc\chart                        nmake   -   all ifc_chart runner NULL
 qa  qadevOOo\tests\java\ifc\connection                   nmake   -   all ifc_connection runner NULL
+qa  qadevOOo\tests\java\ifc\configuration                nmake   -   all ifc_configuration runner NULL
 qa  qadevOOo\tests\java\ifc\container                    nmake   -   all ifc_container runner NULL
 qa  qadevOOo\tests\java\ifc\datatransfer                 nmake   -   all ifc_datatransfer runner NULL
 qa  qadevOOo\tests\java\ifc\datatransfer\clipboard       nmake   -   all ifc_datatransfer_clipboard runner NULL
@@ -64,6 +65,7 @@ qa  qadevOOo\tests\java\mod\_cnt                         nmake   -   all mod__cn
 qa  qadevOOo\tests\java\mod\_connectr                    nmake   -   all mod__connectr runner NULL
 qa  qadevOOo\tests\java\mod\_connector.uno               nmake   -   all mod__connectoruno runner NULL
 qa  qadevOOo\tests\java\mod\_corefl                      nmake   -   all mod__corefl runner NULL
+qa  qadevOOo\tests\java\mod\_cfgmgr2                     nmake   -   all mod__cfgmgr2 runner NULL
 qa  qadevOOo\tests\java\mod\_corereflection.uno          nmake   -   all mod__corereflectionuno runner NULL
 qa  qadevOOo\tests\java\mod\_cpld                        nmake   -   all mod__cpld runner NULL
 qa  qadevOOo\tests\java\mod\_dbaccess                    nmake   -   all mod__dbaccess ifc_accessibility ifc_sdbc ifc_form runner NULL
@@ -110,7 +112,7 @@ qa  qadevOOo\tests\java\mod\_rdbtdp                      nmake   -   all mod__rd
 qa  qadevOOo\tests\java\mod\_regtypeprov.uno             nmake   -   all mod__regtypeprovuno runner NULL
 qa  qadevOOo\tests\java\mod\_remotebridge                nmake   -   all mod__remotebridge runner NULL
 qa  qadevOOo\tests\java\mod\_remotebridge.uno            nmake   -   all mod__remotebridgeuno runner NULL
-qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_xml_sax ifc_accessibility ifc_document runner NULL
+qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_util ifc_xml_sax ifc_accessibility ifc_document runner NULL
 qa  qadevOOo\tests\java\mod\_sch                         nmake   -   all mod__sch ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_sd                          nmake   -   all mod__sd ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_sfx                         nmake   -   all mod__sfx runner NULL
@@ -141,6 +143,8 @@ qa  qadevOOo\tests\java\mod\_ucpfile                     nmake   -   all mod__uc
 qa  qadevOOo\tests\java\mod\_ucphier                     nmake   -   all mod__ucphier runner NULL
 qa  qadevOOo\tests\java\mod\_ucppkg                      nmake   -   all mod__ucppkg runner NULL
 qa  qadevOOo\tests\java\mod\_ucprmt                      nmake   -   all mod__ucprmt runner NULL
+qa  qadevOOo\tests\java\mod\_ucpchelp			 nmake   -   all mod__ucpchelp runner NULL
+qa  qadevOOo\tests\java\mod\_ucpftp			 nmake   -   all mod__ucpftp runner NULL
 qa  qadevOOo\tests\java\mod\_uui                         nmake   -   all mod__uui runner NULL
 qa  qadevOOo\tests\java\mod\_uuresolver                  nmake   -   all mod__uuresolver runner NULL
 qa  qadevOOo\tests\java\mod\_uuresolver.uno              nmake   -   all mod__uuresolveruno runner NULL
