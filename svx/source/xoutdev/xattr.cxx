@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-28 12:07:09 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,39 +275,6 @@ SvStream& NameOrIndex::Store( SvStream& rOut, USHORT nItemVersion ) const
 }
 
 //*************************************************************************
-
-UniString NameOrIndex::CreateStandardName( SfxItemPool* pPool, USHORT nWhich )
-{
-    UniString aName;
-
-    const USHORT nCount = pPool ? pPool->GetItemCount( nWhich ) : 0;
-
-    if( nCount )
-    {
-        BOOL bFound = TRUE;
-        const NameOrIndex *pItem;
-
-        for( sal_Int32 nPostfix = 1; nPostfix<= nCount && bFound; nPostfix++ )
-        {
-            aName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( "Standard " ) );
-            aName += UniString::CreateFromInt32( nPostfix );
-
-            bFound = FALSE;
-
-            for( USHORT nSurrogate = 0; nSurrogate < nCount && !bFound; nSurrogate++ )
-            {
-                pItem = (NameOrIndex*)pPool->GetItem( nWhich, nSurrogate );
-
-                bFound = ( pItem && pItem->GetName() == aName );
-            }
-        }
-    }
-    else
-        aName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( "Standard 1" ) );
-
-    return aName;
-}
-
 
 // -------------------
 // class XColorItem
@@ -713,7 +680,6 @@ XLineDashItem::XLineDashItem(SfxItemPool* pPool, const XDash& rTheDash)
 :   NameOrIndex( XATTR_LINEDASH, -1 ),
     aDash(rTheDash)
 {
-    SetName( CreateStandardName( pPool, XATTR_LINEDASH ) );
 }
 
 //*************************************************************************
@@ -721,7 +687,6 @@ XLineDashItem::XLineDashItem(SfxItemPool* pPool, const XDash& rTheDash)
 XLineDashItem::XLineDashItem(SfxItemPool* pPool )
 : NameOrIndex(XATTR_LINEDASH, -1 )
 {
-    SetName( CreateStandardName( pPool, XATTR_LINEDASH ) );
 }
 
 /*************************************************************************
@@ -1222,7 +1187,6 @@ XLineStartItem::XLineStartItem(SfxItemPool* pPool, const XPolygon& rXPolygon)
 :   NameOrIndex( XATTR_LINESTART, -1 ),
     aXPolygon(rXPolygon)
 {
-    SetName( CreateStandardName( pPool, XATTR_LINESTART ) );
 }
 
 //*************************************************************************
@@ -1230,7 +1194,6 @@ XLineStartItem::XLineStartItem(SfxItemPool* pPool, const XPolygon& rXPolygon)
 XLineStartItem::XLineStartItem(SfxItemPool* pPool )
 : NameOrIndex(XATTR_LINESTART, -1 )
 {
-    SetName( CreateStandardName( pPool, XATTR_LINESTART ) );
 }
 
 /*************************************************************************
@@ -1494,7 +1457,6 @@ XLineEndItem::XLineEndItem(SfxItemPool* pPool, const XPolygon& rXPolygon)
 :   NameOrIndex( XATTR_LINEEND, -1 ),
     aXPolygon(rXPolygon)
 {
-    SetName( CreateStandardName( pPool, XATTR_LINEEND ) );
 }
 
 //*************************************************************************
@@ -1502,7 +1464,6 @@ XLineEndItem::XLineEndItem(SfxItemPool* pPool, const XPolygon& rXPolygon)
 XLineEndItem::XLineEndItem(SfxItemPool* pPool )
 : NameOrIndex(XATTR_LINEEND, -1 )
 {
-    SetName( CreateStandardName( pPool, XATTR_LINEEND ) );
 }
 
 /*************************************************************************
@@ -2563,7 +2524,6 @@ XFillGradientItem::XFillGradientItem(SfxItemPool* pPool, const XGradient& rTheGr
 :   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
     aGradient(rTheGradient)
 {
-    SetName( CreateStandardName( pPool, XATTR_FILLGRADIENT ) );
 }
 
 //*************************************************************************
@@ -2571,7 +2531,6 @@ XFillGradientItem::XFillGradientItem(SfxItemPool* pPool, const XGradient& rTheGr
 XFillGradientItem::XFillGradientItem(SfxItemPool* pPool )
 : NameOrIndex(XATTR_FILLGRADIENT, -1 )
 {
-    SetName( CreateStandardName( pPool, XATTR_FILLGRADIENT ) );
 }
 
 /*************************************************************************
@@ -2840,7 +2799,6 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* pPool, const
     bEnabled            ( bEnable )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-    SetName( CreateStandardName( pPool, XATTR_FILLFLOATTRANSPARENCE ) );
 }
 
 //*************************************************************************
@@ -2848,7 +2806,6 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* pPool, const
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* pPool )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-    SetName( CreateStandardName( pPool, XATTR_FILLFLOATTRANSPARENCE ) );
 }
 
 //------------------------------------------------------------------------
@@ -3062,7 +3019,6 @@ XFillHatchItem::XFillHatchItem(SfxItemPool* pPool, const XHatch& rTheHatch)
 :   NameOrIndex( XATTR_FILLHATCH, -1 ),
     aHatch(rTheHatch)
 {
-    SetName( CreateStandardName( pPool, XATTR_FILLHATCH ) );
 }
 
 //*************************************************************************
@@ -3070,7 +3026,6 @@ XFillHatchItem::XFillHatchItem(SfxItemPool* pPool, const XHatch& rTheHatch)
 XFillHatchItem::XFillHatchItem(SfxItemPool* pPool )
 : NameOrIndex(XATTR_FILLHATCH, -1 )
 {
-    SetName( CreateStandardName( pPool, XATTR_FILLHATCH ) );
 }
 
 /*************************************************************************

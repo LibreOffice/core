@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-14 16:22:56 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,6 @@ XFillBitmapItem::XFillBitmapItem( SfxItemPool* pPool, const XOBitmap& rTheBitmap
 :   NameOrIndex( XATTR_FILLBITMAP, -1 ),
     aXOBitmap( rTheBitmap )
 {
-    SetName( CreateStandardName( pPool, XATTR_FILLBITMAP ) );
 }
 
 //*************************************************************************
@@ -577,7 +576,6 @@ XFillBitmapItem::XFillBitmapItem( SfxItemPool* pPool, const XOBitmap& rTheBitmap
 XFillBitmapItem::XFillBitmapItem( SfxItemPool* pPool )
 : NameOrIndex(XATTR_FILLBITMAP, -1 )
 {
-    SetName( CreateStandardName( pPool, XATTR_FILLBITMAP ) );
 }
 
 /*************************************************************************
