@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:37:49 $
+ *  last change: $Author: ka $ $Date: 2001-08-02 13:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,35 +649,35 @@ Bitmap BMP_EFFECT_ROTATE_VERTICAL
 {
     File = "rotvert.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_L
+Bitmap BMP_EFFECT_UNCOVER_TO_L
 {
     File = "movleft.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_UL
+Bitmap BMP_EFFECT_UNCOVER_TO_UL
 {
     File = "movulft.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_T
+Bitmap BMP_EFFECT_UNCOVER_TO_T
 {
     File = "movtop.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_UR
+Bitmap BMP_EFFECT_UNCOVER_TO_UR
 {
     File = "movurgt.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_R
+Bitmap BMP_EFFECT_UNCOVER_TO_R
 {
     File = "movrght.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_LR
+Bitmap BMP_EFFECT_UNCOVER_TO_LR
 {
     File = "movlrgt.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_B
+Bitmap BMP_EFFECT_UNCOVER_TO_B
 {
     File = "movbotm.bmp";
 };
-Bitmap BMP_EFFECT_MOVE_TO_LL
+Bitmap BMP_EFFECT_UNCOVER_TO_LL
 {
     File = "movllft.bmp";
 };

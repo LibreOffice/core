@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-18 09:15:56 $
+ *  last change: $Author: ka $ $Date: 2001-08-02 13:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,14 +269,14 @@
 #define BMP_FOIL_23                         RID_APP_START+158
 #define BMP_FOIL_24                         RID_APP_START+159
 
-#define BMP_EFFECT_MOVE_TO_L                RID_APP_START+165
-#define BMP_EFFECT_MOVE_TO_UL               RID_APP_START+166
-#define BMP_EFFECT_MOVE_TO_T                RID_APP_START+167
-#define BMP_EFFECT_MOVE_TO_UR               RID_APP_START+168
-#define BMP_EFFECT_MOVE_TO_R                RID_APP_START+169
-#define BMP_EFFECT_MOVE_TO_LR               RID_APP_START+170
-#define BMP_EFFECT_MOVE_TO_B                RID_APP_START+171
-#define BMP_EFFECT_MOVE_TO_LL               RID_APP_START+172
+#define BMP_EFFECT_UNCOVER_TO_L             RID_APP_START+165
+#define BMP_EFFECT_UNCOVER_TO_UL            RID_APP_START+166
+#define BMP_EFFECT_UNCOVER_TO_T             RID_APP_START+167
+#define BMP_EFFECT_UNCOVER_TO_UR            RID_APP_START+168
+#define BMP_EFFECT_UNCOVER_TO_R             RID_APP_START+169
+#define BMP_EFFECT_UNCOVER_TO_LR            RID_APP_START+170
+#define BMP_EFFECT_UNCOVER_TO_B             RID_APP_START+171
+#define BMP_EFFECT_UNCOVER_TO_LL            RID_APP_START+172
 
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-25 13:31:23 $
+ *  last change: $Author: ka $ $Date: 2001-08-02 13:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,6 @@
 #define STR_EFFECT_VERTICAL_CHECKERBOARD    (RID_APP_START+612)
 #define STR_EFFECT_HORIZONTAL_CHECKERBOARD  (RID_APP_START+613)
 
-#define STR_EFFECT_MOVE                     (RID_APP_START+619)
 #define STR_EFFECT_MOVE_TO_UL               (RID_APP_START+620)
 #define STR_EFFECT_MOVE_TO_UR               (RID_APP_START+621)
 #define STR_EFFECT_MOVE_TO_LR               (RID_APP_START+622)
@@ -735,6 +734,16 @@
 #define STR_EFFECT_STRTCH_VERTICAL          (RID_APP_START+645)
 #define STR_EFFECT_ROTATE_HORIZONTAL        (RID_APP_START+646)
 #define STR_EFFECT_ROTATE_VERTICAL          (RID_APP_START+647)
+
+#define STR_EFFECT_UNCOVER                  (RID_APP_START+650)
+#define STR_EFFECT_UNCOVER_TO_L             (RID_APP_START+651)
+#define STR_EFFECT_UNCOVER_TO_UL            (RID_APP_START+652)
+#define STR_EFFECT_UNCOVER_TO_T             (RID_APP_START+653)
+#define STR_EFFECT_UNCOVER_TO_UR            (RID_APP_START+654)
+#define STR_EFFECT_UNCOVER_TO_R             (RID_APP_START+655)
+#define STR_EFFECT_UNCOVER_TO_LR            (RID_APP_START+656)
+#define STR_EFFECT_UNCOVER_TO_B             (RID_APP_START+657)
+#define STR_EFFECT_UNCOVER_TO_LL            (RID_APP_START+658)
 
 #define STR_TWAIN_NO_SOURCE                 (RID_APP_START+670)
 #define STR_UNDO_VECTORIZE                  (RID_APP_START+671)

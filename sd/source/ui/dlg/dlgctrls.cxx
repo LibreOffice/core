@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrls.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 15:45:02 $
+ *  last change: $Author: ka $ $Date: 2001-08-02 13:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,14 +109,14 @@ static FadeEffectPair aEffects[] =
     { presentation::FadeEffect_MOVE_FROM_BOTTOM, STR_EFFECT_DISCARD_FROM_B },
     { presentation::FadeEffect_MOVE_FROM_LOWERLEFT, STR_EFFECT_DISCARD_FROM_LL },
 
-    { presentation::FadeEffect_UNCOVER_TO_LEFT, STR_EFFECT_MOVE_TO_L },
-    { presentation::FadeEffect_UNCOVER_TO_UPPERLEFT, STR_EFFECT_MOVE_TO_UL },
-    { presentation::FadeEffect_UNCOVER_TO_TOP, STR_EFFECT_MOVE_TO_T },
-    { presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT, STR_EFFECT_MOVE_TO_UR },
-    { presentation::FadeEffect_UNCOVER_TO_RIGHT, STR_EFFECT_MOVE_TO_R },
-    { presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT, STR_EFFECT_MOVE_TO_LR },
-    { presentation::FadeEffect_UNCOVER_TO_BOTTOM, STR_EFFECT_MOVE_TO_B },
-    { presentation::FadeEffect_UNCOVER_TO_LOWERLEFT, STR_EFFECT_MOVE_TO_LL },
+    { presentation::FadeEffect_UNCOVER_TO_LEFT, STR_EFFECT_UNCOVER_TO_L },
+    { presentation::FadeEffect_UNCOVER_TO_UPPERLEFT, STR_EFFECT_UNCOVER_TO_UL },
+    { presentation::FadeEffect_UNCOVER_TO_TOP, STR_EFFECT_UNCOVER_TO_T },
+    { presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT, STR_EFFECT_UNCOVER_TO_UR },
+    { presentation::FadeEffect_UNCOVER_TO_RIGHT, STR_EFFECT_UNCOVER_TO_R },
+    { presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT, STR_EFFECT_UNCOVER_TO_LR },
+    { presentation::FadeEffect_UNCOVER_TO_BOTTOM, STR_EFFECT_UNCOVER_TO_B },
+    { presentation::FadeEffect_UNCOVER_TO_LOWERLEFT, STR_EFFECT_UNCOVER_TO_LL },
 
     { presentation::FadeEffect_ROLL_FROM_LEFT, STR_EFFECT_ROLL_FROM_L },
     { presentation::FadeEffect_ROLL_FROM_TOP, STR_EFFECT_ROLL_FROM_T },
