@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
             SvxLRSpaceItem& rItem = (SvxLRSpaceItem&)rPoolItem;
             rItem.SetTxtFirstLineOfst( OutputDevice::LogicToLogic( rItem.GetTxtFirstLineOfst(), eSourceUnit, eDestUnit ) );
             rItem.SetTxtLeft( OutputDevice::LogicToLogic( rItem.GetTxtLeft(), eSourceUnit, eDestUnit ) );
-            rItem.SetLeft( OutputDevice::LogicToLogic( rItem.GetLeft(), eSourceUnit, eDestUnit ) );
+//          rItem.SetLeft( OutputDevice::LogicToLogic( rItem.GetLeft(), eSourceUnit, eDestUnit ) ); // #96298# SetLeft manipulates nTxtLeft!
             rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
         }
         break;
@@ -723,8 +723,9 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLineSpacingItem ) ), "ConvertItem: Ungueltiges Item!" );
             SvxLineSpacingItem& rItem = (SvxLineSpacingItem&)rPoolItem;
-            rItem.SetLineHeight( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) );
-            rItem.SetInterLineSpace( OutputDevice::LogicToLogic( rItem.GetInterLineSpace(), eSourceUnit, eDestUnit ) );
+            // #96298# SetLineHeight changes also eLineSpace!
+            if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
+                rItem.SetLineHeight( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) );
         }
         break;
         case EE_PARA_TABS:
