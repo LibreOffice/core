@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-16 15:47:31 $
+ *  last change: $Author: sj $ $Date: 2002-06-11 14:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,9 +364,9 @@ class WinMtfPathObj : public PolyPolygon
 
     public :
 
-                WinMtfPathObj() { bClosed = sal_False; }
-        void    Init() { Clear(); bClosed = sal_False; };
-        void    ClosePath() { bClosed = sal_True; };
+                WinMtfPathObj() { bClosed = sal_True; }
+        void    Init() { Clear(); bClosed = sal_True; };
+        void    ClosePath();
 
         void    AddPoint( const Point& rPoint );
         void    AddPolygon( const Polygon& rPoly );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-03 15:56:45 $
+ *  last change: $Author: sj $ $Date: 2002-06-11 14:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,23 +146,26 @@ void WinMtfClipPath::MoveClipRegion( const Size& rSize )
 
 void WinMtfPathObj::AddPoint( const Point& rPoint )
 {
-    if ( !Count() )
+    if ( bClosed )
         Insert( Polygon(), POLYPOLY_APPEND );
     Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPoint, POLY_NORMAL );
+    bClosed = sal_False;
 }
 
 void WinMtfPathObj::AddPolyLine( const Polygon& rPolyLine )
 {
-    if ( !Count() )
+    if ( bClosed )
         Insert( Polygon(), POLYPOLY_APPEND );
     Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPolyLine );
+    bClosed = sal_False;
 }
 
 void WinMtfPathObj::AddPolygon( const Polygon& rPoly )
 {
     Insert( rPoly, POLYPOLY_APPEND );
+    bClosed = sal_True;
 }
 
 void WinMtfPathObj::AddPolyPolygon( const PolyPolygon& rPolyPoly )
@@ -170,6 +173,12 @@ void WinMtfPathObj::AddPolyPolygon( const PolyPolygon& rPolyPoly )
     sal_uInt16 i, nCount = rPolyPoly.Count();
     for ( i = 0; i < nCount; i++ )
         Insert( rPolyPoly[ i ], POLYPOLY_APPEND );
+    bClosed = sal_True;
+}
+
+void WinMtfPathObj::ClosePath()
+{
+    bClosed = sal_True;
 }
 
 // ------------------------------------------------------------------------
@@ -926,8 +935,10 @@ void WinMtfOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
                 mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
                 mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), FALSE ) );
             }
-
-            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aPathObj ) );
+            if ( aPathObj.Count() == 1 )
+                mpGDIMetaFile->AddAction( new MetaPolygonAction( aPathObj.GetObject( 0 ) ) );
+            else
+                mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aPathObj ) );
 
             if ( !bStroke )
                 mpGDIMetaFile->AddAction( new MetaPopAction() );
@@ -1227,6 +1238,40 @@ void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, sal_Bool bTo, sal_Bool bReco
 
 //-----------------------------------------------------------------------------------
 
+/* if we are taking care of polyflags in the output device the following code needs
+   to be activated, so beziers will be supported then (100127)
+
+void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
+{
+    UpdateClipRegion();
+
+    UINT16 nPoints = rPolygon.GetSize();
+    if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
+    {
+        ImplMap( rPolygon );
+        if ( bTo )
+        {
+            rPolygon[ 0 ] = maActPos;
+            maActPos = rPolygon[ nPoints - 1 ];
+        }
+        sal_uInt16 i;
+        for ( i = 0; ( i + 2 ) < nPoints; )
+        {
+            rPolygon.SetFlags( i++, POLY_NORMAL );
+            rPolygon.SetFlags( i++, POLY_CONTROL );
+            rPolygon.SetFlags( i++, POLY_CONTROL );
+        }
+        if ( bRecordPath )
+            aPathObj.AddPolyLine( rPolygon );
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+        }
+    }
+}
+*/
+
 void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
 {
     UpdateClipRegion();
@@ -1254,9 +1299,9 @@ void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRe
             for( USHORT nSegPos = 0; nSegPos < nSegPoints; )
                 aBezPoly[ nBezPos++ ] = aSegPoly[ nSegPos++ ];
         }
-
         if( nBezPos != aBezPoly.GetSize() )
             aBezPoly.SetSize( nBezPos );
+
         if ( bRecordPath )
             aPathObj.AddPolyLine( aBezPoly );
         else
