@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:47:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2805,7 +2805,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
     USHORT nCreateOf = (eTox == TOX_CONTENT) ? TOX_OUTLINELEVEL : TOX_MARK;
 
-    USHORT nIndexCols = maSectionManager.CurrentSectionColCount();
+    USHORT nIndexCols = 1;
 
     const SwTOXType* pType = rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
@@ -3290,12 +3290,15 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     ASSERT(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
     if (SwTOXBase* pBase = (SwTOXBase*)rDoc.GetCurTOX(*aRegion.GetPoint()))
     {
-        // Set the column number for index
-        SfxItemSet aSet( rDoc.GetAttrPool(), RES_COL, RES_COL );
-        SwFmtCol aCol;
-        aCol.Init( nIndexCols, 708, USHRT_MAX );
-        aSet.Put( aCol );
-        pBase->SetAttrSet( aSet );
+        if(nIndexCols>1)
+        {
+            // Set the column number for index
+            SfxItemSet aSet( rDoc.GetAttrPool(), RES_COL, RES_COL );
+            SwFmtCol aCol;
+            aCol.Init( nIndexCols, 708, USHRT_MAX );
+            aSet.Put( aCol );
+            pBase->SetAttrSet( aSet );
+        }
 
         maSectionManager.PrependedInlineNode(*pPaM->GetPoint(),
             *aRegion.GetNode());
