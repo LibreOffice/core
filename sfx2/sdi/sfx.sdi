@@ -8818,3 +8818,27 @@ SfxVoidItem OptionsTreeDialog SID_OPTIONS_TREEDIALOG
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem RecentFileList SID_RECENTFILELIST
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_APPLICATION;
+]
