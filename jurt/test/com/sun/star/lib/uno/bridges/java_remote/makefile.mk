@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:11:57 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:14:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,6 @@ PACKAGE := com$/sun$/star$/lib$/uno$/bridges$/java_remote
 JAVATESTFILES := \
     ProxyFactory_Test.java \
     java_remote_bridge_Test.java
-JARFILES := ridl.jar sandbox.jar
+JARFILES := ridl.jar
 
 .INCLUDE: javaunittest.mk
