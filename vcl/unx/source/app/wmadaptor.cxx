@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:36:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,12 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             XFree( pProperty );
         }
     }
+
+#ifdef MACOSX
+        /* Apple's X11 needs NW gravity with OOo 1.1 */
+        m_nWinGravity = NorthWestGravity;
+        m_nInitWinGravity = NorthWestGravity;
+#endif
 }
 
 /*
