@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconChoiceControlEntry.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:51:30 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ service AccessibleIconChoiceControlEntry
        <li>Description: The description of an icon choice control entry is empty.</li>
        <li>Children: There exist no children.
         </li>
-       <li>Parent: The parent is either the <type scope="::com::sun::star::awt">AccessibleIconChoiceControl</type>.</li>
+       <li>Parent: The parent is either the <type scope="com::sun::star::awt">AccessibleIconChoiceControl</type>.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
