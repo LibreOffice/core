@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-24 12:15:06 $
+ *  last change: $Author: cl $ $Date: 2002-05-08 09:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,6 +1353,7 @@ SfxItemSet* SdrCircObj::CreateNewItemSet(SfxItemPool& rPool)
         // ranges from SdrAttrObj
         SDRATTR_START, SDRATTRSET_SHADOW,
         SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
         // circle attributes
         SDRATTR_CIRC_FIRST, SDRATTRSET_CIRC,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-08 15:05:46 $
+ *  last change: $Author: cl $ $Date: 2002-05-08 09:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ SfxItemSet* SdrEdgeObj::CreateNewItemSet(SfxItemPool& rPool)
         // ranges from SdrAttrObj
         SDRATTR_START, SDRATTRSET_SHADOW,
         SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
         // edge attributes
         SDRATTR_EDGE_FIRST, SDRATTRSET_EDGE,

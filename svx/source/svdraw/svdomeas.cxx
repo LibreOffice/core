@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
+ *  last change: $Author: cl $ $Date: 2002-05-08 09:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1705,6 +1705,7 @@ SfxItemSet* SdrMeasureObj::CreateNewItemSet(SfxItemPool& rPool)
         // ranges from SdrAttrObj
         SDRATTR_START, SDRATTRSET_SHADOW,
         SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
         // measure attributes
         SDRATTR_MEASURE_FIRST, SDRATTRSET_MEASURE,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-25 16:33:19 $
+ *  last change: $Author: cl $ $Date: 2002-05-08 09:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,6 +831,7 @@ SfxItemSet* SdrCaptionObj::CreateNewItemSet(SfxItemPool& rPool)
         // ranges from SdrAttrObj
         SDRATTR_START, SDRATTRSET_SHADOW,
         SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
         // caption attributes
         SDRATTR_CAPTION_FIRST, SDRATTRSET_CAPTION,
