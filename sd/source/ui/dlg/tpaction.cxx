@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-23 11:54:21 $
+ *  last change: $Author: ka $ $Date: 2001-12-17 13:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,11 +1379,8 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
     // validate file URI
     INetURLObject aURL( aStr );
 
-    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
-    {
-        String aURLStr(::URIHelper::SmartRelToAbs( aStr ));
-        aURL = INetURLObject( aURLStr );
-    }
+    if( aStr.Len() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
+        aURL = INetURLObject( ::URIHelper::SmartRelToAbs( aStr ) );
 
     // get adjusted file name
     aStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
