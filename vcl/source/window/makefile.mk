@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.12 $
+#	$Revision: 1.13 $
 #
-#	last change: $Author: vg $ $Date: 2004-01-06 14:13:19 $
+#	last change: $Author: hr $ $Date: 2004-05-10 15:50:07 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -104,6 +104,7 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/toolbox2.obj	\
             $(SLO)$/window.obj		\
             $(SLO)$/window2.obj 	\
+            $(SLO)$/window3.obj		\
             $(SLO)$/winproc.obj 	\
             $(SLO)$/wrkwin.obj		\
             $(SLO)$/introwin.obj	\
