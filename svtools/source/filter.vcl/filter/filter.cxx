@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-03 10:13:23 $
+ *  last change: $Author: thb $ $Date: 2001-07-10 11:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,7 +841,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     ResMgr*     pResMgr;
 
     aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-    pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
+    pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
@@ -2081,7 +2081,7 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit e
             ResMgr*     pResMgr;
 
             aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-            pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
+            pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 
             FltCallDialogParameter aFltCallDlgPara( pWindow, pResMgr, eFieldUnit );
 

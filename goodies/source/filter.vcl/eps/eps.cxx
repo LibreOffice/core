@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-05 10:49:16 $
+ *  last change: $Author: thb $ $Date: 2001-07-10 11:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
         ResMgr*     pResMgr;
 
         aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
+        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 
         if( pResMgr )
         {
@@ -469,7 +469,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
         ByteString  aResMgrName( "eps" );
         ResMgr* pResMgr;
         aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
+        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
         if( pResMgr )
         {
             InfoBox aInfoBox( NULL, String( ResId( KEY_VERSION_CHECK, pResMgr ) ) );
@@ -2551,7 +2551,7 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
         ResMgr* pResMgr;
 
         aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
+        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 
         if( pResMgr )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-14 09:18:10 $
+ *  last change: $Author: thb $ $Date: 2001-07-10 11:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2283,7 +2283,7 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
         ResMgr* pResMgr;
 
         aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
+        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 
         if( pResMgr )
         {
