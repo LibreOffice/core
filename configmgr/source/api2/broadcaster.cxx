@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-17 15:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,8 @@ namespace configmgr
             UnoAny getNewValue()    const { return info.change.newValue; }
 
         // --------------------------------------------------------------------
-            bool resolveObjects(configapi::Factory& rFactory) { configapi::resolveToUno(info.change, rFactory); }
-            bool rebase(configuration::Tree const& aBaseTree) { configapi::rebaseChange(info, aBaseTree); }
+            bool resolveObjects(configapi::Factory& rFactory) { return configapi::resolveToUno(info.change, rFactory); }
+            bool rebase(configuration::Tree const& aBaseTree) { return configapi::rebaseChange(info, aBaseTree); }
 
         };
     // -----------------------------------------------------------------------------------------------
