@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pstm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,7 @@ void SvPersistStream::WriteObj
 )
 {
 #ifdef STOR_NO_OPTIMIZE
-    UINT32 nObjPos;
+    UINT32 nObjPos = 0;
     if( nHdr & P_DBGUTIL )
         // Position fuer Laenge merken
         nObjPos = WriteDummyLen();
