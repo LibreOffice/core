@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:22:27 $
+ *  last change: $Author: ka $ $Date: 2000-12-07 19:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #include <svtools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/tempfile.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -2016,26 +2017,44 @@ void SfxObjectShell::AddXMLAsZipToTheStorage( SvStorage& rRoot )
                                                 GetFilter4FilterName( sStr );
                 if( pFilter )
                 {
-                    // 3. create a temp stream and write the XML format into it
-                    SvCacheStream aTmp;
-                    SvStorageRef xTmp = new SvStorage( aTmp );
-                    SfxMedium aMed( xTmp, TRUE );
+                    ::utl::TempFile aTempFile;
+                    SfxMedium       aTmpMed( aTempFile.GetURL(), STREAM_READ | STREAM_WRITE, TRUE );
 
-                    aMed.SetFilter( pFilter );
+                    aTmpMed.SetFilter( pFilter );
 
-                    if( ConvertTo( aMed ) )
+                    if( ConvertTo( aTmpMed ) )
                     {
-                        // 4. zip the XML and put it into the root storage.
-                        //      The name of the stream is XMLFormat
-                        SvStorageStreamRef xStrm( rRoot.OpenStream(
-                                    String::CreateFromAscii( "XMLFormat2" ) ));
-                        SvStream* pOutStrm = aMed.GetOutStream();
-                        pOutStrm->Seek( 0 );
+                        SvStorage* pXMLStor = aTmpMed.GetStorage();
 
-                        ZCodec aCodec;
-                        aCodec.BeginCompression( ZCODEC_BEST_COMPRESSION );
-                        aCodec.Compress( *pOutStrm, *xStrm );
-                        aCodec.EndCompression();
+                        if( pXMLStor )
+                        {
+                            const String    aContent( String::CreateFromAscii( "Content" ) );
+                            const String    aContentXML( String::CreateFromAscii( "Content.xml" ) );
+                            const String    aXMLFormatName( String::CreateFromAscii( "XMLFormat2" ) );
+                            String          aContentName;
+
+                            if( pXMLStor->IsContained( aContentXML ) )
+                                aContentName = aContentXML;
+                            else if( pXMLStor->IsContained( aContent ) )
+                                aContentName = aContent;
+
+                            if( aContentName.Len() )
+                            {
+                                SvStorageStreamRef  xOStm( rRoot.OpenStream( aXMLFormatName, STREAM_WRITE | STREAM_TRUNC ) );
+                                SvStorageStreamRef  xIStm( pXMLStor->OpenStream( aContentName, STREAM_READ | STREAM_NOCREATE ) );
+
+                                if( xOStm.Is() && xIStm.Is() )
+                                {
+                                    ZCodec aCodec;
+
+                                    xIStm->Seek( 0 );
+                                    aCodec.BeginCompression( ZCODEC_BEST_COMPRESSION );
+                                    aCodec.Compress( *xIStm, *xOStm );
+                                    aCodec.EndCompression();
+                                    xOStm->Commit();
+                                }
+                            }
+                        }
                     }
                 }
             }
