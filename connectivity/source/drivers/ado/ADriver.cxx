@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
+ *  last change: $Author: oj $ $Date: 2001-09-28 07:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@ using namespace com::sun::star::lang;
 
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
-ODriver::ODriver() : ODriver_BASE(m_aMutex)
+ODriver::ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
+    : ODriver_BASE(m_aMutex)
+    ,m_xORB(_xORB)
 {
     CoInitialize(NULL);
 }
@@ -134,7 +136,7 @@ Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::ado::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-    return *(new ODriver());
+    return *(new ODriver(_rxFactory));
 }
 
 // --------------------------------------------------------------------------------

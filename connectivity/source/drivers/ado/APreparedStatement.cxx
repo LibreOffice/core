@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-09-28 07:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include "connectivity/sqlparse.hxx"
+#endif
 #ifndef _CONNECTIVITY_ADO_APREPAREDSTATEMENT_HXX_
 #include "ado/APreparedStatement.hxx"
 #endif
@@ -69,6 +73,9 @@
 #endif
 #ifndef _CONNECTIVITY_ADO_ARESULTSET_HXX_
 #include "ado/AResultSet.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_ADRIVER_HXX_
+#include "ado/ADriver.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -82,6 +89,7 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+
 
 #define CHECK_RETURN(x)                                                 \
     if(!x)                                                              \
@@ -106,7 +114,22 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
 {
     osl_incrementInterlockedCount( &m_refCount );
 
-    CHECK_RETURN(m_Command.put_CommandText(sql))
+    OSQLParser aParser(_pConnection->getDriver()->getORB());
+    ::rtl::OUString sErrorMessage;
+    ::rtl::OUString sNewSql;
+    OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
+    if(pNode)
+    {   // special handling for parameters
+        // we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å"
+        sal_Int32 nParameterCount = 0;
+        ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
+        replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
+        pNode->parseNodeToStr(sNewSql,_pConnection->getMetaData());
+        delete pNode;
+    }
+    else
+        sNewSql = sql;
+    CHECK_RETURN(m_Command.put_CommandText(sNewSql))
     CHECK_RETURN(m_Command.put_Prepared(VARIANT_TRUE))
     m_pParameters = m_Command.get_Parameters();
     m_pParameters->AddRef();
@@ -472,6 +495,28 @@ void SAL_CALL OPreparedStatement::acquire() throw(::com::sun::star::uno::Runtime
 void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
 {
     OStatement_Base::release();
+}
+// -----------------------------------------------------------------------------
+void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
+                                                  const ::rtl::OUString& _sDefaultName,
+                                                  sal_Int32& _rParameterCount)
+{
+    sal_Int32 nCount = _pNode->count();
+    for(sal_Int32 i=0;i < nCount;++i)
+    {
+        OSQLParseNode* pChildNode = _pNode->getChild(i);
+        if(SQL_ISRULE(pChildNode,parameter) && pChildNode->count() == 1)
+        {
+            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString::createFromAscii(":") ,SQL_NODE_PUNCTUATION,0);
+            delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
+            ::rtl::OUString sParameterName = _sDefaultName;
+            sParameterName += ::rtl::OUString::valueOf(++_rParameterCount);
+            pChildNode->append(new OSQLParseNode( sParameterName,SQL_NODE_NAME,0));
+        }
+        else
+            replaceParameterNodeName(pChildNode,_sDefaultName,_rParameterCount);
+
+    }
 }
 // -----------------------------------------------------------------------------
 

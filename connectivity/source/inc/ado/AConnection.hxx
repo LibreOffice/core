@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
+ *  last change: $Author: oj $ $Date: 2001-09-28 07:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,8 @@ namespace connectivity
             void setCatalog(const ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>& _xCat) { m_xCatalog = _xCat; }
             const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo;}
 
-            sal_Int32 getEngineType() const { return m_nEngineType; }
+            sal_Int32 getEngineType()   const { return m_nEngineType; }
+            ODriver*  getDriver()       const { return m_pDriver; }
         };
     }
 }

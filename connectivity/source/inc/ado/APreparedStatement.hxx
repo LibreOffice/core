@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: oj $ $Date: 2001-09-28 07:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 
 namespace connectivity
 {
+    class OSQLParseNode;
     namespace ado
     {
 
@@ -102,6 +103,9 @@ namespace connectivity
         {
             void setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType,const sal_Int32& _nSize,const OLEVariant& _Val)
                                         throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void replaceParameterNodeName(  OSQLParseNode* _pNode,
+                                            const ::rtl::OUString& _sDefaultName,
+                                            sal_Int32& _nParameterCount);
         protected:
             //====================================================================
             // Data attributes
