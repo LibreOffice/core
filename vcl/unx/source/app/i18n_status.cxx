@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-26 15:37:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 // [ed] 6/15/02 We don't have alloca.h on OS X either.
@@ -411,7 +411,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
                      rGeom.nY + rGeom.nHeight + nDistance
                      );
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
 #endif
