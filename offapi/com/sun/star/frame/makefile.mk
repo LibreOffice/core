@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 14:23:50 $
+#   last change: $Author: obo $ $Date: 2004-11-17 14:31:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,7 @@ IDLFILES=\
     Settings.idl\
     SynchronousFrameLoader.idl\
     StatusbarController.idl\
+    StatusbarControllerFactory.idl\
     Task.idl\
     TemplateAccess.idl\
     TerminationVetoException.idl\
