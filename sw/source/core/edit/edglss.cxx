@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:01:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 
 #pragma hdrstop
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -380,7 +384,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
     else if( IsSelection() )
     {
         SvCacheStream aStream(20480);
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
