@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:04:40 $
+ *  last change: $Author: fs $ $Date: 2001-10-30 08:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,6 @@ using namespace ::utl;
 namespace dbaccess
 {
 //........................................................................
-::com::sun::star::awt::FontDescriptor ODataSettings_Base::m_aAppFont;
-
 float ConvertFontWeight( ::FontWeight eWeight )
 {
     if( eWeight == WEIGHT_DONTKNOW )
@@ -252,16 +250,11 @@ ODataSettings_Base::ODataSettings_Base()
     ,m_nFontEmphasis(::com::sun::star::awt::FontEmphasisMark::NONE)
     ,m_nFontRelief(::com::sun::star::awt::FontRelief::NONE)
 {
-    if (0 == m_aAppFont.Name.getLength())
-        m_aAppFont = ImplCreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
 }
 
 //--------------------------------------------------------------------------
 ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
 {
-    if (0 == m_aAppFont.Name.getLength())
-        m_aAppFont = ImplCreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
-
     m_sFilter       = _rSource.m_sFilter;
     m_sOrder        = _rSource.m_sOrder;
     m_bApplyFilter  = _rSource.m_bApplyFilter;
@@ -288,23 +281,25 @@ void ODataSettings_Base::storeTo(const OConfigurationNode& _rConfigLocation) con
     _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT, m_aRowHeight);
 
     Any aNullAny;
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_NAME, makeAny(m_aFont.Name));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_HEIGHT, makeAny(m_aFont.Height));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WIDTH, makeAny(m_aFont.Width));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STYLENAME, makeAny(m_aFont.StyleName));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_FAMILY, makeAny(m_aFont.Family));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARSET, makeAny(m_aFont.CharSet));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_PITCH, makeAny(m_aFont.Pitch));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH, makeAny(m_aFont.CharacterWidth));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WEIGHT, makeAny(m_aFont.Weight));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_SLANT, makeAny((sal_Int16)m_aFont.Slant));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINE, makeAny(m_aFont.Underline));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STRIKEOUT, makeAny(m_aFont.Strikeout));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_ORIENTATION, makeAny(m_aFont.Orientation));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_KERNING, makeAny(m_aFont.Kerning));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WORDLINEMODE, makeAny(m_aFont.WordLineMode));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_TYPE, makeAny(m_aFont.Type));
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_NAME, makeAny( m_aFont.Name ) );
+    sal_Bool bValidFont = 0 != m_aFont.Name.getLength();
 
+    Any aEmpty;
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_HEIGHT,        bValidFont ? makeAny( m_aFont.Height )          : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_WIDTH,         bValidFont ? makeAny( m_aFont.Width )           : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_STYLENAME,     bValidFont ? makeAny( m_aFont.StyleName )       : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_FAMILY,        bValidFont ? makeAny( m_aFont.Family )          : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_CHARSET,       bValidFont ? makeAny( m_aFont.CharSet )         : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_PITCH,         bValidFont ? makeAny( m_aFont.Pitch )           : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH,bValidFont ? makeAny( m_aFont.CharacterWidth )  : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_WEIGHT,        bValidFont ? makeAny( m_aFont.Weight )          : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_SLANT,         bValidFont ? makeAny( (sal_Int16)m_aFont.Slant ): aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_UNDERLINE,     bValidFont ? makeAny( m_aFont.Underline )       : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_STRIKEOUT,     bValidFont ? makeAny( m_aFont.Strikeout )       : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_ORIENTATION,   bValidFont ? makeAny( m_aFont.Orientation )     : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_KERNING,       bValidFont ? makeAny( m_aFont.Kerning )         : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_WORDLINEMODE,  bValidFont ? makeAny( m_aFont.WordLineMode )    : aEmpty );
+    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_TYPE,          bValidFont ? makeAny( m_aFont.Type )            : aEmpty );
 
     _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR, m_aTextColor);
     _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR, m_aTextLineColor);
@@ -325,42 +320,31 @@ void ODataSettings_Base::loadFrom(const OConfigurationNode& _rConfigLocation)
     OSL_VERIFY(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ORDER)        >>= m_sOrder);
     m_bApplyFilter = ::cppu::any2bool(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_APPLYFILTER));
 
-    if(!(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_NAME) >>= m_aFont.Name) || !m_aFont.Name.getLength())
-        m_aFont.Name = m_aAppFont.Name;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_HEIGHT) >>= m_aFont.Height))
-        m_aFont.Height = m_aAppFont.Height;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_WIDTH) >>= m_aFont.Width))
-        m_aFont.Width = m_aAppFont.Width;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_STYLENAME) >>= m_aFont.StyleName))
-        m_aFont.StyleName = m_aAppFont.StyleName;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_FAMILY) >>= m_aFont.Family))
-        m_aFont.Family = m_aAppFont.Family;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARSET) >>= m_aFont.CharSet))
-        m_aFont.CharSet = m_aAppFont.CharSet;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_PITCH) >>= m_aFont.Pitch))
-        m_aFont.Pitch = m_aAppFont.Pitch;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH) >>= m_aFont.CharacterWidth))
-        m_aFont.CharacterWidth = m_aAppFont.CharacterWidth;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_WEIGHT) >>= m_aFont.Weight))
-        m_aFont.Weight = m_aAppFont.Weight;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINE) >>= m_aFont.Underline))
-        m_aFont.Underline = m_aAppFont.Underline;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_STRIKEOUT) >>= m_aFont.Strikeout))
-        m_aFont.Strikeout = m_aAppFont.Strikeout;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_ORIENTATION) >>= m_aFont.Orientation))
-        m_aFont.Orientation = m_aAppFont.Orientation;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_KERNING) >>= m_aFont.Kerning))
-        m_aFont.Kerning = m_aAppFont.Kerning;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_WORDLINEMODE) >>= m_aFont.WordLineMode))
-        m_aFont.WordLineMode = m_aAppFont.WordLineMode;;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_TYPE) >>= m_aFont.Type))
-        m_aFont.Type = m_aAppFont.Type;;
-    sal_Int16 nTemp = 0;
-    if(! (_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_SLANT) >>= nTemp))
-        m_aFont.Slant = m_aAppFont.Slant;
-    else
-        m_aFont.Slant = (FontSlant)nTemp;
+    // default the font
+    m_aFont = ::comphelper::getDefaultFont();
 
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_NAME) >>= m_aFont.Name;
+    if ( m_aFont.Name.getLength() )
+    {   // all other settings are only used if the name is valid
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_HEIGHT )       >>= m_aFont.Height;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_WIDTH )        >>= m_aFont.Width;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_STYLENAME )    >>= m_aFont.StyleName;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_FAMILY )       >>= m_aFont.Family;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_CHARSET )      >>= m_aFont.CharSet;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_PITCH )        >>= m_aFont.Pitch;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH )>>= m_aFont.CharacterWidth;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_WEIGHT )       >>= m_aFont.Weight;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_UNDERLINE )    >>= m_aFont.Underline;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_STRIKEOUT )    >>= m_aFont.Strikeout;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_ORIENTATION )  >>= m_aFont.Orientation;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_KERNING )      >>= m_aFont.Kerning;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_WORDLINEMODE ) >>= m_aFont.WordLineMode;
+        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_TYPE )         >>= m_aFont.Type;
+
+        sal_Int16 nTemp = 0;
+        if ( _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_SLANT ) >>= nTemp )
+            m_aFont.Slant = (FontSlant)nTemp;
+    }
 
     m_aRowHeight = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT);
     m_aTextColor = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR);
