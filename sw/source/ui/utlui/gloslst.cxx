@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:55:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ BOOL SwGlossaryList::GetShortName(const String& rLongName,
     {
         SwGlossDecideDlg aDlg(0);
         String sTitle = aDlg.GetText();
+        sTitle += ' ';
         sTitle += aTripleStrings[0]->sBlock;
         aDlg.SetText(sTitle);
 
