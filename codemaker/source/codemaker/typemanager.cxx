@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-07 13:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,42 @@ sal_Int32 TypeManager::release()
         delete m_pImpl;
     }
     return refCount;;
+}
+
+sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
+{
+    if ( name.equals(OString("short")) )
+        return sal_True;
+    if ( name.equals(OString("unsigned short")) )
+        return sal_True;
+    if ( name.equals(OString("long")) )
+        return sal_True;
+    if ( name.equals(OString("unsigned long")) )
+        return sal_True;
+    if ( name.equals(OString("hyper")) )
+        return sal_True;
+    if ( name.equals(OString("unsigned hyper")) )
+        return sal_True;
+    if ( name.equals(OString("string")) )
+        return sal_True;
+    if ( name.equals(OString("boolean")) )
+        return sal_True;
+    if ( name.equals(OString("char")) )
+        return sal_True;
+    if ( name.equals(OString("byte")) )
+        return sal_True;
+    if ( name.equals(OString("any")) )
+        return sal_True;
+    if ( name.equals(OString("type")) )
+        return sal_True;
+    if ( name.equals(OString("float")) )
+        return sal_True;
+    if ( name.equals(OString("double")) )
+        return sal_True;
+    if ( name.equals(OString("void")) )
+        return sal_True;
+
+    return sal_False;
 }
 
 RegistryTypeManager::RegistryTypeManager()
@@ -319,4 +355,4 @@ RegistryKey RegistryTypeManager::searchTypeKey(const OString& name)
 
     return key;
 }
-
+    
