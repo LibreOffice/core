@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:56:21 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3272,7 +3272,7 @@ IMPL_LINK( SvImpLBox, EditTimerCall, Timer *, pTimer )
         if( pEntry )
         {
             ShowCursor( FALSE );
-            pView->EditEntry( pEntry );
+            pView->ImplEditEntry( pEntry );
             ShowCursor( TRUE );
         }
     }
