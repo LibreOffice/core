@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: thb $ $Date: 2002-06-07 12:13:15 $
+#   last change: $Author: oj $ $Date: 2002-07-30 10:32:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES =								\
+    charmapacc.cxx						\
     svxrectctaccessiblecontext.cxx		\
     DescriptionGenerator.cxx			\
     GraphCtlAccessibleContext.cxx		\
@@ -99,6 +100,7 @@ CXXFILES =								\
     AccessibleControlShape.cxx			\
 
 SLOFILES =	\
+    $(SLO)$/charmapacc.obj						\
     $(SLO)$/svxrectctaccessiblecontext.obj		\
     $(SLO)$/GraphCtlAccessibleContext.obj		\
     $(SLO)$/ChildrenManager.obj 				\
