@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-18 13:45:19 $
+ *  last change: $Author: mt $ $Date: 2001-08-08 10:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #ifndef _SV_ACCESS_HXX
 #include <access.hxx>
 #endif
+#ifndef _VCL_I18NHELP_HXX
+#include <i18nhelp.hxx>
+#endif
 
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
@@ -153,7 +156,7 @@ inline BOOL ImplIsMouseFollow()
     return ( Application::GetSettings().GetMouseSettings().GetFollow() & MOUSE_FOLLOW_MENU ) ? TRUE : FALSE;
 }
 
-
+
 struct MenuItemData
 {
     USHORT          nId;            // SV Id
@@ -182,10 +185,13 @@ struct MenuItemData
                     ~MenuItemData() { delete pAutoSubMenu; }
 };
 
-
+
 class MenuItemList : public List
 {
+private:
     uno::Reference< i18n::XCharacterClassification > xCharClass;
+
+
 public:
                     MenuItemList() : List( 16, 4 ) {}
                     ~MenuItemList();
@@ -208,7 +214,7 @@ public:
 };
 
 
-
+
 MenuItemList::~MenuItemList()
 {
     for ( ULONG n = Count(); n; )
@@ -279,25 +285,16 @@ MenuItemData* MenuItemList::GetData( USHORT nSVId, USHORT& rPos ) const
 
 MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, USHORT& rPos ) const
 {
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
-    xub_Unicode cCharCode = GetCharClass()->toUpper( String(cSelectChar), 0, 1, rLocale )[0];
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+
     for ( rPos = (USHORT)Count(); rPos; )
     {
         MenuItemData* pData = GetDataFromPos( --rPos );
-        if ( pData->bEnabled )
-        {
-            USHORT n = pData->aText.Search( '~' );
-            if ( n != STRING_NOTFOUND )
-            {
-                xub_Unicode cCompareChar = pData->aText.GetChar( n+1 );
-                cCompareChar = GetCharClass()->toUpper( String(cCompareChar), 0, 1, rLocale )[0];
-                if ( cCompareChar == cCharCode )
-                    return pData;
-            }
-        }
+        if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
+            return pData;
     }
 
-    return 0;
+    return NULL;
 }
 
 uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() const
@@ -308,7 +305,7 @@ uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() co
 }
 
 
-
+
 class MenuFloatingWindow : public FloatingWindow
 {
 private:
@@ -377,7 +374,7 @@ public:
     void            ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer );
 };
 
-
+
 // Eine Basicklasse fuer beide (wegen pActivePopup, Timer, ...) waere nett,
 // aber dann musste eine 'Container'-Klasse gemacht werden, da von
 // unterschiedlichen Windows abgeleitet...
@@ -438,7 +435,7 @@ public:
 };
 
 
-
+
 static void ImplSetMenuItemData( MenuItemData* pData, USHORT nPos )
 {
     // Daten umsetzen
@@ -489,7 +486,7 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
     return bDone;
 }
 
-
+
 Menu::Menu()
 {
     DBG_CTOR( Menu, NULL );
@@ -2091,7 +2088,7 @@ long PopupMenu::ImplCalcHeight( USHORT nEntries ) const
     return nHeight;
 }
 
-
+
 static void ImplInitMenuWindow( Window* pWin, BOOL bFont )
 {
     const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
@@ -2941,7 +2938,6 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
 }
 
 
-
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
     Window( pParent, 0 ),
     aCloser( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
