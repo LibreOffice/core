@@ -57,7 +57,7 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 class AccessibleSelectionImpl implements javax.accessibility.AccessibleSelection {
     XAccessibleSelection unoAccessibleSelection;
@@ -113,7 +113,7 @@ class AccessibleSelectionImpl implements javax.accessibility.AccessibleSelection
     /** Removes the specified child of the object from the object's selection */
     public void removeAccessibleSelection(int i) {
         try {
-            unoAccessibleSelection.deselectSelectedAccessibleChild(i);
+            unoAccessibleSelection.deselectAccessibleChild(i);
         } catch (com.sun.star.uno.Exception e) {
         }
     }
