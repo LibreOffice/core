@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 14:57:12 $
+#   last change: $Author: jsc $ $Date: 2000-11-14 08:23:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,6 @@ PACKAGE=com$/sun$/star$/util
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    XProxyFactory.idl \
-    ProxyFactory.idl \
     AliasProgrammaticPair.idl \
     CellProtection.idl\
     ChangesEvent.idl\
@@ -131,13 +129,13 @@ IDLFILES=\
     XRefreshListener.idl\
     XReplaceable.idl\
     XReplaceDescriptor.idl\
-        XSearchable.idl\
-        XSearchDescriptor.idl\
+       XSearchable.idl\
+       XSearchDescriptor.idl\
     XSimpleErrorHandler.idl\
     XSortable.idl\
     XStringMapping.idl\
     XStringEscape.idl\
-        XTextSearch.idl\
+    XTextSearch.idl\
     XTransliteration.idl\
     XURLTransformer.idl\
     XUniqueIDFactory.idl\
