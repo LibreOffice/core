@@ -49,7 +49,7 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-
+   
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:output method="xml" indent="no" encoding="UTF-8" version="1.0"/>
@@ -70,10 +70,12 @@
     <xsl:template match="w:wordDocument">
         <office:document office:mimetype="application/x-vnd.oasis.openoffice.text" office:version="1.0">
             <xsl:apply-templates select="o:DocumentProperties"/>
+            <xsl:apply-templates select="w:docOleData" mode="init"/>
             <xsl:apply-templates select="w:docPr"/>
             <xsl:apply-templates select="w:fonts"/>
             <xsl:apply-templates select="w:styles"/>
             <xsl:apply-templates select="w:body"/>
+            <xsl:apply-templates select="w:docOleData" mode="exit"/>
         </office:document>
     </xsl:template>
     <xsl:template match="w:fonts">
@@ -88,8 +90,12 @@
             </xsl:if>
             <xsl:for-each select="w:font">
                 <xsl:element name="style:font-face">
-                    <xsl:attribute name="style:name"><xsl:value-of select="@w:name"/></xsl:attribute>
-                    <xsl:attribute name="svg:font-family"><xsl:value-of select="@w:name"/></xsl:attribute>
+                    <xsl:attribute name="style:name">
+                        <xsl:value-of select="@w:name"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="svg:font-family">
+                        <xsl:value-of select="@w:name"/>
+                    </xsl:attribute>
                     <!-- added by glu, for process special fonts e.g. Marlett, -->
                     <xsl:if test="w:charset/@w:val = '02'">
                         <xsl:attribute name="style:font-charset">x-symbol</xsl:attribute>
@@ -120,7 +126,14 @@
                         </xsl:choose>
                     </xsl:if>
                     <xsl:if test="w:pitch and string-length(w:pitch/@w:val) &gt; 0">
-                        <xsl:attribute name="style:font-pitch"><xsl:choose><xsl:when test="w:pitch/@w:val = 'default'">variable</xsl:when><xsl:otherwise><xsl:value-of select="w:pitch/@w:val"/></xsl:otherwise></xsl:choose></xsl:attribute>
+                        <xsl:attribute name="style:font-pitch">
+                            <xsl:choose>
+                                <xsl:when test="w:pitch/@w:val = 'default'">variable</xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="w:pitch/@w:val"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
                     </xsl:if>
                 </xsl:element>
             </xsl:for-each>
@@ -165,12 +178,18 @@
     </xsl:template>
     <xsl:template match="w:style">
         <style:style>
-            <xsl:attribute name="style:name"><xsl:value-of select="concat('w',translate(@w:styleId,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/></xsl:attribute>
+            <xsl:attribute name="style:name">
+                <xsl:value-of select="concat('w',translate(@w:styleId,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
+            </xsl:attribute>
             <xsl:if test="w:basedOn">
-                <xsl:attribute name="style:parent-style-name"><xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/></xsl:attribute>
+                <xsl:attribute name="style:parent-style-name">
+                    <xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
+                </xsl:attribute>
             </xsl:if>
             <xsl:if test="w:next">
-                <xsl:attribute name="style:next-style-name"><xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/></xsl:attribute>
+                <xsl:attribute name="style:next-style-name">
+                    <xsl:value-of select="concat('w',translate(w:basedOn/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
+                </xsl:attribute>
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="@w:type = 'character'">
@@ -178,7 +197,9 @@
                 </xsl:when>
                 <!-- table, paragraph are the same as in Writer . glu -->
                 <xsl:when test="@w:type">
-                    <xsl:attribute name="style:family"><xsl:value-of select="@w:type"/></xsl:attribute>
+                    <xsl:attribute name="style:family">
+                        <xsl:value-of select="@w:type"/>
+                    </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="style:family">text</xsl:attribute>
