@@ -8,17 +8,17 @@
     This component provides ...
 </Description>
 
-<SupportedService>com::sun::star::drawing::GenericDrawPage</SupportedService>
+<ModuleName>sd</ModuleName>
+
+<LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
 
 <Language>c++</Language>
 
 <Status StatusValue="final"/>
 
+<SupportedService>com.sun.star.drawing.GenericDrawPage</SupportedService>
+
 <!--
-<ModuleName>...</ModuleName>
-
-<LoaderName>com.sun.star.loader...</LoaderName>
-
 <ServiceDependency>...</ServiceDependency>
 
 <ProjectBuildDependency>...</ProjectBuildDependency>
