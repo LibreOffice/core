@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:40:29 $
+ *  last change: $Author: sb $ $Date: 2002-07-04 09:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,7 @@
 #ifndef _SVX_NOIDERESIDS
 
 #define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
-#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 1)
-#define RID_IMGLST_LAYOUT_HC (RID_BASICIDE_START + 2)
-#define RID_IMG_REMOVEWATCH_HC (RID_BASICIDE_START + 3)
+
 #define RID_EDT_WATCHEDIT               ( RID_BASICIDE_START +  4 )
 #define RID_ICO_MDIWINDOW               ( RID_BASICIDE_START +  5 )
 #define RID_IMG_LOCKED_HC (RID_BASICIDE_START + 6)
@@ -87,6 +85,9 @@
 #define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
+#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)
+#define RID_IMGLST_LAYOUT_HC (RID_BASICIDE_START + 14)
+#define RID_IMG_REMOVEWATCH_HC (RID_BASICIDE_START + 15)
 #define RID_TD_ORGANIZE                 ( RID_BASICIDE_START + 36 )
 #define RID_TP_MODULS                   ( RID_BASICIDE_START + 37 )
 #define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
