@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:11:07 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,8 @@
 #include "globals.hrc" //CHINA001
 #include <envelp.hrc> //CHINA001
 
+#include <svx/ofaitem.hxx>
+
 //Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
 static String sLstPg;
 static USHORT nPageCnt = 0;
@@ -418,6 +420,32 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ))
             {
+                Sequence <sal_Int8> aPasswd = pWrtShell->GetDoc()->GetRedlinePasswd();
+                if( aPasswd.getLength() )
+                {
+                    DBG_ASSERT( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
+                    // xmlsec05:    new password dialog
+                    Window* pParent;
+                    const SfxPoolItem* pParentItem;
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    else
+                        pParent = &GetViewFrame()->GetWindow();
+                    SfxPasswordDialog aPasswdDlg( pParent );
+                    if (aPasswdDlg.Execute())
+                    {
+                        String sNewPasswd( aPasswdDlg.GetPassword() );
+                        Sequence <sal_Int8> aNewPasswd = pWrtShell->GetDoc()->GetRedlinePasswd();
+                        SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
+                        if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
+                            pWrtShell->GetDoc()->SetRedlinePasswd(Sequence <sal_Int8> ());
+                        else
+                        {   // xmlsec05: message box for wrong password
+                            break;
+                        }
+                    }
+                }
+
                 USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
                 pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
@@ -426,12 +454,20 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         break;
         case FN_REDLINE_PROTECT :
         {
-            BOOL bMode = (( pWrtShell->GetRedlineMode() & REDLINE_ON ) != 0);
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ) && ((SfxBoolItem*)pItem)->GetValue() == bMode )
+            Sequence <sal_Int8> aPasswd = pWrtShell->GetDoc()->GetRedlinePasswd();
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem )
+                && ((SfxBoolItem*)pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
                 break;
-            Sequence <sal_Int8> aPasswd =
-                        pWrtShell->GetDoc()->GetRedlinePasswd();
-            SfxPasswordDialog aPasswdDlg(&GetViewFrame()->GetWindow());
+
+            // xmlsec05:    new password dialog
+            //              message box for wrong password
+            Window* pParent;
+            const SfxPoolItem* pParentItem;
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
+                pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+            else
+                pParent = &GetViewFrame()->GetWindow();
+            SfxPasswordDialog aPasswdDlg( pParent );
             if(!aPasswd.getLength())
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
