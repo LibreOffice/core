@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SFXCTRLITEM_HXX //autogen
 #include <sfx2/ctrlitem.hxx>
 #endif
+#ifndef _SFXTBXCTRL_HXX
+#include <sfx2/tbxctrl.hxx>
+#endif
 
 #ifndef _CONTTREE_HXX
 #include <conttree.hxx>
@@ -134,6 +137,8 @@ class SwNavigationPI : public Window,
     SwWrtShell          *pContentWrtShell;
     SwView              *pActContView;
     SwView              *pCreateView;
+    SfxPopupWindow      *pPopupWindow;
+    SfxPopupWindow      *pFloatingWindow;
 
     SfxChildWindowContext* pContextWin;
 
@@ -171,12 +176,15 @@ class SwNavigationPI : public Window,
     DECL_LINK( MenuSelectHdl, Menu * );
     DECL_LINK( ChangePageHdl, Timer* );
     DECL_LINK( PageEditModifyHdl, Edit* );
+    DECL_LINK( PopupModeEndHdl, void * );
+    DECL_LINK( ClosePopupWindow, SfxPopupWindow * );
     void UsePage(SwWrtShell *);
 
     void MakeVisible();
     void InitImageList();
     virtual SfxChildAlignment
                     CheckAlignment(SfxChildAlignment,SfxChildAlignment);
+    void SetPopupWindow( SfxPopupWindow* );
 
 protected:
 
