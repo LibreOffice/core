@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:15:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,7 +1088,7 @@ String S_NO_SELECTED_ENTRY_DEPRECATED
 {
     Text = "Es ist kein Eintrag Selektiert in TreeListBox bei ($Arg1)";
     Text[ english_us ] = "An entry has not been selected in TreeListBox at ($Arg1)";
-    Text[ portuguese ] = "Nenhuma entrada seleccionada na TreeListBox para ($Arg1)";
+    Text[ portuguese ] = "Nenhuma entrada seleccionada na TreeListBox em ($Arg1)";
     Text[ russian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ greek ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ dutch ] = "Geen item geselecteerd in TreeListBox bij  ($Arg1)";
@@ -1099,7 +1099,7 @@ String S_NO_SELECTED_ENTRY_DEPRECATED
     Text[ swedish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
-    Text[ japanese ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ japanese ] = "($Arg1) ‚Ì TreeListBox ‚Å€–Ú‚Ì‘I‘ğ‚ª‚Å‚«‚Ä‚¢‚Ü‚¹‚ñB";
     Text[ korean ] = "($Arg1)ÀÇ Æ®¸® ¸®½ºÆ® ¹Ú½º¿¡ ¼±ÅÃµÈ Ç×¸ñÀÌ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ chinese_traditional ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1112,18 +1112,18 @@ String S_NO_SELECTED_ENTRY
 {
     Text = "Es ist kein Eintrag Selektiert in ($Arg2) bei ($Arg1)";
     Text[ english_us ] = "An entry has not been selected in TreeListBox at ($Arg1)";
-    Text[ portuguese ] = "Nenhuma entrada seleccionada na TreeListBox para ($Arg1)";
+    Text[ portuguese ] = "Nenhuma entrada seleccionada em ($Arg2) em ($Arg1)";
     Text[ russian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ greek ] = "An entry has not been selected in TreeListBox at ($Arg1)";
-    Text[ dutch ] = "Geen item geselecteerd in TreeListBox bij  ($Arg1)";
-    Text[ french ] = "Aucune entrée sélectionnée dans la TreeListBox pour ($Arg1)";
-    Text[ spanish ] = "No hay ninguna entrada seleccionada en TreeListBox para ($Arg1)";
+    Text[ dutch ] = "Geen item geselecteerd in ($Arg2) bij  ($Arg1)";
+    Text[ french ] = "Aucune entrée sélectionnée dans ($Arg2) pour ($Arg1)";
+    Text[ spanish ] = "No hay ninguna entrada seleccionada en ($Arg2) para ($Arg1)";
     Text[ italian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ danish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ swedish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
-    Text[ japanese ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ japanese ] = "($Arg1) ‚Ì ($Arg2) ‚Å€–Ú‚Ì‘I‘ğ‚ª‚Å‚«‚Ä‚¢‚Ü‚¹‚ñB";
     Text[ korean ] = "($Arg1)ÀÇ Æ®¸® ¸®½ºÆ® ¹Ú½º¿¡ ¼±ÅÃµÈ Ç×¸ñÀÌ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ chinese_traditional ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1588,6 +1588,7 @@ String S_NO_MENU
     Text[ catalan ] = "No existe botón Ayuda para ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ohje-painiketta";
 };
+
 
 
 
