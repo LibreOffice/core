@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:45:22 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     {
         // count chars to process as LTR
         rArgs.ResetPos();
-        for( bool bRTL; rArgs.GetNextRun( &i, &j, &bRTL ) && !bRTL; )
+        bool bRTL;
+        for( bRTL; rArgs.GetNextRun( &i, &j, &bRTL ) && !bRTL; )
             mnGlyphCount += j - i;
         // if there are RTL runs we need room to remember the RTL status
         if( bRTL )
@@ -1882,7 +1883,8 @@ void UniscribeLayout::MoveGlyph( int nStart, long nNewXPos )
     long nDelta = nNewXPos - pVI->mnXOffset;
     if( nStart > nMinGlyphPos )
     {
-        for( int i = nMinGlyphPos; i < nStart; ++i )
+        int i;
+        for( i = nMinGlyphPos; i < nStart; ++i )
             nDelta -= mpGlyphAdvances[ i ];
         mpGlyphAdvances[ i-1 ] += nDelta;
     }
@@ -2185,7 +2187,8 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
     bool bModified = false;
     int nOldWidth = 0;
     DBG_ASSERT( mnUnitsPerPixel==1, "UniscribeLayout.mnUnitsPerPixel != 1" );
-    for( int i = mnMinCharPos, j = 0; i < mnEndCharPos; ++i, ++j )
+    int i,j;
+    for( i = mnMinCharPos, j = 0; i < mnEndCharPos; ++i, ++j )
     {
         int nNewCharWidth = (pDXArray[j] - nOldWidth);
         // TODO: nNewCharWidth *= mnUnitsPerPixel;
