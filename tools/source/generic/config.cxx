@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-22 15:42:49 $
+ *  last change: $Author: pl $ $Date: 2001-06-13 15:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,25 +132,15 @@ static ByteString& getEmptyByteString()
 
 static String toUncPath( const String& rPath )
 {
-#ifdef TF_FILEURL
     ::rtl::OUString aFileURL;
 
-    // check ir rFileName is already a URL; if not make it so
+    // check if rFileName is already a URL; if not make it so
     if( rPath.CompareToAscii( "file://", 7 ) == COMPARE_EQUAL )
         aFileURL = rPath;
     else if( ::osl::FileBase::getFileURLFromSystemPath( rPath, aFileURL ) != ::osl::FileBase::E_None )
         aFileURL = rPath;
 
     return aFileURL;
-#else
-    ::rtl::OUString aUncPath;
-    // check ir rFileName is already UNC; if not make it so
-    if( rPath.CompareToAscii( "//", 2 ) == COMPARE_EQUAL )
-        aUncPath = rPath;
-    else if( ::osl::FileBase::normalizePath( rPath, aUncPath ) != ::osl::FileBase::E_None )
-        aUncPath = rPath;
-    return aUncPath;
-#endif
 }
 
 static ULONG ImplSysGetConfigTimeStamp( const XubString& rFileName )
@@ -255,8 +245,13 @@ static String ImplMakeConfigName( const XubString* pFileName,
 #endif
     }
 
-    if ( pPathName )
+    // #88208# in case pPathName is set but empty and pFileName is set
+    // and not empty just return the filename; on the default case
+    // prepend default path as usual
+    if ( pPathName && pPathName->Len() )
         aPathName = toUncPath( *pPathName );
+    else if( pPathName && pFileName && pFileName->Len() )
+        return aFileName;
     else
     {
         oslSecurity aSec = osl_getCurrentSecurity();
