@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:28:13 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ Resource RID_SVXERRCTX
         Text [ french ] = "$(ERR) lors de l'ex�cution du dictionnaire des synonymes" ;
         Text [ dutch ] = "$(ERR) bij het uitvoeren van de thesaurus." ;
         Text [ swedish ] = "$(ERR) vid anv�ndning av synonymordboken." ;
-        Text [ danish ] = "$(ERR) ved brug af synonymordbogen." ;
+        Text [ danish ] = "$(ERR) under k�ring af synonymordbogen." ;
         Text [ portuguese ] = "$(ERR) ao executar o dicion�rio de sin�nimos." ;
         Text [ portuguese_brazilian ] = "$(ERR) ao executar o dicion�rio de sin�nimos." ;
         Text[ chinese_simplified ] = "$(ERR)发生在使用同义词词典时。";
@@ -101,6 +101,8 @@ Resource RID_SVXERRCTX
         Text[ hebrew ] = "$(ERR)‮ הפעלת התסאורוס מתבצעת.‬";
         Text[ hindi ] = "$(ERR) विश्वकोश को चला रहा है ।";
         Text[ slovak ] = "Chyba pri spustení slovníka synoným ($(ERR)).";
+        Text[ hungarian ] = "Hiba a szókincstár indításakor: $(ERR)";
+        Text[ slovenian ] = "$(ERR) pri izvajanju slovarja sopomenk";
     };
     String ERRCTX_SVX_LINGU_SPELLING&ERRCODE_RES_MASK
     {
@@ -136,6 +138,8 @@ Resource RID_SVXERRCTX
         Text[ hebrew ] = "$(ERR)‮ בדיקת איות מתבצעת.‬";
         Text[ hindi ] = "$(ERR) अक्षर की जाँच चला रहा है ।";
         Text[ slovak ] = "Chyba pri spustení kontroly pravopisu ($(ERR)).";
+        Text[ hungarian ] = "Hiba a helyesírás-ellenőrzés közben: $(ERR)";
+        Text[ slovenian ] = "$(ERR) pri izvajanju preverjanja črkovanja";
     };
     String ERRCTX_SVX_LINGU_HYPHENATION&ERRCODE_RES_MASK
     {
@@ -171,6 +175,8 @@ Resource RID_SVXERRCTX
         Text[ hebrew ] = "$(ERR)‮ מיקוף מתבצע.‬";
         Text[ hindi ] = "$(ERR) हाइफ़नेशन् चला रहा है ।";
         Text[ slovak ] = "Chyba pri spustení delenia slov ($(ERR)).";
+        Text[ hungarian ] = "Hiba a szóelválasztásnál: $(ERR)";
+        Text[ slovenian ] = "$(ERR) pri izvajanju deljenja besed";
     };
     String ERRCTX_SVX_LINGU_DICTIONARY&ERRCODE_RES_MASK
     {
@@ -184,7 +190,7 @@ Resource RID_SVXERRCTX
         Text [ french ] = "$(ERR) lors de la cr�ation d'un dictionnaire" ;
         Text [ dutch ] = "$(ERR) bij het maken van een woordenboek" ;
         Text [ swedish ] = "$(ERR) n�r en ordbok skapades." ;
-        Text [ danish ] = "$(ERR) under oprettelse af en ordbog." ;
+        Text [ danish ] = "$(ERR) under oprettelsen af en ordbog." ;
         Text [ portuguese ] = "$(ERR) ao criar dicion�rio." ;
         Text [ portuguese_brazilian ] = "$(ERR) ao criar um dicion�rio." ;
         Text[ chinese_simplified ] = "$(ERR) 发生在建立一个词典时。";
@@ -206,6 +212,8 @@ Resource RID_SVXERRCTX
         Text[ hebrew ] = "$(ERR)‮ יצירת מילון מתבצעת.‬";
         Text[ hindi ] = "$(ERR) शब्दकोश को उत्पन्न कर रहा है ।";
         Text[ slovak ] = "Chyba pri vytváraní slovníka ($(ERR)).";
+        Text[ hungarian ] = "Hiba a szótár létrehozásakor: $(ERR)";
+        Text[ slovenian ] = "$(ERR) pri ustvarjanju slovarja";
     };
     String ERRCTX_SVX_BACKGROUND&ERRCODE_RES_MASK
     {
@@ -239,6 +247,8 @@ Resource RID_SVXERRCTX
         Text[ hebrew ] = "$(ERR)‮ קביעת תכונת הרקע.‬";
         Text[ hindi ] = "$(ERR) पृष्ठभाग ऐट्रिब्यूट् सेट्ट कर रहा है ।";
         Text[ slovak ] = "Chyba pri nastavovaní pozadia ($(ERR)).";
+        Text[ hungarian ] = "Hiba a háttérjellemző beállításánál: $(ERR)";
+        Text[ slovenian ] = "$(ERR) pri nastavljanju atributov ozadja";
     };
     String ERRCTX_SVX_IMPORT_GRAPHIC&ERRCODE_RES_MASK
     {
@@ -250,7 +260,7 @@ Resource RID_SVXERRCTX
         Text [ french ] = "$(ERR) lors du chargement d'un graphique" ;
         Text [ dutch ] = "$(ERR) bij het laden van een afbeelding" ;
         Text [ swedish ] = "$(ERR) vid laddning av ett grafikobjekt." ;
-        Text [ danish ] = "$(ERR) under indl�sning af en grafik." ;
+        Text [ danish ] = "$(ERR) under indl�sning af grafiken." ;
         Text [ portuguese ] = "$(ERR) ao carregar imagem." ;
         Text [ portuguese_brazilian ] = "$(ERR) ao carregar a figura." ;
         Text[ chinese_simplified ] = "$(ERR) 发生在装入一个图形时。";
@@ -272,6 +282,8 @@ Resource RID_SVXERRCTX
         Text[ hebrew ] = "$(ERR)‮טעינת גרפיקה מתבצעת.‬";
         Text[ hindi ] = "$(ERR) सुचित्र को लोड़ कर रहा है ।";
         Text[ slovak ] = "Chyba pri načítaní obrázku ($(ERR)).";
+        Text[ hungarian ] = "Hiba a kép betöltése közben: $(ERR)";
+        Text[ slovenian ] = "$(ERR) pri nalaganju grafik";
     };
 };
  // Error-Code ------------------------------------------------------------
@@ -289,7 +301,7 @@ Resource RID_SVXERRCODE
         Text [ french ] = "Aucun dictionnaire des synonymes n'est disponible pour la langue s�lectionn�e.\nVeuillez v�rifiez l'installation et installer\nle cas �ch�ant la langue concern�e." ;
         Text [ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal" ;
         Text [ swedish ] = "Ingen synonymordbok �r tillg�nglig f�r det inst�llda spr�ket.\nKontrollera din installation och installera eventuellt det �nskade spr�ket." ;
-        Text [ danish ] = "Synonymordbogen st�r ikke til r�dighed for det indstillede sprog.\nKontroller venligst din installation og installer i givet fald det �nskede sprog." ;
+        Text [ danish ] = "Synonymordbogen er ikke tilg�ngelig for det indstillede sprog.\nKontroller venligst din installation og installer det �nskede sprog." ;
         Text [ portuguese ] = "O dicion�rio de sin�nimos n�o se encontra dispon�vel para a l�ngua especificada.\nConfira a sua instala��o e, se necess�rio, instale a l�ngua desejada." ;
         Text [ portuguese_brazilian ] = "O dicion�rio de sin�nimos n�o se encontra dispon�vel para o idioma atual.\nConfira a sua instala��o e, se necess�rio, instale o idioma desejado." ;
         Text[ chinese_simplified ] = "您所设定的语言没有相应的同义词词典。\n请您检查安装，如有必要，请您安装所要使用的语言版本。";
@@ -311,6 +323,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮אין תסאורוס זמין עבור השפה הנוכחית.\nנא לבדוק את ההתקנה ולהתקין את השפה הנדרשת.‬";
         Text[ hindi ] = "प्रचलित भाषा केलिए विश्वकोश उपलब्ध नहीं है ।\nकृपया आपका प्रतिष्ठापन की जाँच कीजिए और आवश्यक भाषा को प्रतिष्ठापित कीजिए";
         Text[ slovak ] = "Pre súčasný jazyk nie je dostupný slovník synoným.\nProsím skontrolujte svoju inštaláciu a doplňte požadovaný jazyk.";
+        Text[ hungarian ] = "A kiválasztott nyelvhez nincs elérhető szókincstár.\nKérem ellenőrizze a telepítést, és telepítse a megfelelő nyelvű szótárt. ";
+        Text[ slovenian ] = "Za izbrani jezik ni na voljo slovarja sopomenk.\nProsimo, preverite namestitev in namestite željeni jezik";
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
     {
@@ -325,7 +339,7 @@ Resource RID_SVXERRCODE
         TEXT[ spanish ] = "$(ARG1) no est� disponible para la revisi�n ortogr�fica o no est� activo en este momento.\n Examine la instalaci�n e instale en caso dado el idioma deseado\no active el m�dulo correspondiente en 'Herramientas - Opciones - Configuraci�n de idiomas - Ling��stica'.";
         TEXT[ finnish ] = "$(ARG1) ei ole k�ytett�viss� oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
         TEXT[ italian ] = "$(ARG1) non � supportato per il controllo oppure non � attivato al momento.\nControllate l'installazione ed installate, se necessario, la lingua desiderata\noppure impostate il modulo linquistico corrispondente in 'Strumenti - Opzioni - Impostazioni lingua - Linguistica'.";
-        TEXT[ danish ] = "$(ARG1) underst�ttes ikke af kontrollen eller er ikke aktiveret i �jeblikket.\nKontroller installationen, og installer eventuelt det n�dvendige sprogmodul,\neller aktiver det p�g�ldende sprogmodul under 'Supplerende - Indstillinger -  Sprogindstillinger - Lingvistik'.";
+        TEXT[ danish ] = "$(ARG1) underst�ttes ikke af stavekontrollen eller er ikke aktiveret i �jeblikket.\nKontroller venligst installationen, og installer eventuelt det n�dvendige sprogmodul,\neller aktiver det p�g�ldende sprogmodul under 'Funktioner - Indstillinger - Sprogindstillinger - Skrivehj�lp'.";
         TEXT[ swedish ] = "$(ARG1) st�ds inte av kontrollen resp., �r inte aktiverat f�r n�rvarande.\nKontrollera installationen och installera eventuellt den n�dv�ndiga spr�kmodulen\nresp. aktivera motsvarande spr�kmodul under \"Verktyg - Alternativ - Spr�kinst�llningar - Lingvistik\".";
         TEXT[ polish ] = "$(ARG1) nie jest obs�ugiwany przez funkcj� sprawdzania pisowni albo nie jest teraz aktywny.\nSprawd� instalacj� i ewentualnie zainstaluj wymagany modu� j�zyka\nlub uaktywnij go, wydaj�c sekwencj� polece� 'Narz�dzia - Opcje - Konfiguracja j�zyk�w - Pisownia'.";
         TEXT[ portuguese_brazilian ] = "$(ARG1) n�o possui suporte para verifica��o ortogr�fica ou encontra-se desativado. \nConfira a sua instala��o e, se necess�rio, instale o m�dulo ling��stico desejado\nou ent�o ative-o em 'Ferramentas - Op��es - Configura��o do Idioma - Ling��stica'.";
@@ -341,6 +355,8 @@ Resource RID_SVXERRCODE
         TEXT[ hebrew ] = "‮$(ARG1) אינה נתמכת על ידי בודק האיות או אינה פעילה כעת.\nנא לבדוק את ההתקנה ואם נדרש, יש להתקין את המודול של השפה הרצויה\nאו להפעיל אותו ב \"כלים\" > \"אפשרויות\" > \"קביעות שפה\" > \"עזרי כתיבה\".‬";
         TEXT[ hindi ] = "$(ARG1) अक्षर की जाँच करने केलिए असमर्थित है अथवा अभी क्रियाशील नहीं है ।\nकृपया आपका प्रतिष्ठापन की जाँच कीजिए और अगर ज़रूरत पड़ा तो आवश्यक भाषा मोड्यूल को प्रतिष्ठापित कीजिए\nअथवा 'औज़ार - ऑप्शन्स - भाषा निर्धारण - लेखन सहाय' के नीचे संचालित कीजिए ।";
         TEXT[ slovak ] = "$(ARG1) nieje podporované kontrolou pravopisu alebo nie je práve aktívne.\nProsím skontrolujte svoju inštaláciu a doplňte požadovaný jazykový modul \nalebo aktivujte túto funkciu v menu 'Nástroje - Voľby - Jazykové nastavenia - Pomôcky pri písaní'.";
+        TEXT[ hungarian ] = "A helyesírás-ellenőrző nem támogatja a következőt: $(ARG1), vagy a lehetőség nincs bekapcsolva. \nEllenőrizze, hogy telepítve van-e a megfelelő nyelvi modul, vagy kapcsolja be \naz 'Eszközök - Beállítások - Írástámogatás' párbeszédablakban.";
+        TEXT[ slovenian ] = "Ta funkcija ne podpira jezika $(ARG1) ali pa trenutno ni aktivna.\nPreverite namestitev in, če bo potrebno, namestite željeni jezikovni modul\nali ga aktivirajte v meniju 'Orodja - Možnosti - Nastavitve jezika - Pripomočki za pisanje'";
     };
     String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
     {
@@ -354,7 +370,7 @@ Resource RID_SVXERRCODE
         Text [ french ] = "La v�rification de l'orthographe n'est pas disponible." ;
         Text [ dutch ] = "De spellingcontrole is niet beschikbaar." ;
         Text [ swedish ] = "R�ttstavningskontrollen �r inte tillg�nglig." ;
-        Text [ danish ] = "Stavekontrollen st�r ikke til r�dighed." ;
+        Text [ danish ] = "Stavekontrollen er ikke tilg�ngelig." ;
         Text [ portuguese ] = "A verifica��o ortogr�fica n�o est� dispon�vel." ;
         Text [ portuguese_brazilian ] = "A verifica��o ortogr�fica n�o est� dispon�vel" ;
         Text[ chinese_simplified ] = "不提供这个拼写检查功能。";
@@ -376,6 +392,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮בודק האיות אינו זמין.‬";
         Text[ hindi ] = "अक्षर की जाँच उपलब्ध नहीं है ।";
         Text[ slovak ] = "Kontrola pravopisu nie je dostupná.";
+        Text[ hungarian ] = "A helyesírás-ellenőrző nem elérhető.";
+        Text[ slovenian ] = "Preverjanje črkovanja ni na voljo";
     };
     String ERRCODE_SVX_LINGU_HYPHENNOTEXISTS&ERRCODE_RES_MASK
     {
@@ -389,7 +407,7 @@ Resource RID_SVXERRCODE
         Text [ french ] = "Coupure des mots non disponible" ;
         Text [ dutch ] = "De modus Woordafbreken is niet beschikbaar." ;
         Text [ swedish ] = "Avstavningshj�lpen �r inte tillg�nglig." ;
-        Text [ danish ] = "Orddelingen st�r ikke til r�dighed." ;
+        Text [ danish ] = "Orddelingen er ikke tilg�ngelig." ;
         Text [ portuguese ] = "A separa��o sil�bica n�o est� dispon�vel." ;
         Text [ portuguese_brazilian ] = "A divis�o sil�bica n�o est� dispon�vel." ;
         Text[ chinese_simplified ] = "连字符不存在。";
@@ -411,6 +429,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮מיקוף אינו זמין.‬";
         Text[ hindi ] = "हाइफ़नशन् उपलब्ध नहीं है ।";
         Text[ slovak ] = "Delenie slov nie je k dispozícii.";
+        Text[ hungarian ] = "Az elválasztás nem elérhető.";
+        Text[ slovenian ] = "Deljenje besed ni na voljo";
     };
     String ERRCODE_SVX_LINGU_DICT_NOTREADABLE&ERRCODE_RES_MASK
     {
@@ -424,7 +444,7 @@ Resource RID_SVXERRCODE
         Text [ french ] = "Impossible de lire le dictionnaire personnalis� $(ARG1)." ;
         Text [ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden gelezen." ;
         Text [ swedish ] = "Den personliga ordboken $(ARG1) kan inte l�sas." ;
-        Text [ danish ] = "Det er ikke muligt at l�se den personlige ordbog $(ARG1)." ;
+        Text [ danish ] = "Det er ikke muligt at l�se brugerordbogen $(ARG1)." ;
         Text [ portuguese ] = "Imposs�vel ler o dicion�rio pessoal $(ARG1)." ;
         Text [ portuguese_brazilian ] = "N�o � poss�vel ler o dicion�rio personalizado $(ARG1)." ;
         Text[ chinese_simplified ] = "无法读出私人词典 $(ARG1)。";
@@ -446,6 +466,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮לא ניתן לקרוא את המילון המיוחד $(ARG1).‬";
         Text[ hindi ] = "कस्टम् शब्दकोश $(ARG1) को नहीं पढ़ सकते है ।";
         Text[ slovak ] = "Nie je možné načítať vlastný slovník $(ARG1).";
+        Text[ hungarian ] = "A(z) $(ARG1) felhasználói szótárfájl nem olvasható.";
+        Text[ slovenian ] = "Osebnega slovarja $(ARG1) ni mogoče brati";
     };
     String ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE&ERRCODE_RES_MASK
     {
@@ -459,7 +481,7 @@ Resource RID_SVXERRCODE
         Text [ french ] = "Impossible d'installer le dictionnaire $(ARG1)." ;
         Text [ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden aangelegd." ;
         Text [ swedish ] = "Den personliga ordlistan $(ARG1) kan inte skapas." ;
-        Text [ danish ] = "Det er ikke muligt at oprette den personlige ordbog $(ARG1)." ;
+        Text [ danish ] = "Det er ikke muligt at oprette brugerordbogen $(ARG1)." ;
         Text [ portuguese ] = "Imposs�vel criar o dicion�rio pessoal $(ARG1)." ;
         Text [ portuguese_brazilian ] = "N�o � poss�vel criar o dicion�rio personalizado $(ARG1)." ;
         Text[ chinese_simplified ] = "无法建立私人词典 $(ARG1)。";
@@ -481,6 +503,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮לא ניתן ליצור את המילון המיוחד $(ARG1).‬";
         Text[ hindi ] = "कस्टम् शब्दकोश $(ARG1) को उत्पन्न नहीं कर सकते है ।";
         Text[ slovak ] = "Nie je možné vytvoriť vlastný slovník $(ARG1).";
+        Text[ hungarian ] = "Nem sikerült létrehozni a(z) $(ARG1) felhasználói szótárfájlt.";
+        Text[ slovenian ] = "Osebnega slovarja $(ARG) ni mogoče ustvariti";
     };
     String ERRCODE_SVX_GRAPHIC_NOTREADABLE&ERRCODE_RES_MASK
     {
@@ -514,6 +538,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮לא ניתן לאתר את המילון המיוחד $(ARG1).‬";
         Text[ hindi ] = "सुचित्र $(ARG1) नहीं मिला ।";
         Text[ slovak ] = "Obrázok $(ARG1). nebol nájdený.";
+        Text[ hungarian ] = "A(z) $(ARG1) kép nem található.";
+        Text[ slovenian ] = "Grafike $(ARG) ni bilo mogoče najti";
     };
     String ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT&ERRCODE_RES_MASK
     {
@@ -544,6 +570,8 @@ Resource RID_SVXERRCODE
         TEXT[ hebrew ] = "‮לא ניתן לטעון עצם גרפי שקישורו נותק‬";
         TEXT[ hindi ] = "लिंक हटाया हुआ सुचित्र को लोड नहीं कर सकते है";
         TEXT[ slovak ] = "Nie je možné načítať nepripojený obrázok";
+        TEXT[ hungarian ] = "Egy nem csatolt kép nem tölthető be.";
+        TEXT[ slovenian ] = "Nepovezane grafike ni bilo mogoče naložiti";
     };
     String ERRCODE_SVX_LINGU_NOLANGUAGE&ERRCODE_RES_MASK
     {
@@ -574,6 +602,8 @@ Resource RID_SVXERRCODE
         TEXT[ hebrew ] = "‮לא נקבעה שפה עבור המונח שנבחר‬";
         TEXT[ hindi ] = "चुने हुए विषय केलिए भाषा को निश्चय नहीं किया है ।";
         TEXT[ slovak ] = "Jazyk nebol upravený pre zvolený termín.";
+        TEXT[ hungarian ] = "A kiválasztott kifejezés nyelve még nincs javítva.";
+        TEXT[ slovenian ] = "Za izbrani izraz ni bilo določenega jezika";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -589,7 +619,7 @@ Resource RID_SVXERRCODE
         Text[ language_user1 ] = " ";
         Text[ russian ] = "�� �������� ���� �����, ��� ��� �� ������� ������� ��������� ������ IO (stardiv.uno.io.*).";
         Text[ italian ] = "Lo strato del formulario non � stato caricato poich� stato possibile creare i servizi IO (strdiv.uno.io.*) necessari.";
-        Text[ danish ] = "Formularlaget blev ikke indl�st, fordi det ikke var muligt at instantiere den kr�vede IO-service (stardiv.uno.io.*).";
+        Text[ danish ] = "Formularlaget blev ikke indl�st, fordi det ikke var muligt at instantiere den n�dvendige IO-service (stardiv.uno.io.*)";
         Text[ polish ] = "Warstwa formularza nie zosta�a za�adowana, poniewa� nie mo�na utworzy� instancji wymaganych us�ug we-wy (stardiv.uno.io.*)";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel carregar a camada do formul�rio pois n�o foi poss�vel instanciar os servi�os IO (stardiv.uno.io.*) necess�rios.";
         Text[ japanese ] = "IOサービス(stardiv.uno.io.*)がインストールできなかったため、フォーム層は読み込まれませんでした。";
@@ -605,6 +635,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮לא ניתן להפעיל את שירתי הקלט\\פלט הנדרשים (stardiv.uno.io.*) ולכן רובד הטפסים לא נטען.‬";
         Text[ hindi ] = "आवश्यक IO-सेवों (stardiv.uno.io.*) को प्रारंभ नहीं करने के कारण फ़ॉर्म का परत को लोड नहीं कर सकते है ";
         Text[ slovak ] = "Vrstva formulára nebola načítaná, pretože nie je možné vytvoriť požadované IO služby (stardiv.uno.io.*).";
+        Text[ hungarian ] = "Az űrlapréteg nem tölthető be, mert a szükséges IO-szolgáltatás (stardiv.uno.io.*) nem példányosítható.";
+        Text[ slovenian ] = "Plast obrazca se ni naložila, ker zahtevanih IO-storitev (stardiv.uno.io*) ni bilo mogoče uporabiti";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
@@ -619,7 +651,7 @@ Resource RID_SVXERRCODE
         Text[ swedish ] = "Formul�rskiktet skrevs inte eftersom n�dv�ndig IO-service (stardiv.uno.io.*) inte kunde instantieras";
         Text[ russian ] = "�� ������� ���� �����, ��� ��� �� ������� ������� ��������� ������ IO (stardiv.uno.io.*).";
         Text[ italian ] = "Lo strato del formulario non � stato scritto perch� non non � stato possibile creare i servizi IO (stardiv.uno.io.*) necessari.";
-        Text[ danish ] = "Formularlaget blev ikke skrevet, fordi det ikke var muligt at instantiere den kr�vede IO-service (stardiv.uno.io.*).";
+        Text[ danish ] = "Formularlaget blev ikke skrevet, fordi det ikke var muligt at instantiere den n�dvendige IO-service (stardiv.uno.io.*)";
         Text[ polish ] = "Warstwa formularza nie zosta�a zapisana, poniewa� nie mo�na utworzy� instancji wymaganych us�ug we-wy (stardiv.uno.io.*)";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel gravar a camada do formul�rio pois n�o foi poss�vel instanciar os servi�os IO (stardiv.uno.io.*) necess�rios.";
         Text[ japanese ] = "IOサービス(stardiv.uno.io.*)がインストールできなかったため、フォーム層は書きこめませんでした。";
@@ -635,6 +667,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮לא ניתן להפעיל את שירתי הקלט\\פלט הנדרשים (stardiv.uno.io.*) ולכן רובד הטפסים לא נכתב.‬";
         Text[ hindi ] = "आवश्यक IO-सवों (stardiv.uno.io.*) को प्रारंभ नहीं करने के कारण फ़ॉर्म का परत को लिख नहीं सकते है";
         Text[ slovak ] = "Vrstva formulára nebola zapísaná, pretože nie je možné vytvoriť požadované IO služby (stardiv.uno.io.*).";
+        Text[ hungarian ] = "Az űrlapréteg nem írható mert a szükséges I/O szolgáltatások (stardiv.uno.io.*) nem példányosíthatók.";
+        Text[ slovenian ] = "Plast obrazca ni bila zapisana, ker zahtevanih IO-storitev (stardiv.uno.io*) ni bilo mogoče uporabiti";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -649,7 +683,7 @@ Resource RID_SVXERRCODE
         Text[ swedish ] = "Det uppstod ett fel vid l�sning av formul�r-controls. Formul�rskiktet laddades inte";
         Text[ russian ] = "������ ������ ��������� ���������� �����. �� �������� ���� �����";
         Text[ italian ] = "Si � verificato un errore nella lettura del formulario Controls. Lo strato del formulario non � stato caricato";
-        Text[ danish ] = "Der opstod en fejl under l�sning af formular-kontrolelementerne. Formularlaget blev ikke indl�st.";
+        Text[ danish ] = "Der opstod en fejl under l�sning af formularkontrolelementerne. Formularlaget blev ikke indl�st";
         Text[ polish ] = "Wyst�pi� b��d podczas odczytu formant�w formularza. Warstwa formularza nie zosta�a za�adowana";
         Text[ portuguese_brazilian ] = "Ocorreu um erro na leitura dos controles do formul�rio. N�o foi poss�vel carregar a camada do formul�rio.";
         Text[ japanese ] = "フォーム層の読み取り中にエラー発生。このフォーム層は読み込まれていません。";
@@ -665,6 +699,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮ארעה שגיאה בעת קריאת פקדי הטפסים ולכן רובד הטפסים לא נטען.‬";
         Text[ hindi ] = "फ़ॉर्म नियंत्रणों को पढ़ने के समय गलती घटित हुआ । फ़ॉर्म का परत को लोड़ नहीं कर सकते है";
         Text[ slovak ] = "Nastala chyba pri načítavaní formulárových prvkov. Vrstva formulára nebola načítaná.";
+        Text[ hungarian ] = "Hiba történt az űrlap elemeinek olvasásakor. Az űrlapréteg nem töltődött be.";
+        Text[ slovenian ] = "Pri branju kontrolnikov obrazca je prišlo do napake. Plast obrazca se ni naložila";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
@@ -679,7 +715,7 @@ Resource RID_SVXERRCODE
         Text[ swedish ] = "Det uppstod ett fel vid skrivning av formul�r-controls. Formul�rskiktet sparades inte";
         Text[ russian ] = "������ ������ ��������� ���������� �����. �� �������� ���� �����";
         Text[ italian ] = "Si � verificato un errore durante la compilazione del formulario controls. Lo strato del formulario non � stato salvato.";
-        Text[ danish ] = "Der opstod en fejl under skrivning af formular-kontrolelementerne. Formularlaget blev ikke gemt.";
+        Text[ danish ] = "Der opstod en fejl under skrivning af formular-kontrolelementerne. Formularlaget blev ikke gemt";
         Text[ polish ] = "Wyst�pi� b��d podczas zapisu formant�w formularza. Warstwa formularza nie zosta�a zapisana";
         Text[ portuguese_brazilian ] = "Ocorreu um erro ao gravar os controles do formul�rio. N�o foi poss�vel salvar a camada do formul�rio.";
         Text[ japanese ] = "フォーム層の書き込み中にエラー発生。フォーム層は保存されていません。";
@@ -695,6 +731,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮ארעה שגיאה בעת כתיבת פקדי הטפסים ולכן רובד הטפסים לא נשמר.‬";
         Text[ hindi ] = "फ़ॉर्म नियंत्रणों को लिखने के समय गलती घटित हुआ । फ़ॉर्म का परत को संचित नहीं कर सकते है";
         Text[ slovak ] = "Nastala chyba pri zapisovaní formulárových prvkov. Vrstva formulára nebola uložená.";
+        Text[ hungarian ] = "Hiba történt az űrlap elemeinek írása közben. Az űrlapréteg nem menthető.";
+        Text[ slovenian ] = "Pri pisanju kontrolnikov obrazca je prišlo do napake. Plast obrazca se ni shranila";
     };
     String (ERRCODE_SVX_BULLETITEM_NOBULLET | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -704,7 +742,7 @@ Resource RID_SVXERRCODE
         Text[ portuguese ] = "Surgiu um erro durante a leitura de uma marca. Foi imposs�vel carreg�-las todas.";
         Text[ russian ] = "������ ������ �������. �� ������� ��������� ��� �������.";
         Text[ greek ] = "������������� ������ ���� ��� �������� ���� ��� ��� ��������. ��� ���������� ���� �� ��������.";
-        Text[ dutch ] = "Fout bij laden van opsommingsteken. Niet alle tekens kunnen worden geladen.";
+        Text[ dutch ] = "Fout bij laden van een opsommingsteken. Niet alle tekens kunnen worden geladen.";
         Text[ french ] = "Une erreur s'est produite pendant la lecture d'une puce. Certaines puces n'ont pas pu �tre charg�es.";
         Text[ spanish ] = "Ha ocurrido un error al leer una vi�eta. No se pudieron cargar todas las vi�etas.";
         Text[ italian ] = "Durante la lettura di un bullet si � verificato un errore. Non � stato possibile caricare tutti i bullet.";
@@ -725,6 +763,8 @@ Resource RID_SVXERRCODE
         Text[ hebrew ] = "‮ארעה שגיאה בעת קריאת אחד מנקודות הכותרה (bullets). לא כל הנקודות נטענו.‬";
         Text[ hindi ] = "किसी एक बुल्लेट्स को पढ़ने के समय गलती घटित हुआ । सब बुल्लेटों को लोड़ नहीं कर सकते है ।";
         Text[ slovak ] = "Nastala chyba pri načítavaní jednej z odrážok. Nie všetky odrážky boli načítané.";
+        Text[ hungarian ] = "Hiba történt az egyik felsorolásjel betöltése közben. Nem minden felsorolásjel lett betöltve.";
+        Text[ slovenian ] = "Pri branju ene od oznak je prišlo do napake. Vse oznake niso bile naložene";
     };
 
     String ERRCODE_SVX_MODIFIED_VBASIC_STORAGE & ERRCODE_RES_MASK
@@ -741,7 +781,7 @@ Resource RID_SVXERRCODE
         TEXT[ french ] = "Comme les modifications apport�es au code Basic du document vont �tre perdues, c'est le code de macro VBA d'origine qui va �tre enregistr� � la place.";
         TEXT[ spanish ] = "Se perder�n todas las modificaciones del Basic Code del documento. En su lugar se guardar� el c�digo macro VBA original.";
         TEXT[ italian ] = "Tutte le modifiche apportate al documento Basic Code andranno perdute. Pertanto verr� salvato l'originale VBA.";
-        TEXT[ danish ] = "Alle �ndringer i dokumentet Basic Code g�r tabt. I stedet gemmes gemmes den originale VBA Macro Code.";
+        TEXT[ danish ] = "Alle �ndringer i Basic-koden er g�et tabt. I stedet gemmes den originale VBA Makrokode.";
         TEXT[ swedish ] = "Alla �ndringar av dokument-Basic-koden g�r f�rlorade. I st�llet sparas original-VBA-makrokoden.";
         TEXT[ polish ] = "Wszystkie zmiany w kodzie Basic s� tracone. Zapisany zostanie za to oryginalny kod makra VBA.";
         TEXT[ portuguese_brazilian ] = "As modifica��es efetuadas no c�digo BASIC est�o perdidas. No seu lugar ser� salvo o c�digo macro VBA original.";
@@ -758,6 +798,8 @@ Resource RID_SVXERRCODE
         TEXT[ hebrew ] = "‮כל השינוים לקוד הבייסיק אבדו. המקרו ה VBA המקורי נשמר במקומו.‬";
         TEXT[ hindi ] = "Basic Code में किया हुआ सब परिवर्तन नष्ट हुआ । इसके बदले यथार्थ VBA Macro Code को संचित किया है ।";
         TEXT[ slovak ] = "Všetky zmeny prevedené do kódu BASIC sú stratené. Namiesto toho je uložený kód makra VBA.";
+        TEXT[ hungarian ] = "A Basic-kódban esett változtatások elvesztek. Az eredeti VBA-makró kódja kerül mentésre helyette.";
+        TEXT[ slovenian ] = "Vse spremembe Basic kode so izgubljene. Namesto tega bo shranjena izvirna VBA Makro koda";
     };
 
     String ERRCODE_SVX_VBASIC_STORAGE_EXIST & ERRCODE_RES_MASK
@@ -772,7 +814,7 @@ Resource RID_SVXERRCODE
         TEXT[ french ] = "Le code VBA basic d'origine contenu dans le document ne sera pas enregistr�.";
         TEXT[ spanish ] = "No se guardar� el Basic Code VBA incluido en el documento.";
         TEXT[ italian ] = "Non � possibile salvare il codice VBA Basic contenuto nel documeto.";
-        TEXT[ danish ] = "Den originale VBA Basic Code, som er indeholdt i dokumentet, gemmes ikke.";
+        TEXT[ danish ] = "Den originale VBA Basic kode, som er indeholdt i dokumentet, gemmes ikke.";
         TEXT[ swedish ] = "Original-VBA-Basic-koden som finns i dokumentet sparas inte.";
         TEXT[ polish ] = "Zawarty w dokumencie oryginalny kod VBA nie zostanie zapisany.";
         TEXT[ portuguese_brazilian ] = "O c�digo BASIC VBA original contido no documento n�o ser� salvo.";
@@ -789,9 +831,14 @@ Resource RID_SVXERRCODE
         TEXT[ hebrew ] = "‮קוד הבייסיק ה VBA המקורי שבמסמך לא ישמר.‬";
         TEXT[ hindi ] = "लेखपत्र का यथार्थ VBA Basic Code को संचित नहीं कर सकते है ।";
         TEXT[ slovak ] = "Kód VBA Basic pôvodne obsiahnutý v dokumente nebude uložený.";
+        TEXT[ hungarian ] = "A dokumentumban levő eredeti VBA Basic kód nem lesz mentve.";
+        TEXT[ slovenian ] = "Izvirna VBA Basic koda, ki jo vsebuje dokument, ne bo shranjena";
     };
 };
  // ********************************************************************** EOF
+
+
+
 
 
 
