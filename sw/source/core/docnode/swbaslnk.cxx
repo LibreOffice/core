@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: swbaslnk.cxx,v $
+ *  $rcsfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:05:10 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,18 @@
 #include <vcl/outdev.hxx>
 #endif
 
+#ifndef _OSL_THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
+#ifndef _SALHELPER_CONDITION_HXX_
+#include <salhelper/condition.hxx>
+#endif
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
 #ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
 #endif
@@ -150,15 +162,13 @@
 #include <htmltbl.hxx>
 #endif
 
+using namespace com::sun::star;
+
 BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
 
 TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
 SV_IMPL_REF( SwServerObject )
-
-SwBaseLink::~SwBaseLink()
-{
-}
 
 void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
@@ -484,6 +494,187 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
     return bRet;
 }
 
+
+class ReReadThread : public osl::Thread {
+public:
+
+    class DelCondition : public ::salhelper::Condition {
+
+    public:
+
+        DelCondition(ReReadThread& rThread)
+            : salhelper::Condition(rThread.m_aMutex),
+              m_rThread(rThread)
+        {
+        }
+
+    protected:
+
+        bool applies() const {
+            return m_rThread.m_bIsRead;
+        }
+
+    private:
+
+        ReReadThread& m_rThread;
+    };
+
+    friend class DelCondition;
+
+    ReReadThread(
+        SwBaseLink* pSwBaseLink,
+        const String& rGrfName,
+        BOOL bWaitForData,
+        BOOL bNativFormat
+    );
+
+    ~ReReadThread();
+
+    String getGrfName() {
+        osl::MutexGuard aGuard(m_aMutex);
+        return m_rGrfName;
+    }
+
+    BOOL waitForData() {
+        osl::MutexGuard aGuard(m_aMutex);
+        return m_bWaitForData;
+    }
+
+    BOOL nativFormat() {
+        osl::MutexGuard aGuard(m_aMutex);
+        return m_bNativFormat;
+    }
+
+    uno::Reference<io::XInputStream> getInputStream() {
+        osl::MutexGuard aGuard(m_aMutex);
+        return m_xInputStream;
+    }
+
+    sal_Bool getIsReadOnly() {
+        return m_bIsReadOnly;
+    }
+
+    SwBaseLink* getSwBaseLink() {
+        osl::MutexGuard aGuard(m_aMutex);
+        return m_pSwBaseLink;
+    }
+
+    void setReRead()
+    {
+        salhelper::ConditionModifier aCM(m_aCond);
+        m_bIsRead = true;
+    }
+
+    void releaseSwBaseLink() {
+        osl::MutexGuard aGuard(m_aMutex);
+        m_pSwBaseLink = 0;
+    }
+
+protected:
+
+    void SAL_CALL run();
+
+    void SAL_CALL onTerminated();
+
+private:
+
+    osl::Mutex m_aMutex;
+    DelCondition m_aCond;
+    bool m_bIsRead;
+
+    SwBaseLink* m_pSwBaseLink;
+    String m_rGrfName;
+    BOOL m_bWaitForData, m_bNativFormat;
+
+    sal_Bool m_bIsReadOnly;
+    uno::Reference<io::XInputStream> m_xInputStream;
+};
+
+
+ReReadThread::ReReadThread(
+    SwBaseLink* pSwBaseLink,
+    const String& rGrfName,
+    BOOL bWaitForData,BOOL bNativFormat )
+    : m_aCond(*this),
+      m_bIsRead(false),
+      m_pSwBaseLink(pSwBaseLink),
+      m_rGrfName(rGrfName),
+      m_bWaitForData(bWaitForData),
+      m_bNativFormat(bNativFormat)
+{
+}
+
+
+ReReadThread::~ReReadThread() {
+}
+
+
+long GrfNodeChanged( void* pLink, void* pCaller ) {
+
+    // is called in the main thread
+    if(!pCaller)
+        return 0;
+
+    ReReadThread* pReReadThread = static_cast<ReReadThread*>(pCaller);
+    SwBaseLink* pSwBaseLink = pReReadThread->getSwBaseLink();
+    if(pSwBaseLink) {
+        uno::Reference<io::XInputStream> xInputStream(
+            pReReadThread->getInputStream());
+        sal_Bool bIsReadOnly(
+            pReReadThread->getIsReadOnly());
+        if(xInputStream.is()) {
+            pSwBaseLink->setStreamToLoadFrom(
+                xInputStream,bIsReadOnly);
+            pSwBaseLink->Update();
+        }
+        pSwBaseLink->m_pReReadThread = 0;
+    }
+
+    pReReadThread->setReRead();
+    return 0;
+}
+
+
+void SAL_CALL ReReadThread::run() {
+    uno::Sequence < beans::PropertyValue > xProps(1);
+    xProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    xProps[0].Value <<= ::rtl::OUString(m_rGrfName);
+    comphelper::MediaDescriptor aMedium( xProps );
+
+    aMedium.addInputStream();
+    m_bIsReadOnly = aMedium.isStreamReadOnly();
+    uno::Reference<io::XInputStream> xInputStream;
+    uno::Reference<io::XStream> xStream;
+    aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= xStream;
+    aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    if( !xInputStream.is() && xStream.is() )
+        xInputStream = xStream->getInputStream();
+
+    if( xInputStream.is() ) {
+        osl::MutexGuard aGuard(m_aMutex);
+        m_xInputStream = xInputStream;
+    }
+
+    //TODO error handling
+    Application* pApp = GetpApp();
+    Link aLink(0,
+               // important that this is 0,
+               // because the main thread might have killed
+               // the node already
+               GrfNodeChanged); // the method
+    pApp->PostUserEvent(aLink,this);
+}
+
+
+void SAL_CALL ReReadThread::onTerminated() {
+    {
+        ::salhelper::ConditionWaiter aCW(m_aCond);
+    }
+    delete this;
+}
+
+
+
 FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
 {
     bSwapIn = TRUE;
@@ -500,13 +691,21 @@ FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
 #if OSL_DEBUG_LEVEL > 1
     {
         String sGrfNm;
-        GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
+        if(GetLinkManager())
+            GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
         int x = 0;
     }
 #endif
 
+    TestBalloonInputStream* pTBIS = 0;
+    if(!m_xInputStreamToLoadFrom.is()) {
+        pTBIS = new TestBalloonInputStream();
+        m_xInputStreamToLoadFrom = pTBIS;
+    }
+
     if( GetObj() )
     {
+        GetObj()->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
         String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
 
 //!! ??? what have we here to do ????
@@ -540,6 +739,11 @@ FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
         bRes = Update();
 
     bSwapIn = FALSE;
+
+    if(pTBIS && pTBIS->isTouched()) {
+        (m_pReReadThread = new ReReadThread(
+            this,GetName(),bWaitForData,bNativFormat))->create();
+    }
     return bRes;
 }
 
@@ -594,6 +798,8 @@ BOOL SwBaseLink::IsInRange( ULONG, ULONG, xub_StrLen, xub_StrLen ) const
     return FALSE;
 }
 
-
-
-
+SwBaseLink::~SwBaseLink()
+{
+    if(m_pReReadThread)
+        m_pReReadThread->releaseSwBaseLink();
+}
