@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:23:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #endif
 
 #include "saveopt.hxx"
+
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include "rtl/instance.hxx"
+#endif
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -730,10 +734,18 @@ void SvtLoadOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames 
 }
 // -----------------------------------------------------------------------
 
+namespace
+{
+    class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
+    {
+    };
+}
+
+// -----------------------------------------------------------------------
 SvtSaveOptions::SvtSaveOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSaveOptions_Impl::ctor()");
@@ -753,7 +765,7 @@ SvtSaveOptions::SvtSaveOptions()
 SvtSaveOptions::~SvtSaveOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !--nRefCount )
     {
         if ( pOptions->pSaveOpt->IsModified() )
