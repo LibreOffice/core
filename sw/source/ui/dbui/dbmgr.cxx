@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:14:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #endif
 
 #include <stdio.h>
+
+#include <com/sun/star/text/NotePrintMode.hpp>
 
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -959,10 +961,40 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
          bRet = FALSE;
     long nStartRow, nEndRow;
     //calculate number of data sets to be printed
-    Sequence<PropertyValue> aViewProperties(1);
+
+    Sequence<PropertyValue> aViewProperties(15);
     PropertyValue* pViewProperties =  aViewProperties.getArray();
     pViewProperties[0].Name = C2U("MailMergeCount");
     pViewProperties[0].Value <<= (sal_Int32)rOpt.nMergeCnt;
+    pViewProperties[1].Name = C2U("PrintGraphics");
+    pViewProperties[1].Value <<= (sal_Bool)rOpt.IsPrintGraphic();
+    pViewProperties[2].Name = C2U("PrintTables");
+    pViewProperties[2].Value <<= (sal_Bool)rOpt.IsPrintTable();
+    pViewProperties[3].Name = C2U("PrintDrawings");
+    pViewProperties[3].Value <<= (sal_Bool)rOpt.IsPrintDraw();
+    pViewProperties[4].Name = C2U("PrintLeftPages");
+    pViewProperties[4].Value <<= (sal_Bool)rOpt.IsPrintLeftPage();
+    pViewProperties[5].Name = C2U("PrintRightPages");
+    pViewProperties[5].Value <<= (sal_Bool)rOpt.IsPrintRightPage();
+    pViewProperties[6].Name = C2U("PrintControls");
+    pViewProperties[6].Value <<= (sal_Bool)rOpt.IsPrintControl();
+    pViewProperties[7].Name = C2U("PrintReversed");
+    pViewProperties[7].Value <<= (sal_Bool)rOpt.IsPrintReverse();
+    pViewProperties[8].Name = C2U("PrintPaperFromSetup");
+    pViewProperties[8].Value <<= (sal_Bool)rOpt.IsPaperFromSetup();
+    pViewProperties[9].Name = C2U("PrintFaxName");
+    pViewProperties[9].Value <<= rOpt.GetFaxName();
+    pViewProperties[10].Name = C2U("PrintAnnotationMode");
+    pViewProperties[10].Value <<= (com::sun::star::text::NotePrintMode) rOpt.GetPrintPostIts();
+    pViewProperties[11].Name = C2U("PrintProspect");
+    pViewProperties[11].Value <<= (sal_Bool)rOpt.IsPrintProspect();
+    pViewProperties[12].Name = C2U("PrintPageBackground");
+    pViewProperties[12].Value <<= (sal_Bool)rOpt.IsPrintPageBackground();
+    pViewProperties[13].Name = C2U("PrintBlackFonts");
+    pViewProperties[13].Value <<= (sal_Bool)rOpt.IsPrintBlackFont();
+    pViewProperties[14].Name = C2U("IsSinglePrintJob");
+    pViewProperties[14].Value <<= (sal_Bool)rOpt.IsPrintSingleJobs();
+
     rView.SetAdditionalPrintOptions(aViewProperties);
     do {
         nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
