@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-30 11:47:52 $
+ *  last change: $Author: tl $ $Date: 2002-03-21 10:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,6 @@ void SmDocShell::SetText(const String& rBuffer)
 
         aText = rBuffer;
         Parse();
-        SetFormulaArranged(FALSE);
         Resize();
         SmViewShell *pViewSh = SmGetActiveView();
         if( pViewSh )
@@ -377,6 +376,7 @@ void SmDocShell::Parse()
         delete pTree;
     pTree = aInterpreter.Parse(aText);
     nModifyCount++;
+    SetFormulaArranged( FALSE );
 }
 
 
