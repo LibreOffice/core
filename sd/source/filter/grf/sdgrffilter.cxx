@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:20:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,15 @@
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
+    mbHideSpell = mrDocument.GetHideSpell();
+    mrDocument.SetHideSpell(TRUE);
 }
 
 // -----------------------------------------------------------------------------
 
 SdGRFFilter::~SdGRFFilter()
 {
+    mrDocument.SetHideSpell(mbHideSpell);
 }
 
 // -----------------------------------------------------------------------------
