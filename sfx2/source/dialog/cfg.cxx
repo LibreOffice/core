@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:32:41 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,6 +806,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     SetUpdateMode(FALSE);
     ClearAll(); // Remove all old entries from treelist box
 
+    if ( xSMGR.is())
+    {
     m_xSMGR           = xSMGR;
     m_xFrame          = xFrame;
     m_sModuleLongName = sModuleLongName;
@@ -817,6 +819,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     InitModule();
     InitBasic();
     InitStyles();
+    }
 
     /*
 
@@ -1093,6 +1096,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     }
 
     // add styles
+    if ( m_xSMGR.is() )
     {
         String sStyle( SfxResId( STR_GROUP_STYLES ) );
         SvLBoxEntry *pEntry = InsertEntry( sStyle, 0 );
