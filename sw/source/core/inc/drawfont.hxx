@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,18 +154,17 @@ private:
     SvBytes aCompType;
     xub_StrLen nInvalidityPos;
     BYTE nDefaultDir;
-    sal_Bool bBidiInfoValid;
+
+    void UpdateBidiInfo( const String& rTxt );
 
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
 
-    inline SwScriptInfo() : nInvalidityPos( 0 ), nDefaultDir( 0 ),
-                            bBidiInfoValid( sal_False ) {};
+    inline SwScriptInfo() : nInvalidityPos( 0 ), nDefaultDir( 0 ) {};
 
     // determines script changes
-    void InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
-                         const OutputDevice& rOut );
-    void UpdateBidiInfo( const String& rTxt );
+    void InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL );
+    void InitScriptInfo( const SwTxtNode& rNode );
 
     // set/get position from which data is invalid
     inline void SetInvalidity( const xub_StrLen nPos );
@@ -173,7 +172,6 @@ public:
 
     // get default direction for paragraph
     inline BYTE GetDefaultDir() const { return nDefaultDir; };
-    inline void SetDefaultDir( BYTE nNew )  { nDefaultDir = nNew; };
 
     // array operations, nCnt refers to array position
     inline USHORT CountScriptChg() const;
@@ -279,7 +277,6 @@ inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
 {
     if ( nPos < nInvalidityPos )
         nInvalidityPos = nPos;
-    bBidiInfoValid = sal_False;
 };
 inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
 inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
@@ -353,7 +350,7 @@ class SwDrawTextInfo
     SwFont *pFnt;
     SwUnderlineFont* pUnderFnt;
     xub_StrLen* pHyphPos;
-    Fraction aZoom;
+//   Fraction aZoom;
     long nLeft;
     long nRight;
     long nKanaDiff;
@@ -483,16 +480,6 @@ public:
     {
         ASSERT( bHyph, "DrawTextInfo: Undefined Hyph Position" );
         return pHyphPos;
-    }
-
-    const Fraction &GetZoom() const
-    {
-        return aZoom;
-    }
-
-    Fraction &GetZoom()
-    {
-        return aZoom;
     }
 
     const XubString &GetText() const
