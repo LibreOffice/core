@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:55:25 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
 #endif
+
 #include "scrrect.hxx"
 
 
@@ -286,8 +287,11 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
 void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed )
 {
     //Zeilennummer ist staerker als der Teiler
-    XubString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
+    const XubString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
                                 : rLineInf.GetDivider() );
+
+    // get script type of line numbering:
+    pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, 0 ) );
 
     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.Len() );
     aDrawInf.SetSpace( 0 );
