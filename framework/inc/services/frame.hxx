@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 12:16:05 $
+ *  last change: $Author: kz $ $Date: 2001-09-12 16:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ class Frame :   // interfaces
         virtual void                                                SAL_CALL getFastPropertyValue               (           css::uno::Any&                                                      aValue              ,
                                                                                                                               sal_Int32                                                         nHandle             ) const;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                      (                                                                                                   );
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo                 (                                                                                                   );
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo                 (                                                                                                   ) throw (::com::sun::star::uno::RuntimeException);
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
