@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iniman.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 21:45:32 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,14 @@ ErrorBox ERRBOX_CHECK_PLZ
     Message[ japanese ] = "“ό—Ν‚µ‚½—X•Φ”Τ†‚Ν•s“KΨ‚Ε‚·B\n”‚ά‚½‚Ν•¶‚Εn‚ί‚Θ‚―‚κ‚Ξ‚Θ‚θ‚ά‚Ή‚ρ\n”‚Ζ•¶‚Ζ½Νί°½‚¨‚ζ‚Ρΐή―Ό­‚Μ‚έg—p‚Ε‚«‚ά‚·B";
     Message[ arabic ] = "ΗαΡγÒ ΗαΘΡνΟν ΅ΗαΠν ήγΚ ΘΕΟΞΗαε΅ ΫνΡ ΥΗαΝ.\nνΜΘ Γδ νΘΟΓ ΘΡήγ Γζ ΘΝΡέ΅\nζνΜΘ Γδ νΝΚζν έήΨ Ϊαμ ΓΡήΗγ΅ ΓΝΡέ΅ ΓΝΡέ γΣΗέΙ΅ ζΤΡΨ έΗΥαΙ.";
     Message[ chinese_traditional ] = "±zΏι¤JªΊ¶l»Ό°ΟΈΉµL®Δ΅C\n¶l»Ό°ΟΈΉ¥²¶·¥Ρ¤@­ΣΌΖ¦r©Ξ¤@­Σ¦r¥ΐ¶}©l΅A\n¦Σ¥B¥u―ΰ¬OΌΖ¦r΅A¦r¥ΐ΅AªΕ®ζ©M³s¦r²Ε΅C";
-    Message[ greek ] = "Ο ταχυδρομικός κωδικός που εισάγατε δεν είναι έγκυρος.\nΠρέπει να ξεκινά με ένα ψηφίο ή με ένα γράμμα και\nμπορεί να περιέχει μόνο ψηφία, γρά?";
+    Message[ greek ] = "Ο ταχυδρομικός κωδικός που εισάγατε δεν είναι έγκυρος.\nΠρέπει να ξεκινά με ένα ψηφίο ή με ένα γράμμα και\nμπορεί να περιέχει μόνο ψηφία, γρά? ";
     Message[ korean ] = "ΐΤ·ΒΗΡ ΏμΖνΉψΘ£΄Β ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΏμΖνΉψΘ£΄Β ΌύΐΪ³ª Ή®ΐΪ·Ξ ½ΓΐΫΗΨΎί ΗΟΈη \nΌύΐΪ, Ή®ΐΪ, °ψΉι ±ΧΈ®°ν  ΄λ½Γ·ΞΈΈ ΐΜ·ηΎξΑ®Ύί ΗΥ΄Ο΄Ω.";
     Message[ turkish ] = "Girilen posta kodu geηerli deπil.\nPosta kodu bir rakam ya da harf ile baώlamalύ ve yalnύzca\nrakam, harf, boώluk ve ayύrma ηizgileri iηermeli.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El cσdigo postal indicado no es vαlido.\nDebe comenzar con un nϊmero o una letra y\nsolo puede contener nϊmeros, letras, espacios y guiones.";
     Message[ finnish ] = "Mδδritetty postinumero on virheellinen.\nPostinumeron ensimmδinen merkki voi olla vain numero tai kirjain ja\npostinumero voi sisδltδδ vain numeroita, kirjaimia, vδlilyφntejδ ja vδliviivoja.";
 };
+
 
 
 
