@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 17:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater()
 void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement)
 {
     using configuration::NodeID;
-    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getTree().getRootNode()) ==
+    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getNode()) ==
                 NodeID(aElement.getTree().getContextTree(),aElement.getTree().getContextNode()),
                 "ERROR: Attaching an unrelated SetElement to a SetInfoAccess");
     aElement.haveNewParent(&aSet);
@@ -127,7 +127,7 @@ void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement)
 bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const& aElementTree)
 {
     using configuration::NodeID;
-    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getTree().getRootNode()) ==
+    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getNode()) ==
                 NodeID(aElementTree.getTree().getContextTree(),aElementTree.getTree().getContextNode()),
                 "ERROR: Attaching an unrelated ElementTree to a SetInfoAccess");
 
