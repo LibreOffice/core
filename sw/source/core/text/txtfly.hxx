@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:50:20 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ public:
     // (ausser bei transparenten Frames) nicht uebergepinselt werden.
     sal_Bool DrawTextOpaque( SwDrawTextInfo &rInf );
 
-    void DrawFlyRect( OutputDevice *pOut, const SwRect &rRect,
+    void DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
                       const SwTxtPaintInfo &rInf, sal_Bool bNoGraphic = sal_False );
 
     // Liefert zurueck, ob die Zeile von einem Frame ueberlappt wird.
