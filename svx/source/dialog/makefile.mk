@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:20:33 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:33:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,14 +81,14 @@ RSCDEFS += -Dause_hack
 
 SRS1NAME=dialogs
 SRC1FILES =  \
-                svuidlg.src \
+        svuidlg.src \
         autocdlg.src \
         connect.src \
         contdlg.src \
         ctredlin.src \
         measure.src \
         dstribut.src \
-        passwd.src	\
+        passwd.src      \
         align.src \
         backgrnd.src \
         bbdlg.src \
@@ -132,24 +132,24 @@ SRC1FILES =  \
         textattr.src \
         thesdlg.src \
         txenctab.src \
-        zoom.src	\
+        zoom.src        \
         dlgctrl.src \
         grfflt.src \
         langbox.src \
         frmdirlbox.src \
         hangulhanjadlg.src \
         commonlingui.src \
-        fontsubs.src				\
+        fontsubs.src                            \
         readonlyimage.src           \
-        opthtml.src					\
-        optgdlg.src					\
-        optmemory.src				\
-        treeopt.src					\
-        optfltr.src					\
-        connpooloptions.src			\
-        dbregister.src				\
-        doclinkdialog.src			\
-        internationaloptions.src	\
+        opthtml.src                                     \
+        optgdlg.src                                     \
+        optmemory.src                           \
+        treeopt.src                                     \
+        optfltr.src                                     \
+        connpooloptions.src                     \
+        dbregister.src                          \
+        doclinkdialog.src                       \
+        internationaloptions.src        \
         macropg.src \
         eventdlg.src \
         cfg.src \
@@ -166,28 +166,9 @@ SRC2FILES =  \
         labdlg.src \
         transfrm.src
 
-#EXCEPTIONSFILES=\
-#	$(SLO)$/connpoolconfig.obj \
-#	$(SLO)$/connpoolsettings.obj \
-#	$(SLO)$/sdbcdriverenum.obj	\
-#	$(SLO)$/optgdlg.obj	\
-#		$(SLO)$/charmap.obj		\
-#		$(SLO)$/_bmpmask.obj	\
-#        $(SLO)$/frmsel.obj   \
-#		$(SLO)$/hltpbase.obj	\
-#		$(SLO)$/hldocntp.obj	\
-#		$(SLO)$/hlmarkwn.obj	\
-#		$(SLO)$/opengrf.obj		\
-#		$(SLO)$/hyphen.obj		\
-#		$(SLO)$/rubydialog.obj 	\
-#		$(SLO)$/thesdlg.obj		\
-#		$(SLO)$/spldlg.obj		\
-#		$(SLO)$/numpages.obj	\
-#		$(SLO)$/splwrap.obj		\
-#		$(SLO)$/hangulhanja.obj
-
-
 EXCEPTIONSFILES=\
+        $(SLO)$/cfg.obj\
+        $(SLO)$/eventdlg.obj \
         $(SLO)$/linkdlg.obj \
         $(SLO)$/pastedlg.obj \
         $(SLO)$/insdlg.obj \
@@ -221,17 +202,13 @@ EXCEPTIONSFILES=\
     $(SLO)$/dbregister.obj				\
     $(SLO)$/doclinkdialog.obj				\
     $(SLO)$/dbregisterednamesconfig.obj \
-    $(SLO)$/scriptdlg.obj \
-    $(SLO)$/selector.obj \
+        $(SLO)$/scriptdlg.obj \
+        $(SLO)$/selector.obj \
     $(SLO)$/showcols.obj \
     $(SLO)$/svxbmpnumvalueset.obj \
-    $(SLO)$/macropg.obj \
-    $(SLO)$/cfg.obj \
+        $(SLO)$/macropg.obj \
     $(SLO)$/optjava.obj \
     $(SLO)$/docrecovery.obj
-
-#	$(SLO)$/docrecoveryservice.obj	\
-
 
 .IF "$(GUI)"=="UNX"
 EXCEPTIONSFILES +=	$(SLO)$/sendreportunx.obj
@@ -255,15 +232,15 @@ SLOFILES=\
     $(SLO)$/opthtml.obj					\
     $(SLO)$/optfltr.obj					\
     $(SLO)$/treeopt.obj \
-                $(SLO)$/autocdlg.obj     \
-                $(SLO)$/cuiexp.obj     \
-                $(SLO)$/dlgfact.obj     \
-                $(SLO)$/svxdlg.obj     \
+        $(SLO)$/autocdlg.obj     \
+        $(SLO)$/cuiexp.obj     \
+        $(SLO)$/dlgfact.obj     \
+        $(SLO)$/svxdlg.obj     \
         $(SLO)$/_contdlg.obj\
         $(SLO)$/iconcdlg.obj\
         $(SLO)$/connect.obj \
         $(SLO)$/connctrl.obj \
-        $(SLO)$/contwnd.obj	\
+        $(SLO)$/contwnd.obj     \
         $(SLO)$/fontlb.obj   \
         $(SLO)$/graphctl.obj \
         $(SLO)$/hyperdlg.obj \
@@ -278,68 +255,68 @@ SLOFILES=\
         $(SLO)$/measctrl.obj \
         $(SLO)$/passwd.obj \
         $(SLO)$/strarray.obj \
-                $(SLO)$/align.obj    \
-                $(SLO)$/backgrnd.obj \
-                $(SLO)$/bbdlg.obj    \
-                $(SLO)$/border.obj   \
-                $(SLO)$/borderconn.obj   \
-                $(SLO)$/chardlg.obj  \
-                $(SLO)$/checklbx.obj \
-                $(SLO)$/dialcontrol.obj    \
-                $(SLO)$/ctredlin.obj \
-                $(SLO)$/dlgctrl.obj \
-                $(SLO)$/dlgctl3d.obj \
-                $(SLO)$/dlgname.obj \
-                $(SLO)$/dlgutil.obj  \
-                $(SLO)$/fntctrl.obj  \
-                $(SLO)$/fontwork.obj \
+        $(SLO)$/align.obj    \
+        $(SLO)$/backgrnd.obj \
+        $(SLO)$/bbdlg.obj    \
+        $(SLO)$/border.obj   \
+        $(SLO)$/borderconn.obj   \
+        $(SLO)$/chardlg.obj  \
+        $(SLO)$/checklbx.obj \
+        $(SLO)$/dialcontrol.obj    \
+        $(SLO)$/ctredlin.obj \
+        $(SLO)$/dlgctrl.obj \
+        $(SLO)$/dlgctl3d.obj \
+        $(SLO)$/dlgname.obj \
+        $(SLO)$/dlgutil.obj  \
+        $(SLO)$/fntctrl.obj  \
+        $(SLO)$/fontwork.obj \
         $(SLO)$/grfpage.obj \
-                $(SLO)$/hdft.obj     \
-                $(SLO)$/impgrf.obj   \
-                $(SLO)$/labdlg.obj \
-                $(SLO)$/langtab.obj \
-                $(SLO)$/langbox.obj \
-                $(SLO)$/wrapfield.obj \
-                $(SLO)$/numfmt.obj   \
-                $(SLO)$/page.obj     \
-                $(SLO)$/pagectrl.obj \
-                $(SLO)$/paragrph.obj \
-                $(SLO)$/paraprev.obj \
+        $(SLO)$/hdft.obj     \
+        $(SLO)$/impgrf.obj   \
+        $(SLO)$/labdlg.obj \
+        $(SLO)$/langtab.obj \
+        $(SLO)$/langbox.obj \
+        $(SLO)$/wrapfield.obj \
+        $(SLO)$/numfmt.obj   \
+        $(SLO)$/page.obj     \
+        $(SLO)$/pagectrl.obj \
+        $(SLO)$/paragrph.obj \
+        $(SLO)$/paraprev.obj \
         $(SLO)$/pfiledlg.obj \
-                $(SLO)$/postdlg.obj  \
+        $(SLO)$/postdlg.obj  \
         $(SLO)$/prtqry.obj \
-                $(SLO)$/relfld.obj   \
-                $(SLO)$/rlrcitem.obj \
-                $(SLO)$/rulritem.obj \
+        $(SLO)$/relfld.obj   \
+        $(SLO)$/rlrcitem.obj \
+        $(SLO)$/rulritem.obj \
         $(SLO)$/simptabl.obj \
-                $(SLO)$/srchxtra.obj \
-                $(SLO)$/srchctrl.obj \
+        $(SLO)$/srchxtra.obj \
+        $(SLO)$/srchctrl.obj \
         $(SLO)$/srchdlg.obj  \
-                $(SLO)$/stddlg.obj   \
-                $(SLO)$/svxbox.obj   \
-                $(SLO)$/svxruler.obj \
-                $(SLO)$/swpossizetabpage.obj \
-                $(SLO)$/tabarea.obj \
-                $(SLO)$/tabline.obj \
-                $(SLO)$/tabstpge.obj \
-                $(SLO)$/textattr.obj \
-                $(SLO)$/textanim.obj \
-                $(SLO)$/tparea.obj   \
-                $(SLO)$/tpbitmap.obj \
-                $(SLO)$/tpcolor.obj  \
-                $(SLO)$/tpgradnt.obj \
-                $(SLO)$/tphatch.obj  \
-                $(SLO)$/tpline.obj \
-                $(SLO)$/tplneend.obj \
-                $(SLO)$/tplnedef.obj \
-                $(SLO)$/tpshadow.obj   \
-                $(SLO)$/transfrm.obj \
-                $(SLO)$/orienthelper.obj    \
-                $(SLO)$/txenctab.obj \
-                $(SLO)$/txencbox.obj \
-                $(SLO)$/zoom.obj	 \
-                $(SLO)$/grfflt.obj	\
-                $(SLO)$/frmdirlbox.obj \
+        $(SLO)$/stddlg.obj   \
+        $(SLO)$/svxbox.obj   \
+        $(SLO)$/svxruler.obj \
+        $(SLO)$/swpossizetabpage.obj \
+        $(SLO)$/tabarea.obj \
+        $(SLO)$/tabline.obj \
+        $(SLO)$/tabstpge.obj \
+        $(SLO)$/textattr.obj \
+        $(SLO)$/textanim.obj \
+        $(SLO)$/tparea.obj   \
+        $(SLO)$/tpbitmap.obj \
+        $(SLO)$/tpcolor.obj  \
+        $(SLO)$/tpgradnt.obj \
+        $(SLO)$/tphatch.obj  \
+        $(SLO)$/tpline.obj \
+        $(SLO)$/tplneend.obj \
+        $(SLO)$/tplnedef.obj \
+        $(SLO)$/tpshadow.obj   \
+        $(SLO)$/transfrm.obj \
+        $(SLO)$/orienthelper.obj    \
+        $(SLO)$/txenctab.obj \
+        $(SLO)$/txencbox.obj \
+        $(SLO)$/zoom.obj         \
+        $(SLO)$/grfflt.obj      \
+        $(SLO)$/frmdirlbox.obj \
         $(SLO)$/commonlingui.obj \
         $(SLO)$/dialmgr.obj \
     $(SLO)$/cuiimapwnd.obj \
@@ -354,11 +331,11 @@ SLOFILES=\
     $(SLO)$/optjsearch.obj  \
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/optctl.obj	\
-    $(SLO)$/svxgrahicitem.obj \
-    $(SLO)$/SpellAttrib.obj  \
-    $(SLO)$/SpellDialog.obj  \
-    $(SLO)$/swframeposstrings.obj\
-    $(SLO)$/swframeexample.obj \
+        $(SLO)$/svxgrahicitem.obj \
+        $(SLO)$/SpellAttrib.obj  \
+        $(SLO)$/SpellDialog.obj  \
+        $(SLO)$/swframeposstrings.obj\
+        $(SLO)$/swframeexample.obj \
     $(SLO)$/svxbmpnumvalueset.obj	\
     $(SLO)$/svxgrahicitem.obj \
     $(SLO)$/frmsel.obj	\
@@ -440,7 +417,7 @@ LIB1OBJFILES= \
     $(SLO)$/cfg.obj	\
     $(SLO)$/framelink.obj	\
     $(SLO)$/framelinkarray.obj
-    
+
 .IF "$(GUI)"=="UNX"
 LIB1OBJFILES +=	$(SLO)$/sendreportunx.obj
 .ELSE
@@ -541,12 +518,12 @@ LIB2OBJFILES= \
     $(SLO)$/page.obj \
     $(SLO)$/postdlg.obj \
     $(SLO)$/grfpage.obj
-    
-.IF "$(GUI)"=="WNT"	
+
+.IF "$(GUI)"=="WNT"
 SLOFILES+=$(SLO)$/winpluginlib.obj
 LIB2OBJFILES+=$(SLO)$/winpluginlib.obj
 .ENDIF
-    
+
 
 # --- Targets -------------------------------------------------------
 
