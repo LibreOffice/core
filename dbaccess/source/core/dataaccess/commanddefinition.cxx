@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: fs $ $Date: 2001-12-06 08:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,32 @@ OCommandDefinition::OCommandDefinition(const Reference< XInterface >& _rxContain
 
     if (m_aConfigurationNode.isValid())
         initializeFromConfiguration();
+}
+
+//--------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OCommandDefinition::getTypes() throw (RuntimeException)
+{
+    return concatSequences(
+        OCommandDefinition_Base::getTypes(),
+        OPropertyContainer::getTypes(),
+        OConfigurationFlushable::getTypes()
+    );
+}
+
+//--------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL OCommandDefinition::getImplementationId() throw (RuntimeException)
+{
+    static ::cppu::OImplementationId* pId = 0;
+    if ( !pId )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !pId )
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 //--------------------------------------------------------------------------

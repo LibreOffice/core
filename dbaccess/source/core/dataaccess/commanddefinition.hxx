@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
+ *  last change: $Author: fs $ $Date: 2001-12-06 08:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,10 @@ namespace dbaccess
 //= OCommandDefinition - a database "document" which describes a query
 //=========================================================================
 
-typedef ::cppu::WeakImplHelper3<
-                    ::com::sun::star::lang::XUnoTunnel,
-                    ::com::sun::star::lang::XServiceInfo,
-                    ::com::sun::star::sdbcx::XRename
-                    > OCommandDefinition_Base;
+typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::lang::XUnoTunnel
+                                ,   ::com::sun::star::lang::XServiceInfo
+                                ,   ::com::sun::star::sdbcx::XRename
+                                >   OCommandDefinition_Base;
 
 class OCommandDefinition    :public OCommandDefinition_Base
                             ,public OCommandBase
@@ -151,6 +150,10 @@ public:
             const ::rtl::OUString& _rElementName,
             const ::utl::OConfigurationTreeRoot& _rConfigRoot
         );
+
+// com::sun::star::lang::XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
