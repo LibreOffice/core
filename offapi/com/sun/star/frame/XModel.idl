@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@
     @see Controller
     @see com::sun::star::view::XSelectionSupplier
  */
-interface XModel: com::sun::star::lang::XComponent
+published interface XModel: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
     /** informs a model about its resource description.
