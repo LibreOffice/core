@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:42:13 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,3 +149,4 @@ void ODataView::Resize()
         m_pToolBox->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
 }
 //------------------------------------------------------------------
+
