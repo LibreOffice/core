@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:40:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ greek ] = "Όνομα του URL";
         QuickHelpText[ korean ] = "URL Name";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Name der URL";
     };
     FixedText FT_URL
     {
@@ -164,6 +165,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ greek ] = "Πλαίσιο συλλογής για URL του Internet";
         QuickHelpText[ korean ] = "Internet URLs";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Sammelbox fόr Internet-URLs";
     };
     ToolBox TB
     {
