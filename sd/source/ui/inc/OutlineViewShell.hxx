@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:38:14 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,6 @@ public:
     virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
 
 protected:
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
-    virtual void UpdateHRuler();
-
     virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
     virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
     virtual Size GetOptimalSizePixel() const;
