@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-12-12 17:00:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include "utf8conv.hxx"
 #include "tokens.h"
 
-extern "C" { yyerror( char * ); }
-extern "C" { YYWarning( char * ); }
+extern "C" { int yyerror( char * ); }
+extern "C" { int YYWarning( char * ); }
 
 // defines to parse command line
 #define STATE_NON       0x0001
@@ -438,7 +438,7 @@ ByteString XRMResParser::GetAttribute( const ByteString &rToken, const ByteStrin
     ByteString sSearch( " " );
     sSearch += rAttribute;
     sSearch += "=";
-    short nPos = sTmp.Search( sSearch );
+    int nPos = sTmp.Search( sSearch );
 
     if ( nPos != STRING_NOTFOUND ) {
         sTmp = sTmp.Copy( nPos );
