@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:00:27 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:35:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,6 @@ TARGET=ofa
 
 RES1FILELIST=\
     $(SRS)$/app.srs \
-    $(SRS)$/svxslots.srs \
-    $(SOLARCOMMONRESDIR)$/sfxslots.srs \
     $(SOLARCOMMONRESDIR)$/svtools.srs \
     $(SOLARCOMMONRESDIR)$/sfx.srs 	\
     $(SOLARCOMMONRESDIR)$/so2.srs 	\
