@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:13:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,9 @@ namespace css = com::sun::star;
 using stoc_javavm::JavaVirtualMachine;
 
 namespace {
+class NoJavaIniException: public css::uno::Exception
+{
+};
 
 class SingletonFactory:
     private cppu::WeakImplHelper1< css::lang::XEventListener >
@@ -494,11 +497,7 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
         urlrcPath= usInstallDir + OUSTR("/share/config/" INI_FILE);
         std::auto_ptr<osl::File> pIni2(new osl::File(urlrcPath));
         if(pIni2->open(OpenFlag_Read) != osl::File::E_None)
-        {
-            throw css::java::JavaNotConfiguredException (
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: can not find " INI_FILE )),
-                0);
-        }
+            throw NoJavaIniException();
         else
             pIniFile= pIni2;
     }
@@ -575,15 +574,22 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
     }
     pIniFile->close();
+
+    //The office can be configured not to use Java. Then a java.ini exists but
+    //the entries RuntimeLib,Home, VMType, Version and SystemClasspath are missing.
+    const rtl::OUString & usRt = pjvm->getRuntimeLib();
+    if (usRt.getLength() == 0)
+        throw css::java::JavaNotConfiguredException();
 }
 
 void getJavaPropsFromEnvironment(stoc_javavm::JVM * pjvm) throw() {
 
     const char * pClassPath = getenv("CLASSPATH");
-    if( pClassPath )
+    //sometimes pClassPath contains only seperator, then we donot call addSystemClasspath
+    rtl::OUString usCP(pClassPath, strlen(pClassPath), osl_getThreadTextEncoding());
+    if ( ! (usCP.getLength() == 1 && usCP[0] == SAL_PATHSEPARATOR))
     {
-        pjvm->addSystemClasspath(rtl::OUString(pClassPath, strlen(pClassPath),
-                                               osl_getThreadTextEncoding()));
+        pjvm->addSystemClasspath(usCP);
     }
     pjvm->setRuntimeLib(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DEF_JAVALIB)));
@@ -834,28 +840,32 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
 #endif
     }
 
-    sal_Bool bPropsFail= sal_False;
+    sal_Bool bPropsFail = sal_False;
     sal_Bool bPropsFail2= sal_False;
     css::java::JavaNotConfiguredException confexc;
     try
     {
+        //JavaNotConfiguredException is rethrown. The user chose not to use java, therefore
+        //we do not look fore settings from the environment.
         getJavaPropsFromConfig(&jvm, xSMgr,xCtx);
+    }
+    catch(NoJavaIniException& e)
+    {
+        //no java.ini. This can be the case when the setup runs and java was used for accessibility etc.
+        bPropsFail= sal_True;
     }
     catch(css::java::JavaNotConfiguredException& e)
     {
-        confexc= e;
-        bPropsFail= sal_True;
+        throw;
     }
     catch(css::uno::Exception & exception)
     {
 #if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("javavm.cxx: couldn't use configuration cause of >%s<", message.getStr());
+        OSL_TRACE("javavm.cxx: unexspected exception: >%s<", message.getStr());
 #endif
-        bPropsFail2= sal_True;
     }
-
-    if( bPropsFail ||bPropsFail2)
+    if( bPropsFail)
     {
         getJavaPropsFromEnvironment(&jvm);
         // at this point we have to find out if there is a classpath. If not
@@ -863,17 +873,22 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
         rtl::OUString usRuntimeLib= jvm.getRuntimeLib();
         rtl::OUString usUserClasspath= jvm.getUserClasspath();
         rtl::OUString usSystemClasspath= jvm.getSystemClasspath();
-        if( usUserClasspath.getLength() == 0 && usSystemClasspath.getLength() == 0)
+        if (usSystemClasspath.getLength() == 0)
         {
-            if (bPropsFail)
-                throw confexc;
-            throw css::java::JavaNotConfiguredException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("There is neither a java.ini (or javarc) " \
-                                                       "and there are no environment variables set which " \
-                                                       "contain configuration data")), 0);
+            throw css::java::JavaNotConfiguredException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "There is neither a java.ini (or javarc) " \
+                "and there are no environment variables set which " \
+                "contain configuration data")), 0);
         }
+<<<<<<< javavm.cxx
 
+=======
+>>>>>>> 1.52.2.1.16.2
     }
+<<<<<<< javavm.cxx
 
+=======
+>>>>>>> 1.52.2.1.16.2
     try {
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
@@ -1060,14 +1075,14 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             catch (css::java::JavaNotConfiguredException & rException)
             {
                 if (!askForRetry(css::uno::makeAny(rException)))
-                    throw;
+                    return css::uno::Any();
                 continue; // retry
             }
-
             // This is the second attempt to create Java.  m_bDontCreateJvm is
             // set which means instantiating the JVM might crash.
             if (m_bDontCreateJvm)
-                throw css::uno::RuntimeException();
+                //throw css::uno::RuntimeException();
+                return css::uno::Any();
 
             if (!aJvm.isEnabled())
             {
@@ -1078,7 +1093,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                             " Java is deactivated in the configuration")),
                     static_cast< cppu::OWeakObject * >(this));
                 if (!askForRetry(css::uno::makeAny(aException)))
-                    throw aException;
+                    //throw aException;
+                    return css::uno::Any();
                 continue; // retry
             }
 
@@ -1139,8 +1155,9 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                                 static_cast<
                                   css::java::JavaVMCreationFailureException * >(
                                         0))))
-                        cppu::throwException(rException.TargetException);
-                    throw;
+                        //cppu::throwException(rException.TargetException);
+                    //throw;
+                    return css::uno::Any();
                 }
                 continue; // retry
             }
