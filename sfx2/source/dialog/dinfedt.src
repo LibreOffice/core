@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:30:26 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_DOCINFO_EDT
     Text [ italian ] = "Modifica informazioni nomi" ;
     Text [ portuguese_brazilian ] = "Editar nomes de info" ;
     Text [ portuguese ] = "Editar nomes das informações" ;
-    Text [ finnish ] = "Muokkaa tietonimiä" ;
+    Text [ finnish ] = "Muokkaa kenttänimiä" ;
     Text [ danish ] = "Rediger infonavne" ;
     Text [ french ] = "Édition des noms de champ" ;
     Text [ swedish ] = "Redigera informationsnamn" ;
@@ -123,7 +123,7 @@ ModalDialog DLG_DOCINFO_EDT
         Text [ italian ] = "Nomi" ;
         Text [ portuguese_brazilian ] = "Nomes" ;
         Text [ portuguese ] = "Nomes" ;
-        Text [ finnish ] = "~Nimet" ;
+        Text [ finnish ] = "Nimet" ;
         Text [ danish ] = "Navne" ;
         Text [ french ] = "Noms" ;
         Text [ swedish ] = "Namn" ;
