@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-26 11:21:25 $
+ *  last change: $Author: aw $ $Date: 2002-11-26 15:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,14 +468,33 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         aP-=pPV->GetOffset();
         // Ringsum die TextEditArea ein Rand zum Selektieren ohne Textedit
         Rectangle aBoundRect(pHitObj->GetBoundRect());
-        long nSchlauchTol=nHitTolLog;
-        if (pOut!=NULL) nSchlauchTol=pOut->PixelToLogic(Size(2,0)).Width();
-        aBoundRect.Left()+=nSchlauchTol;
-        aBoundRect.Top()+=nSchlauchTol;
-        aBoundRect.Right()+=nSchlauchTol;
-        aBoundRect.Bottom()+=nSchlauchTol;
-        BOOL bSchlauchHit=(aBoundRect.GetWidth()-1<=nSchlauchTol || aBoundRect.GetWidth()-1<=nSchlauchTol) && !aBoundRect.IsInside(aP);
-        if (!bSchlauchHit) {
+
+        // #105130# Force to SnapRect when Fontwork
+        if(pHitObj->ISA(SdrTextObj) && ((SdrTextObj*)pHitObj)->IsFontwork())
+        {
+            aBoundRect = pHitObj->GetSnapRect();
+        }
+
+        // #105130# Old test for hit on BoundRect is completely wrong
+        // and never worked, doing it new here.
+        sal_Int32 nTolerance(nHitTolLog);
+        sal_Bool bBoundRectHit(sal_False);
+
+        if(pOut)
+        {
+            nTolerance = pOut->PixelToLogic(Size(2, 0)).Width();
+        }
+
+        if( (aP.X() >= aBoundRect.Left() - nTolerance && aP.X() <= aBoundRect.Left() + nTolerance)
+         || (aP.X() >= aBoundRect.Right() - nTolerance && aP.X() <= aBoundRect.Right() + nTolerance)
+         || (aP.Y() >= aBoundRect.Top() - nTolerance && aP.Y() <= aBoundRect.Top() + nTolerance)
+         || (aP.Y() >= aBoundRect.Bottom() - nTolerance && aP.Y() <= aBoundRect.Bottom() + nTolerance))
+        {
+            bBoundRectHit = sal_True;
+        }
+
+        if(!bBoundRectHit)
+        {
             BOOL bTEHit=pHitObj->IsTextEditHit(aP,0,&pPV->GetVisibleLayers());
 
             // TextEdit an Objekten im gesperrten Layer
