@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:23 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,6 @@ void SplitWindow::ImplSetWindowSize( long nDelta )
     Size aSize = GetSizePixel();
     if ( meAlign == WINDOWALIGN_TOP )
     {
-        maDragRect.Bottom() -= nDelta;
         aSize.Height() += nDelta;
         SetSizePixel( aSize );
     }
@@ -1458,7 +1457,6 @@ void SplitWindow::ImplSetWindowSize( long nDelta )
     }
     else if ( meAlign == WINDOWALIGN_LEFT )
     {
-        maDragRect.Right() -= nDelta;
         aSize.Width() += nDelta;
         SetSizePixel( aSize );
     }
