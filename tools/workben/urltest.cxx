@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:14:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1525,6 +1525,64 @@ main()
         bSuccess &= assertEqual(
             url, url,
             rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+    }
+
+    if (true) {
+        rtl::OUString path;
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/a/b/c"));
+        bSuccess &= assertEqual(
+            path,
+            rtl::OUString(
+                INetURLObject(path, INetURLObject::FSYS_DETECT).GetMainURL(
+                    INetURLObject::NO_DECODE)),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///a/b/c")));
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a\\b\\c"));
+        bSuccess &= assertEqual(
+            path,
+            rtl::OUString(
+                INetURLObject(path, INetURLObject::FSYS_DETECT).GetMainURL(
+                    INetURLObject::NO_DECODE)),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///a/b/c")));
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a:b:c"));
+        bSuccess &= assertEqual(
+            path, INetURLObject(path, INetURLObject::FSYS_DETECT).HasError(),
+            true);
+        bSuccess &= assertEqual(
+            path,
+            rtl::OUString(
+                INetURLObject(
+                    path,
+                    INetURLObject::FSysStyle(
+                        INetURLObject::FSYS_DETECT | INetURLObject::FSYS_MAC)).
+                GetMainURL(INetURLObject::NO_DECODE)),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///a/b/c")));
+        rtl::OUString url;
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/a/b/c"));
+        bSuccess &= assertEqual(
+            url,
+            rtl::OUString(
+                INetURLObject(url, INET_PROT_HTTP).GetMainURL(
+                    INetURLObject::NO_DECODE)),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///a/b/c")));
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a:\\b\\c"));
+        bSuccess &= assertEqual(
+            url,
+            rtl::OUString(
+                INetURLObject(url, INET_PROT_HTTP).GetMainURL(
+                    INetURLObject::NO_DECODE)),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///a:/b/c")));
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a:b:c"));
+        bSuccess &= assertEqual(
+            url, INetURLObject(url, INET_PROT_HTTP).HasError(), true);
+        bSuccess &= assertEqual(
+            url,
+            (INetURLObject(
+                url, INET_PROT_HTTP, INetURLObject::WAS_ENCODED,
+                RTL_TEXTENCODING_UTF8,
+                INetURLObject::FSysStyle(
+                    INetURLObject::FSYS_DETECT | INetURLObject::FSYS_MAC)).
+             HasError()),
+            true);
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
