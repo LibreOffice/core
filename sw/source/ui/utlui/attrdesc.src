@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-07 19:17:38 $
+ *  last change: $Author: rt $ $Date: 2001-04-12 07:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ String STR_NO_CHARFMT
     Text [ english_us ] = "No Character Style" ;
     Text [ italian ] = "Senza modello di carattere" ;
     Text [ spanish ] = "El estilo de carácter no existe" ;
-    Text [ french ] = "Pas de style de caractère" ;
+    Text [ french ] = "Pas de style de caractères" ;
     Text [ dutch ] = "geen opmaakprofiel" ;
     Text [ swedish ] = "ingen teckenformatmall" ;
     Text [ danish ] = "ingen tegntypografi" ;
