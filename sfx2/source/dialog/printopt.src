@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:30:23 $
+ *  last change: $Author: ka $ $Date: 2001-07-24 15:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 146, 51 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
-        Text = "Fabverlauf~sstreifen" ;
+        Text = "Farbverlauf~sstreifen" ;
         Text [ ENGLISH ] = "Gradient ~stripes" ;
         Text[ english_us ] = "Gradient ~stripes";
         Text[ portuguese ] = "Faixas de gradação";
@@ -340,7 +340,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ turkish ] = "Gradient ~stripes";
         Text[ arabic ] = "Gradient ~stripes";
         Text[ catalan ] = "Gradient ~stripes";
-        Text[ finnish ] = "Fabverlauf~sstreifen";
+        Text[ finnish ] = "Farbverlauf~sstreifen";
     };
     NumericField NF_REDUCEGRADIENTS_STEPCOUNT
     {
