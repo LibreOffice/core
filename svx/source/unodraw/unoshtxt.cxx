@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 09:17:22 $
+ *  last change: $Author: cl $ $Date: 2001-06-20 15:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _SVX_UNOFOROU_HXX
 #include <unoforou.hxx>
+#endif
+#ifndef _OUTLOBJ_HXX
+#include "outlobj.hxx"
 #endif
 #include "svdotext.hxx"
 #include "svdpage.hxx"
@@ -169,6 +172,8 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
         }
         else
         {
+            sal_Bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
+
             // set objects style sheet on empty outliner
             SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)pObj->GetModel()->GetStyleSheetPool();
             if( pPool )
@@ -177,6 +182,9 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
             SfxStyleSheet* pStyleSheet = pObj->GetPage()->GetTextStyleSheetForObject( pObj );
             if( pStyleSheet )
                 pOutliner->SetStyleSheet( 0, pStyleSheet );
+
+            if( bVertical )
+                pOutliner->SetVertical( sal_True );
         }
 
         bDataValid = TRUE;
