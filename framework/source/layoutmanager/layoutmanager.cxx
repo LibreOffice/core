@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:20:16 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3218,6 +3218,13 @@ throw ( RuntimeException )
         m_aDockingArea     = css::awt::Rectangle();
         m_xContainerWindow = m_xDockingAreaAcceptor->getContainerWindow();
         m_xContainerWindow->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+
+        // #i37884# set initial visibility state - in the plugin case the container window is already shown
+        // and we get no notification anymore
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+        if( pContainerWindow )
+            m_bParentWindowVisible = pContainerWindow->IsVisible();
 
         css::uno::Reference< css::awt::XWindowPeer > xParent( m_xContainerWindow, UNO_QUERY );
         xTopDockWindow = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
