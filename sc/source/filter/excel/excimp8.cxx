@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-07 15:15:49 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 11:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,7 +1944,7 @@ void ImportExcel8::Cellmerging( void )
 
     aIn >> n;
 
-    DBG_ASSERT( aIn.GetRecLeft() >= (ULONG)(2 + n * 8), "*ImportExcel8::Cellmerging(): in die Hose!" );
+    DBG_ASSERT( aIn.GetRecLeft() >= (ULONG)(n * 8), "*ImportExcel8::Cellmerging(): in die Hose!" );
 
     while( n )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 11:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1797,6 +1797,7 @@ void ImportExcel::Row34( void )
 
         if( nGrbit & EXC_ROW_GHOSTDIRTY )
         {
+            nXF &= EXC_ROW_XFMASK;
             for( UINT16 n = 0 ; n <= MAXCOL ; n++ )
                 pFltTab->SetXF( n, nRow, nXF, TRUE );
         }

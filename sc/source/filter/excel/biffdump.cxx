@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:14:36 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 11:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,7 +987,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
         else
             aT += " [";
 
-        __AddHex( aT, (UINT16)nL );
+        if( bReadContRecs )
+            __AddHex( aT, nL );
+        else
+            __AddHex( aT, (UINT16)nL );
         aT += "]";
         if( !bSkipOffset )
         {

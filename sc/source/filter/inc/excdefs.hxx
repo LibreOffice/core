@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-07 15:16:18 $
+ *  last change: $Author: dr $ $Date: 2001-02-08 11:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,7 @@
 #define EXC_ROW_ZEROHEIGHT          0x0020
 #define EXC_ROW_UNSYNCED            0x0040
 #define EXC_ROW_GHOSTDIRTY          0x0080
+#define EXC_ROW_XFMASK              0x0FFF
 
 // outline
 #define EXC_ROW_LEVELFLAGS(nOL)     (nOL & 0x0007)
