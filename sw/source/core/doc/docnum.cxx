@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 14:25:47 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,7 +1659,6 @@ BOOL lcl_IsNumbering(sal_Int16 eNumberType)
     return bResult;
 }
 
-#if 0
 const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                                         BOOL bForward,
                                         BOOL bNum,
@@ -1717,7 +1716,6 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
     return pResult;
 }
 // <- #i23731#
-#endif
 
 BOOL SwDoc::GotoPrevNum( SwPosition& rPos, BOOL bOverUpper,
                             BYTE* pUpper, BYTE* pLower  )
@@ -2922,3 +2920,46 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
         pRule->SetInvalidRule( FALSE );
 }
 // <- #111955#
+
+// #i23726#
+BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
+{
+    BOOL bResult = FALSE;
+    SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+
+    if (pTxtNode)
+    {
+        SwNumRule * pNumRule = pTxtNode->GetNumRule();
+
+        if (pNumRule)
+        {
+            SwNumRuleInfo aNumInfo(pNumRule->GetName());
+            aNumInfo.MakeList(*this);
+
+            if (aNumInfo.GetList().Count() > 0 &&
+                aNumInfo.GetList().GetObject(0) == pTxtNode)
+                bResult = TRUE;
+        }
+    }
+
+    return bResult;
+}
+
+// #i23726#
+void SwDoc::IndentNumRule(SwPosition & rPos, short nAmount)
+{
+    BOOL bResult = FALSE;
+    SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+
+    if (pTxtNode)
+    {
+        SwNumRule * pNumRule = pTxtNode->GetNumRule();
+
+        if (pNumRule)
+        {
+            pNumRule->Indent(nAmount);
+
+            UpdateNumRule();
+        }
+    }
+}
