@@ -59,6 +59,7 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
+        setPreferredSize(new java.awt.Dimension(500, 300));
         jLabel1.setText("Parcel Recipe Name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
