@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:10:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 14:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,6 @@ namespace dbaui
         ,m_aSuppressVersionColumns(this, ResId(CB_SUPPRESVERSIONCL))
         ,m_bCatalogAtStart      (sal_True)
         ,m_pAdminDialog         (NULL)
-        ,m_pNotifier            (NULL)
     {
         m_aTablesList.SetCheckHandler(getControlModifiedLink());
         m_aSuppressVersionColumns.SetClickHdl(getControlModifiedLink());
@@ -215,12 +214,25 @@ namespace dbaui
         }
         catch (RuntimeException&) { }
 
-        if ( m_pNotifier )
+        retireNotifiers();
+    }
+
+    //------------------------------------------------------------------------
+    void OTableSubscriptionPage::retireNotifiers()
+    {
+        for (   AdapterArrayIterator aLoop = m_aNotifiers.begin();
+                aLoop != m_aNotifiers.end();
+                ++aLoop
+            )
         {
-            m_pNotifier->dispose();
-            m_pNotifier->release();
-            m_pNotifier = NULL;
+            if ( *aLoop )
+            {
+                ( *aLoop )->dispose();
+                ( *aLoop )->release();
+                ( *aLoop ) = NULL;
+            }
         }
+        m_aNotifiers.clear( );
     }
 
     //------------------------------------------------------------------------
@@ -298,6 +310,24 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
+    void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter )
+    {
+        if (!_rTableFilter.getLength())
+        {   // no tables visible
+            CheckAll(sal_False);
+        }
+        else
+        {
+            if ((1 == _rTableFilter.getLength()) && _rTableFilter[0].equalsAsciiL("%", 1))
+            {   // all tables visible
+                CheckAll(sal_True);
+            }
+            else
+                implCheckTables( _rTableFilter );
+        }
+    }
+
+    //-------------------------------------------------------------------------
     void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -324,19 +354,7 @@ namespace dbaui
         if (pSuppress)
             bSuppressVersionColumns = pSuppress->GetValue();
 
-        if (!aTableFilter.getLength())
-        {   // no tables visible
-            CheckAll(sal_False);
-        }
-        else
-        {
-            if ((1 == aTableFilter.getLength()) && aTableFilter[0].equalsAsciiL("%", 1))
-            {   // all tables visible
-                CheckAll(sal_True);
-            }
-            else
-                implCheckTables(aTableFilter);
-        }
+        implCompleteTablesCheck( aTableFilter );
 
         // expand the first entry by default
         SvLBoxEntry* pExpand = m_aTablesList.getAllObjectsEntry();
@@ -384,12 +402,7 @@ namespace dbaui
         }
         catch (RuntimeException&) { }
 
-        if ( m_pNotifier )
-        {
-            m_pNotifier->dispose();
-            m_pNotifier->release();
-            m_pNotifier = NULL;
-        }
+        retireNotifiers();
 
         return nResult;
     }
@@ -447,26 +460,9 @@ namespace dbaui
                     m_aTablesList.GetModel()->SetSortMode(SortAscending);
                     m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
-                    Reference< XNameAccess > xTablesContainer;
-                    m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams, xTablesContainer);
+                    m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
                     if ( m_xCurrentConnection.is() )
                     {
-                        // add a listener to the tables container
-                        if ( m_pNotifier )
-                        {
-                            DBG_ERROR( "OTableSubscriptionPage::ActivatePage: already have a notifier!" );
-                            m_pNotifier->dispose();
-                            m_pNotifier->release();
-                            m_pNotifier = NULL;
-                        }
-
-                        Reference< XContainer > xTables( xTablesContainer, UNO_QUERY );
-                        if ( xTables.is() )
-                        {
-                            m_pNotifier = new OContainerListenerAdapter( this, xTables );
-                            m_pNotifier->acquire( );
-                        }
-
                         if (m_pAdminDialog)
                             m_pAdminDialog->successfullyConnected();
                     }
@@ -990,7 +986,46 @@ namespace dbaui
             case ID_NEW_TABLE_DESIGN:
             {
                 OTableDesignAccess aDispatcher(m_xORB);
-                aDispatcher.create(m_sDSName, Reference< XConnection >());
+                Reference< XComponent > xComp = aDispatcher.create(m_sDSName, Reference< XConnection >());
+                OSL_ENSURE( xComp.is(), "OTableSubscriptionPage::doToolboxAction: could not load the component!" );
+
+                if ( xComp.is() )
+                {   // successfully loaded
+
+                    // add a container listener to the tables container the component is about to extend ....
+                    try
+                    {
+                        // get the property set of the controller we just loaded
+                        Reference< XPropertySet > xCompProps( xComp, UNO_QUERY );
+                        Reference< XPropertySetInfo > xPSI;
+                        if ( xCompProps.is() ) xPSI = xCompProps->getPropertySetInfo();
+                        OSL_ENSURE( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_ACTIVECONNECTION ),
+                            "OTableSubscriptionPage::doToolboxAction: invalid controller!" );
+
+                        // get the connection the controller is working with
+                        if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_ACTIVECONNECTION ) )
+                        {
+                            Reference< XTablesSupplier > xSuppTables;
+                            xCompProps->getPropertyValue( PROPERTY_ACTIVECONNECTION ) >>= xSuppTables;
+                            OSL_ENSURE( xSuppTables.is(), "OTableSubscriptionPage::doToolboxAction: the controller has an invalid connection!" );
+                            if ( xSuppTables.is() )
+                            {
+                                Reference< XContainer > xTables( xSuppTables->getTables(), UNO_QUERY );
+                                OSL_ENSURE( xTables.is(), "OTableSubscriptionPage::doToolboxAction: invalid tables container!" );
+                                // create a notifier for the container so we know if a table is inserted
+                                if ( xTables.is() )
+                                {
+                                    OContainerListenerAdapter* pNotifier = new OContainerListenerAdapter( this, xTables );
+                                    pNotifier->acquire( );
+                                    m_aNotifiers.push_back( pNotifier );
+                                }
+                            }
+                        }
+                    }
+                    catch( const Exception& )
+                    {
+                    }
+                }
             }
             break;
 
@@ -1199,7 +1234,23 @@ namespace dbaui
 
         m_aTablesList.addedTable( m_xCurrentConnection, sName, _rEvent.Element );
 
-        // TODO: update the check states (the newly table is probably included in the filter)
+        // update the checks from the table filter set on the data source
+        try
+        {
+            Reference< XPropertySet > xDS = m_pAdminDialog->getCurrentDataSource();
+            if ( xDS.is() )
+            {
+                Sequence< ::rtl::OUString > aTableFilter;
+                xDS->getPropertyValue( PROPERTY_TABLEFILTER ) >>= aTableFilter;
+                implCompleteTablesCheck( aTableFilter );
+            }
+        }
+        catch( const Exception& )
+        {
+        }
+
+        // update the check states
+        m_aTablesList.CheckButtons();
     }
 
     //------------------------------------------------------------------------
@@ -1213,7 +1264,7 @@ namespace dbaui
 
         m_aTablesList.removedTable( m_xCurrentConnection, sName );
 
-        // TODO: update the check states
+        m_aTablesList.CheckButtons();
     }
 
     //------------------------------------------------------------------------
@@ -1225,6 +1276,23 @@ namespace dbaui
     //------------------------------------------------------------------------
     void OTableSubscriptionPage::_disposing(const EventObject& _rSource) throw( RuntimeException)
     {
+        Reference< XContainer > xSource( _rSource.Source, UNO_QUERY );
+
+        // look for the notifier which caused this
+        for (   AdapterArrayIterator aSearch = m_aNotifiers.begin();
+                aSearch != m_aNotifiers.end();
+                ++aSearch
+            )
+        {
+            if  (   *aSearch
+                &&  ( *aSearch )->getContainer().get() == xSource.get()
+                )
+            {
+                ( *aSearch )->release();
+                m_aNotifiers.erase( aSearch );
+                break;
+            }
+        }
         // not interested in
     }
 
@@ -1235,6 +1303,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/08/14 12:10:12  fs
+ *  preparations for #86945# (be a container listener ...)
+ *
  *  Revision 1.3  2001/08/01 08:31:26  fs
  *  #88530# collectDetailedSelection: don't change anything if not connected
  *

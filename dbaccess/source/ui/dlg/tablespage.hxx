@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:10:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 14:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -106,8 +109,9 @@ namespace dbaui
         ODbAdminDialog*         m_pAdminDialog;     /** needed for translating an SfxItemSet into Sequence< PropertyValue >
                                                         (for building an XConnection)
                                                     */
-        ::osl::Mutex                    m_aNotifierMutex;
-        OContainerListenerAdapter*      m_pNotifier;
+        DECLARE_STL_VECTOR( OContainerListenerAdapter*, AdapterArray );
+        ::osl::Mutex            m_aNotifierMutex;
+        AdapterArray            m_aNotifiers;
 
         ::rtl::OUString         m_sDSName;
 
@@ -203,6 +207,12 @@ namespace dbaui
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
+        void retireNotifiers();
+
+        // checks the tables according to the filter given
+        // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...
+        void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter );
+
         // OContainerListener
         virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
         virtual void _elementRemoved( const ::com::sun::star::container::ContainerEvent& _Event ) throw(::com::sun::star::uno::RuntimeException);
@@ -219,6 +229,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/14 12:10:12  fs
+ *  preparations for #86945# (be a container listener ...)
+ *
  *  Revision 1.1  2001/05/29 09:59:46  fs
  *  initial checkin - outsourced the class from commonpages
  *
