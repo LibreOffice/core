@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 12:47:48 $
+ *  last change: $Author: os $ $Date: 2002-05-27 10:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,60 +134,18 @@ TabPage TP_FRM_WRAP
         Pos = MAP_APPFONT ( 48 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text = "~Links" ;
-        Text [ ENGLISH ] = "~Left" ;
-        Text [ english_us ] = "~Left" ;
         TopImage = True ;
-        Text [ dutch ] = "~Links" ;
-        Text [ italian ] = "Sinistra" ;
-        Text [ spanish ] = "Iz~quierda" ;
-        Text [ french ] = "¿ gauche" ;
-        Text [ swedish ] = "V~‰nster" ;
-        Text [ danish ] = "Venstre" ;
-        Text [ portuguese ] = "~Esquerda" ;
-        Text [ portuguese_brazilian ] = "~Links" ;
-        Text[ chinese_simplified ] = "Â∑¶(~L)";
-        Text[ russian ] = "—ÎÂ‚‡";
-        Text[ polish ] = "Z le~wej";
-        Text[ japanese ] = "Â∑¶(~L)";
-        Text[ chinese_traditional ] = "Â∑¶(~L)";
-        Text[ arabic ] = "≈·Ï «·Ì”«—";
-        Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
-        Text[ korean ] = "ÏôºÏ™Ω(~L)";
-        Text[ turkish ] = "So~l";
-        Text[ catalan ] = "Iz~quierda";
-        Text[ finnish ] = "~Vasen:";
-        Text[ thai ] = "~‡∏ã‡πâ‡∏≤‡∏¢";
+        Text = "Vor" ;
+        Text [ english_us ] = "B~efore" ;
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
         Pos = MAP_APPFONT ( 90 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text = "~Rechts" ;
-        Text [ ENGLISH ] = "~Right" ;
-        Text [ english_us ] = "R~ight" ;
         TopImage = True ;
-        Text [ dutch ] = "~Rechts" ;
-        Text [ italian ] = "Destra" ;
-        Text [ spanish ] = "~Derecha" ;
-        Text [ french ] = "¿ droite" ;
-        Text [ swedish ] = "Hˆ~ger" ;
-        Text [ danish ] = "H¯jre" ;
-        Text [ portuguese ] = "~Direita" ;
-        Text [ portuguese_brazilian ] = "~Rechts" ;
-        Text[ chinese_simplified ] = "Âè≥(~I)";
-        Text[ russian ] = "—Ô‡‚‡";
-        Text[ polish ] = "Z prawej";
-        Text[ japanese ] = "Âè≥(~I)";
-        Text[ chinese_traditional ] = "Âè≥(~I)";
-        Text[ arabic ] = "≈·Ï «·Ì„Ì‰";
-        Text[ greek ] = "ƒÂÓÈ‹";
-        Text[ korean ] = "Ïò§Î•∏Ï™Ω(~I)";
-        Text[ turkish ] = "Sa~";
-        Text[ catalan ] = "~Derecha";
-        Text[ finnish ] = "~Oikea";
-        Text[ thai ] = "‡∏Ç~‡∏ß‡∏≤";
+        Text = "Hinter" ;
+        Text [ english_us ] = "~After" ;
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
@@ -669,5 +627,6 @@ TabPage TP_FRM_WRAP
     };
 
 };
+
 
 
