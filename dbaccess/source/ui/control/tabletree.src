@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 15:24:36 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ italian ] = "Verificare le impostazioni attuali; in particolare quelle in riferimento al nome utente e password.";
     Text[ danish ] = "Kontroller venligst de aktuelle indstillinger, f.eks. med hensyn til brugernavn og adgangskode.";
     Text[ swedish ] = "Kontrollera de aktuella inställningarna, t.ex. med avseende på användarnamn och lösenord.";
-    Text[ polish ] = "Proszê sprawdziæ aktualne konfiguracje, n.p. nazwê u¿ytkownika i has³o.";
+    Text[ polish ] = "SprawdŸ bie¿¹ce konfiguracje, np. nazwê u¿ytkownika i has³o.";
     Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ japanese ] = "Õ°»Ş°–¼‚âÊß½Ü°ÄŞ‚È‚ÇŒ»İİ’è‚³‚ê‚Ä‚¢‚é“à—e‚ğ‚à‚¤ˆê“xÁª¯¸‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ korean ] = "ÇöÀçÀÇ ¼³Á¤À» Á¡°ËÇÏ½Ê½Ã¿À,  ¿¹¸¦ µé¸é »ç¿ëÀÚ ÀÌ¸§/ ÆĞ½º¿öµå¿Í °ü·ÃÇØ¼­.";
@@ -251,7 +251,7 @@ String STR_NOTABLEINFO
 {
     Text = "Die Verbindung wurde erfolgreich hergestellt, aber es konnten keine Informationen über Tabellen in der Datenbank ermittelt werden.";
     Text [ english ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
-    Text [ english_us ] = "Successfully connected, but information about databank tables is not available.";
+    Text [ english_us ] = "Successfully connected, but information about database tables is not available.";
     Text[ portuguese ] = "A ligação foi estabelecida, mas foi impossível encontrar informações sobre tabelas na base de dados.";
     Text[ russian ] = "Ñîåäèåíåíèå óñïåøíî ñîçäàíî, íî èíôîğìàöèÿ î òàáëèöàõ â áàçå äàííûõ íå äîñòóïíà.";
     Text[ greek ] = "Ç óıíäåóç ğİôõ÷å áëëÜ äåí Şôáí äõíáôüí íá ğñïóäéïñéóôïıí ğëçñïöïñßåò ó÷åôéêÜ ìå ğßíáêåò óôç âÜóç äåäïìİíùí.";
@@ -261,7 +261,7 @@ String STR_NOTABLEINFO
     Text[ italian ] = "Il collegamento è stato realizzato tuttavia non è stato possibile trasmettere le informazioni relative alle tabelle nel database.";
     Text[ danish ] = "Forbindelsen er blevet oprettet; men det var ikke muligt at hente informationer om tabeller i databasen.";
     Text[ swedish ] = "Förbindelsen upprättades men det gick inte att få fram någon information om tabeller i databasen.";
-    Text[ polish ] = "Po³¹czenie zosta³o pomy?lnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
+    Text[ polish ] = "Po³¹czenie zosta³o pomyœlnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
     Text[ portuguese_brazilian ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ japanese ] = "³í‚ÉÚ‘±‚Å‚«‚Ü‚µ‚½‚ªAÃŞ°ÀÍŞ°½‚ÌÃ°ÌŞÙ‚ÉŠÖ‚·‚éî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB";
     Text[ korean ] = "¿¬°áÀº ¼º°øÀûÀ¸·Î ±¸ÃàµÇ¾úÁö¸¸, Ç¥ ±×¸®°í/¶Ç´Â º¸±â¿¡ ´ëÇÑ Á¤º¸¸¦ ¼öÁıÇÏÁö ¸øÇß½À´Ï´Ù.";
@@ -308,13 +308,13 @@ String STR_ALL_VIEWS
     Text[ dutch ] = "Alle tabelmodi";
     Text[ french ] = "Toutes les vues";
     Text[ spanish ] = "Todas las visualizaciones de tablas";
-    Text[ italian ] = "Tutte le viste di tabella";
+    Text[ italian ] = "Tutte le viste di tabelle";
     Text[ danish ] = "All views";
     Text[ swedish ] = "Alla tabellvyer";
     Text[ polish ] = "Wszystkie widoki tabeli";
     Text[ portuguese_brazilian ] = "All views";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙËŞ­°";
-    Text[ korean ] = "¸ğµç ½ÃÆ® º¸±â";
+    Text[ korean ] = "¸ğµç Å×ÀÌºí º¸±â";
     Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñÊÓÍ¼";
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æÀËµø";
     Text[ turkish ] = "All views";
@@ -333,13 +333,13 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ dutch ] = "Alle tabellen en tabelmodi";
     Text[ french ] = "Toutes les tables et vues";
     Text[ spanish ] = "Todas las tablas y visualizaciones de tablas";
-    Text[ italian ] = "Tutte le tabelle e le vista tabelle";
+    Text[ italian ] = "Tutte le tabelle e le viste di tabelle";
     Text[ danish ] = "All tables and views";
     Text[ swedish ] = "Alla tabeller och tabellvyer";
     Text[ polish ] = "Wszystkie tabele i widoki tabeli";
     Text[ portuguese_brazilian ] = "All tables and views";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙ‚ÆÃ°ÌŞÙËŞ­°";
-    Text[ korean ] = "¸ğµç Å×ÀÌºí°ú º¸±â";
+    Text[ korean ] = "¸ğµç Å×ÀÌºí°ú Å×ÀÌºí º¸±â";
     Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñºÍ±í¸ñÊÓÍ¼";
     Text[ chinese_traditional ] = "©Ò¦³ªºªí®æ©Mªí®æÀËµø";
     Text[ turkish ] = "All tables and views";
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/16 15:24:36  rt
+ *  Merge SRC632: 16.05.01 - 17:24:45 (NoBranch)
+ *
  *  Revision 1.11  2001/05/12 06:32:10  kz
  *  Merge SRC631: 12.05.01 - 08:31:35 (NoBranch)
  *
@@ -387,4 +390,5 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
 
