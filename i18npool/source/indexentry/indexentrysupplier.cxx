@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,13 +283,13 @@ sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(con
         OUString::createFromAscii("com.sun.star.i18n.IndexEntrySupplier_") + name);
 
     if ( xI.is() ) {
-        xI->queryInterface( ::getCppuType((const Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
+        xI->queryInterface( ::getCppuType((const Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
         return xIES.is();
     }
     return sal_False;
 }
 
-Reference < drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL
+Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
 {
     if (xIES.is() && rLocale == aLocale && rSortAlgorithm == aSortAlgorithm)
