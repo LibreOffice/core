@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailmsg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:41:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,57 +71,21 @@
 #include "cmdmailmsg.hxx"
 #endif
 
-//#############################################################
-// <HACK> #110368#
-// Mozilla and Co. expect file urls but not UTF8 encoded as we
-// do but in the current system encoding, so we have to recode
-// our file urls to this encoding
-#ifndef _RTL_URI_H_
-#include <rtl/uri.hxx>
+#ifndef _COM_SUN_STAR_URI_XEXTERNALURIREFERENCETRANSLATOR_HPP_
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #endif
 
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
+#ifndef _COM_SUN_STAR_URI_EXTERNALURIREFERENCETRANSLATOR_HPP_
+#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #endif
 
-/* a slightly modified version of Pchar in rtl/source/uri.c */
-const sal_Bool uriCharClass[128] =
-{
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* Pchar but without encoding slashes */
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* !"#$%&'()*+,-./  */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, /* 0123456789:;<=>? */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* @ABCDEFGHIJKLMNO */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /* PQRSTUVWXYZ[\]^_ */
-  0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* `abcdefghijklmno */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /* pqrstuvwxyz{|}~  */
-};
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
 
-//-------------------------------------
-rtl::OUString reencode_file_url(
-    const rtl::OUString& file_url,
-    rtl_TextEncoding from_textenc,
-    rtl_TextEncoding to_textenc)
-{
-    rtl::OUString tmp = rtl::Uri::decode(
-        file_url, rtl_UriDecodeWithCharset, from_textenc);
-
-    return rtl::Uri::encode(
-        tmp, uriCharClass, rtl_UriEncodeIgnoreEscapes, to_textenc);
-}
-
-//-------------------------------------
-void reencode_file_url_list(/*inout*/ com::sun::star::uno::Sequence<rtl::OUString>& file_url_list)
-{
-    sal_uInt32 nmax = file_url_list.getLength();
-    for (sal_uInt32 i = 0; i < nmax; i++)
-        file_url_list[i] = reencode_file_url(
-            file_url_list[i], RTL_TEXTENCODING_UTF8, osl_getThreadTextEncoding());
-}
-//
-// </HACK> #110368#
-//#############################################################
-
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -257,12 +221,29 @@ void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAt
 {
     MutexGuard aGuard( m_aMutex );
     m_Attachments = aAttachment;
-
-    //#######################################
-    //#110368#
-    reencode_file_url_list(m_Attachments);
-    //#110368#
-    //#######################################
+    sal_Int32 n = m_Attachments.getLength();
+    if (n > 0) {
+        Reference< com::sun::star::uri::XExternalUriReferenceTranslator >
+            translator(
+                com::sun::star::uri::ExternalUriReferenceTranslator::create(
+                    m_xContext));
+        for (sal_Int32 i = 0; i < n; ++i) {
+            OUString external(
+                translator->translateToExternal(m_Attachments[i]));
+            if (external.getLength() == 0
+                && m_Attachments[i].getLength() != 0)
+            {
+                throw RuntimeException(
+                    (OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "Cannot translate URI reference to external"
+                            " format: "))
+                     + m_Attachments[i]),
+                    static_cast< cppu::OWeakObject * >(this));
+            }
+            m_Attachments[i] = external;
+        }
+    }
 }
 
 //------------------------------------------------
