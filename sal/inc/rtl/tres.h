@@ -21,6 +21,7 @@ extern "C" {
 #define rtl_tres_Flag_HIS       0x00000100
 #define rtl_tres_Flag_TIME      0x00000200
 #define rtl_tres_Flag_MSG       0x00000400
+#define rtl_tres_Flag_QUIET     0x00000800
 
  /* state flags */
 #define rtl_tres_Flag_SUB       0x01000000
