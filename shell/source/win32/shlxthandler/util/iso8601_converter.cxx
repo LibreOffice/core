@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iso8601_converter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:17:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include "internal/iso8601_converter.hxx"
 #endif
 
+#ifndef UTILITIES_HXX_INCLUDED
+#include "internal/utilities.hxx"
+#endif
+
 #include <sstream>
 #include <iomanip>
 
@@ -71,17 +75,61 @@
    represenation to the representation
    conforming to the current locale
 */
-std::wstring iso8601_date_to_local_date(const std::wstring& iso8601date)
+std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
 {
-    // expect YYYY-MM-DDThh:mm:ss
-    if (19 == iso8601date.length())
+    const std::wstring CONST_SPACE(L" ");
+    ::std::wstring ws8601DateTime(isoDate);
+
+    if ( ws8601DateTime.length() == 19 )
     {
-        std::wstring date(iso8601date.substr(0, 10));
-        std::wstring time(iso8601date.substr(11, 8));
-        std::wstring separator(L", ");
-        return (date + separator + time);
+        //fill in the SYSTEMTIME structure;
+        std::string asDateTime = WStringToString( ws8601DateTime );
+        SYSTEMTIME DateTime;
+        DateTime.wYear         = ( unsigned short )strtol( asDateTime.substr( 0, 4 ).c_str(), NULL, 10 );
+        DateTime.wMonth        = ( unsigned short )strtol( asDateTime.substr( 5, 2 ).c_str(), NULL, 10 );
+        DateTime.wDayOfWeek    =  0;
+        DateTime.wDay          = ( unsigned short )strtol( asDateTime.substr( 8, 2 ).c_str(), NULL, 10 );
+        DateTime.wHour         = ( unsigned short )strtol( asDateTime.substr( 11,2 ).c_str(), NULL, 10 );
+        DateTime.wMinute       = ( unsigned short )strtol( asDateTime.substr( 14,2 ).c_str(), NULL, 10 );
+        DateTime.wSecond       = ( unsigned short )strtol( asDateTime.substr( 17,2 ).c_str(), NULL, 10 );
+        DateTime.wMilliseconds =  0;
+
+        //get Date info from structure
+        WCHAR DateBuffer[ MAX_PATH ];
+        int DateSize = GetDateFormatW(
+            LOCALE_SYSTEM_DEFAULT,
+            0,
+            &DateTime,
+            NULL,
+            DateBuffer,
+            MAX_PATH );
+
+        if ( DateSize )
+            ws8601DateTime.assign(DateBuffer);
+        else
+            ws8601DateTime = StringToWString( asDateTime );
+
+        //get Time info from structure
+        WCHAR TimeBuffer[ MAX_PATH ];
+
+        int TimeSize =  GetTimeFormatW(
+            LOCALE_SYSTEM_DEFAULT,
+            0,
+            &DateTime,
+            NULL,
+            TimeBuffer,
+            MAX_PATH );
+
+        if ( TimeSize )
+        {
+            ws8601DateTime.append(L" ");
+            ws8601DateTime.append(TimeBuffer);
+        }
+        else
+            ws8601DateTime = StringToWString( asDateTime );
     }
-    return iso8601date;
+
+    return ws8601DateTime;
 }
 
 //------------------------------------
