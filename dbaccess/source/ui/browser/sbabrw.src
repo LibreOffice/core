@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-07 16:13:04 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@
         ID_BROWSER_SAVEASDOC;\
         ID_QUERY_ZOOM_IN;\
         ID_QUERY_ZOOM_OUT;\
-        ID_REALTION_ADD_RELATION;\
+        ID_RELATION_ADD_RELATION;\
         SID_INDEXDESIGN; \
         ID_BROWSER_DOCUMENT_DATASOURCE;\
     };\
