@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:07:17 $
+ *  last change: $Author: nn $ $Date: 2002-12-11 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,8 +871,9 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             SdrTextObj* pText = (SdrTextObj*)pObj;
             pText->SetLogicRect(rRectangle);
 
-            String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
-            pText->SetText(aText);
+            //  #105815# don't set default text, start edit mode instead
+            // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
+            // pText->SetText(aText);
 
             sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nID);
             sal_Bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nID);
@@ -905,6 +906,8 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
 
                 pObj->SetItemSetAndBroadcast(aSet);
             }
+
+            SetInEditMode( pObj );      // #105815# start edit mode
         }
         else
         {

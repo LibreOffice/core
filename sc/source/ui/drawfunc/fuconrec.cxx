@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:52:08 $
+ *  last change: $Author: nn $ $Date: 2002-12-11 14:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,8 +505,12 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                         pObj->SetItemSet(aSet);
                     }
 
-                    String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
-                    ((SdrCaptionObj*)pObj)->SetText(aText);
+                    //  #105815# don't set default text, start edit mode instead
+                    //  (Edit mode is started in ScTabViewShell::ExecDraw, because
+                    //  it must be handled by FuText)
+                    // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
+                    // ((SdrCaptionObj*)pObj)->SetText(aText);
+
                     ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
                     ((SdrCaptionObj*)pObj)->SetTailPos(
                         aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));

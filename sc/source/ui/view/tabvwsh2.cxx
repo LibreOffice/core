@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-26 17:18:33 $
+ *  last change: $Author: nn $ $Date: 2002-12-11 14:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,15 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 {
                     // insert into page
                     pView->InsertObject(pObj, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+
+                    if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
+                    {
+                        //  #105815# use KeyInput to start edit mode (FuText is created).
+                        //  For FuText objects, edit mode is handled within CreateDefaultObject.
+                        //  KEY_F2 is handled in FuDraw::KeyInput.
+
+                        pFuActual->KeyInput( KeyEvent( 0, KeyCode( KEY_F2 ) ) );
+                    }
                 }
             }
         }
