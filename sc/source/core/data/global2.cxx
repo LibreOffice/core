@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:50:21 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,7 +945,7 @@ void ScConsolidateParam::Store( SvStream& rStream ) const
 ScPivotParam::ScPivotParam()
     :   nCol(0), nRow(0), nTab(0),
         ppLabelArr( NULL ), nLabels(0),
-        nColCount(0), nRowCount(0), nDataCount(0),
+        nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(FALSE), bDetectCategories(FALSE),
         bMakeTotalCol(TRUE), bMakeTotalRow(TRUE)
 {
@@ -960,11 +960,11 @@ ScPivotParam::ScPivotParam( const ScPivotParam& r )
         bMakeTotalCol(r.bMakeTotalCol),
         bMakeTotalRow(r.bMakeTotalRow),
         ppLabelArr( NULL ), nLabels(0),
-        nColCount(0), nRowCount(0), nDataCount(0)
+        nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0)
 {
     SetLabelData    ( r.ppLabelArr, r.nLabels );
-    SetPivotArrays  ( r.aColArr, r.aRowArr, r.aDataArr,
-                      r.nColCount, r.nRowCount, r.nDataCount );
+    SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
+                      r.nPageCount, r.nColCount, r.nRowCount, r.nDataCount );
 }
 
 //------------------------------------------------------------------------
@@ -1003,10 +1003,11 @@ void __EXPORT ScPivotParam::ClearLabelData()
 
 void __EXPORT ScPivotParam::ClearPivotArrays()
 {
+    memset( aPageArr, 0, PIVOT_MAXPAGEFIELD * sizeof(PivotField) );
     memset( aColArr, 0, PIVOT_MAXFIELD * sizeof(PivotField) );
     memset( aRowArr, 0, PIVOT_MAXFIELD * sizeof(PivotField) );
     memset( aDataArr, 0, PIVOT_MAXFIELD * sizeof(PivotField) );
-    nColCount = nRowCount = nDataCount = 0;
+    nPageCount = nColCount = nRowCount = nDataCount = 0;
 }
 
 //------------------------------------------------------------------------
@@ -1027,21 +1028,25 @@ void __EXPORT ScPivotParam::SetLabelData( LabelData**   pLabArr,
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPivotParam::SetPivotArrays  ( const PivotField* pColArr,
+void __EXPORT ScPivotParam::SetPivotArrays  ( const PivotField* pPageArr,
+                                              const PivotField* pColArr,
                                               const PivotField* pRowArr,
                                               const PivotField* pDataArr,
+                                              USHORT            nPageCnt,
                                               USHORT            nColCnt,
                                               USHORT            nRowCnt,
                                               USHORT            nDataCnt )
 {
     ClearPivotArrays();
 
-    if ( pColArr && pRowArr && pDataArr )
+    if ( pPageArr && pColArr && pRowArr && pDataArr  )
     {
+        nPageCount  = (nPageCnt>PIVOT_MAXPAGEFIELD) ? PIVOT_MAXPAGEFIELD : nPageCnt;
         nColCount   = (nColCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nColCnt;
         nRowCount   = (nRowCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nRowCnt;
         nDataCount  = (nDataCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nDataCnt;
 
+        memcpy( aPageArr, pPageArr, nPageCount * sizeof(PivotField) );
         memcpy( aColArr,  pColArr,  nColCount  * sizeof(PivotField) );
         memcpy( aRowArr,  pRowArr,  nRowCount  * sizeof(PivotField) );
         memcpy( aDataArr, pDataArr, nDataCount * sizeof(PivotField) );
@@ -1061,8 +1066,8 @@ ScPivotParam& __EXPORT ScPivotParam::operator=( const ScPivotParam& r )
     bMakeTotalRow     = r.bMakeTotalRow;
 
     SetLabelData    ( r.ppLabelArr, r.nLabels );
-    SetPivotArrays  ( r.aColArr, r.aRowArr, r.aDataArr,
-                      r.nColCount, r.nRowCount, r.nDataCount );
+    SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
+                      r.nPageCount, r.nColCount, r.nRowCount, r.nDataCount );
 
     return *this;
 }
@@ -1079,6 +1084,7 @@ BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
                  && (bMakeTotalCol == r.bMakeTotalCol)
                  && (bMakeTotalRow == r.bMakeTotalRow)
                  && (nLabels    == r.nLabels)
+                 && (nPageCount == r.nPageCount)
                  && (nColCount  == r.nColCount)
                  && (nRowCount  == r.nRowCount)
                  && (nDataCount == r.nDataCount);
@@ -1086,6 +1092,9 @@ BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
     if ( bEqual )
     {
         USHORT i;
+
+        for ( i=0; i<nPageCount && bEqual; i++ )
+            bEqual = ( aPageArr[i] == r.aPageArr[i] );
 
         for ( i=0; i<nColCount && bEqual; i++ )
             bEqual = ( aColArr[i] == r.aColArr[i] );
