@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:42:33 $
+ *  last change: $Author: vg $ $Date: 2002-01-14 21:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2051,30 +2051,30 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
              < "A3" ; PAPERSIZE_A3 ; > ;
         < "A4" ; PAPERSIZE_A4 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4" ; PAPERSIZE_B4 ; > ;
-        < "B5" ; PAPERSIZE_B5 ; > ;
-        < "레터" ; PAPERSIZE_B6 ; > ;
-        < "리갈l" ; PAPERSIZE_B4_JIS ; > ;
-        < "타블로이드" ; PAPERSIZE_B5_JIS ; > ;
-        < "사용자" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6" ; PAPERSIZE_LETTER ; > ;
-        < "C4" ; PAPERSIZE_LEGAL ; > ;
-        < "C5" ; PAPERSIZE_TABLOID ; > ;
-        < "C6" ; PAPERSIZE_USER ; > ;
-        < "C65" ; PAPERSIZE_C4 ; > ;
-        < "DL" ; PAPERSIZE_C5 ; > ;
-        < "봉투(용지 종류) #63/4" ; PAPERSIZE_C6 ; > ;
-        < "봉투 Monarch" ; PAPERSIZE_C65 ; > ;
-        < "봉투 #9" ; PAPERSIZE_DL ; > ;
-        < "봉투 #10" ; PAPERSIZE_COM675; > ;
-        < "봉투 #11" ; PAPERSIZE_MONARCH; > ;
-        < "봉투 #12" ; PAPERSIZE_COM9; > ;
-        < "16 kai" ; PAPERSIZE_COM10; > ;
-        < "32 kai" ; PAPERSIZE_COM11; > ;
-        < "32 kai 크기" ; PAPERSIZE_COM12; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)l" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "레터" ; PAPERSIZE_LETTER ; > ;
+        < "리갈" ; PAPERSIZE_LEGAL ; > ;
+        < "타블로이드" ; PAPERSIZE_TABLOID ; > ;
+        < "사용자" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "봉투 #63/4" ; PAPERSIZE_COM675; > ;
+        < "monarch 봉투" ; PAPERSIZE_MONARCH; > ;
+        < "봉투 #9" ; PAPERSIZE_COM9; > ;
+        < "봉투 #10" ; PAPERSIZE_COM10; > ;
+        < "봉투 #11" ; PAPERSIZE_COM11; > ;
+        < "봉투 #12" ; PAPERSIZE_COM12; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai ũ�" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai 크기" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -2730,26 +2730,26 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "A3" ; PAPERSIZE_A3 ; > ;
         < "A4" ; PAPERSIZE_A4 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4" ; PAPERSIZE_B4 ; > ;
-        < "B5" ; PAPERSIZE_B5 ; > ;
-        < "레터" ; PAPERSIZE_B6 ; > ;
-        < "리갈" ; PAPERSIZE_B4_JIS ; > ;
-        < "타블로이드" ; PAPERSIZE_B5_JIS ; > ;
-        < "사용자" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6" ; PAPERSIZE_LETTER ; > ;
-        < "C4" ; PAPERSIZE_LEGAL ; > ;
-        < "C5" ; PAPERSIZE_TABLOID ; > ;
-        < "C6" ; PAPERSIZE_USER ; > ;
-        < "C65" ; PAPERSIZE_C4 ; > ;
-        < "DL" ; PAPERSIZE_C5 ; > ;
-        < "슬라이드" ; PAPERSIZE_C6 ; > ;
-        < "화면" ; PAPERSIZE_C65 ; > ;
-        < "16 kai" ; PAPERSIZE_DL ; > ;
-        < "32 kai" ; PAPERSIZE_DIA ; > ;
-        < "32 kai 크기" ; PAPERSIZE_SCREEN ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "레터" ; PAPERSIZE_LETTER ; > ;
+        < "리갈" ; PAPERSIZE_LEGAL ; > ;
+        < "타블로이드" ; PAPERSIZE_TABLOID ; > ;
+        < "사용자" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "슬라이드" ; PAPERSIZE_DIA ; > ;
+        < "화면" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai ũ�" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai 크기" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -2950,6 +2950,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ finnish ] = "[Tulostinasetuksien mukaan]";
 };
  // ********************************************************************** EOF
+
 
 
 
