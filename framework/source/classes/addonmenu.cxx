@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:43:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,12 @@ void AddonMenuManager::MergeAddonHelpMenu( Reference< XFrame >& rFrame, MenuBar*
             AddonsOptions aOptions;
 
             if ( nRegPos == USHRT_MAX )
-                nRegPos = FindMenuId( pHelpMenu, String::CreateFromAscii( ".uno:OnlineRegistrationDlg" ));
+            {
+                // try to detect the online registration dialog menu item with the command URL
+                USHORT nId = FindMenuId( pHelpMenu, String::CreateFromAscii( ".uno:OnlineRegistrationDlg" ));
+                nRegPos = pHelpMenu->GetItemPos( nId );
+                nInsPos = nRegPos;
+            }
 
             Sequence< Sequence< PropertyValue > > aAddonSubMenu;
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
