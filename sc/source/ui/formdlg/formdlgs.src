@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:18:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ korean ] = "ÇÔ¼ö¡¡Àû¿ë!";
         QuickHelpText[ turkish ] = "Funktion übernehmen";
         QuickHelpText[ catalan ] = "Aplicar función";
+        QuickHelpText[ finnish ] = "Käytä funktiota!";
     };
     ListBox LB_CATEGORY
     {
@@ -227,19 +228,19 @@ TabPage RID_SCTAB_FUNCTION
         };
         StringList [ finnish ] =
         {
-            < "Zuletzt verwendet" ; Default ; > ;
-            < "Alle" ; Default ; > ;
-            < "Datenbank" ; Default ; > ;
-            < "Datum&Zeit" ; Default ; > ;
-            < "Finanz" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Logisch" ; Default ; > ;
-            < "Mathematik" ; Default ; > ;
-            < "Matrix" ; Default ; > ;
-            < "Statistik" ; Default ; > ;
-            < "Tabelle" ; Default ; > ;
-            < "Text" ; Default ; > ;
-            < "Add In" ; Default ; > ;
+            < "Viimeksi käytetty" ; Default ; > ;
+            < "Kaikki" ; Default ; > ;
+            < "Tietokanta" ; Default ; > ;
+            < "Päivämäärä&Aika" ; Default ; > ;
+            < "Rahoitus" ; Default ; > ;
+            < "Tiedot" ; Default ; > ;
+            < "Looginen" ; Default ; > ;
+            < "Matemaattinen" ; Default ; > ;
+            < "Matriisitaulukko" ; Default ; > ;
+            < "Tilastolliset" ; Default ; > ;
+            < "Laskentataulukko" ; Default ; > ;
+            < "Teksti" ; Default ; > ;
+            < "Lisäosa" ; Default ; > ;
              //         < "Käyttäjän"; Default; >;
         };
         StringList [ danish ] =
@@ -521,7 +522,7 @@ TabPage RID_SCTAB_FUNCTION
         Text [ italian ] = "~Categoria" ;
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "~Ryhmä" ;
+        Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Kategori" ;
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Kategori" ;
@@ -549,7 +550,7 @@ TabPage RID_SCTAB_FUNCTION
         Text [ italian ] = "~Funzione" ;
         Text [ portuguese_brazilian ] = "~Função" ;
         Text [ portuguese ] = "~Função" ;
-        Text [ finnish ] = "~Funktio" ;
+        Text [ finnish ] = "~Toiminto" ;
         Text [ danish ] = "Funktion" ;
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "~Funktion" ;
@@ -607,6 +608,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ korean ] = "±¸Á¶(~S)";
         Text[ turkish ] = "~Yapý";
         Text[ catalan ] = "~Estructura";
+        Text[ finnish ] = "~Rakenne";
     };
     Bitmap BMP_STR_CLOSE
     {
@@ -647,6 +649,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ korean ] = "=?";
         Text[ turkish ] = "=?";
         Text[ catalan ] = "=?";
+        Text[ finnish ] = "=?";
     };
     String STR_STRUCT_ERR2
     {
@@ -671,6 +674,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ korean ] = "¿À·ù";
         Text[ turkish ] = "Hata";
         Text[ catalan ] = "Error";
+        Text[ finnish ] = "Virhe";
     };
 };
 ModelessDialog RID_SCDLG_FORMULA
@@ -712,6 +716,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ korean ] = "ÇÔ¼ö";
                 Text[ turkish ] = "Fonksiyon";
                 Text[ catalan ] = "Funciones";
+                Text[ finnish ] = "Toiminnot";
             };
             PageItem
             {
@@ -737,6 +742,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ korean ] = "±¸Á¶";
                 Text[ turkish ] = "Yapý";
                 Text[ catalan ] = "Estructura";
+                Text[ finnish ] = "Rakenne";
             };
         };
     };
@@ -795,6 +801,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "¼ö½Ä(~M)";
         Text[ turkish ] = "F~ormül";
         Text[ catalan ] = "~Fórmula";
+        Text[ finnish ] = "~Kaava";
     };
     Control ED_FORMULA
     {
@@ -873,6 +880,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "¼Ò°è";
         Text[ turkish ] = "Ara sonuç";
         Text[ catalan ] = "Subtotal";
+        Text[ finnish ] = "Funktion tulos";
     };
     Window WND_RESULT
     {
@@ -943,6 +951,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "Çà·Ä";
         Text[ turkish ] = "Matri~s";
         Text[ catalan ] = "Matri~z";
+        Text[ finnish ] = "Matriisitaulukko";
     };
     Edit ED_REF
     {
@@ -976,6 +985,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ korean ] = "È®´ë!";
         QuickHelpText[ turkish ] = "Vergrößern";
         QuickHelpText[ catalan ] = "Aumentar";
+        QuickHelpText[ finnish ] = "Maximize";
     };
     /*
     HelpButton BTN_HELP
@@ -1024,7 +1034,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "<< Indietro" ;
         Text [ portuguese_brazilian ] = "<< ~Para Trás" ;
         Text [ portuguese ] = "<<~Anterior" ;
-        Text [ finnish ] = "<< ~Taakse" ;
+        Text [ finnish ] = "<< ~Takaisin" ;
         Text [ danish ] = "<< Tilbage" ;
         Text [ french ] = "<< ~Précédent" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
@@ -1053,7 +1063,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = ">> ~Avanti" ;
         Text [ portuguese_brazilian ] = "Para~ Frente >>" ;
         Text [ portuguese ] = ">>~Seguinte" ;
-        Text [ finnish ] = "~Eteen >>" ;
+        Text [ finnish ] = "~Seuraava >>" ;
         Text [ danish ] = "Næste >>" ;
         Text [ french ] = ">> ~Suivant" ;
         Text [ swedish ] = "~Nästa >>" ;
@@ -1087,7 +1097,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "Pilota automatico di funzione" ;
         Text [ portuguese_brazilian ] = "Função Piloto Automático  -  Paso 1 de 2" ;
         Text [ portuguese ] = "Função AutoPiloto" ;
-        Text [ finnish ] = "AutoPilot-toiminto" ;
+        Text [ finnish ] = "Automaattinen ohjaus: Toiminnot" ;
         Text [ danish ] = "FunktionsAutoPilot" ;
         Text [ french ] = "AutoPilote de fonctions" ;
         Text [ swedish ] = "Funktionsautopilot" ;
@@ -1113,7 +1123,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "Pilota automatico di funzione" ;
         Text [ portuguese_brazilian ] = "Função Piloto Automático  -  Paso 2 de 2" ;
         Text [ portuguese ] = "Função AutoPiloto  -" ;
-        Text [ finnish ] = "AutoPilot-toiminto -" ;
+        Text [ finnish ] = "Automaattinen ohjaus: Toiminnot  -" ;
         Text [ danish ] = "FunktionsAutoPilot  -" ;
         Text [ french ] = "AutoPilote de fonctions -" ;
         Text [ swedish ] = "Funktionsautopilot  -  " ;
