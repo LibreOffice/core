@@ -11719,3 +11719,4 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?GetExportFormatNumberForTypeName@FilterConfigCache@@QAEGABVString@@@Z
 ?GetImportFormatNumberForTypeName@FilterConfigCache@@QAEGABVString@@@Z
 ?Push@WinMtfOutput@@QAEXXZ
+?ShutdownLink@CommunicationLinkViaSocket@@IAEJPAX@Z
