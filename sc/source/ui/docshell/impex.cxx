@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:58:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ class StarBASIC;
 #include "compiler.hxx"
 
 #include "impex.hxx"
+
+// ause
+#include "editutil.hxx"
 
 #include "globstr.hrc"
 
