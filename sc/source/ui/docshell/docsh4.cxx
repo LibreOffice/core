@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-24 17:46:03 $
+ *  last change: $Author: mba $ $Date: 2002-07-12 09:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,15 +635,28 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScDocument* pDoc = GetDocument();
                 if(pDoc!=NULL)
                 {
+                    // get argument (recorded macro)
+                    SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD, sal_False );
                     BOOL bDo = TRUE;
-                    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-                    if ( pChangeTrack )
-                    {
-                        WarningBox aBox( GetDialogParent(),
-                            WinBits(WB_YES_NO | WB_DEF_NO),
-                            ScGlobal::GetRscString( STR_END_REDLINING ) );
 
-                        if( aBox.Execute() == RET_YES )
+                    // desired state
+                    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+                    BOOL bActivateTracking = (pChangeTrack == 0);   // toggle
+                    if ( pItem )
+                        bActivateTracking = pItem->GetValue();      // from argument
+
+                    if ( !bActivateTracking )
+                    {
+                        if ( !pItem )
+                        {
+                            // no dialog on playing the macro
+                            WarningBox aBox( GetDialogParent(),
+                                WinBits(WB_YES_NO | WB_DEF_NO),
+                                ScGlobal::GetRscString( STR_END_REDLINING ) );
+                            bDo = ( aBox.Execute() == RET_YES );
+                        }
+
+                        if ( bDo )
                         {
                             if ( pChangeTrack->IsProtected() )
                                 bDo = ExecuteChangeProtectionDialog();
@@ -653,8 +666,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 PostPaintGridAll();
                             }
                         }
-                        else
-                            bDo = FALSE;
                     }
                     else
                     {
@@ -668,7 +679,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         //  update "accept changes" dialog
                         //! notify all views
-
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if ( pViewFrm && pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
                         {
@@ -678,9 +688,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
                             }
                         }
+
                         // Slots invalidieren
                         if (pBindings)
                             pBindings->InvalidateAll(FALSE);
+                        if ( !pItem )
+                            rReq.AppendItem( SfxBoolItem( FID_CHG_RECORD, bActivateTracking ) );
                         rReq.Done();
                     }
                     else
