@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:47:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,31 +558,31 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdDrawDocument* pModel = (SdDrawDocument*) pSourceView->GetAllMarkedModel();
                     bReturn = Paste( *pModel, aDropPos, pPage, nPasteOptions );
 
-                    if( bLink )
-                    {
-                        SdrObject*      pObj = NULL;
-                        SdPage*         pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
-                        SdrObjListIter  aIter( *pWorkPage, IM_DEEPWITHGROUPS );
-                        String          aDocName( pSourceDoc->GetDocSh()->GetMedium()->GetName() );
-
-                        while( aIter.IsMore() )
-                        {
-                            pObj = aIter.Next();
-
-                            String aName( pObj->GetName() );
-
-                            if( aName.Len() )
-                            {
-                                SdrObject* pNewObj = pDoc->GetObj( aName );
-
-                                if( pNewObj )
-                                {
-                                    if( pNewObj->ISA( SdrObjGroup ) )
-                                        ( (SdrObjGroup*) pNewObj )->SetGroupLink( aDocName, aName );
-                                }
-                            }
-                        }
-                    }
+//BFS02                 if( bLink )
+//BFS02                 {
+//BFS02                     SdrObject*      pObj = NULL;
+//BFS02                     SdPage*         pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
+//BFS02                     SdrObjListIter  aIter( *pWorkPage, IM_DEEPWITHGROUPS );
+//BFS02                     String          aDocName( pSourceDoc->GetDocSh()->GetMedium()->GetName() );
+//BFS02
+//BFS02                     while( aIter.IsMore() )
+//BFS02                     {
+//BFS02                         pObj = aIter.Next();
+//BFS02
+//BFS02                         String aName( pObj->GetName() );
+//BFS02
+//BFS02                         if( aName.Len() )
+//BFS02                         {
+//BFS02                             SdrObject* pNewObj = pDoc->GetObj( aName );
+//BFS02
+//BFS02                             if( pNewObj )
+//BFS02                             {
+//BFS02                                 if( pNewObj->ISA( SdrObjGroup ) )
+//BFS02                                     ( (SdrObjGroup*) pNewObj )->SetGroupLink( aDocName, aName );
+//BFS02                             }
+//BFS02                         }
+//BFS02                     }
+//BFS02                 }
 
                     if( !pPage )
                         pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
@@ -643,7 +643,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
 //          pModel->GetItemPool().FreezeIdRanges();
 
-            pModel->SetStreamingSdrModel( TRUE );
+//BFS04         pModel->SetStreamingSdrModel( TRUE );
 
             Reference< XComponent > xComponent( new SdXImpressDocument( pModel, sal_True ) );
             pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
@@ -653,7 +653,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Impress.XMLOasisImporter" );
 
-            pModel->SetStreamingSdrModel( FALSE );
+//BFS04         pModel->SetStreamingSdrModel( FALSE );
 
             if( pModel->GetPageCount() == 0 )
             {
