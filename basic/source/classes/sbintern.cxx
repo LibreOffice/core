@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:41:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ SbiGlobals::SbiGlobals()
     pMod  = NULL;
     pSbFac= NULL;
     pUnoFac = NULL;
+    pTypeFac = NULL;
+    pOLEFac = NULL;
     pCompMod = NULL; // JSM
     nInst = 0;
     nCode = 0;
