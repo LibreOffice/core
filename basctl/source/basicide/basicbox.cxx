@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ void __EXPORT BasicLibBox::ReleaseFocus()
     {
         Window* pShellWin = pCurSh->GetWindow();
         if ( !pShellWin )       // sonst werde ich ihn nicht los
-            pShellWin = Application::GetDefModalDialogParent();
+            pShellWin = Application::GetDefDialogParent();
 
         pShellWin->GrabFocus();
     }
