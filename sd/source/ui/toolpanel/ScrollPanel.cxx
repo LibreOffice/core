@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollPanel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:23:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@ ScrollPanel::ScrollPanel (
       maScrollWindow(this, WB_DIALOGCONTROL),
       maVerticalScrollBar(this, WB_VERT),
       maHorizontalScrollBar(this, WB_HORZ),
-      maScrollWindowFiller(&maScrollWindow),
       maScrollBarFiller(this),
+      maScrollWindowFiller(&maScrollWindow),
       mbIsRearrangePending(true),
       mbIsLayoutPending(true),
       mnChildrenWidth(0),
@@ -330,7 +330,6 @@ void ScrollPanel::ExpandControl (
     Rearrange ();
     Invalidate ();
 }
-
 
 
 
@@ -650,5 +649,38 @@ IMPL_LINK(ScrollPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     }
     return 0;
 }
+
+
+
+long ScrollPanel::Notify( NotifyEvent& rNEvt )
+{
+    long nRet = FALSE;
+    if( rNEvt.GetType() == EVENT_COMMAND )
+    {
+        // note: dynamic_cast is not possible as GetData() returns a void*
+        CommandEvent* pCmdEvent = reinterpret_cast< CommandEvent* >(rNEvt.GetData());
+        DBG_ASSERT( pCmdEvent!=0 &&
+                    ( pCmdEvent->IsMouseEvent() == TRUE ||
+                      pCmdEvent->IsMouseEvent() == FALSE ),
+                    "Invalid CommandEvent" );
+        if (pCmdEvent)
+            switch (pCmdEvent->GetCommand())
+            {
+                case COMMAND_WHEEL:
+                case COMMAND_STARTAUTOSCROLL:
+                case COMMAND_AUTOSCROLL:
+                {
+                    nRet = HandleScrollCommand (*pCmdEvent, &maHorizontalScrollBar, &maVerticalScrollBar);
+                    break;
+                }
+            }
+    }
+
+    if( ! nRet )
+        nRet = ::Window::Notify( rNEvt );
+
+    return nRet;
+}
+
 
 } } // end of namespace ::sd::toolpanel
