@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:03:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 13:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ void GetXMLWriter( const String&, WriterRef& );
 // Writer-internen Namen, d.h. die namen, die in INSTALL.INI vor dem
 // Gleichheitszeichen stehen, z.b. SWG oder ASCII.
 
-class SwIoSystem
+class SW_DLLPUBLIC SwIoSystem
 {
 public:
         // suche ueber den Filtertext den Filtereintrag
