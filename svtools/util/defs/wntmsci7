@@ -8749,3 +8749,7 @@ WideCharListToMultiByteList
 ?Commit@SvtCurrencyConfigItem@@UAEXXZ
 ?CreateConfigString@SvtCurrencyConfigItem@@SA?AVOUString@rtl@@ABVString@@G@Z
 ?GetAbbrevAndLanguage@SvtCurrencyConfigItem@@SAXAAVString@@AAGABVOUString@rtl@@@Z
+??1?$Reference@VXBreakIterator@i18n@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1TextDDInfo@@QAE@XZ
+??1TextHint@@UAE@XZ
+?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXTransferable@datatransfer@456@@Z
