@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:14:11 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,9 @@ void SwRTFParser::ReadTable( int nToken )
 
         // jetzt die Boxen abgleichen
         USHORT nBoxes = Min( pNewLine->GetTabBoxes().Count(), aBoxFmts.Count() );
-        for( USHORT n = 0; n < nBoxes; ++n )
+        USHORT n;
+
+        for( n = 0; n < nBoxes; ++n )
         {
             SwTableBox* pBox = pNewLine->GetTabBoxes()[ n ];
             *pBox->GetFrmFmt() = *aBoxFmts[ n ];
