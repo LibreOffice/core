@@ -1,0 +1,3364 @@
+ /*************************************************************************
+ *
+ *  $RCSfile: datanavi.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:21:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "datanavi.hxx"
+
+#ifndef _SVX_DATANAVI_HRC
+#include "datanavi.hrc"
+#endif
+#ifndef _SVX_FMRESIDS_HRC
+#include "fmresids.hrc"
+#endif
+#ifndef _SVX_FMHELP_HRC
+#include "fmhelp.hrc"
+#endif
+#ifndef _SVX_SVXIDS_HRC
+#include "svxids.hrc"
+#endif
+
+#ifndef _SVX_XMLEXCHG_HXX_
+#include "xmlexchg.hxx"
+#endif
+#ifndef _SVX_DIALMGR_HXX
+#include "dialmgr.hxx"
+#endif
+#ifndef _SVX_FMSHELL_HXX
+#include "fmshell.hxx"
+#endif
+
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include <svtools/miscopt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
+#endif
+#ifndef _SVTOOLS_HRC
+#include <svtools/svtools.hrc>
+#endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _SFX_OBJITEM_HXX
+#include <sfx2/objitem.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XENumeration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XENumerationAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
+#include <com/sun/star/container/XSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XFORMS_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_DOM_XDOCUMENT_HPP_
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_DOM_DOMEXCEPTION_HPP_
+#include <com/sun/star/xml/dom/DOMException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_DOM_DOMEXCEPTIONTYPE_HPP_
+#include <com/sun/star/xml/dom/DOMExceptiontype.hpp>
+#endif
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::datatransfer;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::dom::events;
+using namespace ::svx;
+
+namespace css = ::com::sun::star;
+
+#define CFGNAME_DATANAVIGATOR       DEFINE_CONST_UNICODE("DataNavigator")
+#define MSG_VARIABLE                DEFINE_CONST_UNICODE("%1")
+#define MODELNAME                   DEFINE_CONST_UNICODE("$MODELNAME")
+#define INSTANCENAME                DEFINE_CONST_UNICODE("$INSTANCENAME")
+#define ELEMENTNAME                 DEFINE_CONST_UNICODE("$ELEMENTNAME")
+#define ATTRIBUTENAME               DEFINE_CONST_UNICODE("$ATTRIBUTENAME")
+
+//............................................................................
+namespace svxform
+{
+//............................................................................
+
+    // properties of instance
+    #define PN_INSTANCE_MODEL       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Instance" ) )
+    #define PN_INSTANCE_ID          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
+    #define PN_INSTANCE_URL         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) )
+
+    // properties of binding
+    #define PN_BINDING_ID           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingID" ) )
+    #define PN_BINDING_EXPR         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingExpression" ) )
+    #define PN_BINDING_MODEL        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
+    #define PN_BINDING_NAMESPACES   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingNamespaces" ) )
+    #define PN_BINDING_MODELID      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelID" ) )
+    #define PN_READONLY_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadonlyExpression" ) )
+    #define PN_RELEVANT_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelevantExpression" ) )
+    #define PN_REQUIRED_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RequiredExpression" ) )
+    #define PN_CONSTRAINT_EXPR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConstraintExpression" ) )
+    #define PN_CALCULATE_EXPR       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CalculateExpression" ) )
+    #define PN_BINDING_TYPE         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) )
+    #define PN_BINDING_READONLY     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )
+    #define PN_BINDING_ENABLED      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) )
+
+    // properties of submission
+    #define PN_SUBMISSION_ID        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
+    #define PN_SUBMISSION_BIND      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bind" ) )
+    #define PN_SUBMISSION_REF       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Ref" ) )
+    #define PN_SUBMISSION_ACTION    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) )
+    #define PN_SUBMISSION_METHOD    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Method" ) )
+    #define PN_SUBMISSION_MODEL     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
+    #define PN_SUBMISSION_REPLACE   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Replace" ) )
+
+    // submission methods
+    #define SUBMITMETHOD_POST       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "post" ) )
+    #define SUBMITMETHOD_GET        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "get" ) )
+    #define SUBMITMETHOD_PUT        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "put" ) )
+
+    // other const strings
+    #define TRUE_VALUE              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true()" ) )
+    #define FALSE_VALUE             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false()" ) )
+    #define NEW_ELEMENT             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newElement" ) )
+    #define NEW_ATTRIBUTE           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newAttribute" ) )
+    #define EVENTTYPE_SUBTREE       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMSubtreeModified" ) )
+    #define EVENTTYPE_CHARDATA      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMCharacterDataModified" ) )
+    #define EVENTTYPE_ATTR          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMAttrModified" ) )
+
+    #define MIN_PAGE_COUNT          3 // at least one instance, one submission and one binding page
+
+    struct ItemNode
+    {
+        Reference< css::xml::dom::XNode >   m_xNode;
+        Reference< XPropertySet >           m_xPropSet;
+
+        ItemNode( const Reference< css::xml::dom::XNode >& _rxNode ) :
+            m_xNode( _rxNode ) {}
+        ItemNode( const Reference< XPropertySet >& _rxSet ) :
+            m_xPropSet( _rxSet ) {}
+
+        DataGroupType   GetDataGroupType() const;
+    };
+
+    //========================================================================
+    // class DataTreeListBox
+    //========================================================================
+    DataTreeListBox::DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId ) :
+
+        SvTreeListBox( pPage, rResId ),
+
+        m_pXFormsPage   ( pPage ),
+        m_eGroup        ( _eGroup )
+
+    {
+        EnableContextMenuHandling();
+
+        if ( DGTInstance == m_eGroup )
+            SetDragDropMode( SV_DRAGDROP_CTRL_MOVE |SV_DRAGDROP_CTRL_COPY | SV_DRAGDROP_APP_COPY );
+    }
+
+    DataTreeListBox::~DataTreeListBox()
+    {
+        DeleteAndClear();
+    }
+
+    sal_Int8 DataTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
+    {
+        return DND_ACTION_NONE;
+    }
+    sal_Int8 DataTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+    {
+        return DND_ACTION_NONE;
+    }
+    void DataTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+    {
+        SvLBoxEntry* pSelected = FirstSelected();
+        if ( !pSelected )
+            // no drag without an entry
+            return;
+
+        TransferableHelper* pTransferEntry = new OXFormsTransferable();
+        Reference< XTransferable > xEnsureDelete = pTransferEntry;
+        if ( pTransferEntry )
+        {
+            EndSelection();
+            pTransferEntry->StartDrag( this, DND_ACTION_COPY );
+        }
+    }
+
+    PopupMenu* DataTreeListBox::CreateContextMenu()
+    {
+        PopupMenu* pMenu = new PopupMenu( SVX_RES( RID_MENU_DATANAVIGATOR ) );
+        if ( DGTInstance == m_eGroup )
+            pMenu->RemoveItem( pMenu->GetItemPos( TBI_ITEM_ADD ) );
+        else
+        {
+            pMenu->RemoveItem( pMenu->GetItemPos( TBI_ITEM_ADD_ELEMENT ) );
+            pMenu->RemoveItem( pMenu->GetItemPos( TBI_ITEM_ADD_ATTRIBUTE ) );
+
+            if ( DGTSubmission == m_eGroup )
+            {
+                pMenu->SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
+                pMenu->SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                pMenu->SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
+            }
+            else
+            {
+                pMenu->SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
+                pMenu->SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
+                pMenu->SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
+            }
+        }
+        m_pXFormsPage->EnableMenuItems( pMenu );
+        return pMenu;
+    }
+
+    void DataTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
+    {
+        m_pXFormsPage->DoMenuAction( _nSelectedPopupEntry );
+    }
+
+    void DataTreeListBox::RemoveEntry( SvLBoxEntry* _pEntry )
+    {
+        if ( _pEntry )
+        {
+            delete static_cast< ItemNode* >( _pEntry->GetUserData() );
+            SvTreeListBox::GetModel()->Remove( _pEntry );
+        }
+    }
+
+    void DataTreeListBox::DeleteAndClear()
+    {
+        ULONG i, nCount = GetEntryCount();
+        for ( i = 0; i < nCount; ++i )
+        {
+            SvLBoxEntry* pEntry = GetEntry(i);
+            if ( pEntry )
+                delete static_cast< ItemNode* >( pEntry->GetUserData() );
+        }
+
+        Clear();
+    }
+
+    //========================================================================
+    // class XFormsPage
+    //========================================================================
+    XFormsPage::XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
+
+        TabPage( pParent, SVX_RES( RID_SVX_XFORMS_TABPAGES ) ),
+
+        m_aToolBox      ( this, ResId( TB_ITEMS ) ),
+        m_aItemList     ( this, _eGroup, ResId( LB_ITEMS ) ),
+        m_pNaviWin      ( _pNaviWin ),
+        m_bHasModel     ( false ),
+        m_eGroup        ( _eGroup ),
+        m_TbxImageList  ( ResId( IL_TBX_BMPS ) ),
+        m_TbxHCImageList( ResId( IL_TBX_BMPS_HC ) )
+
+    {
+        FreeResource();
+
+        const ImageList& rImageList =
+            GetBackground().GetColor().IsDark() ? m_TbxHCImageList : m_TbxImageList;
+        m_aToolBox.SetItemImage( TBI_ITEM_ADD, rImageList.GetImage( IID_ITEM_ADD ) );
+        m_aToolBox.SetItemImage( TBI_ITEM_ADD_ELEMENT, rImageList.GetImage( IID_ITEM_ADD_ELEMENT ) );
+        m_aToolBox.SetItemImage( TBI_ITEM_ADD_ATTRIBUTE, rImageList.GetImage( IID_ITEM_ADD_ATTRIBUTE ) );
+        m_aToolBox.SetItemImage( TBI_ITEM_EDIT, rImageList.GetImage( IID_ITEM_EDIT ) );
+        m_aToolBox.SetItemImage( TBI_ITEM_REMOVE, rImageList.GetImage( IID_ITEM_REMOVE ) );
+
+        if ( DGTInstance == m_eGroup )
+            m_aToolBox.RemoveItem( m_aToolBox.GetItemPos( TBI_ITEM_ADD ) );
+        else
+        {
+            m_aToolBox.RemoveItem( m_aToolBox.GetItemPos( TBI_ITEM_ADD_ELEMENT ) );
+            m_aToolBox.RemoveItem( m_aToolBox.GetItemPos( TBI_ITEM_ADD_ATTRIBUTE ) );
+
+            if ( DGTSubmission == m_eGroup )
+            {
+                m_aToolBox.SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
+                m_aToolBox.SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                m_aToolBox.SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
+            }
+            else
+            {
+                m_aToolBox.SetItemText( TBI_ITEM_ADD, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
+                m_aToolBox.SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
+                m_aToolBox.SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
+            }
+        }
+
+        const Size aTbxSz( m_aToolBox.CalcWindowSizePixel() );
+        m_aToolBox.SetSizePixel( aTbxSz );
+        m_aToolBox.SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
+        m_aToolBox.SetSelectHdl( LINK( this, XFormsPage, TbxSelectHdl ) );
+        Point aPos = m_aItemList.GetPosPixel();
+        aPos.Y() = aTbxSz.Height();
+        m_aItemList.SetPosPixel( aPos );
+
+        m_aItemList.SetSelectHdl( LINK( this, XFormsPage, ItemSelectHdl ) );
+        m_aItemList.SetNodeDefaultImages();
+        WinBits nBits = WB_BORDER | WB_TABSTOP | WB_HIDESELECTION | WB_NOINITIALSELECTION;
+        if ( DGTInstance == m_eGroup || DGTSubmission == m_eGroup )
+            nBits |= WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT;
+        m_aItemList.SetWindowBits( m_aItemList.GetStyle() | nBits  );
+        m_aItemList.Show();
+        ItemSelectHdl( &m_aItemList );
+    }
+    //------------------------------------------------------------------------
+    XFormsPage::~XFormsPage()
+    {
+    }
+    //------------------------------------------------------------------------
+    IMPL_LINK( XFormsPage, TbxSelectHdl, ToolBox *, EMPTYARG )
+    {
+        DoToolBoxAction( m_aToolBox.GetCurItemId() );
+        return 0;
+    }
+    //------------------------------------------------------------------------
+    IMPL_LINK( XFormsPage, ItemSelectHdl, DataTreeListBox *, EMPTYARG )
+    {
+        EnableMenuItems( NULL );
+        return 0;
+    }
+    //------------------------------------------------------------------------
+    void XFormsPage::AddChildren(
+        SvLBoxEntry* _pParent, const ImageList& _rImgLst,
+        const Reference< css::xml::dom::XNode >& _xNode )
+    {
+        DBG_ASSERT( m_xUIHelper.is(), "XFormsPage::AddChildren(): invalid UIHelper" );
+
+        try
+        {
+            Reference< css::xml::dom::XNodeList > xNodeList = _xNode->getChildNodes();
+            if ( xNodeList.is() )
+            {
+                bool bShowDetails = m_pNaviWin->IsShowDetails();
+                sal_Int32 i, nNodeCount = xNodeList->getLength();
+                for ( i = 0; i < nNodeCount; ++i )
+                {
+                    Reference< css::xml::dom::XNode > xChild = xNodeList->item(i);
+                    css::xml::dom::NodeType eChildType = xChild->getNodeType();
+                    Image aExpImg, aCollImg;
+                    switch ( eChildType )
+                    {
+                        case css::xml::dom::NodeType_ATTRIBUTE_NODE:
+                            aExpImg = aCollImg = _rImgLst.GetImage( IID_ATTRIBUTE );
+                            break;
+                        case css::xml::dom::NodeType_ELEMENT_NODE:
+                            aExpImg = aCollImg = _rImgLst.GetImage( IID_ELEMENT );
+                            break;
+                        case css::xml::dom::NodeType_TEXT_NODE:
+                            aExpImg = aCollImg = _rImgLst.GetImage( IID_TEXT );
+                            break;
+                        default:
+                            aExpImg = aCollImg = _rImgLst.GetImage( IID_OTHER );
+                    }
+
+                    ::rtl::OUString sName = m_xUIHelper->getNodeDisplayName( xChild, bShowDetails );
+                    if ( sName.getLength() > 0 )
+                    {
+                        ItemNode* pNode = new ItemNode( xChild );
+                        SvLBoxEntry* pEntry = m_aItemList.InsertEntry(
+                            sName, aExpImg, aCollImg, _pParent, FALSE, LIST_APPEND, pNode );
+                        if ( xChild->hasAttributes() )
+                        {
+                            Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
+                            if ( xMap.is() )
+                            {
+                                aExpImg = aCollImg = _rImgLst.GetImage( IID_ATTRIBUTE );
+                                sal_Int32 j, nMapLen = xMap->getLength();
+                                for ( j = 0; j < nMapLen; ++j )
+                                {
+                                    Reference< css::xml::dom::XNode > xAttr = xMap->item(j);
+                                    pNode = new ItemNode( xAttr );
+                                    ::rtl::OUString sAttrName =
+                                        m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
+                                    m_aItemList.InsertEntry(
+                                        sAttrName, aExpImg, aCollImg,
+                                        pEntry, FALSE, LIST_APPEND, pNode );
+                                }
+                            }
+                        }
+                        if ( xChild->hasChildNodes() )
+                            AddChildren( pEntry, _rImgLst, xChild );
+                    }
+                }
+            }
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "XFormsPage::AddChildren(): exception caught" );
+        }
+    }
+    //------------------------------------------------------------------------
+    void XFormsPage::DoToolBoxAction( USHORT _nToolBoxID )
+    {
+        bool bIsDocModified = false;
+        m_pNaviWin->DisableNotify( true );
+
+        if ( TBI_ITEM_ADD == _nToolBoxID
+            || TBI_ITEM_ADD_ELEMENT == _nToolBoxID
+            || TBI_ITEM_ADD_ATTRIBUTE == _nToolBoxID )
+        {
+            Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+            DBG_ASSERT( xModel.is(), "XFormsPage::DoToolBoxAction(): Action without model" );
+            if ( DGTSubmission == m_eGroup )
+            {
+                AddSubmissionDialog aDlg( this, NULL, m_xUIHelper );
+                if ( aDlg.Execute() == RET_OK && aDlg.GetNewSubmission().is() )
+                {
+                    try
+                    {
+                        Reference< css::xforms::XSubmission > xNewSubmission = aDlg.GetNewSubmission();
+                        Reference< XSet > xSubmissions( xModel->getSubmissions(), UNO_QUERY );
+                        xSubmissions->insert( makeAny( xNewSubmission ) );
+                        Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
+                        SvLBoxEntry* pEntry = AddEntry( xNewPropSet );
+                        m_aItemList.Select( pEntry, TRUE );
+                        bIsDocModified = true;
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while adding submission" );
+                    }
+                }
+            }
+            else
+            {
+                DataItemType eType = DITElement;
+                SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+                ItemNode* pNode = NULL;
+                Reference< css::xml::dom::XNode > xParentNode;
+                Reference< XPropertySet > xNewBinding;
+                USHORT nResId = 0;
+                bool bIsElement = true;
+                if ( DGTInstance == m_eGroup )
+                {
+                    DBG_ASSERT( pEntry, "XFormsPage::DoToolBoxAction(): no entry" );
+                    ItemNode* pParentNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+                    DBG_ASSERT( pParentNode, "XFormsPage::DoToolBoxAction(): no parent node" );
+                    xParentNode = pParentNode->m_xNode;
+                    Reference< css::xml::dom::XNode > xNewNode;
+                    if ( TBI_ITEM_ADD_ELEMENT == _nToolBoxID )
+                    {
+                        try
+                        {
+                            nResId = RID_STR_DATANAV_ADD_ELEMENT;
+                            xNewNode = m_xUIHelper->createElement( xParentNode, NEW_ELEMENT );
+                        }
+                        catch ( Exception& )
+                        {
+                            DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while create element" );
+                        }
+                    }
+                    else
+                    {
+                        nResId = RID_STR_DATANAV_ADD_ATTRIBUTE;
+                        bIsElement = false;
+                        eType = DITAttribute;
+                        try
+                        {
+                            xNewNode = m_xUIHelper->createAttribute( xParentNode, NEW_ATTRIBUTE );
+                        }
+                        catch ( Exception& )
+                        {
+                            DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while create attribute" );
+                        }
+                    }
+
+                    try
+                    {
+                        xNewNode = xParentNode->appendChild( xNewNode );
+                    }
+                    catch ( css::xml::dom::DOMException& e )
+                    {
+                        if ( e.Code == css::xml::dom::DOMExceptionType_DOMSTRING_SIZE_ERR )
+                        {
+                            DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): domexception: size error" );
+                        }
+                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): domexception while append child" );
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while append child" );
+                    }
+
+                    try
+                    {
+                        Reference< css::xml::dom::XNode > xPNode;
+                        if ( xNewNode.is() )
+                             xPNode = xNewNode->getParentNode();
+                        // attributes don't have parents in the DOM model
+                        DBG_ASSERT( TBI_ITEM_ADD_ATTRIBUTE == _nToolBoxID
+                                    || xPNode.is(), "XFormsPage::DoToolboxAction(): node not added" );
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                    }
+
+                    try
+                    {
+                        m_xUIHelper->getBindingForNode( xNewNode, sal_True );
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while get binding for node" );
+                    }
+                    pNode = new ItemNode( xNewNode );
+                }
+                else
+                {
+                    try
+                    {
+                        nResId = RID_STR_DATANAV_ADD_BINDING;
+                        xNewBinding = xModel->createBinding();
+                        Reference< XSet > xBindings( xModel->getBindings(), UNO_QUERY );
+                        xBindings->insert( makeAny( xNewBinding ) );
+                        pNode = new ItemNode( xNewBinding );
+                        eType = DITBinding;
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while adding binding" );
+                    }
+                }
+
+                AddDataItemDialog aDlg( this, pNode, m_xUIHelper );
+                aDlg.SetText( SVX_RESSTR( nResId ) );
+                aDlg.InitText( eType );
+                short nReturn = aDlg.Execute();
+                if (  DGTInstance == m_eGroup )
+                {
+                    if ( RET_OK == nReturn )
+                    {
+                        SvLBoxEntry* pNewEntry = AddEntry( pNode, bIsElement );
+                        m_aItemList.MakeVisible( pNewEntry );
+                        m_aItemList.Select( pNewEntry, TRUE );
+                        bIsDocModified = true;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Reference< css::xml::dom::XNode > xPNode;
+                            Reference< css::xml::dom::XNode > xNode =
+                                xParentNode->removeChild( pNode->m_xNode );
+                            if ( xNode.is() )
+                                xPNode = xNode->getParentNode();
+                            DBG_ASSERT( !xPNode.is(), "XFormsPage::RemoveEntry(): node not removed" );
+                            delete pNode;
+                        }
+                        catch ( Exception& )
+                        {
+                            DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                        }
+                    }
+                }
+                else
+                {
+                    if ( RET_OK == nReturn )
+                    {
+                        SvLBoxEntry* pEntry = AddEntry( xNewBinding );
+                        m_aItemList.Select( pEntry, TRUE );
+                        bIsDocModified = true;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Reference< XSet > xBindings( xModel->getBindings(), UNO_QUERY );
+                            xBindings->remove( makeAny( xNewBinding ) );
+                        }
+                        catch ( Exception& )
+                        {
+                            DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                        }
+                    }
+                    delete pNode;
+                }
+            }
+        }
+        else if ( TBI_ITEM_EDIT == _nToolBoxID )
+        {
+            SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+            if ( pEntry )
+            {
+                if ( DGTSubmission == m_eGroup && m_aItemList.GetParent( pEntry ) )
+                    pEntry = m_aItemList.GetParent( pEntry );
+                ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+                if ( DGTInstance == m_eGroup || DGTBinding == m_eGroup )
+                {
+                    AddDataItemDialog aDlg( this, pNode, m_xUIHelper );
+                    DataItemType eType = DITElement;
+                    USHORT nResId = RID_STR_DATANAV_EDIT_ELEMENT;
+                    if ( pNode && pNode->m_xNode.is() )
+                    {
+                        try
+                        {
+                            css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
+                            if ( eChildType == css::xml::dom::NodeType_ATTRIBUTE_NODE )
+                            {
+                                nResId = RID_STR_DATANAV_EDIT_ATTRIBUTE;
+                                eType = DITAttribute;
+                            }
+                        }
+                        catch ( Exception& )
+                        {
+                            DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                        }
+                    }
+                    else if ( DGTBinding == m_eGroup )
+                    {
+                        nResId = RID_STR_DATANAV_EDIT_BINDING;
+                        eType = DITBinding;
+                    }
+                    aDlg.SetText( SVX_RESSTR( nResId ) );
+                    aDlg.InitText( eType );
+                    if ( aDlg.Execute() == RET_OK )
+                    {
+                        // Set the new name
+                        String sNewName;
+                        if ( DGTInstance == m_eGroup )
+                        {
+                            try
+                            {
+                                sNewName = m_xUIHelper->getNodeDisplayName(
+                                    pNode->m_xNode, m_pNaviWin->IsShowDetails() );
+                            }
+                            catch ( Exception& )
+                            {
+                                DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                                ::rtl::OUString sTemp;
+                                pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
+                                sNewName += String( sTemp );
+                                sNewName += sDelim;
+                                pNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
+                                sNewName += String( sTemp );
+                            }
+                            catch ( Exception& )
+                            {
+                                DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                            }
+                        }
+
+                        m_aItemList.SetEntryText( pEntry, sNewName );
+                        bIsDocModified = true;
+                    }
+                }
+                else
+                {
+                    AddSubmissionDialog aDlg( this, pNode, m_xUIHelper );
+                    aDlg.SetText( SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                    if ( aDlg.Execute() == RET_OK )
+                    {
+                        EditEntry( pNode->m_xPropSet );
+                        bIsDocModified = true;
+                    }
+                }
+            }
+        }
+        else if ( TBI_ITEM_REMOVE == _nToolBoxID )
+            bIsDocModified = RemoveEntry();
+
+        m_pNaviWin->DisableNotify( false );
+        EnableMenuItems( NULL );
+        if ( bIsDocModified )
+            m_pNaviWin->SetDocModified();
+    }
+
+    //------------------------------------------------------------------------
+    SvLBoxEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
+    {
+        SvLBoxEntry* pParent = m_aItemList.FirstSelected();
+        const ImageList& rImageList = GetBackground().GetColor().IsDark()
+            ? m_pNaviWin->GetItemHCImageList()
+            : m_pNaviWin->GetItemImageList();
+        USHORT nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
+        Image aImage = rImageList.GetImage( nImageID );
+        ::rtl::OUString sName;
+        try
+        {
+            sName = m_xUIHelper->getNodeDisplayName(
+                _pNewNode->m_xNode, m_pNaviWin->IsShowDetails() );
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "XFormsPage::AddEntry(Node): exception caught" );
+        }
+        return m_aItemList.InsertEntry(
+            sName, aImage, aImage, pParent, FALSE, LIST_APPEND, _pNewNode );
+    }
+    //------------------------------------------------------------------------
+    SvLBoxEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
+    {
+        SvLBoxEntry* pEntry = NULL;
+        const ImageList& rImageList = GetBackground().GetColor().IsDark()
+            ? m_pNaviWin->GetItemHCImageList()
+            : m_pNaviWin->GetItemImageList();
+        Image aImage = rImageList.GetImage( IID_ELEMENT );
+        String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+        ItemNode* pNode = new ItemNode( _rEntry );
+        rtl::OUString sTemp;
+
+        if ( DGTSubmission == m_eGroup )
+        {
+            try
+            {
+                // ID
+                _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
+                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, FALSE, LIST_APPEND, pNode );
+                // Action
+                _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
+                String sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
+                sEntry += String( sTemp );
+                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                // Method
+                _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
+                sEntry += String( sTemp );
+                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                // Ref
+                _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
+                sEntry += String( sTemp );
+                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                // Bind
+                _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
+                sEntry += String( sTemp );
+                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+                // Replace
+                _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
+                sEntry += String( sTemp );
+                m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "XFormsPage::AddEntry(Ref): exception caught" );
+            }
+        }
+        else // then Binding Page
+        {
+            try
+            {
+                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                ::rtl::OUString sTemp, sName;
+                _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
+                sName += String( sTemp );
+                sName += sDelim;
+                _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
+                sName += String( sTemp );
+                pEntry = m_aItemList.InsertEntry(
+                    sName, aImage, aImage, NULL, FALSE, LIST_APPEND, pNode );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "XFormsPage::AddEntry(Ref): exception caught" );
+            }
+        }
+
+        return pEntry;
+    }
+
+    //------------------------------------------------------------------------
+    void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
+    {
+        SvLBoxEntry* pEntry = NULL;
+        ItemNode* pNode = new ItemNode( _rEntry );
+        rtl::OUString sTemp;
+
+        if ( DGTSubmission == m_eGroup )
+        {
+            try
+            {
+                pEntry = m_aItemList.FirstSelected();
+
+                // #i36262# may be called for submission entry *or* for
+                // submission children. If we don't have any children, we
+                // assume the latter case and use the parent
+                if( m_aItemList.GetEntry( pEntry, 0 ) == NULL )
+                {
+                    pEntry = m_aItemList.GetModel()->GetParent( pEntry );
+                }
+
+                _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
+                m_aItemList.SetEntryText( pEntry, sTemp );
+
+                _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
+                String sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
+                sEntry += String( sTemp );
+                ULONG nPos = 0;
+                SvLBoxEntry* pChild = m_aItemList.GetEntry( pEntry, nPos++ );
+                m_aItemList.SetEntryText( pChild, sEntry );
+                _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
+                sEntry += String( sTemp );
+                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
+                m_aItemList.SetEntryText( pChild, sEntry );
+                _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
+                sEntry += String( sTemp );
+                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
+                m_aItemList.SetEntryText( pChild, sEntry );
+                _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
+                sEntry += String( sTemp );
+                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
+                m_aItemList.SetEntryText( pChild, sEntry );
+                _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
+                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
+                sEntry += String( sTemp );
+                pChild = m_aItemList.GetEntry( pEntry, nPos++ );
+                m_aItemList.SetEntryText( pChild, sEntry );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "XFormsPage::EditEntry(): exception caught" );
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
+    bool XFormsPage::RemoveEntry()
+    {
+        bool bRet = false;
+        SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+        if ( pEntry &&
+             ( DGTInstance != m_eGroup || m_aItemList.GetParent( pEntry ) ) )
+        {
+            Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+            DBG_ASSERT( xModel.is(), "XFormsPage::RemoveEntry(): no model" );
+            ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+            DBG_ASSERT( pNode, "XFormsPage::RemoveEntry(): no node" );
+
+            if ( DGTInstance == m_eGroup )
+            {
+                try
+                {
+                    DBG_ASSERT( pNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no XNode" );
+                    css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
+                    bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
+                    USHORT nResId = bIsElement ? RID_QRY_REMOVE_ELEMENT : RID_QRY_REMOVE_ATTRIBUTE;
+                    String sVar = bIsElement ? ELEMENTNAME : ATTRIBUTENAME;
+                    QueryBox aQBox( this, SVX_RES( nResId ) );
+                    String sMessText = aQBox.GetMessText();
+                    sMessText.SearchAndReplace(
+                        sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, sal_False ) );
+                    aQBox.SetMessText( sMessText );
+                    if ( aQBox.Execute() == RET_YES )
+                    {
+                        SvLBoxEntry* pParent = m_aItemList.GetParent( pEntry );
+                        DBG_ASSERT( pParent, "XFormsPage::RemoveEntry(): no parent entry" );
+                        ItemNode* pParentNode = static_cast< ItemNode* >( pParent->GetUserData() );
+                        DBG_ASSERT( pParentNode && pParentNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no parent XNode" );
+
+                        Reference< css::xml::dom::XNode > xPNode;
+                        Reference< css::xml::dom::XNode > xNode =
+                            pParentNode->m_xNode->removeChild( pNode->m_xNode );
+                        if ( xNode.is() )
+                            xPNode = xNode->getParentNode();
+                        DBG_ASSERT( !xPNode.is(), "XFormsPage::RemoveEntry(): node not removed" );
+                        bRet = true;
+                    }
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
+                }
+            }
+            else
+            {
+                DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
+                try
+                {
+                    if ( DGTSubmission == m_eGroup )
+                        xModel->getSubmissions()->remove( makeAny( pNode->m_xPropSet ) );
+                    else // then Binding Page
+                        xModel->getBindings()->remove( makeAny( pNode->m_xPropSet ) );
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
+                }
+                bRet = true;
+            }
+
+            if ( bRet )
+                m_aItemList.RemoveEntry( pEntry );
+        }
+
+        return bRet;
+    }
+
+    //------------------------------------------------------------------------
+    long XFormsPage::Notify( NotifyEvent& rNEvt )
+    {
+        long nHandled = 0;
+
+        if ( rNEvt.GetType() == EVENT_KEYINPUT )
+        {
+            USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+
+            switch ( nCode )
+            {
+                case KEY_DELETE:
+                    DoMenuAction( TBI_ITEM_REMOVE );
+                    break;
+            }
+        }
+
+        return nHandled ? nHandled : Window::Notify( rNEvt );
+    }
+    //------------------------------------------------------------------------
+    void XFormsPage::Resize()
+    {
+        Size aSize = GetOutputSizePixel();
+        Size aTbxSize = m_aToolBox.GetSizePixel();
+        aTbxSize.Width() = aSize.Width();
+        m_aToolBox.SetSizePixel( aTbxSize );
+        aSize.Width() -= 4;
+        aSize.Height() -= ( 4 + aTbxSize.Height() );
+        m_aItemList.SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
+    }
+    //------------------------------------------------------------------------
+    String XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, USHORT _nPagePos )
+    {
+        DBG_ASSERT( _xModel.is(), "XFormsPage::SetModel(): invalid model" );
+
+        m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( _xModel, UNO_QUERY );
+        String sRet;
+        m_bHasModel = true;
+        const ImageList& rImageList = GetBackground().GetColor().IsDark()
+            ? m_pNaviWin->GetItemHCImageList()
+            : m_pNaviWin->GetItemImageList();
+
+        switch ( m_eGroup )
+        {
+            case DGTInstance :
+            {
+                DBG_ASSERT( _nPagePos != TAB_PAGE_NOTFOUND, "XFormsPage::SetModel(): invalid page position" );
+                try
+                {
+                    Reference< XContainer > xContainer( _xModel->getInstances(), UNO_QUERY );
+                    if ( xContainer.is() )
+                        m_pNaviWin->AddContainerBroadcaster( xContainer );
+
+                    USHORT nIter = 0;
+                    Reference< XEnumerationAccess > xNumAccess( _xModel->getInstances(), UNO_QUERY );
+                    if ( xNumAccess.is() )
+                    {
+                        Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
+                        if ( xNum.is() && xNum->hasMoreElements() )
+                        {
+                            while ( xNum->hasMoreElements() )
+                            {
+                                if ( nIter == _nPagePos )
+                                {
+                                    Sequence< PropertyValue > xPropSeq;
+                                    Any aAny = xNum->nextElement();
+                                    if ( aAny >>= xPropSeq )
+                                        sRet = LoadInstance( xPropSeq, rImageList );
+                                    else
+                                    {
+                                        DBG_ERRORFILE( "XFormsPage::SetModel(): invalid instance" );
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    xNum->nextElement();
+                                    nIter++;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch( Exception& )
+                {
+                    DBG_ERRORFILE( "XFormsPage::SetModel(): exception caught" );
+                }
+                break;
+            }
+
+            case DGTSubmission :
+            {
+                DBG_ASSERT( TAB_PAGE_NOTFOUND == _nPagePos, "XFormsPage::SetModel(): invalid page position" );
+                try
+                {
+                    Reference< XContainer > xContainer( _xModel->getSubmissions(), UNO_QUERY );
+                    if ( xContainer.is() )
+                        m_pNaviWin->AddContainerBroadcaster( xContainer );
+
+                    Reference< XEnumerationAccess > xNumAccess( _xModel->getSubmissions(), UNO_QUERY );
+                    if ( xNumAccess.is() )
+                    {
+                        Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
+                        if ( xNum.is() && xNum->hasMoreElements() )
+                        {
+                            while ( xNum->hasMoreElements() )
+                            {
+                                Reference< XPropertySet > xPropSet;
+                                Any aAny = xNum->nextElement();
+                                if ( aAny >>= xPropSet )
+                                    AddEntry( xPropSet );
+                            }
+                        }
+                    }
+                }
+                catch( Exception& )
+                {
+                    DBG_ERRORFILE( "XFormsPage::SetModel(): exception caught" );
+                }
+                break;
+            }
+
+            case DGTBinding :
+            {
+                DBG_ASSERT( TAB_PAGE_NOTFOUND == _nPagePos, "XFormsPage::SetModel(): invalid page position" );
+                try
+                {
+                    Reference< XContainer > xContainer( _xModel->getBindings(), UNO_QUERY );
+                    if ( xContainer.is() )
+                        m_pNaviWin->AddContainerBroadcaster( xContainer );
+
+                    Reference< XEnumerationAccess > xNumAccess( _xModel->getBindings(), UNO_QUERY );
+                    if ( xNumAccess.is() )
+                    {
+                        Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
+                        if ( xNum.is() && xNum->hasMoreElements() )
+                        {
+                            Image aImage1 = rImageList.GetImage( IID_ELEMENT );
+                            Image aImage2 = rImageList.GetImage( IID_ELEMENT );
+                            String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                            while ( xNum->hasMoreElements() )
+                            {
+                                Reference< XPropertySet > xPropSet;
+                                Any aAny = xNum->nextElement();
+                                if ( aAny >>= xPropSet )
+                                {
+                                    String sEntry;
+                                    rtl::OUString sTemp;
+                                    xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
+                                    sEntry += String( sTemp );
+                                    sEntry += sDelim;
+                                    xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
+                                    sEntry += String( sTemp );
+
+                                    ItemNode* pNode = new ItemNode( xPropSet );
+                                    m_aItemList.InsertEntry(
+                                        sEntry, aImage1, aImage2, NULL, FALSE, LIST_APPEND, pNode );
+                                }
+                            }
+                        }
+                    }
+                }
+                catch( Exception& )
+                {
+                    DBG_ERRORFILE( "XFormsPage::SetModel(): exception caught" );
+                }
+                break;
+            }
+        }
+
+        EnableMenuItems( NULL );
+
+        return sRet;
+    }
+    //------------------------------------------------------------------------
+    void XFormsPage::ClearModel()
+    {
+        m_bHasModel = false;
+        m_aItemList.DeleteAndClear();
+    }
+    //------------------------------------------------------------------------
+    String XFormsPage::LoadInstance(
+        const Sequence< PropertyValue >& _xPropSeq, const ImageList& _rImgLst )
+    {
+        String sRet;
+        rtl::OUString sTemp;
+        rtl::OUString sInstModel = PN_INSTANCE_MODEL;
+        rtl::OUString sInstName = PN_INSTANCE_ID;
+        rtl::OUString sInstURL = PN_INSTANCE_URL;
+        const PropertyValue* pProps = _xPropSeq.getConstArray();
+        const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
+        for ( ; pProps != pPropsEnd; ++pProps )
+        {
+            if ( sInstModel.compareTo( pProps->Name ) == 0 )
+            {
+                Reference< css::xml::dom::XNode > xRoot;
+                if ( pProps->Value >>= xRoot )
+                {
+                    try
+                    {
+                        Reference< XEventTarget > xTarget( xRoot, UNO_QUERY );
+                        if ( xTarget.is() )
+                            m_pNaviWin->AddEventBroadcaster( xTarget );
+
+                        css::xml::dom::NodeType eNodeType = xRoot->getNodeType();
+                        ::rtl::OUString sNodeName =
+                            m_xUIHelper->getNodeDisplayName( xRoot, m_pNaviWin->IsShowDetails() );
+                        if ( sNodeName.getLength() == 0 )
+                            sNodeName = xRoot->getNodeName();
+                        ItemNode* pNode = new ItemNode( xRoot );
+                        if ( xRoot->hasChildNodes() )
+                            AddChildren( NULL, _rImgLst, xRoot );
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "XFormsPage::LoadInstance(): exception caught" );
+                    }
+                }
+            }
+            else if ( sInstName.compareTo( pProps->Name ) == 0 && ( pProps->Value >>= sTemp ) )
+                m_sInstanceName = sRet = sTemp;
+            else if ( sInstURL.compareTo( pProps->Name ) == 0 && ( pProps->Value >>= sTemp ) )
+                m_sInstanceURL = sTemp;
+        }
+
+        return sRet;
+    }
+
+    //------------------------------------------------------------------------
+    void XFormsPage::DoMenuAction( USHORT _nMenuID )
+    {
+        DoToolBoxAction( _nMenuID );
+    }
+
+    //------------------------------------------------------------------------
+    void XFormsPage::EnableMenuItems( Menu* _pMenu )
+    {
+        BOOL bEnableAdd = FALSE;
+        BOOL bEnableEdit = FALSE;
+        BOOL bEnableRemove = FALSE;
+
+        SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
+        if ( pEntry )
+        {
+            bEnableAdd = TRUE;
+            bool bSubmitChild = false;
+            if ( DGTSubmission == m_eGroup && m_aItemList.GetParent( pEntry ) )
+            {
+                pEntry = m_aItemList.GetParent( pEntry );
+                bSubmitChild = true;
+            }
+            ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+            if ( pNode && ( pNode->m_xNode.is() || pNode->m_xPropSet.is() ) )
+            {
+                bEnableEdit = TRUE;
+                bEnableRemove = ( bSubmitChild != true );
+                if ( DGTInstance == m_eGroup && !m_aItemList.GetParent( pEntry ) )
+                    bEnableRemove = FALSE;
+                if ( pNode->m_xNode.is() )
+                {
+                    try
+                    {
+                        css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
+                        if ( eChildType != css::xml::dom::NodeType_ELEMENT_NODE
+                            && eChildType != css::xml::dom::NodeType_DOCUMENT_NODE )
+                        {
+                            bEnableAdd = FALSE;
+                        }
+                    }
+                    catch ( Exception& )
+                    {
+                       DBG_ERRORFILE( "XFormsPage::EnableMenuItems(): exception caught" );
+                    }
+                }
+            }
+        }
+        else if ( m_eGroup != DGTInstance )
+            bEnableAdd = TRUE;
+
+        m_aToolBox.EnableItem( TBI_ITEM_ADD, bEnableAdd );
+        m_aToolBox.EnableItem( TBI_ITEM_ADD_ELEMENT, bEnableAdd );
+        m_aToolBox.EnableItem( TBI_ITEM_ADD_ATTRIBUTE, bEnableAdd );
+        m_aToolBox.EnableItem( TBI_ITEM_EDIT, bEnableEdit );
+        m_aToolBox.EnableItem( TBI_ITEM_REMOVE, bEnableRemove );
+
+        if ( _pMenu )
+        {
+            _pMenu->EnableItem( TBI_ITEM_ADD, bEnableAdd );
+            _pMenu->EnableItem( TBI_ITEM_ADD_ELEMENT, bEnableAdd );
+            _pMenu->EnableItem( TBI_ITEM_ADD_ATTRIBUTE, bEnableAdd );
+            _pMenu->EnableItem( TBI_ITEM_EDIT, bEnableEdit );
+            _pMenu->EnableItem( TBI_ITEM_REMOVE, bEnableRemove );
+        }
+        if ( DGTInstance == m_eGroup )
+        {
+            USHORT nResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
+            USHORT nResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
+            if ( pEntry )
+            {
+                ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
+                if ( pNode && pNode->m_xNode.is() )
+                {
+                    try
+                    {
+                        css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
+                        if ( eChildType == css::xml::dom::NodeType_ATTRIBUTE_NODE )
+                        {
+                            nResId1 = RID_STR_DATANAV_EDIT_ATTRIBUTE;
+                            nResId2 = RID_STR_DATANAV_REMOVE_ATTRIBUTE;
+                        }
+                    }
+                    catch ( Exception& )
+                    {
+                       DBG_ERRORFILE( "XFormsPage::EnableMenuItems(): exception caught" );
+                    }
+                }
+            }
+            m_aToolBox.SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( nResId1 ) );
+            m_aToolBox.SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( nResId2 ) );
+            if ( _pMenu )
+            {
+                _pMenu->SetItemText( TBI_ITEM_EDIT, SVX_RESSTR( nResId1 ) );
+                _pMenu->SetItemText( TBI_ITEM_REMOVE, SVX_RESSTR( nResId2 ) );
+            }
+        }
+    }
+
+
+    //========================================================================
+    // class DataNavigatorWindow
+    //========================================================================
+    DataNavigatorWindow::DataNavigatorWindow( Window* pParent ) :
+
+        Window( pParent, SVX_RES( RID_SVXWIN_DATANAVIGATOR ) ),
+
+        m_aModelsBox        ( this, ResId( LB_MODELS ) ),
+        m_aModelBtn         ( this, ResId( MB_MODELS ) ),
+        m_aTabCtrl          ( this, ResId( TC_ITEMS ) ),
+        m_aInstanceBtn      ( this, ResId( MB_INSTANCES ) ),
+
+        m_pInstPage         ( NULL ),
+        m_pSubmissionPage   ( NULL ),
+        m_pBindingPage      ( NULL ),
+
+        m_nMinWidth         ( 0 ),
+        m_nMinHeight        ( 0 ),
+        m_nBorderHeight     ( 0 ),
+        m_nLastSelectedPos  ( LISTBOX_ENTRY_NOTFOUND ),
+        m_bShowDetails      ( false ),
+        m_bIsNotifyDisabled ( false ),
+
+        m_aItemImageList    (       ResId( IL_ITEM_BMPS ) ),
+        m_aItemHCImageList  (       ResId( IL_ITEM_BMPS_HC ) ),
+        m_xDataListener     ( new DataListener( this ) )
+
+    {
+        FreeResource();
+
+        // init minimal metric
+        m_a2Size = LogicToPixel( Size( 2, 2 ), MAP_APPFONT );
+        m_a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+        Size aOutSz = GetOutputSizePixel();
+        m_nMinWidth = aOutSz.Width();
+        m_nMinHeight = aOutSz.Height();
+        m_nBorderHeight = 4*m_a3Size.Height() +
+            m_aModelBtn.GetSizePixel().Height() + m_aInstanceBtn.GetSizePixel().Height();
+
+        // handler
+        m_aModelsBox.SetSelectHdl( LINK( this, DataNavigatorWindow, ModelSelectHdl ) );
+        Link aLink = LINK( this, DataNavigatorWindow, MenuSelectHdl );
+        m_aModelBtn.SetSelectHdl( aLink );
+        m_aInstanceBtn.SetSelectHdl( aLink );
+        aLink = LINK( this, DataNavigatorWindow, MenuActivateHdl );
+        m_aModelBtn.SetActivateHdl( aLink );
+        m_aInstanceBtn.SetActivateHdl( aLink );
+        m_aTabCtrl.SetActivatePageHdl( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
+        m_aUpdateTimer.SetTimeout( 2000 );
+        m_aUpdateTimer.SetTimeoutHdl( LINK( this, DataNavigatorWindow, UpdateHdl ) );
+
+        Menu* pMenu = m_aInstanceBtn.GetPopupMenu();
+        pMenu->SetItemBits( MID_SHOW_DETAILS, MIB_CHECKABLE );
+        pMenu->CheckItem( MID_SHOW_DETAILS, FALSE );
+
+        // init tabcontrol
+        m_aTabCtrl.Show();
+        sal_Int32 nPageId = TID_INSTANCE;
+        SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
+        if ( aViewOpt.Exists() )
+            nPageId = aViewOpt.GetPageID();
+        m_aTabCtrl.SetCurPageId( static_cast< USHORT >( nPageId ) );
+        ActivatePageHdl( &m_aTabCtrl );
+
+        // load xforms models of the current document
+        LoadModels();
+    }
+    //------------------------------------------------------------------------
+    DataNavigatorWindow::~DataNavigatorWindow()
+    {
+        SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
+        aViewOpt.SetPageID( static_cast< sal_Int32 >( m_aTabCtrl.GetCurPageId() ) );
+
+        delete m_pInstPage;
+        delete m_pSubmissionPage;
+        delete m_pBindingPage;
+
+        sal_Int32 i, nCount = m_aPageList.size();
+        for ( i = 0; i < nCount; ++i )
+            delete m_aPageList[i];
+        Reference< XContainerListener > xContainerListener(
+            static_cast< XContainerListener* >( m_xDataListener.get() ), UNO_QUERY );
+        nCount = m_aContainerList.size();
+        for ( i = 0; i < nCount; ++i )
+            m_aContainerList[i]->removeContainerListener( xContainerListener );
+        Reference< XEventListener > xEventListener(
+            static_cast< XEventListener* >( m_xDataListener.get() ), UNO_QUERY );
+        nCount = m_aEventTargetList.size();
+        for ( i = 0; i < nCount; ++i )
+        {
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_CHARDATA, xEventListener, true );
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_CHARDATA, xEventListener, false );
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_ATTR, xEventListener, true );
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_ATTR, xEventListener, false );
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    IMPL_LINK( DataNavigatorWindow, ModelSelectHdl, ListBox *, pBox )
+    {
+        USHORT nPos = m_aModelsBox.GetSelectEntryPos();
+        // pBox == NULL, if you want to force a new fill.
+        if ( nPos != m_nLastSelectedPos || !pBox )
+        {
+            m_nLastSelectedPos = nPos;
+            ClearAllPageModels( pBox != NULL );
+            InitPages();
+            SetPageModel();
+        }
+
+        return 0;
+    }
+    // -----------------------------------------------------------------------
+    IMPL_LINK( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn )
+    {
+        bool bIsDocModified = false;
+        Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
+        USHORT nPos = m_aModelsBox.GetSelectEntryPos();
+        rtl::OUString sModel( m_aModelsBox.GetEntry( nPos ) );
+        Reference< css::xforms::XModel > xModel;
+        try
+        {
+            Any aAny = m_xDataContainer->getByName( sModel );
+            if ( aAny >>= xModel )
+                xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( xModel, UNO_QUERY );
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+        }
+        DBG_ASSERT( xUIHelper.is(), "DataNavigatorWindow::MenuSelectHdl(): no UIHelper" );
+
+        m_bIsNotifyDisabled = true;
+
+        if ( &m_aModelBtn == pBtn )
+        {
+            switch ( pBtn->GetCurItemId() )
+            {
+                case MID_MODELS_ADD :
+                {
+                    AddModelDialog aDlg( this, false );
+                    bool bShowDialog = true;
+                    while ( bShowDialog )
+                    {
+                        bShowDialog = false;
+                        if ( aDlg.Execute() == RET_OK )
+                        {
+                            String sNewName = aDlg.GetName();
+                            if ( m_aModelsBox.GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
+                            {
+                                // error: model name already exists
+                                ErrorBox aErrBox( this, SVX_RES( RID_ERR_DOUBLE_MODELNAME ) );
+                                String sMessText = aErrBox.GetMessText();
+                                sMessText.SearchAndReplace( MSG_VARIABLE, sNewName );
+                                aErrBox.SetMessText( sMessText );
+                                aErrBox.Execute();
+                                bShowDialog = true;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    // add new model to frame model
+                                    Reference< css::xforms::XModel > xNewModel =
+                                        xUIHelper->newModel( m_xFrameModel, sNewName );
+                                    if ( xNewModel.is() )
+                                    {
+                                        nPos = m_aModelsBox.InsertEntry( sNewName );
+                                        m_aModelsBox.SelectEntryPos( nPos );
+                                        ModelSelectHdl( &m_aModelsBox );
+                                        bIsDocModified = true;
+                                    }
+                                }
+                                catch ( Exception& )
+                                {
+                                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                case MID_MODELS_EDIT :
+                {
+                    AddModelDialog aDlg( this, true );
+                    USHORT nPos = m_aModelsBox.GetSelectEntryPos();
+                    rtl::OUString sModel( m_aModelsBox.GetEntry( nPos ) );
+                    aDlg.SetName( sModel );
+                    if ( aDlg.Execute() == RET_OK )
+                    {
+                        String sNewName = aDlg.GetName();
+                        if ( sNewName.Len() > 0 && ( sNewName != String( sModel ) ) )
+                        {
+                            try
+                            {
+                                xUIHelper->renameModel( m_xFrameModel, sModel, sNewName );
+                                m_aModelsBox.RemoveEntry( nPos );
+                                nPos = m_aModelsBox.InsertEntry( sNewName );
+                                m_aModelsBox.SelectEntryPos( nPos );
+                                bIsDocModified = true;
+                            }
+                            catch ( Exception& )
+                            {
+                                DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                            }
+                        }
+                    }
+                    break;
+                }
+                case MID_MODELS_REMOVE :
+                {
+                    QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_MODEL ) );
+                    String sText = aQBox.GetMessText();
+                    sText.SearchAndReplace( MODELNAME, sModel );
+                    aQBox.SetMessText( sText );
+                    if ( aQBox.Execute() == RET_YES )
+                    {
+                        try
+                        {
+                            xUIHelper->removeModel( m_xFrameModel, sModel );
+                        }
+                        catch ( Exception& )
+                        {
+                            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                        }
+                        m_aModelsBox.RemoveEntry( nPos );
+                        if ( m_aModelsBox.GetEntryCount() <= nPos )
+                            nPos = m_aModelsBox.GetEntryCount() - 1;
+                        m_aModelsBox.SelectEntryPos( nPos );
+                        ModelSelectHdl( &m_aModelsBox );
+                        bIsDocModified = true;
+                    }
+                    break;
+                }
+                default:
+                {
+                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
+                }
+            }
+        }
+        else if ( &m_aInstanceBtn == pBtn )
+        {
+            switch ( pBtn->GetCurItemId() )
+            {
+                case MID_INSTANCES_ADD :
+                {
+                    AddInstanceDialog aDlg( this, false );
+                    if ( aDlg.Execute() == RET_OK )
+                    {
+                        USHORT nInst = GetNewPageId();
+                        ::rtl::OUString sName = aDlg.GetName();
+                        ::rtl::OUString sURL = aDlg.GetURL();
+                        sal_Bool bOnlyOnce = !aDlg.IsLinkInstance();
+                        try
+                        {
+                            Reference< css::xml::dom::XDocument > xNewInst =
+                                xUIHelper->newInstance( sName, sURL, bOnlyOnce );
+                        }
+                        catch ( Exception& )
+                        {
+                            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                        }
+                        ModelSelectHdl( NULL );
+                        m_aTabCtrl.SetCurPageId( nInst );
+                        ActivatePageHdl( &m_aTabCtrl );
+                        bIsDocModified = true;
+                    }
+                    break;
+                }
+                case MID_INSTANCES_EDIT :
+                {
+                    USHORT nId = 0;
+                    XFormsPage* pPage = GetCurrentPage( nId );
+                    if ( pPage )
+                    {
+                        AddInstanceDialog aDlg( this, true );
+                        aDlg.SetName( pPage->GetInstanceName() );
+                        aDlg.SetURL( pPage->GetInstanceURL() );
+                        aDlg.SetRenameMode();
+                        String sOldName = aDlg.GetName();
+                        if ( aDlg.Execute() == RET_OK )
+                        {
+                            String sNewName = aDlg.GetName();
+                            try
+                            {
+                                xUIHelper->renameInstance( sOldName, sNewName );
+                            }
+                            catch ( Exception& )
+                            {
+                                DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                            }
+                            m_aTabCtrl.SetPageText( nId, sNewName );
+                            bIsDocModified = true;
+                        }
+                    }
+                    break;
+                }
+                case MID_INSTANCES_REMOVE :
+                {
+                    USHORT nId = 0;
+                    XFormsPage* pPage = GetCurrentPage( nId );
+                    if ( pPage )
+                    {
+                        String sInstName = pPage->GetInstanceName();
+                        QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_INSTANCE ) );
+                        String sMessText = aQBox.GetMessText();
+                        sMessText.SearchAndReplace( INSTANCENAME, sInstName );
+                        aQBox.SetMessText( sMessText );
+                        if ( aQBox.Execute() == RET_YES )
+                        {
+                            bool bDoRemove = false;
+                            if ( nId > TID_INSTANCE )
+                            {
+                                PageList::iterator aPageListEnd = m_aPageList.end();
+                                PageList::iterator aFoundPage =
+                                    std::find( m_aPageList.begin(), aPageListEnd, pPage );
+                                if ( aFoundPage != aPageListEnd )
+                                {
+                                    m_aPageList.erase( aFoundPage );
+                                    delete pPage;
+                                    bDoRemove = true;
+                                }
+                            }
+                            else
+                            {
+                                DELETEZ( m_pInstPage );
+                                bDoRemove = true;
+                            }
+
+                            if ( bDoRemove )
+                            {
+                                try
+                                {
+                                    xUIHelper->removeInstance( sInstName );
+                                }
+                                catch ( Exception& )
+                                {
+                                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                }
+                                m_aTabCtrl.RemovePage( nId );
+                                m_aTabCtrl.SetCurPageId( TID_INSTANCE );
+                                ModelSelectHdl( NULL );
+                                bIsDocModified = true;
+                            }
+                        }
+                    }
+                    break;
+                }
+                case MID_SHOW_DETAILS :
+                {
+                    m_bShowDetails = !m_bShowDetails;
+                    m_aInstanceBtn.GetPopupMenu()->CheckItem( MID_SHOW_DETAILS, m_bShowDetails );
+                    ModelSelectHdl( &m_aModelsBox );
+                    break;
+                }
+                default:
+                {
+                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
+                }
+            }
+        }
+        else
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): wrong button" );
+        }
+
+        m_bIsNotifyDisabled = false;
+
+        if ( bIsDocModified )
+            SetDocModified();
+        return 0;
+    }
+    // -----------------------------------------------------------------------
+    IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn )
+    {
+        Menu* pMenu = pBtn->GetPopupMenu();
+
+        if ( &m_aInstanceBtn == pBtn )
+        {
+            bool bIsInstPage = ( m_aTabCtrl.GetCurPageId() >= TID_INSTANCE );
+            pMenu->EnableItem( MID_INSTANCES_EDIT, bIsInstPage );
+            pMenu->EnableItem( MID_INSTANCES_REMOVE,
+                bIsInstPage && m_aTabCtrl.GetPageCount() > MIN_PAGE_COUNT );
+            pMenu->EnableItem( MID_SHOW_DETAILS, bIsInstPage );
+        }
+        else if ( &m_aModelBtn == pBtn )
+        {
+            // we need at least one model!
+            pMenu->EnableItem( MID_MODELS_REMOVE, m_aModelsBox.GetEntryCount() > 1 );
+        }
+        else
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::MenuActivateHdl(): wrong button" );
+        }
+        return 0;
+    }
+    // -----------------------------------------------------------------------
+    IMPL_LINK( DataNavigatorWindow, ActivatePageHdl, TabControl *, EMPTYARG )
+    {
+        USHORT nId = 0;
+        XFormsPage* pPage = GetCurrentPage( nId );
+        if ( pPage )
+        {
+            m_aTabCtrl.SetTabPage( nId, pPage );
+            if ( m_xDataContainer.is() && !pPage->HasModel() )
+                SetPageModel();
+        }
+
+        return 0;
+    }
+    // -----------------------------------------------------------------------
+    IMPL_LINK( DataNavigatorWindow, UpdateHdl, Timer *, EMPTYARG )
+    {
+        ModelSelectHdl( NULL );
+        return 0;
+    }
+    // -----------------------------------------------------------------------
+    XFormsPage* DataNavigatorWindow::GetCurrentPage( USHORT& rCurId )
+    {
+        rCurId = m_aTabCtrl.GetCurPageId();
+        XFormsPage* pPage = NULL;
+        switch ( rCurId )
+        {
+            case TID_SUBMISSION:
+            {
+                if ( !m_pSubmissionPage )
+                    m_pSubmissionPage = new XFormsPage( &m_aTabCtrl, this, DGTSubmission );
+                pPage = m_pSubmissionPage;
+                break;
+            }
+
+            case TID_BINDINGS:
+            {
+                if ( !m_pBindingPage )
+                    m_pBindingPage = new XFormsPage( &m_aTabCtrl, this, DGTBinding );
+                pPage = m_pBindingPage;
+                break;
+            }
+
+            case TID_INSTANCE:
+            {
+                if ( !m_pInstPage )
+                    m_pInstPage = new XFormsPage( &m_aTabCtrl, this, DGTInstance );
+                pPage = m_pInstPage;
+                break;
+            }
+        }
+
+        if ( rCurId > TID_INSTANCE )
+        {
+            USHORT nPos = m_aTabCtrl.GetPagePos( rCurId );
+            if ( HasFirstInstancePage() && nPos > 0 )
+                nPos--;
+            if ( m_aPageList.size() > nPos )
+                pPage = m_aPageList[nPos];
+            else
+            {
+                pPage = new XFormsPage( &m_aTabCtrl, this, DGTInstance );
+                m_aPageList.push_back( pPage );
+            }
+        }
+
+        return pPage;
+    }
+    // -----------------------------------------------------------------------
+    void DataNavigatorWindow::LoadModels()
+    {
+        if ( !m_xFrameModel.is() )
+        {
+            SfxViewFrame* pFrm = SfxViewFrame::Current();
+            Reference< XController > xCtrl = pFrm->GetFrame()->GetController();
+            if ( xCtrl.is() )
+            {
+                try
+                {
+                    m_xFrameModel = xCtrl->getModel();
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERRORFILE( "DataNavigatorWindow::LoadModels(): exception caught" );
+                }
+            }
+        }
+
+        if ( m_xFrameModel.is() )
+        {
+            try
+            {
+                ::rtl::OUString sURL = m_xFrameModel->getURL();
+                Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY );
+                if ( xFormsSupp.is() )
+                {
+                    Reference< XNameContainer > xContainer = xFormsSupp->getXForms();
+                    if ( xContainer.is() )
+                    {
+                        m_xDataContainer = xContainer;
+                        Sequence< ::rtl::OUString > aNameList = m_xDataContainer->getElementNames();
+                        sal_Int32 i, nCount = aNameList.getLength();
+                        ::rtl::OUString* pNames = aNameList.getArray();
+                        for ( i = 0; i < nCount; ++i )
+                        {
+                            Any aAny = m_xDataContainer->getByName( pNames[i] );
+                            Reference< css::xforms::XModel > xFormsModel;
+                            if ( aAny >>= xFormsModel )
+                                m_aModelsBox.InsertEntry( xFormsModel->getID() );
+                        }
+                    }
+                }
+            }
+            catch( Exception& )
+            {
+                DBG_ERRORFILE( "DataNavigatorWindow::LoadModels(): exception caught" );
+            }
+        }
+
+        if ( m_aModelsBox.GetEntryCount() > 0 )
+        {
+            m_aModelsBox.SelectEntryPos(0);
+            ModelSelectHdl( &m_aModelsBox );
+        }
+    }
+    // -----------------------------------------------------------------------
+    void DataNavigatorWindow::SetPageModel()
+    {
+        rtl::OUString sModel( m_aModelsBox.GetSelectEntry() );
+        try
+        {
+            Any aAny = m_xDataContainer->getByName( sModel );
+            Reference< css::xforms::XModel > xFormsModel;
+            if ( aAny >>= xFormsModel )
+            {
+                USHORT nPagePos = TAB_PAGE_NOTFOUND;
+                USHORT nId = 0;
+                XFormsPage* pPage = GetCurrentPage( nId );
+                DBG_ASSERT( pPage, "DataNavigatorWindow::SetPageModel(): no page" );
+                if ( nId >= TID_INSTANCE )
+                    // instance page
+                    nPagePos = m_aTabCtrl.GetPagePos( nId );
+                String sText = pPage->SetModel( xFormsModel, nPagePos );
+                if ( sText.Len() > 0 )
+                    m_aTabCtrl.SetPageText( nId, sText );
+            }
+        }
+        catch ( NoSuchElementException& )
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): no such element" );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): unexpected exception" );
+        }
+    }
+    // -----------------------------------------------------------------------
+    void DataNavigatorWindow::InitPages()
+    {
+        rtl::OUString sModel( m_aModelsBox.GetSelectEntry() );
+        try
+        {
+            Any aAny = m_xDataContainer->getByName( sModel );
+            Reference< css::xforms::XModel > xModel;
+            if ( aAny >>= xModel )
+            {
+                Reference< XEnumerationAccess > xNumAccess( xModel->getInstances(), UNO_QUERY );
+                if ( xNumAccess.is() )
+                {
+                    Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
+                    if ( xNum.is() && xNum->hasMoreElements() )
+                    {
+                        sal_Int32 nAlreadyLoadedCount = m_aPageList.size();
+                        if ( !HasFirstInstancePage() && nAlreadyLoadedCount > 0 )
+                            nAlreadyLoadedCount--;
+                        sal_Int32 nIdx = 0;
+                        while ( xNum->hasMoreElements() )
+                        {
+                            if ( nIdx > nAlreadyLoadedCount )
+                            {
+                                Sequence< PropertyValue > xPropSeq;
+                                Any aAny = xNum->nextElement();
+                                if ( aAny >>= xPropSeq )
+                                    CreateInstancePage( xPropSeq );
+                                else
+                                {
+                                    DBG_ERRORFILE( "DataNavigator::InitPages(): invalid instance" );
+                                }
+                            }
+                            else
+                                xNum->nextElement();
+                            nIdx++;
+                        }
+                    }
+                }
+            }
+        }
+        catch ( NoSuchElementException& )
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): no such element" );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): unexpected exception" );
+        }
+    }
+    // -----------------------------------------------------------------------
+    void DataNavigatorWindow::ClearAllPageModels( bool bClearPages )
+    {
+        if ( m_pInstPage )
+            m_pInstPage->ClearModel();
+        if ( m_pSubmissionPage )
+            m_pSubmissionPage->ClearModel();
+        if ( m_pBindingPage )
+            m_pBindingPage->ClearModel();
+
+        sal_Int32 i, nCount = m_aPageList.size();
+        for ( i = 0; i < nCount; ++i )
+        {
+            XFormsPage* pPage = m_aPageList[i];
+            pPage->ClearModel();
+            if ( bClearPages )
+                delete pPage;
+        }
+
+        if ( bClearPages )
+        {
+            m_aPageList.clear();
+            while ( m_aTabCtrl.GetPageCount() > MIN_PAGE_COUNT )
+                m_aTabCtrl.RemovePage( m_aTabCtrl.GetPageId( 1 ) );
+        }
+    }
+    // -----------------------------------------------------------------------
+    void DataNavigatorWindow::CreateInstancePage( const Sequence< PropertyValue >& _xPropSeq )
+    {
+        rtl::OUString sInstName;
+        rtl::OUString sID( PN_INSTANCE_ID );
+        const PropertyValue* pProps = _xPropSeq.getConstArray();
+        const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
+        for ( ; pProps != pPropsEnd; ++pProps )
+        {
+            if ( sID.compareTo( pProps->Name ) == 0 )
+            {
+                pProps->Value >>= sInstName;
+                break;
+            }
+        }
+
+        USHORT nPageId = GetNewPageId();
+        if ( sInstName.getLength() == 0 )
+        {
+            DBG_ERRORFILE( "DataNavigatorWindow::CreateInstancePage(): instance without name" );
+            String sTemp = String::CreateFromAscii( "untitled" );
+            sTemp += String::CreateFromInt32( nPageId );
+            sInstName = sTemp;
+        }
+        m_aTabCtrl.InsertPage( nPageId, sInstName, m_aTabCtrl.GetPageCount() - 2 );
+    }
+
+    //------------------------------------------------------------------------
+    bool DataNavigatorWindow::HasFirstInstancePage() const
+    {
+        return ( m_aTabCtrl.GetPageId( 0 ) == TID_INSTANCE );
+    }
+
+    //------------------------------------------------------------------------
+    USHORT DataNavigatorWindow::GetNewPageId() const
+    {
+        USHORT i, nMax = 0, nCount = m_aTabCtrl.GetPageCount();
+        for ( i = 0; i < nCount; ++i )
+        {
+            if ( nMax < m_aTabCtrl.GetPageId(i) )
+                nMax = m_aTabCtrl.GetPageId(i);
+        }
+        return ( nMax + 1 );
+    }
+
+    //------------------------------------------------------------------------
+    void DataNavigatorWindow::Resize()
+    {
+        Window::Resize();
+
+        Size aOutSz = GetOutputSizePixel();
+        long nWidth = Max( aOutSz.Width(), m_nMinWidth );
+        long nHeight = Max( aOutSz.Height(), m_nMinHeight );
+
+        Size aSz = m_aModelsBox.GetSizePixel();
+        aSz.Width() = nWidth - 3*m_a3Size.Width() - m_aModelBtn.GetSizePixel().Width();
+        m_aModelsBox.SetSizePixel( aSz );
+        Point aPos = m_aModelBtn.GetPosPixel();
+        aPos.X() = m_aModelsBox.GetPosPixel().X() + aSz.Width() + m_a3Size.Width();
+        m_aModelBtn.SetPosPixel( aPos );
+
+        aSz = m_aTabCtrl.GetSizePixel();
+        aSz.Width() = nWidth - 2*m_a3Size.Width();
+        aSz.Height() = nHeight - m_nBorderHeight;
+        m_aTabCtrl.SetSizePixel( aSz );
+        // Instance button positioning
+        aPos = m_aInstanceBtn.GetPosPixel();
+        // right aligned
+        aPos.X() = nWidth - m_aInstanceBtn.GetSizePixel().Width() - m_a3Size.Width();
+        // under the tabcontrol
+        aPos.Y() = m_aTabCtrl.GetPosPixel().Y() + aSz.Height() + m_a3Size.Height();
+        m_aInstanceBtn.SetPosPixel( aPos );
+    }
+
+    //------------------------------------------------------------------------
+    void DataNavigatorWindow::SetDocModified()
+    {
+        SfxObjectShell* pCurrentDoc = SfxObjectShell::Current();
+        DBG_ASSERT( pCurrentDoc, "DataNavigatorWindow::SetDocModified(): no objectshell" );
+        if ( !pCurrentDoc->IsModified() && pCurrentDoc->IsEnableSetModified() )
+            pCurrentDoc->SetModified();
+    }
+
+    //------------------------------------------------------------------------
+    void DataNavigatorWindow::NotifyChanges()
+    {
+        if ( !m_bIsNotifyDisabled )
+            m_aUpdateTimer.Start();
+    }
+
+    //------------------------------------------------------------------------
+    void DataNavigatorWindow::AddContainerBroadcaster( const XContainer_ref& xContainer )
+    {
+        Reference< XContainerListener > xListener(
+            static_cast< XContainerListener* >( m_xDataListener.get() ), UNO_QUERY );
+        xContainer->addContainerListener( xListener );
+        m_aContainerList.push_back( xContainer );
+    }
+
+    //------------------------------------------------------------------------
+    void DataNavigatorWindow::AddEventBroadcaster( const XEventTarget_ref& xTarget )
+    {
+        Reference< XEventListener > xListener(
+            static_cast< XEventListener* >( m_xDataListener.get() ), UNO_QUERY );
+        xTarget->addEventListener( EVENTTYPE_CHARDATA, xListener, true );
+        xTarget->addEventListener( EVENTTYPE_CHARDATA, xListener, false );
+        xTarget->addEventListener( EVENTTYPE_ATTR, xListener, true );
+        xTarget->addEventListener( EVENTTYPE_ATTR, xListener, false );
+        m_aEventTargetList.push_back( xTarget );
+    }
+
+    //========================================================================
+    // class DataNavigator
+    //========================================================================
+    DBG_NAME(DataNavigator)
+    //------------------------------------------------------------------------
+    DataNavigator::DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, Window* pParent ) :
+
+        SfxDockingWindow( pBindings, pMgr, pParent,
+                          WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
+        SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *pBindings ),
+
+        m_aDataWin( this )
+
+    {
+        DBG_CTOR(DataNavigator,NULL);
+
+        SetHelpId( HID_DATA_NAVIGATOR_WIN );
+        SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
+        SfxDockingWindow::SetFloatingSize( Size( 200, 400 ) );
+
+        m_aDataWin.Show();
+    }
+
+    //------------------------------------------------------------------------
+    DataNavigator::~DataNavigator()
+    {
+        DBG_DTOR(DataNavigator,NULL);
+    }
+
+    //-----------------------------------------------------------------------
+    void DataNavigator::Update( FmFormShell* pFormShell )
+    {
+    }
+    //-----------------------------------------------------------------------
+    void DataNavigator::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+    {
+        if ( !pState  || SID_FM_DATANAVIGATOR_CONTROL != nSID )
+            return;
+
+        if ( eState >= SFX_ITEM_AVAILABLE )
+        {
+            FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
+            Update( pShell );
+        }
+        else
+            Update( NULL );
+    }
+
+    //-----------------------------------------------------------------------
+    void DataNavigator::GetFocus()
+    {
+        SfxDockingWindow::GetFocus();
+    }
+
+    //-----------------------------------------------------------------------
+    sal_Bool DataNavigator::Close()
+    {
+        Update( NULL );
+        return SfxDockingWindow::Close();
+    }
+
+    //-----------------------------------------------------------------------
+    Size DataNavigator::CalcDockingSize( SfxChildAlignment eAlign )
+    {
+        Size aSize = SfxDockingWindow::CalcDockingSize( eAlign );
+
+        switch( eAlign )
+        {
+            case SFX_ALIGN_TOP:
+            case SFX_ALIGN_BOTTOM:
+                return Size();
+
+            case SFX_ALIGN_LEFT:
+            case SFX_ALIGN_RIGHT:
+                break;
+        }
+
+        return aSize;
+    }
+
+    //-----------------------------------------------------------------------
+    SfxChildAlignment DataNavigator::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
+    {
+        switch ( eAlign )
+        {
+            case SFX_ALIGN_LEFT:
+            case SFX_ALIGN_RIGHT:
+            case SFX_ALIGN_NOALIGNMENT:
+                return eAlign;
+        }
+
+        return eActAlign;
+    }
+
+    //------------------------------------------------------------------------
+    void DataNavigator::Resize()
+    {
+        SfxDockingWindow::Resize();
+
+        Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MAP_APPFONT );
+        Size aLogExplSize = aLogOutputSize;
+        aLogExplSize.Width() -= 2;
+        aLogExplSize.Height() -= 2;
+
+        Point aExplPos = LogicToPixel( Point(1,1), MAP_APPFONT );
+        Size aExplSize = LogicToPixel( aLogExplSize, MAP_APPFONT );
+
+        m_aDataWin.SetPosSizePixel( aExplPos, aExplSize );
+    }
+
+
+    //========================================================================
+    // class NavigatorFrameManager
+    //========================================================================
+
+    //-----------------------------------------------------------------------
+    SFX_IMPL_DOCKINGWINDOW( DataNavigatorManager, SID_FM_SHOW_DATANAVIGATOR )
+
+    //-----------------------------------------------------------------------
+    DataNavigatorManager::DataNavigatorManager(
+        Window* pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+
+        SfxChildWindow( pParent, nId )
+
+    {
+        pWindow = new DataNavigator( pBindings, this, pParent );
+        eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+        ( (SfxDockingWindow*)pWindow )->Initialize( pInfo );
+    }
+
+    //========================================================================
+    // class AddDataItemDialog
+    //========================================================================
+
+    AddDataItemDialog::AddDataItemDialog(
+        Window* pParent, ItemNode* _pNode,
+        const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper ) :
+
+        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_DATAITEM ) ),
+
+        m_aItemFL       ( this, ResId( FL_ITEM ) ),
+        m_aNameFT       ( this, ResId( FT_NAME ) ),
+        m_aNameED       ( this, ResId( ED_NAME ) ),
+        m_aDefaultFT    ( this, ResId( FT_DEFAULT ) ),
+        m_aDefaultED    ( this, ResId( ED_DEFAULT ) ),
+        m_aDefaultBtn   ( this, ResId( PB_DEFAULT ) ),
+        m_aSettingsFL   ( this, ResId( FL_SETTINGS ) ),
+        m_aDataTypeFT   ( this, ResId( FT_DATATYPE ) ),
+        m_aDataTypeLB   ( this, ResId( LB_DATATYPE ) ),
+        m_aRequiredCB   ( this, ResId( CB_REQUIRED ) ),
+        m_aRequiredBtn  ( this, ResId( PB_REQUIRED ) ),
+        m_aRelevantCB   ( this, ResId( CB_RELEVANT ) ),
+        m_aRelevantBtn  ( this, ResId( PB_RELEVANT ) ),
+        m_aConstraintCB ( this, ResId( CB_CONSTRAINT ) ),
+        m_aConstraintBtn( this, ResId( PB_CONSTRAINT ) ),
+        m_aReadonlyCB   ( this, ResId( CB_READONLY ) ),
+        m_aReadonlyBtn  ( this, ResId( PB_READONLY ) ),
+        m_aCalculateCB  ( this, ResId( CB_CALCULATE ) ),
+        m_aCalculateBtn ( this, ResId( PB_CALCULATE ) ),
+        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) ),
+
+        m_xUIHelper     ( _rUIHelper ),
+        m_pItemNode     ( _pNode ),
+        m_eItemType     ( DITNone ),
+        m_sFL_Element   ( ResId( STR_FIXEDLINE_ELEMENT ) ),
+        m_sFL_Attribute ( ResId( STR_FIXEDLINE_ATTRIBUTE ) ),
+        m_sFL_Binding   ( ResId( STR_FIXEDLINE_BINDING ) ),
+        m_sFT_BindingExp( ResId( STR_FIXEDTEXT_BINDING ) )
+
+    {
+        FreeResource();
+        m_aDataTypeLB.SetDropDownLineCount( 10 );
+
+        InitDialog();
+        InitFromNode();
+        InitDataTypeBox();
+        CheckHdl( NULL );
+    }
+
+    //------------------------------------------------------------------------
+    AddDataItemDialog::~AddDataItemDialog()
+    {
+        if ( m_xTempBinding.is() )
+        {
+            Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+            if ( xModel.is() )
+            {
+                try
+                {
+                    Reference < XSet > xBindings = xModel->getBindings();
+                    if ( xBindings.is() )
+                        xBindings->remove( makeAny( m_xTempBinding ) );
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERRORFILE( "AddDataItemDialog::Dtor(): exception caught" );
+                }
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddDataItemDialog, CheckHdl, CheckBox *, pBox )
+    {
+        // Condition buttons are only enable if their check box is checked
+        m_aReadonlyBtn.Enable( m_aReadonlyCB.IsChecked() );
+        m_aRequiredBtn.Enable( m_aRequiredCB.IsChecked() );
+        m_aRelevantBtn.Enable( m_aRelevantCB.IsChecked() );
+        m_aConstraintBtn.Enable( m_aConstraintCB.IsChecked() );
+        m_aCalculateBtn.Enable( m_aCalculateCB.IsChecked() );
+
+        if ( pBox && m_xTempBinding.is() )
+        {
+            ::rtl::OUString sTemp, sPropName;
+            if ( &m_aRequiredCB == pBox )
+                sPropName = PN_REQUIRED_EXPR;
+            else if ( &m_aRelevantCB == pBox )
+                sPropName = PN_RELEVANT_EXPR;
+            else if ( &m_aConstraintCB == pBox )
+                sPropName = PN_CONSTRAINT_EXPR;
+            else if ( &m_aReadonlyCB == pBox )
+                sPropName = PN_READONLY_EXPR;
+            else if ( &m_aCalculateCB == pBox )
+                sPropName = PN_CALCULATE_EXPR;
+            bool bIsChecked = ( pBox->IsChecked() != FALSE );
+            m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
+            if ( bIsChecked && sTemp.getLength() == 0 )
+                sTemp = TRUE_VALUE;
+            else if ( !bIsChecked && sTemp.getLength() > 0 )
+                sTemp = ::rtl::OUString();
+            m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
+        }
+
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddDataItemDialog, ConditionHdl, PushButton *, pBtn )
+    {
+        ::rtl::OUString sTemp, sPropName;
+        if ( &m_aDefaultBtn == pBtn )
+            sPropName = PN_BINDING_EXPR;
+        else if ( &m_aRequiredBtn == pBtn )
+            sPropName = PN_REQUIRED_EXPR;
+        else if ( &m_aRelevantBtn == pBtn )
+            sPropName = PN_RELEVANT_EXPR;
+        else if ( &m_aConstraintBtn == pBtn )
+            sPropName = PN_CONSTRAINT_EXPR;
+        else if ( &m_aReadonlyBtn == pBtn )
+            sPropName = PN_READONLY_EXPR;
+        else if ( &m_aCalculateBtn == pBtn )
+            sPropName = PN_CALCULATE_EXPR;
+        Reference< XPropertySet > xBind =
+            ( DITBinding == m_eItemType ) ? m_pItemNode->m_xPropSet : m_xBinding;
+        AddConditionDialog aDlg( this, sPropName, xBind );
+        bool bIsDefBtn = ( &m_aDefaultBtn == pBtn );
+        String sCondition;
+        if ( bIsDefBtn )
+            sCondition = m_aDefaultED.GetText();
+        else
+        {
+            m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
+            if ( sTemp.getLength() == 0 )
+                sTemp = TRUE_VALUE;
+            sCondition = sTemp;
+        }
+        aDlg.SetCondition( sCondition );
+
+        if ( aDlg.Execute() == RET_OK )
+        {
+            String sNewCondition = aDlg.GetCondition();
+            if ( bIsDefBtn )
+                m_aDefaultED.SetText( sNewCondition );
+            else
+            {
+
+                m_xTempBinding->setPropertyValue(
+                    sPropName, makeAny( ::rtl::OUString( sNewCondition ) ) );
+            }
+        }
+        return 0;
+    }
+
+    void copyPropSet( const Reference< XPropertySet >& xFrom, Reference< XPropertySet >& xTo )
+    {
+        DBG_ASSERT( xFrom.is(), "copyPropSet(): no source" );
+        DBG_ASSERT( xTo.is(), "copyPropSet(): no target" );
+
+        try
+        {
+            // get property names & infos, and iterate over target properties
+            Sequence< Property > aProperties = xTo->getPropertySetInfo()->getProperties();
+            sal_Int32 nProperties = aProperties.getLength();
+            const Property* pProperties = aProperties.getConstArray();
+            Reference< XPropertySetInfo > xFromInfo = xFrom->getPropertySetInfo();
+            for ( sal_Int32 i = 0; i < nProperties; ++i )
+            {
+                const ::rtl::OUString& rName = pProperties[i].Name;
+
+                // if both set have the property, copy the value
+                // (catch and ignore exceptions, if any)
+                if ( xFromInfo->hasPropertyByName( rName ) )
+                {
+                    // don't set readonly properties
+                    Property aProperty = xFromInfo->getPropertyByName( rName );
+                    if ( ( aProperty.Attributes && PropertyAttribute::READONLY ) == 0 )
+                        xTo->setPropertyValue(rName, xFrom->getPropertyValue( rName ));
+                }
+                // else: no property? then ignore.
+            }
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "copyPropSet(): exception caught" );
+        }
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddDataItemDialog, OKHdl, OKButton *, EMPTYARG )
+    {
+        bool bIsHandleBinding = ( DITBinding == m_eItemType );
+        bool bIsHandleText = ( DITText == m_eItemType );
+        ::rtl::OUString sNewName( m_aNameED.GetText() );
+
+        if ( ( !bIsHandleBinding && !bIsHandleText && !m_xUIHelper->isValidXMLName( sNewName ) ) ||
+             ( bIsHandleBinding && sNewName.getLength() == 0 ) )
+        {
+            // Error and don't close the dialog
+            ErrorBox aErrBox( this, SVX_RES( RID_ERR_INVALID_XMLNAME ) );
+            String sMessText = aErrBox.GetMessText();
+            sMessText.SearchAndReplace( MSG_VARIABLE, sNewName );
+            aErrBox.SetMessText( sMessText );
+            aErrBox.Execute();
+            return 0;
+        }
+
+        ::rtl::OUString sDataType( m_aDataTypeLB.GetSelectEntry() );
+        m_xTempBinding->setPropertyValue( PN_BINDING_TYPE, makeAny( sDataType ) );
+
+        if ( bIsHandleBinding )
+        {
+            // copy properties from temp binding to original binding
+            copyPropSet( m_xTempBinding, m_pItemNode->m_xPropSet );
+            try
+            {
+                ::rtl::OUString sValue = m_aNameED.GetText();
+                m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_ID, makeAny( sValue ) );
+                sValue = m_aDefaultED.GetText();
+                m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_EXPR, makeAny( sValue ) );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "AddDataDialog::OKHdl(): exception caught" );
+            }
+        }
+        else
+        {
+            // copy properties from temp binding to original binding
+            copyPropSet( m_xTempBinding, m_xBinding );
+            try
+            {
+                if ( bIsHandleText )
+                    m_xUIHelper->setNodeValue( m_pItemNode->m_xNode, m_aDefaultED.GetText() );
+                else
+                {
+                    Reference< css::xml::dom::XNode > xNewNode =
+                        m_xUIHelper->renameNode( m_pItemNode->m_xNode, m_aNameED.GetText() );
+                    m_xUIHelper->setNodeValue( xNewNode, m_aDefaultED.GetText() );
+                    m_pItemNode->m_xNode = xNewNode;
+                }
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "AddDataDialog::OKHdl(): exception caught" );
+            }
+        }
+        // then close the dialog
+        EndDialog( RET_OK );
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    void AddDataItemDialog::InitDialog()
+    {
+        // set handler
+        Link aLink = LINK( this, AddDataItemDialog, CheckHdl );
+        m_aRequiredCB.SetClickHdl( aLink );
+        m_aRelevantCB.SetClickHdl( aLink );
+        m_aConstraintCB.SetClickHdl( aLink );
+        m_aReadonlyCB.SetClickHdl( aLink );
+        m_aCalculateCB.SetClickHdl( aLink );
+
+        aLink = LINK( this, AddDataItemDialog, ConditionHdl );
+        m_aDefaultBtn.SetClickHdl( aLink );
+        m_aRequiredBtn.SetClickHdl( aLink );
+        m_aRelevantBtn.SetClickHdl( aLink );
+        m_aConstraintBtn.SetClickHdl( aLink );
+        m_aReadonlyBtn.SetClickHdl( aLink );
+        m_aCalculateBtn.SetClickHdl( aLink );
+
+        m_aOKBtn.SetClickHdl( LINK( this, AddDataItemDialog, OKHdl ) );
+    }
+
+    //------------------------------------------------------------------------
+    void AddDataItemDialog::InitFromNode()
+    {
+        if ( m_pItemNode )
+        {
+            if ( m_pItemNode->m_xNode.is() )
+            {
+                try
+                {
+                    // detect type of the node
+                    css::xml::dom::NodeType eChildType = m_pItemNode->m_xNode->getNodeType();
+                    switch ( eChildType )
+                    {
+                        case css::xml::dom::NodeType_ATTRIBUTE_NODE:
+                            m_eItemType = DITAttribute;
+                            break;
+                        case css::xml::dom::NodeType_ELEMENT_NODE:
+                            m_eItemType = DITElement;
+                            break;
+                        case css::xml::dom::NodeType_TEXT_NODE:
+                            m_eItemType = DITText;
+                            break;
+                    }
+
+                    /** Get binding of the node and clone it
+                        Then use this temporary binding in the dialog.
+                        When the user click OK the temporary binding will be copied
+                        into the original binding.
+                     */
+
+                    m_xBinding = m_xUIHelper->getBindingForNode( m_pItemNode->m_xNode, sal_True );
+                    if ( m_xBinding.is() )
+                    {
+                        Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+                        if ( xModel.is() )
+                        {
+                            m_xTempBinding = xModel->cloneBinding( m_xBinding );
+                            Reference < XSet > xBindings = xModel->getBindings();
+                            if ( xBindings.is() )
+                                xBindings->insert( makeAny( m_xTempBinding ) );
+                        }
+                    }
+
+                    if ( m_eItemType != DITText )
+                    {
+                        ::rtl::OUString sName( m_xUIHelper->getNodeName( m_pItemNode->m_xNode ) );
+                        m_aNameED.SetText( sName );
+                    }
+                    m_aDefaultED.SetText( m_pItemNode->m_xNode->getNodeValue() );
+                }
+                catch( Exception& )
+                {
+                    DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                }
+            }
+            else if ( m_pItemNode->m_xPropSet.is() )
+            {
+                m_eItemType = DITBinding;
+                Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+                if ( xModel.is() )
+                {
+                    try
+                    {
+                        m_xTempBinding = xModel->cloneBinding( m_pItemNode->m_xPropSet );
+                        Reference < XSet > xBindings = xModel->getBindings();
+                        if ( xBindings.is() )
+                            xBindings->insert( makeAny( m_xTempBinding ) );
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                    }
+                }
+                rtl::OUString sTemp;
+                try
+                {
+                    Reference< XPropertySetInfo > xInfo = m_pItemNode->m_xPropSet->getPropertySetInfo();
+                    if ( xInfo->hasPropertyByName( PN_BINDING_ID ) )
+                    {
+                        m_pItemNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
+                        m_aNameED.SetText( sTemp );
+                        m_pItemNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
+                        m_aDefaultED.SetText( sTemp );
+                    }
+                    else if ( xInfo->hasPropertyByName( PN_SUBMISSION_BIND ) )
+                    {
+                        m_pItemNode->m_xPropSet->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
+                        m_aNameED.SetText( sTemp );
+                    }
+                }
+                catch( Exception& )
+                {
+                    DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                }
+
+                Size a3and1Sz = LogicToPixel( Size( 3, 1 ), MAP_APPFONT );
+                Size aNewSz = m_aDefaultED.GetSizePixel();
+                Point aNewPnt = m_aDefaultED.GetPosPixel();
+                aNewPnt.Y() += a3and1Sz.Height();
+                aNewSz.Width() -= ( m_aDefaultBtn.GetSizePixel().Width() + a3and1Sz.Width() );
+                m_aDefaultED.SetPosSizePixel( aNewPnt, aNewSz );
+                m_aDefaultBtn.Show();
+            }
+
+            if ( m_xTempBinding.is() )
+            {
+                ::rtl::OUString sTemp;
+                try
+                {
+                    if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
+                        && sTemp.getLength() > 0 )
+                        m_aRequiredCB.Check( TRUE );
+                    if ( ( m_xTempBinding->getPropertyValue( PN_RELEVANT_EXPR ) >>= sTemp )
+                        && sTemp.getLength() > 0 )
+                        m_aRelevantCB.Check( TRUE );
+                    if ( ( m_xTempBinding->getPropertyValue( PN_CONSTRAINT_EXPR ) >>= sTemp )
+                        && sTemp.getLength() > 0 )
+                        m_aConstraintCB.Check( TRUE );
+                    if ( ( m_xTempBinding->getPropertyValue( PN_READONLY_EXPR ) >>= sTemp )
+                        && sTemp.getLength() > 0 )
+                        m_aReadonlyCB.Check( TRUE );
+                    if ( ( m_xTempBinding->getPropertyValue( PN_CALCULATE_EXPR ) >>= sTemp )
+                        && sTemp.getLength() > 0 )
+                        m_aCalculateCB.Check( TRUE );
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                }
+            }
+        }
+
+        if ( DITText == m_eItemType )
+        {
+            long nDelta = m_aButtonsFL.GetPosPixel().Y() - m_aSettingsFL.GetPosPixel().Y();
+            sal_Int32 i = 0;
+            Window* pWinsForHide[] =
+            {
+                &m_aSettingsFL, &m_aDataTypeFT, &m_aDataTypeLB, &m_aRequiredCB,
+                &m_aRequiredBtn, &m_aRelevantCB, &m_aRelevantBtn, &m_aConstraintCB,
+                &m_aConstraintBtn, &m_aReadonlyCB, &m_aReadonlyBtn, &m_aCalculateCB,
+                &m_aCalculateBtn
+            };
+            Window** pCurrent = pWinsForHide;
+            for ( ; i < sizeof( pWinsForHide ) / sizeof( pWinsForHide[ 0 ] ); ++i, ++pCurrent )
+                (*pCurrent)->Hide();
+
+            Window* pWinsForMove[] =
+            {
+                &m_aButtonsFL, &m_aOKBtn, &m_aEscBtn, &m_aHelpBtn
+            };
+            pCurrent = pWinsForMove;
+            for ( i = 0; i < sizeof( pWinsForMove ) / sizeof( pWinsForMove[ 0 ] ); ++i, ++pCurrent )
+            {
+                Point aNewPos = (*pCurrent)->GetPosPixel();
+                aNewPos.Y() -= nDelta;
+                (*pCurrent)->SetPosPixel( aNewPos );
+            }
+            Size aNewWinSz = GetSizePixel();
+            aNewWinSz.Height() -= nDelta;
+            SetSizePixel( aNewWinSz );
+
+            m_aNameFT.Disable();
+            m_aNameED.Disable();
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void AddDataItemDialog::InitDataTypeBox()
+    {
+        if ( m_eItemType != DITText )
+        {
+            Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+            if ( xModel.is() )
+            {
+                try
+                {
+                    Reference< css::xforms::XDataTypeRepository > xDataTypes =
+                        xModel->getDataTypeRepository();
+                    if ( xDataTypes.is() )
+                    {
+                        Sequence< ::rtl::OUString > aNameList = xDataTypes->getElementNames();
+                        sal_Int32 i, nCount = aNameList.getLength();
+                        ::rtl::OUString* pNames = aNameList.getArray();
+                        for ( i = 0; i < nCount; ++i )
+                            m_aDataTypeLB.InsertEntry( pNames[i] );
+                    }
+
+                    if ( m_xTempBinding.is() )
+                    {
+                        rtl::OUString sTemp;
+                        if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
+                        {
+                            USHORT nPos = m_aDataTypeLB.GetEntryPos( String( sTemp ) );
+                            if ( LISTBOX_ENTRY_NOTFOUND == nPos )
+                                nPos = m_aDataTypeLB.InsertEntry( sTemp );
+                            m_aDataTypeLB.SelectEntryPos( nPos );
+                        }
+                    }
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERRORFILE( "AddDataItemDialog::InitDataTypeBox(): exception caught" );
+                }
+            }
+        }
+    }
+
+    void AddDataItemDialog::InitText( DataItemType _eType )
+    {
+        String sText;
+
+        switch ( _eType )
+        {
+            case DITAttribute :
+            {
+                sText = m_sFL_Attribute;
+                break;
+            }
+
+            case DITBinding :
+            {
+                sText = m_sFL_Binding;
+                m_aDefaultFT.SetText( m_sFT_BindingExp );
+                break;
+            }
+
+            default:
+            {
+                sText = m_sFL_Element;
+            }
+        }
+
+        m_aItemFL.SetText( sText );
+    }
+
+    //========================================================================
+    // class AddConditionDialog
+    //========================================================================
+
+    AddConditionDialog::AddConditionDialog(
+        Window* pParent, const ::rtl::OUString& _rPropertyName,
+        const Reference< XPropertySet >& _rPropSet ) :
+
+        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_CONDITION ) ),
+
+        m_aConditionFT      ( this, ResId( FT_CONDITION ) ),
+        m_aConditionED      ( this, ResId( ED_CONDITION ) ),
+        m_aResultFT         ( this, ResId( FT_RESULT ) ),
+        m_aResultWin        ( this, ResId( FT_RESULT_PREVIEW ) ),
+        m_aEditNamespacesBtn( this, ResId( PB_EDIT_NAMESPACES ) ),
+        m_aButtonsFL        ( this, ResId( FL_DATANAV_BTN ) ),
+        m_aOKBtn            ( this, ResId( BTN_DATANAV_OK ) ),
+        m_aEscBtn           ( this, ResId( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn          ( this, ResId( BTN_DATANAV_HELP ) ),
+
+        m_sPropertyName     ( _rPropertyName ),
+        m_xBinding          ( _rPropSet )
+
+    {
+        FreeResource();
+
+        DBG_ASSERT( m_xBinding.is(), "AddConditionDialog::Ctor(): no Binding" );
+
+        m_aResultWin.SetBackground( m_aConditionED.GetBackground() );
+        m_aConditionED.SetModifyHdl( LINK( this, AddConditionDialog, ModifyHdl ) );
+        m_aEditNamespacesBtn.SetClickHdl( LINK( this, AddConditionDialog, EditHdl ) );
+        m_aOKBtn.SetClickHdl( LINK( this, AddConditionDialog, OKHdl ) );
+        m_aResultTimer.SetTimeout( 500 );
+        m_aResultTimer.SetTimeoutHdl( LINK( this, AddConditionDialog, ResultHdl ) );
+
+        if ( m_sPropertyName.getLength() > 0 )
+        {
+            try
+            {
+                rtl::OUString sTemp;
+                if ( ( m_xBinding->getPropertyValue( m_sPropertyName ) >>= sTemp )
+                    && sTemp.getLength() > 0 )
+                {
+                    m_aConditionED.SetText( sTemp );
+                }
+                else
+                {
+//!                 m_xBinding->setPropertyValue( m_sPropertyName, makeAny( TRUE_VALUE ) );
+                    m_aConditionED.SetText( TRUE_VALUE );
+                }
+
+                Reference< css::xforms::XModel > xModel;
+                if ( ( m_xBinding->getPropertyValue( PN_BINDING_MODEL ) >>= xModel ) && xModel.is() )
+                    m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( xModel, UNO_QUERY );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "AddConditionDialog::Ctor(): exception caught" );
+            }
+        }
+
+        DBG_ASSERT( m_xUIHelper.is(), "AddConditionDialog::Ctor(): no UIHelper" );
+        ResultHdl( &m_aResultTimer );
+    }
+
+    //------------------------------------------------------------------------
+    AddConditionDialog::~AddConditionDialog()
+    {
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddConditionDialog, EditHdl, PushButton *, EMPTYARG )
+    {
+        Reference< XNameContainer > xNameContnr;
+        try
+        {
+            m_xBinding->getPropertyValue( PN_BINDING_NAMESPACES ) >>= xNameContnr;
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "AddDataItemDialog::EditHdl(): exception caught" );
+        }
+        NamespaceItemDialog aDlg( this, xNameContnr );
+        aDlg.Execute();
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddConditionDialog, OKHdl, OKButton *, EMPTYARG )
+    {
+/*!!!
+        try
+        {
+            if ( m_xBinding.is() )
+                m_xBinding->setPropertyValue( m_sPropertyName, makeAny( ::rtl::OUString( m_aConditionED.GetText() ) ) );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERRORFILE( "AddConditionDialog, OKHdl: caught an exception!" );
+        }
+*/
+        EndDialog( RET_OK );
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddConditionDialog, ModifyHdl, MultiLineEdit *, EMPTYARG )
+    {
+        m_aResultTimer.Start();
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddConditionDialog, ResultHdl, Timer *, EMPTYARG )
+    {
+        String sCondition = m_aConditionED.GetText().EraseLeadingChars().EraseTrailingChars();
+        String sResult;
+        if ( sCondition.Len() > 0 )
+        {
+            try
+            {
+                sResult = m_xUIHelper->getResultForExpression( m_xBinding, ( m_sPropertyName == PN_BINDING_EXPR ), sCondition );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "AddConditionDialog::ResultHdl(): exception caught" );
+            }
+        }
+        m_aResultWin.SetText( sResult );
+        return 0;
+    }
+
+    //========================================================================
+    // class NamespaceItemDialog
+    //========================================================================
+
+    NamespaceItemDialog::NamespaceItemDialog(
+        AddConditionDialog* _pCondDlg, Reference< XNameContainer >& _rContainer ) :
+
+        ModalDialog( _pCondDlg, SVX_RES( RID_SVXDLG_NAMESPACE_ITEM ) ),
+
+        m_aNamespacesFT         ( this, ResId( FT_NAMESPACES ) ),
+        m_aNamespacesList       ( this, ResId( LB_NAMESPACES ) ),
+        m_aAddNamespaceBtn      ( this, ResId( PB_ADD_NAMESPACE ) ),
+        m_aEditNamespaceBtn     ( this, ResId( PB_EDIT_NAMESPACE ) ),
+        m_aDeleteNamespaceBtn   ( this, ResId( PB_DELETE_NAMESPACE ) ),
+        m_aButtonsFL            ( this, ResId( FL_DATANAV_BTN ) ),
+        m_aOKBtn                ( this, ResId( BTN_DATANAV_OK ) ),
+        m_aEscBtn               ( this, ResId( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn              ( this, ResId( BTN_DATANAV_HELP ) ),
+
+        m_pConditionDlg         ( _pCondDlg ),
+        m_rNamespaces           ( _rContainer )
+
+    {
+        static long aStaticTabs[]= { 3, 0, 35, 200 };
+        m_aNamespacesList.SvxSimpleTable::SetTabs( aStaticTabs );
+        String sHeader = String( ResId( STR_HEADER_PREFIX ) );
+        sHeader += '\t';
+        sHeader += String( ResId( STR_HEADER_URL ) );
+        m_aNamespacesList.InsertHeaderEntry(
+            sHeader, HEADERBAR_APPEND, HIB_LEFT /*| HIB_FIXEDPOS | HIB_FIXED*/ );
+
+        FreeResource();
+
+        m_aNamespacesList.SetSelectHdl( LINK( this, NamespaceItemDialog, SelectHdl ) );
+        Link aLink = LINK( this, NamespaceItemDialog, ClickHdl );
+        m_aAddNamespaceBtn.SetClickHdl( aLink );
+        m_aEditNamespaceBtn.SetClickHdl( aLink );
+        m_aDeleteNamespaceBtn.SetClickHdl( aLink );
+        m_aOKBtn.SetClickHdl( LINK( this, NamespaceItemDialog, OKHdl ) );
+
+        LoadNamespaces();
+        SelectHdl( &m_aNamespacesList );
+    }
+
+    //------------------------------------------------------------------------
+    NamespaceItemDialog::~NamespaceItemDialog()
+    {
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( NamespaceItemDialog, SelectHdl, SvxSimpleTable *,  EMPTYARG )
+    {
+        BOOL bEnable = ( m_aNamespacesList.FirstSelected() != NULL );
+        m_aEditNamespaceBtn.Enable( bEnable );
+        m_aDeleteNamespaceBtn.Enable( bEnable );
+
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( NamespaceItemDialog, ClickHdl, PushButton *, pBtn )
+    {
+        if ( &m_aAddNamespaceBtn == pBtn )
+        {
+            ManageNamespaceDialog aDlg( this, m_pConditionDlg, false );
+            if ( aDlg.Execute() == RET_OK )
+            {
+                String sEntry = aDlg.GetPrefix();
+                sEntry += '\t';
+                sEntry += aDlg.GetURL();
+                m_aNamespacesList.InsertEntry( sEntry );
+            }
+        }
+        else if ( &m_aEditNamespaceBtn == pBtn )
+        {
+            ManageNamespaceDialog aDlg( this, m_pConditionDlg, true );
+            SvLBoxEntry* pEntry = m_aNamespacesList.FirstSelected();
+            DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
+            String sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+            aDlg.SetNamespace(
+                sPrefix,
+                m_aNamespacesList.GetEntryText( pEntry, 1 ) );
+            if ( aDlg.Execute() == RET_OK )
+            {
+                // if a prefix was changed, mark the old prefix as 'removed'
+                if( sPrefix != aDlg.GetPrefix() )
+                    m_aRemovedList.push_back( sPrefix );
+
+                m_aNamespacesList.SetEntryText( aDlg.GetPrefix(), pEntry, 0 );
+                m_aNamespacesList.SetEntryText( aDlg.GetURL(), pEntry, 1 );
+            }
+        }
+        else if ( &m_aDeleteNamespaceBtn == pBtn )
+        {
+            SvLBoxEntry* pEntry = m_aNamespacesList.FirstSelected();
+            DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
+            ::rtl::OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+            m_aRemovedList.push_back( sPrefix );
+            m_aNamespacesList.GetModel()->Remove( pEntry );
+        }
+        else
+        {
+            DBG_ERRORFILE( "NamespaceItemDialog::ClickHdl(): invalid button" );
+        }
+
+        SelectHdl( &m_aNamespacesList );
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( NamespaceItemDialog, OKHdl, OKButton *, EMPTYARG )
+    {
+        try
+        {
+            // update namespace container
+            sal_Int32 i, nRemovedCount = m_aRemovedList.size();
+            for( i = 0; i < nRemovedCount; ++i )
+                m_rNamespaces->removeByName( m_aRemovedList[i] );
+
+            sal_Int32 nEntryCount = m_aNamespacesList.GetEntryCount();
+            for( i = 0; i < nEntryCount; ++i )
+            {
+                SvLBoxEntry* pEntry = m_aNamespacesList.GetEntry(i);
+                ::rtl::OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+                ::rtl::OUString sURL( m_aNamespacesList.GetEntryText( pEntry, 1 ) );
+
+                if ( m_rNamespaces->hasByName( sPrefix ) )
+                    m_rNamespaces->replaceByName( sPrefix, makeAny( sURL ) );
+                else
+                    m_rNamespaces->insertByName( sPrefix, makeAny( sURL ) );
+            }
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "NamespaceItemDialog::OKHdl(): exception caught" );
+        }
+        // and close the dialog
+        EndDialog( RET_OK );
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    void NamespaceItemDialog::LoadNamespaces()
+    {
+        try
+        {
+            Sequence< ::rtl::OUString > aAllNames = m_rNamespaces->getElementNames();
+            const ::rtl::OUString* pAllNames = aAllNames.getConstArray();
+            const ::rtl::OUString* pAllNamesEnd = pAllNames + aAllNames.getLength();
+            for ( ; pAllNames != pAllNamesEnd; ++pAllNames )
+            {
+                ::rtl::OUString sURL;
+                ::rtl::OUString sPrefix = *pAllNames;
+                if ( m_rNamespaces->hasByName( sPrefix ) )
+                {
+                    Any aAny = m_rNamespaces->getByName( sPrefix );
+                    if ( aAny >>= sURL )
+                    {
+                        String sEntry( sPrefix );
+                        sEntry += '\t';
+                        sEntry += String( sURL );
+
+                        m_aNamespacesList.InsertEntry( sEntry );
+                    }
+                }
+            }
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "NamespaceItemDialog::LoadNamespaces(): exception caught" );
+        }
+    }
+
+    //========================================================================
+    // class ManageNamespaceDialog
+    //========================================================================
+
+    ManageNamespaceDialog::ManageNamespaceDialog(
+        Window* pParent, AddConditionDialog* _pCondDlg, bool _bIsEdit ) :
+
+        ModalDialog( pParent, SVX_RES( RID_SVXDLG_MANAGE_NAMESPACE ) ),
+
+        m_aPrefixFT     ( this, ResId( FT_PREFIX ) ),
+        m_aPrefixED     ( this, ResId( ED_PREFIX ) ),
+        m_aUrlFT        ( this, ResId( FT_URL ) ),
+        m_aUrlED        ( this, ResId( ED_URL ) ),
+        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) ),
+
+        m_pConditionDlg ( _pCondDlg )
+
+    {
+        if ( _bIsEdit )
+            SetText( String( ResId( STR_EDIT_TEXT ) ) );
+
+        FreeResource();
+
+        m_aOKBtn.SetClickHdl( LINK( this, ManageNamespaceDialog, OKHdl ) );
+    }
+
+    //------------------------------------------------------------------------
+    ManageNamespaceDialog::~ManageNamespaceDialog()
+    {
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( ManageNamespaceDialog, OKHdl, OKButton *, EMPTYARG )
+    {
+        String sPrefix = m_aPrefixED.GetText();
+
+        try
+        {
+            if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
+            {
+                ErrorBox aErrBox( this, SVX_RES( RID_ERR_INVALID_XMLPREFIX ) );
+                String sMessText = aErrBox.GetMessText();
+                sMessText.SearchAndReplace( MSG_VARIABLE, sPrefix );
+                aErrBox.SetMessText( sMessText );
+                aErrBox.Execute();
+                return 0;
+            }
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "ManageNamespacesDialog::OKHdl(): exception caught" );
+        }
+
+        // no error so close the dialog
+        EndDialog( RET_OK );
+        return 0;
+    }
+
+    //========================================================================
+    // class AddSubmissionDialog
+    //========================================================================
+
+    AddSubmissionDialog::AddSubmissionDialog(
+        Window* pParent, ItemNode* _pNode,
+        const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper ) :
+
+        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_SUBMISSION ) ),
+
+        m_aSubmissionFL ( this, ResId( FL_SUBMISSION ) ),
+        m_aNameFT       ( this, ResId( FT_SUBMIT_NAME ) ),
+        m_aNameED       ( this, ResId( ED_SUBMIT_NAME ) ),
+        m_aActionFT     ( this, ResId( FT_SUBMIT_ACTION ) ),
+        m_aActionED     ( this, ResId( ED_SUBMIT_ACTION ) ),
+        m_aMethodFT     ( this, ResId( FT_SUBMIT_METHOD ) ),
+        m_aMethodLB     ( this, ResId( LB_SUBMIT_METHOD ) ),
+        m_aRefFT        ( this, ResId( FT_SUBMIT_REF ) ),
+        m_aRefED        ( this, ResId( ED_SUBMIT_REF ) ),
+        m_aRefBtn       ( this, ResId( PB_SUBMIT_REF ) ),
+        m_aBindFT       ( this, ResId( FT_SUBMIT_BIND ) ),
+        m_aBindLB       ( this, ResId( LB_SUBMIT_BIND ) ),
+        m_aReplaceFT    ( this, ResId( FT_SUBMIT_REPLACE ) ),
+        m_aReplaceLB    ( this, ResId( LB_SUBMIT_REPLACE ) ),
+
+        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) ),
+
+        m_pItemNode     ( _pNode ),
+        m_xUIHelper     ( _rUIHelper )
+
+    {
+        FillAllBoxes(); // we need local resources here, so call before FreeResource!!!
+
+        FreeResource();
+
+        m_aRefBtn.SetClickHdl( LINK( this, AddSubmissionDialog, RefHdl ) );
+        m_aOKBtn.SetClickHdl( LINK( this, AddSubmissionDialog, OKHdl ) );
+    }
+
+    //------------------------------------------------------------------------
+    AddSubmissionDialog::~AddSubmissionDialog()
+    {
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddSubmissionDialog, RefHdl, PushButton *, EMPTYARG )
+    {
+        AddConditionDialog aDlg( this, PN_BINDING_EXPR, m_xTempBinding );
+        aDlg.SetCondition( m_aRefED.GetText() );
+        if ( aDlg.Execute() == RET_OK )
+            m_aRefED.SetText( aDlg.GetCondition() );
+
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddSubmissionDialog, OKHdl, OKButton *, EMPTYARG )
+    {
+        if ( !m_xSubmission.is() )
+        {
+            DBG_ASSERT( !m_xNewSubmission.is(),
+                "AddSubmissionDialog::OKHdl(): new submission already exists" );
+
+            // add a new submission
+            Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+            if ( xModel.is() )
+            {
+                try
+                {
+                    m_xNewSubmission = xModel->createSubmission();
+                    m_xSubmission = Reference< XPropertySet >( m_xNewSubmission, UNO_QUERY );
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERRORFILE( "AddSubmissionDialog::OKHdl(): exception caught" );
+                }
+            }
+        }
+
+        if ( m_xSubmission.is() )
+        {
+            rtl::OUString sTemp = m_aNameED.GetText();
+            try
+            {
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, makeAny( sTemp ) );
+                sTemp = m_aActionED.GetText();
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_ACTION, makeAny( sTemp ) );
+                sTemp = m_aMethodLB.GetSelectEntry();
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, makeAny( sTemp ) );
+                sTemp = m_aRefED.GetText();
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
+                String sEntry = m_aBindLB.GetSelectEntry();
+                sEntry.Erase( sEntry.Search( ':' ) );
+                sTemp = sEntry;
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
+                sTemp = m_aReplaceLB.GetSelectEntry();
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, makeAny( sTemp ) );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "AddSubmissionDialog::OKHdl(): exception caught" );
+            }
+        }
+
+        EndDialog( RET_OK );
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    void AddSubmissionDialog::FillAllBoxes()
+    {
+        // method box
+        m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_POST ) ) );
+        m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_PUT ) ) );
+        m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_GET ) ) );
+        // binding box
+        Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
+        if ( xModel.is() )
+        {
+            try
+            {
+                Reference< XEnumerationAccess > xNumAccess( xModel->getBindings(), UNO_QUERY );
+                if ( xNumAccess.is() )
+                {
+                    Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
+                    if ( xNum.is() && xNum->hasMoreElements() )
+                    {
+                        String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                        while ( xNum->hasMoreElements() )
+                        {
+                            Reference< XPropertySet > xPropSet;
+                            Any aAny = xNum->nextElement();
+                            if ( aAny >>= xPropSet )
+                            {
+                                String sEntry;
+                                rtl::OUString sTemp;
+                                xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
+                                sEntry += String( sTemp );
+                                sEntry += sDelim;
+                                xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
+                                sEntry += String( sTemp );
+                                m_aBindLB.InsertEntry( sEntry );
+
+                                if ( !m_xTempBinding.is() )
+                                    m_xTempBinding = xPropSet;
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "AddSubmissionDialog::FillAllBoxes(): exception caught" );
+            }
+        }
+
+        // replace box
+        m_aReplaceLB.InsertEntry( String( ResId( STR_REPLACE_NONE ) ) );
+        m_aReplaceLB.InsertEntry( String( ResId( STR_REPLACE_INST ) ) );
+        m_aReplaceLB.InsertEntry( String( ResId( STR_REPLACE_DOC ) ) );
+
+
+        // init the controls with the values of the submission
+        if ( m_pItemNode && m_pItemNode->m_xPropSet.is() )
+        {
+            m_xSubmission = m_pItemNode->m_xPropSet;
+            rtl::OUString sTemp;
+            try
+            {
+                m_xSubmission->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
+                m_aNameED.SetText( sTemp );
+                m_xSubmission->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
+                m_aActionED.SetText( sTemp );
+                m_xSubmission->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
+                m_aRefED.SetText( sTemp );
+
+                m_xSubmission->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
+                USHORT nPos = m_aMethodLB.GetEntryPos( String( sTemp ) );
+                if ( LISTBOX_ENTRY_NOTFOUND == nPos )
+                    nPos = m_aMethodLB.InsertEntry( sTemp );
+                m_aMethodLB.SelectEntryPos( nPos );
+
+                m_xSubmission->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
+                nPos = m_aBindLB.GetEntryPos( String( sTemp ) );
+                if ( LISTBOX_ENTRY_NOTFOUND == nPos )
+                    nPos = m_aBindLB.InsertEntry( sTemp );
+                m_aBindLB.SelectEntryPos( nPos );
+
+                m_xSubmission->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
+                if ( sTemp.getLength() == 0 )
+                    sTemp = m_aReplaceLB.GetEntry(0); // first entry == "none"
+                nPos = m_aReplaceLB.GetEntryPos( String( sTemp ) );
+                if ( LISTBOX_ENTRY_NOTFOUND == nPos )
+                    nPos = m_aReplaceLB.InsertEntry( sTemp );
+                m_aReplaceLB.SelectEntryPos( nPos );
+            }
+            catch ( Exception& )
+            {
+                DBG_ERRORFILE( "AddSubmissionDialog::FillAllBoxes(): exception caught" );
+            }
+        }
+
+        m_aRefBtn.Enable( m_xTempBinding.is() );
+    }
+
+    //========================================================================
+    // class AddModelDialog
+    //========================================================================
+
+    AddModelDialog::AddModelDialog( Window* pParent, bool _bEdit ) :
+
+        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_MODEL ) ),
+
+        m_aModelFL      ( this, ResId( FL_MODEL ) ),
+        m_aNameFT       ( this, ResId( FT_MODEL_NAME ) ),
+        m_aNameED       ( this, ResId( ED_MODEL_NAME ) ),
+        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) )
+
+    {
+        if ( _bEdit )
+            SetText( String( ResId( STR_EDIT_TEXT ) ) );
+
+        FreeResource();
+    }
+
+    AddModelDialog::~AddModelDialog()
+    {
+    }
+
+    //========================================================================
+    // class AddInstanceDialog
+    //========================================================================
+
+    AddInstanceDialog::AddInstanceDialog( Window* pParent, bool _bEdit ) :
+
+        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_INSTANCE ) ),
+
+        m_aInstanceFL       ( this, ResId( FL_INSTANCE ) ),
+        m_aNameFT           ( this, ResId( FT_INST_NAME ) ),
+        m_aNameED           ( this, ResId( ED_INST_NAME ) ),
+        m_aURLFT            ( this, ResId( FT_INST_URL ) ),
+        m_aURLED            ( this, ResId( ED_INST_URL ) ),
+        m_aFilePickerBtn    ( this, ResId( PB_FILEPICKER ) ),
+        m_aLinkInstanceCB   ( this, ResId( CB_INST_LINKINST ) ),
+        m_aButtonsFL        ( this, ResId( FL_DATANAV_BTN ) ),
+        m_aOKBtn            ( this, ResId( BTN_DATANAV_OK ) ),
+        m_aEscBtn           ( this, ResId( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn          ( this, ResId( BTN_DATANAV_HELP ) )
+
+    {
+        if ( _bEdit )
+            SetText( String( ResId( STR_EDIT_TEXT ) ) );
+
+        FreeResource();
+
+        m_aURLED.DisableHistory();
+        m_aFilePickerBtn.SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
+
+        // load the filter name from svtools resource
+        ByteString aResMgrName( "svt" );
+        aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
+        ResMgr* pSvtResMgr = ResMgr::CreateResMgr(
+            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, pSvtResMgr ) );
+    }
+
+    AddInstanceDialog::~AddInstanceDialog()
+    {
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( AddInstanceDialog, FilePickerHdl, PushButton *, EMPTYARG )
+    {
+        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+        INetURLObject aFile( SvtPathOptions().GetWorkPath() );
+
+        aDlg.AddFilter( m_sAllFilterName, DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
+        String sFilterName( DEFINE_CONST_UNICODE("XML") );
+        aDlg.AddFilter( sFilterName, DEFINE_CONST_UNICODE("*.xml") );
+        aDlg.SetCurrentFilter( sFilterName );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+
+        if( aDlg.Execute() == ERRCODE_NONE )
+            m_aURLED.SetText( aDlg.GetPath() );
+
+        return 0;
+    }
+
+//............................................................................
+}   // namespace svxform
+//............................................................................
+
