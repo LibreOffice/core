@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:10:06 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 15:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1812,7 +1812,7 @@ void SwXTextField::attachToRange(
         }
         if(pFld)
         {
-            pFld->SetAutomaticLanguage(m_pProps->bBool4);
+            pFld->SetAutomaticLanguage(!m_pProps->bBool4);
             SwFmtFld aFmt( *pFld );
 
             UnoActionContext aCont(pDoc);
@@ -2005,7 +2005,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             pBool = &m_pProps->bBool3;
             break;
         case FIELD_PROP_BOOL4:
-            pBool = &m_pProps->bBool3;
+            pBool = &m_pProps->bBool4;
         break;
         case FIELD_PROP_DATE :
         {
