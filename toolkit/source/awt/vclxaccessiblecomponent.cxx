@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-25 11:27:42 $
+ *  last change: $Author: mt $ $Date: 2002-04-29 10:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,22 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
 
     switch ( rVclWindowEvent.GetId() )
     {
+        case VCLEVENT_WINDOW_CHILDCREATED:
+        {
+            Window* pWindow = (Window*) rVclWindowEvent.GetData();
+            DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDCREATED - Window=?" );
+//            aNewValue <<= pWindow->GetAccessible();
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+        }
+        break;
+        case VCLEVENT_WINDOW_CHILDDESTROYED:
+        {
+            Window* pWindow = (Window*) rVclWindowEvent.GetData();
+            DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDDESTROYED - Window=?" );
+//            aOldValue <<= pWindow->GetAccessible();
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+        }
+        break;
         case VCLEVENT_WINDOW_SHOW:
         {
             aNewValue <<= accessibility::AccessibleStateType::VISIBLE;
