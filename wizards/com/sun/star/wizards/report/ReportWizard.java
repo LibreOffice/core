@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 12:48:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     ReportLayouter CurReportLayouter;
     Finalizer CurReportFinalizer;
     public static String ReportPath;
+    PropertyValue[] DBGPROPERTYVALUE;
 
 
     public static final String SOREPORTFORMNAME = "ReportSource";
@@ -128,7 +129,6 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     static String slstDatabasesDefaultText;
     static String slstTablesDefaultText;
     static String sMsgErrorOccured;
-    static String sMsgNoDatabaseAvailable;
     static String sMsgCommandCouldNotbeOpened;
     static String sMsgSavingImpossible;
     static String sMsgLinkCreationImpossible;
@@ -239,7 +239,7 @@ public class ReportWizard extends WizardDialog implements XTextListener{
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             PropertyValue[] curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+            curproperties[0] = Properties.createProperty("DataSourceName", "file:///D:/trash/biblio.sxb");
             CurReportWizard.startReportWizard(xLocMSF, curproperties);
         }
     }
@@ -289,8 +289,6 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     }
 
 
-
-
     public void insertQueryRelatedSteps(){
         setRMItemLabels(oResource, UIConsts.RID_QUERY + 80);
         addRoadmap();
@@ -311,8 +309,9 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     try{
         this.xMSF = _xMSF;
         ReportPath = FileAccess.getOfficePath(xMSF, "Template","share") + "/wizard/report";
-        CurReportDocument =  new ReportDocument(xMSF, true, false, oResource);
+        CurReportDocument =  new ReportDocument(xMSF, true, oResource);
         CurDBMetaData = CurReportDocument.CurDBMetaData;
+        DBGPROPERTYVALUE = CurPropertyValue;
         if (CurDBMetaData.getConnection(CurPropertyValue)){
             CurReportDocument.xProgressBar.setValue(20);
             CurReportDocument.oTextStyleHandler.loadStyleTemplates(ReportPath + "/stl-default.stw", "LoadPageStyles");
@@ -330,29 +329,32 @@ public class ReportWizard extends WizardDialog implements XTextListener{
                         CheckIfTodisposeMetaData();
                         return;
                     }
-                    if ((CurReportFinalizer.buseTemplate == true) || (CurReportFinalizer.bcreateTemplate == false)){
+                    if ((CurReportFinalizer.getReportMode() == Finalizer.SOCREATETEMPLATE) || (CurReportFinalizer.getReportMode() == Finalizer.SOUSETEMPLATE)) {
+                        xComponent.dispose();
+                        bdisposeDialog = false;
+                        CurReportDocument.CurDBMetaData.addDatabaseDocument(CurReportDocument.xComponent, false,true);
+                        if (CurReportFinalizer.getReportMode() == Finalizer.SOUSETEMPLATE){
+                            CurDBMetaData.openReportDocument(CurReportFinalizer.getStoreName());
+                        }
+                    }
+                    else {
                         if (CurReportDocument.checkReportLayoutMode(CurReportDocument.CurDBMetaData.GroupFieldNames)){
                             xComponent.dispose();
                             bdisposeDialog = false;
                             Dataimport CurDataimport = new Dataimport(xMSF);
                             CurDataimport.CurReportDocument = CurReportDocument;
-                            CurDataimport.showProgressDisplay(xMSF, false);     // CurReportDocument.Frame.getComponentWindow().getPosSize().Width);
-                            importReportData(xMSF, CurDataimport);          // CurReportDocument, CurUnoProgressDialog, CurDataimport);
+                            CurDataimport.showProgressDisplay(xMSF, false);
+                            importReportData(xMSF, CurDataimport);
                         }
                         else{
                             xComponent.dispose();
-                            CheckIfTodisposeMetaData();             }
+                            CheckIfTodisposeMetaData();
+                        }
                     }
-                    else{
-                        CheckIfTodisposeMetaData();         }
                     break;
                 case 1:
                     if (bdisposeDialog == true)
                         CurReportDocument.unlockallControllers();
-                    else{
-                        int iMsg = SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgNoDatabaseAvailable);
-                        OfficeDocument.dispose(xMSF, CurReportDocument.xComponent);
-                    }
                     break;
             }
         }
@@ -374,14 +376,13 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     Thread ProgressThread = new Thread(new Runnable() {
 
         public void run(){
+        boolean bDocisStored = false;
         try{
             if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, false))
                 CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
-                if (CurReportFinalizer.bcreateTemplate == false){
-                    boolean bDocisStored = OfficeDocument.store(xMSF, CurReportDocument.xComponent, CurReportFinalizer.StorePath, "StarOffice XML (Writer)",
-                                                                false, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
-                    if (CurReportFinalizer.bcreateLink && bDocisStored)
-                        CurReportDocument.CurDBMetaData.createDBLink(CurReportFinalizer.StorePath);
+                if (CurReportFinalizer.getReportMode() == Finalizer.SOCREATEDOCUMENT){
+                    bDocisStored = OfficeDocument.store(xMSF, CurReportDocument.xComponent, CurReportFinalizer.getStorePath(), "StarOffice XML (Writer)",
+                                                                false, sMsgSavingImpossible);
                 }
             }
         catch (com.sun.star.wizards.common.InvalidQueryException queryexception){
@@ -390,9 +391,10 @@ public class ReportWizard extends WizardDialog implements XTextListener{
             System.out.println("could not stop thread");
             CurUnoProgressDialog.xComponent.dispose();
         }
-        CurReportDocument.CurDBMetaData.disposeDBMetaData();
-// Todo: Dispose the Reocordparser here too
         CurDataimport.xComponent.dispose();
+        if (bDocisStored)
+            CurReportDocument.CurDBMetaData.addDatabaseDocument(CurReportDocument.xComponent, false,CurReportFinalizer.getReportMode() == Finalizer.SOCREATETEMPLATE);
+        CurReportDocument.CurDBMetaData.disposeDBMetaData();
         }
     });
     ProgressThread.start();
@@ -408,7 +410,6 @@ public class ReportWizard extends WizardDialog implements XTextListener{
             sMsgErrorOccured = oResource.getResText(UIConsts.RID_DB_COMMON + 6);
             sMsgNoTableInDatabase = oResource.getResText(UIConsts.RID_DB_COMMON + 9);
             sMsgCommandCouldNotbeOpened = oResource.getResText(UIConsts.RID_DB_COMMON + 13);
-            sMsgNoDatabaseAvailable = oResource.getResText(UIConsts.RID_REPORT + 2);
             slblTables = oResource.getResText(UIConsts.RID_FORM + 6);
             slblFields = oResource.getResText(UIConsts.RID_FORM + 12);
             slblSelFields = oResource.getResText(UIConsts.RID_REPORT + 9);
