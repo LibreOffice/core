@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoUrl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-13 09:12:15 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,15 @@ public class UnoUrl {
         public String getUninterpretedParameterString() {
             return uninterpretedParameterString;
         }
+
+        public String getUninterpretedString() {
+            StringBuffer buf = new StringBuffer(partTypeName);
+            if (uninterpretedParameterString.length() > 0) {
+                buf.append(',');
+                buf.append(uninterpretedParameterString);
+            }
+            return buf.toString();
+        }
     }
 
     private UnoUrl(
@@ -218,6 +227,28 @@ public class UnoUrl {
      */
     public String getConnectionParametersAsString() {
         return connection.getUninterpretedParameterString();
+    }
+
+    /**
+     * Returns the raw specification of the protocol
+     * name and parameters. Encoded characters like '%41' are
+     * not decoded.
+     *
+     * @return The uninterpreted protocol name and parameters as string.
+     */
+    public String getProtocolAndParametersAsString() {
+        return protocol.getUninterpretedString();
+    }
+
+    /**
+     * Returns the raw specification of the connection
+     * name and parameters. Encoded characters like '%41' are
+     * not decoded.
+     *
+     * @return The uninterpreted connection name and parameters as string.
+     */
+    public String getConnectionAndParametersAsString() {
+        return connection.getUninterpretedString();
     }
 
     private static int hexToInt(int ch)
