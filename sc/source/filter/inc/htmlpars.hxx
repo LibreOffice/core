@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:54:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ public:
     explicit                    ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc );
     virtual                     ~ScHTMLParser();
 
-    virtual sal_uInt32          Read( SvStream& rStrm ) = 0;
+    virtual sal_uInt32          Read( SvStream& rStrm, const String& rBaseURL  ) = 0;
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable*  GetGlobalTable() const = 0;
@@ -164,6 +164,7 @@ class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
     Size                aPageSize;
+    String              aBaseURL;
     ScHTMLTableStack    aTableStack;
     String              aString;
     ScRangeListRef      xLockedList;        // je Table
@@ -228,9 +229,9 @@ private:
     void                FontOn( ImportInfo* );
 
 public:
-                        ScHTMLLayoutParser( EditEngine*, const Size& aPageSize, ScDocument* );
+                        ScHTMLLayoutParser( EditEngine*, const String& rBaseURL, const Size& aPageSize, ScDocument* );
     virtual             ~ScHTMLLayoutParser();
-    virtual ULONG       Read( SvStream& );
+    virtual ULONG       Read( SvStream&, const String& rBaseURL  );
     virtual const ScHTMLTable*  GetGlobalTable() const;
 };
 
@@ -623,7 +624,7 @@ public:
     explicit                    ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc );
     virtual                     ~ScHTMLQueryParser();
 
-    virtual sal_uInt32          Read( SvStream& rStrm );
+    virtual sal_uInt32          Read( SvStream& rStrm, const String& rBaseURL  );
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable*  GetGlobalTable() const;
