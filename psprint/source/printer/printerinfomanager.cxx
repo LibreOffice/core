@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-06 13:46:21 $
+ *  last change: $Author: pl $ $Date: 2002-07-24 09:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,13 +884,13 @@ struct SystemCommandParameters
 static const struct SystemCommandParameters aParms[] =
 {
 #ifdef LINUX
-    { "/usr/sbin/lpc status", "lpr -P (PRINTER)", "", ":", 0 },
-    { "lpc status", "lpr -P (PRINTER)", "", ":", 0 },
-    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d (PRINTER)", "system for ", ": ", 1 }
+    { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
+    { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
+    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1 }
 #else
-    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d (PRINTER)", "system for ", ": ", 1 },
-    { "/usr/sbin/lpc status", "lpr -P (PRINTER)", "", ":", 0 },
-    { "lpc status", "lpr -P (PRINTER)", "", ":", 0 }
+    { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1 },
+    { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
+    { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 }
 #endif
 };
 
