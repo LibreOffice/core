@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.9 $
+#*  $Revision: 1.10 $
 #*
-#*  last change: $Author: hr $ $Date: 2000-11-14 10:13:55 $
+#*  last change: $Author: hr $ $Date: 2000-11-14 11:04:54 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -153,6 +153,7 @@ LIB8FILES=	\
         $(SLB)$/svarray.lib \
         $(SLB)$/svhtml1.lib \
         $(SLB)$/svrtf.lib	\
+        $(SLB)$/svsql.lib	\
         $(SLB)$/cmdparse.lib
 
 # Bilden der dyn. Resourcen-DLL --------------------------------------------------
