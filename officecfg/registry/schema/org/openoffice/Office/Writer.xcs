@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $: vg $ $Date: 2004-07-05 13:41:27 $
+ *  last change: $: vg $ $Date: 2004-09-08 13:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,12 +489,12 @@
 					<desc>Enables the Footer.</desc>
 				</info>
 			</prop>
-			<prop oor:type="xs:int" oor:name="Salutation">
+			<prop oor:type="xs:string" oor:name="Salutation">
 				<info>
 					<desc>Type of the salutation.</desc>
 				</info>
 			</prop>
-			<prop oor:type="xs:int" oor:name="Greeting">
+			<prop oor:type="xs:string" oor:name="Greeting">
 				<info>
 					<desc>Type of the greeting.</desc>
 				</info>
@@ -574,6 +574,163 @@
 					<desc>Position of the Business Paper Company Address.</desc>
 				</info>
 			</node-ref>
+		</group>
+		<group oor:name="FaxControls" >
+			<info>
+				<author>TV</author>
+				<desc xml:lang="en-US">Specifies settings for a Fax Wizard type.</desc>
+			</info>
+			<prop oor:type="xs:int" oor:name="Style">
+				<info>
+					<desc xml:lang="en-US">Style of the Fax.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintCompanyLogo">
+				<info>
+					<desc xml:lang="en-US">Enables Company Logo.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintDate">
+				<info>
+					<desc xml:lang="en-US">Enables Date.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintCommunicationType">
+				<info>
+					<desc xml:lang="en-US">Enables Communication Type.</desc>
+				</info>
+			</prop>			
+			<prop oor:type="xs:boolean" oor:name="PrintSubjectLine">
+				<info>
+					<desc xml:lang="en-US">Enables the Subject line.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintSalutation">
+				<info>
+					<desc xml:lang="en-US">Enables the Salutation.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintGreeting">
+				<info>
+					<desc xml:lang="en-US">Enables the Greeting.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintFooter">
+				<info>
+					<desc xml:lang="en-US">Enables the Footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="CommunicationType">
+				<info>
+					<desc xml:lang="en-US">Type of the Communication.</desc>
+				</info>
+			</prop>			
+			<prop oor:type="xs:string" oor:name="Salutation">
+				<info>
+					<desc xml:lang="en-US">Type of the salutation.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="Greeting">
+				<info>
+					<desc xml:lang="en-US">Type of the greeting.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int" oor:name="SenderAddressType">
+				<info>
+					<desc xml:lang="en-US">Type of the sender address.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderCompanyName">
+				<info>
+					<desc xml:lang="en-US">Sender Company Name.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderStreet">
+				<info>
+					<desc xml:lang="en-US">Sender Street.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderPostCode">
+				<info>
+					<desc xml:lang="en-US">Sender PostCode.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderState">
+				<info>
+					<desc xml:lang="en-US">Sender State.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderCity">
+				<info>
+					<desc xml:lang="en-US">Sender City.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderFax">
+				<info>
+					<desc xml:lang="en-US">Sender Fax number.</desc>
+				</info>
+			</prop>			
+			<prop oor:type="xs:int" oor:name="ReceiverAddressType">
+				<info>
+					<desc xml:lang="en-US">Receiver Address Type.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="Footer">
+				<info>
+					<desc xml:lang="en-US">Content of the Footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="FooterOnlySecondPage">
+				<info>
+					<desc xml:lang="en-US">Enables that the Footer is only displayed of the Second and following pages.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="FooterPageNumbers">
+				<info>
+					<desc xml:lang="en-US">Add a page number to the footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int" oor:name="CreationType">
+				<info>
+					<desc xml:lang="en-US">Defines how the template is loaded after completion.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="TemplateName">
+				<info>
+					<desc xml:lang="en-US">Template Name.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="TemplatePath">
+				<info>
+					<desc xml:lang="en-US">Template Path.</desc>
+				</info>
+			</prop>
+		</group>
+		<group oor:name="AgendaWizardTopic">
+			<info>
+				<author>rpiterman</author>
+				<desc xml:lang="en-US"> Contains the topics properties </desc>
+			</info>
+			<prop oor:name="Index" oor:type="xs:int">
+				<info>
+					<desc xml:lang="en-US"> The index of the topic</desc>
+				</info>
+			</prop>
+			<prop oor:name="Topic" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US"> The title of the topic</desc>
+				</info>
+			</prop>
+			<prop oor:name="Responsible" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US"> The responsible person for the topic</desc>
+				</info>
+			</prop>
+			<prop oor:name="Time" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US"> The time for the topic</desc>
+				</info>
+			</prop>
 		</group>
 	</templates>
 	<component>
@@ -8465,6 +8622,141 @@
 						<desc>Reference to the LetterControls template for a Private Letter</desc>
 					</info>
 				</node-ref>
+			</group>
+			<group oor:name="Fax" >
+				<info>
+					<desc xml:lang="en-US">Specifies settings for the Fax Wizard.</desc>
+				</info>
+				<prop oor:type="xs:int" oor:name="FaxType">
+					<info>
+						<desc xml:lang="en-US">The type of the Fax</desc>
+					</info>
+				</prop>
+				<node-ref oor:node-type="FaxControls" oor:name="BusinessFax">
+					<info>
+						<desc xml:lang="en-US">Reference to the FaxControls template for a Business Fax</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:node-type="FaxControls" oor:name="PrivateFax">
+					<info>
+						<desc xml:lang="en-US">Reference to the FaxControls template for a Private Fax</desc>
+					</info>
+				</node-ref>
+			</group>
+			<group oor:name="Agenda">
+				<info>
+					<author>RPiterman</author>
+					<desc xml:lang="en-US">Specifies settings for the Agenda Wizard.</desc>
+				</info>
+				<prop oor:type="xs:int" oor:name="AgendaType">
+					<info>
+						<desc xml:lang="en-US">The number of the template to use</desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="IncludeMinutes">
+					<info>
+						<desc xml:lang="en-US">The type of the Fax</desc>
+					</info>
+				</prop>
+
+				<prop oor:type="xs:string" oor:name="Title">
+					<info>
+						<desc xml:lang="en-US">The title of the agenda</desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:string" oor:name="Date">
+					<info>
+						<desc xml:lang="en-US">The date of the meeting</desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:string" oor:name="Time">
+					<info>
+						<desc xml:lang="en-US">The time of the meeting</desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:string" oor:name="Location">
+					<info>
+						<desc xml:lang="en-US">The Location of the meeting</desc>
+					</info>
+				</prop>
+
+				<prop oor:type="xs:boolean" oor:name="ShowMeetingType">
+					<info>
+						<desc xml:lang="en-US">Show the "Type of meeting" heading ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowRead">
+					<info>
+						<desc xml:lang="en-US">Show the "read" heading ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowBring">
+					<info>
+						<desc xml:lang="en-US">Show the bring heading ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowNotes">
+					<info>
+						<desc xml:lang="en-US">Show the "notes" heading ? </desc>
+					</info>
+				</prop>
+
+				<prop oor:type="xs:boolean" oor:name="ShowCalledBy">
+					<info>
+						<desc xml:lang="en-US">Show the "Meeting called by" name ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowFacilitator">
+					<info>
+						<desc xml:lang="en-US">Show the "Facilitator" name ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowNotetaker">
+					<info>
+						<desc xml:lang="en-US">Show the "notetaker" name ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowTimekeeper">
+					<info>
+						<desc xml:lang="en-US">Show the "timekeeper" name ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowAttendees">
+					<info>
+						<desc xml:lang="en-US">Show the "attendees" names ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowObservers">
+					<info>
+						<desc xml:lang="en-US">Show the "observers" names ? </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:boolean" oor:name="ShowResourcePersons">
+					<info>
+						<desc xml:lang="en-US">Show the "resource persons" names ? </desc>
+					</info>
+				</prop>
+				
+				<prop oor:type="xs:string" oor:name="TemplateName">
+					<info>
+						<desc xml:lang="en-US">The template's document property "title" </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:string" oor:name="TemplatePath">
+					<info>
+						<desc xml:lang="en-US"> the full url to save to... </desc>
+					</info>
+				</prop>
+				<prop oor:type="xs:int" oor:name="ProceedMethod">
+					<info>
+						<desc xml:lang="en-US"> how to proceed? 0 = create document, 1 = edit template  </desc>
+					</info>
+				</prop>
+				<set oor:name="Topics" oor:node-type="AgendaWizardTopic">
+					<info>
+						<desc xml:lang="en-US"> The topics of the agenda wizard </desc>
+					</info>
+				</set>
 			</group>
 		</group>
 	</component>
