@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:54:40 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,14 @@
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
 #endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
 class SalDisplay;
-class SalInstance;
-class SalFrame;
+class X11SalFrame;
 class SalPrinter;
 
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -103,12 +102,6 @@ typedef unsigned int pthread_t;
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalData
 {
-            char**              argv_;
-            int                 argc_;
-            String              aBinaryPath_;
-
-            SALTIMERPROC        pTimerProc_;        // timer callback proc
-
             SIG_TYP             sig_[30];
             BOOL                bNoExceptions_;
 
@@ -120,19 +113,14 @@ class SalData
 
             pthread_t           hMainThread_;
 public:
-            SalInstance        *pFirstInstance_;    // pointer of first instance
-            SalFrame           *pFirstFrame_;       // pointer of first frame
+            X11SalInstance*     pInstance_;         // pointer to instance
+            X11SalFrame*        pFirstFrame_;       // pointer to first frame
 
 public:
                                 SalData();
                                 ~SalData();
 
-            void                Init( int *pArgc, char *ppArgv[] );
-
-    inline  const XubString    &GetFileName() const { return aBinaryPath_; }
-    inline  USHORT              GetCommandLineParamCount() const
-                                    { return argc_; }
-            XubString           GetCommandLineParam( USHORT nParam ) const;
+            void                Init();
 
             long                ShutDown() const;
             long                Close() const;
@@ -158,8 +146,6 @@ public:
 
             void                StartTimer( ULONG nMS );
     inline  void                StopTimer();
-    inline  void                SetCallback( SALTIMERPROC pProc )
-                                    { pTimerProc_ = pProc; }
             void                Timeout() const;
 
 };
@@ -194,9 +180,9 @@ public:
 inline YieldMutexReleaser::YieldMutexReleaser()
 {
     SalData *pSalData       = GetSalData();
-    m_pSalInstYieldMutex    =
-        pSalData->pFirstInstance_->maInstData.mpSalYieldMutex;
+    m_pSalInstYieldMutex    = static_cast<SalYieldMutex*>(pSalData->pInstance_->GetYieldMutex());
 
+    // release YieldMutex as often as acquired
     ULONG i;
     if ( m_pSalInstYieldMutex->GetThreadId() ==
          NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
@@ -211,7 +197,7 @@ inline YieldMutexReleaser::YieldMutexReleaser()
 
 inline YieldMutexReleaser::~YieldMutexReleaser()
 {
-    // Yield-Semaphore wieder holen
+    // acquire YieldMutex again
     while ( m_nYieldCount )
     {
         m_pSalInstYieldMutex->acquire();
