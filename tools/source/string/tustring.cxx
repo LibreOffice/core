@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tustring.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:25:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ DBG_NAMEEX( ByteString );
 #include <strimp.cxx>
 #include <strucvt.cxx>
 #include <strascii.cxx>
+
+UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
 // -----------------------------------------------------------------------
 
