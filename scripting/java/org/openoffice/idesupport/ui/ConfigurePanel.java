@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurePanel.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-06-04 13:19:52 $
+ *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@ import java.awt.event.ActionListener;
 
 import org.w3c.dom.Document;
 
-import org.openoffice.idesupport.xml.ParcelDescriptor;
+import com.sun.star.script.framework.browse.ScriptEntry;
+import com.sun.star.script.framework.browse.ParcelDescriptor;
+
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class ConfigurePanel extends JPanel {

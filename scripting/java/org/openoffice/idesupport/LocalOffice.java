@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOffice.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:05 $
+ *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,9 @@ public class LocalOffice
             File.separator + "modules" +
             File.separator + "ext" +
             File.separator + "localoffice.jar");
-        ClassLoader appcl   = new DefaultScriptClassLoader(parent, path);
+        // commented out so code will compile
+        // ClassLoader appcl   = new DefaultScriptClassLoader(parent, path);
+        ClassLoader appcl = path.getClass().getClassLoader();
         Class       clazz   = null;
         LocalOffice office  = null;
         try {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodPanel.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: npower $ $Date: 2003-03-03 18:42:22 $
+ *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.MalformedURLException;
 
-import org.openoffice.idesupport.ScriptEntry;
+import com.sun.star.script.framework.browse.ScriptEntry;
 import org.openoffice.idesupport.MethodFinder;
 import org.openoffice.idesupport.ExtensionFinder;
 import org.openoffice.idesupport.JavaFinder;

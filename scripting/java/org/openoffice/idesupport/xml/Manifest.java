@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Manifest.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:29 $
+ *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
+
+import com.sun.star.script.framework.browse.XMLParserFactory;
 
 public class Manifest {
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptPanel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 17:47:56 $
+ *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.AbstractTableModel;
 
-import org.openoffice.idesupport.ScriptEntry;
+import com.sun.star.script.framework.browse.ScriptEntry;
 
 public class ScriptPanel extends JPanel {
     private ScriptTableModel model;

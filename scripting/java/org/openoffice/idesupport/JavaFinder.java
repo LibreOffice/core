@@ -12,6 +12,8 @@ import java.net.URLClassLoader;
 import java.net.MalformedURLException;
 import org.openoffice.idesupport.zip.ParcelZipper;
 
+import com.sun.star.script.framework.browse.ScriptEntry;
+
 public class JavaFinder implements MethodFinder {
 
     private static JavaFinder finder;

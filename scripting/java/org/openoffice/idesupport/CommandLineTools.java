@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandLineTools.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-03-14 11:06:40 $
+ *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,12 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
+import com.sun.star.script.framework.browse.ScriptEntry;
+import com.sun.star.script.framework.browse.ParcelDescriptor;
+
 import org.openoffice.idesupport.zip.ParcelZipper;
-import org.openoffice.idesupport.xml.ParcelDescriptor;
 import org.openoffice.idesupport.filter.AllFilesFilter;
+import com.sun.star.script.framework.browse.XMLParserFactory;
 import org.openoffice.idesupport.*;
 
 public class CommandLineTools {
@@ -78,6 +81,20 @@ public class CommandLineTools {
     public static void main(String[] args) {
         CommandLineTools driver = new CommandLineTools();
         Command command = driver.parseArgs(args);
+
+        // Get the URL for the Office DTD directory and pass it to the
+        // XMLParserFactory so that Office xml files can be parsed
+        try {
+            SVersionRCFile sv = SVersionRCFile.createInstance();
+            String office = sv.getDefaultVersion().getPath();
+
+            OfficeInstallation oi = new OfficeInstallation(office);
+            String url = oi.getURL("share/dtd/officedocument/1_0/");
+            XMLParserFactory.setOfficeDTDURL(url);
+        }
+        catch (IOException ioe) {
+            System.err.println("Error getting Office DTD directory");
+        }
 
         if (command == null)
             driver.printUsage();
