@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:39:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,9 +182,6 @@
 #ifndef _DBAUI_INDEXDIALOG_HXX_
 #include "indexdialog.hxx"
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -317,7 +314,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(isEditable());
-            aReturn.bEnabled = m_bNew || isEditable() || isAddAllowed() || isDropAllowed() || isAlterAllowed();
+            aReturn.bEnabled = m_bNew || isEditable();// the editable flag is set through this one -> || isAddAllowed() || isDropAllowed() || isAlterAllowed();
             break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = isModified();
@@ -328,7 +325,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             }
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled |= isConnected();
+            aReturn.bEnabled = isConnected() && isEditable();
             if ( aReturn.bEnabled )
             {
                 ::std::vector<OTableRow*>::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
@@ -511,9 +508,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             if(!m_xTable.is()) // correct name and try again
             {
                 // it can be that someone inserted new data for us
-                ::rtl::OUString sComposedName;
-                ::dbaui::composeTableName(getConnection()->getMetaData(),xTable,sComposedName,sal_False);
-                m_sName = sComposedName;
+                m_sName = ::dbtools::composeTableName(getConnection()->getMetaData(),xTable,sal_False,::dbtools::eInDataManipulation);
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
@@ -524,9 +519,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             bAlter = sal_True;
             alterColumns();
         }
-        Reference<XFlushable> xFlush(m_xTable,UNO_QUERY);
-        if(xFlush.is())
-            xFlush->flush();
         reSyncRows();
     }
     catch(const SQLContext& e)
@@ -626,11 +618,11 @@ void OTableController::doEditIndexes()
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+void OTableController::impl_initialize( const Sequence< Any >& aArguments )
 {
     try
     {
-        OTableController_BASE::initialize(aArguments);
+        OTableController_BASE::impl_initialize(aArguments);
 
         PropertyValue aValue;
         const Any* pBegin   = aArguments.getConstArray();
@@ -646,19 +638,13 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
                 if ( xConn.is() )
                     initializeConnection( xConn );
             }
-            else if (0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
-            {
-                ::rtl::OUString sName;
-                aValue.Value >>= sName;
-                initializeDataSourceName( sName );
-                // read autoincrement value set in the datasource
-                ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);
-            }
             else if (0 == aValue.Name.compareToAscii(PROPERTY_CURRENTTABLE))
             {
                 aValue.Value >>= m_sName;
             }
         }
+        // read autoincrement value set in the datasource
+        ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);
 
         sal_Bool bFirstTry = sal_False;
         if (!isConnected())
@@ -680,21 +666,12 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         assignTable();
         if(!m_xFormatter.is())
         {
-            Reference< XChild> xChild(getConnection(), UNO_QUERY);
-            if(xChild.is())
+            Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(getConnection());
+            if(xSupplier.is())
             {
-                Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-                if(xProp.is())
-                {
-                    Reference< XNumberFormatsSupplier> xSupplier;
-                    xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER) >>= xSupplier;
-                    if(xSupplier.is())
-                    {
-                        m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
-                            ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
-                        m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-                    }
-                }
+                m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
+                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+                m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
             OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
@@ -738,6 +715,11 @@ sal_Bool OTableController::Construct(Window* pParent)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
 {
+    if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
+        return sal_True;
+
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
     sal_Bool bCheck = sal_True;
     if ( isModified() )
     {
@@ -1061,7 +1043,8 @@ void OTableController::loadData()
             pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
             sal_Bool bForce;
-            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bIsAutoIncrement,bForce);
+            ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x"));
+            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreate,nPrecision,nScale,bIsAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
                 pTypeInfo = m_pTypeInfo;
             pTabEdRow->SetFieldType( pTypeInfo, bForce );
@@ -1153,7 +1136,7 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
                 xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                 if(KeyType::PRIMARY == nKeyType)
                 {
-                    xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                    xKeyColsSup.set(xProp,UNO_QUERY);
                     OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
                     xKeyColumns = xKeyColsSup->getColumns();
                     break;
@@ -1567,7 +1550,8 @@ void OTableController::assignTable()
                 startTableListening();
 
                 // check if we set the table editable
-                setEditable( isAlterAllowed() || isDropAllowed() || isAddAllowed() );
+                Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
+                setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
                 if(!isEditable())
                 {
                     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
@@ -1579,12 +1563,8 @@ void OTableController::assignTable()
                 InvalidateAll();
             }
         }
-        if(m_xTable.is())
-            ::dbaui::composeTableName(getConnection()->getMetaData(),m_xTable,sComposedName,sal_False);
-        else
-            sComposedName = m_sName;
     }
-    setTitle(sComposedName);
+    updateTitle();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::isAddAllowed() const
@@ -1663,23 +1643,33 @@ void OTableController::reSyncRows()
     return sName;
 }
 // -----------------------------------------------------------------------------
-String OTableController::getMenu() const
+void OTableController::updateTitle()
 {
-    return String::CreateFromInt32(RID_TABLE_DESIGN_MAIN_MENU);
-}
-// -----------------------------------------------------------------------------
-void OTableController::setTitle(const ::rtl::OUString & _rTitle)
-{
-    Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-    if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
+    try
     {
+        ::rtl::OUString sTitle;
+        // get the table
+        if ( m_sName.getLength() && getConnection().is() )
+        {
+            if ( m_xTable.is() )
+                sTitle = ::dbtools::composeTableName(getConnection()->getMetaData(),m_xTable,sal_False,::dbtools::eInDataManipulation);
+            else
+                sTitle = m_sName;
+        }
         ::rtl::OUString sName = String(ModuleRes(STR_TABLEDESIGN_TITLE));
-        sName += ::rtl::OUString::createFromAscii(": ");
-        if(_rTitle.getLength())
-            sName += _rTitle;
+        if(sTitle.getLength())
+            sName = sTitle + sName;
         else
-            sName += getDataSourceName();
-        xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
+        {
+            ::rtl::OUString sTemp(getDataSourceName());
+            sName = ::dbaui::getStrippedDatabaseName(getDataSource(),sTemp) + sName;
+        }
+
+        OGenericUnoController::setTitle(sName);
+    }
+    catch(Exception)
+    {
+        OSL_ENSURE(0,"Exception catched while setting the title!");
     }
 }
 // -----------------------------------------------------------------------------
