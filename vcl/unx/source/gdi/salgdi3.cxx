@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hdu $ $Date: 2001-06-11 15:33:01 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 13:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,8 @@ SalDisplay::GetXlfdList()
                  continue;
             #endif
 
+
+
             Bool bSameOutline = pXlfdList[i].SameFontoutline(pXlfdList + nFrom);
             XlfdFonttype eType = pXlfdList[i].Fonttype();
 
@@ -1033,7 +1035,6 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
 
     // set foreground
     GC nGC = SelectFont();
-
     XGCValues aGCVal;
     XGetGCValues( pDisplay, nGC, GCForeground, &aGCVal );
     aGCVal.clip_mask = None;
@@ -1044,7 +1045,6 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
     // notify xrender of target drawable
     XRenderPictureAttributes aAttr;
     Picture aDst = (*aX11GlyphPeer.pXRenderCreatePicture)( pDisplay, hDrawable_, pVisualFormat, 0, &aAttr );
-
     // set clipping
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
         (*aX11GlyphPeer.pXRenderSetPictureClipRegion)( pDisplay, aDst, pClipRegion_ );
@@ -1444,6 +1444,7 @@ SalGraphicsData::DrawStringMB ( int nX, int nY, const sal_Unicode* pStr, int nLe
     XDrawText16( pDisplay, hDrawable_, nGC, nX, nY, pTextItem, nItem );
 }
 
+//--------------------------------------------------------------------------
 
 // draw string in one of the fonts / encodings that are available in the
 // extended font
@@ -1460,6 +1461,21 @@ SalGraphicsData::DrawText( long nX, long nY, const sal_Unicode* pStr, USHORT nLe
         else
             DrawStringMB ( nX, nY, pStr, nLength );
     }
+}
+
+// ---------------------------------------------------------------------------
+
+ULONG SalGraphicsData::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+{
+    ULONG nPairs = 0;
+#ifdef USE_BUILTIN_RASTERIZER
+    if( mpServerSideFont )
+        nPairs = mpServerSideFont->GetFontCodeRanges( pCodePairs );
+    else
+#endif //USE_BUILTIN_RASTERIZER
+    if( xFont_ )
+        nPairs = xFont_->GetFontCodeRanges( pCodePairs );
+    return nPairs;
 }
 
 //--------------------------------------------------------------------------
@@ -1846,6 +1862,7 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                     nFaceNum = 0;
                 rGC.AddFontFile( rMgr.getFontFileSysPath( aInfo.m_nID ), nFaceNum,
                     aInfo.m_nID, &aFontData );
+
             }
         }
 
@@ -2030,7 +2047,7 @@ SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
     // the font should know it's metrics best
     SalDisplay *pSalDisplay = maGraphicsData.GetDisplay();
 
-    nCharWidth = maGraphicsData.xFont_->GetCharWidth( nChar1, nChar2, pWidthAry,                        maGraphicsData.mxFallbackFont );
+    nCharWidth = maGraphicsData.xFont_->GetCharWidth( nChar1, nChar2, pWidthAry, maGraphicsData.mxFallbackFont );
 
     // XXX sanity check, this may happen if the font cannot be loaded/queried
     // either because of a garbled fontpath or because of invalid fontfile
@@ -2139,6 +2156,13 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
     }
 
     return 0;
+}
+
+// ---------------------------------------------------------------------------
+
+ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+{
+    return maGraphicsData.GetFontCodeRanges( pCodePairs );
 }
 
 // ---------------------------------------------------------------------------
