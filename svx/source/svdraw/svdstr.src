@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-10 15:25:02 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2155,7 +2155,7 @@ String STR_ObjNameSingulTITLETEXT
     Text [ portuguese ] = "Texto do título" ;
     Text [ finnish ] = "Otsikkoteksti" ;
     Text [ danish ] = "Titeltekst" ;
-    Text [ french ] = "Texte (titres)" ;
+    Text [ french ] = "Texte (titre)" ;
     Text [ swedish ] = "Rubriktext" ;
     Text [ dutch ] = "Titeltekst" ;
     Text [ spanish ] = "Texto del título" ;
@@ -4691,7 +4691,7 @@ String STR_EditConvToPoly
     Text [ finnish ] = "Muunna %O monikulmioksi" ;
     Text [ danish ] = "Konverter %O til polygon" ;
     Text [ french ] = "Convertir %O en polygone" ;
-    Text [ swedish ] = "Ändra %O till polygon" ;
+    Text [ swedish ] = "Omvandla %O till polygon" ;
     Text [ dutch ] = "%O naar veelhoek converteren" ;
     Text [ spanish ] = "Convertir %O en polígono" ;
     Text [ english_us ] = "Convert %O to polygon" ;
@@ -4719,7 +4719,7 @@ String STR_EditConvToPolys
     Text [ finnish ] = "Muunna %O monikulmioiksi" ;
     Text [ danish ] = "Konverter %O til polygoner" ;
     Text [ french ] = "Convertir %O en polygones" ;
-    Text [ swedish ] = "Ändra %O till polygoner" ;
+    Text [ swedish ] = "Omvandla %O till polygoner" ;
     Text [ dutch ] = "%O naar veelhoeken converteren" ;
     Text [ spanish ] = "Convertir %O en polígonos" ;
     Text [ english_us ] = "Convert %O to polygons" ;
@@ -4747,7 +4747,7 @@ String STR_EditConvToCurve
     Text [ finnish ] = "Muunna %O käyräksi" ;
     Text [ danish ] = "Konverter %O til kurve" ;
     Text [ french ] = "Convertir %O en courbe" ;
-    Text [ swedish ] = "Ändra %O till kurva" ;
+    Text [ swedish ] = "Omvandla %O till kurva" ;
     Text [ dutch ] = "%O naar boog converteren" ;
     Text [ spanish ] = "Convertir %O en curva" ;
     Text [ english_us ] = "Convert %O to curve" ;
@@ -4775,7 +4775,7 @@ String STR_EditConvToCurves
     Text [ finnish ] = "Muunna %O käyriksi" ;
     Text [ danish ] = "Konverter %O til kurver" ;
     Text [ french ] = "Convertir %O en courbes" ;
-    Text [ swedish ] = "Ändra %O till kurvor" ;
+    Text [ swedish ] = "Omvandla %O till kurvor" ;
     Text [ dutch ] = "%O naar bogen converteren" ;
     Text [ spanish ] = "Convertir %O en curvas" ;
     Text [ english_us ] = "Convert %O to curves" ;
@@ -5416,7 +5416,7 @@ String STR_ExchangeClpPaste
     Text[ arabic ] = "áÕŞ ÇáÍÇİÙÉ";
     Text[ dutch ] = "Inhoud van het Klembord plakken";
     Text[ chinese_simplified ] = "²åÈë¼ôÌù°åÄÚÈİ";
-    Text[ greek ] = "Åğéêüëëçóç Clipboard";
+    Text[ greek ] = "Åğéêüëëçóç ôïõ ğñü÷åéñïõ";
     Text[ korean ] = "Å¬¸³º¸µå ºÙ¿©³Ö±â";
     Text[ turkish ] = "Pano içeriğini yapıştır";
     Text[ language_user1 ] = " ";
@@ -6268,7 +6268,7 @@ String STR_ViewMarkedGluePoint
     Text [ portuguese ] = "Ponto de colagem de %O" ;
     Text [ english_us ] = "Glue point from %O" ;
     Text [ portuguese_brazilian ] = "Klebepunkt von %O" ;
-    Text [ swedish ] = "Fästpunkt för %O" ;
+    Text [ swedish ] = "fästpunkt för %O" ;
     Text [ danish ] = "Klæbepunkt for %O" ;
     Text [ italian ] = "Punto di incollaggio di  %O" ;
     Text [ spanish ] = "Punto de adhesión de %O" ;
@@ -6768,7 +6768,7 @@ String STR_UndoDelPageMasterDscr
     Text [ portuguese ] = "Remover atributos da página do plano de fundo" ;
     Text [ english_us ] = "Clear background page assignment" ;
     Text [ portuguese_brazilian ] = "Hintergrundseitenzuordnung entfernen" ;
-    Text [ swedish ] = "Ta bort sidformatmallens bakgrund" ;
+    Text [ swedish ] = "Ta bort tilldelning av bakgrundssidor" ;
     Text [ danish ] = "Fjern baggrundssidetildeling" ;
     Text [ italian ] = "Elimina correlazione pagina di sfondo" ;
     Text [ spanish ] = "Eliminar atributos de la página de fondo" ;
@@ -6782,7 +6782,7 @@ String STR_UndoDelPageMasterDscr
     Text[ arabic ] = "ÅÒÇáÉ ÊÚííä ÕİÍÇÊ ÇáÎáİíÉ";
     Text[ dutch ] = "Toewijzing achtergrondpagina´s verwijderen";
     Text[ chinese_simplified ] = "É¾³ı±³¾°Ò³ÃæÅäÖÃ";
-    Text[ greek ] = "ÊáôÜñãçóç áíôéóôïß÷çóçò óåëéäşí öüíôïõ";
+    Text[ greek ] = "ÊáôÜñãçóç áíôéóôïß÷éóçò óåëéäşí öüíôïõ";
     Text[ korean ] = "¹è°æ ÆäÀÌÁö ¹èÁ¤ Á¦°Å";
     Text[ turkish ] = "Artalan sayfa atamasını kaldır";
     Text[ language_user1 ] = " ";
@@ -6808,7 +6808,7 @@ String STR_UndoMovPageMasterDscr
     Text[ arabic ] = "ÅÒÇÍÉ ÊÚííä ÕİÍÉ ÇáÎáİíÉ";
     Text[ dutch ] = "Toewijzing achtergrondpagina´s verplaatsen";
     Text[ chinese_simplified ] = "ÒÆ¶¯±³¾°Ò³Ãæ·ÖÅä";
-    Text[ greek ] = "Ìåôáêßíçóç áíôéóôïß÷çóçò óåëéäşí öüíôïõ";
+    Text[ greek ] = "Ìåôáêßíçóç áíôéóôïß÷éóçò óåëéäşí öüíôïõ";
     Text[ korean ] = "¹è°æ ÆäÀÌÁö ¹èÁ¤ ÀÌµ¿";
     Text[ turkish ] = "Artalan sayfa atamasını taşı";
     Text[ language_user1 ] = " ";
@@ -8203,7 +8203,7 @@ String STR_ItemValMEASURETEXT_BREAKEDLINE
     Text [ danish ] = "afbrudt linje" ;
     Text [ italian ] = "linea interrotta" ;
     Text [ spanish ] = "línea interrumpida" ;
-    Text [ french ] = "Lignie interrompue" ;
+    Text [ french ] = "Ligne interrompue" ;
     Text [ dutch ] = "onderbroken lijn" ;
     Text[ chinese_simplified ] = "ÕÛ¶ÏµÄÏßÌõ";
     Text[ russian ] = "Ïğåğûâèñòàÿ ëèíèÿ";
@@ -13045,6 +13045,24 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
 {
     Text = "Autoformen Justierung";
     Text [ ENGLISH ] = "Autoshape Adjustment" ;
+    Text[ english_us ] = "AutoShape Adjustment";
+    Text[ portuguese ] = "SvDraw Autoshape Adjustment";
+    Text[ russian ] = "Âûğàâíèâàíèå àâòîôîğì";
+    Text[ greek ] = "Ñıèìéóç Áõôïìïñöşí";
+    Text[ dutch ] = "SvDraw Autoshape Adjustment";
+    Text[ french ] = "Cadrage des formes automatiques";
+    Text[ spanish ] = "Ajuste de autoformas";
+    Text[ italian ] = "SvDraw Autoshape Adjustment";
+    Text[ danish ] = "SvDraw Autoshape Adjustment";
+    Text[ swedish ] = "Justering AutoForm";
+    Text[ polish ] = "Justowanie form automatycznych";
+    Text[ portuguese_brazilian ] = "SvDraw Autoshape Adjustment";
+    Text[ japanese ] = "µ°Ä¼ª²Ìß’²®";
+    Text[ korean ] = "SvDraw Autoshape Adjustment";
+    Text[ chinese_simplified ] = "ĞÎ×´×Ô¶¯µ÷ÊÊ";
+    Text[ chinese_traditional ] = "§Îª¬¦Û­q½ÕÓì";
+    Text[ turkish ] = "SvDraw Autoshape Adjustment";
+    Text[ arabic ] = "ÖÈØ ÇáÃÔßÇá ÇáÊáŞÇÆíÉ";
 };
 
 String SIP_SA_RESERVE14
@@ -16183,7 +16201,7 @@ String SIP_EE_FEATURE_LINEBR
 {
     Text = "Weicher Zeilenumbruch";
     Text [ ENGLISH ] = "Soft line break" ;
-    Text[ english_us ] = "Soft line break";
+    Text[ english_us ] = "Optional line break";
     Text[ portuguese ] = "Quebra de linha suave";
     Text[ russian ] = "Ìÿãêèé ğàçğûâ ñòğîêè";
     Text[ dutch ] = "Zachte woordafbreking";
@@ -16470,6 +16488,23 @@ String SIP_SA_GRAFCROP
     Text[ english ] = "Crop";
     Text[ english_us ] = "Crop";
 
+    Text[ portuguese ] = "Crop";
+    Text[ russian ] = "Îáğåçàòü";
+    Text[ greek ] = "ĞñïóáñìïãŞ";
+    Text[ dutch ] = "Knippen";
+    Text[ french ] = "Rogner";
+    Text[ spanish ] = "Cortar";
+    Text[ italian ] = "Crop";
+    Text[ danish ] = "Beskær";
+    Text[ swedish ] = "Beskär";
+    Text[ polish ] = "Przytnij";
+    Text[ portuguese_brazilian ] = "Crop";
+    Text[ japanese ] = "ÄØĞİ¸Ş";
+    Text[ korean ] = "Crop";
+    Text[ chinese_simplified ] = "¼ôÏÂ";
+    Text[ chinese_traditional ] = "µô°Å";
+    Text[ turkish ] = "Crop";
+    Text[ arabic ] = "ÇŞÊÕÇÕ";
 };
 String SIP_SA_GRAFRESERVE3 { Text = "" ; };
 String SIP_SA_GRAFRESERVE4 { Text = "" ; };
