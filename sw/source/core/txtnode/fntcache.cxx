@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 17:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,8 +853,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( *pWaveCol );
 
-                        long nX = rInf.GetPos().X() + pKernArray[ USHORT(rInf.GetLen()-1) ];
-                        Point aEnd( nX, rInf.GetPos().Y() );
+                        Point aEnd( rInf.GetPos() );
+                        long nDiff = pKernArray[ USHORT(rInf.GetLen()-1) ];
+                        if( pTmpFont->GetOrientation() )
+                        {
+                            if( 900 == pTmpFont->GetOrientation() )
+                                aEnd.Y() -= nDiff;
+                            else
+                                aEnd.Y() += nDiff;
+                        }
+                        else
+                            aEnd.X() += nDiff;
                         rInf.GetOut().DrawWaveLine( rInf.GetPos(), aEnd, nWave );
 
                         if ( bColSave )
@@ -893,20 +902,39 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                             do
                             {
                                 nStart -= rInf.GetIdx();
-                                Point aStart = nStart ?
-                                    Point( rInf.GetPos().X() + pKernArray[ USHORT(nStart-1) ],
-                                           rInf.GetPos().Y() ) : rInf.GetPos();
+                                Point aStart( rInf.GetPos() );
+                                Point aEnd( aStart );
+                                long nDiff1 = nStart ?
+                                    pKernArray[ USHORT(nStart-1) ] : 0;
                                 nStart += nWrLen;
-                                long nX = rInf.GetPos().X() + pKernArray[ USHORT(nStart-1) ];
-                                if( nStart < nCnt
-                                    && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nStart ) )
+                                long nDiff2 = pKernArray[ USHORT(nStart-1) ];
+                                if( nStart < nCnt && CH_BLANK == rInf.GetText().
+                                    GetChar( rInf.GetIdx() + nStart ) )
                                 {
                                     if( nStart + 1 == nCnt )
-                                        nX -= rInf.GetSpace();
+                                        nDiff2 -= rInf.GetSpace();
                                     else
-                                        nX -= nHalfSpace;
+                                        nDiff2 -= nHalfSpace;
                                 }
-                                Point aEnd( nX, rInf.GetPos().Y() );
+                                if( pTmpFont->GetOrientation() )
+                                {
+                                    if( 900 == pTmpFont->GetOrientation() )
+                                    {
+                                        aStart.Y() -= nDiff1;
+                                        aEnd.Y() -= nDiff2;
+                                    }
+                                    else
+                                    {
+                                        aStart.Y() += nDiff1;
+                                        aEnd.Y() += nDiff2;
+                                    }
+                                }
+                                else
+                                {
+                                    aStart.X() += nDiff1;
+                                    aEnd.X() += nDiff2;
+                                }
+
                                 rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
                                 nStart += rInf.GetIdx();
                                 nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
