@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 10:31:26 $
+#   last change: $Author: rt $ $Date: 2004-07-13 08:14:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ UNOTYPES=\
     com.sun.star.form.binding.XListEntrySink
 
 SLOFILES =	\
-        $(SLO)$/formstyles.obj \
         $(SLO)$/officeforms.obj \
         $(SLO)$/formevents.obj \
         $(SLO)$/eventimport.obj \
