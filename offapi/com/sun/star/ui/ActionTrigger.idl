@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionTrigger.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-29 07:31:34 $
+ *  last change: $Author: cd $ $Date: 2001-11-29 09:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@ service ActionTrigger
     /** contains the menu item image.
     */
     [property] ::com::sun::star::awt::XBitmap Image;
+
+    /** contains a sub menu.
+    */
+    [property] ::com::sun::star::container::XIndexContainer SubContainer;
 };
 }; }; }; };
 #endif
