@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-28 16:04:07 $
+ *  last change: $Author: pb $ $Date: 2001-12-05 18:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,30 +1193,6 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ arabic ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Textdocument Template";
 };
-String STR_DESCRIPTION_REMOTE_VOLUME
-{
-    Text = "Netzwerkverbindung" ;
-    Text [ english_us ] = "Network connection" ;
-    Text[ portuguese ] = "Network connection";
-    Text[ russian ] = "Network connection";
-    Text[ greek ] = "Network connection";
-    Text[ dutch ] = "Network connection";
-    Text[ french ] = "Network connection";
-    Text[ spanish ] = "Network connection";
-    Text[ finnish ] = "Network connection";
-    Text[ italian ] = "Network connection";
-    Text[ danish ] = "Network connection";
-    Text[ swedish ] = "Network connection";
-    Text[ polish ] = "Network connection";
-    Text[ portuguese_brazilian ] = "Network connection";
-    Text[ japanese ] = "Network connection";
-    Text[ korean ] = "Network connection";
-    Text[ chinese_simplified ] = "网络连接";
-    Text[ chinese_traditional ] = "Network connection";
-    Text[ turkish ] = "Network connection";
-    Text[ arabic ] = "Network connection";
-    Text[ catalan ] = "Network connection";
-};
 String STR_DESCRIPTION_LOCALE_VOLUME
 {
     Text = "Lokales Laufwerk" ;
@@ -1240,6 +1216,11 @@ String STR_DESCRIPTION_LOCALE_VOLUME
     Text[ turkish ] = "Local drive";
     Text[ arabic ] = "Local drive";
     Text[ catalan ] = "Local drive";
+};
+String STR_DESCRIPTION_FLOPPY_VOLUME
+{
+    Text = "Diskettenlaufwerk" ;
+    Text [ english_us ] = "Floppy disk" ;
 };
 String STR_DESCRIPTION_CDROM_VOLUME
 {
@@ -1265,7 +1246,30 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text[ arabic ] = "CD-ROM drive";
     Text[ catalan ] = "CD-ROM drive";
 };
-
+String STR_DESCRIPTION_REMOTE_VOLUME
+{
+    Text = "Netzwerkverbindung" ;
+    Text [ english_us ] = "Network connection" ;
+    Text[ portuguese ] = "Network connection";
+    Text[ russian ] = "Network connection";
+    Text[ greek ] = "Network connection";
+    Text[ dutch ] = "Network connection";
+    Text[ french ] = "Network connection";
+    Text[ spanish ] = "Network connection";
+    Text[ finnish ] = "Network connection";
+    Text[ italian ] = "Network connection";
+    Text[ danish ] = "Network connection";
+    Text[ swedish ] = "Network connection";
+    Text[ polish ] = "Network connection";
+    Text[ portuguese_brazilian ] = "Network connection";
+    Text[ japanese ] = "Network connection";
+    Text[ korean ] = "Network connection";
+    Text[ chinese_simplified ] = "网络连接";
+    Text[ chinese_traditional ] = "Network connection";
+    Text[ turkish ] = "Network connection";
+    Text[ arabic ] = "Network connection";
+    Text[ catalan ] = "Network connection";
+};
 String STR_DESCRIPTION_POWERPOINT
 {
     Text = "MS PowerPoint Dokument" ;
