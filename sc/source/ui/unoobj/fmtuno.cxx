@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 #include "fmtuno.hxx"
 #include "miscuno.hxx"
@@ -98,6 +99,7 @@ const SfxItemPropertyMap* lcl_GetValidatePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_INPTITLE), 0,  &getCppuType((rtl::OUString*)0),                0},
         {MAP_CHAR_LEN(SC_UNONAME_SHOWERR),  0,  &getBooleanCppuType(),                          0},
         {MAP_CHAR_LEN(SC_UNONAME_SHOWINP),  0,  &getBooleanCppuType(),                          0},
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWLIST), 0,  &getCppuType((sal_Int16*)0),                    0},
         {MAP_CHAR_LEN(SC_UNONAME_TYPE),     0,  &getCppuType((sheet::ValidationType*)0),        0},
         {0,0,0,0}
     };
@@ -612,6 +614,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, bEnglish, bCompileXML );
             nValMode = pData->GetDataMode();
             bIgnoreBlank = pData->IsIgnoreBlank();
+            nShowList = pData->GetListType();
             bShowInput = pData->GetInput( aInputTitle, aInputMessage );
             ScValidErrorStyle eStyle;
             bShowError = pData->GetErrMsg( aErrorTitle, aErrorMessage, eStyle );
@@ -634,6 +637,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
                                                    aExpr1, aExpr2, pDoc, aSrcPos,
                                                    bEnglish, bCompileXML );
     pRet->SetIgnoreBlank(bIgnoreBlank);
+    pRet->SetListType(nShowList);
 
     // set strings for error / input even if disabled (and disable afterwards)
     pRet->SetInput( aInputTitle, aInputMessage );
@@ -651,6 +655,7 @@ void ScTableValidationObj::ClearData_Impl()
     nMode        = SC_COND_NONE;
     nValMode     = SC_VALID_ANY;
     bIgnoreBlank = TRUE;
+    nShowList    = sheet::TableValidationVisibility::UNSORTED;
     bShowInput   = FALSE;
     bShowError   = FALSE;
     nErrorStyle  = SC_VALERR_STOP;
@@ -756,6 +761,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       bShowInput = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  bShowError = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aString.EqualsAscii( SC_UNONAME_IGNOREBL ) ) bIgnoreBlank = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aValue >>= nShowList;
     else if ( aString.EqualsAscii( SC_UNONAME_INPTITLE ) )
     {
         rtl::OUString aStrVal;
@@ -823,6 +829,7 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& a
     if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       ScUnoHelpFunctions::SetBoolInAny( aRet, bShowInput );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, bShowError );
     else if ( aString.EqualsAscii( SC_UNONAME_IGNOREBL ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, bIgnoreBlank );
+    else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aRet <<= nShowList;
     else if ( aString.EqualsAscii( SC_UNONAME_INPTITLE ) ) aRet <<= rtl::OUString( aInputTitle );
     else if ( aString.EqualsAscii( SC_UNONAME_INPMESS ) )  aRet <<= rtl::OUString( aInputMessage );
     else if ( aString.EqualsAscii( SC_UNONAME_ERRTITLE ) ) aRet <<= rtl::OUString( aErrorTitle );
