@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nf $ $Date: 2001-09-20 16:25:11 $
+ *  last change: $Author: nf $ $Date: 2001-11-05 12:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ Prj::Prj() :
     pPrjInitialDepList(0),
     bSorted( FALSE ),
     bHardDependencies( FALSE ),
+    bFixedDependencies( FALSE ),
     bVisited( FALSE )
 /*****************************************************************************/
 {
@@ -362,6 +363,7 @@ Prj::Prj( ByteString aName ) :
     pPrjInitialDepList(0),
     bSorted( FALSE ),
     bHardDependencies( FALSE ),
+    bFixedDependencies( FALSE ),
     bVisited( FALSE )
 /*****************************************************************************/
 {
@@ -790,6 +792,7 @@ void Star::InsertToken ( char *yytext )
         sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
     static BOOL bPrjDep = FALSE;
     static BOOL bHardDep = FALSE;
+    static BOOL bFixedDep = FALSE;
     static int nCommandType, nOSType;
     CommandData* pCmdData;
     static SByteStringList *pStaticDepList;
@@ -809,18 +812,28 @@ void Star::InsertToken ( char *yytext )
                 {
                     bPrjDep = TRUE;
                     bHardDep = FALSE;
+                    bFixedDep = FALSE;
                     i = 9;
                 }
                 else if ( !strcmp( yytext, "::" ))
                 {
                     bPrjDep = TRUE;
                     bHardDep = TRUE;
+                    bFixedDep = FALSE;
+                    i = 9;
+                }
+                else if ( !strcmp( yytext, ":::" ))
+                {
+                    bPrjDep = TRUE;
+                    bHardDep = TRUE;
+                    bFixedDep = TRUE;
                     i = 9;
                 }
                 else
                 {
                     bPrjDep = FALSE;
                     bHardDep = FALSE;
+                    bFixedDep = FALSE;
 
                     aWhat = yytext;
                     if ( aWhat == "nmake" )
@@ -920,6 +933,7 @@ void Star::InsertToken ( char *yytext )
                         }
                         pPrj->AddDependencies( aItem );
                         pPrj->HasHardDependencies( bHardDep );
+                        pPrj->HasFixedDependencies( bFixedDep );
 
                         if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
                             String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
@@ -1251,7 +1265,9 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
             aDataString += aTab;
             aDataString += pPrj->GetProjectName();
             aDataString += aTab;
-            if ( pPrj->HasHardDependencies())
+            if ( pPrj->HasFixedDependencies())
+                aDataString+= ByteString(":::");
+            else if ( pPrj->HasHardDependencies())
                 aDataString+= ByteString("::");
             else
                 aDataString+= ByteString(":");
@@ -1406,6 +1422,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
     static  ByteString aDirName;
     BOOL bPrjDep = FALSE;
     BOOL bHardDep = FALSE;
+    BOOL bFixedDep = FALSE;
     int nCommandType, nOSType;
     CommandData* pCmdData;
     SByteStringList *pDepList2 = NULL;
@@ -1442,18 +1459,28 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                     {
                         bPrjDep = TRUE;
                         bHardDep = FALSE;
+                        bFixedDep = FALSE;
                         i = 9;
                     }
                     else if ( !strcmp( yytext, "::" ))
                     {
                         bPrjDep = TRUE;
                         bHardDep = TRUE;
+                        bFixedDep = FALSE;
+                        i = 9;
+                    }
+                    else if ( !strcmp( yytext, ":::" ))
+                    {
+                        bPrjDep = TRUE;
+                        bHardDep = TRUE;
+                        bFixedDep = TRUE;
                         i = 9;
                     }
                     else
                     {
                         bPrjDep = FALSE;
                         bHardDep = FALSE;
+                        bFixedDep = FALSE;
 
                         aWhat = yytext;
                         if ( aWhat == "nmake" )
@@ -1554,6 +1581,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                             }
                             pPrj->AddDependencies( aItem );
                             pPrj->HasHardDependencies( bHardDep );
+                            pPrj->HasFixedDependencies( bFixedDep );
 
                             if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
                                 String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
