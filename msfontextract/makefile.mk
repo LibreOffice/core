@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2004-05-05 14:31:07 $
+#   last change: $Author: rt $ $Date: 2004-11-09 17:11:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,12 @@ LIBSALCPPRT=
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(WITH_FONTOOO)" != "YES"
+@all:
+    @+echo "FontOOo disabled... Nothing to build here."
+.ENDIF
+
 TARFILE_NAME=libmspack
 PATCH_FILE_NAME=msfontextract.patch
 
@@ -87,3 +93,4 @@ BUILD_ACTION=dmake subdmak=true $(MFLAGS) $(MAKEFILE) $(CALLMACROS)
 .INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
+
