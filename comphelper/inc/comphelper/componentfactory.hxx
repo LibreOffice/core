@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-15 11:47:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _COMPHELPER_COMPONENTFACTORY_HXX
 #define _COMPHELPER_COMPONENTFACTORY_HXX
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -135,7 +138,7 @@ namespace comphelper
 
  * </listing>
  */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     getComponentInstance(
         const ::rtl::OUString & rLibraryName,
         const ::rtl::OUString & rImplementationName
