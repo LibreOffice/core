@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:45:56 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 09:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,12 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/XExecutableDialog.hpp>
+#endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
@@ -161,6 +167,8 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -1207,6 +1215,31 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
     return aNewName;
 }
 
+// -----------------------------------------------------------------------------
+void showError(const SQLExceptionInfo& _rInfo,
+               const Reference< XWindow>& _xParent,
+               const Reference< XMultiServiceFactory >& _xFactory)
+{
+    if (_rInfo.isValid())
+    {
+        try
+        {
+            Sequence< Any > aArgs(2);
+            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
+            aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(_xParent), PropertyState_DIRECT_VALUE);
+
+            static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
+            Reference< XExecutableDialog > xErrorDialog(
+                _xFactory->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
+            if (xErrorDialog.is())
+                xErrorDialog->execute();
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(0,"showError: could not display the error message!");
+        }
+    }
+}
 
 //.........................................................................
 }   // namespace dbtools
@@ -1216,6 +1249,9 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/03/15 08:45:56  fs
+ *  cppuhelper/extract -> comphelper/extract
+ *
  *  Revision 1.16  2001/02/16 16:01:29  oj
  *  some new functions
  *

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: fs $ $Date: 2001-01-24 11:00:42 $
+#   last change: $Author: oj $ $Date: 2001-03-19 09:35:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,9 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 SLOFILES=\
         $(SLO)$/emptymetadata.obj	\
-        $(SLO)$/dbcharset.obj	\
-        $(SLO)$/dbtools.obj	\
-        $(SLO)$/dbexception.obj	\
+        $(SLO)$/dbcharset.obj		\
+        $(SLO)$/dbtools.obj			\
+        $(SLO)$/dbexception.obj		\
         $(SLO)$/dbconversion.obj	\
         $(SLO)$/CommonTools.obj		\
         $(SLO)$/DateConversion.obj	\

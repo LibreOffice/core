@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:39 $
+#   last change: $Author: oj $ $Date: 2001-03-19 09:35:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,22 +74,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
-
-# --- Types -------------------------------------
-
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
-UNOTYPES+=	\
-        com.sun.star.sdbcx.XRowLocate					\
-        com.sun.star.sdbcx.CompareBookmark				\
-        com.sun.star.sdbcx.XDeleteRows
 
 # --- Files -------------------------------------
 

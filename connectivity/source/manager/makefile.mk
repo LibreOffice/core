@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:01 $
+#   last change: $Author: oj $ $Date: 2001-03-19 09:35:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,33 +75,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
 
-# --- Types -------------------------------------
-
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-UNOUCROUT=$(PRJ)$/common$/inc
-INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
-UNOTYPES+=	\
-        com.sun.star.sdbc.XDriverManager				\
-        com.sun.star.lang.XMultiServiceFactory			\
-        com.sun.star.uno.TypeClass						\
-        com.sun.star.container.XEnumerationAccess		\
-        com.sun.star.container.XContentEnumerationAccess\
-        com.sun.star.uno.XWeak							\
-        com.sun.star.uno.XAggregation					\
-        com.sun.star.lang.XTypeProvider					\
-        com.sun.star.lang.XSingleServiceFactory			\
-        com.sun.star.registry.XRegistryKey				\
-        com.sun.star.lang.XServiceInfo					\
-        com.sun.star.uno.XNamingService					\
-        com.sun.star.sdbc.XDriver						\
-        com.sun.star.sdbc.XDriverAccess					\
-        com.sun.star.lang.IllegalArgumentException
 
 # --- Files -------------------------------------
 

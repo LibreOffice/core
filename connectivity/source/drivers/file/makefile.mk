@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:41 $
+#   last change: $Author: oj $ $Date: 2001-03-19 09:35:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,64 +74,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
-
-# --- Types -------------------------------------
-
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
-UNOTYPES+=	\
-        com.sun.star.util.XCancellable					\
-        com.sun.star.util.XNumberFormatter				\
-        com.sun.star.uno.TypeClass						\
-        com.sun.star.uno.XWeak							\
-        com.sun.star.uno.XAggregation					\
-        com.sun.star.beans.XPropertyState				\
-        com.sun.star.beans.XPropertySet					\
-        com.sun.star.beans.PropertyValue				\
-        com.sun.star.beans.XMultiPropertySet			\
-        com.sun.star.beans.XFastPropertySet				\
-        com.sun.star.lang.XTypeProvider					\
-        com.sun.star.lang.EventObject					\
-        com.sun.star.lang.XComponent					\
-        com.sun.star.lang.IllegalArgumentException		\
-        com.sun.star.lang.DisposedException				\
-        com.sun.star.lang.XMultiServiceFactory			\
-        com.sun.star.lang.XSingleServiceFactory			\
-        com.sun.star.registry.XRegistryKey				\
-        com.sun.star.java.XJavaThreadRegister_11		\
-        com.sun.star.java.XJavaVM						\
-        com.sun.star.sdbc.XConnection					\
-        com.sun.star.sdbc.XStatement					\
-        com.sun.star.sdbc.XResultSet					\
-        com.sun.star.sdbc.XResultSetMetaDataSupplier	\
-        com.sun.star.sdbc.XColumnLocate					\
-        com.sun.star.sdbc.XResultSetUpdate				\
-        com.sun.star.sdbc.XWarningsSupplier				\
-        com.sun.star.sdbc.XRowUpdate					\
-        com.sun.star.sdbc.XMultipleResults				\
-        com.sun.star.sdbc.XBatchExecution				\
-        com.sun.star.sdbc.XPreparedBatchExecution		\
-        com.sun.star.sdbc.XParameters					\
-        com.sun.star.sdbc.XOutParameters				\
-        com.sun.star.sdbc.DriverPropertyInfo			\
-        com.sun.star.sdbc.XDriver						\
-        com.sun.star.sdbc.XRow							\
-        com.sun.star.sdbc.SQLWarning					\
-        com.sun.star.sdbc.ColumnSearch					\
-        com.sun.star.sdbc.DataType						\
-        com.sun.star.sdbc.ResultSetConcurrency			\
-        com.sun.star.sdbc.ResultSetType					\
-        com.sun.star.sdbc.ColumnValue					\
-        com.sun.star.sdb.XColumnUpdate					\
-        com.sun.star.sdb.XColumn						\
-        com.sun.star.lang.XServiceInfo
 
 # --- Files -------------------------------------
 

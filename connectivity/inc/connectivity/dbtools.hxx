@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:02:06 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 09:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@ namespace sdbc {
 namespace beans {
     class XPropertySet;
 }
+namespace awt {
+    class XWindow;
+}
 namespace lang {
     struct Locale;
     class XMultiServiceFactory;
@@ -113,7 +116,7 @@ namespace util {
 namespace dbtools
 {
 //.........................................................................
-
+    class SQLExceptionInfo;
 //=========================================================================
     // date conversion
 
@@ -262,6 +265,10 @@ namespace dbtools
         @param      _rSpecials      @see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
     */
     ::rtl::OUString convertName2SQLName(const ::rtl::OUString& _rName,const ::rtl::OUString& _rSpecials);
+
+    void showError( const SQLExceptionInfo& _rInfo,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _pParent,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
 //.........................................................................
 }   // namespace dbtools
