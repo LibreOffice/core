@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:29:47 $
+ *  last change: $Author: os $ $Date: 2001-08-01 12:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,9 +1693,13 @@ uno::Reference< XTextRange >  SwXFrame::getAnchor(void) throw( RuntimeException 
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        if( pFmt->GetAnchor().GetAnchorId() != FLY_PAGE )
+        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+        // return an anchor for non-page bound frames
+        // and for page bound frames that have a page no == NULL and a content position
+        if( rAnchor.GetAnchorId() != FLY_PAGE ||
+            (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
-            const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
+            const SwPosition &rPos = *(rAnchor.GetCntntAnchor());
             aRef = SwXTextRange::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
         }
     }

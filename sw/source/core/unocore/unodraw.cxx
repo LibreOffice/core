@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 06:43:30 $
+ *  last change: $Author: os $ $Date: 2001-08-01 12:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1466,7 +1466,11 @@ Reference< XTextRange >  SwXShape::getAnchor(void) throw( RuntimeException )
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        if( pFmt->GetAnchor().GetAnchorId() != FLY_PAGE )
+        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+        // return an anchor for non-page bound frames
+        // and for page bound frames that have a page no == NULL and a content position
+        if( rAnchor.GetAnchorId() != FLY_PAGE ||
+            (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
             SwPaM aPam(rPos);
