@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:53:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -248,7 +250,7 @@ using namespace ::com::sun::star::io;
 #include "sfxresid.hxx"
 #include "appuno.hxx"
 
-#include "xmlversion.hxx"
+//#include "xmlversion.hxx"
 
 #define MAX_REDIRECT 5
 
@@ -374,7 +376,6 @@ public:
     sal_Bool bIsStorage: 1;
     sal_Bool bUseInteractionHandler: 1;
     sal_Bool bAllowDefaultIntHdl: 1;
-    sal_Bool bIsDiskSpannedJAR: 1;
     sal_Bool bIsCharsetInitialized: 1;
     sal_Bool bDisposeStorage: 1;
     sal_Bool bStorageBasedOnInStream: 1;
@@ -397,7 +398,8 @@ public:
     svtools::AsynchronLink  aDoneLink;
     svtools::AsynchronLink  aAvailableLink;
 
-    SfxVersionTableDtor*    pVersions;
+    uno::Sequence < util::RevisionTag > aVersions;
+
     ::utl::TempFile*           pTempDir;
     ::utl::TempFile*           pTempFile;
 
@@ -453,7 +455,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     aExpireTime( Date() + 10, Time() ),
     bForceSynchron( sal_False ), bIsStorage( sal_False ),
     pAntiImpl( pAntiImplP ),
-    bDontCreateCancellable( sal_False ), pTempDir( NULL ), bIsDiskSpannedJAR( sal_False ),
+    bDontCreateCancellable( sal_False ), pTempDir( NULL ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL ),
     nLastStorageError( 0 ),
     bIsCharsetInitialized( sal_False ),
@@ -473,7 +475,6 @@ SfxMedium_Impl::~SfxMedium_Impl()
     aAvailableLink.ClearPendingCall();
 
     delete pEaMgr;
-    delete pVersions;
 
     if ( pTempFile )
         delete pTempFile;
@@ -1167,7 +1168,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
     if ( pVersion && pVersion->GetValue() )
     {
         // Alle verf"ugbaren Versionen einlesen
-        if ( pImp->pVersions )
+        if ( pImp->aVersions.getLength() )
         {
             // Die zum Kommentar passende Version suchen
             // Die Versionen sind von 1 an durchnumeriert, mit negativen
@@ -1175,15 +1176,12 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
             // r"uckw"arts gez"ahlt
             short nVersion = pVersion ? pVersion->GetValue() : 0;
             if ( nVersion<0 )
-                nVersion = ( (short) pImp->pVersions->Count() ) + nVersion;
+                nVersion = ( (short) pImp->aVersions.getLength() ) + nVersion;
             else if ( nVersion )
                 nVersion--;
 
-            SfxVersionInfo* pInfo = nVersion>=0 ? pImp->pVersions->GetObject( nVersion ) : NULL;
-            if ( pInfo )
+            util::RevisionTag& rTag = pImp->aVersions[nVersion];
             {
-                String aVersionStream = pInfo->aName;
-
                 // SubStorage f"ur alle Versionen "offnen
                 uno::Reference < embed::XStorage > xSub = pImp->xStorage->openStorageElement( DEFINE_CONST_UNICODE( "Versions" ),
                         embed::ElementModes::READ );
@@ -1191,7 +1189,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                 DBG_ASSERT( xSub.is(), "Versionsliste, aber keine Versionen!" );
 
                 // Dort ist die Version als gepackter Stream gespeichert
-                uno::Reference < io::XStream > xStr = xSub->openStreamElement( aVersionStream, embed::ElementModes::READ );
+                uno::Reference < io::XStream > xStr = xSub->openStreamElement( rTag.Identifier, embed::ElementModes::READ );
                 SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStr );
                 if ( pStream && pStream->GetError() == SVSTREAM_OK )
                 {
@@ -1213,13 +1211,12 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
 
                     pImp->bIsTemp = sal_True;
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-                    DELETEZ( pImp->pVersions );
+                    // TODO/MBA
+                    pImp->aVersions.realloc(0);
                 }
                 else
                     bResetStorage = TRUE;
             }
-            else
-                bResetStorage = TRUE;
         }
         else
             bResetStorage = TRUE;
@@ -2099,7 +2096,6 @@ void SfxMedium::Init_Impl()
 
 {
     Reference< XOutputStream > rOutStream;
-    pImp->pVersions = NULL;
 
     // TODO/LATER: handle lifetime of storages
     pImp->bDisposeStorage = FALSE;
@@ -2122,6 +2118,12 @@ void SfxMedium::Init_Impl()
         }
         else
         {
+            if ( aUrl.HasMark() )
+            {
+                aLogicName = aUrl.GetURLNoMark( INetURLObject::NO_DECODE );
+                pSet->Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
+            }
+
             // try to convert the URL into a physical name - but never change a physical name
             // physical name may be set if the logical name is changed after construction
             if ( !aName.Len() )
@@ -2794,67 +2796,62 @@ void SfxMedium::SetDontCreateCancellable( )
     return pImp->xInputStream;
 }
 
-const SfxVersionTableDtor* SfxMedium::GetVersionList()
+const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList()
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
-    if ( !pImp->pVersions && ( aName.Len() || aLogicName.Len() ) && GetStorage().is() )
+    if ( !pImp->aVersions.getLength() && ( aName.Len() || aLogicName.Len() ) && GetStorage().is() )
     {
-        if ( pImp->bIsDiskSpannedJAR )
-            return NULL;
+        uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
+        if ( xReader.is() )
+        {
+            try
+            {
+                pImp->aVersions = xReader->load( GetStorage() );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+    }
 
+    return pImp->aVersions;
+}
+
+uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Reference < embed::XStorage >& xStorage )
+{
+    uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
+            ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
+    if ( xReader.is() )
+    {
         try
         {
-            SfxVersionTableDtor *pList = new SfxVersionTableDtor;
-            if ( SfxXMLVersList_Impl::ReadInfo( GetStorage(), pList ) )
-                pImp->pVersions = pList;
-            else
-                delete pList;
+            return xReader->load( xStorage );
         }
         catch ( uno::Exception& )
         {
-            //TODO/MBA: error handling
         }
     }
 
-    return pImp->pVersions;
+    return uno::Sequence < util::RevisionTag >();
 }
 
-SfxVersionTableDtor* SfxMedium::GetVersionList( const uno::Reference < embed::XStorage >& xStor )
-{
-    SfxVersionTableDtor* pVersions = NULL;
-    if( xStor.is() )
-    {
-        SfxVersionTableDtor *pList = new SfxVersionTableDtor;
-        if ( SfxXMLVersList_Impl::ReadInfo( xStor, pList ) )
-            pVersions = pList;
-        else
-            delete pList;
-    }
-
-    return pVersions;
-}
-
-
-sal_uInt16 SfxMedium::AddVersion_Impl( SfxVersionInfo& rInfo )
+sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
 {
     if ( GetStorage().is() )
     {
-        if ( !pImp->pVersions )
-            pImp->pVersions = new SfxVersionTableDtor;
-
         // Einen eindeutigen Namen f"ur den Stream ermitteln
         SvULongs aLongs;
-        SfxVersionInfo* pInfo = pImp->pVersions->First();
-        while ( pInfo )
+        sal_Int32 nLength = pImp->aVersions.getLength();
+        for ( sal_Int32 m=0; m<nLength; m++ )
         {
-            sal_uInt32 nVer = (sal_uInt32) pInfo->aName.Copy(7).ToInt32();
+            sal_uInt32 nVer = (sal_uInt32) String( pImp->aVersions[m].Identifier ).Copy(7).ToInt32();
             sal_uInt16 n;
             for ( n=0; n<aLongs.Count(); n++ )
                 if ( nVer<aLongs[n] )
                     break;
 
             aLongs.Insert( nVer, n );
-            pInfo = pImp->pVersions->Next();
         }
 
         sal_uInt16 nKey;
@@ -2862,32 +2859,32 @@ sal_uInt16 SfxMedium::AddVersion_Impl( SfxVersionInfo& rInfo )
             if ( aLongs[nKey] > ( ULONG ) nKey+1 )
                 break;
 
-        rInfo.aName = DEFINE_CONST_UNICODE( "Version" );
-        rInfo.aName += String::CreateFromInt32( nKey + 1 );
-        pInfo = new SfxVersionInfo( rInfo );
-        pImp->pVersions->Insert( pInfo, LIST_APPEND );
+        String aName = DEFINE_CONST_UNICODE( "Version" );
+        aName += String::CreateFromInt32( nKey + 1 );
+        pImp->aVersions.realloc( nLength+1 );
+        rRevision.Identifier = aName;
+        pImp->aVersions[nLength] = rRevision;
         return nKey;
     }
 
     return 0;
 }
 
-sal_Bool SfxMedium::RemoveVersion_Impl( const SfxVersionInfo& rInfo )
+sal_Bool SfxMedium::RemoveVersion_Impl( const ::rtl::OUString& rName )
 {
-    if ( !pImp->pVersions )
+    if ( !pImp->aVersions.getLength() )
         return sal_False;
 
-    SfxVersionInfo* pInfo = pImp->pVersions->First();
-    while( pInfo )
+    sal_Int32 nLength = pImp->aVersions.getLength();
+    for ( sal_Int32 n=0; n<nLength; n++ )
     {
-        if ( pInfo->aName == rInfo.aName )
+        if ( pImp->aVersions[n].Identifier == rName )
         {
-            pImp->pVersions->Remove( pInfo );
-            delete pInfo;
+            for ( sal_Int32 m=n; m<nLength-1; m++ )
+                pImp->aVersions[m] = pImp->aVersions[m+1];
+            pImp->aVersions.realloc(nLength-1);
             return sal_True;
         }
-
-        pInfo = pImp->pVersions->Next();
     }
 
     return sal_False;
@@ -2895,10 +2892,9 @@ sal_Bool SfxMedium::RemoveVersion_Impl( const SfxVersionInfo& rInfo )
 
 sal_Bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
 {
-    if ( rMedium.pImp->pVersions )
+    if ( rMedium.pImp->aVersions.getLength() )
     {
-        delete pImp->pVersions;
-        pImp->pVersions = new SfxVersionTableDtor( *rMedium.pImp->pVersions );
+        pImp->aVersions = rMedium.pImp->aVersions;
         return sal_True;
     }
 
@@ -2909,24 +2905,20 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool bUseXML )
 {
     if ( GetStorage().is() )
     {
-        if ( !pImp->pVersions )
+        if ( !pImp->aVersions.getLength() )
             return sal_True;
 
-        if ( bUseXML )
+        uno::Reference < document::XDocumentRevisionListPersistence > xWriter( comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
+        if ( xWriter.is() )
         {
-            SfxXMLVersList_Impl::WriteInfo( pImp->xStorage, pImp->pVersions );
-            return sal_True;
-        }
-        else
-        {
-            uno::Reference < io::XStream > xStream = GetStorage()->openStreamElement( DEFINE_CONST_UNICODE( "VersionList" ),
-                    embed::ElementModes::READWRITE );
-            if ( xStream.is() )
+            try
             {
-                SvStream* pStr = utl::UcbStreamHelper::CreateStream( xStream );
-                pImp->pVersions->Write( *pStr );
-                delete pStr;
+                xWriter->store( GetStorage(), pImp->aVersions );
                 return sal_True;
+            }
+            catch ( uno::Exception& )
+            {
             }
         }
     }
@@ -3171,91 +3163,6 @@ void SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
 }
 
 //----------------------------------------------------------------
-#define nActVersion 1
-
-SvStream& SfxVersionTableDtor::Read( SvStream& rStrm )
-{
-    sal_uInt16 nCount = 0, nVersion = 0;
-
-    rStrm >> nVersion;
-    rStrm >> nCount;
-
-    for( sal_uInt16 i=0; i<nCount; ++i )
-    {
-        SfxVersionInfo *pNew = new SfxVersionInfo;
-        rStrm.ReadByteString( pNew->aComment, RTL_TEXTENCODING_UTF8 );
-        rStrm.ReadByteString( pNew->aName, RTL_TEXTENCODING_UTF8 );
-        pNew->aCreateStamp.Load( rStrm );
-        Insert( pNew, LIST_APPEND );
-    }
-
-    return rStrm;
-}
-
-SvStream& SfxVersionTableDtor::Write( SvStream& rStream ) const
-{
-    rStream << (sal_uInt16) nActVersion;
-    rStream << (sal_uInt16) Count();
-
-    SfxVersionInfo* pInfo = ((SfxVersionTableDtor*)this)->First();
-    while( pInfo && rStream.GetError() == SVSTREAM_OK )
-    {
-        rStream.WriteByteString( pInfo->aComment, RTL_TEXTENCODING_UTF8 );
-        rStream.WriteByteString( pInfo->aName, RTL_TEXTENCODING_UTF8 );
-        pInfo->aCreateStamp.Save( rStream );
-        pInfo = ((SfxVersionTableDtor*)this)->Next();
-    }
-
-    return rStream;
-}
-
-void SfxVersionTableDtor::DelDtor()
-{
-    SfxVersionInfo* pTmp = First();
-    while( pTmp )
-    {
-        delete pTmp;
-        pTmp = Next();
-    }
-    Clear();
-}
-
-SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& rTbl )
-{
-    DelDtor();
-    SfxVersionInfo* pTmp = ((SfxVersionTableDtor&)rTbl).First();
-    while( pTmp )
-    {
-        SfxVersionInfo *pNew = new SfxVersionInfo( *pTmp );
-        Insert( pNew, LIST_APPEND );
-        pTmp = ((SfxVersionTableDtor&)rTbl).Next();
-    }
-    return *this;
-}
-
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-SfxVersionInfo::SfxVersionInfo()
-{
-}
-
-SvStringsDtor* SfxVersionTableDtor::GetVersions() const
-{
-    SvStringsDtor *pList = new SvStringsDtor;
-    SfxVersionInfo* pInfo = ((SfxVersionTableDtor*) this)->First();
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    while ( pInfo )
-    {
-        String *pString = new String( pInfo->aComment );
-        (*pString) += DEFINE_CONST_UNICODE( "; " );
-        (*pString) += ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper );
-        pList->Insert( pString, pList->Count() );
-        pInfo = ((SfxVersionTableDtor*) this)->Next();
-    }
-
-    return pList;
-}
 
 SV_DECL_PTRARR_DEL(SvKeyValueList_Impl, SvKeyValue*, 0, 4);
 SV_IMPL_PTRARR(SvKeyValueList_Impl, SvKeyValue*);
