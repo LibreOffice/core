@@ -201,6 +201,11 @@ public class CanvasSprite
         }
     }
 
+    public synchronized void setPriority( double nPriority )
+    {
+        // TODO
+    }
+
     public synchronized void setAlpha( double _alpha )
     {
         alpha = _alpha;
@@ -232,9 +237,7 @@ public class CanvasSprite
         // TODO
     }
 
-    public synchronized void clip( XPolyPolygon2D   aClip,
-                                   ViewState        viewState,
-                                   RenderState      renderState ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized void clip( XPolyPolygon2D aClip )
     {
         // TODO
     }
@@ -242,7 +245,7 @@ public class CanvasSprite
     public synchronized void show()
     {
         canvas.showSprite( this );
-        canvas.updateScreen();
+        canvas.updateScreen( false );
     }
 
     public synchronized void hide()
