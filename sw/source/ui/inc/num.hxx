@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:02:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@
 #ifndef _NUMPREVW_HXX
 #include <numprevw.hxx>
 #endif
-#ifndef _SVX_NUMPAGES_HXX
-#include <svx/numpages.hxx>
-#endif
+//CHINA001 #ifndef _SVX_NUMPAGES_HXX
+//CHINA001 #include <svx/numpages.hxx>
+//CHINA001 #endif
 #include "numrule.hxx"
 #include "bmpwin.hxx" // BmpWindow
 
