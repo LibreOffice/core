@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:27:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,28 @@ public:
         SdPage* pCurrentPage,
         PageKind ePageKind);
 
+    /** Determine the view id of the view shell.  This corresponds to the
+        view id stored in the SfxViewFrame class.
+
+        We can not use the view of that class because with the introduction
+        of the multi pane GUI we do not switch the SfxViewShell anymore when
+        switching the view in the center pane.  The view id of the
+        SfxViewFrame is thus not modified and we can not set it from the
+        outside.
+
+        The view id is still needed for the SFX to determine on start up
+        (e.g. after loading a document) which ViewShellBase sub class to
+        use.  These sub classes--like OutlineViewShellBase--exist only to be
+        used by the SFX as factories.  They only set the initial pane
+        configuration, nothing more.
+
+        So what we do here in essence is to return on of the
+        ViewShellFactoryIds that can be used to select the factory that
+        creates the ViewShellBase subclass with the initial pane
+        configuration that has in the center pane a view shell of the same
+        type as mrViewShell.
+    */
+    sal_uInt16 GetViewId (void);
 
 private:
     ViewShell& mrViewShell;
