@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:40:37 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "fuediglu.hxx"
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -74,13 +76,24 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "fuediglu.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 
+namespace sd {
 
 TYPEINIT1( FuEditGluePoints, FuDraw );
 
@@ -90,14 +103,15 @@ TYPEINIT1( FuEditGluePoints, FuDraw );
 |*
 \************************************************************************/
 
-FuEditGluePoints::FuEditGluePoints(SdViewShell*     pViewSh,
-                             SdWindow*          pWin,
-                             SdView*            pView,
-                             SdDrawDocument*    pDoc,
-                             SfxRequest&        rReq) :
-    FuDraw(pViewSh, pWin, pView, pDoc, rReq)
+FuEditGluePoints::FuEditGluePoints (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuDraw(pViewSh, pWin, pView, pDoc, rReq)
 {
-    pViewShell->SwitchObjectBar(RID_GLUEPOINTS_TOOLBOX);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_GLUEPOINTS_TOOLBOX);
     pView->SetInsGluePointMode(FALSE);
 }
 
@@ -474,3 +488,4 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 }
 
 
+} // end of namespace sd
