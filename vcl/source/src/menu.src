@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 10:20:39 $
+ *  last change: $Author: nf $ $Date: 2000-12-06 10:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 String SV_RESID_STRING_NOSELECTIONPOSSIBLE
 {
-    Text ="%PRODUCTVERSIONKeine%PRODUCTVERSIONAuswahl%PRODUCTVERSIONmöglich%PRODUCTVERSION";
+    Text ="<Keine Auswahl möglich>";
     Text[English] ="<No selection possible>";
     Text[ english_us ] = "<No selection possible>";
     Text[ portuguese ] = "<Selecção impossível>";
@@ -229,7 +229,7 @@ Menu SV_RESID_MENU_EDIT
         MenuItem
         {
             Identifier = SV_MENU_EDIT_SELECTALL ;
-            Text = "Alles%PRODUCTVERSIONaus~wählen" ;
+            Text = "Alles aus~wählen" ;
             Text [ English ] = "Select ~All" ;
             Text [ norwegian ] = "Select ~All" ;
             Text [ italian ] = "Seleziona tutto" ;
@@ -257,7 +257,7 @@ Menu SV_RESID_MENU_EDIT
         MenuItem
         {
             Identifier = SV_MENU_EDIT_INSERTSYMBOL;
-            Text = "~Sonderzeichen%PRODUCTVERSIONeinfügen%PRODUCTVERSION";
+            Text = "~Sonderzeichen einfügen...";
             Text [ English ] = "insert ~symbol...";
                     TEXT[ italian ] = "Inserisci caratteri speciali...";
             TEXT[ portuguese_brazilian ] = "~Sonderzeichen einfügen...";
