@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connectn.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2000-09-22 13:43:05 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #   include <vos/ref.hxx>
 #endif
 
-#ifndef _RTL_USTRING_
-#   include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#   include <rtl/ustring.hxx>
 #endif
 
 #ifdef _USE_NAMESPACE
@@ -85,7 +85,7 @@ public:
 
     //---------------------------------------------------------------------------
     /** reads the specified amount of bytes from the stream. The call will block
-          until nBytesToRead bytes are available.
+        until nBytesToRead bytes are available.
 
         @param pData
         pointer to the buffer to fill.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _VOS_PROCESS_HXX_
 
 #ifndef _RTL_USTRING_
-#   include <rtl/ustring>
+#   include <rtl/ustring.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #   include <vos/mutex.hxx>
@@ -170,7 +170,7 @@ public:
         E_NotFound     = osl_Process_E_NotFound,        /* image not found */
         E_TimedOut     = osl_Process_E_TimedOut,        /* timout occured */
         E_NoPermission = osl_Process_E_NoPermission,    /* permission denied */
-          E_Unknown    = osl_Process_E_Unknown,         /* unknown error */
+        E_Unknown      = osl_Process_E_Unknown,         /* unknown error */
         E_InvalidError = osl_Process_E_InvalidError     /* unmapped error */
     };
 
@@ -204,7 +204,7 @@ public:
 
     OProcess(const ::rtl::OUString& strImageName);
 
-      OProcess(const ::rtl::OUString& strImageName,
+    OProcess(const ::rtl::OUString& strImageName,
              const ::rtl::OUString& strWorkingDirectory);
 
     /// destroying a process object
@@ -293,7 +293,7 @@ public:
         E_NotFound     = osl_Process_E_NotFound,        /* image not found */
         E_TimedOut     = osl_Process_E_TimedOut,        /* timout occured */
         E_NoPermission = osl_Process_E_NoPermission,    /* permission denied */
-          E_Unknown    = osl_Process_E_Unknown,         /* unknown error */
+        E_Unknown      = osl_Process_E_Unknown,         /* unknown error */
         E_InvalidError = osl_Process_E_InvalidError     /* unmapped error */
     };
 

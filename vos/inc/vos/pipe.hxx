@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #   include <vos/security.hxx>
 #endif
 #ifndef _RTL_USTRING_
-#   include <rtl/ustring>
+#   include <rtl/ustring.hxx>
 #endif
 
 
@@ -183,7 +183,7 @@ public:
         @return True if socket was successfully created.
     */
     sal_Bool SAL_CALL create(const ::rtl::OUString& strName, TPipeOption Options,
-                     const NAMESPACE_VOS(OSecurity)& rSecurity);
+                   const NAMESPACE_VOS(OSecurity)& rSecurity);
 
     /** Assignment operator. If pipe was already created, the old one will
         be discarded.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 15:25:47 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #   include <vos/refobj.hxx>
 #endif
 #ifndef _RTL_USTRING_
-#   include <rtl/ustring>
+#   include <rtl/ustring.hxx>
 #endif
 #ifndef _OSL_SOCKET_H_
 #   include <osl/socket.h>
@@ -202,13 +202,13 @@ public:
         E_OpNotSupport      = osl_Socket_E_OpNotSupport,      /* Operation not supported on socket */
         E_PfNoSupport       = osl_Socket_E_PfNoSupport,       /* Protocol family not supported */
         E_AfNoSupport       = osl_Socket_E_AfNoSupport,       /* Address family not supported by */
-                                                                /* protocol family */
+                                                              /* protocol family */
         E_AddrInUse         = osl_Socket_E_AddrInUse,         /* Address already in use */
         E_AddrNotAvail      = osl_Socket_E_AddrNotAvail,      /* Can't assign requested address */
         E_NetDown           = osl_Socket_E_NetDown,           /* Network is down */
         E_NetUnreachable    = osl_Socket_E_NetUnreachable,    /* Network is unreachable */
         E_NetReset          = osl_Socket_E_NetReset,          /* Network dropped connection because */
-                                                                /* of reset */
+                                                              /* of reset */
         E_ConnAborted       = osl_Socket_E_ConnAborted,       /* Software caused connection abort */
         E_ConnReset         = osl_Socket_E_ConnReset,         /* Connection reset by peer */
         E_NoBufferSpace     = osl_Socket_E_NoBufferSpace,     /* No buffer space available */
