@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astexpression.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:34:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,25 +281,25 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_short;
                     return ev;
                 case ET_long:
-                    if ((sal_Int16)ev->u.lval > SHRT_MAX || (sal_Int16)ev->u.lval < SHRT_MIN)
-                        return NULL;
+                    if (ev->u.lval > SHRT_MAX || ev->u.lval < SHRT_MIN)
+                            return NULL;
                     ev->u.sval = (sal_Int16)ev->u.lval;
                     ev->et = ET_short;
                     return ev;
                 case ET_ulong:
-                    if ((sal_Int16)ev->u.ulval > SHRT_MAX)
+                    if (ev->u.ulval > SHRT_MAX)
                         return NULL;
                     ev->u.sval = (sal_Int16)ev->u.ulval;
                     ev->et = ET_short;
                     return ev;
                 case ET_hyper:
-                    if ((sal_Int16)ev->u.hval > SHRT_MAX || (sal_Int16)ev->u.hval < SHRT_MIN)
+                    if (ev->u.hval > SHRT_MAX || ev->u.hval < SHRT_MIN)
                         return NULL;
                     ev->u.sval = (sal_Int16)ev->u.hval;
                     ev->et = ET_short;
                     return ev;
                 case ET_uhyper:
-                    if ((sal_Int16)ev->u.uhval > SHRT_MAX)
+                    if (ev->u.uhval > SHRT_MAX)
                         return NULL;
                     ev->u.sval = (sal_Int16)ev->u.uhval;
                     ev->et = ET_short;
@@ -309,13 +309,13 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_short;
                     return ev;
                 case ET_float:
-                    if ((sal_Int16)ev->u.fval > SHRT_MAX || (sal_Int16)ev->u.fval < SHRT_MIN)
+                    if (ev->u.fval > SHRT_MAX || ev->u.fval < SHRT_MIN)
                         return NULL;
                     ev->u.sval = (sal_Int16)ev->u.fval;
                     ev->et = ET_short;
                     return ev;
                 case ET_double:
-                    if ((sal_Int16)ev->u.dval > SHRT_MAX || (sal_Int16)ev->u.dval < SHRT_MIN)
+                    if (ev->u.dval > SHRT_MAX || ev->u.dval < SHRT_MIN)
                         return NULL;
                     ev->u.sval = (sal_Int16)ev->u.dval;
                     ev->et = ET_short;
@@ -332,7 +332,7 @@ coerce_value(AstExprValue *ev, ExprType t)
             switch (ev->et)
             {
                 case ET_short:
-                    if (ev->u.sval < 0 && ev->u.sval != USHRT_MAX)
+                    if (ev->u.sval < 0)
                         return NULL;
                     ev->u.usval = (sal_uInt16)ev->u.sval;
                     ev->et = ET_ushort;
@@ -340,25 +340,25 @@ coerce_value(AstExprValue *ev, ExprType t)
                 case ET_ushort:
                     return ev;
                 case ET_long:
-                    if ((sal_uInt16)ev->u.lval > USHRT_MAX || ev->u.lval < 0)
+                    if (ev->u.lval > USHRT_MAX || ev->u.lval < 0)
                         return NULL;
                     ev->u.usval = (sal_uInt16)ev->u.lval;
                     ev->et = ET_ushort;
                     return ev;
                 case ET_ulong:
-                    if ((sal_uInt16)ev->u.ulval > USHRT_MAX)
+                    if (ev->u.ulval > USHRT_MAX)
                         return NULL;
                     ev->u.usval = (sal_uInt16)ev->u.ulval;
                     ev->et = ET_ushort;
                     return ev;
                 case ET_hyper:
-                    if ((sal_uInt16)ev->u.hval > USHRT_MAX || ev->u.hval < 0)
+                    if (ev->u.hval > USHRT_MAX || ev->u.hval < 0)
                         return NULL;
                     ev->u.usval = (sal_uInt16)ev->u.hval;
                     ev->et = ET_ushort;
                     return ev;
                 case ET_uhyper:
-                    if ((sal_uInt16)ev->u.uhval > USHRT_MAX)
+                    if (ev->u.uhval > USHRT_MAX)
                         return NULL;
                     ev->u.usval = (sal_uInt16)ev->u.uhval;
                     ev->et = ET_ushort;
@@ -368,13 +368,13 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_short;
                     return ev;
                 case ET_float:
-                    if (ev->u.fval < 0.0 || (sal_uInt16)ev->u.fval > USHRT_MAX)
+                    if (ev->u.fval < 0.0 || ev->u.fval > USHRT_MAX)
                         return NULL;
                     ev->u.usval = (sal_uInt16)ev->u.fval;
                     ev->et = ET_short;
                     return ev;
                 case ET_double:
-                    if (ev->u.dval < 0.0 || (sal_uInt16)ev->u.dval > USHRT_MAX)
+                    if (ev->u.dval < 0.0 || ev->u.dval > USHRT_MAX)
                         return NULL;
                     ev->u.usval = (sal_uInt16)ev->u.dval;
                     ev->et = ET_short;
