@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsFocusManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:28:46 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SD_SLIDESORTER_FOCUS_MANAGER_HXX
 #define SD_SLIDESORTER_FOCUS_MANAGER_HXX
 
@@ -148,13 +147,30 @@ public:
     */
     sal_Int32 GetFocusedPageIndex (void) const;
 
-    /** Set the focus to the page with the given index.  This does not make
+    /** DEPRECATED. (Use equivalent SetFocusedPage(sal_Int32) instead.
+
+        Set the focus to the page with the given index.  This does not make
         the focus visible.
         @param nPageIndex
             Index of a page as it is accepted by the slide sorter model.
             The index is not checked for validity.
     */
     void FocusPage (sal_Int32 nPageIndex);
+
+    /** Set the focused page to the one described by the given page
+        descriptor.  The visibility of the focus indicator is not modified.
+        @param rDescriptor
+            One of the page descriptors that are currently managed by the
+            SlideSorterModel.
+    */
+    void SetFocusedPage (const model::PageDescriptor& rDescriptor);
+
+    /** Set the focused page to the one described by the given page
+        index.  The visibility of the focus indicator is not modified.
+        @param nPageIndex
+            A valid page index that is understood by the SlideSorterModel.
+    */
+    void SetFocusedPage (sal_Int32 nPageIndex);
 
     /** Return <TRUE/> when the focus inidcator is currently shown.  A
         prerequisite is that the window managed by this focus manager has
