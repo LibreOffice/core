@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-16 16:23:41 $
+ *  last change: $Author: jp $ $Date: 2002-01-16 18:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@
 #endif
 #define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
 #define MAX_FIELDLEN 64000
+
+#define WW8_TOX_LEVEL_DELIM     ':'
 
 class _ReadFieldParams
 {
@@ -2912,7 +2914,7 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
     USHORT nLevel = 1;
 
     xub_StrLen n;
-    String sKey1, sKey2, sFldTxt;
+    String sFldTxt;
     long nRet;
     _ReadFieldParams aReadParam( aStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
@@ -2923,19 +2925,6 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
             {
                 // PrimaryKey ohne ":", 2nd dahinter
                 sFldTxt = aReadParam.GetResult();
-                xub_StrLen nFnd = sFldTxt.Search( ':' );
-                if( STRING_NOTFOUND != nFnd )  // it exist levels
-                {
-                    sKey1 = sFldTxt.Copy( 0, nFnd );
-
-                    xub_StrLen nScndFnd = sFldTxt.Search( ':', nFnd+1 );
-                    if( STRING_NOTFOUND != nScndFnd )
-                    {
-                        sKey2 = sFldTxt.Copy( nFnd+1, nScndFnd - nFnd - 1 );
-                        nFnd = nScndFnd;
-                    }
-                    sFldTxt.Erase( 0, nFnd+1 );
-                }
             }
             break;
 
@@ -2968,12 +2957,27 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
 
     const SwTOXType* pT = rDoc.GetTOXType( eTox, 0 );
     SwTOXMark aM( pT );
+
     if( eTox != TOX_INDEX )
         aM.SetLevel( nLevel );
+    else
+    {
+        xub_StrLen nFnd = sFldTxt.Search( WW8_TOX_LEVEL_DELIM );
+        if( STRING_NOTFOUND != nFnd )  // it exist levels
+        {
+            aM.SetPrimaryKey( sFldTxt.Copy( 0, nFnd ) );
+            xub_StrLen nScndFnd =
+                sFldTxt.Search( WW8_TOX_LEVEL_DELIM, nFnd+1 );
+            if( STRING_NOTFOUND != nScndFnd )
+            {
+                aM.SetSecondaryKey(  sFldTxt.Copy( nFnd+1, nScndFnd - nFnd - 1 ));
+                nFnd = nScndFnd;
+            }
+            sFldTxt.Erase( 0, nFnd+1 );
+        }
+    }
 
     aM.SetAlternativeText( sFldTxt );
-    aM.SetPrimaryKey( sKey1 );
-    aM.SetSecondaryKey( sKey2 );
 
     if( !aM.IsAlternativeText() )
     {
@@ -3032,7 +3036,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     while( ' '  == sFieldName.GetChar( nC ))
         nC++;
 
-    for( int i = 0; i < 2; i++ )
+    for( int i = 0; i < 3; i++ )
     {
         const sal_Char* pName = aFldNames[i];
         USHORT nNameLen = *pName++;
