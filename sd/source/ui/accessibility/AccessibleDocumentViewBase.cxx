@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-08 10:00:22 $
+ *  last change: $Author: af $ $Date: 2002-05-13 12:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,10 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
         mxModel = rxController->getModel();
 
     // Fill the shape tree info.
-    maShapeTreeInfo.SetControllerBroadcaster (
+    maShapeTreeInfo.SetModelBroadcaster (
         uno::Reference<document::XEventBroadcaster>(
-            rxController->getModel(), uno::UNO_QUERY));
+            mxModel, uno::UNO_QUERY));
+    maShapeTreeInfo.SetController (rxController);
     maShapeTreeInfo.SetSdrView (pViewShell->GetView());
     maShapeTreeInfo.SetWindow (pSdWindow);
     maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
