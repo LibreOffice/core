@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:27:28 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
 #endif
+#ifndef FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
+#include "componenttools.hxx"
+#endif
+
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -191,39 +195,50 @@ namespace frm
 //=========================================================================
 DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
-OControl::OControl(const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const rtl::OUString& _sService)
+OControl::OControl( const Reference< XMultiServiceFactory>& _rxFactory, const rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
-            ,m_aService(_sService)
             ,m_xServiceFactory(_rxFactory)
 {
     DBG_CTOR(frm_OControl, NULL);
     // VCL-Control aggregieren
     // bei Aggregation den Refcount um eins erhoehen da im setDelegator
     // das Aggregat selbst den Refcount erhoeht
-    increment(m_refCount);
+    increment( m_refCount );
     {
-        m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_sService), UNO_QUERY);
-        m_xControl = Reference<XControl>(m_xAggregate, UNO_QUERY);
+        m_xAggregate = m_xAggregate.query( _rxFactory->createInstance( _rAggregateService ) );
+        m_xControl = m_xControl.query( m_xAggregate );
     }
+    decrement( m_refCount );
 
-    if (m_xAggregate.is())
-    {
-        m_xAggregate->setDelegator(static_cast<XWeak*>(this));
-    }
-
-    // Refcount wieder bei NULL
-    sal_Int32 n = decrement(m_refCount);
+    if ( _bSetDelegator )
+        doSetDelegator();
 }
 
 //------------------------------------------------------------------------------
 OControl::~OControl()
 {
     DBG_DTOR(frm_OControl, NULL);
-    // Freigeben der Aggregation
-    if (m_xAggregate.is())
-    {
-        m_xAggregate->setDelegator(InterfaceRef());
+    doResetDelegator();
+}
+
+//------------------------------------------------------------------------------
+void OControl::doResetDelegator()
+{
+    if ( m_xAggregate.is() )
+        m_xAggregate->setDelegator( NULL );
+}
+
+//------------------------------------------------------------------------------
+void OControl::doSetDelegator()
+{
+    increment( m_refCount );
+    if ( m_xAggregate.is() )
+    {   // those brackets are important for some compilers, don't remove!
+        // (they ensure that the temporary object created in the line below
+        // is destroyed *before* the refcount-decrement)
+        m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
     }
+    decrement( m_refCount );
 }
 
 // UNO Anbindung
@@ -253,22 +268,19 @@ Sequence<sal_Int8> SAL_CALL OControl::getImplementationId() throw(RuntimeExcepti
 //------------------------------------------------------------------------------
 Sequence<Type> SAL_CALL OControl::getTypes() throw(RuntimeException)
 {
-    Sequence<Type> aOwnTypes = _getTypes();
-    Reference<com::sun::star::lang::XTypeProvider> xProv;
+    TypeBag aTypes( _getTypes() );
 
-    if (query_aggregation(m_xAggregate, xProv))
-        return concatSequences(aOwnTypes, xProv->getTypes());
-    else
-        return aOwnTypes;
+    Reference< XTypeProvider > xProv;
+    if ( query_aggregation( m_xAggregate, xProv ) )
+        aTypes.addTypes( xProv->getTypes() );
+
+    return aTypes.getTypes();
 }
 
 //------------------------------------------------------------------------------
 Sequence<Type> OControl::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-        aTypes = concatSequences(OComponentHelper::getTypes(), OControl_BASE::getTypes());
-    return aTypes;
+    return TypeBag( OComponentHelper::getTypes(), OControl_BASE::getTypes() ).getTypes();
 }
 
 // OComponentHelper
@@ -310,7 +322,7 @@ Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() throw(Runt
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
         getSupportedServiceNames_Static()
-    );
+   );
 }
 
 //------------------------------------------------------------------------------
@@ -417,12 +429,13 @@ sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException)
 //==================================================================
 DBG_NAME(frm_OBoundControl);
 //------------------------------------------------------------------
-OBoundControl::OBoundControl(const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sService)
-        :OControl(_rxFactory, _sService)
-        ,m_bLocked(sal_False)
-        ,m_bLastKnownValidity( sal_True )
-        ,m_aOriginalFont( EmptyFontDescriptor() )
-        ,m_nOriginalTextLineColor( 0 )
+OBoundControl::OBoundControl( const Reference< XMultiServiceFactory >& _rxFactory,
+            const ::rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
+    :OControl( _rxFactory, _rAggregateService, _bSetDelegator )
+    ,m_bLocked(sal_False)
+    ,m_bLastKnownValidity( sal_True )
+    ,m_aOriginalFont( EmptyFontDescriptor() )
+    ,m_nOriginalTextLineColor( 0 )
 {
     DBG_CTOR(frm_OBoundControl, NULL);
 }
@@ -435,10 +448,7 @@ OBoundControl::~OBoundControl()
 // -----------------------------------------------------------------------------
 Sequence< Type> OBoundControl::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-        aTypes = concatSequences(OControl::_getTypes(), OBoundControl_BASE::getTypes());
-    return aTypes;
+    return TypeBag( OControl::_getTypes(), OBoundControl_BASE::getTypes() ).getTypes();
 }
 //------------------------------------------------------------------
 Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType) throw(RuntimeException)
@@ -696,25 +706,22 @@ Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeEx
 //------------------------------------------------------------------
 Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException)
 {
-    Sequence<Type> aOwnTypes = _getTypes();
-    Reference<com::sun::star::lang::XTypeProvider> xProv;
+    TypeBag aTypes( _getTypes() );
 
-    if (query_aggregation(m_xAggregate, xProv))
-        return concatSequences(aOwnTypes, xProv->getTypes());
-    else
-        return aOwnTypes;
+    Reference< XTypeProvider > xProv;
+    if ( query_aggregation( m_xAggregate, xProv ) )
+        aTypes.addTypes( xProv->getTypes() );
+
+    return aTypes.getTypes();
 }
 
 //------------------------------------------------------------------------------
 Sequence<Type> OControlModel::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-    {
-        // my two base classes
-        aTypes = concatSequences(OComponentHelper::getTypes(), OPropertySetAggregationHelper::getTypes(), OControlModel_BASE::getTypes());
-    }
-    return aTypes;
+    return TypeBag( OComponentHelper::getTypes(),
+        OPropertySetAggregationHelper::getTypes(),
+        OControlModel_BASE::getTypes()
+    ).getTypes();
 }
 
 //------------------------------------------------------------------
@@ -1547,21 +1554,21 @@ namespace
 //-----------------------------------------------------------------------------
 Sequence< Type > OBoundControlModel::_getTypes()
 {
-    Sequence< Type > aTypes( concatSequences(
+    TypeBag aTypes(
         OControlModel::_getTypes(),
         OBoundControlModel_BASE1::getTypes()
-    ) );
+    );
 
     if ( m_bCommitable )
-        appendSequence( aTypes, OBoundControlModel_COMMITTING::getTypes() );
+        aTypes.addTypes( OBoundControlModel_COMMITTING::getTypes() );
 
     if ( m_bSupportsExternalBinding )
-        appendSequence( aTypes, OBoundControlModel_BINDING::getTypes() );
+        aTypes.addTypes( OBoundControlModel_BINDING::getTypes() );
 
     if ( m_bSupportsValidation )
-        appendSequence( aTypes, OBoundControlModel_VALIDATION::getTypes() );
+        aTypes.addTypes( OBoundControlModel_VALIDATION::getTypes() );
 
-    return aTypes;
+    return aTypes.getTypes();
 }
 
 // OComponentHelper
