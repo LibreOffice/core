@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:47:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 11:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0691 UNO_NAME_IN_SERVER_PASSWORD  */  {MAP_CHAR_LEN("InServerPassword")},
 /* 0692 UNO_NAME_OUT_SERVER_PASSWORD */  {MAP_CHAR_LEN("OutServerPassword")},
 /* 0693 UNO_NAME_SAVE_FILTER         */  {MAP_CHAR_LEN("SaveFilterOptions")},
-/* 0694 UNO_NAME_SAVE_DATA           */  {MAP_CHAR_LEN("SaveFilterData")}
+/* 0694 UNO_NAME_SAVE_DATA           */  {MAP_CHAR_LEN("SaveFilterData")},
+/* 0695 UNO_NAME_LOCK_UPDATES        */  {MAP_CHAR_LEN("LockUpdates")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
