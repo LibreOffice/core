@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scpzipfiles.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:16:59 $
+#   last change: $Author: kz $ $Date: 2004-06-18 16:56:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,11 +144,10 @@ sub resolving_scpzip_replace_flag
 
                 my $onefilename = $onefile->{'Name'};
                 my $sourcepath = $onefile->{'sourcepath'};
+                $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
                 my $destinationpath = $replacedir . $onefilename;
                 my $movepath = $destinationpath . ".orig";
 
-            #   if (!(-f $movepath))    # do nothing if the file already exists
-            #   {
                 my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
 
                 if ( $copysuccess )
@@ -160,7 +159,6 @@ sub resolving_scpzip_replace_flag
                     replace_all_ziplistvariables_in_file($onefileref, $variablesref);
                     installer::files::save_file($destinationpath ,$onefileref);
                 }
-            #   }
 
                 # Writing the new sourcepath into the hashref, even if it was no copied
 
@@ -168,7 +166,7 @@ sub resolving_scpzip_replace_flag
             }
             else
             {
-                # ToDo: How about SCPZIP_REPALCE and ARCHIVE?
+                # ToDo: How about SCPZIP_REPLACE and ARCHIVE?
                 # Requires that the zip file was unpacked in resolving_archive_flag
                 # and that $installer::globals::dounzip is set (Parameter -unzip).
             }
