@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:44:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-08 09:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,80 +1086,6 @@ struct ScConsolidateParam
 };
 
 // -----------------------------------------------------------------------
-struct PivotField
-{
-    SCsCOL  nCol;
-    USHORT  nFuncMask;
-    USHORT  nFuncCount;
-
-    PivotField() :
-        nCol(0),nFuncMask(0),nFuncCount(0) {}
-
-    PivotField( const PivotField& rCpy ) :
-        nCol(rCpy.nCol),nFuncMask(rCpy.nFuncMask),nFuncCount(rCpy.nFuncCount) {}
-
-    PivotField(SCsCOL nNewCol, USHORT nNewFuncMask = 0) :
-        nCol(nNewCol),nFuncMask(nNewFuncMask),nFuncCount(0) {}
-
-    PivotField  operator = (const PivotField& r)
-                {
-                    nCol        = r.nCol;
-                    nFuncMask   = r.nFuncMask;
-                    nFuncCount  = r.nFuncCount;
-                    return *this;
-                }
-
-    BOOL        operator == (const PivotField& r) const
-                {
-                    return (   (nCol == r.nCol)
-                            && (nFuncMask == r.nFuncMask)
-                            && (nFuncCount == r.nFuncCount));
-                }
-};
-
-// -----------------------------------------------------------------------
-struct ScPivotParam
-{
-    SCCOL           nCol;           // Cursor Position /
-    SCROW           nRow;           // bzw. Anfang des Zielbereiches
-    SCTAB           nTab;
-    LabelData**     ppLabelArr;
-    SCSIZE          nLabels;
-    PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
-    PivotField      aColArr[PIVOT_MAXFIELD];
-    PivotField      aRowArr[PIVOT_MAXFIELD];
-    PivotField      aDataArr[PIVOT_MAXFIELD];
-    SCSIZE          nPageCount;
-    SCSIZE          nColCount;
-    SCSIZE          nRowCount;
-    SCSIZE          nDataCount;
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bDetectCategories;
-    BOOL            bMakeTotalCol;
-    BOOL            bMakeTotalRow;
-
-    ScPivotParam();
-    ScPivotParam( const ScPivotParam& r );
-    ~ScPivotParam();
-
-    ScPivotParam&   operator=       ( const ScPivotParam& r );
-    BOOL            operator==      ( const ScPivotParam& r ) const;
-    void            Clear           ();
-    void            ClearLabelData  ();
-    void            ClearPivotArrays();
-    void            SetLabelData    ( LabelData**   ppLabArr,
-                                      SCSIZE        nLab );
-    void            SetPivotArrays  ( const PivotField* pPageArr,
-                                      const PivotField* pColArr,
-                                      const PivotField* pRowArr,
-                                      const PivotField* pDataArr,
-                                      SCSIZE            nPageCnt,
-                                      SCSIZE            nColCnt,
-                                      SCSIZE            nRowCnt,
-                                      SCSIZE            nDataCnt );
-};
-
-
 extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();//CHINA001
 extern const LocaleDataWrapper* GetScGlobalpLocaleData();
 
