@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-20 15:40:26 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 06:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 module oletest
 {
 
-[ uik(8DE309C0-8310-11d3-9EEC0050-04526AB4), ident("XTestSequence", 1.0) ]
 interface XTestSequence: com::sun::star::uno::XInterface
 {
     sequence<byte> methodByte( [in] sequence<byte> aSeq );
@@ -139,7 +138,6 @@ interface XTestSequence: com::sun::star::uno::XInterface
     [attribute]  any AttrAny2;
 
 };
-[uik(EBEF02B0-8C41-11d3-9EF90050-04526AB4), ident("XTestStruct", 1.0)]
 interface XTestStruct: com::sun::star::uno::XInterface
 {
 // Method taking structs as arguments
@@ -150,7 +148,6 @@ interface XTestStruct: com::sun::star::uno::XInterface
     [attribute] com::sun::star::beans::Property AttrStruct;
 };
 
-[uik(E5087290-95E9-11d3-9F070050-04526AB4), ident("XTestOutParameters", 1.0)]
 interface XTestOutParameters: com::sun::star::uno::XInterface
 {
     void out_methodByte( [out] byte rOut );
@@ -185,7 +182,6 @@ enum SimpleEnum
     C
 };
 
-[uik(57F9DDE0-9293-11d3-9F000050-04526AB4), ident("XTestOthers", 1.0)]
 interface XTestOther: com::sun::star::uno::XInterface
 {
     // Any test
@@ -196,26 +192,25 @@ interface XTestOther: com::sun::star::uno::XInterface
 };
 
 
-[uik(67E59870-6EA4-11d4-832F0050-04526AB4), ident("XSimple", 1.0)]
 interface XSimple: com::sun::star::uno::XInterface
 {
     void func( [in] string message);
     string getName();
 };
-[uik(29828AB0-79A0-11d4-83330050-04526AB4), ident("XSimple2", 1.0)]
+
 interface XSimple2: com::sun::star::uno::XInterface
 {
     void func2( [in] string message);
     string getName2();
 };
-[uik(29828AB1-79A0-11d4-83330050-04526AB4), ident("XSimple3", 1.0)]
+
 interface XSimple3: com::sun::star::uno::XInterface
 {
     void func3( [in] string message);
     string getName3();
 };
 
-[uik(4405B9E0-6D39-11d4-832F0050-04526AB4), ident("XTestOthers", 1.0)]
+
 interface XCallback: com::sun::star::uno::XInterface
 {
     void func1();
@@ -291,7 +286,6 @@ interface XCallback: com::sun::star::uno::XInterface
 };
 
 
-[uik(259159C0-6D38-11d4-832F0050-04526AB4), ident("XTestOthers", 1.0)]
 interface XTestInterfaces: com::sun::star::uno::XInterface
 {
     // Any test
