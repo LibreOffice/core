@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-06-28 09:54:50 $
+ *  last change: $Author: os $ $Date: 2001-07-10 07:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,43 +154,11 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-/*#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
-#include <com/sun/star/style/NumberingType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
-#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
-#include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#endif
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::text;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::style;
-using namespace rtl;
-*/
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 /* -----------------------------31.01.01 10:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-/*Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
-{
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
-    Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-    DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
-
-    return xRet;
-} */
 
 DBG_NAME(outlinehdl);
 
@@ -590,37 +558,6 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aStartEdit.SetModifyHdl(LINK(this,  SwOutlineSettingsTabPage, StartModified));
     aCharFmtLB.SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, CharFmtHdl));
 
-/*  Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
-    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
-    if(xInfo.is())
-    {
-        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
-        const sal_Int16* pTypes = aTypes.getConstArray();
-        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
-        {
-            sal_Int16 nCurrent = pTypes[nType];
-            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
-            {
-                sal_Bool bInsert = sal_True;
-                for(USHORT nEntry = 0; nEntry < aNumberBox.GetEntryCount(); nEntry++)
-                {
-                    USHORT nEntryData = (USHORT)(ULONG)aNumberBox.GetEntryData(nEntry);
-                    if(nEntryData == (USHORT) nCurrent)
-                    {
-                        bInsert = sal_False;
-                        break;
-                    }
-                }
-                if(bInsert)
-                {
-                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
-                    USHORT nPos = aNumberBox.InsertEntry(aIdent);
-                    aNumberBox.SetEntryData(nPos,(void*)(ULONG)nCurrent);
-                }
-            }
-        }
-    }*/
-
 }
 /* -----------------07.07.98 14:19-------------------
  *
@@ -664,8 +601,6 @@ void    SwOutlineSettingsTabPage::Update()
         {
             long nData = aNumFmtArr[0]->GetNumberingType();
             aNumberBox.SelectNumberingType(nData);
-//          USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
-//          aNumberBox.SelectEntryPos( nPos );
         }
         else
             aNumberBox.SetNoSelection();
@@ -716,8 +651,6 @@ void    SwOutlineSettingsTabPage::Update()
 
         ULONG nData = rFmt.GetNumberingType();
         aNumberBox.SelectNumberingType(nData);
-//      USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
-//      aNumberBox.SelectEntryPos( nPos );
         aPrefixED.SetText(rFmt.GetPrefix());
         aSuffixED.SetText(rFmt.GetSuffix());
         const SwCharFmt* pFmt = rFmt.GetCharFmt();
@@ -905,7 +838,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
         }
         nMask <<= 1;
     }
-//    SetModified();
     return 0;
 }
 /* -----------------21.09.98 12:21-------------------
@@ -955,7 +887,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, CharFmtHdl, ListBox *, EMPTYARG )
         }
         nMask <<= 1;
     }
-//  SetModified(FALSE);
     return RET_OK;
 }
 /* -----------------07.07.98 14:19-------------------
@@ -1011,8 +942,6 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 
     long nData = rNumFmt.GetNumberingType();
     aNumberBox.SelectNumberingType(nData);
-//  USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
-//  aNumberBox.SelectEntryPos( nPos );
     USHORT nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
     USHORT nTmp = 0;
     if(nOutlinePos != USHRT_MAX)
@@ -1153,7 +1082,6 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             nXStep /= 2;
         USHORT nYStart = 4;
         USHORT nYStep = (aSize.Height() - 6)/ MAXLEVEL;
-//      USHORT nLineHeight = nYStep * 8 / 10;
         aStdFont = OutputDevice::GetDefaultFont(
                 DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
 
@@ -1242,7 +1170,6 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                 }
                 else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
-//                  aNum.GetLevelVal()[ nLevel ] = 0;
                     nTextOffset =  lcl_DrawBullet(pVDev, rFmt, nXStart, nYStart, aStdFont.GetSize());
                     nTextOffset += nXStep;
                 }
