@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdevprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,10 @@
 #ifndef _VCLCANVAS_OUTDEVPROVIDER_HXX
 #define _VCLCANVAS_OUTDEVPROVIDER_HXX
 
-#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
-#include <comphelper/implementationreference.hxx>
-#endif
+#include <sal/types.h>
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
 #endif
 
 class OutputDevice;
@@ -76,49 +74,19 @@ namespace vclcanvas
 {
     /* Definition of OutDevProvider interface */
 
-    /** Helper interface to connect CanvasBase with its various
-        clients.
-    */
-
-    // The problem here is the fact that first of all, XCanvas and its
-    // specialised interfaces form an inheritance hierarchy. Thus,
-    // every client of a base class implementing the commons of
-    // canvases, will have to implement all interface methods, and
-    // forward them to the base class. Thus, there's no real gain in
-    // using implementation inheritance here. If we instead use a
-    // helper class to be held as a member by its client, we have the
-    // problem that several base methods serve as object factories,
-    // generating objects which require links to the canvas
-    // implementation object _and_ a UNO reference. The latter is for
-    // lifetime issues, and should better be directly from the client
-    // object.
-
-    // Therefore, every client of CanvasBase must implement this
-    // interface and pass a pointer to it to the CanvasBase
-    // instance. The XInterface base class is necessary to have basic
-    // UNO reference semantics.
-
-    class OutDevProvider : public ::com::sun::star::uno::XInterface
+    /** Implementers of this interface provide the CanvasHelper
+        with its OutputDevice
+     */
+    class OutDevProvider
     {
     public:
-        /** Use this type to store a C++ pointer alongside a UNO
-            reference to this interface.
-
-            This is advantageous e.g. for CanvasBase, where several
-            helper methods (color conversion etc.) need access to the
-            XCanvas UNO interface. Performing a QueryInterface
-            everytime is a real performance killer there.
-         */
-        typedef ::comphelper::ImplementationReference<
-            OutDevProvider,
-            ::drafts::com::sun::star::rendering::XCanvas,
-            ::com::sun::star::uno::XInterface > ImplRef;
-
         virtual ~OutDevProvider() {}
 
         virtual OutputDevice&       getOutDev() = 0;
         virtual const OutputDevice& getOutDev() const = 0;
     };
+
+    typedef ::boost::shared_ptr< OutDevProvider > OutDevProviderSharedPtr;
 }
 
 #endif /* _VCLCANVAS_OUTDEVPROVIDER_HXX */
