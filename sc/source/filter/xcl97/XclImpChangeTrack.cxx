@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:07:44 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,10 @@ void XclImpChangeTrack::ReadChTrInsert()
     *pStrm >> aRecHeader;
     if( CheckRecord( EXC_CHTR_OP_UNKNOWN ) )
     {
-        if( (aRecHeader.nOpCode < EXC_CHTR_OP_INSROW) || (aRecHeader.nOpCode > EXC_CHTR_OP_DELCOL) )
+        if( (aRecHeader.nOpCode != EXC_CHTR_OP_INSROW) &&
+            (aRecHeader.nOpCode != EXC_CHTR_OP_INSCOL) &&
+            (aRecHeader.nOpCode != EXC_CHTR_OP_DELROW) &&
+            (aRecHeader.nOpCode != EXC_CHTR_OP_DELCOL) )
         {
             DBG_ERROR( "XclImpChangeTrack::ReadChTrInsert - unknown action" );
             return;
@@ -427,7 +430,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
 void XclImpChangeTrack::ReadChTrTabId()
 {
     if( !nTabIdCount )      // read only 1st time, otherwise calculated by <ReadChTrInsertTab()>
-        nTabIdCount = (pStrm->GetRecLeft() >> 1);
+        nTabIdCount = static_cast< sal_uInt16 >( pStrm->GetRecLeft() >> 1 );
 }
 
 void XclImpChangeTrack::ReadChTrMoveRange()
