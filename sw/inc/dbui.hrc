@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:18:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,38 @@
 #define DLG_PRINTMONITOR        (RC_DBUI_BEGIN + 1)
 #define DLG_AP_INSERT_DB_SEL    (RC_DBUI_BEGIN + 2)
 
+#define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
+#define DLG_MM_DOCSELECT_PAGE       (RC_DBUI_BEGIN + 4)
+#define DLG_MM_OUTPUTTYPE_PAGE      (RC_DBUI_BEGIN + 5)
+#define DLG_MM_ADDRESSBLOCK_PAGE    (RC_DBUI_BEGIN + 6)
+#define DLG_MM_GREETINGS_PAGE       (RC_DBUI_BEGIN + 7)
+#define DLG_MM_PREPAREMERGE_PAGE    (RC_DBUI_BEGIN + 8)
+#define DLG_MM_MERGE_PAGE           (RC_DBUI_BEGIN + 9)
+#define DLG_MM_OUTPUT_PAGE          (RC_DBUI_BEGIN + 10)
+#define DLG_MM_ADDRESSLISTDIALOG    (RC_DBUI_BEGIN + 11)
+#define DLG_MM_SELECTDBTABLEDDIALOG (RC_DBUI_BEGIN + 12)
+#define DLG_MM_DBTABLEPREVIEWDIALOG (RC_DBUI_BEGIN + 13)
+#define DLG_MM_CREATEADDRESSLIST    (RC_DBUI_BEGIN + 14)
+#define DLG_MM_FIND_ENTRY           (RC_DBUI_BEGIN + 15)
+#define DLG_MM_ADD_RENAME_ENTRY     (RC_DBUI_BEGIN + 16)
+#define DLG_MM_CUSTOMIZE_ADDRESS_LIST (RC_DBUI_BEGIN + 17)
+#define DLG_MM_CUSTOMIZEADDRESSBLOCK  (RC_DBUI_BEGIN + 18)
+#define DLG_MM_SELECTADDRESSBLOCK     (RC_DBUI_BEGIN + 19)
+#define DLG_MM_ASSIGNFIELDS           (RC_DBUI_BEGIN + 20)
+
+#define DLG_MM_LAYOUT_PAGE            (RC_DBUI_BEGIN + 22)
+#define DLG_MM_COPYTO                 (RC_DBUI_BEGIN + 23)
+#define DLG_MM_MAILBODY               (RC_DBUI_BEGIN + 24)
+#define DLG_MM_SENDMAILS              (RC_DBUI_BEGIN + 25)
+#define DLG_MAILMERGECHILD            (RC_DBUI_BEGIN + 26)
+#define DLG_MM_SAVEWARNING            (RC_DBUI_BEGIN + 27)
+#define DLG_MM_QUERY                  (RC_DBUI_BEGIN + 28)
+#define DLG_MM_SENDWARNING            (RC_DBUI_BEGIN + 29)
 // Strings ------------------------------------------------------------------
 
 #define STR_DB_EMAIL            (RC_DBUI_BEGIN)
-// free
-// free
+#define SA_ADDRESS_HEADER       (RC_DBUI_BEGIN + 1)
+#define STR_NOTASSIGNED         (RC_DBUI_BEGIN + 2)
 #define STR_FILTER_ALL          (RC_DBUI_BEGIN + 3)
 #define STR_FILTER_SXB          (RC_DBUI_BEGIN + 4)
 #define STR_FILTER_SXC          (RC_DBUI_BEGIN + 5)
@@ -85,6 +112,7 @@
 #define STR_FILTER_TXT          (RC_DBUI_BEGIN + 8)
 #define STR_FILTER_CSV          (RC_DBUI_BEGIN + 9)
 #define STR_FILTER_ALL_DATA     (RC_DBUI_BEGIN + 10)
+
 // Bitmaps ------------------------------------------------------------------
 
 
@@ -102,6 +130,21 @@
 #define PB_CANCELPRNMON     9
 #define FT_SENDING          10
 #define STR_EMAILMON        11
+
+#define MM_PART_TITLE                   0
+#define MM_PART_FIRSTNAME               1
+#define MM_PART_LASTNAME                2
+#define MM_PART_COMPANY                 3
+#define MM_PART_ADDRESS_1               4
+#define MM_PART_ADDRESS_2               5
+#define MM_PART_CITY                    6
+#define MM_PART_REGION                  7
+#define MM_PART_ZIP                     8
+#define MM_PART_COUNTRY                 9
+#define MM_PART_PHONE_PRIVATE           10
+#define MM_PART_PHONE_BUSINESS          11
+#define MM_PART_E_MAIL                  12
+#define MM_PART_GENDER                  13
 
 #endif
 
