@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-18 16:29:19 $
+#   last change: $Author: rt $ $Date: 2004-08-12 15:20:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ CFLAGSCC=-xCC
 CFLAGSCXX=-features=no%altspell -library=no%Cstd
 
 # flags to enable build with symbols; required for crashdump feature
-CFLAGSENABLESYMBOLS=-g0 -xs
+CFLAGSENABLESYMBOLS=#-g0 -xs # temporarily commented out, will be reenabled before Beta
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex

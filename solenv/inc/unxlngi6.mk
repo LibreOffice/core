@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-07-30 15:24:01 $
+#   last change: $Author: rt $ $Date: 2004-08-12 15:20:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,8 @@ CFLAGS+=-Wuninitialized
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
 CFLAGSENABLESYMBOLS=-g1
 .ELSE
-CFLAGSENABLESYMBOLS=-g
+CFLAGSENABLESYMBOLS=#-g # temporarily commented out, will be reenabled before Beta
+
 .ENDIF
 
 # flags for the C++ Compiler
