@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-02 13:53:16 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,10 +321,10 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const com::sun::star::uno::Type & rType)
     throw(uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw (uno::RuntimeException)
+    virtual void SAL_CALL acquire() throw ()
     { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() throw (uno::RuntimeException)
+    virtual void SAL_CALL release() throw ()
     { OWeakObject::release(); }
 
     virtual void SAL_CALL writeBytes(const uno::Sequence< sal_Int8 > & rData)
@@ -396,10 +396,10 @@ public:
                                 const uno::Type & rType)
         throw(uno::RuntimeException);
 
-    virtual void SAL_CALL acquire() throw (uno::RuntimeException)
+    virtual void SAL_CALL acquire() throw ()
     { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() throw (uno::RuntimeException)
+    virtual void SAL_CALL release() throw ()
     { OWeakObject::release(); }
 
     virtual void SAL_CALL push(const uno::Any & rStatus)
@@ -501,7 +501,6 @@ private:
     uno::Reference< star::ucb::XContentIdentifierFactory > m_xIdFac;
     rtl::OUString m_aConfigurationKey1;
     rtl::OUString m_aConfigurationKey2;
-    rtl::OUString m_aRapConnect;
     sal_Bool m_bInited : 1;
 
     static rtl::OUString getUnoURL();
@@ -509,8 +508,7 @@ private:
 public:
     Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
          rtl::OUString const & rConfigurationKey1,
-         rtl::OUString const & rConfigurationKey2,
-         rtl::OUString const & rRapConnect );
+         rtl::OUString const & rConfigurationKey2 );
     ~Ucb();
 
     sal_Bool init();
@@ -546,12 +544,10 @@ rtl::OUString Ucb::getUnoURL()
 //-------------------------------------------------------------------------
 Ucb::Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
           rtl::OUString const & rConfigurationKey1,
-          rtl::OUString const & rConfigurationKey2,
-          rtl::OUString const & rRapConnect )
+          rtl::OUString const & rConfigurationKey2 )
 : m_xFac( rxFactory ),
   m_aConfigurationKey1( rConfigurationKey1 ),
   m_aConfigurationKey2( rConfigurationKey2 ),
-  m_aRapConnect( rRapConnect ),
   m_bInited( sal_False )
 {
 }
@@ -568,108 +564,54 @@ sal_Bool Ucb::init()
         return sal_True;
 
     // Create auto configured UCB:
-    if (m_aRapConnect.getLength() == 0)
-    {
-        if (m_xFac.is())
-            try
-            {
-                rtl::OUString aPipe;
-                vos::OSecurity().getUserIdent(aPipe);
-                uno::Sequence< uno::Any > aArgs(4);
-                aArgs[0] <<= m_aConfigurationKey1;
-                aArgs[1] <<= m_aConfigurationKey2;
-                aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
-                aArgs[3] <<= aPipe;
-#if 0
-                m_xProv
-                    = uno::Reference< XContentProvider >(
-                          m_xFac->
-                              createInstanceWithArguments(
-                                  rtl::OUString::createFromAscii(
-                                      "com.sun.star.ucb."
-                                          "UniversalContentBroker"),
-                                  aArgs),
-                          uno::UNO_QUERY);
-#else
-                ::ucb::ContentBroker::initialize( m_xFac, aArgs );
-                m_xProv
-                    = ::ucb::ContentBroker::get()->getContentProviderInterface();
-#endif
-            }
-            catch (uno::Exception const &) {}
-
-        if (m_xProv.is())
+    if (m_xFac.is())
+        try
         {
-            print("UCB initialized");
-            uno::Reference< star::ucb::XContentProviderManager > xProvMgr(
-                m_xProv, uno::UNO_QUERY);
-            if (xProvMgr.is())
+            rtl::OUString aPipe;
+            vos::OSecurity().getUserIdent(aPipe);
+            uno::Sequence< uno::Any > aArgs(4);
+            aArgs[0] <<= m_aConfigurationKey1;
+            aArgs[1] <<= m_aConfigurationKey2;
+            aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
+            aArgs[3] <<= aPipe;
+#if 0
+            m_xProv
+                = uno::Reference< XContentProvider >(
+                      m_xFac->
+                          createInstanceWithArguments(
+                              rtl::OUString::createFromAscii(
+                                  "com.sun.star.ucb."
+                                      "UniversalContentBroker"),
+                              aArgs),
+                         uno::UNO_QUERY);
+#else
+            ::ucb::ContentBroker::initialize( m_xFac, aArgs );
+            m_xProv
+                = ::ucb::ContentBroker::get()->getContentProviderInterface();
+#endif
+        }
+        catch (uno::Exception const &) {}
+
+    if (m_xProv.is())
+    {
+        print("UCB initialized");
+        uno::Reference< star::ucb::XContentProviderManager > xProvMgr(
+            m_xProv, uno::UNO_QUERY);
+        if (xProvMgr.is())
+        {
+            print("Registered schemes:");
+            uno::Sequence< star::ucb::ContentProviderInfo >
+                aInfos(xProvMgr->queryContentProviders());
+            for (sal_Int32 i = 0; i < aInfos.getLength(); ++i)
             {
-                print("Registered schemes:");
-                uno::Sequence< star::ucb::ContentProviderInfo >
-                    aInfos(xProvMgr->queryContentProviders());
-                for (sal_Int32 i = 0; i < aInfos.getLength(); ++i)
-                {
-                    String aText(RTL_CONSTASCII_USTRINGPARAM("    "));
-                    aText += UniString(aInfos[i].Scheme);
-                    print(aText);
-                }
+                String aText(RTL_CONSTASCII_USTRINGPARAM("    "));
+                aText += UniString(aInfos[i].Scheme);
+                print(aText);
             }
         }
-        else
-            print("Error initializing UCB");
     }
     else
-    {
-        if (m_xFac.is())
-            try
-            {
-                uno::Reference< bridge::XUnoUrlResolver >
-                    xResolver(
-                        m_xFac->
-                            createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.bridge.UnoUrlResolver")),
-                        uno::UNO_QUERY);
-
-                uno::Reference< lang::XMultiServiceFactory > xRemoteFactory;
-                if (xResolver.is())
-                {
-                    rtl::OUStringBuffer aUrl;
-                    aUrl.appendAscii(RTL_CONSTASCII_STRINGPARAM("uno:"));
-                    aUrl.append(m_aRapConnect);
-                    aUrl.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                                         ";urp;UCB.Factory"));
-                    xRemoteFactory
-                        = uno::Reference< lang::XMultiServiceFactory >(
-                              xResolver->resolve(aUrl.makeStringAndClear()),
-                              uno::UNO_QUERY);
-                }
-
-                if (xRemoteFactory.is())
-                    xRemoteFactory
-                        = uno::Reference< lang::XMultiServiceFactory >(
-                              xRemoteFactory->
-                                  createInstance(
-                                      rtl::OUString::createFromAscii(
-                                          "com.sun.star.lang."
-                                              "ServiceManager")),
-                              uno::UNO_QUERY);
-
-                if (xRemoteFactory.is())
-                    m_xProv
-                        = uno::Reference< star::ucb::XContentProvider >(
-                              xRemoteFactory->
-                                  createInstance(
-                                      rtl::OUString::createFromAscii(
-                                          "com.sun.star.ucb."
-                                              "RemoteAccessContentProvider")),
-                              uno::UNO_QUERY);
-            }
-            catch (uno::Exception const &) {}
-
-        print(m_xProv.is() ? "RAP initialized" : "Error initializing RAP");
-    }
+        print("Error initializing UCB");
 
     m_bInited = m_xProv.is();
     return m_bInited;
@@ -724,9 +666,9 @@ public:
     virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
         throw( uno::RuntimeException );
     virtual void SAL_CALL acquire()
-        throw( uno::RuntimeException );
+        throw();
     virtual void SAL_CALL release()
-        throw( uno::RuntimeException );
+        throw();
 
      // XCommandEnvironemnt
 
@@ -777,7 +719,7 @@ UcbTaskEnvironment::queryInterface( const uno::Type & rType )
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbTaskEnvironment::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -785,7 +727,7 @@ void SAL_CALL UcbTaskEnvironment::acquire()
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbTaskEnvironment::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -991,10 +933,10 @@ public:
         throw( uno::RuntimeException );
     virtual void SAL_CALL
     acquire()
-        throw( uno::RuntimeException );
+        throw();
     virtual void SAL_CALL
     release()
-        throw( uno::RuntimeException );
+        throw();
 
     // XEventListener
     // ( base interface of XContentEventListener, XPropertiesChangeListener )
@@ -1846,7 +1788,7 @@ uno::Any SAL_CALL UcbContent::queryInterface( const uno::Type & rType )
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbContent::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -1854,7 +1796,7 @@ void SAL_CALL UcbContent::acquire()
 //----------------------------------------------------------------------------
 // virtual
 void SAL_CALL UcbContent::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -2016,8 +1958,7 @@ public:
     MyWin( Window *pParent, WinBits nWinStyle,
            uno::Reference< lang::XMultiServiceFactory >& rxFactory,
            rtl::OUString const & rConfigurationKey1,
-           rtl::OUString const & rConfigurationKey2,
-           rtl::OUString const & rRapConnect );
+           rtl::OUString const & rConfigurationKey2 );
     virtual ~MyWin();
 
     void Resize( void );
@@ -2031,12 +1972,11 @@ public:
 MyWin::MyWin( Window *pParent, WinBits nWinStyle,
               uno::Reference< lang::XMultiServiceFactory >& rxFactory,
               rtl::OUString const & rConfigurationKey1,
-              rtl::OUString const & rConfigurationKey2,
-              rtl::OUString const & rRapConnect )
+              rtl::OUString const & rConfigurationKey2 )
 : WorkWindow( pParent, nWinStyle ),
   m_pTool( NULL ),
   m_pOutEdit( NULL ),
-  m_aUCB( rxFactory, rConfigurationKey1, rConfigurationKey2, rRapConnect ),
+  m_aUCB( rxFactory, rConfigurationKey1, rConfigurationKey2 ),
   m_pContent( NULL ),
   m_nFetchSize( 0 ),
   m_bTiming( false ),
@@ -2688,7 +2628,6 @@ void MyApp::Main()
                                          UCB_CONFIGURATION_KEY1_LOCAL));
     rtl::OUString aConfigurationKey2(rtl::OUString::createFromAscii(
                                          UCB_CONFIGURATION_KEY2_OFFICE));
-    rtl::OUString aRapConnect;
 
     USHORT nParams = Application::GetCommandLineParamCount();
     for ( USHORT n = 0; n < nParams; ++n )
@@ -2713,28 +2652,6 @@ void MyApp::Main()
                                   nSlash - RTL_CONSTASCII_LENGTH("-key="));
                 aConfigurationKey2
                     = aParam.Copy(nSlash + 1);
-            }
-        }
-        else if (aParam.CompareIgnoreCaseToAscii("-rapconnect=",
-                                                 RTL_CONSTASCII_LENGTH(
-                                                     "-rapconnect="))
-                     == COMPARE_EQUAL)
-        {
-            aRapConnect = aParam.Copy(RTL_CONSTASCII_LENGTH("-rapconnect="));
-            rtl::OUString aUserId;
-            vos::OSecurity().getUserIdent(aUserId);
-            for (sal_Int32 nPos = 0;; nPos += aUserId.getLength())
-            {
-                nPos = aRapConnect.indexOf(rtl::OUString::createFromAscii(
-                                               "$(USERID)"),
-                                           nPos);
-                if (nPos == -1)
-                    break;
-                aRapConnect
-                    = aRapConnect.
-                          replaceAt(nPos,
-                                    RTL_CONSTASCII_LENGTH("$(USERID)"),
-                                    aUserId);
             }
         }
     }
@@ -2780,8 +2697,7 @@ void MyApp::Main()
     Help::EnableBalloonHelp();
 
     MyWin *pMyWin = new MyWin( NULL, WB_APP | WB_STDWORK, xFac,
-                               aConfigurationKey1, aConfigurationKey2,
-                               aRapConnect );
+                               aConfigurationKey1, aConfigurationKey2 );
 
     pMyWin->
         SetText(
