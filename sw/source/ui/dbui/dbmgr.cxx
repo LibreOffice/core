@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-06-19 07:42:09 $
+ *  last change: $Author: os $ $Date: 2001-06-19 11:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,6 +1153,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
             ULONG nDocNo = 1;
             ULONG nCounter = 0;
             String sExt( INetURLObject( sOldName ).GetExtension() );
+            sExt.InsertAscii(".", 0);
 
             do {
                 {
