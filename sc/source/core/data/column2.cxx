@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 20:01:58 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 15:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,44 +1178,61 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
 
             if (bStdAllowed)
             {
-                USHORT nHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
+                USHORT nLatHeight = 0;
+                USHORT nCjkHeight = 0;
+                USHORT nCtlHeight = 0;
+                USHORT nDefHeight;
+                BYTE nDefScript = ScGlobal::GetDefaultScriptType();
+                if ( nDefScript == SCRIPTTYPE_ASIAN )
+                    nDefHeight = nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
+                else if ( nDefScript == SCRIPTTYPE_COMPLEX )
+                    nDefHeight = nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
+                else
+                    nDefHeight = nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
 
-                //  wenn eh alles schon groesser ist, muss die Schleife nicht mehr
-                //  ewig durchgenudelt werden
+                //  if everything below is already larger, the loop doesn't have to
+                //  be run again
                 USHORT nStdEnd = nEnd;
-                if ( nHeight <= nMinHeight && nStdEnd >= nMinStart )
+                if ( nDefHeight <= nMinHeight && nStdEnd >= nMinStart )
                     nStdEnd = nMinStart ? nMinStart-1 : 0;
 
                 for (nRow=nStart; nRow<=nStdEnd; nRow++)
-                    if (nHeight > pHeight[nRow-nStartRow])
-                        pHeight[nRow-nStartRow] = nHeight;
+                    if (nDefHeight > pHeight[nRow-nStartRow])
+                        pHeight[nRow-nStartRow] = nDefHeight;
 
                 if ( bStdOnly )
                 {
                     //  if cells are not handled individually below,
-                    //  check for cells with CJK or CTL script type
-
-                    USHORT nCjkHeight = 0;
-                    USHORT nCtlHeight = 0;
+                    //  check for cells with different script type
 
                     USHORT nIndex;
                     Search(nStart,nIndex);
                     while ( nIndex < nCount && (nRow=pItems[nIndex].nRow) <= nEnd )
                     {
                         BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
-                        if ( nScript == SCRIPTTYPE_ASIAN )
+                        if ( nScript != nDefScript )
                         {
-                            if ( nCjkHeight == 0 )
-                                nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
-                            if (nCjkHeight > pHeight[nRow-nStartRow])
-                                pHeight[nRow-nStartRow] = nCjkHeight;
-                        }
-                        else if ( nScript == SCRIPTTYPE_COMPLEX )
-                        {
-                            if ( nCtlHeight == 0 )
-                                nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
-                            if (nCtlHeight > pHeight[nRow-nStartRow])
-                                pHeight[nRow-nStartRow] = nCtlHeight;
+                            if ( nScript == SCRIPTTYPE_ASIAN )
+                            {
+                                if ( nCjkHeight == 0 )
+                                    nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
+                                if (nCjkHeight > pHeight[nRow-nStartRow])
+                                    pHeight[nRow-nStartRow] = nCjkHeight;
+                            }
+                            else if ( nScript == SCRIPTTYPE_COMPLEX )
+                            {
+                                if ( nCtlHeight == 0 )
+                                    nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
+                                if (nCtlHeight > pHeight[nRow-nStartRow])
+                                    pHeight[nRow-nStartRow] = nCtlHeight;
+                            }
+                            else
+                            {
+                                if ( nLatHeight == 0 )
+                                    nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
+                                if (nLatHeight > pHeight[nRow-nStartRow])
+                                    pHeight[nRow-nStartRow] = nLatHeight;
+                            }
                         }
                         ++nIndex;
                     }
