@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2002-01-22 09:06:16 $
+ *  last change: $Author: tbe $ $Date: 2002-02-04 15:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,8 +735,12 @@ void DlgEditor::Paste()
                     for( sal_uInt32 n = 0; n < nCtrls; n++ )
                     {
                            Any aA = xNameAcc->getByName( pNames[n] );
-                        Reference< ::com::sun::star::awt::XControlModel > xCtrlModel;
-                           aA >>= xCtrlModel;
+                        Reference< ::com::sun::star::awt::XControlModel > xCM;
+                           aA >>= xCM;
+
+                        // clone the control model
+                        Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
+                        Reference< awt::XControlModel > xCtrlModel( xClone->createClone(), uno::UNO_QUERY );
 
                         DlgEdObj* pCtrlObj = new DlgEdObj();
                         pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
