@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-18 16:52:19 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:55:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -272,9 +272,9 @@ if ($installer::globals::setupscript_defined_in_productlist) { installer::setups
 
 installer::logger::globallog("setup script file: $installer::globals::setupscriptname");
 
-my $setupscriptref = installer::files::read_file($installer::globals::setupscriptname); # Reading the setup script file
+print "... analyzing script: $installer::globals::setupscriptname ... \n";
 
-print "... analyzing $installer::globals::setupscriptname ... \n";
+my $setupscriptref = installer::files::read_file($installer::globals::setupscriptname); # Reading the setup script file
 
 # Resolving variables defined in the zip list file into setup script
 # All the variables are defined in $allvariablesarrayref
@@ -521,10 +521,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $languagesarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10b.log", $filesinproductlanguageresolvedarrayref); }
 
-    print "... calculating checksums ...\n";
-
-    my $checksumfile = installer::worker::make_checksum_file($filesinproductlanguageresolvedarrayref, $includepatharrayref);
-    if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . $installer::globals::checksumfilename, $checksumfile); }
+    # print "... calculating checksums ...\n";
+    # my $checksumfile = installer::worker::make_checksum_file($filesinproductlanguageresolvedarrayref, $includepatharrayref);
+    # if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . $installer::globals::checksumfilename, $checksumfile); }
 
     ######################################################################################
     # Unzipping files with flag ARCHIVE and putting all included files into the file list
@@ -555,7 +554,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     # Editing files with flag SCPZIP_REPLACE.
 
-    installer::scpzipfiles::resolving_scpzip_replace_flag($filesinproductlanguageresolvedarrayref, $allvariablesarrayref, "File");
+    installer::scpzipfiles::resolving_scpzip_replace_flag($filesinproductlanguageresolvedarrayref, $allvariablesarrayref, "File", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles13.log", $filesinproductlanguageresolvedarrayref); }
 
     #####################################
@@ -625,7 +624,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     # Editing scpactions with flag SCPZIP_REPLACE.
 
-    installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariablesarrayref, "ScpAction");
+    installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariablesarrayref, "ScpAction", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6.log", $scpactionsinproductlanguageresolvedarrayref); }
 
     #########################################################
@@ -830,20 +829,21 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating directories
         ####################################################
 
-        my $installdir = installer::systemactions::create_directories("install", $languagestringref);
-        my $numberedinprogressdir = installer::systemactions::make_numbered_dir("inprogress", $installdir);
-        my $current_install_number = installer::converter::get_number_from_directory($numberedinprogressdir);
+        my $current_install_number = "";
+
+        my $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
 
         my $listfiledir = installer::systemactions::create_directories("listfile", $languagestringref);
-
-        my $installlogdir = installer::systemactions::create_directory_next_to_directory($numberedinprogressdir, "log");
-        my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($numberedinprogressdir, "checksum");
+        my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
+        # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
         ############################################################################
         # Investigating the different RPMs, Packages, ... that shall be created.
         # The module GIDs are defined in the input file
         # Only for non-Windows platforms
         ############################################################################
+
+        print "... analyzing package list ...\n";
 
         $packages = installer::packagelist::analyze_list($packages, $modulesinproductlanguageresolvedarrayref);
 
@@ -1005,7 +1005,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             my $currentdir = cwd();
 
-            chdir($numberedinprogressdir);  # changing into install directory
+            chdir($installdir); # changing into install directory
 
             ###########################################
             # Starting epm
@@ -1104,39 +1104,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Analyzing the log file
         #######################################################
 
-        print "... checking log file " . $loggingdir . $installer::globals::logfilename . "\n";
+        installer::worker::clean_output_tree(); # removing directories created in the output tree
 
-        my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
-
-        # Dependent from the success, the installation directory can be renamed and mails can be sent.
-
-        if ( $contains_error )
-        {
-            my $errordir = installer::systemactions::rename_string_in_directory($numberedinprogressdir, "inprogress", "with_error");
-            if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
-        }
-        else
-        {
-            my $destdir = installer::systemactions::rename_string_in_directory($numberedinprogressdir, "inprogress", "");
-
-            if ( $installer::globals::updatepack )
-            {
-                # my $completeshipinstalldir = installer::worker::copy_install_sets_to_ship($destdir, $shipinstalldir);
-                # my $completeshipinstalldir = installer::worker::link_install_sets_to_ship($destdir, $shipinstalldir);
-                installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $completeshipinstalldir);
-            }
-        }
-
-        # Saving the logfile in the log file directory and additionally in a log directory in the install directory
-
-        my $numberedlogfilename = $installer::globals::logfilename;
-        $numberedlogfilename =~ s /logfile/log_$current_install_number/;
-        print "... creating log file $numberedlogfilename \n";
-        installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
-        installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
-
-        # Saving the checksumfile in a checksum directory in the install directory
-        installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
+        installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
 
     }   # end of "if (!( $installer::globals::iswindowsbuild ))"
 
@@ -1155,15 +1125,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::iswindowsbuild )
     {
-        # my $installdir = installer::systemactions::create_directories("windows", $languagestringref);
-        my $installdir = installer::systemactions::create_directories("install", $languagestringref);
+        my $current_install_number = "";
+
+        my $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
+
          my $idtdirbase = installer::systemactions::create_directories("idt_files", $languagestringref);
-
-        $installdir = installer::systemactions::make_numbered_dir("inprogress", $installdir);
-        my $current_install_number = installer::converter::get_number_from_directory($installdir);
-
         my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
-        my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
+        # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
         ############################################################################
         # Begin of functions that are used for the creation of idt files
@@ -1366,8 +1334,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # The following addition of Custom Actions has to be done by scp as soon as old setup is removed
 
             # adding the custom action for the configuration into the product (CustomAc.idt and InstallE.idt)
-            my $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecutePkgchk", "82", "pkgchk.exe", "--shared", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable,"pkgchk.exe", "ExecutePkgchk", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            my $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecutePkgchk", "82", "msi-pkgchk.exe", "--quiet --shared", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable,"msi-pkgchk.exe", "ExecutePkgchk", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the quickstarter into the product (CustomAc.idt and InstallE.idt)
             # $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteQuickstart", "82", "install_quickstart.exe", "", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
@@ -1550,42 +1518,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Analyzing the log file
         #######################################################
 
-        print "... checking log file " . $loggingdir . $installer::globals::logfilename . "\n";
+        installer::worker::clean_output_tree(); # removing directories created in the output tree
 
-        my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
-
-        # $installdir = installer::systemactions::make_numbered_dir("inprogress", $installdir);
-        # my $current_install_number = installer::converter::get_number_from_directory($installdir);
-        # my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
-
-        # Dependent from the success, the installation directory can be renamed and mails can be send.
-
-        if ( $contains_error )
-        {
-            my $errordir = installer::systemactions::rename_string_in_directory($installdir, "inprogress", "with_error");
-            if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
-        }
-        else
-        {
-            my $destdir = installer::systemactions::rename_string_in_directory($installdir, "inprogress", "");
-
-            if ( $installer::globals::updatepack )
-            {
-                # my $completeshipinstalldir = installer::worker::copy_install_sets_to_ship($destdir, $shipinstalldir);
-                installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $completeshipinstalldir);
-            }
-        }
-
-        # Saving the logfile in the log file directory and additionally in a log directory in the install directory
-
-        my $numberedlogfilename = $installer::globals::logfilename;
-        $numberedlogfilename =~ s /logfile/log_$current_install_number/;
-        print "... creating log file $numberedlogfilename \n";
-        installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
-        installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
-
-        # Saving the checksumfile in a checksum directory in the install directory
-        installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
+        installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
 
     }    # end of "if ( $installer::globals::iswindowsbuild )"
 
