@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGroupShapeContext( rImport, nPrfx, rLName, rShapes )
+:   SdXMLGroupShapeContext( rImport, nPrfx, rLName, xAttrList, rShapes )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -617,6 +617,8 @@ void SdXMLMasterPageContext::EndElement()
         if( pContext && pContext->ISA( SvXMLStyleContext ) )
             ((SdXMLStylesContext*)pContext)->SetMasterPageStyles(*this);
     }
+
+    SdXMLGroupShapeContext::EndElement();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -654,7 +656,7 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
         case XML_TOK_MASTERPAGE_NOTES:
         {
             // presentation:notes inside master-page context
-            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName,
+            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList,
                 GetLocalShapesContext());
             break;
         }

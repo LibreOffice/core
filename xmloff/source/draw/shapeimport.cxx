@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 16:31:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,15 @@
  *
  ************************************************************************/
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart/XChartDocument.hpp>
 #endif
+
+#include <stl/list>
 
 #ifndef _XMLOFF_SHAPEIMPORT_HXX
 #include "shapeimport.hxx"
@@ -96,6 +102,7 @@
 #endif
 
 using namespace ::rtl;
+using namespace ::std;
 using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -119,7 +126,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpTextBoxShapeAttrTokenMap(0L),
     mpControlShapeAttrTokenMap(0L),
     mpPageShapeAttrTokenMap(0L),
-    mpGraphicObjectShapeAttrTokenMap(0L)
+    mpGraphicObjectShapeAttrTokenMap(0L),
+    mpSortContext(0L)
 {
     // prepare factory parts
     mpSdPropHdlFactory = new XMLSdPropHdlFactory;
@@ -455,31 +463,10 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 {
-    SvXMLImportContext *pContext = 0L;
+    SdXMLShapeContext *pContext = 0L;
 
     const SvXMLTokenMap& rTokenMap = GetGroupShapeElemTokenMap();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    sal_Bool bIsPlaceholder(FALSE);
-    OUString aPresentationObjectClass;
-
-    for(sal_Int16 a(0); a < nAttrCount; a++)
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex(a);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
-
-        if(XML_NAMESPACE_PRESENTATION == nPrefix)
-        {
-            if(aLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_placeholder))))
-            {
-                bIsPlaceholder = TRUE;
-            }
-            else if(aLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_class))))
-            {
-                aPresentationObjectClass = xAttrList->getValueByIndex(a);
-            }
-        }
-    }
 
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
@@ -502,7 +489,7 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
                     uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
                     if(xNewShapes.is())
                     {
-                        pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xNewShapes);
+                        pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xAttrList, xNewShapes);
                     }
                 }
             }
@@ -593,6 +580,17 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
         // add other shapes here...
     }
 
+    // now parse the attribute list and call the child context for each unknown attribute
+    for(sal_Int16 a(0); a < nAttrCount; a++)
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex(a);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+        const OUString aValue( xAttrList->getValueByIndex(a) );
+
+        pContext->processAttribute( nPrefix, aLocalName, aValue );
+    }
+
     return pContext;
 }
 
@@ -621,3 +619,145 @@ void XMLShapeImportHelper::finishShape(
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
 {
 }
+
+// helper functions for z-order sorting
+struct ZOrderHint
+{
+    sal_Int32 nIs;
+    sal_Int32 nShould;
+
+    int operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
+};
+
+class ShapeSortContext
+{
+public:
+    uno::Reference< drawing::XShapes > mxShapes;
+    list<ZOrderHint>              maZOrderList;
+    list<ZOrderHint>              maUnsortedList;
+    sal_Int32                     mnCurrentZ;
+    ShapeSortContext*             mpParentContext;
+    const OUString                maZOrderStr;
+
+    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = NULL );
+
+    void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
+};
+
+ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext )
+: mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ), maZOrderStr(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))
+{
+}
+
+void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
+{
+    uno::Any aAny( mxShapes->getByIndex( nSourcePos ) );
+    uno::Reference< beans::XPropertySet > xPropSet;
+    aAny >>= xPropSet;
+
+    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( maZOrderStr ) )
+    {
+        aAny <<= nDestPos;
+        xPropSet->setPropertyValue( maZOrderStr, aAny );
+
+        list<ZOrderHint>::iterator aIter = maZOrderList.begin();
+        list<ZOrderHint>::iterator aEnd = maZOrderList.end();
+
+        while( aIter != aEnd )
+        {
+            if( (*aIter).nIs < nSourcePos )
+            {
+                DBG_ASSERT( (*aIter).nIs >= nDestPos, "Shape sorting failed" );
+                (*aIter).nIs++;
+            }
+            aIter++;
+        }
+
+        aIter = maUnsortedList.begin();
+        aEnd = maUnsortedList.end();
+
+        while( aIter != aEnd )
+        {
+            if( (*aIter).nIs < nSourcePos )
+            {
+                DBG_ASSERT( (*aIter).nIs >= nDestPos, "shape sorting failed" );
+                (*aIter).nIs++;
+            }
+            aIter++;
+        }
+    }
+}
+
+void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
+{
+    mpSortContext = new ShapeSortContext( rShapes, mpSortContext );
+}
+
+void XMLShapeImportHelper::popGroupAndSort()
+{
+    DBG_ASSERT( mpSortContext, "No context to sort!" );
+    if( mpSortContext == NULL )
+        return;
+
+    list<ZOrderHint>& rZList = mpSortContext->maZOrderList;
+    if( !rZList.empty() )
+    {
+        // only do something if we have shapes to sort
+        list<ZOrderHint>& rUnsortedList = mpSortContext->maUnsortedList;
+
+        // sort z ordered shapes
+        rZList.sort();
+
+        // this is the current index, all shapes before that
+        // index are finished
+        sal_Int32 nIndex = 0;
+        while( !rZList.empty() )
+        {
+            list<ZOrderHint>::iterator aIter( rZList.begin() );
+
+            DBG_ASSERT( (*aIter).nShould >= nIndex, "wrong should!" )
+            while( nIndex < (*aIter).nShould && !rUnsortedList.empty() )
+            {
+                ZOrderHint aGapHint( *rUnsortedList.begin() );
+                rUnsortedList.pop_front();
+
+                mpSortContext->moveShape( aGapHint.nIs, nIndex++ );
+            }
+
+            if( (*aIter).nIs != nIndex )
+                mpSortContext->moveShape( (*aIter).nIs, nIndex );
+
+            rZList.pop_front();
+            nIndex++;
+        }
+    }
+
+    // put parent on top and delete current context, were done
+    ShapeSortContext* pContext = mpSortContext;
+    mpSortContext = pContext->mpParentContext;
+    delete pContext;
+}
+
+void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape, sal_Int32 nZIndex )
+{
+    if( mpSortContext )
+    {
+        ZOrderHint aNewHint;
+        aNewHint.nIs = mpSortContext->mnCurrentZ++;
+        aNewHint.nShould = nZIndex;
+
+        sal_Int32 nInsertIndex = 0;
+
+        if( nZIndex == -1 )
+        {
+            // don't care, so add to unsorted list
+            mpSortContext->maUnsortedList.push_back(aNewHint);
+        }
+        else
+        {
+            // insert into sort list
+            mpSortContext->maZOrderList.push_back(aNewHint);
+        }
+    }
+}
+

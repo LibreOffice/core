@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 16:31:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 #include "ximpstyl.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include"xmlnmspe.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
 #endif
@@ -129,7 +133,8 @@ SdXMLShapeContext::SdXMLShapeContext(
     mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID),
     mbIsPlaceholder(FALSE),
     mbIsUserTransformed(FALSE),
-    mxAttrList(xAttrList)
+    mxAttrList(xAttrList),
+    mnZOrder(-1)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -226,11 +231,6 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
             mxCursor = xText->createTextCursor();
             if( mxCursor.is() )
             {
-/*
-                const OUString aEmpty;
-                mxCursor->gotoEnd( sal_True );
-                mxCursor->setString( aEmpty );
-*/
                 GetImport().GetTextImport()->SetCursor( mxCursor );
             }
         }
@@ -287,6 +287,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         }
 
         GetImport().GetShapeImport()->addShape( xShape, mxAttrList, mxShapes );
+        GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, mnZOrder );
     }
 }
 
@@ -337,6 +338,18 @@ void SdXMLShapeContext::SetStyle()
                     pPropStyle->FillPropertySet(xPropSet);
                 }
             }
+        }
+    }
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_zindex)) )
+        {
+            mnZOrder = rValue.toInt32();
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 12:19:53 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGroupShapeContext( rImport, nPrfx, rLocalName, rShapes )
+:   SdXMLGroupShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
@@ -328,7 +328,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
         case XML_TOK_DRAWPAGE_NOTES:
         {
             // presentation:notes inside draw:page context
-            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName,
+            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList,
                 GetLocalShapesContext());
             break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,9 @@ using namespace ::com::sun::star;
 
 SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGroupShapeContext( rImport, nPrfx, rLocalName, rShapes ),
+:   SdXMLGroupShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
     mbNotesMode(FALSE)
 {
     if(GetSdImport().IsImpress())
@@ -158,6 +159,7 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( USHORT nPrefix,
 
 void SdXMLNotesContext::EndElement()
 {
+    SdXMLGroupShapeContext::EndElement();
 }
 
 

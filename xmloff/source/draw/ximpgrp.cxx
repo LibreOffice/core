@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,12 @@ TYPEINIT1( SdXMLGroupShapeContext, SvXMLImportContext );
 SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SvXMLImportContext( rImport, nPrfx, rLocalName ),
-    mxShapes(rShapes)
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+    mxShapes( rShapes )
 {
+    GetImport().GetShapeImport()->pushGroupForSorting( rShapes );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -99,7 +101,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext* pContext = 0L;
 
-    // call GroupChilödContext function at common ShapeImport
+    // call GroupChildContext function at common ShapeImport
     pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
         GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
 
@@ -115,6 +117,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 
 void SdXMLGroupShapeContext::EndElement()
 {
+    GetImport().GetShapeImport()->popGroupAndSort();
 }
 
 

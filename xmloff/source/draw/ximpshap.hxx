@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 16:31:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ protected:
     sal_uInt16                  mnClass;
     sal_Bool                    mbIsPlaceholder;
     sal_Bool                    mbIsUserTransformed;
+    sal_Int32                   mnZOrder;
 
     void SetStyle();
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
@@ -124,6 +125,9 @@ public:
 
     virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
