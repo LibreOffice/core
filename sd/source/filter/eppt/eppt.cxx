@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-13 16:56:24 $
+ *  last change: $Author: sj $ $Date: 2001-02-20 17:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
         const PHLayout& rLayout = pPHLayout[ nLayout ];
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
-            aXName( mXModel, ::com::sun::star::uno::UNO_QUERY );
+            aXName( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
 
         if ( aXName.is() )
         {
@@ -856,22 +856,25 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         nFlags |= 8;
                     }
                 }
-                else if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) )
+                if ( ( nFlags & 8 ) == 0 )
                 {
-                    ::rtl::OUString aSlideName( *(::rtl::OUString*)mAny.getValue() );
-                    for ( ::rtl::OUString* pStr = (::rtl::OUString*)maSlideNameList.First(); pStr;
-                                pStr = (::rtl::OUString*)maSlideNameList.Next(), nStartSlide++ )
+                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) )
                     {
-                        if ( *pStr == aSlideName )
+                        ::rtl::OUString aSlideName( *(::rtl::OUString*)mAny.getValue() );
+                        for ( ::rtl::OUString* pStr = (::rtl::OUString*)maSlideNameList.First(); pStr;
+                                    pStr = (::rtl::OUString*)maSlideNameList.Next(), nStartSlide++ )
                         {
-                            nStartSlide++;
-                            nFlags |= 4;
-                            nEndSlide = (sal_uInt16)mnPages;
-                            break;
+                            if ( *pStr == aSlideName )
+                            {
+                                nStartSlide++;
+                                nFlags |= 4;
+                                nEndSlide = (sal_uInt16)mnPages;
+                                break;
+                            }
                         }
+                        if ( !pStr )
+                            nStartSlide = 0;
                     }
-                    if ( !pStr )
-                        nStartSlide = 0;
                 }
 
 //              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "DiaName" ) ) ) )
