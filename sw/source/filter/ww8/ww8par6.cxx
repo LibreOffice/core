@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:35:39 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,11 @@
 #endif
 #ifndef _WW8GRAF_HXX
 #include "ww8graf.hxx"
+#endif
+
+// OD 2004-05-18 #i27767#
+#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
+#include <fmtwrapinfluenceonobjpos.hxx>
 #endif
 
 using namespace sw::util;
@@ -727,13 +732,18 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     if( rData.bHasHeader )
     {
         rData.nSwUp  = nWWHTop;             // Header -> umrechnen
-        if (nWWUp >= nWWHTop)
+        // --> CMC, OD 2004-06-18 #i19922# - correction:
+        // consider that <nWWUp> can be negative, compare only if it's positive
+        if ( nWWUp > 0 &&
+             static_cast<sal_uInt32>(abs(nWWUp)) >= nWWHTop )
             rData.nSwHLo = nWWUp - nWWHTop;
         else
             rData.nSwHLo = 0;
 
-        if (rData.nSwHLo < MM50)
-            rData.nSwHLo = MM50;
+        // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+        // use new constant <cMinHdFtHeight>
+        if (rData.nSwHLo < cMinHdFtHeight)
+            rData.nSwHLo = cMinHdFtHeight;
     }
     else // kein Header -> Up einfach uebernehmen
         rData.nSwUp = nWWUp;
@@ -749,13 +759,18 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     if( rData.bHasFooter )
     {
         rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
-        if (nWWLo >= nWWFBot)
+        // --> CMC, OD 2004-06-18 #i19922# - correction:
+        // consider that <nWWLo> can be negative, compare only if it's positive
+        if ( nWWLo > 0 &&
+             static_cast<sal_uInt32>(abs(nWWLo)) >= nWWFBot )
             rData.nSwFUp = nWWLo - nWWFBot;
         else
             rData.nSwFUp = 0;
 
-        if (rData.nSwFUp < MM50)
-            rData.nSwFUp = MM50;
+        // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+        // use new constant <cMinHdFtHeight>
+        if (rData.nSwFUp < cMinHdFtHeight)
+            rData.nSwFUp = cMinHdFtHeight;
     }
     else // kein Footer -> Lo einfach uebernehmen
         rData.nSwLo = nWWLo;
@@ -773,7 +788,9 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             if (!rSection.IsFixedHeightHeader())    //normal
             {
                 pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
-                aHdUL.SetLower(writer_cast<USHORT>(rData.nSwHLo - MM50));
+                // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+                // use new constant <cMinHdFtHeight>
+                aHdUL.SetLower( writer_cast<USHORT>(rData.nSwHLo - cMinHdFtHeight) );
                 pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, true));
             }
@@ -796,7 +813,9 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             if (!rSection.IsFixedHeightFooter())    //normal
             {
                 pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
-                aFtUL.SetUpper(writer_cast<USHORT>(rData.nSwFUp - MM50));
+                // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+                // use new constant <cMinHdFtHeight>
+                aFtUL.SetUpper( writer_cast<USHORT>(rData.nSwFUp - cMinHdFtHeight) );
                 pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, true));
             }
@@ -980,8 +999,9 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
         SwSection aSection(FILE_LINK_SECTION, sSectionName);
         aSection.SetLinkFileName( sSectionName );
         aSection.SetProtect(true);
-        SwSection* pSection = mrReader.rDoc.Insert(*mrReader.pPaM, aSection, 0 ,false);
-
+        // --> CMC, OD 2004-06-18 #i19922# improvement:
+        // return value of method <Insert> not used.
+        mrReader.rDoc.Insert(*mrReader.pPaM, aSection, 0 ,false);
     }
 
     wwSection aLastSection(*mrReader.pPaM->GetPoint());
@@ -1980,7 +2000,6 @@ bool WW8FlyPara::IsEmpty() const
 }
 
 // OD 14.10.2003 #i18732# - changes made on behalf of CMC
-//#define OLD_ANCHORING
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     sal_uInt32 nPgLeft, sal_uInt32 nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy )
 {
@@ -2056,26 +2075,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     // Bindung
     nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
 // OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-    switch ( nYBind )
-    {   // Y - Bindung bestimmt Sw-Bindung
-        case 0:
-            eAnchor = FLY_PAGE;             // Vert Margin
-            eVRel = REL_PG_PRTAREA;
-            break;
-        case 1:
-            eAnchor = FLY_PAGE;             // Vert Page
-            eVRel = REL_PG_FRAME;
-            break;                          // 2=Vert. Paragraph, 3=Use Default
-        default:
-            eAnchor = FLY_AT_CNTNT;
-            eVRel = PRTAREA;
-            if( nYPos < 0 )
-                nYPos = 0;                  // koennen wir nicht
-            break;
-    }
-// OD 14.10.2003 #i18732#
-#else
     eAnchor = FLY_AUTO_CNTNT;
     switch (nYBind)
     {
@@ -2089,31 +2088,8 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             eVRel = FRAME;
             break;
     }
-#endif
 
 // OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-    switch( rWW.nSp27 )             // besondere Y-Positionen ?
-    {
-        case -4:
-            eVAlign = VERT_TOP;
-            if (eAnchor == FLY_PAGE)
-                nUpMgn = 0;
-            break;  // oben
-        case -8:
-            eVAlign = VERT_CENTER;
-            break;  // zentriert
-        case -12:
-            eVAlign = VERT_BOTTOM;
-            if (eAnchor == FLY_PAGE)
-                nLoMgn = 0;
-            break;  // unten
-        default:
-            nYPos = rWW.nSp27 + (short)nIniFlyDy;
-            break;  // Korrekturen per Ini-Datei
-    }
-// OD 14.10.2003 #i18732#
-#else
     switch( rWW.nSp27 )             // besondere Y-Positionen ?
     {
         case -4:
@@ -2133,7 +2109,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             nYPos = rWW.nSp27 + (short)nIniFlyDy;
             break;  // Korrekturen per Ini-Datei
     }
-#endif
 
     switch( rWW.nSp26 )                 // besondere X-Positionen ?
     {
@@ -2163,39 +2138,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
 
     nXBind = ( rWW.nSp29 & 0xc0 ) >> 6;
 // OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-    switch ( nXBind )           // X - Bindung -> Koordinatentransformation
-    {
-        case 0:
-            eHRel = (FLY_PAGE == eAnchor) ? REL_PG_PRTAREA : PRTAREA;
-            break;
-        case 1:                                 // Hor. Absatz
-            eHRel = REL_PG_PRTAREA;
-            break;
-    /*  case 2:*/                               // Hor. Seite
-    /*  case 3:*/                               // Use Default
-        default:
-            eHRel = (FLY_AT_CNTNT== eAnchor) ? REL_PG_FRAME : FRAME;
-
-            // important: allways set REL_PG_FRAME in sections with columns
-            if (eHRel != REL_PG_FRAME)
-            {
-                const SwSectionNode* pSectNd
-                    = rPaM.GetPoint()->nNode.GetNode().FindSectionNode();
-                if (pSectNd)
-                {
-                    const SwSectionFmt* pFmt = pSectNd->GetSection().GetFmt();
-                    if (pFmt)
-                    {
-                        if (1 < pFmt->GetCol().GetNumCols())
-                            eHRel = REL_PG_FRAME;
-                    }
-                }
-            }
-            break;
-    }
-// OD 14.10.2003 #i18732#
-#else
     switch (nXBind)           // X - Bindung -> Koordinatentransformation
     {
         case 0:     //relative to column
@@ -2208,7 +2150,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             eHRel = REL_PG_FRAME;
             break;
     }
-#endif
 
     if (rWW.bBorderLines)
     {
@@ -2233,23 +2174,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     FlySecur1( nWidth, rWW.bBorderLines );          // passen Raender ?
     FlySecur1( nHeight, rWW.bBorderLines );
 
-// OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-    /*
-        // eine Writer-Kuriositaet: auch wenn Abstaende vom Seitenrand
-        // gezaehlt werden sollen, muessen die Positionen als Abstaende vom
-        // Papierrand angegeben werden
-        // bei Absatzgebundenen Frames geht die Zaehlung immer von
-        // der Printarea aus
-    */
-    if( (FRAME == eHRel) && (FLY_AT_CNTNT == eAnchor) )
-    {
-        // hier duerfen neg. Werte bis minimal -nPgLeft entstehen
-        nXPos -= nPgLeft;
-        if( rIo.nInTable )
-            nXPos -= rIo.GetTableLeft();
-    }
-#endif
 }
 
 // hat ein Fly in WW eine automatische Breite, dann muss das durch
@@ -2277,11 +2201,6 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 /*Below can all go when we have from left in rtl mode*/
     long nXPos = pFS->nXPos;
     SwRelationOrient eHRel = pFS->eHRel;
-// OD 14.10.2003 #i18732#
-#ifdef OLD_ANCHORING
-    if ((pFS->eAnchor == FLY_PAGE) && (eHRel == FRAME))
-        eHRel = REL_PG_FRAME;
-#endif
     rReader.MiserableRTLGraphicsHack(nXPos, pFS->nWidth, pFS->eHAlign, eHRel);
 /*Above can all go when we have from left in rtl mode*/
     Put( SwFmtHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bToggelPos ));
@@ -2307,6 +2226,10 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
 
     // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
+
+    // OD 2004-05-18 #i27767#
+    Put( SwFmtWrapInfluenceOnObjPos(
+                text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ) );
 
     if( !bGraf )
     {
