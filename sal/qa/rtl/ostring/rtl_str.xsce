@@ -1,0 +1,26 @@
+# signaled with SIGNAL 11
+rtl_str.compare.compare_000
+rtl_str.compare.compare_000_1
+
+rtl_str.compareIgnoreAsciiCase.compare_000
+rtl_str.compareIgnoreAsciiCase.compare_000_1
+
+rtl_str.hashCode.hashCode_000
+
+rtl_str.indexOfChar.indexOfChar_000
+
+rtl_str.lastIndexOfChar.lastIndexOfChar_000
+
+rtl_str.indexOfStr.indexOfStr_000
+
+rtl_str.lastIndexOfStr.lastIndexOfStr_000
+
+rtl_str.replaceChar.replaceChar_000
+
+rtl_str.replaceChar_WithLength.replaceChar_WithLength_000_1
+
+rtl_str.toAsciiLowerCase.toAsciiLowerCase_000
+
+rtl_str.toAsciiUpperCase.toAsciiUpperCase_000
+
+rtl_str.valueOfChar.valueOfChar_000
