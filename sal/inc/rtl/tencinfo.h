@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-10 10:07:59 $
+ *  last change: $Author: sb $ $Date: 2002-12-10 10:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,21 +135,23 @@ typedef struct _rtl_TextEncodingInfo
         RTL_TEXTENCODING_INFO_ASCII:  The encoding is a superset of ASCII.  More
         specifically, any appearance of a byte in the range 0x20--7F denotes the
         corresponding ASCII character (from SPACE to DELETE); in particular,
-        such a byte can not be part of a multi-byte character.
+        such a byte cannot be part of a multi-byte character.  Note that the
+        ASCII control codes 0x00--1F are not included here, as they are used for
+        special purposes in some encodings.
 
         If an encoding has this property, it is easy to search for occurences of
         ASCII characters within strings of this encoding---you do not need to
         keep track whether a byte in the range 0x20--7F really represents an
         ASCII character or rather is part of some multi-byte character.
 
-        But note that there is no guarantee that mapping between Unicode and the
-        given encoding keeps ASCII characters intact: the mapping from Unicode
-        to the given encoding could map any of U+0020--007F to anything else
-        than 0x20--7F (though this is extremely unlikely) and could map anything
-        outside the range U+0020-007F to 0x20--7F, and the mapping from the
-        given encoding to Unicode could map characters outside the range
-        0x20--7F to U+0020--007F (but it must map the range 0x20--7F to
-        U+0020--007F).
+        The guarantees when mapping between Unicode and a given encoding with
+        the ASCII property are as follows:  When mapping from Unicode to the
+        given encoding, U+0020--007F map to 0x20--7F (but there can also be
+        other Unicode characters mapping into the range 0x20--7F), and when
+        mapping from the given encoding to Unicode, 0x20--7F map to U+0020--007F
+        (again, there can also be other characters mapping into the range
+        U+0020--007F).  In particular, this ensures round-trip conversion for
+        the ASCII range.
 
         In principle, the ASCII property is orthogonal to the CONTEXT property.
         In practice, however, an encoding that has the ASCII property will most
