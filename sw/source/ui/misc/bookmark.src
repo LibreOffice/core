@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:21:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ czech ] = "Smazat";
         TEXT[ hebrew ] = "‮מחיקה‬";
         TEXT[ hindi ] = "~मिटाओ";
+        TEXT[ slovak ] = "Z~mazať";
     };
     FixedLine FL_BOOKMARK
     {
@@ -172,6 +173,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ czech ] = "Záložky";
         TEXT[ hebrew ] = "Textmarken";
         TEXT[ hindi ] = "पृष्ठसंकेत";
+        TEXT[ slovak ] = "Záložky";
     };
     TEXT[ chinese_simplified ] = "插入书签";
     TEXT[ russian ] = "������� ��������";
@@ -187,6 +189,7 @@ ModalDialog DLG_INSERT_BOOKMARK
     TEXT[ czech ] = "Vložit záložku";
     TEXT[ hebrew ] = "‮הוספת סימניה‬";
     TEXT[ hindi ] = "पृष्ठसंकेत जोड़ो";
+    TEXT[ slovak ] = "Vložiť záložku";
 };
 String STR_REMOVE_WARNING
 {
@@ -216,7 +219,10 @@ String STR_REMOVE_WARNING
     Text[ czech ] = "Následující znaky jsou neplatné a byly odstraněny: ";
     Text[ hebrew ] = "Die folgenden Zeichen sind nicht zulässig und wurden deshalb entfernt:";
     Text[ hindi ] = "निम्नलिखित अक्षरें अमान्य है और उनको हटाया: ";
+    Text[ slovak ] = "Nasledujúce znaky sú neplatné a budú odstránené: ";
 };
+
+
 
 
 
