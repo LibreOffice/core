@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adiasync.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 #ifndef _SC_ADIASYNC_HXX
 #define _SC_ADIASYNC_HXX
 
-#ifndef _SFXBRDCST_HXX //autogen
-#include <svtools/brdcst.hxx>
+#ifndef _SVT_BROADCAST_HXX
+#include <svtools/broadcast.hxx>
+#endif
+#ifndef _SVARRAY_HXX
+#include <svtools/svarray.hxx>
 #endif
 
 #include "callform.hxx"
@@ -84,7 +87,7 @@ SV_DECL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr, 1, 1 );
 
 class String;
 
-class ScAddInAsync : public SfxBroadcaster
+class ScAddInAsync : public SvtBroadcaster
 {
 private:
     union
