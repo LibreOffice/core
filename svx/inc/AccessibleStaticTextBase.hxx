@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 13:43:42 $
+ *  last change: $Author: thb $ $Date: 2002-06-20 15:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,15 @@ namespace accessibility
 
     class AccessibleStaticTextBase_Impl;
 
-    /** Helper class for objects containing EditEngine text
+    /** Helper class for objects containing EditEngine/Outliner text
 
         This class implements the XAccessibleText interface for static
         text, somewhat similar to the children of the
-        AccessibleTextHelper class. There are no children, i.e. the
-        whole text is presented in one big chunk. As the edit engine
-        does not support bullets, there are no image bullet children,
-        too.
+        AccessibleTextHelper class. Currently, there are no children,
+        i.e. the whole text is presented in one big chunk. This might
+        change in the future, if a need for image bullets should
+        arise. These, by convention, would be represented as children
+        of the text.
 
         You have to implement the SvxEditSource, SvxTextForwarder,
         SvxViewForwarder and SvxEditViewForwarder interfaces in order
@@ -106,9 +107,19 @@ namespace accessibility
         class. SvxTextForwarder encapsulates the fact that text
         objects do not necessarily have an EditEngine at their
         disposal, SvxViewForwarder and SvxEditViewForwarder do the
-        same for the document and the edit view.
+        same for the document and the edit view. The three mentioned
+        forwarder objects are not stored by the AccessibleTextHelper,
+        but fetched every time from the SvxEditSource. So you are best
+        off making your SvxEditSource::Get*Forwarder methods cache the
+        current forwarder.
 
-        @attention All public non-UNO methods (those are the lowercase
+        As this class is intended for static (i.e. non-changing) text
+        only, no event broadcasting is necessary. You must handle
+        visibility by yourself, the bounding boxes returned by
+        getCharacterBounds() are relative to your accessibility
+        object.
+
+        @attention All public non-UNO methods (those are the uppercase
         ones) must not be called with any mutex hold, except when
         calling from the main thread (with holds the solar mutex),
         unless stated otherwise. This is because they themselves might
@@ -181,6 +192,12 @@ namespace accessibility
             dying, either the edit source must be set to NULL or it
             has to broadcast a SFX_HINT_DYING hint.
 
+            This class does not have a dispose method, since it is not
+            a UNO component. Nevertheless, it holds C++ references to
+            several core objects, so you should issue a
+            SetEditSource(::std::auto_ptr<SvxEditSource>(NULL)) in
+            your dispose() method.
+
             @param pEditSource
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
@@ -209,6 +226,9 @@ namespace accessibility
         virtual Point GetOffset() const;
 
         /** Update the visible children
+
+            As this class currently does not represent any content
+            using children, this does nothing at the moment.
 
             @attention You are required to have the solar mutex
             locked, when calling this method. Thus, the method should
