@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-04 15:57:14 $
+ *  last change: $Author: nn $ $Date: 2002-12-04 10:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,13 +417,14 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    ++nObjCount;
                     if ( pObject->ISA(SdrUnoObj) )
                         pObject->NbcSetLayer(SC_LAYER_CONTROLS);
                     else
                         pObject->NbcSetLayer(SC_LAYER_FRONT);
                     pObject = aIter.Next();
                 }
+
+                nObjCount += pPage->GetObjCount();          // #105888# count group object only once
             }
 
             PasteDraw( aPos, pModel, (nObjCount > 1) );     // grouped if more than 1 object
