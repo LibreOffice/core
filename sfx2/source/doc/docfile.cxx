@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:45:39 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 08:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,7 +1280,7 @@ void SfxMedium::Transfer_Impl()
             return;
         }
 
-        if ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() )
+        if ( pFilter && SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() )
         {
             SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_PACK, sal_False);
             if ( pItem && !pItem->GetValue() )
