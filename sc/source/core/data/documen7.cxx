@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-11-27 21:33:13 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,9 +493,6 @@ void ScDocument::TrackFormulas( ULONG nHintId )
 
     if ( pFormulaTrack )
     {
-        BOOL bWasWaiting = Application::IsWait();
-        if ( !bWasWaiting )
-            Application::EnterWait();
         erBEEPER();
         ScBroadcasterList* pBC;
         ScFormulaCell* pTrack;
@@ -533,8 +530,6 @@ void ScDocument::TrackFormulas( ULONG nHintId )
             else
                 SetForcedFormulaPending( TRUE );
         }
-        if ( !bWasWaiting )
-            Application::LeaveWait();
     }
     DBG_ASSERT( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
 }
