@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:30:49 $
+ *  last change: $Author: os $ $Date: 2000-11-14 12:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,11 +401,11 @@ static USHORT __READONLY_DATA aHashValue[ 27 ] =
     // diese sind mit doppelten HashIds
     11, 38
 };
-static AddressToken __READONLY_DATA aAdrToken[ 12 ] =
+static USHORT __READONLY_DATA aAdrToken[ 12 ] =
 {
-    ADDRESS_COMPANY, ADDRESS_STREET, ADDRESS_COUNTRY, ADDRESS_PLZ,
-    ADDRESS_CITY, ADDRESS_TITLE, ADDRESS_POSITION, ADDRESS_TEL_COMPANY,
-    ADDRESS_TEL_PRIVATE, ADDRESS_FAX, ADDRESS_EMAIL, ADDRESS_STATE
+    POS_COMPANY, POS_STREET, POS_COUNTRY, POS_PLZ,
+    POS_CITY, POS_TITLE, POS_POSITION, POS_TEL_COMPANY,
+    POS_TEL_PRIVATE, POS_FAX, POS_EMAIL, POS_STATE
 };
 
 static USHORT SwDocStat::* __READONLY_DATA aDocStat1[ 3 ] =
@@ -442,7 +442,7 @@ static ULONG SwDocStat::* __READONLY_DATA aDocStat2[ 4 ] =
     for( n = 0; n < 4; ++n )
         ((SwCalcExp*)VarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
-    SvxAddressItem aAdr( *SFX_APP()->GetIniManager() );
+    SvxAddressItem aAdr;
 
     ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( aAdr.GetFirstName() );
     ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( aAdr.GetName() );
