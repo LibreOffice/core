@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:49:49 $
+ *  last change: $Author: mav $ $Date: 2004-10-08 11:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1492,10 +1492,11 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_bWaitSaveCompleted )
-        throw embed::WrongStateException(
-                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    // Actually this information is clear even in case object is wayting for saveCompleted
+    // if ( m_bWaitSaveCompleted )
+    //  throw embed::WrongStateException(
+    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_bIsLink;
 }
@@ -1510,10 +1511,11 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_bWaitSaveCompleted )
-        throw embed::WrongStateException(
-                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    // Actually this information is clear even in case object is wayting for saveCompleted
+    // if ( m_bWaitSaveCompleted )
+    //  throw embed::WrongStateException(
+    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_bIsLink )
         throw embed::WrongStateException(
