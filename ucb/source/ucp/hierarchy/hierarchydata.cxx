@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-27 15:12:21 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,7 @@
  **************************************************************************
 
  - HierarchyEntry::move
-   --> Umstellen auf Benutzung von XNamed ( wenn es von config db api
-       unterstuetzt wird ).
+   --> Rewrite to use XNamed ( once this is supported by config db api ).
 
  *************************************************************************/
 
@@ -97,6 +96,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XOFFICEINSTALLTIONDIRECTORIES_HPP_
+#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#endif
 #ifndef _HIERARCHYPROVIDER_HXX
 #include "hierarchyprovider.hxx"
 #endif
@@ -118,12 +120,13 @@ namespace hierarchy_ucp
 //=========================================================================
 struct HierarchyEntry::iterator_Impl
 {
-    HierarchyEntryData                   entry;
-    Reference< XHierarchicalNameAccess > dir;
-    Sequence< OUString>                  names;
-    sal_Int32                            pos;
-
-    iterator_Impl() : pos( -1 /* before first */ ) {};
+    HierarchyEntryData                          entry;
+    Reference< XHierarchicalNameAccess >        dir;
+    Reference< XOfficeInstallationDirectories > officeDirs;
+    Sequence< OUString>                         names;
+    sal_Int32                                   pos;
+    iterator_Impl()
+    : pos( -1 /* before first */ ), officeDirs( 0 ) {};
 };
 
 //=========================================================================
@@ -184,6 +187,7 @@ HierarchyEntry::HierarchyEntry(
                 HierarchyContentProvider* pProvider,
                 const OUString& rURL )
 : m_xSMgr( rSMgr ),
+  m_xOfficeInstDirs( pProvider->getOfficeInstallationDirectories() ),
   m_bTriedToGetRootReadAccess( sal_False )
 {
     HierarchyUri aUri( rURL );
@@ -274,6 +278,13 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
                 return sal_False;
             }
 
+            // TargetURL property may contain a reference to the Office
+            // installation directory. To ensure a reloctable office
+            // installation, the path to the office installtion directory must
+            // never be stored directly. A placeholder is used instead. Replace
+            // it by actual installation directory.
+            if ( m_xOfficeInstDirs.is() && ( aValue.getLength() > 0 ) )
+                aValue = m_xOfficeInstDirs->makeAbsoluteURL( aValue );
             rData.setTargetURL( aValue );
 
             OUString aTypePath = m_aPath;
@@ -481,9 +492,19 @@ sal_Bool HierarchyEntry::setData(
                                 makeAny( rData.getTitle() ) );
 
                     // Set TargetURL value.
+
+                    // TargetURL property may contain a reference to the Office
+                    // installation directory. To ensure a reloctable office
+                    // installation, the path to the office installtion
+                    // directory must never be stored directly. Use a
+                    // placeholder instead.
+                    rtl::OUString aValue( rData.getTargetURL() );
+                    if ( m_xOfficeInstDirs.is() && ( aValue.getLength() > 0 ) )
+                        aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
+
                     xNameReplace->replaceByName(
                                 OUString::createFromAscii( "TargetURL" ),
-                                makeAny( rData.getTargetURL() ) );
+                                makeAny( aValue ) );
 
                     // Set Type value.
                     sal_Int32 nType
@@ -798,9 +819,18 @@ sal_Bool HierarchyEntry::move(
         xNewNameReplace->replaceByName(
                             OUString::createFromAscii( "Title" ),
                             makeAny( rData.getTitle() ) );
+
+        // TargetURL property may contain a reference to the Office
+        // installation directory. To ensure a reloctable office
+        // installation, the path to the office installtion
+        // directory must never be stored directly. Use a placeholder
+        // instead.
+        rtl::OUString aValue( rData.getTargetURL() );
+        if ( m_xOfficeInstDirs.is() && ( aValue.getLength() > 0 ) )
+            aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
         xNewNameReplace->replaceByName(
                             OUString::createFromAscii( "TargetURL" ),
-                            makeAny( rData.getTargetURL() ) );
+                            makeAny( aValue ) );
         sal_Int32 nType = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
         xNewNameReplace->replaceByName(
                             OUString::createFromAscii( "Type" ),
@@ -1029,6 +1059,8 @@ sal_Bool HierarchyEntry::first( iterator& it )
                             "HierarchyEntry::first - No hier. name access!" );
 
                 it.m_pImpl->dir = xHierNameAccess;
+
+                it.m_pImpl->officeDirs = m_xOfficeInstDirs;
             }
         }
         catch ( RuntimeException& )
@@ -1220,6 +1252,14 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             m_pImpl->entry.setTitle( aValue );
 
             m_pImpl->dir->getByHierarchicalName( aTargetURL ) >>= aValue;
+
+            // TargetURL property may contain a reference to the Office
+            // installation directory. To ensure a reloctable office
+            // installation, the path to the office installtion directory must
+            // never be stored directly. A placeholder is used instead. Replace
+            // it by actual installation directory.
+            if ( m_pImpl->officeDirs.is() && ( aValue.getLength() > 0 ) )
+                aValue = m_pImpl->officeDirs->makeAbsoluteURL( aValue );
             m_pImpl->entry.setTargetURL( aValue );
 
             if ( m_pImpl->dir->hasByHierarchicalName( aType ) )
