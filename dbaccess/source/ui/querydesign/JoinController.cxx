@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-19 14:16:17 $
+ *  last change: $Author: oj $ $Date: 2002-02-27 09:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ void OJoinController::setModified(sal_Bool _bModified)
 {
     m_bModified = _bModified;
     InvalidateFeature(ID_BROWSER_SAVEDOC);
+    InvalidateFeature(ID_RELATION_ADD_RELATION);
 }
 // -----------------------------------------------------------------------------
 void OJoinController::Save(const Reference< XObjectOutputStream>& _rxOut)
