@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:17:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@
 #ifndef _BMPMASK_HXX_ //autogen
 #include <svx/bmpmask.hxx>
 #endif
+#include "LayerTabBar.hxx"
 
 // #97016# IV
 #ifndef _SVDITER_HXX
@@ -189,7 +190,7 @@ void DrawViewShell::DeleteActualPage()
     aString.Erase(nPos, 1);
     aString.Insert(aPageName, nPos);
 
-    if (QueryBox(pWindow, WB_YES_NO, aString).Execute() == RET_YES)
+    if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
     {
         USHORT nPageCount = GetDoc()->GetPageCount();
         DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
@@ -218,7 +219,7 @@ void DrawViewShell::DeleteActualPage()
 void DrawViewShell::DeleteActualLayer()
 {
     SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
-    const String&  rName  = aLayerTab.GetPageText(aLayerTab.GetCurPageId());
+    const String&  rName  = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
     String         aString(SdResId(STR_ASK_DELETE_LAYER));
 
     // Platzhalter ersetzen
@@ -226,7 +227,7 @@ void DrawViewShell::DeleteActualLayer()
     aString.Erase(nPos, 1);
     aString.Insert(rName, nPos);
 
-    if (QueryBox(pWindow, WB_YES_NO, aString).Execute() == RET_YES)
+    if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
     {
         const SdrLayer* pLayer = rAdmin.GetLayer(rName, FALSE);
         pDrView->DeleteLayer( pLayer->GetName() );
@@ -236,8 +237,8 @@ void DrawViewShell::DeleteActualLayer()
         // Hint von Joe angestossen werden
         // ( View::Notify() --> ViewShell::ResetActualLayer() )
 
-        bLayerMode = FALSE;     // damit ChangeEditMode() ueberhaupt was tut
-        ChangeEditMode(GetEditMode(), TRUE);
+        mbIsLayerModeActive = false;    // damit ChangeEditMode() ueberhaupt was tut
+        ChangeEditMode(GetEditMode(), true);
     }
 }
 
@@ -271,7 +272,7 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
         // #97016# IV
         if(KEY_RETURN == rKEvt.GetKeyCode().GetCode()
             && rKEvt.GetKeyCode().IsMod1()
-            && pView->IsTextEdit())
+            && GetView()->IsTextEdit())
         {
             // this should be used for cursor travelling.
             SdPage* pActualPage = GetActualPage();
@@ -286,7 +287,7 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 SdrObject* pOldObj = pMark->GetObj();
 
                 // end text edit now
-                pView->EndTextEdit();
+                GetView()->EndTextEdit();
 
                 // look for a new candidate, a successor of pOldObj
                 SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
@@ -319,8 +320,8 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             if(pCandidate)
             {
                 // set the new candidate to text edit mode
-                pView->UnMarkAll();
-                pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
+                GetView()->UnMarkAll();
+                GetView()->MarkObj(pCandidate, GetView()->GetPageViewPvNum(0));
 
                 GetViewFrame()->GetDispatcher()->Execute(
                     SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
@@ -354,9 +355,9 @@ void DrawViewShell::StartRulerDrag (
     if(!pDrView->IsHlplVisible())
         return;
 
-    pWindow->CaptureMouse();
+    GetActiveWindow()->CaptureMouse();
 
-    Point aWPos = pWindow->PixelToLogic(pWindow->GetPointerPosPixel());
+    Point aWPos = GetActiveWindow()->PixelToLogic(GetActiveWindow()->GetPointerPosPixel());
 
     if ( rRuler.GetExtraRect().IsInside(rMEvt.GetPosPixel()) )
     {
@@ -409,41 +410,35 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         if ( pDrView->IsAction() )
         {
-            Rectangle aOutputArea(Point(0,0), pWindow->GetOutputSizePixel());
+            Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
 
             if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
             {
                 BOOL bInsideOtherWindow = FALSE;
 
-                for (USHORT nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+                if (mpContentWindow.get() != NULL)
                 {
-                    for (USHORT nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-                    {
-                        if ( pWinArray[nX][nY] )
-                        {
-                            aOutputArea = Rectangle(Point(0,0),
-                                        pWinArray[nX][nY]->GetOutputSizePixel());
+                    aOutputArea = Rectangle(Point(0,0),
+                        mpContentWindow->GetOutputSizePixel());
 
-                            Point aPos = pWinArray[nX][nY]->GetPointerPosPixel();
-                            if ( aOutputArea.IsInside(aPos) )
-                                bInsideOtherWindow = TRUE;
-                        }
-                    }
+                    Point aPos = mpContentWindow->GetPointerPosPixel();
+                    if ( aOutputArea.IsInside(aPos) )
+                        bInsideOtherWindow = TRUE;
                 }
 
-                if (! pWindow->HasFocus ())
+                if (! GetActiveWindow()->HasFocus ())
                 {
-                    pWindow->ReleaseMouse ();
+                    GetActiveWindow()->ReleaseMouse ();
                     pDrView->BrkAction ();
                     return;
                 }
                 else if ( bInsideOtherWindow )
                 {
-                    pWindow->ReleaseMouse();
+                    GetActiveWindow()->ReleaseMouse();
                     pWin->CaptureMouse ();
                 }
             }
-            else if ( pWin != pWindow )
+            else if ( pWin != GetActiveWindow() )
                  pWin->CaptureMouse();
         }
 
@@ -451,7 +446,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
         // Since the next MouseMove may execute a IsSolidDraggingNow() in
         // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
         // is needed it is necessary to set it here.
-        if(pDrView && GetDoc())
+        if(pDrView!=NULL && GetDoc()!=NULL)
         {
             svtools::ColorConfig aColorConfig;
             Color aFillColor;
@@ -477,14 +472,14 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
         if ( bIsRulerDrag )
         {
-            Point aLogPos = pWindow->PixelToLogic(aMousePos);
+            Point aLogPos = GetActiveWindow()->PixelToLogic(aMousePos);
             pDrView->MovAction(aLogPos);
         }
 
         if ( pDrView->IsAction() )
         {
             pDrView->TakeActionRect(aRect);
-            aRect = pWindow->LogicToPixel(aRect);
+            aRect = GetActiveWindow()->LogicToPixel(aRect);
         }
         else
         {
@@ -539,7 +534,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
         if (bIsRulerDrag)
         {
-            Rectangle aOutputArea(Point(0,0), pWindow->GetOutputSizePixel());
+            Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
 
             if (aOutputArea.IsInside(rMEvt.GetPosPixel()))
             {
@@ -561,7 +556,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
                 pDrView->BrkAction();
             }
 
-            pWindow->ReleaseMouse();
+            GetActiveWindow()->ReleaseMouse();
             bIsRulerDrag = FALSE;
         }
         else
@@ -585,15 +580,15 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
         if( rCEvt.GetCommand() == COMMAND_PASTESELECTION && !bNativeShow )
         {
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( pWindow ) );
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( GetActiveWindow() ) );
 
             if( aDataHelper.GetTransferable().is() )
             {
                 Point       aPos;
                 sal_Int8    nDnDAction = DND_ACTION_COPY;
 
-                if( pWindow )
-                    aPos = pWindow->PixelToLogic( rCEvt.GetMousePosPixel() );
+                if( GetActiveWindow() )
+                    aPos = GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() );
 
                 if( !pDrView->InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
                 {
@@ -621,7 +616,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             // Ist ein Fangobjekt unter dem Mauszeiger?
             SdrPageView* pPV;
             Point   aMPos = pWin->PixelToLogic( aMousePos );
-            USHORT  nHitLog = (USHORT) pWindow->PixelToLogic(
+            USHORT  nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
                 Size(FuPoor::HITPIX, 0 ) ).Width();
             USHORT  nHelpLine;
             // fuer Klebepunkt
@@ -635,7 +630,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 //pFldItem = pOLV->GetFieldUnderMousePointer();
 
             // Hilfslinie
-            if ( pDrView->PickHelpLine( aMPos, nHitLog, *pWindow, nHelpLine, pPV) )
+            if ( pDrView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
                 nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
                 bMousePosFreezed = TRUE;
@@ -724,7 +719,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                                     if( !rCEvt.IsMouseEvent() )
                                     {
-                                        aPos = pWindow->LogicToPixel( pOLV->GetEditView().GetCursor()->GetPos() );
+                                        aPos = GetActiveWindow()->LogicToPixel( pOLV->GetEditView().GetCursor()->GetPos() );
                                     }
                                     pOLV->ExecuteSpellPopup(aPos, &aLink);
                                 }
@@ -847,7 +842,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             // Popup-Menue anzeigen
             if (nSdResId)
             {
-                pWindow->ReleaseMouse();
+                GetActiveWindow()->ReleaseMouse();
 
                 if(rCEvt.IsMouseEvent())
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
@@ -856,8 +851,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     //#106326# don't open contextmenu at mouse position if not opened via mouse
 
                     //middle of the window if nothing is marked
-                    Point aMenuPos(pWindow->GetSizePixel().Width()/2
-                            ,pWindow->GetSizePixel().Height()/2);
+                    Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2
+                            ,GetActiveWindow()->GetSizePixel().Height()/2);
 
                     //middle of the bounding rect if something is marked
                     if( pDrView->AreObjectsMarked() && pDrView->GetMarkedObjectList().GetMarkCount() >= 1 )
@@ -871,14 +866,14 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             aMenuPos.X() = 0;
                         if( aMenuPos.Y() < 0 )
                             aMenuPos.Y() = 0;
-                        if( aMenuPos.X() > pWindow->GetSizePixel().Width() )
-                            aMenuPos.X() = pWindow->GetSizePixel().Width();
-                        if( aMenuPos.Y() > pWindow->GetSizePixel().Height() )
-                            aMenuPos.Y() = pWindow->GetSizePixel().Height();
+                        if( aMenuPos.X() > GetActiveWindow()->GetSizePixel().Width() )
+                            aMenuPos.X() = GetActiveWindow()->GetSizePixel().Width();
+                        if( aMenuPos.Y() > GetActiveWindow()->GetSizePixel().Height() )
+                            aMenuPos.Y() = GetActiveWindow()->GetSizePixel().Height();
                     }
 
                     //open context menu at that point
-                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),pWindow,&aMenuPos);
+                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),GetActiveWindow(),&aMenuPos);
                 }
                 bMousePosFreezed = FALSE;
             }
@@ -899,45 +894,30 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
     ::sd::Window* pWin)
 {
-    if ( bHasRuler && pWin )
+    if (mbHasRulers && pWin )
     {
         RulerLine   pHLines[2];
         RulerLine   pVLines[2];
         long        nHOffs = 0L;
         long        nVOffs = 0L;
         USHORT      nCnt;
-        USHORT      nX, nY,
-                    nCol = 0,
-                    nRow = 0;
 
-        for (nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+        if (mpHorizontalRuler.get() != NULL)
+            mpHorizontalRuler->SetLines();
+
+        if (mpVerticalRuler.get() != NULL)
+            mpVerticalRuler->SetLines();
+
+        if (mpHorizontalRuler.get() != NULL)
         {
-            if ( pHRulerArray[nX] )
-                pHRulerArray[nX]->SetLines();
-
-            for (nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-            {
-                if ( pVRulerArray[nY] && nX == 0 )
-                    pVRulerArray[nY]->SetLines();
-
-                if ( pWinArray[nX][nY] == pWin )
-                {
-                    nCol = nX;
-                    nRow = nY;
-                }
-            }
+            nHOffs = mpHorizontalRuler->GetNullOffset() +
+                     mpHorizontalRuler->GetPageOffset();
         }
 
-        if (pHRulerArray[nCol])
+        if (mpVerticalRuler.get() != NULL)
         {
-            nHOffs = pHRulerArray[nCol]->GetNullOffset() +
-                     pHRulerArray[nCol]->GetPageOffset();
-        }
-
-        if (pVRulerArray[nRow])
-        {
-            nVOffs = pVRulerArray[nRow]->GetNullOffset() +
-                     pVRulerArray[nRow]->GetPageOffset();
+            nVOffs = mpVerticalRuler->GetNullOffset() +
+                     mpVerticalRuler->GetPageOffset();
         }
 
         nCnt = 1;
@@ -955,10 +935,10 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
             nCnt++;
         }
 
-        if (pHRulerArray[nCol])
-            pHRulerArray[nCol]->SetLines(nCnt, pHLines);
-        if (pVRulerArray[nRow])
-            pVRulerArray[nRow]->SetLines(nCnt, pVLines);
+        if (mpHorizontalRuler.get() != NULL)
+            mpHorizontalRuler->SetLines(nCnt, pHLines);
+        if (mpVerticalRuler.get() != NULL)
+            mpVerticalRuler->SetLines(nCnt, pVLines);
     }
 
     // StatusBar Koordinatenanzeige
