@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:31:31 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -17551,5 +17551,11 @@ String STR_PLACEHOLDER_DESCRIPTION_NOTES
 {
     Text = "Bereich für Notizen";
     Text [ ENGLISH ] = "Notes Area";
+};
+
+String STR_UNDO_HANGULHANJACONVERSION
+{
+    Text = "Hangul/Hanja Konvertierung";
+    Text [ english_us ] = "Hangul/Hanja Conversion";
 };
 
