@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+#   last change: $Author: mtg $ $Date: 2001-09-06 09:42:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,8 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
+# the following flag un-inlines function calls
+# CFLAGS+=/Ob2
 
 SLOFILES= \
         $(SLO)$/ZipPackage.obj			\
@@ -83,11 +85,8 @@ SLOFILES= \
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
         $(SLO)$/ZipPackageSink.obj		\
         $(SLO)$/ZipPackageStream.obj 	\
-        $(SLO)$/OutputThread.obj		\
-        $(SLO)$/ThreadedBuffer.obj		\
         $(SLO)$/InteractionRequest.obj  \
         $(SLO)$/InteractionContinuation.obj
-
 
 # --- UNO stuff ---------------------------------------------------
 
