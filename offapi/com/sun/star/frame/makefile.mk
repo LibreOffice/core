@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dv $ $Date: 2001-07-27 12:35:31 $
+#   last change: $Author: mba $ $Date: 2001-11-09 16:20:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,9 @@ IDLFILES=\
     XTerminateListener.idl\
     XUrlList.idl\
     XWindowArranger.idl\
+        DispatchResultEvent.idl\
+        XDispatchResultListener.idl\
+        XNotifyingDispatch.idl\
 
 # ------------------------------------------------------------------
 
