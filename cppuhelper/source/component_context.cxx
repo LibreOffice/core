@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:34:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ static inline void try_dispose( Reference< lang::XComponent > const & xComp )
 
 //==================================================================================================
 
-#if defined(MACOSX)
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 // Initialize static template data here to break circular reference to libstatic
 ClassData1 WeakImplHelper1< lang::XEventListener >::s_aCD(1);
 #endif
@@ -382,7 +382,7 @@ struct MutexHolder
 };
 //==================================================================================================
 
-#if defined(MACOSX)
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 // Initialize static template data here to break circular reference to libstatic
 ClassData1 WeakComponentImplHelper1< XComponentContext >::s_aCD(1);
 #endif
