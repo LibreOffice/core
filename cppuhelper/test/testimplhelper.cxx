@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testimplhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 12:57:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,8 @@ struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
 //==================================================================================================
 struct TestWeakImpl : public WeakImplHelper4< CA, DBA, FE, G >
 {
+    TestWeakImpl() {}
+
     virtual ~TestWeakImpl()
         { OSL_TRACE( "> TestWeakImpl dtor called... <\n" ); }
 
@@ -206,6 +208,19 @@ struct TestWeakImpl : public WeakImplHelper4< CA, DBA, FE, G >
     // G
     virtual OUString SAL_CALL g() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("g") ); }
+
+protected:
+    TestWeakImpl(int) {}
+
+    TestWeakImpl(int, int) {}
+
+    TestWeakImpl(int, int, int) {}
+
+    TestWeakImpl(int, int, int, int) {}
+
+    TestWeakImpl(int, int, int, int, int) {}
+
+    TestWeakImpl(int, int, int, int, int, int, int = 0) {}
 };
 
 //==================================================================================================
@@ -283,6 +298,26 @@ struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, F
 //==================================================================================================
 struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
 {
+    TestImplInh() {}
+
+    explicit TestImplInh(int):
+        ImplInheritanceHelper2< TestWeakImpl, H, I >(1) {}
+
+    TestImplInh(int, int):
+        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2) {}
+
+    TestImplInh(int, int, int):
+        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3) {}
+
+    TestImplInh(int, int, int, int):
+        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3, 4) {}
+
+    TestImplInh(int, int, int, int, int):
+        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3, 4, 5) {}
+
+    TestImplInh(int, int, int, int, int, int):
+        ImplInheritanceHelper2< TestWeakImpl, H, I >(1, 2, 3, 4, 5, 6) {}
+
     virtual ~TestImplInh()
         { OSL_TRACE( "> TestWeakImplInh dtor called... <\n" ); }
 
