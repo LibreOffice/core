@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticmb.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ganaya $ $Date: 2001-02-23 15:37:04 $
+ *  last change: $Author: ganaya $ $Date: 2001-03-02 20:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,80 +58,3 @@
  *
  *
  ************************************************************************/
-
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase5.hxx>
-
-#include <com/sun/star/linguistic2/XDictionaryEntry.hpp>
-#include <com/sun/star/linguistic2/XDictionary.hpp>
-#include <com/sun/star/linguistic2/XDictionary1.hpp>
-#include <com/sun/star/linguistic2/XDictionaryEventListener.hpp>
-#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <com/sun/star/linguistic2/DictionaryEvent.hpp>
-#include <com/sun/star/linguistic2/XHyphenator.hpp>
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
-#include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XMeaning.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-
-using namespace com::sun::star::linguistic2;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-
-namespace cppu {
-
-    ClassData1 WeakImplHelper1< XDictionaryEntry >::s_aCD = ClassData1( 1 );
-    ClassData1 WeakImplHelper1< XDictionaryEventListener >::s_aCD = ClassData1( 1 );
-    ClassData1 WeakImplHelper1< XHyphenator >::s_aCD = ClassData1( 1 );
-    ClassData1 WeakImplHelper1< XHyphenatedWord >::s_aCD = ClassData1( 1 );
-    ClassData1 WeakImplHelper1< XPossibleHyphens >::s_aCD = ClassData1( 1 );
-    ClassData1 WeakImplHelper1< XDictionaryListEventListener >::s_aCD = ClassData1( 1 );
-    ClassData1 WeakImplHelper1< XSpellAlternatives >::s_aCD = ClassData1( 1 );
-    ClassData1 WeakImplHelper1< XThesaurus >::s_aCD = ClassData1( 1 );
-
-    ClassData2 WeakImplHelper2< XLinguServiceEventListener, XDictionaryListEventListener >::s_aCD = ClassData2( 1 );
-    ClassData2 WeakImplHelper2< XSpellChecker, XSpellChecker1 >::s_aCD = ClassData2( 1 );
-
-    ClassData3 WeakImplHelper3< XDictionary, XDictionaryEntry, XStorable >::s_aCD = ClassData3( 1 );
-      ClassData3 WeakImplHelper3< XDictionary1, XDictionary, XStorable >::s_aCD = ClassData3( 1 );
-      ClassData3 WeakImplHelper3< XSearchableDictionaryList, XComponent, XServiceInfo >::s_aCD = ClassData3( 1 );
-      ClassData3 WeakImplHelper3< XLinguServiceManager, XComponent, XServiceInfo >::s_aCD = ClassData3( 1 );
-
-      ClassData5 WeakImplHelper5< XPropertySet, XFastPropertySet, XPropertyAccess, XComponent, XServiceInfo >::s_aCD = ClassData5( 1 );
-
-}
-
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::linguistic2;
-
-
-namespace uno {
-
-    typelib_TypeDescriptionReference * Sequence< XDictionaryEntry >::s_pType = 0;
-    typelib_TypeDescriptionReference * Sequence< Reference< XDictionaryEntry > >::s_pType = 0;
-    typelib_TypeDescriptionReference * Sequence< DictionaryEvent >::s_pType = 0;
-    typelib_TypeDescriptionReference * Sequence< Reference < XDictionary > >::s_pType = 0;
-    typelib_TypeDescriptionReference * Sequence< Reference < XSpellChecker > >::s_pType = 0;
-    typelib_TypeDescriptionReference * Sequence< Reference < XSpellChecker1 > >::s_pType = 0;
-    typelib_TypeDescriptionReference * Sequence< Reference < XThesaurus > >::s_pType = 0;
-    typelib_TypeDescriptionReference * Sequence< Reference < XMeaning > >::s_pType = 0;
-
-}
