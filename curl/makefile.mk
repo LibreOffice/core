@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-02 09:49:28 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:24:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,11 @@ CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict 
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
+.IF "$(OS)"=="IRIX"
+BUILD_ACTION=gmake
+.ELSE
 BUILD_ACTION=make
+.ENDIF
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)
 .ENDIF			# "$(GUI)"=="UNX"
