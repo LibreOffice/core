@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:03:57 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,11 @@
 #ifndef _SV_OUTFONT_HXX
 #include <outfont.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALDISP_HXX
+#include <saldisp.hxx>
+#endif
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -702,7 +705,7 @@ void X11FontLayout::DrawText( SalGraphics& rSalGraphics ) const
         for( int i = 0; i < nGlyphCount; ++i )
             pStr[ i ] = aGlyphAry[ i ] & GF_IDXMASK;
 
-        rSalGraphics.maGraphicsData.DrawStringUCS2MB( mrFont, aPos, pStr, nGlyphCount );
+        static_cast<X11SalGraphics&>(rSalGraphics).DrawStringUCS2MB( mrFont, aPos, pStr, nGlyphCount );
     }
 }
 
