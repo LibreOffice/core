@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:10:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1791,7 +1791,9 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     aOpt.SetSoftHyph( FALSE );
     aOpt.SetFldName( FALSE );
     aOpt.SetPostIts( FALSE );
-    aOpt.SetHidden( FALSE );
+    aOpt.SetShowHiddenChar( FALSE );
+    aOpt.SetShowHiddenField( FALSE );
+    aOpt.SetShowHiddenPara( FALSE );
     aOpt.SetViewHRuler( FALSE );
     aOpt.SetViewVRuler( FALSE );
     aOpt.SetGraphic( TRUE );
