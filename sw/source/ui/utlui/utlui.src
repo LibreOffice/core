@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:30:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese_brazilian ] = "Benutzervorlagen ersetzen" ;
         Text[ chinese_simplified ] = "¸üÌæÓÃ»§ÑùÊ½";
         Text[ russian ] = "Çàìåíèòü ñòèëè ïîëüçîâàòåëÿ";
-        Text[ polish ] = "Zamieñ style u¿ytkownika";
+        Text[ polish ] = "Zamieñ style indywidualne";
         Text[ japanese ] = "Õ°»Ş°İ’è‚Ì½À²Ù‚É’u‚«Š·‚¦‚é";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¥N´À¦Û­q¼Ë¦¡";
@@ -1746,6 +1746,7 @@ String STR_HYPH_TITLE
     Text[ catalan ] = "Separación silábica";
     Text[ finnish ] = "Tavutus";
 };
+
 
 
 
