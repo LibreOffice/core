@@ -1,0 +1,881 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cfg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:11:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "dialogs.hrc"
+#include "cfg.hrc"
+#include "helpid.hrc"
+
+TabDialog RID_SVXDLG_CUSTOMIZE
+{
+    OutputSize = TRUE ;
+    Text = "Anpassen" ;
+    Text [ English ] = "Customize" ;
+    Text [ english_us ] = "Customize" ;
+    Moveable = TRUE ;
+    SvLook = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_MENUS ;
+                Text = "Men¸s" ;
+                Text [ English ] = "Menus" ;
+                Text [ english_us ] = "Menus" ;
+                PageResID = 300 ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_KEYBOARD ;
+                Text = "Keyboard" ;
+                Text [ ENGLISH ] = "Keyboard" ;
+                Text [ english_us ] = "Keyboard" ;
+                PageResID = 301 ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TOOLBARS ;
+                Text = "Symbolleisten" ;
+                Text [ ENGLISH ] = "Toolbars" ;
+                Text [ english_us ] = "Toolbars" ;
+                PageResID = 302 ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_EVENTS ;
+                Text = "Events" ;
+                Text [ ENGLISH ] = "Events" ;
+                Text [ english_us ] = "Events" ;
+                PageResID = 303 ;
+            };
+        };
+    };
+};
+
+#define TEXT_MENU \
+    Text = "Men¸" ; \
+    Text [ ENGLISH ] = "Menu" ; \
+    Text [ english_us ] = "Menu" ;
+
+#define TEXT_BEGIN_GROUP \
+    Text = "Gruppe beginnen" ; \
+    Text [ English ] = "Begin a Group" ; \
+    Text [ english_us ] = "Begin a Group" ;
+
+#define TEXT_RENAME \
+    Text = "Umbenennen..." ; \
+    Text [ English ] = "Rename..." ; \
+    Text [ english_us ] = "Rename..." ;
+
+#define TEXT_DELETE \
+    Text = "Entfernen..." ; \
+    Text [ English ] = "Delete..." ; \
+    Text [ english_us ] = "Delete..." ;
+
+#define TEXT_DELETE_NODOTS \
+    Text = "Entfernen" ; \
+    Text [ English ] = "Delete" ; \
+    Text [ english_us ] = "Delete" ;
+
+#define TEXT_MOVE \
+    Text = "Verschieben..." ; \
+    Text [ English ] = "Move..." ; \
+    Text [ english_us ] = "Move..." ;
+
+#define TEXT_DEFAULT_STYLE \
+    Text = "Standard Einstellungen herstellen" ; \
+    Text [ English ] = "Restore Default Settings" ; \
+    Text [ english_us ] = "Restore Default Settings" ;
+
+#define TEXT_TEXT_ONLY \
+    Text = "Nur Text" ; \
+    Text [ English ] = "Text only" ; \
+    Text [ english_us ] = "Text only" ;
+
+#define TEXT_TOOLBAR_NAME \
+    Text = "Name der Symbolleiste" ; \
+    Text [ ENGLISH ] = "Toolbar Name" ; \
+    Text [ english_us ] = "Toolbar Name" ;
+
+#define TEXT_SAVE_IN \
+    Text = "Speichern in" ; \
+    Text [ ENGLISH ] = "Save In" ; \
+    Text [ english_us ] = "Save In" ;
+
+TabPage RID_SVXPAGE_MENUS
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 244 , 258 ) ;
+    HelpId = HID_SVX_CONFIG_MENU ;
+    FixedLine GRP_MENUS
+    {
+        Pos = MAP_APPFONT ( 6 , 11 ) ;
+        Size = MAP_APPFONT ( 232 , 8 ) ;
+        Text = "%PRODUDUCTNAME %PRODUCTMODULE Men¸s" ;
+        Text [ ENGLISH ] = "%PRODUCTNAME %MODULENAME Menus" ;
+        Text [ english_us ] = "%PRODUCTNAME %MODULENAME Menus" ;
+    };
+    FixedText FT_MENUS
+    {
+        Pos = MAP_APPFONT ( 9 , 22 ) ;
+        Size = MAP_APPFONT ( 55 , 8 ) ;
+        TEXT_MENU
+    };
+    ListBox LB_MENUS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 22 ) ;
+        Size = MAP_APPFONT ( 108 , 108 ) ;
+        DropDown = TRUE ;
+    };
+    PushButton BTN_NEW
+    {
+        Pos = MAP_APPFONT ( 188 , 22 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Neu..." ;
+        Text [ ENGLISH ] = "New..." ;
+        Text [ english_us ] = "New..." ;
+    };
+    MenuButton BTN_CHANGE
+    {
+        Pos = MAP_APPFONT ( 188 , 39 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        TEXT_MENU
+    };
+    FixedLine GRP_MENU_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Size = MAP_APPFONT ( 232 , 8 ) ;
+        Text = "Men¸inhalt" ;
+        Text [ ENGLISH ] = "Menu Content" ;
+        Text [ english_us ] = "Menu Content" ;
+    };
+    FixedText GRP_MENU_ENTRIES
+    {
+        Pos = MAP_APPFONT ( 9 , 67 ) ;
+        Size = MAP_APPFONT ( 55 , 8 ) ;
+        Group = TRUE ;
+        Text = "Eintr‰ge" ;
+        Text [ ENGLISH ] = "Entries" ;
+        Text [ english_us ] = "Entries" ;
+    };
+    Control BOX_ENTRIES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 67 ) ;
+        Size = MAP_APPFONT ( 108 , 115 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_SVX_CONFIG_MENU_CONTENTS ;
+    };
+    PushButton BTN_ADD_COMMANDS
+    {
+        Pos = MAP_APPFONT ( 188 , 67 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Befehle hinzuf¸gen..." ;
+        Text [ ENGLISH ] = "Add Commands..." ;
+        Text [ english_us ] = "Add Commands..." ;
+    };
+    MenuButton BTN_CHANGE_ENTRY
+    {
+        Pos = MAP_APPFONT ( 188 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Befehl" ;
+        Text [ ENGLISH ] = "Command" ;
+        Text [ english_us ] = "Command" ;
+    };
+    ImageButton BTN_UP
+    {
+        Pos = MAP_APPFONT ( 175 , 102 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_UP ;
+    };
+    ImageButton BTN_DOWN
+    {
+        Pos = MAP_APPFONT ( 175 , 119 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_DOWN ;
+    };
+    FixedText TXT_SAVEIN
+    {
+        Pos = MAP_APPFONT ( 9 , 190 ) ;
+        Size = MAP_APPFONT ( 55 , 8 ) ;
+        Group = TRUE ;
+        TEXT_SAVE_IN
+    };
+    ListBox LB_SAVEIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 188 ) ;
+        Size = MAP_APPFONT ( 108 , 53 ) ;
+        DropDown = TRUE ;
+    };
+    FixedLine GRP_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 205 ) ;
+        Size = MAP_APPFONT ( 232 , 8 ) ;
+        Group = TRUE ;
+        Text = "Beschreibung" ;
+        Text [ ENGLISH ] = "Description" ;
+        Text [ english_us ] = "Description" ;
+    };
+    FixedText TXT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 9 , 216 ) ;
+        Size = MAP_APPFONT ( 192 , 30 ) ;
+        WordBreak = TRUE ;
+    };
+};
+
+Menu MODIFY_MENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_MOVE ;
+            TEXT_MOVE
+        };
+        MenuItem
+        {
+            Identifier = ID_RENAME ;
+            TEXT_RENAME
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_DELETE ;
+            TEXT_DELETE
+        };
+    };
+};
+
+Menu MODIFY_ENTRY
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_ADD_SUBMENU ;
+            Text = "Untermen¸ einf¸gen..." ;
+            Text [ English ] = "Add Submenu..." ;
+            Text [ english_us ] = "Add Submenu..." ;
+        };
+        MenuItem
+        {
+            Identifier = ID_BEGIN_GROUP ;
+            TEXT_BEGIN_GROUP
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_RENAME ;
+            TEXT_RENAME
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_DELETE ;
+            TEXT_DELETE_NODOTS
+        };
+    };
+};
+
+Menu MODIFY_TOOLBAR
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_RENAME ;
+            TEXT_RENAME
+        };
+        MenuItem
+        {
+            Identifier = ID_DELETE ;
+            TEXT_DELETE_NODOTS
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_DEFAULT_STYLE ;
+            TEXT_DEFAULT_STYLE
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_ICONS_ONLY ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+            Text = "Nur Symbole" ;
+            Text [ English ] = "Icons Only" ;
+            Text [ english_us ] = "Icons Only" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TEXT_ONLY ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+            TEXT_TEXT_ONLY
+        };
+        MenuItem
+        {
+            Identifier = ID_ICONS_AND_TEXT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+            Text = "Symbole & Text" ;
+            Text [ English ] = "Icons & Text" ;
+            Text [ english_us ] = "Icons & Text" ;
+        };
+    };
+};
+
+Menu MODIFY_TOOLBAR_CONTENT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_RENAME ;
+            TEXT_RENAME
+        };
+        MenuItem
+        {
+            Identifier = ID_DELETE ;
+            TEXT_DELETE_NODOTS
+        };
+        MenuItem
+        {
+            Identifier = ID_DEFAULT_STYLE ;
+            TEXT_DEFAULT_STYLE
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_BEGIN_GROUP ;
+            TEXT_BEGIN_GROUP
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        /*
+        MenuItem
+        {
+            Identifier = ID_ICON_ONLY ;
+            Text = "Nur Symbol" ;
+            Text [ English ] = "Icon Only" ;
+            Text [ english_us ] = "Icon Only" ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TEXT_ONLY ;
+            Text = "Nur Text" ;
+            Text [ English ] = "Text Only" ;
+            Text [ english_us ] = "Text Only" ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_ICON_AND_TEXT ;
+            Text = "Symbol & Text" ;
+            Text [ English ] = "Icon & Text" ;
+            Text [ english_us ] = "Icon & Text" ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        */
+        MenuItem
+        {
+            Identifier = ID_CHANGE_SYMBOL ;
+            Text = "Symbol austauschen..." ;
+            Text [ English ] = "Change Icon..." ;
+            Text [ english_us ] = "Change Icon..." ;
+        };
+        MenuItem
+        {
+            Identifier = ID_RESET_SYMBOL ;
+            Text = "Symbol zur¸cksetzen" ;
+            Text [ English ] = "Reset Icon" ;
+            Text [ english_us ] = "Reset Icon" ;
+        };
+    };
+};
+
+/* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
+String RID_SVXSTR_NEW_MENU
+{
+    TEXT = "Neues Men¸ %n";
+    TEXT [ English ] = "New Menu %n";
+    TEXT [ english_us ] = "New Menu %n";
+};
+
+/* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
+String RID_SVXSTR_NEW_TOOLBAR
+{
+    TEXT = "Neue Symbolleiste %n";
+    TEXT [ English ] = "New Toolbar %n";
+    TEXT [ english_us ] = "New Toolbar %n";
+};
+
+String RID_SVXSTR_MOVE_MENU
+{
+    TEXT = "Men¸ verschieben";
+    TEXT [ English ] = "Move Menu";
+    TEXT [ english_us ] = "Move Menu";
+};
+
+String RID_SVXSTR_ADD_SUBMENU
+{
+    TEXT = "Untermen¸ hinzuf¸gen";
+    TEXT [ English ] = "Add Submenu";
+    TEXT [ english_us ] = "Add Submenu";
+};
+
+String RID_SVXSTR_SUBMENU_NAME
+{
+    TEXT = "Name des Untermen¸s";
+    TEXT [ English ] = "Submenu name";
+    TEXT [ english_us ] = "Submenu name";
+};
+
+String RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION
+{
+    TEXT = "Um Befehle einem menu hinzuzuf¸gen, w‰hlen Sie zuerst eine Kategorie und dann den Befehl. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Men¸s' im Dialog 'Anpassen'.";
+    TEXT [ English ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
+    TEXT [ english_us ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
+};
+
+ModalDialog MD_MENU_ORGANISER
+{
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 172 , 154 ) ;
+    Text = "Neues Men¸" ;
+    Text [ English ] = "New Menu" ;
+    Text [ english_us ] = "New Menu" ;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    FixedText TXT_MENU_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text = "Men¸name" ;
+        Text [ ENGLISH ] = "Menu name" ;
+        Text [ english_us ] = "Menu name" ;
+    };
+    Edit EDIT_MENU_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 93 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText TXT_MENU
+    {
+        Pos = MAP_APPFONT ( 6 , 37 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text = "Men¸position" ;
+        Text [ ENGLISH ] = "Menu position" ;
+        Text [ english_us ] = "Menu position" ;
+    };
+    Control BOX_MAIN_MENUS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 93 , 100 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton BTN_MENU_UP
+    {
+        Pos = MAP_APPFONT ( 102 , 80 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_UP ;
+    };
+    ImageButton BTN_MENU_DOWN
+    {
+        Pos = MAP_APPFONT ( 102 , 97 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_DOWN ;
+    };
+    OKButton BTN_MENU_ADD
+    {
+        DefButton = TRUE;
+        Pos = MAP_APPFONT ( 119 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton BTN_MENU_CLOSE
+    {
+        Pos = MAP_APPFONT ( 119 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_MENU_HELP
+    {
+        Pos = MAP_APPFONT ( 119 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+// MD_NEW_TOOLBAR -------------------------------------------------
+ModalDialog MD_NEW_TOOLBAR
+{
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Size = MAP_APPFONT ( 165 , 63 ) ;
+    Text = "Name" ;
+    Text [ English ] = "Name" ;
+    Text [ english_us ] = "Name" ;
+    Moveable = TRUE ;
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
+        TEXT_TOOLBAR_NAME
+        WordBreak = TRUE ;
+    };
+    Edit EDT_STRING
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 97 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText TXT_SAVEIN
+    {
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
+        Group = TRUE ;
+        TEXT_SAVE_IN
+    };
+    ListBox LB_SAVEIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 97 , 53 ) ;
+        DropDown = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 109 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 109 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 109 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+#ifndef IMAGE_STDBTN_COLOR
+#define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
+#endif
+
+ModalDialog MD_ICONSELECTOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 240 , 136 ) ;
+    Text = "Symbole Austauschen" ;
+    Text [ English ] = "Change Icon" ;
+    Text [ english_us ] = "Change Icon" ;
+    Moveable = TRUE ;
+    FixedText FT_SYMBOLS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text = "Symbole" ;
+        Text [ English ] = "Symbols" ;
+        Text [ norwegian ] = "Symbols" ;
+        Text [ italian ] = "Simboli" ;
+        Text [ portuguese_brazilian ] = "Botıes" ;
+        Text [ portuguese ] = "Õcones" ;
+        Text [ finnish ] = "Painikkeet" ;
+        Text [ danish ] = "Knapper" ;
+        Text [ french ] = "IcÙnes" ;
+        Text [ swedish ] = "Ikoner" ;
+        Text [ dutch ] = "Pictogrammen" ;
+        Text [ spanish ] = "SÌmbolos" ;
+        Text [ english_us ] = "Buttons" ;
+        Text[ chinese_simplified ] = "ÂõæÊ†á";
+        Text[ russian ] = " ÌÓÔÍË";
+        Text[ polish ] = "Przyciski";
+        Text[ japanese ] = "„Ç¢„Ç§„Ç≥„É≥„Éú„Çø„É≥";
+        Text[ chinese_traditional ] = "ÂúñÁ§∫";
+        Text[ arabic ] = "«·—„Ê“";
+        Text[ dutch ] = "Pictogrammen";
+        Text[ chinese_simplified ] = "ÂõæÊ†á";
+        Text [ language_user1 ] = "Symbols" ;
+        Text[ greek ] = " ÔıÏÈ‹";
+        Text[ korean ] = "Î≤ÑÌäº";
+        Text[ turkish ] = "D¸meler";
+        Text[ catalan ] = "Botons";
+        Text[ thai ] = "‡∏õ‡∏∏‡πà‡∏°";
+        Text[ czech ] = "Tlaƒç√≠tka";
+        Text[ hebrew ] = "‚ÄÆ◊õ◊§◊™◊ï◊®◊ô◊ù‚Ä¨";
+        Text[ hindi ] = "‡§¨‡§ü‡§®‡•á‡§Ç";
+        Text[ slovak ] = "Kl√°vesy";
+        Text[ hungarian ] = "Gombok";
+        Text[ slovenian ] = "Gumbi";
+    };
+    ToolBox TB_SYMBOLS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 160 , 96 ) ;
+        Scroll = TRUE ;
+        LineSpacing = TRUE ;
+        Customize = FALSE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 184 , 7 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 184 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 184 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_IMPORT
+    {
+        Pos = MAP_APPFONT ( 184 , 95 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Importieren..." ;
+        Text [ English ] = "Import..." ;
+            Text[ english_us ] = "Import...";
+    };
+    FixedText FT_NOTE
+    {
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text = "Hinweis:\nBitte beachten Sie das f¸r einen erfolgreichen Import die Symbole eine Grˆﬂe  von 16x16 Pixel haben m¸ssen." ;
+        Text [ English ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
+        Text [ english_us ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
+        Left = TRUE ;
+    };
+    Color IMAGE_BTN_COLOR
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
+
+// Strings ---------------------------------------------------------------
+String RID_SVXSTR_PRODUCTNAME_TOOLBARS
+{
+    Text = "%PRODUCTNAME %MODULENAME Symbolleisten" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME %MODULENAME Toolbars" ;
+    Text [ english_us ] = "%PRODUCTNAME %MODULENAME Toolbars" ;
+};
+
+String RID_SVXSTR_TOOLBAR
+{
+    Text = "Symbolleiste" ;
+    Text [ ENGLISH ] = "Toolbar" ;
+    Text [ english_us ] = "Toolbar" ;
+};
+
+String RID_SVXSTR_TOOLBAR_CONTENT
+{
+    Text = "Symbolleisteninhalt" ;
+    Text [ ENGLISH ] = "Toolbar Content" ;
+    Text [ english_us ] = "Toolbar Content" ;
+};
+
+String RID_SVXSTR_COMMANDS
+{
+    Text = "Befehle" ;
+    Text [ ENGLISH ] = "Commands" ;
+    Text [ english_us ] = "Commands" ;
+};
+
+String RID_SVXSTR_COMMAND
+{
+    Text = "Befehl" ;
+    Text [ ENGLISH ] = "Command" ;
+    Text [ english_us ] = "Command" ;
+};
+
+String RID_SVXSTR_TOOLBAR_NAME
+{
+    TEXT_TOOLBAR_NAME
+};
+
+/* %MENUNAME will be replaced at runtime by the name of the selected menu. */
+QueryBox QBX_CONFIRM_DELETE_MENU
+{
+    Message = "Sind Sie sicher, dass Sie das Men¸ '%MENUNAME' lˆschen mˆchten?";
+    Message [ ENGLISH ] = "Are you sure you want to delete the '%MENUNAME' menu?";
+    Message [ english_us ] = "Are you sure you want to delete the '%MENUNAME' menu?";
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+};
+
+/* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder and will be
+   replaced at runtime by the name of the selected application or document.
+*/
+QueryBox QBX_CONFIRM_RESET
+{
+    Message = "Die Men¸konfiguration f¸r %SAVE IN SELECTION% wird auf die Standardeinstellung zur¸ckgesetzt. Mˆchten Sie fortfahren?";
+    Message [ ENGLISH ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
+    Message [ english_us ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+};
+
+QueryBox QBX_CONFIRM_RESTORE_DEFAULT
+{
+    Message = "Alle Anpassungen die an dieser Symbolleiste vorgenommen wurden werden gelˆscht. Mˆchten Sie diese Symbolleiste wirklich zur¸cksetzen?";
+    Message [ ENGLISH ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
+    Message [ english_us ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+};
+
+InfoBox IBX_MNUCFG_ALREADY_INCLUDED
+{
+    Message = "Die Funktion ist bereits in diesem Popup enthalten." ;
+    Message [ ENGLISH ] = "Function is already included in this popup." ;
+    Message [ norwegian ] = "Funksjon er allerede inkludert i denne tilleggsmenyen." ;
+    Message [ italian ] = "Funzione gi‡ inclusa in questo elenco." ;
+    Message [ portuguese_brazilian ] = "A funÁ„o j· est· incluÌda neste menu pop-up." ;
+    Message [ portuguese ] = "A funÁ„o j· est· incluÌda neste menu instant‚neo." ;
+    Message [ finnish ] = "Toiminto on jo t‰ss‰ valikossa." ;
+    Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
+    Message [ french ] = "Cette fonction est dÈj‡ incluse dans ce Pop-up." ;
+    Message [ swedish ] = "Funktionen ingÂr redan i denna snabbmeny." ;
+    Message [ dutch ] = "Deze functie komt al voor in dit menu." ;
+    Message [ spanish ] = "La funciÛn ya est· incluida en este emergente." ;
+    Message [ english_us ] = "Function is already included in this popup." ;
+    Message[ chinese_simplified ] = "Ëøô‰∏™ÂºπÂá∫ÂºèËèúÂçïÂ∑≤ÁªèÂåÖÂê´‰∫ÜËøô‰∏™ÂäüËÉΩ„ÄÇ";
+    Message[ russian ] = "›Ú‡ ÙÛÌÍˆËˇ ÛÊÂ ÒÓ‰ÂÊËÚÒˇ ‚Ó ‚ÒÔÎ˚‚‡˛˘ÂÏ ÏÂÌ˛.";
+    Message[ polish ] = "Funkcja jest juø w tym menu podrÍcznym.";
+    Message[ japanese ] = "Ê©üËÉΩ„ÅØ„Åô„Åß„Å´„Åì„ÅÆ„Éù„ÉÉ„Éó„Ç¢„ÉÉ„Éó„Å´Âê´„Åæ„Çå„Å¶„ÅÑ„Åæ„Åô„ÄÇ";
+    Message[ chinese_traditional ] = "ÈÄôÂÄãÂø´ÈÄüÂäüËÉΩË°®Â∑≤Á∂ìÂåÖÂê´‰∫ÜÈÄôÂÄãÂäüËÉΩ„ÄÇ";
+    Message[ arabic ] = "«·„Â„… „ÊÃÊœ… „”»ﬁ« ›Ì Â–Â «·ﬁ«∆„… «·„‰»Àﬁ….";
+    Message[ greek ] = "« ÛıÌ‹ÒÙÁÛÁ ÂÒÈ›˜ÂÙ·È ﬁ‰Á ÛÂ ·ıÙ¸ ÙÔ ·Ì·‰ı¸ÏÂÌÔ ÍÂﬂÏÂÌÔ.";
+    Message[ korean ] = "Í∏∞Îä•Ïù¥ Ïù¥ÎØ∏ Ïù¥ ÌåùÏóÖÏóê Ìè¨Ìï®ÎêòÏñ¥ ÏûàÏäµÎãàÎã§.";
+    Message[ turkish ] = "›˛lev zaten bu aÁ˝lan mˆn¸de mevcut.";
+    Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La funciÛ ja est‡ inclosa en aquest emergent.";
+    Message[ thai ] = "‡∏£‡∏ß‡∏°‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô‡πÉ‡∏ô‡∏Å‡∏≤‡∏£‡∏ú‡∏∏‡∏î‡∏Ç‡∏∂‡πâ‡∏ô‡∏ô‡∏µ‡πâ‡πÅ‡∏•‡πâ‡∏ß";
+    Message[ czech ] = "Funkce u≈æ byla zahrnuta v tomto kontextov√©m menu.";
+    Message[ hebrew ] = "‚ÄÆ◊î◊§◊ï◊§◊ê◊§ ◊õ◊ë◊® ◊û◊õ◊ô◊ú ◊™◊§◊ß◊ï◊ì ◊ñ◊î‚Ä¨";
+    Message[ hindi ] = "‡§´‡§Ç‡§ï‡•ç‡§∂‡§®‡•ç ‡§ï‡•ã ‡§á‡§∏ ‡§™‡•â‡§™‡•ç-‡§Ö‡§™‡•ç ‡§Æ‡•á‡§Ç ‡§™‡§π‡§ø‡§≤‡•á ‡§∏‡•á ‡§π‡•Ä ‡§∏‡§Æ‡•ç‡§Æ‡§ø‡§≤‡§ø‡§§ ‡§ï‡§ø‡§Ø‡§æ ‡§π‡•à ‡•§";
+    Message[ slovak ] = "Funkcia u≈æ bola zahrnut√° v tomto kontextovom menu.";
+    Message[ hungarian ] = "Az el≈ëugr√≥ men√º m√°r tartalmazza a f√ºggv√©nyt.";
+    Message[ slovenian ] = "Funkcija je ≈æe vkljuƒçena v to pojavno okno.";
+};
