@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:41:10 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,7 @@
 
 using namespace rtl;
 using namespace osl;
-//using namespace JavaInfo;
-using stoc_javadetect::SunVersion;
-//using jvmaccess::JavaInfo::Impl;
-
-namespace stoc_javadetect {
+namespace jfw_plugin  { //stoc_javadetect
 
 //extern OUString ::Impl::usPathDelim();
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
@@ -83,109 +79,6 @@ public:
     SelfTest();
 } test;
 #endif
-
-class FileHandleGuard
-{
-public:
-    inline FileHandleGuard(oslFileHandle & rHandle) SAL_THROW(()):
-        m_rHandle(rHandle) {}
-
-    inline ~FileHandleGuard() SAL_THROW(());
-
-    inline oslFileHandle & getHandle() SAL_THROW(()) { return m_rHandle; }
-
-private:
-    oslFileHandle & m_rHandle;
-
-    FileHandleGuard(FileHandleGuard &); // not implemented
-    void operator =(FileHandleGuard); // not implemented
-};
-inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
-{
-    if (m_rHandle != 0)
-    {
-        oslFileError eError = osl_closeFile(m_rHandle);
-        OSL_ENSURE(eError == osl_File_E_None, "unexpected situation");
-    }
-}
-
-class FileHandleReader
-{
-public:
-    enum Result
-    {
-        RESULT_OK,
-        RESULT_EOF,
-        RESULT_ERROR
-    };
-
-    inline FileHandleReader(oslFileHandle & rHandle) SAL_THROW(()):
-        m_aGuard(rHandle), m_nSize(0), m_nIndex(0), m_bLf(false) {}
-
-    Result readLine(rtl::OString * pLine) SAL_THROW(());
-
-private:
-    enum { BUFFER_SIZE = 1024 };
-
-    sal_Char m_aBuffer[BUFFER_SIZE];
-    FileHandleGuard m_aGuard;
-    int m_nSize;
-    int m_nIndex;
-    bool m_bLf;
-};
-
-FileHandleReader::Result
-FileHandleReader::readLine(rtl::OString * pLine)
-    SAL_THROW(())
-{
-    OSL_ENSURE(pLine, "specification violation");
-
-    for (bool bEof = true;; bEof = false)
-    {
-        if (m_nIndex == m_nSize)
-        {
-            sal_uInt64 nRead;
-            switch (osl_readFile(
-                        m_aGuard.getHandle(), m_aBuffer, BUFFER_SIZE, &nRead))
-            {
-            case osl_File_E_PIPE: //HACK! for windows
-                nRead = 0;
-            case osl_File_E_None:
-                if (nRead == 0)
-                {
-                    m_bLf = false;
-                    return bEof ? RESULT_EOF : RESULT_OK;
-                }
-                m_nIndex = 0;
-                m_nSize = static_cast< int >(nRead);
-                break;
-
-            default:
-                return RESULT_ERROR;
-            }
-        }
-
-        if (m_bLf && m_aBuffer[m_nIndex] == 0x0A)
-            ++m_nIndex;
-        m_bLf = false;
-
-        int nStart = m_nIndex;
-        while (m_nIndex != m_nSize)
-            switch (m_aBuffer[m_nIndex++])
-            {
-            case 0x0D:
-                m_bLf = true;
-            case 0x0A:
-                *pLine += rtl::OString(m_aBuffer + nStart,
-                                       m_nIndex - 1 - nStart);
-                    //TODO! check for overflow, and not very efficient
-                return RESULT_OK;
-            }
-
-        *pLine += rtl::OString(m_aBuffer + nStart, m_nIndex - nStart);
-            //TODO! check for overflow, and not very efficient
-    }
-}
 
 SunVersion::SunVersion():  m_nUpdateSpecial(0),
                            m_preRelease(Rel_NONE),
@@ -398,7 +291,12 @@ bool SunVersion::operator > (const SunVersion& ver) const
         return true;
     }
 
+    //Until here the versions are equal
     //compare pre -release values
+    if ((m_preRelease == Rel_NONE && ver.m_preRelease == Rel_NONE)
+        ||
+        (m_preRelease != Rel_NONE && ver.m_preRelease == Rel_NONE))
+        return false;
     if (m_preRelease > ver.m_preRelease)
         return true;
 
@@ -431,105 +329,6 @@ SunVersion::operator bool()
     return m_bValid;
 }
 
-SunVersion initVersion(const OUString& usJavaHomeArg)
-{
-    OSL_ASSERT( usJavaHomeArg.getLength() > 0);
-    SunVersion ret;
-    //create the string to the java executable
-#if defined WNT
-    OUString usJava(RTL_CONSTASCII_USTRINGPARAM
-                       ("java.exe"));
-#else // WNT
-    OUString usJava(RTL_CONSTASCII_USTRINGPARAM
-                       ("java"));
-#endif // WNT
-    usJava= usJavaHomeArg + OUSTR("/bin/") + usJava;
-    OUString usStartDir;
-    OUString argument(RTL_CONSTASCII_USTRINGPARAM("-version"));
-    oslProcess javaProcess= 0;
-    oslFileHandle fileOut= 0;
-    oslFileHandle fileErr= 0;
-
-
-    FileHandleReader stdoutReader(fileOut);
-    FileHandleReader stderrReader(fileErr);
-
-    oslProcessError procErr =
-        osl_executeProcess_WithRedirectedIO( usJava.pData,//usExe.pData,
-                                             &argument.pData, //rtl_uString *strArguments[],
-                                             1,                 //sal_uInt32   nArguments,
-                                             osl_Process_HIDDEN, //oslProcessOption Options,
-                                             Security().getHandle(), //oslSecurity Security,
-                                             usStartDir.pData,//usStartDir.pData,//usWorkDir.pData, //rtl_uString *strWorkDir,
-                                             NULL, //rtl_uString *strEnvironment[],
-                                             0, //  sal_uInt32   nEnvironmentVars,
-                                             &javaProcess, //oslProcess *pProcess,
-                                             NULL,//oslFileHandle *pChildInputWrite,
-                                             &fileOut,//oslFileHandle *pChildOutputRead,
-                                             &fileErr);//oslFileHandle *pChildErrorRead);
-
-
-    if( procErr != osl_Process_E_None)
-        return ret;
-
-    OString aLine;
-    FileHandleReader::Result rs = stdoutReader.readLine( & aLine);
-    if (rs != FileHandleReader::RESULT_OK)
-    {
-        rs = stderrReader.readLine( & aLine);
-    }
-    if (rs == FileHandleReader::RESULT_OK)
-        ret = extractVersion(aLine);
-
-    TimeValue waitMax= {5 ,0};
-    procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
-    OSL_ASSERT( procErr ==osl_Process_E_None );
-
-    return ret;
-}
-
-/** java -version has an output that reads: java version "1.4.0" in the first line
-    @param arg
-           max size of buffer pBuf
- */
-SunVersion extractVersion( const OString & sVersionLine)
-{
-    // look for the string "version"
-    sal_Int32 i = sVersionLine.indexOf(
-        "version", 0);
-
-    if(i == -1)
-        return SunVersion();
-    sal_Char const * pBuf = sVersionLine.getStr();
-    sal_Char const * pEnd= pBuf + sVersionLine.getLength();
-
-    pBuf += i + RTL_CONSTASCII_LENGTH("version");
-    // skip tabs an spaces
-    while (pBuf != pEnd && (*pBuf == '\t' || *pBuf == ' '))
-        ++pBuf;
-    // next char " ? then move one forward
-    if (pBuf != pEnd && *pBuf == '"')
-        ++pBuf;
-    // now we have the beginning of the version string.
-    // search for the end of the string indicated by white space or a character
-    // other than '.','_' or 0 ..9
-    sal_Char *pEndVer= (sal_Char*) pBuf;
-    while(pEndVer != pEnd &&
-          (*pEndVer != '\t'
-           && *pEndVer != ' '
-           && *pEndVer != '\n'
-           && *pEndVer != '\"'))
-        pEndVer++;
-    // found the end, create the version string
-    sal_Int32 sizeVer= pEndVer - pBuf + 1;
-    char *szVersion= new char[sizeVer];
-    strncpy(szVersion, pBuf, sizeVer);
-    szVersion[sizeVer - 1]= 0;
-    SunVersion oVersion(szVersion);
-    delete[] szVersion;
-
-    return oVersion;
-}
 
 #ifdef SUNVERSION_SELFTEST
 SelfTest::SelfTest()
