@@ -11467,7 +11467,7 @@ SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
+        Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
@@ -11493,7 +11493,7 @@ SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
+        Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
