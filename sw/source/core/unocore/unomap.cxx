@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-08 14:34:48 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 09:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,7 +883,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_KEEP_TOGETHER), RES_KEEP,               CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_SPLIT), RES_LAYOUT_SPLIT,       CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_PAGE_NUMBER_OFFSET), RES_PAGEDESC,              CPPU_E2T(CPPUTYPE_INT16),       PropertyAttribute::MAYBEVOID, MID_PAGEDESC_PAGENUMOFFSET},
-                    { SW_PROP_NMID(UNO_NAME_PAGE_DESC_NAME), RES_PAGEDESC,           CPPU_E2T(CPPUTYPE_OUSTRING),         PROPERTY_NONE, 0xff},
+                    { SW_PROP_NMID(UNO_NAME_PAGE_DESC_NAME), RES_PAGEDESC,           CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID, 0xff},
                     { SW_PROP_NMID(UNO_NAME_RELATIVE_WIDTH), FN_TABLE_RELATIVE_WIDTH,CPPU_E2T(CPPUTYPE_INT16)  ,        PROPERTY_NONE, 0xff },
                     { SW_PROP_NMID(UNO_NAME_REPEAT_HEADLINE), FN_TABLE_HEADLINE_REPEAT,CPPU_E2T(CPPUTYPE_BOOLEAN),      PROPERTY_NONE, 0xff},
                     { SW_PROP_NMID(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, 0},
