@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 17:55:58 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 18:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2254,7 +2254,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             {
                                 rSh.PushMode();
                                 bModePushed = TRUE;
+
+                                BOOL bUnLockView = !rSh.IsViewLocked();
+                                rSh.LockView( TRUE );
                                 rSh.EnterAddMode();
+                                if( bUnLockView )
+                                    rSh.LockView( FALSE );
                             }
                             bCallBase = FALSE;
                         }
