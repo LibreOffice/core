@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonsoptions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:12:00 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,15 @@ class AddonsOptions
         sal_Bool    HasAddonsHelpMenu() const;
 
         /*-****************************************************************************************************//**
+            @short      returns number of addons toolbars
+            @descr      Call to retrieve the number of addons toolbars
+
+
+            @return     number of addons toolbars
+        *//*-*****************************************************************************************************/
+        sal_Int32   GetAddonsToolBarCount() const ;
+
+        /*-****************************************************************************************************//**
             @short      returns the  complete addons menu
             @descr      Call it to get all entries of the addon menu.
                         We return a list of all nodes with his names and properties.
@@ -235,7 +244,7 @@ class AddonsOptions
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
 
         /*-****************************************************************************************************//**
-            @short      Gets the toolbar part of all addon components registered
+            @short      Gets a toolbar part of an single addon
             @descr      -
 
             @seealso    -
@@ -245,7 +254,7 @@ class AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
 
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsToolBarPart() const;
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************//**
             @short      Gets the Add-On help menu part of all addon components registered
