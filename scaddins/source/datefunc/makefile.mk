@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.5 2001-06-21 12:57:28 gt Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.6 2001-10-02 07:52:33 dr Exp $
 #
-#     $Date: 2001-06-21 12:57:28 $
-#     $Author: gt $
-#     $Revision: 1.5 $
+#     $Date: 2001-10-02 07:52:33 $
+#     $Author: dr $
+#     $Revision: 1.6 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -88,6 +88,7 @@ CPPUMAKERFLAGS*=-C
 
 UNOTYPES=\
     com.sun.star.sheet.addin.XDateFunctions \
+    com.sun.star.sheet.addin.XMiscFunctions \
     com.sun.star.lang.XComponent \
     com.sun.star.lang.XMultiServiceFactory \
     com.sun.star.lang.XSingleServiceFactory \
@@ -111,6 +112,9 @@ SLOFILES=\
 ALLIDLFILES=\
     dateadd.idl
 
+SRCFILES =\
+    datefunc.src
+
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
@@ -119,12 +123,23 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
         $(VOSLIB)			\
-        $(SALLIB) 
+        $(TOOLSLIB)			\
+        $(SALLIB)			\
+        $(SVLIB)
 
 SHL1DEPN=makefile.mk
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
+
+# --- Resourcen ----------------------------------------------------
+
+RESLIB1LIST=\
+    $(SRS)$/date.srs
+
+RESLIB1NAME=date
+RESLIB1SRSFILES=\
+    $(RESLIB1LIST)
 
 # --- Targets ----------------------------------
 

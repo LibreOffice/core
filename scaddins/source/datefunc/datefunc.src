@@ -1,0 +1,441 @@
+/*************************************************************************
+ *
+ *  $RCSfile: datefunc.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: dr $ $Date: 2001-10-02 07:51:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "datefunc.hrc"
+
+
+Resource RID_DATE_FUNCTION_DESCRIPTIONS
+{
+    Resource DATE_FUNCDESC_DiffWeeks
+    {
+        String 1    // description              DiffWeeks
+        {
+            Text = "Berechnet die Anzahl der Wochen in einem bestimmten Zeitraum.";
+            Text[ english ] = "Determines the number of weeks in a specific period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         DiffWeeks
+        {
+            Text = "Ausgangsdatum";
+            Text[ english ] = "Start date";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  DiffWeeks
+        {
+            Text = "Erster Tag des Zeitraums.";
+            Text[ english ] = "First day of the period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 4 // name of parameter 2         DiffWeeks
+        {
+            Text = "Enddatum";
+            Text[ english ] = "End date";
+            Text[ language_user1 ] = " ";
+        };
+        String 5 // description of parameter 2  DiffWeeks
+        {
+            Text = "Letzter Tag des Zeitraums.";
+            Text[ english ] = "Last day of the period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 6 // name of parameter 3         DiffWeeks
+        {
+            Text = "Art";
+            Text[ english ] = "Mode";
+            Text[ language_user1 ] = " ";
+        };
+        String 7 // description of parameter 3  DiffWeeks
+        {
+            Text = "Art der Berechnung: Art=0 für Wochenanzahl im Intervall, Art=1 für Kalenderwochen.";
+            Text[ english ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+
+    Resource DATE_FUNCDESC_DiffMonths
+    {
+        String 1    // description              DiffMonths
+        {
+            Text = "Berechnet die Anzahl der Monate in einem bestimmten Zeitraum.";
+            Text[ english ] = "Determines the number of months in a specific period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         DiffMonths
+        {
+            Text = "Ausgangsdatum";
+            Text[ english ] = "Start date";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  DiffMonths
+        {
+            Text = "Erster Tag des Zeitraums.";
+            Text[ english ] = "First day of the period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 4 // name of parameter 2         DiffMonths
+        {
+            Text = "Enddatum";
+            Text[ english ] = "End date";
+            Text[ language_user1 ] = " ";
+        };
+        String 5 // description of parameter 2  DiffMonths
+        {
+            Text = "Letzter Tag des Zeitraums.";
+            Text[ english ] = "Last day of the period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 6 // name of parameter 3         DiffMonths
+        {
+            Text = "Art";
+            Text[ english ] = "Mode";
+            Text[ language_user1 ] = " ";
+        };
+        String 7 // description of parameter 3  DiffMonths
+        {
+            Text = "Art der Berechnung: Art=0 für Monatsanzahl im Intervall, Art=1 für Kalendermonate.";
+            Text[ english ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+
+    Resource DATE_FUNCDESC_DiffYears
+    {
+        String 1    // description              DiffYears
+        {
+            Text = "Berechnet die Anzahl der Jahre in einem bestimmten Zeitraum.";
+            Text[ english ] = "Determines the number of years in a specific period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         DiffYears
+        {
+            Text = "Ausgangsdatum";
+            Text[ english ] = "Start date";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  DiffYears
+        {
+            Text = "Erster Tag des Zeitraums.";
+            Text[ english ] = "First day of the period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 4 // name of parameter 2         DiffYears
+        {
+            Text = "Enddatum";
+            Text[ english ] = "End date";
+            Text[ language_user1 ] = " ";
+        };
+        String 5 // description of parameter 2  DiffYears
+        {
+            Text = "Letzter Tag des Zeitraums.";
+            Text[ english ] = "Last day of the period.";
+            Text[ language_user1 ] = " ";
+        };
+        String 6 // name of parameter 3         DiffYears
+        {
+            Text = "Art";
+            Text[ english ] = "Mode";
+            Text[ language_user1 ] = " ";
+        };
+        String 7 // description of parameter 3  DiffYears
+        {
+            Text = "Art der Berechnung: Art=0 für Jahresanzahl im Intervall, Art=1 für Kalenderjahre.";
+            Text[ english ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+
+    Resource DATE_FUNCDESC_IsLeapYear
+    {
+        String 1    // description              IsLeapYear
+        {
+            Text = "Gibt 1 (WAHR) zurück, wenn das angegebene Datum in einem Schaltjahr liegt, sonst 0 (FALSCH).";
+            Text[ english ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         IsLeapYear
+        {
+            Text = "Datum";
+            Text[ english ] = "Date";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  IsLeapYear
+        {
+            Text = "Ein beliebiger Tag im gewünschten Jahr.";
+            Text[ english ] = "Any day in the desired year.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+
+    Resource DATE_FUNCDESC_DaysInMonth
+    {
+        String 1    // description              DaysInMonth
+        {
+            Text = "Gibt die Anzahl der Tage des Monats zurück, in dem das angegebene Datum liegt.";
+            Text[ english ] = "Returns the number of days of the month in relation to the date entered.";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         DaysInMonth
+        {
+            Text = "Datum";
+            Text[ english ] = "Date";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  DaysInMonth
+        {
+            Text = "Ein beliebiger Tag im gewünschten Monat.";
+            Text[ english ] = "Any day in the desired month.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+
+    Resource DATE_FUNCDESC_DaysInYear
+    {
+        String 1    // description              DaysInYear
+        {
+            Text = "Gibt die Anzahl der Tage des Jahres zurück, in dem das angegebene Datum liegt.";
+            Text[ english ] = "Returns the number of days of the year in relation to the date entered.";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         DaysInYear
+        {
+            Text = "Datum";
+            Text[ english ] = "Date";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  DaysInYear
+        {
+            Text = "Ein beliebiger Tag im gewünschten Jahr.";
+            Text[ english ] = "Any day in the desired year.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+
+    Resource DATE_FUNCDESC_WeeksInYear
+    {
+        String 1    // description              WeeksInYear
+        {
+            Text = "Gibt die Anzahl der Wochen des Jahres zurück, in dem das angegebene Datum liegt.";
+            Text[ english ] = "Returns the number of weeks of the year in relation to the date entered.";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         WeeksInYear
+        {
+            Text = "Datum";
+            Text[ english ] = "Date";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  WeeksInYear
+        {
+            Text = "Ein beliebiger Tag im gewünschten Jahr.";
+            Text[ english ] = "Any day in the desired year.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+
+    Resource DATE_FUNCDESC_Rot13
+    {
+        String 1    // description              Rot13
+        {
+            Text = "Verschlüsselt oder entschlüsselt einen Text mit Hilfe des ROT13-Algorithmus.";
+            Text[ english ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
+            Text[ language_user1 ] = " ";
+        };
+        String 2 // name of parameter 1         Rot13
+        {
+            Text = "Text";
+            Text[ english ] = "Text";
+            Text[ language_user1 ] = " ";
+        };
+        String 3 // description of parameter 1  Rot13
+        {
+            Text = "Zu verschlüsselnder oder verschlüsselter Text.";
+            Text[ english ] = "Text to be encrypted or encrypted text.";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+
+Resource RID_DATE_FUNCTION_NAMES
+{
+    String DATE_FUNCNAME_DiffWeeks
+    {
+        Text = "WOCHEN";
+        Text[ english ] = "WEEKS";
+        Text[ language_user1 ] = " ";
+    };
+    String DATE_FUNCNAME_DiffMonths
+    {
+        Text = "MONATE";
+        Text[ english ] = "MONTHS";
+        Text[ language_user1 ] = " ";
+    };
+    String DATE_FUNCNAME_DiffYears
+    {
+        Text = "JAHRE";
+        Text[ english ] = "YEARS";
+        Text[ language_user1 ] = " ";
+    };
+    String DATE_FUNCNAME_IsLeapYear
+    {
+        Text = "ISTSCHALTJAHR";
+        Text[ english ] = "ISLEAPYEAR";
+        Text[ language_user1 ] = " ";
+    };
+    String DATE_FUNCNAME_DaysInMonth
+    {
+        Text = "TAGEIMMONAT";
+        Text[ english ] = "DAYSINMONTH";
+        Text[ language_user1 ] = " ";
+    };
+    String DATE_FUNCNAME_DaysInYear
+    {
+        Text = "TAGEIMJAHR";
+        Text[ english ] = "DAYSINYEAR";
+        Text[ language_user1 ] = " ";
+    };
+    String DATE_FUNCNAME_WeeksInYear
+    {
+        Text = "WOCHENIMJAHR";
+        Text[ english ] = "WEEKSINYEAR";
+        Text[ language_user1 ] = " ";
+    };
+    String DATE_FUNCNAME_Rot13
+    {
+        Text = "ROT13";
+        Text[ english ] = "ROT13";
+        Text[ language_user1 ] = " ";
+    };
+};
+
+
+Resource RID_DATE_DEFFUNCTION_NAMES
+{
+
+    StringArray DATE_DEFFUNCNAME_DiffWeeks
+    {
+        ItemList =
+        {
+            < "WOCHEN"; >;
+            < "WEEKS"; >;
+        };
+    };
+    StringArray DATE_DEFFUNCNAME_DiffMonths
+    {
+        ItemList =
+        {
+            < "MONATE"; >;
+            < "MONTHS"; >;
+        };
+    };
+    StringArray DATE_DEFFUNCNAME_DiffYears
+    {
+        ItemList =
+        {
+            < "JAHRE"; >;
+            < "YEARS"; >;
+        };
+    };
+    StringArray DATE_DEFFUNCNAME_IsLeapYear
+    {
+        ItemList =
+        {
+            < "ISTSCHALTJAHR"; >;
+            < "ISLEAPYEAR"; >;
+        };
+    };
+    StringArray DATE_DEFFUNCNAME_DaysInMonth
+    {
+        ItemList =
+        {
+            < "TAGEIMMONAT"; >;
+            < "DAYSINMONTH"; >;
+        };
+    };
+    StringArray DATE_DEFFUNCNAME_DaysInYear
+    {
+        ItemList =
+        {
+            < "TAGEIMJAHR"; >;
+            < "DAYSINYEAR"; >;
+        };
+    };
+    StringArray DATE_DEFFUNCNAME_WeeksInYear
+    {
+        ItemList =
+        {
+            < "WOCHENIMJAHR"; >;
+            < "WEEKSINYEAR"; >;
+        };
+    };
+    StringArray DATE_DEFFUNCNAME_Rot13
+    {
+        ItemList =
+        {
+            < "ROT13"; >;
+            < "ROT13"; >;
+        };
+    };
+};
+
+
+
