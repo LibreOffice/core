@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-12 08:34:49 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 07:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,11 +642,12 @@ void SwDoc::SetDocStat( const SwDocStat& rStat )
     *pDocStat = rStat;
 }
 
+
 /*************************************************************************
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
 
-/* void SwDoc::UpdateDocStat( SwDocStat& rStat )
+void SwDoc::UpdateDocStat( SwDocStat& rStat )
 {
     if( rStat.bModified )
     {
@@ -663,13 +664,8 @@ void SwDoc::SetDocStat( const SwDocStat& rStat )
 
                     if( rStr.Len() && pBreakIt->xBreak.is() )
                     {
-//                        WordType::ANY_WORD
-//                        WordType::ANYWORD_IGNOREWHITESPACES
-//                        WordType::DICTIONARY_WORD
-//                        WordType::WORD_COUNT
-
                         SwScanner aScanner( *((SwTxtNode*)pNd), NULL,
-                                            ::com::sun::star::i18n::WordType::DICTIONARY_WORD,
+                                            ::com::sun::star::i18n::WordType::WORD_COUNT,
                                             0, rStr.Len(), sal_False, sal_False );
 
                         while ( aScanner.NextWord() )
@@ -683,86 +679,6 @@ void SwDoc::SetDocStat( const SwDocStat& rStat )
                     ++rStat.nPara;
                 }
                 break;
-            case ND_TABLENODE:      ++rStat.nTbl;   break;
-            case ND_GRFNODE:        ++rStat.nGrf;   break;
-            case ND_OLENODE:        ++rStat.nOLE;   break;
-            case ND_SECTIONNODE:    break;
-            }
-
-        rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
-        rStat.bModified = FALSE;
-        SetDocStat( rStat );
-        // event. Stat. Felder Updaten
-        SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
-        pType->UpdateFlds();
-    }
-}  */
-
-void SwDoc::UpdateDocStat( SwDocStat& rStat )
-{
-    if( rStat.bModified )
-    {
-        const String& rWordDelim = SW_MOD()->GetDocStatWordDelim();
-
-        rStat.Reset();
-        rStat.nPara = 0;        // Default ist auf 1 !!
-        SwNode* pNd;
-
-        for( ULONG n = GetNodes().Count(); n; )
-            switch( ( pNd = GetNodes()[ --n ])->GetNodeType() )
-            {
-            case ND_TEXTNODE:
-                {
-                    const String& rStr = ((SwTxtNode*)pNd)->GetTxt();
-                    if( rStr.Len() )
-                    {
-                        int bInWord = FALSE;
-                        USHORT  nSpChar = 0;
-                        for( xub_StrLen l = 0; l < rStr.Len(); ++l )
-                        {
-                            sal_Unicode b = rStr.GetChar( l );
-                            switch( b )
-                            {
-                            case CH_TXTATR_BREAKWORD:
-                                ++nSpChar;
-                                if( bInWord )
-                                {
-                                    ++rStat.nWord;
-                                    bInWord = FALSE;
-                                }
-                                break;
-
-                            case CH_TXTATR_INWORD:
-                                ++nSpChar;
-                                break;
-
-                            case 0x0A:
-                                ++nSpChar;
-                                if( bInWord )
-                                {
-                                    ++rStat.nWord;
-                                    bInWord = FALSE;
-                                }
-                                break;
-
-                            default:
-                                if( STRING_NOTFOUND == rWordDelim.Search( b ))
-                                    bInWord = TRUE;
-                                else if( bInWord )
-                                {
-                                    ++rStat.nWord;
-                                    bInWord = FALSE;
-                                }
-                            }
-                        }
-                        if( bInWord )
-                            ++rStat.nWord;
-                        rStat.nChar += rStr.Len() - nSpChar;
-                    }
-                    ++rStat.nPara;
-                }
-                break;
-
             case ND_TABLENODE:      ++rStat.nTbl;   break;
             case ND_GRFNODE:        ++rStat.nGrf;   break;
             case ND_OLENODE:        ++rStat.nOLE;   break;
