@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:12:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,10 @@
 #include <vcl/graph.hxx>
 #endif
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -102,7 +99,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _SFX_INTERNO_HXX //autogen
-#include <sfx2/interno.hxx>
+//#include <sfx2/interno.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -127,21 +124,20 @@
 #include "dialogs.hrc"
 #include "unolingu.hxx"
 
-class SvxInternalLink : public so3::SvLinkSource
+class SvxInternalLink : public sfx2::SvLinkSource
 {
 public:
     SvxInternalLink() {}
 
-    virtual BOOL Connect( so3::SvBaseLink* );
+    virtual BOOL Connect( sfx2::SvBaseLink* );
 };
 
-
-SvxLinkManager::SvxLinkManager( SvPersist * pPersist )
+SvxLinkManager::SvxLinkManager( SfxObjectShell * pPersist )
 {
     SvLinkManager::SetPersist( pPersist );
 }
 
-so3::SvLinkSourceRef SvxLinkManager::CreateObj( so3::SvBaseLink * pLink )
+sfx2::SvLinkSourceRef SvxLinkManager::CreateObj( sfx2::SvBaseLink * pLink )
 {
     switch( pLink->GetObjType() )
     {
@@ -156,7 +152,7 @@ so3::SvLinkSourceRef SvxLinkManager::CreateObj( so3::SvBaseLink * pLink )
 }
 
 
-BOOL SvxLinkManager::InsertFileLink( so3::SvBaseLink& rLink,
+BOOL SvxLinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
                                     USHORT nFileType,
                                     const String& rFileNm,
                                     const String* pFilterNm,
@@ -166,26 +162,26 @@ BOOL SvxLinkManager::InsertFileLink( so3::SvBaseLink& rLink,
         return FALSE;
 
     String sCmd( rFileNm );
-    sCmd += ::so3::cTokenSeperator;
+    sCmd += ::sfx2::cTokenSeperator;
     if( pRange )
         sCmd += *pRange;
     if( pFilterNm )
-        ( sCmd += ::so3::cTokenSeperator ) += *pFilterNm;
+        ( sCmd += ::sfx2::cTokenSeperator ) += *pFilterNm;
 
     return SvLinkManager::InsertLink( &rLink, nFileType,
-                                    so3::LINKUPDATE_ONCALL, &sCmd );
+                                    sfx2::LINKUPDATE_ONCALL, &sCmd );
 }
 
-BOOL SvxLinkManager::InsertFileLink( so3::SvBaseLink& rLink )
+BOOL SvxLinkManager::InsertFileLink( sfx2::SvBaseLink& rLink )
 {
     if( OBJECT_CLIENT_FILE == ( OBJECT_CLIENT_FILE & rLink.GetObjType() ))
         return SvLinkManager::InsertLink( &rLink, rLink.GetObjType(),
-                                            so3::LINKUPDATE_ONCALL );
+                                            sfx2::LINKUPDATE_ONCALL );
     return FALSE;
 }
 
         // erfrage die Strings fuer den Dialog
-BOOL SvxLinkManager::GetDisplayNames( const so3::SvBaseLink* pBaseLink,
+BOOL SvxLinkManager::GetDisplayNames( const sfx2::SvBaseLink* pBaseLink,
                                         String* pType,
                                         String* pFile,
                                         String* pLink,
@@ -200,8 +196,8 @@ BOOL SvxLinkManager::GetDisplayNames( const so3::SvBaseLink* pBaseLink,
         case OBJECT_CLIENT_GRF:
             {
                 USHORT nPos = 0;
-                String sFile( sLNm.GetToken( 0, ::so3::cTokenSeperator, nPos ) );
-                String sRange( sLNm.GetToken( 0, ::so3::cTokenSeperator, nPos ) );
+                String sFile( sLNm.GetToken( 0, ::sfx2::cTokenSeperator, nPos ) );
+                String sRange( sLNm.GetToken( 0, ::sfx2::cTokenSeperator, nPos ) );
 
                 if( pFile )
                     *pFile = sFile;
@@ -233,9 +229,9 @@ BOOL SvxLinkManager::GetDisplayNames( const so3::SvBaseLink* pBaseLink,
 void SvxLinkManager::CancelTransfers()
 {
     SvFileObject* pFileObj;
-    so3::SvBaseLink* pLnk;
+    sfx2::SvBaseLink* pLnk;
 
-    const so3::SvBaseLinks& rLnks = GetLinks();
+    const sfx2::SvBaseLinks& rLnks = GetLinks();
     for( USHORT n = rLnks.Count(); n; )
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
@@ -245,7 +241,7 @@ void SvxLinkManager::CancelTransfers()
             pFileObj->CancelTransfers();
 }
 
-void SvxLinkManager::SetTransferPriority( so3::SvBaseLink& rLink, USHORT nPrio )
+void SvxLinkManager::SetTransferPriority( sfx2::SvBaseLink& rLink, USHORT nPrio )
 {
     SvFileObject* pFileObj =
 //      (SvFileObject*)SvFileObject::ClassFactory()->
@@ -320,19 +316,18 @@ BOOL SvxLinkManager::GetGraphicFromAny( const String& rMimeType,
 
 
 // ----------------------------------------------------------------------
-String lcl_DDE_RelToAbs( const String& rTopic )
+String lcl_DDE_RelToAbs( const String& rTopic, const String& rReferer )
 {
     String sRet;
     INetURLObject aURL( rTopic );
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic,
-                                        INetURLObject::GetBaseURL(), sRet );
+        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rReferer.Len() ? rReferer : INetURLObject::GetBaseURL(), sRet );
     if( !sRet.Len() )
         sRet = URIHelper::SmartRelToAbs( rTopic );
     return sRet;
 }
 
-BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
+BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 {
     SfxObjectShell* pFndShell = 0;
     String sTopic, sItem, sReferer;
@@ -344,29 +339,27 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
         // Namen heraussuchen:
 
         CharClass aCC( SvxCreateLocale( LANGUAGE_SYSTEM ));
-        String sNm( sTopic ), sNmURL( lcl_DDE_RelToAbs( sTopic ) ),
-               sTmp;
+        String sNm( sTopic ), sTmp;
         aCC.toLower( sNm );
-        aCC.toLower( sNmURL );
 
         TypeId aType( TYPE(SfxObjectShell) );
 
         BOOL bFirst = TRUE;
-        SfxObjectShell* pShell = 0;
-        SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist());
-        if( aRef.Is() )
+        SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+        if( pShell )
         {
             // sch... SFX: das gerade gelesen Doc hat noch keinen Namen und
             // steht noch nicht in der Doc. Liste
-            pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
-
-            if( pShell && pShell->GetMedium() )
+            if( pShell->GetMedium() )
             {
                 sReferer = pShell->GetMedium()->GetName();
                 if( !pShell->HasName()  )
                     sTmp = sReferer;
             }
         }
+
+        String sNmURL( lcl_DDE_RelToAbs( sTopic, sReferer ) );
+        aCC.toLower( sNmURL );
 
         if ( !pShell )
         {
@@ -379,7 +372,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
             if( !sTmp.Len() )
             {
                 sTmp = pShell->GetTitle( SFX_TITLE_FULLNAME );
-                sTmp = lcl_DDE_RelToAbs(sTmp);
+                sTmp = lcl_DDE_RelToAbs(sTmp, sReferer);
             }
 
 
@@ -411,7 +404,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
         // dann versuche die Datei zu laden:
         INetURLObject aURL( sTopic );
         INetProtocol eOld = aURL.GetProtocol();
-        aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic ) );
+        aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic, sReferer ) );
         if( INET_PROT_NOT_VALID != eOld ||
             INET_PROT_HTTP != aURL.GetProtocol() )
         {
@@ -426,20 +419,14 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
             aArgs.Put(aTarget);
             aArgs.Put(aMinimized);
             aArgs.Put(aName);
-            SfxRequest aRequest( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aArgs );
-            SFX_APP()->ExecuteSlot( aRequest );
-            const SfxPoolItem*  pRet = aRequest.GetReturnValue();
-
-            if( pRet && pRet->ISA( SfxViewFrameItem ) &&
-                ((SfxViewFrameItem*)pRet)->GetFrame() )
-                pFndShell = ((SfxViewFrameItem*)pRet)->GetFrame()->GetObjectShell();
+            pFndShell = SfxObjectShell::CreateAndLoadObject( aArgs );
         }
     }
 
     BOOL bRet = FALSE;
     if( pFndShell )
     {
-        so3::SvLinkSource* pNewSrc = pFndShell->DdeCreateLinkSource( sItem );
+        sfx2::SvLinkSource* pNewSrc = pFndShell->DdeCreateLinkSource( sItem );
         if( pNewSrc )
         {
             bRet = TRUE;
@@ -449,7 +436,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
 
             pLink->SetObj( pNewSrc );
             pNewSrc->AddDataAdvise( pLink, aFl.MimeType,
-                                so3::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
+                                sfx2::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
                                     ? ADVISEMODE_ONLYONCE
                                     : 0 );
         }
