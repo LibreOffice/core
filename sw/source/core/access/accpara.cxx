@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 07:19:36 $
+ *  last change: $Author: dvo $ $Date: 2002-07-05 19:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,14 +333,48 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                 if( ( nHere >= pStart->nNode.GetIndex() ) &&
                     ( nHere <= pEnd->nNode.GetIndex() )      )
                 {
-                    // Yup, we are selected!
-                    bRet = sal_True;
-                    nStart = static_cast<sal_Int32>(
-                        ( nHere > pStart->nNode.GetIndex() ) ? 0
-                        : pStart->nContent.GetIndex() );
-                    nEnd = static_cast<sal_Int32>(
-                        ( nHere < pEnd->nNode.GetIndex() ) ? pNode->Len()
-                        : pEnd->nContent.GetIndex() );
+                    // #100298# furthermore check it the selection is in our
+                    // part of a paragraph
+                    USHORT nCoreStart = pStart->nContent.GetIndex();
+                    USHORT nCoreEnd = pEnd->nContent.GetIndex();
+                    sal_Bool bStartOK =
+                        GetPortionData().IsValidCorePosition( nCoreStart );
+                    sal_Bool bEndOK =
+                        GetPortionData().IsValidCorePosition( nCoreEnd );
+                    if( bStartOK || bEndOK )
+                    {
+                        // Yup, we are selected!
+
+                        // We may have to 'cut' one position in case of a
+                        // selection across two paragraphs.
+
+                        bRet = sal_True;
+                        if( bStartOK && ( nHere <= pStart->nNode.GetIndex() ) )
+                        {
+                            nStart = GetPortionData().GetAccessiblePosition(
+                                         nCoreStart );
+                        }
+                        else
+                        {
+                            // cut start of selection if it starts before this
+                            // paragraph, or before our part of this paragraph
+                            nStart = 0;
+                        }
+
+                        if( bEndOK && ( nHere >= pEnd->nNode.GetIndex() ) )
+                        {
+                            nEnd = GetPortionData().GetAccessiblePosition(
+                                       nCoreEnd );
+                        }
+                        else
+                        {
+                            // cut end of selection if it extends beyond 'our'
+                            // part of the paragraph or beyond even the entire
+                            // paragraph
+                            nEnd = GetPortionData().GetAccessibleString().
+                                                                   getLength();
+                        }
+                    }
                 }
                 // else: this PaM doesn't point to this paragraph
             }
