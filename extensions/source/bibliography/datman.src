@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 14:44:36 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,6 +503,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
     Text[ catalan ] = "Assignació de columnes per a la taula %1";
     Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‚à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡ %1";
+    Text[ language_user1 ] = "EM (29 July 2002): this was just a German spelling error, no change in translation";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -512,7 +513,7 @@ ModalDialog RID_DLG_DBCHANGE
     Size = MAP_APPFONT ( 291 , 131 ) ;
     Moveable = TRUE ;
     Text = "Datenquelle austauschen" ;
-    Text[ english_us ] = "Choose Data Source";
+    Text[ english_us ] = "Select Data Source";
     OKButton BT_OK
     {
         Pos = MAP_APPFONT ( 238 , 3 ) ;
@@ -572,4 +573,22 @@ ModalDialog RID_DLG_DBCHANGE
         Size = MAP_APPFONT ( 223 , 12 ) ;
         Border = TRUE;
     };
+    Text[ portuguese ] = "Seleccionar fonte de dados";
+    Text[ russian ] = "Âûáîğ èñõîäíûõ äàííûõ";
+    Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò äåäïìİíùí";
+    Text[ dutch ] = "Kies gegevensbron";
+    Text[ french ] = "Sélection de la source de données";
+    Text[ spanish ] = "Selección de la fuente de datos";
+    Text[ finnish ] = "Valitse tietolähde";
+    Text[ italian ] = "Selezione della sorgente dati";
+    Text[ danish ] = "Vælg datakilde";
+    Text[ swedish ] = "Urval av datakälla";
+    Text[ polish ] = "Wybór Ÿród³a danych";
+    Text[ portuguese_brazilian ] = "Select data source";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®é¸æŠ";
+    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ì„ íƒ";
+    Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº";
+    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
+    Text[ turkish ] = "Veri kaynağı seçimi";
+    Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
 };
