@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocumentSettings.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 18:09:59 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 07:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <com/sun/star/util/Date.idl>
 #endif
 
+#ifndef __com_sun_star_i18n_XForbiddenCharacters_idl__
+#include <com/sun/star/i18n/XForbiddenCharacters.idl>
+#endif
 
 //=============================================================================
 
@@ -188,6 +191,22 @@ service SpreadsheetDocumentSettings
      */
     [property] boolean RegularExpressions;
 
+    //-------------------------------------------------------------------------
+
+    /** This property gives the XForbiddenCharacters.
+     */
+    [readonly, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is set the document has DrawPages. Use this property
+        to find out, whether the document has a DrawPages or not, because the
+        getDrawPage method on the XDrawPageSupplier and the getDrawPages method
+        on the XDrawPagesSupplier allways creates the DrawPages
+        if there are no and this is very slow and needs more memory.
+     */
+    [readonly, property] boolean HasDrawPages;
+
 };
 
 //=============================================================================
@@ -197,6 +216,9 @@ service SpreadsheetDocumentSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/05/15 18:09:59  er
+    #78323# new document settings property RegularExpressions
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 
