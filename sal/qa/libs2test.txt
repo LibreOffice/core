@@ -1,6 +1,6 @@
 # This file contain a list of todos for testshl2 automated tests.
 # 
-# $Id: libs2test.txt,v 1.7 2003-10-06 13:39:31 vg Exp $
+# $Id: libs2test.txt,v 1.8 2003-11-18 16:36:25 kz Exp $
 #
 # Legend:
 # there exist 2 formats
@@ -14,7 +14,7 @@
 
 
 # LLA: marked as deprecated by Stephan Bergmann
-# ByteSequence
+ByteSequence
 
 OStringBuffer   ; OStringBuffer
 
@@ -22,8 +22,11 @@ rtl_strings ; rtl_OUString
 rtl_strings ; rtl_OString
 rtl_strings ; rtl_OUStringBuffer
 
+# replacements for old rtl::XString tests
+rtl/oustring; rtl_OUString2
+rtl/ostring; rtl_OString2
+
 osl/file      ; File
-osl/process   ; Thread
 osl/socket    ; Socket
 osl/mutex     ; Mutex
 osl/pipe      ; Pipe
@@ -34,7 +37,9 @@ osl/security  ; Security
 
 rtl/math ; rtl_math
 
-
+# LLA: Due to the fact, that thread testing seams to be little bit error prone, now
+# check this at the end.
+osl/process   ; Thread
 
 # not ready yet
 # strings ; test_oustring
