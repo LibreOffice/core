@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-23 00:17:32 $
+ *  last change: $Author: obo $ $Date: 2001-12-04 19:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ String RID_STR_LIBISREADONLY
     Text[ greek ] = "This library is readonly.";
     Text[ dutch ] = "Deze bibliotheek is schrijfbeveiligd.";
     Text[ french ] = "Cette bibliothèque est en lecture seule.";
-    Text[ spanish ] = "This library is readonly.";
+    Text[ spanish ] = "Esta biblioteca es de sólo lectura.";
     Text[ finnish ] = "This library is readonly.";
     Text[ italian ] = "This library is readonly.";
     Text[ danish ] = "This library is readonly.";
@@ -2882,6 +2882,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
