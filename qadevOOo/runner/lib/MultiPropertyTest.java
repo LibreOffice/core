@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertyTest.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:42 $
+ *  last change:$Date: 2003-02-10 13:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@ import java.lang.reflect.Method;
 
 import util.ValueChanger;
 import util.ValueComparer;
+
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * MultiPropertyTest extends the functionality of MultiMethodTest to support
@@ -310,10 +314,19 @@ public class MultiPropertyTest extends MultiMethodTest {
                     if (!compare(resValue, oldValue)) {
                         log.println("Read only property '"
                                 + propName + "' has changed");
-                        log.println("old = " + toString(oldValue));
-                        log.println("new = " + toString(newValue));
-                        log.println("result = " + toString(resValue));
-                        log.println("expected = " + toString(oldValue));
+                        try {
+                            if (!util.utils.isVoid(oldValue)
+                                                && oldValue instanceof Any) {
+                                oldValue = AnyConverter.toObject
+                                        (new Type(((Any)oldValue).getClass()),oldValue);
+                            }
+                            log.println("old = " + toString(oldValue));
+                            log.println("new = " + toString(newValue));
+                            log.println("result = " + toString(resValue));
+                            log.println("expected = " + toString(oldValue));
+                        } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                        }
+
                         tRes.tested(propName, false);
                     } else {
                         log.println("Read only property '"
@@ -329,10 +342,18 @@ public class MultiPropertyTest extends MultiMethodTest {
                     if ((!compare(resValue, newValue)) || (compare(resValue, oldValue))) {
                         log.println("Value for '" + propName
                                 + "' hasn't changed as expected");
-                        log.println("old = " + toString(oldValue));
-                        log.println("new = " + toString(newValue));
-                        log.println("result = " + toString(resValue));
-                        log.println("expected = " + toString(newValue));
+                        try {
+                            if (!util.utils.isVoid(oldValue)
+                                            && oldValue instanceof Any) {
+                                oldValue = AnyConverter.toObject
+                                        (new Type(((Any)oldValue).getClass()),oldValue);
+                            }
+                            log.println("old = " + toString(oldValue));
+                            log.println("new = " + toString(newValue));
+                            log.println("result = " + toString(resValue));
+                            log.println("expected = " + toString(oldValue));
+                        } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                        }
                         if (resValue != null ) {
                             if ( (!compare(resValue, oldValue)) || (!resValue.equals(oldValue))) {
                                 log.println("But it has changed.");
@@ -347,10 +368,18 @@ public class MultiPropertyTest extends MultiMethodTest {
                         //tRes.tested(propName, false);
                     } else {
                         log.println("Property '" + propName + "' OK");
-                        log.println("old = " + toString(oldValue));
-                        log.println("new = " + toString(newValue));
-                        log.println("result = " + toString(resValue));
-                        log.println("expected = " + toString(newValue));
+                        try {
+                            if (!util.utils.isVoid(oldValue)
+                                                   && oldValue instanceof Any) {
+                                oldValue = AnyConverter.toObject
+                                        (new Type(((Any)oldValue).getClass()),oldValue);
+                            }
+                            log.println("old = " + toString(oldValue));
+                            log.println("new = " + toString(newValue));
+                            log.println("result = " + toString(resValue));
+                            log.println("expected = " + toString(oldValue));
+                        } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                        }
                         tRes.tested(propName, true);
                     }
                 } else {
