@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by Sascha Ballach (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.22 2001-02-01 17:38:58 sab Exp $
+	$Id: table.mod,v 1.23 2001-02-07 08:53:11 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -160,7 +160,7 @@
 <!ENTITY % table-header-rows "table:table-header-rows">
 <!ENTITY % table-column-groups "( (%table-columns;,(%table-header-columns;,%table-columns;?)?) | (%table-header-columns;,%table-columns;?) )">
 <!ENTITY % table-row-groups "( (%table-rows;,(%table-header-rows;,%table-rows;?)?) | (%table-header-rows;,%table-rows;?) )">
-<!ELEMENT table:table (table:table-source?, table:scenario?, table:shapes?, %table-column-groups;, %table-row-groups;)>
+<!ELEMENT table:table (table:table-source?, table:scenario?, office:forms?, table:shapes?, %table-column-groups;, %table-row-groups;)>
 <!ATTLIST table:table
 	table:name %string; #REQUIRED
 	table:style-name %styleName; #IMPLIED
