@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:06:57 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 11:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <sot/factory.hxx>
 #include <vcl/system.hxx>
 #include <svtools/menuoptions.hxx>
+#include <svtools/imagemgr.hxx>
 
 #pragma hdrstop
 
@@ -88,6 +89,7 @@
 #include "appdata.hxx"
 #include "picklist.hxx"
 #include "viewsh.hxx"
+#include "imgmgr.hxx"
 
 //=========================================================================
 
@@ -276,6 +278,9 @@ void SfxVirtualMenu::CreateFromSVMenu()
     SfxApplication *pSfxApp = SFX_APP();
     const int bOleServer = FALSE;
     const int bMac = FALSE;
+    SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
+    SfxModule* pModule = pViewFrame->GetObjectShell()->GetModule();
+    SvtMenuOptions aOptions;
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
@@ -364,6 +369,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                     if ( aCmd.Len() )
                     {
+                        pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
                         pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId,
                             *pSVMenu, *pBindings, this );
                         if ( pMnuCtrl )
@@ -383,6 +389,9 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     }
                     else
                     {
+                        if ( aOptions.IsMenuIconsEnabled() )
+                            pSVMenu->SetItemImage( nId, SFX_IMAGEMANAGER()->SeekImage( nId, pModule ) );
+
                         pMnuCtrl = SfxMenuControl::CreateControl(nId,
                             *pSVMenu, *pBindings);
 
