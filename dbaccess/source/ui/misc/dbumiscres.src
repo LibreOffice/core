@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.63 $
+*  $Revision: 1.64 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 16:09:27 $
+*  last change: $Author: rt $ $Date: 2004-09-09 09:47:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -264,7 +264,6 @@ String STR_BUTTON_TEXT_ALL
 Text [ de ] = "~Alle";
 Text [ en-US ] = "~All";
 
-Text [ x-comment ] = "; This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
 };
 
 String STR_UNDO_COLON
