@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:11:25 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1854,14 +1854,14 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ dutch ] = "Wachtwoord niet correct." ;
     MESSAGE [ spanish ] = "Contraseña no válida" ;
     MESSAGE [ english_us ] = "Invalid password." ;
-    MESSAGE[ chinese_simplified ] = "´íÎóµÄ¿ÚÁî¡£";
+    MESSAGE[ chinese_simplified ] = "ÃÜÂëÎŞĞ§¡£";
     MESSAGE[ russian ] = "Îøèáêà â ïàğîëå.";
     MESSAGE[ polish ] = "Nieprawid³owe has³o.";
     MESSAGE[ japanese ] = "Êß½Ü°ÄŞ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
     MESSAGE[ chinese_traditional ] = "±K½XµL®Ä¡C";
     MESSAGE[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÇáÍÉ.";
     MESSAGE[ dutch ] = "Wachtwoord niet correct.";
-    MESSAGE[ chinese_simplified ] = "´íÎóµÄ¿ÚÁî¡£";
+    MESSAGE[ chinese_simplified ] = "ÃÜÂëÎŞĞ§¡£";
     MESSAGE[ greek ] = "Åóöáëìİíïò êùäéêüò ğñüóâáóçò.";
     MESSAGE[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆĞ½º¿öµå";
     MESSAGE[ turkish ] = "Yanlış şifre.";
