@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 14:14:31 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,6 +888,8 @@ void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObje
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException )
 {
+    DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+        "SbaXDataBrowserController::elementInserted: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xNewColumn(*(Reference< XPropertySet > *)evt.Element.getValue());
     AddColumnListener(xNewColumn);
 }
@@ -895,6 +897,8 @@ void SbaXDataBrowserController::elementInserted(const ::com::sun::star::containe
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException )
 {
+    DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+        "SbaXDataBrowserController::elementRemoved: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xOldColumn(*(Reference< XPropertySet > *)evt.Element.getValue());
     RemoveColumnListener(xOldColumn);
 }
@@ -902,6 +906,8 @@ void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException )
 {
+    DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+        "SbaXDataBrowserController::elementReplaced: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xOldColumn(*(Reference< XPropertySet > *)evt.ReplacedElement.getValue());
     RemoveColumnListener(xOldColumn);
 
