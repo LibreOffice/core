@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:40:28 $
+ *  last change: $Author: svesik $ $Date: 2004-04-20 13:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,13 +322,13 @@ namespace svx
         if( bTransparent )
         {
             Graphic aMaskGraphic( rMtf.GetMonochromeMtf( COL_BLACK ) );
-            Bitmap  aMaskBmp( aMaskGraphic.GetBitmap( pSize ) );
+            Bitmap  aMaskBmp( aMaskGraphic.GetUnlimitedBitmap( pSize ) );
 
             aMaskBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-            aBmpEx = BitmapEx( aGraphic.GetBitmap( pSize ), aMaskBmp );
+            aBmpEx = BitmapEx( aGraphic.GetUnlimitedBitmap( pSize ), aMaskBmp );
         }
         else
-            aBmpEx = BitmapEx( aGraphic.GetBitmap( pSize ) );
+            aBmpEx = BitmapEx( aGraphic.GetUnlimitedBitmap( pSize ) );
 
         aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
         aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
@@ -639,21 +639,43 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             // For gif pictures there can also be a vector format used (bTranslucent)
             if ( !bVectorType && !bTranslucent )
             {
-                const Size      aSizePix( Application::GetDefaultDevice()->LogicToPixel( aSize, aMap ) );
-                long    nWidthPix = ( aSizePix.Width()>MAX_EXT_PIX || aSizePix.Height()>MAX_EXT_PIX ) ? MAX_EXT_PIX : 0;
-                long    nHeightPix = 0;
-
-                if( (nWidth != -1) && (nWidth < MAX_EXT_PIX) )
+                long nWidthPix = 0;
+                long nHeightPix = 0;
+                if ( nWidth > 0 && nHeight > 0 )
+                {
                     nWidthPix = nWidth;
-
-                if( (nHeight != -1) && (nHeight < MAX_EXT_PIX) )
                     nHeightPix = nHeight;
+                }
+                else
+                {
+                    const Size aSizePix( Application::GetDefaultDevice()->LogicToPixel( aSize, aMap ) );
+                    if (aSizePix.Width() > MAX_EXT_PIX || aSizePix.Height() > MAX_EXT_PIX)
+                    {
+                        if (aSizePix.Width() > MAX_EXT_PIX)
+                            nWidthPix = MAX_EXT_PIX;
+                        else
+                            nWidthPix = aSizePix.Width();
+                        if (aSizePix.Height() > MAX_EXT_PIX)
+                            nHeightPix = MAX_EXT_PIX;
+                        else
+                            nHeightPix = aSizePix.Height();
+
+                        double fWidthDif = aSizePix.Width() / nWidthPix;
+                        double fHeightDif = aSizePix.Height() / nHeightPix;
+
+                        if (fWidthDif > fHeightDif)
+                            nHeightPix = static_cast<long>(aSizePix.Height() / fWidthDif);
+                        else
+                            nWidthPix = static_cast<long>(aSizePix.Width() / fHeightDif);
+                    }
+                    else
+                    {
+                        nWidthPix = aSizePix.Width();
+                        nHeightPix = aSizePix.Height();
+                    }
+                }
 
                 SdrView*        pView;
-
-                if( (nWidth > 0) && (nWidth <= MAX_EXT_PIX)  )
-                    nWidthPix = nWidth;
-
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
                     pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
