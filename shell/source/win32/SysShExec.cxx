@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SysShExec.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-07 14:43:08 $
+ *  last change: $Author: tra $ $Date: 2001-11-01 16:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 
     SetLastError( 0 );
 
-    if ( !ShellExecuteExW( &sei ) )
+    sal_Bool bRet = ShellExecuteExW( &sei );
+
+    if ( !bRet && (nFlags & NO_SYSTEM_ERROR_MESSAGE) )
     {
         // ShellExecuteEx fails to set an error code
         // we return osl_File_E_INVAL
