@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_writer.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:23:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,7 +1039,7 @@ RegistryItem gid_Regitem_Ott_Contenttype
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".ott";
     Name = "Content Type";
-    Value = "application/vnd.oasis.opendocument.text";
+    Value = "application/vnd.oasis.opendocument.text-template";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_1
