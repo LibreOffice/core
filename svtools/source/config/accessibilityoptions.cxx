@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 08:57:15 $
+ *  last change: $Author: os $ $Date: 2002-08-28 12:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ private:
     sal_Bool        m_bAutomaticFontColor;
     sal_Bool        m_bSystemFont;
     sal_Int16       m_nHelpTipSeconds;
+    sal_Bool        m_bTextSelectionInReadonly;
 
     typedef sal_Bool SvtAccessibilityOptions_Impl:: *BoolPtr;
 
@@ -116,6 +117,7 @@ private:
                             , ALLOWANIMATEDTEXT
                             , AUTOMATICFONTCOLOR
                             , SYSTEMFONT
+                            , TEXTSELECTION
                         };
 
     static Sequence< OUString > GetPropertyNames();
@@ -144,6 +146,8 @@ public:
                     {return GetToken( &SvtAccessibilityOptions_Impl::m_bSystemFont );}
     sal_Int16   GetHelpTipSeconds() const
                     {return m_nHelpTipSeconds;}
+    sal_Bool    IsSelectionInReadonly() const
+                    {return m_bTextSelectionInReadonly;}
 
     void        SetIsForDrawings(sal_Bool bSet)
                     { SetToken( &SvtAccessibilityOptions_Impl::m_bForDrawings, bSet ); }
@@ -169,6 +173,8 @@ public:
                             SetModified();
                         }
                     }
+    void        SetSelectionInReadonly(sal_Bool bSet)
+                    {SetToken( &SvtAccessibilityOptions_Impl::m_bTextSelectionInReadonly, bSet);}
 };
 
 // initialization of static members --------------------------------------
@@ -193,6 +199,7 @@ Sequence< OUString > SvtAccessibilityOptions_Impl::GetPropertyNames()
         ,"IsAllowAnimatedText"      // ALLOWANIMATEDTEXT
         ,"IsAutomaticFontColor"     // AUTOMATICFONTCOLOR
         ,"IsSystemFont"             // SYSTEMFONT
+        ,"IsSelectionInReadonly"    // TEXTSELECTION
     };
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< OUString > aNames( nCount );
@@ -239,6 +246,7 @@ void SvtAccessibilityOptions_Impl::Load()
                         case ALLOWANIMATEDTEXT:     m_bAllowAnimatedText = bTemp;   break;
                         case AUTOMATICFONTCOLOR:    m_bAutomaticFontColor = bTemp;  break;
                         case SYSTEMFONT:            m_bSystemFont = bTemp;          break;
+                        case TEXTSELECTION:         m_bTextSelectionInReadonly = bTemp; break;
                         default:
                             DBG_ERRORFILE( "invalid index to load a user token" );
                     }
@@ -287,6 +295,7 @@ void SvtAccessibilityOptions_Impl::Commit()
             case ALLOWANIMATEDTEXT:     bTemp = m_bAllowAnimatedText;   break;
             case AUTOMATICFONTCOLOR:    bTemp = m_bAutomaticFontColor;  break;
             case SYSTEMFONT:            bTemp = m_bSystemFont;          break;
+            case TEXTSELECTION:         bTemp = m_bTextSelectionInReadonly; break;
             default:
                 DBG_ERRORFILE( "invalid index to save a user token" );
         }
@@ -408,6 +417,10 @@ sal_Int16 SvtAccessibilityOptions::GetHelpTipSeconds() const
 {
     return sm_pSingleImplConfig->GetHelpTipSeconds();
 }
+sal_Bool SvtAccessibilityOptions::IsSelectionInReadonly() const
+{
+    return sm_pSingleImplConfig->IsSelectionInReadonly();
+}
 
 // -----------------------------------------------------------------------
 
@@ -446,6 +459,10 @@ void SvtAccessibilityOptions::SetIsSystemFont(sal_Bool bSet)
 void SvtAccessibilityOptions::SetHelpTipSeconds(sal_Int16 nSet)
 {
     sm_pSingleImplConfig->SetHelpTipSeconds(nSet);
+}
+void SvtAccessibilityOptions::SetSelectionInReadonly(sal_Bool bSet)
+{
+    sm_pSingleImplConfig->SetSelectionInReadonly(bSet);
 }
 
 // -----------------------------------------------------------------------
