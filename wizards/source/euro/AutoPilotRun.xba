@@ -33,7 +33,6 @@ Dim i As Integer
 		InitializeConverter(oLocale, 2)
 		ToggleGoOnButton()
 		DialogModel.cmdGoOn.DefaultButton = True
-&apos;		YPos = DialogConvert.PosSize.Y + DialogConvert.PosSize.Height
 		DialogConvert.Execute
 	End If
 End Sub

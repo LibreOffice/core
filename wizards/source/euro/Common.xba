@@ -8,11 +8,11 @@ Public PasswordModel as Object
 
 Sub	RetrieveDocumentObjects()
 	CurMimeType = oDocument.DocumentInfo.MimeType
-&apos;	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
+	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 	    oSheets = oDocument.Sheets
 		oSheet = oDocument.Sheets.GetbyIndex(0)
-&apos;		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
-&apos;	End If
+		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
+	End If
     oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
     &apos; Retrieve the indices for the cellformatations
     oFormats = oDocument.NumberFormats
@@ -40,7 +40,7 @@ Function ConvertDocument()
 	GoOn = True
 &apos;	DocDisposed = True
 	InitializeProgressbar()
-&apos;	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
+	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 		bDocHasProtectedSheets = CheckSheetProtection(oSheets)
 		If bDocHasProtectedSheets Then
 			bDocHasProtectedSheets = UnprotectSheetsWithPassword(oSheets, bDoUnProtect)
@@ -61,18 +61,18 @@ Function ConvertDocument()
 			ReprotectSheets()
 			bRangeListDefined = False
 		End If
-&apos;	Else
-&apos;		oStatusline.SetValue(10)
-&apos;		ConvertTextFields()
-&apos;		oStatusline.SetValue(80)
-&apos;		ConvertWriterTables()
-&apos;	End If	
+	Else
+		oStatusline.SetValue(10)
+		ConvertTextFields()
+		oStatusline.SetValue(80)
+		ConvertWriterTables()
+	End If	
 	oStatusline.End
 	On Local Error Goto 0 
 End Function
 
 
-Sub SwitchNumberFormat(oObject as Object, oFormats as object, sNewSymbol as String)
+Sub SwitchNumberFormat(oObject as Object, oFormats as object)
 Dim nFormatLanguage as Integer
 Dim nFormatDecimals as Integer
 Dim nFormatLeading as Integer
@@ -84,19 +84,21 @@ Dim i as Integer
 Dim aNewStr as String
 Dim iNumberFormat as Long
 Dim AddToList as Boolean
+Dim sOldCurrSymbol as String
 	On Local Error Resume Next
 	iNumberFormat = oObject.NumberFormat
 	On Local Error GoTo NOKEY
 	aFormat() = oFormats.getByKey(iNumberFormat)
 	On Local Error GoTo 0
-	&apos; Numberformat mit dem neuen Symbol als Basis für generateFormat
-	aSimpleStr = &quot;0 [$&quot;+sNewSymbol &amp; aFormat.CurrencyExtension &amp; &quot;]&quot;
-	nSimpleKey = Numberformat(oFormats, aSimpleStr, oLocale)
-	If Err &lt;&gt; 0 Then
-		Msgbox &quot;Error Reading the Number Format&quot;
-		Resume CLERROR
+	sOldCurrSymbol = aFormat.CurrencySymbol
+	If sOldCurrSymbol = CurrValue(CurrIndex,5) Then
+		aSimpleStr = &quot;0 [$EUR]&quot;
+	Else
+		aSimpleStr = &quot;0 [$&quot; &amp; sEuroSign &amp; aFormat.CurrencyExtension &amp; &quot;]&quot;
 	End If
 
+	&apos; Numberformat mit dem neuen Symbol als Basis für generateFormat
+	nSimpleKey = Numberformat(oFormats, aSimpleStr, oLocale)
 	&apos; Typ und Währungssymbol des Numberformats heraussuchen
 	&apos; neues Währungsformat mit passenden Einstellungen setzen
 	nFormatDecimals = 2

@@ -48,7 +48,6 @@ Dim m as Integer
 Dim MaxIndex as Integer
 	Listbox = DialogModel.lstSelection
 	If Ubound(Listbox.SelectedItems()) &gt; -1 Then
-&apos;		ToggleWindow(False)
 		EnableStep1DialogControls(False, False, False)
 		oSelRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 
@@ -78,8 +77,8 @@ Dim MaxIndex as Integer
 				Wend
 			Next i
 		Else
-			a = -1
 			&apos; Hard Formatation is selected
+			a = -1
 			For n = 0 To Ubound(Listbox.SelectedItems())
 				m = Listbox.SelectedItems(n)
 				RangeName = Listbox.StringItemList(m)
@@ -103,7 +102,6 @@ Dim MaxIndex as Integer
 		End If
 		oDocument.CurrentController.Select(oSelRanges)
 		EnableStep1DialogControls(True, True, True)
-&apos;		ToggleWindow(True)
 	End If
 End Sub
 
@@ -136,7 +134,7 @@ Dim bDoEnableFrame as Boolean
 		.optDocRanges.Enabled = bDoEnableFrame
 		.optSelRange.Enabled = bDoEnableFrame
 	End With
-	&apos; The CheckBox has the Value &apos;True&apos; when the Controls in the Frame are disabled
+	&apos; The CheckBox has the Value &apos;1&apos; when the Controls in the Frame are disabled
 	If bButtonsEnabled Then
 		bCurrIsSelected = Ubound(DialogModel.lstCurrencies.SelectedItems()) &lt;&gt; -1
 		&apos; Enable GoOnButton only when Currency is selected
@@ -245,46 +243,16 @@ Dim OldCurrIndex as Integer
 Dim OldCurExtension(2) as String
 	oPreSelRange = AddSelectedRangeToSelRangesEnum()
 	bPreSelected = True
-
-&apos;	bPreSelected =  CheckIfRangeisCurrency(oRange)
-&apos;	If bPreSelected Then
-&apos;		OldCurrSymbolList() = CurrSymbolList()
-&apos;		OldCurExtension() = CurExtension()
-&apos;		OldCurrIndex = CurrIndex
-&apos;		For i = 0 To 11
-&apos;			CurrIndex = i
-&apos;			CurExtension(0) = LangIDValue(CurrIndex,0,2)
-&apos;			CurExtension(1) = LangIDValue(CurrIndex,1,2)
-&apos;			CurExtension(2) = LangIDValue(CurrIndex,2,2)
-&apos;			InitializeCurrencyValues(CurrIndex)
-&apos;			bPreSelected = CheckFormatType(oRange)
-&apos;			If bPreSelected Then
-&apos;				Exit For
-&apos;			End If
-&apos;		Next i
-&apos;		If Not bPreSelected Then
-&apos;			CurrIndex = OldCurrIndex
-&apos;			CurrSymbolList() = OldCurrSymbolList()
-&apos;			CurExtension() = OldCurExtension()
-&apos;		End If
-&apos;	End If
-
-&apos;	If CurrIndex &gt; -1 Then
-		If bPreSelected Then
-			DialogModel.optSelRange.State = 1
-			AddRangeToListbox(oPreSelRange)
-		Else
-			DialogModel.optCellTemplates.State  = 1
-			CreateStyleEnumeration()
-		End If
-&apos;	End If
+	If bPreSelected Then
+		DialogModel.optSelRange.State = 1
+		AddRangeToListbox(oPreSelRange)
+	Else
+		DialogModel.optCellTemplates.State  = 1
+		CreateStyleEnumeration()
+	End If
 	EnableStep1DialogControls(True, bPreSelected, True)
 &apos; Todo: auf Integer umstellen
-&apos;	If bPreselected Then
-		DialogModel.chkComplete.State = Not(Abs(bPreSelected)) &apos;0
-&apos;	Else
-&apos;		DialogModel.chkComplete.State = 1
-&apos;	End If
+	DialogModel.chkComplete.State = Not(Abs(bPreSelected))
 	DialogModel.optSelRange.Enabled = bPreSelected
 End Sub
 
@@ -304,7 +272,6 @@ Sub CheckRangeSelection(Optional oEvent)
 &apos;	oPreSelRange = AddSelectedRangeToSelRangesEnum()
 &apos;	bPreSelected = CheckFormatType(oRange)
  &apos;	If bPreSelected Then
-&apos;
 		EmptySelection()
 		AddRangeToListbox(oPreSelRange)
 &apos;	End If
