@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 17:55:25 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 09:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_ED( "ParaTabStops",       STYLE,  tab_stops,          MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not realy a string!
     // RES_PARATR_HYPHENZONE
     M_E( "ParaIsHyphenation",   FO,     hyphenate,          XML_TYPE_BOOL, 0 ),
-    M_E( "ParaHyphenationMaxLeadingChars", FO, hyphenation_remain_char_count, XML_TYPE_NUMBER, 0 ),
-    M_E( "ParaHyphenationMaxTrailingChars",FO, hyphenation_push_char_count, XML_TYPE_NUMBER, 0 ),
-    M_E( "ParaHyphenationMaxHyphens",   FO, hyphenation_ladder_count, XML_TYPE_NUMBER_NONE, 0 ),
+    M_E( "ParaHyphenationMaxLeadingChars", FO, hyphenation_remain_char_count, XML_TYPE_NUMBER16, 0 ),
+    M_E( "ParaHyphenationMaxTrailingChars",FO, hyphenation_push_char_count, XML_TYPE_NUMBER16, 0 ),
+    M_E( "ParaHyphenationMaxHyphens",   FO, hyphenation_ladder_count, XML_TYPE_NUMBER16_NONE, 0 ),
     // RES_PARATR_DROP
     M_E( "DropCapWholeWord",    STYLE,  length,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL, CTF_DROPCAPWHOLEWORD ),
     M_E( "DropCapCharStyleName",    STYLE,  style_name, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_DROPCAPCHARSTYLE ),
