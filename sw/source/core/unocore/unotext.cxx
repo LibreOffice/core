@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
+ *  last change: $Author: tl $ $Date: 2002-02-08 10:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
+#endif
+#ifndef _UNOPORT_HXX
+#include <unoport.hxx>
 #endif
 #ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
@@ -438,12 +441,18 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
             uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
             SwXTextRange* pRange = 0;
             SwXTextCursor* pCursor = 0;
+            SwXTextPortion* pPortion = 0;
+            SwXText* pText = 0;
             if(xRangeTunnel.is())
             {
                 pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                         SwXTextRange::getUnoTunnelId());
                 pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
                                         SwXTextCursor::getUnoTunnelId());
+                pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
+                                        SwXTextPortion::getUnoTunnelId());
+                pText = (SwXText*)xRangeTunnel->getSomething(
+                                        SwXText::getUnoTunnelId());
             }
 
 
@@ -465,16 +474,32 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
                 //case CURSOR_BODY:
             }
 
-            const SwNode* pSrcNode;
-            if(pCursor)
+            const SwNode* pSrcNode = 0;
+            if(pCursor && pCursor->GetCrsr())
             {
                 pSrcNode = pCursor->GetCrsr()->GetNode();
             }
-            else //dann pRange
+            else if (pRange && pRange->GetBookmark())
             {
                 SwBookmark* pBkm = pRange->GetBookmark();
                 pSrcNode = &pBkm->GetPos().nNode.GetNode();
             }
+            else if (pPortion && pPortion->GetCrsr())
+            {
+                pSrcNode = pPortion->GetCrsr()->GetNode();
+            }
+            else if (pText)
+            {
+                Reference<XTextCursor> xTextCursor = pText->createCursor();
+                xTextCursor->gotoEnd(sal_True);
+                Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY );
+                pCursor = (SwXTextCursor*)xCrsrTunnel->getSomething(
+                        SwXTextCursor::getUnoTunnelId() );
+                pSrcNode = pCursor->GetCrsr()->GetNode();
+            }
+            else
+                throw lang::IllegalArgumentException();
+
             const SwStartNode* pTmp = pSrcNode->FindSttNodeByType(eSearchNodeType);
 
             //SectionNodes ueberspringen
