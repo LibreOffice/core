@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlScroller.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:03:59 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public abstract class ControlScroller {
         int ScrollHeight = iCompHeight - 2;
         nlineincrement = 1;
         sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "imgBackground");
-        CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
+        oImgControl = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
                 new String[] { "Border", "Height", "PositionX", "PositionY", "Step", "Width" },
                 new Object[] { new Short("1"), new Integer(iCompHeight), ICompPosX, new Integer(iCompPosY), IStep, ICompWidth });
         oImgControl = CurUnoDialog.xDlgContainer.getControl("imgBackground" + sIncSuffix);
@@ -162,9 +162,7 @@ public abstract class ControlScroller {
     }
 
     public void setComponentMouseTransparent(){
-        if (oTitlePeerConfig == null)
-            oTitlePeerConfig = new PeerConfig(CurUnoDialog.xWindow);
-        oTitlePeerConfig.setPeerProperties(oImgControl, new String[] { "MouseTransparent" }, new Boolean[] { Boolean.TRUE });
+        CurUnoDialog.getPeerConfiguration().setPeerProperties(oImgControl, new String[] { "MouseTransparent" }, new Boolean[] { Boolean.TRUE });
     }
 
     protected void setScrollBarOrientationHorizontal() {
