@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 12:21:49 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1474,8 +1474,19 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         WaitObject aWaitCursor(getBrowserView());
         if(!pFirstData->xObject.is())
         {
+            UnoDataBrowserView* pView = static_cast<UnoDataBrowserView*>(getView());
+            if (pView)
+            {
+                String sConnecting(ModuleRes(STR_CONNECTING_DATASOURCE));
+                sConnecting.SearchAndReplaceAscii("$name$", pString->GetText());
+                pView->showStatus(sConnecting);
+            }
+
             xConnection = connect(pString->GetText());
             pFirstData->xObject = xConnection;
+
+            if (pView)
+                pView->hideStatus();
         }
         if(xConnection.is())
         {
