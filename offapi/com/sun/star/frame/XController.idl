@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XController.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@ interface XModel;
 
 // DocMerge from xml: interface com::sun::star::frame::XController
 /** With this interface, components viewed in a <type>Frame</type> can serve
-    events (by supplying dispatches).@see       interface XModel
-        @see        interface XFrame
-        @see        interface com::sun::star::awt::XWindow
+    events (by supplying dispatches).@see XModel
+        @see XFrame
+        @see com::sun::star::awt::XWindow
  */
 [ uik(E2280115-33D6-11D1-AABE00A0-249D5590), ident( "XController", 1.0 ) ]
 interface XController: com::sun::star::lang::XComponent
@@ -150,6 +150,9 @@ interface XController: com::sun::star::lang::XComponent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:14  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:56  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

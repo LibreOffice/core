@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 10:04:31 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com { module sun { module star { module document {
 /** describes properties of a document
 
     <p>This service may be represented by a <code>sequence&amp;lt;PropertyValue&amp;gt;</code>.
-    </p>@see struct com::sun::star::beans::PropertyValue
+    </p>@see com::sun::star::beans::PropertyValue
  */
 service MediaDescriptor
 {

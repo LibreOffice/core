@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTableRow.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ service TextTableRow
 
     // DocMerge from xml: property com::sun::star::text::TextTableRow::VertOrient
     /** the vertical orientation of the text inside of the table cells in
-        this row.@see constants VertOrientation
+        this row.@see VertOrientation
      */
     [property] short VertOrient;
 
@@ -133,7 +133,7 @@ service TextTableRow
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextTableRow::BackGraphicLocation
-    /** determines the position of the background graphic.@see enum GraphicLocation
+    /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
@@ -168,6 +168,9 @@ service TextTableRow
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:44  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:44:27  mi
     moved from api
 

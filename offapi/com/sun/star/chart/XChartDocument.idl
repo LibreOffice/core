@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChartDocument.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ interface XChartDocument: com::sun::star::frame::XModel
     /** @returns
                 the shape of the main title of the chart document.
 
-                @see service ChartTitle
+                @see ChartTitle
      */
     [const] com::sun::star::drawing::XShape getTitle();
 
@@ -111,7 +111,7 @@ interface XChartDocument: com::sun::star::frame::XModel
     /** @returns
                 the shape of the subtitle of the chart document.
 
-                @see service ChartTitle
+                @see ChartTitle
      */
     [const] com::sun::star::drawing::XShape getSubTitle();
 
@@ -121,7 +121,7 @@ interface XChartDocument: com::sun::star::frame::XModel
     /** @returns
                 the shape of the legend of the chart document.
 
-                @see service ChartLegend
+                @see ChartLegend
      */
     [const] com::sun::star::drawing::XShape getLegend();
 
@@ -131,7 +131,7 @@ interface XChartDocument: com::sun::star::frame::XModel
     /** @returns
                 the properties of the background area of the chart document.
 
-                @see service ChartArea
+                @see ChartArea
      */
     [const] com::sun::star::beans::XPropertySet getArea();
 
@@ -141,7 +141,7 @@ interface XChartDocument: com::sun::star::frame::XModel
     /** @returns
                 the diagram of the chart document.
 
-                @see service Diagram
+                @see Diagram
      */
     [const] com::sun::star::chart::XDiagram getDiagram();
 
@@ -167,14 +167,14 @@ interface XChartDocument: com::sun::star::frame::XModel
     /** @returns
                 the data source of the chart.
 
-                @see service ChartData
+                @see ChartData
      */
     [const] com::sun::star::chart::XChartData getData();
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::chart::XChartDocument::attachData
-    /** attaches an external data source to the chart.@see service ChartData
+    /** attaches an external data source to the chart.@see ChartData
      */
     void attachData( [in] com::sun::star::chart::XChartData xData );
 
@@ -187,6 +187,9 @@ interface XChartDocument: com::sun::star::frame::XModel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:03  hjs
     initial import
 

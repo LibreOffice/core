@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextRange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 16:52:37 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
     data, all formatting attributes and contents bound to this range have
     to be available from implementations of this service.
 
-    </p>@see service Text
+    </p>@see Text
  */
 service TextRange
 {
@@ -139,6 +139,9 @@ service TextRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/20 16:52:37  cl
+    #79272# made some interfaces optional
+
     Revision 1.3  2000/11/08 12:44:27  mi
     moved from api
 

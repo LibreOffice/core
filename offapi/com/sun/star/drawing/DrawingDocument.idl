@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocument.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ service DrawingDocument
                 The <type>Shapes</type> created by this factory may not work correctly
                 until they are added to a page.
 
-                @see service GenericDrawPage@see service GenericDrawPage
+                @see GenericDrawPage
      */
     interface com::sun::star::lang::XMultiServiceFactory;
 
@@ -183,6 +183,9 @@ service DrawingDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:41  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:12  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextCursor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 
 // DocMerge from xml: service com::sun::star::text::TextCursor
 /** A <type>TextCursor</type> is a <type>TextRange</type> which can be moved
-    within a <type scope="com::sun::star::drawing">Text</type> object.@see service TextRange
+    within a <type scope="com::sun::star::drawing">Text</type> object.@see TextRange
  */
 service TextCursor
 {
@@ -155,6 +155,9 @@ service TextCursor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:03  hjs
     initial import
 

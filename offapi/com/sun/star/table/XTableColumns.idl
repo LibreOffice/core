@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTableColumns.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:19 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::table::XTableColumns
-/** represents a collection of columns in a table.@see service TableColumns
+/** represents a collection of columns in a table.@see TableColumns
  */
 [ uik(E2281105-33D6-11D1-AABE00A0-249D5590), ident( "XTableColumns", 1.0 ) ]
 interface XTableColumns: com::sun::star::container::XIndexAccess
@@ -103,6 +103,9 @@ interface XTableColumns: com::sun::star::container::XIndexAccess
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:19  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:56  hjs
     initial import
 

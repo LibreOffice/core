@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDesktop.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:37 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
     that a desktop can handle framesets; the frames may be top frames
     only.
 
-    </p>@see service Desktop
+    </p>@see Desktop
  */
 [ uik(E2280119-33D6-11D1-AABE00A0-249D5590), ident( "XDesktop", 1.0 ) ]
 interface XDesktop: com::sun::star::uno::XInterface
@@ -114,8 +114,8 @@ interface XDesktop: com::sun::star::uno::XInterface
         TerminationVetoException was thrown, a notifyTermination-event is
         broadcast and <TRUE/> will be returned; otherwise an
         abortTermination-event is broadcast and <FALSE/> will be returned.
-        </p>@see exception com::sun::star::frame::TerminationVetoException
-                @see interface XTerminateListener
+        </p>@see com::sun::star::frame::TerminationVetoException
+                @see XTerminateListener
      */
     boolean terminate();
 
@@ -155,7 +155,7 @@ interface XDesktop: com::sun::star::uno::XInterface
                 method is a collection of all components of the desktop which are open
                 within a frame of the desktop.
 
-                @see service Components
+                @see Components
      */
     [const] com::sun::star::container::XEnumerationAccess getComponents();
 
@@ -189,6 +189,9 @@ interface XDesktop: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:37  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartGrid.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 
     <p>The distance between the grid lines depends on the distance of the help
-    or main tick marks, which may be set in <type>ChartAxis</type>.</p>@see service ChartAxis
+    or main tick marks, which may be set in <type>ChartAxis</type>.</p>@see ChartAxis
  */
 service ChartGrid
 {
@@ -101,6 +101,9 @@ service ChartGrid
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 

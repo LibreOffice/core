@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X3DDisplay.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ interface X3DDisplay: com::sun::star::uno::XInterface
                 <p>In 3 dimension diagrams this specifies the side wall and the background wall;
                 in 2 dimension diagrams this specifies only the background of the diagram.
 
-                @see service ChartArea
+                @see ChartArea
      */
     [const] com::sun::star::beans::XPropertySet getWall();
 
@@ -101,7 +101,7 @@ interface X3DDisplay: com::sun::star::uno::XInterface
     /** @returns
                 the properties of the floor in a 3 dimensional diagram.
 
-                @see service ChartArea
+                @see ChartArea
      */
     [const] com::sun::star::beans::XPropertySet getFloor();
 
@@ -114,6 +114,9 @@ interface X3DDisplay: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:01  hjs
     initial import
 

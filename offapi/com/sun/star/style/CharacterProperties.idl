@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:42 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::style::CharacterProperties
-/** This is a set of properties to describe the style of characters.@see service ParagraphProperties
+/** This is a set of properties to describe the style of characters.@see ParagraphProperties
  */
 service CharacterProperties
 {
@@ -211,7 +211,7 @@ service CharacterProperties
 
         @optional
 
-        @see constants CaseMap
+        @see CaseMap
      */
     [optional, property] short CharCaseMap;
 
@@ -333,6 +333,9 @@ service CharacterProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:42  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:44:12  mi
     moved from api
 

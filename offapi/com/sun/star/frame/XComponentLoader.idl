@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentLoader.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-12 12:27:50 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,9 @@ module com {  module sun {  module star {  module frame {
 
 // DocMerge from xml: interface com::sun::star::frame::XComponentLoader
 /** This is a simple interface to load components by an URL into a
-    frame environment.@see service Desktop
-        @see service Frame
-        @see interface XFrame
+    frame environment.@see Desktop
+        @see Frame
+        @see XFrame
  */
 [ uik(E2280106-33D6-11D1-AABE00A0-249D5590), ident( "XComponentLoader", 1.0 ) ]
 interface XComponentLoader: com::sun::star::uno::XInterface
@@ -141,6 +141,9 @@ interface XComponentLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/12 12:27:50  mi
+    documentation for arguments added
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 

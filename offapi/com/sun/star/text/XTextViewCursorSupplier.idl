@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextViewCursorSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
     <p>This cursor is the same instance that is available in the user
     interface.
 
-    </p>@see service TextDocumentView
+    </p>@see TextDocumentView
  */
 [ uik(E2281204-33D6-11D1-AABE00A0-249D5590), ident( "XTextViewCursorSupplier", 1.0 ) ]
 interface XTextViewCursorSupplier: com::sun::star::uno::XInterface
@@ -106,6 +106,9 @@ interface XTextViewCursorSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:05  hjs
     initial import
 

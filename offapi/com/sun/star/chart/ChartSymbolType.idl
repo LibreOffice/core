@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartSymbolType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-20 14:41:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ constants ChartSymbolType
         The bitmap given by the URL set in the property <type>SymbolBitmapURL</type>
         is copied so that the graphic is embedded.
 
-        @see service ChartDataPointProperties
+        @see ChartDataPointProperties
      */
     const long BITMAPURL = -1;
 
@@ -164,6 +164,9 @@ constants ChartSymbolType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/20 14:41:52  bm
+    const value -1 was missing. It is now set to bitmap corresponding to the core value
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

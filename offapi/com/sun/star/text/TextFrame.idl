@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFrame.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:49 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 /** specifies a rectangular shape which contains a <type scope="com::sun::star::drawing">Text</type> object
     and is attached to a piece of surrounding <type scope="com::sun::star::drawing">Text</type>.
 
-    @see service Text
+    @see Text
 
     @example StarBasic
 
@@ -236,7 +236,7 @@ service TextFrame
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextFrame::BackGraphicLocation
-    /** determines the position of the background graphic.@see enum GraphicLocation
+    /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
@@ -250,6 +250,9 @@ service TextFrame
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 16:03:49  mi
+    documentations syntax errors fixed
+
     Revision 1.4  2000/12/19 14:59:04  mi
     documentation sytax errors fixed
 

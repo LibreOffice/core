@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpreadsheet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:47 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ interface XSpreadsheet: XSheetCellRange
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sheet::XSpreadsheet::createCursor
-    /** creates a cell cursor.@see service com::sun::star::sheet::Spreadsheet
+    /** creates a cell cursor.@see com::sun::star::sheet::Spreadsheet
      */
     XSheetCellCursor createCursor();
 
@@ -88,7 +88,7 @@ interface XSpreadsheet: XSheetCellRange
 
     // DocMerge from xml: method com::sun::star::sheet::XSpreadsheet::createCursorByRange
     /** creates a cell cursor to travel in
-        the given range context.@see service com::sun::star::sheet::Spreadsheet
+        the given range context.@see com::sun::star::sheet::Spreadsheet
      */
     XSheetCellCursor createCursorByRange( [in] XSheetCellRange aRange );
 
@@ -101,6 +101,9 @@ interface XSpreadsheet: XSheetCellRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:47  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:58  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

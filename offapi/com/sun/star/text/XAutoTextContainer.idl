@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAutoTextContainer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
     is used.  For automatic text expansion, the name of an actual group is
     set to search first in this group.
 
-    </p>@see service AutoTextContainer
+    </p>@see AutoTextContainer
  */
 [ uik(E2281217-33D6-11D1-AABE00A0-249D5590), ident( "XAutoTextContainer", 1.0 ) ]
 interface XAutoTextContainer: com::sun::star::container::XNameAccess
@@ -141,6 +141,9 @@ interface XAutoTextContainer: com::sun::star::container::XNameAccess
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTwoAxisYSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ service ChartTwoAxisYSupplier
 
     // DocMerge from xml: property com::sun::star::chart::ChartTwoAxisYSupplier::HasSecondaryYAxis
     /** determines if the secondary y-axis is shown or
-        hidden.@see service ChartAxis
+        hidden.@see ChartAxis
      */
     [property] boolean HasSecondaryYAxis;
 
@@ -113,6 +113,9 @@ service ChartTwoAxisYSupplier
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:02  hjs
     initial import
 

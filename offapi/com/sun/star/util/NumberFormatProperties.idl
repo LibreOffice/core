@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::util::NumberFormatProperties
-/** properties specifying the behavior of a <type>NumberFormatter</type>.@see service NumberFormatter.
+/** properties specifying the behavior of a <type>NumberFormatter</type>.@see NumberFormatter.
  */
 service NumberFormatProperties
 {
@@ -94,7 +94,7 @@ service NumberFormatProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::util::NumberFormatProperties::Type
-    /** contains the type of the number format.@see constants NumberFormat
+    /** contains the type of the number format.@see NumberFormat
      */
     [readonly, property] short Type;
 
@@ -115,6 +115,9 @@ service NumberFormatProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:19  hjs
     initial import
 

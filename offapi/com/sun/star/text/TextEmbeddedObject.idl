@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextEmbeddedObject.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ service TextEmbeddedObject
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::AnchorType
-    /** determines the type of the anchor of the object.@see enum TextContentAnchorType
+    /** determines the type of the anchor of the object.@see TextContentAnchorType
      */
     [property] short AnchorType;
 
@@ -199,7 +199,7 @@ service TextEmbeddedObject
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BackGraphicLocation
-    /** determines the position of the background graphic.@see enum GraphicLocation
+    /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
@@ -279,14 +279,14 @@ service TextEmbeddedObject
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::SizeType
     /** determines the interpretation of the height and relative
-        height properties.@see constants SizeType
+        height properties.@see SizeType
      */
     [property] short SizeType;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HoriOrient
-    /** determines the horizontal orientation of the object.@see constants HoriOrientation
+    /** determines the horizontal orientation of the object.@see HoriOrientation
      */
     [property] short HoriOrient;
 
@@ -305,14 +305,14 @@ service TextEmbeddedObject
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HoriOrientRelation
     /** determines the environment of the object to which the orientation
-        is related.@see constants RelOrientation
+        is related.@see RelOrientation
      */
     [property] short HoriOrientRelation;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::VertOrient
-    /** determines the vertical orientation of the object.@see constants VertOrientation
+    /** determines the vertical orientation of the object.@see VertOrientation
      */
     [property] short VertOrient;
 
@@ -329,7 +329,7 @@ service TextEmbeddedObject
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::VertOrientRelation
-    /** determines the environment of the object to which the orientation is related.@see constants RelOrientation
+    /** determines the environment of the object to which the orientation is related.@see RelOrientation
      */
     [property] short VertOrientRelation;
 
@@ -385,7 +385,7 @@ service TextEmbeddedObject
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ShadowFormat
-    /** contains the type of the shadow of the object.@see struct ShadowFormat
+    /** contains the type of the shadow of the object.@see ShadowFormat
      */
     [property] com::sun::star::table::ShadowFormat ShadowFormat;
 
@@ -422,7 +422,7 @@ service TextEmbeddedObject
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::Surround
-    /** determines the type of the surrounding text.@see enum WrapTextMode
+    /** determines the type of the surrounding text.@see WrapTextMode
      */
     [property] short Surround;
 

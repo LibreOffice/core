@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleText.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ interface XSimpleText: com::sun::star::text::XTextRange
                 a new instance of a <type>TextCursor</type> service which can
                 be used to travel in the given text context.
 
-                @see service com::sun::star::text::TextCursor
+                @see com::sun::star::text::TextCursor
      */
     com::sun::star::text::XTextCursor createTextCursor();
 
@@ -121,7 +121,7 @@ interface XSimpleText: com::sun::star::text::XTextRange
                 specifies the start position for the new
                 <type>TextCursor</type>.
 
-                @see service com::sun::star::text::TextCursor
+                @see com::sun::star::text::TextCursor
      */
     com::sun::star::text::XTextCursor createTextCursorByRange( [in] com::sun::star::text::XTextRange aTextPosition );
 
@@ -168,7 +168,7 @@ interface XSimpleText: com::sun::star::text::XTextRange
 
     // DocMerge from xml: method com::sun::star::text::XSimpleText::insertControlCharacter
     /** inserts a control character (like a paragraph break or a hard
-        space) into the text.@see constants com::sun::star::text::ControlCharacter
+        space) into the text.@see com::sun::star::text::ControlCharacter
      */
     void insertControlCharacter( [in] com::sun::star::text::XTextRange xRange,
              [in] short nControlCharacter,
@@ -184,6 +184,9 @@ interface XSimpleText: com::sun::star::text::XTextRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:25:02  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ service ContentProvider
         shall be deferred for some reason until the first method gets called
         on it ( i.e. performance ).
 
-        @see service <type>ContentProviderProxy</type>
+        @see <type>ContentProviderProxy</type>
      */
     // [optional]
     interface com::sun::star::ucb::XContentProviderSupplier;

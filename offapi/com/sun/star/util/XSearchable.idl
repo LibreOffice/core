@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSearchable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:46 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,28 +130,28 @@ interface XSearchable: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::util::XSearchable::createSearchDescriptor
     /** creates a <type>SearchDescriptor</type> which contains properties that
-        specify a search in this container.@see service SearchDescriptor
+        specify a search in this container.@see SearchDescriptor
      */
     com::sun::star::util::XSearchDescriptor createSearchDescriptor();
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::util::XSearchable::findAll
-    /** searches the contained texts for all occurrences of whatever is specified.@see service SearchDescriptor
+    /** searches the contained texts for all occurrences of whatever is specified.@see SearchDescriptor
      */
     com::sun::star::container::XIndexAccess findAll( [in] com::sun::star::util::XSearchDescriptor xDesc );
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::util::XSearchable::findFirst
-    /** searches the contained texts for the next occurrence of whatever is specified.@see service SearchDescriptor
+    /** searches the contained texts for the next occurrence of whatever is specified.@see SearchDescriptor
      */
     com::sun::star::uno::XInterface findFirst( [in] com::sun::star::util::XSearchDescriptor xDesc );
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::util::XSearchable::findNext
-    /** searches the contained texts for the next occurrence of whatever is specified.@see service SearchDescriptor
+    /** searches the contained texts for the next occurrence of whatever is specified.@see SearchDescriptor
      */
     com::sun::star::uno::XInterface findNext( [in] com::sun::star::uno::XInterface xStartAt,
              [in] com::sun::star::util::XSearchDescriptor xDesc );
@@ -165,6 +165,9 @@ interface XSearchable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:46  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:45:17  mi
     moved from api
 

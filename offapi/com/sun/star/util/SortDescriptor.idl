@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:46 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 // DocMerge from xml: service com::sun::star::util::SortDescriptor
 /** specifies the properties which can be used to describe
-    a sort order applied to an XSortable.@see interface XSortable
+    a sort order applied to an XSortable.@see XSortable
  */
 service SortDescriptor
 {
@@ -104,6 +104,9 @@ service SortDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:46  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:45:17  mi
     moved from api
 

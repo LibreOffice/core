@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrawPagesSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
     <type>DrawPage</type> interface <type>XDrawPageSupplier</type> is
     supported.
 
-    </p>@see interface XDrawPageSupplier
+    </p>@see XDrawPageSupplier
  */
 [ uik(E2281319-33D6-11D1-AABE00A0-249D5590), ident( "XDrawPagesSupplier", 1.0 ) ]
 interface XDrawPagesSupplier: com::sun::star::uno::XInterface
@@ -108,6 +108,9 @@ interface XDrawPagesSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:15  hjs
     initial import
 

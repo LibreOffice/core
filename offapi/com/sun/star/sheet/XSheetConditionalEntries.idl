@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetConditionalEntries.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:47 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::sheet::XSheetConditionalEntries
-/** the conditions of a conditional format are managed.@see service com::sun::star::sheet::TableConditionalFormat
+/** the conditions of a conditional format are managed.@see com::sun::star::sheet::TableConditionalFormat
  */
 [ uik(E2281525-33D6-11D1-AABE00A0-249D5590), ident( "XSheetConditionalEntries", 1.0 ) ]
 interface XSheetConditionalEntries: com::sun::star::container::XIndexAccess
@@ -85,7 +85,7 @@ interface XSheetConditionalEntries: com::sun::star::container::XIndexAccess
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sheet::XSheetConditionalEntries::addNew
-    /** adds a conditional entry to the format.@see service com::sun::star::sheet::TableConditionalFormat
+    /** adds a conditional entry to the format.@see com::sun::star::sheet::TableConditionalFormat
      */
     void addNew( [in] sequence<com::sun::star::beans::PropertyValue> aConditionalEntry );
 
@@ -112,6 +112,9 @@ interface XSheetConditionalEntries: com::sun::star::container::XIndexAccess
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:47  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:58  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XColumnRowRange.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:19 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 // DocMerge from xml: interface com::sun::star::table::XColumnRowRange
 /** enables accessing the columns and rows of
-    a cell range.@see service com::sun::star::table::CellRange
+    a cell range.@see com::sun::star::table::CellRange
  */
 [ uik(E2281107-33D6-11D1-AABE00A0-249D5590), ident( "XColumnRowRange", 1.0 ) ]
 interface XColumnRowRange: com::sun::star::uno::XInterface
@@ -112,6 +112,9 @@ interface XColumnRowRange: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:19  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:25:01  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

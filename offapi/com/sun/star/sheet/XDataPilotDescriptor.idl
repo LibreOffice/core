@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataPilotDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::sheet::XDataPilotDescriptor
-/** represents a description of a data pilot table.@see service com::sun::star::sheet::DataPilotDescriptor
-        @see service com::sun::star::sheet::DataPilotTable
+/** represents a description of a data pilot table.@see com::sun::star::sheet::DataPilotDescriptor
+        @see com::sun::star::sheet::DataPilotTable
  */
 [ uik(E2281538-33D6-11D1-AABE00A0-249D5590), ident( "XDataPilotDescriptor", 1.0 ) ]
 interface XDataPilotDescriptor: com::sun::star::container::XNamed
@@ -190,6 +190,9 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:46  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:58  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

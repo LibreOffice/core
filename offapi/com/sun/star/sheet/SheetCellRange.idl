@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ interface XArrayFormulaRange;
 
 // DocMerge from xml: service com::sun::star::sheet::SheetCellRange
 /** an extenion of the CellRange service for use
-    in spreadsheet documents.@see service com::sun::star::table::CellRange
+    in spreadsheet documents.@see com::sun::star::table::CellRange
  */
 service SheetCellRange
 {
@@ -158,6 +158,9 @@ service SheetCellRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:46  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:58  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

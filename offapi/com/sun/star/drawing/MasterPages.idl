@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPages.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 // DocMerge from xml: service com::sun::star::drawing::MasterPages
 /** provides access to a collection of <type>MasterPage</type>s
-    and makes it possible for them to be manipulated.@see service DrawingDocument
+    and makes it possible for them to be manipulated.@see DrawingDocument
  */
 service MasterPages
 {
@@ -94,6 +94,9 @@ service MasterPages
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:13  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndexFormat.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ service DocumentIndexFormat
 
     //-------------------------------------------------------------------------
     /** return an object that provides the service "com.sun.star.text.DocumentIndexLevelFormat"
-     @see service com.sun.star.text.DocumentIndexLevelFormat
+     @see com.sun.star.text.DocumentIndexLevelFormat
      */
     [property] sequence<string> LevelFormat;
 };

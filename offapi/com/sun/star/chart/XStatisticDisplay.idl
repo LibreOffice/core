@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStatisticDisplay.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ interface XStatisticDisplay: com::sun::star::uno::XInterface
                 the properties of the up bars of a stock chart
                 which has <member>UpDown</member> set to <TRUE/>.
 
-                @see service ChartArea
+                @see ChartArea
      */
     [const] com::sun::star::beans::XPropertySet getUpBar();
 
@@ -106,7 +106,7 @@ interface XStatisticDisplay: com::sun::star::uno::XInterface
                 the properties of the down bars of a stock chart
                 which has <member>UpDown</member> set to <TRUE/>.
 
-                @see service ChartArea
+                @see ChartArea
      */
     [const] com::sun::star::beans::XPropertySet getDownBar();
 
@@ -116,7 +116,7 @@ interface XStatisticDisplay: com::sun::star::uno::XInterface
     /** @returns
                 the properties of MinMax lines of a stock chart.
 
-                @see service ChartLine
+                @see ChartLine
      */
     [const] com::sun::star::beans::XPropertySet getMinMaxLine();
 
@@ -129,6 +129,9 @@ interface XStatisticDisplay: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:03  hjs
     initial import
 

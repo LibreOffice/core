@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPagePrintable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ interface XPagePrintable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPagePrintable::printPages
-    /** prints the pages according to the <type scope="com::sun::star::view">PrintSettings</type>.@see service com::sun::star::view::PrintOptions
+    /** prints the pages according to the <type scope="com::sun::star::view">PrintSettings</type>.@see com::sun::star::view::PrintOptions
      */
     void printPages( [in] sequence<com::sun::star::beans::PropertyValue> xOptions )
             raises( com::sun::star::lang::IllegalArgumentException );
@@ -131,6 +131,9 @@ interface XPagePrintable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:25:02  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

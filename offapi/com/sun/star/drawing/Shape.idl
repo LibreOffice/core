@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:29 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,10 @@
 
 // DocMerge from xml: service com::sun::star::drawing::Shape
 /** This abstract service specifies the general characteristics of all
-    <type>Shape</type>s.@see interface XShape
-        @see interface com::sun::star::lang::XComponent
-        @see interface com::sun::star::text::XText
-        @see service ShapeDescriptor
+    <type>Shape</type>s.@see XShape
+        @see com::sun::star::lang::XComponent
+        @see com::sun::star::text::XText
+        @see ShapeDescriptor
  */
 service Shape
 {
@@ -127,6 +127,9 @@ service Shape
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 16:03:29  mi
+    documentations syntax errors fixed
+
     Revision 1.4  2000/11/23 19:11:28  cl
     #80679# added ZOrder property for shapes
 

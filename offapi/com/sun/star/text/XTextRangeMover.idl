@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextRangeMover.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
     <p>The movement is specified by the number of paragraphs within the order
     of paragraphs.
 
-    </p>@see service Text
+    </p>@see Text
  */
 [ uik(E2281236-33D6-11D1-AABE00A0-249D5590), ident( "XTextRangeMover", 1.0 ) ]
 interface XTextRangeMover: com::sun::star::uno::XInterface
@@ -108,6 +108,9 @@ interface XTextRangeMover: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:05  hjs
     initial import
 

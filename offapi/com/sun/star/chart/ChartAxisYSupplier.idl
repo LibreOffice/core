@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxisYSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ service ChartAxisYSupplier
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::chart::ChartAxisYSupplier::HasYAxis
-    /** determines if the y-axis is shown or hidden.@see service ChartAxis
+    /** determines if the y-axis is shown or hidden.@see ChartAxis
      */
     [property] boolean HasYAxis;
 
@@ -99,7 +99,7 @@ service ChartAxisYSupplier
 
     // DocMerge from xml: property com::sun::star::chart::ChartAxisYSupplier::HasYAxisGrid
     /** determines if the major grid of the y-axis is
-        shown or hidden.@see service ChartGrid
+        shown or hidden.@see ChartGrid
      */
     [property] boolean HasYAxisGrid;
 
@@ -107,7 +107,7 @@ service ChartAxisYSupplier
 
     // DocMerge from xml: property com::sun::star::chart::ChartAxisYSupplier::HasYAxisHelpGrid
     /** determines if the minor grid of the y-axis is
-        shown or hidden.@see service ChartGrid
+        shown or hidden.@see ChartGrid
      */
     [property] boolean HasYAxisHelpGrid;
 
@@ -115,7 +115,7 @@ service ChartAxisYSupplier
 
     // DocMerge from xml: property com::sun::star::chart::ChartAxisYSupplier::HasYAxisTitle
     /** determines if the title of the y-axis is shown
-        or hidden.@see service ChartTitle
+        or hidden.@see ChartTitle
      */
     [property] boolean HasYAxisTitle;
 
@@ -128,6 +128,9 @@ service ChartAxisYSupplier
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:01  hjs
     initial import
 
