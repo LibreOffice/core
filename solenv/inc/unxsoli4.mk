@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-22 15:07:52 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:58:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,8 +115,9 @@ THREADLIB=
 .IF "$(PURIFY)"!=""
 LINK=/usr/local/purify-4.2-solaris2/purify CC
 .ELSE
-LINK=CC
+LINK=$(CXX)
 .ENDIF
+LINKC=$(CC)
 
 # link against set of baseline libraries
 .IF "$(SYSBASE)"!=""
@@ -130,6 +131,7 @@ LD_OPTIONS+:=-L$(SYSBASE)$/usr/lib
 # -norunpath prevents the compiler from recording his own libs in the runpath
 LINKFLAGSRUNPATH*=-R\''$$ORIGIN'\'
 LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp $(LINKFLAGSRUNPATH) -norunpath -library=no%Cstd
+LINKCFLAGS=-w -mt -z combreloc $(LINKFLAGSRUNPATH) -norunpath
 
 # -z text force fatal error if non PIC code is linked into shared library. Such code
 #    would be expensive on startup
@@ -158,6 +160,8 @@ APPLINKSTATIC=$(STATIC)
 APPLINKSHARED=$(DIRECT)
 APP_LINKTYPE=
 
+STDLIBCPP=-lCrun
+
 # reihenfolge der libs NICHT egal!
 STDOBJGUI=
 .IF "DBG_UTIL" != ""
@@ -172,10 +176,10 @@ STDLIBGUIST=$(DYNAMIC) -lm
 STDLIBCUIST=$(DYNAMIC) -lm
 STDLIBGUIMT=$(DYNAMIC) -lpthread -lm
 STDLIBCUIMT=$(DYNAMIC) -lpthread -lm
-STDSHLGUIST=$(DYNAMIC) -lCrun -lm -lc
-STDSHLCUIST=$(DYNAMIC) -lCrun -lm -lc
-STDSHLGUIMT=$(DYNAMIC) -lpthread -lCrun -lm -lc
-STDSHLCUIMT=$(DYNAMIC) -lpthread -lCrun -lm -lc
+STDSHLGUIST=$(DYNAMIC) CPPRUNTIME -lm -lc
+STDSHLCUIST=$(DYNAMIC) CPPRUNTIME -lm -lc
+STDSHLGUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
+STDSHLCUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 
 STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
