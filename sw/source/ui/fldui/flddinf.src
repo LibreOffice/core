@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:20 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage TP_FLD_DOKINF
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
         Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
@@ -90,7 +90,7 @@ TabPage TP_FLD_DOKINF
         Left = TRUE ;
         Text[ chinese_simplified ] = "字段类型(~T)";
         Text[ russian ] = "��� ����";
-        Text[ polish ] = "Typ pola";
+        Text[ polish ] = "~Typ pola";
         Text[ japanese ] = "フィールドタイプ(~T)";
         Text[ chinese_traditional ] = "欄位類型(~T)";
         Text[ arabic ] = "��� �����";
@@ -100,6 +100,9 @@ TabPage TP_FLD_DOKINF
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "~वर्ग";
     };
     Control TLB_DOKINFTYPE
     {
@@ -116,7 +119,7 @@ TabPage TP_FLD_DOKINF
         Text [ ENGLISH ] = "Selection" ;
         Text [ norwegian ] = "Selection" ;
         Text [ italian ] = "Selezione" ;
-        Text [ portuguese_brazilian ] = "Sele??o" ;
+        Text [ portuguese_brazilian ] = "~Selecionar" ;
         Text [ portuguese ] = "~Selec��o" ;
         Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
@@ -128,7 +131,7 @@ TabPage TP_FLD_DOKINF
         Left = TRUE ;
         Text[ chinese_simplified ] = "选择(~E)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Wyb�r";
+        Text[ polish ] = "~Wyb�r";
         Text[ japanese ] = "選択(~E)";
         Text[ chinese_traditional ] = "選擇(~E)";
         Text[ arabic ] = "�������";
@@ -138,6 +141,9 @@ TabPage TP_FLD_DOKINF
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~elecciona";
         Text[ thai ] = "เลื~อก";
+        Text[ czech ] = "Vybrat";
+        Text[ hebrew ] = "~Auswahl";
+        Text[ hindi ] = "चु~नो";
     };
     ListBox LB_DOKINFSELECTION
     {
@@ -162,9 +168,9 @@ TabPage TP_FLD_DOKINF
         stringlist [ portuguese_brazilian ] =
         {
             < "Autor" ; > ;
-            < "Uhrzeit" ; > ;
-            < "Datum" ; > ;
-            < "Datum Zeit Autor" ; > ;
+            < "Hora" ; > ;
+            < "Data" ; > ;
+            < "Data Hora Autor" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -306,6 +312,27 @@ TabPage TP_FLD_DOKINF
         < "วัน" ; > ;
         < "วัน เวลา และผู้เขียน" ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Autor" ; > ;
+        < "Čas" ; > ;
+        < "Datum" ; > ;
+        < "Datum, čas a autor" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮מחבר‬" ; > ;
+        < "‮שעה‬" ; > ;
+        < "‮תאריך‬" ; > ;
+        < "Datum Zeit Autor" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "लेखक" ; > ;
+        < "समय" ; > ;
+        < "दिनांक" ; > ;
+        < "दिनांक समय लेखक" ; > ;
+    };
     };
     FixedText FT_DOKINFFORMAT
     {
@@ -315,7 +342,7 @@ TabPage TP_FLD_DOKINF
         TEXT [ English ] = "Format" ;
         Left = TRUE ;
         Text [ english_us ] = "F~ormat" ;
-        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "F~ormato" ;
         Text [ swedish ] = "F~ormat" ;
         Text [ danish ] = "Format" ;
         Text [ italian ] = "F~ormato" ;
@@ -325,7 +352,7 @@ TabPage TP_FLD_DOKINF
         Text [ portuguese ] = "F~ormato" ;
         Text[ chinese_simplified ] = "格式(~O)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Format";
+        Text[ polish ] = "~Format";
         Text[ japanese ] = "書式(~O)";
         Text[ chinese_traditional ] = "格式(~O)";
         Text[ arabic ] = "�������";
@@ -336,6 +363,9 @@ TabPage TP_FLD_DOKINF
         Text[ catalan ] = "F~ormata";
         Text[ finnish ] = "M~uotoilu";
         Text[ thai ] = "รู~ปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "F~ormat";
+        Text[ hindi ] = "र~चना";
     };
     ListBox LB_DOKINFFORMAT
     {
@@ -353,7 +383,7 @@ TabPage TP_FLD_DOKINF
         TEXT [ English ] = "Fixed content" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Fixed content" ;
-        Text [ portuguese_brazilian ] = "~Inhalt fixieren" ;
+        Text [ portuguese_brazilian ] = "~Conte�do fixo" ;
         Text [ swedish ] = "Fi~xera inneh�ll" ;
         Text [ danish ] = "Fast in~dhold" ;
         Text [ italian ] = "~Fissa il contenuto" ;
@@ -363,7 +393,7 @@ TabPage TP_FLD_DOKINF
         Text [ portuguese ] = "~Cont�udo fixo" ;
         Text[ chinese_simplified ] = "固定内容(~F)";
         Text[ russian ] = "����. ����������";
-        Text[ polish ] = "Sta�a tre��";
+        Text[ polish ] = "St~a�a tre��";
         Text[ japanese ] = "内容の固定(~F)";
         Text[ chinese_traditional ] = "固定內容(~F)";
         Text[ arabic ] = "����� ���������";
@@ -374,6 +404,9 @@ TabPage TP_FLD_DOKINF
         Text[ catalan ] = "Contingut fi~x";
         Text[ finnish ] = "~Kiinte� sis�lt�";
         Text[ thai ] = "เนื้อหา~คงที่";
+        Text[ czech ] = "Pevný obsah";
+        Text[ hebrew ] = "~Inhalt fixieren";
+        Text[ hindi ] = "~स्थिर विषय";
     };
     Bitmap BMP_DOKINFROOT_OPENED
     {
@@ -409,9 +442,12 @@ TabPage TP_FLD_DOKINF
         Text[ catalan ] = "Informaci�";
         Text[ finnish ] = "Tietoja";
         Text[ thai ] = "ข้อมูล";
+        Text[ czech ] = "Informace";
+        Text[ hebrew ] = "Info";
+        Text[ hindi ] = "जानकारी";
     };
     Text [ english_us ] = "DocInformation" ;
-    Text [ portuguese_brazilian ] = "Dokumentinfo" ;
+    Text [ portuguese_brazilian ] = "Info. do Doc." ;
     Text [ swedish ] = "Dokumentinfo" ;
     Text [ danish ] = "Dokumentinfo" ;
     Text [ italian ] = "Info documento" ;
@@ -432,7 +468,19 @@ TabPage TP_FLD_DOKINF
     Text[ catalan ] = "Informaci� del document";
     Text[ finnish ] = "Asiakirjatiedot";
     Text[ thai ] = "ข้อมูลเอกสาร";
+    Text[ czech ] = "Informace o dokumentu";
+    Text[ hebrew ] = "Dokumentinfo";
+    Text[ hindi ] = "DocInformation";
 };
+
+
+
+
+
+
+
+
+
 
 
 
