@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2001-03-01 12:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,12 @@
 #endif
 #ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _FMTFLD_HXX
+#include <fmtfld.hxx>
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
@@ -1405,6 +1411,53 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, SvEmbeddedObject *pIPO
     if ( rRect.SSize() != pFly->Prt().SSize() )
     {
          Size aSz( rRect.SSize() );
+
+        //JP 28.02.2001: Task 74707 - ask for fly in fly with automatic size
+        //
+        const SwFrm* pAnchor;
+        const SwTxtNode* pTNd;
+        const SwpHints* pHts;
+        const SwFmtFrmSize& rFrmSz = pFly->GetFmt()->GetFrmSize();
+        if( bCheckForOLEInCaption &&
+            0 != rFrmSz.GetWidthPercent() &&
+            0 != (pAnchor = pFly->GetAnchor()) &&
+            pAnchor->IsTxtFrm() &&
+            !pAnchor->GetNext() && !pAnchor->GetPrev() &&
+            pAnchor->GetUpper()->IsFlyFrm() &&
+            0 != ( pTNd = ((SwTxtFrm*)pAnchor)->GetNode()->GetTxtNode()) &&
+            0 != ( pHts = pTNd->GetpSwpHints() ))
+        {
+            // search for a sequence field:
+            const SfxPoolItem* pItem;
+            for( USHORT n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
+                if( RES_TXTATR_FIELD == ( pItem =
+                            &(*pHts)[ n ]->GetAttr())->Which() &&
+                    TYP_SEQFLD == ((SwFmtFld*)pItem)->GetFld()->GetTypeId() )
+                {
+                    // sequence field found
+                    SwFlyFrm* pChgFly = (SwFlyFrm*)pAnchor->GetUpper();
+                    // calculate the changed size:
+                    // width must change, height can change
+                    Size aNewSz( aSz.Width() + pChgFly->Frm().Width() -
+                                   pFly->Prt().Width(), aSz.Height() );
+
+                    SwFrmFmt *pFmt = pChgFly->GetFmt();
+                    SwFmtFrmSize aFrmSz( pFmt->GetFrmSize() );
+                    aFrmSz.SetWidth( aNewSz.Width() );
+                    if( ATT_MIN_SIZE != aFrmSz.GetSizeType() )
+                    {
+                        aNewSz.Height() += pChgFly->Frm().Height() -
+                                               pFly->Prt().Height();
+                        if( Abs( aNewSz.Height() - pChgFly->Frm().Height()) > 1 )
+                            aFrmSz.SetHeight( aNewSz.Height() );
+                    }
+                    // uebers Doc fuers Undo!
+                    pFmt->GetDoc()->SetAttr( aFrmSz, *pFmt );
+                    break;
+                }
+        }
+
+        // set the new Size at the fly themself
         aSz.Width() += pFly->Frm().Width() - pFly->Prt().Width();
         aSz.Height()+= pFly->Frm().Height()- pFly->Prt().Height();
         pFly->ChgSize( aSz );
