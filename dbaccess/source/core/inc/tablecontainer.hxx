@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:15:25 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ namespace dbaccess
                                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
                                     const ::std::vector< WildCard >& _rWCSearch) const;
         virtual void SAL_CALL disposing();
+
+        virtual void notifyDataSourceModified();
 
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
