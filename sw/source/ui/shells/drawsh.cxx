@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:41:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
@@ -112,6 +109,7 @@
 #include <swmodule.hxx>
 #endif
 
+#include <svx/xtable.hxx>
 
 #include "swundo.hxx"
 #include "wrtsh.hxx"
@@ -445,7 +443,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     else
     {
         if ( pDlg )
-            pDlg->SetColorTable(OFF_APP()->GetStdColorTable());
+            pDlg->SetColorTable(XColorTable::GetStdColorTable());
 
         pDrView->GetAttributes( rSet );
     }
