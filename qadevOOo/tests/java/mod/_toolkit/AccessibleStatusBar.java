@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBar.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 11:22:02 $
+ *  last change:$Date: 2003-05-27 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import java.io.PrintWriter;
+import com.sun.star.lang.XMultiServiceFactory;
 
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.Rectangle;
@@ -126,7 +127,7 @@ public class AccessibleStatusBar extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
     }
 
     /**
@@ -168,14 +169,14 @@ public class AccessibleStatusBar extends TestCase {
         if (xTextDoc != null) xTextDoc.dispose();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         XInterface toolkit = null;
 
         try {
             log.println( "creating a text document" );
             xTextDoc = SOF.createTextDoc(null);
-            toolkit = (XInterface) tParam.getMSF().createInstance(
+            toolkit = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance(
                                         "com.sun.star.awt.Toolkit") ;
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
@@ -192,7 +193,7 @@ public class AccessibleStatusBar extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
