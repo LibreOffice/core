@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-24 20:47:03 $
+ *  last change: $Author: jp $ $Date: 2001-08-01 10:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3004,6 +3004,8 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
             }
         }
     }
+    pWrtShell->GetView().GetEditWin().DragFinished();
+
     if( pWrtShell->IsSelFrmMode() )
         pWrtShell->HideCrsr();
     else
@@ -3017,7 +3019,6 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
 //!!        pWrtShell->EndAction();
 //!!    }
 
-    pWrtShell->GetView().GetEditWin().DragFinished();
     ((SwViewOption *)pWrtShell->GetViewOptions())->SetIdle( bOldIdle );
 }
 
