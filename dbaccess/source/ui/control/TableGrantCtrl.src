@@ -1,0 +1,241 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TableGrantCtrl.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-06-20 06:58:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+String STR_TABLE_PRIV_NAME
+{
+    Text = "Tabellename";
+    Text[ENGLISH] = "Tablename";
+    Text[ english_us ] = "Table name";
+    Text[ portuguese ] = "Nome da tabela";
+    Text[ russian ] = "Èìÿ òàáëèöû";
+    Text[ greek ] = "¼íïìá ğßíáêá";
+    Text[ dutch ] = "Tabelnaam";
+    Text[ french ] = "Nom de table";
+    Text[ spanish ] = "Nombre de tabla";
+    Text[ italian ] = "Nome tabella";
+    Text[ danish ] = "Tabelnavn";
+    Text[ swedish ] = "Tabellnamn";
+    Text[ polish ] = "Nazwa tabeli";
+    Text[ portuguese_brazilian ] = "Tablename";
+    Text[ japanese ] = "Ã°ÌŞÙ–¼";
+    Text[ korean ] = "Å×ÀÌºí ÀÌ¸§";
+    Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
+    Text[ chinese_traditional ] = "ªí®æ¦WºÙ";
+    Text[ arabic ] = "ÇÓã ÇáÌÏæá";
+    Text[ turkish ] = "Tablo adı";
+};
+
+String STR_TABLE_PRIV_INSERT
+{
+    Text = "Einfügen";
+    Text[ENGLISH] = "Insert";
+    Text[ english_us ] = "Insert";
+    Text[ portuguese ] = "Inserir";
+    Text[ russian ] = "Âñòàâèòü";
+    Text[ greek ] = "ĞñïóèŞêç";
+    Text[ dutch ] = "Invoegen";
+    Text[ french ] = "Insérer";
+    Text[ spanish ] = "Insertar";
+    Text[ italian ] = "Inserisci";
+    Text[ danish ] = "Indsæt";
+    Text[ swedish ] = "Infoga";
+    Text[ polish ] = "Wstaw";
+    Text[ portuguese_brazilian ] = "Insert";
+    Text[ japanese ] = "‘}“ü";
+    Text[ korean ] = "»ğÀÔ";
+    Text[ chinese_simplified ] = "²åÈë";
+    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ arabic ] = "ÅÏÑÇÌ";
+    Text[ turkish ] = "Ekle";
+};
+
+String STR_TABLE_PRIV_DELETE
+{
+    Text = "Löschen";
+    Text[ENGLISH] = "Delete";
+    Text[ english_us ] = "Delete";
+    Text[ portuguese ] = "Eliminar";
+    Text[ russian ] = "Óäàëèòü";
+    Text[ greek ] = "ÄéáãñáöŞ";
+    Text[ dutch ] = "Wissen";
+    Text[ french ] = "Supprimer";
+    Text[ spanish ] = "Eliminar";
+    Text[ italian ] = "Cancella";
+    Text[ danish ] = "Slet";
+    Text[ swedish ] = "Radera";
+    Text[ polish ] = "Usuñ";
+    Text[ portuguese_brazilian ] = "Delete";
+    Text[ japanese ] = "íœ";
+    Text[ korean ] = "»èÁ¦";
+    Text[ chinese_simplified ] = "É¾³ı";
+    Text[ chinese_traditional ] = "§R°£";
+    Text[ arabic ] = "ÍĞİ";
+    Text[ turkish ] = "Sil";
+};
+
+String STR_TABLE_PRIV_UPDATE
+{
+    Text = "Ändern";
+    Text[ENGLISH] = "Update";
+    Text[ english_us ] = "Modify";
+    Text[ portuguese ] = "Modificar";
+    Text[ russian ] = "Èçìåíèòü";
+    Text[ greek ] = "ÁëëáãŞ";
+    Text[ dutch ] = "Wijzigen";
+    Text[ french ] = "Modifier";
+    Text[ spanish ] = "Modificar";
+    Text[ italian ] = "Cambia";
+    Text[ danish ] = "Modificer";
+    Text[ swedish ] = "Ändra";
+    Text[ polish ] = "Modyfikuj";
+    Text[ portuguese_brazilian ] = "Update";
+    Text[ japanese ] = "•ÏX";
+    Text[ korean ] = "º¯°æ";
+    Text[ chinese_simplified ] = "¸ü¸Ä";
+    Text[ chinese_traditional ] = "§ó·s";
+    Text[ arabic ] = "ÊÚÏíá";
+    Text[ turkish ] = "Değiştir";
+};
+
+String STR_TABLE_PRIV_ALTER
+{
+    Text = "Struktur ändern";
+    Text[ENGLISH] = "Alter";
+    Text[ english_us ] = "Alter structure";
+    Text[ portuguese ] = "Modificar estrutura";
+    Text[ russian ] = "Èçìåíèòü ñòğóêòóğó";
+    Text[ greek ] = "ÁëëáãŞ äïìŞò";
+    Text[ dutch ] = "Structuur wijzigen";
+    Text[ french ] = "Modifier la structure";
+    Text[ spanish ] = "Modificar estructura";
+    Text[ italian ] = "Cambia struttura";
+    Text[ danish ] = "Modificer struktur";
+    Text[ swedish ] = "Ändra struktur";
+    Text[ polish ] = "Modyfikuj strukturê";
+    Text[ portuguese_brazilian ] = "Alter";
+    Text[ japanese ] = "\\¬•ÏX";
+    Text[ korean ] = "±¸Á¶ º¯°æ";
+    Text[ chinese_simplified ] = "¸ü¸Ä¹¹Ôì";
+    Text[ chinese_traditional ] = "ÅÜ§óµ²ÌÛ";
+    Text[ arabic ] = "ÊÚÏíá ÇáÈäíÉ";
+    Text[ turkish ] = "Yapıyı değiştir";
+};
+String STR_TABLE_PRIV_SELECT
+{
+    Text = "Lesen";
+    Text[ENGLISH] = "Select";
+    Text[ english_us ] = "Read";
+    Text[ portuguese ] = "Ler";
+    Text[ russian ] = "×èòàòü";
+    Text[ greek ] = "ÁíÜãíùóç";
+    Text[ dutch ] = "Lezen";
+    Text[ french ] = "Lire";
+    Text[ spanish ] = "Leer";
+    Text[ italian ] = "Leggi";
+    Text[ danish ] = "Læs";
+    Text[ swedish ] = "Läs";
+    Text[ polish ] = "Czytaj";
+    Text[ portuguese_brazilian ] = "Select";
+    Text[ japanese ] = "“Ç‚İæ‚è";
+    Text[ korean ] = "ÀĞ±â";
+    Text[ chinese_simplified ] = "¶ÁÈ¡";
+    Text[ chinese_traditional ] = "Åª¨ú";
+    Text[ arabic ] = "ŞÑÇÁÉ";
+    Text[ turkish ] = "Oku";
+};
+
+String STR_TABLE_PRIV_REFERENCE
+{
+    Text = "References ändern";
+    Text[ENGLISH] = "References";
+    Text[english_us] = "Modify references";
+    Text[ portuguese ] = "Modificar referências";
+    Text[ russian ] = "Èçìåíèòü ññûëêè";
+    Text[ greek ] = "Áëëáãİò ğáñáğïìğşí";
+    Text[ dutch ] = "Referenties wijzigen";
+    Text[ french ] = "Modifier les références";
+    Text[ spanish ] = "Modificar referencias";
+    Text[ italian ] = "Cambia riferimenti";
+    Text[ danish ] = "Modificer referencer";
+    Text[ swedish ] = "Ändra referenser";
+    Text[ polish ] = "Modyfikuj odwo³ania";
+    Text[ portuguese_brazilian ] = "References";
+    Text[ japanese ] = "QÆ‚Ì•ÏX";
+    Text[ korean ] = "ÂüÁ¶ º¯°æ";
+    Text[ chinese_simplified ] = "¸ü¸ÄÒıÓÃ";
+    Text[ chinese_traditional ] = "ÅÜ§ó¤Ş¥Î";
+    Text[ arabic ] = "ÊÚÏíá ÇáãÑÇÌÚ";
+    Text[ turkish ] = "Referansları değiştir";
+};
+
+String STR_TABLE_PRIV_DROP
+{
+    Text = "Löschen";
+    Text[ENGLISH] = "Droping";
+    Text[ english_us ] = "Droping";
+};
+
+
+

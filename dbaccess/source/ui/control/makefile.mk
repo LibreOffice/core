@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-14 07:37:39 $
+#   last change: $Author: oj $ $Date: 2001-06-20 06:59:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,13 +76,15 @@ ENABLE_EXCEPTIONS=TRUE
 # ... resource files ............................
 
 SRCFILES =	\
-        undosqledit.src	\
-        tabletree.src	\
+        TableGrantCtrl.src	\
+        undosqledit.src		\
+        tabletree.src		\
         marktree.src
 
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/TableGrantCtrl.obj		\
         $(SLO)$/SqlNameEdit.obj			\
         $(SLO)$/FieldDescControl.obj	\
         $(SLO)$/listviewitems.obj		\
