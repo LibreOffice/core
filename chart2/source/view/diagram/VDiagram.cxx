@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 17:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,9 @@ void VDiagram::createShapes_2d( const awt::Point& rPos, const awt::Size& rSize )
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.RectangleShape" ) ), uno::UNO_QUERY );
         xShape2D->setPosition(awt::Point(0,0));
-        xShape2D->setSize(awt::Size(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME));
+        xShape2D->setSize(awt::Size(
+                              static_cast< sal_Int32 >( FIXED_SIZE_FOR_3D_CHART_VOLUME ),
+                              static_cast< sal_Int32 >( FIXED_SIZE_FOR_3D_CHART_VOLUME )));
         xOuterGroup_Shapes->add(xShape2D);
         uno::Reference< beans::XPropertySet > xProp( xShape2D, uno::UNO_QUERY );
         if( xProp.is())
@@ -219,7 +221,7 @@ void VDiagram::createShapes_2d( const awt::Point& rPos, const awt::Size& rSize )
             }
             catch( uno::Exception& e )
             {
-                e;
+                ASSERT_EXCEPTION( e );
             }
         }
 
@@ -303,7 +305,7 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     m_xOuterGroupShape->setPosition(rPos); //FIXED_SIZE_FOR_3D_CHART_VOLUME
@@ -383,9 +385,9 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
         uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes,C2U("testonly;CooContainer=XXX_CID") );
         m_xCoordinateRegionShape = uno::Reference< drawing::XShape >( xShapes, uno::UNO_QUERY );
 
-        uno::Reference< beans::XPropertySet > xProp( m_xCoordinateRegionShape, uno::UNO_QUERY );
-        DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
-        if( xProp.is())
+        uno::Reference< beans::XPropertySet > xShapeProp( m_xCoordinateRegionShape, uno::UNO_QUERY );
+        DBG_ASSERT(xShapeProp.is(), "created shape offers no XPropertySet");
+        if( xShapeProp.is())
         {
             try
             {
@@ -396,12 +398,12 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
                 Matrix4D aM4;
                 aM4.Translate(GRID_TO_WALL_DISTANCE/fXScale, FLOOR_THICKNESS/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
                 aM4.Scale( fXScale, fYScale, fZScale );
-                xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
+                xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(Matrix4DToHomogenMatrix(aM4)) );
             }
             catch( uno::Exception& e )
             {
-                e;
+                ASSERT_EXCEPTION( e );
             }
         }
     }
