@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-18 11:51:31 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 15:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,13 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
+
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
 #endif
@@ -108,6 +115,10 @@
 
 #include <berkeleydb/db_cxx.h>
 #include <svtools/pathoptions.hxx>
+#include <rtl/ustring.hxx>
+
+#define _SVSTDARR_ULONGSSORT
+#include <svtools/svstdarr.hxx>     // SvUShorts
 
 #include "sfxsids.hrc"
 #include "app.hxx"
@@ -123,13 +134,94 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::rtl;
 
 #define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
 #define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
 
-// class SfxHelpDB_Impl --------------------------------------------------
+// class SfxHelp_Impl --------------------------------------------------
 
-class SfxHelpDB_Impl
+#define STARTERLIST 0
+
+class SfxHelpOptions_Impl : public utl::ConfigItem
+{
+    SvULongsSort*   pIds;
+public:
+
+                    SfxHelpOptions_Impl();
+                    ~SfxHelpOptions_Impl();
+    BOOL            HasId( ULONG nId )
+                    { USHORT nDummy; return pIds->Seek_Entry( nId, &nDummy ); }
+};
+
+static Sequence< OUString > GetPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "HelpAgentStarterList",
+    };
+
+    const int nCount = sizeof( aPropNames ) / sizeof( const char* );
+    Sequence< OUString > aNames( nCount );
+    OUString* pNames = aNames.getArray();
+    for ( int i = 0; i < nCount; i++ )
+        pNames[i] = OUString::createFromAscii( aPropNames[i] );
+
+    return aNames;
+}
+
+// -----------------------------------------------------------------------
+
+SfxHelpOptions_Impl::SfxHelpOptions_Impl()
+    : ConfigItem( OUString::createFromAscii("Office.SFX/Help") )
+    , pIds( 0 )
+{
+    Sequence< OUString > aNames = GetPropertyNames();
+    Sequence< Any > aValues = GetProperties( aNames );
+    EnableNotification( aNames );
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
+    if ( aValues.getLength() == aNames.getLength() )
+    {
+        for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
+        {
+            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
+            if ( pValues[nProp].hasValue() )
+            {
+                switch ( nProp )
+                {
+                    case STARTERLIST :
+                    {
+                        ::rtl::OUString aCodedList;
+                        if ( pValues[nProp] >>= aCodedList )
+                        {
+                            String aTmp( aCodedList );
+                            USHORT nCount = aTmp.GetTokenCount( ',' );
+                            pIds = new SvULongsSort();
+                            for ( USHORT n=0; n<nCount; n++ )
+                                pIds->Insert( (ULONG) aTmp.GetToken( n, ',' ).ToInt64() );
+                        }
+
+                        else
+                            DBG_ERROR( "Wrong Type!" );
+                        break;
+                    }
+
+                    default:
+                        DBG_ERROR( "Wrong Type!" );
+                        break;
+                }
+            }
+        }
+    }
+}
+
+SfxHelpOptions_Impl::~SfxHelpOptions_Impl()
+{
+    delete pIds;
+}
+
+class SfxHelp_Impl
 {
 private:
     String      m_aDBPath;
@@ -137,32 +229,43 @@ private:
     Db*         m_pDB;
     sal_Bool    m_bIsDebug;
     sal_Bool    m_bIsOpen;
+    SfxHelpOptions_Impl* m_pOpt;
 
 public:
-    SfxHelpDB_Impl( const String& rPath, sal_Bool bDebug );
-    ~SfxHelpDB_Impl();
+    SfxHelp_Impl( const String& rPath, sal_Bool bDebug );
+    ~SfxHelp_Impl();
 
     String      GetHelpText( ULONG nHelpId, const String& rModule );
+    SfxHelpOptions_Impl* GetOptions();
 };
 
-SfxHelpDB_Impl::SfxHelpDB_Impl( const String& rPath, sal_Bool bDebug ) :
+SfxHelp_Impl::SfxHelp_Impl( const String& rPath, sal_Bool bDebug ) :
 
     m_aDBPath   ( rPath ),
     m_pDB       ( NULL ),
     m_bIsDebug  ( bDebug ),
-    m_bIsOpen   ( sal_False )
+    m_bIsOpen   ( sal_False ),
+    m_pOpt      ( 0 )
 
 {
 }
 
-SfxHelpDB_Impl::~SfxHelpDB_Impl()
+SfxHelp_Impl::~SfxHelp_Impl()
 {
     if ( m_bIsOpen )
         m_pDB->close(0);
     delete m_pDB;
+    delete m_pOpt;
 }
 
-String SfxHelpDB_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
+SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
+{
+    if ( !m_pOpt )
+        m_pOpt = new SfxHelpOptions_Impl;
+    return m_pOpt;
+}
+
+String SfxHelp_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
 {
     sal_Bool bOpenDB = sal_True;
     String aHelpText;
@@ -261,7 +364,7 @@ void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
 
 SfxHelp::SfxHelp() :
 
-    pDB     ( NULL ),
+    pImp     ( NULL ),
     bIsDebug( sal_False )
 
 {
@@ -295,12 +398,12 @@ SfxHelp::SfxHelp() :
 
     INetURLObject aPath( SvtPathOptions().GetHelpPath(), INET_PROT_FILE );
     aPath.insertName( aLanguageStr );
-    pDB = new SfxHelpDB_Impl( aPath.GetMainURL(), bIsDebug );
+    pImp = new SfxHelp_Impl( aPath.GetMainURL(), bIsDebug );
 }
 
 SfxHelp::~SfxHelp()
 {
-    delete pDB;
+    delete pImp;
 }
 
 String SfxHelp::GetHelpModuleName( ULONG nHelpId )
@@ -408,7 +511,7 @@ BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 {
     String aModuleName = GetHelpModuleName( nHelpId );
-    XubString aHelpText = pDB->GetHelpText( nHelpId, aModuleName );;
+    XubString aHelpText = pImp->GetHelpText( nHelpId, aModuleName );;
     if ( bIsDebug )
     {
         aHelpText += DEFINE_CONST_UNICODE("\n\n");
@@ -475,8 +578,12 @@ String SfxHelp::CreateHelpURL( ULONG nHelpId, const String& rModuleName )
     return aHelpURL;
 }
 
-void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, sal_Int32 nHelpId )
+void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
 {
+    SfxHelpOptions_Impl *pOpt = pImp->GetOptions();
+    if ( !pOpt->HasId( nHelpId ) )
+        return;
+
     try
     {
         URL aURL;

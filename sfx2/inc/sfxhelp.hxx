@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-18 11:49:56 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 15:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include <tools/string.hxx>
 
-class SfxHelpDB_Impl;
+class SfxHelp_Impl;
 class SfxFrame;
 class SfxHelp : public Help
 {
@@ -76,7 +76,7 @@ class SfxHelp : public Help
     String          aLanguageStr;
     String          aCountryStr;
     sal_Bool        bIsDebug;
-    SfxHelpDB_Impl* pDB;
+    SfxHelp_Impl*   pImp;
 
 private:
     virtual BOOL    Start( ULONG nHelpId, const Window* pWindow );
@@ -92,7 +92,7 @@ public:
                     { aUser = rUser;}
 
     virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
-    void            OpenHelpAgent( SfxFrame* pFrame, sal_Int32 nHelpId );
+    void            OpenHelpAgent( SfxFrame* pFrame, ULONG nHelpId );
     String          CreateHelpURL( ULONG nHelpId, const String& rModuleName );
 };
 
