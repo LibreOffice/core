@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-09 14:35:46 $
+ *  last change: $Author: ama $ $Date: 2001-05-18 09:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,7 +970,11 @@ void SwTabFrm::MakeAll()
                         if ( !StackHack::IsLocked() )
                         {
                             StackHack aHack;
+                            delete pAccess;
                             GetFollow()->MakeAll();
+                            pAccess= new SwBorderAttrAccess( SwFrm::GetCache(),
+                                                             this );
+                            pAttrs = pAccess->Get();
                             ((SwTabFrm*)GetFollow())->SetLowersFormatted(FALSE);
                             ::lcl_CalcLayout((SwLayoutFrm*)GetFollow()->Lower(),
                                 GetFollow()->GetUpper()->Frm().Bottom() );
