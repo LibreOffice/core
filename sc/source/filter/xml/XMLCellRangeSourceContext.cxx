@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCellRangeSourceContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,10 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
     sal_Int16               nAttrCount      = xAttrList->getLength();
     const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetTableCellRangeSourceAttrTokenMap();
 
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
+    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        OUString sAttrName  = xAttrList->getNameByIndex( nIndex );
-        OUString sValue     = xAttrList->getValueByIndex( nIndex );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( nIndex ));
+        const OUString& sValue(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
