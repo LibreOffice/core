@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:13:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,14 +130,8 @@ ModalDialog DLG_DBASE_INDEXES
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
-    Text = "Indizes" ;
-    Text [ english ] = "Indexes" ;
-    Text [ italian ] = "Indici" ;
-    Text [ portuguese ] = "Índices" ;
-    Text [ french ] = "Index" ;
-    Text [ dutch ] = "Indices " ;
-    Text [ spanish ] = "Índices" ;
-    Text [ english_us ] = "Indexes" ;
+    Text [ de ] = "Indizes" ;
+    Text [ en-US ] = "Indexes" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton PB_OK
@@ -162,35 +156,8 @@ ModalDialog DLG_DBASE_INDEXES
     {
         Pos = MAP_APPFONT ( 8 , 7 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Tabelle" ;
-        Text [ english ] = "Table" ;
-        Text[ english_us ] = "~Table";
-        Text[ portuguese ] = "~Tabela:";
-        Text[ russian ] = "Òàáëèöà";
-        Text[ greek ] = "Ğß~íáêáò";
-        Text[ dutch ] = "~Tabel";
-        Text[ french ] = "Table";
-        Text[ spanish ] = "~Tabla";
-        Text[ finnish ] = "~Taulu:";
-        Text[ italian ] = "~Tabella";
-        Text[ danish ] = "Ta~bel";
-        Text[ swedish ] = "~Tabell";
-        Text[ polish ] = "~Tabela";
-        Text[ portuguese_brazilian ] = "~Tabela";
-        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«(~T)";
-        Text[ korean ] = "í…Œì´ë¸”(~T):";
-        Text[ chinese_simplified ] = "è¡¨æ ¼(~T)";
-        Text[ chinese_traditional ] = "è¡¨æ ¼(~T)";
-        Text[ turkish ] = "~Tablo";
-        Text[ arabic ] = "ÌÏæá:";
-        Text[ catalan ] = "~Taula:";
-        Text[ thai ] = "~à¸•à¸²à¸£à¸²à¸‡";
-        Text[ czech ] = "Tabulka";
-        Text[ hebrew ] = "â€®×˜×‘×œ×”â€¬";
-        Text[ hindi ] = "~à¤¸à¤¾à¤°à¤£à¥€";
-        Text[ slovak ] = "~TabuÄ¾ka";
-        Text[ hungarian ] = "~TÃ¡bla";
-        Text[ slovenian ] = "~Tabela";
+        Text [ de ] = "~Tabelle" ;
+        Text [ en-US ] = "~Table";
     };
     ComboBox CB_TABLES
     {
@@ -205,69 +172,15 @@ ModalDialog DLG_DBASE_INDEXES
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
         Size = MAP_APPFONT ( 196 , 8 ) ;
-        Text = "Zuweisung" ;
-        Text [ english ] = "Assignment" ;
-        Text [ english_us ] = "Assignment" ;
-        Text[ portuguese ] = "Atribuição";
-        Text[ russian ] = "Íàçíà÷åíèå";
-        Text[ greek ] = "ÁíÜèåóç";
-        Text[ dutch ] = "Toewijzing ";
-        Text[ french ] = "Assignation";
-        Text[ spanish ] = "Asignación";
-        Text[ italian ] = "Assegnazione";
-        Text[ danish ] = "Tildeling";
-        Text[ swedish ] = "Tilldelning";
-        Text[ polish ] = "Przypisanie";
-        Text[ portuguese_brazilian ] = "Atribuição";
-        Text[ japanese ] = "é©ç”¨";
-        Text[ korean ] = "í• ë‹¹";
-        Text[ chinese_simplified ] = "æŒ‡å®š";
-        Text[ chinese_traditional ] = "æŒ‡å®š";
-        Text[ arabic ] = "ÊÚííä";
-        Text[ turkish ] = "Atama";
-        Text[ catalan ] = "Asignació";
-        Text[ finnish ] = "Määritys";
-        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
-        Text[ czech ] = "PÅ™iÅ™azenÃ­";
-        Text[ hebrew ] = "â€®×”×©××”â€¬";
-        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤°à¤¨à¤¾";
-        Text[ slovak ] = "Priradenie";
-        Text[ hungarian ] = "HozzÃ¡rendelÃ©s";
-        Text[ slovenian ] = "Dodelitev";
+        Text [ de ] = "Zuweisung" ;
+        Text [ en-US ] = "Assignment" ;
     };
     FixedText FT_TABLEINDEXES
     {
         Pos = MAP_APPFONT ( 12 , 33 ) ;
         Size = MAP_APPFONT ( 83 , 8 ) ;
-        Text = "T~abellenindizes" ;
-        Text [ english ] = "Table indexes" ;
-        Text[ english_us ] = "T~able indexes";
-        Text[ portuguese ] = "~Índices de tabelas:";
-        Text[ russian ] = "Èíäåêñû òàáëèöû";
-        Text[ greek ] = "ÅõñåôŞñé~á ğéíÜêùí";
-        Text[ dutch ] = "Tabel~indices";
-        Text[ french ] = "Index de table";
-        Text[ spanish ] = "Índices de ta~bla";
-        Text[ finnish ] = "T~auluindeksit:";
-        Text[ italian ] = "Indici t~abella";
-        Text[ danish ] = "~Tabelindeks";
-        Text[ swedish ] = "T~abellindex";
-        Text[ polish ] = "Indeksy t~abeli";
-        Text[ portuguese_brazilian ] = "~Índices de tabelas";
-        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(~A)";
-        Text[ korean ] = "í…Œì´ë¸” ìƒ‰ì¸(~A):";
-        Text[ chinese_simplified ] = "è¡¨æ ¼æ ‡å¿—(~A)";
-        Text[ chinese_traditional ] = "è¡¨æ ¼æ¨™èªŒ(~A)";
-        Text[ turkish ] = "T~ablo içeriği";
-        Text[ arabic ] = "İåÇÑÓ ÌÏæá:";
-        Text[ catalan ] = "Índexs de la t~aula:";
-        Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ~à¸•à¸²à¸£à¸²à¸‡:";
-        Text[ czech ] = "RejstÅ™Ã­ky tabulky";
-        Text[ hebrew ] = "â€®××¤×ª×—×•×ª ××˜×‘×œ×”â€¬";
-        Text[ hindi ] = "~à¤¸à¤¾à¤°à¤£à¥€ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¥€";
-        Text[ slovak ] = "Indexy t~abuÄ¾ky";
-        Text[ hungarian ] = "TÃ¡~blaindexek";
-        Text[ slovenian ] = "Kazala t~abel";
+        Text [ de ] = "T~abellenindizes" ;
+        Text [ en-US ] = "T~able indexes";
     };
     ListBox LB_TABLEINDEXES
     {
@@ -281,35 +194,8 @@ ModalDialog DLG_DBASE_INDEXES
     {
         Pos = MAP_APPFONT ( 120 , 33 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text = "~Freie Indizes" ;
-        Text [ english ] = "Free Indexes" ;
-        Text[ english_us ] = "~Free indexes";
-        Text[ portuguese ] = "Índices ~livres:";
-        Text[ russian ] = "Ñâîáîäíûå èíäåêñû";
-        Text[ greek ] = "Åëåı~èåñá åõñåôŞñéá";
-        Text[ dutch ] = "~Vrije indices";
-        Text[ french ] = "Index libres";
-        Text[ spanish ] = "Índices lib~res";
-        Text[ finnish ] = "~Vapaat indeksit:";
-        Text[ italian ] = "Indici li~beri";
-        Text[ danish ] = "~Frigør indeks";
-        Text[ swedish ] = "~Fria index";
-        Text[ polish ] = "~Wolne indeksy";
-        Text[ portuguese_brazilian ] = "Índices ~livres";
-        Text[ japanese ] = "ãƒ•ãƒªãƒ¼ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹(~F)";
-        Text[ korean ] = "ììœ í˜• ìƒ‰ì¸(~F)";
-        Text[ chinese_simplified ] = "è‡ªç”±çš„æ ‡å¿—(~F)";
-        Text[ chinese_traditional ] = "è‡ªç”±æ¨™èªŒ(~F)";
-        Text[ turkish ] = "~İndeksleri temizle";
-        Text[ arabic ] = "İåÇÑÓ ÍÑÉ:";
-        Text[ catalan ] = "Í~ndexs lliures:";
-        Text[ thai ] = "~à¸”à¸±à¸Šà¸™à¸µà¸§à¹ˆà¸²à¸‡:";
-        Text[ czech ] = "VolnÃ© rejstÅ™Ã­ky";
-        Text[ hebrew ] = "â€®××¤×ª×—×•×ª ×—×•×¤×©×™×™×â€¬";
-        Text[ hindi ] = "~à¤®à¥à¤•à¥à¤¤ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¥€";
-        Text[ slovak ] = "~VoÄ¾nÃ© indexy";
-        Text[ hungarian ] = "~Szabad indexek";
-        Text[ slovenian ] = "P~rosta kazala";
+        Text [ de ] = "~Freie Indizes" ;
+        Text [ en-US ] = "~Free indexes";
     };
     ListBox LB_FREEINDEXES
     {
@@ -396,32 +282,18 @@ ModalDialog DLG_DBASE_INDEXES
         };
     };
 
-    Text [ portuguese_brazilian ] = "Índices" ;
-    Text [ swedish ] = "Index" ;
-    Text [ danish ] = "Indeks" ;
-    Text[ chinese_simplified ] = "æ ‡å¿—";
-    Text[ russian ] = "Èíäåêñû";
-    Text[ polish ] = "Indeksy";
-    Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹";
-    Text[ chinese_traditional ] = "æ¨™èªŒ";
-    Text[ arabic ] = "İåÇÑÓ";
-    Text[ greek ] = "ÅõñåôŞñéá";
-    Text[ korean ] = "ìƒ‰ì¸";
-    Text[ turkish ] = "Indeksler";
-    Text[ catalan ] = "Índexs";
-    Text[ finnish ] = "Indeksit";
-    Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ";
-    Text[ czech ] = "RejstÅ™Ã­ky";
-    Text[ hebrew ] = "Indizes";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¥€";
-    Text[ slovak ] = "Indexy";
-    Text[ hungarian ] = "Indexek";
-    Text[ slovenian ] = "Kazala";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30.26.3  2004/04/21 05:47:10  hjs
+ *  RESYNC: (1.30-1.31); FILE MERGED
+ *
+ *  Revision 1.31  2003/12/17 15:13:50  vg
+ *  INTEGRATION: CWS geordi2q11 (1.30.72); FILE MERGED
+ *  2003/12/16 11:05:08 hr 1.30.72.1: #111934#: join CWS ooo111fix1
+ *
  *  Revision 1.30.72.1  2003/12/16 11:05:08  hr
  *  #111934#: join CWS ooo111fix1
  *
