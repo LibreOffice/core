@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-11-15 14:11:17 $
+dnl * Date: $Date: 2004-12-03 14:19:46 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.77 $ )
+AC_REVISION( $Revision: 1.78 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2163,11 +2163,17 @@ if test \( "$_os" = "WINNT" \) ; then
 	else
 		HAVE_PSDK_LIB="no"
 	fi
-	if test "$HAVE_PSDK_H" = "yes" -a "$HAVE_PSDK_LIB" = "yes"; then
-		AC_MSG_RESULT([PSDK files found])
-	else
-		AC_MSG_ERROR([PSDK files not found, please use --with-psdk-home .])
-	fi
+    if test "$HAVE_PSDK_H" = "no" -o "$HAVE_PSDK_LIB" = "no"; then
+        AC_MSG_ERROR([Some (all?) PSDK files not found, please check if all needed Platform SDKs
+are installed or use --with-psdk-home .])
+    fi
+    if test ! -x "$PSDK_HOME/bin/msiinfo.exe" \
+         -o ! -x "$PSDK_HOME/bin/msidb.exe" \
+         -o ! -x "$PSDK_HOME/bin/uuidgen.exe" \
+         -o ! -x "$PSDK_HOME/bin/msitran.exe" ; then
+        AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
+    fi
+    AC_MSG_RESULT([PSDK files found])
 fi
 AC_SUBST(PSDK_HOME)
 
