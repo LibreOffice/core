@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:01:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ namespace basprov
         ::com::sun::star::script::XInvocation > BasicMethodNodeImpl_BASE;
 
     class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE,
+                                public ::scripting_helper::OMutexHolder,
                                 public ::scripting_helper::OBroadcastHelperHolder,
                                 public ::comphelper::OPropertyContainer,
                                 public ::comphelper::OPropertyArrayUsageHelper< BasicMethodNodeImpl >
