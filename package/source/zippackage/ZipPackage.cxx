@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 12:25:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xFactory( xNewFactory )
 , bHasEncryptedEntries ( sal_False )
 , bUseManifest ( sal_True )
+, m_bMediaTypeFallbackUsed ( sal_False )
 , m_bPackageFormat( sal_True )
 , bForceRecovery ( sal_False )
 , eMode ( e_IMode_None )
@@ -393,6 +394,7 @@ void ZipPackage::getZipFileContents()
 
     if ( m_bPackageFormat )
     {
+        sal_Bool bManifestParsed = sal_False;
         const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
         if ( xRootFolder->hasByName( sMeta ) )
         {
@@ -498,6 +500,8 @@ void ZipPackage::getZipFileContents()
                                     }
                                 }
                             }
+
+                            bManifestParsed = sal_True;
                         }
                         else
                             VOS_ENSURE ( 0, "Couldn't get a ManifestReader!" ); // throw RuntimeException?
@@ -516,7 +520,40 @@ void ZipPackage::getZipFileContents()
 
         const OUString sMimetype ( RTL_CONSTASCII_USTRINGPARAM ( "mimetype" ) );
         if ( xRootFolder->hasByName( sMimetype ) )
-        xRootFolder->removeByName( sMimetype );
+        {
+            if ( !bManifestParsed )
+            {
+                // try to get mediatype from the "mimetype" stream
+                uno::Reference< lang::XUnoTunnel > xMimeTypeTunnel;
+                xRootFolder->getByName( sMimetype ) >>= xMimeTypeTunnel;
+                uno::Reference < io::XActiveDataSink > xMimeSink( xMimeTypeTunnel, UNO_QUERY );
+                if ( xMimeSink.is() )
+                {
+                    uno::Reference< io::XInputStream > xMimeInStream = xMimeSink->getInputStream();
+                    if ( xMimeInStream.is() )
+                    {
+                        // Mediatypes longer than 1024 symbols should not appear here
+                        uno::Sequence< sal_Int8 > aData( 1024 );
+                        sal_Int32 nRead = xMimeInStream->readBytes( aData, 1024 );
+                        OSL_ENSURE( nRead == aData.getLength(), "Difference between reading result and data!\n" );
+                        if ( nRead > aData.getLength() )
+                            nRead = aData.getLength();
+                        if ( nRead )
+                        {
+                            ::rtl::OUString aFallBack( (sal_Char*)aData.getConstArray(), nRead, RTL_TEXTENCODING_ASCII_US );
+                            if ( aFallBack.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "application/vnd." ) ) == 0 )
+                            {
+                                // accept only types that look similar to own mediatypes
+                                pRootFolder->SetMediaType( aFallBack );
+                                m_bMediaTypeFallbackUsed = sal_True;
+                            }
+                        }
+                    }
+                }
+
+            }
+            xRootFolder->removeByName( sMimetype );
+        }
     }
 }
 // XInitialization
@@ -1318,6 +1355,9 @@ void SAL_CALL ZipPackage::commitChanges(  )
         }
     }
 
+    // after successful storing it can be set to false
+    m_bMediaTypeFallbackUsed = sal_False;
+
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "} ZipPackage::commitChanges" );
 }
 
@@ -1447,8 +1487,9 @@ Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
 void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") ) )
-        throw IllegalArgumentException (); // This property is read-only
+    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") )
+      ||aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaTypeFallbackUsed") ) )
+        throw PropertyVetoException();
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
         if ( !m_bPackageFormat )
@@ -1485,6 +1526,11 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "UseManifest" ) ) )
     {
         aAny <<= bUseManifest;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "MediaTypeFallbackUsed" ) ) )
+    {
+        aAny <<= m_bMediaTypeFallbackUsed;
         return aAny;
     }
     throw UnknownPropertyException();
