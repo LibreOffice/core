@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:41:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ public:
     sal_Bool bCfgNetscape4 : 1;         // Netscape4 Hacks
     // 23
 
-    SwHTMLWriter();
+    SwHTMLWriter( const String& rBaseURL );
     virtual ~SwHTMLWriter();
 
     void Out_SwDoc( SwPaM* );       // schreibe den makierten Bereich
