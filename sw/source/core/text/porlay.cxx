@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:20:01 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,8 +1111,8 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     long nCount = ubidi_countRuns( pBidi, &nError );
-    UTextOffset nStart = 0;
-    UTextOffset nEnd;
+    int32_t nStart = 0;
+    int32_t nEnd;
     UBiDiLevel nCurrDir;
     // counter for direction information arrays
     USHORT nCntDir = 0;
