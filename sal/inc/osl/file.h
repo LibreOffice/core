@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-19 11:18:13 $
+ *  last change: $Author: hro $ $Date: 2001-11-09 10:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,6 +1021,36 @@ oslFileError SAL_CALL osl_searchFileURL( rtl_uString *ustrFileName, rtl_uString 
 */
 
 oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
+
+/** Function pointer representing the function called back from osl_abbreviateSystemPath.
+
+    @param  ustrText[in]    Text to calculate the width for
+
+    @return the width of the Text specified by ustrText. F.e. it can return the width in pixel
+            or the width in character count.
+
+    @see    osl_abbreviateSystemPath
+*/
+
+typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFunc)( rtl_uString *ustrText );
+
+
+/** Abbreviates a system notation path
+
+    @param  ustrSystemPath[in]  the full system path to abbreviate
+    @param  pustrCompacted[out] receives the compacted system path on output
+    @param  pfnCalcWidth[in] function ptr that calculates the width of a string. Can be zero.
+    @param  uMaxWidth[in] maximum width allowed that is retunrned from pfnCalcWidth.
+            If pfnCalcWidth is zero the character count is assumed as width.
+
+    @return osl_File_E_None on success otherwise one osl_File_E_INVAL
+
+    @see    oslCalcTextWidthFunc
+
+*/
+
+oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrCompacted, sal_uInt32 uMaxWidth, oslCalcTextWidthFunc pCalcWidth );
+
 
 /** Sets file-attributes
 

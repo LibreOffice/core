@@ -433,6 +433,7 @@ UDK_3_0_0 {
 
         osl_acquireDirectoryItem;
 
+        osl_abbreviateSystemPath;
         osl_getDateTimeFromTimeValue;
         osl_getTimeValueFromDateTime;
         osl_getLocalTimeFromSystemTime;
