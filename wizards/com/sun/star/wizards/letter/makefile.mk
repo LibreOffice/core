@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 12:44:36 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:22:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ PACKAGE = com$/sun$/star$/wizards$/letter
 .INCLUDE : settings.mk
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-JARFILES= unoil.jar jurt.jar ridl.jar sandbox.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar
+JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar
 
 CUSTOMMANIFESTFILE= MANIFEST.MF
 
