@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:12:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2252,22 +2252,6 @@ SwFrm* SwFrm::_GetIndNext()
         return pSct->GetIndNext();
     }
     return NULL;
-}
-
-BOOL SwSectionFrm::IsAncestorOf( const SwSection* pSect ) const
-{
-    if( !pSection || !pSect )
-        return FALSE;
-    const SwSectionFmt *pFmt = pSect->GetFmt();
-    const SwSectionFmt *pMyFmt = pSection->GetFmt();
-    while( pFmt != pMyFmt )
-    {
-        if( pFmt->GetRegisteredIn()->ISA( SwSectionFmt ) )
-            pFmt = (SwSectionFmt*)pFmt->GetRegisteredIn();
-        else
-            return FALSE;
-    }
-    return TRUE;
 }
 
 BOOL SwSectionFrm::IsDescendantFrom( const SwSectionFmt* pFmt ) const
