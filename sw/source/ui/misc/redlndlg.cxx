@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:38:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,10 +993,13 @@ void SwRedlineAcceptDlg::RemoveParents(USHORT nStart, USHORT nEnd)
 
     // Hinter dem letzten Eintrag Cursor setzen, da sonst Performance-Problem in TLB.
     // TLB wuerde sonst bei jedem Remove den Cursor erneut umsetzen (teuer)
-    USHORT nPos = Min((USHORT)nCount, (USHORT)aRedlineParents.Count()) - 1;
-    SvLBoxEntry *pCurEntry = aRedlineParents[nPos]->pTLBParent;
-    if (!pCurEntry)
-        while (--nPos && (pCurEntry = aRedlineParents[nPos]->pTLBParent) == 0);
+    USHORT nPos = Min((USHORT)nCount, (USHORT)aRedlineParents.Count());
+    SvLBoxEntry *pCurEntry = NULL;
+    while( ( pCurEntry == NULL ) && ( nPos > 0 ) )
+    {
+        --nPos;
+        pCurEntry = aRedlineParents[nPos]->pTLBParent;
+    }
 
     if (pCurEntry)
         pTable->SetCurEntry(pCurEntry);
@@ -1318,7 +1321,14 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
     BOOL bReadonlySel = FALSE;
 
     //#98883# don't select redlines while the dialog is not focussed
-    SvLBoxEntry* pSelEntry = pTable->HasFocus() ? pTable->FirstSelected() : 0;
+    //#107938# But not only ask pTable if it has the focus. To move
+    //         the selection to the selected redline any child of pParentDlg
+    //         may the focus.
+    SvLBoxEntry* pSelEntry = 0;
+
+    if (pParentDlg->HasChildPathFocus())
+        pSelEntry = pTable->FirstSelected();
+
     if( pSelEntry )
     {
         SvLBoxEntry* pActEntry = pSelEntry;
