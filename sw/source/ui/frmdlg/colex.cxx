@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
+ *  last change: $Author: os $ $Date: 2002-02-13 10:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,11 +521,14 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
                         - GetFtHeight() - GetFtDist();
 
+        //increase the values to get a 'viewable' preview
+        sal_Int32 nBaseHeight = pGridItem->GetBaseHeight() * 3;
+        sal_Int32 nRubyHeight = pGridItem->GetRubyHeight() * 3;
 
         //detect height of rectangles
-        Rectangle aRubyRect(aRect.TopLeft(), Size(aRect.GetWidth(), pGridItem->GetRubyHeight()));
-        Rectangle aCharRect(aRect.TopLeft(), Size(aRect.GetWidth(), pGridItem->GetBaseHeight()));
-        sal_Int32 nLineHeight = pGridItem->GetBaseHeight() + pGridItem->GetRubyHeight();
+        Rectangle aRubyRect(aRect.TopLeft(), Size(aRect.GetWidth(), nRubyHeight));
+        Rectangle aCharRect(aRect.TopLeft(), Size(aRect.GetWidth(), nBaseHeight));
+        sal_Int32 nLineHeight = nBaseHeight + nRubyHeight;
 
         //detect count of rectangles
         sal_Int32 nLines = aRect.GetHeight() / nLineHeight;
@@ -537,9 +540,9 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         aRubyRect.Move(0, nYStart);
         aCharRect.Move(0, nYStart);
         if(pGridItem->IsRubyTextBelow())
-            aRubyRect.Move(0, pGridItem->GetBaseHeight());
+            aRubyRect.Move(0, nBaseHeight);
         else
-            aCharRect.Move(0, pGridItem->GetRubyHeight());
+            aCharRect.Move(0, nRubyHeight);
 
         //vertical lines
         sal_Bool bVertical = pGridItem->GetGridType() == GRID_LINES_CHARS;
@@ -557,42 +560,12 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
                 while(aTop.X() < aRect.Right())
                 {
                     DrawLine(aTop, aBottom);
-                    aTop.X() = aBottom.X() += pGridItem->GetBaseHeight();
+                    aTop.X() = aBottom.X() += nBaseHeight;
                 }
             }
             aRubyRect.Move(0, nLineHeight);
             aCharRect.Move(0, nLineHeight);
         }
-
-
-
-        //pGridItem->GetGridType() == GRID_LINES_CHARS
-
-        /*long nHoriStep = aRect.GetHeight();
-        USHORT nLines = pGridItem->GetLines() > MAX_LINES ? MAX_LINES : pGridItem->GetLines();
-        nHoriStep /= nLines;
-        Point aLeft(aRect.TopLeft());
-        aLeft.Y() += nHoriStep/2;
-        Point aRight(aRect.Right(), aLeft.Y());
-        for(USHORT nLine = 0; nLine < nLines; nLine++)
-        {
-            DrawLine( aLeft, aRight );
-            aLeft.Y() = aRight.Y() += nHoriStep;
-        }
-        if(pGridItem->GetGridType() == GRID_LINES_CHARS)
-        {
-            long nVertStep = aRect.GetWidth();
-            USHORT nCols = MAX_ROWS;
-            nVertStep /= nCols;
-            Point aTop(aRect.Left() + nVertStep/2, aRect.Top());
-            Point aBottom(aTop.X(), aRect.Bottom() );
-            for(USHORT nCol = 0; nCol < nCols; nCol++)
-            {
-                DrawLine( aTop, aBottom );
-                aTop.X() = aBottom.X() += nVertStep;
-            }
-        }*/
-
     }
 }
 /* -----------------------------08.02.2002 11:48------------------------------
