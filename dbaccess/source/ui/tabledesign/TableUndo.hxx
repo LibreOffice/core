@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace dbaui
         virtual void    Undo();
         virtual void    Redo();
     public:
+        TYPEINFO();
         OTableDesignUndoAct( OTableRowView* pOwner ,USHORT nCommentID);
         virtual ~OTableDesignUndoAct();
     };
@@ -102,6 +103,7 @@ namespace dbaui
         OTableEditorCtrl* pTabEdCtrl;
 
     public:
+        TYPEINFO();
         OTableEditorUndoAct( OTableEditorCtrl* pOwner,USHORT nCommentID );
         virtual ~OTableEditorUndoAct();
     };
@@ -119,6 +121,7 @@ namespace dbaui
         virtual void    Undo();
         virtual void    Redo();
     public:
+        TYPEINFO();
         OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, USHORT nColumn );
         virtual ~OTableDesignCellUndoAct();
     };
@@ -136,6 +139,7 @@ namespace dbaui
         virtual void    Undo();
         virtual void    Redo();
     public:
+        TYPEINFO();
         OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType );
         virtual ~OTableEditorTypeSelUndoAct();
     };
@@ -149,6 +153,7 @@ namespace dbaui
         virtual void    Undo();
         virtual void    Redo();
     public:
+        TYPEINFO();
         OTableEditorDelUndoAct( OTableEditorCtrl* pOwner );
         virtual ~OTableEditorDelUndoAct();
     };
@@ -163,6 +168,7 @@ namespace dbaui
         virtual void    Undo();
         virtual void    Redo();
     public:
+        TYPEINFO();
         OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                 long nInsertPosition,
                                 const ::std::vector< OTableRow*>& _vInsertedRows);
@@ -179,6 +185,7 @@ namespace dbaui
         virtual void    Undo();
         virtual void    Redo();
     public:
+        TYPEINFO();
         OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, long nInsertPosition, long nInsertedRows );
         virtual ~OTableEditorInsNewUndoAct();
     };
@@ -195,6 +202,7 @@ namespace dbaui
         virtual void    Undo();
         virtual void    Redo();
     public:
+        TYPEINFO();
         OPrimKeyUndoAct( OTableEditorCtrl* pOwner, MultiSelection aDeletedKeys, MultiSelection aInsertedKeys );
         virtual ~OPrimKeyUndoAct();
     };
