@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-19 10:00:54 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 12:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2329,3 +2329,18 @@ ULONG SdOutlineViewShell::Read(SvStream& rInput, USHORT eFormat)
     return( bRet );
 }
 
+void SdOutlineViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+{
+    WriteFrameViewData();
+
+    SdViewShell::WriteUserDataSequence( rSequence, bBrowse );
+}
+
+void SdOutlineViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+{
+    WriteFrameViewData();
+
+    SdViewShell::ReadUserDataSequence( rSequence, bBrowse );
+
+    ReadFrameViewData( pFrameView );
+}

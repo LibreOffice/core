@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 18:04:10 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 12:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,3 +665,54 @@ void SdDrawViewShell::HidePage(SdrPageView* pPV)
 
 
 
+void SdDrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+{
+    WriteFrameViewData();
+
+    SdViewShell::WriteUserDataSequence( rSequence, bBrowse );
+}
+
+void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+{
+    WriteFrameViewData();
+
+    SdViewShell::ReadUserDataSequence( rSequence, bBrowse );
+
+    if( pFrameView->GetPageKind() != ePageKind )
+    {
+        ePageKind = pFrameView->GetPageKind();
+
+        if (ePageKind == PK_NOTES)
+        {
+            aNotesBtn.Check(TRUE);
+            aLayerBtn.Disable();
+            SetHelpId( SID_NOTESMODE );
+            pWindow->SetHelpId( SID_NOTESMODE );
+            pWindow->SetUniqueId( SID_NOTESMODE );
+        }
+        else if (ePageKind == PK_HANDOUT)
+        {
+            aHandoutBtn.Check(TRUE);
+            aPageBtn.Disable();
+            aLayerBtn.Disable();
+            SetHelpId( SID_HANDOUTMODE );
+            pWindow->SetHelpId( SID_HANDOUTMODE );
+            pWindow->SetUniqueId( SID_HANDOUTMODE );
+        }
+        else
+        {
+            aDrawBtn.Check(TRUE);
+            SetHelpId( SD_IF_SDDRAWVIEWSHELL );
+            pWindow->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
+            pWindow->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
+        }
+    }
+
+    ReadFrameViewData( pFrameView );
+
+    SetZoomRect(pFrameView->GetVisArea());
+
+    ChangeEditMode( eEditMode, !bLayerMode );
+    ChangeEditMode( eEditMode, !bLayerMode );
+
+}

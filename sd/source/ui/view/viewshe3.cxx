@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-20 14:05:54 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 12:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 #include <utility>
 #include <vector>
 
@@ -72,6 +76,10 @@
 #ifndef _SV_PRINTDLG_HXX
 #include <svtools/printdlg.hxx>
 #endif
+#endif
+
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
 #endif
 
 #ifndef _SVX_PRTQRY_HXX
@@ -139,9 +147,6 @@
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -1780,7 +1785,5 @@ void __EXPORT SdViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
     }
 }
-
-
 
 
