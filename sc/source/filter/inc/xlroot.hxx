@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:05:03 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
 class EditEngine;
+class XclTracer;
 
 struct RootData;//!
 
@@ -87,10 +88,12 @@ struct XclRootData
     typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEngineDefaulterPtr;
     typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEditEnginePtr;
     typedef ::std::auto_ptr< EditEngine >               EditEnginePtr;
+    typedef ::std::auto_ptr< XclTracer >                XclTracerPtr;
 
     XclBiff                     meBiff;         /// Current BIFF version.
     ScDocument&                 mrDoc;          /// The source or destination document.
-    String                      maBasePath;     /// Base path of imported/exported file.
+    String                      maDocUrl;       /// Document URL of imported/exported file.
+    String                      maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
     CharSet                     meCharSet;      /// Character set to import/export byte strings.
     LanguageType                meDocLang;      /// Document language (import: from file, export: from system).
     LanguageType                meUILang;       /// UI language (import: from file, export: from system).
@@ -104,6 +107,8 @@ struct XclRootData
     ScHeaderEditEnginePtr       mpHFEditEngine; /// Edit engine for header/footer.
     EditEnginePtr               mpDrawEditEng;  /// Edit engine for text boxes.
 
+    XclTracerPtr                mpTracer;       /// Filter tracer.
+
     ::std::auto_ptr< RootData > mpRDP;//!
 
 #ifdef DBG_UTIL
@@ -113,7 +118,7 @@ struct XclRootData
     explicit                    XclRootData(
                                     XclBiff eBiff,
                                     ScDocument& rDocument,
-                                    const String& rBasePath,
+                                    const String& rDocUrl,
                                     CharSet eCharSet );
     virtual                     ~XclRootData();
 };
@@ -158,6 +163,8 @@ public:
     /** Returns whether the "some cells have been cut" warning box should show. */
     inline bool                 IsTruncated() const { return mrData.mbTruncated; }
 
+    /** Returns the document URL of the imported/exported file. */
+    inline const String&        GetDocUrl() const { return mrData.maDocUrl; }
     /** Returns the base path of the imported/exported file. */
     inline const String&        GetBasePath() const { return mrData.maBasePath; }
     /** Returns the character set to import/export byte strings. */
@@ -192,6 +199,9 @@ public:
     ScHeaderEditEngine&         GetHFEditEngine() const;
     /** Returns the edit engine for import/export of drawing text boxes. */
     EditEngine&                 GetDrawEditEngine() const;
+
+    /** Returns the filter tracer. */
+    XclTracer&                  GetTracer() const;
 
     /** Returns the highest possible cell address in a Calc document. */
     inline const ScAddress&     GetScMaxPos() const { return mrData.maScMaxPos; }
