@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 17:07:08 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ ToolBox RID_TOOLBOX
             Text[ russian ] = "Γξπθη. οξλξρΰ οπξκπσςκθ";
             Text[ polish ] = "Poziomy pasek przewijania";
             Text[ japanese ] = "…•½½ΈΫ°ΩΚή°";
-            Text[ chinese_traditional ] = "Ύξ¦V¨χ¶b";
+            Text[ chinese_traditional ] = "¤τ¥­¦V¨χ¶b";
             Text[ arabic ] = "ΤΡνΨ ΚΝΡνί ΗαΥέΝΙ ΓέήνΗπ";
             Text[ greek ] = "Οριζόντια γραμμή κύλισης";
             Text[ korean ] = "ΌφΖς ½ΊΕ©·ΡΉΩ";
@@ -277,7 +277,7 @@ ToolBox RID_TOOLBOX
             Text[ russian ] = "FrameControl";
             Text[ polish ] = "FrameControl";
             Text[ japanese ] = "ΜΪ°ΡΊέΔΫ°Ω";
-            Text[ chinese_traditional ] = "°T®Ψ±±¨ξ¶µ";
+            Text[ chinese_traditional ] = "®Ψ¬[±±¨ξ¶µ";
             Text[ arabic ] = "FrameControl";
             Text[ greek ] = "Στοιχείου ελέγχου πλαισίου";
             Text[ korean ] = "ΗΑ·ΉΐΣ ΔΑΖ®·Ρ";
@@ -497,7 +497,7 @@ ToolBox RID_TOOLBOX
             Text[ russian ] = "Βεπς. οξλξρΰ οπξκπσςκθ";
             Text[ polish ] = "Pionowy pasek przewijania";
             Text[ japanese ] = "‚’Ό½ΈΫ°ΩΚή°";
-            Text[ chinese_traditional ] = "Αa¦V¨χ¶b";
+            Text[ chinese_traditional ] = "««ª½¦V¨χ¶b";
             Text[ arabic ] = "ΤΡνΨ ΚΝΡνί ΗαΥέΝΙ ΡΓΣνΗπ";
             Text[ greek ] = "Κατακόρυφη γραμμή κύλισης";
             Text[ korean ] = "ΌφΑχ ½ΊΕ©·ΡΉΩ";
