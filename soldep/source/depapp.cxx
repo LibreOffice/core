@@ -2,9 +2,9 @@
  *
  *  $RCSfile: depapp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-26 14:48:13 $
+ *  last change: $Author: obo $ $Date: 2004-07-27 15:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,14 +117,15 @@ void MyApp::Main()
 {
     ByteString aResMgrName( "dep" );
     aResMgrName += ByteString::CreateFromInt64( SOLARUPD );
-    Application* pApp;
-    pApp = GetpApp();
     International iNat;
-    iNat = GetpApp()->GetAppInternational();
-    LanguageType lt;
-    lt = iNat.GetLanguage();
-    pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(),
-            GetpApp()->GetAppInternational().GetLanguage());
+    iNat = GetAppInternational();
+    ::com::sun::star::lang::Locale aLocale;
+    pResMgr = ResMgr::SearchCreateResMgr( aResMgrName.GetBuffer(), aLocale );
+        AllSettings as = GetSettings();
+        as.SetUILocale(aLocale);
+        SetSettings(as);
+
+    Resource::SetResManager( pResMgr ); // from vcl
     DtSodResId::SetResMgr( pResMgr );
 
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
