@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-12 15:15:12 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 13:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3426,7 +3426,7 @@ bool WW8PLCFx_SEPX::SprmsAreEquivalent(const BYTE*  pOtherSprms,
                             bRes = false;
                     }
                     else if (memcmp(pTst, pOtherSp,
-                        maSprmParser.GetSprmSize0(nSpId, pSp)))
+                        maSprmParser.GetSprmTailLen(nSpId, pSp)))
                     {
                         bRes = false;
                     }
@@ -6475,7 +6475,8 @@ USHORT WW8DopTypography::GetConvertedLang() const
 //-----------------------------------------
 //              Sprms
 //-----------------------------------------
-USHORT wwSprmParser::GetSprmSize0(sal_uInt16 nId, const sal_uInt8* pSprm) const
+USHORT wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
+    const
 {
     SprmInfo aSprm = GetSprmInfo(nId);
     USHORT nL = 0;                      // number of Bytes to read
@@ -6573,7 +6574,7 @@ USHORT wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
 // with tokens and length byte
 USHORT wwSprmParser::GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const
 {
-    return GetSprmSize0(nId, pSprm) + 1 + mnDelta + SprmDataOfs(nId);
+    return GetSprmTailLen(nId, pSprm) + 1 + mnDelta + SprmDataOfs(nId);
 }
 
 BYTE wwSprmParser::SprmDataOfs(USHORT nId) const

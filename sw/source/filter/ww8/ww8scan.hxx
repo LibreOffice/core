@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-12 15:15:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 13:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,6 @@ namespace SL
 //simple template that manages a static [] array by sorting at construction
 template<class C> class wwSortedArray;
 
-//wwSprmParser knows how to take a sequence of bytes and split it up into
-//sprms and their arguments
-class WW8PLCFx_SEPX;        //Yucky friend, remove this horror
-
 struct SprmInfo
 {
     sal_uInt16 nId;         //A ww8 sprm is hardcoded as 16bits
@@ -128,9 +124,10 @@ typedef wwSortedArray<SprmInfo> wwSprmSearcher;
 //a managed sorted sequence of sprms
 typedef wwSortedArray<sal_uInt16> wwSprmSequence;
 
+//wwSprmParser knows how to take a sequence of bytes and split it up into
+//sprms and their arguments
 class wwSprmParser
 {
-    friend class WW8PLCFx_SEPX;
 private:
     int mnVersion;
     BYTE mnDelta;
@@ -139,7 +136,6 @@ private:
     static const wwSprmSearcher* GetWW6SprmSearcher();
 
     SprmInfo GetSprmInfo(sal_uInt16 nId) const;
-    USHORT GetSprmSize0(sal_uInt16 nId, const sal_uInt8 * pSprm) const;
 
     enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 public:
@@ -154,6 +150,10 @@ public:
     //Get known len of a sprms head, the bytes of the sprm id + any bytes
     //reserved to hold a variable length
     USHORT DistanceToData(sal_uInt16 nId) const;
+
+    //Get len of a sprms data area, ignoring the bytes of the sprm id and
+    //ignoring any len bytes. Reports the remaining data after those bytes
+    USHORT GetSprmTailLen(sal_uInt16 nId, const sal_uInt8 * pSprm) const;
 
     //The minimum acceptable sprm len possible for this type of parser
     int MinSprmLen() const { return (mnVersion < 8) ? 2 : 3; }
@@ -636,7 +636,7 @@ public:
         long nOtherSprmSiz ) const;
     BOOL Find4Sprms(USHORT nId1, USHORT nId2, USHORT nId3, USHORT nId4,
                     BYTE*& p1,   BYTE*& p2,   BYTE*& p3,   BYTE*& p4 ) const;
-    bool SprmsAreEquivalent( const BYTE* pOtherSprms, long nOtherSprmSiz) const;
+    bool SprmsAreEquivalent(const BYTE* pOtherSprms, long nOtherSprmSiz) const;
 };
 
 // Iterator fuer Fuss-/Endnoten und Anmerkungen
