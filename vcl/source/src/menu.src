@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:04:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ String SV_RESID_STRING_NOSELECTIONPOSSIBLE
     Text[ hebrew ] = "‮<אין אפשרות לבחור>‬";
     Text[ hindi ] = "<कोई चुनाव संभव नहीं>";
     Text[ slovak ] = "<Výber nie je možný>";
+    Text[ hungarian ] = "<Nem lehet kijelölni>";
+    Text[ slovenian ] = "<Ni mogoča izbira>";
 };
 
 Menu SV_RESID_MENU_EDIT
@@ -129,6 +131,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ hebrew ] = "‮ביטול פעולה‬";
             Text[ hindi ] = "~अनावृत्ति";
             Text[ slovak ] = "~Späť";
+            Text[ hungarian ] = "~Visszavonás";
+            Text[ slovenian ] = "Ra~zveljavi";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -163,6 +167,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ hebrew ] = "‮גזירה‬";
             Text[ hindi ] = "का~टो";
             Text[ slovak ] = "Vys~trihnúť";
+            Text[ hungarian ] = "~Kivágás";
+            Text[ slovenian ] = "I~zreži";
         };
         MenuItem
         {
@@ -196,6 +202,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ hebrew ] = "‮העתקה‬";
             Text[ hindi ] = "~प्रतिलिपि";
             Text[ slovak ] = "~Kopírovať";
+            Text[ hungarian ] = "~Másolás";
+            Text[ slovenian ] = "Kopir~aj";
         };
         MenuItem
         {
@@ -207,7 +215,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ portuguese_brazilian ] = "~Colar" ;
             Text [ portuguese ] = "Co~lar" ;
             Text [ finnish ] = "Lii~t�" ;
-            Text [ danish ] = "~Inds�t" ;
+            Text [ danish ] = "S�t i~nd" ;
             Text [ french ] = "C~oller" ;
             Text [ swedish ] = "K~listra in" ;
             Text [ dutch ] = "~Plakken" ;
@@ -229,6 +237,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ hebrew ] = "‮הדבקה‬";
             Text[ hindi ] = "~छिपकाओ";
             Text[ slovak ] = "~Vložiť";
+            Text[ hungarian ] = "~Beillesztés";
+            Text[ slovenian ] = "P~rilepi";
         };
         MenuItem
         {
@@ -262,6 +272,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
             Text[ slovak ] = "~Zmazať";
+            Text[ hungarian ] = "~Törlés";
+            Text[ slovenian ] = "~Izbriši";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -296,6 +308,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ hebrew ] = "‮בחירת הכל‬";
             Text[ hindi ] = "~सब चुनो";
             Text[ slovak ] = "Vybr~ať všetko";
+            Text[ hungarian ] = "~Mindet kijelöli";
+            Text[ slovenian ] = "Izberi ~vse";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -306,7 +320,7 @@ Menu SV_RESID_MENU_EDIT
                     TEXT[ italian ] = "Inserisci caratteri speciali...";
             TEXT[ portuguese_brazilian ] = "~Caracteres especiais...";
             TEXT[ portuguese ] = "~Inserir caracteres especiais...";
-            TEXT[ danish ] = "Inds�t ~specialtegn...";
+            TEXT[ danish ] = "~Specialtegn...";
             TEXT[ french ] = "~Ins�rer des caract�res sp�ciaux...";
             TEXT[ swedish ] = "Infoga ~specialtecken...";
             TEXT[ dutch ] = "~Speciaal teken invoegen...";
@@ -330,9 +344,12 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ hebrew ] = "‮תו מיוחד...‬";
             TEXT[ hindi ] = "~विशेष अक्षर...";
             TEXT[ slovak ] = "Špeciálny ~znak...";
+            TEXT[ hungarian ] = "~Különleges karakter...";
+            TEXT[ slovenian ] = "Po~seben znak...";
         };
     };
 };
+
 
 
 
