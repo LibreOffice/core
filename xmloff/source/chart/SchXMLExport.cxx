@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-24 09:51:00 $
+ *  last change: $Author: bm $ $Date: 2000-11-24 15:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
         {
             rtl::OUString sChartType = xDiagram->getDiagramType();
             rtl::OUString sXMLChartType;
+            rtl::OUString sAddInName;
             mnDomainAxes = 0;
 
             if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.LineDiagram" )))
@@ -380,16 +381,25 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                 sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_radar ));
             else if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" )))
                 sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_stock ));
+            else    // servie-name of add-in
+            {
+                sXMLChartType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_add_in ));
+                sAddInName = sChartType;
+            }
 
             if( sXMLChartType.getLength())
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_class, sXMLChartType );
 
-            uno::Reference< drawing::XShape > xShape ( rChartDoc->getArea(), uno::UNO_QUERY );
-            if( xShape.is())
-            {
-                // write size of entire chart
-// CHECKME: needed? CL              addSize( xShape );
-            }
+            if( sAddInName.getLength())
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_add_in_name, sAddInName );
+
+            // write size of entire chart
+            // is not necessary: it is done from the object container
+            // but it might be needed for swapping ?
+
+//              uno::Reference< drawing::XShape > xShape ( rChartDoc->getArea(), uno::UNO_QUERY );
+//              if( xShape.is())
+//                  addSize( xShape );
         }
         // write style name
         rtl::OUString aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
