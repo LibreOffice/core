@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:27:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,14 +1484,13 @@ const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
             if( aOrgName.EqualsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
-
-        if( !pCvt ) // unknown symbol font => use Unicode DingBats/Adobe Symbols
-            pCvt = &aImplDingBatsCvt;
     }
     else if( aMapName.EqualsAscii( "starbats" ) )
     {
-        if( aOrgName.EqualsAscii( "starsymbol" ) )      pCvt = &aImplStarSymbolCvt;
-        else if( aOrgName.EqualsAscii( "opensymbol" ) ) pCvt = &aImplStarSymbolCvt;
+        if( aOrgName.EqualsAscii( "starsymbol" ) )
+            pCvt = &aImplStarSymbolCvt;
+        else if( aOrgName.EqualsAscii( "opensymbol" ) )
+            pCvt = &aImplStarSymbolCvt;
     }
 
     return pCvt;
