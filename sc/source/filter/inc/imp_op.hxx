@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:08:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ protected:
     void                    Mulblank( void );               // 0xBE
     void                    Rstring( void );                // 0xD6
     void                    Olesize( void );                // 0xDE
+    void                    ReadUsesElfs();                 // 0x0160
     void                    Blank34( void );                // 0x0201
     void                    Number34( void );               // 0x0203
     void                    Label( void );                  // 0x0204
