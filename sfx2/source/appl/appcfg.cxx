@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:33:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 13:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,12 +120,15 @@
 #ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
 #endif
+
+#if 0  /* OBSOLETE */
 #ifndef _INET_WRAPPER_HXX
 #include <inet/wrapper.hxx>
 #endif
 #ifndef _INET_CONFIG_HXX
 #include <inet/inetcfg.hxx>
 #endif
+#endif /* OBSOLETE */
 
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
@@ -1133,6 +1136,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
     if ( bResetSession )
     {
+#if 0   /* OBSOLETE */
         NAMESPACE_INET(INetWrapper) aWrapper;
         ::vos::ORef< ::inet::INetConfig > xINetConfig;
         if ( aWrapper.getINetConfig( xINetConfig ) )
@@ -1164,6 +1168,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                 xINetConfig->setProxyConfig (aProxyCfg);
             }
         }
+#endif  /* OBSOLETE */
     }
 
     // AutoSave starten oder anhalten
