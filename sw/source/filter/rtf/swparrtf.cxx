@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:00:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,6 +574,9 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
     delete pRegionEndIdx, pRegionEndIdx = 0;
     RemoveUnusedNumRules();
 
+    pDoc->SetUpdateExpFldStat();
+    pDoc->SetInitDBFields(true);
+
     // Laufbalken bei asynchronen Call nicht einschalten !!!
     ::EndProgress( pDoc->GetDocShell() );
 }
@@ -649,6 +652,22 @@ void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     }
 }
 
+bool HasHeader(const SwFrmFmt &rFmt)
+{
+    const SfxPoolItem *pHd;
+    if (SFX_ITEM_SET == rFmt.GetItemState(RES_HEADER, false, &pHd))
+        return ((const SwFmtHeader *)(pHd))->IsActive();
+    return false;
+}
+
+bool HasFooter(const SwFrmFmt &rFmt)
+{
+    const SfxPoolItem *pFt;
+    if (SFX_ITEM_SET == rFmt.GetItemState(RES_FOOTER, false, &pFt))
+        return ((const SwFmtFooter *)(pFt))->IsActive();
+    return false;
+}
+
 void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     rtfSections::wwULSpaceData& rData)
 {
@@ -677,9 +696,8 @@ void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     if (bFirst)
     {
         if (
-            rSection.mpTitlePage &&
-            SFX_ITEM_SET == rSection.mpTitlePage->GetMaster().GetItemState(RES_HEADER)
-            )
+            rSection.mpTitlePage && HasHeader(rSection.mpTitlePage->GetMaster())
+           )
         {
             rData.bHasHeader = true;
         }
@@ -687,10 +705,10 @@ void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     else
     {
         if (rSection.mpPage &&
-           (
-           SFX_ITEM_SET == rSection.mpPage->GetMaster().GetItemState(RES_HEADER)
-           || rSection.mpPage->GetLeft().GetItemState(RES_HEADER)
-           )
+               (
+               HasHeader(rSection.mpPage->GetMaster())
+               || HasHeader(rSection.mpPage->GetLeft())
+               )
            )
         {
             rData.bHasHeader = true;
@@ -711,9 +729,9 @@ void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     if (bFirst)
     {
         if (
-            rSection.mpTitlePage &&
-            SFX_ITEM_SET == rSection.mpTitlePage->GetMaster().GetItemState(RES_FOOTER)
-            )
+                rSection.mpTitlePage &&
+                HasFooter(rSection.mpTitlePage->GetMaster())
+           )
         {
             rData.bHasFooter = true;
         }
@@ -722,8 +740,8 @@ void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     {
         if (rSection.mpPage &&
            (
-           SFX_ITEM_SET == rSection.mpPage->GetMaster().GetItemState(RES_FOOTER)
-           || rSection.mpPage->GetLeft().GetItemState(RES_FOOTER)
+               HasFooter(rSection.mpPage->GetMaster())
+               || HasFooter(rSection.mpPage->GetLeft())
            )
            )
         {
@@ -963,7 +981,8 @@ void rtfSections::InsertSegments(bool bNewDoc)
             if (aIter->mpTitlePage)
                 aIter->mpTitlePage->SetFollow(aIter->mpPage);
 
-            if (aIter->PageRestartNo())
+            if (aIter->PageRestartNo() ||
+                ((aIter == aStart) && aIter->PageStartAt() != 1))
                 aPgDesc.SetNumOffset(aIter->PageStartAt());
 
             /*
@@ -1562,10 +1581,11 @@ SectPageInformation::SectPageInformation(const DocPageInformation &rDoc)
     mnPgwsxn(rDoc.mnPaperw), mnPghsxn(rDoc.mnPaperh),
     mnMarglsxn(rDoc.mnMargl), mnMargrsxn(rDoc.mnMargr),
     mnMargtsxn(rDoc.mnMargt), mnMargbsxn(rDoc.mnMargb),
-    mnGutterxsn(rDoc.mnGutter), mnHeadery(720), mnFootery(720), mnPgnStarts(1),
-    mnCols(1), mnColsx(720), mnStextflow(rDoc.mbRTLdoc ? 3 : 0), mnBkc(2),
-    mbLndscpsxn(rDoc.mbLandscape), mbTitlepg(false), mbFacpgsxn(rDoc.mbFacingp),
-    mbRTLsection(rDoc.mbRTLdoc), mbPgnrestart(false)
+    mnGutterxsn(rDoc.mnGutter), mnHeadery(720), mnFootery(720),
+    mnPgnStarts(rDoc.mnPgnStart), mnCols(1), mnColsx(720),
+    mnStextflow(rDoc.mbRTLdoc ? 3 : 0), mnBkc(2), mbLndscpsxn(rDoc.mbLandscape),
+    mbTitlepg(false), mbFacpgsxn(rDoc.mbFacingp), mbRTLsection(rDoc.mbRTLdoc),
+    mbPgnrestart(false)
 {
 };
 
@@ -2064,8 +2084,6 @@ void SwRTFParser::DoHairyWriterPageDesc(int nToken)
 
 void SwRTFParser::ReadSectControls( int nToken )
 {
-    AttrGroupEnd(); //#106493#
-
     //this is some hairy stuff to try and retain writer style page descriptors
     //in rtf, almost certainy a bad idea, but we've inherited it, so here it
     //stays
@@ -2085,14 +2103,14 @@ void SwRTFParser::ReadSectControls( int nToken )
 
     SectPageInformation aNewSection(maSegments.back().maPageInfo);
 
+    bool bNewSection = false;
     int bWeiter = true;
     do {
-        bool bIsSectToken = false;
         USHORT nValue = USHORT( nTokenValue );
         switch( nToken )
         {
             case RTF_SECT:
-//                bWeiter = false;
+                bNewSection = true;
                 break;
             case RTF_SECTD:
                 //Reset to page defaults
@@ -2304,7 +2322,17 @@ void SwRTFParser::ReadSectControls( int nToken )
             nToken = GetNextToken();
     } while (bWeiter && IsParserWorking());
 
-    maSegments.push_back(rtfSection(*pPam->GetPoint(), aNewSection));
+    if (bNewSection || maSegments.empty())
+    {
+        AttrGroupEnd(); //#106493#
+        maSegments.push_back(rtfSection(*pPam->GetPoint(), aNewSection));
+    }
+    else //modifying/replacing the current section
+    {
+        SwPaM aPamStart(maSegments.back().maStart);
+        maSegments.pop_back();
+        maSegments.push_back(rtfSection(*aPamStart.GetPoint(), aNewSection));
+    }
 
     SkipToken(-1);
 }
