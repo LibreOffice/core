@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2003-03-05 08:44:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 16:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,6 @@ int _cdecl main( int argc, char* argv[] )
         "-onlyerrors,   shows only the failed test functions",
 /*      "-tc=s@,        name(s) of testcase(s) to generate", */
         "-sf=s,         absolute path and name to the signal file.",
-//! new (helpful if at debug time)
-        "-dntsf,        if given, do not touch signal file, also if one exist.",
         "-jobonly=s,    job control file, these jobs should only executed.",
         "-jobfilter=s,  use a filter for just some tests.",
         "-onlyshowjobs, show only all jobs, do no tests.",

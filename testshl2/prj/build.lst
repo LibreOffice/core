@@ -1,8 +1,8 @@
-ts  testshl2   :  sal NULL
-ts  testshl2						usr1    -   all ts_mkout NULL
-ts  testshl2\source\cppunit            nmake   -   all ts_tss NULL
-ts  testshl2\source\result             nmake   -   all ts_tsr ts_tss NULL
-ts  testshl2\source                    nmake   -   all ts_tst ts_tsr ts_tss NULL
-ts  testshl2\util                      nmake   -   all ts_tstu ts_tst ts_tsr ts_tss NULL
-ts  testshl2\inc                       get     -   all ts_tsti NULL
+t2  testshl2   :  sal NULL
+t2  testshl2						usr1    -   all t2_mkout NULL
+t2  testshl2\source\cppunit            nmake   -   all t2_tss NULL
+t2  testshl2\source\result             nmake   -   all t2_tsr t2_tss NULL
+t2  testshl2\source                    nmake   -   all t2_tst t2_tsr t2_tss NULL
+t2  testshl2\util                      nmake   -   all t2_tstu t2_tst t2_tsr t2_tss NULL
+t2  testshl2\inc                       get     -   all t2_tsti NULL
 
