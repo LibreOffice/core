@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -75,9 +75,6 @@
 #endif
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #pragma hdrstop
 
@@ -406,7 +403,7 @@ SvxMetricField::SvxMetricField( Window* pParent, SfxBindings& rBind, WinBits nBi
     SetLast( 5000 );
     SetFirst( 0 );
 
-    GET_MODULE_FIELDUNIT( eDlgUnit );
+    eDlgUnit = GetModuleFieldUnit();
     SetFieldUnit( *this, eDlgUnit, FALSE );
     Show();
 }
@@ -479,8 +476,7 @@ void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 
 void SvxMetricField::RefreshDlgUnit()
 {
-    FieldUnit eTmpUnit = SFX_APP()->GetOptions().GetMetric();
-    GET_MODULE_FIELDUNIT( eTmpUnit );
+    FieldUnit eTmpUnit = GetModuleFieldUnit();
 
     if ( eDlgUnit != eTmpUnit )
     {
