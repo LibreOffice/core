@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:52:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,11 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
                     "drafts.com.sun.star.frame.ModuleManager" ) ) ),
             uno::UNO_QUERY );
 
-        OUString aModuleId = xModuleManager->identify( xFrame );
+        OUString aModuleId;
+        try{
+            aModuleId = xModuleManager->identify( xFrame );
+        } catch(const uno::Exception&)
+            { aModuleId = ::rtl::OUString(); }
 
         if ( SvxConfigPage::CanConfig( aModuleId ) )
         {
