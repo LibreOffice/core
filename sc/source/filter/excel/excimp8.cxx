@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:56:29 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,10 +1065,8 @@ void ImportExcel8::PostDocLoad( void )
 
 void ImportExcel8::ApplyEscherObjects()
 {
-    SfxObjectShell* pShell = GetDocShell();
     XclImpObjectManager& rObjManager = GetObjectManager();
-
-    if( pShell && rObjManager.HasEscherStream() )
+    if( rObjManager.HasEscherStream() )
     {
         XclImpDffManager& rDffManager = rObjManager.GetDffManager();
         if( const SvxMSDffShapeInfos* pShapeInfos = rDffManager.GetShapeInfos() )
@@ -1103,8 +1101,8 @@ void ImportExcel8::ApplyEscherObjects()
                 }
             }
         }
-        rObjManager.Apply();
     }
+    rObjManager.Apply();
 }
 
 
