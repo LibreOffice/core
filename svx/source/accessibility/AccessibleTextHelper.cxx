@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-29 17:56:25 $
+ *  last change: $Author: thb $ $Date: 2002-12-12 12:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <limits.h>
 #include <memory>
 #include <algorithm>
+#include <deque>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -148,6 +149,10 @@
 // Project-local header
 //
 //------------------------------------------------------------------------
+
+#ifndef _SVX_ACCESSIBLE_TEXT_EVENT_QUEUE_HXX
+#include "AccessibleTextEventQueue.hxx"
+#endif
 
 #ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
 #include "AccessibleTextHelper.hxx"
@@ -244,7 +249,7 @@ namespace accessibility
 #endif
 
         // checks all children for visibility, throws away invisible ones
-        void UpdateVisibleChildren();
+        void UpdateVisibleChildren( bool bBroadcastEvents=true );
 
         // check all children for changes in positíon and size
         void UpdateBoundRect();
@@ -255,6 +260,9 @@ namespace accessibility
 
     private:
 
+        // Process event queue
+        void ProcessQueue();
+
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const uno::Any& rNewValue, const sal_Int16 nEventId ) const { FireEvent( nEventId, rNewValue ); }
         void LostPropertyEvent( const uno::Any& rOldValue, const sal_Int16 nEventId ) const { FireEvent( nEventId, uno::Any(), rOldValue ); }
@@ -263,8 +271,6 @@ namespace accessibility
         void ShutdownEditSource() SAL_THROW((uno::RuntimeException));
 
         void ParagraphsMoved( sal_Int32 nFirst, sal_Int32 nMiddle, sal_Int32 nLast );
-        void ParagraphsInserted( sal_Int32 nFirst );
-        void ParagraphsRemoved( sal_Int32 nFirst );
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -300,6 +306,12 @@ namespace accessibility
         // the object handling our children (guarded by solar mutex)
         accessibility::AccessibleParaManager maParaManager;
 
+        // number of not-yet-closed event frames (BEGIN/END sequences) (guarded by solar mutex)
+        sal_Int32 maEventOpenFrames;
+
+        // Queued events from Notify() (guarded by solar mutex)
+        AccessibleTextEventQueue maEventQueue;
+
         // spin lock to prevent notify in notify (guarded by solar mutex)
         sal_Bool mbInNotify;
 
@@ -332,6 +344,7 @@ namespace accessibility
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
         mnStartIndex( 0 ),
+        maEventOpenFrames( 0 ),
         mbInNotify( sal_False ),
         mbGroupHasFocus( sal_False ),
         mbThisHasFocus( sal_False ),
@@ -696,7 +709,7 @@ namespace accessibility
         UpdateBoundRect();
     }
 
-    void AccessibleTextHelper_Impl::UpdateVisibleChildren()
+    void AccessibleTextHelper_Impl::UpdateVisibleChildren( bool bBroadcastEvents )
     {
         try
         {
@@ -748,7 +761,8 @@ namespace accessibility
                     accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
                     if( aChild.second.Width == 0 &&
                         aChild.second.Height == 0 &&
-                        mxFrontEnd.is() )
+                        mxFrontEnd.is() &&
+                        bBroadcastEvents )
                     {
                         GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
                                                                                    mxFrontEnd, GetEditSource(), nCurrPara ).first ),
@@ -760,8 +774,9 @@ namespace accessibility
                     // not or no longer visible
                     if( maParaManager.IsReferencable( nCurrPara ) )
                     {
-                        LostPropertyEvent( uno::makeAny( maParaManager.GetChild( nCurrPara ).first.get().getRef() ),
-                                           AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                        if( bBroadcastEvents )
+                            LostPropertyEvent( uno::makeAny( maParaManager.GetChild( nCurrPara ).first.get().getRef() ),
+                                               AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
 
                         // clear reference
                         maParaManager.Release( nCurrPara );
@@ -779,7 +794,8 @@ namespace accessibility
             maParaManager.SetNum(0);
 
             // lost all children
-            FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
+            if( bBroadcastEvents )
+                FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
         }
     }
 
@@ -933,76 +949,323 @@ namespace accessibility
         }
     }
 
-    void AccessibleTextHelper_Impl::ParagraphsInserted( sal_Int32 nFirst )
+    /** functor processing queue events
+
+        Reacts on TEXT_HINT_PARAINSERTED/REMOVED events and stores
+        their content
+     */
+    class AccessibleTextHelper_QueueFunctor : public ::std::unary_function< const SfxHint*, void >
     {
-        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-        const sal_Int32 nOldNumParas( maParaManager.GetNum() );
-        const sal_Int32 nLast( nParas - 1 );
-
-        // resize child vector to the current child count
-        maParaManager.SetNum( nParas );
-
-        if( nFirst < nOldNumParas && nFirst < nParas && nLast < nParas )
+    public:
+        AccessibleTextHelper_QueueFunctor() :
+            mnParasChanged( 0 ),
+            mnParaIndex(-1),
+            mnHintId(-1)
+        {}
+        void operator()( const SfxHint* pEvent )
         {
-            // since we have no "paragraph index
-            // changed" event on UAA, remove
-            // [first,last] and insert again later (in
-            // UpdateVisibleChildren)
+            if( pEvent &&
+                mnParasChanged != -1 )
+            {
+                // determine hint type
+                const TextHint* pTextHint = PTR_CAST( TextHint, pEvent );
+                const SvxEditSourceHint* pEditSourceHint = PTR_CAST( SvxEditSourceHint, pEvent );
 
-            // move successors of inserted paragraph one position further
-            //maParaManager.MoveRightFrom( pTextHint->GetValue() );
-
-            // send CHILD_EVENT to affected children
-            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
-
-            ::std::advance( begin, nFirst );
-            ::std::advance( end, nLast+1 );
-
-            // TODO: maybe optimize here in the following way.  If the
-            // number of removed children exceeds a certain threshold,
-            // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
-            AccessibleTextHelper_LostChildEvent aFunctor( *this );
-            ::std::for_each( begin, end, aFunctor );
-
-            // release everything from the insertion position until the end
-            // #102235# Perform the release after the CHILD_EVENT notification
-            maParaManager.Release(nFirst, nLast+1);
+                if( !pEditSourceHint && pTextHint &&
+                    (pTextHint->GetId() == TEXT_HINT_PARAINSERTED ||
+                     pTextHint->GetId() == TEXT_HINT_PARAREMOVED ) )
+                {
+                    if( pTextHint->GetValue() == EE_PARA_ALL )
+                    {
+                        mnParasChanged = -1;
+                    }
+                    else
+                    {
+                        mnHintId = pTextHint->GetId();
+                        mnParaIndex = pTextHint->GetValue();
+                        ++mnParasChanged;
+                    }
+                }
+            }
         }
-    }
 
-    void AccessibleTextHelper_Impl::ParagraphsRemoved( sal_Int32 nFirst )
+        /** Query number of paragraphs changed during queue processing.
+
+            @return number of changed paragraphs, -1 for
+            "every paragraph changed"
+        */
+        int GetNumberOfParasChanged() { return mnParasChanged; }
+        /** Query index of last added/removed paragraph
+
+            @return index of lastly added paragraphs, -1 for none
+            added so far.
+        */
+        int GetParaIndex() { return mnParaIndex; }
+        /** Query hint id of last interesting event
+
+            @return hint id of last interesting event (REMOVED/INSERTED).
+        */
+        int GetHintId() { return mnHintId; }
+
+    private:
+        /** number of paragraphs changed during queue processing. -1 for
+            "every paragraph changed"
+        */
+        int mnParasChanged;
+        /// index of paragraph added/removed last
+        int mnParaIndex;
+        /// TextHint ID (removed/inserted) of last interesting event
+        int mnHintId;
+    };
+
+    void AccessibleTextHelper_Impl::ProcessQueue()
     {
-        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-        const sal_Int32 nLast( maParaManager.GetNum() - 1 );
+        // inspect queue for paragraph insert/remove events. If there
+        // is exactly _one_ of those in the queue, and the number of
+        // paragraphs has changed by exactly one, use that event to
+        // determine a priori which paragraph was added/removed. This
+        // is necessary, since I must sync right here with the
+        // EditEngine state (number of paragraphs etc.), since I'm
+        // potentially sending listener events right away.
+        AccessibleTextHelper_QueueFunctor aFunctor;
+        maEventQueue.ForEach( aFunctor );
 
-        // since we have no "paragraph index
-        // changed" event on UAA, remove
-        // [first,last] and insert again later (in
-        // UpdateVisibleChildren)
+        const sal_Int32 nNewParas( GetTextForwarder().GetParagraphCount() );
+        const sal_Int32 nCurrParas( maParaManager.GetNum() );
 
-        // move successors of removed paragraph one position closer
-        // maParaManager.MoveLeftFrom( pTextHint->GetValue() );
+        // whether every paragraph already is updated (no need to
+        // repeat that later on, e.g. for PARA_MOVED events)
+        bool            bEverythingUpdated( false );
 
-        // send CHILD_EVENT to affected children
-        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+        if( labs( nNewParas - nCurrParas ) == 1 &&
+            aFunctor.GetNumberOfParasChanged() == 1 )
+        {
+            // #103483# Exactly one paragraph added/removed. This is
+            // the normal case, optimize event handling here.
 
-        ::std::advance( begin, nFirst );
-        ::std::advance( end, nLast+1 );
+            if( aFunctor.GetHintId() == TEXT_HINT_PARAINSERTED )
+            {
+                // update num of paras
+                maParaManager.SetNum( nNewParas );
 
-        // TODO: maybe optimize here in the following way.  If the
-        // number of removed children exceeds a certain threshold,
-        // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
-        AccessibleTextHelper_LostChildEvent aFunctor( *this );
-        ::std::for_each( begin, end, aFunctor );
+                // release everything from the insertion position until the end
+                maParaManager.Release(aFunctor.GetParaIndex(), nCurrParas);
 
-        // release everything from the remove position until the end
-        // #102235# Perform the release after the CHILD_EVENT notification
-        maParaManager.Release(nFirst, nLast+1);
+                // TODO: Clarify whether this behaviour _really_ saves
+                // anybody anything!
+                // update children, _don't_ broadcast
+                UpdateVisibleChildren( false );
+                UpdateBoundRect();
 
-        // resize child vector to the current child count
-        maParaManager.SetNum( nParas );
+                // send insert event
+                AccessibleParaManager::WeakPara::HardRefType aChild( maParaManager.GetChild( aFunctor.GetParaIndex() ).first.get() );
+                GotPropertyEvent( uno::makeAny( aChild.getRef() ),
+                                  AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+            }
+            else if( aFunctor.GetHintId() == TEXT_HINT_PARAREMOVED )
+            {
+                ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+                ::std::advance( begin, aFunctor.GetParaIndex() );
+                ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+                ::std::advance( end, 1 );
+
+                // send remove event
+                AccessibleTextHelper_LostChildEvent aLooseFunctor( *this );
+                ::std::for_each( begin, end, aLooseFunctor );
+
+                // release everything from the remove position until the end
+                // #102235# Perform the release after the CHILD_EVENT notification
+                maParaManager.Release(aFunctor.GetParaIndex(), nCurrParas);
+
+                // update num of paras
+                maParaManager.SetNum( nNewParas );
+
+                // TODO: Clarify whether this behaviour _really_ saves
+                // anybody anything!
+                // update children, _don't_ broadcast
+                UpdateVisibleChildren( false );
+                UpdateBoundRect();
+            }
+#ifdef DBG_UTIL
+            else
+                DBG_ERROR("AccessibleTextHelper_Impl::ProcessQueue() invalid hint id");
+#endif
+        }
+        else if( nNewParas != nCurrParas )
+        {
+            // number of paragraphs somehow changed - but we have no
+            // chance determining how. Thus, throw away everything and
+            // create from scratch.
+            FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
+
+            // release all paras
+            maParaManager.Release(0, nCurrParas);
+
+            // update num of paras
+            maParaManager.SetNum( nNewParas );
+
+            // create from scratch
+            UpdateVisibleChildren();
+            UpdateBoundRect();
+
+            // no need for further updates later on
+            bEverythingUpdated = true;
+        }
+
+        while( !maEventQueue.IsEmpty() )
+        {
+            ::std::auto_ptr< SfxHint > pHint( maEventQueue.PopFront() );
+            if( pHint.get() )
+            {
+                const SfxHint& rHint = *(pHint.get());
+
+                // determine hint type
+                const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+                const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+                const TextHint* pTextHint = PTR_CAST( TextHint, &rHint );
+                const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
+                const SvxEditSourceHint* pEditSourceHint = PTR_CAST( SvxEditSourceHint, &rHint );
+
+                try
+                {
+                    const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+
+                    if( pEditSourceHint )
+                    {
+                        switch( pEditSourceHint->GetId() )
+                        {
+                            case EDITSOURCE_HINT_PARASMOVED:
+                            {
+                                DBG_ASSERT( pEditSourceHint->GetStartValue() < GetTextForwarder().GetParagraphCount() &&
+                                            pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
+                                            "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
+
+                                if( !bEverythingUpdated )
+                                {
+                                    ParagraphsMoved(pEditSourceHint->GetStartValue(),
+                                                    pEditSourceHint->GetValue(),
+                                                    pEditSourceHint->GetEndValue());
+
+                                    // in all cases, check visibility afterwards.
+                                    UpdateVisibleChildren();
+                                }
+                                break;
+                            }
+
+                            case EDITSOURCE_HINT_SELECTIONCHANGED:
+                                // notify listeners
+                                try
+                                {
+                                    UpdateSelection();
+                                }
+                                // maybe we're not in edit mode (this is not an error)
+                                catch( const uno::Exception& ) {}
+                                break;
+                        }
+                    }
+                    else if( pTextHint )
+                    {
+                        switch( pTextHint->GetId() )
+                        {
+                            case TEXT_HINT_MODIFIED:
+                            {
+                                // notify listeners
+                                sal_Int32 nPara( pTextHint->GetValue() );
+                                if( nPara == static_cast<sal_Int32>(EE_PARA_ALL) )
+                                    maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                                else
+                                    if( nPara < nParas )
+                                        maParaManager.FireEvent( nPara, AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                                break;
+                            }
+
+                            case TEXT_HINT_PARAINSERTED:
+                                // already happened above
+                                break;
+
+                            case TEXT_HINT_PARAREMOVED:
+                                // already happened above
+                                break;
+
+                            case TEXT_HINT_TEXTHEIGHTCHANGED:
+                                // visibility changed, done below
+                                break;
+
+                            case TEXT_HINT_VIEWSCROLLED:
+                                // visibility changed, done below
+                                break;
+                        }
+
+                        // in all cases, check visibility afterwards.
+                        UpdateVisibleChildren();
+                        UpdateBoundRect();
+                    }
+                    else if( pViewHint )
+                    {
+                        switch( pViewHint->GetId() )
+                        {
+                            case SVX_HINT_VIEWCHANGED:
+                                // just check visibility
+                                UpdateVisibleChildren();
+                                UpdateBoundRect();
+                                break;
+                        }
+                    }
+                    else if( pSdrHint )
+                    {
+                        switch( pSdrHint->GetKind() )
+                        {
+                            case HINT_BEGEDIT:
+                            {
+                                // change children state
+                                maParaManager.SetActive();
+
+                                // per definition, edit mode text has the focus
+                                SetFocus( sal_True );
+                                break;
+                            }
+
+                            case HINT_ENDEDIT:
+                                // focused child now looses focus
+                                ESelection aSelection;
+                                if( GetEditViewForwarder().GetSelection( aSelection ) )
+                                    SetChildFocus( aSelection.nEndPara, sal_False );
+
+                                // change children state
+                                maParaManager.SetActive( sal_False );
+
+                                maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND,
+                                                              EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND);
+                                break;
+                        }
+                    }
+                    // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
+                    else if( pSimpleHint )
+                    {
+                        switch( pSimpleHint->GetId() )
+                        {
+                            case SFX_HINT_DYING:
+                                // edit source is dying under us, become defunc then
+                                try
+                                {
+                                    // make edit source inaccessible
+                                    // Note: cannot destroy it here, since we're called from there!
+                                    ShutdownEditSource();
+                                }
+                                catch( const uno::Exception& ) {}
+
+                                break;
+                        }
+                    }
+                }
+                catch( const uno::Exception& )
+                {
+#ifdef DBG_UTIL
+                    OSL_TRACE("AccessibleTextHelper_Impl::ProcessQueue: Unhandled exception.");
+#endif
+                }
+            }
+        }
     }
 
     void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1025,154 +1288,83 @@ namespace accessibility
 
         try
         {
-            const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-
-            // precondition: edit engine and para manager consistent
-
-            /* The problem here is the fact that the EditEngine events
-             * do not always arrive in a logical order. For example,
-             * when inserting a paragraph by pressing return at the
-             * end of a line, currently the TEXT_MODIFIED hint arrives
-             * before the PARAGRAPH_INSERTED hint. Therefore, we have
-             * to update our paragraph count proactively here.
-             */
-            sal_Int32 nFirstParaInsert( 0 ); // default range is pessimization, don't know where to add
-            if( (!pEditSourceHint && pTextHint && pTextHint->GetId() == TEXT_HINT_PARAINSERTED) )
-                nFirstParaInsert = pTextHint->GetValue() == EE_PARA_ALL ? 0 : pTextHint->GetValue();
-
-            if( nFirstParaInsert != 0 ||
-                maParaManager.GetNum() < static_cast<sal_uInt32>(nParas) )
-            {
-                ParagraphsInserted( nFirstParaInsert );
-                UpdateVisibleChildren();
-                UpdateBoundRect();
-            }
-
-            sal_Int32 nFirstParaRemove( 0 ); // default range is pessimization, don't know where to add
-            if( (!pEditSourceHint && pTextHint && pTextHint->GetId() == TEXT_HINT_PARAREMOVED) )
-                nFirstParaRemove = pTextHint->GetValue() == EE_PARA_ALL ? 0 : pTextHint->GetValue();
-
-            if( nFirstParaRemove != 0 ||
-                maParaManager.GetNum() > static_cast<sal_uInt32>(nParas) )
-            {
-                // remove excess paragraphs (range is pessimization, don't know where to remove)
-                ParagraphsRemoved( nFirstParaRemove );
-                UpdateVisibleChildren();
-                UpdateBoundRect();
-            }
-
+            // Process notification event
             if( pEditSourceHint )
             {
-                switch( pEditSourceHint->GetId() )
-                {
-                    case EDITSOURCE_HINT_PARASMOVED:
-                    {
-                        DBG_ASSERT( pEditSourceHint->GetStartValue() < GetTextForwarder().GetParagraphCount() &&
-                                    pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
-                                    "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
-
-                        ParagraphsMoved(pEditSourceHint->GetStartValue(),
-                                        pEditSourceHint->GetValue(),
-                                        pEditSourceHint->GetEndValue());
-
-                        // in all cases, check visibility afterwards.
-                        UpdateVisibleChildren();
-
-                        break;
-                    }
-
-                    case EDITSOURCE_HINT_SELECTIONCHANGED:
-                        // notify listeners
-                        try
-                        {
-                            UpdateSelection();
-                        }
-                        // maybe we're not in edit mode (this is not an error)
-                        catch( const uno::Exception& ) {}
-                        break;
-                }
+                maEventQueue.Append( *pEditSourceHint );
             }
             else if( pTextHint )
             {
                 switch( pTextHint->GetId() )
                 {
-                    case TEXT_HINT_MODIFIED:
-                    {
-                        // notify listeners
-                        sal_Int32 nPara( pTextHint->GetValue() );
-                        if( nPara == static_cast<sal_Int32>(EE_PARA_ALL) )
-                            maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
-                        else
-                            if( nPara < nParas )
-                                maParaManager.FireEvent( nPara, AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
-                        break;
-                    }
+                    case TEXT_HINT_BLOCKNOTIFICATION_END:
+                    case TEXT_HINT_INPUT_END:
+                        --maEventOpenFrames;
 
-                    case TEXT_HINT_PARAINSERTED:
-                        // already happened above
+                        if( maEventOpenFrames == 0 )
+                        {
+                            // #103483#
+                            /* All information should have arrived
+                             * now, process queue. As stated in the
+                             * above bug, we can often avoid throwing
+                             * away all paragraphs by looking forward
+                             * in the event queue (searching for
+                             * PARAINSERT/REMOVE events). Furthermore,
+                             * processing the event queue only at the
+                             * end of an interaction cycle, ensures
+                             * that the EditEngine state and the
+                             * AccessibleText state are the same
+                             * (well, mostly. If there are _multiple_
+                             * interaction cycles in the EE queues, it
+                             * can still happen that EE state is
+                             * different. That's so to say broken by
+                             * design with that delayed EE event
+                             * concept).
+                             */
+                            ProcessQueue();
+                        }
                         break;
 
-                    case TEXT_HINT_PARAREMOVED:
-                        // already happened above
-                        break;
+                    case TEXT_HINT_BLOCKNOTIFICATION_START:
+                    case TEXT_HINT_INPUT_START:
+                        ++maEventOpenFrames;
 
-                    case TEXT_HINT_TEXTHEIGHTCHANGED:
-                        break;
-
-                    case TEXT_HINT_VIEWSCROLLED:
+                    default:
+                        maEventQueue.Append( *pTextHint );
                         break;
                 }
-
-                // in all cases, check visibility afterwards.
-                UpdateVisibleChildren();
-                UpdateBoundRect();
             }
             else if( pViewHint )
             {
-                switch( pViewHint->GetId() )
-                {
-                    case SVX_HINT_VIEWCHANGED:
-                        // just check visibility
-                        UpdateVisibleChildren();
-                        UpdateBoundRect();
-                        break;
-                }
+                maEventQueue.Append( *pViewHint );
+
+                // process visibility right away, if not within an
+                // open EE notification frame. Otherwise, event
+                // processing would be delayed until next EE
+                // notification sequence.
+                if( maEventOpenFrames == 0 )
+                    ProcessQueue();
             }
             else if( pSdrHint )
             {
-                switch( pSdrHint->GetKind() )
-                {
-                    case HINT_BEGEDIT:
-                    {
-                        // change children state
-                        maParaManager.SetActive();
+                maEventQueue.Append( *pSdrHint );
 
-                        // per definition, edit mode text has the focus
-                        SetFocus( sal_True );
-                        break;
-                    }
-
-                    case HINT_ENDEDIT:
-                        // focused child now looses focus
-                        ESelection aSelection;
-                        if( GetEditViewForwarder().GetSelection( aSelection ) )
-                            SetChildFocus( aSelection.nEndPara, sal_False );
-
-                        // change children state
-                        maParaManager.SetActive( sal_False );
-
-                        maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND,
-                                                      EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND);
-                        break;
-                }
+                // process drawing layer events right away, if not
+                // within an open EE notification frame. Otherwise,
+                // event processing would be delayed until next EE
+                // notification sequence.
+                if( maEventOpenFrames == 0 )
+                    ProcessQueue();
             }
             // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
             else if( pSimpleHint )
             {
+                // handle this event _at once_, because after that, objects are invalid
                 switch( pSimpleHint->GetId() )
                 {
                     case SFX_HINT_DYING:
                         // edit source is dying under us, become defunc then
+                        maEventQueue.Clear();
                         try
                         {
                             // make edit source inaccessible
