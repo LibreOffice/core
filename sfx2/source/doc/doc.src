@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 21:35:39 $
+ *  last change: $Author: kz $ $Date: 2001-10-12 20:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1995,7 +1995,7 @@ String STR_NOSAVEANDCLOSE
     Text[ spanish ] = "~Rechazar";
     Text[ italian ] = "~Esci";
     Text[ danish ] = "Forkast";
-    Text[ swedish ] = "A~vslå";
+    Text[ swedish ] = "I~gnorera";
     Text[ polish ] = "Odrzuæ";
     Text[ portuguese_brazilian ] = "~Discard";
     Text[ japanese ] = "ç ´æ£„(~D)";
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
