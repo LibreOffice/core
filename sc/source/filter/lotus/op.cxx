@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:50:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void OP_HiddenCols( SvStream& r, UINT16 n )
                 pDoc->SetColFlags( nCount, 0, pDoc->GetColFlags( nCount, 0 ) | CR_HIDDEN );
 
             nCount++;
-            nAkt = nAkt / 2;    // der Nächste bitte...
+            nAkt = nAkt / 2;    // der Naechste bitte...
         }
     }
 }
