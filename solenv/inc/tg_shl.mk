@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: svesik $ $Date: 2002-01-02 11:23:22 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 14:12:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -179,11 +179,11 @@ USE_SHL$(TNR)DEF=
 SHL$(TNR)DEPN+:=$(SHL$(TNR)DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
+USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
 
 .IF "$(USE_SHL$(TNR)VERSIONMAP)"!=""
 
-.IF "$(DEF$(TNR)EXPORTFILE)"!=""
+.IF "$(SHL$(TNR)FILTERFILE)"!=""
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
@@ -204,7 +204,7 @@ SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
 $(USE_SHL$(TNR)VERSIONMAP): \
                     $(SHL$(TNR)OBJS)\
                     $(SHL$(TNR)LIBS)\
-                    $(DEF$(TNR)EXPORTFILE)
+                    $(SHL$(TNR)FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL$(TNR)OBJS)"!=""
 # dump remaining objects on the fly
@@ -215,16 +215,16 @@ $(USE_SHL$(TNR)VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL$(TNR)LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF$(TNR)EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL$(TNR)INTERFACE) -f $(SHL$(TNR)FILTERFILE) -m $@
 
-.ELSE			# "$(DEF$(TNR)EXPORTFILE)"!=""
+.ELSE			# "$(SHL$(TNR)FILTERFILE)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
 $(USE_SHL$(TNR)VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF$(TNR)EXPORTFILE not set!
+    @+echo SHL$(TNR)FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF$(TNR)EXPORTFILE)"!=""
+.ENDIF			# "$(SHL$(TNR)FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -575,18 +575,19 @@ SHL1IMP SHL2IMP SHL3IMP SHL4IMP SHL5IMP SHL6IMP SHL7IMP SHL8IMP SHL9IMP:
 .IF "$(SHL$(TNR)IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL$(TNR)LIBS)
+USELIB$(TNR)DEPN+=$(SHL$(TNR)LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL$(TNR)TARGETN)
+USE_SHL$(TNR)TARGET=$(SHL$(TNR)TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL$(TNR)IMPLIBN):	\
                     $(SHL$(TNR)DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL$(TNR)TARGET) \
+                    $(USELIB$(TNR)DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL$(TNR)IMPLIBN):	\

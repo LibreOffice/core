@@ -79,11 +79,11 @@ USE_SHL1DEF=
 SHL1DEPN+:=$(SHL1DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
+USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
 
 .IF "$(USE_SHL1VERSIONMAP)"!=""
 
-.IF "$(DEF1EXPORTFILE)"!=""
+.IF "$(SHL1FILTERFILE)"!=""
 .IF "$(SHL1VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
@@ -104,7 +104,7 @@ SHL1VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL1VERSIONMAP)
 $(USE_SHL1VERSIONMAP): \
                     $(SHL1OBJS)\
                     $(SHL1LIBS)\
-                    $(DEF1EXPORTFILE)
+                    $(SHL1FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL1OBJS)"!=""
 # dump remaining objects on the fly
@@ -115,16 +115,16 @@ $(USE_SHL1VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL1OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL1LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF1EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL1INTERFACE) -f $(SHL1FILTERFILE) -m $@
 
-.ELSE			# "$(DEF1EXPORTFILE)"!=""
+.ELSE			# "$(SHL1FILTERFILE)"!=""
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
 $(USE_SHL1VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF1EXPORTFILE not set!
+    @+echo SHL1FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF1EXPORTFILE)"!=""
+.ENDIF			# "$(SHL1FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL1VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -504,11 +504,11 @@ USE_SHL2DEF=
 SHL2DEPN+:=$(SHL2DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
+USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
 
 .IF "$(USE_SHL2VERSIONMAP)"!=""
 
-.IF "$(DEF2EXPORTFILE)"!=""
+.IF "$(SHL2FILTERFILE)"!=""
 .IF "$(SHL2VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
@@ -529,7 +529,7 @@ SHL2VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL2VERSIONMAP)
 $(USE_SHL2VERSIONMAP): \
                     $(SHL2OBJS)\
                     $(SHL2LIBS)\
-                    $(DEF2EXPORTFILE)
+                    $(SHL2FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL2OBJS)"!=""
 # dump remaining objects on the fly
@@ -540,16 +540,16 @@ $(USE_SHL2VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL2OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL2LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF2EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL2INTERFACE) -f $(SHL2FILTERFILE) -m $@
 
-.ELSE			# "$(DEF2EXPORTFILE)"!=""
+.ELSE			# "$(SHL2FILTERFILE)"!=""
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
 $(USE_SHL2VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF2EXPORTFILE not set!
+    @+echo SHL2FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF2EXPORTFILE)"!=""
+.ENDIF			# "$(SHL2FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL2VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -929,11 +929,11 @@ USE_SHL3DEF=
 SHL3DEPN+:=$(SHL3DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
+USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
 
 .IF "$(USE_SHL3VERSIONMAP)"!=""
 
-.IF "$(DEF3EXPORTFILE)"!=""
+.IF "$(SHL3FILTERFILE)"!=""
 .IF "$(SHL3VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
@@ -954,7 +954,7 @@ SHL3VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL3VERSIONMAP)
 $(USE_SHL3VERSIONMAP): \
                     $(SHL3OBJS)\
                     $(SHL3LIBS)\
-                    $(DEF3EXPORTFILE)
+                    $(SHL3FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL3OBJS)"!=""
 # dump remaining objects on the fly
@@ -965,16 +965,16 @@ $(USE_SHL3VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL3OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL3LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF3EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL3INTERFACE) -f $(SHL3FILTERFILE) -m $@
 
-.ELSE			# "$(DEF3EXPORTFILE)"!=""
+.ELSE			# "$(SHL3FILTERFILE)"!=""
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
 $(USE_SHL3VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF3EXPORTFILE not set!
+    @+echo SHL3FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF3EXPORTFILE)"!=""
+.ENDIF			# "$(SHL3FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL3VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -1354,11 +1354,11 @@ USE_SHL4DEF=
 SHL4DEPN+:=$(SHL4DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
+USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
 
 .IF "$(USE_SHL4VERSIONMAP)"!=""
 
-.IF "$(DEF4EXPORTFILE)"!=""
+.IF "$(SHL4FILTERFILE)"!=""
 .IF "$(SHL4VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
@@ -1379,7 +1379,7 @@ SHL4VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL4VERSIONMAP)
 $(USE_SHL4VERSIONMAP): \
                     $(SHL4OBJS)\
                     $(SHL4LIBS)\
-                    $(DEF4EXPORTFILE)
+                    $(SHL4FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL4OBJS)"!=""
 # dump remaining objects on the fly
@@ -1390,16 +1390,16 @@ $(USE_SHL4VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL4OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL4LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF4EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL4INTERFACE) -f $(SHL4FILTERFILE) -m $@
 
-.ELSE			# "$(DEF4EXPORTFILE)"!=""
+.ELSE			# "$(SHL4FILTERFILE)"!=""
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
 $(USE_SHL4VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF4EXPORTFILE not set!
+    @+echo SHL4FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF4EXPORTFILE)"!=""
+.ENDIF			# "$(SHL4FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL4VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -1779,11 +1779,11 @@ USE_SHL5DEF=
 SHL5DEPN+:=$(SHL5DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
+USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
 
 .IF "$(USE_SHL5VERSIONMAP)"!=""
 
-.IF "$(DEF5EXPORTFILE)"!=""
+.IF "$(SHL5FILTERFILE)"!=""
 .IF "$(SHL5VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
@@ -1804,7 +1804,7 @@ SHL5VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL5VERSIONMAP)
 $(USE_SHL5VERSIONMAP): \
                     $(SHL5OBJS)\
                     $(SHL5LIBS)\
-                    $(DEF5EXPORTFILE)
+                    $(SHL5FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL5OBJS)"!=""
 # dump remaining objects on the fly
@@ -1815,16 +1815,16 @@ $(USE_SHL5VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL5OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL5LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF5EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL5INTERFACE) -f $(SHL5FILTERFILE) -m $@
 
-.ELSE			# "$(DEF5EXPORTFILE)"!=""
+.ELSE			# "$(SHL5FILTERFILE)"!=""
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
 $(USE_SHL5VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF5EXPORTFILE not set!
+    @+echo SHL5FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF5EXPORTFILE)"!=""
+.ENDIF			# "$(SHL5FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL5VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -2204,11 +2204,11 @@ USE_SHL6DEF=
 SHL6DEPN+:=$(SHL6DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
+USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
 
 .IF "$(USE_SHL6VERSIONMAP)"!=""
 
-.IF "$(DEF6EXPORTFILE)"!=""
+.IF "$(SHL6FILTERFILE)"!=""
 .IF "$(SHL6VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
@@ -2229,7 +2229,7 @@ SHL6VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL6VERSIONMAP)
 $(USE_SHL6VERSIONMAP): \
                     $(SHL6OBJS)\
                     $(SHL6LIBS)\
-                    $(DEF6EXPORTFILE)
+                    $(SHL6FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL6OBJS)"!=""
 # dump remaining objects on the fly
@@ -2240,16 +2240,16 @@ $(USE_SHL6VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL6OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL6LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF6EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL6INTERFACE) -f $(SHL6FILTERFILE) -m $@
 
-.ELSE			# "$(DEF6EXPORTFILE)"!=""
+.ELSE			# "$(SHL6FILTERFILE)"!=""
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
 $(USE_SHL6VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF6EXPORTFILE not set!
+    @+echo SHL6FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF6EXPORTFILE)"!=""
+.ENDIF			# "$(SHL6FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL6VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -2629,11 +2629,11 @@ USE_SHL7DEF=
 SHL7DEPN+:=$(SHL7DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
+USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
 
 .IF "$(USE_SHL7VERSIONMAP)"!=""
 
-.IF "$(DEF7EXPORTFILE)"!=""
+.IF "$(SHL7FILTERFILE)"!=""
 .IF "$(SHL7VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
@@ -2654,7 +2654,7 @@ SHL7VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL7VERSIONMAP)
 $(USE_SHL7VERSIONMAP): \
                     $(SHL7OBJS)\
                     $(SHL7LIBS)\
-                    $(DEF7EXPORTFILE)
+                    $(SHL7FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL7OBJS)"!=""
 # dump remaining objects on the fly
@@ -2665,16 +2665,16 @@ $(USE_SHL7VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL7OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL7LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF7EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL7INTERFACE) -f $(SHL7FILTERFILE) -m $@
 
-.ELSE			# "$(DEF7EXPORTFILE)"!=""
+.ELSE			# "$(SHL7FILTERFILE)"!=""
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
 $(USE_SHL7VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF7EXPORTFILE not set!
+    @+echo SHL7FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF7EXPORTFILE)"!=""
+.ENDIF			# "$(SHL7FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL7VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -3054,11 +3054,11 @@ USE_SHL8DEF=
 SHL8DEPN+:=$(SHL8DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
+USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
 
 .IF "$(USE_SHL8VERSIONMAP)"!=""
 
-.IF "$(DEF8EXPORTFILE)"!=""
+.IF "$(SHL8FILTERFILE)"!=""
 .IF "$(SHL8VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
@@ -3079,7 +3079,7 @@ SHL8VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL8VERSIONMAP)
 $(USE_SHL8VERSIONMAP): \
                     $(SHL8OBJS)\
                     $(SHL8LIBS)\
-                    $(DEF8EXPORTFILE)
+                    $(SHL8FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL8OBJS)"!=""
 # dump remaining objects on the fly
@@ -3090,16 +3090,16 @@ $(USE_SHL8VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL8OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL8LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF8EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL8INTERFACE) -f $(SHL8FILTERFILE) -m $@
 
-.ELSE			# "$(DEF8EXPORTFILE)"!=""
+.ELSE			# "$(SHL8FILTERFILE)"!=""
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
 $(USE_SHL8VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF8EXPORTFILE not set!
+    @+echo SHL8FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF8EXPORTFILE)"!=""
+.ENDIF			# "$(SHL8FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL8VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -3479,11 +3479,11 @@ USE_SHL9DEF=
 SHL9DEPN+:=$(SHL9DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
+USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
 
 .IF "$(USE_SHL9VERSIONMAP)"!=""
 
-.IF "$(DEF9EXPORTFILE)"!=""
+.IF "$(SHL9FILTERFILE)"!=""
 .IF "$(SHL9VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
@@ -3504,7 +3504,7 @@ SHL9VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL9VERSIONMAP)
 $(USE_SHL9VERSIONMAP): \
                     $(SHL9OBJS)\
                     $(SHL9LIBS)\
-                    $(DEF9EXPORTFILE)
+                    $(SHL9FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL9OBJS)"!=""
 # dump remaining objects on the fly
@@ -3515,16 +3515,16 @@ $(USE_SHL9VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL9OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL9LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF9EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL9INTERFACE) -f $(SHL9FILTERFILE) -m $@
 
-.ELSE			# "$(DEF9EXPORTFILE)"!=""
+.ELSE			# "$(SHL9FILTERFILE)"!=""
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
 $(USE_SHL9VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF9EXPORTFILE not set!
+    @+echo SHL9FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF9EXPORTFILE)"!=""
+.ENDIF			# "$(SHL9FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL9VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -3904,11 +3904,11 @@ USE_SHL10DEF=
 SHL10DEPN+:=$(SHL10DEPNU)
 
 # to activate vmaps remove "#"
-#USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
+USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
 
 .IF "$(USE_SHL10VERSIONMAP)"!=""
 
-.IF "$(DEF10EXPORTFILE)"!=""
+.IF "$(SHL10FILTERFILE)"!=""
 .IF "$(SHL10VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
@@ -3929,7 +3929,7 @@ SHL10VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL10VERSIONMAP)
 $(USE_SHL10VERSIONMAP): \
                     $(SHL10OBJS)\
                     $(SHL10LIBS)\
-                    $(DEF10EXPORTFILE)
+                    $(SHL10FILTERFILE)
     @+$(RM) $@.dump
 .IF "$(SHL10OBJS)"!=""
 # dump remaining objects on the fly
@@ -3940,16 +3940,16 @@ $(USE_SHL10VERSIONMAP): \
 .ENDIF
 .ENDIF			# "$(SHL10OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL10LIBS:s/.lib/.dump/) >> $@.dump
-    @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF10EXPORTFILE) -o $@
+    +$(PERL) $(SOLARENV)$/bin$/mapgen.pl -d $@.dump -s $(SHL10INTERFACE) -f $(SHL10FILTERFILE) -m $@
 
-.ELSE			# "$(DEF10EXPORTFILE)"!=""
+.ELSE			# "$(SHL10FILTERFILE)"!=""
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
 $(USE_SHL10VERSIONMAP) .PHONY: 
     @+echo -----------------------------
-    @+echo DEF10EXPORTFILE not set!
+    @+echo SHL10FILTERFILE not set!
     @+echo -----------------------------
 #	force_dmake_to_error
-.ENDIF			# "$(DEF10EXPORTFILE)"!=""
+.ENDIF			# "$(SHL10FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL10VERSIONMAP)"!=""
 
 #and now for the plain non-generic way...
@@ -4253,18 +4253,19 @@ $(SHL10TARGETN) : \
 .IF "$(SHL1IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL1LIBS)
+USELIB1DEPN+=$(SHL1LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL1TARGETN)
+USE_SHL1TARGET=$(SHL1TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL1IMPLIBN):	\
                     $(SHL1DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL1TARGET) \
+                    $(USELIB1DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL1IMPLIBN):	\
@@ -4302,18 +4303,19 @@ $(SHL1IMPLIBN):	\
 .IF "$(SHL2IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL2LIBS)
+USELIB2DEPN+=$(SHL2LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL2TARGETN)
+USE_SHL2TARGET=$(SHL2TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL2IMPLIBN):	\
                     $(SHL2DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL2TARGET) \
+                    $(USELIB2DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL2IMPLIBN):	\
@@ -4351,18 +4353,19 @@ $(SHL2IMPLIBN):	\
 .IF "$(SHL3IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL3LIBS)
+USELIB3DEPN+=$(SHL3LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL3TARGETN)
+USE_SHL3TARGET=$(SHL3TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL3IMPLIBN):	\
                     $(SHL3DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL3TARGET) \
+                    $(USELIB3DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL3IMPLIBN):	\
@@ -4400,18 +4403,19 @@ $(SHL3IMPLIBN):	\
 .IF "$(SHL4IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL4LIBS)
+USELIB4DEPN+=$(SHL4LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL4TARGETN)
+USE_SHL4TARGET=$(SHL4TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL4IMPLIBN):	\
                     $(SHL4DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL4TARGET) \
+                    $(USELIB4DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL4IMPLIBN):	\
@@ -4449,18 +4453,19 @@ $(SHL4IMPLIBN):	\
 .IF "$(SHL5IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL5LIBS)
+USELIB5DEPN+=$(SHL5LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL5TARGETN)
+USE_SHL5TARGET=$(SHL5TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL5IMPLIBN):	\
                     $(SHL5DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL5TARGET) \
+                    $(USELIB5DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL5IMPLIBN):	\
@@ -4498,18 +4503,19 @@ $(SHL5IMPLIBN):	\
 .IF "$(SHL6IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL6LIBS)
+USELIB6DEPN+=$(SHL6LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL6TARGETN)
+USE_SHL6TARGET=$(SHL6TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL6IMPLIBN):	\
                     $(SHL6DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL6TARGET) \
+                    $(USELIB6DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL6IMPLIBN):	\
@@ -4547,18 +4553,19 @@ $(SHL6IMPLIBN):	\
 .IF "$(SHL7IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL7LIBS)
+USELIB7DEPN+=$(SHL7LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL7TARGETN)
+USE_SHL7TARGET=$(SHL7TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL7IMPLIBN):	\
                     $(SHL7DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL7TARGET) \
+                    $(USELIB7DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL7IMPLIBN):	\
@@ -4596,18 +4603,19 @@ $(SHL7IMPLIBN):	\
 .IF "$(SHL8IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL8LIBS)
+USELIB8DEPN+=$(SHL8LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL8TARGETN)
+USE_SHL8TARGET=$(SHL8TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL8IMPLIBN):	\
                     $(SHL8DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL8TARGET) \
+                    $(USELIB8DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL8IMPLIBN):	\
@@ -4645,18 +4653,19 @@ $(SHL8IMPLIBN):	\
 .IF "$(SHL9IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL9LIBS)
+USELIB9DEPN+=$(SHL9LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL9TARGETN)
+USE_SHL9TARGET=$(SHL9TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL9IMPLIBN):	\
                     $(SHL9DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL9TARGET) \
+                    $(USELIB9DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL9IMPLIBN):	\
@@ -4694,18 +4703,19 @@ $(SHL9IMPLIBN):	\
 .IF "$(SHL10IMPLIBN)" != ""
 
 .IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL10LIBS)
+USELIB10DEPN+=$(SHL10LIBS)
 .ELSE
 .ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL10TARGETN)
+USE_SHL10TARGET=$(SHL10TARGETN)
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
 $(SHL10IMPLIBN):	\
                     $(SHL10DEF) \
-                    $(USE_SHLTARGET) \
+                    $(USE_SHL10TARGET) \
+                    $(USELIB10DEPN) \
                     $(USELIBDEPN)
 .ELSE
 $(SHL10IMPLIBN):	\
