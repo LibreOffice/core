@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:25:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,8 +262,18 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         const BOOL bProtect = SFX_ITEM_SET ==
             pSet->GetItemState(FN_PARAM_REGION_PROTECT, TRUE, &pItem)?
             (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
+        // --> FME 2004-06-22 #114856# edit in readonly sections
+        const BOOL bEditInReadonly = SFX_ITEM_SET ==
+            pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, TRUE, &pItem)?
+            (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
+        // <--
+
         aSection.SetProtect(bProtect);
         aSection.SetHidden(bHidden);
+        // --> FME 2004-06-22 #114856# edit in readonly sections
+        aSection.SetEditInReadonly(bEditInReadonly);
+        // <--
+
         if(SFX_ITEM_SET ==
                 pSet->GetItemState(FN_PARAM_REGION_CONDITION, TRUE, &pItem))
             aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
