@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-23 12:00:10 $
+ *  last change: $Author: nn $ $Date: 2000-10-24 17:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,20 @@
 #define SC_UNO_SRCHSTYLES           "SearchStyles"
 #define SC_UNO_SRCHTYPE             "SearchType"
 #define SC_UNO_SRCHWORDS            "SearchWords"
+
+//  old (5.2) property names for page styles - for compatibility only!
+#define OLD_UNO_PAGE_BACKCOLOR      "BackgroundColor"
+#define OLD_UNO_PAGE_BACKTRANS      "IsBackgroundTransparent"
+#define OLD_UNO_PAGE_HDRBACKCOL     "HeaderBackgroundColor"
+#define OLD_UNO_PAGE_HDRBACKTRAN    "TransparentHeaderBackground"
+#define OLD_UNO_PAGE_HDRSHARED      "HeaderShared"
+#define OLD_UNO_PAGE_HDRDYNAMIC     "HeaderDynamic"
+#define OLD_UNO_PAGE_HDRON          "HeaderOn"
+#define OLD_UNO_PAGE_FTRBACKCOL     "FooterBackgroundColor"
+#define OLD_UNO_PAGE_FTRBACKTRAN    "TransparentFooterBackground"
+#define OLD_UNO_PAGE_FTRSHARED      "FooterShared"
+#define OLD_UNO_PAGE_FTRDYNAMIC     "FooterDynamic"
+#define OLD_UNO_PAGE_FTRON          "FooterOn"
 
 //  page styles
 #define SC_UNO_PAGE_BACKCOLOR       "BackColor"

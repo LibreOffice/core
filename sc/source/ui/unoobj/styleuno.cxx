@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-23 12:00:24 $
+ *  last change: $Author: nn $ $Date: 2000-10-24 17:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICLOC),  ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
         {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICURL),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_BACKTRANS),   ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_BACKCOLOR),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_BOTTBORDER),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_BOTTMARGIN),  ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_CENTERHOR),   ATTR_PAGE_HORCENTER,&::getBooleanCppuType(),            0, 0 },
@@ -173,17 +174,21 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRDYNAMIC), ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRHEIGHT),   ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRDYNAMIC),  ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRON),       ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHARED),   ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTMAR),  ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_L_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRON),      ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBOR), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTMAR), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRSHARED),  ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBOR),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
 //
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
@@ -191,20 +196,25 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRDYNAMIC), ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRHEIGHT),   ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRDYNAMIC),  ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRON),       ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHARED),   ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTMAR),  ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_L_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRON),      ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBOR), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTMAR), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRSHARED),  ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBOR),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
 //
         {MAP_CHAR_LEN(SC_UNO_PAGE_HEIGHT),      ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_BACKTRANS),  ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNO_PAGE_LANDSCAPE),   ATTR_PAGE,          &::getBooleanCppuType(),            0, MID_PAGE_ORIENTATION },
         {MAP_CHAR_LEN(SC_UNO_PAGE_LEFTBORDER),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_LEFTMARGIN),  ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_L_MARGIN | CONVERT_TWIPS },
@@ -232,6 +242,8 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_SIZE),        ATTR_PAGE_SIZE,     &::getCppuType((const awt::Size*)0),            0, MID_SIZE_SIZE | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_TOPBORDER),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_TOPMARGIN),   ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNO_PAGE_WIDTH),       ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
         {0,0,0,0}
     };
@@ -249,18 +261,23 @@ const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRDYNAMIC), ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRHEIGHT),   ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRDYNAMIC),  ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRON),       ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHARED),   ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTMAR),  ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_L_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRON),      ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBOR), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTMAR), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRSHARED),  ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBOR),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {0,0,0,0}
     };
     return aHeaderStyleMap_Impl;
@@ -277,18 +294,23 @@ const SfxItemPropertyMap* lcl_GetFooterStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRDYNAMIC), ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRHEIGHT),   ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRDYNAMIC),  ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRON),       ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHARED),   ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTMAR),  ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_L_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRON),      ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBOR), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTMAR), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRSHARED),  ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBOR),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {0,0,0,0}
     };
     return aFooterStyleMap_Impl;
