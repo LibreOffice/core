@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTypeWizDlgSetup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:00:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef DBAUI_DBWIZSETUP_HXX
 #include "dbwizsetup.hxx"
 #endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 
 using namespace dbaui;
 
@@ -92,7 +95,14 @@ namespace dbaui
 //-------------------------------------------------------------------------
 ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XMultiServiceFactory >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
+    ,m_bOpenDatabase(sal_True)
+    ,m_bStartTableWizard(sal_False)
 {
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenDatabase")), 3, PropertyAttribute::TRANSIENT,
+        &m_bOpenDatabase, getBooleanCppuType());
+
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartTableWizard")), 4, PropertyAttribute::TRANSIENT,
+        &m_bStartTableWizard, getBooleanCppuType());
 }
 //-------------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw(RuntimeException)
@@ -165,8 +175,7 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
 //-------------------------------------------------------------------------
 Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo() throw(RuntimeException)
 {
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
+    return createPropertySetInfo( getInfoHelper() );
 }
 
 //-------------------------------------------------------------------------
@@ -185,8 +194,16 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
 //------------------------------------------------------------------------------
 Dialog* ODBTypeWizDialogSetup::createDialog(Window* _pParent)
 {
-    ODbTypeWizDialogSetup* pDlg = new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_xORB, m_aInitialSelection);
-    return pDlg;
+    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_xORB, m_aInitialSelection);
+}
+// -----------------------------------------------------------------------------
+void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
+{
+    if ( _nExecutionResult == RET_OK )
+    {
+        m_bOpenDatabase = static_cast<ODbTypeWizDialogSetup*>(m_pDialog)->IsDatabaseDocumentToBeOpened();
+        m_bStartTableWizard = static_cast<ODbTypeWizDialogSetup*>(m_pDialog)->IsTableWizardToBeStarted();
+    }
 }
 
 //.........................................................................
