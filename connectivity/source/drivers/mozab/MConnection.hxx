@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:41:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,20 @@ namespace connectivity
             } sdbc_address_type;
         }
 
+        // For the moment, we will connect the Mozilla address book to the Mozilla
+        // top-level address book which will display whatever is in the preferences
+        // file of Mozilla.
+        // This one is a base uri which will be completed with the connection data.
+        static sal_Char*    MOZ_SCHEME_MOZILLA          = "moz-abdirectory://";
+        // This one is for mozilla native address book
+        static sal_Char*    MOZ_SCHEME_MOZILLA_MDB      = "moz-abmdbdirectory://";
+        // This one is for LDAP address book
+        static sal_Char*    MOZ_SCHEME_LDAP             = "moz-abldapdirectory://";
+        // These two uris will be used to obtain directory factories to access all
+        // address books of the given type.
+        static sal_Char*    MOZ_SCHEME_OUTLOOK_MAPI     = "moz-aboutlookdirectory://op/";
+        static sal_Char*    MOZ_SCHEME_OUTLOOK_EXPRESS  = "moz-aboutlookdirectory://oe/";
+
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
         class OConnection : public OConnection_BASE,
@@ -150,7 +164,7 @@ namespace connectivity
 
             SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
 
-            // End of Additions from the land of mozilla
+            sal_Bool        m_bForceLoadTable;
 
         public:
             virtual void construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
@@ -229,6 +243,9 @@ namespace connectivity
             static ::rtl::OUString    getDriverImplementationName();
 
             MNameMapper* getNameMapper();
+            void setForceLoadTables(sal_Bool aForce){ m_bForceLoadTable = aForce;}
+            sal_Bool getForceLoadTables() { return m_bForceLoadTable;}
+
 
             // End of Additions from the land of mozilla
         };
