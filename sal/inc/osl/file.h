@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-29 09:01:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,7 +1405,6 @@ oslFileError SAL_CALL osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL);
-
 
 #ifdef __cplusplus
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-13 14:42:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,8 +284,6 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 /*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule hModule)
 {
-    OSL_ENSURE(hModule,"osl_unloadModule : module handle is not valid");
-
 #ifdef MACOSX
 
         // Unloading dylibs is not yet supported on Mac OS X.

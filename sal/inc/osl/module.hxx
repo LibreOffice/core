@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-12 15:51:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,51 +73,29 @@
 namespace osl
 {
 
-/** A class representing a share library module
-*/
 class Module
 {
     Module( const Module&);
     Module& operator = ( const Module&);
 
 public:
-    /** Lookup URL of module which is mapped at the specified address.
-        @param  addr specifies an address in the process memory space
-        @param  pustrURL receives the URL of the module that is mapped at pv
-        @return sal_True on success, sal_False if no module can be found at the specified address
-    */
     static sal_Bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl) {
         return osl_getModuleURLFromAddress(addr, &libraryUrl.pData);
     }
 
 
-    /** Constructs an uninitialized module object.
-    */
     Module(): m_Module(0){}
 
-    /** Contructs the module object and loads the shared library or module.
-        @param strModuleName the module to load
-        @seealso ::osl_loadModule()
-    */
     Module( const ::rtl::OUString& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     {
         load( strModuleName, nRtldMode);
     }
 
-    /** Unloads the module and destructs the object
-        @seealso ::osl_unloadModule()
-    */
     ~Module()
     {
         osl_unloadModule(m_Module);
     }
 
-    /** Loads the shared library or module.
-
-        A previously loaded module will be unloaded before the new one gets loaded.
-        @param strModuleName the module to load
-        @seealso ::osl_loadModule()
-    */
     sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName,
         sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     {
@@ -126,9 +104,6 @@ public:
         return is();
     }
 
-    /** Unloads the module.
-        @seealso ::osl_unloadModule()
-    */
     void SAL_CALL unload()
     {
         if (m_Module)
@@ -138,27 +113,16 @@ public:
         }
     }
 
-    /** Checks if a module is loaded.
-        @return sal_True if the module is loaded, sal_False if not
-    */
     sal_Bool SAL_CALL is() const
     {
            return m_Module != NULL;
     }
 
-    /** Extract a symbol from the module.
-        @param strSymbolName the symbol to extract.
-        @return the address of the symbol
-        @seealso ::osl_getSymbol()
-    */
     void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
     {
         return ( osl_getSymbol( m_Module, strSymbolName.pData ) );
     }
 
-    /** Cast operator to oslModule.
-        @return the oslModule handle
-    */
     operator oslModule() const
     {
         return m_Module;

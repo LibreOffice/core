@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-06 15:49:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "rtl/math.h"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
 #include "sal/mathconf.h"
 #include "sal/types.h"
 
@@ -134,6 +135,42 @@ inline rtl::OUString doubleToUString(double fValue,
     return aResult;
 }
 
+/** A wrapper around rtl_math_doubleToUString that appends to an
+    rtl::OUStringBuffer.
+ */
+inline void doubleToUStringBuffer( rtl::OUStringBuffer& rBuffer, double fValue,
+                                   rtl_math_StringFormat eFormat,
+                                   sal_Int32 nDecPlaces,
+                                   sal_Unicode cDecSeparator,
+                                   sal_Int32 const * pGroups,
+                                   sal_Unicode cGroupSeparator,
+                                   bool bEraseTrailingDecZeros = false)
+{
+    rtl_uString ** pData;
+    sal_Int32 * pCapacity;
+    rBuffer.accessInternals( &pData, &pCapacity );
+    rtl_math_doubleToUString( pData, pCapacity, rBuffer.getLength(), fValue,
+                              eFormat, nDecPlaces, cDecSeparator, pGroups,
+                              cGroupSeparator, bEraseTrailingDecZeros);
+}
+
+/** A wrapper around rtl_math_doubleToUString that appends to an
+    rtl::OUStringBuffer, with no grouping.
+ */
+inline void doubleToUStringBuffer( rtl::OUStringBuffer& rBuffer, double fValue,
+                                   rtl_math_StringFormat eFormat,
+                                   sal_Int32 nDecPlaces,
+                                   sal_Unicode cDecSeparator,
+                                   bool bEraseTrailingDecZeros = false)
+{
+    rtl_uString ** pData;
+    sal_Int32 * pCapacity;
+    rBuffer.accessInternals( &pData, &pCapacity );
+    rtl_math_doubleToUString( pData, pCapacity, rBuffer.getLength(), fValue,
+                              eFormat, nDecPlaces, cDecSeparator, 0, 0,
+                              bEraseTrailingDecZeros);
+}
+
 /** A wrapper around rtl_math_stringToDouble.
  */
 inline double stringToDouble(rtl::OString const & rString,
@@ -174,7 +211,7 @@ inline double stringToDouble(rtl::OUString const & rString,
 /** A wrapper around rtl_math_round.
  */
 inline double round(
-    double fValue, int nDecPlaces,
+    double fValue, int nDecPlaces = 0,
     rtl_math_RoundingMode eMode = rtl_math_RoundingMode_Corrected)
 {
     return rtl_math_round(fValue, nDecPlaces, eMode);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sb $ $Date: 2002-05-29 11:41:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return nEncoding > RTL_TEXTENCODING_DONTKNOW
-           && nEncoding <= RTL_TEXTENCODING_TIS_620 /* always update this! */
+           && nEncoding <= RTL_TEXTENCODING_KOI8_U /* always update this! */
            && nEncoding != 9; /* RTL_TEXTENCODING_SYSTEM */
 }
 
@@ -543,6 +543,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
     static ImplStrCharsetDef const aUnixCharsetKOI8Tab[] =
     {
         { "r", RTL_TEXTENCODING_KOI8_R },
+        { "u", RTL_TEXTENCODING_KOI8_U },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
@@ -942,6 +943,8 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "windows874", RTL_TEXTENCODING_MS_874 },
             /* This is no official MIME character set name, but it might be in
                use in Thailand. */
+        { "koi8u", RTL_TEXTENCODING_KOI8_U },
+        { "cpis", RTL_TEXTENCODING_IBM_861 },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 

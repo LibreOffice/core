@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: rtl_String_Utils_Const.h,v $
+ *  $RCSfile: t_ojp_exe.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lwang $ $Date: 2003-01-03 09:52:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,50 +59,28 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
-#ifndef _RTL_STRING_UTILS_CONST_H_
-#define _RTL_STRING_UTILS_CONST_H_
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
-#ifndef _SAL_TYPES_H_
-    #include <sal/types.h>
+#ifdef WNT
+#   define WIN32_LEAN_AND_MEAN
+#   include <windows.h>
+#else
+#   include <unistd.h>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+#include <stdio.h>
 
-#ifdef __cplusplus
-extern "C"
+int main(int argc, char* argv[])
 {
+    printf("osl process test executable started:\n");
+
+#ifdef WNT
+    Sleep(5000);
+#else
+    sleep(5);
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+    printf("osl process test executable ended:\n");
 
-static const sal_Int32 kErrCompareAStringToUString     = -2;
-static const sal_Int32 kErrCompareNAStringToUString    = -3;
-static const sal_Int32 kErrCompareAStringToRTLUString  = -4;
-static const sal_Int32 kErrCompareNAStringToRTLUString = -5;
-static const sal_Int32 kErrAStringToByteStringCompare  = -6;
-static const sal_Int32 kErrAStringToByteStringNCompare = -7;
-static const sal_Int32 kErrCompareAStringToString      = -8;
-static const sal_Int32 kErrCompareNAStringToString     = -9;
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
-#ifdef __cplusplus
+    return (0);
 }
-#endif
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
-#endif /* _RTL_STRING_UTILS_CONST_H_ */
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-19 15:08:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_GB_18030               (RTL_TEXTENC_CAST( 85 ))
 #define RTL_TEXTENCODING_BIG5_HKSCS             (RTL_TEXTENC_CAST( 86 ))
 #define RTL_TEXTENCODING_TIS_620                (RTL_TEXTENC_CAST( 87 ))
+#define RTL_TEXTENCODING_KOI8_U                 (RTL_TEXTENC_CAST( 88 ))
 /* ATTENTION!  Whenever some encoding is added here, make sure to update
  * rtl_isOctetEncoding in tencinfo.c.
  */
@@ -225,6 +226,7 @@ Cyrillic (DOS/OS2-855)                          RTL_TEXTENCODING_IBM_855
 Cyrillic (DOS/OS2-866/Russian)                  RTL_TEXTENCODING_IBM_866
 Cyrillic (ISO-8859-5)                           RTL_TEXTENCODING_ISO_8859_5
 Cyrillic (KOI8-R)                               RTL_TEXTENCODING_KOI8_R
+Cyrillic (KOI8-U)                               RTL_TEXTENCODING_KOI8_U
 Cyrillic (Windows-1251)                         RTL_TEXTENCODING_MS_1251
 
 Greek (Apple Macintosh)                         RTL_TEXTENCODING_APPLE_GREEK

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: haggai $ $Date: 2003-03-25 17:01:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ sal_Char *getCmdLine()
 
     name[0] = '\0';
 
-    sprintf(name, CMD_ARG_PROC_NAME, getpid());
+    snprintf(name, sizeof(name), CMD_ARG_PROC_NAME, getpid());
 
     if ( (fp = fopen(name, "r")) != 0 )
     {
@@ -361,7 +361,7 @@ sal_Char *getCmdLine()
 
     name[0] = '\0';
 
-    sprintf(name, CMD_ARG_PROC_NAME, getpid());
+    snprintf(name, sizeof(name), CMD_ARG_PROC_NAME, getpid());
 
     if ((fd = open(name, O_RDONLY)) >= 0)
     {
@@ -381,8 +381,6 @@ sal_Char *getCmdLine()
                          pchr = (sal_Char*) realloc(pchr, (n += l + 32) * sizeof(sal_Char));
 
                       strcpy(&pchr[i], CMD_ARG_PROC_ARGV(psinfo)[j]);
-/*                      fprintf(stderr,"getCmdLine : arg %i is '%s'\n",j,&pchr[i]); */
-/*                      fprintf(stderr,"getCmdLine : argv %i is '%s'\n",j,CMD_ARG_PROC_ARGV(psinfo)[j]); */
 
                     i += l;
                       pchr[i++] = '\0';
@@ -414,7 +412,7 @@ sal_Char *getCmdLine()
 
     cmd[0] = '\0';
 
-    sprintf(cmd, CMD_ARG_PS, getpid());
+    snprintf(cmd, sizeof(cmd), CMD_ARG_PS, getpid());
 
     if (fp = popen(cmd, "r"))
     {
@@ -465,10 +463,6 @@ oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt
     const char * pszRealPathSrc = pszCmdLine;
     char szAbsolutePath[PATH_MAX] = "";
     char szRealPathBuf[PATH_MAX] = "";
-
-    if( pszCmdLine == NULL ) {
-        return osl_Process_E_None;
-    }
 
     /* if the command line argument #0 starts with a '/', this program has been */
     /* invoked using a full qualified path */
@@ -712,7 +706,6 @@ oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
         while ((*pStr != '\0') &&
                ((pBuffer + strlen(pszCmdLine)) < (CmdLine + sizeof(CmdLine) - 2)))
         {
-/*              fprintf(stderr,"osl_getCommandArgs : Arg %i is '%s'\n",nArgCount,pStr); */
             strcpy(pBuffer, pStr);
             pBuffer += strlen(pStr) + 1;
             pStr    += strlen(pStr) + 1;
@@ -1151,10 +1144,7 @@ static void ChildStatusProc(void *pData)
             OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
             OSL_TRACE("Failed to launch child process, child reports errno=%d (%s)\n", status, strerror(status));
 
-            osl_setCondition(pdata->m_started);
-
             /* Close pipe ends */
-
             if ( pdata->m_pInputWrite )
                 *pdata->m_pInputWrite = NULL;
 
@@ -1167,6 +1157,9 @@ static void ChildStatusProc(void *pData)
             close( stdInput[1] );
             close( stdOutput[0] );
             close( stdError[0] );
+
+            /* notify (and unblock) parent thread */
+            osl_setCondition(pdata->m_started);
         }
     }
 }
@@ -1662,7 +1655,7 @@ void osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
-    sprintf(name, "/proc/%u/stat", pid);
+    snprintf(name, sizeof(name), "/proc/%u/stat", pid);
 
     if ((fd = open(name,O_RDONLY)) >=0 )
     {
@@ -1711,7 +1704,7 @@ void osl_getProcStatm(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
-    sprintf(name, "/proc/%u/statm", pid);
+    snprintf(name, sizeof(name), "/proc/%u/statm", pid);
 
     if ((fd = open(name,O_RDONLY)) >=0 )
     {
@@ -1739,7 +1732,7 @@ void osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
-    sprintf(name, "/proc/%u/status", pid);
+    snprintf(name, sizeof(name), "/proc/%u/status", pid);
 
     if ((fd = open(name,O_RDONLY)) >=0 )
     {
@@ -1839,7 +1832,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
         int  fd;
         sal_Char name[PATH_MAX + 1];
 
-        sprintf(name, "/proc/%u", pid);
+        snprintf(name, sizeof(name), "/proc/%u", pid);
 
         if ((fd = open(name, O_RDONLY)) >= 0)
         {
@@ -1903,7 +1896,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
         int  fd;
         sal_Char name[PATH_MAX + 1];
 
-        sprintf(name, "/proc/%u", pid);
+        snprintf(name, sizeof(name), "/proc/%u", pid);
 
         if ((fd = open(name, O_RDONLY)) >= 0)
         {
@@ -1991,56 +1984,104 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
 
+
+/***********************************************
+ helper function for osl_joinProcessWithTimeout
+ **********************************************/
+
+static int is_timeout(const struct timeval* tend)
+{
+    struct timeval tcurrent;
+    gettimeofday(&tcurrent, NULL);
+    return (tcurrent.tv_sec >= tend->tv_sec);
+}
+
+/**********************************************
+ kill(pid, 0) is usefull for checking if a
+ process is still alive, but remember that
+ kill even returns 0 if the process is already
+ a zombie.
+ *********************************************/
+
+static int is_process_dead(pid_t pid)
+{
+    return ((-1 == kill(pid, 0)) && (ESRCH == errno));
+}
+
+/**********************************************
+ osl_joinProcessWithTimeout
+ *********************************************/
+
+oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
+{
+    oslProcessImpl* pChild    = ChildList;
+    oslProcessError osl_error = osl_Process_E_None;
+
+    OSL_PRECOND(Process, "osl_joinProcess: Invalid parameter");
+    OSL_ASSERT(ChildListMutex);
+
+    if (NULL == Process || 0 == ChildListMutex)
+        return osl_Process_E_Unknown;
+
+    osl_acquireMutex(ChildListMutex);
+
+    /* check if process is a child of ours */
+    while (pChild != NULL)
+    {
+        if (pChild == (oslProcessImpl*)Process)
+            break;
+
+        pChild = pChild->m_pnext;
+    }
+
+    osl_releaseMutex(ChildListMutex);
+
+    if (pChild != NULL)
+    {
+        oslConditionResult cond_res = osl_waitCondition(pChild->m_terminated, pTimeout);
+
+        if (osl_cond_result_timeout == cond_res)
+            osl_error = osl_Process_E_TimedOut;
+        else if (osl_cond_result_ok != cond_res)
+            osl_error = osl_Process_E_Unknown;
+    }
+    else /* alien process; StatusThread will not be able
+               to set the condition terminated */
+    {
+        pid_t pid = ((oslProcessImpl*)Process)->m_pid;
+
+        if (pTimeout)
+        {
+            int timeout = 0;
+            struct timeval tend;
+
+            gettimeofday(&tend, NULL);
+
+            tend.tv_sec += pTimeout->Seconds;
+
+            while (!is_process_dead(pid) && ((timeout = is_timeout(&tend)) == 0))
+                sleep(1);
+
+            if (timeout)
+                osl_error = osl_Process_E_TimedOut;
+        }
+        else /* infinite */
+        {
+            while (!is_process_dead(pid))
+                sleep(1);
+        }
+    }
+    return osl_error;
+}
+
 /**********************************************
  osl_joinProcess
  *********************************************/
 
 oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
-/*  int status;*/
-
-    if (Process != NULL)
-    {
-        oslProcessImpl* pChild;
-
-        OSL_ASSERT(ChildListMutex != NULL);
-
-        if ( ChildListMutex == 0 )
-        {
-            return osl_Process_E_Unknown;
-        }
-
-        osl_acquireMutex(ChildListMutex);
-
-        pChild = ChildList;
-
-        /* check if process is a child of ours */
-        while (pChild != NULL)
-        {
-            if (pChild == (oslProcessImpl*)Process)
-                break;
-
-            pChild = pChild->m_pnext;
-        }
-
-        osl_releaseMutex(ChildListMutex);
-
-        if (pChild != NULL)
-            osl_waitCondition(pChild->m_terminated, NULL);
-        else
-        {
-            /* process is not a child, so the StatusThread will not be able
-               to set the condition terminated */
-            while (kill(((oslProcessImpl*)Process)->m_pid, 0) != -1)
-                sleep(1);
-        }
-
-        return osl_Process_E_None;
-    }
-
-    return osl_Process_E_Unknown;
+    return osl_joinProcessWithTimeout(Process, NULL);
 }
-
 
 
 /******************************************************************************

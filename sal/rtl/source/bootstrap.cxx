@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-23 09:41:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ namespace _STL
 #endif /* __STL_MEMBER_TEMPLATE_CLASSES */
 
 //----------------------------------------------------------------------------
+
 
 struct rtl_bootstrap_NameValue
 {
@@ -533,6 +534,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
     }
     return static_cast<rtlBootstrapHandle>(pImpl);
 }
+
 
 void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
 {

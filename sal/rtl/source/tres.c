@@ -5,7 +5,7 @@
 #include <osl/diagnose.h>
 #endif
 
-#ifndef _OSL_TIME_H_
+#ifndef _OSL_TIMEE_H_
 #include <osl/time.h>
 #endif
 
@@ -34,6 +34,7 @@ typedef struct _rtl_FuncState
     struct _rtl_CmpState*   m_cmp;
 
 } rtl_FuncState;
+
 
 
 typedef struct _rtl_TestResult_Data

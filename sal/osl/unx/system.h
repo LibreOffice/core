@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 15:54:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,28 +341,6 @@ extern unsigned int nanosleep(unsigned int);
 extern char *strdup(const char *);
 #endif
 
-#ifdef S390
-#   define  AF_IPX -1
-#   include <stropts.h>
-#   include <pthread.h>
-#   include <xti.h>
-#   include <sys/time.h>
-#   include <sys/ioctl.h>
-#   include <sys/ps.h>
-#   include <dll.h>
-#   define  _BIG_ENDIAN
-#   define  LIBPATH "LIPPATH"
-#   define  PTHREAD_NONE_INIT           { 0 }
-#   define  sched_yield()               pthread_yield(NULL)
-#   define  SLEEP_TIMESPEC(timespec)    OSL_TRACE("WARNINIG:sleep not implemented (%s:%d)", __FILE__, __LINE__)
-#   define  pthread_testcancel          pthread_testintr
-#   define  pthread_detach(t)           pthread_detach(&(t))
-#   define  NO_PTHREAD_SEMAPHORES
-#   define  NO_PTHREAD_PRIORITY
-#   define  NO_DL_FUNCTIONS
-#   define  PATH_MAX                    _POSIX_PATH_MAX
-#endif
-
 #ifdef SOLARIS
 #   include <shadow.h>
 #   include <sys/procfs.h>
@@ -418,7 +396,7 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
-    !defined(AIX)     && !defined(HPUX)   && !defined(S390) && \
+    !defined(AIX)     && !defined(HPUX)   && \
     !defined(SOLARIS) && !defined(IRIX)   && !defined(MAC) && \
     !defined(MACOSX)
 #   error "Target plattform not specified !"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-28 13:35:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,316 +162,207 @@ typedef struct {
 #   pragma pack()
 #endif
 
-/** Process handle.
-
-    @see osl_executeProcess()
-    @see osl_terminateProcess()
-    @see osl_freeProcessHandle()
-    @see osl_getProcessInfo()
-    @see osl_joinProcess()
+/** Process handle
+    @see osl_executeProcess
+    @see osl_terminateProcess
+    @see osl_freeProcessHandle
+    @see osl_getProcessInfo
+    @see osl_joinProcess
 */
 typedef void* oslProcess;
 
 /** Execute a process.
-
-    @param pustrImageName [in]
-    Denotes the file URL of the executable image to be started.
-
-    @param pustrArguments [in]
-    Is an array of argument strings.
-
-    @param nArgument [in]
-    The number of arguments provided.
-
-    @param Options [in]
-    Is a combination of int-constants to describe the mode of execution.
-
-    @param Security [in]
-    Describes a the user and his rights for wich the process is started.
-
-    @param pustrWorkDir [in]
-    Denotes the file URL of the working directory of the new process.
-
-    @param strEnviroments [in]
-    Is an array of strings wich describes the enviroment to set.
+    @param strImageName [in] denotes the name of the executable to be started.
+    @param strArguments [in] is an array of argument strings.
+    @param nArgument [in] the number of arguments provided.
+    @param Options [in] is a combination of int-constants to describe the mode of execution.
+    @param Security [in] describes a the user and his rights for wich the process is started.
+    @param strDirectory [in] denotes the name of the startup directory.
+    @param strEnviroments [in] is an array of strings wich describes the enviroment to set.
     Each string has the form "variable=value".
-
-    @param nEnvironmentVars [in]
-    The number of environment vars to set.
-
-    @param pProcess [out]
-    Points to a oslProcess variable, in wich the processhandle is returned.
-
-    @return
-    osl_Process_E_None if the executable could be started, otherwise an error-code.
-
-    @see osl_executeProcess_WithRedirectedIO()
-    @see osl_freeProcessHandle()
-    @see osl_loginUser()
+    @param nEnvironmentVars [in] the number of environment vars to set.
+    @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
+    @return osl_Process_E_None if the executable could be started, otherwise an error-code.
+    @see osl_executeProcess_WithRedirectedIO
+    @see osl_freeProcessHandle
+    @see osl_loginUser
 */
-
-oslProcessError SAL_CALL osl_executeProcess(rtl_uString *pustrImageName,
-                                            rtl_uString *pustrArguments[],
+oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
+                                            rtl_uString *strArguments[],
                                             sal_uInt32   nArguments,
                                             oslProcessOption Options,
                                             oslSecurity Security,
-                                            rtl_uString *pustrWorkDir,
-                                            rtl_uString *pustrEnvironment[],
+                                            rtl_uString *strWorkDir,
+                                            rtl_uString *strEnvironment[],
                                             sal_uInt32   nEnvironmentVars,
                                             oslProcess *pProcess);
 
 
-/** Execute a process and redirected child process standard IO.
-
-    @param pustrImageName [in]
-    Denotes the file URL of the executable image to be started.
-
-    @param pustrArguments [in]
-    Is an array of argument strings.
-
-    @param nArgument [in]
-    The number of arguments provided.
-
-    @param Options [in]
-    Is a combination of int-constants to describe the mode of execution.
-
-    @param Security [in]
-    Describes a the user and his rights for wich the process is started.
-
-    @param pustrWorkDir [in]
-    Denotes the file URL of the working directory of the new process.
-
-    @param pustrEnviroment [in]
-    Is an array of strings wich describes the enviroment to set.
+/** Execute a process and redirected child process standard IO
+    @param strImageName [in] denotes the name of the executable to be started.
+    @param strArguments [in] is an array of argument strings.
+    @param nArgument [in] the number of arguments provided.
+    @param Options [in] is a combination of int-constants to describe the mode of execution.
+    @param Security [in] describes a the user and his rights for wich the process is started.
+    @param strDirectory [in] denotes the name of the startup directory.
+    @param strEnviroments [in] is an array of strings wich describes the enviroment to set.
     Each string has the form "variable=value".
-
-    @param nEnvironmentVars [in]
-    The number of environment vars to set.
-
-    @param pResource [in]
-    Is a NULL terminated array of resources to transmit to the client process.
-
-    @param pProcess [out]
-    Points to a oslProcess variable, in wich the processhandle is returned.
-
-    @param pChildInputWrite [out]
-    Points to a oslFileHandle variable that receives the handle which can
+    @param nEnvironmentVars [in] the number of environment vars to set.
+    @param pResource [in] is a NULL terminated array of resources to transmit to the client process.
+    @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
+    @param pChildInputWrite [out] points to a oslFileHandle variable that receives the handle which can
     be used to write to child process standard input device. Handle has to be closed with osl_closeFile
     if no longer used.
-
-    @param pChildOutputRead [out]
-    Points to a oslFileHandle variable that receives the handle which can be used to read from
-    child process standard output device. Handle has to be closed with osl_closeFile if no longer used.
-
-    @param pChildErrorRead [out]
-    Points to a oslFileHandle variable that receives the handle which can be used to read from child
-    process standard error device. Handle has to be closed with osl_closeFile if no longer used.
-
-    @return
-    osl_Process_E_None if the executable could be started, otherwise an error-code.
-
-    @see osl_executeProcess()
-    @see osl_freeProcessHandle()
-    @see osl_loginUser()
-    @see osl_closeFile()
+    @param pChildOutputRead [out] points to a oslFileHandle variable that receives the handle which can
+    be used to read from child process standard output device. Handle has to be closed with osl_closeFile
+    if no longer used.
+    @param pChildErrorRead [out] points to a oslFileHandle variable that receives the handle which can
+    be used to read from child process standard error device. Handle has to be closed with osl_closeFile
+    if no longer used.
+    @return osl_Process_E_None if the executable could be started, otherwise an error-code.
+    @see osl_executeProcess
+    @see osl_freeProcessHandle
+    @see osl_loginUser
+    @see osl_closeFile
 */
-
-oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(rtl_uString *pustrImageName,
-                                            rtl_uString *pustrArguments[],
+oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(rtl_uString *strImageName,
+                                            rtl_uString *strArguments[],
                                             sal_uInt32   nArguments,
                                             oslProcessOption Options,
                                             oslSecurity Security,
-                                            rtl_uString *pustrWorkDir,
-                                            rtl_uString *pustrEnvironment[],
+                                            rtl_uString *strWorkDir,
+                                            rtl_uString *strEnvironment[],
                                             sal_uInt32   nEnvironmentVars,
                                             oslProcess *pProcess,
                                             oslFileHandle *pChildInputWrite,
                                             oslFileHandle *pChildOutputRead,
                                             oslFileHandle *pChildErrorRead);
 
+/** Terminate a process
+    @param Process [in] the handle of the process to be terminated
 
-/** Terminate a process.
-
-    @param Process [in]
-    The handle of the process to be terminated.
-
-    @see osl_executeProcess()
-    @see osl_getProcess()
-    @see osl_joinProcess()
-*/
-
+    @see osl_executeProcess
+    @see osl_getProcess
+    @see osl_joinProcess
+ */
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process);
 
 
-/** Retrieve the process handle of a process identifier
+/** @deprecated
+    Retrieve the process handle of a process identifier
+    @param Ident [in] a process identifier
 
-    @deprecated
-
-    @param Ident [in]
-    A process identifier.
-
-    @return
-    The process handle on success, NULL in all other cases.
+    @return the process handle on success, NULL in all other cases
  */
-
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident);
 
 
 /** Free the specified proces-handle.
-
     @param Process [in]
-    The handle of the process.
-
-    @see osl_executeProcess()
-    @see osl_executeProcess_WithRedirectedIO()
 */
-
 void SAL_CALL osl_freeProcessHandle(oslProcess Process);
 
 
-/** Wait for completation of the specified child-process.
-
+/** Wait for completation of the specified childprocess.
     @param Process [in]
-    The handle of the process.
-
-    @return
-    ols_Process_E_None on success, otherwise an error code.
-
-    @see osl_executeProcess()
-    @see osl_executeProcess_WithRedirectedIO()
+    @return ols_Process_E_None
+    @see osl_executeProcess
 */
-
 oslProcessError SAL_CALL osl_joinProcess(oslProcess Process);
 
-
-/** Retrieves information about a Process.
+/** Wait with a timeout for the completion of the specified child
+    process.
 
     @param Process [in]
-    The handle of the process.
+    A process identifier.
 
-    @param Fields [in]
-    The information which is to be retrieved this can be one or more of
-    osl_Process_IDENTIFIER
-    osl_Process_EXITCODE
-    osl_Process_CPUTIMES
-    osl_Process_HEAPUSAGE
-
-    @param pInfo [out]
-    A pointer to a vaid oslProcessInfo structure. The Size field has to be initialized with the size
-    of the oslProcessInfo structure. On success the the Field member holds the (or'ed) retrieved
-    valid information fields.
+    @param pTimeout [in]
+    A timeout value or NULL for infinite waiting.
+    The unit of resolution is second.
 
     @return
     osl_Process_E_None on success
-    osl_Process_E_Unknown on failure.
+    osl_Process_E_TimedOut waiting for the child process timed out
+    osl_Process_E_Unknown an error occured or the parameter are invalid
 
-    @see osl_executeProcess()
-    @see osl_executeProcess_WithRedirectedIO()
+    @see osl_executeProcess
+*/
+oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout);
+
+/** Retrieves information about a Process
+    @param Process [in] the process handle of the process
+    @param Field   [in] the information which is to be retrieved
+                        this can be one or more of
+                        osl_Process_IDENTIFIER
+                        osl_Process_EXITCODE
+                        osl_Process_CPUTIMES
+                        osl_Process_HEAPUSAGE
+    @param pInfo  [out] a pointer to a vaid oslProcessInfo structure.
+                        the Size field has to be initialized with the size
+                        of the oslProcessInfo structure.
+                        on success the the Field member holds the (or'ed)
+                        retrieved valid information fields.
+    @return osl_Process_E_None on success, osl_Process_E_Unknown on failure.
  */
+oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields,
+                                   oslProcessInfo* pInfo);
 
-oslProcessError SAL_CALL osl_getProcessInfo(
-    oslProcess Process,
-    oslProcessData Fields,
-    oslProcessInfo* pInfo);
-
-
-/** Get the file name of the executable.
-
-    @param ppustrFile [out]
-    Receives the file URL of the executable image.
-
-    @return
-    osl_Process_E_None or does not return.
-
-    @see osl_executeProcess()
-    @see osl_executeProcess_WithRedirectedIO()
+/** Get the filename of the executable.
+    @param strFile [out] the string that receives the executable file path.
+    @return osl_Process_E_None or does not return.
+    @see osl_executeProcess
 */
+oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **strFile);
 
-oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **ppustrFile);
-
-
-/** Get the number of command line arguments.
-
-    @return
-    The number of commandline arguments passed to the main function of
-    this process.
-
-    @see osl_getCommandArg()
+/** @return the number of commandline arguments passed to the main-function of
+    this process
+    @see osl_getCommandArg
 */
-
 sal_uInt32 SAL_CALL osl_getCommandArgCount();
 
-
-/** Get the nArg-th command line argument passed to the main function of this process.
-
-    @param nArg [in]
-    The number of the argument to return.
-
-    @param pustrCommandArg [out]
-    The string receives the nArg-th command-line argument.
-
-    @return
-    osl_Process_E_None or does not return.
-
-    @see osl_getCommandArgCount()
+/** Get the nArg-th command-line argument passed to the main-function of this process.
+    @param nArg [in] The number of the argument to return.
+    @param strCommandArg [out] The string receives the nArg-th command-line argument.
+    @return osl_Process_E_None or does not return.
+    @see osl_executeProcess
 */
-
-oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **pustrCommandArg);
+oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
 
 /** Get the value of one enviroment variable.
-
-    @param pustrVar [in]
-    Denotes the name of the variable to get.
-
-    @param ppustrValue [out]
-    String that receives the value of environment variable.
+    @param strVar [in] denotes the name of the variable to get.
+    @param strValue [out] string that receives the value of environment variable.
 */
-
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *pustrVar, rtl_uString **ppustrValue);
-
+oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **strValue);
 
 /** Get the working directory of the current process as a file URL.
 
     The file URL is encoded as common for the OSL file API.
-
-    @param ppustrWorkingDir [out]
-    String that receives the working directory URL.
+    @param  pustrWorkingDir [out] string that receives the working directory file URL.
 */
 
-oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **ppustrWorkingDir );
-
+oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir );
 
 /** Get the locale the process is currently running in.
 
     The unix implementation caches the value it returns, so if you have to change the locale
     your are running in, you will have to use osl_setProcessLocale therefor.
 
-    @param  ppLocale [out]
-    A pointer that receives the currently selected locale structure.
-
-    @see osl_setProcessLocale()
+    @param  ppLocale [out] a pointer that receives the currently selected locale structure
+    @see osl_setProcessLocale
 */
 
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale );
 
-
 /** Change the locale of the process.
 
-    @param pLocale [in]
-    A pointer to the locale to be set.
-
-    @see osl_getProcessLocale()
+    @param  pLocale [in] a pointer to the locale to be set
+    @see osl_getProcessLocale
 */
 
 oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale );
 
-/** @internal
-*/
 
 sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket);
-
-/** @internal
-*/
 
 oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe Pipe);
 

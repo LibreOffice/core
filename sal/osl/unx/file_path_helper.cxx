@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_path_helper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-14 13:20:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,8 @@
         pustrPath->buffer[pustrPath->length] = (sal_Unicode)'\0';
     }
 
-    OSL_POSTCOND((0 == pustrPath->length) || \
-                 (1 == pustrPath->length && pustrPath->buffer[0] == FPH_CHAR_PATH_SEPARATOR) || \
-                 ((pustrPath->length > 0) && pustrPath->buffer[pustrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR), \
+    OSL_POSTCOND((0 == pustrPath->length) || (1 == pustrPath->length) || \
+                 (pustrPath->length > 1 && pustrPath->buffer[pustrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR), \
                  "osl_systemPathRemoveSeparator: Post condition failed");
  }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,6 +1158,43 @@ sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str,
     details.
  */
 void SAL_CALL rtl_uString2String( rtl_String ** newStr, const sal_Unicode * str, sal_Int32 len, rtl_TextEncoding encoding, sal_uInt32 convertFlags ) SAL_THROW_EXTERN_C();
+
+/**
+  Converts a Unicode string to a byte string, signalling failure.
+
+  @param pTarget
+  An out parameter receiving the converted string.  Must not be null itself, and
+  must contain either null or a pointer to a valid rtl_String; the contents are
+  not modified if conversion fails (rtl_convertUStringToString returns false).
+
+  @param pSource
+  The Unicode string.  May only be null if nLength is zero.
+
+  @param nLength
+  The length of the Unicode string.  Must be non-negative.
+
+  @param nEncoding
+  The text encoding to convert into.  Must be an octet encoding (i.e.,
+  rtl_isOctetTextEncoding(nEncoding) must return true).
+
+  @param nFlags
+  A combination of RTL_UNICODETOTEXT_FLAGS that detail how to do the conversion
+  (see rtl_convertUnicodeToText).  RTL_UNICODETOTEXT_FLAGS_FLUSH need not be
+  included, it is implicitly assumed.  Typical uses are either
+  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR (fail if a Unicode character cannot be
+  converted to the target nEncoding) or OUSTRING_TO_OSTRING_CVTFLAGS (make a
+  best efforts conversion).
+
+  @return
+  True if the conversion succeeded, false otherwise.
+ */
+sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
+                                             sal_Unicode const * pSource,
+                                             sal_Int32 nLength,
+                                             rtl_TextEncoding nEncoding,
+                                             sal_uInt32 nFlags)
+    SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }

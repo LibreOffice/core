@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-06 10:06:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
         pLeadEntry = pLeadTab+cLead;
 
         /* SingleByte char? */
-        if ( !pLeadEntry->mpToUniTrailTab )
+        if (pLeadEntry->mpToUniTrailTab == NULL
+            || cLead < pConvertData->mnLeadStart
+            || cLead > pConvertData->mnLeadEnd)
         {
             cConv = pLeadEntry->mnUniChar;
             if ( !cConv && (cLead != 0) )
@@ -202,7 +204,10 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                     /* moeglich auch richtig zu behandeln, das double byte */
                     /* characters auch als ein einzelner Character behandelt */
                     /* wird. */
-                    if ( (cTrail < pConvertData->mnTrailStart) || (cTrail > pConvertData->mnTrailEnd) )
+                    if (cLead < pConvertData->mnLeadStart
+                        || cLead > pConvertData->mnLeadEnd
+                        || cTrail < pConvertData->mnTrailStart
+                        || cTrail > pConvertData->mnTrailEnd)
                     {
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
                         if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
@@ -271,6 +276,12 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
     sal_Char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
 
+    sal_Bool bCheckRange = (pConvertData->mnLeadStart != 0
+                            || pConvertData->mnLeadEnd != 0xFF);
+        /* this statement has the effect that this extra check is only done for
+           EUC-KR, which uses the MS-949 tables, but does not support the full
+           range of MS-949 */
+
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
     pEndSrcBuf  = pSrcBuf+nSrcChars;
@@ -285,7 +296,15 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
 
         /* is low byte in the table range */
         if ( (nLowChar >= pHighEntry->mnLowStart) && (nLowChar <= pHighEntry->mnLowEnd) )
+        {
             cConv = pHighEntry->mpToUniTrailTab[nLowChar-pHighEntry->mnLowStart];
+            if (bCheckRange && cConv > 0x7F
+                && ((cConv >> 8) < pConvertData->mnLeadStart
+                    || (cConv >> 8) > pConvertData->mnLeadEnd
+                    || (cConv & 0xFF) < pConvertData->mnTrailStart
+                    || (cConv & 0xFF) > pConvertData->mnTrailEnd))
+                cConv = 0;
+        }
         else
             cConv = 0;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,8 @@ typedef struct
 {
     const ImplDBCSToUniLeadTab*     mpToUniLeadTab;
     const ImplUniToDBCSHighTab*     mpToDBCSHighTab;
+    sal_uChar                       mnLeadStart;
+    sal_uChar                       mnLeadEnd;
     sal_uChar                       mnTrailStart;
     sal_uChar                       mnTrailEnd;
     const ImplDBCSEUDCData*         mpEUDCTab;
@@ -307,16 +309,23 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
                             sal_Char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars );
-sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
-                            sal_Unicode* pDestBuf, sal_Size nDestChars,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtBytes );
-sal_Size ImplUnicodeToUTF8( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtChars );
+
+void * ImplCreateUtf8ToUnicodeContext(void) SAL_THROW_EXTERN_C();
+void ImplResetUtf8ToUnicodeContext(void * pContext) SAL_THROW_EXTERN_C();
+sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
+                                  void * pContext, sal_Char const * pSrcBuf,
+                                  sal_Size nSrcBytes, sal_Unicode * pDestBuf,
+                                  sal_Size nDestChars, sal_uInt32 nFlags,
+                                  sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
+    SAL_THROW_EXTERN_C();
+void * ImplCreateUnicodeToUtf8Context(void) SAL_THROW_EXTERN_C();
+void ImplResetUnicodeToUtf8Context(void * pContext) SAL_THROW_EXTERN_C();
+sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
+                                  void * pContext, sal_Unicode const * pSrcBuf,
+                                  sal_Size nSrcChars, sal_Char * pDestBuf,
+                                  sal_Size nDestBytes, sal_uInt32 nFlags,
+                                  sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
+    SAL_THROW_EXTERN_C();
 
 #if defined __cplusplus
 }

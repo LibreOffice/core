@@ -460,7 +460,7 @@ UDK_3_0_0 {
         rtl_uriDecode;
 
         rtl_bootstrap_get;
-    rtl_bootstrap_set;
+        rtl_bootstrap_set;
         rtl_bootstrap_setIniFileName;
         rtl_bootstrap_args_open;
         rtl_bootstrap_args_close;
@@ -481,7 +481,6 @@ UDK_3_0_0 {
         rtl_removeUnloadingListener;
 
         rtl_logfile_trace;
-        rtl_tres_state;
         rtl_tres_create;
         rtl_tres_destroy;
         osl_getProcessLocale;
@@ -501,4 +500,7 @@ UDK_3.1 {
         rtl_math_round;
         rtl_math_stringToDouble;
         rtl_math_uStringToDouble;
+        rtl_convertUStringToString;
+
+        osl_joinProcessWithTimeout;
 } UDK_3_0_0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-09 15:41:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,16 @@
  *
  ************************************************************************/
 
-
 /* system headers */
 #include "system.h"
+#include <tchar.h>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
 #include <osl/signal.h>
+#include <DbgHelp.h>
+#include <ErrorRep.h>
+#include <systools/win32/uwinapi.h>
 
 typedef struct _oslSignalHandlerImpl
 {
@@ -82,9 +85,20 @@ long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
 
 static sal_Bool InitSignal()
 {
+    HMODULE hFaultRep;
+
     SignalListMutex = osl_createMutex();
 
     SetUnhandledExceptionFilter(SignalHandlerFunction);
+
+    hFaultRep = LoadLibrary( "faultrep.dll" );
+    if ( hFaultRep )
+    {
+        pfn_ADDEREXCLUDEDAPPLICATIONW       pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
+        if ( pfn )
+            pfn( L"SOFFICE.EXE" );
+        FreeLibrary( hFaultRep );
+    }
 
     return sal_True;
 }
@@ -118,6 +132,60 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 /* SignalHandlerFunction    */
 /*****************************************************************************/
 
+static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
+{
+    BOOL    fSuccess = FALSE;
+    TCHAR   szBuffer[1024];
+    TCHAR   szPath[MAX_PATH];
+    LPTSTR  lpFilePart;
+    PROCESS_INFORMATION ProcessInfo;
+    STARTUPINFO StartupInfo;
+
+    if ( SearchPath( NULL, TEXT("crashrep.exe"), NULL, MAX_PATH, szPath, &lpFilePart ) )
+    {
+        ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
+        StartupInfo.cb = sizeof(StartupInfo.cb);
+
+
+        sntprintf( szBuffer, elementsof(szBuffer),
+            _T("%s -p %u -excp 0x%p -t %u"),
+            szPath,
+            GetCurrentProcessId(),
+            lpEP,
+            GetCurrentThreadId() );
+
+        if (
+            CreateProcess(
+                NULL,
+                szBuffer,
+                NULL,
+                NULL,
+                FALSE,
+#ifdef UNICODE
+                CREATE_UNICODE_ENVIRONMENT,
+#else
+                0,
+#endif
+                NULL, NULL, &StartupInfo, &ProcessInfo )
+            )
+        {
+            DWORD   dwExitCode;
+
+            WaitForSingleObject( ProcessInfo.hProcess, INFINITE );
+            if ( GetExitCodeProcess( ProcessInfo.hProcess, &dwExitCode ) && 0 == dwExitCode )
+
+            fSuccess = TRUE;
+
+        }
+    }
+
+    return fSuccess;
+}
+
+/*****************************************************************************/
+/* SignalHandlerFunction    */
+/*****************************************************************************/
+
 static BOOL WINAPI IsWin95A()
 {
     OSVERSIONINFO   ovi;
@@ -142,6 +210,8 @@ static BOOL WINAPI IsWin95A()
 
 static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 {
+    static sal_Bool     bNested = sal_False;
+    sal_Bool        bRaiseCrashReporter = sal_False;
     oslSignalInfo   Info;
     oslSignalAction Action;
 
@@ -156,14 +226,17 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
         case EXCEPTION_MSC_CPP_EXCEPTION:
         case EXCEPTION_ACCESS_VIOLATION:
             Info.Signal = osl_Signal_AccessViolation;
+            bRaiseCrashReporter = sal_True;
             break;
 
         case EXCEPTION_INT_DIVIDE_BY_ZERO:
             Info.Signal = osl_Signal_IntegerDivideByZero;
+            bRaiseCrashReporter = sal_True;
             break;
 
         case EXCEPTION_FLT_DIVIDE_BY_ZERO:
             Info.Signal = osl_Signal_FloatDivideByZero;
+            bRaiseCrashReporter = sal_True;
             break;
 
         case EXCEPTION_BREAKPOINT:
@@ -172,13 +245,25 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 
         default:
             Info.Signal = osl_Signal_System;
+            bRaiseCrashReporter = sal_True;
             break;
     }
 
-    Action = CallSignalHandler(&Info);
+    if ( !bNested )
+    {
+        bNested = sal_True;
 
-    if ( IsWin95A() )
+        if ( bRaiseCrashReporter && ReportCrash( lpEP ) || IsWin95A() )
+        {
+            CallSignalHandler(&Info);
+            Action = osl_Signal_ActKillApp;
+        }
+        else
+            Action = CallSignalHandler(&Info);
+    }
+    else
         Action = osl_Signal_ActKillApp;
+
 
     switch ( Action )
     {

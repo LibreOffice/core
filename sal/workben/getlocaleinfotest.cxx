@@ -2,9 +2,9 @@
  *
  *  $RCSfile: getlocaleinfotest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-11 12:49:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,67 +61,19 @@
 
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
-#include <osl/process.h>
 #include <rtl/ustring.hxx>
 
-#include <stdio.h>
-
-#ifdef WNT
-#define _CDECL _cdecl
-#else
-#define _CDECL
-#endif
-
-int _CDECL main( int argc, char * argv[] )
+int _cdecl main( int argc, char * argv[] )
 {
-/*
-    rtl::OUString lang = rtl::OUString::createFromAscii( "zh" );
-    rtl::OUString country = rtl::OUString::createFromAscii( "TW" );
-*/
-    rtl::OUString lang = rtl::OUString::createFromAscii( argv[1] );
-    rtl::OUString country = rtl::OUString::createFromAscii( argv[2] );
+    rtl::OUString lang = rtl::OUString::createFromAscii( "de" );
+    rtl::OUString country = rtl::OUString::createFromAscii( "DE" );
     rtl_TextEncoding rtlTextEnc;
-    rtl_Locale* rtlLocale = NULL;
 
-    osl_getProcessLocale( &rtlLocale );
-
-    if ( rtlLocale )
-    {
-        rtlTextEnc = osl_getTextEncodingFromLocale( rtlLocale );
-        printf( "default text encoding is %d.\n", rtlTextEnc );
-    }
-    else
-        fprintf( stderr, "osl_getProcessLocale did not return a locale !!\n" );
-
-    rtlLocale = rtl_locale_register( lang.getStr( ), country.getStr( ), NULL );
+    rtl_Locale* rtlLocale =
+        rtl_locale_register( lang.getStr( ), country.getStr( ), NULL );
 
     if ( rtlLocale )
-    {
         rtlTextEnc = osl_getTextEncodingFromLocale( rtlLocale );
-        printf( "text encoding for %s_%s is %d.\n", argv[1], argv[2], rtlTextEnc );
-    }
-    else
-        fprintf( stderr, "rtl_locale_register did not return a locale !!\n" );
-
-    rtlTextEnc = osl_getTextEncodingFromLocale( NULL );
-    printf( "process text encoding is %d.\n", rtlTextEnc );
-
-    if( osl_setProcessLocale( rtlLocale ) )
-        fprintf( stderr, "osl_setProcessLocale failed !!\n" );
-
-
-    rtlTextEnc = osl_getTextEncodingFromLocale( NULL );
-    printf( "process text encoding is now: %d.\n", rtlTextEnc );
-
-    osl_getProcessLocale( &rtlLocale );
-
-    if ( rtlLocale )
-    {
-        rtlTextEnc = osl_getTextEncodingFromLocale( rtlLocale );
-        printf( "text encoding for process locale is now: %d.\n", rtlTextEnc );
-    }
-    else
-        fprintf( stderr, "osl_getProcessLocale did not return a locale !!\n" );
 
     return(0);
 }

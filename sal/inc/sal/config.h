@@ -2,8 +2,8 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.15 $
- *  last change: $Author: hro $ $Date: 2002-12-10 12:18:23 $
+ *  $Revision: 1.16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@ extern "C" {
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 
 #ifdef _MSC_VER
+
+/* warnings ought to be disabled using /wd:n option of msvc.net compiler */
+#if _MSC_VER < 1300
+/* no performance warning: int to bool */
+#pragma warning( disable : 4800 )
+
 /* No warning for: C++ Exception Specification ignored */
 #pragma warning( disable : 4290 )
 
@@ -88,14 +94,15 @@ extern "C" {
 /* No warning for: identifier was truncated to '255' characters in the browser information */
 #pragma warning( disable : 4786 )
 #endif
+#endif /* _MSC_VER < 1300 */
 
 /* Provide ISO C99 compatible versions of snprint and vsnprintf */
 #ifndef _SNPRINTF_H
 #include <systools/win32/snprintf.h>
 #endif
 
-#endif
-#endif
+#endif /* defined _MSC_VER */
+#endif /* defined WIN32 */
 
 /* BR: 16bit fuer Borland-Compiler */
 #ifdef __BORLANDC__

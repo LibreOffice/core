@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: svesik $ $Date: 2002-03-18 00:43:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,7 @@
 #ifndef _SAL_TYPES_H_
 #define _SAL_TYPES_H_
 
-#ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
-#endif
-
-#ifndef INCLUDED_STDLIB_H
-#include <stdlib.h>
-#define INCLUDED_STDLIB_H
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -118,7 +111,7 @@ typedef unsigned long       sal_Size;
 #define SAL_MAX_ENUM 0x7fff
 #endif
 
-#if defined(_MSC_VER) || (defined(WNT) && defined(__GNUC__))
+#ifdef _MSC_VER
 #   define SAL_DLLEXPORT    __declspec(dllexport)
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
@@ -138,9 +131,9 @@ typedef unsigned long       sal_Size;
 #   error("unknown platform")
 #endif
 
-/* Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
-   This hinders the compiler from setting a generic vtable stating that
-   a pure virtual function was called and thus slightly reduces code size.
+/** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
+    This hinders the compiler from setting a generic vtable stating that
+    a pure virtual function was called and thus slightly reduces code size.
 */
 #ifdef _MSC_VER
 #define SAL_NO_VTABLE __declspec(novtable)
@@ -155,21 +148,21 @@ typedef unsigned long       sal_Size;
 #endif
 
 /** This is the binary specification of a SAL sequence.
+    <br>
 */
 typedef struct _sal_Sequence
 {
-    /** reference count of sequence
+    /** reference count of sequence<br>
     */
     sal_Int32           nRefCount;
-    /** element count
+    /** element count<br>
     */
     sal_Int32           nElements;
-    /** elements array
+    /** elements array<br>
     */
     char                elements[1];
 } sal_Sequence;
-/** calculated header size excluding elements array
-*/
+
 #define SAL_SEQUENCE_HEADER_SIZE ((sal_Size)&((sal_Sequence *)0)->elements)
 
 #ifdef SAL_W32
@@ -179,12 +172,12 @@ typedef struct _sal_Sequence
 #endif
 
 
-/* Wrap C++ const_cast, reinterpret_cast and static_cast expressions in
-   macros to keep code portable to old compilers (since most compilers still
-   lack RTTI support, dynamic_cast is not included here).
-*/
+/** Wrap C++ const_cast, reinterpret_cast and static_cast expressions in
+    macros to keep code portable to old compilers (since most compilers still
+    lack RTTI support, dynamic_cast is not included here).
+ */
 #ifdef __cplusplus
-#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD || defined IRIX
+#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))
@@ -195,15 +188,15 @@ typedef struct _sal_Sequence
 #endif /* SAL_W32, SOLARIS, LINUX */
 #endif /* __cplusplus */
 
-/* Definition of function throw clause macros.  These have been introduced
-   to reduce code size by balancing out compiler bugs.
+/** Definition of function throw clause macros.  These have been introduced
+    to reduce code size by balancing out compiler bugs.
 
-   These macros are ONLY for function declarations,
-   use common C++ throw statement for throwing exceptions, e.g.
-   throw RuntimeException();
+    These macros are ONLY for function declarations,
+    use common C++ throw statement for throwing exceptions, e.g.
+    throw RuntimeException();
 
-   SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW( () )
-   SAL_THROW_EXTERN_C() should be used for all C functions
+    SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW( () )
+    SAL_THROW_EXTERN_C() should be used for all C functions
 */
 #ifdef __cplusplus
 #if defined(__GNUC__) || defined(__SUNPRO_CC) || defined(__sgi)
@@ -218,9 +211,8 @@ typedef struct _sal_Sequence
 #endif
 
 
+
 #ifdef __cplusplus
-/** definition of a no acquire enum for ctors
-*/
 enum __sal_NoAcquire
 {
     /** definition of a no acquire enum for ctors

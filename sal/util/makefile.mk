@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2002-11-19 10:21:49 $
+#   last change: $Author: hr $ $Date: 2003-03-26 16:47:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,24 +96,18 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=$(SLB)$/cpposl.lib $(SLB)$/oslall.lib $(SLB)$/cpprtl.lib
 
 .IF "$(GUI)"!="WIN"
-LIB1FILES+=$(SLB)$/textenc.lib
-.ENDIF
-.IF "$(GUI)"=="UNX"
-LIB1FILES+=$(SLB)$/systoolsunx.lib
+LIB1FILES+=$(SLB)$/textenc.lib 
 .ENDIF
 
 LIB3TARGET=$(LB)$/a$(TARGET).lib
 LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 LIB3FILES=$(LB)$/cpposl.lib $(LB)$/oslall.lib $(LB)$/cpprtl.lib
 
-.IF "$(UPDATER)"!=""
+#.IF "$(UPDATER)"!=""
 .IF "$(GUI)"!="WIN"
 LIB3FILES+=$(LB)$/textenc.lib
 .ENDIF
-.IF "$(GUI)"=="UNX"
-LIB3FILES+=$(LB)$/systoolsunx.lib
-.ENDIF
-.ENDIF
+#.ENDIF
 
 SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
@@ -152,14 +146,11 @@ SHL1STDLIBS+=-init InitLibrary -term ExitLibrary
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
 # libposix4.so (SunOS 5.6) -> librt.so (SunOS >= 5.7)
-SHL1STDLIBS= -lpthread -lposix4 -lsocket -lnsl -ldl
+SHL1STDLIBS= -lnsl -lsocket -lpthread -lposix4 
 .IF "$(COM)" == "C50"
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
 .ENDIF # SOLARIS
-.IF "$(OS)" == "LINUX"
-SHL1STDLIBS+= -lstdc++
-.ENDIF
 .ENDIF # UNX
 
 .IF "$(GUI)"=="OS2"

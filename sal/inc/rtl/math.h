@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-04 15:21:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/** Formatting modes for rtl_math_doubleToString and rtl_math_doubleToUString.
+/** Formatting modes for rtl_math_doubleToString and rtl_math_doubleToUString
+    and rtl_math_doubleToUStringBuffer.
  */
 enum rtl_math_StringFormat
 {
@@ -154,6 +155,23 @@ enum rtl_math_RoundingMode
     rtl_math_RoundingMode_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
+/** Special decimal places constants for rtl_math_doubleToString and
+    rtl_math_doubleToUString and rtl_math_doubleToUStringBuffer.
+ */
+enum rtl_math_DecimalPlaces
+{
+    /** Value to be used with rtl_math_StringFormat_Automatic.
+     */
+    rtl_math_DecimalPlaces_Max = 0x7ffffff,
+
+    /** Value to be used with rtl_math_StringFormat_G.
+        In fact the same value as rtl_math_DecimalPlaces_Max, just an alias for
+        better understanding.
+     */
+    rtl_math_DecimalPlaces_DefaultSignificance = 0x7ffffff
+};
+
+
 /** Conversions analogous to sprintf() using internal rounding.
 
     +/-HUGE_VAL are converted to "1.#INF" and "-1.#INF", NAN values are
@@ -170,10 +188,10 @@ enum rtl_math_RoundingMode
     If non-null, it points to the current capacity of pResult, which is
     considered to point to a string buffer (pResult must not itself be null in
     this case, and must point to a string that has room for the given capacity).
-    The string representation of the given double value is appended to pResult.
-    If pResult's current capacity is too small, a new string buffer will be
-    allocated in pResult as necessary, and pResultCapacity will contain the new
-    capacity on return.
+    The string representation of the given double value is inserted into pResult
+    at position nResultOffset.  If pResult's current capacity is too small, a
+    new string buffer will be allocated in pResult as necessary, and
+    pResultCapacity will contain the new capacity on return.
 
     @param nResultOffset
     If pResult is used as a string buffer (i.e., pResultCapacity is non-null),
@@ -184,14 +202,24 @@ enum rtl_math_RoundingMode
     The value to convert.
 
     @param eFormat
-    The format to use.  If eFormat == rtl_math_StringFormat_G and
-    nDecPlaces < 0, the default number (currently 6) of decimals is generated.
-    If eFormat == rtl_math_StringFormat_Automatic and nDecPlaces < 0, the
-    highest number of significant decimals possible is generated.
+    The format to use, one of rtl_math_StringFormat.
 
     @param nDecPlaces
-    The number of decimals to be generated.  Must be non-negative, expect as
-    described for the eFormat parameter.
+    The number of decimals to be generated.  Effectively fValue is rounded at
+    this position, specifying nDecPlaces <= 0 accordingly rounds the value
+    before the decimal point and fills with zeros.
+    If eFormat == rtl_math_StringFormat_Automatic and nDecPlaces ==
+    rtl_math_DecimalPlaces_Max, the highest number of significant decimals
+    possible is generated.
+    If eFormat == rtl_math_StringFormat_G, nDecPlaces specifies the number of
+    significant digits instead.  If nDecPlaces ==
+    rtl_math_DecimalPlaces_DefaultSignificance, the default number (currently 6
+    as implemented by most libraries) of significant digits is generated.
+    According to the ANSI C90 standard the E style will be used only if the
+    exponent resulting from the conversion is less than -4 or greater than or
+    equal to the precision.  However, as opposed to the ANSI standard, trailing
+    zeros are not necessarily removed from the fractional portion of the result
+    unless bEraseTrailingDecZeros == true was specified.
 
     @param cDecSeparator
     The decimal separator.
@@ -200,7 +228,8 @@ enum rtl_math_RoundingMode
     Either null (no grouping is used), or a null-terminated list of group
     lengths.  Each group length must be strictly positive.  If the number of
     digits in a conversion exceeds the specified range, the last (highest) group
-    length is repeated as needed.
+    length is repeated as needed.  Values are applied from right to left, for a
+    grouping of 1,00,00,000 you'd have to specify pGroups={3,2,0}.
 
     @param cGroupSeparator
     The group separator.  Ignored if pGroups is null.
@@ -235,10 +264,10 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
     If non-null, it points to the current capacity of pResult, which is
     considered to point to a string buffer (pResult must not itself be null in
     this case, and must point to a string that has room for the given capacity).
-    The string representation of the given double value is appended to pResult.
-    If pResult's current capacity is too small, a new string buffer will be
-    allocated in pResult as necessary, and pResultCapacity will contain the new
-    capacity on return.
+    The string representation of the given double value is inserted into pResult
+    at position nResultOffset.  If pResult's current capacity is too small, a
+    new string buffer will be allocated in pResult as necessary, and
+    pResultCapacity will contain the new capacity on return.
 
     @param nResultOffset
     If pResult is used as a string buffer (i.e., pResultCapacity is non-null),
@@ -249,14 +278,24 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
     The value to convert.
 
     @param eFormat
-    The format to use.  If eFormat == rtl_math_StringFormat_G and
-    nDecPlaces < 0, the default number (currently 6) of decimals is generated.
-    If eFormat == rtl_math_StringFormat_Automatic and nDecPlaces < 0, the
-    highest number of significant decimals possible is generated.
+    The format to use, one of rtl_math_StringFormat.
 
     @param nDecPlaces
-    The number of decimals to be generated.  Must be non-negative, expect as
-    described for the eFormat parameter.
+    The number of decimals to be generated.  Effectively fValue is rounded at
+    this position, specifying nDecPlaces <= 0 accordingly rounds the value
+    before the decimal point and fills with zeros.
+    If eFormat == rtl_math_StringFormat_Automatic and nDecPlaces ==
+    rtl_math_DecimalPlaces_Max, the highest number of significant decimals
+    possible is generated.
+    If eFormat == rtl_math_StringFormat_G, nDecPlaces specifies the number of
+    significant digits instead.  If nDecPlaces ==
+    rtl_math_DecimalPlaces_DefaultSignificance, the default number (currently 6
+    as implemented by most libraries) of significant digits is generated.
+    According to the ANSI C90 standard the E style will be used only if the
+    exponent resulting from the conversion is less than -4 or greater than or
+    equal to the precision.  However, as opposed to the ANSI standard, trailing
+    zeros are not necessarily removed from the fractional portion of the result
+    unless bEraseTrailingDecZeros == true was specified.
 
     @param cDecSeparator
     The decimal separator.
@@ -265,7 +304,8 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
     Either null (no grouping is used), or a null-terminated list of group
     lengths.  Each group length must be strictly positive.  If the number of
     digits in a conversion exceeds the specified range, the last (highest) group
-    length is repeated as needed.
+    length is repeated as needed.  Values are applied from right to left, for a
+    grouping of 1,00,00,000 you'd have to specify pGroups={3,2,0}.
 
     @param cGroupSeparator
     The group separator.  Ignored if pGroups is null.

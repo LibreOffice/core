@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtscn6.tab,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-10 10:14:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,6 +622,7 @@ static ImplDBCSConvertData const aImplGB2312DBCSCvtData =
 {
     aGB2312UniLeadTab,
     aGB2312DBCSHighTab,
+    0x00, 0xFF,
     0xA1, 0xFE,
     aImplMS936DBCSEUDCTab,
     DBCS_EUDC_MS936_COUNT
@@ -1201,6 +1202,7 @@ static ImplDBCSConvertData const aImplGBT12345DBCSCvtData =
 {
     aGBT12345UniLeadTab,
     aGBT12345DBCSHighTab,
+    0x00, 0xFF,
     0xA1, 0xFE,
     aImplMS936DBCSEUDCTab,
     DBCS_EUDC_MS936_COUNT
@@ -1845,6 +1847,7 @@ static ImplDBCSConvertData const aImplGBKDBCSCvtData =
 {
     aGBKUniLeadTab,
     aGBKDBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFE,
     aImplMS936DBCSEUDCTab,
     DBCS_EUDC_MS936_COUNT
@@ -2401,6 +2404,7 @@ static ImplDBCSConvertData const aImplMS936DBCSCvtData =
 {
     aMS936UniLeadTab,
     aMS936DBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFE,
     aImplMS936DBCSEUDCTab,
     DBCS_EUDC_MS936_COUNT
@@ -2958,6 +2962,7 @@ static ImplDBCSConvertData const aImplAPPLECHINSIMPDBCSCvtData =
 {
     aAPPLECHINSIMPUniLeadTab,
     aAPPLECHINSIMPDBCSHighTab,
+    0x00, 0xFF,
     0xA1, 0xFE,
     NULL,
     0

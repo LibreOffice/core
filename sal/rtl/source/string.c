@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-05 11:01:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,17 +227,20 @@ static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL rtl_uString2String( rtl_String** ppThis,
-                                  const sal_Unicode* pUStr,
-                                  sal_Int32 nULen,
-                                  rtl_TextEncoding eTextEncoding,
-                                  sal_uInt32 nCvtFlags )
+sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
+                                                  sal_Unicode const * pSource,
+                                                  sal_Int32 nLength,
+                                                  rtl_TextEncoding nEncoding,
+                                                  sal_uInt32 nFlags,
+                                                  sal_Bool bCheckErrors)
 {
-    OSL_ENSURE(rtl_isOctetTextEncoding(eTextEncoding),
-               "rtl_uString2String() - Wrong TextEncoding");
+    OSL_ASSERT(pTarget != NULL
+               && (pSource != NULL || nLength == 0)
+               && nLength >= 0
+               && rtl_isOctetTextEncoding(nEncoding));
 
-    if ( !nULen )
-        rtl_string_new( ppThis );
+    if ( !nLength )
+        rtl_string_new( pTarget );
     else
     {
         rtl_String*                 pTemp;
@@ -249,77 +252,79 @@ void SAL_CALL rtl_uString2String( rtl_String** ppThis,
         sal_Size                    nNotConvertedChars;
         sal_Size                    nMaxCharLen;
 
-        if ( *ppThis )
-            IMPL_RTL_STRINGNAME( release )( *ppThis );
-
         /* Optimization for UTF-8 - we try to calculate the exact length */
         /* For all other encoding we try an good estimation */
-        if ( eTextEncoding == RTL_TEXTENCODING_UTF8 )
+        if ( nEncoding == RTL_TEXTENCODING_UTF8 )
         {
-            nNewLen = rtl_ImplGetFastUTF8ByteLen( pUStr, nULen );
+            nNewLen = rtl_ImplGetFastUTF8ByteLen( pSource, nLength );
             /* Includes the string only ASCII, then we could copy
                the buffer faster */
-            if ( nNewLen == (sal_Size)nULen )
+            if ( nNewLen == (sal_Size)nLength )
             {
                 IMPL_RTL_STRCODE* pBuffer;
-                *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nULen );
-                pBuffer = (*ppThis)->buffer;
+                if ( *pTarget )
+                    IMPL_RTL_STRINGNAME( release )( *pTarget );
+                *pTarget = IMPL_RTL_STRINGNAME( ImplAlloc )( nLength );
+                pBuffer = (*pTarget)->buffer;
                 do
                 {
                     /* Check ASCII range */
-                    OSL_ENSURE( *pUStr <= 127,
+                    OSL_ENSURE( *pSource <= 127,
                                 "rtl_uString2String() - UTF8 test is encoding is wrong" );
 
-                    *pBuffer = (IMPL_RTL_STRCODE)(unsigned char)*pUStr;
+                    *pBuffer = (IMPL_RTL_STRCODE)(unsigned char)*pSource;
                     pBuffer++;
-                    pUStr++;
-                    nULen--;
+                    pSource++;
+                    nLength--;
                 }
-                while ( nULen );
-                return;
+                while ( nLength );
+                return sal_True;
             }
 
-            nMaxCharLen = 6;
+            nMaxCharLen = 4;
         }
         else
         {
             rtl_TextEncodingInfo aTextEncInfo;
             aTextEncInfo.StructSize = sizeof( aTextEncInfo );
-            if ( !rtl_getTextEncodingInfo( eTextEncoding, &aTextEncInfo ) )
+            if ( !rtl_getTextEncodingInfo( nEncoding, &aTextEncInfo ) )
             {
                 aTextEncInfo.AverageCharSize    = 1;
                 aTextEncInfo.MaximumCharSize    = 8;
             }
 
-            nNewLen = nULen*aTextEncInfo.AverageCharSize;
+            nNewLen = nLength*aTextEncInfo.AverageCharSize;
             nMaxCharLen = aTextEncInfo.MaximumCharSize;
         }
 
-        nCvtFlags |= RTL_UNICODETOTEXT_FLAGS_FLUSH;
-        hConverter = rtl_createUnicodeToTextConverter( eTextEncoding );
+        nFlags |= RTL_UNICODETOTEXT_FLAGS_FLUSH;
+        hConverter = rtl_createUnicodeToTextConverter( nEncoding );
 
-        pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
-        nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
-                                               pUStr, nULen,
-                                               pTemp->buffer, nNewLen,
-                                               nCvtFlags,
-                                               &nInfo, &nSrcChars );
-
-        /* Buffer not big enough, try again with enough space */
-        while ( nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL )
+        for (;;)
         {
+            pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+            nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
+                                                   pSource, nLength,
+                                                   pTemp->buffer, nNewLen,
+                                                   nFlags,
+                                                   &nInfo, &nSrcChars );
+            if (bCheckErrors && (nInfo & RTL_UNICODETOTEXT_INFO_ERROR) != 0)
+            {
+                rtl_freeMemory(pTemp);
+                rtl_destroyUnicodeToTextConverter(hConverter);
+                return sal_False;
+            }
+
+            if ((nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0)
+                break;
+
+            /* Buffer not big enough, try again with enough space */
             rtl_freeMemory( pTemp );
 
             /* Try with the max. count of characters with
                additional overhead for replacing functionality */
-            nNotConvertedChars = nULen-nSrcChars;
+            nNotConvertedChars = nLength-nSrcChars;
             nNewLen = nDestBytes+(nNotConvertedChars*nMaxCharLen)+nNotConvertedChars+4;
-            pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
-            nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
-                                                   pUStr, nULen,
-                                                   pTemp->buffer, nNewLen,
-                                                   nCvtFlags,
-                                                   &nInfo, &nSrcChars );
         }
 
         /* Set the buffer to the correct size or is there to
@@ -338,12 +343,34 @@ void SAL_CALL rtl_uString2String( rtl_String** ppThis,
         }
 
         rtl_destroyUnicodeToTextConverter( hConverter );
-        *ppThis = pTemp;
+        if ( *pTarget )
+            IMPL_RTL_STRINGNAME( release )( *pTarget );
+        *pTarget = pTemp;
 
         /* Results the conversion in an empty buffer -
            create an empty string */
         if ( pTemp && !nDestBytes )
-            rtl_string_new( ppThis );
+            rtl_string_new( pTarget );
     }
+    return sal_True;
 }
 
+void SAL_CALL rtl_uString2String( rtl_String** ppThis,
+                                  const sal_Unicode* pUStr,
+                                  sal_Int32 nULen,
+                                  rtl_TextEncoding eTextEncoding,
+                                  sal_uInt32 nCvtFlags )
+{
+    rtl_impl_convertUStringToString(ppThis, pUStr, nULen, eTextEncoding,
+                                    nCvtFlags, sal_False);
+}
+
+sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
+                                             sal_Unicode const * pSource,
+                                             sal_Int32 nLength,
+                                             rtl_TextEncoding nEncoding,
+                                             sal_uInt32 nFlags)
+{
+    return rtl_impl_convertUStringToString(pTarget, pSource, nLength, nEncoding,
+                                           nFlags, sal_True);
+}

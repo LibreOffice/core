@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hro $ $Date: 2002-12-10 12:17:06 $
+#   last change: $Author: hr $ $Date: 2003-03-26 16:46:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,15 +83,20 @@ SLOFILES=\
         $(SLO)$/CopyFileExA.obj\
         $(SLO)$/CopyFileExW.obj\
         $(SLO)$/DrawStateW.obj\
+        $(SLO)$/EnumProcesses.obj\
         $(SLO)$/GetLogicalDriveStringsW.obj\
         $(SLO)$/GetLongPathNameA.obj\
         $(SLO)$/GetLongPathNameW.obj\
+        $(SLO)$/GetModuleFileNameExA.obj\
+        $(SLO)$/GetModuleFileNameExW.obj\
+        $(SLO)$/GetProcessId.obj\
         $(SLO)$/GetUserDomainA.obj\
         $(SLO)$/GetUserDomainW.obj\
         $(SLO)$/GetDiskFreeSpaceExA.obj\
         $(SLO)$/GetDiskFreeSpaceExW.obj\
         $(SLO)$/MoveFileExA.obj\
         $(SLO)$/MoveFileExW.obj\
+        $(SLO)$/toolhelp.obj\
         $(SLO)$/DllGetVersion.obj\
         $(SLO)$/DllMain.obj\
         $(SLO)$/ResolveThunk.obj\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-17 13:06:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,6 +1060,37 @@ public:
     double toDouble() const SAL_THROW(())
     {
         return rtl_ustr_toDouble( pData->buffer );
+    }
+
+    /**
+      Converts to an OString, signalling failure.
+
+      @param pTarget
+      An out parameter receiving the converted OString.  Must not be null; the
+      contents are not modified if conversion fails (convertToOString returns
+      false).
+
+      @param nEncoding
+      The text encoding to convert into.  Must be an octet encoding (i.e.,
+      rtl_isOctetTextEncoding(nEncoding) must return true).
+
+      @param nFlags
+      A combination of RTL_UNICODETOTEXT_FLAGS that detail how to do the
+      conversion (see rtl_convertUnicodeToText).  RTL_UNICODETOTEXT_FLAGS_FLUSH
+      need not be included, it is implicitly assumed.  Typical uses are either
+      RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+      RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR (fail if a Unicode character cannot
+      be converted to the target nEncoding) or OUSTRING_TO_OSTRING_CVTFLAGS
+      (make a best efforts conversion).
+
+      @return
+      True if the conversion succeeded, false otherwise.
+     */
+    inline bool convertToString(OString * pTarget, rtl_TextEncoding nEncoding,
+                                sal_uInt32 nFlags)
+    {
+        return rtl_convertUStringToString(&pTarget->pData, pData->buffer,
+                                          pData->length, nEncoding, nFlags);
     }
 
     /**

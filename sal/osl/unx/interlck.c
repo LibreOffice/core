@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-05-02 15:03:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,11 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
         "lock\n\t"
         "xadd %0, %2\n\t"
         "incl %0"
-    :   "=a" (nCount), "=m" (*pCount)
+    :   "=&r" (nCount), "=m" (*pCount)
     :   "m" (*pCount)
     :   "memory");
+
+    return nCount;
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
@@ -97,9 +99,11 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         "lock\n\t"
         "xadd %0, %2\n\t"
         "decl %0"
-    :   "=a" (nCount), "=m" (*pCount)
+    :   "=&r" (nCount), "=m" (*pCount)
     :   "m" (*pCount)
     :   "memory");
+
+    return nCount;
 }
 
 #elif defined ( GCC ) && defined ( POWERPC )
@@ -117,7 +121,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
         "   addi    %0,%0,1\n\t"
         "   stwcx.  %0,0,%2\n\t"
         "   bne-    1b"
-        : "=r" (nCount), "=m" (*pCount)
+        : "=&r" (nCount), "=m" (*pCount)
         : "r" (pCount)
         : "r4", "memory");
 
@@ -134,7 +138,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         "   subi    %0,%0,1\n\t"
         "   stwcx.  %0,0,%2\n\t"
         "   bne-    1b"
-        : "=r" (nCount), "=m" (*pCount)
+        : "=&r" (nCount), "=m" (*pCount)
         : "r" (pCount)
         : "r4", "memory");
 

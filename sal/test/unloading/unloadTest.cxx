@@ -68,8 +68,61 @@ void SAL_CALL listenerCallback( void* id);
 
 int main(int argc, char* argv[])
 {
-    sal_Bool ret1= test1();
-    if( ret1) printf( "\n Test 1 successful \n");
+  // Test if the servicemanager can be created and if the sample libs
+  // can be loaded
+//  Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
+//     OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+//    if( !serviceManager.is())
+//    {
+//      printf("\n ####################################################\n"
+//         "Error: could not create service manager. \n"
+//         "Is the executable in the office program directory?\n");
+//      return -1;
+//    }
+
+//    Reference<XInterface> xint1=  serviceManager->createInstance( OUString(
+//                  RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
+
+//    if( !xint1.is())
+//    {
+//        printf("\n ###################################################\n"
+//           "Error: could not create service from samplelib1\n"
+//           "Is samplelib1 in the office program directory and is it "
+//           "registered?\n");
+//        return -1;
+//    }
+//    Reference<XInterface> xint2=  serviceManager->createInstance( OUString(
+//                  RTL_CONSTASCII_USTRINGPARAM(SERVICENAME21)));
+//    if( !xint2.is())
+//      {
+//        printf("\n ###################################################"
+//           "Error: could not create service from samplelib2\n"
+//           "Is samplelib2 in the office program directory and is it "
+//           "registered?\n");
+//        return -1;
+//      }
+//        //destroy servicemanager
+//        Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
+//        Any any_prop= xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+//        Reference<XComponentContext> xContext;
+//        any_prop >>= xContext;
+//        Reference<XComponent> xComponent( xContext, UNO_QUERY);
+//        xComponent->dispose();
+
+//        //unload samplelib1 and samplelib2. We need the handles, therefore load
+//        // the libs
+//        OUString libname1( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
+//        OUString libname2( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
+//        oslModule m1= osl_loadModule(libname1.pData, 0);
+//        oslModule m2= osl_loadModule(libname2.pData, 0);
+//        osl_unloadModule( m1);
+//        osl_unloadModule( m1);
+//        osl_unloadModule( m2);
+//        osl_unloadModule( m2);
+
+
+  sal_Bool ret1= test1();
+  if( ret1) printf( "\n Test 1 successful \n");
     else printf("\n !!!!!! Test 1 failed\n");
     sal_Bool ret2= test2();
     if( ret2) printf( "\n Test 2 successful \n");
@@ -89,7 +142,7 @@ int main(int argc, char* argv[])
     sal_Bool ret8= test8();
     if( ret8) printf( "\n Test 8 successful \n");
     else printf("\n !!!!!! Test 8 failed\n");
-      sal_Bool ret9= test9();
+    sal_Bool ret9= test9();
     if( ret9) printf( "\n Test 9 successful: service manager is unloading listener\n");
     else printf("\n !!!!! Test 9 failed\n");
 
@@ -563,10 +616,7 @@ sal_Bool test9()
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
 
-    xint= serviceManager->createInstance( OUString(
-                RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
-
-    if( pSymbol ||  !xint.is())
+    if( pSymbol)
     {
         retval= sal_False;
     }

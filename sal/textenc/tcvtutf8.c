@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtutf8.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,354 +59,379 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
-#include "tenchelp.h"
-#endif
-#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
-#include "unichars.h"
-#endif
-
-#ifndef _RTL_TEXTCVT_H
+#include "sal/types.h"
+#include "rtl/alloc.h"
 #include "rtl/textcvt.h"
-#endif
 
-/* ----------------------------------------------------------------------- */
+#include "converter.h"
+#include "tenchelp.h"
+#include "unichars.h"
 
-sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
-                            sal_Unicode* pDestBuf, sal_Size nDestChars,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtBytes )
+static struct ImplUtf8ToUnicodeContext
 {
-    static sal_uInt8 const nExtraBytesFromUTF8Tab[16] =
-    {
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 0, 0
-    };
-    static sal_uInt8 const nFirstByteMaskTab[3] =
-    {
-        0x07, 0x03, 0x01
-    };
+    sal_uInt32 nUtf32;
+    int nShift;
+    sal_Bool bCheckBom;
+};
 
-    sal_uInt8               nBytes;
-    sal_uInt8               nTempBytes;
-    sal_uChar               c;
-    sal_uInt32              cConv;
-    sal_Unicode*            pEndDestBuf;
-    const sal_Char*         pEndSrcBuf;
+static struct ImplUnicodeToUtf8Context
+{
+    sal_Unicode nHighSurrogate; // 0xFFFF: write BOM
+};
 
-    *pInfo = 0;
-    pEndDestBuf = pDestBuf+nDestChars;
-    pEndSrcBuf  = pSrcBuf+nSrcBytes;
-    while ( pSrcBuf < pEndSrcBuf )
-    {
-        if ( pDestBuf == pEndDestBuf )
-        {
-            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
-            break;
-        }
-
-        c = (sal_uChar)*pSrcBuf;
-
-        /* 1 Byte */
-        /* 0aaaaaaa (000000000aaaaaaa) */
-        if ( !(c & 0x80) )
-        {
-            *pDestBuf = (sal_Unicode)c;
-            pDestBuf++;
-            pSrcBuf++;
-        }
-        /* 2-3 Bytes */
-        else if ( (c & 0xF0) != 0xF0 )
-        {
-            /* 110aaaaa 10bbbbbb (00000aaaaabbbbbb) */
-            if ( (c & 0xE0) == 0xC0 )
-            {
-                nBytes = 2;
-                c &= 0x1F; /* 00001111; */
-            }
-            /* 1110aaaa 10bbbbbb 10cccccc (aaaabbbbbbcccccc) */
-            else if ( (c & 0xF0) == 0xE0 )
-            {
-                nBytes = 3;
-                c &= 0x0F; /* 00001111; */
-            }
-            else
-            {
-                *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
-                if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
-                {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                    break;
-                }
-                else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                {
-                    if ( pDestBuf >= pEndDestBuf )
-                    {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
-                        break;
-                    }
-                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                }
-                pSrcBuf++;
-                continue;
-            }
-
-            if ( pSrcBuf+nBytes > pEndSrcBuf )
-            {
-                *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
-                break;
-            }
-
-            cConv = c;
-            pSrcBuf++;
-            if ( (*pSrcBuf & 0xC0) != 0x80 )
-            {
-                *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
-                if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
-                {
-                    pSrcBuf--;
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                    break;
-                }
-                else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                continue;
-            }
-            else
-            {
-                c = (sal_uChar)*pSrcBuf;
-                cConv <<= 6;
-                cConv += c & 0x3F; /* 00111111 */
-            }
-            if ( nBytes == 3 )
-            {
-                pSrcBuf++;
-                if ( (*pSrcBuf & 0xC0) != 0x80 )
-                {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
-                    if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
-                    {
-                        pSrcBuf -= 2;
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                        break;
-                    }
-                    else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                        *pDestBuf++
-                            = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                    continue;
-                }
-                else
-                {
-                    c = (sal_uChar)*pSrcBuf;
-                    cConv <<= 6;
-                    cConv += c & 0x3F; /* 00111111 */
-                }
-            }
-            *pDestBuf = (sal_Unicode)cConv;
-            pDestBuf++;
-            pSrcBuf++;
-        }
-        /* 4-6 Bytes */
-        else
-        {
-            /* convert to ucs4 */
-            nBytes = nExtraBytesFromUTF8Tab[c & 0x0F];
-            if ( !nBytes )
-            {
-                *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
-                if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
-                {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                    break;
-                }
-                else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                {
-                    if ( pDestBuf >= pEndDestBuf )
-                    {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
-                        break;
-                    }
-                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                }
-                pSrcBuf++;
-                continue;
-            }
-            else if ( pSrcBuf+nBytes+1 > pEndSrcBuf )
-            {
-                *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
-                break;
-            }
-
-            cConv = c & nFirstByteMaskTab[nBytes-3];
-            nTempBytes = nBytes;
-            do
-            {
-                pSrcBuf++;
-                if ( (*pSrcBuf & 0xC0) != 0x80 )
-                    break;
-                c = (sal_uChar)*pSrcBuf;
-                cConv <<= 6;
-                cConv += c & 0x3F; /* 00111111 */
-                nTempBytes--;
-            }
-            while ( nTempBytes );
-            if ( nTempBytes )
-            {
-                *pInfo |= RTL_TEXTTOUNICODE_INFO_INVALID;
-                if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) == RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR )
-                {
-                    pSrcBuf -= nBytes-nTempBytes+1;
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                    break;
-                }
-                else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                pSrcBuf++;
-                continue;
-            }
-            else
-            {
-                pSrcBuf++;
-                if ( cConv > 0x10FFFF )
-                {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_MBUNDEFINED;
-                    if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR )
-                    {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-                        break;
-                    }
-                    else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) != RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE )
-                        *pDestBuf++
-                            = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-                }
-                else if ( pDestBuf+2 > pEndDestBuf )
-                {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
-                    break;
-                }
-                else
-                {
-                    *pDestBuf++ = (sal_Unicode) ImplGetHighSurrogate(cConv);
-                    *pDestBuf++ = (sal_Unicode) ImplGetLowSurrogate(cConv);
-                }
-            }
-        }
-    }
-
-    *pSrcCvtBytes = nSrcBytes - (pEndSrcBuf-pSrcBuf);
-    return (nDestChars - (pEndDestBuf-pDestBuf));
+void * ImplCreateUtf8ToUnicodeContext(void)
+{
+    void * p = rtl_allocateMemory(sizeof (struct ImplUtf8ToUnicodeContext));
+    ImplResetUtf8ToUnicodeContext(p);
+    return p;
 }
 
-/* ----------------------------------------------------------------------- */
-
-sal_Size ImplUnicodeToUTF8( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtChars )
+void ImplResetUtf8ToUnicodeContext(void * pContext)
 {
-    static sal_uInt8 const nFirstByteMarkTab[6] =
+    if (pContext != NULL)
     {
-        0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC
-    };
+        ((struct ImplUtf8ToUnicodeContext *) pContext)->nShift = -1;
+        ((struct ImplUtf8ToUnicodeContext *) pContext)->bCheckBom = sal_True;
+    }
+}
 
-    sal_Unicode             c;
-    sal_Unicode             c2;
-    sal_uInt32              nUCS4Char;
-    sal_uInt8               nBytes;
-    sal_Char*               pTempDestBuf;
-    sal_Char*               pEndDestBuf;
-    const sal_Unicode*      pEndSrcBuf;
+sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
+                                  void * pContext, sal_Char const * pSrcBuf,
+                                  sal_Size nSrcBytes, sal_Unicode * pDestBuf,
+                                  sal_Size nDestChars, sal_uInt32 nFlags,
+                                  sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
+{
+    // This function is very liberal with the UTF-8 input.  Accepted are:
+    // - non-shortest forms (e.g., C0 41 instead of 41 to represent U+0041)
+    // - surrogates (e.g., ED A0 80 to represent U+D800)
+    // - encodings with up to six bytes (everything outside the range
+    //   U+0000..10FFFF is considered "undefined")
 
-    *pInfo = 0;
-    pEndDestBuf = pDestBuf+nDestBytes;
-    pEndSrcBuf  = pSrcBuf+nSrcChars;
-    while ( pSrcBuf < pEndSrcBuf )
+    sal_uInt32 nUtf32;
+    int nShift = -1;
+    sal_Bool bCheckBom = sal_True;
+    sal_uInt32 nInfo = 0;
+    sal_uChar const * pSrcBufPtr = (sal_uChar const *) pSrcBuf;
+    sal_uChar const * pSrcBufEnd = pSrcBufPtr + nSrcBytes;
+    sal_Unicode * pDestBufPtr = pDestBuf;
+    sal_Unicode * pDestBufEnd = pDestBufPtr + nDestChars;
+
+    if (pContext != NULL)
     {
-        c = *pSrcBuf;
-        if ( c < 0x80 )
-        {
-            if ( pDestBuf == pEndDestBuf )
+        nUtf32 = ((struct ImplUtf8ToUnicodeContext *) pContext)->nUtf32;
+        nShift = ((struct ImplUtf8ToUnicodeContext *) pContext)->nShift;
+        bCheckBom = ((struct ImplUtf8ToUnicodeContext *) pContext)->bCheckBom;
+    }
+
+    while (pSrcBufPtr < pSrcBufEnd)
+    {
+        sal_Bool bUndefined = sal_False;
+        sal_Bool bConsume = sal_True;
+        sal_uInt32 nChar = *pSrcBufPtr++;
+        if (nShift < 0)
+            if (nChar <= 0x7F)
             {
-                *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
-                break;
+                nUtf32 = nChar;
+                goto transform;
             }
-
-            *pDestBuf = (sal_Char)(sal_uChar)c;
-            pDestBuf++;
-            pSrcBuf++;
+            else if (nChar <= 0xBF)
+                goto bad_input;
+            else if (nChar <= 0xDF)
+            {
+                nUtf32 = (nChar & 0x1F) << 6;
+                nShift = 0;
+            }
+            else if (nChar <= 0xEF)
+            {
+                nUtf32 = (nChar & 0x0F) << 12;
+                nShift = 6;
+            }
+            else if (nChar <= 0xF7)
+            {
+                nUtf32 = (nChar & 0x07) << 18;
+                nShift = 12;
+            }
+            else if (nChar <= 0xFB)
+            {
+                nUtf32 = (nChar & 0x03) << 24;
+                nShift = 18;
+            }
+            else if (nChar <= 0xFD)
+            {
+                nUtf32 = (nChar & 0x01) << 30;
+                nShift = 24;
+            }
+            else
+                goto bad_input;
+        else if ((nChar & 0xC0) == 0x80)
+        {
+            nUtf32 |= (nChar & 0x3F) << nShift;
+            if (nShift == 0)
+                goto transform;
+            else
+                nShift -= 6;
         }
         else
         {
-            nUCS4Char = c;
-            if ( nUCS4Char < 0x800 )
-                nBytes = 2;
+            // This byte is preceeded by a broken UTF-8 sequence; if this byte
+            // is neither in the range [0x80..0xBF] nor in the range
+            // [0xFE..0xFF], assume that this byte does not belong to that
+            // broken sequence, but instead starts a new, legal UTF-8 sequence:
+            bConsume = nChar >= 0xFE;
+            goto bad_input;
+        }
+        continue;
+
+    transform:
+        if (!bCheckBom || nUtf32 != 0xFEFF
+            || (nFlags & RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE) == 0)
+            if (nUtf32 <= 0xFFFF)
+                if (pDestBufPtr != pDestBufEnd)
+                    *pDestBufPtr++ = (sal_Unicode) nUtf32;
+                else
+                    goto no_output;
+            else if (nUtf32 <= 0x10FFFF)
+                if (pDestBufEnd - pDestBufPtr >= 2)
+                {
+                    *pDestBufPtr++ = (sal_Unicode) ImplGetHighSurrogate(nUtf32);
+                    *pDestBufPtr++ = (sal_Unicode) ImplGetLowSurrogate(nUtf32);
+                }
+                else
+                    goto no_output;
             else
             {
-                if (ImplIsHighSurrogate(c))
-                {
-                    if ( pSrcBuf == pEndSrcBuf )
-                    {
-                        *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
-                        break;
-                    }
-
-                    c2 = *(pSrcBuf+1);
-                    if (ImplIsLowSurrogate(c2))
-                    {
-                        nUCS4Char = ImplCombineSurrogates(c, c2);
-                        pSrcBuf++;
-                    }
-                    else
-                    {
-                        *pInfo |= RTL_UNICODETOTEXT_INFO_INVALID;
-                        if ( (nFlags & RTL_UNICODETOTEXT_FLAGS_INVALID_MASK) == RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR )
-                        {
-                            *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR;
-                            break;
-                        }
-                        else if ( (nFlags & RTL_UNICODETOTEXT_FLAGS_INVALID_MASK) == RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE )
-                        {
-                            pSrcBuf++;
-                            continue;
-                        }
-                        /* in UTF8 we save the original code. I think   */
-                        /* this is better than the default char,        */
-                        /* because it is a unicode format.              */
-                    }
-                }
-
-                if ( nUCS4Char < 0x10000 )
-                    nBytes = 3;
-                else if ( nUCS4Char < 0x200000 )
-                    nBytes = 4;
-                else if ( nUCS4Char < 0x4000000 )
-                    nBytes = 5;
-                else
-                    nBytes = 6;
+                bUndefined = sal_True;
+                goto bad_input;
             }
+        nShift = -1;
+        bCheckBom = sal_False;
+        continue;
 
-            if ( pDestBuf+nBytes > pEndDestBuf )
-            {
-                *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
-                break;
-            }
-            pDestBuf += nBytes;
-            pTempDestBuf = pDestBuf;
-            switch ( nBytes ) /* no breaks, only jump table */
-            {
-                case 6: pTempDestBuf--; *pTempDestBuf = (sal_Char)((((sal_uChar)nUCS4Char) | 0x80) & 0xBF); nUCS4Char >>= 6;
-                case 5: pTempDestBuf--; *pTempDestBuf = (sal_Char)((((sal_uChar)nUCS4Char) | 0x80) & 0xBF); nUCS4Char >>= 6;
-                case 4: pTempDestBuf--; *pTempDestBuf = (sal_Char)((((sal_uChar)nUCS4Char) | 0x80) & 0xBF); nUCS4Char >>= 6;
-                case 3: pTempDestBuf--; *pTempDestBuf = (sal_Char)((((sal_uChar)nUCS4Char) | 0x80) & 0xBF); nUCS4Char >>= 6;
-                case 2: pTempDestBuf--; *pTempDestBuf = (sal_Char)((((sal_uChar)nUCS4Char) | 0x80) & 0xBF); nUCS4Char >>= 6;
-            };
-            pTempDestBuf--;
-            *pTempDestBuf = (sal_Char)(((sal_uChar)nUCS4Char) | nFirstByteMarkTab[nBytes-1]);
-            pSrcBuf++;
+    bad_input:
+        switch (ImplHandleBadInputMbTextToUnicodeConversion(bUndefined, nFlags,
+                                                            &pDestBufPtr,
+                                                            pDestBufEnd,
+                                                            &nInfo))
+        {
+        case IMPL_BAD_INPUT_STOP:
+            nShift = -1;
+            bCheckBom = sal_False;
+            if (!bConsume)
+                --pSrcBufPtr;
+            break;
+
+        case IMPL_BAD_INPUT_CONTINUE:
+            nShift = -1;
+            bCheckBom = sal_False;
+            if (!bConsume)
+                --pSrcBufPtr;
+            continue;
+
+        case IMPL_BAD_INPUT_NO_OUTPUT:
+            goto no_output;
         }
+        break;
+
+    no_output:
+        --pSrcBufPtr;
+        nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+        break;
     }
 
-    *pSrcCvtChars = nSrcChars - (pEndSrcBuf-pSrcBuf);
-    return (nDestBytes - (pEndDestBuf-pDestBuf));
+    if (nShift >= 0
+        && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
+                         | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
+               == 0)
+        if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
+            nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+        else
+            switch (ImplHandleBadInputMbTextToUnicodeConversion(sal_False,
+                                                                nFlags,
+                                                                &pDestBufPtr,
+                                                                pDestBufEnd,
+                                                                &nInfo))
+            {
+            case IMPL_BAD_INPUT_STOP:
+            case IMPL_BAD_INPUT_CONTINUE:
+                nShift = -1;
+                bCheckBom = sal_False;
+                break;
+
+            case IMPL_BAD_INPUT_NO_OUTPUT:
+                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                break;
+            }
+
+    if (pContext != NULL)
+    {
+        ((struct ImplUtf8ToUnicodeContext *) pContext)->nUtf32 = nUtf32;
+        ((struct ImplUtf8ToUnicodeContext *) pContext)->nShift = nShift;
+        ((struct ImplUtf8ToUnicodeContext *) pContext)->bCheckBom = bCheckBom;
+    }
+    if (pInfo != NULL)
+        *pInfo = nInfo;
+    if (pSrcCvtBytes != NULL)
+        *pSrcCvtBytes = (sal_Char const *) pSrcBufPtr - pSrcBuf;
+    return pDestBufPtr - pDestBuf;
+}
+
+void * ImplCreateUnicodeToUtf8Context(void)
+{
+    void * p = rtl_allocateMemory(sizeof (struct ImplUnicodeToUtf8Context));
+    ImplResetUnicodeToUtf8Context(p);
+    return p;
+}
+
+void ImplResetUnicodeToUtf8Context(void * pContext)
+{
+    if (pContext != NULL)
+        ((struct ImplUnicodeToUtf8Context *) pContext)->nHighSurrogate = 0xFFFF;
+}
+
+sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
+                                  void * pContext, sal_Unicode const * pSrcBuf,
+                                  sal_Size nSrcChars, sal_Char * pDestBuf,
+                                  sal_Size nDestBytes, sal_uInt32 nFlags,
+                                  sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
+{
+    sal_Unicode nHighSurrogate = 0xFFFF;
+    sal_uInt32 nInfo = 0;
+    sal_Unicode const * pSrcBufPtr = pSrcBuf;
+    sal_Unicode const * pSrcBufEnd = pSrcBufPtr + nSrcChars;
+    sal_Char * pDestBufPtr = pDestBuf;
+    sal_Char * pDestBufEnd = pDestBufPtr + nDestBytes;
+
+    if (pContext != NULL)
+        nHighSurrogate
+            = ((struct ImplUnicodeToUtf8Context *) pContext)->nHighSurrogate;
+
+    if (nHighSurrogate == 0xFFFF)
+    {
+        if ((nFlags & RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE) != 0)
+            if (pDestBufEnd - pDestBufPtr >= 3)
+            {
+                // Write BOM (U+FEFF) as UTF-8:
+                *pDestBufPtr++ = (sal_Char) 0xEF;
+                *pDestBufPtr++ = (sal_Char) 0xBB;
+                *pDestBufPtr++ = (sal_Char) 0xBF;
+            }
+            else
+            {
+                nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+                goto done;
+            }
+        nHighSurrogate = 0;
+    }
+
+    while (pSrcBufPtr < pSrcBufEnd)
+    {
+        sal_uInt32 nChar = *pSrcBufPtr++;
+        if (nHighSurrogate == 0)
+        {
+            if (ImplIsHighSurrogate(nChar))
+            {
+                nHighSurrogate = (sal_Unicode) nChar;
+                continue;
+            }
+        }
+        else if (ImplIsLowSurrogate(nChar))
+            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
+        else
+            goto bad_input;
+
+        if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
+            goto bad_input;
+
+        if (nChar <= 0x7F)
+            if (pDestBufPtr != pDestBufEnd)
+                *pDestBufPtr++ = (sal_Char) nChar;
+            else
+                goto no_output;
+        else if (nChar <= 0x7FF)
+            if (pDestBufEnd - pDestBufPtr >= 2)
+            {
+                *pDestBufPtr++ = (sal_Char) (0xC0 | (nChar >> 6));
+                *pDestBufPtr++ = (sal_Char) (0x80 | (nChar & 0x3F));
+            }
+            else
+                goto no_output;
+        else if (nChar <= 0xFFFF)
+            if (pDestBufEnd - pDestBufPtr >= 3)
+            {
+                *pDestBufPtr++ = (sal_Char) (0xE0 | (nChar >> 12));
+                *pDestBufPtr++ = (sal_Char) (0x80 | ((nChar >> 6) & 0x3F));
+                *pDestBufPtr++ = (sal_Char) (0x80 | (nChar & 0x3F));
+            }
+            else
+                goto no_output;
+        else if (pDestBufEnd - pDestBufPtr >= 4)
+        {
+            *pDestBufPtr++ = (sal_Char) (0xF0 | (nChar >> 18));
+            *pDestBufPtr++ = (sal_Char) (0x80 | ((nChar >> 12) & 0x3F));
+            *pDestBufPtr++ = (sal_Char) (0x80 | ((nChar >> 6) & 0x3F));
+            *pDestBufPtr++ = (sal_Char) (0x80 | (nChar & 0x3F));
+        }
+        else
+            goto no_output;
+        nHighSurrogate = 0;
+        continue;
+
+    bad_input:
+        switch (ImplHandleBadInputUnicodeToTextConversion(sal_False, 0, nFlags,
+                                                          &pDestBufPtr,
+                                                          pDestBufEnd, &nInfo,
+                                                          NULL, 0, NULL))
+        {
+        case IMPL_BAD_INPUT_STOP:
+            nHighSurrogate = 0;
+            break;
+
+        case IMPL_BAD_INPUT_CONTINUE:
+            nHighSurrogate = 0;
+            continue;
+
+        case IMPL_BAD_INPUT_NO_OUTPUT:
+            goto no_output;
+        }
+        break;
+
+    no_output:
+        --pSrcBufPtr;
+        nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+        break;
+    }
+
+    if (nHighSurrogate != 0
+        && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR
+                         | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
+               == 0)
+        if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
+            nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
+        else
+            switch (ImplHandleBadInputUnicodeToTextConversion(sal_False, 0,
+                                                              nFlags,
+                                                              &pDestBufPtr,
+                                                              pDestBufEnd,
+                                                              &nInfo, NULL, 0,
+                                                              NULL))
+            {
+            case IMPL_BAD_INPUT_STOP:
+            case IMPL_BAD_INPUT_CONTINUE:
+                nHighSurrogate = 0;
+                break;
+
+            case IMPL_BAD_INPUT_NO_OUTPUT:
+                nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+                break;
+            }
+
+ done:
+    if (pContext != NULL)
+        ((struct ImplUnicodeToUtf8Context *) pContext)->nHighSurrogate
+            = nHighSurrogate;
+    if (pInfo != NULL)
+        *pInfo = nInfo;
+    if (pSrcCvtChars != NULL)
+        *pSrcCvtChars = pSrcBufPtr - pSrcBuf;
+    return pDestBufPtr - pDestBuf;
 }

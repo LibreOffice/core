@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathconf.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-06 15:48:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include "osl/endian.h"
 
 #include <float.h>
-#include <limits.h>
 
 #if defined SOLARIS
 #include <ieeefp.h>
@@ -75,79 +74,21 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/** @descr
-    Handle FP errors using exceptions and setjmp/longjmp? DON'T in C++!
-    Switch off with SAL_MATH_FPCONTROL() and just calculate, test results with
-    SAL_MATH_FINITE(d), 0==error (INFinitiy, NaN), else ok.
+
+/* Generally, the C standard guarantees that at program startup, "trapping or
+   stopping (if supported) is disabled on all [floating-point] exceptions"
+   (F.7.3/1 of the August 3, 1998 draft of C99), and that during program
+   execution, "a programmer can safely assume default modes (or be unaware of
+   them)" (7.6/2, footnote 161 of the August 3, 1998 draft of C99).  Reportedly,
+   on Windows there are printer drivers that switch on exceptions.  To avoid
+   problems, the SAL_MATH_FPEXCEPTIONS_OFF macro can be used to explicitly
+   switch off exceptions (on Windows).
  */
-#if 0
-#define SAL_MATH_FPSIGNAL_JUMP 1
-#else /* 0 */
-#define SAL_MATH_FPSIGNAL_JUMP 0
-#endif /* 0 */
-
-
-/* signal() ID for FP exceptions */
-#if defined RS6000
-#define SAL_MATH_SIGFPE SIGTRAP
-#else /* RS6000 */
-#define SAL_MATH_SIGFPE SIGFPE
-#endif /* RS6000 */
-
-
-/* SAL_MATH_FPCONTROL(): switch FP exceptions on/off, depending on
-   SAL_MATH_FPSIGNAL_JUMP
-   SAL_MATH_FPRESET(): reinitialize math package
-*/
-#if defined WNT || defined WIN
-
-#define SAL_MATH_FPEXCEPTIONS_ON()  _control87( _MCW_EM, 0 )
+#if defined WNT
 #define SAL_MATH_FPEXCEPTIONS_OFF() _control87( _MCW_EM, _MCW_EM )
-#define SAL_MATH_FPRESET()          _fpreset()
-
-#elif defined OS2
-
-#define SAL_MATH_FPEXCEPTIONS_ON() _control87( MCW_EM, 0 )
-#define SAL_MATH_FPEXCEPTIONS_OFF() _control87( MCW_EM, MCW_EM )
-#define SAL_MATH_FPRESET()          _fpreset()
-
-#elif defined RS6000
-
-#define SAL_MATH_FPEXCEPTIONS_ON()  fp_enable_all()
-#define SAL_MATH_FPEXCEPTIONS_OFF() fp_disable_all()
-#define SAL_MATH_FPRESET()
-
-#elif defined LINUX
-
-#include <fpu_control.h>
-
-void sal_math_setfpucw( fpu_control_t set );
-
-#if defined POWERPC
-/* set bit to 1 to enable that exception */
-/* _FPU_MASK_ZM | _FPU_MASK_OM | _FPU_MASK_UM | _FPU_MASK_IM */
-#define SAL_MATH_FPEXCEPTIONS_ON() sal_math_setfpucw(_FPU_DEFAULT | 0x000000F0)
-#define SAL_MATH_FPEXCEPTIONS_OFF() sal_math_setfpucw(_FPU_DEFAULT)
-#else /* POWERPC */
-#define SAL_MATH_FPEXCEPTIONS_ON()  sal_math_setfpucw(_FPU_DEFAULT & ~0x001F)
-#define SAL_MATH_FPEXCEPTIONS_OFF() sal_math_setfpucw(_FPU_IEEE)
-#endif /* POWERPC */
-#define SAL_MATH_FPRESET()
-
-#else /* WNT, WIN, OS2, RS6000, LINUX */
-
-#define SAL_MATH_FPEXCEPTIONS_ON()
+#else /* WNT */
 #define SAL_MATH_FPEXCEPTIONS_OFF()
-#define SAL_MATH_FPRESET()
-
-#endif /* WNT, WIN, OS2, RS6000, LINUX */
-
-
-#if SAL_MATH_FPSIGNAL_JUMP
-#define SAL_MATH_FPCONTROL() SAL_MATH_FPEXCEPTIONS_ON()
-#else /* SAL_MATH_FPSIGNAL_JUMP */
-#define SAL_MATH_FPCONTROL() SAL_MATH_FPEXCEPTIONS_OFF()
-#endif /* SAL_MATH_FPSIGNAL_JUMP */
+#endif /* WNT */
 
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
@@ -228,6 +169,7 @@ union sal_math_Double
 #error "don't know how to handle IEEE 754"
 
 #endif /* IEEE 754 supported */
+
 
 #if defined __cplusplus
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textcvt.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-29 15:14:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ void                       SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUni
 #define RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE              ((sal_uInt32)0x0200)
 #define RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT             ((sal_uInt32)0x0300)
 #define RTL_TEXTTOUNICODE_FLAGS_FLUSH                       ((sal_uInt32)0x8000)
+#define RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE 0x10000
+    /* Accept any global document signatures (for example, in UTF-8, a leading
+       EF BB BF encoding the Byte Order Mark U+FEFF) */
 
 #define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK              ((sal_uInt32)0x000F)
 #define RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK            ((sal_uInt32)0x00F0)
@@ -184,6 +187,9 @@ void                       SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeTo
 #define RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE              ((sal_uInt32)0x2000)
 #define RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE                 ((sal_uInt32)0x4000)
 #define RTL_UNICODETOTEXT_FLAGS_FLUSH                       ((sal_uInt32)0x8000)
+#define RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE 0x10000
+    /* Write any global document signatures (for example, in UTF-8, a leading
+       EF BB BF encoding the Byte Order Mark U+FEFF) */
 
 #define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK              ((sal_uInt32)0x000F)
 #define RTL_UNICODETOTEXT_FLAGS_INVALID_MASK                ((sal_uInt32)0x00F0)

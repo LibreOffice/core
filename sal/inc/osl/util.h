@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-12 15:51:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,9 @@
 extern "C" {
 #endif
 
-/** Retrieves an ethernet address of the machine.
+/**
     @param pEthernetAddr 6 bytes of memory
+
     @return sal_True  if the ethernetaddress could be retrieved. <br>
             sal_False if no address could be found. This may be either because
            there is no ethernet card or there is no appropriate algorithm

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-26 15:27:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,6 @@ extern "C" {
 #   endif
 #endif
 
-#ifdef S390
-#   define  _BIG_ENDIAN
-#endif
-
 #ifdef _WIN16
 #   define  _LITTLE_ENDIAN
 #endif
@@ -202,7 +198,7 @@ extern "C" {
  */
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)   && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)   && \
-    !defined(AIX)     && !defined(HPUX)   && !defined(S390)  && \
+    !defined(AIX)     && !defined(HPUX)   && \
     !defined(SOLARIS) && !defined(IRIX)   && !defined(MACOS) && \
     !defined(MACOSX) && !defined(FREEBSD)
 #   error "Target plattform not specified !"

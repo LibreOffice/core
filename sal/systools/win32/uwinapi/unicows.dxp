@@ -2,9 +2,9 @@
 ;
 ;   $RCSfile: unicows.dxp,v $
 ;
-;   $Revision: 1.1 $
+;   $Revision: 1.2 $
 ;
-;   last change: $Author: hro $ $Date: 2002-08-26 12:56:07 $
+;   last change: $Author: hr $ $Date: 2003-03-26 16:46:50 $
 ;
 ;   The Contents of this file are made available subject to the terms of
 ;   either of the following licenses
@@ -411,7 +411,7 @@ RasConnectionNotificationW
 RasCreatePhonebookEntryW
 RasDeleteEntryW
 RasDeleteSubEntryW
-RasDialW
+;RasDialW
 RasEditPhonebookEntryW
 RasEnumConnectionsW
 RasEnumDevicesW

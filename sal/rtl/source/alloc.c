@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mhu $ $Date: 2002-04-09 09:46:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ static sal_uInt32 __rtl_memory_vmpagesize (void)
 
 /* #95880# building on Solaris 8 provides MAP_ANON, but it
    is not available on Solaris 7 */
-#if defined (SOLARIS) && defined (INTEL)
+#if defined (SOLARIS)
 #ifdef MAP_ANON
 #undef MAP_ANON
 #endif

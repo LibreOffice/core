@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvttcn6.tab,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-10 10:14:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,7 @@ static ImplDBCSConvertData const aImplBIG5DBCSCvtData =
 {
     aBIG5UniLeadTab,
     aBIG5DBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFE,
     aImplMS950DBCSEUDCTab,
     DBCS_EUDC_MS950_COUNT
@@ -1180,6 +1181,7 @@ static ImplDBCSConvertData const aImplMS950DBCSCvtData =
 {
     aMS950UniLeadTab,
     aMS950DBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFE,
     aImplMS950DBCSEUDCTab,
     DBCS_EUDC_MS950_COUNT
@@ -1737,6 +1739,7 @@ static ImplDBCSConvertData const aImplAPPLECHINTRADDBCSCvtData =
 {
     aAPPLECHINTRADUniLeadTab,
     aAPPLECHINTRADDBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFE,
     NULL,
     0

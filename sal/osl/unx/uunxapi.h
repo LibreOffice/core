@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uunxapi.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-14 12:54:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,14 @@
  #include <stdlib.h>
  #endif
 
+ #ifndef _TYPES_H
+ #include <sys/types.h>
+ #endif
+
+ #ifndef _STAT_H
+ #include <sys/stat.h>
+ #endif
+
  #ifndef _RTL_USTRING_H_
  #include <rtl/ustring.h>
  #endif
@@ -104,6 +112,14 @@
  sal_Bool realpath_u(
      const rtl_uString* pustrFileName,
     rtl_uString** ppustrResolvedName);
+
+ /***********************************
+  lstat_u
+
+  @see lstat
+  **********************************/
+
+ int lstat_u(const rtl_uString* pustrPath, struct stat* buf);
 
 
  #ifdef __cplusplus

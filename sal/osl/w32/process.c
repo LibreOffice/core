@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 11:21:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,12 +640,33 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
 oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
-    if (Process == NULL)
+    return osl_joinProcessWithTimeout(Process, NULL);
+}
+
+/***************************************************************************/
+
+oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
+{
+    DWORD           timeout   = INFINITE;
+    oslProcessError osl_error = osl_Process_E_None;
+    DWORD           ret;
+
+    OSL_PRECOND(Process, "osl_joinProcessWithTimeout: Invalid parameter");
+
+    if (NULL == Process)
         return osl_Process_E_Unknown;
 
-    WaitForSingleObject(((oslProcessImpl*)Process)->m_hProcess, INFINITE);
+    if (pTimeout)
+        timeout = pTimeout->Seconds * 1000 + pTimeout->Nanosec / 1000000L;
 
-    return osl_Process_E_None;
+    ret = WaitForSingleObject(((oslProcessImpl*)Process)->m_hProcess, timeout);
+
+    if (WAIT_FAILED == ret)
+        osl_error = osl_Process_E_Unknown;
+    else if (WAIT_TIMEOUT == ret)
+        osl_error = osl_Process_E_TimedOut;
+
+    return osl_error;
 }
 
 /***************************************************************************/

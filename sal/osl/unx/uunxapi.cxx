@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uunxapi.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-14 12:54:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,3 +113,15 @@
     return bRet;
  }
 
+ /***********************************
+  lstat_u
+  **********************************/
+
+ int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
+ {
+     rtl::OString p = rtl::OUStringToOString(
+        rtl::OUString(const_cast<rtl_uString*>(pustrPath)),
+        osl_getThreadTextEncoding());
+
+    return lstat(p.getStr(), buf);
+ }

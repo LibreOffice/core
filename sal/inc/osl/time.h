@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-08 15:48:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ extern "C" {
 #   pragma pack(1)
 #endif
 
-/** Time since Jan-01-1970
-*/
+/* Time since Jan-01-1970 */
+
 typedef struct {
     sal_uInt32 Seconds;
     sal_uInt32 Nanosec;
@@ -98,10 +98,9 @@ typedef struct {
 /* oslDateTime */
 /****************************************************************************/
 
-/** Contains all elements of a timestamp as an own member
-*/
 typedef struct _oslDateTime
 {
+    /*----------------------------------------------------------------------*/
     /** contains the nanoseconds .
     */
     sal_uInt32 NanoSeconds;
@@ -110,26 +109,32 @@ typedef struct _oslDateTime
     */
     sal_uInt16 Seconds;
 
+    /*----------------------------------------------------------------------*/
     /** contains the minutes (0-59).
     */
     sal_uInt16 Minutes;
 
+    /*----------------------------------------------------------------------*/
     /** contains the hour (0-23).
     */
     sal_uInt16 Hours;
 
+    /*----------------------------------------------------------------------*/
     /** is the day of month (1-31).
     */
     sal_uInt16 Day;
 
+    /*----------------------------------------------------------------------*/
     /** is the day of week (0-6 , 0 : Sunday).
     */
     sal_uInt16 DayOfWeek;
 
+    /*----------------------------------------------------------------------*/
     /** is the month of year (1-12).
     */
     sal_uInt16 Month;
 
+    /*----------------------------------------------------------------------*/
     /** is the year.
     */
     sal_uInt16 Year;

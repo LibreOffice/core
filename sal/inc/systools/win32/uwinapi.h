@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uwinapi.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-26 13:45:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ EXTERN_C WINBASEAPI DWORD WINAPI GetUserDomainW( LPWSTR lpBuffer, DWORD nBuffser
 #else
 #define GetUserDomain   GetUserDomainA
 #endif
+
+EXTERN_C WINBASEAPI DWORD WINAPI GetProcessId( HANDLE hProcess );
 
 /* macro that calculates the count of elements of a static array */
 

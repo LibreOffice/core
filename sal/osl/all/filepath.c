@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepath.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-11-27 18:42:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,36 +62,13 @@
 #include <osl/file.h>
 #include <rtl/ustring.h>
 
-/*---------------------------------------------------------------------------*/
-
-static sal_uInt32 SAL_CALL osl_defCalcTextWidthEx( rtl_uString *ustrText, void *pvContext )
+static sal_uInt32 SAL_CALL osl_defCalcTextWidth( rtl_uString *ustrText )
 {
     return ustrText ? ustrText->length : 0;
 }
 
-/*---------------------------------------------------------------------------*/
-
-static sal_uInt32 SAL_CALL osl_calcTextWidthWrapper( rtl_uString *ustrText, void *pvContext )
-{
-    if ( pvContext )
-    {
-        return ((oslCalcTextWidthFunc)pvContext)( ustrText );
-    }
-    else
-        return osl_defCalcTextWidthEx( ustrText, NULL );
-}
-
-
-/*---------------------------------------------------------------------------*/
 
 oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrCompacted, sal_uInt32 uMaxWidth, oslCalcTextWidthFunc pfnCalcWidth )
-{
-    return osl_abbreviateSystemPathEx( ustrSystemPath, pustrCompacted, uMaxWidth, osl_calcTextWidthWrapper, (void *)pfnCalcWidth );
-}
-
-/*---------------------------------------------------------------------------*/
-
-oslFileError SAL_CALL osl_abbreviateSystemPathEx( rtl_uString *ustrSystemPath, rtl_uString **pustrCompacted, sal_uInt32 uMaxWidth, oslCalcTextWidthFuncEx pfnCalcWidth, void *pvContext )
 {
     oslFileError    error = osl_File_E_None;
     rtl_uString     *ustrPath = NULL;
@@ -99,7 +76,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPathEx( rtl_uString *ustrSystemPath, r
     sal_uInt32      uPathWidth, uFileWidth;
 
     if ( !pfnCalcWidth )
-        pfnCalcWidth = osl_defCalcTextWidthEx;
+        pfnCalcWidth = osl_defCalcTextWidth;
 
     {
         sal_Int32   iLastSlash = rtl_ustr_lastIndexOfChar_WithLength( ustrSystemPath->buffer, ustrSystemPath->length, SAL_PATHDELIMITER );
@@ -116,8 +93,8 @@ oslFileError SAL_CALL osl_abbreviateSystemPathEx( rtl_uString *ustrSystemPath, r
         }
     }
 
-    uPathWidth = pfnCalcWidth( ustrPath, pvContext );
-    uFileWidth = pfnCalcWidth( ustrFile, pvContext );
+    uPathWidth = pfnCalcWidth( ustrPath );
+    uFileWidth = pfnCalcWidth( ustrFile );
 
     /* First abbreviate the directory component of the path */
 
@@ -131,7 +108,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPathEx( rtl_uString *ustrSystemPath, r
             ustrPath->buffer[ustrPath->length-1] = '.';
             ustrPath->buffer[ustrPath->length] = 0;
 
-            uPathWidth = pfnCalcWidth( ustrPath, pvContext );
+            uPathWidth = pfnCalcWidth( ustrPath );
         }
         else
             break;
@@ -149,7 +126,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPathEx( rtl_uString *ustrSystemPath, r
             ustrFile->buffer[ustrFile->length-1] = '.';
             ustrFile->buffer[ustrFile->length] = 0;
 
-            uFileWidth = pfnCalcWidth( ustrFile, pvContext );
+            uFileWidth = pfnCalcWidth( ustrFile );
         }
         else
             break;
@@ -165,7 +142,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPathEx( rtl_uString *ustrSystemPath, r
     {
         (*pustrCompacted)->length--;
         (*pustrCompacted)->buffer[(*pustrCompacted)->length] = 0;
-        uPathWidth = pfnCalcWidth( *pustrCompacted, pvContext );
+        uPathWidth = pfnCalcWidth( *pustrCompacted );
     }
 
     if ( ustrPath )

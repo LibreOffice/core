@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-28 07:18:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,84 +660,6 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
         pthread_mutex_unlock(&mutex);
         return osl_Security_E_UserUnknown;
     }
-
-#elif defined S390
-
-    struct passwd           *pPasswd;
-
-    if ((pszUserName == NULL) || (pszPasswd == NULL) || (pSecurity == NULL))
-        return osl_SEUNKNOWN;
-
-    OSL_TRACE("osl_loginUser %s (for now without password validation!)\n", pszUserName);
-
-    pPasswd = getpwnam(pszUserName);
-    if (pPasswd)
-    {
-        int   iResult = 0;
-/* the function __passwd is not correctly implemented now; we have to wait for the next OS/390 release...
-        sal_Char* _pszUserName = strdup(pszUserName);
-        sal_Char* _pszPasswd = strdup(pszPasswd);
-        asc2ebc(_pszUserName);
-        asc2ebc(_pszPasswd);
-
-        iResult = __passwd(_pszUserName, _pszPasswd, NULL);
-        if(iResult == -1)
-        {
-            OSL_TRACE("__passwd result: %d", errno);
-            perror(NULL);
-        }
-
-        free(_pszUserName);
-        free(_pszPasswd);
-*/
-        if (iResult == 0)
-        {
-            if (strlen(pPasswd->pw_name) +
-                strlen(pPasswd->pw_dir) +
-                strlen(pPasswd->pw_shell) + 7 <= PASSWD_BUFFER_SIZE)
-            {
-                sal_Char *p;
-                oslSecurityImpl *pSecImpl = malloc(sizeof(oslSecurityImpl));
-
-                pSecImpl->m_pPasswd = *pPasswd;
-
-                p = pSecImpl->m_buffer;
-                pSecImpl->m_pPasswd.pw_name = p;
-                strcpy(p, pPasswd->pw_name);
-
-                p += strlen(pPasswd->pw_name) + 1;
-                pSecImpl->m_pPasswd.pw_dir = p;
-                strcpy(p, pPasswd->pw_dir);
-
-                p += strlen(pPasswd->pw_dir) + 1;
-                pSecImpl->m_pPasswd.pw_shell = p;
-                strcpy(p, pPasswd->pw_shell);
-
-                pSecImpl->m_isValid = sal_True;
-                *pSecurity = (oslSecurity)pSecImpl;
-
-                OSL_TRACE("Homedirectory of %s: %s\n", pSecImpl->m_pPasswd.pw_name, pSecImpl->m_pPasswd.pw_dir);
-
-                return osl_Security_E_None;
-            }
-            else
-            {
-                *pSecurity = NULL;
-                return osl_SEUNKNOWN;
-            }
-        }
-        else
-        {
-            *pSecurity = NULL;
-            return osl_Security_E_WrongPassword;
-        }
-    }
-    else
-    {
-        *pSecurity = NULL;
-        return osl_Security_E_UserUnknown;
-    }
-
 
 #elif (LINUX && (GLIBC >= 2))
 

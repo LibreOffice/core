@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hro $ $Date: 2002-10-16 14:42:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,10 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         szMessage[0] = '\0';
 
         if(pszMessage != 0)
-            snprintf(szMessage, sizeof(szMessage), "Assertion Failed: %s: File %s, Line %lu: %s\n",
+            sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu: %s\n",
                         lpszAppName, pszFileName, nLine, pszMessage);
         else
-            snprintf(szMessage, sizeof(szMessage), "Assertion Failed: %s: File %s, Line %lu:\n",
+            sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu:\n",
                         lpszAppName, pszFileName, nLine);
 
         _pPrintDebugMessage( szMessage );
@@ -132,18 +132,6 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     else
     {
         /* format message into buffer */
-#ifdef S390
-        if(pszMessage != 0)
-        {
-            s390_printf( "Assertion Failed: %s: File %s, Line %d: %s\n",
-                         lpszAppName, pszFileName, nLine, pszMessage);
-        }
-        else
-        {
-            s390_printf( "Assertion Failed: %s: File %s, Line %d:\n",
-                         lpszAppName, pszFileName, nLine);
-        }
-#else
         if(pszMessage != 0)
         {
             fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu: %s\n",
@@ -154,7 +142,6 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
             fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu:\n",
                     lpszAppName, pszFileName, nLine);
         }
-#endif
     }
 
     return sal_False;   /* no abort */
@@ -162,11 +149,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 
 sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
 {
-#ifdef S390
-    s390_printf( pszMessage );
-#else
     fputs(pszMessage, stderr);
-#endif
     return 0;
 }
 

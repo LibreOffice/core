@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-05 21:21:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <winsock.h>
 #include <osl/diagnose.h>
 #include <sal/types.h>
+#include <float.h>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
@@ -229,6 +230,10 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 InitializeCriticalSection( &g_ThreadKeyListCS );
 
                 InitDCOM();
+
+                //We disable floating point exceptions. This is the usual state at program startup
+                //but on Windows 98 and ME this is not always the case.
+                _control87(_MCW_EM, _MCW_EM);
 
                 break;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-10 10:14:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,6 +609,7 @@ static ImplDBCSConvertData const aImplSJISDBCSCvtData =
 {
     aSJISUniLeadTab,
     aSJISDBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFC,
     aImplSJISDBCSEUDCTab,
     DBCS_EUDC_SJIS_COUNT
@@ -1165,6 +1166,7 @@ static ImplDBCSConvertData const aImplMS932DBCSCvtData =
 {
     aMS932UniLeadTab,
     aMS932DBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFC,
     aImplSJISDBCSEUDCTab,
     DBCS_EUDC_SJIS_COUNT
@@ -1721,6 +1723,7 @@ static ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
 {
     aAPPLEJAPANESEUniLeadTab,
     aAPPLEJAPANESEDBCSHighTab,
+    0x00, 0xFF,
     0x40, 0xFC,
     aImplSJISDBCSEUDCTab,
     DBCS_EUDC_SJIS_COUNT
@@ -2630,6 +2633,7 @@ static ImplDBCSConvertData const aImplJISX0208DBCSCvtData =
 {
     NULL,
     aJIS0208DBCSHighTab,
+    0x00, 0xFF,
     0x21, 0x7E,
     NULL,
     0
@@ -2662,6 +2666,7 @@ static ImplDBCSConvertData const aImplJISX0212DBCSCvtData =
 {
     NULL,
     aJIS0212DBCSHighTab,
+    0x00, 0xFF,
     0x21, 0x7E,
     NULL,
     0

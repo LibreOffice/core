@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: sb $ $Date: 2002-01-15 17:01:35 $
+#   last change: $Author: hr $ $Date: 2003-03-26 16:47:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ SLOFILES = \
     $(SLO)$/textenc.obj \
     $(SLO)$/unichars.obj
 
-.IF "$(UPDATER)" != ""
+#.IF "$(UPDATER)" != ""
 
 OBJFILES = \
     $(OBJ)$/context.obj \
@@ -105,7 +105,7 @@ OBJFILES = \
     $(OBJ)$/textenc.obj \
     $(OBJ)$/unichars.obj
 
-.ENDIF # UPDATER
+#.ENDIF # UPDATER
 
 # Optimization off on Solaris Intel due to internal compiler error; to be
 # reevaluated after compiler upgrade:

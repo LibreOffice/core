@@ -17,7 +17,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 ..\inc\systools\unx\*.h %_DEST%\inc%_EXT%\systools\unx\*.h
 
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
-..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
+..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.dylib.* %_DEST%\lib%_EXT%\*.dylib.*

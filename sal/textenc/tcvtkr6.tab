@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtkr6.tab,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-10 10:14:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,8 @@ static ImplDBCSToUniLeadTab const aKSC5601UniLeadTab[256] =
     {      0, 0x41, 0xF6, aImplDBCSToUniTab_KSC5601_AB },       /* 0xAB */
     {      0, 0x41, 0xF1, aImplDBCSToUniTab_KSC5601_AC },       /* 0xAC */
     {      0, 0x41, 0xA0, aImplDBCSToUniTab_KSC5601_AD },       /* 0xAD */
-    {      0, 0x41, 0xA1, aImplDBCSToUniTab_KSC5601_AE },       /* 0xAE */
-    {      0, 0x41, 0xA1, aImplDBCSToUniTab_KSC5601_AF },       /* 0xAF */
+    {      0, 0x41, 0xA0, aImplDBCSToUniTab_KSC5601_AE },       /* 0xAE */
+    {      0, 0x41, 0xA0, aImplDBCSToUniTab_KSC5601_AF },       /* 0xAF */
     {      0, 0x41, 0xFE, aImplDBCSToUniTab_KSC5601_B0 },       /* 0xB0 */
     {      0, 0x41, 0xFE, aImplDBCSToUniTab_KSC5601_B1 },       /* 0xB1 */
     {      0, 0x41, 0xFE, aImplDBCSToUniTab_KSC5601_B2 },       /* 0xB2 */
@@ -270,7 +270,7 @@ static ImplDBCSToUniLeadTab const aKSC5601UniLeadTab[256] =
     {      0, 0x41, 0xFE, aImplDBCSToUniTab_KSC5601_C6 },       /* 0xC6 */
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_C7 },       /* 0xC7 */
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_C8 },       /* 0xC8 */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xC9 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xC9 */
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_CA },       /* 0xCA */
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_CB },       /* 0xCB */
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_CC },       /* 0xCC */
@@ -323,7 +323,7 @@ static ImplDBCSToUniLeadTab const aKSC5601UniLeadTab[256] =
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_FB },       /* 0xFB */
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_FC },       /* 0xFC */
     {      0, 0xA1, 0xFE, aImplDBCSToUniTab_KSC5601_FD },       /* 0xFD */
-    {      0,    1,    0, NULL },                               /* 0xFE */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xFE */
     {      0,    1,    0, NULL }                                /* 0xFF */
 };
 
@@ -600,10 +600,10 @@ static ImplDBCSEUDCData const aImplMS949DBCSEUDCTab[DBCS_EUDC_MS949_COUNT] =
     /* EUDC-Range */
     /* Lead:    C9-C9 */
     /* Trail:   A1-FE */
-    { 0xC9, 0xC9, 0xA1, 0xFE, 0, 0, 0, 0, 1, 0x5D, 0xE000, 0xE05D },
+    { 0xC9, 0xC9, 0xA1, 0xFE, 0, 0, 0, 0, 1, 0x5E, 0xE000, 0xE05D },
     /* Lead:    FE-FE */
     /* Trail:   A1-FE */
-    { 0xFE, 0xFE, 0xA1, 0xFE, 0, 0, 0, 0, 1, 0x5D, 0xE05E, 0xE0BB }
+    { 0xFE, 0xFE, 0xA1, 0xFE, 0, 0, 0, 0, 1, 0x5E, 0xE05E, 0xE0BB }
 };
 
 /* ----------------------------------------------------------------------- */
@@ -612,6 +612,19 @@ static ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
 {
     aKSC5601UniLeadTab,
     aKSC5601DBCSHighTab,
+    0xA1, 0xFE,
+    0xA1, 0xFE,
+    aImplMS949DBCSEUDCTab,
+    DBCS_EUDC_MS949_COUNT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplDBCSConvertData const aImplMS949DBCSCvtData =
+{
+    aKSC5601UniLeadTab,
+    aKSC5601DBCSHighTab,
+    0x00, 0xFF,
     0x41, 0xFE,
     aImplMS949DBCSEUDCTab,
     DBCS_EUDC_MS949_COUNT
@@ -619,10 +632,6 @@ static ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
 
 /* ======================================================================= */
 
-// TODO  EUC-KR should only use two-byte characters in the range 0xA1--FE
-// 0xA1--FE, and thus should have the RTL_TEXTENCODING_INFO_ASCII property.  For
-// whatever reason, EUC-KR is treated like MS-949 that uses trail bytes starting
-// from 0x41.
 static ImplTextEncodingData const aImplEUCKRTextEncodingData
     = { { &aImplKSC5601DBCSCvtData,
           ImplDBCSToUnicode,
@@ -639,13 +648,15 @@ static ImplTextEncodingData const aImplEUCKRTextEncodingData
         129,
         "euc-kr",
         "euc-kr",
-        RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
 /* ======================================================================= */
 
 static ImplTextEncodingData const aImplMS949TextEncodingData
-    = { { &aImplKSC5601DBCSCvtData,
+    = { { &aImplMS949DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
           NULL,
@@ -668,7 +679,7 @@ static ImplTextEncodingData const aImplMS949TextEncodingData
 /* Apple has some extension, which we don't support */
 
 static ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
-    = { { &aImplKSC5601DBCSCvtData,
+    = { { &aImplMS949DBCSCvtData,
           ImplDBCSToUnicode,
           ImplUnicodeToDBCS,
           NULL,
@@ -1233,6 +1244,7 @@ static ImplDBCSConvertData const aImplJOHABDBCSCvtData =
 {
     aJOHABUniLeadTab,
     aJOHABDBCSHighTab,
+    0x00, 0xFF,
     0x31, 0xFE,
     aImplMS1361DBCSEUDCTab,
     DBCS_EUDC_MS1361_COUNT

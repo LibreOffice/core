@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obr $ $Date: 2002-07-17 11:28:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ const _pair _nl_language_list[] = {
     { "ISO8859-8",      RTL_TEXTENCODING_ISO_8859_8     },
     { "ISO8859-9",      RTL_TEXTENCODING_ISO_8859_9     },
     { "KOI8-R",         RTL_TEXTENCODING_KOI8_R         },
+    { "KOI8-U",         RTL_TEXTENCODING_KOI8_U         },
     { "PCK",            RTL_TEXTENCODING_MS_932         },
     { "SUN_EU_GREEK",   RTL_TEXTENCODING_ISO_8859_7     }, /* 8859-7 + Euro */
     { "TIS620.2533",    RTL_TEXTENCODING_MS_874         }, /* th_TH.TIS620 */
@@ -323,7 +324,8 @@ const _pair _nl_language_list[] = {
     { "ASMO_449",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO_9036 ARABIC7 */
     { "BALTIC",                     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 */
     { "BIG5",                       RTL_TEXTENCODING_BIG5 },        /* locale: zh_TW */
-    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5_HKSCS },  /* locale: zh_CN.BIG5HK */
+    { "BIG5-HKSCS",                 RTL_TEXTENCODING_BIG5_HKSCS },  /* locale: zh_CN.BIG5HK */
+    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5_HKSCS },  /* depricated */
     { "BS_4730",                    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-4 ISO646-GB */
     { "BS_VIEWDATA",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-47 */
     { "CP1250",                     RTL_TEXTENCODING_MS_1250 },     /* MS-EE */
@@ -464,7 +466,7 @@ const _pair _nl_language_list[] = {
     { "JUS_I.B1.003-SERB",          RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-146 SERBIAN */
     { "KOI-8",                      RTL_TEXTENCODING_DONTKNOW },
     { "KOI8-R",                     RTL_TEXTENCODING_KOI8_R },
-    { "KOI8-U",                     RTL_TEXTENCODING_DONTKNOW },
+    { "KOI8-U",                     RTL_TEXTENCODING_KOI8_U },
     { "KSC5636",                    RTL_TEXTENCODING_DONTKNOW },    /* ISO646-KR */
     { "LATIN-GREEK",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-19 */
     { "LATIN-GREEK-1",              RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-27 */
@@ -490,7 +492,7 @@ const _pair _nl_language_list[] = {
     { "T.101-G2",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-128 */
     { "T.61-7BIT",                  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-102 */
     { "T.61-8BIT",                  RTL_TEXTENCODING_DONTKNOW },    /* T.61 ISO-IR-103 */
-    { "TIS-620",                    RTL_TEXTENCODING_MS_874 },      /* locale: th_TH */
+    { "TIS-620",                     RTL_TEXTENCODING_MS_874 },     /* locale: th_TH */
     { "UTF-8",                      RTL_TEXTENCODING_UTF8 },        /* ISO-10646/UTF-8 */
     { "VIDEOTEX-SUPPL",             RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-70 */
     { "WIN-SAMI-2",                 RTL_TEXTENCODING_DONTKNOW }     /* WS2 */
@@ -684,6 +686,7 @@ const _pair _locale_extension_list[] = {
     { "iso8859-8",    RTL_TEXTENCODING_ISO_8859_8  },
     { "iso8859-9",    RTL_TEXTENCODING_ISO_8859_9  },
     { "koi8-r",       RTL_TEXTENCODING_KOI8_R      },
+    { "koi8-u",       RTL_TEXTENCODING_KOI8_U      },
     { "pck",          RTL_TEXTENCODING_MS_932      },
 #if (0)
     { "sun_eu_greek", RTL_TEXTENCODING_DONTKNOW    },

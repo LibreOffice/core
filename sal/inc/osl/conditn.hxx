@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-08 15:48:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,7 @@
 
 namespace osl
 {
-    /** Thread synchronization object
 
-        A condition is a thread synchronization method with two different states:
-        set (sal_True) and unset (sal_False). When in unset state, any thread
-        calling the wait() method will be blocked until the state changes to set.
-    */
     class Condition
     {
     public:
@@ -90,55 +85,41 @@ namespace osl
             result_timeout = osl_cond_result_timeout
         };
 
-        /** Constructs a condition object.
-
-            The initial state of the condition is false/unset.
-
-            @seealso ::osl_createCondition()
+        /* Create a condition.
          */
         Condition()
         {
             condition = osl_createCondition();
         }
 
-        /** Release the OS-structures and free condition data-structure.
-
-            @seealso ::osl_destroyCondition()
-        */
+        /* Release the OS-structures and free condition data-structure.
+         */
         ~Condition()
         {
             osl_destroyCondition(condition);
         }
 
-        /** Release all waiting threads, check() returns sal_True.
-
-            @seealso ::osl_setCondition()
-        */
+        /* Release all waiting threads, check returns sal_True.
+         */
         void set()
         {
             osl_setCondition(condition);
         }
 
-        /** Reset condition to false: wait() will block, check() returns sal_False.
-
-            @seealso ::osl_resetCondition()
-        */
+        /* Reset condition to false: wait() will block, check() returns sal_False.
+         */
         void reset() {
             osl_resetCondition(condition);
         }
 
         /** Blocks the calling thread until condition is set.
-
-            @seealso ::osl_waitCondition()
-        */
+         */
         Result wait(const TimeValue *pTimeout = 0)
         {
             return (Result) osl_waitCondition(condition, pTimeout);
         }
 
         /** Checks if the condition is set without blocking.
-
-            @seealso ::osl_checkCondition()
          */
         sal_Bool check()
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-31 08:51:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,45 @@ static sal_Bool DeInitSignal()
     return sal_False;
 }
 
+/*****************************************************************************/
+/* Call crash reporter  */
+/*****************************************************************************/
+
+static int ReportCrash( int Signal )
+{
+    static sal_Bool bCrashReporterExecuted = sal_False;
+
+    if ( !bCrashReporterExecuted )
+    {
+        int i;
+        struct sigaction act;
+
+        for (i = 0; i < NoSignals; i++)
+        {
+            if (Signals[i].Signal == Signal && Signals[i].Action == ACT_ABORT )
+            {
+                char    szShellCmd[512];
+
+                snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                "crash_report -p %d -s %d", getpid(), Signal );
+
+                if ( -1 != system( szShellCmd ) )
+                {
+                    bCrashReporterExecuted = sal_True;
+                    return 1;
+                }
+                else
+                    return -1;
+
+            }
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
+
 static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 {
     oslSignalHandlerImpl* pHandler = SignalList;
@@ -295,6 +334,7 @@ static void CallSystemHandler(int Signal)
                     break;
 
                 case ACT_ABORT:     /* terminate witch core dump */
+                    ReportCrash( Signal );
                     act.sa_handler = SIG_DFL;
                     act.sa_flags   = 0;
                     sigemptyset(&(act.sa_mask));
@@ -313,6 +353,7 @@ static void CallSystemHandler(int Signal)
             (*Signals[i].Handler)(Signal);
     }
 }
+
 
 /*****************************************************************************/
 /* SignalHandlerFunction    */
@@ -357,10 +398,13 @@ static void SignalHandlerFunction(int Signal)
             break;
     }
 
+    ReportCrash( Signal );
+
     /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     if (bDoHardKill && (Info.Signal == osl_Signal_AccessViolation))
         _exit(255);
     /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
 
     switch (CallSignalHandler(&Info))
     {
@@ -369,6 +413,7 @@ static void SignalHandlerFunction(int Signal)
         break;
 
     case osl_Signal_ActAbortApp:
+        ReportCrash( Signal );
         act.sa_handler = SIG_DFL;
         act.sa_flags   = 0;
         sigemptyset(&(act.sa_mask));

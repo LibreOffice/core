@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,6 +722,29 @@ public:
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFDOUBLE];
         return insert( offset, sz, rtl_ustr_valueOfDouble( sz, d ) );
     }
+
+    /** Allows access to the internal data of this OUStringBuffer, for effective
+        manipulation.
+
+        This method should be used with care.  After you have called this
+        method, you may use the returned pInternalData or pInternalCapacity only
+        as long as you make no other method call on this OUStringBuffer.
+
+        @param pInternalData
+        This output parameter receives a pointer to the internal data
+        (rtl_uString pointer).  pInternalData itself must not be null.
+
+        @param pInternalCapacity
+        This output parameter receives a pointer to the internal capacity.
+        pInternalCapacity itself must not be null.
+     */
+    inline void accessInternals(rtl_uString *** pInternalData,
+                                sal_Int32 ** pInternalCapacity)
+    {
+        *pInternalData = &pData;
+        *pInternalCapacity = &nCapacity;
+    }
+
 private:
     /**
         A pointer to the data structur which contains the data.
@@ -738,5 +761,3 @@ private:
 
 #endif  /* __cplusplus */
 #endif  /* _RTL_USTRBUF_HXX_ */
-
-

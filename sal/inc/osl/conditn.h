@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-08 15:48:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,28 +71,18 @@
 extern "C" {
 #endif
 
-/** condition synchronization object handle
-    @seealso osl_createCondition()
-*/
 typedef void* oslCondition;
 
-/** enumeration of possible error values for conditions
-    @seealso osl_waitCondition()
-*/
 typedef enum {
-    /** successful completion */
-    osl_cond_result_ok,
-    /** an unspecified error occured */
-    osl_cond_result_error,
-    /** blocking operation timed out */
-    osl_cond_result_timeout,
+    osl_cond_result_ok,     /* successful completion */
+    osl_cond_result_error,  /* error occured, check osl_getLastSocketError() for details */
+    osl_cond_result_timeout, /* blocking operation timed out */
     osl_cond_result_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslConditionResult;
 
 /** Creates a condition.
     The condition is in the reset-state.
-    @return a pointer to the created condition object or
-        NULL if the condition could not be created.
+    @returns 0 if condition could not be created.
 */
 oslCondition SAL_CALL osl_createCondition(void);
 
@@ -101,41 +91,32 @@ oslCondition SAL_CALL osl_createCondition(void);
 */
 void SAL_CALL osl_destroyCondition(oslCondition Condition);
 
-/** Sets the condition state to set
-    Any call to osl_waitCondition() will not block, osl_checkCondition()
-    returns sal_True.
+/** Sets condition to True => wait() will not block, check() returns True.
     NOTE: ALL threads waiting on this condition are unblocked!
-
     @param Condition handle to a created condition.
-    @return sal_True if the condition has been set or
-        sal_False if the system-call failed.
+    @return False if system-call failed.
 */
 sal_Bool SAL_CALL osl_setCondition(oslCondition Condition);
 
-/** Resets condition to unset state
-    Any call to osl_waitCondition() will block, osl_checkCondition()
-    will return sal_False.
-
+/** Sets condition to False => wait() will block, check() returns False
     @param Condition handle to a created condition.
-    @return sal_True if the condition has been unset or
-        sal_False if the system-call failed.
+    @return False if system-call failed.
 */
 sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
 
-/** Blocks if condition is not set.
-    If condition has been destroyed prematurely, osl_waitCondition()
-    will return sal_False.
+/** Blocks if condition is not set<BR>
+    If condition has been destroyed prematurely, wait() will
+    return with False.
     @param Condition handle to a created condition.
     @param pTimeout Tiemout value or NULL for infinite waiting
-    @return on of the following result values: osl_cond_result_ok,
-        osl_cond_result_error, osl_cond_result_timeout.
-
+    @return False if system-call failed.
 */
 oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout);
 
 /** Queries the state of the condition without blocking.
     @param Condition handle to a created condition.
-    @return sal_True if condition is in set state or sal_False otherwise.
+    @return True: condition is set. <BR>
+    False: condition is not set. <BR>
 */
 sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition);
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mindyliu $ $Date: 2003-03-03 07:47:05 $
+#   last change: $Author: hr $ $Date: 2003-03-26 16:45:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,46 +59,29 @@
 #
 #
 #*************************************************************************
-PRJ=..$/..
+PRJ=..
 
-PRJNAME=sal
-TARGET=qa
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
+PRJNAME=SAL
+TARGET=salcpprt
 
 ENABLE_EXCEPTIONS=TRUE
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES= \
-#	  $(SLO)$/ByteSequence.obj
+# --- Files --------------------------------------------------------
 
-#----------------------------------- OStringBuffer -----------------------------------
+CXXFILES =	\
+    operators_new_delete.cxx
 
-SHL1OBJS= \
-    $(SLO)$/ByteSequence.obj 
+SLOFILES =	\
+    $(SLO)$/operators_new_delete.obj
 
-SHL1TARGET= ByteSequence
-SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
-
-SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
-
-
+LIB1TARGET=$(LB)$/$(TARGET).lib
+LIB1ARCHIV=$(LB)$/lib$(TARGET).a
+LIB1OBJFILES=$(SLOFILES)
 
 # --- Targets ------------------------------------------------------
 
