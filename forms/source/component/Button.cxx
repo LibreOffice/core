@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:33:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 
         _rxOutStream->writeShort( (sal_uInt16)m_eButtonType );
 
-        ::rtl::OUString sTmp = INetURLObject::decode(INetURLObject::AbsToRel( m_sTargetURL ), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+        ::rtl::OUString sTmp = INetURLObject::decode( m_sTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS);
         _rxOutStream << sTmp;
         _rxOutStream << m_sTargetFrame;
         writeHelpTextCompatibly(_rxOutStream);
@@ -216,9 +216,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         {
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
 
-            ::rtl::OUString sTmp;
-            _rxInStream >> sTmp;
-            m_sTargetURL = INetURLObject::RelToAbs( sTmp );
+            _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
         }
         break;
@@ -227,9 +225,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         {
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
 
-            ::rtl::OUString sTmp;
-            _rxInStream >> sTmp;
-            m_sTargetURL = INetURLObject::RelToAbs( sTmp );
+            _rxInStream >> m_sTargetURL;
             _rxInStream >> m_sTargetFrame;
             readHelpTextCompatibly(_rxInStream);
         }
@@ -244,9 +240,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
 
             // URL
-            ::rtl::OUString sTmp;
-            _rxInStream >> sTmp;
-            m_sTargetURL = INetURLObject::RelToAbs( sTmp );
+            _rxInStream >> m_sTargetURL;
 
             // target frame
             _rxInStream >> m_sTargetFrame;
