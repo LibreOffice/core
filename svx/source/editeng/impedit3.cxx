@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:31:14 $
+ *  last change: $Author: mt $ $Date: 2002-07-17 09:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2584,23 +2584,38 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // Ueber die Portions der Zeile...
                     // --------------------------------------------------
                     nIndex = pLine->GetStart();
-                    long nR2LWidth = 0;
+// R2L                    long nR2LWidth = 0;
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Zeile ohne Textportion im Paint!" );
                         TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( y );
                         DBG_ASSERT( pTextPortion, "NULL-Pointer im Portioniterator in UpdateViews" );
 
-                        // New position after processing R2L text...
-                        if ( nR2LWidth && !pTextPortion->GetRightToLeft() )
+                        long nPortionXOffset = GetPortionXOffset( pPortion, pLine, y );
+                        if ( !IsVertical() )
                         {
-                            if ( !IsVertical() )
-                                aTmpPos.X() += nR2LWidth;
-                            else
-                                aTmpPos.Y() += nR2LWidth;
-
-                            nR2LWidth = 0;
+                            aTmpPos.X() = aStartPos.X() + nPortionXOffset;
+                            if ( aTmpPos.X() > aClipRec.Right() )
+                                break;  // Keine weitere Ausgabe in Zeile noetig
                         }
+                        else
+                        {
+                            aTmpPos.Y() = aStartPos.Y() + nPortionXOffset;
+                            if ( aTmpPos.Y() > aClipRec.Bottom() )
+                                break;  // Keine weitere Ausgabe in Zeile noetig
+                        }
+
+                        // R2L replaces with obove...
+                        // New position after processing R2L text...
+// R2L                        if ( nR2LWidth && !pTextPortion->GetRightToLeft() )
+// R2L                        {
+// R2L                          if ( !IsVertical() )
+// R2L                              aTmpPos.X() += nR2LWidth;
+// R2L                          else
+// R2L                              aTmpPos.Y() += nR2LWidth;
+// R2L
+// R2L                            nR2LWidth = 0;
+// R2L                        }
 
                         switch ( pTextPortion->GetKind() )
                         {
@@ -2687,25 +2702,24 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 long nTxtWidth = pTextPortion->GetSize().Width();
 
                                 Point aOutPos( aTmpPos );
-                                if ( pTextPortion->GetRightToLeft() )
-                                {
-                                    sal_uInt16 nNextPortion = y+1;
-                                    while ( nNextPortion <= pLine->GetEndPortion() )
-                                    {
-                                        TextPortion* pNextTextPortion = pPortion->GetTextPortions().GetObject( nNextPortion );
-                                        if ( pNextTextPortion->GetRightToLeft() )
-                                        {
-                                            if ( !IsVertical() )
-                                                aOutPos.X() += pNextTextPortion->GetSize().Width();
-                                            else
-                                                aOutPos.Y() += pNextTextPortion->GetSize().Width();
-                                        }
-                                        else
-                                            break;
-                                        nNextPortion++;
-                                    }
-
-                                }
+//L2R                                if ( pTextPortion->GetRightToLeft() )
+//L2R                                {
+//L2R                                    sal_uInt16 nNextPortion = y+1;
+//L2R                                    while ( nNextPortion <= pLine->GetEndPortion() )
+//L2R                                    {
+//L2R                                       TextPortion* pNextTextPortion = pPortion->GetTextPortions().GetObject( nNextPortion );
+//L2R                                        if ( pNextTextPortion->GetRightToLeft() )
+//L2R                                        {
+//L2R                                           if ( !IsVertical() )
+//L2R                                                aOutPos.X() += pNextTextPortion->GetSize().Width();
+//L2R                                           else
+//L2R                                                aOutPos.Y() += pNextTextPortion->GetSize().Width();
+//L2R                                        }
+//L2R                                        else
+//L2R                                            break;
+//L2R                                        nNextPortion++;
+//L2R                                    }
+//L2R                                }
                                 if ( bStripOnly )
                                 {
                                     // VERT???
@@ -2809,17 +2823,17 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 if ( pTmpDXArray )
                                     delete[] pTmpDXArray;
 
-                                if ( !pTextPortion->GetRightToLeft() )
-                                {
-                                    if ( !IsVertical() )
-                                        aTmpPos.X() += nTxtWidth;
-                                    else
-                                        aTmpPos.Y() += nTxtWidth;
-                                }
-                                else
-                                {
-                                    nR2LWidth += nTxtWidth;
-                                }
+// R2L                                if ( !pTextPortion->GetRightToLeft() )
+// R2L                                {
+// R2L                                  if ( !IsVertical() )
+// R2L                                      aTmpPos.X() += nTxtWidth;
+// R2L                                  else
+// R2L                                      aTmpPos.Y() += nTxtWidth;
+// R2L                                }
+// R2L                                else
+// R2L                                {
+// R2L                                    nR2LWidth += nTxtWidth;
+// R2L                                }
                             }
                             break;
 //                          case PORTIONKIND_EXTRASPACE:
@@ -2841,17 +2855,17 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aText.Fill( (USHORT)nChars, pTextPortion->GetExtraValue() );
                                     pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
                                 }
-                                if ( !IsVertical() )
-                                    aTmpPos.X() += pTextPortion->GetSize().Width();
-                                else
-                                    aTmpPos.Y() += pTextPortion->GetSize().Width();
+// R2L                              if ( !IsVertical() )
+// R2L                                  aTmpPos.X() += pTextPortion->GetSize().Width();
+// R2L                              else
+// R2L                                  aTmpPos.Y() += pTextPortion->GetSize().Width();
                             }
                             break;
                         }
-                        if ( !IsVertical() && ( aTmpPos.X() > aClipRec.Right() ) )
-                            break;  // Keine weitere Ausgabe in Zeile noetig
-                        else if ( IsVertical() && ( aTmpPos.Y() > aClipRec.Bottom() ) )
-                            break;  // Keine weitere Ausgabe in Zeile noetig
+// R2L                      if ( !IsVertical() && ( aTmpPos.X() > aClipRec.Right() ) )
+// R2L                          break;  // Keine weitere Ausgabe in Zeile noetig
+// R2L                      else if ( IsVertical() && ( aTmpPos.Y() > aClipRec.Bottom() ) )
+// R2L                          break;  // Keine weitere Ausgabe in Zeile noetig
                         nIndex += pTextPortion->GetLen();
                     }
                 }
