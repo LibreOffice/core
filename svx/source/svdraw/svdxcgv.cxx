@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:06:55 $
+ *  last change: $Author: ka $ $Date: 2001-09-04 12:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,229 +490,15 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrExchangeView::CutMarked(ULONG nFormat)
-{
-    YankMarked(nFormat);
-    XubString aStr;
-    ImpTakeDescriptionStr(STR_ExchangeClpCut,aStr);
-    BegUndo(aStr);
-    DeleteMarkedObj();
-    EndUndo();
-}
-
-void SdrExchangeView::ImpYank(ULONG nFormat, BOOL bClp) const
-{
-    DBG_ERROR( "ImpYank: Not supported anymore" );
-/*
-    if(HasMarkedObj())
-    {
-        String aStrEditEngineFormat("EditEngineFormat", gsl_getSystemTextEncoding());
-        UINT32 nSdrFormat(SOT_FORMATSTR_ID_DRAWING);
-        UINT32 nEEFormat(Exchange::RegisterFormatName(aStrEditEngineFormat));
-
-        if(bClp)
-        {
-            // 1. Private
-        }
-
-        // 2. SdrExchangeFormat
-        if (nFormat==SDR_ANYFORMAT || nFormat==nSdrFormat) {
-            SdrModel* pModel=GetMarkedObjModel();
-            pModel->SetStreamingSdrModel(TRUE);
-            pModel->RemoveNotPersistentObjects(TRUE); // OLE, etc. entfernen
-            SvMemoryStream aMemStream(4096,4096);
-            aMemStream.SetVersion(SOFFICE_FILEFORMAT_50);
-            // StyleSheetPool und Persist fehlt hier wohl noch ...
-            pModel->GetItemPool().SetFileFormatVersion( (sal_uInt16)aMemStream.GetVersion() );
-            pModel->GetItemPool().Store(aMemStream);
-            aMemStream<<*pModel;
-            if (bClp) Clipboard::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nSdrFormat);
-            else DragServer::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nSdrFormat);
-            delete pModel;
-        }
-        // 3. Metafile
-        if (nFormat==SDR_ANYFORMAT || nFormat==FORMAT_GDIMETAFILE) {
-            GDIMetaFile aMtf(GetMarkedObjMetaFile());
-            if (bClp) Clipboard::CopyGDIMetaFile(aMtf);
-            else DragServer::CopyGDIMetaFile(aMtf);
-        }
-        // 4. Bitmap
-        if (nFormat==SDR_ANYFORMAT || nFormat==FORMAT_BITMAP) {
-            Bitmap aBmp(GetMarkedObjBitmap());
-            if (bClp) Clipboard::CopyBitmap(aBmp);
-            else DragServer::CopyBitmap(aBmp);
-        }
-        // 5. EditEngine, 6. RTF, 7. Text
-        if (nFormat==SDR_ANYFORMAT || nFormat==nEEFormat || nFormat==FORMAT_RTF || nFormat==FORMAT_STRING) {
-            if (aMark.GetMarkCount()==1) {
-                const SdrObject* pObj=aMark.GetMark(0)->GetObj();
-                const OutlinerParaObject* pOLPara=pObj->GetOutlinerParaObject();
-                if (pOLPara!=NULL) {
-                    const SdrTextObj* pText=PTR_CAST(SdrTextObj,pObj); // DrawOutliner ggf. mit Rahmendefaults
-                    SdrOutliner& rOutliner=pText!=NULL ? pText->ImpGetDrawOutliner() : pMod->GetDrawOutliner();
-                    rOutliner.SetUpdateMode(TRUE);
-                    rOutliner.SetText(*pOLPara);
-                    XubString aStr(rOutliner.GetText(rOutliner.GetParagraph( 0 ), rOutliner.GetParagraphCount()));
-
-                    if(aStr.Len())
-                    {
-                        if (nFormat==SDR_ANYFORMAT || nFormat==nEEFormat) {
-                            SvMemoryStream aMemStream(4096,4096);
-                            aMemStream.SetVersion(SOFFICE_FILEFORMAT_50);
-                            ((EditEngine&)rOutliner.GetEditEngine()).Write(aMemStream,EE_FORMAT_BIN);
-                            if (bClp) Clipboard::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nEEFormat);
-                            else DragServer::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nEEFormat);
-                        }
-                        if (nFormat==SDR_ANYFORMAT || nFormat==FORMAT_RTF) {
-                            SvMemoryStream aMemStream(4096,4096);
-                            ((EditEngine&)rOutliner.GetEditEngine()).Write(aMemStream,EE_FORMAT_RTF);
-                            if (bClp) Clipboard::CopyData(aMemStream.GetData(),aMemStream.GetSize(),FORMAT_RTF);
-                            else DragServer::CopyData(aMemStream.GetData(),aMemStream.GetSize(),FORMAT_RTF);
-                        }
-                        if (nFormat==SDR_ANYFORMAT || nFormat==FORMAT_STRING) {
-                            if (bClp) Clipboard::CopyString(aStr);
-                            else DragServer::CopyString(aStr);
-                        }
-                    }
-                }
-            }
-        }
-    }
-*/
-}
-
-void SdrExchangeView::YankMarked(ULONG nFormat)
-{
-    DBG_ERROR( "YankMarked: Not supported anymore" );
-/*
-    if (HasMarkedObj())
-    {
-        Clipboard::Clear();
-        ImpYank(nFormat,TRUE);
-    }
-*/
-}
-
-BOOL SdrExchangeView::PasteClipboard(OutputDevice* pOut, ULONG nFormat, UINT32 nOptions)
-{
-    DBG_ERROR( "PasteClipboard: Not supported anymore" );
-/*
-
-    BOOL bRet=FALSE;
-    if (!IsTextEdit()) UnmarkAllObj();
-    BegUndo(ImpGetResStr(STR_ExchangeClpPaste));
-    bRet=ImpPaste(nFormat,TRUE,0,GetViewCenter(pOut),nOptions);
-    EndUndo();
-    return bRet;
-*/
-    return FALSE;
-}
-
-BOOL SdrExchangeView::PasteDragDrop(const Point& rPos, ULONG nFormat, USHORT nItemNum, UINT32 nOptions)
-{
-    DBG_ERROR( "PasteDragDrop: Not supported anymore" );
-/*
-    BOOL bRet=FALSE;
-    if (!IsTextEdit()) UnmarkAllObj();
-    BegUndo(ImpGetResStr(STR_ExchangeDDPaste));
-    USHORT i=nItemNum;
-    USHORT nMax=i;
-    if (i==SDR_ANYITEM) {
-        i=0;
-        nMax=DragServer::GetItemCount();
-    } else nMax++;
-    while (i<nMax) {
-        if (ImpPaste(nFormat,FALSE,i,rPos,nOptions)) bRet=TRUE;
-        i++;
-    }
-    EndUndo();
-    return bRet;
-*/
-    return FALSE;
-}
-
-BOOL SdrExchangeView::IsClipboardFormatSupported(ULONG nFormat) const
-{
-    DBG_ERROR( "IsClipboardFormatSupported: Not supported anymore" );
-/*
-    BOOL bOk(FALSE);
-
-    if(nFormat == SDR_ANYFORMAT)
-    {
-        String aStrEditEngineFormat("EditEngineFormat", gsl_getSystemTextEncoding());
-
-        bOk = Clipboard::HasFormat(FORMAT_PRIVATE)     ||
-              Clipboard::HasFormat(FORMAT_GDIMETAFILE) ||
-              Clipboard::HasFormat(FORMAT_BITMAP)      ||
-              Clipboard::HasFormat(FORMAT_RTF)         ||
-              Clipboard::HasFormat(FORMAT_STRING)      ||
-              Clipboard::HasFormat(SOT_FORMATSTR_ID_DRAWING) ||
-              Clipboard::HasFormat(Exchange::RegisterFormatName(aStrEditEngineFormat));
-    }
-    else
-    {
-        bOk = IsExchangeFormatSupported(nFormat);
-    }
-*/
-    return TRUE;
-}
-
-BOOL SdrExchangeView::IsDragDropFormatSupported(ULONG nFormat, USHORT nItemNum) const
-{
-    DBG_ERROR( "IsDragDropFormatSupported: Not supported anymore" );
-/*
-    BOOL bOk=FALSE;
-    USHORT i=nItemNum;
-    USHORT nMax=i;
-
-    if(i == SDR_ANYITEM)
-    {
-        i = 0;
-        nMax = DragServer::GetItemCount();
-    }
-    else
-        nMax++;
-
-    while(i < nMax && !bOk)
-    {
-        if(nFormat == SDR_ANYFORMAT)
-        {
-            String aStrEditEngineFormat("EditEngineFormat", gsl_getSystemTextEncoding());
-
-            bOk = DragServer::HasFormat(i, FORMAT_PRIVATE)     ||
-                  DragServer::HasFormat(i, FORMAT_GDIMETAFILE) ||
-                  DragServer::HasFormat(i, FORMAT_BITMAP)      ||
-                  DragServer::HasFormat(i, FORMAT_RTF)         ||
-                  DragServer::HasFormat(i, FORMAT_STRING)      ||
-                  DragServer::HasFormat(i, SOT_FORMATSTR_ID_DRAWING) ||
-                  DragServer::HasFormat(i, Exchange::RegisterFormatName(aStrEditEngineFormat));
-        }
-        else
-        {
-            bOk = IsExchangeFormatSupported(nFormat);
-        }
-
-        i++;
-    }
-
-    return bOk;
-*/
-    return TRUE;
-}
-
 BOOL SdrExchangeView::IsExchangeFormatSupported(ULONG nFormat) const
 {
-    String aStrEditEngineFormat("EditEngineFormat", gsl_getSystemTextEncoding());
-    BOOL bOk(nFormat == FORMAT_PRIVATE     ||
-            nFormat == FORMAT_GDIMETAFILE ||
-            nFormat == FORMAT_BITMAP      ||
-            nFormat == FORMAT_RTF         ||
-            nFormat == FORMAT_STRING      ||
-            nFormat == SOT_FORMATSTR_ID_DRAWING ||
-            nFormat == SotExchange::RegisterFormatName(aStrEditEngineFormat));
-   return bOk;
+    return( FORMAT_PRIVATE == nFormat ||
+            FORMAT_GDIMETAFILE == nFormat ||
+            FORMAT_BITMAP == nFormat ||
+            FORMAT_RTF == nFormat ||
+            FORMAT_STRING == nFormat ||
+            SOT_FORMATSTR_ID_DRAWING == nFormat ||
+            SOT_FORMATSTR_ID_EDITENGINE == nFormat );
 }
 
 void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, UINT32 nOptions)
@@ -754,188 +540,10 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     }
 }
 
-BOOL SdrExchangeView::ImpPaste(ULONG nFormat, BOOL bClp, USHORT nItemNum, const Point& rPos, UINT32 nOptions)
-{
-    DBG_ERROR( "ImpPaste: Not supported anymore" );
-/*
-
-    BOOL bRet(FALSE);
-    String aStrEditEngineFormat("EditEngineFormat", gsl_getSystemTextEncoding());
-    UINT32 nSdrFormat(SOT_FORMATSTR_ID_DRAWING);
-    UINT32 nEEFormat(Exchange::RegisterFormatName(aStrEditEngineFormat));
-
-    // 1. Prioritaet fuer Private
-    if (!bRet && (nFormat==FORMAT_PRIVATE || nFormat==SDR_ANYFORMAT) &&
-        ((bClp && Clipboard::HasFormat(FORMAT_PRIVATE)) ||
-         (!bClp && DragServer::HasFormat(nItemNum,FORMAT_PRIVATE)))) {
-        SdrModel* pModel=(SdrModel*)DragServer::PastePrivateData(nItemNum);
-        if (bClp) pModel=(SdrModel*)Clipboard::PastePrivateData();
-        if (pModel!=NULL) {
-            bRet=Paste(*pModel,rPos,NULL,nOptions);
-        }
-    }
-    // 2. Prioritaet fuer SdrExchangeFormat
-    if (!bRet && (nFormat==nSdrFormat || nFormat==SDR_ANYFORMAT) &&
-        ((bClp && Clipboard::HasFormat(nSdrFormat)) ||
-         (!bClp && DragServer::HasFormat(nItemNum,nSdrFormat))))
-    {
-        UINT32 nDataLen(0);
-        char* pDataBuf = NULL;
-
-        if(bClp)
-        {
-            nDataLen = Clipboard::GetDataLen(nSdrFormat);
-
-            if(nDataLen)
-            {
-                pDataBuf = new char[nDataLen];
-                Clipboard::PasteData(pDataBuf, nDataLen, nSdrFormat);
-            }
-        }
-        else
-        {
-            nDataLen = DragServer::GetDataLen(nItemNum, nSdrFormat);
-
-            if(nDataLen)
-            {
-                pDataBuf = new char[nDataLen];
-                DragServer::PasteData(nItemNum, pDataBuf, nDataLen, nSdrFormat);
-            }
-        }
-
-        if(nDataLen)
-        {
-            SvMemoryStream aMemStream(pDataBuf, nDataLen, STREAM_READ);
-
-            aMemStream.SetVersion(SOFFICE_FILEFORMAT_50);
-
-            SdrModel* pModel = pMod->AllocModel();
-
-            pModel->SetStreamingSdrModel(TRUE);
-
-            // StyleSheetPool und Persist fehlt hier wohl noch ...
-            pModel->GetItemPool().Load(aMemStream);
-            aMemStream >> *pModel;
-            bRet = Paste(*pModel, rPos, NULL, nOptions);
-        }
-
-        if(pDataBuf != NULL)
-            delete [] pDataBuf;
-    }
-    // 3. Prioritaet fuer Metafile
-    if (!bRet && (nFormat==FORMAT_GDIMETAFILE || nFormat==SDR_ANYFORMAT) &&
-        ((bClp && Clipboard::HasFormat(FORMAT_GDIMETAFILE)) ||
-         (!bClp && DragServer::HasFormat(nItemNum,FORMAT_GDIMETAFILE)))) {
-        GDIMetaFile aMtf;
-        if (bClp) Clipboard::PasteGDIMetaFile(aMtf);
-        else DragServer::PasteGDIMetaFile(nItemNum,aMtf);
-        bRet=Paste(aMtf,rPos,NULL,nOptions);
-    }
-    // 4. Prioritaet fuer Bitmap
-    if (!bRet && (nFormat==FORMAT_BITMAP || nFormat==SDR_ANYFORMAT) &&
-        ((bClp && Clipboard::HasFormat(FORMAT_BITMAP)) ||
-         (!bClp && DragServer::HasFormat(nItemNum,FORMAT_BITMAP)))) {
-        Bitmap aBmp;
-        if (bClp) aBmp=Clipboard::PasteBitmap();
-        else aBmp=DragServer::PasteBitmap(nItemNum);
-        bRet=Paste(aBmp,rPos,NULL,nOptions);
-    }
-    // 5. Prioritaet fuer EditEngineFormat
-    if (!bRet && (nFormat==nEEFormat || nFormat==SDR_ANYFORMAT) &&
-        ((bClp && Clipboard::HasFormat(nEEFormat)) ||
-         (!bClp && DragServer::HasFormat(nItemNum,nEEFormat))))
-    {
-        UINT32 nDataLen(0);
-        char* pDataBuf = NULL;
-
-        if(bClp)
-        {
-            nDataLen = Clipboard::GetDataLen(nEEFormat);
-
-            if(nDataLen)
-            {
-                pDataBuf = new char[nDataLen];
-                Clipboard::PasteData(pDataBuf, nDataLen, nEEFormat);
-            }
-        }
-        else
-        {
-            nDataLen = DragServer::GetDataLen(nItemNum, nEEFormat);
-
-            if(nDataLen)
-            {
-                pDataBuf = new char[nDataLen];
-                DragServer::PasteData(nItemNum, pDataBuf, nDataLen, nEEFormat);
-            }
-        }
-
-        if(nDataLen)
-        {
-            SvMemoryStream aMemStream(pDataBuf, nDataLen, STREAM_READ);
-            bRet = Paste(aMemStream, UINT16(EE_FORMAT_BIN), rPos, NULL, nOptions);
-        }
-
-        if(pDataBuf)
-            delete [] pDataBuf;
-    }
-
-    // 6. Prioritaet fuer RTF
-    if (!bRet && (nFormat==FORMAT_RTF || nFormat==SDR_ANYFORMAT) &&
-        ((bClp && Clipboard::HasFormat(FORMAT_RTF)) ||
-         (!bClp && DragServer::HasFormat(nItemNum,FORMAT_RTF))))
-    {
-        UINT32 nDataLen(0);
-        char* pDataBuf = NULL;
-
-        if(bClp)
-        {
-            nDataLen = Clipboard::GetDataLen(FORMAT_RTF);
-
-            if(nDataLen)
-            {
-                pDataBuf = new char[nDataLen];
-                Clipboard::PasteData(pDataBuf, nDataLen, FORMAT_RTF);
-            }
-        }
-        else
-        {
-            nDataLen = DragServer::GetDataLen(nItemNum, FORMAT_RTF);
-
-            if(nDataLen)
-            {
-                pDataBuf = new char[nDataLen];
-                DragServer::PasteData(nItemNum, pDataBuf, nDataLen, FORMAT_RTF);
-            }
-        }
-
-        if(nDataLen)
-        {
-            SvMemoryStream aMemStream(pDataBuf, nDataLen, STREAM_READ);
-            bRet = Paste(aMemStream, UINT16(EE_FORMAT_RTF), rPos, NULL, nOptions);
-        }
-
-        if(pDataBuf)
-            delete [] pDataBuf;
-    }
-    // 7. Prioritaet fuer unformatierten Text
-    if (!bRet && (nFormat==FORMAT_STRING || nFormat==SDR_ANYFORMAT) &&
-        ((bClp && Clipboard::HasFormat(FORMAT_STRING)) ||
-         (!bClp && DragServer::HasFormat(nItemNum,FORMAT_STRING)))) {
-        XubString aStr;
-        if (bClp) aStr=Clipboard::PasteString();
-        else aStr=DragServer::PasteString(nItemNum);
-        bRet=Paste(aStr,rPos,NULL,nOptions);
-    }
-    return bRet;
-*/
-    return FALSE;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Bitmap SdrExchangeView::GetMarkedObjBitmap( BOOL bNoVDevIfOneBmpMarked ) const
 {
-
     Bitmap aBmp;
 
     if( HasMarkedObj() )
@@ -1005,6 +613,81 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) 
 
 // -----------------------------------------------------------------------------
 
+Graphic SdrExchangeView::GetAllMarkedGraphic() const
+{
+    Graphic aRet;
+
+    if( HasMarkedObj() )
+    {
+        if( ( 1 == aMark.GetMarkCount() ) && aMark.GetMark( 0 ) )
+            aRet = SdrExchangeView::GetObjGraphic( pMod, aMark.GetMark( 0 )->GetObj() );
+        else
+            aRet = GetMarkedObjMetaFile( FALSE );
+    }
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
+{
+    Graphic aRet;
+
+    if( pModel && pObj )
+    {
+        // try to get a graphic from the object first
+        if( pObj->ISA( SdrGrafObj ) )
+            aRet = static_cast< SdrGrafObj* >( pObj )->GetGraphic();
+        else if( pObj->ISA( SdrOle2Obj ) )
+        {
+            SdrOle2Obj* pOLEObj = static_cast< SdrOle2Obj* >( pObj );
+
+            if( pOLEObj->HasGDIMetaFile() )
+            {
+                const GDIMetaFile* pMtf = pOLEObj->GetGDIMetaFile();
+
+                if( pMtf )
+                    aRet = *pMtf;
+            }
+        }
+
+        // if graphic could not be retrieved => go the hard way and create a MetaFile
+        if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
+        {
+            VirtualDevice   aOut;
+            ExtOutputDevice aXOut( &aOut);
+            SdrPaintInfoRec aInfoRec;
+            GDIMetaFile     aMtf;
+            const Rectangle aBoundRect( pObj->GetBoundRect() );
+            const MapMode   aMap( pModel->GetScaleUnit(),
+                                  Point(),
+                                  pModel->GetScaleFraction(),
+                                  pModel->GetScaleFraction() );
+
+            aOut.EnableOutput( FALSE );
+            aOut.SetMapMode( aMap );
+            aMtf.Record( &aOut );
+
+            aXOut.SetOffset( Point( -aBoundRect.Left(), -aBoundRect.Top() ) );
+            aInfoRec.nPaintMode |= SDRPAINTMODE_ANILIKEPRN;
+            pObj->Paint( aXOut, aInfoRec );
+
+            aMtf.Stop();
+            aMtf.WindStart();
+            aMtf.SetPrefMapMode( aMap );
+            aMtf.SetPrefSize( aBoundRect.GetSize() );
+
+            if( aMtf.GetActionCount() )
+                aRet = aMtf;
+        }
+     }
+
+     return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
 void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
 {
     // Wenn das sortieren der MarkList mal stoeren sollte,
@@ -1025,6 +708,8 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
     }
     pXOut->SetOffset(Point(0,0));
 }
+
+// -----------------------------------------------------------------------------
 
 SdrModel* SdrExchangeView::GetMarkedObjModel() const
 {
@@ -1121,29 +806,40 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     return pNeuMod;
 }
 
-BOOL SdrExchangeView::Cut(ULONG nFormat)
+// -----------------------------------------------------------------------------
+
+BOOL SdrExchangeView::Cut( ULONG nFormat )
 {
-    BOOL bOk=SdrObjEditView::Cut(nFormat);
-    if (!bOk && HasMarkedObj()) {
-        CutMarked(nFormat);
-        bOk=TRUE;
-    }
-    return bOk;
+    DBG_ERROR( "SdrExchangeView::Cut: Not supported anymore" );
+    return FALSE;
 }
+
+// -----------------------------------------------------------------------------
+
+void SdrExchangeView::CutMarked( ULONG nFormat )
+{
+    DBG_ERROR( "SdrExchangeView::CutMarked: Not supported anymore" );
+}
+
+// -----------------------------------------------------------------------------
 
 BOOL SdrExchangeView::Yank(ULONG nFormat)
 {
-    BOOL bOk=SdrObjEditView::Yank(nFormat);
-    if (!bOk && HasMarkedObj()) {
-        YankMarked(nFormat);
-        bOk=TRUE;
-    }
-    return bOk;
+    DBG_ERROR( "SdrExchangeView::Yank: Not supported anymore" );
+    return FALSE;
 }
+
+// -----------------------------------------------------------------------------
+
+void SdrExchangeView::YankMarked(ULONG nFormat)
+{
+    DBG_ERROR( "YankMarked: Not supported anymore" );
+}
+
+// -----------------------------------------------------------------------------
 
 BOOL SdrExchangeView::Paste(Window* pWin, ULONG nFormat)
 {
-    BOOL bOk=SdrObjEditView::Paste(pWin,nFormat);
-    if (!bOk) bOk=PasteClipboard(pWin,nFormat);
-    return bOk;
+    DBG_ERROR( "SdrExchangeView::Paste: Not supported anymore" );
+    return FALSE;
 }
