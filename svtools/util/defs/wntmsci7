@@ -12246,3 +12246,5 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_MoveControl@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx281481956@@YAXPAVControl@@JJAAJ@Z
 ?lcl_autoUpdateFileExtension@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx281481956@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx281481956@@YAEABVString@@AAV2@@Z
+?checkActionIndex_Impl@?%O:\SRX642\src\svtools\source\Accessibility\accessiblelistboxentry.cxx91521092@@YAXJ@Z
+?isHiContrast@?%O:\SRX642\src\svtools\source\brwbox\editbrowsebox.cxx508325386@svt@@YAEPAVWindow@@@Z
