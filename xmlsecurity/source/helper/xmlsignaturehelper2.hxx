@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:56:25 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,6 @@ public:
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL getUriBinding( const rtl::OUString& uri )
         throw (com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    static com::sun::star::uno::Reference < com::sun::star::io::XStream > OpenInputStream( com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStore, const rtl::OUString& rURI );
+    static com::sun::star::uno::Reference < com::sun::star::io::XInputStream > OpenInputStream( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStore, const rtl::OUString& rURI );
 };
 
