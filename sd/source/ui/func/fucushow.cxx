@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucushow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:00:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #pragma hdrstop
 
-#include "custsdlg.hxx"
+//CHINA001 #include "custsdlg.hxx"
 
 #include "app.hrc"
 #include "sdresid.hxx"
@@ -85,6 +85,9 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+
+#include "sdabstdlg.hxx" //CHINA001
+#include "custsdlg.hrc" //CHINA001
 
 namespace sd {
 
@@ -107,16 +110,19 @@ FuCustomShowDlg::FuCustomShowDlg (
 {
     USHORT nRet = RET_YES;
 
-    SdCustomShowDlg  aDlg( NULL, *pDoc );
-
-    nRet = aDlg.Execute();
+    //CHINA001 SdCustomShowDlg  aDlg( NULL, *pDoc );
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    AbstractSdCustomShowDlg* pDlg = pFact->CreateSdCustomShowDlg(ResId( DLG_CUSTOMSHOW ), NULL, *pDoc );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    nRet = pDlg->Execute(); //CHINA001 nRet = aDlg.Execute();
     if( nRet != RET_CANCEL )
     {
         // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
-        if( aDlg.IsModified() )
+        if( pDlg->IsModified() )//CHINA001 if( aDlg.IsModified() )
         {
             pDoc->SetChanged( TRUE );
-            pDoc->SetCustomShow( aDlg.IsCustomShow() );
+            pDoc->SetCustomShow( pDlg->IsCustomShow() ); //CHINA001 pDoc->SetCustomShow( aDlg.IsCustomShow() );
         }
 
         if( nRet == RET_YES )
@@ -127,6 +133,7 @@ FuCustomShowDlg::FuCustomShowDlg (
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
     }
+    delete pDlg; //CHINA001
 }
 
 } // end of namespace
