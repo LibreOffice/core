@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2003-12-15 13:57:23 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,13 +203,13 @@ FastString& FastString::operator+=( const NMSP_RTL::OUString& rStr )
             const sal_uInt32    nNewBufLen = ( mnBufLen + ( ( ( mnCurLen + rStr.getLength() ) - mnBufLen ) / mnBufInc + 1 ) * mnBufInc );
             sal_Unicode*        pNewBuffer = new sal_Unicode[ nNewBufLen * sizeof( sal_Unicode ) ];
 
-            HMEMCPY( pNewBuffer, mpBuffer, mnBufLen * sizeof( sal_Unicode )  );
+            memcpy( pNewBuffer, mpBuffer, mnBufLen * sizeof( sal_Unicode )  );
             delete[] mpBuffer;
             mpBuffer = pNewBuffer;
             mnBufLen = nNewBufLen;
         }
 
-        HMEMCPY( mpBuffer + mnCurLen, rStr.getStr(), rStr.getLength() * sizeof( sal_Unicode ) );
+        memcpy( mpBuffer + mnCurLen, rStr.getStr(), rStr.getLength() * sizeof( sal_Unicode ) );
         mnCurLen += rStr.getLength();
 
         if( maString.getLength() )
