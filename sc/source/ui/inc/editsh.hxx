@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-13 11:39:20 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ public:
     void    SetEditView(EditView* pView);
 
     void    Execute(SfxRequest& rReq);
+    void    ExecuteTrans(SfxRequest& rReq);
     void    GetState(SfxItemSet &rSet);
     void    GetClipState(SfxItemSet& rSet);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 09:51:58 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,6 +679,42 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
             StartFormatArea();              // Attribute loeschen ist auch Attributierung
     }
 #endif
+
+    return TRUE;
+}
+
+//------------------------------------------------------------------------
+
+BOOL ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
+                                    BOOL bRecord, BOOL bApi )
+{
+    ScDocShellModificator aModificator( rDocShell );
+
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+
+    if (!pDoc->IsSelectionEditable(rMark))
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+        return FALSE;
+    }
+
+    ScRange aMarkRange;
+    ScMarkData aMultiMark = rMark;
+    aMultiMark.SetMarking(FALSE);       // for MarkToMulti
+    aMultiMark.MarkToMulti();
+    aMultiMark.GetMultiMarkArea( aMarkRange );
+
+    //! undo
+
+    pDoc->TransliterateText( aMultiMark, nType );
+
+    if (!AdjustRowHeight( aMarkRange ))
+        rDocShell.PostPaint( aMarkRange, PAINT_GRID );
+
+    aModificator.SetDocumentModified();
 
     return TRUE;
 }

@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: er $ $Date: 2001-02-06 14:46:11 $ $Revision: 1.2 $
+ // $Author: nn $ $Date: 2001-03-26 19:18:57 $ $Revision: 1.3 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -161,6 +161,12 @@ interface CellSelection : Selection
     SID_THESAURUS   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
     SID_SPELLING    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
+    SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
 }
 
  // ===========================================================================
@@ -370,6 +376,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/06 14:46:11  er
+    SID_DEL_COLS, SID_DEL_ROWS: StateMethod GetBlockState instead of GetState (need matrix formula check)
+
     Revision 1.1.1.1  2000/09/18 16:44:52  hr
     initial import
 

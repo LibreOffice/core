@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-26 14:12:11 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,6 +1003,26 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
     pDocSh->PostDataChanged();
 }
 
+//----------------------------------------------------------------------------
+
+void ScViewFunc::TransliterateText( sal_Int32 nType )
+{
+    ScMarkData aFuncMark = GetViewData()->GetMarkData();
+    if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
+    {
+        //  no selection -> use cursor position
+
+        ScAddress aCursor( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+        aFuncMark.SetMarkArea( ScRange( aCursor ) );
+    }
+
+    BOOL bSuccess = GetViewData()->GetDocShell()->GetDocFunc().
+                        TransliterateText( aFuncMark, nType, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+}
 
 //----------------------------------------------------------------------------
 //  AutoFormat

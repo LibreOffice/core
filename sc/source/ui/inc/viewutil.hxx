@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:42:40 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ public:
                                 USHORT nWhichId, USHORT nScript );
 
     static USHORT GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
+
+    static sal_Int32 GetTransliterationType( USHORT nSlotID );
 };
 
 // ---------------------------------------------------------------------------

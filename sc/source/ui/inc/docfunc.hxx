@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@ public:
     BOOL            DetectiveRefresh(BOOL bAutomatic = FALSE);
 
     BOOL            DeleteContents( const ScMarkData& rMark, USHORT nFlags,
+                                    BOOL bRecord, BOOL bApi );
+
+    BOOL            TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
                                     BOOL bRecord, BOOL bApi );
 
     BOOL            SetNormalString( const ScAddress& rPos, const String& rText, BOOL bApi );

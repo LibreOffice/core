@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ public:
     void        GetState(SfxItemSet &);
 
     void        ExecuteEdit( SfxRequest& rReq );
+    void        ExecuteTrans( SfxRequest& rReq );
 
     void        GetBlockState( SfxItemSet& rSet );
     void        GetCellState( SfxItemSet& rSet );

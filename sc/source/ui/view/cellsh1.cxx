@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:29:04 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1792,7 +1792,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
     }
 }
 
-
-
+void ScCellShell::ExecuteTrans( SfxRequest& rReq )
+{
+    sal_Int32 nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
+    if ( nType )
+    {
+        GetViewData()->GetView()->TransliterateText( nType );
+        rReq.Done();
+    }
+}
 
 

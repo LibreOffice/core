@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 09:48:27 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,6 +928,8 @@ public:
     void            FillTabMarked( USHORT nSrcTab, const ScMarkData& rMark,
                                 USHORT nFlags, USHORT nFunction,
                                 BOOL bSkipEmpty, BOOL bAsLink );
+
+    void            TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType );
 
     void            InitUndo( ScDocument* pSrcDoc, USHORT nTab1, USHORT nTab2,
                                 BOOL bColInfo = FALSE, BOOL bRowInfo = FALSE );

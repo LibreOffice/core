@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:44:00 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+
 #include "viewutil.hxx"
 #include "global.hxx"
 #include "chgtrack.hxx"
@@ -133,6 +135,34 @@ USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
         eLnge = System::GetLanguage();      // never use SYSTEM for spelling
 
     return eLnge;
+}
+
+//  static
+sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
+{
+    sal_Int32 nType = 0;
+    switch ( nSlotID )
+    {
+        case SID_TRANSLITERATE_UPPER:
+            nType = com::sun::star::i18n::TransliterationModules_LOWERCASE_UPPERCASE;
+            break;
+        case SID_TRANSLITERATE_LOWER:
+            nType = com::sun::star::i18n::TransliterationModules_UPPERCASE_LOWERCASE;
+            break;
+        case SID_TRANSLITERATE_HALFWIDTH:
+            nType = com::sun::star::i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
+            break;
+        case SID_TRANSLITERATE_FULLWIDTH:
+            nType = com::sun::star::i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
+            break;
+        case SID_TRANSLITERATE_HIRAGANA:
+            nType = com::sun::star::i18n::TransliterationModules_KATAKANA_HIRAGANA;
+            break;
+        case SID_TRANSLITERATE_KATAGANA:
+            nType = com::sun::star::i18n::TransliterationModules_HIRAGANA_KATAKANA;
+            break;
+    }
+    return nType;
 }
 
 //  static

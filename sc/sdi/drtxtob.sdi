@@ -86,6 +86,13 @@ interface TableDrawText : Selection
 
     SID_TEXTDIRECTION_LEFT_TO_RIGHT     [ ExecMethod = Execute; StateMethod = GetAttrState; Export = FALSE; ]
     SID_TEXTDIRECTION_TOP_TO_BOTTOM     [ ExecMethod = Execute; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
 }
 
 

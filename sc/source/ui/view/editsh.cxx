@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-13 11:40:08 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,6 +878,29 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
             rSet.DisableItem( SID_UNDO );
         if ( rTopMgr.GetRedoActionCount() == 0 )
             rSet.DisableItem( SID_REDO );
+    }
+}
+
+void ScEditShell::ExecuteTrans( SfxRequest& rReq )
+{
+    sal_Int32 nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
+    if ( nType )
+    {
+        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+        DBG_ASSERT( pHdl, "no ScInputHandler" );
+
+        EditView* pTopView   = pHdl->GetTopView();
+        EditView* pTableView = pHdl->GetTableView();
+        DBG_ASSERT( pTableView, "no EditView" );
+
+        EditEngine* pEngine = pTableView->GetEditEngine();
+        pHdl->DataChanging();
+
+        pTableView->TransliterateText( nType );
+        if (pTopView)
+            pTopView->TransliterateText( nType );
+
+        pHdl->DataChanged();
     }
 }
 

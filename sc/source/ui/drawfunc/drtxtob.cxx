@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-09 19:47:42 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
         if ( nPar >= aSel.nStartPara && nPar <= aSel.nEndPara )
         {
             SvUShorts aPortions;
-            rEditEng.GetPortions( nPar, aPortions );
+            rEditEng.GetPortions( (USHORT)nPar, aPortions );
             //! GetPortions should use xub_StrLen instead of USHORT
 
             for ( USHORT nPos = aPortions.Count(); nPos; )
@@ -586,7 +586,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
                      ( nPar > aSel.nStartPara || nStart >= aSel.nStartPos ) &&
                      ( nPar < aSel.nEndPara   || nEnd   <= aSel.nEndPos ) )
                 {
-                    ESelection aFieldSel( nPar, nStart, nPar, nEnd );
+                    ESelection aFieldSel( (USHORT)nPar, nStart, (USHORT)nPar, nEnd );
                     SfxItemSet aSet = rEditEng.GetAttribs( aFieldSel );
                     if ( aSet.GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_ON )
                     {
@@ -940,5 +940,22 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
 }
 
-
+void ScDrawTextObjectBar::ExecuteTrans( SfxRequest& rReq )
+{
+    sal_Int32 nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
+    if ( nType )
+    {
+        ScDrawView* pView = pViewData->GetScDrawView();
+        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        if ( pOutView )
+        {
+            //  change selected text in object
+            pOutView->TransliterateText( nType );
+        }
+        else
+        {
+            //! apply to whole objects?
+        }
+    }
+}
 

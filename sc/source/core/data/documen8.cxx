@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:46:40 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svx/editstat.hxx>
 #include <svx/langitem.hxx>
 #include <svx/linkmgr.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svx/unolingu.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
@@ -83,6 +84,7 @@
 #include <svtools/zformat.hxx>
 #include <sfx2/misccfg.hxx>
 #include <sfx2/app.hxx>
+#include <unotools/transliterationwrapper.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/system.hxx>
@@ -112,6 +114,7 @@
 #include "chartlis.hxx"
 #include "refupdat.hxx"
 #include "validat.hxx"      // fuer HasMacroCalls
+#include "markdata.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
 
@@ -1560,5 +1563,61 @@ SfxBindings* ScDocument::GetViewBindings()
         return NULL;
 }
 
+//------------------------------------------------------------------------
 
+void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
+{
+    DBG_ASSERT( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
+
+    utl::TransliterationWrapper aTranslitarationWrapper( xServiceManager, nType );
+    BOOL bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
+    sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
+
+    USHORT nCount = GetTableCount();
+    for (USHORT nTab = 0; nTab < nCount; nTab++)
+        if ( pTab[nTab] && rMultiMark.GetTableSelect(nTab) )
+        {
+            USHORT nCol = 0;
+            USHORT nRow = 0;
+
+            BOOL bFound = rMultiMark.IsCellMarked( nCol, nRow );
+            if (!bFound)
+                bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
+
+            while (bFound)
+            {
+                const ScBaseCell* pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
+                CellType eType = pCell ? pCell->GetCellType() : CELLTYPE_NONE;
+
+                //! TransliterateText method for EditEngine needed
+
+                if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
+                {
+                    String aOldStr;
+                    if ( eType == CELLTYPE_STRING )
+                        ((const ScStringCell*)pCell)->GetString(aOldStr);
+                    else
+                        ((const ScEditCell*)pCell)->GetString(aOldStr);
+                    xub_StrLen nOldLen = aOldStr.Len();
+
+                    if ( bConsiderLanguage )
+                    {
+                        BYTE nScript = GetStringScriptType( aOldStr );      //! cell script type?
+                        USHORT nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
+                                        ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
+                                                                                ATTR_FONT_LANGUAGE );
+                        nLanguage = ((const SvxLanguageItem*)GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
+                    }
+
+                    com::sun::star::uno::Sequence<sal_Int32> aOffsets;
+                    String aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
+
+                    if ( aNewStr != aOldStr )
+                        PutCell( ScAddress( nCol, nRow, nTab ), new ScStringCell( aNewStr ) );
+                }
+
+                bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
+            }
+        }
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:16:31 $
+ *  last change: $Author: nn $ $Date: 2001-03-26 19:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,8 @@ public:
                                 double fStart, double fStep, double fMax, BOOL bRecord = TRUE );
     void            FillAuto( FillDir eDir, USHORT nStartCol, USHORT nStartRow,
                                 USHORT nEndCol, USHORT nEndRow, USHORT nCount, BOOL bRecord = TRUE );
+
+    void            TransliterateText( sal_Int32 nType );
 
     ScAutoFormatData* CreateAutoFormatData();
     void            AutoFormat( USHORT nFormatNo, BOOL bRecord = TRUE );
