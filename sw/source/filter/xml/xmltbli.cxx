@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 08:59:54 $
+ *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,21 @@ enum SwXMLTableElemTokens
     XML_TOK_TABLE_ELEM_END=XML_TOK_UNKNOWN
 };
 
+enum SwXMLTableCellAttrTokens
+{
+    XML_TOK_TABLE_STYLE_NAME,
+    XML_TOK_TABLE_NUM_COLS_SPANNED,
+    XML_TOK_TABLE_NUM_ROWS_SPANNED,
+    XML_TOK_TABLE_NUM_COLS_REPEATED,
+    XML_TOK_TABLE_FORMULA,
+    XML_TOK_TABLE_VALUE,
+    XML_TOK_TABLE_TIME_VALUE,
+    XML_TOK_TABLE_DATE_VALUE,
+    XML_TOK_TABLE_BOOLEAN_VALUE,
+    XML_TOK_TABLE_PROTECTED,
+    XML_TOK_TABLE_CELL_ATTR_END=XML_TOK_UNKNOWN
+};
+
 static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, sXML_table_header_columns,
@@ -207,12 +222,37 @@ static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static __FAR_DATA SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_style_name, XML_TOK_TABLE_STYLE_NAME },
+    { XML_NAMESPACE_TABLE, sXML_number_columns_spanned, XML_TOK_TABLE_NUM_COLS_SPANNED },
+    { XML_NAMESPACE_TABLE, sXML_number_rows_spanned, XML_TOK_TABLE_NUM_ROWS_SPANNED },
+    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated, XML_TOK_TABLE_NUM_COLS_REPEATED },
+    { XML_NAMESPACE_TABLE, sXML_formula, XML_TOK_TABLE_FORMULA },
+    { XML_NAMESPACE_TABLE, sXML_value, XML_TOK_TABLE_VALUE },
+    { XML_NAMESPACE_TABLE, sXML_time_value, XML_TOK_TABLE_TIME_VALUE },
+    { XML_NAMESPACE_TABLE, sXML_date_value, XML_TOK_TABLE_DATE_VALUE },
+    { XML_NAMESPACE_TABLE, sXML_boolean_value, XML_TOK_TABLE_BOOLEAN_VALUE },
+    { XML_NAMESPACE_TABLE, sXML_protected, XML_TOK_TABLE_PROTECTED },
+    { XML_NAMESPACE_TABLE, sXML_protect, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
+
+    XML_TOKEN_MAP_END
+};
+
 const SvXMLTokenMap& SwXMLImport::GetTableElemTokenMap()
 {
     if( !pTableElemTokenMap )
         pTableElemTokenMap = new SvXMLTokenMap( aTableElemTokenMap );
 
     return *pTableElemTokenMap;
+}
+
+const SvXMLTokenMap& SwXMLImport::GetTableCellAttrTokenMap()
+{
+    if( !pTableCellAttrTokenMap )
+        pTableCellAttrTokenMap = new SvXMLTokenMap( aTableCellAttrTokenMap );
+
+    return *pTableCellAttrTokenMap;
 }
 
 // ---------------------------------------------------------------------
@@ -246,7 +286,8 @@ public:
                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                      const SwStartNode *pStNd, SwXMLTableContext *pTable,
                      sal_Bool bProtect = sal_False,
-                     OUString* pFormula = NULL, sal_Bool bHasValue = sal_False,
+                     const OUString* pFormula = NULL,
+                     sal_Bool bHasValue = sal_False,
                      double dVal = 0.0 );
 
     sal_Bool IsUsed() const { return pStartNode!=0 ||
@@ -274,7 +315,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       const SwStartNode *pStNd,
                                       SwXMLTableContext *pTable,
                                       sal_Bool bProtect,
-                                      OUString* pFormula,
+                                      const OUString* pFormula,
                                       sal_Bool bHasVal,
                                       double dVal)
 {
@@ -414,6 +455,7 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
 
     sal_uInt32                  nRowSpan;
     sal_uInt32                  nColSpan;
+    sal_uInt32                  nColRepeat;
 
     sal_Bool                    bHasTextContent : 1;
     sal_Bool                    bHasTableContent : 1;
@@ -421,6 +463,8 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
     sal_Bool HasContent() const { return bHasTextContent || bHasTableContent; }
+    inline void _InsertContent();
+    inline void InsertContent();
     inline void InsertContentIfNotThere();
     inline void InsertContent( SwXMLTableContext *pTable );
 
@@ -449,6 +493,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     xMyTable( pTable ),
     nRowSpan( 1UL ),
     nColSpan( 1UL ),
+    nColRepeat( 1UL ),
     bHasTextContent( sal_False ),
     bHasTableContent( sal_False ),
     sFormula(),
@@ -466,31 +511,32 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
-        if( XML_NAMESPACE_TABLE == nPrefix )
+        const SvXMLTokenMap& rTokenMap =
+            GetSwImport().GetTableCellAttrTokenMap();
+        switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
-            if( aLocalName.compareToAscii( sXML_style_name ) == 0 )
-                aStyleName = rValue;
-            else if( aLocalName.compareToAscii(
-                                        sXML_number_columns_spanned ) == 0 )
-            {
-                nColSpan = (sal_uInt32)rValue.toInt32();
-                if( nColSpan < 1UL )
-                    nColSpan = 1UL;
-            }
-            else if( aLocalName.compareToAscii(
-                                        sXML_number_rows_spanned ) == 0 )
-            {
-                nRowSpan = (sal_uInt32)rValue.toInt32();
-                if( nRowSpan < 1UL )
-                    nRowSpan = 1UL;
-            }
-            else if (aLocalName.equalsAsciiL(sXML_formula,
-                                             sizeof(sXML_formula)-1))
-            {
-                sFormula = rValue;
-            }
-            else if (aLocalName.equalsAsciiL(sXML_value,
-                                             sizeof(sXML_value)-1))
+        case XML_TOK_TABLE_STYLE_NAME:
+            aStyleName = rValue;
+            break;
+        case XML_TOK_TABLE_NUM_COLS_SPANNED:
+            nColSpan = (sal_uInt32)rValue.toInt32();
+            if( nColSpan < 1UL )
+                nColSpan = 1UL;
+            break;
+        case XML_TOK_TABLE_NUM_ROWS_SPANNED:
+            nRowSpan = (sal_uInt32)rValue.toInt32();
+            if( nRowSpan < 1UL )
+                nRowSpan = 1UL;
+            break;
+        case XML_TOK_TABLE_NUM_COLS_REPEATED:
+            nColRepeat = (sal_uInt32)rValue.toInt32();
+            if( nColRepeat < 1UL )
+                nColRepeat = 1UL;
+            break;
+        case XML_TOK_TABLE_FORMULA:
+            sFormula = rValue;
+            break;
+        case XML_TOK_TABLE_VALUE:
             {
                 double fTmp;
                 if (SvXMLUnitConverter::convertDouble(fTmp, rValue))
@@ -499,8 +545,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                     bHasValue = sal_True;
                 }
             }
-            else if (aLocalName.equalsAsciiL(sXML_time_value,
-                                             sizeof(sXML_time_value)-1))
+            break;
+        case XML_TOK_TABLE_TIME_VALUE:
             {
                 double fTmp;
                 if (SvXMLUnitConverter::convertTime(fTmp, rValue))
@@ -509,8 +555,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                     bHasValue = sal_True;
                 }
             }
-            else if (aLocalName.equalsAsciiL(sXML_date_value,
-                                             sizeof(sXML_date_value)-1))
+            break;
+        case XML_TOK_TABLE_DATE_VALUE:
             {
                 double fTmp;
                 if (GetImport().GetMM100UnitConverter().convertDateTime(fTmp,
@@ -520,8 +566,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                     bHasValue = sal_True;
                 }
             }
-            else if (aLocalName.equalsAsciiL(sXML_boolean_value,
-                                             sizeof(sXML_boolean_value)-1))
+            break;
+        case XML_TOK_TABLE_BOOLEAN_VALUE:
             {
                 sal_Bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, rValue))
@@ -530,11 +576,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                     bHasValue = sal_True;
                 }
             }
-            else if (aLocalName.equalsAsciiL(sXML_protected,
-                                             sizeof(sXML_protected)-1) ||
-                     // for backwards compatibility with SRC629 (and before)
-                     aLocalName.equalsAsciiL(sXML_protect,
-                                             sizeof(sXML_protect)-1) )
+            break;
+        case XML_TOK_TABLE_PROTECTED:
             {
                 sal_Bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, rValue))
@@ -542,6 +585,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                     bProtect = bTmp;
                 }
             }
+            break;
         }
     }
 }
@@ -550,15 +594,24 @@ SwXMLTableCellContext_Impl::~SwXMLTableCellContext_Impl()
 {
 }
 
+inline void SwXMLTableCellContext_Impl::_InsertContent()
+{
+    GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
+                            GetTable()->InsertTableSection(),
+                            NULL, bProtect, &sFormula, bHasValue, fValue);
+}
+
+inline void SwXMLTableCellContext_Impl::InsertContent()
+{
+    ASSERT( !HasContent(), "content already there" );
+    _InsertContent();
+    bHasTextContent = sal_True;
+}
+
 inline void SwXMLTableCellContext_Impl::InsertContentIfNotThere()
 {
     if( !HasContent() )
-    {
-        GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
-                                GetTable()->InsertTableSection(),
-                                NULL, bProtect, &sFormula, bHasValue, fValue);
-        bHasTextContent = sal_True;
-    }
+        InsertContent();
 }
 
 inline void SwXMLTableCellContext_Impl::InsertContent(
@@ -607,13 +660,60 @@ void SwXMLTableCellContext_Impl::EndElement()
 {
     if( GetTable()->IsValid() )
     {
+        sal_Bool bEmpty = sal_False;
         if( bHasTextContent )
         {
             GetImport().GetTextImport()->DeleteParagraph();
+            if( nColRepeat > 1 && nColSpan == 1 )
+            {
+                // The original text is is invalid after deleting the last
+                // paragraph
+                Reference < XTextCursor > xSrcTxtCursor =
+                    GetImport().GetTextImport()->GetText()->createTextCursor();
+                xSrcTxtCursor->gotoEnd( sal_True );
+
+                // Until we have an API for copying we have to use the core.
+                Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTxtCursor, UNO_QUERY);
+                ASSERT( xSrcCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+                SwXTextCursor *pSrcTxtCrsr =
+                        (SwXTextCursor*)xSrcCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+                ASSERT( pSrcTxtCrsr, "SwXTextCursor missing" );
+                SwDoc *pDoc = pSrcTxtCrsr->GetDoc();
+                const SwPaM *pSrcPaM = pSrcTxtCrsr->GetPaM();
+
+                while( nColRepeat > 1 && GetTable()->IsInsertCellPossible() )
+                {
+                    _InsertContent();
+
+                    Reference<XUnoTunnel> xDstCrsrTunnel(
+                        GetImport().GetTextImport()->GetCursor(), UNO_QUERY);
+                    ASSERT( xDstCrsrTunnel.is(),
+                            "missing XUnoTunnel for Cursor" );
+                    SwXTextCursor *pDstTxtCrsr =
+                            (SwXTextCursor*)xDstCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+                    ASSERT( pDstTxtCrsr, "SwXTextCursor missing" );
+                    SwPaM aSrcPaM( *pSrcPaM->GetPoint(),
+                                   *pSrcPaM->GetMark() );
+                    SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
+                    pDoc->Copy( aSrcPaM, aDstPos );
+
+                    nColRepeat--;
+                }
+            }
         }
         else if( !bHasTableContent )
         {
-            InsertContentIfNotThere();
+            InsertContent();
+            if( nColRepeat > 1 && nColSpan == 1 )
+            {
+                while( nColRepeat > 1 && GetTable()->IsInsertCellPossible() )
+                {
+                    _InsertContent();
+                    nColRepeat--;
+                }
+            }
         }
     }
 }
@@ -765,6 +865,8 @@ class SwXMLTableRowContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
 
+    sal_uInt32                  nRowRepeat;
+
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
 public:
@@ -792,7 +894,8 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         SwXMLTableContext *pTable,
         sal_Bool bInHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    xMyTable( pTable )
+    xMyTable( pTable ),
+    nRowRepeat( 1 )
 {
     OUString aStyleName;
 
@@ -806,10 +909,20 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
-        if( XML_NAMESPACE_TABLE == nPrefix &&
-            aLocalName.compareToAscii( sXML_style_name ) == 0 )
+        if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            aStyleName = rValue;
+            if( aLocalName.equalsAsciiL( sXML_style_name,
+                                         sizeof(sXML_style_name)-1 ) )
+            {
+                aStyleName = rValue;
+            }
+            else if( aLocalName.equalsAsciiL( sXML_number_rows_repeated,
+                                      sizeof(sXML_number_rows_repeated)-1 ) )
+            {
+                nRowRepeat = (sal_uInt32)rValue.toInt32();
+                if( nRowRepeat < 1UL )
+                    nRowRepeat = 1UL;
+            }
         }
     }
     if( GetTable()->IsValid() )
@@ -819,7 +932,12 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
 void SwXMLTableRowContext_Impl::EndElement()
 {
     if( GetTable()->IsValid() )
+    {
         GetTable()->FinishRow();
+
+        if( nRowRepeat > 1UL )
+            GetTable()->InsertRepRows( nRowRepeat );
+    }
 }
 
 SwXMLTableRowContext_Impl::~SwXMLTableRowContext_Impl()
@@ -1121,7 +1239,7 @@ SV_IMPL_PTRARR(SwXMLTableRows_Impl,SwXMLTableRowPtr)
 SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
                                                  sal_uInt32 nCol ) const
 {
-    return (*pRows)[nRow]->GetCell( (sal_uInt16)nCol );
+    return (*pRows)[(sal_uInt16)nRow]->GetCell( (sal_uInt16)nCol );
 }
 
 TYPEINIT1( SwXMLTableContext, XMLTextTableContext );
@@ -1373,7 +1491,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                                     const SwStartNode *pStartNode,
                                     SwXMLTableContext *pTable,
                                     sal_Bool bProtect,
-                                    OUString* pFormula,
+                                    const OUString* pFormula,
                                     sal_Bool bHasValue,
                                     double fValue)
 {
@@ -1493,6 +1611,29 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
 
     if( 0UL == nCurRow )
         bHasHeading = bInHead;
+}
+
+void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
+{
+    const SwXMLTableRow_Impl *pSrcRow = (*pRows)[(sal_uInt16)nCurRow-1];
+    while( nCount > 1 && IsInsertRowPossible() )
+    {
+        InsertRow( pSrcRow->GetStyleName(), sal_False );
+        while( nCurCol < GetColumnCount() )
+        {
+            if( !GetCell(nCurRow,nCurCol)->IsUsed() )
+            {
+                const SwXMLTableCell_Impl *pSrcCell =
+                    GetCell( nCurRow-1, nCurCol );
+                InsertCell( aStyleName, 1U, pSrcCell->GetColSpan(),
+                            InsertTableSection(), 0, pSrcCell->IsProtected(),
+                            &pSrcCell->GetFormula(),
+                            pSrcCell->HasValue(), pSrcCell->GetValue() );
+            }
+        }
+        FinishRow();
+        nCount--;
+    }
 }
 
 void SwXMLTableContext::FinishRow()
@@ -1623,11 +1764,16 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
 {
     SwTableBox *pBox = new SwTableBox( pBoxFmt, 0, pUpper );
 
+    sal_uInt32 nColSpan = nRightCol - nLeftCol;
+    sal_Int32 nColWidth = GetColumnWidth( nLeftCol, nColSpan );
+
     // TODO: Share formats!
     SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
     pFrmFmt->ResetAllAttr();
     pFrmFmt->SetAttr( aFillOrder );
+
+    pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
     SwTableLines& rLines = pBox->GetTabLines();
     sal_Bool bSplitted = sal_False;

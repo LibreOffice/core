@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-04 15:44:57 $
+ *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ class SwXMLImport: public SvXMLImport
     SvXMLImportItemMapper   *pTableItemMapper;// paragraph item import
     SvXMLTokenMap           *pDocElemTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
+    SvXMLTokenMap           *pTableCellAttrTokenMap;
 
     SvXMLItemMapEntriesRef  xTableItemMap;
     SvXMLItemMapEntriesRef  xTableColItemMap;
@@ -206,6 +207,7 @@ public:
 
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
+    const SvXMLTokenMap& GetTableCellAttrTokenMap();
 
     sal_Bool FindAutomaticStyle( sal_uInt16 nFamily,
                              const ::rtl::OUString& rName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 12:56:11 $
+ *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
     nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
     pDocElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
+    pTableCellAttrTokenMap( 0 ),
     pTableItemMapper( 0 ),
     pSttNdIdx( 0 ),
     bShowProgress( sal_True ),
@@ -382,6 +383,7 @@ SwXMLImport::SwXMLImport(
     nStyleFamilyMask( nStyleFamMask ),
     pDocElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
+    pTableCellAttrTokenMap( 0 ),
     pTableItemMapper( 0 ),
     pSttNdIdx( 0 ),
     bShowProgress( sal_True ),
@@ -403,6 +405,7 @@ SwXMLImport::~SwXMLImport()
 {
     delete pDocElemTokenMap;
     delete pTableElemTokenMap;
+    delete pTableCellAttrTokenMap;
     _FinitItemImport();
 }
 

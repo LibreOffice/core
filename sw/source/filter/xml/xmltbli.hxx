@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
+ *  last change: $Author: mib $ $Date: 2001-05-14 14:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,12 +184,13 @@ public:
                      const SwStartNode *pStNd=0,
                      SwXMLTableContext *pTable=0,
                      sal_Bool bIsProtected = sal_False,
-                     ::rtl::OUString *pFormula=0,
+                     const ::rtl::OUString *pFormula=0,
                      sal_Bool bHasValue = sal_False,
                      double fValue = 0.0 );
     void InsertRow( const ::rtl::OUString& rStyleName,
                     sal_Bool bInHead );
     void FinishRow();
+    void InsertRepRows( sal_uInt32 nCount );
     SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol ) const;
     const SwStartNode *InsertTableSection( const SwStartNode *pPrevSttNd=0 );
 
