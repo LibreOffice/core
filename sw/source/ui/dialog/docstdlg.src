@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:28:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage TP_DOC_STAT
         Text [ ENGLISH ] = "Number of pages:" ;
         Text [ norwegian ] = "Number of pages:" ;
         Text [ italian ] = "Numero di pagine:" ;
-        Text [ portuguese_brazilian ] = "Número de páginas:" ;
+        Text [ portuguese_brazilian ] = "N?ero de p?ginas:" ;
         Text [ portuguese ] = "Número de páginas:" ;
         Text [ finnish ] = "Sivujen määrä:" ;
         Text [ danish ] = "Antal sider:" ;
@@ -106,7 +106,7 @@ TabPage TP_DOC_STAT
         Text [ ENGLISH ] = "Number of tables:" ;
         Text [ norwegian ] = "Number of tables:" ;
         Text [ italian ] = "Numero di tabelle:" ;
-        Text [ portuguese_brazilian ] = "Número de tabelas:" ;
+        Text [ portuguese_brazilian ] = "N?ero de tabelas:" ;
         Text [ portuguese ] = "Número de tabelas:" ;
         Text [ finnish ] = "Taulukoiden määrä:" ;
         Text [ danish ] = "Antal tabeller:" ;
@@ -136,7 +136,7 @@ TabPage TP_DOC_STAT
         Text [ ENGLISH ] = "Number of graphics:" ;
         Text [ norwegian ] = "Number of graphics:" ;
         Text [ italian ] = "Numero di immagini:" ;
-        Text [ portuguese_brazilian ] = "Número de gráficos:" ;
+        Text [ portuguese_brazilian ] = "N?ero de gr?ficos:" ;
         Text [ portuguese ] = "Número de imagens:" ;
         Text [ finnish ] = "Kuvien määrä:" ;
         Text [ danish ] = "Antal billeder:" ;
@@ -166,7 +166,7 @@ TabPage TP_DOC_STAT
         Text [ ENGLISH ] = "Number of OLE objects:" ;
         Text [ norwegian ] = "Number of OLE objects:" ;
         Text [ italian ] = "Numero di oggetti OLE:" ;
-        Text [ portuguese_brazilian ] = "Número de objetos OLE:" ;
+        Text [ portuguese_brazilian ] = "N?ero de objetos OLE:" ;
         Text [ portuguese ] = "Número de objectos OLE:" ;
         Text [ finnish ] = "OLE-objektien määrä:" ;
         Text [ danish ] = "Antal OLE-objekter:" ;
@@ -196,7 +196,7 @@ TabPage TP_DOC_STAT
         Text [ ENGLISH ] = "Number of paragraphs:" ;
         Text [ norwegian ] = "Number of paragraphs:" ;
         Text [ italian ] = "Numero di paragrafi:" ;
-        Text [ portuguese_brazilian ] = "Número de parágrafos:" ;
+        Text [ portuguese_brazilian ] = "N?ero de par?grafos:" ;
         Text [ portuguese ] = "Número de parágrafos:" ;
         Text [ finnish ] = "Kappaleiden määrä:" ;
         Text [ danish ] = "Antal afsnit:" ;
@@ -226,7 +226,7 @@ TabPage TP_DOC_STAT
         Text [ ENGLISH ] = "Number of words:" ;
         Text [ norwegian ] = "Number of words:" ;
         Text [ italian ] = "Numero di parole:" ;
-        Text [ portuguese_brazilian ] = "Número de palavras:" ;
+        Text [ portuguese_brazilian ] = "N?ero de palavras:" ;
         Text [ portuguese ] = "Número de palavras:" ;
         Text [ finnish ] = "Sanamäärä:" ;
         Text [ danish ] = "Antal ord:" ;
@@ -292,7 +292,7 @@ TabPage TP_DOC_STAT
         Text [ ENGLISH ] = "Number of chars:" ;
         Text [ norwegian ] = "Number of chars:" ;
         Text [ italian ] = "Numero di caratteri:" ;
-        Text [ portuguese_brazilian ] = "Número de caracteres:" ;
+        Text [ portuguese_brazilian ] = "N?ero de caracteres:" ;
         Text [ portuguese ] = "Número de caracteres:" ;
         Text [ finnish ] = "Merkkien määrä:" ;
         Text [ danish ] = "Antal tegn:" ;
