@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:20:03 $
+ *  last change: $Author: sab $ $Date: 2001-01-30 17:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,8 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetTableRowCellElemTokenMap();
-    sal_Bool bHeader = sal_False;
+    sal_Bool bHeader(sal_False);
+    sal_Bool bTextP(sal_False);
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROW_CELL_P:
@@ -347,6 +348,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             pContext = new ScXMLContentContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList, sOUCurrentText );*/
             bIsEmpty = sal_False;
+            bTextP = sal_True;
             if (nCellType == util::NumberFormat::TEXT)
             {
                 ScXMLImport& rXMLImport = GetScImport();
@@ -431,7 +433,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
         break;
     }
 
-    if (!pContext)
+    if (!pContext && !bTextP)
     {
         ScXMLImport& rXMLImport = GetScImport();
         com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
