@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:51:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
+#include <accelerators/presethandler.hxx>
+#endif
 
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
@@ -312,6 +316,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
+            PresetHandler                                                                   m_aStorageHandler;
             com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xModuleImageManager;
    };
 }
