@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:21 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,6 +1115,16 @@ TabPage PAGE_GENERAL
         Size = MAP_APPFONT ( 248, 24 );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
+    };
+    PushButton PB_CONVERTDATABASE
+    {
+        TabStop = TRUE ;
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 154 , 165 ) ;
+        Size = MAP_APPFONT ( 100 , 14 ) ;
+        Text = "Datenbank kon~vertieren" ;
+        Text [ english ] = "Con~vert Database" ;
+        Text [ english_us ] = "Con~vert Database" ;
     };
     PushButton PB_CREATEDATABASE
     {
@@ -4359,3 +4369,52 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
     Text[ thai ] = "(Not supported by this connection)";
 };
 
+#define EDIT_SIZE_X     50
+#define FT_SIZE_X       90
+#define WIN_X           220
+#define WIN_Y           72
+
+ModalDialog DLG_DOMAINPASSWORD
+{
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
+    Text = "Datenbank konvertieren";
+    Text [ English ] = "Convert Database";
+    Text[ english_us ] = "Convert Database";
+
+    FixedLine FT_PASSWORD
+    {
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
+        Text = "Bitte geben Sie das ~Kennwort für den Benutzer 'DOMAIN' ein" ;
+        Text [ English ] = "Please enter the ~password for the user 'DOMAIN'." ;
+        Text[ english_us ] = "Please enter the ~password for the user 'DOMAIN'.";
+    };
+
+    Edit ET_PASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        PassWord = TRUE ;
+    };
+    OKButton BTN_PASSWORD_OK
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_PASSWORD_CANCEL
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_PASSWORD_HELP
+    {
+        Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
