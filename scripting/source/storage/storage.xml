@@ -30,7 +30,6 @@
     <type> drafts.com.sun.star.script.framework.storage.XScriptStore                </type>
     <type> drafts.com.sun.star.script.framework.storage.XParcel                               </type>
     <type> com.sun.star.lang.XInitialization                    </type>
-    <type> drafts.com.sun.star.script.framework.storage.ScriptImplInfo                  </type>
     <type> drafts.com.sun.star.script.framework.storage.XScriptInvocationPrep           </type>
     <type> drafts.com.sun.star.script.framework.storage.XParcelInvocationPrep   </type>
     <type> drafts.com.sun.star.script.framework.storage.XScriptStorageManager                   </type>

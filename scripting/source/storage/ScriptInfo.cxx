@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:28 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::script::framework;
 using namespace ::drafts::com::sun::star::script::framework::storage;
 
+typedef ::std::vector < ::std::pair < ::rtl::OUString, bool > >  dependencies_vec;
+
 namespace scripting_impl
 {
 
@@ -95,6 +97,15 @@ ScriptInfo::ScriptInfo( const Reference< XComponentContext > & xContext )
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 
+ScriptInfo::ScriptInfo( const Reference< XComponentContext > & xContext,
+        const ScriptData & scriptData, sal_Int32 storageID )
+        : m_xContext( xContext ), m_scriptData( scriptData ),
+            m_storageID( storageID )
+{
+    OSL_TRACE( "< ++++++ ScriptInfo ctor called >\n" );
+    OSL_TRACE( "< ++++++ parcelURI=%s>\n",::rtl::OUStringToOString(m_scriptData.parcelURI , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+}
 //*************************************************************************
 ScriptInfo::~ScriptInfo()
 {
@@ -108,10 +119,10 @@ throw (RuntimeException, Exception)
 {
     try
     {
-        if (((args[0] >>= m_scriptImplInfo) == sal_False) ||
-        ((args[1] >>= m_storageID) == sal_False)) {
-        throw RuntimeException(OUSTR("ScriptInfo: initialize(): "), Reference< XInterface >());
-        }
+        //if (((args[0] >>= m_scriptData) == sal_False) ||
+        //((args[1] >>= m_storageID) == sal_False)) {
+        //throw RuntimeException(OUSTR("ScriptInfo: initialize(): "), Reference< XInterface >());
+       // }
     }
     catch (Exception &e)
     {
@@ -123,42 +134,42 @@ throw (RuntimeException, Exception)
 OUString SAL_CALL ScriptInfo::getLogicalName(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptImplInfo.logicalName;
+    return m_scriptData.logicalName;
 }
 
 //*************************************************************************
 void SAL_CALL ScriptInfo::setLogicalName( const OUString& name ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptImplInfo.logicalName = name;
+    m_scriptData.logicalName = name;
 }
 
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getDescription(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptImplInfo.scriptDescription;
+    return m_scriptData.scriptDescription;
 }
 
 //*************************************************************************
 void SAL_CALL ScriptInfo::setDescription( const OUString& desc ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptImplInfo.scriptDescription = desc;
+    m_scriptData.scriptDescription = desc;
 }
 
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getLanguage(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptImplInfo.scriptLanguage;
+    return m_scriptData.scriptLanguage;
 }
 
 //*************************************************************************
 void SAL_CALL ScriptInfo::setLanguage( const OUString& language ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptImplInfo.scriptLanguage = language;
+    m_scriptData.scriptLanguage = language;
 }
 
 //*************************************************************************
@@ -166,44 +177,47 @@ OUString SAL_CALL ScriptInfo::getScriptLocation()
     throw ( RuntimeException )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptImplInfo.scriptLocation;
+    return m_scriptData.scriptLocation;
 }
 
 //*************************************************************************
 sal_Bool SAL_CALL ScriptInfo::hasSource(  ) throw (RuntimeException)
 {
-    return m_scriptImplInfo.scriptSource;
+    return m_scriptData.scriptSource;
 }
 
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getLanguageSpecificName(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptImplInfo.functionName;
+    return m_scriptData.functionName;
 }
 
 //*************************************************************************
 void SAL_CALL ScriptInfo::setLanguageSpecificName( const OUString& langName ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptImplInfo.functionName = langName;
+    m_scriptData.functionName = langName;
 }
 
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getRoot(  ) throw (RuntimeException)
 {
-    return m_scriptImplInfo.scriptRoot;
+    return m_scriptData.scriptRoot;
 }
 
 //*************************************************************************
 Sequence< OUString > SAL_CALL ScriptInfo::getDependencies(  ) throw (RuntimeException)
 {
-    storage::ScriptDepFile *pArray = m_scriptImplInfo.scriptDependencies.getArray();
-    sal_Int32 len = m_scriptImplInfo.scriptDependencies.getLength();
-    Sequence< OUString > r_deps(len);
-    for(sal_Int32 i = 0; i < len; i++)
+    dependencies_vec  & scriptDependencies =
+                m_scriptData.scriptDependencies;
+    Sequence< OUString > r_deps( scriptDependencies.size() );
+    dependencies_vec::const_iterator it = scriptDependencies.begin();
+    dependencies_vec::const_iterator it_end = scriptDependencies.end();
+
+    for(int i = 0; it != it_end; ++it )
     {
-        r_deps[i] = pArray[i].fileName;
+        r_deps[i++] = it->first;
     }
 
     return r_deps;
@@ -243,8 +257,9 @@ throw(RuntimeException)
     OSL_TRACE("******* In ScriptInfo::prepareForInvocation() *************\n");
     try
     {
-        if (m_scriptImplInfo.parcelURI.compareToAscii(docUriPrefix, 16) != 0) {
-        return m_scriptImplInfo.parcelURI;
+        OSL_TRACE("preparing %s for invocation",::rtl::OUStringToOString(m_scriptData.parcelURI, RTL_TEXTENCODING_ASCII_US).pData->buffer);
+        if (m_scriptData.parcelURI.compareToAscii(docUriPrefix, 16) != 0) {
+        return m_scriptData.parcelURI;
         }
 
         validateXRef(m_xContext, "ScriptInfo::prepareForInvocation(): invalid context");
@@ -263,7 +278,7 @@ throw(RuntimeException)
         validateXRef(xx, "ScriptInfo::prepareForInvocation(): could not get XInterface");
         Reference <XParcelInvocationPrep> xPIP(xx, UNO_QUERY);
         validateXRef(xPIP, "ScriptInfo::prepareForInvocation(): could not get XParcelInvocationPrep");
-        return xPIP->prepareForInvocation(m_scriptImplInfo.parcelURI);
+        return xPIP->prepareForInvocation(m_scriptData.parcelURI);
     }
     catch(RuntimeException &e)
     {

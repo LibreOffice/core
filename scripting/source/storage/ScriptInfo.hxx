@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-01 10:45:13 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
-#include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInvocationPrep.hpp>
+#include "ScriptData.hxx"
 
 namespace scripting_impl {
 // for simplification
@@ -84,6 +84,9 @@ class ScriptInfo : public ::cppu::WeakImplHelper4< css::lang::XServiceInfo,
 public:
     explicit ScriptInfo(
         const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit ScriptInfo(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const ScriptData & scriptData, sal_Int32 storageID );
     virtual ~ScriptInfo();
 
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -136,8 +139,8 @@ private:
 
     ::osl::Mutex     m_mutex;
 
-    dcsssf::storage::ScriptImplInfo m_scriptImplInfo;
-    sal_uInt16 m_storageID;
+    ScriptData m_scriptData;
+    sal_Int32 m_storageID;
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:08:29 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,21 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script::framework;
+
+typedef ::std::vector < ::std::pair < ::rtl::OUString, bool > >  dependencies_vec;
+typedef ::std::vector < ::std::pair < ::rtl::OUString, ::rtl::OUString > > deliveries_vec;
 
 namespace scripting_impl
 {
 
 //*************************************************************************
 /**
-    Construct a ScriptElement from a ScriptImplInfo object
+    Construct a ScriptElement from a ScriptData object
 
     @param sII
-    the ScriptImplInfoObject
+    the ScriptDataObject
 */
-ScriptElement::ScriptElement(storage::ScriptImplInfo & sII) :
+ScriptElement::ScriptElement( ScriptData & sII ) :
         m_sII( sII ),
         XMLElement(OUSTR("script"))
 {
@@ -103,18 +105,20 @@ ScriptElement::ScriptElement(storage::ScriptImplInfo & sII) :
         addSubElement(xal);
     }
 
-    storage::ScriptDepFile *pArray = sII.scriptDependencies.getArray();
-    sal_Int32 len = sII.scriptDependencies.getLength();
+    dependencies_vec  & scriptDependencies = sII.scriptDependencies;
 
-    if (len > 0)
+    dependencies_vec::const_iterator it = scriptDependencies.begin();
+    dependencies_vec::const_iterator it_end = scriptDependencies.end();
+
+    if ( it != it_end )
     {
         XMLElement* xel = new XMLElement(OUSTR("dependencies"));
 
-        for(sal_Int32 i = 0; i < len; i++)
+        for(; it != it_end ; ++it)
         {
             XMLElement* subxel =  new XMLElement(OUSTR("dependfile"));
-            subxel->addAttribute(OUSTR("name"), pArray[i].fileName);
-            if(pArray[i].isDeliverable)
+            subxel->addAttribute( OUSTR( "name" ), it->first );
+            if( it->second )
             {
                 subxel->addAttribute(OUSTR("isdeliverable"), OUSTR("yes"));
             }
@@ -138,18 +142,19 @@ ScriptElement::ScriptElement(storage::ScriptImplInfo & sII) :
         addSubElement(xal);
     }
 
-    storage::ScriptDeliverFile *pt_Array = sII.parcelDelivers.getArray();
-    sal_Int32 len_d = sII.parcelDelivers.getLength();
+    deliveries_vec & parcelDelivers = sII.parcelDelivers;
+    deliveries_vec::const_iterator it2 = parcelDelivers.begin();
+    deliveries_vec::const_iterator it2_end = parcelDelivers.end();
 
-    if(len_d > 0)
+    if( it2 != it2_end )
     {
         XMLElement* xel = new XMLElement(OUSTR("delivery"));
 
-        for(sal_Int32 i = 0; i < len_d; i++)
+        for(; it2 != it2_end ; ++it2 )
         {
             XMLElement* subxel = new XMLElement(OUSTR("deliverfile"));
-            subxel->addAttribute(OUSTR("name"), pt_Array[i].fileName);
-            subxel->addAttribute(OUSTR("type"), pt_Array[i].fileType);
+            subxel->addAttribute(OUSTR("name"), it2->first );
+            subxel->addAttribute(OUSTR("type"), it2->second );
             Reference < xml::sax::XAttributeList > subxal(subxel);
             xel->addSubElement(subxal);
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageBridge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-16 08:33:27 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ const int STORAGEPROXY = 0;
 //*************************************************************************
 // StorageBridge Constructor
 StorageBridge::StorageBridge( const Reference< XComponentContext >& xContext,
-                              sal_uInt16 sid ) : m_xContext( xContext ), m_sid( sid )
+                              sal_Int32 sid ) : m_xContext( xContext ), m_sid( sid )
 {
     try
     {

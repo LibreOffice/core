@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-01 10:45:14 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace scripting_impl
 #define dcsssf ::drafts::com::sun::star::script::framework
 
 // Define a hash_map used to store the ScriptingStorages key;d by ID
-typedef ::std::hash_map < sal_uInt16, css::uno::Reference < css::uno::XInterface > >
+typedef ::std::hash_map < sal_Int32, css::uno::Reference < css::uno::XInterface > >
     ScriptStorage_hash;
 
 class ScriptStorageManager : public
@@ -122,7 +122,7 @@ public:
         @returns an unsigned short ScriptStorage ID, which can be used in the
         getScriptStorage method
     */
-    virtual sal_uInt16 SAL_CALL createScriptStorage(
+    virtual sal_Int32 SAL_CALL createScriptStorage(
             const css::uno::Reference< css::ucb::XSimpleFileAccess > & xSFA )
             throw (css::uno::RuntimeException);
     //----------------------------------------------------------------------
@@ -139,7 +139,7 @@ public:
         @returns an unsigned short ScriptStorage ID, which can be used in the
         getScriptStorage method
     */
-    virtual sal_uInt16 SAL_CALL
+    virtual sal_Int32 SAL_CALL
         createScriptStorageWithURI(
             const css::uno::Reference< css::ucb::XSimpleFileAccess >& xSFA,
             const ::rtl::OUString& stringURI )
@@ -157,7 +157,7 @@ public:
         service
     */
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getScriptStorage(
-        sal_uInt16 scriptStorageID )
+        sal_Int32 scriptStorageID )
         throw (css::uno::RuntimeException);
     //======================================================================
 
@@ -176,13 +176,13 @@ private:
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     ::osl::Mutex m_mutex;
     ScriptStorage_hash m_ScriptStorageHash;
-    sal_uInt16 m_count;
+    sal_Int32 m_count;
 
     void setupAppStorage( const css::uno::Reference< css::util::XMacroExpander > & xME,
         const ::rtl::OUString & storageStr )
         SAL_THROW ( ( css::uno::RuntimeException ) );
 
-    sal_uInt16 setupAnyStorage(
+    sal_Int32 setupAnyStorage(
         const css::uno::Reference< css::ucb::XSimpleFileAccess> & xSFA,
         const ::rtl::OUString & storageStr )
         SAL_THROW ( ( css::uno::RuntimeException ) );

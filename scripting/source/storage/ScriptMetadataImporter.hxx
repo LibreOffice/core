@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-01 10:45:13 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include "ScriptData.hxx"
 
 
 namespace scripting_impl
@@ -81,9 +81,7 @@ namespace scripting_impl
 #define css ::com::sun::star
 #define dcsssf ::drafts::com::sun::star::script::framework
 
-typedef ::std::vector< dcsssf::storage::ScriptImplInfo > Impls_vec;
-typedef ::std::vector< ::rtl::OUString > Deps_vec;
-typedef ::std::vector< bool > Bool_vec;
+typedef ::std::vector< ScriptData > Datas_vec;
 
 /**
  * Script Meta Data Importer
@@ -101,8 +99,9 @@ public:
      *
      * @see css::io::XInputStream
      */
-    Impls_vec parseMetaData( css::uno::Reference< css::io::XInputStream > const & xInput,
-        const ::rtl::OUString & parcelURI )
+    void parseMetaData( css::uno::Reference< css::io::XInputStream >
+        const & xInput, const ::rtl::OUString & parcelURI,
+        Datas_vec & io_ScriptDatas )
         throw ( css::xml::sax::SAXException, css::io::IOException,
             css::uno::RuntimeException);
 
@@ -229,20 +228,8 @@ public:
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 private:
 
-    /** Vector contains the ScriptImplInfo structs */
-    Impls_vec ms_scriptInfos;
-
-    /** @internal */
-    Deps_vec mv_deps;
-
-    /** @internal */
-    Deps_vec mv_delivFile;
-
-    /** @internal */
-    Deps_vec mv_deliverType;
-
-    /** @internal */
-    Bool_vec mv_depsDelivered;
+    /** Vector contains the ScriptData structs */
+    Datas_vec* mpv_scriptDatas;
 
     /** @internal */
     osl::Mutex     m_mutex;
@@ -260,7 +247,7 @@ private:
     css::uno::Sequence< ::rtl::OUString > ms_dependFiles;
 
     /** Build up the struct during parsing the meta data */
-    dcsssf::storage::ScriptImplInfo m_scriptImplInfo;
+    ScriptData m_scriptData;
 
     /**
      *   Helper function to set the state

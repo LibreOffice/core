@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridgeFactory.hxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: npower $ $Date: 2002-10-01 10:45:12 $
+*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -83,7 +83,7 @@ public:
     explicit StorageBridgeFactory(
         const css::uno::Reference < css::uno::XComponentContext > & xContext );
     css::uno::Reference < dcsssf::storage::XScriptImplAccess >
-        getStorageInstance( sal_uInt16 sid );
+        getStorageInstance( sal_Int32 sid );
 private:
     StorageBridgeFactory(); // No definition for default ctor
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-16 08:33:26 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include <drafts/com/sun/star/script/framework/storage/XScriptAccessManager.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptImplAccess.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageExport.hpp>
-#include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 #include <drafts/com/sun/star/script/framework/storage/NoSuchView.hpp>
 #include <drafts/com/sun/star/script/framework/scripturi/XScriptURI.hpp>
@@ -92,9 +91,9 @@ namespace scripting_impl
 
 //Typedefs
 //=============================================================================
-typedef ::std::vector< dcsssf::storage::ScriptImplInfo > Impls_vec;
+typedef ::std::vector< ScriptData > Datas_vec;
 //-----------------------------------------------------------------------------
-typedef ::std::hash_map < ::rtl::OUString, Impls_vec, ::rtl::OUStringHash,
+typedef ::std::hash_map < ::rtl::OUString, Datas_vec, ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString > > ScriptInfo_hash;
 //-----------------------------------------------------------------------------
 typedef ::std::hash_map < ::rtl::OUString,
@@ -233,12 +232,12 @@ private:
     ::std::vector < ::rtl::OUString >  mv_logicalNames;
     ScriptInfo_hash mh_implementations;
     ScriptOutput_hash mh_parcels;
-    sal_uInt16 m_scriptStorageID;
+    sal_Int32 m_scriptStorageID;
 
     osl::Mutex m_mutex;
     bool m_bInitialised;
 
-    void updateMaps(const Impls_vec & vScriptImplInfos);
+    void updateMaps(const Datas_vec & vScriptDatas);
     void writeMetadataHeader(
         css::uno::Reference < css::xml::sax::XExtendedDocumentHandler > & xExDocHandler);
     /**

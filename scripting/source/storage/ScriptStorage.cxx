@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.9 $
-*  last change: $Author: npower $ $Date: 2002-10-16 08:33:26 $
+*  $Revision: 1.10 $
+*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -65,13 +65,13 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
-#include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
 #include <util/util.hxx>
 
+#include "ScriptData.hxx"
 #include "ScriptInfo.hxx"
 #include "ScriptStorage.hxx"
-#include "ScriptMetadataImporter.hxx"
 #include "ScriptElement.hxx"
+#include "ScriptMetadataImporter.hxx"
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -242,10 +242,10 @@ throw ( RuntimeException, Exception )
                 }
 
                 OSL_TRACE( "Parse the metadata \n" );
-                Impls_vec vScriptImplInfos;
+                Datas_vec vScriptDatas;
                 try
                 {
-                    vScriptImplInfos = SMI->parseMetaData( xInput, parcelDirs[ j ] );
+                    SMI->parseMetaData( xInput, parcelDirs[ j ], vScriptDatas );
                 }
                 catch ( xml::sax::SAXException saxe )
                 {
@@ -267,7 +267,7 @@ throw ( RuntimeException, Exception )
                 }
                 xInput->closeInput();
 
-                updateMaps( vScriptImplInfos );
+                updateMaps( vScriptDatas );
             }
         }
     }
@@ -320,20 +320,20 @@ throw ( RuntimeException, Exception )
 //*************************************************************************
 // private method for updating hashmaps
 void
-ScriptStorage::updateMaps( const Impls_vec & vScriptImplInfos )
+ScriptStorage::updateMaps( const Datas_vec & vScriptDatas )
 {
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
 
-    Impls_vec::const_iterator it_end = vScriptImplInfos.end();
+    Datas_vec::const_iterator it_end = vScriptDatas.end();
     // step through the vector of ScripImplInfos returned from parse
-    for ( Impls_vec::const_iterator it = vScriptImplInfos.begin() ; it != it_end; ++it )
+    for ( Datas_vec::const_iterator it = vScriptDatas.begin() ; it != it_end; ++it )
     {
-        //find the Impls_vec for this logical name
+        //find the Datas_vec for this logical name
         ScriptInfo_hash::iterator h_it = mh_implementations.find( it->logicalName );
 
         if ( h_it == mh_implementations.end() )
         {
-            //if it's null, need to create a new Impls_vec
+            //if it's null, need to create a new Datas_vec
 #ifdef _DEBUG
             fprintf( stderr,
                      "updateMaps: new logical name: %s\n", rtl::OUStringToOString(
@@ -343,7 +343,7 @@ ScriptStorage::updateMaps( const Impls_vec & vScriptImplInfos )
                          it->functionName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
-            Impls_vec v;
+            Datas_vec v;
             v.push_back( *it );
             mh_implementations[ it->logicalName ] = v;
         }
@@ -380,21 +380,21 @@ throw ( RuntimeException )
         for ( ScriptInfo_hash::iterator it = mh_implementations.begin() ; it != it_end; ++it )
         {
             ::rtl::OUString logName = it->first;
-            Impls_vec::iterator it_impls_end = it->second.end();
-            for ( Impls_vec::iterator it_impls = it->second.begin();
-                    it_impls != it_impls_end ; ++it_impls )
+            Datas_vec::iterator it_datas_end = it->second.end();
+            for ( Datas_vec::iterator it_datas = it->second.begin();
+                    it_datas != it_datas_end ; ++it_datas )
             {
                 ScriptOutput_hash::const_iterator it_parcels =
-                    mh_parcels.find( it_impls->parcelURI );
+                    mh_parcels.find( it_datas->parcelURI );
                 if ( it_parcels == mh_parcels.end() )
                 {
                     //create new outputstream
-                    OUString parcel_xml_path = it_impls->parcelURI.concat( parcel_suffix );
+                    OUString parcel_xml_path = it_datas->parcelURI.concat( parcel_suffix );
                     m_xSimpleFileAccess->kill( parcel_xml_path );
                     xOS = m_xSimpleFileAccess->openFileWrite( parcel_xml_path );
 #ifdef _DEBUG
 
-                    fprintf( stderr, "saving: %s\n", rtl::OUStringToOString( it_impls->parcelURI.concat( OUString::createFromAscii( "/parcel.xml" ) ), RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    fprintf( stderr, "saving: %s\n", rtl::OUStringToOString( it_datas->parcelURI.concat( OUString::createFromAscii( "/parcel.xml" ) ), RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
                     Reference< XInterface > xInterface =
@@ -413,14 +413,14 @@ throw ( RuntimeException )
                     xHandler->startElement( ou_parcel,
                                             Reference< xml::sax::XAttributeList >() );
 
-                    mh_parcels[ it_impls->parcelURI ] = xHandler;
+                    mh_parcels[ it_datas->parcelURI ] = xHandler;
                 }
                 else
                 {
                     xHandler = it_parcels->second;
                 }
 
-                ScriptElement* pSE = new ScriptElement( *it_impls );
+                ScriptElement* pSE = new ScriptElement( *it_datas );
                 // this is to get pSE released correctly
                 Reference <xml::sax::XAttributeList> xal( pSE );
                 pSE->dump( xHandler );
@@ -492,22 +492,12 @@ throw ( RuntimeException )
         //Get array of XScriptInfos
         //        Reference< storage::XScriptInfo >* pScriptInfo = sr_xScriptInfo.getArray();
 
-        Impls_vec::const_iterator end_iter = h_iter->second.end();
+        Datas_vec::const_iterator end_iter = h_iter->second.end();
         sal_Int32 count = 0;
-        for ( Impls_vec::const_iterator it = h_iter->second.begin(); it != end_iter; ++it )
+        for ( Datas_vec::const_iterator it = h_iter->second.begin(); it != end_iter; ++it )
         {
-            Any a( makeAny( *it ) );
-            Reference< XInterface > xInterface =
-                m_xMgr->createInstanceWithArgumentsAndContext(
-                    OUString::createFromAscii(
-                        "drafts.com.sun.star.script.framework.storage.ScriptInfo" ),
-                    Sequence< Any >( &a, 1 ), m_xContext );
-            validateXRef( xInterface,
-                          "ScriptStorage::getScriptInfoService: cannot get drafts.com.sun.star.script.framework.storage.ScriptInfo" );
-            //            pScriptInfo[ count ] = Reference< storage::XScriptInfo >(xInterface,
-            //                                   UNO_QUERY_THROW );
-            sr_xScriptInfo[ count ] = Reference< storage::XScriptInfo >( xInterface,
-                                      UNO_QUERY_THROW );
+            sr_xScriptInfo[ count ] = Reference< storage::XScriptInfo >(
+                new ScriptInfo( m_xContext, *it, m_scriptStorageID ) );
             count++;
         }
     }
@@ -601,12 +591,14 @@ throw ( lang::IllegalArgumentException,
 
         ::osl::Guard< osl::Mutex > aGuard( m_mutex );
 
-        Impls_vec::const_iterator it_impls = h_it->second.begin();
-        Impls_vec::const_iterator it_impls_end = h_it->second.end();
-        for ( sal_Int32 count = 0; it_impls != it_impls_end ; ++it_impls )
+        Datas_vec::const_iterator it_datas = h_it->second.begin();
+        Datas_vec::const_iterator it_datas_end = h_it->second.end();
+        for ( sal_Int32 count = 0; it_datas != it_datas_end ; ++it_datas )
         {
             Sequence<Any> aArgs( 2 );
-            aArgs[ 0 ] <<= *it_impls;
+            Reference< storage::XScriptInfo > xScriptInfo = new ScriptInfo ( m_xContext, *it_datas, m_scriptStorageID );
+
+            aArgs[ 0 ] <<= xScriptInfo;
             aArgs[ 1 ] <<= m_scriptStorageID;
 
             Reference< XInterface > xInterface =

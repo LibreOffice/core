@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-10 16:09:48 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ Sequence< OUString > nrs_serviceNames = Sequence< OUString >( &nrs_serviceName, 
 extern ::rtl_StandardModuleCount s_moduleCount;
 
 // define storages to search
-static ::std::vector< sal_uInt16 >* m_pSearchIDs = NULL;
+static ::std::vector< sal_Int32 >* m_pSearchIDs = NULL;
 
 //*************************************************************************
 ScriptNameResolverImpl::ScriptNameResolverImpl(
@@ -102,7 +102,7 @@ ScriptNameResolverImpl::ScriptNameResolverImpl(
         {
             scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
                 scripting_constants::ScriptingConstantsPool::instance();
-            m_pSearchIDs = new ::std::vector< sal_uInt16 >();
+            m_pSearchIDs = new ::std::vector< sal_Int32 >();
             m_pSearchIDs->push_back( scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET );
             m_pSearchIDs->push_back( scriptingConstantsPool.USER_STORAGE_ID );
             m_pSearchIDs->push_back( scriptingConstantsPool.SHARED_STORAGE_ID );
@@ -138,7 +138,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
     Any any;
     OUString docUri;
-    sal_uInt16 docSid;
+    sal_Int32 docSid;
     try
     {
         scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
@@ -188,10 +188,10 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
 
     OSL_TRACE( "ScriptNameResolverImpl::resolve Starting..." );
-    ::std::vector< sal_uInt16 >& m_vSearchIDs = *m_pSearchIDs;
+    ::std::vector< sal_Int32 >& m_vSearchIDs = *m_pSearchIDs;
     m_vSearchIDs[ 0 ] = docSid;
-    ::std::vector< sal_uInt16 >::const_iterator iter;
-    ::std::vector< sal_uInt16 >::const_iterator iterEnd = m_vSearchIDs.end();
+    ::std::vector< sal_Int32 >::const_iterator iter;
+    ::std::vector< sal_Int32 >::const_iterator iterEnd = m_vSearchIDs.end();
 
     for ( iter = m_vSearchIDs.begin() ; iter != iterEnd; ++iter )
     {
@@ -255,7 +255,7 @@ throw( RuntimeException )
 
 Reference< scripturi::XScriptURI >
 ScriptNameResolverImpl::resolveURIFromStorageID
-( sal_uInt16 sid, const Reference< scripturi::XScriptURI >& scriptURI )
+( sal_Int32 sid, const Reference< scripturi::XScriptURI >& scriptURI )
 SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
 

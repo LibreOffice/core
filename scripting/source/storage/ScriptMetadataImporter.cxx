@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dsherwin $ $Date: 2002-09-24 13:20:46 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script::framework;
 
 namespace scripting_impl
 {
@@ -93,13 +92,16 @@ ScriptMetadataImporter::~ScriptMetadataImporter() SAL_THROW( () )
 
 
 //*************************************************************************
-Impls_vec ScriptMetadataImporter::parseMetaData(
+void ScriptMetadataImporter::parseMetaData(
     Reference< io::XInputStream > const & xInput,
-    const ::rtl::OUString & parcelURI )
+    const ::rtl::OUString & parcelURI,
+    Datas_vec &  io_ScriptDatas )
     throw ( xml::sax::SAXException, io::IOException, RuntimeException )
 {
+    mpv_scriptDatas=&io_ScriptDatas;
+    Datas_vec & ms_scriptDatas=*mpv_scriptDatas;
     //Clear the vector of parsed information
-    ms_scriptInfos.clear();
+    ms_scriptDatas.clear();
 
     //Set the placeholder for the parcel URI
     ms_parcelURI = parcelURI;
@@ -164,11 +166,8 @@ Impls_vec ScriptMetadataImporter::parseMetaData(
 
 #ifdef _DEBUG
     fprintf(stderr, "ScriptMetadataImporter: vector size is %d\n",
-        ms_scriptInfos.size());
+        ms_scriptDatas.size());
 #endif
-
-    //return the vector of ScriptImplInfos
-    return ms_scriptInfos;
 }
 
 //*************************************************************************
@@ -251,16 +250,51 @@ void ScriptMetadataImporter::startElement(
     case PARCEL:
         break;
 
+    case SCRIPT:
+        {
+            //Assign a new empty struct to the member struct to clear
+            //all values in the struct
+            ScriptData t_implInfo;
+            m_scriptData = t_implInfo;
+            m_scriptData.parcelURI = ms_parcelURI;
+            if(xAttribs->getLength() == 2)
+            {
+                //Get the script tag attributes
+                OSL_TRACE("ScriptMetadataImporter: Get language and deployment dir\n");
+
+                //script language
+                m_scriptData.scriptLanguage = xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii("language"));
+
+#ifdef _DEBUG
+                fprintf(stderr, "ScriptMetadataImporter: Got language: %s\n",
+                    ::rtl::OUStringToOString(m_scriptData.scriptLanguage,
+                        RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#endif
+
+                //script root directory
+                m_scriptData.scriptRoot = xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "deploymentdir" ));
+
+#ifdef _DEBUG
+                fprintf(stderr, "ScriptMetadataImporter: Got dir: %s\n",
+                    ::rtl::OUStringToOString(m_scriptData.scriptRoot,
+                        RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#endif
+
+            }
+            break;
+        }
 
     case LOGICALNAME:
         //logical name
-        m_scriptImplInfo.logicalName =
+        m_scriptData.logicalName =
             xAttribs->getValueByName(
                 ::rtl::OUString::createFromAscii("value"));
 
 #ifdef _DEBUG
         fprintf(stderr, "ScriptMetadataImporter: Got  logicalname: %s\n",
-            ::rtl::OUStringToOString(m_scriptImplInfo.logicalName,
+            ::rtl::OUStringToOString(m_scriptData.logicalName,
                 RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
@@ -268,91 +302,61 @@ void ScriptMetadataImporter::startElement(
 
     case LANGUAGENAME:
         //language(function) name
-        m_scriptImplInfo.functionName =
+        m_scriptData.functionName =
             xAttribs->getValueByName(
                 ::rtl::OUString::createFromAscii("value"));
-        m_scriptImplInfo.scriptLocation =
+        m_scriptData.scriptLocation =
             xAttribs->getValueByName(
                 ::rtl::OUString::createFromAscii("location"));
 
 #ifdef _DEBUG
         fprintf(stderr, "ScriptMetadataImporter: Got language: %s\n",
-            ::rtl::OUStringToOString(m_scriptImplInfo.functionName,
+            ::rtl::OUStringToOString(m_scriptData.functionName,
                 RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
         break;
 
     case DELIVERFILE:
-        //Get Info about delivered files
-        mv_delivFile.push_back( xAttribs->getValueByName(
-            ::rtl::OUString::createFromAscii("name")));
-        mv_deliverType.push_back( xAttribs->getValueByName(
-            ::rtl::OUString::createFromAscii("type")));
+        {
+            //Get Info about delivered files
+            ::std::pair < ::rtl::OUString, ::rtl::OUString > deliveryFile(
+                xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "name" ) ),
+                xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "type" ) ) );
+            m_scriptData.parcelDelivers.push_back( deliveryFile );
 
-        break;
+            break;
+        }
 
     case DEPENDFILE:
-        //push the dependency into the the vector
-        mv_deps.push_back( xAttribs->getValueByName(
-            ::rtl::OUString::createFromAscii("name")));
-
-        t_delivered = xAttribs->getValueByName(
-            ::rtl::OUString::createFromAscii("isdeliverable"));
-
-        if( t_delivered.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("yes")) )
         {
-            mv_depsDelivered.push_back( true );
-        }
-        else
-        {
-            mv_depsDelivered.push_back( false );
-        }
+            //push the dependency into the the vector
+            ::std::pair < ::rtl::OUString, bool > dependFile(
+                xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "name" ) ),
+                false );
+            ::rtl::OUString t_delivered = xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "isdeliverable" ) );
+            if( t_delivered.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("yes")) )
+            {
+                dependFile.second = true;
+            }
+            m_scriptData.scriptDependencies.push_back( dependFile );
 
 #ifdef _DEBUG
-        fprintf(stderr, "ScriptMetadataImporter: Got dependency: %s\n",
-            ::rtl::OUStringToOString( xAttribs->getValueByName(
-               ::rtl::OUString::createFromAscii("name")),
-                   RTL_TEXTENCODING_ASCII_US).pData->buffer);
+            fprintf(stderr, "ScriptMetadataImporter: Got dependency: %s\n",
+                ::rtl::OUStringToOString( xAttribs->getValueByName(
+                   ::rtl::OUString::createFromAscii("name")),
+                       RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
-        break;
+            break;
+        }
 
         //Needs to be here to circumvent bypassing of initialization of
         //local(global) variables affecting other cases
-    case SCRIPT:
-        //Assign a new empty struct to the member struct to clear
-        //all values in the struct
-        storage::ScriptImplInfo t_implInfo;
-        m_scriptImplInfo = t_implInfo;
-        m_scriptImplInfo.parcelURI = ms_parcelURI;
-        if(xAttribs->getLength() == 2)
-        {
-            //Get the script tag attributes
-            OSL_TRACE("ScriptMetadataImporter: Get language and deployment dir\n");
-
-            //script language
-            m_scriptImplInfo.scriptLanguage = xAttribs->getValueByName(
-                ::rtl::OUString::createFromAscii("language"));
-
-#ifdef _DEBUG
-            fprintf(stderr, "ScriptMetadataImporter: Got language: %s\n",
-                ::rtl::OUStringToOString(m_scriptImplInfo.scriptLanguage,
-                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
-#endif
-
-            //script root directory
-            m_scriptImplInfo.scriptRoot = xAttribs->getValueByName(
-                ::rtl::OUString::createFromAscii( "deploymentdir" ));
-
-#ifdef _DEBUG
-            fprintf(stderr, "ScriptMetadataImporter: Got dir: %s\n",
-                ::rtl::OUStringToOString(m_scriptImplInfo.scriptRoot,
-                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
-#endif
-
-        }
-        break;
     }
 }
 
@@ -383,13 +387,13 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
     case SCRIPT:
 
 #ifdef _DEBUG
-        OSL_TRACE("ScriptMetadataImporter: Got a scriptImplInfo\n");
+        OSL_TRACE("ScriptMetadataImporter: Got a scriptData\n");
         fprintf(stderr, "ScriptMetadataImporter: \t %s\n", ::rtl::OUStringToOString(
-            m_scriptImplInfo.scriptLanguage, RTL_TEXTENCODING_ASCII_US).pData->buffer);
+            m_scriptData.scriptLanguage, RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
         //Push the struct into the vector
-        ms_scriptInfos.push_back(m_scriptImplInfo);
+        mpv_scriptDatas->push_back(m_scriptData);
         break;
 
     case LOGICALNAME:
@@ -399,52 +403,9 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
         break;
 
     case DELIVERY:
-        t_delSize = mv_delivFile.size();
-        if(t_delSize > 0)
-        {
-            Sequence< storage::ScriptDeliverFile > t_delivers(t_delSize);
-            Deps_vec::const_iterator it = mv_delivFile.begin();
-            Deps_vec::const_iterator it_end = mv_delivFile.end();
-            Deps_vec::const_iterator itType = mv_deliverType.begin();
-            Deps_vec::const_iterator itType_end = mv_deliverType.end();
-            for(int cnt = 0; (it!=it_end)&&(itType!=itType_end); ++it)
-            {
-                t_delivers[cnt].fileName = *it;
-                t_delivers[cnt].fileType = *itType;
-                cnt++;
-                ++itType;
-            }
-            m_scriptImplInfo.parcelDelivers = t_delivers;
-            mv_delivFile.clear();
-            mv_deliverType.clear();
-        }
         break;
 
     case DEPENDENCIES:
-        //Iterator through the vector of dependencies
-        //and put them into a sequence
-        int t_depsSize = mv_deps.size();
-        //Check if there is any dependencies, no need
-        //to bother doing anything
-        if(t_depsSize > 0)
-        {
-            Sequence< storage::ScriptDepFile > t_deps(t_depsSize);
-            Deps_vec::const_iterator it = mv_deps.begin();
-            Bool_vec::const_iterator itDel = mv_depsDelivered.begin();
-            Deps_vec::const_iterator it_end = mv_deps.end();
-            Bool_vec::const_iterator itDel_end = mv_depsDelivered.end();
-            for( int cnt = 0; (it!=it_end)&&(itDel!=itDel_end); ++it)
-            {
-                t_deps[cnt].fileName = *it;
-                t_deps[cnt].isDeliverable = *itDel;
-                cnt++;
-                ++itDel;
-            }
-            m_scriptImplInfo.scriptDependencies = t_deps;
-            //Clear the dependencies vector
-            mv_deps.clear();
-            mv_depsDelivered.clear();
-        }
         break;
     }
 }
@@ -471,7 +432,7 @@ void ScriptMetadataImporter::characters( const ::rtl::OUString & aChars )
         break;
     case DESCRIPTION:
         //Put description into the struct
-        m_scriptImplInfo.scriptDescription = aChars;
+        m_scriptData.scriptDescription = aChars;
         break;
     case DELIVERY:
         break;
@@ -559,7 +520,7 @@ void ScriptMetadataImporter::setState(const ::rtl::OUString & tagName)
     }
     else
     {
-        //If there is a tag we don't know about, throw a expcetion (woobler) :)
+        //If there is a tag we don't know about, throw a exception (wobbler) :)
         ::rtl::OUString str_sax = ::rtl::OUString::createFromAscii( "No Such Tag" );
 
 #ifdef _DEBUG

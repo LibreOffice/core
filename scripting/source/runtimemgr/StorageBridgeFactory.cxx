@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridgeFactory.cxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-30 12:56:40 $
+*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -90,7 +90,7 @@ StorageBridgeFactory::StorageBridgeFactory(
 // use "real" storage.
 
 Reference< storage::XScriptImplAccess >
-StorageBridgeFactory::getStorageInstance( sal_uInt16 sid )
+StorageBridgeFactory::getStorageInstance( sal_Int32 sid )
 {
 
     Reference< storage::XScriptImplAccess > storage = new StorageBridge( m_xContext,

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: npower $ $Date: 2002-10-01 10:45:14 $
+*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -163,7 +163,7 @@ SAL_THROW ( ( RuntimeException ) )
 
 //*************************************************************************
 // ScriptStorageManager setupAnyStorage
-sal_uInt16
+sal_Int32
 ScriptStorageManager::setupAnyStorage(
     const Reference< ucb::XSimpleFileAccess > & xSFA,
     const OUString & storageStr )
@@ -226,7 +226,7 @@ SAL_THROW ( () )
 //*************************************************************************
 // This method assumes that the XSimpleFileAccess knows it's on root URL
 // and can be used with relative URLs
-sal_uInt16 SAL_CALL
+sal_Int32 SAL_CALL
 ScriptStorageManager::createScriptStorage(
     const Reference< ucb::XSimpleFileAccess >& xSFA )
 throw ( RuntimeException )
@@ -239,7 +239,7 @@ throw ( RuntimeException )
 }
 
 //*************************************************************************
-sal_uInt16 SAL_CALL
+sal_Int32 SAL_CALL
 ScriptStorageManager::createScriptStorageWithURI(
     const Reference< ucb::XSimpleFileAccess >& xSFA, const OUString & stringURI )
 throw ( RuntimeException )
@@ -252,10 +252,11 @@ throw ( RuntimeException )
 
 //*************************************************************************
 Reference <XInterface> SAL_CALL
-ScriptStorageManager::getScriptStorage( sal_uInt16 scriptStorageID )
+ScriptStorageManager::getScriptStorage( sal_Int32 scriptStorageID )
 throw( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in getStorageInstance\n" );
+    OSL_TRACE( "** ==> request for id=%d",scriptStorageID );
 
     ScriptStorage_hash::const_iterator itr =
         m_ScriptStorageHash.find( scriptStorageID );

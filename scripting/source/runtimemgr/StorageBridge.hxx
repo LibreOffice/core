@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridge.hxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: npower $ $Date: 2002-10-16 08:33:27 $
+*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -107,12 +107,12 @@ public:
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 private:
     StorageBridge( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        sal_uInt16 sid );
+        sal_Int32 sid );
 
     void initStorage() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< dcsssf::storage::XScriptImplAccess > m_xScriptImplAccess;
-    sal_uInt16 m_sid;
+    sal_Int32 m_sid;
 };
 }
 
