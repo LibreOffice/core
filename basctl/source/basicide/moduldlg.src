@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:51:05 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 16:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,11 @@ TabDialog RID_TD_ORGANIZE
     TEXT[ dutch ] = "Macro's beheren";
     TEXT[ spanish ] = "Administrar";
     TEXT[ english_us ] = "Macro Organizer";
-    TEXT[ chinese_simplified ] = "¹ÜÀíºê";
+    TEXT[ chinese_simplified ] = "ç®¡ç†å®";
     TEXT[ russian ] = "Îğãàíèçîâàòü ìàêğîñû";
     TEXT[ polish ] = "Zarz¹dzaj makrami";
-    TEXT[ japanese ] = "Ï¸Û‚ÌŠÇ—";
-    TEXT[ chinese_traditional ] = "ºŞ²z¥¨¶°";
+    TEXT[ japanese ] = "ï¾ï½¸ï¾›ã®ç®¡ç†";
+    TEXT[ chinese_traditional ] = "ç®¡ç†å·¨é›†";
     TEXT[ arabic ] = "ÅÏÇÑÉ æÍÏÇÊ ÇáãÇßÑæ";
     Closeable = TRUE ;
      // Da Cancel-Button auf TabPage, nicht auf Dialog!
@@ -110,14 +110,14 @@ TabDialog RID_TD_ORGANIZE
                 Text [ dutch ] = "Modules" ;
                 Text [ spanish ] = "Módulos" ;
                 Text [ ENGLISH_US ] = "Modules" ;
-                Text[ chinese_simplified ] = "Ä£¿é";
+                Text[ chinese_simplified ] = "æ¨¡å—";
                 Text[ russian ] = "Ìîäóëè";
                 Text[ polish ] = "Modu³y";
-                Text[ japanese ] = "Ó¼Ş­°Ù";
-                Text[ chinese_traditional ] = "¼Ò¶ô";
+                Text[ japanese ] = "ï¾“ï½¼ï¾ï½­ï½°ï¾™";
+                Text[ chinese_traditional ] = "æ¨¡å¡Š";
                 Text[ arabic ] = "æÍÏÇÊ äãØíÉ";
                 Text[ greek ] = "Ëåéôïõñãéêİò ìïíÜäåò";
-                Text[ korean ] = "¸ğµâ";
+                Text[ korean ] = "ëª¨ë“ˆ";
                 Text[ turkish ] = "Modüller";
                 Text[ catalan ] = "Módulos";
             };
@@ -135,14 +135,14 @@ TabDialog RID_TD_ORGANIZE
                 Text [ danish ] = "Biblioteker" ;
                 Text [ portuguese ] = "Bibliotecas" ;
                 Text [ portuguese_brazilian ] = "Bibliotheken" ;
-                Text[ chinese_simplified ] = "³ÌĞò¿â";
+                Text[ chinese_simplified ] = "ç¨‹åºåº“";
                 Text[ russian ] = "Áèáëèîòåêè";
                 Text[ polish ] = "Biblioteki";
-                Text[ japanese ] = "×²ÌŞ×Ø";
-                Text[ chinese_traditional ] = "µ{¦¡®w";
+                Text[ japanese ] = "ï¾—ï½²ï¾Œï¾ï¾—ï¾˜";
+                Text[ chinese_traditional ] = "ç¨‹å¼åº«";
                 Text[ arabic ] = "ãßÊÈÇÊ";
                 Text[ greek ] = "ÂéâëéïèŞêåò";
-                Text[ korean ] = "¶óÀÌºê·¯¸®";
+                Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬";
                 Text[ turkish ] = "Kitaplıklar";
                 Text[ catalan ] = "Bibliotecas";
                 Text[ finnish ] = "Kirjastot";
@@ -159,7 +159,7 @@ TabDialog RID_TD_ORGANIZE
     Text [ french ] = "Gestion de macros" ;
     Text [ dutch ] = "Macro's beheren" ;
     Text[ greek ] = "Äéá÷åßñéóç ìáêñïåíôïëşí";
-    Text[ korean ] = "¸ÅÅ©·Î °ü¸®";
+    Text[ korean ] = "ë§¤í¬ë¡œ ê´€ë¦¬";
     Text[ turkish ] = "Makroları yönet";
     Text[ catalan ] = "Administrar";
     Text[ finnish ] = "Makrojen järjestelytyökalu";
@@ -187,14 +187,14 @@ TabPage RID_TP_MODULS
         Text [ dutch ] = "M~odule/dialoogvenster" ;
         Text [ spanish ] = "Mód~ulo/Diálogo" ;
         Text [ english_us ] = "M~odule/Dialog" ;
-        Text[ chinese_simplified ] = "Ä£¿é/¶Ô»°¿ò(~O)";
+        Text[ chinese_simplified ] = "æ¨¡å—/å¯¹è¯æ¡†(~O)";
         Text[ russian ] = "Ìîäóëü/Äèàëîã";
         Text[ polish ] = "Modu³/Dialog";
-        Text[ japanese ] = "Ó¼Ş­°Ù/ÀŞ²±Û¸Ş(~O)";
-        Text[ chinese_traditional ] = "¼Ò¶ô/¹ï¸Ü¤è¶ô(~O)";
+        Text[ japanese ] = "ï¾“ï½¼ï¾ï½­ï½°ï¾™/ï¾€ï¾ï½²ï½±ï¾›ï½¸ï¾(~O)";
+        Text[ chinese_traditional ] = "æ¨¡å¡Š/å°è©±æ–¹å¡Š(~O)";
         Text[ arabic ] = "æÍÏÉ äãØíÉ/ ãÑÈÚ ÍæÇÑ";
         Text[ greek ] = "ËåéôïõñãéêŞ ì~ïíÜäá/ÄéÜëïãïò";
-        Text[ korean ] = "¸ğµâ/´ëÈ­ »óÀÚ(~O)";
+        Text[ korean ] = "ëª¨ë“ˆ/ëŒ€í™” ìƒì(~O)";
         Text[ turkish ] = "Modül/diyalog";
         Text[ catalan ] = "Mód~ulo/Diálogo";
     };
@@ -227,10 +227,10 @@ TabPage RID_TP_MODULS
         Text[ dutch ] = "~Bewerken";
         Text[ spanish ] = "~Editar";
         Text[ english_us ] = "~Edit";
-    Text[ chinese_simplified ] = "±à¼­(~E)";
+    Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-    Text[ chinese_traditional ] = "½s¿è(~E)";
+    Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
         Text = "~Bearbeiten" ;
         Text [ ENGLISH ] = "~Edit" ;
         Text [ norwegian ] = "~Rediger" ;
@@ -250,8 +250,8 @@ TabPage RID_TP_MODULS
         Text[ russian ] = "~Ïğàâêà";
         Text[ greek ] = "Åğåîåñãáóßá";
         Text[ polish ] = "~Edytuj";
-        Text[ japanese ] = "•ÒW(~E)";
-        Text[ korean ] = "ÆíÁı(~E)";
+        Text[ japanese ] = "ç·¨é›†(~E)";
+        Text[ korean ] = "í¸ì§‘(~E)";
         Text[ turkish ] = "Düzenle";
         Text[ catalan ] = "~Editar";
     };
@@ -267,9 +267,9 @@ TabPage RID_TP_MODULS
         Text[ dutch ] = "Sluiten";
         Text[ spanish ] = "Cerrar";
         Text[ english_us ] = "Close";
-    Text[ chinese_simplified ] = "¹Ø±Õ";
+    Text[ chinese_simplified ] = "å…³é—­";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
-    Text[ chinese_traditional ] = "Ãö³¬";
+    Text[ chinese_traditional ] = "é—œé–‰";
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         Text = "Schließen" ;
@@ -290,8 +290,8 @@ TabPage RID_TP_MODULS
         Text[ russian ] = "Çàêğûòü";
         Text[ greek ] = "Êëåßóéìï";
         Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é";
-        Text[ korean ] = "´İ±â";
+        Text[ japanese ] = "é–‰ã˜ã‚‹";
+        Text[ korean ] = "ë‹«ê¸°";
         Text[ turkish ] = "Kapat";
         Text[ catalan ] = "Cerrar";
     };
@@ -313,14 +313,14 @@ TabPage RID_TP_MODULS
         Text [ spanish ] = "Nuevo ~módulo..." ;
         Text [ english_us ] = "New ~Module..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ĞÂ½¨Ä£¿é(~M)...";
+        Text[ chinese_simplified ] = "æ–°å»ºæ¨¡å—(~M)...";
         Text[ russian ] = "Íîâûé ìîäóëü...";
         Text[ polish ] = "Nowy modu³...";
-        Text[ japanese ] = "V‚µ‚¢Ó¼Ş­°Ù(~M)...";
-        Text[ chinese_traditional ] = "·s«Ø¼Ò¶ô(~M)...";
+        Text[ japanese ] = "æ–°ã—ã„ï¾“ï½¼ï¾ï½­ï½°ï¾™(~M)...";
+        Text[ chinese_traditional ] = "æ–°å»ºæ¨¡å¡Š(~M)...";
         Text[ arabic ] = "æÍÏÉ äãØíÉ ÌÏíÏÉ...";
         Text[ greek ] = "Äçìéïõñãßá ëåéôïõñãéêŞò ~ìïíÜäáò...";
-        Text[ korean ] = "»õ ¸ğµâ(~M)...";
+        Text[ korean ] = "ìƒˆ ëª¨ë“ˆ(~M)...";
         Text[ turkish ] = "Yeni modül...";
         Text[ catalan ] = "Nuevo ~módulo...";
     };
@@ -342,14 +342,14 @@ TabPage RID_TP_MODULS
         Text [ spanish ] = "Nuevo diálo~go..." ;
         Text [ english_us ] = "~New Dialog..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ĞÂ½¨¶Ô»°¿ò(~N)...";
+        Text[ chinese_simplified ] = "æ–°å»ºå¯¹è¯æ¡†(~N)...";
         Text[ russian ] = "Íîâûé äèàëîã...";
         Text[ polish ] = "Nowe okno dialogowe...";
-        Text[ japanese ] = "V‚µ‚¢ÀŞ²±Û¸Ş(~N)...";
-        Text[ chinese_traditional ] = "¶}±Ò¹ï¸Ü¤è¶ô(~N)...";
+        Text[ japanese ] = "æ–°ã—ã„ï¾€ï¾ï½²ï½±ï¾›ï½¸ï¾(~N)...";
+        Text[ chinese_traditional ] = "é–‹å•Ÿå°è©±æ–¹å¡Š(~N)...";
         Text[ arabic ] = "ãÑÈÚ ÍæÇÑ ÌÏíÏ...";
         Text[ greek ] = "Äçìéïõñãßá äéáëü~ãïõ...";
-        Text[ korean ] = "»õ ´ëÈ­»óÀÚ(~N)...";
+        Text[ korean ] = "ìƒˆ ëŒ€í™”ìƒì(~N)...";
         Text[ turkish ] = "Yeni diyalog...";
         Text[ catalan ] = "Nuevo diálo~go...";
     };
@@ -372,14 +372,14 @@ TabPage RID_TP_MODULS
         Text [ spanish ] = "E~liminar..." ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ...";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)...";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ...";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "Á¦°Å(~D)...";
+        Text[ korean ] = "ì œê±°(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "E~liminar...";
     };
@@ -405,14 +405,14 @@ TabPage RID_TP_LIBS
         Text [ danish ] = "Bibliotek" ;
         Text [ portuguese ] = "Bibliote~ca" ;
         Text [ portuguese_brazilian ] = "Bibliothe~k" ;
-        Text[ chinese_simplified ] = "³ÌĞò¿â(~L)";
+        Text[ chinese_simplified ] = "ç¨‹åºåº“(~L)";
         Text[ russian ] = "Áèáëèîòåêà";
         Text[ polish ] = "Biblioteka";
-        Text[ japanese ] = "×²ÌŞ×Ø(~L)";
-        Text[ chinese_traditional ] = "µ{¦¡®w(~L)";
+        Text[ japanese ] = "ï¾—ï½²ï¾Œï¾ï¾—ï¾˜(~L)";
+        Text[ chinese_traditional ] = "ç¨‹å¼åº«(~L)";
         Text[ arabic ] = "ÇáãßÊÈÉ";
         Text[ greek ] = "ÂéâëéïèŞ~êç";
-        Text[ korean ] = "¶óÀÌºê·¯¸®(~L)";
+        Text[ korean ] = "ë¼ì´ë¸ŒëŸ¬ë¦¬(~L)";
         Text[ turkish ] = "Kitaplık";
         Text[ catalan ] = "~Biblioteca";
         Text[ finnish ] = "~Kirjasto";
@@ -437,10 +437,10 @@ TabPage RID_TP_LIBS
         Text[ dutch ] = "~Bewerken";
         Text[ spanish ] = "~Editar";
         Text[ english_us ] = "~Edit";
-    Text[ chinese_simplified ] = "±à¼­(~E)";
+    Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-    Text[ chinese_traditional ] = "½s¿è(~E)";
+    Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
         Text = "~Bearbeiten" ;
         Text [ ENGLISH ] = "~Edit" ;
         Text [ norwegian ] = "~Rediger" ;
@@ -460,8 +460,8 @@ TabPage RID_TP_LIBS
         Text[ russian ] = "~Ïğàâêà";
         Text[ greek ] = "Åğåîåñãáóßá";
         Text[ polish ] = "~Edytuj";
-        Text[ japanese ] = "•ÒW(~E)";
-        Text[ korean ] = "ÆíÁı(~E)";
+        Text[ japanese ] = "ç·¨é›†(~E)";
+        Text[ korean ] = "í¸ì§‘(~E)";
         Text[ turkish ] = "Düzenle";
         Text[ catalan ] = "~Editar";
     };
@@ -477,9 +477,9 @@ TabPage RID_TP_LIBS
         Text[ dutch ] = "Sluiten";
         Text[ spanish ] = "Cerrar";
         Text[ english_us ] = "Close";
-    Text[ chinese_simplified ] = "¹Ø±Õ";
+    Text[ chinese_simplified ] = "å…³é—­";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
-    Text[ chinese_traditional ] = "Ãö³¬";
+    Text[ chinese_traditional ] = "é—œé–‰";
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         Text = "Schließen" ;
@@ -500,8 +500,8 @@ TabPage RID_TP_LIBS
         Text[ russian ] = "Çàêğûòü";
         Text[ greek ] = "Êëåßóéìï";
         Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é";
-        Text[ korean ] = "´İ±â";
+        Text[ japanese ] = "é–‰ã˜ã‚‹";
+        Text[ korean ] = "ë‹«ê¸°";
         Text[ turkish ] = "Kapat";
         Text[ catalan ] = "Cerrar";
     };
@@ -523,14 +523,14 @@ TabPage RID_TP_LIBS
         Text [ spanish ] = "~Contraseña..." ;
         Text [ english_us ] = "~Password..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÃÜÂë(~P)...";
+        Text[ chinese_simplified ] = "å¯†ç (~P)...";
         Text[ russian ] = "Ïàğîëü...";
         Text[ polish ] = "Has³o...";
-        Text[ japanese ] = "Êß½Ü°ÄŞ(~P)...";
-        Text[ chinese_traditional ] = "±K½X(~P)...";
+        Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾(~P)...";
+        Text[ chinese_traditional ] = "å¯†ç¢¼(~P)...";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ...";
         Text[ greek ] = "Êùäéêüò ~ğñüóâáóçò";
-        Text[ korean ] = "ÆĞ½º¿öµå(~P)...";
+        Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ(~P)...";
         Text[ turkish ] = "Şifre...";
         Text[ catalan ] = "~Contraseña...";
     };
@@ -552,14 +552,14 @@ TabPage RID_TP_LIBS
         Text [ finnish ] = "~Uusi..." ;
         Text [ english_us ] = "~New..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ĞÂ½¨(~N)...";
+        Text[ chinese_simplified ] = "æ–°å»º(~N)...";
         Text[ russian ] = "Ñîçäàòü...";
         Text[ polish ] = "Nowy...";
-        Text[ japanese ] = "V‹Kì¬(~N)...";
-        Text[ chinese_traditional ] = "·s«Ø(~N)...";
+        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)...";
+        Text[ chinese_traditional ] = "æ–°å»º(~N)...";
         Text[ arabic ] = "ÌÏíÏ...";
         Text[ greek ] = "Äçìéïõñãßá...";
-        Text[ korean ] = "»õ·Î(~N)...";
+        Text[ korean ] = "ìƒˆë¡œ(~N)...";
         Text[ turkish ] = "Yeni...";
         Text[ catalan ] = "~Nuevo...";
     };
@@ -579,14 +579,14 @@ TabPage RID_TP_LIBS
         Text [ danish ] = "Tilføj..." ;
         Text [ portuguese_brazilian ] = "Hin~zuf?en..." ;
         Text [ portuguese ] = "~Adicionar..." ;
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)...";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
         Text[ polish ] = "Dodaj...";
-        Text[ japanese ] = "’Ç‰Á(~A)...";
-        Text[ chinese_traditional ] = "·s¼W(~A)...";
+        Text[ japanese ] = "è¿½åŠ (~A)...";
+        Text[ chinese_traditional ] = "æ–°å¢(~A)...";
         Text[ arabic ] = "ÅÖÇİÉ...";
         Text[ greek ] = "ĞñïóèŞêç...";
-        Text[ korean ] = "Ãß°¡(~A)...";
+        Text[ korean ] = "ì¶”ê°€(~A)...";
         Text[ turkish ] = "Ekle...";
         Text[ catalan ] = "~Añadir...";
         Text[ finnish ] = "~Liitä";
@@ -610,14 +610,14 @@ TabPage RID_TP_LIBS
         Text [ spanish ] = "Elim~inar..." ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ...";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)...";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ...";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "Á¦°Å(~D)...";
+        Text[ korean ] = "ì œê±°(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "Elim~inar...";
     };
@@ -688,14 +688,14 @@ ModalDialog RID_DLG_LIBS
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese ] = "Opções" ;
         Text [ portuguese_brazilian ] = "Optionen" ;
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "¿É¼Ç";
+        Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
         Text[ catalan ] = "Opciones";
         Text[ finnish ] = "Asetukset";
@@ -717,14 +717,14 @@ ModalDialog RID_DLG_LIBS
         Text [ french ] = "Insérer comme référence (lecture seule)" ;
         Text [ dutch ] = "Als verwijzing invoegen (alleen lezen)" ;
         Text [ portuguese ] = "Inserir como referência (só leitura)" ;
-        Text[ chinese_simplified ] = "µ±×÷ÒıÓÃ²åÈë(Ö»¶Á)";
+        Text[ chinese_simplified ] = "å½“ä½œå¼•ç”¨æ’å…¥(åªè¯»)";
         Text[ russian ] = "Âñòàâèòü êàê ññûëêó (òîëüêî äëÿ ÷òåíèÿ)";
         Text[ polish ] = "Wstaw jako odwo³anie (tylko do odczytu)";
-        Text[ japanese ] = "QÆ‚Æ‚µ‚Ä‘}“ü(“Ç‚İæ‚èê—p)";
-        Text[ chinese_traditional ] = "·í§@°Ñ·Ó´¡¤J(°ßÅª)";
+        Text[ japanese ] = "å‚ç…§ã¨ã—ã¦æŒ¿å…¥(èª­ã¿å–ã‚Šå°‚ç”¨)";
+        Text[ chinese_traditional ] = "ç•¶ä½œåƒç…§æ’å…¥(å”¯è®€)";
         Text[ arabic ] = "ÅÏÑÇÌ ßãÑÌÚ (ááŞÑÇÁÉ İŞØ)";
         Text[ greek ] = "ÅéóáãùãŞ ùò áíáöïñÜ (ìüíï ãéá áíÜãíùóç)";
-        Text[ korean ] = "ÂüÁ¶·Î¼­ »ğÀÔ (ÀĞ±â Àü¿ë)";
+        Text[ korean ] = "ì°¸ì¡°ë¡œì„œ ì‚½ì… (ì½ê¸° ì „ìš©)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
         Text[ catalan ] = "Insertar como referencia (solo leer)";
         Text[ finnish ] = "Lisää viite (vain luku)";
@@ -744,14 +744,14 @@ ModalDialog RID_DLG_LIBS
         Text [ spanish ] = "Guardar como archivo separado" ;
         Text [ french ] = "Enregistrer comme fichier distinct" ;
         Text [ dutch ] = "Als separaat bestand opslaan" ;
-        Text[ chinese_simplified ] = "Áí´æÎÄ¼ş";
+        Text[ chinese_simplified ] = "å¦å­˜æ–‡ä»¶";
         Text[ russian ] = "Ñîõğàíèòü êàê îòäåëüíûé ôàéë";
         Text[ polish ] = "Zapisz w oddzielnym pliku";
-        Text[ japanese ] = "•Ê‚ÌÌ§²Ù‚Æ‚µ‚Ä•Û‘¶";
-        Text[ chinese_traditional ] = "¥t¦sÀÉ®×";
+        Text[ japanese ] = "åˆ¥ã®ï¾Œï½§ï½²ï¾™ã¨ã—ã¦ä¿å­˜";
+        Text[ chinese_traditional ] = "å¦å­˜æª”æ¡ˆ";
         Text[ arabic ] = "ÍİÙ ßãáİ ãäİÕá";
         Text[ greek ] = "ÁğïèŞêåõóç ùò îå÷ùñéóôü áñ÷åßï";
-        Text[ korean ] = "º°µµ ÆÄÀÏ·Î¼­  ÀúÀå";
+        Text[ korean ] = "ë³„ë„ íŒŒì¼ë¡œì„œ  ì €ì¥";
         Text[ turkish ] = "Ayrı dosya olarak kaydet";
         Text[ catalan ] = "Guardar como archivo separado";
         Text[ finnish ] = "Tallenna erillisenä tiedostona";
@@ -771,14 +771,14 @@ ModalDialog RID_DLG_LIBS
         Text [ spanish ] = "Reemplazar bibliotecas existentes" ;
         Text [ french ] = "Remplacer les bibliothèques existantes" ;
         Text [ dutch ] = "Bestaande bibliotheken vervangen" ;
-        Text[ chinese_simplified ] = "Ìæ»»ÏÖ´æµÄ³ÌĞò¿â";
+        Text[ chinese_simplified ] = "æ›¿æ¢ç°å­˜çš„ç¨‹åºåº“";
         Text[ russian ] = "Çàìåíèòü ñóùåñòâóşùèå áèáëèîòåêè";
         Text[ polish ] = "Zamieñ istniej¹ce biblioteki";
-        Text[ japanese ] = "Šù‘¶×²ÌŞ×Ø‚Ì’uŠ·";
-        Text[ chinese_traditional ] = "´À¥N²{¦sªºµ{¦¡®w";
+        Text[ japanese ] = "æ—¢å­˜ï¾—ï½²ï¾Œï¾ï¾—ï¾˜ã®ç½®æ›";
+        Text[ chinese_traditional ] = "æ›¿ä»£ç¾å­˜çš„ç¨‹å¼åº«";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÇáãßÊÈÇÊ ÇáãæÌæÏÉ";
         Text[ greek ] = "ÁíôéêáôÜóôáóç õğÜñ÷ïõóåò âéâëéïèŞêåò";
-        Text[ korean ] = "±âÁ¸ ¶óÀÌºê·¯¸® ´ëÃ¼";
+        Text[ korean ] = "ê¸°ì¡´ ë¼ì´ë¸ŒëŸ¬ë¦¬ ëŒ€ì²´";
         Text[ turkish ] = "Mevcut kitaplığı değiştir";
         Text[ catalan ] = "Reemplazar bibliotecas existentes";
         Text[ finnish ] = "Korvaa nykyiset kirjastot";
@@ -819,14 +819,14 @@ ModalDialog RID_DLG_NEWLIB
         Text [ french ] = "~Nom :" ;
         Text [ dutch ] = "~Naam:" ;
         Text [ portuguese ] = "~Nome:" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)£º";
+        Text[ chinese_simplified ] = "åç§°(~N)ï¼š";
         Text[ russian ] = "Èìÿ:";
         Text[ polish ] = "Nazwa:";
-        Text[ japanese ] = "–¼‘O(~N):";
-        Text[ chinese_traditional ] = "¦WºÙ(~N)¡G";
+        Text[ japanese ] = "åå‰(~N):";
+        Text[ chinese_traditional ] = "åç¨±(~N)ï¼š";
         Text[ arabic ] = "ÇáÇÓã:";
         Text[ greek ] = "¼~íïìá:";
-        Text[ korean ] = "ÀÌ¸§(~N):";
+        Text[ korean ] = "ì´ë¦„(~N):";
         Text[ turkish ] = "Ad:";
         Text[ catalan ] = "~Nombre:";
         Text[ finnish ] = "~Nimi:";
@@ -855,19 +855,20 @@ ModalDialog RID_DLG_NEWLIB
         Text [ french ] = "~Créer un fichier distinct" ;
         Text [ dutch ] = "~Apart bestand maken" ;
         Hide = TRUE ;
-        Text[ chinese_simplified ] = "½¨Á¢Ò»¸öÁíÍâµÄÎÄ¼ş(~C)";
+        Text[ chinese_simplified ] = "å»ºç«‹ä¸€ä¸ªå¦å¤–çš„æ–‡ä»¶(~C)";
         Text[ russian ] = "Ñîçäàòü îòäåëüíûé ôàéë";
         Text[ polish ] = "Utwórz oddzielny plik";
-        Text[ japanese ] = "•Ê‚ÌÌ§²Ù‚ğì¬(~C)";
-        Text[ chinese_traditional ] = "¥t¶}±Ò·sÀÉ(~C)";
+        Text[ japanese ] = "åˆ¥ã®ï¾Œï½§ï½²ï¾™ã‚’ä½œæˆ(~C)";
+        Text[ chinese_traditional ] = "å¦é–‹å•Ÿæ–°æª”(~C)";
         Text[ arabic ] = "ÅäÔÇÁ ãáİ ãäİÕá";
         Text[ greek ] = "Äçìéïõñãßá îå÷ùñé~óôïı áñ÷åßïõ";
-        Text[ korean ] = "º°µµ ÆÄÀÏ ÀÛ¼º(~C)";
+        Text[ korean ] = "ë³„ë„ íŒŒì¼ ì‘ì„±(~C)";
         Text[ turkish ] = "Ayrı dosya oluştur";
         Text[ catalan ] = "Crear archivo ~separado";
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
