@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:38:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
 
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
                 const ScMarkData& rMark,
-                USHORT nNewStart, USHORT nNewStartTab, USHORT nNewEnd, USHORT nNewEndTab,
-                ScDocument* pNewUndoDoc, USHORT nNewCnt, USHORT* pNewRanges,
+                SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
+                ScDocument* pNewUndoDoc, SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
                 ScOutlineTable* pNewUndoTab,
                 ScSizeMode eNewMode, USHORT nNewSizeTwips, BOOL bNewWidth ) :
     ScSimpleUndo( pNewDocShell ),
@@ -155,7 +155,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    USHORT nPaintStart = nStart ? nStart-1 : 0;
+    SCCOLROW nPaintStart = nStart > 0 ? nStart-1 : static_cast<SCCOLROW>(0);
 
     if (eMode==SC_SIZE_OPTIMAL)
     {
@@ -173,16 +173,19 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     if (pUndoTab)                                           // Outlines mit gespeichert?
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
 
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTab;
+    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTab;
     for (nTab=0; nTab<nTabCount; nTab++)
         if (aMarkData.GetTableSelect(nTab))
         {
             if (bWidth) // Width
             {
-                pUndoDoc->CopyToDocument( nStart, 0, nTab, nEnd, MAXROW, nTab, IDF_NONE, FALSE, pDoc );
+                pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
+                        static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE,
+                        FALSE, pDoc );
                 pDoc->UpdatePageBreaks( nTab );
-                pDocShell->PostPaint( nPaintStart, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
+                pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, nTab,
+                        MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
             }
             else        // Height
             {
@@ -199,7 +202,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     {
         pViewShell->UpdateScrollBars();
 
-        USHORT nCurrentTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nCurrentTab = pViewShell->GetViewData()->GetTabNo();
         if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
     }
@@ -229,7 +232,7 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 
     if (pViewShell)
     {
-        USHORT nTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
     }
