@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:11:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4755,34 +4755,32 @@ SfxSlotInfo FN_INSERT_REF_FIELD
 SfxSlotInfo FN_INSERT_REGION
 {
     SlotName = "Bereich einfügen";
-    SlotName [ english ] =  "Bereich einfügen";
+    SlotName [ english ] =  "Insert Section";
     SlotName[ english_us ] = "Insert Section";
     SlotName[ portuguese ] = "Inserir secção";
-    SlotName[ russian ] = "Âñòàâèòü ğàçäåë";
+    SlotName[ greek ] = "ÅéóáãùãŞ åíüôçôáò";
     SlotName[ dutch ] = "Bereik invoegen";
     SlotName[ french ] = "Insérer une section";
     SlotName[ spanish ] = "Insertar una sección";
-    SlotName[ italian ] = "Inserisci area";
-    SlotName[ danish ] = "Indsæt område";
     SlotName[ swedish ] = "Infoga område";
+    SlotName[ russian ] = "Âñòàâèòü ğàçäåë";
+    SlotName[ italian ] = "Inserisci sezione";
+    SlotName[ danish ] = "Indsæt område";
     SlotName[ polish ] = "Wstaw sekcjê";
     SlotName[ portuguese_brazilian ] = "Inserir Seção";
     SlotName[ japanese ] = "ç¯„å›²ã®æŒ¿å…¥";
+    SlotName[ korean ] = "êµ¬ì—­ ì‚½ì…";
     SlotName[ chinese_simplified ] = "æ’å…¥åŒºåŸŸ";
     SlotName[ chinese_traditional ] = "æ’å…¥å€åŸŸ";
     SlotName[ arabic ] = "ÅÏÑÇÌ äØÇŞ";
-    SlotName[ dutch ] = "Bereik invoegen";
-    SlotName[ chinese_simplified ] = "æ’å…¥åŒºåŸŸ";
-    SlotName[ greek ] = "ÅéóáãùãŞ åíüôçôáò";
-    SlotName[ korean ] = "êµ¬ì—­ ì‚½ì…";
     SlotName[ turkish ] = "Bölüm ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insereix una secció";
     SlotName[ finnish ] = "Lisää osa";
     SlotName[ thai ] = "à¹à¸—à¸£à¸à¸ªà¹ˆà¸§à¸™";
-    SlotName[ czech ] = "VloÅ¾it oblast";
+    SlotName[ czech ] = "VloÅ¾it sekci";
     SlotName[ hebrew ] = "â€®×”×•×¡×¤×ª ×§×˜×¢â€¬";
-    SlotName[ hindi ] = "à¤µà¤¿à¤­à¤¾à¤— à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
+    SlotName[ hindi ] = "à¤µà¤¿à¤­à¤¾à¤— à¤œà¥‹à¤¡à¤¼à¥‹";
 };
 SfxSlotInfo FN_INSERT_SMA
 {
@@ -10585,36 +10583,6 @@ SfxSlotInfo SID_TEMPLATE_LOAD
     SlotName[ czech ] = "NaÄÃ­st styly";
     SlotName[ hebrew ] = "â€®×˜×¢×™× ×ª ×¡×’× ×•× ×•×ªâ€¬";
     SlotName[ hindi ] = "à¤¶à¥ˆà¤²à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
-};
-SfxSlotInfo FN_INSERT_COLUMN_SECTION
-{
-    SlotName = "Bereich einfügen";
-    SlotName [ english ] =  "Insert Section";
-    SlotName[ english_us ] = "Insert Section";
-    SlotName[ portuguese ] = "Inserir secção";
-    SlotName[ greek ] = "ÅéóáãùãŞ åíüôçôáò";
-    SlotName[ dutch ] = "Bereik invoegen";
-    SlotName[ french ] = "Insérer une section";
-    SlotName[ spanish ] = "Insertar una sección";
-    SlotName[ swedish ] = "Infoga område";
-    SlotName[ russian ] = "Âñòàâèòü ğàçäåë";
-    SlotName[ italian ] = "Inserisci sezione";
-    SlotName[ danish ] = "Indsæt område";
-    SlotName[ polish ] = "Wstaw sekcjê";
-    SlotName[ portuguese_brazilian ] = "Inserir Seção";
-    SlotName[ japanese ] = "ç¯„å›²ã®æŒ¿å…¥";
-    SlotName[ korean ] = "êµ¬ì—­ ì‚½ì…";
-    SlotName[ chinese_simplified ] = "æ’å…¥åŒºåŸŸ";
-    SlotName[ chinese_traditional ] = "æ’å…¥å€åŸŸ";
-    SlotName[ arabic ] = "ÅÏÑÇÌ äØÇŞ";
-    SlotName[ turkish ] = "Bölüm ekle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Insereix una secció";
-    SlotName[ finnish ] = "Lisää osa";
-    SlotName[ thai ] = "à¹à¸—à¸£à¸à¸ªà¹ˆà¸§à¸™";
-    SlotName[ czech ] = "VloÅ¾it sekci";
-    SlotName[ hebrew ] = "â€®×”×•×¡×¤×ª ×§×˜×¢â€¬";
-    SlotName[ hindi ] = "à¤µà¤¿à¤­à¤¾à¤— à¤œà¥‹à¤¡à¤¼à¥‹";
 };
 SfxSlotInfo FN_FORMAT_COLUMN
 {
