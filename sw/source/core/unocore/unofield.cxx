@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:13:25 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 09:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2409,6 +2409,10 @@ void SwXTextField::update(  ) throw (RuntimeException)
             }
             break;
         }
+        // --> FME 2004-10-06 #116480#
+        // Text formatting has to be triggered.
+        const_cast<SwFmtFld*>(pFmtFld)->Modify( 0, 0 );
+        // <--
     }
     else
         m_bCallUpdate = sal_True;
