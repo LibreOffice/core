@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:43:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,3 +403,22 @@ void osl_InitSparcV9(void)
 
 #endif /* SPARC */
 
+#if defined ( LINUX ) && defined ( SPARC )
+#include <sys/utsname.h>
+void osl_InitSparcV9(void)  __attribute__((constructor));
+void osl_InterlockedCountSetV9(sal_Bool bV9);
+/* Determine which processor we are running on (sparc v8 or v9)
+ * The approach is very similar to Solaris.
+ */
+void osl_InitSparcV9(void)
+{
+    struct utsname name;
+    int rc;
+    rc = uname(&name);
+    if ( rc != -1 ) {
+        if ( !strcmp( "sparc", name.machine ))
+        return;
+    osl_InterlockedCountSetV9(sal_True);
+    }
+}
+#endif
