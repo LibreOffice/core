@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailconfigpage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:08:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,27 +81,27 @@ TabPage TP_MAILCONFIG
     FixedText       FT_DISPLAYNAME
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Size = MAP_APPFONT ( 74 , 8 ) ;
         Text [ de ] = "~Ihr Name" ;
         Text[ en-US ] = "~Your name";
     };
     Edit  ED_DISPLAYNAME
     {
-        Pos = MAP_APPFONT ( 78 , 14 ) ;
-        Size = MAP_APPFONT ( 170 , 12 ) ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 160 , 12 ) ;
         Border = TRUE;
     };
     FixedText       FT_ADDRESS
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Size = MAP_APPFONT ( 74 , 8 ) ;
         Text [ de ] = "~E-Mail-Adresse" ;
         Text[ en-US ] = "~E-Mail address";
     };
     Edit   ED_ADDRESS
     {
-        Pos = MAP_APPFONT ( 78 , 29 ) ;
-        Size = MAP_APPFONT ( 170 , 12 ) ;
+        Pos = MAP_APPFONT ( 88 , 29 ) ;
+        Size = MAP_APPFONT ( 160 , 12 ) ;
         Border = TRUE;
     };
     CheckBox        CB_REPLYTO
@@ -114,14 +114,14 @@ TabPage TP_MAILCONFIG
     FixedText       FT_REPLYTO
     {
         Pos = MAP_APPFONT ( 18 , 60 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
         Text [ de ] = "Ant~wortadresse" ;
         Text[ en-US ] = "~Reply address";
     };
     Edit ED_REPLYTO
     {
-        Pos = MAP_APPFONT ( 78 , 58 ) ;
-        Size = MAP_APPFONT ( 170 , 12 ) ;
+        Pos = MAP_APPFONT ( 88 , 58 ) ;
+        Size = MAP_APPFONT ( 160 , 12 ) ;
         Border = TRUE;
     };
     FixedLine       FL_SMTP
@@ -134,14 +134,14 @@ TabPage TP_MAILCONFIG
     FixedText       FT_SERVER
     {
         Pos = MAP_APPFONT ( 12 , 89 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Size = MAP_APPFONT ( 74 , 8 ) ;
         Text [ de ] = "~Server-Name" ;
         Text[ en-US ] = "~Server name";
     };
     Edit ED_SERVER
     {
-        Pos = MAP_APPFONT ( 78 , 87 ) ;
-        Size = MAP_APPFONT ( 115 , 12 ) ;
+        Pos = MAP_APPFONT ( 88 , 87 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
         Border = TRUE;
     };
     FixedText       FT_PORT
@@ -165,34 +165,17 @@ TabPage TP_MAILCONFIG
         Spin = FALSE ;
         TabStop = TRUE ;
     };
-    FixedText       FT_SECURE
+    CheckBox        CB_SECURE
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
-        Text [ de ] = "~Verschlüsselte Verbindung verwenden" ;
-        Text[ en-US ] = "~Use secure connection";
-    };
-    ListBox         LB_SECURE
-    {
-        Pos = MAP_APPFONT ( 78 , 102 ) ;
-        Size = MAP_APPFONT ( 40 , 50 ) ;
-        DropDown = TRUE;
-        Border = TRUE;
-        StringList =
-        {
-            < "Keine" ; > ;
-            < "SSL" ; > ;
-        };
-        stringlist [ en-US ] =
-        {
-            < "None" ; > ;
-            < "SSL" ; > ;
-        };
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ de ] = "~Verschlüsselte Verbindung verwenden (SSL)" ;
+        Text[ en-US ] = "~Use secure connection (SSL)";
     };
     PushButton PB_AUTHENTICATION
     {
-        Pos = MAP_APPFONT ( 78 , 118 ) ;
-        Size = MAP_APPFONT ( 115 , 14 ) ;
+        Pos = MAP_APPFONT ( 88 , 118 ) ;
+        Size = MAP_APPFONT ( 105 , 14 ) ;
         Text [ de ] = "Server Authen~tifizierung" ;
         Text[ en-US ] = "Server Au~thentication";
     };
@@ -203,8 +186,8 @@ TabPage TP_MAILCONFIG
     };
     PushButton      PB_TEST
     {
-        Pos = MAP_APPFONT ( 78 , 164 ) ;
-        Size = MAP_APPFONT ( 115 , 14 ) ;
+        Pos = MAP_APPFONT ( 88 , 164 ) ;
+        Size = MAP_APPFONT ( 105 , 14 ) ;
         Text [ de ] = "Einstellungen ~Testen..." ;
         Text[ en-US ] = "Test S~ettings...";
     };
