@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:56:05 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,79 +587,6 @@ public:
     virtual                     ~ExcWindow28();
 
     virtual void                Save( XclExpStream& rStrm );
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-};
-
-
-// --- class XclCondFormat -------------------------------------------
-
-class ScConditionalFormat;
-class ScCondFormatEntry;
-class ScRangeList;
-struct RootData;
-class XclCf;
-
-class XclCondFormat : public ExcEmptyRec, protected ScfDelList< XclCf >
-{
-// writes multiple cf _and_ condfmt records!
-private:
-    const ScConditionalFormat&  rCF;
-    ScRangeList*                pRL;
-    UINT16                      nTabNum;
-    ULONG                       nComplLen;
-
-    void                        WriteCondfmt( XclExpStream& rStrm );
-
-public:
-                                XclCondFormat( const ScConditionalFormat&, ScRangeList*, RootData& );
-                                    // takes ScRangeList, don't use it after this Ctor!
-    virtual                     ~XclCondFormat();
-
-    virtual void                Save( XclExpStream& rStrm );
-};
-
-
-
-class XclCf : public ExcRecord, protected XclExpRoot
-{
-private:
-    friend XclCondFormat;
-
-    sal_Char*                   pVarData;       // formats + formulas
-    UINT16                      nVarLen;        // len of attributes + formulas
-    UINT16                      nFormatLen;
-    UINT16                      nFormLen1;
-    UINT16                      nFormLen2;
-
-    UINT8                       nType;          // formatting type
-    UINT8                       nOp;            // formatting operator
-
-    BOOL                        bHasStyle;
-    UINT32                      nStart;
-
-    BOOL                        bHasFont;
-    UINT32                      nFontData1;
-    UINT32                      nFontData2;
-    UINT32                      nFontData3;
-    UINT32                      nFontData4;
-    UINT32                      nFontData5;
-    UINT8                       nFontData6;
-    BOOL                        bHasColor;
-    UINT32                      nIcvTextSer;
-
-    BOOL                        bHasLine;
-    XclExpCellBorder            maBorder;
-
-    BOOL                        bHasPattern;
-    XclExpCellArea              maArea;
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& );
-    virtual                     ~XclCf();
-
     virtual UINT16              GetNum() const;
     virtual ULONG               GetLen() const;
 };
