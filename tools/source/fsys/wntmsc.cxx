@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wntmsc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 10:44:22 $
+ *  last change: $Author: dv $ $Date: 2001-09-17 10:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,6 +565,22 @@ void FileStat::ImpInit( void* p )
 
     SYSTEMTIME aSysTime;
     FILETIME aLocTime;
+
+    // use the last write date / time when the creation date / time isn't set
+    if ( ( pDirEnt->ftCreationTime.dwLowDateTime == 0 ) &&
+         ( pDirEnt->ftCreationTime.dwHighDateTime == 0 ) )
+    {
+        pDirEnt->ftCreationTime.dwLowDateTime = pDirEnt->ftLastWriteTime.dwLowDateTime;
+        pDirEnt->ftCreationTime.dwHighDateTime = pDirEnt->ftLastWriteTime.dwHighDateTime;
+    }
+
+    // use the last write date / time when the last accessed date / time isn't set
+    if ( ( pDirEnt->ftLastAccessTime.dwLowDateTime == 0 ) &&
+         ( pDirEnt->ftLastAccessTime.dwHighDateTime == 0 ) )
+    {
+        pDirEnt->ftLastAccessTime.dwLowDateTime = pDirEnt->ftLastWriteTime.dwLowDateTime;
+        pDirEnt->ftLastAccessTime.dwHighDateTime = pDirEnt->ftLastWriteTime.dwHighDateTime;
+    }
 
     FileTimeToLocalFileTime( &pDirEnt->ftCreationTime, &aLocTime );
     FileTimeToSystemTime( &aLocTime, &aSysTime );
