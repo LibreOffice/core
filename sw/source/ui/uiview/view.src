@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:05:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ QueryBox DLG_WRAP
     MESSAGE [ portuguese_brazilian ] = "Deseja continuar a verifica��o pelo in�cio do documento?" ;
     MESSAGE [ portuguese ] = "Deseja continuar com a verifica��o no in�cio do documento?" ;
     MESSAGE [ finnish ] = "Haluatko jatkaa tarkistusta asiakirjan alusta?" ;
-    MESSAGE [ danish ] = "Vil du forts�tte kontrollen fra dokumentets start?" ;
+    MESSAGE [ danish ] = "Vil du forts�tte kontrollen fra dokumentets begyndelse?" ;
     MESSAGE [ french ] = "Continuer la v�rification au d�but du document ?" ;
     MESSAGE [ swedish ] = "Vill du forts�tta kontrollen i b�rjan p� dokumentet?" ;
     MESSAGE [ dutch ] = "Wilt u dat de spellingcontrole wordt voortgezet bij het begin van het document?" ;
@@ -116,6 +116,8 @@ QueryBox DLG_WRAP
     MESSAGE[ hebrew ] = "Überprüfung am Anfang des Dokumentes fortsetzen?";
     MESSAGE[ hindi ] = "लेखपत्र के प्रारंभ से जाँच को जारी रखना चाहते है?";
     MESSAGE[ slovak ] = "Prajete si pokračovať v kontrole od začiatku dokumentu?";
+    MESSAGE[ hungarian ] = "Szeretné folytatni az ellenőrzést a dokumentum elejétől?";
+    MESSAGE[ slovenian ] = "Ali želite nadaljevati preverjanje na začetku dokumenta?";
 };
 QueryBox DLG_BODY
 {
@@ -128,7 +130,7 @@ QueryBox DLG_BODY
     MESSAGE [ portuguese_brazilian ] = "Deseja verificar o texto principal?" ;
     MESSAGE [ portuguese ] = "Deseja verificar o texto principal?" ;
     MESSAGE [ finnish ] = "Haluatko tarkistaa p��tekstin?" ;
-    MESSAGE [ danish ] = "Vil du kontrollere br�dteksten?" ;
+    MESSAGE [ danish ] = "Vil du kontrollere hovedteksten?" ;
     MESSAGE [ french ] = "Voulez-vous v�rifier le texte principal?" ;
     MESSAGE [ swedish ] = "Vill du kontrollera huvudtexten?" ;
     MESSAGE [ dutch ] = "Wilt u de hoofdtekst controleren?" ;
@@ -150,6 +152,8 @@ QueryBox DLG_BODY
     MESSAGE[ hebrew ] = "Wollen Sie den Haupttext prüfen?";
     MESSAGE[ hindi ] = "मुख्य टेक्स्ट् में जाँच करना चाहते है?";
     MESSAGE[ slovak ] = "Prajete si  skontrolovať hlavný text?";
+    MESSAGE[ hungarian ] = "Szeretné ellenőrizni a szövegtörzset?";
+    MESSAGE[ slovenian ] = "Ali želite preveriti glavno besedilo?";
 };
 QueryBox DLG_PRT_FIELDNAME
 {
@@ -164,7 +168,7 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE [ french ] = "L'option Afficher le nom de champ est activ�e.\nVoulez-vous imprimer le document avec le nom de champ ?" ;
     MESSAGE [ dutch ] = "Optie 'Veldnaam weergeven' is actief.\nWilt u het document met de veldnaam afdrukken?" ;
     MESSAGE [ spanish ] = "La opci�n nombre de campo est� activada. \n�Desea imprimir el archivo con nombres de campo?" ;
-    MESSAGE [ danish ] = "Vis feltnavn er aktiveret\nVil du udskrive dokumentet med feltnavn?" ;
+    MESSAGE [ danish ] = "Vis feltnavn er aktiveret\nVil du udskrive dokumentet med feltnavne?" ;
     MESSAGE [ swedish ] = "Alternativet Visa f�ltnamn �r aktiverat.\nVill du skriva ut dokumentet med f�ltnamn?" ;
     MESSAGE [ finnish ] = "N�yt� kentt�komennot -asetus on valittuna.\nHaluatko tulostaa asiakirjan niin, ett� kentt�nimet n�kyv�t?" ;
     MESSAGE [ english_us ] = "Show field commands option is checked.\nDo you want to print the document with field names?" ;
@@ -184,6 +188,8 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE[ hebrew ] = "Option Feldname anzeigen ist aktiviert.\nWollen Sie das Dokument mit Feldnamen drucken?";
     MESSAGE[ hindi ] = "दिखाव क्षेत्र आज्ञों का विकल्प को चिह्नित किया है ।\nआप लेखपत्र को क्षेत्र नामों के सहित छपाई करना चाहते है ?";
     MESSAGE[ slovak ] = "Je zaškrtnutá voľba Zobraziť pole.\nChcete vytlačiť dokument s názvami polí?";
+    MESSAGE[ hungarian ] = "A mezőutasítások megjelenítése be van állítva. \nSzeretné, hogy a kinyomtatott dokumentumon a mezőnevek is szerepeljenek?";
+    MESSAGE[ slovenian ] = "Možnost za prikaz polj je preverjena.\nAli želite natisniti dokument z imeni polj?";
 };
 QueryBox DLG_SPECIAL
 {
@@ -218,6 +224,8 @@ QueryBox DLG_SPECIAL
     MESSAGE[ hebrew ] = "Sonderbereiche prüfen?";
     MESSAGE[ hindi ] = "विशेष क्षेत्रों में जाँच करना चाहते है?";
     MESSAGE[ slovak ] = "Prajete si skontrolovať špeciálne oblasti?";
+    MESSAGE[ hungarian ] = "Ellenőrzi a speciális területeket?";
+    MESSAGE[ slovenian ] = "Ali želite preveriti posebna področja?";
 };
 QueryBox DLG_THESAURUS
 {
@@ -230,7 +238,7 @@ QueryBox DLG_THESAURUS
     MESSAGE [ portuguese_brazilian ] = "Esta palavra aparece na lista de palavras que se deseja evitar! Deseja iniciar o dicion�rio de sin�nimos?" ;
     MESSAGE [ portuguese ] = "Evite esta palavra! Iniciar o dicion�rio de sin�nimos?" ;
     MESSAGE [ finnish ] = "T�m� sana esiintyy v�ltett�vien sanojen luettelossa. Avataanko synonyymisanasto?" ;
-    MESSAGE [ danish ] = "Undg� venligst dette ord! Vil du bruge synonymordbogen?" ;
+    MESSAGE [ danish ] = "Dette ord indg�r i listen over ord, du �nsker at undg�! Vil du �bne synonymordbogen?" ;
     MESSAGE [ french ] = "Il vaudrait mieux �viter d'employer ce mot ! Souhaitez-vous consulter le dictionnaire des synonymes ?" ;
     MESSAGE [ swedish ] = "Undvik det h�r ordet! Starta synonymordlista?" ;
     MESSAGE [ dutch ] = "Dit woord niet gebruiken! Thesaurus starten?" ;
@@ -252,6 +260,8 @@ QueryBox DLG_THESAURUS
     MESSAGE[ hebrew ] = "Dieses Wort sollten Sie vermeiden! Thesaurus starten?";
     MESSAGE[ hindi ] = "इस शब्द उन शब्दों की सूची में है जिसको आप त्यागना चाहते है ! शब्दकोश प्रारंभ करना है?";
     MESSAGE[ slovak ] = "Toto slovo sa objavuje v zozname slov, ktorým sa chcete vyhnúť. Spustiť slovník synoným?";
+    MESSAGE[ hungarian ] = "Ez a szó szerepel a kerülendő szavak listáján. Elindítja a szókincstárat?";
+    MESSAGE[ slovenian ] = "Ta beseda je na seznamu besed, ki jih ne želite uporabljati! Ali želite slovar sopomenk?";
 };
 QueryBox DLG_SPECIAL_FORCED
 {
@@ -264,7 +274,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE [ portuguese_brazilian ] = "A verifica��o de regi�es especiais est� desativada. Verificar mesmo assim?" ;
     MESSAGE [ portuguese ] = "A verifica��o de zonas especiais est� desactivada, mesmo assim prosseguir?" ;
     MESSAGE [ finnish ] = "Tarkista erityisalueet -toiminto on poistettu k�yt�st�. Tarkistetaanko kuitenkin?" ;
-    MESSAGE [ danish ] = "Stavekontrol af s�romr�der er sl�et fra, skal der kontrolleres alligevel?" ;
+    MESSAGE [ danish ] = "Stavekontrol af s�romr�der er sl�et fra. Skal der kontrolleres alligevel?" ;
     MESSAGE [ french ] = "La v�rification dans les zones sp�ciales est d�sactiv�e. V�rifier tout de m�me ?" ;
     MESSAGE [ swedish ] = "Kontroll av specialomr�den �r avst�ngd. Kontrollera �nd�?" ;
     MESSAGE [ dutch ] = "De functie 'Speciale bereiken controleren' is uitgeschakeld. Controle toch uitvoeren?" ;
@@ -286,6 +296,8 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE[ hebrew ] = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?";
     MESSAGE[ hindi ] = "विशेष क्षेत्रों की जाँच को निष्क्रिय किया है । फिर भी जाँच करना चाहते है?";
     MESSAGE[ slovak ] = "Kontrola špeciálnych oblastí je vypnutá. Skontrolovať napriek tomu?";
+    MESSAGE[ hungarian ] = "A speciális területek ellenőrzése ki van kapcsolva. Ez esetben is ellenőrzi?";
+    MESSAGE[ slovenian ] = "Preverjanje posebnih področij je deaktivirano. Ali želite vseeno preveriti?";
 };
 QueryBox MSG_SEARCH_END
 {
@@ -298,7 +310,7 @@ QueryBox MSG_SEARCH_END
     Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer pesquisou at� o final do documento. Deseja continuar pelo in�cio?" ;
     Message [ portuguese ] = "O %PRODUCTNAME Writer procurou at� ao fim do documento. Continuar a procura no in�cio do documento?" ;
     Message [ finnish ] = "%PRODUCTNAME Writer on tehnyt haun asiakirjan loppuun asti. Haluatko jatkaa hakua alkuun?" ;
-    Message [ danish ] = "%PRODUCTNAME Writer har s�gt til slutningen af dokumentet. Vil du forts�tte s�gningen fra starten af dokumentet?" ;
+    Message [ danish ] = "%PRODUCTNAME Writer har s�gt til slutningen af dokumentet. Vil du forts�tte s�gningen fra dokumentets begyndelse?" ;
     Message [ french ] = "%PRODUCTNAME Writer a atteint la fin du document. Souhaitez-vous reprendre la recherche au d�but du document ?" ;
     Message [ swedish ] = "%PRODUCTNAME Writer har s�kt till slutet av dokument. Vill du forts�tta s�kningen i b�rjan av dokumentet?" ;
     Message [ dutch ] = "%PRODUCTNAME Writer heeft tot aan het einde van het document gezocht. Wilt u doorgaan met zoeken vanaf het begin?" ;
@@ -320,6 +332,8 @@ QueryBox MSG_SEARCH_END
     Message[ hebrew ] = "%PRODUCTNAME Writer hat bis zum Ende des Dokumentes gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?";
     Message[ hindi ] = "%PRODUCTNAME लेखक लेखपत्र का अंत तक खोज किया । आप खोज को प्रारंभ से जारी रखना चाहते है ?";
     Message[ slovak ] = "%PRODUCTNAME Writer hľadal až do konca dokumentu. Chcete pokračovať na začiatku?";
+    Message[ hungarian ] = "Az %PRODUCTNAME Writer befejezte a keresést a dokumentum végéig. Szeretné folytatni az elejétől?";
+    Message[ slovenian ] = "%PRODUCTNAME Writer je preiskal do konca dokumenta. Ali želite nadaljevati na začetku?";
 };
 QueryBox MSG_SEARCH_START
 {
@@ -332,7 +346,7 @@ QueryBox MSG_SEARCH_START
     Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer pesquisou at� o in�cio do documento. Deseja continuar pelo final?" ;
     Message [ portuguese ] = "O %PRODUCTNAME Writer procurou at� ao in�cio do documento. Continuar a procura no fim do documento?" ;
     Message [ finnish ] = "%PRODUCTNAME Writer on tehnyt haun asiakirjan alkuun asti. Haluatko jatkaa hakua loppuun?" ;
-    Message [ danish ] = "%PRODUCTNAME Writer har s�gt til starten af dokumentet. Vil du forts�tte s�gningen fra slutningen af dokumentet?" ;
+    Message [ danish ] = "%PRODUCTNAME Writer har s�gt til begyndelsen af dokumentet. Vil du forts�tte s�gningen fra dokumentets slutning?" ;
     Message [ french ] = "%PRODUCTNAME Writer a atteint le d�but du document. Souhaitez-vous reprendre la recherche � la fin du document ?" ;
     Message [ swedish ] = "%PRODUCTNAME Writer har s�kt till b�rjan av dokumentet. Vill du forts�tta s�kningen i slutet av dokumentet?" ;
     Message [ dutch ] = "%PRODUCTNAME Writer heeft tot aan het begin van het document gezocht. Wilt u doorgaan met zoeken vanaf het einde?" ;
@@ -354,6 +368,8 @@ QueryBox MSG_SEARCH_START
     Message[ hebrew ] = "%PRODUCTNAME Writer hat bis zum Anfang des Dokumentes gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?";
     Message[ hindi ] = "%PRODUCTNAME लेखक लेखपत्र का प्रारंभ तक खोज किया । आप खोज को अंत से जारी रखना चाहते है ?";
     Message[ slovak ] = "%PRODUCTNAME Writer hľadal až na začiatok dokumentu. Chcete pokračovať na konci?";
+    Message[ hungarian ] = "Az %PRODUCTNAME Writer befejezte a keresést a dokumentum elejéig. Szeretné folytatni a végétől?";
+    Message[ slovenian ] = "%PRODUCTNAME Writer je preiskal do začetka dokumenta. Ali želite nadaljevati na koncu?";
 };
 InfoBox MSG_NO_MERGE_ENTRY
 {
@@ -362,7 +378,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message [ english_us ] = "Could not merge documents." ;
     Message [ portuguese_brazilian ] = "N�o foi poss�vel mesclar os documentos." ;
     Message [ swedish ] = "Inget kunde sammanf�ras." ;
-    Message [ danish ] = "Det var ikke muligt at udf�re fletning." ;
+    Message [ danish ] = "Det var ikke muligt at flette dokumenterne." ;
     Message [ italian ] = "Non � stato possibile unire alcunch�." ;
     Message [ spanish ] = "No se pudieron fusionar los documentos." ;
     Message [ french ] = "Impossible de fusionner les documents." ;
@@ -385,6 +401,8 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message[ hebrew ] = "Es konnte nichts zusammengeführt werden.";
     Message[ hindi ] = "लेखपत्रों को नहीं मिला सकते है ।";
     Message[ slovak ] = "Nie je možné zlúčiť súbory.";
+    Message[ hungarian ] = "A dokumentumok egyesítése nem sikerült.";
+    Message[ slovenian ] = "Dokumentov ni bilo mogoče spojiti.";
 };
 InfoBox MSG_ERR_INSERT_GLOS
 {
@@ -395,10 +413,10 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ portuguese_brazilian ] = "N�o foi poss�vel criar o AutoTexto" ;
     MESSAGE [ portuguese ] = "Imposs�vel inserir o AutoTexto." ;
     MESSAGE [ finnish ] = "Automaattista teksti� ei voitu luoda." ;
-    MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTekst." ;
+    MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTeksten." ;
     MESSAGE [ french ] = "Impossible de cr�er l'AutoTexte." ;
     MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
-    MESSAGE [ dutch ] = "AutoTekst kan niet worden toegepast." ;
+    MESSAGE [ dutch ] = "AutoTekst kan niet worden aangemaak." ;
     MESSAGE [ spanish ] = "No se pudo crear el Texto autom�tico." ;
     MESSAGE [ english_us ] = "AutoText could not be created." ;
     MESSAGE[ chinese_simplified ] = "无法建立自动图文集。";
@@ -417,6 +435,8 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ hebrew ] = "AutoText konnte nicht angelegt werden.";
     MESSAGE[ hindi ] = "स्वचालित टेक्स्ट् को उत्पन्न नहीं कर सकते है ।";
     MESSAGE[ slovak ] = "Automatický text nie je možné vytvoriť";
+    MESSAGE[ hungarian ] = "Szöveg-o-mata bővítése nem sikerült.";
+    MESSAGE[ slovenian ] = "Samobesedila ni bilo mogoče ustvariti.";
 };
 InfoBox MSG_ERR_SRCSTREAM
 {
@@ -448,6 +468,8 @@ InfoBox MSG_ERR_SRCSTREAM
     Message[ hebrew ] = "Der Quelltext kann nicht geladen werden.";
     Message[ hindi ] = "मूल को लोड़ नहीं कर सकते है ।";
     Message[ slovak ] = "Zdroj nie je možné načítať.";
+    Message[ hungarian ] = "A forrást nem lehet betölteni.";
+    Message[ slovenian ] = "Vira ni mogoče naložiti.";
 };
 InfoBox MSG_ERR_NO_FAX
 {
@@ -479,6 +501,8 @@ InfoBox MSG_ERR_NO_FAX
     Message[ hebrew ] = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt.";
     Message[ hindi ] = "औज़ार/विकल्प/%1/छपाई के नीचे कोई फॉक्स मुद्रक को निर्धार नहीं किया है ।";
     Message[ slovak ] = "V nastavení Nástroje/Možnosti/%1/Tlač nebola určená faxová tlačiareň.";
+    Message[ hungarian ] = "Nincs beállítva faxnyomtató az Eszközök/Beállítások/%1/Nyomtatás alatt.";
+    Message[ slovenian ] = "V Orodja/Možnosti/%1/Tiskanje ni nastavljen noben faks tiskalnik.";
 };
 String STR_WEBOPTIONS
 {
@@ -509,6 +533,8 @@ String STR_WEBOPTIONS
     TEXT[ hebrew ] = "‮מסמך LMTH‬";
     TEXT[ hindi ] = "HTML लेखपत्र";
     TEXT[ slovak ] = "HTML dokument";
+    TEXT[ hungarian ] = "HTML-dokumentum";
+    TEXT[ slovenian ] = "HTML dokument";
 };
 String STR_TEXTOPTIONS
 {
@@ -539,6 +565,8 @@ String STR_TEXTOPTIONS
     TEXT[ hebrew ] = "‮מסמך‬";
     TEXT[ hindi ] = "टेक्स्ट् लेखपत्र";
     TEXT[ slovak ] = "Textový dokument";
+    TEXT[ hungarian ] = "Szöveges dokumentum";
+    TEXT[ slovenian ] = "Dokument z besedilom";
 };
 InfoBox MSG_NOT_FOUND
 {
@@ -571,6 +599,8 @@ InfoBox MSG_NOT_FOUND
     Message[ hebrew ] = "Suchbegriff nicht gefunden.";
     Message[ hindi ] = "खोज की नहीं मिला ।";
     Message[ slovak ] = "Hľadané kľúčové slovo nenájdené";
+    Message[ hungarian ] = "A keresési kulcs nem található.";
+    Message[ slovenian ] = "Ključa za iskanje ni mogoče najti.";
 };
 InfoBox MSG_INDEX_OVERFLOW
 {
@@ -603,6 +633,8 @@ InfoBox MSG_INDEX_OVERFLOW
     Message[ hebrew ] = " gefunden.";
     Message[ hindi ] = "मिला  ।";
     Message[ slovak ] = "nájdené.";
+    Message[ hungarian ] = "találat.";
+    Message[ slovenian ] = "najden.";
 };
 InfoBox MSG_SCAN_NOSOURCE
 {
@@ -634,6 +666,8 @@ InfoBox MSG_SCAN_NOSOURCE
     Message[ hebrew ] = "Quelle nicht gesetzt.";
     Message[ hindi ] = "मूल को निर्दिष्ट नहीं किया है ।";
     Message[ slovak ] = "Zdroj nie je určený";
+    Message[ hungarian ] = "Nem található forrás.";
+    Message[ slovenian ] = "Vir ni določen.";
 };
 String STR_NOGLOS1
 {
@@ -666,6 +700,8 @@ String STR_NOGLOS1
     TEXT[ hebrew ] = "AutoText zum Kürzel '";
     TEXT[ hindi ] = "सरल विधि केलिए स्वचालित टेक्स्ट् '";
     TEXT[ slovak ] = "Automatický text pre skratku '";
+    TEXT[ hungarian ] = "A(z) '";
+    TEXT[ slovenian ] = "Samobesedilo za bližnjico '";
 };
 String STR_NOGLOS2
 {
@@ -680,7 +716,7 @@ String STR_NOGLOS2
     TEXT [ portuguese_brazilian ] = " n�o encontrado." ;
     TEXT [ portuguese ] = "' n�o encontrado." ;
     TEXT [ finnish ] = "ei l�ydy." ;
-    TEXT [ danish ] = "'blev ikke fundet." ;
+    TEXT [ danish ] = "' blev ikke fundet." ;
     TEXT [ french ] = "' est introuvable." ;
     TEXT [ swedish ] = "' hittades inte." ;
     TEXT [ dutch ] = "' niet gevonden." ;
@@ -702,6 +738,8 @@ String STR_NOGLOS2
     TEXT[ hebrew ] = "' nicht gefunden.";
     TEXT[ hindi ] = "' नहीं मिला ।";
     TEXT[ slovak ] = "' nenájdený.";
+    TEXT[ hungarian ] = "' gyorsbillentyűhöz nem található szöveg-o-mata.";
+    TEXT[ slovenian ] = "' ni bilo mogoče najti.";
 };
 String STR_NUM_LEVEL
 {
@@ -733,6 +771,8 @@ String STR_NUM_LEVEL
     Text[ hebrew ] = "Ebene";
     Text[ hindi ] = "स्तर";
     Text[ slovak ] = "Úroveň ";
+    Text[ hungarian ] = "Szint";
+    Text[ slovenian ] = "Raven";
 };
 String STR_ERROR_NOLANG
 {
@@ -743,7 +783,7 @@ String STR_ERROR_NOLANG
     TEXT [ portuguese_brazilian ] = "Nenhum idioma foi selecionado na se��o verificada." ;
     TEXT [ portuguese ] = "Na sec��o verificada n�o existe nenhuma l�ngua definida." ;
     TEXT [ finnish ] = "Tarkistettavassa osassa ei ole valittu kielt�." ;
-    TEXT [ danish ] = "Der er ikke angivet et sprog i det kontrollerede omr�de." ;
+    TEXT [ danish ] = "Der er ikke angivet et sprog i den kontrollerede sektion." ;
     TEXT [ french ] = "Aucune langue choisie pour r�gion d�finie." ;
     TEXT [ swedish ] = "Inget spr�k �r inst�llt i det kontrollerade omr�det." ;
     TEXT [ dutch ] = "In gecontroleerd bereik is geen taal vastgelegd." ;
@@ -765,6 +805,8 @@ String STR_ERROR_NOLANG
     TEXT[ hebrew ] = "Im geprüften Bereich ist keine Sprache eingestellt.";
     TEXT[ hindi ] = "प्रमाणित की हुयी विभाग में कोई भाषा को नहीं चुना ।";
     TEXT[ slovak ] = "Nie je zvolený jazyk kontrolovanej oblasti.";
+    TEXT[ hungarian ] = "Nincs kiválasztott nyelv a megadott szakaszban.";
+    TEXT[ slovenian ] = "Za preverjeni razdelek ni bil izbran jezik.";
 };
 String STR_EDIT_FOOTNOTE
 {
@@ -797,6 +839,8 @@ String STR_EDIT_FOOTNOTE
     TEXT[ hebrew ] = "Fußnote bearbeiten";
     TEXT[ hindi ] = "पृष्ठ के नीचे की टीका का संपादन";
     TEXT[ slovak ] = "Upraviť poznámku pod čiarou";
+    TEXT[ hungarian ] = "Lábjegyzet szerkesztése";
+    TEXT[ slovenian ] = "Uredi sprotno opombo";
 };
 String STR_NB_REPLACED
 {
@@ -829,6 +873,8 @@ String STR_NB_REPLACED
     Text[ hebrew ] = "Suchbegriff XXmal ersetzt.";
     Text[ hindi ] = "खोज की को XX बार प्रतिस्थापित किया ।";
     Text[ slovak ] = "Hľadané kľúčové slovo bolo nahradené XX-krát.";
+    Text[ hungarian ] = "A keresési kulcs XX helyen kicserélve.";
+    Text[ slovenian ] = "Ključ za iskanje je bil zamenjan XX-krat.";
 };
 String RID_TOOLS_TOOLBOX
 {
@@ -840,7 +886,7 @@ String RID_TOOLS_TOOLBOX
     Text [ french ] = "Barre d'instruments" ;
     Text [ dutch ] = "Werktuigbalk" ;
     Text [ swedish ] = "Verktygslist" ;
-    Text [ danish ] = "V�rkt�jslinje" ;
+    Text [ danish ] = "Hovedv�rkt�jslinje" ;
     Text [ portuguese ] = "Barra de ferramentas" ;
     Text [ portuguese_brazilian ] = "Barra de Ferramentas Principal" ;
     Text[ chinese_simplified ] = "主工具栏";
@@ -860,6 +906,8 @@ String RID_TOOLS_TOOLBOX
     Text[ hebrew ] = "‮סרגל ראשי‬";
     Text[ hindi ] = "मुख्य औज़ार पट्टी";
     Text[ slovak ] = "Hlavný panel nástrojov";
+    Text[ hungarian ] = "Fő eszköztár";
+    Text[ slovenian ] = "Glavna orodna vrstica";
 };
 String STR_SRCVIEW_ROW
 {
@@ -892,6 +940,8 @@ String STR_SRCVIEW_ROW
     Text[ hebrew ] = "Zeile";
     Text[ hindi ] = "पंक्ति";
     Text[ slovak ] = "Riadok ";
+    Text[ hungarian ] = "Sor";
+    Text[ slovenian ] = "Vrstica";
 };
 String STR_SRCVIEW_COL
 {
@@ -924,6 +974,8 @@ String STR_SRCVIEW_COL
     Text[ hebrew ] = "Spalte";
     Text[ hindi ] = "स्तंभ ";
     Text[ slovak ] = "Stĺpec ";
+    Text[ hungarian ] = "Oszlop";
+    Text[ slovenian ] = "Stolpec";
 };
 String STR_PRINT_TITLE
 {
@@ -955,6 +1007,8 @@ String STR_PRINT_TITLE
     Text[ hebrew ] = "Drucken der Selektion";
     Text[ hindi ] = "छपाई चुनाव ";
     Text[ slovak ] = "Tlač vybraných častí­";
+    Text[ hungarian ] = "A kijelölés nyomtatása";
+    Text[ slovenian ] = "Izbor za tiskanje";
 };
 String STR_PRINT_MSG
 {
@@ -986,6 +1040,8 @@ String STR_PRINT_MSG
     Text[ hebrew ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?";
     Text[ hindi ] = "आप चुनाव का अथवा सम्पूर्ण लेखपत्र का छपाई करना चाहते है?";
     Text[ slovak ] = "Chcete vytlačiť len výber alebo celý dokument?";
+    Text[ hungarian ] = "A kijelölt részt vagy a teljes dokumentumot nyomtatja?";
+    Text[ slovenian ] = "Ali želite natisniti izbrano ali ves dokument?";
 };
 String STR_PRINT_ALL
 {
@@ -1017,6 +1073,8 @@ String STR_PRINT_ALL
     Text[ hebrew ] = "‮הכל‬";
     Text[ hindi ] = "सब";
     Text[ slovak ] = "Všetko";
+    Text[ hungarian ] = "Mind";
+    Text[ slovenian ] = "Vse";
 };
 String STR_PRINT_SELECTION
 {
@@ -1048,6 +1106,8 @@ String STR_PRINT_SELECTION
     Text[ hebrew ] = "‮מבחר‬";
     Text[ hindi ] = "चुनाव";
     Text[ slovak ] = "Výber";
+    Text[ hungarian ] = "Kijelölés";
+    Text[ slovenian ] = "Izbor";
 };
 String STR_READONLY_SEL
 {
@@ -1079,6 +1139,8 @@ String STR_READONLY_SEL
     TEXT[ hebrew ] = "‮קריאה בלבד‬";
     TEXT[ hindi ] = "केवल पढ़ने केलिए";
     TEXT[ slovak ] = "len na čítanie";
+    TEXT[ hungarian ] = "Csak olvasható";
+    TEXT[ slovenian ] = "samo za branje";
 };
 String STR_SAVEAS_SRC
 {
@@ -1086,7 +1148,7 @@ String STR_SAVEAS_SRC
     Text [ English ] = "Export source as..." ;
     Text [ portuguese_brazilian ] = "~Exportar origem..." ;
     Text [ swedish ] = "Exportera k�lltext..." ;
-    Text [ danish ] = "Eksporter kildetekst..." ;
+    Text [ danish ] = "~Eksporter kildetekst..." ;
     Text [ italian ] = "~Esporta testo sorgente..." ;
     Text [ spanish ] = "~Exportar texto fuente..." ;
     Text [ french ] = "E~xport du texte source..." ;
@@ -1110,6 +1172,8 @@ String STR_SAVEAS_SRC
     Text[ hebrew ] = "Q~uelltext exportieren...";
     Text[ hindi ] = "~मूल को निर्यात करो...";
     Text[ slovak ] = "~Exportovať zdroj...";
+    Text[ hungarian ] = "~Forrás exportálása...";
+    Text[ slovenian ] = "~Izvozi vir...";
 };
 String MN_SRCVIEW_POPUPMENU
 {
@@ -1141,6 +1205,8 @@ String MN_SRCVIEW_POPUPMENU
     Text[ hebrew ] = "HTML‮קוד ‬";
     Text[ hindi ] = "HTML मूल";
     Text[ slovak ] = "Zdrojový HTML text";
+    Text[ hungarian ] = "HTML-forrás";
+    Text[ slovenian ] = "Izvorna HTML koda";
 };
 
 ToolBox RID_TOOLS_TOOLBOX
@@ -1345,42 +1411,8 @@ Menu MN_SRCVIEW_POPUPMENU
             Text[ hebrew ] = "HTML‮קוד ‬";
             Text[ hindi ] = "HTML मूल";
             Text[ slovak ] = "Zdrojový HTML text";
+            Text[ hungarian ] = "HTML-forrás";
+            Text[ slovenian ] = "Izvorna HTML koda";
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
