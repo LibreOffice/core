@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:56:53 $
+ *  last change: $Author: vg $ $Date: 2003-07-28 12:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,6 +886,16 @@ void SfxObjectShell::PostActivateEvent_Impl()
         if ( GetFrame() )
             pSfxApp->NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, this), sal_False);
     }
+}
+
+//--------------------------------------------------------------------
+
+/* Stampit #111050# allow writer to set this event id here hardly!
+   Please replace ith by a better solution! */
+void SfxObjectShell::Stamp_SetActivateEvent(sal_uInt16 nId )
+{
+    if ( GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
+        pImp->nEventId = nId;
 }
 
 //--------------------------------------------------------------------
