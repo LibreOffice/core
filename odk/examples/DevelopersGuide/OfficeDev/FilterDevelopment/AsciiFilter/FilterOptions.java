@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterOptions.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:38:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -45,8 +45,9 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XMultiServiceFactory;
 
 import com.sun.star.uno.Exception;
 import com.sun.star.ucb.CommandAbortedException;
@@ -81,8 +82,9 @@ public class FilterOptions
     public  boolean                                 m_bLower        ;
 
     //_____________________________________
-    // private member for internal things
-    private com.sun.star.lang.XMultiServiceFactory  m_xSMGR         ;
+    // private members for internal things
+    private XMultiComponentFactory m_xMCF         ;
+    private XComponentContext m_Ctx                ;
 
     //_____________________________________
     // interface
@@ -105,11 +107,13 @@ public class FilterOptions
      * @param lDescriptor
      *          the initial MediaDescriptor to set internal member from it
      */
-    public FilterOptions( com.sun.star.lang.XMultiServiceFactory xSMGR       ,
-                          boolean                                bImport     ,
-                          com.sun.star.beans.PropertyValue[]     lDescriptor )
+    public FilterOptions( XMultiComponentFactory                xMCF      ,
+                          XComponentContext                     Context   ,
+                          boolean                               bImport   ,
+                          com.sun.star.beans.PropertyValue[]    lDescriptor )
     {
-        m_xSMGR = xSMGR;
+        m_xMCF = xMCF;
+        m_Ctx = Context;
         analyze(bImport, lDescriptor);
     }
 
@@ -215,7 +219,7 @@ public class FilterOptions
         try{
             com.sun.star.ucb.XSimpleFileAccess xHelper = (com.sun.star.ucb.XSimpleFileAccess)UnoRuntime.queryInterface(
                 com.sun.star.ucb.XSimpleFileAccess.class,
-                m_xSMGR.createInstance("com.sun.star.ucb.SimpleFileAccess"));
+                m_xMCF.createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", m_Ctx));
             if (xHelper!=null)
             {
                 if (bImport==true)
