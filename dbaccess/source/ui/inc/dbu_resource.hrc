@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:08:18 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,11 @@
 #define STR_COULDNOTCREATE_DRIVERMANAGER    256
 #define STR_NOREGISTEREDDRIVER              257
 #define STR_INVALIDREGISTEREDDRIVER         258
-#define STR_COULDNOTCONNECT_PLEASECHECK     259
-#define STR_NOTABLEINFO                     260
-#define STR_GENERAL_SDB_ERROR               261
+#define STR_COULDNOTCONNECT                 259
+#define STR_COULDNOTCONNECT_PLEASECHECK     260
+#define STR_NOTABLEINFO                     261
+#define STR_GENERAL_SDB_ERROR               262
+#define STR_ENTER_CONNECTION_PASSWORD       263
 
 //========================================================================
 // untyped resources
@@ -137,6 +139,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:08:18  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 25.09.00 08:50:32  fs
  ************************************************************************/
