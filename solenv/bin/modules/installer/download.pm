@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:44:58 $
+#   last change: $Author: rt $ $Date: 2005-02-01 15:35:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -878,7 +878,7 @@ sub create_download_sets
     my $lastdir = $installationdir;
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$lastdir);
 
-    if ( $lastdir =~ /\./ ) { $downloaddir =~ s/\./_download_inprogress\./ }
+    if ( $lastdir =~ /\./ ) { $lastdir =~ s/\./_download_inprogress\./ }
     else { $lastdir = $lastdir . "_download_inprogress"; }
 
     # removing existing directory "_native_packed_inprogress" and "_native_packed_witherror" and "_native_packed"
