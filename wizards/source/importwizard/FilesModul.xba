@@ -2,10 +2,6 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FilesModul" script:language="StarBasic">Option Explicit
 
-Public Const SBOVERWRITEUNDEFINED as Integer = 0
-Public Const SBOVERWRITECANCEL as Integer = 2
-Public Const SBOVERWRITEQUERY as Integer = 7
-Public Const SBOVERWRITEALWAYS as Integer = 6
 
 Public AbsTemplateFound as Integer
 Public AbsDocuFound as Integer
@@ -84,13 +80,15 @@ Sub ConvertAllDocuments(sFilterName())
 Dim FileProperties(1) as new com.sun.star.beans.PropertyValue
 Dim PWFileProperties(2) as New com.sun.star.beans.PropertyValue
 Dim WriterWebProperties(0) as new com.sun.star.beans.PropertyValue
-Dim OpenProperties(3) as new com.sun.star.beans.PropertyValue
+Dim OpenProperties(4) as new com.sun.star.beans.PropertyValue
+Dim	oInteractionHandler as Object
+Dim InteractionTypes(0) as Long
 Dim FilesList(0,2) as String
 Dim sViewPath as String
 Dim i as Integer
 Dim FilterIndex as Integer
-Dim sFullName as String
-Dim sFileName as String
+Dim sSourceUrl as String
+Dim CurFilename as String
 Dim oDocument as Object
 Dim sExtension as String
 Dim OldExtension as String
@@ -99,18 +97,20 @@ Dim TotFound as Integer
 Dim TargetStemDir as String
 Dim SourceStemDir as String
 Dim TargetDir as String
-Dim TargetFile as String
+Dim sTargetUrl as String
 Dim CurFilterName as String
 Dim ApplIndex as Integer
 Dim Index as Integer
 Dim bIsDocument as Boolean
-Dim iGeneralOverwrite as Integer
 Dim bDoSave as Boolean
 Dim sCurFileExists as String
 Dim MaxFileIndex as Integer
 Dim bContainsBasicMacro as Boolean
 Dim bIsPassWordProtected as Boolean
 Dim iOverwrite as Integer
+	InteractionTypes(0) = com.sun.star.task.PasswordRequestMode.PASSWORD_REENTER
+	oInteractionHandler = createUnoService(&quot;com.sun.star.task.InteractionHandler&quot;)
+	oInteractionHandler.initialize(InteractionTypes())
 	iGeneralOverwrite = SBOVERWRITEUNDEFINED
 	bConversionIsRunnig = True
 	bLogExists = false
@@ -148,6 +148,8 @@ Dim iOverwrite as Integer
 		OpenProperties(2).Value = com.sun.star.document.MacroExecMode.NEVER_EXECUTE	
 		OpenProperties(3).Name = &quot;UpdateDocMode&quot;
 		OpenProperties(3).Value = com.sun.star.document.UpdateDocMode.NO_UPDATE
+		OpenProperties(4).Name = &quot;InteractionHandler&quot;
+		OpenProperties(4).Value = oInteractionHandler
 		MaxFileIndex = Ubound(FilesList(),1)
 		FileCount = 0
 		For i = 0 To MaxFileIndex
@@ -157,45 +159,36 @@ Dim iOverwrite as Integer
 				Exit For
 			End if
 			bDoSave = True
-			sFullName = FilesList(i,0)
+			sSourceUrl = FilesList(i,0)
 			CurFiltername =	GetFilterName(FilesList(i,1), sFilterName(), sExtension, FilterIndex)
 			ApplIndex = FilesList(i,2)
-			sViewPath = CutPathView(sFullName, 60)
+			sViewPath = CutPathView(sSourceUrl, 60)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_default&quot;, 0, OpenProperties())
-			If Not IsNull(oDocument) Then
-				bIsPassWordProtected = CheckPassWordProtection(oDocument)
-			End If
-
-			If Not IsNull(oDocument) Then
-				CheckIfMacroExists(oDocument.BasicLibraries, sComment)
-				Select Case sExtension
-					Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;sxm&quot;
-						SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
-						TargetStemDir = RTrimStr(Applications(ApplIndex,SBDOCTARGET), &quot;/&quot;)
-					Case Else 								&apos; Templates and Helper-Applications remain
-						SourceStemDir = RTrimStr(Applications(ApplIndex,SBTEMPLSOURCE), &quot;/&quot;)
-						TargetStemDir = RTrimStr(Applications(ApplIndex,SBTEMPLTARGET), &quot;/&quot;)
-				End Select
-
-				TargetFile = ReplaceString(sFullname, TargetStemDir, SourceStemDir)
-				sFileName = GetFileNameWithoutExtension(TargetFile, &quot;/&quot;)
-				OldExtension = GetFileNameExtension(TargetFile)
-
-				TargetFile = RTrimStr(TargetFile, OldExtension)
-				TargetFile = TargetFile &amp; sExtension
-				TargetDir = RTrimStr(TargetFile, sFileName &amp; &quot;.&quot; &amp; sExtension)
-				If Not oUcb.Exists(TargetDir) Then
-					CreateFolder(TargetDir)
-				End If
-				&apos; Todo: According to AS there might come a new feature that storeasUrl could possibly rise a UI dialog. 
-				&apos; In this case my own UI becomes obsolete
-				If ((oUcb.Exists(TargetFile)) and (iGeneralOverwrite &lt;&gt; SBOVERWRITEALWAYS)) Then
+			Select Case sExtension
+				Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;sxm&quot;
+					SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
+					TargetStemDir = RTrimStr(Applications(ApplIndex,SBDOCTARGET), &quot;/&quot;)
+				Case Else 								&apos; Templates and Helper-Applications remain
+					SourceStemDir = RTrimStr(Applications(ApplIndex,SBTEMPLSOURCE), &quot;/&quot;)
+					TargetStemDir = RTrimStr(Applications(ApplIndex,SBTEMPLTARGET), &quot;/&quot;)
+			End Select
+			sTargetUrl = ReplaceString(sSourceUrl, TargetStemDir, SourceStemDir)
+			CurFilename = GetFileNameWithoutExtension(sTargetUrl, &quot;/&quot;)
+			OldExtension = GetFileNameExtension(sTargetUrl)
+			sTargetUrl = RTrimStr(sTargetUrl, OldExtension)
+			sTargetUrl = sTargetUrl &amp; sExtension
+			TargetDir = RTrimStr(sTargetUrl, CurFilename &amp; &quot;.&quot; &amp; sExtension)
+			If (oUcb.Exists(sTargetUrl)) Then
+				If (iGeneralOverwrite &lt;&gt; SBOVERWRITEALWAYS) Then
 					If (iGeneralOverwrite = SBOVERWRITEUNDEFINED) Then
-						iGeneralOverWrite = Msgbox (sOverwriteallFiles, 32 + 3, sTitle)						
-					End If
-					If ((iGeneralOverWrite = SBOVERWRITEQUERY) OR (iGeneralOverwrite = SBOVERWRITECANCEL)) Then
-						sCurFileExists = ReplaceString(sFileExists, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
+						ShowOverwriteAllDialog(sTargetUrl, sTitle)
+						bDoSave = (iGeneralOverwrite = SBOVERWRITEQUERY) Or (iGeneralOverwrite = SBOVERWRITEALWAYS)
+					Elseif iGeneralOverwrite = SBOVERWRITENEVER Then
+						bDoSave = False					
+					ElseIf ((iGeneralOverWrite = SBOVERWRITEQUERY) OR (iGeneralOverwrite = SBOVERWRITECANCEL)) Then
+						&apos; Todo: According to AS there might come a new feature that storeasUrl could possibly rise a UI dialog. 
+						&apos; In this case my own UI becomes obsolete
+						sCurFileExists = ReplaceString(sFileExists, ConvertFromUrl(sTargetUrl), &quot;&lt;1&gt;&quot;)
 						sCurFileExists = ReplaceString(sCurFileExists, chr(13), &quot;&lt;CR&gt;&quot;)
 						iOverWrite = Msgbox (sCurFileExists, 32 + 3, sTitle)
 						Select Case iOverWrite
@@ -210,7 +203,16 @@ Dim iOverwrite as Integer
 						End Select
 					End If
 				End If
-				If bDoSave Then
+			End If
+			If bDoSave Then
+				If Not oUcb.Exists(TargetDir) Then
+					CreateFolder(TargetDir)
+				End If
+				oDocument = StarDesktop.LoadComponentFromURL(sSourceUrl, &quot;_default&quot;, 0, OpenProperties())
+				If Not IsNull(oDocument) Then
+					InsertSourceUrlToLogDocument(sSourceUrl, &quot;&quot;)
+					bIsPassWordProtected = CheckPassWordProtection(oDocument)
+					CheckIfMacroExists(oDocument.BasicLibraries, sComment)
 					On Local Error Goto NOSAVING
 					&apos; Todo: Due to bug #93651 the handling of the fileProperties has to be handled without Redimensioning
 					If bIsPassWordProtected Then
@@ -220,18 +222,18 @@ Dim iOverwrite as Integer
 						PWFileProperties(1).Value = True
 						PWFileProperties(2).Name = &quot;Password&quot;
 						PWFileProperties(2).Value = sCurPassWord
-						oDocument.StoreAsUrl(TargetFile, PWFileProperties())
+						oDocument.StoreAsUrl(sTargetUrl, PWFileProperties())
 					Else
 						FileProperties(0).Name = &quot;FilterName&quot;
 						FileProperties(0).Value = CurFilterName
 						FileProperties(1).Name = &quot;Overwrite&quot;
 						FileProperties(1).Value = True
-						oDocument.StoreAsUrl(TargetFile,FileProperties())
+						oDocument.StoreAsUrl(sTargetUrl,FileProperties())
 					End If
 					&apos; Todo: Make sure that an errorbox pops up when saving fails
 					NOSAVING:
 					If Err &lt;&gt; 0 Then
-						sCurcouldnotsaveDocument = ReplaceString(scouldnotsaveDocument, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
+						sCurcouldnotsaveDocument = ReplaceString(scouldnotsaveDocument, ConvertFromUrl(sTargetUrl), &quot;&lt;1&gt;&quot;)
 						sComment = ConcatComment(sComment, sCurCouldnotsaveDocument)
 						Resume LETSGO
 						LETSGO:
@@ -239,13 +241,13 @@ Dim iOverwrite as Integer
 						FileCount = FileCount + 1
 					End If
 					oDocument.Dispose()
+					InsertTargetUrlToLogDocument(sTargetUrl, sComment)
+				Else
+					sCurcouldnotopenDocument = ReplaceString(scouldnotopenDocument, ConvertFromUrl(sSourceUrl), &quot;&lt;1&gt;&quot;)
+					sComment = ConcatComment(sComment, sCurCouldnotopenDocument)
+					InsertSourceUrlToLogDocument(sSourceUrl, sComment)				
 				End If
-			Else
-				sCurcouldnotopenDocument = ReplaceString(scouldnotopenDocument, ConvertFromUrl(sFullName), &quot;&lt;1&gt;&quot;)
-				sComment = ConcatComment(sComment, sCurCouldnotopenDocument)
-				TargetFile = &quot;&quot;
 			End If
-			InsertDocNamesToLogDocument(sFullName, TargetFile, sComment)
 		Next i
 	End If
 	AddLogStatistics()
@@ -387,43 +389,56 @@ Dim bLogIsThere as Boolean
 End Sub
 
 
-
-Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, sComment as String)		&apos;
-Dim bContainsBasicMacro as Boolean
+Sub InsertTargetUrlToLogDocument(sTargetUrl as String, sComment as String)
 Dim oCell as Object
-Dim oLogCursor as Object
-Dim UrlList(1) as String
-Dim LocFileName as String
-Dim LocUrl as String
-Dim i as Integer
-Dim oCommentCursor as Object
+	If (bLogExists) And (sTargetUrl &lt;&gt; &quot;&quot;) Then
+		If sTargetUrl &lt;&gt; &quot;&quot; Then
+			oCell = oLogTable.GetCellbyPosition(1,oLogTable.Rows.Count-1)
+&apos;			If ((TargetUrl &lt;&gt;&quot;&quot;) AND (i = 1)) Or ((TargetUrl = &quot;&quot;) AND (i = 0)) Then
+				InsertCommentToLogCell(sComment, oCell)
+&apos;			End  If
+			InsertHyperLinkToLogCell(sTargetUrl, oCell)
+			oLogDocument.Store()
+		End If
+	End If
+End Sub
+
+
+Sub InsertSourceUrlToLogDocument(SourceUrl as String, sComment)		&apos;
+Dim oCell as Object
 	If bLogExists Then
 		If bInsertRow Then
 			oLogTable.Rows.InsertByIndex(oLogTable.Rows.Count,1)
 		Else
 			bInsertRow = True
 		End If
-		UrlList(0) = SourceUrl
-		UrlList(1) = TargetUrl
-		For i = 0 To 1
-			oCell = oLogTable.GetCellbyPosition(i,oLogTable.Rows.Count-1)
-			If sComment &lt;&gt; &quot;&quot; Then
-				If ((TargetUrl &lt;&gt;&quot;&quot;) AND (i = 1)) Or ((TargetUrl = &quot;&quot;) AND (i = 0)) Then
-					oCommentCursor = oCell.createTextCursor()
-					oCell.insertControlCharacter(oCommentCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, False)
-					oCell.insertString(oCommentCursor, sComment, false)
-				End If
-			End  If
-			LocUrl = UrlList(i)
-			oLogCursor = oCell.createTextCursor()
-			oLogCursor.CollapseToStart()
-			oLogCursor.HyperLinkURL = LocUrl
-			oLogCursor.HyperLinkName = LocUrl
-			oLogCursor.HyperLinkTarget = LocUrl
-			LocFileName = FileNameOutOfPath(LocUrl)
-			oCell.InsertString(oLogCursor, LocFileName,False)
-		Next i 
+		oCell = oLogTable.GetCellbyPosition(0,oLogTable.Rows.Count-1)
+		InsertCommentToLogCell(sComment, oCell)
+		InsertHyperLinkToLogCell(SourceUrl, oCell)
 		oLogDocument.Store()
+	End If
+End Sub
+
+
+Sub InsertHyperLinkToLogCell(sUrl as String, oCell as Object)
+Dim oLogCursor as Object
+Dim LocFileName as String
+	oLogCursor = oCell.createTextCursor()
+	oLogCursor.CollapseToStart()
+	oLogCursor.HyperLinkURL = sUrl
+	oLogCursor.HyperLinkName = sUrl
+	oLogCursor.HyperLinkTarget = sUrl
+	LocFileName = FileNameOutOfPath(sUrl)
+	oCell.InsertString(oLogCursor, LocFileName,False)
+End Sub			
+
+
+Sub InsertCommentToLogCell(sComment as string, oCell as Object)
+Dim oCommentCursor as Object
+	If sComment &lt;&gt; &quot;&quot; Then
+		oCommentCursor = oCell.createTextCursor()
+		oCell.insertControlCharacter(oCommentCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, False)
+		oCell.insertString(oCommentCursor, sComment, false)
 	End If
 End Sub
 
@@ -528,4 +543,33 @@ Function ConcatComment(sComment as String, AdditionalComment as String)
 	End If				
 	ConcatComment = sComment
 End Function
+
+
+&apos;Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, sComment as String)		&apos;
+&apos;Dim bContainsBasicMacro as Boolean
+&apos;Dim oCell as Object
+&apos;Dim UrlList(1) as String
+&apos;Dim LocUrl as String
+&apos;Dim i as Integer
+&apos;	If bLogExists Then
+&apos;		If bInsertRow Then
+&apos;			oLogTable.Rows.InsertByIndex(oLogTable.Rows.Count,1)
+&apos;		Else
+&apos;			bInsertRow = True
+&apos;		End If
+&apos;		UrlList(0) = SourceUrl
+&apos;		UrlList(1) = TargetUrl
+&apos;		For i = 0 To 1
+&apos;			oCell = oLogTable.GetCellbyPosition(i,oLogTable.Rows.Count-1)
+&apos;			If sComment &lt;&gt; &quot;&quot; Then
+&apos;				If ((TargetUrl &lt;&gt;&quot;&quot;) AND (i = 1)) Or ((TargetUrl = &quot;&quot;) AND (i = 0)) Then
+&apos;					InsertCommentToLogCell(sComment, oCell)
+&apos;				End If
+&apos;			End  If
+&apos;			LocUrl = UrlList(i)
+&apos;			InsertHyperLinkToLogCell(LocUrl, oCell)
+&apos;		Next i 
+&apos;		oLogDocument.Store()
+&apos;	End If
+&apos;End Sub
 </script:module>
