@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 10:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ OFieldDescription::OFieldDescription() :
     ,m_pType(NULL)
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nType(DataType::VARCHAR)
+    ,m_bIsCurrency(sal_False)
 {
     DBG_CTOR(OFieldDescription,NULL);
 }
@@ -143,6 +144,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_pType(NULL)
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nType(DataType::VARCHAR)
+    ,m_bIsCurrency(sal_False)
 {
     DBG_CTOR(OFieldDescription,NULL);
     OSL_ENSURE(xAffectedCol.is(),"PropetySet can notbe null!");
