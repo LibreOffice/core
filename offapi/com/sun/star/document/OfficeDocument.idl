@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:51 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,15 +159,11 @@ service OfficeDocument
     //-------------------------------------------------------------------------
     /** makes it possible to register listeners which are called whenever
         a document event occurs
-
-        @optional
      */
     [optional] interface XEventBroadcaster;
 
     //-------------------------------------------------------------------------
     /** access to bound event handlers
-
-        @optional
      */
     [optional] interface XEventsSupplier;
 
@@ -178,15 +174,11 @@ service OfficeDocument
         Instead of the <type>StandaloneDocumentInfo</type> service the <type>DocumentInfo</type>
         will be available on an already opened document only.
         </p>
-
-        @optional
      */
     [optional] interface XDocumentInfoSupplier;
 
     //-------------------------------------------------------------------------
     /** access to some properties describing all open views to a document
-
-        @optional
      */
     [optional] interface XViewDataSupplier;
 
@@ -198,8 +190,6 @@ service OfficeDocument
         should focus the first control in the document. With this, you may
         control if your document works primarily as a form document.
         </p>
-
-        @optional
     */
     [property, optional] boolean AutomaticControlFocus;
 
@@ -212,8 +202,6 @@ service OfficeDocument
         they belong to).<br>
         With this, you may control if your document works primarily as a form document.
         </p>
-
-        @optional
     */
     [property, optional] boolean ApplyFormDesignMode;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImportFilter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:49 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,28 +142,28 @@ service ImportFilter
         possible configuration data too.
         </p>
 
-        <p>
-        Java Example:
+        @example
             <listing>
-            void XInitialization::initialize( java.lang.Object[] lData )
+            <b>void</b> XInitialization::initialize( java.lang.Object[] lData )
             {
-                // Config part exist every time - it's guaranted by FilterFactory!
-                int i=0;
-                com.sun.star.beans.NamedValue[] lConfig = lData[i];
-                for( y=0; y&lt;lConfig.length(); ++y )
-                {
-                    // ... work with this config data
-                }
-                // Arguments of call createInstanceWithArguments() are optional ones.
-                // They mustn't exist.
-                // Note: i starts with
-                for( ; i&lt;lData.length(); ++i )
-                {
-                    // ... work with this optional data
-                }
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// Config part exist every time - it's guaranted by FilterFactory!</font></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>int</b> i=0;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;com.sun.star.beans.NamedValue[] lConfig = lData[i];
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>( p=0; p&lt;lConfig.length; ++p )
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// ... work with this config data</font></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>if</b> (lConfig[p].Name=="...")
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// Arguments of call createInstanceWithArguments() are optional ones.</font></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// They mustn't exist.</font></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// Note: i starts with 1. Because first element was already handled.</font></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>for</b>( i=1; i&lt;lData.length(); ++i )
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i><font COLOR="#949494">// ... work with this optional data</font></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
             }
             </listing>
-        </p>
      */
     [optional] interface com::sun::star::lang::XInitialization;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AmbigousFilterRequest.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:47 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,13 @@ exception AmbigousFilterRequest : ::com::sun::star::uno::Exception
     string URL;
 
     //-------------------------------------------------------------------------
-    /** two filters as possible result
+    /** transport the pre selected filter
      */
     string SelectedFilter;
+
+        //-------------------------------------------------------------------------
+    /** transport the real detected filter, which stands in conflict to the pre selected one
+     */
     string DetectedFilter;
 };
 
