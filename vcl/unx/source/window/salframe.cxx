@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-18 13:35:34 $
+ *  last change: $Author: svesik $ $Date: 2000-12-19 01:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#ifndef FREEBSD
 #include <alloca.h>
+#endif
 
 #include <prex.h>
 #include <X11/Xatom.h>
