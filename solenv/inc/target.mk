@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-27 15:31:27 $
+#   last change: $Author: hjs $ $Date: 2001-08-28 12:23:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -352,7 +352,7 @@ NOPCHTARGET=do_itpch
 .ENDIF
 
 .IF "$(UPDATER)"!=""
-.IF "$(BUILD_SOSL)"!=""
+.IF "$(BUILD_SOSL)"==""
 .IF "$(PRJNAME)"=="vcl"
 .IF "$(REMOTE_BUILD_FLAG)" == ""
 .IF "$(remote)" == ""
