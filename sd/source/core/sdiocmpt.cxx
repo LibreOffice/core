@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdiocmpt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,79 @@
 #include "sdiocmpt.hxx"
 
 
+//BFS02
+//////////////////////////////////////////////////////////////////////////////
 
+old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, UINT16 nNewMode)
+:   rStream(rNewStream),
+    nSubRecSiz(0),
+    nSubRecPos(0),
+    nMode(nNewMode),
+    bOpen(FALSE)
+{
+    OpenSubRecord();
+}
 
+old_SdrDownCompat::~old_SdrDownCompat()
+{
+    if(bOpen)
+        CloseSubRecord();
+}
+
+void old_SdrDownCompat::Read()
+{
+    rStream >> nSubRecSiz;
+}
+
+void old_SdrDownCompat::Write()
+{
+    rStream << nSubRecSiz;
+}
+
+void old_SdrDownCompat::OpenSubRecord()
+{
+    if(rStream.GetError())
+        return;
+
+    nSubRecPos = rStream.Tell();
+
+    if(nMode == STREAM_READ)
+    {
+        Read();
+    }
+    else if(nMode == STREAM_WRITE)
+    {
+        Write();
+    }
+
+    bOpen = TRUE;
+}
+
+void old_SdrDownCompat::CloseSubRecord()
+{
+    if(rStream.GetError())
+        return;
+
+    UINT32 nAktPos(rStream.Tell());
+
+    if(nMode == STREAM_READ)
+    {
+        UINT32 nReadAnz(nAktPos - nSubRecPos);
+        if(nReadAnz != nSubRecSiz)
+        {
+            rStream.Seek(nSubRecPos + nSubRecSiz);
+        }
+    }
+    else if(nMode == STREAM_WRITE)
+    {
+        nSubRecSiz = nAktPos - nSubRecPos;
+        rStream.Seek(nSubRecPos);
+        Write();
+        rStream.Seek(nAktPos);
+    }
+
+    bOpen = FALSE;
+}
 
 /*************************************************************************
 |*
@@ -78,8 +149,7 @@
 \************************************************************************/
 
 SdIOCompat::SdIOCompat(SvStream& rNewStream, USHORT nNewMode, UINT16 nVer)
-           : SdrDownCompat(rNewStream, nNewMode, TRUE),
-             nVersion(nVer)
+:   old_SdrDownCompat(rNewStream, nNewMode), nVersion(nVer)
 {
     if (nNewMode == STREAM_WRITE)
     {
@@ -95,7 +165,8 @@ SdIOCompat::SdIOCompat(SvStream& rNewStream, USHORT nNewMode, UINT16 nVer)
     }
 }
 
+SdIOCompat::~SdIOCompat()
+{
+}
 
-
-
-
+// eof
