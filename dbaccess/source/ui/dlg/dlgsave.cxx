@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:48:44 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,15 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                             if(!xRow->wasNull())
                                 m_aCatalog.InsertEntry(sCatalog);
                         }
+                        if ( _xConnection.is() )
+                        {
+                            String sCatalog = _xConnection->getCatalog();
+                            USHORT nPos = m_aCatalog.GetEntryPos(sCatalog);
+                            if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                                m_aCatalog.SelectEntryPos(nPos);
+                        }
+                        else
+                            m_aCatalog.SetText(String());
                     }
                     catch(const SQLException&)
                     {
@@ -215,8 +224,10 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                             if(!xRow->wasNull() && m_aSchema.GetEntryPos(XubString(sSchema)) == COMBOBOX_ENTRY_NOTFOUND)
                                 m_aSchema.InsertEntry(sSchema);
                         }
-
-                        m_aSchema.SetText(m_xMetaData->getUserName());
+                        String sTemp = m_xMetaData->getUserName();
+                        USHORT nPos = m_aSchema.GetEntryPos(sTemp);
+                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                            m_aSchema.SelectEntryPos(nPos);
                     }
                     catch(const SQLException&)
                     {
@@ -234,9 +245,16 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
 
-                    m_aCatalog.SetText(sCatalog);
-                    if(sSchema.getLength())
-                        m_aSchema.SetText(sSchema);
+                    USHORT nPos = m_aCatalog.GetEntryPos(String(sCatalog));
+                    if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                        m_aCatalog.SelectEntryPos(nPos);
+
+                    if ( sSchema.getLength() )
+                    {
+                        nPos = m_aSchema.GetEntryPos(String(sSchema));
+                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                            m_aSchema.SelectEntryPos(nPos);
+                    }
                     m_aTitle.SetText(sTable);
                 }
                 else
