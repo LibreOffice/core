@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:34:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Použít";
                 Text[ hebrew ] = "‮יישום‬";
                 Text[ hindi ] = "लागू करो";
+                Text[ slovak ] = "Použiť";
             };
             ToolBoxItem
             {
@@ -147,6 +148,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Otevřít...";
                 Text[ hebrew ] = "‮פתיחה...‬";
                 Text[ hindi ] = "खोलो...";
+                Text[ slovak ] = "Otvoriť...";
             };
             ToolBoxItem
             {
@@ -180,6 +182,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Uložit...";
                 Text[ hebrew ] = "‮שמירה‬";
                 Text[ hindi ] = "संचित करो...";
+                Text[ slovak ] = "Uložiť...";
             };
             ToolBoxItem
             {
@@ -218,6 +221,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Vybrat";
                 Text[ hebrew ] = "‮בחירה‬";
                 Text[ hindi ] = "चुनो";
+                Text[ slovak ] = "Vybrať";
             };
             ToolBoxItem
             {
@@ -252,6 +256,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Obdélník";
                 Text[ hebrew ] = "‮מרובע‬";
                 Text[ hindi ] = "आयत";
+                Text[ slovak ] = "Obdĺžnik";
             };
             ToolBoxItem
             {
@@ -286,6 +291,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Elipsa";
                 Text[ hebrew ] = "‮מעגל‬";
                 Text[ hindi ] = "दीर्घवृत्त";
+                Text[ slovak ] = "Elipsa";
             };
             ToolBoxItem
             {
@@ -320,6 +326,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Mnohoúhelník";
                 Text[ hebrew ] = "‮פוליגונים‬";
                 Text[ hindi ] = "बहुभुज क्षेत्र";
+                Text[ slovak ] = "Mnohouholník";
             };
             ToolBoxItem
             {
@@ -354,6 +361,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Volný mnohoúhelník";
                 Text[ hebrew ] = "Freihandpolygon";
                 Text[ hindi ] = "स्वतंत्र बहुभुज क्षेत्र";
+                Text[ slovak ] = "Ľubovoľná forma";
             };
             ToolBoxItem
             {
@@ -391,6 +399,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Upravit body";
                 Text[ hebrew ] = "‮עריכת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं का संपादन";
+                Text[ slovak ] = "Upraviť body";
             };
             ToolBoxItem
             {
@@ -426,6 +435,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Přesunout body";
                 Text[ hebrew ] = "‮הזזת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं का स्थान परिवर्तन करो";
+                Text[ slovak ] = "Presunúť body";
             };
             ToolBoxItem
             {
@@ -463,6 +473,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Vložit body";
                 Text[ hebrew ] = "‮הוספת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं को जोड़ो";
+                Text[ slovak ] = "Vložiť body";
             };
             ToolBoxItem
             {
@@ -498,6 +509,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Odstranit body";
                 Text[ hebrew ] = "‮מחיקת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं को मिटाओ";
+                Text[ slovak ] = "Odstrániť body";
             };
             ToolBoxItem
             {
@@ -535,6 +547,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Zpět ";
                 Text[ hebrew ] = "‮ביטול פעולה‬";
                 Text[ hindi ] = "अनावृत्ति ";
+                Text[ slovak ] = "Späť ";
             };
             ToolBoxItem
             {
@@ -567,6 +580,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Znovu";
                 Text[ hebrew ] = "‮שחזור פעולה‬";
                 Text[ hindi ] = "फिर से करो";
+                Text[ slovak ] = "Znova";
             };
             ToolBoxItem
             {
@@ -603,6 +617,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Aktivní";
                 Text[ hebrew ] = "Aktiv";
                 Text[ hindi ] = "क्रियाशील";
+                Text[ slovak ] = "Aktívny";
             };
             ToolBoxItem
             {
@@ -635,6 +650,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Makro...";
                 Text[ hebrew ] = "‮הפעלת מאקרו...‬";
                 Text[ hindi ] = "मॉक्रो...";
+                Text[ slovak ] = "Makro...";
             };
             ToolBoxItem
             {
@@ -667,6 +683,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ czech ] = "Vlastnosti...";
                 Text[ hebrew ] = "‮מאפינים...‬";
                 Text[ hindi ] = "विशेषतायें...";
+                Text[ slovak ] = "Vlastnosti...";
             };
         };
         Text[ english_us ] = "Image Map Editor";
@@ -716,6 +733,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Text[ czech ] = "Adresa:";
         Text[ hebrew ] = "Adresse:";
         Text[ hindi ] = "पता:";
+        Text[ slovak ] = "Adresa:";
     };
     ComboBox CBB_URL
     {
@@ -757,6 +775,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Text[ czech ] = "Text:";
         Text[ hebrew ] = "‮טקסט:‬";
         Text[ hindi ] = "टेक्स्ट्:";
+        Text[ slovak ] = "Text:";
     };
     Edit EDT_TEXT
     {
@@ -847,6 +866,7 @@ ModelessDialog RID_SVXDLG_IMAP
     Text[ czech ] = "Editor obrázkových map";
     Text[ hebrew ] = "ImageMap-Editor";
     Text[ hindi ] = "ImageMap Editor";
+    Text[ slovak ] = "Editor obrázkových máp";
 };
 Control RID_SVXCTL_IMAP
 {
@@ -891,6 +911,7 @@ Menu RID_SVXMN_IMAP
             Text[ czech ] = "Popis...";
             Text[ hebrew ] = "‮תאור...‬";
             Text[ hindi ] = "विवरण...";
+            Text[ slovak ] = "Popis...";
         };
         MenuItem
         {
@@ -922,6 +943,7 @@ Menu RID_SVXMN_IMAP
             Text[ czech ] = "Makro...";
             Text[ hebrew ] = "‮הפעלת מאקרו...‬";
             Text[ hindi ] = "~मॉक्रो...";
+            Text[ slovak ] = "~Makro...";
         };
         MenuItem
         {
@@ -953,6 +975,7 @@ Menu RID_SVXMN_IMAP
             Text[ czech ] = "Aktivní";
             Text[ hebrew ] = "~Aktiv";
             Text[ hindi ] = "क्रियाशील";
+            Text[ slovak ] = "Aktívny";
         };
         MenuItem
         {
@@ -1009,6 +1032,7 @@ Menu RID_SVXMN_IMAP
                         Text[ czech ] = "Přenést do popředí";
                         Text[ hebrew ] = "Ganz nach ~vorn";
                         Text[ hindi ] = "सामने लाओ";
+                        Text[ slovak ] = "Preniesť do popredia";
                     };
                     MenuItem
                     {
@@ -1041,6 +1065,7 @@ Menu RID_SVXMN_IMAP
                         Text[ czech ] = "Přenést blíž";
                         Text[ hebrew ] = "W~eiter nach vorn";
                         Text[ hindi ] = "~आगे लाओ";
+                        Text[ slovak ] = "Preniesť ~bližšie";
                     };
                     MenuItem
                     {
@@ -1073,6 +1098,7 @@ Menu RID_SVXMN_IMAP
                         Text[ czech ] = "Přenést dál";
                         Text[ hebrew ] = "Weiter ~nach hinten";
                         Text[ hindi ] = "पि~छली ओर भेजो";
+                        Text[ slovak ] = "P~reniesť ďalej";
                     };
                     MenuItem
                     {
@@ -1086,7 +1112,7 @@ Menu RID_SVXMN_IMAP
                         Text [ finnish ] = "Vie ~taakse" ;
                         Text [ danish ] = "Placer ~bagest" ;
                         Text [ french ] = "Tout � l'a~rri�re" ;
-                        Text [ swedish ] = "L�ngst ~bak" ;
+                        Text [ swedish ] = "L�ngst b~ak" ;
                         Text [ dutch ] = "~Achteraan" ;
                         Text [ spanish ] = "Enviar al ~fondo" ;
                         Text [ english_us ] = "~Send to Back" ;
@@ -1105,6 +1131,7 @@ Menu RID_SVXMN_IMAP
                         Text[ czech ] = "Odeslat na pozadí";
                         Text[ hebrew ] = "Ganz nach ~hinten";
                         Text[ hindi ] = "पीछे ~भेजो";
+                        Text[ slovak ] = "Odo~slať na pozadie";
                     };
                 };
             };
@@ -1123,6 +1150,7 @@ Menu RID_SVXMN_IMAP
             Text[ czech ] = "Uspořádat";
             Text[ hebrew ] = "‮סידור‬";
             Text[ hindi ] = "क्रम में रखो";
+            Text[ slovak ] = "Usporiadať";
         };
         MenuItem
         {
@@ -1161,6 +1189,7 @@ Menu RID_SVXMN_IMAP
             Text[ czech ] = "Vybrat vše";
             Text[ hebrew ] = "‮בחירה כוללת‬";
             Text[ hindi ] = "~सब चुनो";
+            Text[ slovak ] = "Vybrať ~všetko";
         };
         MenuItem
         {
@@ -1196,6 +1225,7 @@ Menu RID_SVXMN_IMAP
             Text[ czech ] = "Smazat";
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
+            Text[ slovak ] = "~Zmazať";
         };
     };
 };
@@ -1247,6 +1277,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ czech ] = "Alternativní text";
         Text[ hebrew ] = "~Alternativtext";
         Text[ hindi ] = "विकल्प ~टेक्स्ट्";
+        Text[ slovak ] = "Alternatívny ~text";
     };
     Edit EDT_URLDESCRIPTION
     {
@@ -1287,6 +1318,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ czech ] = "URL";
         Text[ hebrew ] = "~URL";
         Text[ hindi ] = "~URL";
+        Text[ slovak ] = "~URL";
     };
     Edit EDT_URL
     {
@@ -1340,6 +1372,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ czech ] = "Hypertextový odkaz";
         Text[ hebrew ] = "Hyperlink";
         Text[ hindi ] = "हाइपरलिंक";
+        Text[ slovak ] = "Hypertextový odkaz";
     };
     FixedText FT_TARGET
     {
@@ -1372,6 +1405,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ czech ] = "Rámec";
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "~फ़्रेम";
+        Text[ slovak ] = "~Rámec";
     };
     ComboBox CBB_TARGETS
     {
@@ -1414,6 +1448,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ czech ] = "Název";
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit EDT_NAME
     {
@@ -1441,6 +1476,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     Text[ czech ] = "Popis";
     Text[ hebrew ] = "‮תאור‬";
     Text[ hindi ] = "विवरण";
+    Text[ slovak ] = "Popis";
 };
 /******************************************************************************/
 String STR_IMAPDLG_SAVE
@@ -1475,6 +1511,7 @@ String STR_IMAPDLG_SAVE
     Text[ czech ] = "Tato obrázková mapa byla změněna.\nPřejete si uložit změny?";
     Text[ hebrew ] = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Text[ hindi ] = "चित्र नक्शा को परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
+    Text[ slovak ] = "Táto obrázková mapa bola zmenená.\nPrajete si uložiť zmeny?";
 };
 String STR_IMAPDLG_MODIFY
 {
@@ -1507,8 +1544,11 @@ String STR_IMAPDLG_MODIFY
     Text[ czech ] = "Tato obrázková mapa byla změněna.\nPřejete si uložit změny?";
     Text[ hebrew ] = "Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden?";
     Text[ hindi ] = "चित्र नक्शा को परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
+    Text[ slovak ] = "Táto obrázková mapa bola zmenená.\nPrajete si uložiť zmeny?";
 };
 /******************************************************************************/
+
+
 
 
 
