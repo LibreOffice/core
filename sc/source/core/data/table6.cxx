@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:29:18 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include "stlpool.hxx"
 #include "markdata.hxx"
 #include "editutil.hxx"
+#ifndef SC_DETFUNC_HXX
+#include "detfunc.hxx"
+#endif
+
 
 #ifndef ITEMID_SEARCH
 #define ITEMID_SEARCH 0
@@ -158,9 +162,12 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 break;
             case SVX_SEARCHIN_NOTE:
                 {
-                    ScPostIt aNote;
-                    pCell->GetNote( aNote );
-                    aString = aNote.GetText();
+                    ScPostIt aNote(pDocument);
+                    if(pCell->GetNote( aNote ))
+                    {
+                        aString = aNote.GetText();
+                        bMultiLine = ( ((aNote.GetEditTextObject())->GetParagraphCount()) > 1 );
+                    }
                 }
                 break;
             default:
@@ -273,10 +280,22 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             while (bRepeat);
             if (rSearchItem.GetCellType() == SVX_SEARCHIN_NOTE)
             {
-                ScPostIt aNote;
-                pCell->GetNote( aNote );
-                aNote.SetText(aString);
-                aCol[nCol].SetNote( nRow, aNote );
+                ScPostIt aNote(pDocument);
+                if(pCell->GetNote( aNote ))
+                {
+                    aNote.SetText( aString );
+
+                    // if note is visible - hide it to force a refresh of replaced text
+                    if (aNote.IsShown())
+                    {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
+                        aNote.SetShown(FALSE);
+                    }
+
+                    // NB: rich text format is lost.
+                    // This is also true of Cells.
+                    aCol[nCol].SetNote( nRow, aNote );
+                }
             }
             else if ( cMatrixFlag != MM_NONE )
             {   // #60558# Matrix nicht zerreissen
