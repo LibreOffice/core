@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:39:26 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,11 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
-#include <com/sun/star/text/XTextRange.hpp>
+#ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
+#include <com/sun/star/text/XTextCursor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGECOMPARE_HPP_
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_ParagraphTarget_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -205,6 +208,8 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::text::XTextRange;
+using ::com::sun::star::text::XTextCursor;
+using ::com::sun::star::text::XTextRangeCompare;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -468,10 +473,12 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
         if( xShape.is() )
             return makeAny( xShape );
 
-        Reference< XTextRange > xTextRange( xRef, UNO_QUERY );
-        if( xTextRange.is() )
+        Reference< XTextCursor > xTextCursor( xRef, UNO_QUERY );
+        if( xTextCursor.is() )
         {
-            Reference< XShape > xShape( xTextRange->getText(), UNO_QUERY_THROW );
+            Reference< XTextRange > xStart( xTextCursor->getStart() ), xRange;
+            Reference< XShape > xShape( xTextCursor->getText(), UNO_QUERY_THROW );
+            Reference< XTextRangeCompare > xTextRangeCompare( xShape, UNO_QUERY_THROW );
 
             Reference< XEnumerationAccess > xParaEnumAccess( xShape, UNO_QUERY_THROW );
             Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_QUERY_THROW );
@@ -479,8 +486,10 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
 
             while( xEnumeration->hasMoreElements() )
             {
-                Reference< XTextRange > xRef( xEnumeration->nextElement(), UNO_QUERY );
-                if( xRef == xTextRange )
+                xEnumeration->nextElement() >>= xRange;
+
+                // break if start of selection is prior to end of current paragraph
+                if( xRange.is() && (xTextRangeCompare->compareRegionEnds( xStart, xRange ) >= 0 ) )
                 {
                     return makeAny( ParagraphTarget( xShape, nParagraph ) );
                 }
@@ -500,12 +509,34 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
 
 Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const OUString& rValue )
 {
-    sal_Int32 nPos = rValue.indexOf( ',' );
-    if( nPos >= 0 && !rValue.matchIgnoreAsciiCase( mastrHSL ) )
+    sal_Int32 nCommaPos = -1, nPos;
+    sal_Int32 nOpenBrakets = 0;
+    for( sal_Int32 nPos = 0; (nPos < rValue.getLength()) && (nCommaPos == -1); nPos++ )
+    {
+        switch( rValue[nPos] )
+        {
+        case ',':
+            if( nOpenBrakets == 0 )
+                nCommaPos = nPos;
+            break;
+        case '(':
+        case '[':
+        case '{':
+            nOpenBrakets++;
+            break;
+        case ')':
+        case ']':
+        case '}':
+            nOpenBrakets--;
+            break;
+        }
+    }
+
+    if( nCommaPos >= 0 )
     {
         ValuePair aPair;
-        aPair.First = convertValue( eAttributeName, rValue.copy( 0, nPos ) );
-        aPair.Second = convertValue( eAttributeName, rValue.copy( nPos+1, rValue.getLength() - nPos - 1 ) );
+        aPair.First = convertValue( eAttributeName, rValue.copy( 0, nCommaPos ) );
+        aPair.Second = convertValue( eAttributeName, rValue.copy( nCommaPos+1, rValue.getLength() - nCommaPos - 1 ) );
         return makeAny( aPair );
     }
     else
