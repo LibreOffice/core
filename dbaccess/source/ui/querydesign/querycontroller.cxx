@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 13:22:12 $
+ *  last change: $Author: oj $ $Date: 2001-02-07 12:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,17 +784,23 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                 {
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= m_sStatement;
                     // load the layoutInformation
-                    Sequence< sal_Int8 > aInputSequence;
-                    xProp->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aInputSequence;
+                    try
                     {
-                        Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
-                        Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
-                        Reference< XInputStream> xMarkInStream = Reference< XInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
-                        Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
-                        Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
-                        OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
-                        xInDataSource->setInputStream(xMarkInStream);
-                        Load(xInStream);
+                        Sequence< sal_Int8 > aInputSequence;
+                        xProp->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aInputSequence;
+                        {
+                            Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
+                            Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
+                            Reference< XInputStream> xMarkInStream = Reference< XInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
+                            Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
+                            Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
+                            OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
+                            xInDataSource->setInputStream(xMarkInStream);
+                            Load(xInStream);
+                        }
+                    }
+                    catch(Exception&)
+                    {
                     }
                     setQueryComposer();
                     ::rtl::OUString aErrorMsg;
@@ -1005,40 +1011,46 @@ void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
 void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
 {
     OStreamSection aSection(_rxIn.get());
-    //////////////////////////////////////////////////////////////////////
-    // Liste loeschen
-    ::std::vector< OTableWindowData*>::iterator aIter = m_vTableData.begin();
-    for(;aIter != m_vTableData.end();++aIter)
-        delete *aIter;
-    m_vTableData.clear();
-
-    sal_Int32 nCount = 0;
-    _rxIn >> nCount;
-    for(sal_Int32 i=0;i<nCount;++i)
+    try
     {
-        OQueryTableWindowData* pData = new OQueryTableWindowData();
-        pData->Load(_rxIn);
-        m_vTableData.push_back(pData);
+        //////////////////////////////////////////////////////////////////////
+        // Liste loeschen
+        ::std::vector< OTableWindowData*>::iterator aIter = m_vTableData.begin();
+        for(;aIter != m_vTableData.end();++aIter)
+            delete *aIter;
+        m_vTableData.clear();
+
+        sal_Int32 nCount = 0;
+        _rxIn >> nCount;
+        for(sal_Int32 i=0;i<nCount;++i)
+        {
+            OQueryTableWindowData* pData = new OQueryTableWindowData();
+            pData->Load(_rxIn);
+            m_vTableData.push_back(pData);
+        }
+
+        // some data
+        _rxIn >> m_nSplitPos;
+        _rxIn >> m_nVisibleRows;
+
+        //////////////////////////////////////////////////////////////////////
+        // Liste loeschen
+        ::std::vector< OTableFieldDesc*>::iterator aFieldIter = m_vTableFieldDesc.begin();
+        for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
+            delete *aFieldIter;
+        m_vTableFieldDesc.clear();
+
+        nCount = 0;
+        _rxIn >> nCount;
+        for(sal_Int32 j=0;j<nCount;++j)
+        {
+            OTableFieldDesc* pData = new OTableFieldDesc();
+            pData->Load(_rxIn);
+            m_vTableFieldDesc.push_back(pData);
+        }
     }
-
-    // some data
-    _rxIn >> m_nSplitPos;
-    _rxIn >> m_nVisibleRows;
-
-    //////////////////////////////////////////////////////////////////////
-    // Liste loeschen
-    ::std::vector< OTableFieldDesc*>::iterator aFieldIter = m_vTableFieldDesc.begin();
-    for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
-        delete *aFieldIter;
-    m_vTableFieldDesc.clear();
-
-    nCount = 0;
-    _rxIn >> nCount;
-    for(sal_Int32 j=0;j<nCount;++j)
+    catch(Exception&)
     {
-        OTableFieldDesc* pData = new OTableFieldDesc();
-        pData->Load(_rxIn);
-        m_vTableFieldDesc.push_back(pData);
     }
 }
 // -----------------------------------------------------------------------------
