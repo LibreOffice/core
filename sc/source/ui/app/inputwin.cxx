@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:38:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,14 +870,8 @@ void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
         ScModule* pScMod = SC_MOD();
         ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
 
-        if ( nCommand == COMMAND_STARTEXTTEXTINPUT )
-        {
-            SfxItemSet* pSet = new SfxItemSet( pEditView->GetEditEngine()->GetEmptyItemSet() );
-            Font aFont = GetSettings().GetStyleSettings().GetAppFont();
-            pSet->Put( SvxFontItem( aFont.GetFamily(), aFont.GetName(), EMPTY_STRING,
-                                    aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
-            ((ScEditEngineDefaulter*)pEditView->GetEditEngine())->SetDefaults( pSet );
-        }
+        // #109441# don't modify the font defaults here - the right defaults are
+        // already set in StartEditEngine when the EditEngine is created
 
         // #63263# verhindern, dass die EditView beim View-Umschalten wegkommt
         pScMod->SetInEditCommand( TRUE );
