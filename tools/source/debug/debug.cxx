@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-06 18:46:33 $
+ *  last change: $Author: th $ $Date: 2001-07-03 14:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,9 +217,7 @@ static DebugData aDebugData =
 static sal_Char aCurPath[260];
 #endif
 
-static int      bDbgImplInMain = FALSE;
-static sal_Char aBuf[DBG_BUF_MAXLEN];
-static sal_Char aBufOut[DBG_BUF_MAXLEN];
+static int bDbgImplInMain = FALSE;
 
 // =======================================================================
 
@@ -693,6 +691,7 @@ static DebugData* GetDebugData()
 
         // DEBUG.INI-File
         FILETYPE pDbgFile;
+        sal_Char aBuf[4096];
         DbgGetDbgFileName( aBuf );
         if ( (pDbgFile = FileOpen( aBuf, "r" )) != NULL )
         {
@@ -736,6 +735,7 @@ static FILETYPE ImplDbgInitFile()
     static BOOL bFileInit = FALSE;
 
 #ifndef MAC
+    sal_Char aBuf[4096];
     getcwd( aBuf, sizeof( aBuf ) );
     chdir( aCurPath );
 #endif
@@ -979,6 +979,7 @@ void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... )
     va_list pList;
 
     va_start( pList, pFStr );
+    sal_Char aBuf[DBG_BUF_MAXLEN];
     vsprintf( aBuf, pFStr, pList );
     va_end( pList );
 
@@ -1063,6 +1064,7 @@ void* DbgFunc( USHORT nAction, void* pParam )
             case DBG_FUNC_SAVEDATA:
                 {
                 FILETYPE pDbgFile;
+                sal_Char aBuf[4096];
                 DbgGetDbgFileName( aBuf );
                 if ( (pDbgFile = FileOpen( aBuf, "w" )) != NULL )
                 {
@@ -1118,13 +1120,14 @@ void* DbgFunc( USHORT nAction, void* pParam )
 void DbgProf( USHORT nAction, DbgDataType* pDbgData )
 {
     // Ueberhaupt Profiling-Test an
-    DebugData*  pData = ImplGetDebugData();
-    ProfType*   pProfData = (ProfType*)pDbgData->pData;
-    ULONG       nTime;
+    DebugData* pData = ImplGetDebugData();
 
     if ( !(pData->aDbgData.nTestFlags & DBG_TEST_PROFILING) )
         return;
 
+    sal_Char    aBuf[DBG_BUF_MAXLEN];
+    ProfType*   pProfData = (ProfType*)pDbgData->pData;
+    ULONG       nTime;
     if ( (nAction != DBG_PROF_START) && !pProfData )
     {
         strcpy( aBuf, DbgError_ProfEnd1 );
@@ -1244,7 +1247,8 @@ void DbgXtor( DbgDataType* pDbgData, USHORT nAction, const void* pThis,
     if ( !pXtorData->bTest )
         return;
 
-    USHORT nAct = nAction & ~DBG_XTOR_DTOROBJ;
+    sal_Char    aBuf[DBG_BUF_MAXLEN];
+    USHORT      nAct = nAction & ~DBG_XTOR_DTOROBJ;
 
     // Trace (Enter)
     if ( (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE) &&
@@ -1394,14 +1398,14 @@ void DbgXtor( DbgDataType* pDbgData, USHORT nAction, const void* pThis,
 void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT nLine )
 {
     static BOOL bIn = FALSE;
+    if ( bIn )
+        return;
+    bIn = TRUE;
+
     DebugData*  pData = GetDebugData();
     sal_Char*   pStr;
     ULONG       nOut;
     int         nBufLen = 0;
-
-    if ( bIn )
-        return;
-    bIn = TRUE;
 
     if ( nDbgOut == DBG_OUT_ERROR )
     {
@@ -1443,6 +1447,7 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
 
     ImplDbgLock();
 
+    sal_Char aBufOut[DBG_BUF_MAXLEN];
     if ( pStr )
     {
         strcpy( aBufOut, pStr );
@@ -1472,9 +1477,9 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
         strcat( aBufOut, " at Line " );
 
         // Line in String umwandeln und dranhaengen
-        sal_Char aLine[9];
-        sal_Char*  pLine = &aLine[7];
-        USHORT i;
+        sal_Char    aLine[9];
+        sal_Char*   pLine = &aLine[7];
+        USHORT      i;
         memset( aLine, 0, sizeof( aLine ) );
         do
         {
@@ -1546,6 +1551,7 @@ void DbgOutTypef( USHORT nDbgOut, const sal_Char* pFStr, ... )
     va_list pList;
 
     va_start( pList, pFStr );
+    sal_Char aBuf[DBG_BUF_MAXLEN];
     vsprintf( aBuf, pFStr, pList );
     va_end( pList );
 
@@ -1559,6 +1565,7 @@ void DbgOutf( const sal_Char* pFStr, ... )
     va_list pList;
 
     va_start( pList, pFStr );
+    sal_Char aBuf[DBG_BUF_MAXLEN];
     vsprintf( aBuf, pFStr, pList );
     va_end( pList );
 
