@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:26:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 // forward declaration
 namespace com { namespace sun { namespace star { namespace accessibility {
@@ -110,7 +113,7 @@ namespace comphelper
         class can ask for states which are <em>set</em> only, not for the ones which are <em>reset</em> currently.
         </p>
     */
-    class OAccessibleImplementationAccess : public OAccImpl_Base
+    class COMPHELPER_DLLPUBLIC OAccessibleImplementationAccess : public OAccImpl_Base
     {
     private:
         OAccImpl_Impl*  m_pImpl;
@@ -191,7 +194,7 @@ namespace comphelper
 
 
     private:
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+        COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
     };
 
 //.........................................................................
