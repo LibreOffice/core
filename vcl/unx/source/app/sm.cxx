@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 10:12:33 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 static bool bFirstAssert = true;
 #endif
 
-inline void SMprintf( char* pFormat, ... )
+inline void SMprintf( const char* pFormat, ... )
 {
 #if OSL_DEBUG_LEVEL > 1
     FILE* fp = fopen( "/tmp/sessionlog.txt", bFirstAssert ? "w" : "a" );
