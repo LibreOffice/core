@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-15 12:03:59 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ TabDialog RID_TD_ORGANIZE
                 Text [ ENGLISH ] = "Modules" ;
                 Text [ norwegian ] = "Moduler" ;
                 Text [ italian ] = "Moduli" ;
-                Text [ portuguese_brazilian ] = "Módulos" ;
+                Text [ portuguese_brazilian ] = "M?ulos" ;
                 Text [ portuguese ] = "Módulos" ;
                 Text [ finnish ] = "Moduulit" ;
                 Text [ danish ] = "Moduler" ;
@@ -178,7 +178,7 @@ TabPage RID_TP_MODULS
         Text [ ENGLISH ] = "M~odule/Dialog" ;
         Text [ norwegian ] = "M~odule/Dialog" ;
         Text [ italian ] = "M~odulo/Dialogo" ;
-        Text [ portuguese_brazilian ] = "M~ódulo/Di logo" ;
+        Text [ portuguese_brazilian ] = "M~?ulo/Di logo" ;
         Text [ portuguese ] = "M~ódulo/Diálogo" ;
         Text [ finnish ] = "M~oduuli/valintaikkuna" ;
         Text [ danish ] = "Modul/Dialog" ;
@@ -303,7 +303,7 @@ TabPage RID_TP_MODULS
         Text [ ENGLISH ] = "New ~module..." ;
         Text [ norwegian ] = "New ~module..." ;
         Text [ italian ] = "Nuovo ~modulo..." ;
-        Text [ portuguese_brazilian ] = "~Módulo novo" ;
+        Text [ portuguese_brazilian ] = "~M?ulo novo" ;
         Text [ portuguese ] = "~Novo módulo..." ;
         Text [ finnish ] = "Uusi ~moduuli" ;
         Text [ danish ] = "Nyt modul..." ;
@@ -578,7 +578,7 @@ TabPage RID_TP_LIBS
         Text [ french ] = "~Ajouter..." ;
         Text [ swedish ] = "Lägg ~till..." ;
         Text [ danish ] = "Tilføj..." ;
-        Text [ portuguese_brazilian ] = "Hin~zufügen..." ;
+        Text [ portuguese_brazilian ] = "Hin~zuf?en..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text[ chinese_simplified ] = "ÐÂÔö(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
