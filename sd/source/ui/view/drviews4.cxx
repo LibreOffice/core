@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:43:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,9 +352,6 @@ void DrawViewShell::StartRulerDrag (
     const Ruler& rRuler,
     const MouseEvent& rMEvt)
 {
-    if(!pDrView->IsHlplVisible())
-        return;
-
     GetActiveWindow()->CaptureMouse();
 
     Point aWPos = GetActiveWindow()->PixelToLogic(GetActiveWindow()->GetPointerPosPixel());
@@ -362,9 +359,14 @@ void DrawViewShell::StartRulerDrag (
     if ( rRuler.GetExtraRect().IsInside(rMEvt.GetPosPixel()) )
     {
         pDrView->BegSetPageOrg(aWPos);
+        bIsRulerDrag = TRUE;
     }
     else
     {
+        // #i34536# if no guide-lines are visible yet, that show them
+        if( ! pDrView->IsHlplVisible())
+            pDrView->SetHlplVisible( TRUE );
+
         SdrHelpLineKind eKind;
 
         if ( rMEvt.IsMod1() )
@@ -375,8 +377,8 @@ void DrawViewShell::StartRulerDrag (
             eKind = SDRHELPLINE_VERTICAL;
 
         pDrView->BegDragHelpLine(aWPos, eKind);
+        bIsRulerDrag = TRUE;
     }
-    bIsRulerDrag = TRUE;
 }
 
 /*************************************************************************
