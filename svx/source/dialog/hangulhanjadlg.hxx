@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:47 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,9 @@ namespace svx
         void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
         void            EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset );
         void            EditFocusLost( Edit* _pEdit, sal_uInt8 _nEntryOffset );
+
+        bool            DeleteEntryFromDictionary( const ::rtl::OUString& rEntry, const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary >& xDict );
+
     public:
                         HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
                         ~HangulHanjaEditDictDialog();
