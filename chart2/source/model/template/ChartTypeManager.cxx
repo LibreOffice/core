@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ typedef ::std::map< OUString, TemplateId > tTemplateMapType;
 const tTemplateMapType & lcl_DefaultChartTypeMap()
 {
     static const tTemplateMapType aMap = tTemplateMapType(
-        ::comphelper::MakeMap< tTemplateMapType::key_type, tTemplateMapType::data_type >
+        ::comphelper::MakeMap< tTemplateMapType::key_type, tTemplateMapType::mapped_type >
         ( C2U( "com.sun.star.chart2.template.Line" ),                           TEMPLATE_LINE )
         ( C2U( "com.sun.star.chart2.template.StackedLine" ),                    TEMPLATE_STACKEDLINE )
         ( C2U( "com.sun.star.chart2.template.PercentStackedLine" ),             TEMPLATE_PERCENTSTACKEDLINE )
@@ -404,7 +404,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 
             // As XMultiServiceFactory does not specify, what to do in case
             // createInstance is called with an unknown service-name, this
-            // function will just return an empty XInterface.
+            // function will just return an empty XInterface
             ASSERT_EXCEPTION( ex );
             xResult.set( 0 );
         }
