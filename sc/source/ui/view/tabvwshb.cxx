@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:26:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdview.hxx>
 #include <svx/linkmgr.hxx>
+#include <svx/fontworkbar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -459,6 +460,11 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 rReq.Done();
             }
             break;
+
+        case SID_FONTWORK_GALLERY_FLOATER:
+            svx::FontworkBar::execute( pView, rReq, GetViewFrame()->GetBindings() );
+            rReq.Ignore();
+            break;
     }
 }
 
@@ -512,11 +518,8 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_GRAPHIC:
-                if (bTabProt)
-                    rSet.DisableItem( nWhich );
-                break;
-
             case SID_INSERT_AVMEDIA:
+            case SID_FONTWORK_GALLERY_FLOATER:
                 if (bTabProt)
                     rSet.DisableItem( nWhich );
                 break;
