@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 20:42:42 $
+ *  last change: $Author: th $ $Date: 2000-11-06 21:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4760,33 +4760,6 @@ long Window::GetCursorExtTextInputWidth() const
 
     ImplWinData* pWinData = ImplGetWinData();
     return pWinData->mnCursorExtWidth;
-}
-
-// -----------------------------------------------------------------------
-
-void Window::SetExtTextInputPos( USHORT nStart, USHORT nCount, const Rectangle* pPosAry )
-{
-}
-
-// -----------------------------------------------------------------------
-
-const Rectangle* Window::GetExtTextInputPosAry() const
-{
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-USHORT Window::GetExtTextInputPosStart() const
-{
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-USHORT Window::GetExtTextInputPosCount() const
-{
-    return 0;
 }
 
 // -----------------------------------------------------------------------
