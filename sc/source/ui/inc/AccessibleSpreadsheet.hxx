@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:15:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        selectAllAccessible(  )
+        selectAllAccessibleChildren(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL
