@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:45:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ SalObject* X11SalInstance::CreateObject( SalFrame* pParent )
         return NULL;
     }
 
-    SalDisplay* pSalDisp        = GetSalData()->GetDefDisp();
+    SalDisplay* pSalDisp        = GetSalData()->GetDisplay();
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
@@ -207,7 +207,7 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 X11SalObject::X11SalObject()
 {
     maSystemChildData.nSize     = sizeof( SystemChildData );
-    maSystemChildData.pDisplay  = GetSalData()->GetDefDisp()->GetDisplay();
+    maSystemChildData.pDisplay  = GetSalData()->GetDisplay()->GetDisplay();
     maSystemChildData.aWindow       = None;
     maSystemChildData.pSalFrame = 0;
     maSystemChildData.pWidget       = 0;
