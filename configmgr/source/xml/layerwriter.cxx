@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-12 16:06:33 $
+ *  last change: $Author: ssmith $ $Date: 2002-11-06 11:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ LayerWriter::LayerWriter(ServiceFactory const & _xSvcFactory)
 : LayerWriterService_Base(_xSvcFactory)
 , m_xTCV( createTCV(_xSvcFactory) )
 , m_bInProperty(false)
+, m_bStartDocument(false)
 {
 }
 // -----------------------------------------------------------------------------
@@ -128,10 +129,9 @@ void SAL_CALL LayerWriter::startLayer(  )
 {
     m_aFormatter.reset();
     m_bInProperty = false;
+    m_bStartDocument = false;
 
     checkInElement(false);
-
-    getWriteHandler()->startDocument();
 }
 // -----------------------------------------------------------------------------
 
@@ -139,15 +139,29 @@ void SAL_CALL LayerWriter::endLayer(  )
         throw (backenduno::MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
 {
     checkInElement(false);
-
-    getWriteHandler()->endDocument();
-    m_aFormatter.reset();
+    if (m_bStartDocument == false)
+    {
+        uno::Reference< io::XOutputStream > aStream = this->getOutputStream(  );
+        aStream->closeOutput();
+    }
+    else
+    {
+        getWriteHandler()->endDocument();
+        m_aFormatter.reset();
+        m_bStartDocument = false;
+    }
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerWriter::overrideNode( const OUString& aName, sal_Int16 aAttributes )
         throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+
+    if (m_bStartDocument == false)
+    {
+        getWriteHandler()->startDocument();
+        m_bStartDocument = true;
+    }
     ElementInfo aInfo(aName, this->isInElement() ? ElementType::node : ElementType::layer);
     aInfo.flags = aAttributes;
     aInfo.op = Operation::modify;

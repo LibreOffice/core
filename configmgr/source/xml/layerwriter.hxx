@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:23:01 $
+ *  last change: $Author: ssmith $ $Date: 2002-11-06 11:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ namespace configmgr
             ElementFormatter    m_aFormatter;
             uno::Type           m_aPropertyType;
             bool                m_bInProperty;
+            bool                m_bStartDocument;
         };
 // -----------------------------------------------------------------------------
     } // namespace xml
