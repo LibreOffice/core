@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-19 07:35:33 $
+ *  last change: $Author: gt $ $Date: 2002-07-04 13:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2397,6 +2397,8 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
+        nEntryHeight = 0;   // _together_ with TRUE of 1. par (bFont) of InitSettings() a zero-height
+                            //  forces complete recalc of heights!
         InitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
