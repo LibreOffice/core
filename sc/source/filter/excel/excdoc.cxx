@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:15:02 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
+#endif
+#ifndef SC_XEPAGE_HXX
+#include "xepage.hxx"
 #endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
@@ -453,13 +456,6 @@ void ExcTable::FillAsTable( void )
     SvNumberFormatter&      rFormatter = *rR.pDoc->GetFormatTable();
     const BiffTyp           eDateiTyp = rR.eDateiTyp;
 
-    SfxStyleSheet*          pStSh = ( SfxStyleSheet* ) rDoc.GetStyleSheetPool()->Find(
-                                        rDoc.GetPageStyle( nScTab ), SFX_STYLE_FAMILY_PAGE );
-    rR.pStyleSheet = pStSh;
-
-    SfxItemSet*             pStyleSheetItemSet = pStSh? &pStSh->GetItemSet() : NULL;
-    rR.pStyleSheetItemSet = pStyleSheetItemSet;
-
     XclExpHyperlinkList*    pHlinks = new XclExpHyperlinkList;
     XclExpTableOpManager    aTableOpList;
     XclExpTableOp*          pTableOpRec = NULL;
@@ -548,22 +544,20 @@ void ExcTable::FillAsTable( void )
         pPatt = aIterator.GetPattern();
     }
 
-    // Header und Default-Recs
+    // WSBOOL needs data from page settings, create it here, add it later
+    ::std::auto_ptr< XclExpPageSettings > pPageSett( new XclExpPageSettings( rRoot ) );
+    bool bFitToPages = pPageSett->GetPageData().mbFitToPages;
+
     if( eDateiTyp < Biff8 )
     {
         Add( new ExcBof );
         Add( new ExcDummy_02a );
-        Add( new ExcPrintheaders( pStyleSheetItemSet ) );
-        Add( new ExcPrintGridlines( pStyleSheetItemSet ) );
-        Add( new ExcDummy_02b );
         // GUTS (count & size of outline icons)
         Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
         Add( new ExcDummy_02c );
         // COUNTRY - in BIFF5/7 in every worksheet
         Add( new XclExpCountry( rRoot ) );
-        Add( new XclExpWsbool( rR ) );
-        Add( new XclExpPagebreaks( rR, nScTab, xlPBHorizontal ) );
-        Add( new XclExpPagebreaks( rR, nScTab, xlPBVertical ) );
+        Add( new XclExpWsbool( bFitToPages ) );
     }
     else
     {
@@ -572,43 +566,21 @@ void ExcTable::FillAsTable( void )
         Add( new XclRefmode() );
         Add( new XclIteration( rDoc ) );
         Add( new XclDelta( rDoc ) );
-        Add( new ExcPrintheaders( pStyleSheetItemSet ) );
-        Add( new ExcPrintGridlines( pStyleSheetItemSet ) );
         Add( new ExcDummy8_02 );
         // GUTS (count & size of outline icons)
         Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
-        Add( new XclExpWsbool( rR ) );
-        Add( new XclExpPagebreaks8( rR, nScTab, xlPBHorizontal ) );
-        Add( new XclExpPagebreaks8( rR, nScTab, xlPBVertical ) );
+        Add( new XclExpWsbool( bFitToPages ) );
     }
 
-    Add( new XclExpHeader( rR ) );
-    Add( new XclExpFooter( rR ) );
-    Add( new ExcHcenter( pStyleSheetItemSet ) );
-    Add( new ExcVcenter( pStyleSheetItemSet ) );
+    Add( pPageSett.release() );
 
-    // margins
-    const SvxLRSpaceItem&   rLRSpaceItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
-    Add( new XclExpMargin( rLRSpaceItem.GetLeft(), xlLeftMargin ) );
-    Add( new XclExpMargin( rLRSpaceItem.GetRight(), xlRightMargin ) );
-        const SvxULSpaceItem&   rULSpaceItem = ( const SvxULSpaceItem& ) pStyleSheetItemSet->Get( ATTR_ULSPACE );
-    Add( new XclExpMargin( rULSpaceItem.GetUpper(), xlTopMargin ) );
-    Add( new XclExpMargin( rULSpaceItem.GetLower(), xlBottomMargin ) );
-
-    Add( new ExcSetup( &rR ) );
-
-    if( eDateiTyp >= Biff8 )
-    {
-        Add( new XclExpBitmap( *rR.pER ) );
-
-    }
     if( rDoc.IsTabProtected( nScTab ) )
         Add( new XclProtection() );
 
     if ( eDateiTyp < Biff8 && rR.pExtSheetCntAndRecs )
         Add( new ExcExternDup( *rR.pExtSheetCntAndRecs ) );
 
-    Add( new XclExpUInt16Record( EXC_ID_DEFCOLWIDTH, (eDateiTyp < Biff8) ? 10 : 8 ) );
+    Add( new XclExpUInt16Record( EXC_ID_DEFCOLWIDTH, 10 ) );
 
     // COLINFO records for all columns
     XclExpColinfo* pColinfo = NULL;
@@ -724,7 +696,7 @@ void ExcTable::FillAsTable( void )
                     if ( rR.eDateiTyp < Biff8 )
                         pAktExcCell = new ExcLabel( aScPos, pPatt, rR, aTemp );
                     else
-                        pAktExcCell = new ExcLabelSst( aScPos, pPatt, rR, aTemp );
+                        pAktExcCell = new XclExpLabelSst( *rR.pER, aScPos, aTemp, pPatt );
                 }
                 break;
                 case CELLTYPE_FORMULA:
@@ -763,10 +735,11 @@ void ExcTable::FillAsTable( void )
                 case CELLTYPE_EDIT:
                 {
                     pLastRKMulRK = NULL;
+                    ScEditCell& rEditCell = *static_cast< ScEditCell* >( const_cast< ScBaseCell* >( pAktScCell ) );
                     if( rR.eDateiTyp < Biff8 )
-                        pAktExcCell = new ExcRString( aScPos, pPatt, rR, *((ScEditCell*) pAktScCell) );
+                        pAktExcCell = new ExcRString( aScPos, pPatt, rR, rEditCell );
                     else
-                        pAktExcCell = new ExcLabelSst( aScPos, pPatt, rR, *((ScEditCell*) pAktScCell) );
+                        pAktExcCell = new XclExpLabelSst( *rR.pER, aScPos, rEditCell, pPatt );
 
                     XclExpHyperlink*& rpHlink = rR.pLastHlink;
                     if( rpHlink )
@@ -1003,9 +976,6 @@ void ExcTable::FillAsTable( void )
             }
         }
     }
-
-    rR.pStyleSheet = NULL;
-    rR.pStyleSheetItemSet = NULL;
 
     Add( pHlinks );
 
