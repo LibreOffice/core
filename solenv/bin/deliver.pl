@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:57:00 $
+#   last change: $Author: rt $ $Date: 2004-11-05 12:46:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.75 $ ';
+$id_str = ' $Revision: 1.76 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -948,7 +948,6 @@ sub push_default_actions
     my $subdir;
     my @subdirs = (
                     'bin',
-                    'idl',
                     'inc',
                     'lib',
                     'rdb',
@@ -956,6 +955,7 @@ sub push_default_actions
                     'xml',
                 );
     push(@subdirs, 'zip') if $opt_zip;
+    push(@subdirs, 'idl') if ! $common_build;
     my @common_subdirs = (
                     'bin',
                     'idl',
