@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 06:46:23 $
+ *  last change: $Author: oj $ $Date: 2001-04-26 09:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,13 +406,31 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
             ,m_xORB(_rxORB)
             ,m_pTables(NULL)
             ,m_pViews(NULL)
+            ,m_bSupportsViews(sal_False)
 {
     DBG_CTOR(OConnection,NULL);
 
     try
     {
         m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this, this);
-        m_pViews = new OViewContainer(*this, m_aMutex, this, this);
+        // check if we supports types
+        Reference<XResultSet> xRes = _rxMaster->getMetaData()->getTableTypes();
+        if(xRes.is())
+        {
+            ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
+            Reference<XRow> xRow(xRes,UNO_QUERY);
+            while(xRes->next())
+            {
+                ::rtl::OUString sValue = xRow->getString(1);
+                if( !xRow->wasNull() && sValue == sView)
+                {
+                    m_bSupportsViews = sal_True;
+                    break;
+                }
+            }
+        }
+        if(m_bSupportsViews)
+            m_pViews = new OViewContainer(*this, m_aMutex, this, this);
     }
     catch(const SQLException&)
     {
@@ -492,7 +510,21 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 //--------------------------------------------------------------------------
 Sequence< Type > OConnection::getTypes() throw (RuntimeException)
 {
-    return concatSequences(OSubComponent::getTypes(), OConnectionRerouter::getTypes(), OConnection_Base::getTypes());
+    if(m_bSupportsViews)
+        return concatSequences(OSubComponent::getTypes(), OConnectionRerouter::getTypes(), OConnection_Base::getTypes());
+    Sequence<Type> aTypes = concatSequences(OSubComponent::getTypes(), OConnectionRerouter::getTypes());
+    Sequence<Type> aConTypes = OConnection_Base::getTypes();
+    sal_Int32 nSize = aTypes.getLength();
+    aTypes.realloc(aTypes.getLength() + aConTypes.getLength() - 1);
+    Type* pBegin    = aConTypes.getArray();
+    Type* pEnd      = pBegin + aConTypes.getLength();
+    Type aTypeToHide = getCppuType( (Reference<XViewsSupplier>*)0);
+    for (; pBegin != pEnd; ++pBegin)
+    {
+        if(*pBegin != aTypeToHide)
+            aTypes.getArray()[nSize++] = *pBegin;
+    }
+    return aTypes;
 }
 
 //--------------------------------------------------------------------------
@@ -515,6 +547,8 @@ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
 //--------------------------------------------------------------------------
 Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 {
+    if(!m_bSupportsViews && rType == getCppuType( (Reference<XViewsSupplier>*)0))
+        return Any();
     Any aReturn = OSubComponent::queryInterface( rType );
     if (!aReturn.hasValue())
         aReturn = OConnectionRerouter::queryInterface( rType );

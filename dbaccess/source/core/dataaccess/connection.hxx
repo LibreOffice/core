@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:07:13 $
+ *  last change: $Author: oj $ $Date: 2001-04-26 09:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ protected:
     OTableContainer*            m_pTables;
     OViewContainer*             m_pViews;
     ::com::sun::star::uno::Any  m_aAdditionalWarnings;  // own warnings (appended to the ones got by the master connection)
+    sal_Bool                    m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
 
 protected:
     virtual ~OConnection();
