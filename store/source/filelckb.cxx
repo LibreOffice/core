@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:34:36 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ inline OFileLockBytes_Impl::~OFileLockBytes_Impl (void)
     m_aMemmap.cleanup();
     if (m_hFile)
     {
-        __store_fclose (m_hFile);
+        (void)__store_fclose (m_hFile);
         m_hFile = 0;
     }
 }
@@ -430,7 +430,7 @@ inline storeError OFileLockBytes_Impl::close (void)
     m_aMemmap.cleanup();
     if (m_hFile)
     {
-        __store_fclose (m_hFile);
+        (void)__store_fclose (m_hFile);
         m_hFile = 0;
     }
     return store_E_None;
@@ -445,7 +445,7 @@ inline storeError OFileLockBytes_Impl::create (
     m_aMemmap.cleanup();
     if (m_hFile)
     {
-        __store_fclose (m_hFile);
+        (void)__store_fclose (m_hFile);
         m_hFile = 0;
     }
 
@@ -578,11 +578,9 @@ inline storeError OFileLockBytes_Impl::resize (sal_uInt32 nSize)
 inline storeError OFileLockBytes_Impl::sync (void)
 {
     if (m_bWriteable)
-    {
-        // File I/O.
-        __store_fsync (m_hFile);
-    }
-    return store_E_None;
+        return __store_fsync (m_hFile);
+    else
+        return store_E_None;
 }
 
 /*
@@ -738,7 +736,7 @@ storeError OFileLockBytes::stat (sal_uInt32 &rnSize)
  * lockRange.
  */
 storeError OFileLockBytes::lockRange (
-    sal_uInt32 nOffset, sal_uInt32 nBytes)
+    sal_uInt32 /* nOffset */, sal_uInt32 /* nBytes */)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);
@@ -752,7 +750,7 @@ storeError OFileLockBytes::lockRange (
  * unlockRange.
  */
 storeError OFileLockBytes::unlockRange (
-    sal_uInt32 nOffset, sal_uInt32 nBytes)
+    sal_uInt32 /* nOffset */, sal_uInt32 /* nBytes */)
 {
     // Acquire exclusive access.
     osl::MutexGuard aGuard (m_aMutex);
