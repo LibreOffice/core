@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:32:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,9 +165,11 @@ public:
         of view shells in relation to the other view shells.  After this the
         only shells that are higher on the stack are its object bars.
 
-        <p>Call this method after a focus change to bring a view mode view
+        Call this method after a focus change to bring a view mode view
         shell and ist associated tool bar shells to the top of the
-        stack.</p>
+        stack.
+
+        The mbKeepMainViewShellOnTop flag is not obeyed.
 
         @param nId
             The id of the shell to move to the top.
