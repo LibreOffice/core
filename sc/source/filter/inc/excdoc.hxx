@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:42:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,6 @@
 #include "root.hxx"
 #endif
 
-
-#define XCL_COLMAX                  (UINT16(255))
-#define EXC5_ANZROW                 (UINT16(16383))
-#define XCL8_ROWMAX                 (UINT16(65535))
-
-
 //------------------------------------------------------------------ Forwards -
 
 class SvStream;
@@ -93,7 +87,6 @@ class ScProgress;
 
 class NameBuffer;
 
-class XclExpStream;
 class XclExpChangeTrack;
 
 
@@ -117,7 +110,6 @@ private:
 
     NameBuffer*                 pTabNames;
 
-    void                        Clear();
     void                        NullTab( const String* pCodename = NULL );
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
     void                        Add( XclExpRecordBase* pRec );
