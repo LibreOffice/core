@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-18 13:20:58 $
+ *  last change: $Author: lla $ $Date: 2000-12-06 09:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,9 +437,11 @@ Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime()
     if( !xModuleFactory.is() )
     {
         MutexGuard aGuard( aMutex );
-        xModuleFactory = createModuleFactory();
+        if( !xModuleFactory.is() )      // is xModuleFactory really not set (MultiThreaded!)
+        {
+            xModuleFactory = createModuleFactory();
+        }
     }
-
     if( xModuleFactory.is() )
         return xModuleFactory->createInstance();
 
@@ -535,7 +537,10 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
     if( !xModuleFactory.is() )
     {
         MutexGuard aGuard( aMutex );
-        xModuleFactory = createModuleFactory();
+        if( !xModuleFactory.is() )   // MultiThreaded!
+        {
+            xModuleFactory = createModuleFactory();
+        }
     }
 
     if( xModuleFactory.is() )
