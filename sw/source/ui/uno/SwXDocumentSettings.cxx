@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-14 14:02:00 $
+ *  last change: $Author: mtg $ $Date: 2001-09-07 10:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CHART_AUTO_UPDATE,
     HANDLE_ADD_PARA_TABLE_SPACING,
     HANDLE_ADD_PARA_TABLE_SPACING_AT_START,
+    HANDLE_ALIGN_TAB_STOP_POSITION,
     HANDLE_PRINTER_NAME,
     HANDLE_PRINTER_SETUP,
     HANDLE_IS_KERN_ASIAN_PUNCTUATION,
@@ -164,6 +165,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate"),            HANDLE_CHART_AUTO_UPDATE,               CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing"),        HANDLE_ADD_PARA_TABLE_SPACING,          CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart"), HANDLE_ADD_PARA_TABLE_SPACING_AT_START, CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AlignTabStopPosition"),       HANDLE_ALIGN_TAB_STOP_POSITION,         CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("PrinterName"),                HANDLE_PRINTER_NAME,                    CPPUTYPE_OUSTRING,          0,   0},
         { RTL_CONSTASCII_STRINGPARAM("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   CPPUTYPE_SEQINT8,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       CPPUTYPE_BOOLEAN,           0,   0},
@@ -305,6 +307,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             sal_Bool bParaSpacePage;
             rValue >>= bParaSpacePage;
             mpDoc->SetParaSpaceMax( mpDoc->IsParaSpaceMax(), bParaSpacePage);
+        }
+        break;
+        case HANDLE_ALIGN_TAB_STOP_POSITION:
+        {
+            sal_Bool bAlignTab = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetTabCompat( bAlignTab );
         }
         break;
         case HANDLE_PRINTER_NAME:
@@ -490,6 +498,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bParaSpace = mpDoc->IsParaSpaceMaxAtPages();
             rValue.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_ALIGN_TAB_STOP_POSITION:
+        {
+            sal_Bool bAlignTab = mpDoc->IsTabCompat();
+            rValue.setValue(&bAlignTab, ::getBooleanCppuType());
         }
         break;
         case HANDLE_PRINTER_NAME:
