@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
+ *  last change: $Author: mib $ $Date: 2001-05-10 10:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,10 @@ void lcl_addOutplaceProperties(
         *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
         pStates++;
 
+        aAny <<= (sal_Int32)pEmbed->GetViewAspect();
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), aAny );
+        pStates++;
+
         // TODO: aspect
     }
 }
@@ -424,7 +428,7 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
     if( !pInfo )
         return;
 
-    const XMLPropertyState *aStates[6] = { 0, 0, 0, 0, 0, 0 };
+    const XMLPropertyState *aStates[7] = { 0, 0, 0, 0, 0, 0, 0 };
     SvGlobalName aClassId( pInfo->GetClassName() );
 
     if( aOutplaceClassId == aClassId )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
+ *  last change: $Author: mib $ $Date: 2001-05-10 10:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
 
     Rectangle aVisArea( 0, 0, nWidth, nHeight );
+    sal_Int32 nDrawAspect = 0;
     const XMLPropStyleContext *pStyle = 0;
     if( rStyleName.getLength() )
     {
@@ -361,6 +362,11 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                             aVisArea.setHeight( nVal );
                         }
                         break;
+                    case CTF_OLE_DRAW_ASPECT:
+                        {
+                            rProp.maValue >>= nDrawAspect;
+                        }
+                        break;
                     }
                 }
             }
@@ -372,6 +378,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     {
         SvEmbeddedInfoObject * pEmbed = PTR_CAST(SvEmbeddedInfoObject, pInfo );
         pEmbed->SetInfoVisArea( aVisArea );
+        if( nDrawAspect )
+            pEmbed->SetInfoViewAspect( (UINT32)nDrawAspect );
     }
     return xPropSet;
 }
