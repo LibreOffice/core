@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WrapColumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:22:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace connectivity
             void put_Type(const DataTypeEnum& _eNum) ;
             sal_Int32 get_Precision() const;
             void put_Precision(sal_Int32 _nPre) ;
-            sal_Int32 get_NumericScale() const;
+            sal_uInt8 get_NumericScale() const;
             void put_NumericScale(sal_Int8 _nScale);
             SortOrderEnum get_SortOrder() const;
             void put_SortOrder(SortOrderEnum _nScale);
