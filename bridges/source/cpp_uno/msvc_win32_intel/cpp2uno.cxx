@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-26 07:22:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 
 #include "msci.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define TRACE(x) OSL_TRACE(x)
 #else
 #define TRACE(x)
