@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: registry_XImplementationRegistration.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:51:35 $ 
+'*  last change:$Date: 2004-03-09 10:19:43 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -94,7 +94,7 @@ On Error Goto ErrHndl
     xReg = createUNOService("com.sun.star.registry.SimpleRegistry")
     xReg.Open(utils.Path2URL(cTestDocsDir &amp; "XImpReg.reg"), false, true)
     aImplementationLoader = "com.sun.star.loader.Java2"
-    aLocation = utils.Path2URL(cTestDocsDir &amp; "bascomps.jar")
+    aLocation = utils.Path2URL(cTestDocsDir &amp; "qadevlibs/MyPersistObjectImpl.jar")
 
     Test.StartMethod("getImplementations()")
     bOK = true
