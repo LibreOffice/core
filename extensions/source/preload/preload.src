@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-07 15:04:26 $
+ *  last change: $Author: rt $ $Date: 2002-01-10 21:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,14 +185,14 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ greek ] = " - Software License Agreement";
         Text[ dutch ] = " - Software License Agreement";
         Text[ french ] = " - Contrat de licence du logiciel";
-        Text[ spanish ] = " - Software License Agreement";
+        Text[ spanish ] = " - Contrato de licencia para el uso de software ";
         Text[ finnish ] = " - Software License Agreement";
         Text[ italian ] = " - Accordo di licenza del software";
         Text[ danish ] = " - Software License Agreement";
         Text[ swedish ] = " - Avtal f�r progamvara";
         Text[ polish ] = " - Software License Agreement";
         Text[ portuguese_brazilian ] = " - Software License Agreement";
-        Text[ japanese ] = " - ソフトウェア使用許諾書";
+        Text[ japanese ] = " - ソフトウェア使用許諾協定";
         Text[ korean ] = " - Software License Agreement";
         Text[ chinese_simplified ] = " - 软件使用协约";
         Text[ chinese_traditional ] = " - 軟體使用協定";
@@ -210,7 +210,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ greek ] = "- User Data";
         Text[ dutch ] = "- User Data";
         Text[ french ] = " - Donn�es d'identit�";
-        Text[ spanish ] = "- User Data";
+        Text[ spanish ] = " - Datos del usuario";
         Text[ finnish ] = "- User Data";
         Text[ italian ] = " - Dati utente";
         Text[ danish ] = "- User Data";
@@ -377,6 +377,7 @@ TabPage RID_TP_LICENSE
     Text[ arabic ] = "License Agreement";
     Text[ catalan ] = "License Agreement";
 };
+
 
 
 
