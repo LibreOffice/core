@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-09 12:38:13 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 10:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,13 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_TEXT_ANIAMOUNT       -SDRATTR_START]=new SdrTextAniAmountItem;
     ppPoolDefaults[SDRATTR_TEXT_CONTOURFRAME    -SDRATTR_START]=new SdrTextContourFrameItem;
     ppPoolDefaults[SDRATTR_AUTOSHAPE_ADJUSTMENT -SDRATTR_START]=new SdrAutoShapeAdjustmentItem;
-    for (i=SDRATTR_RESERVE14; i<=SDRATTR_RESERVE19; i++) {
+#ifndef SVX_LIGHT
+    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
+#else
+    // no need to have alien attributes persistent in the player
+    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SfxVoidItem( SDRATTR_XMLATTRIBUTES );
+#endif // #ifndef SVX_LIGHT
+    for (i=SDRATTR_RESERVE15; i<=SDRATTR_RESERVE19; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
     }
     ppPoolDefaults[SDRATTRSET_MISC-SDRATTR_START]=new SdrMiscSetItem(pMaster);
@@ -335,14 +341,8 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
     ppPoolDefaults[SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, TRUE );
     ppPoolDefaults[SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM, FALSE );
-#ifndef SVX_LIGHT
-    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
-#else
-    // no need to have alien attributes persistent in the player
-    ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SfxVoidItem( SDRATTR_XMLATTRIBUTES );
-#endif // #ifndef SVX_LIGHT
 
-    for (i=SDRATTR_NOTPERSISTRESERVE4; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
+    for (i=SDRATTR_NOTPERSISTRESERVE3; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
     }
 
@@ -664,7 +664,7 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_TEXT_ANIAMOUNT         : nResId = SIP_SA_TEXT_ANIAMOUNT;break;
         case SDRATTR_TEXT_CONTOURFRAME      : nResId = SIP_SA_TEXT_CONTOURFRAME;break;
         case SDRATTR_AUTOSHAPE_ADJUSTMENT   : nResId = SIP_SA_AUTOSHAPE_ADJUSTMENT;break;
-        case SDRATTR_RESERVE14              : nResId = SIP_SA_RESERVE14;break;
+        case SDRATTR_XMLATTRIBUTES          : nResId = SIP_SA_XMLATTRIBUTES;break;
         case SDRATTR_RESERVE15              : nResId = SIP_SA_RESERVE15;break;
         case SDRATTR_RESERVE16              : nResId = SIP_SA_RESERVE16;break;
         case SDRATTR_RESERVE17              : nResId = SIP_SA_RESERVE17;break;
@@ -951,7 +951,7 @@ BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
         case SDRATTR_TEXT_ANIAMOUNT          : aStr="SDRATTR_TEXT_ANIAMOUNT          "; break;
         case SDRATTR_TEXT_CONTOURFRAME       : aStr="SDRATTR_TEXT_CONTOURFRAME       "; break;
         case SDRATTR_AUTOSHAPE_ADJUSTMENT    : aStr="SDRATTR_AUTOSHAPE_ADJUSTMENT    "; break;
-        case SDRATTR_RESERVE14               : aStr="SDRATTR_RESERVE14               "; break;
+        case SDRATTR_XMLATTRIBUTES           : aStr="SDRATTR_XMLATTRIBUTES           "; break;
         case SDRATTR_RESERVE15               : aStr="SDRATTR_RESERVE15               "; break;
         case SDRATTR_RESERVE16               : aStr="SDRATTR_RESERVE16               "; break;
         case SDRATTR_RESERVE17               : aStr="SDRATTR_RESERVE17               "; break;

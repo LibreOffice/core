@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-24 20:20:20 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 10:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13986,32 +13986,11 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ finnish ] = "Automaattinen muutosten muotoilu";
 };
 
-String SIP_SA_RESERVE14
+String SIP_SA_XMLATTRIBUTES
 {
-    Text = "SvDraw Reserve 14";
-    Text [ ENGLISH ] = "SvDraw Reserve 14" ;
-    Text[ english_us ] = "SvDraw reserved for 14";
-    Text[ portuguese ] = "SvDraw Reserva 14";
-    Text[ russian ] = "Çàğåçåğâèğîâàííûé SvDraw 14";
-    Text[ dutch ] = "SvDraw reserve 14";
-    Text[ french ] = "Réservé pour SvDraw 14";
-    Text[ spanish ] = "SvDraw reserva 14";
-    Text[ italian ] = "Riservato per SvDraw 14";
-    Text[ danish ] = "SvDraw reserve 14";
-    Text[ swedish ] = "SvDraw reserverad för 14";
-    Text[ polish ] = "Rezerwa SvDraw 14";
-    Text[ portuguese_brazilian ] = "SvDraw Reserve 14";
-    Text[ japanese ] = "SvDrawã®äºˆå‚™ 14";
-    Text[ chinese_simplified ] = "SvDraw Reserve 14";
-    Text[ chinese_traditional ] = "SvDraw é ç•™ 14";
-    Text[ arabic ] = "SvDraw ãÍÌæÒ áÜ 14";
-    Text[ dutch ] = "SvDraw reserve 14";
-    Text[ chinese_simplified ] = "SvDraw Reserve 14";
-    Text[ greek ] = "SvDraw åíáëëáêô. 14";
-    Text[ korean ] = "SvDraw ì˜ˆë¹„ 14";
-    Text[ turkish ] = "SvDraw - Yedek 14";
-    Text[ catalan ] = "SvDraw reserva 14";
-    Text[ finnish ] = "SvDraw varattu 14:lle";
+    Text = "Benutzerdefinierte Attribute";
+    Text [ ENGLISH ] = "User definied Attributes" ;
+    Text[ english_us ] = "User definied Attributes";
 };
 
 String SIP_SA_RESERVE15
