@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:40:02 $
+ *  last change: $Author: tbe $ $Date: 2001-08-03 15:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,27 +871,53 @@ void SdTPAction::OpenFileDialog()
             Window* pOldWin = Application::GetDefDialogParent();
             Application::SetDefDialogParent( this );
 
-            String aMacroURL = OfficeApplication::ChooseMacro(FALSE, TRUE);
+            // choose macro dialog
+            String aScriptURL = OfficeApplication::ChooseMacro(FALSE, TRUE);
 
-            // aMacroURL has the following format:
-            // 'macro:///libname.modulename.macroname(args)'               => Macro via App-BasMgr
-            // 'macro://[docname|.]/libname.modulename.macroname(args)'    => Macro via corresponging Doc-BasMgr
-
+            // aScriptURL has the following format:
+            // vnd.sun.star.script:language=[language],macro=[macro],location=[location]
+            // [language] = StarBasic
+            // [macro] = libname.modulename.macroname
+            // [location] = application|document
+            // e.g. 'vnd.sun.star.script:language=StarBasic,macro=Standard.Module1.Main,location=document'
+            //
             // but for the UI we need this format:
             // 'libname.modulename.macroname'
 
-            if ( aMacroURL.Len() != 0 )
+            if ( aScriptURL.Len() != 0 )
             {
-                sal_uInt16 nHashPos = aMacroURL.Search( '/', 8 );
-                sal_uInt16 nArgsPos = aMacroURL.Search( '(' );
+                // parse script URL
+                BOOL bFound;
+                String aValue;
+                INetURLObject aINetScriptURL( aScriptURL );
 
-                String aBasMgrName( INetURLObject::decode(aMacroURL.Copy( 8, nHashPos - 8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-                String aQualifiedName( INetURLObject::decode(aMacroURL.Copy( nHashPos + 1, nArgsPos - nHashPos - 1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-                String aLibName    = aQualifiedName.GetToken(0, sal_Unicode('.'));
-                String aModuleName = aQualifiedName.GetToken(1, sal_Unicode('.'));
-                String aMacroName  = aQualifiedName.GetToken(2, sal_Unicode('.'));
+                // get language
+                String aLanguage;
+                bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("language") ), &aValue );
+                if ( bFound )
+                    aLanguage = aValue;
 
-                SetEditText( aQualifiedName );
+                // get macro
+                String aMacro;
+                String aLibName;
+                String aModuleName;
+                String aMacroName;
+                bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("macro") ), &aValue );
+                if ( bFound )
+                {
+                    aMacro = aValue;
+                    aLibName    = aMacro.GetToken(0, sal_Unicode('.'));
+                    aModuleName = aMacro.GetToken(1, sal_Unicode('.'));
+                    aMacroName  = aMacro.GetToken(2, sal_Unicode('.'));
+                }
+
+                // get location
+                String aLocation;
+                bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("location") ), &aValue );
+                if ( bFound )
+                    aLocation = aValue;
+
+                SetEditText( aMacro );
             }
 
             Application::SetDefDialogParent( pOldWin );
