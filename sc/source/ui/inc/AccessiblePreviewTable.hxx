@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-03-22 16:34:54 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,23 +197,26 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException);
 
+    //=====  internal  ========================================================
+    void SetCurrentIndexInParent(sal_Int32 nNew) { mnIndex = nNew; }
+
 protected:
     virtual ::rtl::OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual Rectangle GetBoundingBoxOnScreen(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual Rectangle GetBoundingBox(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);
 
 private:
     ScPreviewShell*     mpViewShell;
     sal_Int32           mnIndex;
-    ScPreviewTableInfo* mpTableInfo;
+    mutable ScPreviewTableInfo* mpTableInfo;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
-    void    FillTableInfo();
+    void    FillTableInfo() const;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,7 +643,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Spreadsheet Page Preview Table"));
 }
 
-Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() throw (uno::RuntimeException)
+Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
 {
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -659,7 +659,7 @@ Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() throw (uno::Runtime
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewTable::GetBoundingBox() throw (uno::RuntimeException)
+Rectangle ScAccessiblePreviewTable::GetBoundingBox() const throw (uno::RuntimeException)
 {
     FillTableInfo();
 
@@ -688,7 +688,7 @@ sal_Bool ScAccessiblePreviewTable::IsDefunc( const uno::Reference<XAccessibleSta
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
-void ScAccessiblePreviewTable::FillTableInfo()
+void ScAccessiblePreviewTable::FillTableInfo() const
 {
     if ( mpViewShell && !mpTableInfo )
     {
