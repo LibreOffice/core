@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:23:12 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,7 @@ TabDialog DLG_FLD_INSERT
     Text[ catalan ] = "Campos";
     Text[ finnish ] = "Kentät";
 };
+
 
 
 
