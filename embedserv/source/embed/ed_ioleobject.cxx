@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:54:21 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include "embeddoc.hxx"
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <ols/diagnose.h>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XController_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
@@ -145,15 +148,50 @@ STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject
     return E_NOTIMPL;
 }
 
+/**
+ *  Well, this is a not so very inefficient way to deliver
+ *
+ */
 
-STDMETHODIMP EmbedDocument_Impl::DoVerb( LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect )
+
+STDMETHODIMP EmbedDocument_Impl::DoVerb(
+    LONG iVerb,
+    LPMSG lpmsg,
+    IOleClientSite *pActiveSite,
+    LONG lindex,
+    HWND hwndParent,
+    LPCRECT lprcPosRect )
 {
-    if ( iVerb == OLEIVERB_PRIMARY ||
-         iVerb == OLEIVERB_SHOW ||
-         iVerb == OLEIVERB_OPEN )
-    {
-        if( m_pDocHolder )
-        {
+    switch(iVerb) {
+        case OLEIVERB_DISCARDUNDOSTATE:
+            // free any undostate?
+            break;
+        case OLEIVERB_INPLACEACTIVATE:
+            OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
+
+            return m_pDocHolder->InPlaceActivate(pActiveSite,FALSE);
+            break;
+        case OLEIVERB_UIACTIVATE:
+            OSL_ENSURE(m_pDocHolder,"no document for     inplace activation");
+
+            return m_pDocHolder->InPlaceActivate(pActiveSite,TRUE);
+            break;
+        case OLEIVERB_PRIMARY:
+        case OLEIVERB_SHOW:
+            OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
+
+            if(m_pDocHolder->isActive())
+                return NOERROR; //Already active
+
+            if(SUCCEEDED(
+                m_pDocHolder->InPlaceActivate(
+                    pActiveSite,TRUE)))
+                return NOERROR;
+
+            // intended fall trough
+        case OLEIVERB_OPEN:
+            OSL_ENSURE(m_pDocHolder,"no document to open");
+
             // the commented code could be usefull in case
             // outer window would be resized depending from inner one
             // RECTL aEmbArea;
@@ -161,32 +199,42 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb( LONG iVerb, LPMSG lpmsg, IOleClientSite
             // m_pDocHolder->show();
             // m_pDocHolder->SetVisArea( &aEmbArea );
 
+            if(m_pDocHolder->isActive())
+            {
+                m_pDocHolder->InPlaceDeactivate();
+                m_pDocHolder->DisableInplaceActivation(true);
+            }
+
             SIZEL aEmbSize;
             m_pDocHolder->GetExtent( &aEmbSize );
             m_pDocHolder->show();
             m_pDocHolder->resizeWin( aEmbSize );
-        }
 
-        if ( m_pClientSite )
-            m_pClientSite->OnShowWindow( TRUE );
+            if ( m_pClientSite )
+                m_pClientSite->OnShowWindow( TRUE );
 
-        notify();
+            notify();
+            break;
+        case OLEIVERB_HIDE:
+            OSL_ENSURE(m_pDocHolder,"no document to hide");
 
-        return S_OK;
+            if(m_pDocHolder->isActive())
+                m_pDocHolder->InPlaceDeactivate();
+            else {
+                m_pDocHolder->hide();
+
+                if( m_pClientSite )
+                    m_pClientSite->OnShowWindow(FALSE);
+            }
+            break;
+        default:
+            break;
     }
-    else if( iVerb == OLEIVERB_HIDE )
-    {
-        if(m_pDocHolder)
-            m_pDocHolder->hide();
 
-        if( m_pClientSite )
-            m_pClientSite->OnShowWindow( FALSE );
-
-        return S_OK;
-    }
-    else
-        return E_NOTIMPL;
+    return NOERROR;
 }
+
+
 
 STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB **ppEnumOleVerb )
 {
@@ -207,6 +255,8 @@ STDMETHODIMP EmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
 {
     return GetClassID( pClsid );
 }
+
+
 
 STDMETHODIMP EmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR *pszUserType )
 {
@@ -354,6 +404,17 @@ HRESULT EmbedDocument_Impl::SaveObject()
     }
 
     notify();
+
+    return hr;
+}
+
+
+HRESULT EmbedDocument_Impl::ShowObject()
+{
+    HRESULT hr = S_OK;
+
+    if(m_pClientSite)
+        hr = m_pClientSite->ShowObject();
 
     return hr;
 }
