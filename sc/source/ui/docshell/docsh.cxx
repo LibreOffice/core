@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:48:47 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 16:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,11 +602,6 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
             aDocument.UpdStlShtPtrsFrmNms();
 
             bRet = LoadXML( NULL, pStor );
-            if ( bRet )
-            {
-                CalcOutputFactor();
-                UpdateAllRowHeights();
-            }
         }
         else
             bRet = LoadCalc( pStor );
@@ -683,11 +678,6 @@ BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
         //  load the whole file
 
         bRet = LoadXML( NULL, pStor );
-        if ( bRet )
-        {
-            CalcOutputFactor();
-            UpdateAllRowHeights();
-        }
         InitItems();
     }
     else
@@ -784,10 +774,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 DBG_ERROR("Calc3/4: kein Storage");
         }
         else if (aFltName.EqualsAscii(pFilterXML))
-        {
             bRet = LoadXML( &rMedium, NULL );
-            bSetRowHeights = TRUE;  // row height update is disabled during XML import
-        }
         else if (aFltName.EqualsAscii(pFilterSc10))
         {
             SvStream* pStream = rMedium.GetInStream();
