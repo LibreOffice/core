@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RememberAuthentication.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** A specification of how long to remember some authentication data.
 */
-enum RememberAuthentication
+published enum RememberAuthentication
 {
     //-------------------------------------------------------------------------
     /** Do not remember the authentication data (use it once and immediately
