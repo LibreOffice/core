@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:28:08 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
+    OSL_ENSURE( m_bFlushed, "This method must not be called for nonflushed streams!\n" );
     if ( m_bFlushed )
     {
         OSL_ENSURE( m_xPackageStream.is(), "An inserted stream is incomplete!\n" );
@@ -963,6 +964,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         else
             xInStream = m_xPackageStream->getDataStream();
 
+        // The stream does not exist in the storage
         if ( !xInStream.is() )
             throw io::IOException();
 
@@ -978,6 +980,12 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     }
     else if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::SEEKABLEREAD )
     {
+        if ( !m_aTempURL.getLength() && !( m_xPackageStream->getDataStream().is() ) )
+        {
+            // The stream does not exist in the storage
+            throw io::IOException();
+        }
+
         uno::Reference< io::XInputStream > xInStream;
 
         xInStream = GetTempFileAsInputStream(); //TODO:
@@ -1009,10 +1017,20 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             // open new empty temp file
             m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
+            m_bHasDataToFlush = sal_True;
+
             xStream = GetTempFileAsStream();
         }
         else
+        {
+            if ( !m_aTempURL.getLength() && !( m_xPackageStream->getDataStream().is() ) )
+            {
+                // The stream does not exist in the storage
+                m_bHasDataToFlush = sal_True;
+            }
+
             xStream = GetTempFileAsStream();
+        }
 
         m_pAntiImpl = new OWriteStream( this, xStream );
         uno::Reference< io::XStream > xWriteStream =
