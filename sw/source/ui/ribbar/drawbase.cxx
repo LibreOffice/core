@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:50:21 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 #include "edtwin.hxx"
 #include "caption.hxx"
 #include "swundo.hxx"
+#include "undobj.hxx"
+#include "comcore.hrc"
 
 extern BOOL bNoInterrupt;       // in mainwn.cxx
 
@@ -378,7 +380,12 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
         else
         {
             if (OBJ_NONE == nDrawMode)
-                pSh->StartUndo(UNDO_INSERT);
+            {
+                SwRewriter aRewriter;
+
+                aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FRAME));
+                pSh->StartUndo(UNDO_INSERT, &aRewriter);
+            }
 
             pSh->EndCreate(SDRCREATE_FORCEEND);
             if (OBJ_NONE == nDrawMode)   // Textrahmen eingefuegt
