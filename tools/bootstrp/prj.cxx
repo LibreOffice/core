@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nf $ $Date: 2001-09-20 15:45:40 $
+ *  last change: $Author: nf $ $Date: 2001-09-20 16:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,6 @@
 #endif
 #endif
 #endif
-
-Link Star::aDBNotFoundHdl;
 
 //
 //  class SimpleConfig
@@ -1330,6 +1328,12 @@ USHORT StarWriter::Write( String aFileName )
     SvFileStream aFileStream;
 
     aFileStream.Open( aFileName, STREAM_WRITE | STREAM_TRUNC);
+    if ( !aFileStream.IsOpen() && aFileIOErrorHdl.IsSet()) {
+        String sError( String::CreateFromAscii( "Error: Unable to open \"" ));
+        sError += aFileName;
+        sError += String::CreateFromAscii( "for writing!" );
+        aFileIOErrorHdl.Call( &sError );
+    }
 
     if ( Count() > 0 )
     {
@@ -1369,6 +1373,13 @@ USHORT StarWriter::WriteMultiple( String rSourceRoot )
 
             SvFileStream aFileStream;
             aFileStream.Open( aEntry.GetFull(), STREAM_WRITE | STREAM_TRUNC);
+
+            if ( !aFileStream.IsOpen() && aFileIOErrorHdl.IsSet()) {
+                String sError( String::CreateFromAscii( "Error: Unable to open \"" ));
+                sError += aEntry.GetFull();
+                sError += String::CreateFromAscii( "for writing!" );
+                aFileIOErrorHdl.Call( &sError );
+            }
 
               WritePrj( pPrj, aFileStream );
 
