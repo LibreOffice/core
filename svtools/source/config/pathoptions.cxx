@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-01 05:42:13 $
+ *  last change: $Author: pb $ $Date: 2000-12-01 11:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,9 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     case SvtPathOptions::PATH_BASIC:        m_aBasicPath = String( aFullPath );         break;
                     case SvtPathOptions::PATH_BITMAP:       m_aBitmapPath = String( aFullPath );        break;
                     case SvtPathOptions::PATH_CONFIG:       m_aConfigPath = String( aFullPath );        break;
+#if SUPD < 615
                     case SvtPathOptions::PATH_DATABASE:                                                 break;
+#endif
                     case SvtPathOptions::PATH_DICTIONARY:   m_aDictionaryPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_FAVORITES:    m_aFavoritesPath = String( aFullPath );     break;
                     case SvtPathOptions::PATH_FILTER:       m_aFilterPath = String( aFullPath );        break;
@@ -832,7 +834,9 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     case SvtPathOptions::PATH_STORAGE:      m_aStoragePath = String( aFullPath );       break;
                     case SvtPathOptions::PATH_TEMP:         m_aTempPath = String( aFullPath );          break;
                     case SvtPathOptions::PATH_TEMPLATE:     m_aTemplatePath = String( aFullPath );      break;
+#if SUPD < 615
                     case SvtPathOptions::PATH_TRASH:                                                    break;
+#endif
                     case SvtPathOptions::PATH_USERCONFIG:   m_aUserConfigPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_USERDICTIONARY: m_aUserDictionaryPath = String( aFullPath );break;
                     case SvtPathOptions::PATH_WORK:         m_aWorkPath = String( aFullPath );          break;
@@ -877,7 +881,9 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_BACKUP:           aTempStr = OUString( m_aBackupPath );           break;
             case SvtPathOptions::PATH_BITMAP:           aTempStr = OUString( m_aBitmapPath );           break;
             case SvtPathOptions::PATH_CONFIG:           aTempStr = OUString( m_aConfigPath );           break;
+#if SUPD < 615
             case SvtPathOptions::PATH_DATABASE:                                                         break;
+#endif
             case SvtPathOptions::PATH_DICTIONARY:       aTempStr = OUString( m_aDictionaryPath );       break;
             case SvtPathOptions::PATH_FAVORITES:        aTempStr = OUString( m_aFavoritesPath );        break;
             case SvtPathOptions::PATH_FILTER:           aTempStr = OUString( m_aFilterPath );           break;
@@ -889,7 +895,9 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_PALETTE:          aTempStr = OUString( m_aPalettePath );          break;
             case SvtPathOptions::PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
             case SvtPathOptions::PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
+#if SUPD < 615
             case SvtPathOptions::PATH_TRASH:                                                            break;
+#endif
             case SvtPathOptions::PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
             case SvtPathOptions::PATH_USERDICTIONARY:   aTempStr = OUString( m_aUserDictionaryPath );   break;
             case SvtPathOptions::PATH_WORK:             aTempStr = OUString( m_aWorkPath );             break;
@@ -1374,7 +1382,9 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_BASIC:        aPath = GetBasicPath();         break;
                 case PATH_BITMAP:       aPath = GetBitmapPath();        break;
                 case PATH_CONFIG:       aPath = GetConfigPath();        break;
+#if SUPD < 615
                 case PATH_DATABASE:     DBG_ERRORFILE( "invalid path" );break;
+#endif
                 case PATH_DICTIONARY:   aPath = GetDictionaryPath();    break;
                 case PATH_FAVORITES:    aPath = GetFavoritesPath();     break;
                 case PATH_FILTER:       aPath = GetFilterPath();        break;
@@ -1389,7 +1399,9 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_STORAGE:      aPath = GetStoragePath();       break;
                 case PATH_TEMP:         aPath = GetTempPath();          break;
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
+#if SUPD < 615
                 case PATH_TRASH:        DBG_ERRORFILE( "invalid path" );break;
+#endif
                 case PATH_WORK:         aPath = GetWorkPath();          break;
             }
             sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
