@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:30 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,6 @@ namespace configmgr
         {
             typedef configuration::AbsolutePath AbsolutePath;
             typedef configuration::DefaultProvider DefaultProvider;
-            TreeOptions m_xOptions;
 
         public:
             explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, TreeOptions const& _xOptions);
@@ -261,6 +260,7 @@ namespace configmgr
             ApiTreeImpl                 m_aTreeImpl;
             AbsolutePath                m_aLocationPath;
             rtl::Reference<NodeListener> m_pNotificationListener;
+            TreeOptions m_xOptions;
         };
 //-----------------------------------------------------------------------------
     }
