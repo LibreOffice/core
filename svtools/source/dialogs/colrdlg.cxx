@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "svtdata.hxx"
 #include "colrdlg.hrc"
@@ -79,6 +80,13 @@ SvColorDialog::SvColorDialog( Window* pWindow ) :
         //maFtRGB           ( this, SvtResId( FT_RGB ) ),
         maCtlColor      ( this, SvtResId( CTL_COLOR ) ),
 
+        maFtRed         ( this, SvtResId( FT_RED ) ),
+        maNumRed        ( this, SvtResId( NUM_RED ) ),
+        maFtGreen       ( this, SvtResId( FT_GREEN ) ),
+        maNumGreen      ( this, SvtResId( NUM_GREEN ) ),
+        maFtBlue        ( this, SvtResId( FT_BLUE ) ),
+        maNumBlue       ( this, SvtResId( NUM_BLUE ) ),
+
         maFtCyan        ( this, SvtResId( FT_CYAN ) ),
         maNumCyan       ( this, SvtResId( NUM_CYAN ) ),
         maFtMagenta     ( this, SvtResId( FT_MAGENTA ) ),
@@ -87,13 +95,6 @@ SvColorDialog::SvColorDialog( Window* pWindow ) :
         maNumYellow     ( this, SvtResId( NUM_YELLOW ) ),
         maFtKey         ( this, SvtResId( FT_KEY ) ),
         maNumKey        ( this, SvtResId( NUM_KEY ) ),
-
-        maFtRed         ( this, SvtResId( FT_RED ) ),
-        maNumRed        ( this, SvtResId( NUM_RED ) ),
-        maFtGreen       ( this, SvtResId( FT_GREEN ) ),
-        maNumGreen      ( this, SvtResId( NUM_GREEN ) ),
-        maFtBlue        ( this, SvtResId( FT_BLUE ) ),
-        maNumBlue       ( this, SvtResId( NUM_BLUE ) ),
 
         maFtHue         ( this, SvtResId( FT_HUE ) ),
         maNumHue        ( this, SvtResId( NUM_HUE ) ),
