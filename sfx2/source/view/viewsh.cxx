@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:16:21 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,13 @@
 #include <svtools/ehdl.hxx>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -134,6 +141,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
 
 //=========================================================================
 DBG_NAME(SfxViewShell);
@@ -923,6 +931,7 @@ SfxViewShell::~SfxViewShell()
 //      GetViewFrame()->GetFrame()->SetFrameSet_Impl( NULL );
 //  delete pImp->pSetDescr;
 
+/*
     if ( pImp->pMenu && pImp->bOwnsMenu )
     {
         SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
@@ -936,7 +945,7 @@ SfxViewShell::~SfxViewShell()
 
         delete pImp->pMenu;
     }
-
+*/
     if ( pImp->pController )
     {
         pImp->pController->ReleaseShell_Impl();
@@ -1724,9 +1733,28 @@ SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
 {
     // get the accelerators
     GetAccMgr_Impl();
-    if ( !pImp->pMenu )
-        pImp->pMenu = GetObjectShell()->CreateMenuBarManager_Impl( GetViewFrame() );
-    return pImp->pMenu;
+
+    Reference < XPropertySet > xPropSet( GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
+        if ( xPropSet.is() )
+        {
+            Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            aValue >>= xLayoutManager;
+        }
+
+        if ( xLayoutManager.is() )
+        {
+            rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+            Reference< drafts::com::sun::star::ui::XUIElement > xMenuBarElement( xLayoutManager->getElement( aMenuBarURL ));
+            if ( !xMenuBarElement.is() )
+                GetObjectShell()->CreateMenuBarManager_Impl( GetViewFrame() );
+        }
+    }
+
+    return NULL;
 }
 
 SfxAcceleratorManager* SfxViewShell::GetAccMgr_Impl()
@@ -1738,40 +1766,6 @@ SfxAcceleratorManager* SfxViewShell::GetAccMgr_Impl()
     return GetObjectShell()->GetFactory().GetAccMgr_Impl();
 #endif
 }
-
-/*
-void SfxViewShell::SetMenuBar_Impl( const ResId& rId )
-{
-    if ( !pImp->pMenuBarResId ||
-        rId.GetId() != pImp->pMenuBarResId->GetId() ||
-        rId.GetResMgr() != pImp->pMenuBarResId->GetResMgr() )
-    {
-        DELETEZ( pImp->pMenuBarResId );
-
-        if ( pImp->pMenu )
-        {
-            if ( pImp->bOwnsMenu )
-            {
-                SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
-                SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
-                if ( pTop )
-                {
-                    Menu* pMenu = pImp->pMenu->GetMenu()->GetSVMenu();
-                    if ( pMenu == pTop->GetMenuBar_Impl() )
-                        pTop->SetMenuBar_Impl( 0 );
-                }
-
-                DELETEZ( pImp->pMenu );
-            }
-            else
-                pImp->pMenu = NULL;
-        }
-
-        if ( rId.GetId() )
-            pImp->pMenuBarResId = new ResId(rId);
-    }
-}
-*/
 
 void SfxViewShell::SetController( SfxBaseController* pController )
 {
