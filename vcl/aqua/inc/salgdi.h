@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-28 19:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
+#include <premac.h>
+#include <QD/QD.h>
+#include <postmac.h>
+
 #ifndef _SV_SV_H
 #include <sv.h>
 #endif
@@ -79,6 +83,7 @@ struct SalGraphicsData
 public:
     VCLVIEW                 mhDC;               // VCLVIEW
     VCLWINDOW               mhWnd;              // Window-Handle, when Window-Graphics
+    CGrafPtr                mhCGrafPtr;         // QuickDraw color graphics port
     BOOL                    mbFirstClipRect;    // Flag for first cliprect to insert
     BYTE*                   mpFontCharSets;     // All Charsets for the current font
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
