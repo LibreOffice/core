@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ ModalDialog DLG_INSERT_RULER
     Text[ chinese_traditional ] = "΄‘€J€τ₯­½u";
     Text[ arabic ] = "ΕΟΡΗΜ ΞΨ Γέήν";
     Text[ greek ] = "Προσθήκη οριζόντιας γραμμής";
-    Text[ korean ] = "ΌφΖς ΄«±έΐΪ »πΐΤ";
+    Text[ korean ] = "ΌφΖς Ό±  »πΐΤ";
     Text[ turkish ] = "Yatay ηizgi ekle";
     Text[ language_user1 ] = " ";
 };
