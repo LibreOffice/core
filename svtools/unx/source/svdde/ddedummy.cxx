@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddedummy.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 #ifndef _SVDDE_HXX
 #include <svdde.hxx>
 #endif
-
-static String aString;
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 DdeData::DdeData()
 {
@@ -123,12 +124,12 @@ DdeConnection::~DdeConnection( void )
 
 const String& DdeConnection::GetServiceName()
 {
-  return aString;
+  return String::EmptyString();
 }
 
 const String& DdeConnection::GetTopicName()
 {
-  return aString;
+  return String::EmptyString();
 }
 
 DdeTransaction::DdeTransaction( DdeConnection& rConnection, const String&, long ) :
@@ -234,7 +235,7 @@ BOOL DdeTopic::Put( const DdeData* )
 
 const String& DdeTopic::GetName() const
 {
-  return aString;
+  return String::EmptyString();
 }
 
 DdeService::DdeService( const String& )
@@ -277,7 +278,7 @@ BOOL DdeService::IsBusy()
 
 String DdeService::GetHelp()
 {
-  return aString;
+  return String::EmptyString();
 }
 
 void DdeService::AddFormat( ULONG )
@@ -299,13 +300,18 @@ BOOL DdeService::MakeTopic( const String& )
 
 const String& DdeService::GetName() const
 {
-  return aString;
+  return String::EmptyString();
 }
 
-static DdeServices aDdeServices;
+namespace
+{
+    struct theDdeServices
+        : public rtl::Static< DdeServices, theDdeServices > {};
+}
+
 DdeServices& DdeService::GetServices()
 {
-  return aDdeServices;
+  return theDdeServices::get();
 }
 
 DdeItem::DdeItem( const String& )
