@@ -77,6 +77,10 @@ ZIP2TARGET = kdemime
 ZIP2LIST   = share/mimelnk/*
 ZIP2DIR    = $(MISC)$/kde
 
+ZIP3TARGET = gnome2apps
+ZIP3LIST   = *.desktop
+ZIP3DIR    = $(MISC)$/gnome
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
