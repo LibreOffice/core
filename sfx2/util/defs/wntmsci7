@@ -8749,3 +8749,4 @@ threadFunc
 ?EnableReload@SfxInternetPage@@AAEXE@Z
 ?reset@?$auto_ptr@VString@@@_STL@@QAEXPAVString@@@Z
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx21276391@@YAXABVSbxVariableRef@@PAX@Z
+?GetType@SfxImageManager@@QBEGXZ
