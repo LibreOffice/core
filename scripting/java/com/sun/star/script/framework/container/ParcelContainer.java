@@ -97,6 +97,7 @@ abstract public class ParcelContainer implements XNameAccess
     public abstract XNameContainer createParcel(String name) throws ElementExistException, com.sun.star.lang.WrappedTargetException;
 
     public abstract boolean deleteParcel(String name) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException;
+    public abstract void renameParcel(String oldName, String newName) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException;
     public abstract String getRootPath();
     public String getLanguage() { return language; }
 }

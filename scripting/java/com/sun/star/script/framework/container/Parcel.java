@@ -204,7 +204,9 @@ public abstract class Parcel implements XNameContainer
                    }
                    LogUtils.DEBUG("** have remove script source file " + Name );
                 }
+                LogUtils.DEBUG("about to remove entry from descriptor");
                 parcel.removeScriptEntry( script );
+                LogUtils.DEBUG("removed entry from descriptor");
             }
             else
             {
@@ -218,6 +220,12 @@ public abstract class Parcel implements XNameContainer
         }
 
     }
+    // rename parcel
+    public void rename( String name ) throws com.sun.star.lang.WrappedTargetException
+    {
+        this.name = name;
+    }
+
     public ParcelContainer getParent() { return parent; }
     protected abstract String getPathToParcel();
 
