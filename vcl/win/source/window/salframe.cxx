@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:05:37 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,8 +1452,11 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     }
 
     // #i3338# to be conformant to UNIX we must position the client window, ie without the decoration
-    nX += aWinRect.left;
-    nY += aWinRect.top;
+    // #i43250# if the position was read from the system (GetWindowRect(), see above), it must not be modified
+    if ( nFlags & SAL_FRAME_POSSIZE_X )
+        nX += aWinRect.left;
+    if ( nFlags & SAL_FRAME_POSSIZE_Y )
+        nY += aWinRect.top;
 
     int     nScreenX;
     int     nScreenY;
