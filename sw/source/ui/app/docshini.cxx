@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,11 @@
 #endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
+#endif
+
+// #107253#
+#ifndef _SWLINGUCONFIG_HXX
+#include <swlinguconfig.hxx>
 #endif
 
 
@@ -915,7 +920,9 @@ void SwDocShell::SubInitNew()
 
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
+
+    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+    SwLinguConfig().GetOptions( aLinguOpt );
 
     sal_Int16   nVal = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
