@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 11:11:26 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 11:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,10 +651,12 @@ namespace dbaui
 
                 Reference<XConnection> xSrcConnection;
                 Reference<XResultSet>   xSrcRs;         // the source resultset may be empty
+                Sequence< Any > aSelection;
                 ::rtl::OUString sCommand,sSrcDataSourceName;
                 _rPasteData[daDataSource]       >>= sSrcDataSourceName;
                 _rPasteData[daCommand]          >>= sCommand;
                 _rPasteData[daConnection]       >>= xSrcConnection;
+                _rPasteData[daSelection]        >>= aSelection;
                 _rPasteData[daCursor]           >>= xSrcRs;
 
                 // get the source connection
@@ -1347,6 +1349,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.46  2002/05/29 11:11:26  oj
+ *  #96792# new methods for pasting tables
+ *
  *  Revision 1.45  2002/05/29 11:07:40  hr
  *  #65293#: fixed typo
  *
