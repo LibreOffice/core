@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:16:34 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,9 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
                 // yes, it's an impress document
                 INetURLObject aURL;
                 aURL.SetSmartURL (sURL);
-                aURL.SetPass (sPassword);
+                // The password is set only when it is not empty.
+                if (sPassword.getLength() > 0)
+                    aURL.SetPass (sPassword);
                 m_aOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
                 m_pPage1OpenLB->InsertEntry (sTitle);
                 break;
