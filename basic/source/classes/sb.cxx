@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:31:48 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 07:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,6 +608,8 @@ void StarBASIC::ClearGlobalVars( void )
 
 SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
 {
+    static String aMainStr( RTL_CONSTASCII_USTRINGPARAM("Main") );
+
     SbxVariable* pRes = NULL;
     SbModule* pNamed = NULL;
     // "Extended" search in Runtime Lib
@@ -651,8 +653,9 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
                 break;
         }
     }
-    if( !pRes && pNamed && ( t == SbxCLASS_METHOD || t == SbxCLASS_DONTCARE ) )
-        pRes = pNamed->Find( String( RTL_CONSTASCII_USTRINGPARAM("Main") ), SbxCLASS_METHOD );
+    if( !pRes && pNamed && ( t == SbxCLASS_METHOD || t == SbxCLASS_DONTCARE ) &&
+        !pNamed->GetName().EqualsIgnoreCaseAscii( aMainStr ) )
+            pRes = pNamed->Find( aMainStr, SbxCLASS_METHOD );
     if( !pRes )
         pRes = SbxObject::Find( rName, t );
     return pRes;
