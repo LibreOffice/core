@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:52:46 $
+ *  last change: $Author: thb $ $Date: 2002-03-07 15:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@ public:
 
     virtual BOOL        IsValid() const;
     virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint ) const;
-    virtual Point       PixelToLogic( const Point& rPoint ) const;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 };
 
 ScViewForwarder::ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
@@ -129,24 +129,30 @@ Rectangle ScViewForwarder::GetVisArea() const
     return aVisArea;
 }
 
-Point ScViewForwarder::LogicToPixel( const Point& rPoint ) const
+Point ScViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    return rPoint;
-}
-
-Point ScViewForwarder::PixelToLogic( const Point& rPoint ) const
-{
-    MapMode aMapMode(MAP_100TH_MM);
-    Point aPoint(rPoint);
     if (mpViewShell)
     {
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
-            aPoint = pWindow->PixelToLogic( rPoint, aMapMode );
+            return pWindow->LogicToPixel( rPoint, rMapMode );
     }
     else
         DBG_ERROR("this ViewForwarder is not valid");
-    return rPoint;
+    return Point();
+}
+
+Point ScViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
+{
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+            return pWindow->PixelToLogic( rPoint, rMapMode );
+    }
+    else
+        DBG_ERROR("this ViewForwarder is not valid");
+    return Point();
 }
 
 class ScEditViewForwarder : public SvxEditViewForwarder
@@ -160,8 +166,8 @@ public:
 
     virtual BOOL        IsValid() const;
     virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint ) const;
-    virtual Point       PixelToLogic( const Point& rPoint ) const;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
     virtual sal_Bool    SetSelection( const ESelection& rSelection );
     virtual sal_Bool    Copy();
@@ -219,24 +225,30 @@ Rectangle ScEditViewForwarder::GetVisArea() const
     return aVisArea;
 }
 
-Point ScEditViewForwarder::LogicToPixel( const Point& rPoint ) const
+Point ScEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    return rPoint;
-}
-
-Point ScEditViewForwarder::PixelToLogic( const Point& rPoint ) const
-{
-    MapMode aMapMode(MAP_100TH_MM);
-    Point aPoint(rPoint);
     if (mpViewShell)
     {
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
-            aPoint = pWindow->PixelToLogic( rPoint, aMapMode );
+            return pWindow->LogicToPixel( rPoint, rMapMode );
     }
     else
         DBG_ERROR("this ViewForwarder is not valid");
-    return rPoint;
+    return Point();
+}
+
+Point ScEditViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
+{
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+            return pWindow->PixelToLogic( rPoint, rMapMode );
+    }
+    else
+        DBG_ERROR("this ViewForwarder is not valid");
+    return Point();
 }
 
 sal_Bool ScEditViewForwarder::GetSelection( ESelection& rSelection ) const
