@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
+ *  last change: $Author: hr $ $Date: 2000-10-26 15:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,6 +1361,12 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
             ByteString aPlattform( "unxsols2" );
 #   elif defined ( INTEL )
             ByteString aPlattform( "unxsoli2" );
+#   endif
+#elif defined ( C52 )
+#   if defined ( SPARC )
+            ByteString aPlattform( "unxsols3" );
+#   elif defined ( INTEL )
+            ByteString aPlattform( "unxsoli3" );
 #   endif
 #elif GLIBC == 2
             ByteString aPlattform( "unxlngi2" );
