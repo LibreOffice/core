@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:17:19 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 16:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,9 @@
 #endif
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
 #include <svx/paravertalignitem.hxx>
+#endif
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -797,8 +800,8 @@ void _InitCore()
                                         new SvxForbiddenRuleItem( TRUE );
     aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =
                             new SvxParaVertAlignItem( 0 );
+    aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] = new SvxParaGridItem;
 // ParaAttr - Dummies
-    aAttrTab[ RES_PARATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY3 );
     aAttrTab[ RES_PARATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY4 );
     aAttrTab[ RES_PARATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY5 );
     aAttrTab[ RES_PARATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY6 );

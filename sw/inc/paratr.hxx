@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,8 @@ inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(BOOL bInP) const
     {   return (const SvxForbiddenRuleItem&)Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
 inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(BOOL bInP) const
     {   return (const SvxParaVertAlignItem&)Get( RES_PARATR_VERTALIGN, bInP ); }
+inline const SvxParaGridItem &SwAttrSet::GetParaGrid(BOOL bInP) const
+    {   return (const SvxParaGridItem&)Get( RES_PARATR_SNAPTOGRID, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Paragraph-Attribut Methoden vom SwFmt
@@ -296,5 +298,7 @@ inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(BOOL bInP) const
     {   return (const SvxForbiddenRuleItem&)aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
 inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(BOOL bInP) const
     {   return (const SvxParaVertAlignItem&)aSet.Get( RES_PARATR_VERTALIGN, bInP ); }
+inline const SvxParaGridItem &SwFmt::GetParaGrid(BOOL bInP) const
+    {   return (const SvxParaGridItem&)aSet.Get( RES_PARATR_SNAPTOGRID, bInP ); }
 
 #endif

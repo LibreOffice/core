@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:32:27 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ class SwFmtFtnAtTxtEnd;
 class SwFmtEndAtTxtEnd;
 class SwFmtNoBalancedColumns;
 class SvxFrameDirectionItem;
+class SwTextGridItem;
 
 // Grafik-Attribute
 class SwMirrorGrf;
@@ -166,6 +167,7 @@ class SvxScriptSpaceItem;
 class SvxHangingPunctuationItem;
 class SvxForbiddenRuleItem;
 class SvxParaVertAlignItem;
+class SvxParaGridItem;
 
 // TabellenBox-Attribute
 class SwTblBoxNumFormat;
@@ -319,6 +321,7 @@ public:
     inline const SwFmtEndAtTxtEnd       &GetEndAtTxtEnd( BOOL = TRUE ) const;
     inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
     inline const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
+    inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
@@ -349,6 +352,7 @@ public:
     inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
     inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
     inline const SvxParaVertAlignItem   &GetParaVertAlign(BOOL = TRUE) const;
+    inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline const SwTblBoxNumFormat      &GetTblBoxNumFmt( BOOL = TRUE ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tgrditem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:22:29 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,11 @@ public:
     BOOL GetDisplayGrid() const { return bDisplayGrid; }
     void SetDisplayGrid( BOOL bNew ) { bDisplayGrid = bNew; }
 };
+
+inline const SwTextGridItem &SwAttrSet::GetTextGrid(BOOL bInP) const
+    {   return (const SwTextGridItem&)Get( RES_TEXTGRID, bInP ); }
+inline const SwTextGridItem &SwFmt::GetTextGrid(BOOL bInP) const
+    {   return (const SwTextGridItem&)aSet.Get( RES_TEXTGRID, bInP ); }
 
 #endif
 
