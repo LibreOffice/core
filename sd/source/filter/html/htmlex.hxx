@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:31:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,35 +85,31 @@
 #include <svtools/ehdl.hxx>
 #endif
 
-
-#ifndef MAC
-#include "../../ui/inc/strings.hrc"
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "../../ui/inc/DrawDocShell.hxx"
-#endif
-#ifndef SD_WINDOW_HXX
-#include "../../ui/inc/Window.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_HXX
-#include "../../ui/inc/ViewShell.hxx"
-#endif
-#include "../../ui/inc/assclass.hxx"
-#else  //MAC
 #include "strings.hrc"
+
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
 #endif
+
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
+
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
-#include "assclass.hxx"
-#endif //!MAC
 
+#ifndef INC_ASSCLASS
+#include "assclass.hxx"
+#endif
+
+#ifndef _SD_RESID_HXX
 #include "sdresid.hxx"
+#endif
+
+#ifndef _SD_PUBDLG_HXX
 #include "pubdlg.hxx"
+#endif
 
 #define NUM_BUTTONS 12
 
