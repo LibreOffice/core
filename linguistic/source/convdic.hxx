@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:04:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-22 12:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ typedef std::hash_multimap< const rtl::OUString, const rtl::OUString,
 typedef std::set< rtl::OUString, StrLT > ConvMapKeySet;
 
 typedef std::hash_multimap< const rtl::OUString, sal_Int16,
-                       std::hash< const rtl::OUString >, StrEQ > PropTypeMap;
+                       rtl::OUStringHash, StrEQ > PropTypeMap;
 
 ///////////////////////////////////////////////////////////////////////////
 
