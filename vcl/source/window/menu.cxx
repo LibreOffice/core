@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:34:29 $
+ *  last change: $Author: mt $ $Date: 2001-04-24 09:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ struct MenuItemData
     XubString       aHelpText;      // Help-String
     XubString       aCommandStr;    // CommandString
     ULONG           nHelpId;        // Help-Id
+    ULONG           nUserValue;     // User value
     Image           aImage;         // Image
     KeyCode         aAccelKey;      // Accelerator-Key
     BOOL            bChecked;       // Checked
@@ -239,6 +240,7 @@ MenuItemData* MenuItemList::Insert( USHORT nId, MenuItemType eType,
     pData->pSubMenu     = NULL;
     pData->pAutoSubMenu = NULL;
     pData->nHelpId      = 0;
+    pData->nUserValue   = 0;
     pData->bChecked     = FALSE;
     pData->bEnabled     = TRUE;
     pData->bIsTemporary = FALSE;
@@ -255,6 +257,7 @@ void MenuItemList::InsertSeparator( USHORT nPos )
     pData->pSubMenu     = NULL;
     pData->pAutoSubMenu = NULL;
     pData->nHelpId      = 0;
+    pData->nUserValue   = 0;
     pData->bChecked     = FALSE;
     pData->bEnabled     = TRUE;
     pData->bIsTemporary = FALSE;
@@ -949,6 +952,19 @@ MenuItemBits Menu::GetItemBits( USHORT nItemId ) const
     if ( pData )
         nBits = pData->nBits;
     return nBits;
+}
+
+void Menu::SetUserValue( USHORT nItemId, ULONG nValue )
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+    if ( pData )
+        pData->nUserValue = nValue;
+}
+
+ULONG Menu::GetUserValue( USHORT nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+    return pData ? pData->nUserValue : 0;
 }
 
 void Menu::SetPopupMenu( USHORT nItemId, PopupMenu* pMenu )
