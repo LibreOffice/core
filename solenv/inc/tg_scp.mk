@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_scp.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:17 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-09-28 13:25:00 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_scp.mkv  $
 #*
@@ -51,12 +51,16 @@ SCP1 SCP2 SCP3 SCP4 SCP5 SCP6 SCP7 SCP8 SCP9:
 
 .IF "$(SCP$(TNR)TARGETN)"!=""
 
-ALLSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP$(TNR)TARGETN): $(ALLSCP$(TNR)FILES)
+LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP$(TNR)TARGETN): $(LOCALSCP$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken

@@ -2,12 +2,16 @@
 
 .IF "$(SCP1TARGETN)"!=""
 
-ALLSCP1FILES=$(foreach,i,$(SCP1FILES) $(foreach,j,$(SCP1LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP1TARGETN): $(ALLSCP1FILES)
+LOCALSCP1FILES=$(foreach,i,$(SCP1FILES) $(foreach,j,$(SCP1LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP1TARGETN): $(LOCALSCP1FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP1FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP1FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -16,12 +20,16 @@ $(SCP1TARGETN): $(ALLSCP1FILES)
 
 .IF "$(SCP2TARGETN)"!=""
 
-ALLSCP2FILES=$(foreach,i,$(SCP2FILES) $(foreach,j,$(SCP2LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP2TARGETN): $(ALLSCP2FILES)
+LOCALSCP2FILES=$(foreach,i,$(SCP2FILES) $(foreach,j,$(SCP2LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP2TARGETN): $(LOCALSCP2FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP2FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP2FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -30,12 +38,16 @@ $(SCP2TARGETN): $(ALLSCP2FILES)
 
 .IF "$(SCP3TARGETN)"!=""
 
-ALLSCP3FILES=$(foreach,i,$(SCP3FILES) $(foreach,j,$(SCP3LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP3TARGETN): $(ALLSCP3FILES)
+LOCALSCP3FILES=$(foreach,i,$(SCP3FILES) $(foreach,j,$(SCP3LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP3TARGETN): $(LOCALSCP3FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP3FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP3FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -44,12 +56,16 @@ $(SCP3TARGETN): $(ALLSCP3FILES)
 
 .IF "$(SCP4TARGETN)"!=""
 
-ALLSCP4FILES=$(foreach,i,$(SCP4FILES) $(foreach,j,$(SCP4LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP4TARGETN): $(ALLSCP4FILES)
+LOCALSCP4FILES=$(foreach,i,$(SCP4FILES) $(foreach,j,$(SCP4LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP4TARGETN): $(LOCALSCP4FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP4FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP4FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -58,12 +74,16 @@ $(SCP4TARGETN): $(ALLSCP4FILES)
 
 .IF "$(SCP5TARGETN)"!=""
 
-ALLSCP5FILES=$(foreach,i,$(SCP5FILES) $(foreach,j,$(SCP5LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP5TARGETN): $(ALLSCP5FILES)
+LOCALSCP5FILES=$(foreach,i,$(SCP5FILES) $(foreach,j,$(SCP5LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP5TARGETN): $(LOCALSCP5FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP5FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP5FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -72,12 +92,16 @@ $(SCP5TARGETN): $(ALLSCP5FILES)
 
 .IF "$(SCP6TARGETN)"!=""
 
-ALLSCP6FILES=$(foreach,i,$(SCP6FILES) $(foreach,j,$(SCP6LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP6TARGETN): $(ALLSCP6FILES)
+LOCALSCP6FILES=$(foreach,i,$(SCP6FILES) $(foreach,j,$(SCP6LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP6TARGETN): $(LOCALSCP6FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP6FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP6FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -86,12 +110,16 @@ $(SCP6TARGETN): $(ALLSCP6FILES)
 
 .IF "$(SCP7TARGETN)"!=""
 
-ALLSCP7FILES=$(foreach,i,$(SCP7FILES) $(foreach,j,$(SCP7LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP7TARGETN): $(ALLSCP7FILES)
+LOCALSCP7FILES=$(foreach,i,$(SCP7FILES) $(foreach,j,$(SCP7LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP7TARGETN): $(LOCALSCP7FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP7FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP7FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -100,12 +128,16 @@ $(SCP7TARGETN): $(ALLSCP7FILES)
 
 .IF "$(SCP8TARGETN)"!=""
 
-ALLSCP8FILES=$(foreach,i,$(SCP8FILES) $(foreach,j,$(SCP8LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP8TARGETN): $(ALLSCP8FILES)
+LOCALSCP8FILES=$(foreach,i,$(SCP8FILES) $(foreach,j,$(SCP8LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP8TARGETN): $(LOCALSCP8FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP8FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP8FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -114,12 +146,16 @@ $(SCP8TARGETN): $(ALLSCP8FILES)
 
 .IF "$(SCP9TARGETN)"!=""
 
-ALLSCP9FILES=$(foreach,i,$(SCP9FILES) $(foreach,j,$(SCP9LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP9TARGETN): $(ALLSCP9FILES)
+LOCALSCP9FILES=$(foreach,i,$(SCP9FILES) $(foreach,j,$(SCP9LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP9TARGETN): $(LOCALSCP9FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP9FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP9FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -128,12 +164,16 @@ $(SCP9TARGETN): $(ALLSCP9FILES)
 
 .IF "$(SCP10TARGETN)"!=""
 
-ALLSCP10FILES=$(foreach,i,$(SCP10FILES) $(foreach,j,$(SCP10LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+# try to get missing parfiles
+$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    +$(COPY) $< $@
 
-$(SCP10TARGETN): $(ALLSCP10FILES)
+LOCALSCP10FILES=$(foreach,i,$(SCP10FILES) $(foreach,j,$(SCP10LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+
+$(SCP10TARGETN): $(LOCALSCP10FILES)
     @echo ------------------------------
     @echo Making: $@
-    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP10FILES) $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(i:+","))) -o $@
+    scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP10FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken
