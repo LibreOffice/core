@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:36:27 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,6 +982,9 @@ public:
     void SetRangeOverflowType(sal_uInt32 nType) { nRangeOverflowType = nType; }
     sal_Bool HasRangeOverflow() const { return nRangeOverflowType != 0; }
     sal_uInt32 GetRangeOverflowType() const { return nRangeOverflowType; }
+
+    sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
+    void SetNamedRanges();
 };
 
 #endif
