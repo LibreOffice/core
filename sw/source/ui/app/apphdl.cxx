@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:06:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@
 #ifndef _NAVICFG_HXX
 #include <navicfg.hxx>
 #endif
+
+#include <sfx2/objface.hxx>
 
 #ifndef _VIEW_HXX
 #include <view.hxx>
