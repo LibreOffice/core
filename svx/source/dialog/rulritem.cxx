@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:29:04 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,21 @@
 #include "dialogs.hrc"
 #include "rulritem.hxx"
 
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_LEFTRIGHTMARGIN_HPP_
+#include <drafts/com/sun/star/frame/status/LeftRightMargin.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_UPPERLOWERMARGIN_HPP_
+#include <drafts/com/sun/star/frame/status/UpperLowerMargin.hpp>
+#endif
+
 //------------------------------------------------------------------------
 
-TYPEINIT1(SvxPagePosSizeItem, SfxPoolItem);
-TYPEINIT1(SvxLongLRSpaceItem, SfxPoolItem);
-TYPEINIT1(SvxLongULSpaceItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SvxPagePosSizeItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SvxLongLRSpaceItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SvxLongULSpaceItem, SfxPoolItem);
 TYPEINIT1(SvxColumnItem, SfxPoolItem);
 TYPEINIT1(SvxObjectItem, SfxPoolItem);
 
@@ -103,6 +113,15 @@ sal_Bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE 
     sal_Int32 nVal;
     switch( nMemberId )
     {
+        case 0:
+        {
+            ::drafts::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
+            aLeftRightMargin.Left = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
+            aLeftRightMargin.Right = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
+            rVal <<= aLeftRightMargin;
+            return TRUE;
+        }
+
         case MID_LEFT: nVal = lLeft; break;
         case MID_RIGHT: nVal = lRight; break;
         default: DBG_ERROR("Wrong MemberId!"); return sal_False;
@@ -122,7 +141,17 @@ sal_Bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
     nMemberId &= ~CONVERT_TWIPS;
 
     sal_Int32 nVal;
-    if ( rVal >>= nVal )
+    if ( nMemberId == 0 )
+    {
+        drafts::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
+        if ( rVal >>= aLeftRightMargin )
+        {
+            lLeft    = bConvert ? MM100_TO_TWIP( aLeftRightMargin.Left ) : aLeftRightMargin.Left;
+            lRight   = bConvert ? MM100_TO_TWIP( aLeftRightMargin.Right ) : aLeftRightMargin.Right;
+            return sal_True;
+        }
+    }
+    else if ( rVal >>= nVal )
     {
         if ( bConvert )
             nVal = MM100_TO_TWIP( nVal );
@@ -170,6 +199,14 @@ SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lL, long lR, USHORT nId)
 
 //------------------------------------------------------------------------
 
+SvxLongLRSpaceItem::SvxLongLRSpaceItem() :
+    SfxPoolItem( 0 ),
+    lLeft( 0 ),
+    lRight( 0 )
+{}
+
+//------------------------------------------------------------------------
+
 SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy)
     : SfxPoolItem(rCpy),
     lLeft(rCpy.lLeft),
@@ -201,6 +238,15 @@ sal_Bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE 
     sal_Int32 nVal;
     switch( nMemberId )
     {
+        case 0:
+        {
+            drafts::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
+            aUpperLowerMargin.Upper = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
+            aUpperLowerMargin.Lower = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
+            rVal <<= aUpperLowerMargin;
+            return TRUE;
+        }
+
         case MID_UPPER: nVal = lLeft; break;
         case MID_LOWER: nVal = lRight; break;
         default: DBG_ERROR("Wrong MemberId!"); return sal_False;
@@ -220,7 +266,17 @@ sal_Bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
     nMemberId &= ~CONVERT_TWIPS;
 
     sal_Int32 nVal;
-    if ( rVal >>= nVal )
+    if ( nMemberId == 0 )
+    {
+        drafts::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
+        if ( rVal >>= aUpperLowerMargin )
+        {
+            lLeft    = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
+            lRight   = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Lower ) : aUpperLowerMargin.Lower;
+            return sal_True;
+        }
+    }
+    else if ( rVal >>= nVal )
     {
         if ( bConvert )
             nVal = MM100_TO_TWIP( nVal );
@@ -276,6 +332,14 @@ SvxLongULSpaceItem::SvxLongULSpaceItem(const SvxLongULSpaceItem &rCpy)
 
 //------------------------------------------------------------------------
 
+SvxLongULSpaceItem::SvxLongULSpaceItem() :
+    SfxPoolItem( 0 ),
+    lLeft( 0 ),
+    lRight( 0 )
+{}
+
+//------------------------------------------------------------------------
+
 int SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
@@ -292,10 +356,22 @@ sal_Bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE 
     sal_Int32 nVal;
     switch ( nMemberId )
     {
+        case 0 :
+        {
+            com::sun::star::awt::Rectangle aPagePosSize;
+            aPagePosSize.X = aPos.X();
+            aPagePosSize.Y = aPos.Y();
+            aPagePosSize.Width = lWidth;
+            aPagePosSize.Height = lHeight;
+            rVal <<= aPagePosSize;
+            return TRUE;
+        }
+
         case MID_X: nVal = aPos.X(); break;
         case MID_Y: nVal = aPos.Y(); break;
         case MID_WIDTH: nVal = lWidth; break;
         case MID_HEIGHT: nVal = lHeight; break;
+
         default: DBG_ERROR("Wrong MemberId!"); return sal_False;
     }
 
@@ -309,7 +385,21 @@ sal_Bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
     nMemberId &= ~CONVERT_TWIPS;
 
     sal_Int32 nVal;
-    if ( rVal >>= nVal )
+    if ( nMemberId == 0 )
+    {
+        com::sun::star::awt::Rectangle aPagePosSize;
+        if ( rVal >>= aPagePosSize )
+        {
+            aPos.X() = aPagePosSize.X;
+            aPos.Y() = aPagePosSize.Y;
+            lWidth   = aPagePosSize.Width;
+            lHeight  = aPagePosSize.Height;
+            return sal_True;
+        }
+        else
+            return sal_False;
+    }
+    else if ( rVal >>= nVal )
     {
         switch ( nMemberId )
         {
@@ -317,6 +407,7 @@ sal_Bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
             case MID_Y: aPos.Y() = nVal; break;
             case MID_WIDTH: lWidth = nVal; break;
             case MID_HEIGHT: lHeight = nVal; break;
+
             default: DBG_ERROR("Wrong MemberId!"); return sal_False;
         }
 
@@ -371,6 +462,14 @@ SvxPagePosSizeItem::SvxPagePosSizeItem(const SvxPagePosSizeItem &rCpy)
     lHeight(rCpy.lHeight)
         {}
 
+//------------------------------------------------------------------------
+
+SvxPagePosSizeItem::SvxPagePosSizeItem()
+    : SfxPoolItem( 0 ),
+    aPos( 0, 0 ),
+    lWidth( 0 ),
+    lHeight( 0 )
+{}
 
 //------------------------------------------------------------------------
 
