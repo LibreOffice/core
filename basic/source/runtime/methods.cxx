@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:36:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3237,7 +3237,8 @@ RTLFUNC(VarType)
     }
 }
 
-RTLFUNC(TypeName)
+// Exported function
+String getBasicTypeName( SbxDataType eType )
 {
     static const char* pTypeNames[] =
     {
@@ -3281,17 +3282,23 @@ RTLFUNC(TypeName)
         "Decimal",          // SbxDECIMAL
     };
 
+    int nPos = ((int)eType) & 0x0FFF;
+    USHORT nTypeNameCount = sizeof( pTypeNames ) / sizeof( char* );
+    if ( nPos < 0 || nPos >= nTypeNameCount )
+        nPos = nTypeNameCount - 1;
+    String aRetStr = String::CreateFromAscii( pTypeNames[nPos] );
+    return aRetStr;
+}
+
+RTLFUNC(TypeName)
+{
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
         SbxDataType eType = rPar.Get(1)->GetType();
         BOOL bIsArray = ( ( eType & SbxARRAY ) != 0 );
-        int nPos = ((int)eType) & 0x0FFF;
-        USHORT nTypeNameCount = sizeof( pTypeNames ) / sizeof( char* );
-        if ( nPos < 0 || nPos >= nTypeNameCount )
-            nPos = nTypeNameCount - 1;
-        String aRetStr = String::CreateFromAscii( pTypeNames[nPos] );
+        String aRetStr = getBasicTypeName( eType );
         if( bIsArray )
             aRetStr.AppendAscii( "()" );
         rPar.Get(0)->PutString( aRetStr );
