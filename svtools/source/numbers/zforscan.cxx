@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2001-10-16 11:18:32 $
+ *  last change: $Author: er $ $Date: 2002-01-09 10:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,9 +621,13 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
             {
                 // Fetch any currency longer than one character and don't get
                 // confused later on by "E/" or other combinations of letters
-                // and meaningful symbols.
+                // and meaningful symbols. Necessary for old automatic currency.
+                // #96158# But don't do it if we're starting a "[...]" section,
+                // for example a "[$...]" new currency symbol to not parse away
+                // "$U" (symbol) of "[$UYU]" (abbreviation).
                 if ( nCurrPos != STRING_NOTFOUND && sCurString.Len() > 1 &&
-                        nPos-1 + sCurString.Len() <= rStr.Len() )
+                        nPos-1 + sCurString.Len() <= rStr.Len() &&
+                        !(nPos > 1 && rStr.GetChar( nPos-2 ) == '[') )
                 {
                     String aTest( rStr.Copy( nPos-1, sCurString.Len() ) );
                     pChrCls->toUpper( aTest );
