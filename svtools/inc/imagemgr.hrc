@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:32:32 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,17 @@
 #define STR_DESCRIPTION_SXGLOBAL_DOC                (RID_DESCRIPTION_START + 52)
 #define STR_DESCRIPTION_MATHML_DOC                  (RID_DESCRIPTION_START + 53)
 #define STR_DESCRIPTION_SDATABASE_DOC               (RID_DESCRIPTION_START + 54)
+#define STR_DESCRIPTION_OO_DATABASE_DOC             (RID_DESCRIPTION_START + 55)
+#define STR_DESCRIPTION_OO_DRAW_DOC                 (RID_DESCRIPTION_START + 56)
+#define STR_DESCRIPTION_OO_MATH_DOC                 (RID_DESCRIPTION_START + 57)
+#define STR_DESCRIPTION_OO_GLOBAL_DOC               (RID_DESCRIPTION_START + 58)
+#define STR_DESCRIPTION_OO_IMPRESS_DOC              (RID_DESCRIPTION_START + 59)
+#define STR_DESCRIPTION_OO_CALC_DOC                 (RID_DESCRIPTION_START + 60)
+#define STR_DESCRIPTION_OO_WRITER_DOC               (RID_DESCRIPTION_START + 61)
+#define STR_DESCRIPTION_OO_DRAW_TEMPLATE            (RID_DESCRIPTION_START + 62)
+#define STR_DESCRIPTION_OO_IMPRESS_TEMPLATE         (RID_DESCRIPTION_START + 63)
+#define STR_DESCRIPTION_OO_CALC_TEMPLATE            (RID_DESCRIPTION_START + 64)
+#define STR_DESCRIPTION_OO_WRITER_TEMPLATE          (RID_DESCRIPTION_START + 65)
 
 #endif
 
