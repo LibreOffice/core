@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:50 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,16 @@
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
 #endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+#ifndef _ZFORMAT_HXX
+#include <svtools/zformat.hxx>
+#endif
 
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
 #ifndef SC_SCPATATR_HXX
 #include "patattr.hxx"
 #endif
@@ -734,6 +743,13 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
     ::set_flag( nAttr, EXC_FONTATTR_OUTLINE, maData.mbOutline );
     ::set_flag( nAttr, EXC_FONTATTR_SHADOW, maData.mbShadow );
 
+    DBG_ASSERT( maData.maName < 256, "XclExpFont::WriteBody - font name too long" );
+    XclExpString aFontName;
+    if( GetBiff() < xlBiff8 )
+        aFontName.AssignByte( maData.maName, GetCharSet(), EXC_STR_8BITLENGTH );
+    else
+        aFontName.Assign( maData.maName, EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH );
+
     rStrm   << maData.mnHeight
             << nAttr
             << GetPalette().GetColorIndex( mnCID )
@@ -742,13 +758,8 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
             << maData.meUnderline
             << maData.mnFamily
             << maData.mnCharSet
-            << sal_uInt8( 0xA5 );
-
-    DBG_ASSERT( maData.maName < 256, "XclExpFont::WriteBody - font name too long" );
-    if ( GetBiff() < xlBiff8 )
-        rStrm.WriteByteString( ByteString( maData.maName, GetCharSet() ) ); // 8 bit length, max 255 chars
-    else
-        rStrm << XclExpString( maData.maName, EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH );
+            << sal_uInt8( 0 )
+            << aFontName;
 }
 
 
@@ -763,13 +774,14 @@ XclExpFontBuffer::XclExpFontBuffer( const XclExpRoot& rRoot ) :
 
 void XclExpFontBuffer::SetBiff( XclBiff eBiff )
 {
+    DBG_ASSERT( maFontList.Empty(), "XclExpFontBuffer::SetBiff - call is too late" );
     switch( eBiff )
     {
-        case xlBiff4:
+        case xlBiff4:   mnMaxCount = EXC_FONT_MAXCOUNT4;    break;
         case xlBiff5:
-        case xlBiff7:   mnMaxCount = 0xFF;      break;
-        case xlBiff8:   mnMaxCount = 0xFFFF;    break;
-        default:        DBG_ERROR_BIFF();       return;
+        case xlBiff7:   mnMaxCount = EXC_FONT_MAXCOUNT5;    break;
+        case xlBiff8:   mnMaxCount = EXC_FONT_MAXCOUNT8;    break;
+        default:        DBG_ERROR_BIFF();
     }
 }
 
@@ -845,26 +857,30 @@ void XclExpFontBuffer::InitDefaultFonts()
     aFont.SetHeight( 200 );
     aFont.SetWeight( WEIGHT_NORMAL );
 
-    if( GetBiff() < xlBiff8 )
+    switch( GetBiff() )
     {
-        maFontList.Append( new XclExpFont( aFont ) );
-        aFont.SetWeight( WEIGHT_BOLD );
-        maFontList.Append( new XclExpFont( aFont ) );
-        aFont.SetWeight( WEIGHT_NORMAL );
-        aFont.SetItalic( true );
-        maFontList.Append( new XclExpFont( aFont ) );
-        aFont.SetWeight( WEIGHT_BOLD );
-        maFontList.Append( new XclExpFont( aFont ) );
-        aFont.SetWeight( WEIGHT_NORMAL );
-        aFont.SetItalic( false );
-        maFontList.Append( new XclExpFont( aFont ) );
-    }
-    else
-    {
-        maFontList.Append( new XclExpFont( aFont ) );
-        maFontList.Append( new XclExpFont( aFont ) );
-        maFontList.Append( new XclExpFont( aFont ) );
-        maFontList.Append( new XclExpFont( aFont ) );
+        case xlBiff5:
+        case xlBiff7:
+            maFontList.Append( new XclExpFont( aFont ) );
+            aFont.SetWeight( WEIGHT_BOLD );
+            maFontList.Append( new XclExpFont( aFont ) );
+            aFont.SetWeight( WEIGHT_NORMAL );
+            aFont.SetItalic( true );
+            maFontList.Append( new XclExpFont( aFont ) );
+            aFont.SetWeight( WEIGHT_BOLD );
+            maFontList.Append( new XclExpFont( aFont ) );
+            aFont.SetWeight( WEIGHT_NORMAL );
+            aFont.SetItalic( false );
+            maFontList.Append( new XclExpFont( aFont ) );
+        break;
+        case xlBiff8:
+            maFontList.Append( new XclExpFont( aFont ) );
+            maFontList.Append( new XclExpFont( aFont ) );
+            maFontList.Append( new XclExpFont( aFont ) );
+            maFontList.Append( new XclExpFont( aFont ) );
+        break;
+        default:
+            DBG_ERROR_BIFF();
     }
 }
 
@@ -889,6 +905,163 @@ sal_uInt32 XclExpFontBuffer::Find( const XclExpFont& rFont )
 
 
 // FORMAT record - number formats =============================================
+
+/** Data for a default number format. */
+struct XclExpDefaultFormat
+{
+    sal_uInt16                  mnIndex;        /// Excel index of the format.
+    const sal_Char*             mpFormat;       /// Format string.
+};
+
+static const XclExpDefaultFormat pDefaultFormats[] =
+{
+    {   0x05,   "#,##0\\ \"€\";\\-#,##0\\ \"€\""                                                },
+    {   0x06,   "#,##0\\ \"€\";[Red]\\-#,##0\\ \"€\""                                           },
+    {   0x07,   "#,##0.00\\ \"€\";\\-#,##0.00\\ \"€\""                                          },
+    {   0x08,   "#,##0.00\\ \"€\";[Red]\\-#,##0.00\\ \"€\""                                     },
+    {   0x2A,   "_-* #,##0\\ \"€\"_-;\\-* #,##0\\ \"€\"_-;_-* \"-\"\\ \"€\"_-;_-@_-"          },
+    {   0x29,   "_-* #,##0\\ _€_-;\\-* #,##0\\ _€_-;_-* \"-\"\\ _€_-;_-@_-"                   },
+    {   0x2C,   "_-* #,##0.00\\ \"€\"_-;\\-* #,##0.00\\ \"€\"_-;_-* \"-\"??\\ \"€\"_-;_-@_-"  },
+    {   0x2B,   "_-* #,##0.00\\ _€_-;\\-* #,##0.00\\ _€_-;_-* \"-\"??\\ _€_-;_-@_-"           }
+};
+
+/** Predicate for search algorithm. */
+struct XclExpNumFmtPred
+{
+    sal_uInt32                  mnFormatIx;
+    inline explicit             XclExpNumFmtPred( sal_uInt32 nFormatIx ) : mnFormatIx( nFormatIx ) {}
+    inline bool                 operator()( const XclExpNumFmt& rFormat )
+                                    { return rFormat.mnFormatIx == mnFormatIx; }
+};
+
+
+// ----------------------------------------------------------------------------
+
+XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
+    /*  Compiler needs a hint, this doesn't work: new NfKeywordTable;
+        cannot convert from 'class String *' to 'class String (*)[54]'
+        The effective result here is class String (*)[54*1] */
+    mpKeywordTable( new NfKeywordTable[ 1 ] ),
+    mpFormatter( new SvNumberFormatter( rRoot.GetDoc().GetServiceManager(), LANGUAGE_ENGLISH_US ) )
+{
+    SetBiff( GetBiff() );
+
+    mpFormatter->FillKeywordTable( *mpKeywordTable, LANGUAGE_ENGLISH_US );
+    // remap codes unknown to Excel
+    (*mpKeywordTable)[ NF_KEY_NN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDD" ) );
+    (*mpKeywordTable)[ NF_KEY_NNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
+    (*mpKeywordTable)[ NF_KEY_NNNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+}
+
+XclExpNumFmtBuffer::~XclExpNumFmtBuffer()
+{
+    delete[] mpKeywordTable;
+}
+
+void XclExpNumFmtBuffer::SetBiff( XclBiff eBiff )
+{
+    DBG_ASSERT( maFormatMap.empty(), "XclExpNumFmtBuffer::SetBiff - call is too late" );
+    switch( eBiff )
+    {
+        case xlBiff5:
+        case xlBiff7:   mnXclOffset = EXC_FORMAT_OFFSET5;   break;
+        case xlBiff8:   mnXclOffset = EXC_FORMAT_OFFSET8;   break;
+        default:        DBG_ERROR_BIFF();
+    }
+}
+
+sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nFormatIx )
+{
+    XclExpNumFmtVec::const_iterator aIter =
+        ::std::find_if( maFormatMap.begin(), maFormatMap.end(), XclExpNumFmtPred( nFormatIx ) );
+    if( aIter != maFormatMap.end() )
+        return aIter->mnXclIx;
+
+    sal_uInt32 nSize = maFormatMap.size();
+    if( nSize < 0xFFFFUL - mnXclOffset )
+    {
+        sal_uInt16 nXclIx = static_cast< sal_uInt16 >( nSize + mnXclOffset );
+        maFormatMap.push_back( XclExpNumFmt( nFormatIx, nXclIx ) );
+        return nXclIx;
+    }
+
+    return 0;
+}
+
+void XclExpNumFmtBuffer::Save( XclExpStream& rStrm )
+{
+    WriteDefaultFormats( rStrm );
+    for( XclExpNumFmtVec::const_iterator aIter = maFormatMap.begin(), aEnd = maFormatMap.end(); aIter != aEnd; ++aIter )
+        WriteFormatRecord( rStrm, *aIter );
+}
+
+void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclIx, const String& rFormatStr )
+{
+    XclExpString aExpStr;
+    if( GetBiff() < xlBiff8 )
+        aExpStr.AssignByte( rFormatStr, GetCharSet(), EXC_STR_8BITLENGTH );
+    else
+        aExpStr.Assign( rFormatStr );
+
+    rStrm.StartRecord( EXC_ID_FORMAT, 2 + aExpStr.GetSize() );
+    rStrm << nXclIx << aExpStr;
+    rStrm.EndRecord();
+}
+
+void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat )
+{
+    const SvNumberformat* pEntry = GetFormatter().GetEntry( rFormat.mnFormatIx );
+    String aFormatStr;
+
+    if( pEntry )
+    {
+        if( pEntry->GetType() == NUMBERFORMAT_LOGICAL )
+        {
+            // build Boolean number format
+            Color* pColor = NULL;
+            String aTemp;
+            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
+            aFormatStr.Append( '"' ).Append( aTemp ).AppendAscii( "\";\"" ).Append( aTemp ).AppendAscii( "\";\"" );
+            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 0.0, aTemp, &pColor );
+            aFormatStr.Append( aTemp ).Append( '"' );
+        }
+        else
+        {
+            LanguageType eLang = pEntry->GetLanguage();
+            if( eLang != LANGUAGE_ENGLISH_US )
+            {
+                xub_StrLen nCheckPos;
+                sal_Int16 nType = NUMBERFORMAT_DEFINED;
+                sal_uInt32 nKey;
+                String aTemp( pEntry->GetFormatstring() );
+                mpFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );
+                DBG_ASSERT( nCheckPos == 0, "XclExpNumFmtBuffer::WriteFormatRecord - format code not convertible" );
+                pEntry = mpFormatter->GetEntry( nKey );
+            }
+
+            aFormatStr = pEntry->GetMappedFormatstring( *mpKeywordTable, *mpFormatter->GetLocaleData() );
+            if( aFormatStr.EqualsAscii( "Standard" ) )
+                aFormatStr.AssignAscii( "General" );
+        }
+    }
+    else
+    {
+        DBG_ERRORFILE( "XclExpNumFmtBuffer::WriteFormatRecord - format not found" );
+        aFormatStr.AssignAscii( "General" );
+    }
+
+    WriteFormatRecord( rStrm, rFormat.mnXclIx, aFormatStr );
+}
+
+void XclExpNumFmtBuffer::WriteDefaultFormats( XclExpStream& rStrm )
+{
+    const XclExpDefaultFormat* pEnd = pDefaultFormats + STATIC_TABLE_SIZE( pDefaultFormats );
+    for( const XclExpDefaultFormat* pCurr = pDefaultFormats; pCurr != pEnd; ++pCurr )
+        WriteFormatRecord( rStrm, pCurr->mnIndex, String( pCurr->mpFormat, RTL_TEXTENCODING_UTF8 ) );
+}
+
 
 // XF, STYLE record - Cell formatting =========================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:13 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,17 @@
 #ifndef _SVMEMPOOL_HXX
 #include <tools/mempool.hxx>
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 #ifndef _VCL_VCLENUM_HXX
 #include <vcl/vclenum.hxx>
 #endif
 #ifndef _SVX_SVXENUM_HXX
 #include <svx/svxenum.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
+#include <svtools/nfkeytab.hxx>
 #endif
 
 #ifndef SC_XLSTYLE_HXX
@@ -369,6 +375,60 @@ private:
 
 
 // FORMAT record - number formats =============================================
+
+/** Stores a core number format index with corresponding Excel format index. */
+struct XclExpNumFmt
+{
+    sal_uInt32                  mnFormatIx;     /// Core index of the number format.
+    sal_uInt16                  mnXclIx;        /// Resulting Excel format index.
+
+    inline explicit             XclExpNumFmt( sal_uInt32 nFormatIx, sal_uInt16 nXclIx ) :
+                                    mnFormatIx( nFormatIx ), mnXclIx( nXclIx ) {}
+};
+
+
+// ----------------------------------------------------------------------------
+
+class SvNumberFormatter;
+
+/** Stores all number formats used in the document. */
+class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
+{
+private:
+    typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
+    typedef NfKeywordTable*                         NfKeywordTablePtr;
+    typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
+
+    SvNumberFormatterPtr        mpFormatter;    /// Special number formatter for conversion.
+    NfKeywordTablePtr           mpKeywordTable; /// Replacement table.
+    XclExpNumFmtVec             maFormatMap;    /// Maps core formats to Excel indexes.
+    sal_uInt16                  mnXclOffset;    /// Offset to first user defined format.
+
+public:
+    explicit                    XclExpNumFmtBuffer( const XclExpRoot& rRoot );
+
+    virtual                     ~XclExpNumFmtBuffer();
+
+    /** Sets internal data for the passed BIFF version. */
+    void                        SetBiff( XclBiff eBiff );
+
+    /** Inserts a number format into the format buffer.
+        @param nFormatIx  The core index of the number format.
+        @return  The resulting Excel format index. */
+    sal_uInt16                  Insert( sal_uInt32 nFormatIx );
+
+    /** Writes all FORMAT records contained in this buffer. */
+    virtual void                Save( XclExpStream& rStrm );
+
+private:
+    /** Writes the FORMAT record with index nXclIx and format string rFormatStr. */
+    void                        WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclIx, const String& rFormatStr );
+    /** Writes the FORMAT record represented by rFormat. */
+    void                        WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
+    /** Writes default formats occuring in each Excel file. */
+    void                        WriteDefaultFormats( XclExpStream& rStrm );
+};
+
 
 // XF, STYLE record - Cell formatting =========================================
 
