@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:48:46 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@ TYPEINIT1( SmModule, SfxModule );
 
 #define SmModule
 #include "smslots.hxx"
+
+#include <svx/xmlsecctrl.hxx>
+
 
 
 SmResId::SmResId( USHORT nId )
@@ -409,6 +412,9 @@ void SmModule::FillStatusBar(StatusBar &rBar)
     rBar.InsertItem(SID_TEXTSTATUS, 300, SIB_LEFT | SIB_IN);
     rBar.InsertItem(SID_ATTR_ZOOM, rBar.GetTextWidth(C2S(" 100% ")));
     rBar.InsertItem(SID_MODIFYSTATUS, rBar.GetTextWidth(C2S(" * ")));
+    rBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rBar ), SIB_USERDRAW );
+    rBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+
 }
 
 /* -----------------15.02.99 12:45-------------------
