@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,17 +75,19 @@ namespace dbaui
 //= OConnectionURLEdit
 //=========================================================================
 //-------------------------------------------------------------------------
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, WinBits _nStyle)
+OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, WinBits _nStyle,BOOL _bShowPrefix)
     :Edit(_pParent, _nStyle)
     ,m_pForcedPrefix(NULL)
+    ,m_bShowPrefix(_bShowPrefix)
 {
     DBG_CTOR(OConnectionURLEdit ,NULL);
 }
 
 //-------------------------------------------------------------------------
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId)
+OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,BOOL _bShowPrefix)
     :Edit(_pParent, _rResId)
     ,m_pForcedPrefix(NULL)
+    ,m_bShowPrefix(_bShowPrefix)
 {
     DBG_CTOR(OConnectionURLEdit ,NULL);
 }
@@ -93,13 +95,12 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId)
 //-------------------------------------------------------------------------
 OConnectionURLEdit::~OConnectionURLEdit()
 {
+    DBG_DTOR(OConnectionURLEdit ,NULL);
     // delete my sub controls
     Edit* pSubEdit = GetSubEdit();
     SetSubEdit(NULL);
     delete pSubEdit;
     delete m_pForcedPrefix;
-
-    DBG_DTOR(OConnectionURLEdit ,NULL);
 }
 
 //-------------------------------------------------------------------------
@@ -131,7 +132,7 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& _rNewSele
     // create new sub controls, if necessary
     if (!GetSubEdit())
         SetSubEdit(new Edit(this, 0));
-    if (!m_pForcedPrefix)
+    if ( !m_pForcedPrefix )
     {
         m_pForcedPrefix = new FixedText(this, WB_VCENTER);
 
@@ -139,6 +140,8 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& _rNewSele
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
         m_pForcedPrefix->SetBackground(Wallpaper(aSystemStyle.GetDialogColor()));
     }
+
+    m_pForcedPrefix->Show(m_bShowPrefix);
 
     sal_Bool bIsEmpty = 0 == _rStr.Len();
     // calc the prefix
@@ -155,35 +158,45 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& _rNewSele
     }
 
     // the fixed text gets the prefix
-    m_pForcedPrefix->SetText(sPrefix);
+    if ( m_pForcedPrefix )
+        m_pForcedPrefix->SetText(sPrefix);
 
     // both subs have to be resized according to the text len of the prefix
     Size aMySize = GetSizePixel();
-    sal_Int32 nTextWidth = m_pForcedPrefix->GetTextWidth(sPrefix) + 2;
-    m_pForcedPrefix->SetPosSizePixel(Point(0, -2), Size(nTextWidth, aMySize.Height()));
+    sal_Int32 nTextWidth = 0;
+    if ( m_pForcedPrefix && m_bShowPrefix)
+    {
+        nTextWidth = m_pForcedPrefix->GetTextWidth(sPrefix) + 2;
+        m_pForcedPrefix->SetPosSizePixel(Point(0, -2), Size(nTextWidth, aMySize.Height()));
+    }
     GetSubEdit()->SetPosSizePixel(Point(nTextWidth, -2), Size(aMySize.Width() - nTextWidth - 4, aMySize.Height()));
         // -2 because the edit has a frame which is 2 pixel wide ... should not be necessary, but I don't fully understand this ....
 
     // show the sub controls (in case they were just created)
-    m_pForcedPrefix->Show();
     GetSubEdit()->Show();
 
     // do the real SetTex
 //  Edit::SetText(bIsEmpty ? _rStr : m_aTypeCollection.cutPrefix(_rStr), _rNewSelection);
     String sNewText( _rStr );
     if ( !bIsEmpty )
-        sNewText = m_aTypeCollection.cutPrefix( _rStr );
+        sNewText  =m_aTypeCollection.cutPrefix( _rStr );
     Edit::SetText( sNewText );
 }
 
 //-------------------------------------------------------------------------
 String OConnectionURLEdit::GetText() const
 {
-    if (m_pForcedPrefix)
+    if ( m_pForcedPrefix )
         return m_pForcedPrefix->GetText() += Edit::GetText();
     return Edit::GetText();
 }
-
+// -----------------------------------------------------------------------------
+void OConnectionURLEdit::ShowPrefix(BOOL _bShowPrefix)
+{
+    m_bShowPrefix = _bShowPrefix;
+    if ( m_pForcedPrefix )
+        m_pForcedPrefix->Show(m_bShowPrefix);
+}
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
