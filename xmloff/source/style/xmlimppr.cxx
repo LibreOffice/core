@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: sab $ $Date: 2000-12-15 11:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,15 @@ void SvXMLImportPropertyMapper::importXML(
     }
 
     finished( rProperties, nStartIdx, nEndIdx );
+
+    std::vector <XMLPropertyState>::iterator aItr = rProperties.begin();
+    while (aItr != rProperties.end())
+    {
+        if (aItr->mnIndex == -1)
+            aItr = rProperties.erase(aItr);
+        else
+            aItr++;
+    }
 }
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
