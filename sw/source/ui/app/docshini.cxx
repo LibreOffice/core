@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:41:26 $
+ *  last change: $Author: mtg $ $Date: 2001-02-08 15:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,18 @@ void SwDocShell::RemoveLink()
         pDoc = 0;       // wir haben das Doc nicht mehr !!
     }
 }
-
+void SwDocShell::InvalidateModel()
+{
+    // Uno-Object abklemmen
+    uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
+    ((SwXTextDocument*)xDoc.get())->Invalidate();
+}
+void SwDocShell::ReactivateModel()
+{
+    // Uno-Object abklemmen
+    uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
+    ((SwXTextDocument*)xDoc.get())->Reactivate(this);
+}
 
 /*--------------------------------------------------------------------
     Beschreibung: Laden, Default-Format
@@ -800,6 +811,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/02/06 15:41:26  mib
+    real 6.0 file format
+
     Revision 1.9  2001/02/01 14:30:13  mib
     XML files now can be loaded/saved as own format
 
