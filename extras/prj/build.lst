@@ -11,6 +11,8 @@ er	extras\source\gallery\htmlexpo			nmake	-	all	er_ghtml NULL
 er	extras\source\gallery\rulers			nmake	-	all	er_grulr NULL
 er	extras\source\gallery\sounds			nmake	-	all	er_gsnds NULL
 er	extras\source\gallery\www-back			nmake	-	all	er_gwbck NULL
+er  extras\source\migration                 nmake  -    all er_migr NULL
+er  extras\source\migration\lang            nmake  -    all er_migrl NULL
 er	extras\source\misc_config				nmake	-	all	er_mcnf NULL
 er	extras\source\misc_config\lang			nmake	-	all	er_mcnfl er_mcnf NULL
 er	extras\source\palettes\lang				nmake	-	all	er_pall er_mcnfl NULL
