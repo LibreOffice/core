@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 15:05:30 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:28:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,50 +86,41 @@ SHL1TARGET= svx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= svx
 SVXLOKAL=	$(LB)$/svx.lib
 SHL1BASE  = 0x1d800000
+
 SHL1STDLIBS= \
-            $(SALLIB) \
-            $(VOSLIB) \
-            $(TOOLSLIB) \
-            $(SVTOOLLIB) \
-            $(SVLLIB)	\
-            $(SVLIB) \
-            $(SO2LIB) \
-            $(SOTLIB) \
-            $(XMLOFFLIB) \
             $(SFX2LIB) \
+            $(XMLOFFLIB) \
             $(GOODIESLIB) \
             $(BASICLIB) \
-            $(INETLIBSH) \
-            $(CHANELLIB) \
-            $(SVMEMLIB) \
+            $(SO2LIB) \
+            $(SVTOOLLIB) \
             $(TKLIB) \
-            $(ONELIB) \
-            $(RTLLIB) \
-            $(CPPULIB) \
-            $(CPPUHELPERLIB)	\
+            $(VCLLIB) \
+            $(SVLLIB) \
+            $(SOTLIB) \
+            $(UNOTOOLSLIB) \
+            $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
-            $(UNOTOOLSLIB) \
-            $(ICUI18NLIB)
+            $(CPPUHELPERLIB)	\
+            $(CPPULIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+            $(ICUUCLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
             $(SHELLLIB)
-.ENDIF
+.ENDIF # WNT
 
 .IF "$(BIG_SVX)"==""
 SHL1STDLIBS+=\
             $(LB)$/dl.lib
 .ENDIF
 
-.IF "$(SOLAR_JAVA)" != ""
-SHL1STDLIBS+=\
-        $(SJLIB)
-.ENDIF
-
 .IF "$(GUI)"=="WNT"
 SHL1DEPN=       $(SLB)$/svx.lib $(LB)$/dl.lib
-.ENDIF
+.ENDIF # WNT
 
 SHL1LIBS=       $(SLB)$/svx.lib
 
@@ -161,14 +152,10 @@ SHL2STDLIBS= \
             $(SFX2LIB) \
             $(GOODIESLIB) \
             $(BASICLIB) \
-            $(INETLIBSH) \
-            $(CHANELLIB) \
             $(SVMEMLIB) \
             $(TKLIB) \
-            $(ONELIB) \
             $(CPPULIB) \
             $(CPPUHELPERLIB) \
-            $(RTLLIB) \
             $(UNOTOOLSLIB) \
             $(UCBHELPERLIB) \
             $(COMPHELPERLIB)
@@ -218,7 +205,7 @@ LIB1FILES       = \
             $(LIBPRE) $(SLB)$/stbctrls.lib  \
             $(LIBPRE) $(SLB)$/tbxctrls.lib  \
             $(LIBPRE) $(SLB)$/unoedit.lib   \
-        $(LIBPRE) $(SLB)$/unodraw.lib	\
+            $(LIBPRE) $(SLB)$/unodraw.lib	\
             $(LIBPRE) $(SLB)$/gal.lib		\
             $(LIBPRE) $(SLB)$/accessibility.lib
 
@@ -353,5 +340,3 @@ implib_defs: $(SHL1DEF) $(SHL2DEF)
     +-$(RM) $(MISC)$/dl2.def
     splitdef $(SHL1DEF) $(MISC)$/svx1.def $(MISC)$/svx2.def
     splitdef $(SHL2DEF) $(MISC)$/dl1.def $(MISC)$/dl2.def
-
-
