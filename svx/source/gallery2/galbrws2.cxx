@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-08 15:22:38 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 10:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,10 @@ void GalleryBrowser2::StartDrag( Window* pWindow, const Point* pDragPoint )
         const ULONG nItemId = ImplGetSelectedItemId( pDragPoint, aSelPos );
 
         if( nItemId )
+        {
             mpCurTheme->StartDrag( this, nItemId - 1 );
+            GrabFocus();
+        }
     }
 }
 
