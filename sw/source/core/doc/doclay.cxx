@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: os $ $Date: 2001-05-09 07:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,12 +994,12 @@ sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
             bOk = (nPamStartIndex < nFlyIndex &&
                 (( nPamEndIndex > nFlyIndex )||
                  ((nPamEndIndex == nFlyIndex) &&
-                  (nPamEndContentIndex = nFlyContentIndex))) )
+                  (nPamEndContentIndex > nFlyContentIndex))) )
                 ||
                        (((nPamStartIndex == nFlyIndex) &&
                       (pPaMStart->nContent.GetIndex() <= nFlyContentIndex)) &&
-                        (nPamEndIndex > nFlyIndex) ||
-                     (nPamEndContentIndex > nFlyContentIndex ));
+                     ((nPamEndIndex > nFlyIndex) ||
+                     (nPamEndContentIndex > nFlyContentIndex )));
         }
 
     } while( !bOk && pPam != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
