@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,38 @@
 #define RID_BIB_STR_TABWIN_PREFIX   (RID_BIB_STRING +  3)
 #define RID_BIB_STR_FRAME_TITLE     (RID_BIB_STRING +  4)
 #define RID_MAP_QUESTION            (RID_BIB_STRING +  5)
+
+#define ST_IDENTIFIER               (RID_BIB_STRING +  6)
+#define ST_AUTHTYPE                 (RID_BIB_STRING +  7)
+#define ST_AUTHOR                   (RID_BIB_STRING +  8)
+#define ST_YEAR                     (RID_BIB_STRING +  9)
+#define ST_ISBN                     (RID_BIB_STRING +  10)
+#define ST_MONTH                    (RID_BIB_STRING +  11)
+#define ST_PUBLISHER                (RID_BIB_STRING +  12)
+#define ST_ADDRESS                  (RID_BIB_STRING +  13)
+#define ST_ANNOTE                   (RID_BIB_STRING +  14)
+#define ST_BOOKTITLE                (RID_BIB_STRING +  15)
+#define ST_CHAPTER                  (RID_BIB_STRING +  16)
+#define ST_EDITION                  (RID_BIB_STRING +  17)
+#define ST_EDITOR                   (RID_BIB_STRING +  18)
+#define ST_HOWPUBLISHED             (RID_BIB_STRING +  19)
+#define ST_INSTITUTION              (RID_BIB_STRING +  20)
+#define ST_JOURNAL                  (RID_BIB_STRING +  21)
+#define ST_NOTE                     (RID_BIB_STRING +  22)
+#define ST_NUMBER                   (RID_BIB_STRING +  23)
+#define ST_ORGANIZATION             (RID_BIB_STRING +  24)
+#define ST_PAGE                     (RID_BIB_STRING +  25)
+#define ST_SCHOOL                   (RID_BIB_STRING +  26)
+#define ST_SERIES                   (RID_BIB_STRING +  27)
+#define ST_TITLE                    (RID_BIB_STRING +  28)
+#define ST_REPORT                   (RID_BIB_STRING +  29)
+#define ST_VOLUME                   (RID_BIB_STRING +  30)
+#define ST_URL                      (RID_BIB_STRING +  31)
+#define ST_CUSTOM1                  (RID_BIB_STRING +  32)
+#define ST_CUSTOM2                  (RID_BIB_STRING +  33)
+#define ST_CUSTOM3                  (RID_BIB_STRING +  34)
+#define ST_CUSTOM4                  (RID_BIB_STRING +  35)
+#define ST_CUSTOM5                  (RID_BIB_STRING +  36)
 
 // HelpIDs *** nicht bestaetigt ***
 #ifndef HID_BIB_START

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@
 
 #define GB_SELECTION        68
 #define ST_ENTRY            69
-#define ST_URL              70
 #define LB_SELECTION        71
 #define HB_SELECTION        72
 

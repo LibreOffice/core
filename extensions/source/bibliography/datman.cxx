@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-06-26 10:16:25 $
+ *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,38 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     bModified(sal_False)
 {
     FreeResource();
+
+    aIdentifierFT.SetText(String(         BibResId( ST_IDENTIFIER    )));
+    aAuthorityTypeFT.SetText(String(      BibResId( ST_AUTHTYPE )));
+    aAuthorFT.SetText(String(             BibResId( ST_AUTHOR        )));
+    aTitleFT.SetText(String(              BibResId( ST_TITLE         )));
+    aMonthFT.SetText(String(              BibResId( ST_MONTH         )));
+    aYearFT.SetText(String(               BibResId( ST_YEAR          )));
+    aISBNFT.SetText(String(               BibResId( ST_ISBN          )));
+    aBooktitleFT.SetText(String(          BibResId( ST_BOOKTITLE     )));
+    aChapterFT.SetText(String(            BibResId( ST_CHAPTER       )));
+    aEditionFT.SetText(String(            BibResId( ST_EDITION       )));
+    aEditorFT.SetText(String(             BibResId( ST_EDITOR        )));
+    aHowpublishedFT.SetText(String(       BibResId( ST_HOWPUBLISHED  )));
+    aInstitutionFT.SetText(String(        BibResId( ST_INSTITUTION   )));
+    aJournalFT.SetText(String(            BibResId( ST_JOURNAL       )));
+    aNoteFT.SetText(String(               BibResId( ST_NOTE          )));
+    aAnnoteFT.SetText(String(             BibResId( ST_ANNOTE        )));
+    aNumberFT.SetText(String(             BibResId( ST_NUMBER        )));
+    aOrganizationsFT.SetText(String(      BibResId( ST_ORGANIZATION )));
+    aPagesFT.SetText(String(              BibResId( ST_PAGE         )));
+    aPublisherFT.SetText(String(          BibResId( ST_PUBLISHER     )));
+    aAddressFT.SetText(String(            BibResId( ST_ADDRESS       )));
+    aSchoolFT.SetText(String(             BibResId( ST_SCHOOL        )));
+    aSeriesFT.SetText(String(             BibResId( ST_SERIES        )));
+    aReportTypeFT.SetText(String(         BibResId( ST_REPORT    )));
+    aVolumeFT.SetText(String(             BibResId( ST_VOLUME        )));
+    aURLFT.SetText(String(                BibResId( ST_URL           )));
+    aCustom1FT.SetText(String(            BibResId( ST_CUSTOM1       )));
+    aCustom2FT.SetText(String(            BibResId( ST_CUSTOM2       )));
+    aCustom3FT.SetText(String(            BibResId( ST_CUSTOM3       )));
+    aCustom4FT.SetText(String(            BibResId( ST_CUSTOM4       )));
+    aCustom5FT.SetText(String(            BibResId( ST_CUSTOM5       )));
 
     aOKBT.SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
     String sTitle = GetText();

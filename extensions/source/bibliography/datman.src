@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 12:11:10 $
+ *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: os $ $Date: 2001-07-02 12:11:10 $ $Revision: 1.16 $
+// $Author: os $ $Date: 2001-07-11 07:53:41 $ $Revision: 1.17 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -126,28 +126,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Kürzel";
-        Text [ENGLISH] = "Identifier";
-        Text[ english_us ] = "Identifier";
-        Text[ portuguese ] = "Abreviatura";
-        Text[ russian ] = "Ñîêğàùåíèå";
-        Text[ greek ] = "Áñ÷éêÜ";
-        Text[ dutch ] = "Initialen";
-        Text[ french ] = "Abréviation";
-        Text[ spanish ] = "Abreviatura";
-        Text[ italian ] = "Sigla";
-        Text[ danish ] = "Genvej";
-        Text[ swedish ] = "Initialer";
-        Text[ polish ] = "Inicja³y";
-        Text[ portuguese_brazilian ] = "Identifier";
-        Text[ japanese ] = "’˜‘ID";
-        Text[ korean ] = "¸Ó¸®±ÛÀÚ";
-        Text[ chinese_simplified ] = "±êÊ¶";
-        Text[ chinese_traditional ] = "ÁY¼g";
-        Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
-        Text[ turkish ] = "Kısaltma";
-        Text[ catalan ] = "Abreviatura";
-        Text[ finnish ] = "Tunniste";
     };
     ListBox     LB_IDENTIFIER
     {
@@ -159,28 +137,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Literaturart";
-        Text [ENGLISH] = "Type of literature";
-        Text[ english_us ] = "Type of literature";
-        Text[ portuguese ] = "Tipo de literatura";
-        Text[ russian ] = "Æàíğ";
-        Text[ greek ] = "Åßäïò ëïãïôå÷íßáò";
-        Text[ dutch ] = "Soort literatuur";
-        Text[ french ] = "Genre";
-        Text[ spanish ] = "Tipo de literatura";
-        Text[ italian ] = "Tipo di letteratura";
-        Text[ danish ] = "Litteraturtype";
-        Text[ swedish ] = "Typ av litteratur";
-        Text[ polish ] = "Rodzaj literatury";
-        Text[ portuguese_brazilian ] = "Type of literature";
-        Text[ japanese ] = "–{‚Ì•ª—Ş";
-        Text[ korean ] = "Âü°í¹®Çå À¯Çü";
-        Text[ chinese_simplified ] = "ÎÄÏ×ÀàĞÍ";
-        Text[ chinese_traditional ] = "¤åÄmÃş«¬";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ turkish ] = "Kaynakça türü";
-        Text[ catalan ] = "Tipo de literatura";
-        Text[ finnish ] = "Kirjallisuuden laji";
     };
     ListBox LB_AUTHORITYTYPE
     {
@@ -192,8 +148,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "A~utor(en)" ;
-        Text [ ENGLISH ] = "Author(s)" ;
     };
     ListBox LB_AUTHOR
     {
@@ -205,29 +159,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Titel";
-        Text [ENGLISH] = "Title";
-        Text[ english_us ] = "Title";
-        Text[ portuguese ] = "Título";
-        Text[ russian ] = "Íàçâàíèå";
-        Text[ greek ] = "Ôßôëïò";
-        Text[ dutch ] = "Titel";
-        Text[ french ] = "Titre";
-        Text[ spanish ] = "Título";
-        Text[ italian ] = "Titolo";
-        Text[ danish ] = "Titel";
-        Text[ swedish ] = "Titel";
-        Text[ polish ] = "Tytu³";
-        Text[ portuguese_brazilian ] = "Title";
-        Text[ japanese ] = "À²ÄÙ";
-        Text[ korean ] = "Á¦¸ñ";
-        Text[ chinese_simplified ] = "±êÌâ";
-        Text[ chinese_traditional ] = "¼ĞÃD";
-        Text[ arabic ] = "ÇáÚäæÇä";
-        Text[ turkish ] = "Başlık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Título";
-        Text[ finnish ] = "Otsikko";
     };
     ListBox LB_TITLE
     {
@@ -239,29 +170,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Monat";
-        Text [ENGLISH] = "Month";
-        Text[ english_us ] = "Month";
-        Text[ portuguese ] = "Mês";
-        Text[ russian ] = "Ìåñÿö";
-        Text[ greek ] = "ÌŞíáò";
-        Text[ dutch ] = "Maand";
-        Text[ french ] = "Mois";
-        Text[ spanish ] = "Mes";
-        Text[ italian ] = "Mese";
-        Text[ danish ] = "Måned";
-        Text[ swedish ] = "Månad";
-        Text[ polish ] = "Miesi¹c";
-        Text[ portuguese_brazilian ] = "Month";
-        Text[ japanese ] = "Œ";
-        Text[ korean ] = "¿ù";
-        Text[ chinese_simplified ] = "ÔÂ";
-        Text[ chinese_traditional ] = "¤ë";
-        Text[ arabic ] = "ÇáÔåÑ";
-        Text[ turkish ] = "Ay";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mes";
-        Text[ finnish ] = "Kuukausi";
     };
     ListBox LB_MONTH
     {
@@ -273,29 +181,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Jahr";
-        Text [ENGLISH] = "Year";
-        Text[ english_us ] = "Year";
-        Text[ portuguese ] = "Ano";
-        Text[ russian ] = "Ãîä";
-        Text[ greek ] = "¸ôïò";
-        Text[ dutch ] = "Jaar";
-        Text[ french ] = "An";
-        Text[ spanish ] = "Año";
-        Text[ italian ] = "Anno";
-        Text[ danish ] = "År";
-        Text[ swedish ] = "År";
-        Text[ polish ] = "Rok";
-        Text[ portuguese_brazilian ] = "Year";
-        Text[ japanese ] = "”N";
-        Text[ korean ] = "³âµµ";
-        Text[ chinese_simplified ] = "Äê";
-        Text[ chinese_traditional ] = "¦~";
-        Text[ arabic ] = "ÇáÓäÉ";
-        Text[ turkish ] = "Yıl";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Año";
-        Text[ finnish ] = "Vuosi";
     };
     ListBox LB_YEAR
     {
@@ -307,29 +192,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "ISBN";
-        Text [ENGLISH] = "ISBN";
-        Text[ english_us ] = "ISBN";
-        Text[ portuguese ] = "ISBN";
-        Text[ russian ] = "ISBN";
-        Text[ greek ] = "ISBN";
-        Text[ dutch ] = "ISBN";
-        Text[ french ] = "ISBN";
-        Text[ spanish ] = "ISBN";
-        Text[ italian ] = "ISBN";
-        Text[ danish ] = "ISBN";
-        Text[ swedish ] = "ISBN";
-        Text[ polish ] = "ISBN";
-        Text[ portuguese_brazilian ] = "ISBN";
-        Text[ japanese ] = "ISBN";
-        Text[ korean ] = "ISBN";
-        Text[ chinese_simplified ] = "ISBN";
-        Text[ chinese_traditional ] = "ISBN";
-        Text[ arabic ] = "ISBN";
-        Text[ turkish ] = "ISBN";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ISBN";
-        Text[ finnish ] = "ISBN";
     };
     ListBox LB_ISBN
     {
@@ -341,29 +203,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Buchtitel";
-        Text [ENGLISH] = "Book title";
-        Text[ english_us ] = "Book title";
-        Text[ portuguese ] = "Título do livro";
-        Text[ russian ] = "Íàçâàíèå êíèãè";
-        Text[ greek ] = "Ôßôëïò âéâëßïõ";
-        Text[ dutch ] = "Boektitel";
-        Text[ french ] = "Titre du livre";
-        Text[ spanish ] = "Título del libro";
-        Text[ italian ] = "Titolo del libro";
-        Text[ danish ] = "Bogtitel";
-        Text[ swedish ] = "Boktitel";
-        Text[ polish ] = "Tytu³ ksi¹¿ki";
-        Text[ portuguese_brazilian ] = "Book title";
-        Text[ japanese ] = "‘–¼";
-        Text[ korean ] = "Ã¥ Á¦¸ñ";
-        Text[ chinese_simplified ] = "Êé¼®±êÌâ";
-        Text[ chinese_traditional ] = "®Ñ¦W";
-        Text[ arabic ] = "ÚäæÇä ÇáßÊÇÈ";
-        Text[ turkish ] = "Kitap başlığı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Título del libro";
-        Text[ finnish ] = "Kirjan otsikko";
     };
     ListBox LB_BOOKTITLE
     {
@@ -375,29 +214,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Kapitel";
-        Text [ENGLISH] = "Chapter";
-        Text[ english_us ] = "Chapter";
-        Text[ portuguese ] = "Capítulo";
-        Text[ russian ] = "Ãëàâà";
-        Text[ greek ] = "ÊåöÜëáéï";
-        Text[ dutch ] = "Hoofdstuk";
-        Text[ french ] = "Chapitre";
-        Text[ spanish ] = "Capítulo";
-        Text[ italian ] = "Capitolo";
-        Text[ danish ] = "Kapitel";
-        Text[ swedish ] = "Kapitel";
-        Text[ polish ] = "Rozdzia³";
-        Text[ portuguese_brazilian ] = "Chapter";
-        Text[ japanese ] = "Í";
-        Text[ korean ] = "Àå";
-        Text[ chinese_simplified ] = "ÕÂ";
-        Text[ chinese_traditional ] = "³¹";
-        Text[ arabic ] = "ÇáİÕá";
-        Text[ turkish ] = "Bölüm";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Capítulo";
-        Text[ finnish ] = "Luku";
     };
     ListBox LB_CHAPTER
     {
@@ -409,29 +225,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Ausgabe";
-        Text [ENGLISH] = "Edition";
-        Text[ english_us ] = "Edition";
-        Text[ portuguese ] = "Edição";
-        Text[ russian ] = "Èçäàíèå";
-        Text[ greek ] = "ÅîáãùãŞ";
-        Text[ dutch ] = "Editie";
-        Text[ french ] = "Édition";
-        Text[ spanish ] = "Edición";
-        Text[ italian ] = "Edizione";
-        Text[ danish ] = "Udgave";
-        Text[ swedish ] = "Utgåva";
-        Text[ polish ] = "Wydanie";
-        Text[ portuguese_brazilian ] = "Edition";
-        Text[ japanese ] = "”Å";
-        Text[ korean ] = "ÆÇ";
-        Text[ chinese_simplified ] = "°æ±¾";
-        Text[ chinese_traditional ] = "ª©¥»";
-        Text[ arabic ] = "ÇáØÈÚÉ";
-        Text[ turkish ] = "Yayım";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Edición";
-        Text[ finnish ] = "Laitos";
     };
     ListBox LB_EDITION
     {
@@ -443,29 +236,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 59 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Herausgeber";
-        Text [ENGLISH] = "Editor";
-        Text[ english_us ] = "Editor";
-        Text[ portuguese ] = "Editor";
-        Text[ russian ] = "Ğåäàêòîğ";
-        Text[ greek ] = "Åêäüôçò";
-        Text[ dutch ] = "Uitgever";
-        Text[ french ] = "Éditeur";
-        Text[ spanish ] = "Editor";
-        Text[ italian ] = "Editore";
-        Text[ danish ] = "Udgiver";
-        Text[ swedish ] = "Utgivare";
-        Text[ polish ] = "Wydawca";
-        Text[ portuguese_brazilian ] = "Editor";
-        Text[ japanese ] = "•ÒWÒ–¼";
-        Text[ korean ] = "¹ßÇàÀÎ";
-        Text[ chinese_simplified ] = "·¢ĞĞÈË";
-        Text[ chinese_traditional ] = "¥Xª©°Ó";
-        Text[ arabic ] = "ÇáäÇÔÑ";
-        Text[ turkish ] = "Yayımcı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Editor";
-        Text[ finnish ] = "Muokkaaja";
     };
     ListBox LB_EDITOR
     {
@@ -477,28 +247,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 59 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Ausgabeart";
-        Text [ENGLISH] = "How published";
-        Text[ english_us ] = "Publication type";
-        Text[ portuguese ] = "Tipo de publicação";
-        Text[ russian ] = "Òèï èçäàíèÿ";
-        Text[ greek ] = "Ôığïò İêäïóçò";
-        Text[ dutch ] = "Wijze van publiceren";
-        Text[ french ] = "Mode de publication";
-        Text[ spanish ] = "Tipo de publicación";
-        Text[ italian ] = "Tipo di edizione";
-        Text[ danish ] = "Udgivelsestype";
-        Text[ swedish ] = "Utgivningstyp";
-        Text[ polish ] = "Rodzaj publikacji";
-        Text[ portuguese_brazilian ] = "How published";
-        Text[ japanese ] = "¶ÊŞ°À²Ìß";
-        Text[ korean ] = "¹ßÇà Á¾·ù";
-        Text[ chinese_simplified ] = "·¢ĞĞ·½Ê½";
-        Text[ chinese_traditional ] = "¥Xª©Ãş«¬";
-        Text[ arabic ] = "ØÑíŞÉ ÇáäÔÑ";
-        Text[ turkish ] = "Yayım türü";
-        Text[ catalan ] = "Tipo de publicación";
-        Text[ finnish ] = "Julkaisutyyppi";
     };
     ListBox LB_HOWPUBLISHED
     {
@@ -510,29 +258,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Institution";
-        Text [ENGLISH] = "Institution";
-        Text[ english_us ] = "Institution";
-        Text[ portuguese ] = "Instituição";
-        Text[ russian ] = "Ó÷ğåæäåíèå";
-        Text[ greek ] = "ºäñõìá";
-        Text[ dutch ] = "Instelling";
-        Text[ french ] = "Institution";
-        Text[ spanish ] = "Institución";
-        Text[ italian ] = "Istituzione";
-        Text[ danish ] = "Institution";
-        Text[ swedish ] = "Institution";
-        Text[ polish ] = "Instytucja";
-        Text[ portuguese_brazilian ] = "Institution";
-        Text[ japanese ] = "Œ¤‹†Š–¼";
-        Text[ korean ] = "ÇùÈ¸";
-        Text[ chinese_simplified ] = "»ú¹¹";
-        Text[ chinese_traditional ] = "ÉóÌÛ";
-        Text[ arabic ] = "ÇáåíÆÉ";
-        Text[ turkish ] = "Kurum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Institución";
-        Text[ finnish ] = "Instituutio";
     };
     ListBox LB_INSTITUTION
     {
@@ -544,29 +269,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Zeitschrift";
-        Text [ENGLISH] = "Journal";
-        Text[ english_us ] = "Journal";
-        Text[ portuguese ] = "Revista";
-        Text[ russian ] = "Æóğíàë";
-        Text[ greek ] = "Ğåñéïäéêü";
-        Text[ dutch ] = "Tijdschrift";
-        Text[ french ] = "Revue";
-        Text[ spanish ] = "Revista";
-        Text[ italian ] = "Rivista";
-        Text[ danish ] = "Tidsskrift";
-        Text[ swedish ] = "Tidskrift";
-        Text[ polish ] = "Czasopismo";
-        Text[ portuguese_brazilian ] = "Journal";
-        Text[ japanese ] = "G–¼";
-        Text[ korean ] = "ÀâÁö";
-        Text[ chinese_simplified ] = "ÔÓÖ¾";
-        Text[ chinese_traditional ] = "Âø»x";
-        Text[ arabic ] = "ÇáãÌáÉ";
-        Text[ turkish ] = "Dergi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Revista";
-        Text[ finnish ] = "Päiväkirja";
     };
     ListBox LB_JOURNAL
     {
@@ -578,28 +280,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Notiz";
-        Text [ENGLISH] = "Note";
-        Text[ english_us ] = "Note";
-        Text[ portuguese ] = "Anotações";
-        Text[ russian ] = "Ïğèìå÷àíèå";
-        Text[ greek ] = "Óçìåßùóç";
-        Text[ dutch ] = "Aantekening";
-        Text[ french ] = "Note";
-        Text[ spanish ] = "Nota";
-        Text[ italian ] = "Nota";
-        Text[ danish ] = "Note";
-        Text[ swedish ] = "Anteckning";
-        Text[ polish ] = "Notatka";
-        Text[ portuguese_brazilian ] = "Note";
-        Text[ japanese ] = "ÒÓ";
-        Text[ korean ] = "¸Ş¸ğ";
-        Text[ chinese_simplified ] = "±¸×¢";
-        Text[ chinese_traditional ] = "³Æµù";
-        Text[ arabic ] = "ãáÇÍÙÉ";
-        Text[ turkish ] = "Not";
-        Text[ catalan ] = "Nota";
-        Text[ finnish ] = "Huomautus:";
     };
     ListBox LB_NOTE
     {
@@ -611,29 +291,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12, 89 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Anmerkung";
-        Text [ENGLISH] = "Annotation";
-        Text[ english_us ] = "Annotation";
-        Text[ portuguese ] = "Anotações";
-        Text[ russian ] = "Ïîìåòêè";
-        Text[ greek ] = "ĞáñáôŞñçóç";
-        Text[ dutch ] = "Commentaar";
-        Text[ french ] = "Annotation";
-        Text[ spanish ] = "Anotación";
-        Text[ italian ] = "Annotazione";
-        Text[ danish ] = "Anmærkning";
-        Text[ swedish ] = "Anmärkning";
-        Text[ polish ] = "Adnotacja";
-        Text[ portuguese_brazilian ] = "Annotation";
-        Text[ japanese ] = "’ß";
-        Text[ korean ] = "ÁÖ¼®";
-        Text[ chinese_simplified ] = "ËµÃ÷";
-        Text[ chinese_traditional ] = "³Æµù";
-        Text[ arabic ] = "ÊÚáíŞ ÊæÖíÍí";
-        Text[ turkish ] = "Açıklama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Anotación";
-        Text[ finnish ] = "Huomautus";
     };
     ListBox LB_ANNOTE
     {
@@ -645,28 +302,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 89 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Nummer";
-        Text [ENGLISH] = "No.";
-        Text[ english_us ] = "No.";
-        Text[ portuguese ] = "Nº.";
-        Text[ russian ] = "¹";
-        Text[ greek ] = "Áñéèìüò";
-        Text[ dutch ] = "Nummer";
-        Text[ french ] = "No.";
-        Text[ spanish ] = "Número";
-        Text[ italian ] = "No.";
-        Text[ danish ] = "Nummer";
-        Text[ swedish ] = "Nummer";
-        Text[ polish ] = "Numer";
-        Text[ portuguese_brazilian ] = "No.";
-        Text[ japanese ] = "No.";
-        Text[ korean ] = "¹øÈ£";
-        Text[ chinese_simplified ] = "±àºÅ";
-        Text[ chinese_traditional ] = "¸¹½X";
-        Text[ arabic ] = "ÑŞã";
-        Text[ turkish ] = "Sayı";
-        Text[ catalan ] = "Número";
-        Text[ finnish ] = "Nro";
     };
     ListBox LB_NUMBER
     {
@@ -678,28 +313,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 89 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Organisation";
-        Text [ENGLISH] = "Organization";
-        Text[ english_us ] = "Organization";
-        Text[ portuguese ] = "Organização";
-        Text[ russian ] = "Îğãàíèçàöèÿ";
-        Text[ greek ] = "Ïñãáíéóìüò";
-        Text[ dutch ] = "Organisatie";
-        Text[ french ] = "Organisation";
-        Text[ spanish ] = "Organización";
-        Text[ italian ] = "Organizzazione";
-        Text[ danish ] = "Organisation";
-        Text[ swedish ] = "Organisation";
-        Text[ polish ] = "Organizacja";
-        Text[ portuguese_brazilian ] = "Organization";
-        Text[ japanese ] = "‘gD’c‘Ì–¼";
-        Text[ korean ] = "´ÜÃ¼";
-        Text[ chinese_simplified ] = "×éÖ¯";
-        Text[ chinese_traditional ] = "¾÷ºc";
-        Text[ arabic ] = "ÇáãäÙãÉ";
-        Text[ turkish ] = "Organizasyon";
-        Text[ catalan ] = "Organización";
-        Text[ finnish ] = "Organisaatio";
     };
     ListBox LB_ORGANIZATIONS
     {
@@ -711,29 +324,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Seite(n)";
-        Text [ENGLISH] = "Page(s)";
-        Text[ english_us ] = "Page(s)";
-        Text[ portuguese ] = "Página(s)";
-        Text[ russian ] = "Ñòğàíèö(û)";
-        Text[ greek ] = "Óåëßäá/-åò";
-        Text[ dutch ] = "Pagina(s)";
-        Text[ french ] = "Page(s)";
-        Text[ spanish ] = "Página(s)";
-        Text[ italian ] = "Pagina/e";
-        Text[ danish ] = "Side(r)";
-        Text[ swedish ] = "Sida(-or)";
-        Text[ polish ] = "Strona(y)";
-        Text[ portuguese_brazilian ] = "Page(s)";
-        Text[ japanese ] = "Íß°¼Ş”";
-        Text[ korean ] = "ÂÊ£¨µé£©";
-        Text[ chinese_simplified ] = "Ò³";
-        Text[ chinese_traditional ] = "­¶";
-        Text[ arabic ] = "ÕİÍÉ (ÕİÍÇÊ)";
-        Text[ turkish ] = "Sayfa sayısı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Página(s)";
-        Text[ finnish ] = "Sivua";
     };
     ListBox LB_PAGES
     {
@@ -745,28 +335,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Verlag";
-        Text [ENGLISH] = "Publisher";
-        Text[ english_us ] = "Publisher";
-        Text[ portuguese ] = "Editora";
-        Text[ russian ] = "Èçäàòåëüñòâî";
-        Text[ greek ] = "Åêäïôéêüò ïßêïò";
-        Text[ dutch ] = "Uitgeverij";
-        Text[ french ] = "Édition";
-        Text[ spanish ] = "Editorial";
-        Text[ italian ] = "Casa editrice";
-        Text[ danish ] = "Forlag";
-        Text[ swedish ] = "Förlag";
-        Text[ polish ] = "Wydawnictwo";
-        Text[ portuguese_brazilian ] = "Publisher";
-        Text[ japanese ] = "”­sŠ–¼";
-        Text[ korean ] = "ÃâÆÇ»ç";
-        Text[ chinese_simplified ] = "³ö°æÉç";
-        Text[ chinese_traditional ] = "¥Xª©ªÀ";
-        Text[ arabic ] = "ÏÇÑ ÇáäÔÑ";
-        Text[ turkish ] = "Yayım evi";
-        Text[ catalan ] = "Editorial";
-        Text[ finnish ] = "Julkaisija";
     };
     ListBox LB_PUBLISHER
     {
@@ -778,29 +346,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Adresse";
-        Text [ENGLISH] = "Address";
-        Text[ english_us ] = "Address";
-        Text[ portuguese ] = "Endereço";
-        Text[ russian ] = "Àäğåñ";
-        Text[ greek ] = "Äéåıèõíóç";
-        Text[ dutch ] = "Adres";
-        Text[ french ] = "Adresse";
-        Text[ spanish ] = "Dirección";
-        Text[ italian ] = "Indirizzo";
-        Text[ danish ] = "Adresse";
-        Text[ swedish ] = "Adress";
-        Text[ polish ] = "Adres";
-        Text[ portuguese_brazilian ] = "Address";
-        Text[ japanese ] = "ZŠ";
-        Text[ korean ] = "ÁÖ¼Ò";
-        Text[ chinese_simplified ] = "µØÖ·";
-        Text[ chinese_traditional ] = "¦a§}";
-        Text[ arabic ] = "ÇáÚäæÇä";
-        Text[ turkish ] = "Adres";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Dirección";
-        Text[ finnish ] = "Osoite";
     };
     ListBox LB_ADDRESS
     {
@@ -812,28 +357,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Hochschule/Universit~ät" ;
-        Text [ ENGLISH ] = "University" ;
-        Text[ english_us ] = "University";
-        Text[ portuguese ] = "Universidade";
-        Text[ russian ] = "ÂÓÇ";
-        Text[ greek ] = "Á.Å.É./Ô.Å.É.";
-        Text[ dutch ] = "Hogeschool";
-        Text[ french ] = "École supérieure";
-        Text[ spanish ] = "Universidad";
-        Text[ italian ] = "Scuola superiore";
-        Text[ danish ] = "Universitet";
-        Text[ swedish ] = "Högskola";
-        Text[ polish ] = "Szko³a wy¿sza";
-        Text[ portuguese_brazilian ] = "School";
-        Text[ japanese ] = "‹³ˆç‹@ŠÖ–¼";
-        Text[ korean ] = "´ëÇĞ";
-        Text[ chinese_simplified ] = "´óÑ§";
-        Text[ chinese_traditional ] = "°ªµ¥°|®Õ";
-        Text[ arabic ] = "ÇáÌÇãÚÉ";
-        Text[ turkish ] = "Üniversite";
-        Text[ catalan ] = "Universidad";
-        Text[ finnish ] = "Yliopisto";
     };
     ListBox LB_SCHOOL
     {
@@ -845,29 +368,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Ser~ie";
-        Text[English]= "Series";
-        Text[ english_us ] = "Series";
-        Text[ portuguese ] = "Série";
-        Text[ russian ] = "Ñåğèÿ";
-        Text[ greek ] = "ÓåéñÜ";
-        Text[ dutch ] = "Serie";
-        Text[ french ] = "Série";
-        Text[ spanish ] = "Serie";
-        Text[ italian ] = "Serie";
-        Text[ danish ] = "Serie";
-        Text[ swedish ] = "Serie";
-        Text[ polish ] = "Seria";
-        Text[ portuguese_brazilian ] = "Series";
-        Text[ japanese ] = "‘p‘";
-        Text[ korean ] = "½Ã¸®Áî";
-        Text[ chinese_simplified ] = "ÏµÁĞ";
-        Text[ chinese_traditional ] = "¨t¦C";
-        Text[ arabic ] = "ÓáÓáÉ";
-        Text[ turkish ] = "Dizi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Serie";
-        Text[ finnish ] = "Sarja";
     };
     ListBox LB_SERIES
     {
@@ -879,29 +379,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Art des Reports";
-        Text [ENGLISH] = "Report type";
-        Text[ english_us ] = "Report type";
-        Text[ portuguese ] = "Tipo de relatório";
-        Text[ russian ] = "Òèï îò÷åòà";
-        Text[ greek ] = "Ôığïò áíáöïñÜò";
-        Text[ dutch ] = "Soort bericht";
-        Text[ french ] = "Type de rapport";
-        Text[ spanish ] = "Tipo de informe";
-        Text[ italian ] = "Rapporto";
-        Text[ danish ] = "Rapporttype";
-        Text[ swedish ] = "Typ av rapport";
-        Text[ polish ] = "Rodzaj raportu";
-        Text[ portuguese_brazilian ] = "Report type";
-        Text[ japanese ] = "ÚÎß°Ä‚Ìí—Ş";
-        Text[ korean ] = "º¸°í¼­ Á¾·ù";
-        Text[ chinese_simplified ] = "±¨µÀÀàĞÍ";
-        Text[ chinese_traditional ] = "³ø§iÃş«¬";
-        Text[ arabic ] = "äæÚ ÇáÊŞÑíÑ";
-        Text[ turkish ] = "Rapor türü";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo de informe";
-        Text[ finnish ] = "Raporttityyppi";
     };
     ListBox LB_REPORTTYPE
     {
@@ -913,28 +390,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Band" ;
-        Text [ ENGLISH ] = "Volume" ;
-        Text[ english_us ] = "Volume";
-        Text[ portuguese ] = "Volume";
-        Text[ russian ] = "Òîì";
-        Text[ greek ] = "Ôüìïò";
-        Text[ dutch ] = "Deel";
-        Text[ french ] = "Volume";
-        Text[ spanish ] = "Tomo";
-        Text[ italian ] = "Volume";
-        Text[ danish ] = "Bind";
-        Text[ swedish ] = "Volym";
-        Text[ polish ] = "Tom";
-        Text[ portuguese_brazilian ] = "Volume";
-        Text[ japanese ] = "Šª";
-        Text[ korean ] = "±Ç";
-        Text[ chinese_simplified ] = "²á";
-        Text[ chinese_traditional ] = "¥U";
-        Text[ arabic ] = "ÇáãÌáÏ";
-        Text[ turkish ] = "Cilt";
-        Text[ catalan ] = "Tomo";
-        Text[ finnish ] = "Laitos";
     };
     ListBox LB_VOLUME
     {
@@ -946,29 +401,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "URL";
-        Text [ENGLISH] = "URL";
-        Text[ english_us ] = "URL";
-        Text[ portuguese ] = "URL";
-        Text[ russian ] = "URL";
-        Text[ greek ] = "URL";
-        Text[ dutch ] = "URL";
-        Text[ french ] = "URL";
-        Text[ spanish ] = "URL";
-        Text[ italian ] = "URL";
-        Text[ danish ] = "URL";
-        Text[ swedish ] = "URL";
-        Text[ polish ] = "URL";
-        Text[ portuguese_brazilian ] = "URL";
-        Text[ japanese ] = "URL";
-        Text[ korean ] = "URL";
-        Text[ chinese_simplified ] = "URL";
-        Text[ chinese_traditional ] = "URL";
-        Text[ arabic ] = "URL";
-        Text[ turkish ] = "URL";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "URL";
-        Text[ finnish ] = "URL-osoite";
     };
     ListBox LB_URL
     {
@@ -980,29 +412,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Benutzerfeld 1";
-        Text [ENGLISH] = "Custom field 1";
-        Text[ english_us ] = "User-defined 1";
-        Text[ portuguese ] = "Campo de utilizador 1";
-        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 1";
-        Text[ greek ] = "Ğåäßï ÷ñŞóôç 1";
-        Text[ dutch ] = "Gebruikersveld 1";
-        Text[ french ] = "Champ d'utilisateur 1";
-        Text[ spanish ] = "Campo de usuario 1";
-        Text[ italian ] = "Utente 1";
-        Text[ danish ] = "Brugerdefineret 1";
-        Text[ swedish ] = "Användarfält 1";
-        Text[ polish ] = "Pole u¿ytkownika 1";
-        Text[ portuguese_brazilian ] = "Custom field 1";
-        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ1";
-        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 1";
-        Text[ chinese_simplified ] = "ÓÃ»§À¸ 1";
-        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 1";
-        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 1";
-        Text[ turkish ] = "Kullanıcı alanı 1";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Campo de usuario 1";
-        Text[ finnish ] = "Käyttäjän määrittämä 1";
     };
     ListBox LB_CUSTOM1
     {
@@ -1014,29 +423,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Benutzerfeld 2";
-        Text [ENGLISH] = "Custom field 2";
-        Text[ english_us ] = "User-defined 2";
-        Text[ portuguese ] = "Campo de utilizador 2";
-        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 2";
-        Text[ greek ] = "Ğåäßï ÷ñŞóôç 2";
-        Text[ dutch ] = "Gebruikersveld 2";
-        Text[ french ] = "Champ d'tilisateur 2";
-        Text[ spanish ] = "Campo de usuario 2";
-        Text[ italian ] = "Utente 2";
-        Text[ danish ] = "Brugerdefineret 2";
-        Text[ swedish ] = "Användarfält 2";
-        Text[ polish ] = "Pole u¿ytkownika 2";
-        Text[ portuguese_brazilian ] = "Custom field 2";
-        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ2";
-        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 2";
-        Text[ chinese_simplified ] = "ÓÃ»§À¸ 2";
-        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 2";
-        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 2";
-        Text[ turkish ] = "Kullanıcı alanı 2";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Campo de usuario 2";
-        Text[ finnish ] = "Käyttäjän määrittämä 2";
     };
     ListBox LB_CUSTOM2
     {
@@ -1048,28 +434,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 149 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Benutzerfeld 3";
-        Text [ENGLISH] = "Custom field 3";
-        Text[ english_us ] = "User-defined 3";
-        Text[ portuguese ] = "Campo de utilizador 3";
-        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 3";
-        Text[ greek ] = "Ğåäßï ÷ñŞóôç 3";
-        Text[ dutch ] = "Gebruikersveld 3";
-        Text[ french ] = "Champ d'utilisateur 3";
-        Text[ spanish ] = "Campo de usuario 3";
-        Text[ italian ] = "Utente 3";
-        Text[ danish ] = "Brugerdefineret 3";
-        Text[ swedish ] = "Användarfält 3";
-        Text[ polish ] = "Pole u¿ytkownika 3";
-        Text[ portuguese_brazilian ] = "Custom field 3";
-        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ3";
-        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 3";
-        Text[ chinese_simplified ] = "ÓÃ»§À¸ 3";
-        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 3";
-        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 3";
-        Text[ turkish ] = "Kullanıcı alanı 3";
-        Text[ catalan ] = "Campo de usuario 3";
-        Text[ finnish ] = "Käyttäjän määrittämä 3";
     };
     ListBox LB_CUSTOM3
     {
@@ -1081,28 +445,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 149 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Benutzerfeld 4";
-        Text [ENGLISH] = "Custom field 4";
-        Text[ english_us ] = "User-defined 4";
-        Text[ portuguese ] = "Campo de utilizador 4";
-        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 4";
-        Text[ greek ] = "Ğåäßï ÷ñŞóôç 4";
-        Text[ dutch ] = "Gebruikersveld 4";
-        Text[ french ] = "Champ d'utilisateur 4";
-        Text[ spanish ] = "Campo de usuario 4";
-        Text[ italian ] = "Utente 4";
-        Text[ danish ] = "Brugerdefineret 4";
-        Text[ swedish ] = "Användarfält 4";
-        Text[ polish ] = "Pole u¿ytkownika 4";
-        Text[ portuguese_brazilian ] = "Custom field 4";
-        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ4";
-        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 4";
-        Text[ chinese_simplified ] = "ÓÃ»§À¸ 4";
-        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 4";
-        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 4";
-        Text[ turkish ] = "Kullanıcı alanı 4";
-        Text[ catalan ] = "Campo de usuario 4";
-        Text[ finnish ] = "Käyttäjän määrittämä 4";
     };
     ListBox LB_CUSTOM4
     {
@@ -1114,28 +456,6 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 164 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Benutzerfeld 5";
-        Text [ENGLISH] = "Custom field 5";
-        Text[ english_us ] = "User-defined 5";
-        Text[ portuguese ] = "Campo de utilizador 5";
-        Text[ russian ] = "Ïîëå ïîëüçîâàòåëÿ 5";
-        Text[ greek ] = "Ğåäßï ÷ñŞóôç 5";
-        Text[ dutch ] = "Gebruikersveld 5";
-        Text[ french ] = "Champ d'utilisateur 5";
-        Text[ spanish ] = "Campo de usuario 5";
-        Text[ italian ] = "Utente 5";
-        Text[ danish ] = "Brugerdefineret 5";
-        Text[ swedish ] = "Användarfält 5";
-        Text[ polish ] = "Pole u¿ytkownika 5";
-        Text[ portuguese_brazilian ] = "Custom field 5";
-        Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ5";
-        Text[ korean ] = "»ç¿ëÀÚ ÇÊµå 5";
-        Text[ chinese_simplified ] = "ÓÃ»§À¸ 5";
-        Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 5";
-        Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 5";
-        Text[ turkish ] = "Kullanıcı alanı 5";
-        Text[ catalan ] = "Campo de usuario 5";
-        Text[ finnish ] = "Käyttäjän määrittämä 5";
     };
     ListBox LB_CUSTOM5
     {
@@ -1169,26 +489,6 @@ ModalDialog RID_DLG_MAPPING
         Text[ catalan ] = "<ninguno>";
         Text[ finnish ] = "<ei mitään>";
     };
-    Text[ english_us ] = "Column Layout for Table %1";
-    Text[ portuguese ] = "Atribuição de colunas para a tabela %1";
-    Text[ russian ] = "Ğàñïîëîæåíèå êîëîíîê äëÿ òàáëèöû %1";
-    Text[ greek ] = "Ğñïóäéïñéóìüò óôçëşí ãéá ğßíáêá %1";
-    Text[ dutch ] = "Kolomindeling voor tabel %1";
-    Text[ french ] = "Assignation de colonnes pour la table %1";
-    Text[ spanish ] = "Asignación de columnas para tabla %1";
-    Text[ italian ] = "Assegnazione colonne per la tabella %1";
-    Text[ danish ] = "Kolonnetildeling for tabel %1";
-    Text[ swedish ] = "Kolumntilldelning för tabell %1";
-    Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
-    Text[ portuguese_brazilian ] = "Column assignment for table %1";
-    Text[ japanese ] = "%1 Ã°ÌŞÙ‚Ì—ñ•ª—Ş";
-    Text[ korean ] = "Å×ÀÌºí %1ÀÇ ¿­ ·¹ÀÌ¾Æ¿ô";
-    Text[ chinese_simplified ] = "Îª±í¸ñ %1 ±àÅÅÉè¼ÆÁĞ";
-    Text[ chinese_traditional ] = "½s±Æ %1 ªí®æªºÄæ";
-    Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
-    Text[ turkish ] = "Tablo %1 için sütun düzeni";
-    Text[ catalan ] = "Asignación de columnas para tabla %1";
-    Text[ finnish ] = "Taulukon %1 sarakeasettelu";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -1197,8 +497,6 @@ ModalDialog RID_DLG_DBCHANGE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 291 , 131 ) ;
     Moveable = TRUE ;
-    Text = "Auswahl der Datenquelle";
-    Text [ENGLISH] = "Select data source";
 
     OKButton BT_OK
     {
@@ -1219,29 +517,6 @@ ModalDialog RID_DLG_DBCHANGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 229 , 8 ) ;
-        Text = "Auswahl";
-        Text [ENGLISH] = "Selection";
-        Text[ english_us ] = "Selection";
-        Text[ portuguese ] = "Selecção";
-        Text[ russian ] = "Âûáîğ";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ dutch ] = "Selectie";
-        Text[ french ] = "Sélection";
-        Text[ spanish ] = "Selección";
-        Text[ italian ] = "Selezione";
-        Text[ danish ] = "Udvalg";
-        Text[ swedish ] = "Urval";
-        Text[ polish ] = "Wybór";
-        Text[ portuguese_brazilian ] = "Selection";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ turkish ] = "Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selección";
-        Text[ finnish ] = "Valinta";
     };
     String ST_ENTRY
     {
@@ -1268,32 +543,6 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ catalan ] = "Entrada";
         Text[ finnish ] = "Merkintä";
     };
-    String ST_URL
-    {
-        Text = "URL";
-        Text [ENGLISH] = "URL";
-        Text[ english_us ] = "URL";
-        Text[ portuguese ] = "URL";
-        Text[ russian ] = "URL";
-        Text[ greek ] = "URL";
-        Text[ dutch ] = "URL";
-        Text[ french ] = "URL";
-        Text[ spanish ] = "URL";
-        Text[ italian ] = "URL";
-        Text[ danish ] = "URL";
-        Text[ swedish ] = "URL";
-        Text[ polish ] = "URL";
-        Text[ portuguese_brazilian ] = "URL";
-        Text[ japanese ] = "URL";
-        Text[ korean ] = "URL";
-        Text[ chinese_simplified ] = "URL";
-        Text[ chinese_traditional ] = "URL";
-        Text[ arabic ] = "URL";
-        Text[ turkish ] = "URL";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "URL";
-        Text[ finnish ] = "URL-osoite";
-    };
     Control LB_SELECTION
     {
         Pos = MAP_APPFONT ( 9 , 24 ) ;
@@ -1307,27 +556,6 @@ ModalDialog RID_DLG_DBCHANGE
         Size = MAP_APPFONT ( 223 , 12 ) ;
         Border = TRUE;
     };
-    Text[ english_us ] = "Select Data Source";
-    Text[ portuguese ] = "Seleccionar fonte de dados";
-    Text[ russian ] = "Âûáîğ èñòî÷íèêà äàííûõ";
-    Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò äåäïìİíùí";
-    Text[ dutch ] = "Kies gegevensbron";
-    Text[ french ] = "Sélection de la source de données";
-    Text[ spanish ] = "Selección de la fuente de datos";
-    Text[ italian ] = "Selezione della sorgente dati";
-    Text[ danish ] = "Vælg datakilde";
-    Text[ swedish ] = "Urval av datakälla";
-    Text[ polish ] = "Wybór Ÿród³a danych";
-    Text[ portuguese_brazilian ] = "Select data source";
-    Text[ japanese ] = "ÃŞ°À¿°½‚Ì‘I‘ğ";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃ";
-    Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İÔ´";
-    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ¨Ó·½";
-    Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ turkish ] = "Veri kaynağı seçimi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selección de la fuente de datos";
-    Text[ finnish ] = "Valitse tietolähde";
 };
 
 
