@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:19:04 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ class SwRTFWriter : public Writer
     USHORT nAktFlyPos;              // Index auf das naechste "FlyFrmFmt"
     void OutRTFColorTab();
     void OutRTFFontTab();
+    const rtl::OUString XlateFmtName( const rtl::OUString &rName, SwGetPoolIdFromName eFlags );
     void OutRTFStyleTab();
     void OutRTFListTab();
     bool OutRTFRevTab();
@@ -150,6 +151,7 @@ public:
     const SwPageDesc* pAktPageDesc;     // aktuell gesetzter PageDesc.
     USHORT nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
     USHORT nCurScript;                  // actual scripttype
+    rtl_TextEncoding eCurrentCharSet;
 
 #if defined(MAC) || defined(UNX)
     static const sal_Char sNewLine;                 // nur \012 oder \015
