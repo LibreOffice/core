@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:51:33 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ ModalDialog DLG_OPTIONS
         Text[ czech ] = "1: min. kvalita\n100: max. kvalita";
         Text[ hebrew ] = "1: min. Qualität\n100: max. Qualität";
         Text[ hindi ] = "1: min. quality\n100: max. quality";
+        Text[ slovak ] = "1: min. kvalita\n100: max. kvalita";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -249,7 +250,10 @@ ModalDialog DLG_OPTIONS
     Text[ czech ] = "Volby Macromedia Flash (SWF)";
     Text[ hebrew ] = "Flash Optionen";
     Text[ hindi ] = "Macromedia Flash (SWF) Options";
+    Text[ slovak ] = "Macromedia Flash (SWF) voľby";
 };
+
+
 
 
 
