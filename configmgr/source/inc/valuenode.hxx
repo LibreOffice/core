@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:57:31 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,7 @@ namespace configmgr
         void setDefault();
 
         bool changeDefault(uno::Any const& _aValue);
+        void promoteToDefault();
 
         virtual std::auto_ptr<INode> clone() const;
 

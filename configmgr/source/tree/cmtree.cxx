@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:57:32 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,31 @@ namespace configmgr
         m_aValuePair.clear( selectValue() );
         this->markAsDefault();
         OSL_POSTCOND( isDefault(), "Could not set value node to default");
+    }
+
+    void ValueNode::promoteToDefault()
+    {
+        if (!isDefault())
+        {
+            if (m_aValuePair.hasFirst())
+            {
+                OSL_VERIFY( m_aValuePair.setSecond(m_aValuePair.getFirst()) );
+                m_aValuePair.clear( selectValue() );
+            }
+            else
+            {
+                m_aValuePair.clear( selectDeflt() );
+                OSL_ASSERT( m_aValuePair.isNull() );
+            }
+
+            this->markAsDefault();
+
+            OSL_ENSURE( !m_aValuePair.hasFirst(), "Leaving orphaned value in after promoting to default");
+        }
+        else
+            OSL_ENSURE( !m_aValuePair.hasFirst(), "Orphaned value in default node won't be promoted");
+
+        OSL_POSTCOND( isDefault(), "Could not promote value node to default");
     }
 
     std::auto_ptr<INode> ValueNode::clone() const
