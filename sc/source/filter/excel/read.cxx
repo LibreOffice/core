@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:33:50 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ FltError ImportExcel::Read( void )
                     case 0x00:  Dimensions(); break;    // DIMENSIONS   [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff4E;
-                        IncScTab();
+                        IncCurrScTab();
                         break;
                     case 0x12:  Protect(); break;       // SHEET PROTECTION
                     case 0x14:
@@ -529,7 +529,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         EndSheet();
-                        IncScTab();
+                        IncCurrScTab();
                         eAkt = Z_Biff4E;
                         break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
@@ -660,7 +660,7 @@ FltError ImportExcel::Read( void )
                     case 0x0A:                          // EOF          [ 2345]
                         EndSheet();
                         eAkt = Z_Biff5E;
-                        IncScTab();
+                        IncCurrScTab();
                         break;
                     case 0x14:
                     case 0x15:  GetPageSettings().ReadHeaderFooter( maStrm );   break;
@@ -779,7 +779,7 @@ FltError ImportExcel::Read( void )
                     case 0x07:  RecString(); break;     // STRING       [ 2345]
                     case 0x0A:                          // EOF          [ 2345]
                         EndSheet();
-                        IncScTab();
+                        IncCurrScTab();
                         eAkt = Z_Biff5E;
                         break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
@@ -846,7 +846,7 @@ FltError ImportExcel::Read( void )
                             case Biff5V:
                             default:
                                 NeueTabelle();
-                                pD->SetVisible( GetScTab(), FALSE );
+                                pD->SetVisible( GetCurrScTab(), FALSE );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
@@ -974,7 +974,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = ePrev;
-                        IncScTab();
+                        IncCurrScTab();
                         break;
                 }
 
@@ -1151,7 +1151,7 @@ FltError ImportExcel8::Read( void )
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
 
                     case EXC_ID_SST:            GetSst().ReadSst( maStrm );                 break;
-                    case EXC_ID_TABID:          GetTabIdBuffer().ReadTabid( maStrm );       break;
+                    case EXC_ID_TABID:          GetTabInfo().ReadTabid( maStrm );           break;
                     case EXC_ID_NAME:           GetNameBuffer().ReadName( maStrm );         break;
                     case EXC_ID_EXTERNSHEET:    GetLinkManager().ReadExternsheet( maStrm ); break;
                     case EXC_ID_SUPBOOK:        GetLinkManager().ReadSupbook( maStrm );     break;
@@ -1331,7 +1331,7 @@ FltError ImportExcel8::Read( void )
                         {
                             EndSheet();
                             eAkt = Z_Biff8E;
-                            IncScTab();
+                            IncCurrScTab();
                         }
                         break;
                         case 0x002F:                            // FILEPASS     [ 2345   ]
@@ -1355,7 +1355,7 @@ FltError ImportExcel8::Read( void )
                 {
                     case 0x0809:                        // BOF          [    5   ]
                     {
-                        if( GetScTab() > MAXTAB )    // ignore tables >255
+                        if( GetCurrScTab() > MAXTAB )    // ignore tables >255
                         {
                             ePrev = eAkt;
                             eAkt = Z_Biffn0;
@@ -1381,11 +1381,12 @@ FltError ImportExcel8::Read( void )
                                 ReadChart8( *pProgress, TRUE );
                                 pExcRoot->bChartTab = FALSE;
                                 EndSheet();
-                                IncScTab();
+                                IncCurrScTab();
+                                GetTracer().TraceChartOnlySheet();
                                 break;
                             case Biff8V:
                             default:
-                                pD->SetVisible( GetScTab(), FALSE );
+                                pD->SetVisible( GetCurrScTab(), FALSE );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
@@ -1453,7 +1454,7 @@ FltError ImportExcel8::Read( void )
                         else
                         {
                             eAkt = ePrev;
-                            IncScTab();
+                            IncCurrScTab();
                         }
                     }
                     break;
@@ -1540,8 +1541,10 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
         switch( nOpcode )
         {
             case 0x000A:    ChartEof(); bLoop = FALSE;                          break;  // EOF
+            case 0x005D:    GetTracer().TraceChartEmbeddedObj();                break;  // OBJ
+            case 0x0858:    pChart->ReadPivotChartTableName();                  break;  // Pivot Chart Table Name
             case 0x1002:    pChart->ReadChart();                                break;  // CHART
-            case 0x1003:    pChart->ReadSeries();                               break;  // SERIES
+            case 0x1003:    pChart->ReadSeries( aIn );                          break;  // SERIES
             case 0x1006:    pChart->ReadDataformat( aIn );                      break;  // DATAFORMAT
             case 0x1007:    pChart->ReadLineformat( aIn );                      break;  // LINEFORMAT
             case 0x1009:    pChart->ReadMarkerformat( aIn );                    break;  // MARKERFORMAT
@@ -1578,7 +1581,9 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
             case 0x1041:    pChart->ReadAxisparent( aIn );                      break;  // AXISPARENT
             case 0x1045:    pChart->ReadSertocrt( aIn );                        break;  // SERTOCRT
             case 0x1046:    pChart->ReadAxesused( aIn );                        break;  // AXESUSED
+            case 0x104B:    pChart->ReadSerauxtrend();                          break;  // SERAUXTREND
             case 0x104E:    pChart->ReadIfmt( aIn );                            break;  // IFMT
+            case 0x1050:    pChart->ReadAlruns();                               break;  // ALRUNS
             case 0x1051:    pChart->ReadAi( aIn, (ExcelToSc8&)*pFormConv );     break;  // AI
             case 0x105D:    pChart->ReadSerfmt( aIn );                          break;  // SERFMT
             case 0x105F:    pChart->Read3DDataformat( aIn );                    break;  // 3DDATAFORMAT
