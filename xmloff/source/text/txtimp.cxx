@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 17:53:29 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,9 @@
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
+#endif
+#ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
+#include "XMLEventsImportContext.hxx"
 #endif
 
 
@@ -495,7 +498,8 @@ XMLTextImportHelper::XMLTextImportHelper(
     sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
     sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame")),
     sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName")),
-    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap"))
+    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
+    sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM("HyperLinkEvents"))
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -884,7 +888,8 @@ void XMLTextImportHelper::SetHyperlink(
     const OUString& rName,
     const OUString& rTargetFrameName,
     const OUString& rStyleName,
-    const OUString& rVisitedStyleName )
+    const OUString& rVisitedStyleName,
+    XMLEventsImportContext* pEvents)
 {
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
     Reference < XPropertySetInfo > xPropSetInfo =
@@ -906,6 +911,27 @@ void XMLTextImportHelper::SetHyperlink(
     {
         aAny <<= rTargetFrameName;
         xPropSet->setPropertyValue( sHyperLinkTarget, aAny );
+    }
+
+    if ( (pEvents != NULL) &&
+         xPropSetInfo->hasPropertyByName( sHyperLinkEvents ))
+    {
+        // The API treats events at hyperlinks differently from most
+        // other properties: You have to set a name replace with the
+        // events in it. The easiest way to to this is to 1) get
+        // events, 2) set new ones, and 3) then put events back.
+        aAny = xPropSet->getPropertyValue( sHyperLinkEvents );
+        Reference<XNameReplace> xReplace;
+        aAny >>= xReplace;
+        if (xReplace.is())
+        {
+            // set events
+            pEvents->SetEvents(xReplace);
+
+            // put events
+            aAny <<= xReplace;
+            xPropSet->setPropertyValue( sHyperLinkEvents, aAny );
+        }
     }
 
     if( xTextStyles.is() )

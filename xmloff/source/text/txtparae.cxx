@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:46 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2095,6 +2095,18 @@ void XMLTextParagraphExport::exportTextRange(
             addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                       sXML_a, sal_False, sal_False );
+
+            // export events (if supported)
+            OUString sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM(
+                "HyperLinkEvents"));
+            if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
+            {
+                Any aAny = xPropSet->getPropertyValue(sHyperLinkEvents);
+                Reference<XNameReplace> xName;
+                aAny >>= xName;
+                GetExport().GetEventExport().Export(xName, sal_False);
+            }
+
             _exportTextRange( rTextRange, xPropSet, rPrevCharIsSpace );
         }
         else
@@ -2261,5 +2273,3 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                   GetExport().GetNamespaceMap() );
     pListAutoPool->exportXML();
 }
-
-

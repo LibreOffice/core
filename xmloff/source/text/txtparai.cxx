@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:03 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 #include "XMLTextFrameHyperlinkContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
+#include "XMLEventsImportContext.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -235,15 +238,21 @@ class XMLHyperlinkHint_Impl : public XMLHint_Impl
     OUString                 sTargetFrameName;
     OUString                 sStyleName;
     OUString                 sVisitedStyleName;
+    XMLEventsImportContext*  pEvents;
 
 public:
 
     XMLHyperlinkHint_Impl( const Reference < XTextRange > & rPos ) :
-        XMLHint_Impl( XML_HINT_HYPERLINK, rPos, rPos )
+        XMLHint_Impl( XML_HINT_HYPERLINK, rPos, rPos ),
+        pEvents( NULL )
     {
     }
 
-    virtual ~XMLHyperlinkHint_Impl() {}
+    virtual ~XMLHyperlinkHint_Impl()
+    {
+        if (NULL != pEvents)
+            pEvents->ReleaseRef();
+    }
 
     void SetHRef( const OUString& s ) { sHRef = s; }
     const OUString& GetHRef() const { return sHRef; }
@@ -255,7 +264,22 @@ public:
     const OUString& GetStyleName() const { return sStyleName; }
     void SetVisitedStyleName( const OUString& s ) { sVisitedStyleName = s; }
     const OUString& GetVisitedStyleName() const { return sVisitedStyleName; }
+    XMLEventsImportContext* GetEventsContext() const;
+    void SetEventsContext( XMLEventsImportContext* pCtxt );
 };
+
+void XMLHyperlinkHint_Impl::SetEventsContext( XMLEventsImportContext* pCtxt )
+{
+    pEvents = pCtxt;
+    if (pEvents != NULL)
+        pEvents->AddRef();
+}
+
+XMLEventsImportContext* XMLHyperlinkHint_Impl::GetEventsContext() const
+{
+    return pEvents;
+}
+
 
 class XMLIndexMarkHint_Impl : public XMLHint_Impl
 {
@@ -645,13 +669,24 @@ SvXMLImportContext *XMLImpHyperlinkContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextPElemTokenMap();
-    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+    if ( (nPrefix == XML_NAMESPACE_SCRIPT) &&
+         (rLocalName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1)))
+    {
+        XMLEventsImportContext* pCtxt = new XMLEventsImportContext(
+            GetImport(), nPrefix, rLocalName);
+        pHint->SetEventsContext(pCtxt);
+        return pCtxt;
+    }
+    else
+    {
+        const SvXMLTokenMap& rTokenMap =
+            GetImport().GetTextImport()->GetTextPElemTokenMap();
+        sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
 
-    return XMLImpSpanContext_Impl::CreateChildContext( GetImport(), nPrefix,
-                                                       rLocalName, xAttrList,
-                               nToken, rHints, rIgnoreLeadingSpace );
+        return XMLImpSpanContext_Impl::CreateChildContext(
+            GetImport(), nPrefix, rLocalName, xAttrList,
+            nToken, rHints, rIgnoreLeadingSpace );
+    }
 }
 
 void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
@@ -1049,8 +1084,8 @@ void XMLIndexMarkImportContext_Impl::ProcessAttributes(
     Reference<beans::XPropertySet>& rPropSet)
 {
     // process attributes
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 i=0; i<nLength; i++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 i=0; i<nLength; i++)
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -1791,7 +1826,8 @@ XMLParaContext::~XMLParaContext()
                                               pHHint->GetName(),
                                               pHHint->GetTargetFrameName(),
                                               pHHint->GetStyleName(),
-                                              pHHint->GetVisitedStyleName() );
+                                              pHHint->GetVisitedStyleName(),
+                                              pHHint->GetEventsContext() );
                 }
                 break;
             case XML_HINT_RUBY:
