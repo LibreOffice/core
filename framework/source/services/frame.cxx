@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-02 14:11:17 $
+ *  last change: $Author: mba $ $Date: 2001-04-09 16:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1299,6 +1299,10 @@ void Frame::impl_setContainerWindow( const Reference< awt::XWindow >& xWindow )
     {
         // All VclComponents are XComponents; so call dispose before discarding
         // a Reference< XVclComponent >, because this frame is the owner of the window
+        Window* pWindow = VCLUnoHelper::GetWindow( xOld );
+        if ( pWindow && Application::GetDefModalDialogParent() == pWindow )
+            Application::SetDefModalDialogParent( NULL );
+
         xOld->setVisible( sal_False );
         xOld->dispose();
     }
@@ -1329,6 +1333,10 @@ void Frame::impl_setComponentWindow( const Reference< awt::XWindow >& xWindow )
         {
             // All VclComponents are XComponents; so call dispose before discarding
             // a Reference< XVclComponent >, because this frame is the owner of the Component.
+            Window* pMyWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+            Window* pWindow = VCLUnoHelper::GetWindow( xOld );
+            if ( pWindow && Application::GetDefModalDialogParent() == pWindow )
+                Application::SetDefModalDialogParent( pMyWindow );
             xOld->dispose();
         }
     }
