@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:54:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,8 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
 }
 
 OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
-                            const OUString& rLocalName ) const
+                            const OUString& rLocalName,
+                            sal_Bool bCache) const
 {
     // We always want to return at least the rLocalName...
 
@@ -271,7 +272,11 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         break;
         default:
         {
-            QNameCache::const_iterator aQCacheIter = aQNameCache.find ( QNamePair ( nKey, &rLocalName ) );
+            QNameCache::const_iterator aQCacheIter;
+            if (bCache)
+                aQCacheIter = aQNameCache.find ( QNamePair ( nKey, &rLocalName ) );
+            else
+                aQCacheIter = aQNameCache.end();
             if ( aQCacheIter != aQNameCache.end() )
                 return (*aQCacheIter).second;
             else
@@ -284,10 +289,15 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     sQName.append ( (*aIter).second->sPrefix);
                     sQName.append ( sal_Unicode(':') );
                     sQName.append ( rLocalName );
-                    OUString *pString = new OUString ( rLocalName );
-                    OUString sString = sQName.makeStringAndClear();
-                    const_cast < QNameCache * > (&aQNameCache)->operator[] ( QNamePair ( nKey, pString ) ) = sString;
-                    return sString;
+                    if (bCache)
+                    {
+                        OUString sString(sQName.makeStringAndClear());
+                        OUString *pString = new OUString ( rLocalName );
+                        const_cast < QNameCache * > (&aQNameCache)->operator[] ( QNamePair ( nKey, pString ) ) = sString;
+                        return sString;
+                    }
+                    else
+                        return sQName.makeStringAndClear();
                 }
                 else
                 {
@@ -302,19 +312,25 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
 
 sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName(
                             const OUString& rAttrName,
-                            OUString *pLocalName ) const
+                            OUString *pLocalName,
+                            sal_Bool bCache) const
 {
-    return GetKeyByAttrName( rAttrName, 0, pLocalName, 0 );
+    return _GetKeyByAttrName( rAttrName, 0, pLocalName, 0, bCache );
 }
 
 sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
-                                            OUString *pNamespace ) const
+                                            OUString *pNamespace,
+                                            sal_Bool bCache) const
 {
     sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
 
-    NameSpaceHash::const_iterator aIter = aNameCache.find ( rAttrName );
+    NameSpaceHash::const_iterator aIter;
+    if (bCache)
+        aIter = aNameCache.find ( rAttrName );
+    else
+        aIter = aNameCache.end();
     if ( aIter != aNameCache.end() )
     {
         const NameSpaceEntry &rEntry = (*aIter).second.getBody();
@@ -366,7 +382,8 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
             // not found, and no namespace: 'namespace' none
             nKey = pEntry->nKey = XML_NAMESPACE_NONE;
 
-        const_cast < NameSpaceHash* > ( &aNameCache )->operator[] ( rAttrName ) = pEntry;
+        if (bCache)
+            const_cast < NameSpaceHash* > ( &aNameCache )->operator[] ( rAttrName ) = pEntry;
     }
 
     return nKey;
