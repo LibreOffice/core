@@ -62,6 +62,7 @@ common
 		JDKLIBS
 		JDKPATH
         L10N-framework
+        L10N_framework
 		LOCAL_SOLENV
 		LOCALINI
 		MK_UNROLL
