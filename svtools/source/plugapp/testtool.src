@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2000-11-23 14:35:41 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ class FlagToolBoxState
             Text[ swedish ] = "Visa ID:n";
             Text[ polish ] = "Poka¿ IDs";
             Text[ portuguese_brazilian ] = "IDs anzeigen";
-            Text[ japanese ] = "IDs •\\¦";
+            Text[ japanese ] = "ID •\\¦";
             Text[ korean ] = "ID Ç¥½Ã";
             Text[ chinese_simplified ] = "ÏÔÊ¾ IDs";
             Text[ chinese_traditional ] = "Åã¥Ü ID";
@@ -126,7 +126,7 @@ class FlagToolBoxState
             Text[ swedish ] = "Det är inmatningsfönstret";
             Text[ polish ] = "To jest okno wprowadzania";
             Text[ portuguese_brazilian ] = "Das ist das Eingabefenster";
-            Text[ japanese ] = "‚±‚ê‚Í²İÌß¯Ä¥³¨İÄŞ³‚Å‚·";
+            Text[ japanese ] = "‚±‚ê‚Í“ü—Í³¨İÄŞ³‚Å‚·B";
             Text[ korean ] = "ÀÌ°ÍÀº ÀÔ·ÂÃ¢ÀÔ´Ï´Ù";
             Text[ chinese_simplified ] = "ÕâÊÇÊäÈëÊÓ´°";
             Text[ chinese_traditional ] = "³o¬O¤@­Ó¤å¦r¿é¤J¤è¶ô";
@@ -154,7 +154,7 @@ class FlagToolBoxState
             Text[ swedish ] = "Överför till TestTool";
             Text[ polish ] = "Przenieœ do TestTool";
             Text[ portuguese_brazilian ] = "Zum TestTool Übertragen";
-            Text[ japanese ] = "TestTool‚Ö“]‘—";
+            Text[ japanese ] = "TestTool ‚Ö“]‘—";
             Text[ korean ] = "TestTool·Î ¿Å±â±â";
             Text[ chinese_simplified ] = "´«ËÍÖÁ TestTool";
             Text[ chinese_traditional ] = "¶Ç»¼µ¹ TestTool";
@@ -207,7 +207,7 @@ class FlagToolBoxState
             Text[ swedish ] = "Visa kort namn(om det finns)";
             Text[ polish ] = "Poka¿ skrót (o ile istnieje)";
             Text[ portuguese_brazilian ] = "Kurzname Anzeigen(Falls Vorhanden)";
-            Text[ japanese ] = "’Z‚¢–¼‘O‚ğ•\\¦(Šù‘¶‚·‚éê‡)";
+            Text[ japanese ] = "¼®°ÄÈ°Ñ‚Ì•\\¦(‚ ‚éê‡‚Í)";
             Text[ korean ] = "ÂªÀº ÀÌ¸§(ÀÖÀ» °æ¿ì) Ç¥½Ã";
             Text[ chinese_simplified ] = "ÏÔÊ¾¶ÌÃû³Æ(Èô´æÔÚµÄ»°)";
             Text[ chinese_traditional ] = "Åã¥Üµu¦WºÙ(¦pªG¦s¦b)";
@@ -232,7 +232,7 @@ class FlagToolBoxState
             Text[ swedish ] = "Visa alltid långt namn";
             Text[ polish ] = "Pokazuj zawsze pe³n¹ nazwê";
             Text[ portuguese_brazilian ] = "Langname immer Anzeigen";
-            Text[ japanese ] = "í‚É’·‚¢–¼‘O‚ğ•\\¦";
+            Text[ japanese ] = "í‚ÉÛİ¸ŞÈ°Ñ‚Ì•\\¦";
             Text[ korean ] = "±ä ÀÌ¸§ Ç×»ó Ç¥½Ã";
             Text[ chinese_simplified ] = "×ÜÊÇÏÔÊ¾³¤Ãû³Æ(È«³Æ)";
             Text[ chinese_traditional ] = "Á`¬OÅã¥Üªø¦WºÙ";
@@ -382,7 +382,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "³Æµù";
             Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "¸Ş¸ğ";
+        Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
     };
@@ -409,7 +409,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ chinese_traditional ] = "³Æµù(~C)";
             Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "¸Ş¸ğ(~C)";
+        Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "~Açıklama";
         Text[ language_user1 ] = " ";
     };
@@ -424,7 +424,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Text[ SPANISH ] = "~Seleccionar";
             Text[ FRENCH ] = "~Sélectionner";
             Text[ ITALIAN ] = "Seleziona";
-            Text[ JAPANESE ] = "‘I‘ğ‚·‚é(~S)";
+            Text[ JAPANESE ] = "‘I‘ğ(~S)";
             Text[ DUTCH ] = "~Selecteren";
             Text[ POLISH ] = "Zaznacz";
             Text[ PORTUGUESE_BRAZILIAN ] = "Select";
@@ -541,7 +541,7 @@ MessBox TT_DISCARD_CHANGED_DATA {
     Message[ swedish ] = "Översättningen kommer att gå förlorad. Fortsätta ändå?";
     Message[ polish ] = "T³umaczenie zaginie. Kontynuowaæ?";
     Message[ portuguese_brazilian ] = "The Translation will be lost. Proceed?";
-    Message[ japanese ] = "–|–ó‚ª¸‚í‚ê‚Ü‚µ‚½B‘±‚¯‚Ü‚·‚©?";
+    Message[ japanese ] = "–|–ó‚Í¸‚í‚ê‚Ü‚·B‘±‚¯‚Ü‚·‚©B";
     Message[ chinese_simplified ] = "·­ÒëÄÚÈİ½«»áÒÅÊ§¡£ÄúÒª¼ÌĞøÂğ£¿";
     Message[ chinese_traditional ] = "Â½Ä¶¤º®e±N·|¬y¥¢¡C±z­nÄ~Äò¡H";
     Message[ arabic ] = "åĞå ÇáÊÑÌãÉ Óæİ ÊÖíÚ. åá ÊÑíÏ ÇáãÊÇÈÚÉ Úáì ÇáÑÛã ãä Ğáß¿";
@@ -591,7 +591,7 @@ String TT_GPF
     Text[ swedish ] = "Fel uppstod";
     Text[ polish ] = "Wyst¹pi³ b³¹d";
     Text[ portuguese_brazilian ] = "GPF Aufgetreten";
-    Text[ japanese ] = "GPF‚ª”­¶‚µ‚Ü‚µ‚½";
+    Text[ japanese ] = "GPF ‚ª”­¶‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "GPF ¹ß»ı";
     Text[ chinese_simplified ] = "³öÏÖ´íÎó";
     Text[ chinese_traditional ] = "µo¥X¿ù»~";
@@ -614,7 +614,7 @@ String TT_ALTERNATE_CAPTION
     Text[ swedish ] = "HelpID ej lika med UniqueID:  ";
     Text[ polish ] = "HelpID nie jest równy UniquellID: ";
     Text[ portuguese_brazilian ] = "GPF Aufgetreten";
-    Text[ japanese ] = "ÍÙÌßID ‚Æ ÕÆ°¸ID‚Æ‚Í“¯ˆê‚Å‚Í‚ ‚è‚Ü‚¹‚ñ: ";
+    Text[ japanese ] = "ÍÙÌß ID ‚ª ÕÆ°¸ ID ‚Éˆê’v‚µ‚Ü‚¹‚ñ: ";
     Text[ korean ] = "µµ¿ò¸»ID¿Í °íÀ¯ID°¡ ÀÏÄ¡ÇÏÁö ¾ÊÀ½ ";
     Text[ chinese_simplified ] = "HelpID does not match UniqueID: ";
     Text[ chinese_traditional ] = "HelpID does not match UniqueID: ";
