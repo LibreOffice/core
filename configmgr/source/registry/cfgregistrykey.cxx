@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: fs $ $Date: 2000-11-16 08:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _CONFIGMGR_REGISTRY_CFGREGISTRYKEY_HXX_
 #include "cfgregistrykey.hxx"
 #endif
+#ifndef CONFIGMGR_TYPECONVERTER_HXX
+#include "typeconverter.hxx"
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -75,6 +78,12 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
@@ -94,10 +103,20 @@ namespace configmgr
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::cppu;
+
+//--------------------------------------------------------------------------
+namespace {
+    inline
+    Type getBinaryDataType() {
+        Sequence<sal_Int8> const * const p= 0;
+        return ::getCppuType(p);
+    }
+}
 
 //==========================================================================
 //= OConfigurationRegistryKey
@@ -113,7 +132,7 @@ OConfigurationRegistryKey::OConfigurationRegistryKey
     ,m_bReadOnly(!_bWriteable)
     ,m_xNodeDeepAccess(_rxContainerNode, UNO_QUERY)
 {
-    OSL_ENSHURE(m_xNodeAccess.is(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid config node param !");
+    OSL_ENSURE(m_xNodeAccess.is(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid config node param !");
 }
 
 //--------------------------------------------------------------------------
@@ -126,8 +145,8 @@ OConfigurationRegistryKey::OConfigurationRegistryKey(
     ,m_xNodeDeepAccess(_rxContainerNode, UNO_QUERY)
     ,m_sLocalName(_rLocalName)
 {
-    OSL_ENSHURE(m_xNodeAccess.is(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid config node param !");
-    OSL_ENSHURE(m_sLocalName.getLength(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid relative name !");
+    OSL_ENSURE(m_xNodeAccess.is(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid config node param !");
+    OSL_ENSURE(m_sLocalName.getLength(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid relative name !");
 }
 
 //--------------------------------------------------------------------------
@@ -141,11 +160,11 @@ OConfigurationRegistryKey::OConfigurationRegistryKey(
     ,m_sLocalName(_rRelativeName)
     ,m_bReadOnly(!_bWriteable)
 {
-    OSL_ENSHURE(_rxParentNode.is() && _rCurrentValue.hasValue(),
+    OSL_ENSURE(_rxParentNode.is() && _rCurrentValue.hasValue(),
         "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid value and/or parent !");
-    OSL_ENSHURE(m_bReadOnly || Reference< XNameReplace >(_rxParentNode, UNO_QUERY).is(),
+    OSL_ENSURE(m_bReadOnly || Reference< XNameReplace >(_rxParentNode, UNO_QUERY).is(),
         "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid parent (no value write access) !");
-    OSL_ENSHURE(m_sLocalName.getLength(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid relative name !");
+    OSL_ENSURE(m_sLocalName.getLength(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid relative name !");
 }
 
 //--------------------------------------------------------------------------
@@ -174,6 +193,87 @@ void OConfigurationRegistryKey::checkValid(KEY_ACCESS_TYPE _eIntentedAccess) thr
 }
 
 //--------------------------------------------------------------------------
+Any OConfigurationRegistryKey::getEmptyLeafDefault(const ::rtl::OUString& _rParentName, const ::rtl::OUString& _rElementLocalName)
+{
+    Any aReturn;
+
+    Any aParent = getDescendant(_rParentName);
+    Reference< XInterface > xParent;
+    ::cppu::extractInterface(xParent, aParent);
+    OSL_ENSURE(xParent.is(), "OConfigurationRegistryKey::getEmptyLeafDefault: suspicious behaviour of the ConfigurationAccess!");
+        // if not exception was thrown at all (no above when askeing for the original element, and not in the
+        // recursive call to the elements parent), there should be an interface for the parent node ('cause
+        // it must exist)
+    Reference< XPropertySet > xParentProperties(xParent, UNO_QUERY);
+    if (!xParentProperties.is())
+    {
+        // no fallback anymore
+        OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getEmtyLeafDefault: no fallback anymore to handle the NULL value!");
+            // this assertion is just to point the clients to the fatal error ....
+        ::rtl::OUString sMessage(UNISTRING("There is an element named "));
+        sMessage += _rParentName;
+        sMessage += UNISTRING("/");
+        sMessage += _rElementLocalName;
+        sMessage += UNISTRING(", but it can't be wrapped as registry key. It's current value is NULL, and the parent node is unable to provide type informations.");
+        throw InvalidRegistryException(sMessage, THISREF());
+    }
+
+    Type aElementType = ::getCppuType(static_cast< ::rtl::OUString* >(NULL));
+        // assume a string as fallback
+    try
+    {
+        Reference< XPropertySetInfo > xElementInfo = xParentProperties->getPropertySetInfo();
+        Property aElementDescription = xElementInfo->getPropertyByName(_rElementLocalName);
+        aElementType = aElementDescription.Type;
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getEmptyLeafDefault: could not retrieve the element type!");
+    }
+
+    switch (aElementType.getTypeClass())
+    {
+        case TypeClass_STRING:
+            aReturn <<= ::rtl::OUString();
+            break;
+        case TypeClass_SHORT:
+        case TypeClass_UNSIGNED_SHORT:
+        case TypeClass_BYTE:
+        case TypeClass_LONG:
+        case TypeClass_UNSIGNED_LONG:
+        case TypeClass_BOOLEAN:
+            aReturn <<= (sal_Int32)0;
+                // we don't distinguish between the different integer types (the RegistryKeyType is not
+                // granular enough), so we can handle them all the same way here
+            break;
+        case TypeClass_SEQUENCE:
+            if (m_aLeafElement.getValueType() == getBinaryDataType())
+                aReturn <<= Sequence< sal_Int8 >();
+            else
+            {
+                Type aElementType = getSequenceElementType(m_aLeafElement.getValueType());
+                switch (aElementType.getTypeClass())
+                {
+                    case TypeClass_SHORT:
+                    case TypeClass_UNSIGNED_SHORT:
+                    case TypeClass_BYTE:
+                    case TypeClass_LONG:
+                    case TypeClass_UNSIGNED_LONG:
+                    case TypeClass_BOOLEAN:
+                        aReturn <<= Sequence< sal_Int32 >();
+                        break;
+                    case TypeClass_STRING:
+                        aReturn <<= Sequence< ::rtl::OUString >();
+                        break;
+                }
+            }
+            break;
+    }
+
+    return aReturn;
+}
+
+//--------------------------------------------------------------------------
 Any OConfigurationRegistryKey::getDescendant(const ::rtl::OUString& _rDescendantName) throw(InvalidRegistryException)
 {
     Any aElementReturn;
@@ -193,7 +293,7 @@ Any OConfigurationRegistryKey::getDescendant(const ::rtl::OUString& _rDescendant
                 aElementReturn = m_xNodeAccess->getByName(_rDescendantName);
             else
             {
-                OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::getDescendant : invalid call !");
+                OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getDescendant : invalid call !");
                     // this method should not be called if the object does not represent a container node ...
                 throw InvalidRegistryException(UNISTRING("invalid object."), THISREF());
             }
@@ -215,12 +315,23 @@ Any OConfigurationRegistryKey::getDescendant(const ::rtl::OUString& _rDescendant
     }
 
     if (!aElementReturn.hasValue())
-    {   // suspicious .... either there is an element, or there is none, but in the latter case an exception should
-        // have been thrown.
-        ::rtl::OUString sMessage(UNISTRING("There is no element named "));
-        sMessage += _rDescendantName;
-        sMessage += UNISTRING(".");
-        throw InvalidRegistryException(sMessage, THISREF());
+    {   // the path may have refered to a leaf which is currently NULL. As the registry API we're implementing here
+        // (as a wrapper for the real configuration API) does not allow NULL values, we need a fallback.
+
+        sal_Int32 nSeparatorPos = _rDescendantName.indexOf('/');
+        if (-1 != nSeparatorPos)
+        {
+
+            aElementReturn = getEmptyLeafDefault(_rDescendantName.copy(0, nSeparatorPos), _rDescendantName.copy(nSeparatorPos + 1));
+            if (!aElementReturn.hasValue())
+            {
+                OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getDescendant: unsupported type!");
+                ::rtl::OUString sMessage(UNISTRING("There is an element named "));
+                sMessage += _rDescendantName;
+                sMessage += UNISTRING(", but it can't be wrapped as registry key. There is not equivalent registry type to map the node value to.");
+                throw InvalidRegistryException(sMessage, THISREF());
+            }
+        }
     }
 
     return aElementReturn;
@@ -246,7 +357,7 @@ void OConfigurationRegistryKey::writeValueNode(const Any& _rValue) throw(Invalid
     }
     catch(NoSuchElementException&)
     {
-        OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::writeValueNode : a NoSuchElementException should be impossible !");
+        OSL_ENSURE(sal_False, "OConfigurationRegistryKey::writeValueNode : a NoSuchElementException should be impossible !");
         throw InvalidRegistryException(UNISTRING("Unable to replace the old value. The configuration node threw an NoSuchElementException."), THISREF());
     }
     catch(WrappedTargetException&)
@@ -288,14 +399,6 @@ RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUS
 }
 
 //--------------------------------------------------------------------------
-namespace {
-    inline
-    Type getBinaryDataType() {
-        Sequence<sal_Int8> const * const p= 0;
-        return ::getCppuType(p);
-    }
-}
-//--------------------------------------------------------------------------
 typedef typelib_TypeDescriptionReference ElementTypeDesc;
 
 RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType(  ) throw(InvalidRegistryException, RuntimeException)
@@ -319,12 +422,8 @@ RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType(  ) throw(Inv
                 return RegistryValueType_BINARY;
             else
             {
-                TypeDescription aType( m_aLeafElement.getValueType() );
-                typelib_IndirectTypeDescription* pSequenceType
-                    = reinterpret_cast< typelib_IndirectTypeDescription* >(aType.get());
-                ElementTypeDesc* pElementType = pSequenceType->pType;
-
-                switch (pElementType->eTypeClass)
+                Type aElementType = getSequenceElementType(m_aLeafElement.getValueType());
+                switch (aElementType.getTypeClass())
                 {
                     case TypeClass_SHORT:
                     case TypeClass_UNSIGNED_SHORT:
@@ -336,20 +435,20 @@ RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType(  ) throw(Inv
                     case TypeClass_STRING:
                         return RegistryValueType_STRINGLIST;
                     case TypeClass_DOUBLE:
-                        OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support lists of floating point numebrs !");
+                        OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support lists of floating point numbers !");
                     default:
-                        if (Type(pElementType) == getBinaryDataType())
-                            OSL_ENSHURE(sal_False,"OConfigurationRegistryKey::getValueType : Registry cannot support LIST of BINARY");
+                        if (aElementType.equals(getBinaryDataType()))
+                            OSL_ENSURE(sal_False,"OConfigurationRegistryKey::getValueType : Registry cannot support LIST of BINARY");
                         else
-                            OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::getValueType : unknown sequence element type !");
+                            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : unknown sequence element type !");
                         return RegistryValueType_NOT_DEFINED;
                 }
             }
         case TypeClass_DOUBLE:
-            OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support floating point numebrs !");
+            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : registry does not support floating point numbers !");
             return RegistryValueType_NOT_DEFINED;
         default:
-            OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::getValueType : unknown entry type !");
+            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getValueType : unknown entry type !");
             return RegistryValueType_NOT_DEFINED;
     }
 }
@@ -518,7 +617,7 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
     {
         Reference< XNameAccess > xDescParent(m_xNodeAccess);    // the parent config node of the descandent
 
-        OSL_ENSHURE(aDescendant.hasValue(), "OConfigurationRegistryKey::openKey : invalid return from getDescendant.");
+        OSL_ENSURE(aDescendant.hasValue(), "OConfigurationRegistryKey::openKey : invalid return from getDescendant.");
 #ifdef DEBUG
         switch (aDescendant.getValueType().getTypeClass())
         {
@@ -532,7 +631,7 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
             case TypeClass_SEQUENCE:
                 break;
             default:
-                OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::openKey : unknown or invalid descendant value type !");
+                OSL_ENSURE(sal_False, "OConfigurationRegistryKey::openKey : unknown or invalid descendant value type !");
         }
 #endif
         if (bDeepAccess)
@@ -598,7 +697,7 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
         Reference< XRegistryKey > xSetNode = implGetKey(sSetNodeName);
         if (!xSetNode.is())
         {
-            OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
+            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
             throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
         }
         return xSetNode->createKey(sKeyName);
@@ -693,7 +792,7 @@ void SAL_CALL OConfigurationRegistryKey::deleteKey( const ::rtl::OUString& _rKey
         Reference< XRegistryKey > xSetNode = implGetKey(sSetNodeName);
         if (!xSetNode.is())
         {
-            OSL_ENSHURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
+            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
             throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
         }
         xSetNode->deleteKey(sKeyName);

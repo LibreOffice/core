@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: fs $ $Date: 2000-11-16 08:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,14 +236,32 @@ protected:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OUString& _rKeyName ) throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
-    /** check the given (relative) key name syntactically. In particular, this means that no checks are made if a node
-        with the given name exists or something like that ...
-        <BR>
+    /** check the given (relative) key name syntactically.
+
+        <p>In particular, this means that no checks are made if a node with the given name exists or something like
+        that ...<br/>
         In addition, the given name will be normalized. Basically, this means that it does not contain trailing slashes.
-        @throws InvalidRegistryException if the name is not relative (i.e. if it starts with an slash)
-        @throws InvalidRegistryException if the name is empty or consists of slashes only
+        </p>
+        @throws InvalidRegistryException
+            if the name is not relative (i.e. if it starts with an slash)
+        @throws InvalidRegistryException
+            if the name is empty or consists of slashes only
     */
     void checkRelativeKeyName(::rtl::OUString& _rKeyName) throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+
+    /** get a default value for a leaf which is originally NULL
+
+        <p>The configuration leaf nodes are allowed to be NULL, but we no no chance to wrap this here (the registry
+        interface does not allow NULL values). So in case we encounter such a NULL leaf, we create a default value for
+        it, dependent on the type of the leaf (which can be retrieved from it's parent).</p>
+
+        @return
+            an <type scope="com::sun::star::uno">Any</type> representing a default for the node value type. If the
+            return value is still VOID, the node has an unsupported type (e.g. double)
+        @throws com::sun::star::registry::InvalidRegistryException
+            if the parent node specified by <arg>_rParentName</arg> did not provide type information for the node
+    */
+    ::com::sun::star::uno::Any  getEmptyLeafDefault(const ::rtl::OUString& _rParentName, const ::rtl::OUString& _rElementLocalName);
 };
 
 
