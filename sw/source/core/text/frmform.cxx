@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:09:01 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@
 
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>       // SwFrmFmt
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 extern FASTBOOL IsInProgress( const SwFlyFrm *pFly );
@@ -568,7 +572,11 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                 const Point aOldPos( Frm().Pos() );
                 MakePos();
                 if ( aOldPos != Frm().Pos() )
-                    CalcFlys( sal_True );   //#43679# Fly in Fly in ...
+                {
+                    // OD 2004-07-01 #i28701# - use new method <SwFrm::InvalidateObjs(..)>
+                    // No format is performed for the floating screen objects.
+                    InvalidateObjs( true );
+                }
             }
             nChgHeight = 0;
         }
@@ -2104,36 +2112,23 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     if ( pMaster && !pMaster->IsFlyLock() &&
          pMaster->GetDrawObjs() )
     {
-        SwDrawObjs* pObjs = pMaster->GetDrawObjs();
+        // OD 2004-05-17 #i28701# - lock frame in order to avoid the
+        // clear of its paragraph portions due to the invalidation of
+        // its floating screen objects.
+        SwTxtFrmLocker aLock(this);
+        SwSortedObjs* pObjs = pMaster->GetDrawObjs();
         for( MSHORT i = 0; i < pObjs->Count(); ++i )
         {
             // OD 2004-03-29 #i26791#
-            SdrObject* pSdrObj = (*pObjs)[i];
-            SwContact* pContact = static_cast<SwContact*>(GetUserCall( pSdrObj ));
-            ASSERT( pContact,
-                    "<SwTxtFrm::Format(..) - missing contact object. Please inform OD." );
-            if ( pContact && pContact->ObjAnchoredAtChar() )
+            // --> OD 2004-07-02 #i28701# - consider changed type of
+            // <SwSortedObjs> list entries.
+            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+            if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
+                    == FLY_AUTO_CNTNT )
             {
-                pContact->GetAnchoredObj( pSdrObj )->CheckCharRectAndTopOfLine();
+                pAnchoredObj->CheckCharRectAndTopOfLine();
             }
-//            SdrObject* pO = (*pObjs)[i];
-//            if ( pO->ISA(SwVirtFlyDrawObj) )
-//            {
-//                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-//                // OD 07.10.2003 #110978# - allow invalidation,
-//                // even if formatting of the fly frame or another fly frame
-//                // is in progress
-//                //if ( pFly->IsAutoPos() && !::IsInProgress( pFly ) )
-//                if ( pFly->IsAutoPos() )
-//                {
-//                    ASSERT( pFly->IsFlyAtCntFrm(), "Not at content, but autopos.?" );
-//                    // OD 11.11.2003 #i22341#
-//                    if ( pFly->IsFlyAtCntFrm() )
-//                    {
-//                        static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
-//                    }
-//                }
-//            }
+            // <--
         }
     }
 
