@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-10 22:19:15 $
+ *  last change: $Author: obo $ $Date: 2001-12-13 21:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,27 +1871,27 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
              < "A3" ; PAPERSIZE_A3 ; > ;
         < "A4" ; PAPERSIZE_A4 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4" ; PAPERSIZE_B4 ; > ;
-        < "B5" ; PAPERSIZE_B5 ; > ;
-        < "Letter" ; PAPERSIZE_B6 ; > ;
-        < "Legal" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "Utente" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6" ; PAPERSIZE_LETTER ; > ;
-        < "C4" ; PAPERSIZE_LEGAL ; > ;
-        < "C5" ; PAPERSIZE_TABLOID ; > ;
-        < "C6" ; PAPERSIZE_USER ; > ;
-        < "C65" ; PAPERSIZE_C4 ; > ;
-        < "DL" ; PAPERSIZE_C5 ; > ;
-        < "Busta #6�" ; PAPERSIZE_C6 ; > ;
-        < "Busta Monarch" ; PAPERSIZE_C65 ; > ;
-        < "Busta #9" ; PAPERSIZE_DL ; > ;
-        < "Busta #10" ; PAPERSIZE_COM675; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utente" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Busta #6" ; PAPERSIZE_COM675; > ;
         < "Busta Monarch" ; PAPERSIZE_MONARCH; > ;
-        < "Busta #12" ; PAPERSIZE_COM9; > ;
-        < "Env. #10" ; PAPERSIZE_COM10; > ;
-        < "Env. #11" ; PAPERSIZE_COM11; > ;
-        < "Env. #12" ; PAPERSIZE_COM12; > ;
+        < "Busta #9" ; PAPERSIZE_COM9; > ;
+        < "Busta #10" ; PAPERSIZE_COM10; > ;
+        < "Busta #11" ; PAPERSIZE_COM11; > ;
+        < "Busta #12" ; PAPERSIZE_COM12; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
         < "32 kai grande" ; PAPERSIZE_KAI32BIG; > ;
@@ -2063,7 +2063,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "C6" ; PAPERSIZE_USER ; > ;
         < "C65" ; PAPERSIZE_C4 ; > ;
         < "DL" ; PAPERSIZE_C5 ; > ;
-        < "봉투 #63/4" ; PAPERSIZE_C6 ; > ;
+        < "봉투(용지 종류) #63/4" ; PAPERSIZE_C6 ; > ;
         < "봉투 Monarch" ; PAPERSIZE_C65 ; > ;
         < "봉투 #9" ; PAPERSIZE_DL ; > ;
         < "봉투 #10" ; PAPERSIZE_COM675; > ;
@@ -2564,15 +2564,15 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
         < "Letter" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
-        < "C5" ; PAPERSIZE_TABLOID ; > ;
-        < "C6" ; PAPERSIZE_USER ; > ;
-        < "C65" ; PAPERSIZE_C4 ; > ;
-        < "DL" ; PAPERSIZE_C5 ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utente" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
-        < "Schermo" ; PAPERSIZE_C65 ; > ;
-        < "16 kai" ; PAPERSIZE_DL ; > ;
-        < "32 kai" ; PAPERSIZE_DIA ; > ;
-        < "32 kai grande" ; PAPERSIZE_SCREEN ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Diapoisitiva" ; PAPERSIZE_DIA ; > ;
+        < "Schermo" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
         < "32 kai grande" ; PAPERSIZE_KAI32BIG; > ;
@@ -2950,6 +2950,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ finnish ] = "[Tulostinasetuksien mukaan]";
 };
  // ********************************************************************** EOF
+
 
 
 
