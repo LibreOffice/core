@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeHandle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:05:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_XCUSTOMSHAPEHANDLE_HPP_
-#include <drafts/com/sun/star/drawing/XCustomShapeHandle.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_XCUSTOMSHAPEHANDLE_HPP_
+#include <com/sun/star/drawing/XCustomShapeHandle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
@@ -88,7 +88,7 @@
 
 class EnhancedCustomShapeHandle : public cppu::WeakImplHelper2
 <
-    drafts::com::sun::star::drawing::XCustomShapeHandle,
+    com::sun::star::drawing::XCustomShapeHandle,
     com::sun::star::lang::XInitialization
 >
 {
