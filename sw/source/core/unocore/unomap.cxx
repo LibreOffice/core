@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:23:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1199,6 +1199,16 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                                     FN_SHAPE_POSITION_LAYOUT_DIR,
                                     CPPU_E2T(CPPUTYPE_INT16),
                                     PROPERTY_NONE, 0},
+                    // <--
+                    // --> OD 2004-10-28 #i36248#
+                    { SW_PROP_NMID( UNO_NAME_STARTPOSITION_IN_HORI_L2R),
+                                    FN_SHAPE_STARTPOSITION_IN_HORI_L2R,
+                                    CPPU_E2T(CPPUTYPE_AWTPOINT),
+                                    PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID( UNO_NAME_ENDPOSITION_IN_HORI_L2R),
+                                    FN_SHAPE_ENDPOSITION_IN_HORI_L2R,
+                                    CPPU_E2T(CPPUTYPE_AWTPOINT),
+                                    PropertyAttribute::READONLY, 0},
                     // <--
                     {0,0,0,0,0}
                 };
