@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ void SvxHyperlinkDocTp::SetInitFocus()
 IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
 {
     // Open Fileopen-Dialog
-       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0, GetParent() );
     String aOldURL( GetCurrentURL() );
     if( aOldURL.EqualsIgnoreCaseAscii( sFileScheme, 0, sizeof( sFileScheme ) - 1 ) ||
         aOldURL.EqualsIgnoreCaseAscii( sPortalFileScheme, 0, sizeof( sFileScheme ) - 1 ) )
