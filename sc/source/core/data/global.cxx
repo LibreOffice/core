@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-14 17:48:12 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,6 +737,59 @@ void ScGlobal::Clear()
     DELETEZ(pUnitConverter);
 
     ScDocumentPool::DeleteVersionMaps();
+}
+
+//------------------------------------------------------------------------
+
+// static
+CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
+{
+    // new TextEncoding values
+    if ( CharClass::isAsciiNumeric( rCharSet ) )
+    {
+        sal_Int32 nVal = rCharSet.ToInt32();
+        if ( !nVal || nVal == RTL_TEXTENCODING_DONTKNOW )
+            return gsl_getSystemTextEncoding();
+        return (CharSet) nVal;
+    }
+    // old CharSet values for compatibility
+    else if (rCharSet.EqualsIgnoreCaseAscii("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
+    else if (rCharSet.EqualsIgnoreCaseAscii("MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_437")) return RTL_TEXTENCODING_IBM_437;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_850")) return RTL_TEXTENCODING_IBM_850;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_860")) return RTL_TEXTENCODING_IBM_860;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
+    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
+//  else if (rCharSet.EqualsIgnoreCaseAscii("SYSTEM")   ) return gsl_getSystemTextEncoding();
+    else return gsl_getSystemTextEncoding();
+}
+
+//------------------------------------------------------------------------
+
+// static
+String ScGlobal::GetCharsetString( CharSet eVal )
+{
+    const sal_Char* pChar;
+    switch ( eVal )
+    {
+        // old CharSet strings for compatibility
+        case RTL_TEXTENCODING_MS_1252:      pChar = "ANSI";         break;
+        case RTL_TEXTENCODING_APPLE_ROMAN:  pChar = "MAC";          break;
+        // IBMPC == IBMPC_850
+        case RTL_TEXTENCODING_IBM_437:      pChar = "IBMPC_437";    break;
+        case RTL_TEXTENCODING_IBM_850:      pChar = "IBMPC_850";    break;
+        case RTL_TEXTENCODING_IBM_860:      pChar = "IBMPC_860";    break;
+        case RTL_TEXTENCODING_IBM_861:      pChar = "IBMPC_861";    break;
+        case RTL_TEXTENCODING_IBM_863:      pChar = "IBMPC_863";    break;
+        case RTL_TEXTENCODING_IBM_865:      pChar = "IBMPC_865";    break;
+        case RTL_TEXTENCODING_DONTKNOW:     pChar = "SYSTEM";       break;
+        // new string of TextEncoding value
+        default:
+            return String::CreateFromInt32( eVal );
+    }
+    return String::CreateFromAscii(pChar);
 }
 
 //------------------------------------------------------------------------
@@ -1665,22 +1718,4 @@ String ColToAlpha( const USHORT nCol )
 
     return aStr;
 }
-
-CharSet GetCharsetValue(const String& rCharSet)
-{
-    if      (rCharSet.EqualsIgnoreCaseAscii("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
-    else if (rCharSet.EqualsIgnoreCaseAscii("MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_437")) return RTL_TEXTENCODING_IBM_437;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_850")) return RTL_TEXTENCODING_IBM_850;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_860")) return RTL_TEXTENCODING_IBM_860;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
-//  else if (rCharSet.EqualsIgnoreCaseAscii("SYSTEM")   ) return gsl_getSystemTextEncoding();
-    else return gsl_getSystemTextEncoding();
-}
-
-
-
 

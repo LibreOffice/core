@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-20 10:26:42 $
+ *  last change: $Author: er $ $Date: 2000-12-20 11:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,9 @@ public:
 
     static inline sal_Unicode ToUpperAlpha( sal_Unicode c )
         { return ( c >= 'a' && c <= 'z' ) ? ( c-'a'+'A' ) : c; }
+
+    static  CharSet         GetCharsetValue( const String& rCharSet );
+    static  String          GetCharsetString( CharSet eVal );
 };
 #endif
 
@@ -1081,7 +1084,6 @@ inline void PutInOrder( USHORT& nStart, USHORT& nEnd )
 BOOL    ConvertSingleRef(ScDocument* pDoc, const String& rRefString, USHORT nDefTab, ScRefTripel& rRefTripel);
 BOOL    ConvertDoubleRef(ScDocument* pDoc, const String& rRefString, USHORT nDefTab, ScRefTripel& rStartRefTripel, ScRefTripel& rEndRefTripel);
 String  ColToAlpha( const USHORT nCol );
-CharSet GetCharsetValue(const String& rCharSet);
 
 //===================================================================
 // Funktionsautopilot: Klassen zur Verwaltung der StarCalc-Funktionen
