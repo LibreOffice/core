@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:47 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,11 +282,17 @@ void SAL_CALL OCollection::dropByName( const ::rtl::OUString& elementName ) thro
     if( aIter == m_aNameMap.end())
         throw NoSuchElementException(elementName,*this);
 
-    for(::std::vector< ObjectIter >::size_type i=0;i<m_aElements.size();++i)
+    dropImpl(aIter);
+}
+// -----------------------------------------------------------------------------
+void OCollection::dropImpl(const ObjectIter& _rCurrentObject,sal_Bool _bReallyDrop)
+{
+    ::std::vector< ObjectIter >::size_type nCount = m_aElements.size();
+    for(::std::vector< ObjectIter >::size_type i=0; i < nCount;++i)
     {
-        if(m_aElements[i] == aIter)
+        if ( m_aElements[i] == _rCurrentObject )
         {
-            dropImpl(i);
+            dropImpl(i,_bReallyDrop);
             break; // no duplicates possible
         }
     }
@@ -301,11 +307,12 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
     dropImpl(index);
 }
 // -----------------------------------------------------------------------------
-void OCollection::dropImpl(sal_Int32 _nIndex)
+void OCollection::dropImpl(sal_Int32 _nIndex,sal_Bool _bReallyDrop)
 {
     ::rtl::OUString elementName = m_aElements[_nIndex]->first;
 
-    dropObject(_nIndex,elementName);
+    if ( _bReallyDrop )
+        dropObject(_nIndex,elementName);
 
     ::comphelper::disposeComponent(m_aElements[_nIndex]->second);
 
@@ -438,6 +445,13 @@ Reference< XNamed > OCollection::getObject(ObjectIter& _rCurrentObject)
         }
         catch(const SQLException& e)
         {
+            try
+            {
+                dropImpl(_rCurrentObject,sal_False);
+            }
+            catch(const Exception& )
+            {
+            }
             throw WrappedTargetException(e.Message,*this,makeAny(e));
         }
         (*_rCurrentObject).second = xName;
