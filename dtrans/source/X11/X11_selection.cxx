@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-26 14:14:30 $
+ *  last change: $Author: pl $ $Date: 2001-11-27 18:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2710,8 +2710,18 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
      *  since we are XConnectionListener to a second X display
      *  to get client messages it is essential not to dispatch
      *  events twice that we get on both connections
+     *
+     *  #95201# between dispatching ButtonPress and startDrag
+     *  the user can already have released the mouse. The ButtonRelease
+     *  will then be dispatched in VCLs queue and never turn up here.
+     *  Which is not so good, since startDrag will XGrabPointer and
+     *  XGrabKeyboard -> solid lock.
      */
-    if( rEvent.xany.display != m_pDisplay && rEvent.type != ClientMessage )
+    if( rEvent.xany.display != m_pDisplay
+        && rEvent.type != ClientMessage
+        && rEvent.type != ButtonPress
+        && rEvent.type != ButtonRelease
+        )
         return;
 
     switch (rEvent.type)
