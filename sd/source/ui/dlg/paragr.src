@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:11:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,8 @@ TabDialog TAB_PARAGRAPH
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
 };
+
+
 
 
 
