@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:34 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 13:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,26 @@ void OAddTableDlg::AddTable()
         }
         aTableName = aTableList.GetEntryText(pEntry);
 
+        Reference<XDatabaseMetaData> xMeta = m_pTableView->getDesignView()->getController()->getConnection()->getMetaData();
         // den Datenbank-Namen besorgen
+        if (  !aCatalog.getLength()
+            && aSchema.getLength()
+            && xMeta->supportsCatalogsInDataManipulation()
+            && !xMeta->supportsSchemasInDataManipulation() )
+        {
+            aCatalog = aSchema;
+            aSchema = ::rtl::OUString();
+        }
 
 
         ::rtl::OUString aComposedName;
-        ::dbtools::composeTableName(m_pTableView->getDesignView()->getController()->getConnection()->getMetaData(),
-                                    aCatalog,aSchema,aTableName,aComposedName,sal_False,::dbtools::eInDataManipulation);
+        ::dbtools::composeTableName(xMeta,
+                                    aCatalog,
+                                    aSchema,
+                                    aTableName,
+                                    aComposedName,
+                                    sal_False,
+                                    ::dbtools::eInDataManipulation);
         // aOrigTableName is used because AddTabWin would like to have this
         // und das Ganze dem Container uebergeben
         m_pTableView->AddTabWin( aComposedName,aTableName, TRUE );
