@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:48:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,10 +320,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection()
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
 {
 private:
-    ::rtl::OUString                     m_aURL;
-    Sequence< PropertyValue>            m_aArgs;
-    Reference< XLoadEventListener >     m_xListener;
-    Reference< XFrame >                 m_xFrame;
     Reference< XMultiServiceFactory >   m_xServiceFactory;
     Reference< XFrameLoader >           m_xMySelf;
     ::rtl::OUString                     m_sCurrentURL;
@@ -407,14 +403,14 @@ Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(voi
 }
 
 // -----------------------------------------------------------------------
-void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::rtl::OUString& rURL,
+void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::rtl::OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
 
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
     ::comphelper::SequenceAsHashMap lDescriptor(rArgs);
-    sal_Bool            bPreview = lDescriptor.getUnpackedValueOrDefault(INFO_PREVIEW          , sal_False                                 );
+    sal_Bool bPreview = lDescriptor.getUnpackedValueOrDefault(INFO_PREVIEW, sal_False );
     if ( bPreview )
     {
         if (rListener.is())
@@ -423,10 +419,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     }
     Reference< XModel > xModel   = lDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")), Reference< XModel >());
 
-    m_xFrame    = rFrame;
-    m_xListener = rListener;
-    m_aURL      = rURL;
-    m_aArgs     = rArgs;
+    ::rtl::OUString sSalvagedURL = lDescriptor.getUnpackedValueOrDefault(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SalvagedFile" ) ), _rURL );
+    Sequence< PropertyValue > aLoadArgs( rArgs );
 
     sal_Bool bCreateNew = sal_False;
     sal_Bool bInteractive = sal_False;
@@ -440,12 +435,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         Reference< XSingleServiceFactory > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
         if ( xDatabaseContext.is() )
         {
-            bCreateNew = rURL.match(SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE));
+            bCreateNew = _rURL.match(SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE));
             Sequence<Any> aCreationArgs;
             if ( !bCreateNew )
             {
                 aCreationArgs.realloc(1);
-                aCreationArgs[0] <<= NamedValue(INFO_POOLURL,makeAny(rURL));
+                aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
             }
             else
             {
@@ -460,7 +455,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                     if ( xTransformer.is() )
                     {
                         URL aURL;
-                        aURL.Complete = m_aURL;
+                        aURL.Complete = _rURL;
                         xTransformer->parseStrict( aURL );
                         bInteractive = aURL.Arguments.equalsAscii( "Interactive" );
                     }
@@ -481,14 +476,11 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         try
         {
-            // ich benutze nicht maURL, sondern rURL, denn zwischen dem Constructor und diesem Load hier kann sich die ::com::sun::star::util::URL des Objektes
-            // schon geaendert haben (zum Beispiel durch Umbenennen)
+            aLoadArgs.realloc(aLoadArgs.getLength()+1);
+            aLoadArgs[aLoadArgs.getLength()-1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
+            aLoadArgs[aLoadArgs.getLength()-1].Value <<= _rURL;
 
-            m_aArgs.realloc(m_aArgs.getLength()+1);
-            m_aArgs[m_aArgs.getLength()-1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
-            m_aArgs[m_aArgs.getLength()-1].Value <<= rURL;
-
-            xModel->attachResource(rURL,m_aArgs);
+            xModel->attachResource( _rURL, aLoadArgs );
         }
         catch(Exception&)
         {
@@ -500,7 +492,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
     if ( bInteractive )
     {
-        Sequence< Any > aArgs(2);
+        Sequence< Any > aWizardArgs(2);
         Reference< ::com::sun::star::awt::XWindow> xWindow;
         // get the top most window
         if ( rFrame.is() )
@@ -515,18 +507,18 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                 xWindow = xFrame->getContainerWindow();
         }
         // the parent window
-        aArgs[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
+        aWizardArgs[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
                                     0,
                                     makeAny(xWindow),
                                     PropertyState_DIRECT_VALUE);
-        aArgs[1] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")),
+        aWizardArgs[1] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")),
                                     0,
                                     makeAny(xModel),
                                     PropertyState_DIRECT_VALUE);
 
         // create the dialog
         Reference< XExecutableDialog > xAdminDialog(
-            m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseWizardDialog")),aArgs), UNO_QUERY);
+            m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseWizardDialog")),aWizardArgs), UNO_QUERY);
 
         // execute it
         if ( bSuccess = xAdminDialog.is() && RET_OK == xAdminDialog->execute() )
@@ -555,23 +547,23 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             {
                 Reference<XInitialization > xIni(xController,UNO_QUERY);
                 PropertyValue aProp(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
-                Sequence< Any > aArgs(m_aArgs.getLength() + 2);
+                Sequence< Any > aInitArgs( aLoadArgs.getLength() + 2 );
 
-                Any* pArgIter = aArgs.getArray();
-                Any* pEnd   = pArgIter + aArgs.getLength();
+                Any* pArgIter = aInitArgs.getArray();
+                Any* pEnd   = pArgIter + aInitArgs.getLength();
                 *pArgIter++ <<= aProp;
 
                 aProp.Name = URL_INTERACTIVE;
                 aProp.Value <<= bInteractive;
                 *pArgIter++ <<= aProp;
 
-                const PropertyValue* pIter      = m_aArgs.getConstArray();
+                const PropertyValue* pIter = aLoadArgs.getConstArray();
                 for(++pArgIter;pArgIter != pEnd;++pArgIter,++pIter)
                 {
                     *pArgIter <<= *pIter;
                 }
 
-                xIni->initialize(aArgs);
+                xIni->initialize(aInitArgs);
             }
             catch(Exception&)
             {
