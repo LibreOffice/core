@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aqua_service.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-15 19:25:36 $
+ *  last change: $Author: pluby $ $Date: 2001-03-15 20:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,6 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
-// the service names
-#define AQUA_CLIPBOARD_SERVICE_NAME "com.sun.star.datatransfer.clipboard.SystemClipboard"
-
-// the implementation names
-#define AQUA_CLIPBOARD_IMPL_NAME "com.sun.star.datatransfer.clipboard.AquaClipboard"
-
-// the registry key names
-#define AQUA_CLIPBOARD_REGKEY_NAME "/com.sun.star.datatransfer.clipboard.AquaClipboard/UNO/SERVICES/com.sun.star.datatransfer.clipboard.SystemClipboard"
 
 using namespace rtl;
 using namespace com::sun::star::uno;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-15 19:25:36 $
+#   last change: $Author: pluby $ $Date: 2001-03-15 20:57:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,15 +86,20 @@ dummy:
 .INCLUDE : ..$/cppumaker.mk
 
 SLOFILES= \
-        $(SLO)$/aqua_service.obj
+        $(SLO)$/aqua_service.obj	\
+        $(SLO)$/aqua_clipboard.obj
 
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS= \
         $(SALLIB)	\
+        $(VOSLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
         -framework Cocoa
+
+SHL1DEPN=
+SHL1IMPLIB=	i$(SHL1TARGET)
 
 SHL1OBJS=	$(SLOFILES)
 

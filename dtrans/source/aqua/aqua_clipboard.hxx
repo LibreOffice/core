@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aqua_clipboard.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-15 19:25:36 $
+ *  last change: $Author: pluby $ $Date: 2001-03-15 20:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #ifndef _AQUA_CLIPBOARD_HXX_
 #define _AQUA_CLIPBOARD_HXX_
 
@@ -99,6 +98,15 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+// the service names
+#define AQUA_CLIPBOARD_SERVICE_NAME "com.sun.star.datatransfer.clipboard.SystemClipboard"
+
+// the implementation names
+#define AQUA_CLIPBOARD_IMPL_NAME "com.sun.star.datatransfer.clipboard.AquaClipboard"
+
+// the registry key names
+#define AQUA_CLIPBOARD_REGKEY_NAME "/com.sun.star.datatransfer.clipboard.AquaClipboard/UNO/SERVICES/com.sun.star.datatransfer.clipboard.SystemClipboard"
+
 namespace aqua {
 
 class AquaClipboard :
@@ -119,14 +127,16 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    ::osl::Mutex m_aMutex;
 };
 
 } // namespace aqua
