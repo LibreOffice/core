@@ -8547,3 +8547,13 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?s_pType_com_sun_star_ui_dialogs_XExecutableDialog@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?Move@SfxDockingWindow@@MAEXXZ
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2655423789@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2056322589@@YAXABVSbxVariableRef@@PAX@Z
+??1?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXDispatchRecorderSupplier@frame@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?CutLines@@YAXAAVString@@GGE@Z
+?__query@?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXDispatchRecorder@frame@345@PAVXInterface@2345@@Z
+?__query@?$Reference@VXDispatchRecorderSupplier@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXDispatchRecorderSupplier@frame@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_frame_XDispatchRecorder@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXDispatchRecorder@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_frame_XDispatchRecorderSupplier@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXDispatchRecorderSupplier@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXDispatchRecorder@frame@345@@Z
+?GetMacroRecorder@SfxRequest@@SA?AV?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@XZ
