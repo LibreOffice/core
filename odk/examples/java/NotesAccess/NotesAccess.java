@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotesAccess.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:47:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -67,7 +67,7 @@ import com.sun.star.table.XCell;
 public class NotesAccess implements Runnable {
   /** Connection to the office.
    */
-  static String sOfficeConnection = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+  static String sOfficeConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
   /** Host server of the Domino Directory.
    */
