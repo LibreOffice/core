@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 07:53:26 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 10:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,27 @@ String STR_QUERY_UNDO_TABFIELDMOVED
     /* ### ACHTUNG: Neuer Text in Resource? Spalte hinzuf�gen : Spalte hinzuf�gen */
     Text = "Spalte verschieben" ;
     Text [ ENGLISH ] = "Move column" ;
+    Text[ english_us ] = "Move column";
+    Text[ portuguese ] = "Move column";
+    Text[ russian ] = "Move column";
+    Text[ greek ] = "Move column";
+    Text[ dutch ] = "Move column";
+    Text[ french ] = "Move column";
+    Text[ spanish ] = "Desplazar columna";
+    Text[ finnish ] = "Move column";
+    Text[ italian ] = "Muovi colonna";
+    Text[ danish ] = "Move column";
+    Text[ swedish ] = "Flytta kolumn";
+    Text[ polish ] = "Move column";
+    Text[ portuguese_brazilian ] = "Move column";
+    Text[ japanese ] = "列の移動";
+    Text[ korean ] = "열 이동";
+    Text[ chinese_simplified ] = "移动列";
+    Text[ chinese_traditional ] = "移動欄";
+    Text[ turkish ] = "Move column";
+    Text[ arabic ] = "Move column";
+    Text[ catalan ] = "Move column";
+    Text[ thai ] = "Move column";
 };
 
 String STR_QUERY_UNDO_TABFIELDCREATE
@@ -2467,7 +2488,7 @@ String STR_QRY_LIKE_LEFT_NO_COLUMN
     Text[ finnish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ italian ] = "L'enunciato 'COME' dev'essere preceduto da un nome di colonna.";
     Text[ danish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
-    Text[ swedish ] = "Det f�r bara st� ett kolumnnamn framf�r 'SOM'.";
+    Text[ swedish ] = "Det m�ste st� ett kolumnnamn framf�r 'SOM'.";
     Text[ polish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ japanese ] = "'LIKE' の前に列名を記述する必要があります。";
     Text[ korean ] = "'LIKE' 문장의 왼쪽에는 열 이름을 하나 밖에 사용할 수 없습니다.";
@@ -2490,12 +2511,12 @@ String STR_QRY_CHECK_CASESENSITIVE
     Text[ finnish ] = "Please check if you are using the correct case.";
     Text[ italian ] = "Impossibile trovare la colonna. Vi preghiamo di osservare che il database � sensibile alle maiuscole e minuscole.";
     Text[ danish ] = "Please check if you are using the correct case.";
-    Text[ swedish ] = "Kontrollera anv�ndningen av stor och liten bokstav.";
+    Text[ swedish ] = "Kolumnen kunde inte hittas. Observera att databasen g�r skillnad p� stor och liten bokstav.";
     Text[ polish ] = "Please check if you are using the correct case.";
     Text[ japanese ] = "列は見つかりませんでした。データベースでは大文字と小文字が区別されることに注意してください。";
     Text[ korean ] = "단락을 찾지 못했습니다. 데이터베이스가 대소문자를 구분한다는 점을 유의해주십시오.";
-    Text[ chinese_simplified ] = "请检查字母的大小写。";
-    Text[ chinese_traditional ] = "請檢查字母的大小寫。";
+    Text[ chinese_simplified ] = "无法找到列。请注意本数据库区分字母的大小写。";
+    Text[ chinese_traditional ] = "無法找到欄位。請注意本資料庫區分字母的大小寫。";
     Text[ turkish ] = "Please check if you are using the correct case.";
     Text[ arabic ] = "Please check if you are using the correct case.";
 };
