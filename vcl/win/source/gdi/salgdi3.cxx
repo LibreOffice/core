@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-30 10:13:04 $
+ *  last change: $Author: hdu $ $Date: 2002-08-09 11:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,11 @@
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+
+#ifndef __SUBFONT_H
+#include <psprint/list.h>
+#include <psprint/sft.h>
 #endif
 
 // -----------
@@ -861,8 +866,9 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
     }
     maGraphicsData.mnFontKernPairCount = 0;
 
-    // Auf dem Printer immer mit DrawTextArray arbeiten, da dort die
-    // Zeichenbreiten genauer als Pixel sein koennen
+    // some printers have higher internal resolution, so their
+    // text output would be different from what we calculated
+    // => suggest DrawTextArray to workaround this problem
     if ( maGraphicsData.mbPrinter )
         return SAL_SETFONT_USEDRAWTEXTARRAY;
     else
@@ -1276,10 +1282,15 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
     {
         ImplFontData* pData = new ImplFontData;
         pData->maName = *(pInfo->mpName);
+
         pData->mbSubsettable = FALSE;
         pData->mbEmbeddable = FALSE;
+        if( !(pMetric->ntmTm.tmPitchAndFamily & TMPF_DEVICE)
+          && (pMetric->ntmTm.tmPitchAndFamily & TMPF_TRUETYPE) )
+                pData->mbSubsettable = TRUE;
 
         ImplLogMetricToDevFontDataA( &(pLogFont->elfLogFont), &(pMetric->ntmTm), nFontType, pData );
+
         // Test if Stylename is correct
         const char* pStyleName = (const char*)pLogFont->elfStyle;
         const char* pTemp = pStyleName;
@@ -1362,8 +1373,12 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
     {
         ImplFontData* pData = new ImplFontData;
         pData->maName = *(pInfo->mpName);
+
         pData->mbSubsettable = FALSE;
         pData->mbEmbeddable = FALSE;
+        if( !(pMetric->ntmTm.tmPitchAndFamily & TMPF_DEVICE)
+         &&  (pMetric->ntmTm.tmPitchAndFamily & TMPF_TRUETYPE) )
+                pData->mbSubsettable = TRUE;
 
         ImplLogMetricToDevFontDataW( &(pLogFont->elfLogFont), &(pMetric->ntmTm), nFontType, pData );
 
@@ -1650,7 +1665,7 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
         {
             bRet = TRUE;
 
-            ULONG   nPtSize = GLYPH_INC;
+            int     nPtSize = GLYPH_INC;
             Point*  pPoints = new Point[ nPtSize ];
             BYTE*   pFlags = new BYTE[ nPtSize ];
 
@@ -1786,23 +1801,152 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::CreateFontSubset(
-                                   const rtl::OUString& rToFile,
-                                   ImplFontData* pFont,
-                                   long* pGlyphIDs,
-                                   sal_uInt8* pEncoding,
-                                   sal_Int32* pWidths,
-                                   int nGlyphs,
-                                   FontSubsetInfo& rInfo
-                                   )
+BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+    ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
+    sal_Int32* pWidths, int nGlyphs, FontSubsetInfo& rInfo )
 {
-    return FALSE;
+    // TODO: replace "return FALSE" error with something that cleans up
+    BOOL bRet = FALSE;
+
+    // create matching ImplFontSelectData
+    ImplFontSelectData aIFSD;
+    aIFSD.mpFontData        = pFont;
+    aIFSD.mnOrientation     = 0;
+    aIFSD.mbVertical        = FALSE;
+    aIFSD.mbNonAntialiased  = 0;
+    // aIFSD.maName;
+    // aIFSD.maStyleName;
+    aIFSD.mnWidth           = 0;
+    aIFSD.mnHeight          = 1000;     // make compatible to PS units
+    aIFSD.meFamily          = pFont->meFamily;
+    aIFSD.meCharSet         = pFont->meCharSet;
+    aIFSD.meLanguage        = 0;
+    aIFSD.meWidthType       = pFont->meWidthType;
+    aIFSD.meWeight          = pFont->meWeight;
+    aIFSD.meItalic          = pFont->meItalic;
+    aIFSD.mePitch           = pFont->mePitch;
+    aIFSD.mnOrientation     = 0;
+    aIFSD.mbVertical        = false;    // TODO: how to get vertical mode from pFont?
+    aIFSD.mbNonAntialiased  = false;
+
+    // TODO: much better solution: move SetFont and restoration of old font to caller
+    HFONT hOrigFont = maGraphicsData.mhFont;
+    maGraphicsData.mhFont = NULL;   // avoid deletion of current font
+    SetFont( &aIFSD );
+
+#ifdef DEBUG
+    // get font metrics
+    TEXTMETRICA aWinMetric;
+    if( !::GetTextMetricsA( maGraphicsData.mhDC, &aWinMetric ) )
+        return FALSE;
+
+    DBG_ASSERT( !(aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "cannot subset device font" );
+    DBG_ASSERT( aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "can only subset TT font" );
+    //else if( aWinMetric.tmPitchAndFamily & TMPF_VECTOR )
+    //   rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;
+#endif
+
+    // get raw font file data
+    DWORD nFontSize = ::GetFontData( maGraphicsData.mhDC, 0, 0, NULL, 0 );
+    if( nFontSize == GDI_ERROR )
+        return FALSE;
+    char* pRawFontData = new char[ nFontSize ];
+    DWORD nFontSize2 = ::GetFontData( maGraphicsData.mhDC, 0, 0, (void*)pRawFontData, nFontSize );
+    if( nFontSize != nFontSize2 )
+        return FALSE;
+
+    // open font file
+    int nFaceNum = 0; // TODO: find correct face number
+    TrueTypeFont* pSftTTF = NULL;
+    int nRC = ::OpenTTFont( pRawFontData, nFontSize, nFaceNum, &pSftTTF );
+    if( nRC != SF_OK )
+        return FALSE;
+
+    TTGlobalFontInfo aTTInfo;
+    ::GetTTGlobalFontInfo( pSftTTF, &aTTInfo );
+    rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;
+    rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
+    rInfo.m_nAscent     = +aTTInfo.winAscent;
+    rInfo.m_nDescent    = -aTTInfo.winDescent;
+    rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
+                                    Point( aTTInfo.xMax, aTTInfo.yMax ) );
+    rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
+
+    // subset glyphs and get their properties
+    // take care that subset fonts require the NotDef glyph in pos 0
+    int nOrigCount = nGlyphs;
+    DBG_ASSERT( nGlyphs < 256, "too many glyphs for subsetting" );
+    USHORT    aShortIDs[ 256 ];
+    sal_uInt8 aTempEncs[ 256 ];
+
+    int nNotDef=-1, i;
+    for( i = 0; i < nGlyphs; ++i )
+    {
+        aTempEncs[i] = pEncoding[i];
+        aShortIDs[i] = static_cast<USHORT>(pGlyphIDs[i]);
+        // find NotDef glyph
+        if( !pGlyphIDs[i] )
+            nNotDef = i;
+    }
+
+    if( nNotDef != 0 )
+    {
+        // add fake NotDef glyph if needed
+        if( nNotDef < 0 )
+            nNotDef = nGlyphs++;
+
+        // NotDef glyph must be in pos 0 => swap glyphids
+        aShortIDs[ nNotDef ] = aShortIDs[0];
+        aTempEncs[ nNotDef ] = aTempEncs[0];
+        aShortIDs[0] = 0;
+        aTempEncs[0] = 0;
+    }
+
+    // fill pWidth array
+    TTSimpleGlyphMetrics* pMetrics =
+        ::GetTTSimpleGlyphMetrics( pSftTTF, aShortIDs, nGlyphs, aIFSD.mbVertical );
+    if( !pMetrics )
+        return FALSE;
+    sal_uInt16 nNotDefAdv   = pMetrics[0].adv;
+    pMetrics[0].adv         = pMetrics[nNotDef].adv;
+    pMetrics[nNotDef].adv   = nNotDefAdv;
+    for( i = 0; i < nOrigCount; ++i )
+        pWidths[i] = pMetrics[i].adv;
+    free( pMetrics );
+
+    // write subset into destination file
+    rtl::OUString aSysPath;
+    if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
+        return FALSE;
+    rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
+    ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
+    nRC = ::CreateTTFromTTGlyphs( pSftTTF, aToFile.GetBuffer(), aShortIDs,
+            aTempEncs, nGlyphs, 0, NULL, TTCF_IncludeOS2 );
+    if( nRC == SF_OK )
+        bRet = TRUE;
+
+    // cleanup:
+    if( hOrigFont )
+    {
+        // restore original font, destroy temporary font
+        HFONT hTempFont = maGraphicsData.mhFont;
+        ::SelectObject( maGraphicsData.mhDC, hOrigFont );
+        maGraphicsData.mhFont = hOrigFont;
+        DeleteObject( hTempFont );
+    }
+    // close source font of subsetter
+    if( pSftTTF )
+        ::CloseTTFont( pSftTTF );
+    // delete source font raw data
+    delete[] pRawFontData;
+    return bRet;
 }
 
 //--------------------------------------------------------------------------
 
 const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
+    // TODO: how to get access to Type 1 font files on this platform?
     return NULL;
 }
 
@@ -1810,4 +1954,6 @@ const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidt
 
 void SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
+    // TODO: once GetEmbedFontData() above does something check implementation below
+    free( (void*)pData );
 }
