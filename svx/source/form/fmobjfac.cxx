@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:54:04 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 14:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,6 @@
 #include "tabwin.hxx"
 #endif
 
-#ifndef _SVX_PROPBRW_HXX
-#include "propbrw.hxx"
-#endif
-
 #ifndef _SVX_FMEXPL_HXX
 #include "fmexpl.hxx"
 #endif
@@ -146,6 +142,9 @@
 
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
+#endif
+#ifndef SVX_FMPROPBRW_HXX
+#include "fmPropBrw.hxx"
 #endif
 
 #ifndef ENABLEUNICODE
