@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-12 18:59:28 $
+ *  last change: $Author: nn $ $Date: 2001-12-12 21:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,11 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
 
+    // handling of macro warnings as in LoadCalc
+    BOOL bWarningEnabled = SvtSecurityOptions().IsWarningEnabled() || SvtSecurityOptions().IsConfirmationEnabled();
+    if (bWarningEnabled)
+        aDocument.SetMacroCallMode(SC_MACROCALL_ASK);   // ask before executing
+
     // prevent unnecessary broadcasts and updates
     ScDocShellModificator aModificator( *this );
 
@@ -607,6 +612,22 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     aDocument.SetImportingXML( FALSE );
 
     //! row heights...
+
+    // handling of macro warnings as in LoadCalc
+    if ( eShellMode == SFX_CREATE_MODE_STANDARD && bRet )
+    {
+        if ( bWarningEnabled )
+        {
+            //  If the document contains macro calls, ask now
+            //  otherwise set to ALLOWED (for entering new formulas).
+            //  (If document is loaded invisibly, ASK state is kept)
+
+            if ( aDocument.HasMacroCallsAfterLoad() )
+                aDocument.CheckMacroWarn();
+            else
+                aDocument.SetMacroCallMode(SC_MACROCALL_ALLOWED);
+        }
+    }
 
     return bRet;
 }
