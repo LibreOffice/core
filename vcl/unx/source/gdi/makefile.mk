@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-07 18:14:49 $
+#   last change: $Author: hdu $ $Date: 2001-02-15 15:30:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,10 @@ SLOFILES+=\
 .IF "$(OS)"=="SOLARIS"
 SLOFILES+=$(SLO)$/cdeint.obj
 ENVCFLAGS+=-DUSE_CDE
+.ENDIF
+
+.IF "$(USE_BUILTIN_RASTERIZER)" != ""
+SLOFILES+=	$(SLO)$/gcach_xpeer.obj
 .ENDIF
 
 .ENDIF
