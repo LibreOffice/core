@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chart2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $  $Date: 2004-02-11 09:57:13 $
+ *  last change: $Author: obo $  $Date: 2004-06-04 11:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException)
     // split into columns - FIXME: different if GlueState() is used
     for ( ScRangePtr p = xRanges->First(); p; p = xRanges->Next())
     {
-        for ( USHORT nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
+        for ( SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
         {
             ScRangeListRef aColRanges = new ScRangeList;
             // one single sheet selected assumed for now
@@ -299,13 +299,13 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
     {
         // TODO: use DocIter?
         ScAddress aAdr( p->aStart);
-        for ( USHORT nTab = p->aStart.Tab(); nTab <= p->aEnd.Tab(); ++nTab)
+        for ( SCTAB nTab = p->aStart.Tab(); nTab <= p->aEnd.Tab(); ++nTab)
         {
             aAdr.SetTab( nTab);
-            for ( USHORT nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
+            for ( SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
             {
                 aAdr.SetCol( nCol);
-                for ( USHORT nRow = p->aStart.Row(); nRow <= p->aEnd.Row();
+                for ( SCROW nRow = p->aStart.Row(); nRow <= p->aEnd.Row();
                         ++nRow)
                 {
                     aAdr.SetRow( nRow);
