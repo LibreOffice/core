@@ -7,248 +7,48 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Schriftarten...</value>
                     <value xml:lang="en-US">~Fonts...</value>
-                    <value xml:lang="ar">...خطوط</value>
-                    <value xml:lang="no">~Fonts...</value>
-                    <value xml:lang="ca">Tipus de ~lletra...</value>
-                    <value xml:lang="zh-TW">字型(~F)...</value>
-                    <value xml:lang="cs">Písma...</value>
-                    <value xml:lang="da">~Skrifttyper...</value>
-                    <value xml:lang="el">Γραμματο~σειρές...</value>
-                    <value xml:lang="es">~Fuentes...</value>
-                    <value xml:lang="fi">~Fontit...</value>
-                    <value xml:lang="fr">~Polices...</value>
-                    <value xml:lang="he">‮גופנים...‬</value>
-                    <value xml:lang="it">~Tipi di carattere...</value>
-                    <value xml:lang="ja">フォントの種類(~F)...</value>
-                    <value xml:lang="ko">글꼴(~F)...</value>
-                    <value xml:lang="nl">~Lettertypen...</value>
-                    <value xml:lang="pl">~Czcionki...</value>
-                    <value xml:lang="pt-BR">~Fontes...</value>
-                    <value xml:lang="ru">Шрифты...</value>
-                    <value xml:lang="sk">~Písma...</value>
-                    <value xml:lang="sv">~Teckensnitt...</value>
-                    <value xml:lang="th">~ตัวอักษร...</value>
-                    <value xml:lang="tr">Yazıtipleri...</value>
-                    <value xml:lang="hi">~फ़ॉन्ट...</value>
-                    <value xml:lang="zh-CN">字体(~F)...</value>
-                    <value xml:lang="pt">~Tipos de letra...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeFontSize" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Schrift~größen...</value>
                     <value xml:lang="en-US">F~ont Size...</value>
-                    <value xml:lang="ar">أحجام الخط...</value>
-                    <value xml:lang="no">F~ont Size...</value>
-                    <value xml:lang="ca">~Mida de la lletra...</value>
-                    <value xml:lang="zh-TW">字型大小(~O)...</value>
-                    <value xml:lang="cs">Velikosti písma...</value>
-                    <value xml:lang="da">S~kriftstørrelse...</value>
-                    <value xml:lang="el">Μέ~γεθος γραμματοσειράς...</value>
-                    <value xml:lang="es">~Tamaños de fuente...</value>
-                    <value xml:lang="fi">Fontti~koko...</value>
-                    <value xml:lang="fr">~Tailles de police...</value>
-                    <value xml:lang="he">‮גודל גופן...‬</value>
-                    <value xml:lang="it">Dimensioni carattere...</value>
-                    <value xml:lang="ja">フォントサイズ(~O)...</value>
-                    <value xml:lang="ko">글꼴 크기(~O)...</value>
-                    <value xml:lang="nl">Letter~grootten...</value>
-                    <value xml:lang="pl">~Rozmiar czcionki...</value>
-                    <value xml:lang="pt-BR">Ta~manho da fonte...</value>
-                    <value xml:lang="ru">Размер шрифта...</value>
-                    <value xml:lang="sk">Veľk~osti písma...</value>
-                    <value xml:lang="sv">Tecken~storlekar...</value>
-                    <value xml:lang="th">ขนาดตัว~อักษร...</value>
-                    <value xml:lang="tr">Yazıtipi boyutları...</value>
-                    <value xml:lang="hi">~फ़ॉन्ट परिमाण...</value>
-                    <value xml:lang="zh-CN">字体大小(~O)...</value>
-                    <value xml:lang="pt">Ta~manhos de letra...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeDistance" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Abstände...</value>
                     <value xml:lang="en-US">~Spacing...</value>
-                    <value xml:lang="ar">...تباعد</value>
-                    <value xml:lang="no">~Spacing...</value>
-                    <value xml:lang="ca">Espa~iat...</value>
-                    <value xml:lang="zh-TW">間隔(~S)...</value>
-                    <value xml:lang="cs">Prokládání znaků...</value>
-                    <value xml:lang="da">~Afstand...</value>
-                    <value xml:lang="el">~Αποστάσεις...</value>
-                    <value xml:lang="es">~Espacios...</value>
-                    <value xml:lang="fi">~Välistys...</value>
-                    <value xml:lang="fr">É~carts...</value>
-                    <value xml:lang="he">‮ריווח...‬</value>
-                    <value xml:lang="it">~Distanze...</value>
-                    <value xml:lang="ja">間隔(~S)...</value>
-                    <value xml:lang="ko">간격(~S)...</value>
-                    <value xml:lang="nl">~Afstanden...</value>
-                    <value xml:lang="pl">~Odstęp...</value>
-                    <value xml:lang="pt-BR">~Espaçamento...</value>
-                    <value xml:lang="ru">Интервал...</value>
-                    <value xml:lang="sk">V~zdialenosti znakov...</value>
-                    <value xml:lang="sv">~Avstånd...</value>
-                    <value xml:lang="th">~ระยะห่าง...</value>
-                    <value xml:lang="tr">Aralıklar...</value>
-                    <value xml:lang="hi">~अंतर देना...</value>
-                    <value xml:lang="zh-CN">间隔(~S)...</value>
-                    <value xml:lang="pt">~Espaçamento...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeAlignment" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Aus~richtung...</value>
                     <value xml:lang="en-US">A~lignment...</value>
-                    <value xml:lang="ar">...محاذاة</value>
-                    <value xml:lang="no">A~lignment...</value>
-                    <value xml:lang="ca">A~lineament...</value>
-                    <value xml:lang="zh-TW">對齊(~L)...</value>
-                    <value xml:lang="cs">Zarovnání...</value>
-                    <value xml:lang="da">~Justering...</value>
-                    <value xml:lang="el">Σ~τοίχιση...</value>
-                    <value xml:lang="es">~Alineación...</value>
-                    <value xml:lang="fi">Tasa~us...</value>
-                    <value xml:lang="fr">~Alignement...</value>
-                    <value xml:lang="he">‮יישור...‬</value>
-                    <value xml:lang="it">~Allineamento...</value>
-                    <value xml:lang="ja">配置(~L)...</value>
-                    <value xml:lang="ko">맞춤(~L)...</value>
-                    <value xml:lang="nl">~Uitlijning...</value>
-                    <value xml:lang="pl">~Wyrównanie...</value>
-                    <value xml:lang="pt-BR">A~linhamento...</value>
-                    <value xml:lang="ru">Выравнивание...</value>
-                    <value xml:lang="sk">Za~rovnanie...</value>
-                    <value xml:lang="sv">~Justering...</value>
-                    <value xml:lang="th">จั~ดตำแหน่ง...</value>
-                    <value xml:lang="tr">Hizalama...</value>
-                    <value xml:lang="hi">~पंक्तिकरण...</value>
-                    <value xml:lang="zh-CN">对齐(~L)...</value>
-                    <value xml:lang="pt">A~linhamento...</value>
                 </prop>
             </node>
             <node oor:name=".uno:RedrawAutomatic" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">A~nsicht automatisch aktualisieren</value>
                     <value xml:lang="en-US">~AutoUpdate Display</value>
-                    <value xml:lang="ar">تحديث العرض تلقائياً</value>
-                    <value xml:lang="no">~AutoUpdate Display</value>
-                    <value xml:lang="ca">~Actualitza automàticament</value>
-                    <value xml:lang="zh-TW">自動更新檢視(~A)</value>
-                    <value xml:lang="cs">Automatická aktualizace zobrazení</value>
-                    <value xml:lang="da">Opdater visning ~automatisk</value>
-                    <value xml:lang="el">Αυτόματη ε~νημέρωση προβολής</value>
-                    <value xml:lang="es">~Actualización automática de la visualización</value>
-                    <value xml:lang="fi">Automaattinen näytön ~päivitys</value>
-                    <value xml:lang="fr">Ra~fraîchir automatiquement l&apos;affichage</value>
-                    <value xml:lang="he">‮עידכון תצוגה אוטומטי‬</value>
-                    <value xml:lang="it">Aggior~na automaticamente la vista</value>
-                    <value xml:lang="ja">表示の自動更新(~A)</value>
-                    <value xml:lang="ko">보기를 자동으로 업데이트(~A)</value>
-                    <value xml:lang="nl">Weergave au~tomatisch bijwerken</value>
-                    <value xml:lang="pl">A~utoaktualizacja widoku</value>
-                    <value xml:lang="pt-BR">~Atualizar Exibição Automaticamente</value>
-                    <value xml:lang="ru">Автообновление экрана</value>
-                    <value xml:lang="sk">~Automatická aktualizácia zobrazenia</value>
-                    <value xml:lang="sv">Uppdatera vis~ning automatiskt</value>
-                    <value xml:lang="th">แสดงผลการปรับปรุง~อัตโนมัติ</value>
-                    <value xml:lang="tr">Görünümü otomatik olarak güncelle</value>
-                    <value xml:lang="hi">~स्वचालित अपडेट् प्रदर्शन</value>
-                    <value xml:lang="zh-CN">自动更新视图(~A)</value>
-                    <value xml:lang="pt">~Actualizar vista automaticamente</value>
                 </prop>
             </node>
             <node oor:name=".uno:Symbols" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Symbole</value>
                     <value xml:lang="en-US">Symbols</value>
-                    <value xml:lang="ar">رموز</value>
-                    <value xml:lang="no">Symbols</value>
-                    <value xml:lang="ca">Símbols</value>
-                    <value xml:lang="zh-TW">圖示</value>
-                    <value xml:lang="cs">Symboly</value>
-                    <value xml:lang="da">Symboler</value>
-                    <value xml:lang="el">Σύμβολα</value>
-                    <value xml:lang="es">Símbolos</value>
-                    <value xml:lang="fi">Symbolit</value>
-                    <value xml:lang="fr">Symboles</value>
-                    <value xml:lang="he">‮סימנים‬</value>
-                    <value xml:lang="it">Symboli</value>
-                    <value xml:lang="ja">記号</value>
-                    <value xml:lang="ko">기호</value>
-                    <value xml:lang="nl">Symbolen</value>
-                    <value xml:lang="pl">Symbole</value>
-                    <value xml:lang="pt-BR">Símbolos</value>
-                    <value xml:lang="ru">Символы</value>
-                    <value xml:lang="sk">Symboly</value>
-                    <value xml:lang="sv">Symboler</value>
-                    <value xml:lang="th">สัญลักษณ์</value>
-                    <value xml:lang="tr">Simge</value>
-                    <value xml:lang="hi">संकेत</value>
-                    <value xml:lang="zh-CN">图标</value>
-                    <value xml:lang="pt">Símbolos</value>
                 </prop>
             </node>
             <node oor:name=".uno:Textmode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Textmodus</value>
                     <value xml:lang="en-US">~Text Mode</value>
-                    <value xml:lang="ar">وضع النص</value>
-                    <value xml:lang="no">~Text Mode</value>
-                    <value xml:lang="ca">Mode de ~text</value>
-                    <value xml:lang="zh-TW">文字模式(~T)</value>
-                    <value xml:lang="cs">Textový režim</value>
-                    <value xml:lang="da">~Teksttilstand</value>
-                    <value xml:lang="el">Κατάσταση ~κειμένου</value>
-                    <value xml:lang="es">Modo ~texto</value>
-                    <value xml:lang="fi">R~ivitila</value>
-                    <value xml:lang="fr">~Mode Texte</value>
-                    <value xml:lang="he">‮מצב טקסט‬</value>
-                    <value xml:lang="it">Modo ~testo</value>
-                    <value xml:lang="ja">テキストモード(~T)</value>
-                    <value xml:lang="ko">텍스트 모드(~T)</value>
-                    <value xml:lang="nl">~Tekstmodus</value>
-                    <value xml:lang="pl">Tryb ~tekstowy</value>
-                    <value xml:lang="pt-BR">~Modo Texto</value>
-                    <value xml:lang="ru">Текстовый режим</value>
-                    <value xml:lang="sk">~Textový režim</value>
-                    <value xml:lang="sv">Text~läge</value>
-                    <value xml:lang="th">โหมด~ข้อความ</value>
-                    <value xml:lang="tr">Metin kipi</value>
-                    <value xml:lang="hi">~टेक्स्ट् प्रकार</value>
-                    <value xml:lang="zh-CN">文字模式(~T)</value>
-                    <value xml:lang="pt">~Modo Texto</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertFormula" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Formel importieren...</value>
                     <value xml:lang="en-US">~Import Formula...</value>
-                    <value xml:lang="ar">...استيراد صيغة</value>
-                    <value xml:lang="no">~Import Formula...</value>
-                    <value xml:lang="ca">Importa ~fórmula...</value>
-                    <value xml:lang="zh-TW">匯入公式(~I)...</value>
-                    <value xml:lang="cs">Importovat vzorec...</value>
-                    <value xml:lang="da">~Importer formel...</value>
-                    <value xml:lang="el">Ε~ισαγωγή τύπου...</value>
-                    <value xml:lang="es">Importar ~fórmula...</value>
-                    <value xml:lang="fi">~Tuo kaava...</value>
-                    <value xml:lang="fr">Importer une ~formule...</value>
-                    <value xml:lang="he">~Formel importieren...</value>
-                    <value xml:lang="it">Importa ~formula...</value>
-                    <value xml:lang="ja">数式のインポート(~I)...</value>
-                    <value xml:lang="ko">수식 가져오기(~I)...</value>
-                    <value xml:lang="nl">~Formules importeren...</value>
-                    <value xml:lang="pl">Importuj formułę...</value>
-                    <value xml:lang="pt-BR">Import formula...</value>
-                    <value xml:lang="ru">Импорт формулы...</value>
-                    <value xml:lang="sk">~Importovať vzorec...</value>
-                    <value xml:lang="sv">Importera ~formel...</value>
-                    <value xml:lang="th">~นำเข้าสูตรคำนวณ...</value>
-                    <value xml:lang="tr">~Formülü Al...</value>
-                    <value xml:lang="hi">~सूत्र को आयात करो...</value>
-                    <value xml:lang="zh-CN">输入公式(~I)...</value>
-                    <value xml:lang="pt">~Importar fórmula...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -258,310 +58,60 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">An Fenster anpassen</value>
                     <value xml:lang="en-US">Fit To Window</value>
-                    <value xml:lang="ar">ملاءمة للنافذة</value>
-                    <value xml:lang="no">Fit To Window</value>
-                    <value xml:lang="ca">Ajusta a la finestra</value>
-                    <value xml:lang="zh-TW">和視窗對齊</value>
-                    <value xml:lang="cs">Přizpůsobit velikosti okna</value>
-                    <value xml:lang="da">Tilpas til vindue</value>
-                    <value xml:lang="el">Προσαρμογή στο παράθυρο</value>
-                    <value xml:lang="es">Ajustar a la ventana</value>
-                    <value xml:lang="fi">Sovita ikkunaan</value>
-                    <value xml:lang="fr">Adapter à la taille de la fenêtre</value>
-                    <value xml:lang="he">‮התאמה לגודל חלון‬</value>
-                    <value xml:lang="it">Adatta alla finestra</value>
-                    <value xml:lang="ja">ウィンドウに適合</value>
-                    <value xml:lang="ko">창에 맞춤</value>
-                    <value xml:lang="nl">Aanpassen aan venster</value>
-                    <value xml:lang="pl">Dopasuj do okna</value>
-                    <value xml:lang="pt-BR">Ajustar à janela</value>
-                    <value xml:lang="ru">По размеру окна</value>
-                    <value xml:lang="sk">Prispôsobiť oknu</value>
-                    <value xml:lang="sv">Anpassa till fönster</value>
-                    <value xml:lang="th">จัดพอดีกับหน้าต่าง</value>
-                    <value xml:lang="tr">Pencereye sığdır</value>
-                    <value xml:lang="hi">विन्डों केलिए योग्य</value>
-                    <value xml:lang="zh-CN">和视窗对齐</value>
-                    <value xml:lang="pt">Ajustar à janela</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertConfigName" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Text einfügen</value>
                     <value xml:lang="en-US">Insert Text</value>
-                    <value xml:lang="ar">إدراج نص</value>
-                    <value xml:lang="no">Insert Text</value>
-                    <value xml:lang="ca">Insereix un text</value>
-                    <value xml:lang="zh-TW">插入文字</value>
-                    <value xml:lang="cs">Vložit text</value>
-                    <value xml:lang="da">Indsæt tekst</value>
-                    <value xml:lang="el">Εισαγωγή κειμένου</value>
-                    <value xml:lang="es">Insertar texto</value>
-                    <value xml:lang="fi">Lisää teksti</value>
-                    <value xml:lang="fr">Insérer un texte</value>
-                    <value xml:lang="he">‮הכנסת טקסט‬</value>
-                    <value xml:lang="it">Inserisci testo</value>
-                    <value xml:lang="ja">テキストの挿入</value>
-                    <value xml:lang="ko">텍스트 삽입</value>
-                    <value xml:lang="nl">Tekst invoegen</value>
-                    <value xml:lang="pl">Wstaw tekst</value>
-                    <value xml:lang="pt-BR">Inserir Texto</value>
-                    <value xml:lang="ru">Вставить текст</value>
-                    <value xml:lang="sk">Vložiť text</value>
-                    <value xml:lang="sv">Infoga text</value>
-                    <value xml:lang="th">แทรกข้อความ</value>
-                    <value xml:lang="tr">Metin ekle</value>
-                    <value xml:lang="hi">टेक्स्ट् जोड़ो</value>
-                    <value xml:lang="zh-CN">插入文字</value>
-                    <value xml:lang="pt">Inserir texto</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertCommand" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Befehl einfügen</value>
                     <value xml:lang="en-US">Insert Command</value>
-                    <value xml:lang="ar">إدراج أمر</value>
-                    <value xml:lang="no">Insert Command</value>
-                    <value xml:lang="ca">Insereix una ordre</value>
-                    <value xml:lang="zh-TW">插入指令</value>
-                    <value xml:lang="cs">Vložit příkaz</value>
-                    <value xml:lang="da">Indsæt kommando</value>
-                    <value xml:lang="el">Εισαγωγή εντολής</value>
-                    <value xml:lang="es">Insertar una orden</value>
-                    <value xml:lang="fi">Lisää komento</value>
-                    <value xml:lang="fr">Insérer une commande</value>
-                    <value xml:lang="he">‮הכנסת פקודה‬</value>
-                    <value xml:lang="it">Inserisci comando</value>
-                    <value xml:lang="ja">コマンドの挿入</value>
-                    <value xml:lang="ko">명령 삽입</value>
-                    <value xml:lang="nl">Opdracht invoegen</value>
-                    <value xml:lang="pl">Wstaw polecenie</value>
-                    <value xml:lang="pt-BR">Inserir Comando</value>
-                    <value xml:lang="ru">Вставить команду</value>
-                    <value xml:lang="sk">Vložiť príkaz</value>
-                    <value xml:lang="sv">Infoga kommando</value>
-                    <value xml:lang="th">แทรกคำสั่ง</value>
-                    <value xml:lang="tr">Komut ekle</value>
-                    <value xml:lang="hi">निर्देश जोड़ो</value>
-                    <value xml:lang="zh-CN">插入指令</value>
-                    <value xml:lang="pt">Inserir comando</value>
                 </prop>
             </node>
             <node oor:name=".uno:ModifyStatus" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Geändert-Status</value>
                     <value xml:lang="en-US">Modified</value>
-                    <value xml:lang="ar">حالة التعديل</value>
-                    <value xml:lang="no">Modified</value>
-                    <value xml:lang="ca">Modificat</value>
-                    <value xml:lang="zh-TW">變更過的狀態</value>
-                    <value xml:lang="cs">Změněno</value>
-                    <value xml:lang="da">Ændret</value>
-                    <value xml:lang="el">Κατάσταση τροποποίησης</value>
-                    <value xml:lang="es">Modo modificado</value>
-                    <value xml:lang="fi">Muokattu</value>
-                    <value xml:lang="fr">Statut modifié </value>
-                    <value xml:lang="he">‮מעודכן‬</value>
-                    <value xml:lang="it">Stato modificato</value>
-                    <value xml:lang="ja">変更ステータス</value>
-                    <value xml:lang="ko">변경된 상태</value>
-                    <value xml:lang="nl">Status Gewijzigd</value>
-                    <value xml:lang="pl">Zmodyfikowany</value>
-                    <value xml:lang="pt-BR">Modificado</value>
-                    <value xml:lang="ru">Измененное</value>
-                    <value xml:lang="sk">Zmenené</value>
-                    <value xml:lang="sv">Ändrad</value>
-                    <value xml:lang="th">ดัดแปลงแก้ไข</value>
-                    <value xml:lang="tr">Değiştirildi</value>
-                    <value xml:lang="hi">सुधार किया</value>
-                    <value xml:lang="zh-CN">更改过的状态</value>
-                    <value xml:lang="pt">Estado modificado</value>
                 </prop>
             </node>
             <node oor:name=".uno:TextStatus" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Text-Status</value>
                     <value xml:lang="en-US">Text Status</value>
-                    <value xml:lang="ar">حالة النص</value>
-                    <value xml:lang="no">Text Status</value>
-                    <value xml:lang="ca">Estat del text</value>
-                    <value xml:lang="zh-TW">文字狀態</value>
-                    <value xml:lang="cs">Status textu</value>
-                    <value xml:lang="da">Tekststatus</value>
-                    <value xml:lang="el">Κατάσταση κειμένου</value>
-                    <value xml:lang="es">Estado del texto</value>
-                    <value xml:lang="fi">Tekstin tila</value>
-                    <value xml:lang="fr">Statut de texte</value>
-                    <value xml:lang="he">‮מצב הטקסט‬</value>
-                    <value xml:lang="it">Stato testo</value>
-                    <value xml:lang="ja">テキストのステータス</value>
-                    <value xml:lang="ko">텍스트 상태</value>
-                    <value xml:lang="nl">Tekststatus</value>
-                    <value xml:lang="pl">Stan tekstu</value>
-                    <value xml:lang="pt-BR">Status do Texto</value>
-                    <value xml:lang="ru">Состояние текста</value>
-                    <value xml:lang="sk">Stav textu</value>
-                    <value xml:lang="sv">Textstatus</value>
-                    <value xml:lang="th">สถานะข้อความ</value>
-                    <value xml:lang="tr">Metin durumu</value>
-                    <value xml:lang="hi">टेक्स्ट् वस्तुस्थिति</value>
-                    <value xml:lang="zh-CN">文字状态</value>
-                    <value xml:lang="pt">Status do texto</value>
                 </prop>
             </node>
             <node oor:name=".uno:NextError" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Nächster ~Fehler</value>
                     <value xml:lang="en-US">Ne~xt Error</value>
-                    <value xml:lang="ar">الخطأ التالي</value>
-                    <value xml:lang="no">Ne~xt Error</value>
-                    <value xml:lang="ca">~Error següent</value>
-                    <value xml:lang="zh-TW">下一個錯誤(~X)</value>
-                    <value xml:lang="cs">Následující chyba</value>
-                    <value xml:lang="da">Næste ~fejl</value>
-                    <value xml:lang="el">Επόμενο σ~φάλμα</value>
-                    <value xml:lang="es">~Error siguiente</value>
-                    <value xml:lang="fi">~Seuraavaan virheeseen</value>
-                    <value xml:lang="fr">~Erreur suivante</value>
-                    <value xml:lang="he">‮השגיאה הבאה‬</value>
-                    <value xml:lang="it">Errore successivo</value>
-                    <value xml:lang="ja">次のエラー(~X)</value>
-                    <value xml:lang="ko">다음 오류(~X)</value>
-                    <value xml:lang="nl">Volg~ende fout</value>
-                    <value xml:lang="pl">Następny błą~d</value>
-                    <value xml:lang="pt-BR">Pró~ximo erro</value>
-                    <value xml:lang="ru">Следующая ошибка</value>
-                    <value xml:lang="sk">Ďalšia ch~yba</value>
-                    <value xml:lang="sv">Nästa ~fel</value>
-                    <value xml:lang="th">ข้อผิดพลาดถั~ดไป</value>
-                    <value xml:lang="tr">Sonraki hata</value>
-                    <value xml:lang="hi">~अगला गलती</value>
-                    <value xml:lang="zh-CN">下一个错误(~X)</value>
-                    <value xml:lang="pt">~Erro seguinte</value>
                 </prop>
             </node>
             <node oor:name=".uno:PrevError" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Vorheriger F~ehler</value>
                     <value xml:lang="en-US">Pr~evious Error</value>
-                    <value xml:lang="ar">الخطأ السابق</value>
-                    <value xml:lang="no">Pr~evious Error</value>
-                    <value xml:lang="ca">Error a~nterior</value>
-                    <value xml:lang="zh-TW">上一個錯誤(~E)</value>
-                    <value xml:lang="cs">Předchozí chyba</value>
-                    <value xml:lang="da">Forrige f~ejl</value>
-                    <value xml:lang="el">Προηγούμ~ενο σφάλμα</value>
-                    <value xml:lang="es">E~rror anterior</value>
-                    <value xml:lang="fi">E~delliseen virheeseen</value>
-                    <value xml:lang="fr">E~rreur précédente</value>
-                    <value xml:lang="he">‮השגיאה הקודמת‬</value>
-                    <value xml:lang="it">Errore pr~ecedente</value>
-                    <value xml:lang="ja">前のエラー(~E)</value>
-                    <value xml:lang="ko">이전 오류(~E)</value>
-                    <value xml:lang="nl">Vo~rige fout</value>
-                    <value xml:lang="pl">Poprzedni ~błąd</value>
-                    <value xml:lang="pt-BR">Erro ~anterior</value>
-                    <value xml:lang="ru">Предыдущая ошибка</value>
-                    <value xml:lang="sk">Pr~edchádzajúca chyba</value>
-                    <value xml:lang="sv">Föregående f~el</value>
-                    <value xml:lang="th">ข้อผิดพลาดอัน~ก่อน</value>
-                    <value xml:lang="tr">Önceki hata</value>
-                    <value xml:lang="hi">~पिछला गलती</value>
-                    <value xml:lang="zh-CN">上一个错误(~E)</value>
-                    <value xml:lang="pt">Erro ~anterior</value>
                 </prop>
             </node>
             <node oor:name=".uno:NextMark" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Nächster Marker</value>
                     <value xml:lang="en-US">~Next Marker</value>
-                    <value xml:lang="ar">العلامة التالية</value>
-                    <value xml:lang="no">~Next Marker</value>
-                    <value xml:lang="ca">Marca ~següent</value>
-                    <value xml:lang="zh-TW">下一個標記(~N)</value>
-                    <value xml:lang="cs">Další značka</value>
-                    <value xml:lang="da">~Næste mærke</value>
-                    <value xml:lang="el">Επόμε~νο σημάδι</value>
-                    <value xml:lang="es">Marca ~siguiente</value>
-                    <value xml:lang="fi">Seuraavaan ~paikkamerkkiin</value>
-                    <value xml:lang="fr">Marqueur ~suivant</value>
-                    <value xml:lang="he">‮הסמן הבא‬</value>
-                    <value xml:lang="it">Contrassegno ~successivo</value>
-                    <value xml:lang="ja">次のマーカー(~N)</value>
-                    <value xml:lang="ko">다음 표시자(~N)</value>
-                    <value xml:lang="nl">Volge~nd merkteken</value>
-                    <value xml:lang="pl">~Następny znacznik</value>
-                    <value xml:lang="pt-BR">~Próximo Marcador</value>
-                    <value xml:lang="ru">Следующая метка</value>
-                    <value xml:lang="sk">Ďalšia z~načka</value>
-                    <value xml:lang="sv">~Nästa platshållare</value>
-                    <value xml:lang="th">เครื่องหมาย~ถัดไป</value>
-                    <value xml:lang="tr">Sonraki belirteç</value>
-                    <value xml:lang="hi">~अगला चिह्नित करनेवाला</value>
-                    <value xml:lang="zh-CN">下一个标记(~N)</value>
-                    <value xml:lang="pt">~Marcador seguinte</value>
                 </prop>
             </node>
             <node oor:name=".uno:PrevMark" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Vorheriger Marker</value>
                     <value xml:lang="en-US">Previous ~Marker</value>
-                    <value xml:lang="ar">العلامة السابقة</value>
-                    <value xml:lang="no">Previous ~Marker</value>
-                    <value xml:lang="ca">Marca ~anterior</value>
-                    <value xml:lang="zh-TW">上一個標記(~M)</value>
-                    <value xml:lang="cs">Předchozí značka</value>
-                    <value xml:lang="da">~Forrige mærke</value>
-                    <value xml:lang="el">Προηγούμενο σημάδι</value>
-                    <value xml:lang="es">Marca ~anterior</value>
-                    <value xml:lang="fi">Ed~elliseen paikkamerkkiin</value>
-                    <value xml:lang="fr">Marqueur ~précédent</value>
-                    <value xml:lang="he">‮הסמן הקודם‬</value>
-                    <value xml:lang="it">Contrassegno precedente</value>
-                    <value xml:lang="ja">前のマーカー(~M)</value>
-                    <value xml:lang="ko">이전 표시자(~M)</value>
-                    <value xml:lang="nl">~Vorig merkteken</value>
-                    <value xml:lang="pl">Poprzedni zna~cznik</value>
-                    <value xml:lang="pt-BR">~Marcador anterior</value>
-                    <value xml:lang="ru">Предыдущая метка</value>
-                    <value xml:lang="sk">~Predchádzajúca značka</value>
-                    <value xml:lang="sv">Föregående ~platshållare</value>
-                    <value xml:lang="th">เ~ครื่องหมายอันก่อน</value>
-                    <value xml:lang="tr">Önceki belirteç</value>
-                    <value xml:lang="hi">~पिछला मार्कर</value>
-                    <value xml:lang="zh-CN">上一个标记(~M)</value>
-                    <value xml:lang="pt">Ma~rcador anterior</value>
                 </prop>
             </node>
             <node oor:name=".uno:SymbolCatalogue" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Katalog...</value>
                     <value xml:lang="en-US">~Catalog...</value>
-                    <value xml:lang="ar">...كتالوج</value>
-                    <value xml:lang="no">~Catalog...</value>
-                    <value xml:lang="ca">~Catàleg...</value>
-                    <value xml:lang="zh-TW">目錄(~C)...</value>
-                    <value xml:lang="cs">Katalog...</value>
-                    <value xml:lang="da">~Katalog...</value>
-                    <value xml:lang="el">~Κατάλογος...</value>
-                    <value xml:lang="es">~Catálogo...</value>
-                    <value xml:lang="fi">~Luettelo...</value>
-                    <value xml:lang="fr">~Catalogue...</value>
-                    <value xml:lang="he">‮מבחר...‬</value>
-                    <value xml:lang="it">Catalo~go...</value>
-                    <value xml:lang="ja">カタログ(~C)...</value>
-                    <value xml:lang="ko">목록(~C)...</value>
-                    <value xml:lang="nl">~Catalogus...</value>
-                    <value xml:lang="pl">Katalog...</value>
-                    <value xml:lang="pt-BR">~Catálogo...</value>
-                    <value xml:lang="ru">Каталог...</value>
-                    <value xml:lang="sk">~Katalóg...</value>
-                    <value xml:lang="sv">~Katalog...</value>
-                    <value xml:lang="th">~รายการ...</value>
-                    <value xml:lang="tr">~Katalog...</value>
-                    <value xml:lang="hi">~सूचीपत्र...</value>
-                    <value xml:lang="zh-CN">分类(~C)...</value>
-                    <value xml:lang="pt">Catá~logo...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -571,93 +121,18 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Optionen</value>
                     <value xml:lang="en-US">Options</value>
-                    <value xml:lang="ar">الخيارات</value>
-                    <value xml:lang="no">Options</value>
-                    <value xml:lang="ca">Opcions</value>
-                    <value xml:lang="zh-TW">選項</value>
-                    <value xml:lang="cs">Volby</value>
-                    <value xml:lang="da">Indstillinger</value>
-                    <value xml:lang="el">Επιλογές</value>
-                    <value xml:lang="es">Opciones</value>
-                    <value xml:lang="fi">Asetukset</value>
-                    <value xml:lang="fr">Options</value>
-                    <value xml:lang="he">‮אפשרויות‬</value>
-                    <value xml:lang="it">Opzioni</value>
-                    <value xml:lang="ja">オプション</value>
-                    <value xml:lang="ko">옵션</value>
-                    <value xml:lang="nl">Opties</value>
-                    <value xml:lang="pl">Opcje</value>
-                    <value xml:lang="pt-BR">Opções</value>
-                    <value xml:lang="ru">Параметры</value>
-                    <value xml:lang="sk">Nastavenia</value>
-                    <value xml:lang="sv">Alternativ</value>
-                    <value xml:lang="th">ตัวเลือก</value>
-                    <value xml:lang="tr">Seçenekler</value>
-                    <value xml:lang="hi">विकल्प</value>
-                    <value xml:lang="zh-CN">选项</value>
-                    <value xml:lang="pt">Opções</value>
                 </prop>
             </node>
             <node oor:name=".uno:View50" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">0,5</value>
                     <value xml:lang="en-US">0.5</value>
-                    <value xml:lang="ar">0.5</value>
-                    <value xml:lang="no">0.5</value>
-                    <value xml:lang="ca">0.5</value>
-                    <value xml:lang="zh-TW">0,5</value>
-                    <value xml:lang="cs">0.5</value>
-                    <value xml:lang="da">0,5</value>
-                    <value xml:lang="el">0.5</value>
-                    <value xml:lang="es">0,5</value>
-                    <value xml:lang="fi">0,5</value>
-                    <value xml:lang="fr">0,5</value>
-                    <value xml:lang="he">0,5</value>
-                    <value xml:lang="it">0,5</value>
-                    <value xml:lang="ja">0,5</value>
-                    <value xml:lang="ko">0.5</value>
-                    <value xml:lang="nl">0,5</value>
-                    <value xml:lang="pl">0,5</value>
-                    <value xml:lang="pt-BR">0,5</value>
-                    <value xml:lang="ru">0,5</value>
-                    <value xml:lang="sk">0.5</value>
-                    <value xml:lang="sv">0,5</value>
-                    <value xml:lang="th">0.5</value>
-                    <value xml:lang="tr">0.5</value>
-                    <value xml:lang="hi">0.5</value>
-                    <value xml:lang="zh-CN">0,5</value>
-                    <value xml:lang="pt">0,5</value>
                 </prop>
             </node>
             <node oor:name=".uno:View100" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">1</value>
                     <value xml:lang="en-US">1</value>
-                    <value xml:lang="ar">1</value>
-                    <value xml:lang="no">1</value>
-                    <value xml:lang="ca">1</value>
-                    <value xml:lang="zh-TW">1</value>
-                    <value xml:lang="cs">1</value>
-                    <value xml:lang="da">1</value>
-                    <value xml:lang="el">1</value>
-                    <value xml:lang="es">1</value>
-                    <value xml:lang="fi">1</value>
-                    <value xml:lang="fr">1</value>
-                    <value xml:lang="he">1</value>
-                    <value xml:lang="it">1</value>
-                    <value xml:lang="ja">1</value>
-                    <value xml:lang="ko">1</value>
-                    <value xml:lang="nl">1</value>
-                    <value xml:lang="pl">1</value>
-                    <value xml:lang="pt-BR">1</value>
-                    <value xml:lang="ru">1</value>
-                    <value xml:lang="sk">1</value>
-                    <value xml:lang="sv">1</value>
-                    <value xml:lang="th">1</value>
-                    <value xml:lang="tr">1</value>
-                    <value xml:lang="hi">1</value>
-                    <value xml:lang="zh-CN">1</value>
-                    <value xml:lang="pt">1</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -667,62 +142,12 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">2</value>
                     <value xml:lang="en-US">2</value>
-                    <value xml:lang="ar">2</value>
-                    <value xml:lang="no">2</value>
-                    <value xml:lang="ca">2</value>
-                    <value xml:lang="zh-TW">2</value>
-                    <value xml:lang="cs">2</value>
-                    <value xml:lang="da">2</value>
-                    <value xml:lang="el">2</value>
-                    <value xml:lang="es">2</value>
-                    <value xml:lang="fi">2</value>
-                    <value xml:lang="fr">2</value>
-                    <value xml:lang="he">2</value>
-                    <value xml:lang="it">2</value>
-                    <value xml:lang="ja">2</value>
-                    <value xml:lang="ko">2</value>
-                    <value xml:lang="nl">2</value>
-                    <value xml:lang="pl">2</value>
-                    <value xml:lang="pt-BR">2</value>
-                    <value xml:lang="ru">2</value>
-                    <value xml:lang="sk">2</value>
-                    <value xml:lang="sv">2</value>
-                    <value xml:lang="th">2</value>
-                    <value xml:lang="tr">2</value>
-                    <value xml:lang="hi">2</value>
-                    <value xml:lang="zh-CN">2</value>
-                    <value xml:lang="pt">2</value>
                 </prop>
             </node>
             <node oor:name=".uno:ZoomIn" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Ver~größern</value>
                     <value xml:lang="en-US">Z~oom In</value>
-                    <value xml:lang="ar">تكبير</value>
-                    <value xml:lang="no">Z~oom In</value>
-                    <value xml:lang="ca">Amplia el ~zoom</value>
-                    <value xml:lang="zh-TW">放大(~O)</value>
-                    <value xml:lang="cs">Zvětšit</value>
-                    <value xml:lang="da">For~stør</value>
-                    <value xml:lang="el">Με~γέθυνση</value>
-                    <value xml:lang="es">~Aumentar</value>
-                    <value xml:lang="fi">~Lähennä</value>
-                    <value xml:lang="fr">~Agrandir</value>
-                    <value xml:lang="he">‮זום קדימה‬</value>
-                    <value xml:lang="it">Zoom a~vanti</value>
-                    <value xml:lang="ja">拡大(~O)</value>
-                    <value xml:lang="ko">확대(~O)</value>
-                    <value xml:lang="nl">~Inzoomen</value>
-                    <value xml:lang="pl">~Powiększ</value>
-                    <value xml:lang="pt-BR">M~ais Zoom </value>
-                    <value xml:lang="ru">Увеличить</value>
-                    <value xml:lang="sk">Zväčš~iť</value>
-                    <value xml:lang="sv">Först~ora</value>
-                    <value xml:lang="th">ย่~อเข้า</value>
-                    <value xml:lang="tr">Büyüt</value>
-                    <value xml:lang="hi">~झूम अन्दर</value>
-                    <value xml:lang="zh-CN">放大(~O)</value>
-                    <value xml:lang="pt">~Aproximar</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -732,31 +157,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Ver~kleinern</value>
                     <value xml:lang="en-US">Zoo~m Out</value>
-                    <value xml:lang="ar">تصغير</value>
-                    <value xml:lang="no">Zoo~m Out</value>
-                    <value xml:lang="ca">Redueix el z~oom</value>
-                    <value xml:lang="zh-TW">縮小(~M)</value>
-                    <value xml:lang="cs">Zmenšit</value>
-                    <value xml:lang="da">For~mindsk</value>
-                    <value xml:lang="el">Σμί~κρυνση</value>
-                    <value xml:lang="es">~Reducir</value>
-                    <value xml:lang="fi">L~oitonna</value>
-                    <value xml:lang="fr">~Réduire</value>
-                    <value xml:lang="he">‮זום אחורה‬</value>
-                    <value xml:lang="it">Zoom in~dietro</value>
-                    <value xml:lang="ja">縮小(~M)</value>
-                    <value xml:lang="ko">축소(~M)</value>
-                    <value xml:lang="nl">Uit~zoomen</value>
-                    <value xml:lang="pl">Pomniejsz</value>
-                    <value xml:lang="pt-BR">M~enos Zoom</value>
-                    <value xml:lang="ru">Уменьшить</value>
-                    <value xml:lang="sk">Z~menšiť</value>
-                    <value xml:lang="sv">För~minska</value>
-                    <value xml:lang="th">ข~ยายออก</value>
-                    <value xml:lang="tr">Küçült</value>
-                    <value xml:lang="hi">~झूम बाहर</value>
-                    <value xml:lang="zh-CN">缩小(~M)</value>
-                    <value xml:lang="pt">A~fastar</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -766,31 +166,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Aktualisieren</value>
                     <value xml:lang="en-US">U~pdate</value>
-                    <value xml:lang="ar">تحديث</value>
-                    <value xml:lang="no">U~pdate</value>
-                    <value xml:lang="ca">A~ctualitza</value>
-                    <value xml:lang="zh-TW">更新(~P)</value>
-                    <value xml:lang="cs">Aktualizovat</value>
-                    <value xml:lang="da">O~pdater</value>
-                    <value xml:lang="el">~Ενημέρωση</value>
-                    <value xml:lang="es">Actuali~zar</value>
-                    <value xml:lang="fi">Päi~vitä</value>
-                    <value xml:lang="fr">~Actualiser</value>
-                    <value xml:lang="he">‮עידכון‬</value>
-                    <value xml:lang="it">~Aggiorna</value>
-                    <value xml:lang="ja">更新(~P)</value>
-                    <value xml:lang="ko">업데이트(~P)</value>
-                    <value xml:lang="nl">Bij~werken</value>
-                    <value xml:lang="pl">A~ktualizuj</value>
-                    <value xml:lang="pt-BR">~Atualizar</value>
-                    <value xml:lang="ru">Обновить</value>
-                    <value xml:lang="sk">Aktuali~zovať</value>
-                    <value xml:lang="sv">Uppd~atera</value>
-                    <value xml:lang="th">ป~รับปรุง</value>
-                    <value xml:lang="tr">Güncelle</value>
-                    <value xml:lang="hi">~अपडेट् करो</value>
-                    <value xml:lang="zh-CN">更新(~P)</value>
-                    <value xml:lang="pt">~Actualizar</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -800,31 +175,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Alles an~zeigen</value>
                     <value xml:lang="en-US">Sho~w All</value>
-                    <value xml:lang="ar">إظهار الكل</value>
-                    <value xml:lang="no">Sho~w All</value>
-                    <value xml:lang="ca">~Mostra-ho tot</value>
-                    <value xml:lang="zh-TW">全部顯示(~W)</value>
-                    <value xml:lang="cs">Zobrazit vše</value>
-                    <value xml:lang="da">Vis ~alt</value>
-                    <value xml:lang="el">Εμ~φάνιση όλων</value>
-                    <value xml:lang="es">Mostrar ~todo</value>
-                    <value xml:lang="fi">~Näytä kaikki</value>
-                    <value xml:lang="fr">~Tout afficher</value>
-                    <value xml:lang="he">‮הצגת הכל‬</value>
-                    <value xml:lang="it">Mostra ~tutto</value>
-                    <value xml:lang="ja">すべて表示(~W)</value>
-                    <value xml:lang="ko">모두 표시(~W)</value>
-                    <value xml:lang="nl">~Alles weergeven</value>
-                    <value xml:lang="pl">Pokaż ws~zystko</value>
-                    <value xml:lang="pt-BR">Mostrar ~Tudo</value>
-                    <value xml:lang="ru">Показать все</value>
-                    <value xml:lang="sk">Zo~braziť všetko</value>
-                    <value xml:lang="sv">Visa a~llt</value>
-                    <value xml:lang="th">แสด~งทั้งหมด</value>
-                    <value xml:lang="tr">Tümünü görüntüle</value>
-                    <value xml:lang="hi">~सब दिखाओ</value>
-                    <value xml:lang="zh-CN">全部显示(~W)</value>
-                    <value xml:lang="pt">~Ver tudo</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -834,62 +184,12 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Aus~wahl</value>
                     <value xml:lang="en-US">Selection</value>
-                    <value xml:lang="ar">تحديد</value>
-                    <value xml:lang="no">Selection</value>
-                    <value xml:lang="ca">~Selecció</value>
-                    <value xml:lang="zh-TW">選取</value>
-                    <value xml:lang="cs">Výběr</value>
-                    <value xml:lang="da">Udvalg</value>
-                    <value xml:lang="el">Επιλο~γή</value>
-                    <value xml:lang="es">~Selección</value>
-                    <value xml:lang="fi">Symbolivalikoima</value>
-                    <value xml:lang="fr">~Sélection</value>
-                    <value xml:lang="he">‮בחירה‬</value>
-                    <value xml:lang="it">Selezione</value>
-                    <value xml:lang="ja">選択</value>
-                    <value xml:lang="ko">선택</value>
-                    <value xml:lang="nl">~Selectie</value>
-                    <value xml:lang="pl">Wybór</value>
-                    <value xml:lang="pt-BR">~Seleção</value>
-                    <value xml:lang="ru">Выбор</value>
-                    <value xml:lang="sk">Výber</value>
-                    <value xml:lang="sv">~Urval</value>
-                    <value xml:lang="th">เลือก</value>
-                    <value xml:lang="tr">Seçim</value>
-                    <value xml:lang="hi">चुनाव</value>
-                    <value xml:lang="zh-CN">选择</value>
-                    <value xml:lang="pt">~Selecção</value>
                 </prop>
             </node>
             <node oor:name=".uno:FormelCursor" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Formel Cursor</value>
                     <value xml:lang="en-US">Formula Cursor</value>
-                    <value xml:lang="ar">مؤشر الصيغة</value>
-                    <value xml:lang="no">Formula Cursor</value>
-                    <value xml:lang="ca">Cursor de fórmula</value>
-                    <value xml:lang="zh-TW">公式游標</value>
-                    <value xml:lang="cs">Kurzor ve vzorci</value>
-                    <value xml:lang="da">Formelmarkør</value>
-                    <value xml:lang="el">Δρομέας τύπου</value>
-                    <value xml:lang="es">Cursor de fórmula</value>
-                    <value xml:lang="fi">Kaavakohdistin</value>
-                    <value xml:lang="fr">Curseur de formule</value>
-                    <value xml:lang="he">‮סמן נוסחאות‬</value>
-                    <value xml:lang="it">Cursore di formula</value>
-                    <value xml:lang="ja">数式カーソル</value>
-                    <value xml:lang="ko">수식 커서</value>
-                    <value xml:lang="nl">Formule-cursor</value>
-                    <value xml:lang="pl">Kursor formuły</value>
-                    <value xml:lang="pt-BR">Cursor de Fórmula</value>
-                    <value xml:lang="ru">Курсор формулы</value>
-                    <value xml:lang="sk">Kurzor pre vzorce</value>
-                    <value xml:lang="sv">Formelmarkör</value>
-                    <value xml:lang="th">เคอร์เซอร์สูตรคำนวณ</value>
-                    <value xml:lang="tr">Formül imleci</value>
-                    <value xml:lang="hi">सूत्र कर्सर</value>
-                    <value xml:lang="zh-CN">公式光标</value>
-                    <value xml:lang="pt">Cursor de fórmulas</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
