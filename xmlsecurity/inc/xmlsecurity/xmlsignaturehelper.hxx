@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 15:45:14 $
+ *  last change: $Author: mt $ $Date: 2004-08-18 09:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > GetSecurityEnvironment();
 
                 // After signing/veryfieng, get information about signatures
+    SignatureInformation  GetSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations GetSignatureInformations() const;
 
                 // See XSecController for documentation

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
+ *  last change: $Author: mt $ $Date: 2004-08-18 09:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateT
     return bSuccess;
 }
 
-int XSecController::findSignatureInfor( sal_Int32 nSecurityId)
+int XSecController::findSignatureInfor( sal_Int32 nSecurityId) const
 /****** XSecController/findSignatureInfor *************************************
  *
  *   NAME
@@ -1379,21 +1379,19 @@ void XSecController::exportSignature(
     xDocumentHandler->endElement( tag_Signature );
 }
 
-bool XSecController::getSignatureInfor( sal_Int32 nSecurityId, SignatureInformation& signatureInfor )
+SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurityId ) const
 {
-    int index = findSignatureInfor(nSecurityId);
-    if (index == -1)
+    SignatureInformation aInf( 0 );
+    int nIndex = findSignatureInfor(nSecurityId);
+    DBG_ASSERT( nIndex != -1, "getSignatureInformation - SecurityId is invalid!" );
+    if ( nIndex != -1)
     {
-        return false;
+        aInf = m_vInternalSignatureInformations[nIndex].signatureInfor;
     }
-    else
-    {
-        signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
-        return true;
-    }
+    return aInf;
 }
 
-SignatureInformations XSecController::getSignatureInformations()
+SignatureInformations XSecController::getSignatureInformations() const
 {
     SignatureInformations vInfors;
     int sigNum = m_vInternalSignatureInformations.size();

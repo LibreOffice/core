@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
+ *  last change: $Author: mt $ $Date: 2004-08-18 09:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,11 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     mpXSecController->releaseSignatureReader( );
 
     return !mbError;
+}
+
+SignatureInformation XMLSignatureHelper::GetSignatureInformation( sal_Int32 nSecurityId ) const
+{
+    return mpXSecController->getSignatureInformation( nSecurityId );
 }
 
 SignatureInformations XMLSignatureHelper::GetSignatureInformations() const

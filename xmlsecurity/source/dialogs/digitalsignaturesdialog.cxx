@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
+ *  last change: $Author: mt $ $Date: 2004-08-18 09:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,14 +285,15 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
             // Create a new one...
-            bool bDone = maSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
+            maSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
 
             // That's it...
             maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
             maSignatureHelper.EndMission();
 
-            if ( bDone )
+            sal_Int32 nStatus = maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
+            if ( nStatus == STATUS_CREATION_SUCCEED )
             {
                 uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
                 xTrans->commit();
