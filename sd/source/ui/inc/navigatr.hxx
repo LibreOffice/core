@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 14:14:26 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ private:
 protected:
 
     virtual void                Resize();
-    virtual long                ParentNotify(NotifyEvent& rNEvt);
+    virtual long                Notify(NotifyEvent& rNEvt);
 
 public:
                                 SdNavigatorWin( Window* pParent,
