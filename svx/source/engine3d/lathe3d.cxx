@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 18:38:06 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,18 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     bLatheCharacterMode = rDefault.GetDefaultLatheCharacterMode();
     bLatheCloseFront = rDefault.GetDefaultLatheCloseFront();
     bLatheCloseBack = rDefault.GetDefaultLatheCloseBack();
+}
+
+/*************************************************************************
+|*
+|* Give out simple line geometry
+|*
+\************************************************************************/
+
+void E3dLatheObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+{
+    // call parent
+    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************

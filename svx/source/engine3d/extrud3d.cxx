@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:07 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,18 @@ PolyPolygon3D E3dExtrudeObj::GetBackSide(const PolyPolygon3D& rFrontSide)
     }
 
     return aBackSide;
+}
+
+/*************************************************************************
+|*
+|* Give out simple line geometry
+|*
+\************************************************************************/
+
+void E3dExtrudeObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+{
+    // call parent
+    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 void E3dExtrudeObj::CreateGeometry()

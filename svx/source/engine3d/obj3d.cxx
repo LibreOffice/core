@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-26 14:04:27 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2562,6 +2562,56 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
 
 /*************************************************************************
 |*
+|* Give out simple line geometry
+|*
+\************************************************************************/
+
+void E3dCompoundObject::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+{
+    // use basic implementation here. Maybe optimized later.
+    rLinePolyPolygon.Clear();
+    B3dEntityBucket& rEntityBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetEntityBucket();
+    GeometryIndexValueBucket& rIndexBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetIndexBucket();
+    sal_uInt32 nPolyCounter(0);
+    sal_uInt32 nEntityCounter(0);
+
+    while(nPolyCounter < rIndexBucket.Count())
+    {
+        // next primitive
+        sal_uInt32 nUpperBound(rIndexBucket[nPolyCounter++].GetIndex());
+        Vector3D aLastPoint;
+
+        BOOL bLastLineVisible = rEntityBucket[nUpperBound - 1].IsEdgeVisible();
+        if(bLastLineVisible)
+            aLastPoint = rEntityBucket[nUpperBound - 1].Point().GetVector3D();
+
+        while(nEntityCounter < nUpperBound)
+        {
+            Vector3D aNewPoint = rEntityBucket[nEntityCounter].Point().GetVector3D();
+
+            if(bLastLineVisible)
+            {
+                if(aLastPoint != aNewPoint)
+                {
+                    // fill polygon
+                    Polygon3D aNewPoly(2);
+                    aNewPoly[0] = aLastPoint;
+                    aNewPoly[1] = aNewPoint;
+
+                    // create line geometry for polygon in eye coor to
+                    // have it always orthogonal to camera plane
+                    rLinePolyPolygon.Insert(aNewPoly);
+                }
+            }
+
+            bLastLineVisible = rEntityBucket[nEntityCounter++].IsEdgeVisible();
+            aLastPoint = aNewPoint;
+        }
+    }
+}
+
+/*************************************************************************
+|*
 |* Geometrieerzeugung
 |*
 \************************************************************************/
@@ -4355,7 +4405,148 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
             // #79585#
             pBase3D->SetActiveTexture();
 
-            pBase3D->DrawPolygonGeometry(GetDisplayGeometry(), TRUE);
+            // #78972#
+            // detect if lines need to be drawn specifically
+            const SfxItemSet& rSet = GetItemSet();
+            sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+            XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+            BOOL bDrawLineSolidHair = (aLineStyle == XLINE_SOLID && nLineWidth == 0);
+
+            if(bDrawLineSolidHair)
+            {
+                // simply draw the object geometry as line (as done before)
+                pBase3D->DrawPolygonGeometry(GetDisplayGeometry(), TRUE);
+            }
+            else
+            {
+                // convert object geometry to line geometry and draw as polygons
+                // in 3D space
+                PolyPolygon3D aPolyPoly3D;
+                PolyPolygon3D aLinePoly3D;
+
+                // get LineStyleParameterPack
+                LineStyleParameterPack aLineAttr(rSet, FALSE, *rOut.GetOutDev());
+                LineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, FALSE);
+
+                // get camera set
+                B3dTransformationSet* pTransSet = pBase3D->GetTransformationSet();
+
+                // get object geometry in eye coor
+                PolyPolygon3D aLinePolyPolygon;
+                GetLineGeometry(aLinePolyPolygon);
+                Matrix4D aMatObjectToEye = pTransSet->GetObjectTrans();
+                aMatObjectToEye *= pTransSet->GetOrientation();
+
+                for(sal_uInt16 nInd(0); nInd < aLinePolyPolygon.Count(); nInd++)
+                {
+                    // create line geometry for polygon in eye coor to
+                    // have it always orthogonal to camera plane
+                    Polygon3D aLinePoly = aLinePolyPolygon.GetObject(nInd);
+                    aLinePoly.Transform(aMatObjectToEye);
+                    aLineCreator.AddPolygon3D(aLinePoly);
+                }
+
+                if(aPolyPoly3D.Count() || aLinePoly3D.Count())
+                {
+                    Color aColorLine = ((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetValue();
+                    BOOL bGhosted = (rInfoRec.pPV && rInfoRec.pPV->GetView().DoVisualizeEnteredGroup()) ? rInfoRec.bNotActive : FALSE;
+
+                    if(bGhosted)
+                        aColorLine = Color((aColorLine.GetRed() >> 1) + 0x80, (aColorLine.GetGreen() >> 1) + 0x80, (aColorLine.GetBlue() >> 1) + 0x80);
+
+                    // set line color
+                    pBase3D->SetColor(aColorLine);
+
+                    // set base color
+                    sal_uInt16 nLineTrans = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
+                    Color aColorLineWithTransparency(aColorLine);
+                    aColorLineWithTransparency.SetTransparency((UINT8)(nLineTrans * 255 / 100));
+
+                    pBase3D->SetMaterial(aColorLine, Base3DMaterialAmbient);
+                    pBase3D->SetMaterial(aColorLineWithTransparency, Base3DMaterialDiffuse);
+                    pBase3D->SetMaterial(GetMaterialSpecular(), Base3DMaterialSpecular);
+                    pBase3D->SetMaterial(GetMaterialEmission(), Base3DMaterialEmission);
+                    pBase3D->SetShininess(GetMaterialSpecularIntensity());
+                    if(GetUseDifferentBackMaterial())
+                    {
+                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialAmbient), Base3DMaterialAmbient, Base3DMaterialBack);
+                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialDiffuse), Base3DMaterialDiffuse, Base3DMaterialBack);
+                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialSpecular), Base3DMaterialSpecular, Base3DMaterialBack);
+                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialEmission), Base3DMaterialEmission, Base3DMaterialBack);
+                        pBase3D->SetShininess(aBackMaterial.GetShininess(), Base3DMaterialBack);
+                    }
+
+                    if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_WHITEFILL) != 0)
+                    {
+                        // set material to black and white mode
+                        Color aColorWhite(COL_WHITE);
+                        Color aColorWhiteWithTransparency(COL_WHITE);
+                        aColorWhiteWithTransparency.SetTransparency((UINT8)(nLineTrans * 255 / 100));
+
+                        pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient);
+                        pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse);
+
+                        if(GetUseDifferentBackMaterial())
+                        {
+                            pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient, Base3DMaterialBack);
+                            pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
+                        }
+                    }
+
+                    if(aPolyPoly3D.Count())
+                    {
+                        // draw the line geometry as area polygons
+                        pBase3D->SetRenderMode(Base3DRenderFill);
+                        pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
+
+                        for(sal_uInt32 a(0); a < aPolyPoly3D.Count(); a++)
+                        {
+                            // start new primitive
+                            pBase3D->StartPrimitive(Base3DPolygon);
+                            const Polygon3D& rPolygon = aPolyPoly3D[(sal_uInt16)a];
+
+                            for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
+                            {
+                                // use backward loop to have the correct orientation since
+                                // the geometry was created in eye coor (with Z-flipped coordinate system)
+                                Vector3D aVec = rPolygon[rPolygon.GetPointCount() - sal_uInt16(b + 1)];
+                                aVec = pTransSet->EyeToObjectCoor(aVec);
+                                pBase3D->AddVertex(aVec);
+                            }
+
+                            // draw primitive
+                            pBase3D->EndPrimitive();
+                        }
+                    }
+
+                    if(aLinePoly3D.Count())
+                    {
+                        // draw the line geometry as 3d lines
+                        pBase3D->SetRenderMode(Base3DRenderLine);
+                        pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, TRUE);
+
+                        for(sal_uInt32 a(0); a < aLinePoly3D.Count(); a++)
+                        {
+                            // start new primitive
+                            pBase3D->StartPrimitive(Base3DLineStrip);
+                            const Polygon3D& rPolygon = aLinePoly3D[(sal_uInt16)a];
+
+                            for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
+                            {
+                                Vector3D aVec = rPolygon[sal_uInt16(b)];
+                                aVec = pTransSet->EyeToObjectCoor(aVec);
+                                pBase3D->AddVertex(aVec);
+                            }
+
+                            // draw primitive
+                            pBase3D->EndPrimitive();
+                        }
+
+                        pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
+                    }
+                }
+            }
+
             pBase3D->GetLightGroup()->EnableLighting(bLightingWasEnabled);
             pBase3D->SetLightGroup(pBase3D->GetLightGroup());
         }
@@ -4616,20 +4807,15 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
     }
     else
     {
-        // Normaler 2D Schatten
-        Vector3D aPoint;
-
         // ObjectTrans setzen
         Matrix4D mTransform = GetFullTransform();
         rSet.SetObjectTrans(mTransform);
 
-        if(DrawShadowAsOutline())
+        if(FALSE /* #78972# DrawShadowAsOutline()*/)
         {
             //SubPolygon mit Punktpaaren bilden
-            BOOL bLastLineVisible;
             UINT16 nPolySize = (UINT16)(rEntityBucket.Count() * 2);
             Polygon aPoly(nPolySize);
-            Vector3D aLast;
             Point aLastPolyPoint;
             nPolyPos = 0;
 
@@ -4639,9 +4825,10 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
                 nUpperBound = rIndexBucket[nPolyCounter++].GetIndex();
 
                 // Polygon bilden
-                if(bLastLineVisible = rEntityBucket[nUpperBound - 1].IsEdgeVisible())
+                BOOL bLastLineVisible = rEntityBucket[nUpperBound - 1].IsEdgeVisible();
+                if(bLastLineVisible)
                 {
-                    aLast = rEntityBucket[nUpperBound - 1].Point().GetVector3D();
+                    Vector3D aLast = rEntityBucket[nUpperBound - 1].Point().GetVector3D();
                     aLast = rSet.ObjectToViewCoor(aLast);
                     aLastPolyPoint.X() = (long)(aLast.X() + 0.5) + nXDist;
                     aLastPolyPoint.Y() = (long)(aLast.Y() + 0.5) + nYDist;
@@ -4649,7 +4836,7 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
 
                 while(nEntityCounter < nUpperBound)
                 {
-                    aPoint = rEntityBucket[nEntityCounter].Point().GetVector3D();
+                    Vector3D aPoint = rEntityBucket[nEntityCounter].Point().GetVector3D();
                     aPoint = rSet.ObjectToViewCoor(aPoint);
                     aPolyPoint.X() = (long)(aPoint.X() + 0.5) + nXDist;
                     aPolyPoint.Y() = (long)(aPoint.Y() + 0.5) + nYDist;
@@ -4669,7 +4856,6 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
 
                     // naechster Punkt
                     aLastPolyPoint = aPolyPoint;
-                    aLast = aPoint;
                     bLastLineVisible = rEntityBucket[nEntityCounter++].IsEdgeVisible();
                 }
             }
@@ -4692,7 +4878,7 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
                 // Polygon fuellen
                 while(nEntityCounter < nUpperBound)
                 {
-                    aPoint = rEntityBucket[nEntityCounter++].Point().GetVector3D();
+                    Vector3D aPoint = rEntityBucket[nEntityCounter++].Point().GetVector3D();
                     aPoint = rSet.ObjectToViewCoor(aPoint);
                     aPolyPoint.X() = (long)(aPoint.X() + 0.5) + nXDist;
                     aPolyPoint.Y() = (long)(aPoint.Y() + 0.5) + nYDist;

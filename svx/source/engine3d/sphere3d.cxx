@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,18 @@ void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     // Defaults setzen
     aCenter = rDefault.GetDefaultSphereCenter();
     aSize = rDefault.GetDefaultSphereSize();
+}
+
+/*************************************************************************
+|*
+|* Give out simple line geometry
+|*
+\************************************************************************/
+
+void E3dSphereObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+{
+    // call parent
+    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************

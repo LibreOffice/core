@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygn3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,18 @@ void E3dPolygonObj::SetPolyTexture3D(const PolyPolygon3D& rNewPolyTexture3D)
 SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL bBezier) const
 {
     return NULL;
+}
+
+/*************************************************************************
+|*
+|* Give out simple line geometry
+|*
+\************************************************************************/
+
+void E3dPolygonObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+{
+    // call parent
+    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************

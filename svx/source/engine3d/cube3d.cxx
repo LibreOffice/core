@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:07 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,18 @@ UINT16 E3dCubeObj::GetObjIdentifier() const
 SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL bBezier) const
 {
     return NULL;
+}
+
+/*************************************************************************
+|*
+|* Give out simple line geometry
+|*
+\************************************************************************/
+
+void E3dCubeObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+{
+    // call parent
+    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************
