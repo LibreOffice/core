@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-29 08:42:15 $
+ *  last change: $Author: tl $ $Date: 2002-09-17 08:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
     SmEditWindow        aEdit;
     SmEditController    aController;
     Timer               aGrabTimer;
-
+    BOOL                bExiting;
 
 protected :
     DECL_LINK(UpdateTimeoutHdl, Timer *);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-29 08:41:21 $
+ *  last change: $Author: tl $ $Date: 2002-09-17 08:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,8 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings, SfxChildWindow *pChildWin
                                Window *pParent) :
     SfxDockingWindow(pBindings, pChildWindow, pParent, SmResId(RID_CMDBOXWINDOW)),
     aEdit       (*this),
-    aController (aEdit, SID_TEXT, *pBindings)
+    aController (aEdit, SID_TEXT, *pBindings),
+    bExiting    (FALSE)
 {
     Hide ();
     aGrabTimer.SetTimeout (1000);
@@ -583,6 +584,7 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings, SfxChildWindow *pChildWin
 
 SmCmdBoxWindow::~SmCmdBoxWindow ()
 {
+    bExiting = TRUE;
     aGrabTimer.Stop ();
 }
 
@@ -745,7 +747,8 @@ void SmCmdBoxWindow::ToggleFloatingMode()
 
 void SmCmdBoxWindow::GetFocus()
 {
-    aEdit.GrabFocus();
+    if (!bExiting)
+        aEdit.GrabFocus();
 }
 
 /**************************************************************************/
