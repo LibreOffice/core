@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #endif
 #ifndef _SVTOOLS_SVMEDIT2_HXX
 #include "svmedit2.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } };
@@ -242,7 +246,7 @@ private:
     SvtExtendedMultiLineEdit_Impl*  pEditWin;
     Window*                         pTextWin;
     Window*                         pEmptyWin;
-    LanguageType                    eLangType;
+    ::com::sun::star::lang::Locale  aLocale;
     SvtDocInfoTable_Impl            aInfoTable;
     String                          aCurrentURL;
     ::rtl::OUString                 m_aOpenURL;
