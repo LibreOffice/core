@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-01 09:50:00 $
+ *  last change: $Author: iha $ $Date: 2002-10-23 15:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,9 @@
 #include <osl/file.hxx>
 #endif
 
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 
 #include "sdpage.hxx"
 #include "helpids.h"
@@ -245,6 +248,10 @@ public:
         files and insert them into a listbox.
     */
     void    ScanDocmenu         (void);
+    /** Flag that is set to TRUE after the recently used files have been
+        scanned.
+    */
+    BOOL m_bRecentDocumentsReady;
 
     /** When the list of templates has not been scanned already this is done
         when this method is called.  That includes requesting the whole list
@@ -449,6 +456,7 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     xDocShell (NULL)
 {
     m_aPageListFile += sal_Unicode('?'),
+    m_bRecentDocumentsReady = FALSE;
     m_bTemplatesReady = FALSE;
     m_bPreviewUpdating = FALSE;
 
@@ -764,6 +772,9 @@ void AssistentDlgImpl::EndDialog( long nResult )
 
 void    AssistentDlgImpl::ScanDocmenu   (void)
 {
+    if( m_bRecentDocumentsReady )
+        return;
+
     uno::Sequence<uno::Sequence<beans::PropertyValue> > aHistory =
         SvtHistoryOptions().GetList (ePICKLIST);
 
@@ -814,6 +825,15 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             }
         }
     }
+    m_bRecentDocumentsReady = TRUE;
+    try
+    {
+        UpdatePreview(TRUE);
+    }
+    catch (uno::RuntimeException& e)
+    {
+        // Ignore all exceptions.
+    }
 }
 
 
@@ -822,8 +842,6 @@ void AssistentDlgImpl::ProvideTemplates (void)
 {
     if ( ! m_bTemplatesReady)
     {
-        ScanDocmenu ();
-
         TemplateScanner aScanner;
         aScanner.Scan ();
         TemplateScanDone (aScanner.GetFolderList());
@@ -1208,6 +1226,8 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
 
     if(eType == ST_TEMPLATE)
         ProvideTemplates();
+    else if(eType == ST_OPEN)
+        ScanDocmenu();
 
     SetStartType( eType );
 
@@ -1229,9 +1249,7 @@ IMPL_LINK( AssistentDlgImpl, NextPageHdl, PushButton *, EMPTYARG )
     // When changing from the first to the second page make sure that the
     // templates are present.
     if (m_aAssistentFunc.GetCurrentPage() == 1)
-    {
         ProvideTemplates();
-    }
 
     // Change to the next page.
     LeavePage();
@@ -1671,6 +1689,32 @@ AssistentDlg::AssistentDlg(Window* pParent, BOOL bAutoPilot) :
 
 IMPL_LINK( AssistentDlg, FinishHdl, OKButton *, EMPTYARG )
 {
+    if( GetStartType() == ST_OPEN )
+    {
+        //if we do not have a file here asked for one before ending the dialog
+        String aFileToOpen = GetDocPath();
+        if(aFileToOpen.Len() == 0)
+        {
+            sfx2::FileDialogHelper aFileDlg( WB_OPEN, SdDrawDocShell::Factory() );
+
+            if ( aFileDlg.Execute() == ERRCODE_NONE )
+                aFileToOpen = aFileDlg.GetPath();
+            if( aFileToOpen.Len() == 0)
+                return 1;
+            else
+            {
+                //add the selected file to the recent-file-listbox and select the new entry
+                //this is necessary for 'GetDocPath()' returning the selected file after end of dialog
+
+                INetURLObject aURL;
+                aURL.SetSmartURL(aFileToOpen);
+                m_pImpl->m_aOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
+                USHORT nNewPos = m_pImpl->m_pPage1OpenLB->InsertEntry(aURL.getName());
+                m_pImpl->m_pPage1OpenLB->SelectEntryPos(nNewPos);
+            }
+        }
+    }
+
     //Ende
     m_pImpl->EndDialog(RET_OK);
     EndDialog(RET_OK);
