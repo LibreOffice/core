@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddedata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ DdeData::DdeData( const void* p, long n, ULONG f )
     pImp->hData = NULL;
     pImp->pData = (LPBYTE)p;
     pImp->nData = n;
-    SetFormat( f );
+    pImp->nFmt  = f;
 }
 
 // --- DdeData::DdeData() ------------------------------------------
@@ -142,44 +142,12 @@ void DdeData::Lock()
 
 ULONG DdeData::GetFormat() const
 {
-    ULONG nRet = pImp->nFmt;
-    switch( nRet )
-    {
-    case CF_TEXT:
-        nRet = FORMAT_STRING;
-        break;
+    return pImp->nFmt;
+}
 
-    case CF_BITMAP:
-        nRet = FORMAT_BITMAP;
-        break;
-
-    case CF_METAFILEPICT:
-        nRet = FORMAT_GDIMETAFILE;
-        break;
-
-    default:
-#if defined(WIN) || defined(WNT)
-        if ( pImp->nFmt >= CF_MAX )
-        {
-            TCHAR szName[ 256 ];
-
-            if( GetClipboardFormatName( pImp->nFmt, szName, sizeof(szName) ) )
-                nRet = SotExchange::RegisterFormatName( String(szName) );
-        }
-#endif
-#if defined(PM2)
-        if( pImp->nFmt > CF_PALETTE )
-        {
-            char szName[ 256 ];
-
-            HATOMTBL hSysTable = WinQuerySystemAtomTable();
-            WinQueryAtomName( hSysTable, (ATOM)pImp->nFmt, (PSZ)szName,
-                                sizeof( szName ) );
-            nRet = SotExchange::RegisterFormatName( String( szName ) );
-        }
-#endif
-    }
-    return nRet;
+void DdeData::SetFormat( ULONG nFmt )
+{
+    pImp->nFmt = nFmt;
 }
 
 // --- DdeData::operator const char*() -----------------------------
@@ -211,43 +179,82 @@ DdeData& DdeData::operator = ( const DdeData& rData )
     return *this;
 }
 
-// --- DdeData::SetFormat() ---------------------------------------
-
-void DdeData::SetFormat( ULONG nFmt )
+ULONG DdeData::GetExternalFormat( ULONG nFmt )
 {
     switch( nFmt )
     {
     case FORMAT_STRING:
-        pImp->nFmt = CF_TEXT;
+        nFmt = CF_TEXT;
         break;
     case FORMAT_BITMAP:
-        pImp->nFmt = CF_BITMAP;
+        nFmt = CF_BITMAP;
         break;
     case FORMAT_GDIMETAFILE:
-        pImp->nFmt = CF_METAFILEPICT;
+        nFmt = CF_METAFILEPICT;
         break;
 
     default:
         {
+#if defined(WNT) || defined(WIN) || defined( PM2 )
             String aName( SotExchange::GetFormatName( nFmt ) );
 
 #if defined(WNT) || defined(WIN)
 
             if( aName.Len() )
-                pImp->nFmt = RegisterClipboardFormat( aName.GetBuffer() );
-            else
+                nFmt = RegisterClipboardFormat( aName.GetBuffer() );
 #endif
 #if defined( PM2 )
 
             if( aName.Len() )
             {
                 HATOMTBL hSysTable = WinQuerySystemAtomTable();
-                pImp->nFmt = (ULONG)WinAddAtom( hSysTable, (PSZ)aName.GetBuffer() );
+                nFmt = (ULONG)WinAddAtom( hSysTable, (PSZ)aName.GetBuffer() );
             }
-            else
 #endif
-                pImp->nFmt = (USHORT)nFmt;
+#endif
         }
     }
+    return nFmt;
+}
+
+ULONG DdeData::GetInternalFormat( ULONG nFmt )
+{
+    switch( nFmt )
+    {
+    case CF_TEXT:
+        nFmt = FORMAT_STRING;
+        break;
+
+    case CF_BITMAP:
+        nFmt = FORMAT_BITMAP;
+        break;
+
+    case CF_METAFILEPICT:
+        nFmt = FORMAT_GDIMETAFILE;
+        break;
+
+    default:
+#if defined(WIN) || defined(WNT)
+        if( nFmt >= CF_MAX )
+        {
+            TCHAR szName[ 256 ];
+
+            if( GetClipboardFormatName( nFmt, szName, sizeof(szName) ) )
+                nFmt = SotExchange::RegisterFormatName( String(szName) );
+        }
+#endif
+#if defined(PM2)
+        if( nFmt > CF_PALETTE )
+        {
+            char szName[ 256 ];
+
+            HATOMTBL hSysTable = WinQuerySystemAtomTable();
+            WinQueryAtomName( hSysTable, (ATOM)nFmt, (PSZ)szName,
+                                sizeof( szName ) );
+            nFmt = SotExchange::RegisterFormatName( String( szName ) );
+        }
+#endif
+    }
+    return nFmt;
 }
 

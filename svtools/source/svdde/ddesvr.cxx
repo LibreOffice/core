@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddesvr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,15 +323,18 @@ found:
             }
             else if( DDEGETPUTITEM == pItem->nType )
                 pData = ((DdeGetPutItem*)pItem)->Get(
-                            DdeData( NULL, 0, nCbType ).GetFormat() );
+                            DdeData::GetInternalFormat( nCbType ) );
             else
-                pData = pTopic->Get( DdeData( NULL, 0, nCbType ).GetFormat() );
+                pData = pTopic->Get( DdeData::GetInternalFormat( nCbType ));
 
             if ( pData )
                 return DdeCreateDataHandle( pInst->hDdeInstSvr,
                                             (LPBYTE)pData->pImp->pData,
                                             pData->pImp->nData,
-                                            0, hText2, pData->pImp->nFmt, 0);
+                                            0, hText2,
+                                            DdeData::GetExternalFormat(
+                                                pData->pImp->nFmt ),
+                                            0 );
             }
             break;
 
@@ -340,7 +343,7 @@ found:
             {
                 DdeData d;
                 d.pImp->hData = hData;
-                d.pImp->nFmt  = nCbType;
+                d.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 d.Lock();
                 if( DDEGETPUTITEM == pItem->nType )
                     bRes = ((DdeGetPutItem*)pItem)->Put( &d );
@@ -392,7 +395,7 @@ found:
             {
                 DdeData aExec;
                 aExec.pImp->hData = hData;
-                aExec.pImp->nFmt  = nCbType;
+                aExec.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 aExec.Lock();
                 String aName;
 
@@ -631,25 +634,23 @@ BOOL DdeService::HasCbFormat( USHORT nFmt )
 
 BOOL DdeService::HasFormat( ULONG nFmt )
 {
-    DdeData d( NULL, 0, nFmt );
-    return HasCbFormat( d.pImp->nFmt );
+    return HasCbFormat( (USHORT)DdeData::GetExternalFormat( nFmt ));
 }
 
 // --- DdeService::AddFormat() -------------------------------------
 
 void DdeService::AddFormat( ULONG nFmt )
 {
-    DdeData d( NULL, 0, nFmt );
-    aFormats.Remove( (long)d.pImp->nFmt );
-    aFormats.Insert( (long)d.pImp->nFmt );
+    nFmt = DdeData::GetExternalFormat( nFmt );
+    aFormats.Remove( nFmt );
+    aFormats.Insert( nFmt );
 }
 
 // --- DdeService::RemoveFormat() ----------------------------------
 
 void DdeService::RemoveFormat( ULONG nFmt )
 {
-    DdeData d( NULL, 0, nFmt );
-    aFormats.Remove( (long)d.pImp->nFmt );
+    aFormats.Remove( DdeData::GetExternalFormat( nFmt ) );
 }
 
 // --- DdeTopic::DdeTopic() ----------------------------------------

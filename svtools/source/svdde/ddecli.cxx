@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddecli.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,13 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
 // static DWORD        hDdeInst  = NULL;
 // static short        nInstance = 0;
 
@@ -183,7 +190,7 @@ HDDEDATA CALLBACK _export DdeInternal::CliCallback(
 
                 DdeData d;
                 d.pImp->hData = hData;
-                d.pImp->nFmt  = nCbType;
+                d.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 d.Lock();
                 t->Data( &d );
                 nRet = (HDDEDATA)DDE_FACK;
@@ -349,7 +356,8 @@ void DdeTransaction::Execute()
     HSZ     hItem = *pName;
     void*   pData = (void*)(const void *)aDdeData;
     DWORD   nData = (DWORD)(long)aDdeData;
-    UINT    nFmt  = aDdeData.pImp->nFmt;
+    ULONG   nIntFmt = aDdeData.pImp->nFmt;
+    UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
     DdeInstData* pInst = ImpGetInstData();
 
     if ( nType == XTYP_EXECUTE )
@@ -363,7 +371,7 @@ void DdeTransaction::Execute()
     {
         HDDEDATA hData = DdeClientTransaction( (unsigned char*)pData,
                                                nData, rDde.pImp->hConv,
-                                               hItem, nFmt, (UINT)nType,
+                                               hItem, nExtFmt, (UINT)nType,
                                                (DWORD)nTime, (DWORD FAR*)NULL );
 
         rDde.pImp->nStatus = DdeGetLastError( pInst->hDdeInstCli );
@@ -372,7 +380,7 @@ void DdeTransaction::Execute()
             {
                 DdeData d;
                 d.pImp->hData = hData;
-                d.pImp->nFmt  = nFmt;
+                d.pImp->nFmt = nIntFmt;
                 d.Lock();
                 Data( &d );
             }
@@ -386,7 +394,7 @@ void DdeTransaction::Execute()
         nId = 0;
         bBusy = TRUE;
         HDDEDATA hRet = DdeClientTransaction( (unsigned char*)pData, nData,
-                                            rDde.pImp->hConv, hItem, nFmt,
+                                            rDde.pImp->hConv, hItem, nExtFmt,
                                             (UINT)nType, TIMEOUT_ASYNC,
                                             (DWORD FAR *) ((long*) &nId) );
         rDde.pImp->nStatus = hRet ? DMLERR_NO_ERROR
@@ -403,9 +411,12 @@ const String& DdeTransaction::GetName() const
 
 // --- DdeTransaction::Data() --------------------------------------
 
+
 void __EXPORT DdeTransaction::Data( const DdeData* p )
 {
+    Application::GetSolarMutex().acquire();
     aData.Call( (void*)p );
+    Application::GetSolarMutex().release();
 }
 
 // --- DdeTransaction::Done() --------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddeimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-13 14:39:36 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ struct DdeDataImp
     HDDEDATA        hData;
     LPBYTE          pData;
     long            nData;
-    USHORT          nFmt;
+    ULONG           nFmt;
 };
 
 class DdeConnections;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:40:01 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,63 @@ sal_Bool SotExchange::GetFormatDataFlavor( ULONG nFormat, DataFlavor& rFlavor )
 
 /*************************************************************************
 |*
+|*    SotExchange::GetFormatMimeType( ULONG nFormat )
+|*
+*************************************************************************/
+
+String SotExchange::GetFormatMimeType( ULONG nFormat )
+{
+    String sMimeType;
+    if( SOT_FORMATSTR_ID_USER_END >= nFormat )
+        sMimeType.AssignAscii( ( aFormatArray_Impl + nFormat )->pMimeType );
+    else
+    {
+        List& rL = InitFormats_Impl();
+
+        nFormat -= SOT_FORMATSTR_ID_USER_END + 1;
+
+        if( rL.Count() > nFormat )
+            sMimeType = ((DataFlavor*) rL.GetObject( nFormat ))->MimeType;
+    }
+
+    DBG_ASSERT( sMimeType.Len(), "SotExchange::GetFormatMimeType(): DataFlavor not initialized" );
+
+    return sMimeType;
+}
+
+/*************************************************************************
+|*
+|*    SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
+|*
+*************************************************************************/
+
+ULONG SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
+{
+    ULONG i, nMax = SOT_FORMAT_FILE_LIST;
+    for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
+        if( rMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
+            return i;
+
+    nMax = SOT_FORMATSTR_ID_USER_END;
+    for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
+        if( rMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
+            return i;
+
+    // dann in der dynamischen Liste
+    List& rL = InitFormats_Impl();
+    ::rtl::OUString aMimeType( rMimeType );
+    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
+    {
+        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        if( pFlavor && aMimeType == pFlavor->MimeType )
+            return i + SOT_FORMATSTR_ID_USER_END + 1;
+    }
+
+    return 0;
+}
+
+/*************************************************************************
+|*
 |*    SotExchange::GetFormatName()
 |*
 |*    Beschreibung      CLIP.SDW
@@ -352,15 +409,16 @@ sal_Bool SotExchange::GetFormatDataFlavor( ULONG nFormat, DataFlavor& rFlavor )
 ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
     // teste zuerst die Standard - Name
-    const String    aMimeType( rFlavor.MimeType );
-    ULONG           i, nMax = SOT_FORMAT_FILE_LIST;
+    const ::rtl::OUString& rMimeType = rFlavor.MimeType;
+    const String aMimeType( rMimeType );
+    ULONG i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
-        if( COMPARE_EQUAL == aMimeType.CompareToAscii( aFormatArray_Impl[ i ].pMimeType ) )
+        if( aMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
-        if( COMPARE_EQUAL == aMimeType.CompareToAscii( aFormatArray_Impl[ i ].pMimeType ) )
+        if( aMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
     // dann in der dynamischen Liste
@@ -368,7 +426,7 @@ ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
     for( i = 0, nMax = rL.Count(); i < nMax; i++ )
     {
         DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
-        if( pFlavor && rFlavor.MimeType == pFlavor->MimeType )
+        if( pFlavor && rMimeType == pFlavor->MimeType )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 
