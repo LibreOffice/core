@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:09:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3235,43 +3235,6 @@ SwTwips MA_FASTCALL CalcRowRstHeight( SwLayoutFrm *pRow )
         pLow = (SwLayoutFrm*)pLow->GetNext();
     }
     return nRstHeight;
-}
-
-
-void MA_ParkCrsr( SwPageDesc *pDesc, SwCrsrShell &rSh )
-{
-    //Footer
-    const SwFrmFmt  *pFmt = pDesc->GetMaster().GetFooter().GetFooterFmt();
-    const SwFmtCntnt  *pCnt;
-    if( pFmt )
-    {
-        pCnt = &pFmt->GetCntnt();
-        if ( pCnt->GetCntntIdx() )
-            rSh.ParkCrsr( *pCnt->GetCntntIdx() );
-    }
-    pFmt = pDesc->GetLeft().GetFooter().GetFooterFmt();
-    if( pFmt )
-    {
-        pCnt = &pFmt->GetCntnt();
-        if ( pCnt->GetCntntIdx() )
-            rSh.ParkCrsr( *pCnt->GetCntntIdx() );
-    }
-
-    //Header
-    pFmt = pDesc->GetMaster().GetHeader().GetHeaderFmt();
-    if( pFmt )
-    {
-        pCnt = &pFmt->GetCntnt();
-        if ( pCnt->GetCntntIdx() )
-            rSh.ParkCrsr( *pCnt->GetCntntIdx() );
-    }
-    pFmt = pDesc->GetLeft().GetHeader().GetHeaderFmt();
-    if( pFmt )
-    {
-        pCnt = &pFmt->GetCntnt();
-        if ( pCnt->GetCntntIdx() )
-            rSh.ParkCrsr( *pCnt->GetCntntIdx() );
-    }
 }
 
 const SwFrm* MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage )
