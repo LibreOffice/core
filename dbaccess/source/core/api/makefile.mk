@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: oj $ $Date: 2002-10-25 08:55:20 $
+#   last change: $Author: vg $ $Date: 2003-12-16 12:40:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,37 +74,39 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/FilteredContainer.obj	\
-        $(SLO)$/TableDeco.obj			\
-        $(SLO)$/RowSetCacheIterator.obj	\
-        $(SLO)$/RowSet.obj				\
-        $(SLO)$/column.obj				\
-        $(SLO)$/RowSetBase.obj			\
-        $(SLO)$/CRowSetDataColumn.obj	\
-        $(SLO)$/CRowSetColumn.obj		\
-        $(SLO)$/querycomposer.obj		\
-        $(SLO)$/CIndexes.obj			\
-        $(SLO)$/CKey.obj				\
-        $(SLO)$/CKeys.obj				\
-        $(SLO)$/CKeyColumns.obj			\
-        $(SLO)$/BookmarkSet.obj			\
-        $(SLO)$/KeySet.obj				\
-        $(SLO)$/StaticSet.obj			\
-        $(SLO)$/CacheSet.obj			\
-        $(SLO)$/RowSetCache.obj			\
-        $(SLO)$/definitioncolumn.obj	\
-        $(SLO)$/resultcolumn.obj		\
-        $(SLO)$/datacolumn.obj			\
-        $(SLO)$/resultset.obj			\
-        $(SLO)$/statement.obj			\
-        $(SLO)$/preparedstatement.obj	\
-        $(SLO)$/callablestatement.obj	\
-        $(SLO)$/query.obj				\
-        $(SLO)$/querycontainer.obj		\
-        $(SLO)$/table.obj				\
-        $(SLO)$/viewcontainer.obj		\
-        $(SLO)$/tablecontainer.obj		\
-        $(SLO)$/querydescriptor.obj		\
+        $(SLO)$/FilteredContainer.obj			\
+        $(SLO)$/TableDeco.obj					\
+        $(SLO)$/RowSetCacheIterator.obj			\
+        $(SLO)$/RowSet.obj						\
+        $(SLO)$/column.obj						\
+        $(SLO)$/RowSetBase.obj					\
+        $(SLO)$/CRowSetDataColumn.obj			\
+        $(SLO)$/CRowSetColumn.obj				\
+        $(SLO)$/querycomposer.obj				\
+        $(SLO)$/CIndexes.obj					\
+        $(SLO)$/CKey.obj						\
+        $(SLO)$/CKeys.obj						\
+        $(SLO)$/CKeyColumns.obj					\
+        $(SLO)$/BookmarkSet.obj					\
+        $(SLO)$/KeySet.obj						\
+        $(SLO)$/StaticSet.obj					\
+        $(SLO)$/CacheSet.obj					\
+        $(SLO)$/RowSetCache.obj					\
+        $(SLO)$/definitioncolumn.obj			\
+        $(SLO)$/resultcolumn.obj				\
+        $(SLO)$/datacolumn.obj					\
+        $(SLO)$/resultset.obj					\
+        $(SLO)$/statement.obj					\
+        $(SLO)$/preparedstatement.obj			\
+        $(SLO)$/callablestatement.obj			\
+        $(SLO)$/query.obj						\
+        $(SLO)$/querycontainer.obj				\
+        $(SLO)$/table.obj						\
+        $(SLO)$/viewcontainer.obj				\
+        $(SLO)$/tablecontainer.obj				\
+        $(SLO)$/querydescriptor.obj				\
+        $(SLO)$/SingleSelectQueryComposer.obj	\
+        $(SLO)$/HelperCollections.obj			\
         $(SLO)$/datasettings.obj
 
 # --- Targets ----------------------------------
