@@ -249,5 +249,5 @@ $(NULLPRQ) .PHONY :;
 # Check for a Local project file, gets parsed before user makefile.
 .INCLUDE .IGNORE .NOINFER: "project.mk"
 
-.MAKEFILES :- makefile.rc makefile.mk MAKEFILE.MK $(CONFIG_PROJECT)$/makefile.rc $(SOLARENV)$/inc$/found_no.mk
+.MAKEFILES :- makefile.mk MAKEFILE.MK $(CONFIG_PROJECT)$/makefile.rc $(SOLARENV)$/inc$/found_no.mk
 

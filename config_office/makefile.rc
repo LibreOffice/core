@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: armin $ $Date: 2001-06-28 11:03:07 $
+#   last change: $Author: mh $ $Date: 2001-08-07 07:51:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,17 +62,11 @@
 
 
 # 
-# mark this makefile as a recursive one
-# 
-
-MAKEFILERC=yes
-
-# 
 # implementation of cvs checkout
 # 
 
 .IF "$(checkout)"==""
-all_target: ALLTAR
+all_target:  build_all ALLTAR
 .ELSE	# "$(checkout)"==""
 .IF "$(checkout)"=="true"
 % : $(NULL)
@@ -81,15 +75,15 @@ all_target: ALLTAR
 % : $(NULL)
 	_cvs co -r$(checkout) $@
 .ENDIF	# "$(checkout)"=="true"
-all_subdirs : $(RC_SUBDIRS)
+all_subdirs : $(BUILD_SUBDIRS)
 .ENDIF	# "$(checkout)"==""
 
 # 
-# macro RC_SUBDIRS handles iteration over
+# macro BUILD_SUBDIRS handles iteration over
 # all mandatory sub directories
 # 
 
-RC_SUBDIRS =  \
+BUILD_SUBDIRS =  \
 	UnoControls \
 	XmlSearch \
 	automation \
@@ -186,6 +180,10 @@ RC_SUBDIRS =  \
 	xmloff \
 	xmlscript
 
+build_all .SETDIR=instsetoo/prj:
+	@+perl $(SOLARENV)$/bin$/build.pl -all product=full
+
+
 # 
 # bootstrap target
 # 
@@ -201,8 +199,8 @@ bootstrap .PHONY :
 configure .PHONY SETDIR=config_office :
 	@configure
 
-install: instsetoo
-	cd $?; dmake subdmake=true  product="full"
+install .SETDIR=instsetoo/util:
+	dmake product="full"
 
 # experimental composite targets:
 
@@ -222,96 +220,6 @@ frmwrk:		dtrans framework chaos i18n uui xmloff setup2 scptools scp \
 # dependency handling between directories
 # 
 
-UnoControls : cppuhelper offuh tools
-XmlSearch : external
-automation : basic
-basctl : svx
-basic : xmlscript goodies
-bridges : cppuhelper jurt
-chaos : inet svtools tools store vos sal cppu cppuhelper ucbhelper unotools
-codemaker : udkapi
-comphelper : cppuhelper offuh tools
-configmgr : unotools
-connectivity : comphelper svtools
-cppu : codemaker
-cppuhelper : cppu
-cpputools : cppuhelper
-dbaccess : connectivity offmgr
-desktop : sc sd sw
-drafts : offapi
-dtrans : offapi sal rdbmaker
-eventattacher : cppuhelper offapi drafts
-extensions : offmgr rdbmaker svx
-fileaccess : tools
-forms : svx
-framework : svtools
-goodies : so3
-i18n : bridges stoc svtools unotools
-idl : tools
-idlc : salhelper registry
-inet : ldapber tools
-instsetoo : non_vcl chaos configmgr dbaccess desktop extensions extras forms framework i18n scaddins scp sax wizards readlicense xmlhelp ucb package
-io : rdbmaker
-javaunohelper : cppuhelper jurt bridges
-jurt : codemaker ridljar sandbox
-jut : javaunohelper
-lingu : linguistic
-linguistic : sfx2
-offapi : udkapi
-offmgr : basctl sch starmath uui
-offuh : codemaker drafts
-package : tools unotools
-padmin : psprint vcl
-psprint : tools unotools
-rdbmaker : cppuhelper
-registry : store salhelper
-remotebridges : bridges rdbmaker
-ridljar : udkapi
-rsc : tools
-sal : xml2cmp
-salhelper: sal 
-sax : cppuhelper external drafts
-sc : offmgr
-scaddins : cppuhelper drafts tools
-sch : basctl svx
-scp : scptools
-scptools : setup2
-sd : offmgr sc
-setup2 : automation basic transex3 unoil unzip
-shell : rdbmaker
-sfx2 : framework idl setup2 xmloff xmlscript so_berkeleydb
-sip : sd
-sj2 : sandbox svtools
-so3 : inet sj2
-sot : tools ucbhelper unotools
-starmath : svx
-stoc : bridges rdbmaker
-store : vos
-svtools : toolkit ucbhelper unotools
-svx : lingu linguistic connectivity xmloff sfx2
-sw : connectivity offmgr sd
-sysui : xml2cmp drafts rdbmaker offuh
-testtool : cppuhelper
-toolkit : vcl
-tools : external vos
-transex3 : tools
-ucb : comphelper svtools tools ucbhelper
-ucbhelper : cppuhelper offuh drafts
-udkapi: idlc
-unoil : jurt
-unotools : comphelper cppuhelper offuh tools
-uui : svtools
-vcl : rsc sot ucbhelper unotools psprint sysui
-vos : sal
-wizards : offmgr
-xml2cmp : soltools
-xmlhelp : external jut XmlSearch
-xmloff : goodies drafts
-xmlscript : offapi comphelper
-
-# 
-# central target makefile
-# 
 
 .IF "$(checkout)"==""
 .INCLUDE : target.mk
