@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:26:59 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ italian ] = "Informazioni sulla Guida" ;
         Text [ portuguese_brazilian ] = "Informações do ajuda" ;
         Text [ portuguese ] = "Informações - Ajuda" ;
-        Text [ finnish ] = "Ohjetietoja" ;
+        Text [ finnish ] = "Ohjetiedot" ;
         Text [ danish ] = "Hjælp-information" ;
         Text [ french ] = "Informations - Aide" ;
         Text [ swedish ] = "Hjälp-information" ;
