@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-22 15:43:44 $
+ *  last change: $Author: mav $ $Date: 2002-02-26 15:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,23 +224,6 @@ using namespace ::com::sun::star::io;
 #include "xmlversion.hxx"
 
 #define MAX_REDIRECT 5
-
-//===========================================================================
-
-class ActiveDataStreamer : public ::cppu::WeakImplHelper1< XActiveDataStreamer >
-{
-    Reference< XStream > mStream;
-public:
-
-    virtual Reference< XStream > SAL_CALL getStream() throw (com::sun::star::uno::RuntimeException)
-        { return mStream; }
-
-    virtual void SAL_CALL setStream( const Reference< XStream >& stream ) throw (com::sun::star::uno::RuntimeException)
-        { mStream = stream; }
-};
-
-//===========================================================================
-
 
 class SfxLockBytesHandler_Impl : public ::utl::UcbLockBytesHandler
 {
@@ -1423,12 +1406,11 @@ void SfxMedium::Transfer_Impl()
         INetURLObject aSource( pImp->pTempFile->GetURL() );
 
 
-    // the following fix ( file streaming instead of copiing )
-    // is required only for unix
     Reference< XOutputStream > aDestStream;
     Reference< XSimpleFileAccess > aSimpleAccess;
     ::ucb::Content aOriginalContent;
-        if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aOriginalContent ) )
+        if ( ::utl::LocalFileHelper::IsLocalFile( aDest.GetMainURL( INetURLObject::NO_DECODE ) )
+        && ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aOriginalContent ) )
     {
         Close();
         ::ucb::Content aTempCont;
@@ -1437,35 +1419,7 @@ void SfxMedium::Transfer_Impl()
             try
             {
                 Reference< XInputStream > aTempInput = aTempCont.openStream();
-                Reference < XOutputStream > xOrigOut;
-                Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
-
-                OpenCommandArgument2 aArg;
-                aArg.Mode       = OpenMode::DOCUMENT;
-                aArg.Priority   = 0; // unused
-                aArg.Sink       = xSink;
-                aArg.Properties = Sequence< Property >( 0 ); // unused
-
-                aOriginalContent.executeCommand( DEFINE_CONST_UNICODE( "open" ), makeAny( aArg ) );
-                xOrigOut = xSink->getStream()->getOutputStream();
-
-                sal_Int32 nRead;
-                const sal_Int32 nBufSize = 32765;
-                Sequence < sal_Int8 > aSequence ( nBufSize );
-
-                do
-                {
-                    nRead = aTempInput->readBytes ( aSequence, nBufSize );
-                    if ( nRead < nBufSize )
-                    {
-                        Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-                        xOrigOut->writeBytes ( aTempBuf );
-                    }
-                    else
-                        xOrigOut->writeBytes ( aSequence );
-                } while ( nRead == nBufSize );
-
-                xOrigOut->closeOutput();
+                aOriginalContent.writeStream( aTempInput, sal_True );
                 bSuccess = sal_True;
             }
             catch( Exception& )
