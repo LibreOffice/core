@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 16:38:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
-#include <drafts/com/sun/star/ui/ItemType.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <com/sun/star/ui/ItemType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -169,7 +169,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::container;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 
 namespace framework
 {
@@ -459,7 +459,7 @@ throw( SAXException, RuntimeException )
                 aSubMenuProp[1].Value <<= aHelpId;
                 aSubMenuProp[2].Value <<= xSubItemContainer;
                 aSubMenuProp[3].Value <<= aLabel;
-                aSubMenuProp[4].Value <<= drafts::com::sun::star::ui::ItemType::DEFAULT;
+                aSubMenuProp[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 
                 m_xMenuBarContainer->insertByIndex( m_xMenuBarContainer->getCount(), makeAny( aSubMenuProp ) );
             }
@@ -683,7 +683,7 @@ throw( SAXException, RuntimeException )
             aSubMenuProp[1].Value <<= aHelpId;
             aSubMenuProp[2].Value <<= xSubItemContainer;
             aSubMenuProp[3].Value <<= aLabel;
-            aSubMenuProp[4].Value <<= drafts::com::sun::star::ui::ItemType::DEFAULT;
+            aSubMenuProp[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aSubMenuProp ) );
         }
@@ -729,7 +729,7 @@ throw( SAXException, RuntimeException )
             aMenuItem[1].Value <<= aHelpId;
             aMenuItem[2].Value <<= Reference< XIndexContainer >();
             aMenuItem[3].Value <<= aLabel;
-            aMenuItem[4].Value <<= drafts::com::sun::star::ui::ItemType::DEFAULT;
+            aMenuItem[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuItem ) );
         }
@@ -740,7 +740,7 @@ throw( SAXException, RuntimeException )
     {
         Sequence< PropertyValue > aMenuSeparator( 1 );
         aMenuSeparator[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
-        aMenuSeparator[0].Value <<= drafts::com::sun::star::ui::ItemType::SEPARATOR_LINE;
+        aMenuSeparator[0].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINE;
 
         m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuSeparator ) );
 
@@ -879,7 +879,7 @@ throw ( SAXException, RuntimeException )
             OUString    aCommandURL;
             OUString    aLabel;
             OUString    aHelpURL;
-            sal_Int16   nType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+            sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
             Reference< XIndexAccess > xSubMenu;
 
             ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType );
@@ -923,7 +923,7 @@ throw ( SAXException, RuntimeException )
             }
             else
             {
-                if ( nType == drafts::com::sun::star::ui::ItemType::DEFAULT )
+                if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
                 {
                     if ( aCommandURL.getLength() > 0 )
                     {
