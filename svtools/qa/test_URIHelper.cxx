@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_URIHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:11:31 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,28 @@
 
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/ucb/Command.hpp"
+#include "com/sun/star/ucb/CommandAbortedException.hpp"
+#include "com/sun/star/ucb/IllegalIdentifierException.hpp"
+#include "com/sun/star/ucb/XCommandProcessor.hpp"
+#include "com/sun/star/ucb/XContent.hpp"
+#include "com/sun/star/ucb/XContentIdentifier.hpp"
+#include "com/sun/star/ucb/XContentProvider.hpp"
+#include "com/sun/star/ucb/XContentProviderManager.hpp"
+#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "cppuhelper/bootstrap.hxx"
+#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase2.hxx"
 #include "cppunit/simpleheader.hxx"
+#include "osl/diagnose.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -88,9 +103,141 @@
 // UCB, an UriReferenceFactory, ...), so it is best executed within an OOo
 // installation.
 
+namespace com { namespace sun { namespace star { namespace ucb {
+    class XCommandEnvironment;
+    class XContentEventListener;
+} } } }
+
 namespace {
 
 namespace css = com::sun::star;
+
+// This class only implements that subset of functionality of a proper
+// css::ucb::Content that is known to be needed here:
+class Content:
+    public cppu::WeakImplHelper2<
+        css::ucb::XContent, css::ucb::XCommandProcessor >
+{
+public:
+    explicit Content(
+        css::uno::Reference< css::ucb::XContentIdentifier > const & identifier);
+
+    virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+    getIdentifier() throw (css::uno::RuntimeException) {
+        return m_identifier;
+    }
+
+    virtual rtl::OUString SAL_CALL getContentType()
+        throw (css::uno::RuntimeException)
+    {
+        return rtl::OUString();
+    }
+
+    virtual void SAL_CALL addContentEventListener(
+        css::uno::Reference< css::ucb::XContentEventListener > const &)
+        throw (css::uno::RuntimeException)
+    {}
+
+    virtual void SAL_CALL removeContentEventListener(
+        css::uno::Reference< css::ucb::XContentEventListener > const &)
+        throw (css::uno::RuntimeException)
+    {}
+
+    virtual sal_Int32 SAL_CALL createCommandIdentifier()
+        throw (css::uno::RuntimeException)
+    {
+        return 0;
+    }
+
+    virtual css::uno::Any SAL_CALL execute(
+        css::ucb::Command const & command, sal_Int32 commandId,
+        css::uno::Reference< css::ucb::XCommandEnvironment > const &)
+        throw (
+            css::uno::Exception, css::ucb::CommandAbortedException,
+            css::uno::RuntimeException);
+
+    virtual void SAL_CALL abort(sal_Int32) throw (css::uno::RuntimeException) {}
+
+private:
+    static char const m_prefix[];
+
+    css::uno::Reference< css::ucb::XContentIdentifier > m_identifier;
+};
+
+char const Content::m_prefix[] = "test:";
+
+Content::Content(
+    css::uno::Reference< css::ucb::XContentIdentifier > const & identifier):
+    m_identifier(identifier)
+{
+    OSL_ASSERT(m_identifier.is());
+    rtl::OUString uri(m_identifier->getContentIdentifier());
+    if (!uri.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(m_prefix))
+        || uri.indexOf('#', RTL_CONSTASCII_LENGTH(m_prefix)) != -1)
+    {
+        throw css::ucb::IllegalIdentifierException();
+    }
+}
+
+css::uno::Any Content::execute(
+    css::ucb::Command const & command, sal_Int32 commandId,
+    css::uno::Reference< css::ucb::XCommandEnvironment > const &)
+    throw (
+        css::uno::Exception, css::ucb::CommandAbortedException,
+        css::uno::RuntimeException)
+{
+    if (!command.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("getCasePreservingURL")))
+    {
+        throw css::uno::RuntimeException();
+    }
+    // If any non-empty segment starts with anything but '0', '1', or '2', fail;
+    // otherwise, if the last non-empty segment starts with '1', add a final
+    // slash, and if the last non-empty segment starts with '2', remove a final
+    // slash (if any); also, turn the given uri into all-lowercase:
+    rtl::OUString uri(m_identifier->getContentIdentifier());
+    sal_Unicode c = '0';
+    for (sal_Int32 i = RTL_CONSTASCII_LENGTH(m_prefix); i != -1;) {
+        rtl::OUString seg(uri.getToken(0, '/', i));
+        if (seg.getLength() > 0) {
+            c = seg[0];
+            if (c < '0' || c > '2') {
+                throw css::uno::Exception();
+            }
+        }
+    }
+    switch (c) {
+    case '1':
+        uri += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        break;
+    case '2':
+        if (uri.getLength() > 0 && uri[uri.getLength() - 1] == '/') {
+            uri = uri.copy(0, uri.getLength() -1);
+        }
+        break;
+    }
+    return css::uno::makeAny(uri.toAsciiLowerCase());
+}
+
+class Provider: public cppu::WeakImplHelper1< css::ucb::XContentProvider > {
+public:
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
+        css::uno::Reference< css::ucb::XContentIdentifier > const & identifier)
+        throw (css::ucb::IllegalIdentifierException, css::uno::RuntimeException)
+    {
+        return new Content(identifier);
+    }
+
+    virtual sal_Int32 SAL_CALL compareContentIds(
+        css::uno::Reference< css::ucb::XContentIdentifier > const & id1,
+        css::uno::Reference< css::ucb::XContentIdentifier > const & id2)
+        throw (css::uno::RuntimeException)
+    {
+        OSL_ASSERT(id1.is() && id2.is());
+        return
+            id1->getContentIdentifier().compareTo(id2->getContentIdentifier());
+    }
+};
 
 class Test: public CppUnit::TestFixture {
 public:
@@ -128,6 +275,20 @@ void Test::finish() {
 }
 
 void Test::testNormalizedMakeRelative() {
+    css::uno::Sequence< css::uno::Any > args(2);
+    args[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+    args[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    css::uno::Reference< css::ucb::XContentProviderManager >(
+        (css::uno::Reference< css::lang::XMultiComponentFactory >(
+            m_context->getServiceManager(), css::uno::UNO_QUERY_THROW)->
+         createInstanceWithArgumentsAndContext(
+             rtl::OUString(
+                 RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.ucb.UniversalContentBroker")),
+             args, m_context)),
+        css::uno::UNO_QUERY_THROW)->registerContentProvider(
+            new Provider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
+            true);
     struct Test {
         char const * base;
         char const * absolute;
@@ -138,11 +299,17 @@ void Test::testNormalizedMakeRelative() {
         { "hierarchical:/", "a/b/c", "a/b/c" },
         { "hierarchical:/a", "hierarchical:/a/b/c?d#e", "/a/b/c?d#e" },
         { "hierarchical:/a/", "hierarchical:/a/b/c?d#e", "b/c?d#e" },
+        { "test:/0/0/a", "test:/0/b", "../b" },
+        { "test:/1/1/a", "test:/1/b", "../b" },
+        { "test:/2/2//a", "test:/2/b", "../../b" },
+        { "test:/0a/b", "test:/0A/c#f", "c#f" },
         { "file:///usr/bin/nonex1/nonex2",
           "file:///usr/bin/nonex1/nonex3/nonex4", "nonex3/nonex4" },
         { "file:///usr/bin/nonex1/nonex2#fragmentA",
           "file:///usr/bin/nonex1/nonex3/nonex4#fragmentB",
           "nonex3/nonex4#fragmentB" },
+        { "file:///usr/nonex1/nonex2", "file:///usr/nonex3", "../nonex3" },
+        { "file:///c:/windows/nonex1", "file:///c:/nonex2", "../nonex2" },
 #if defined WNT
         { "file:///c:/nonex1/nonex2", "file:///C:/nonex1/nonex3/nonex4",
           "nonex3/nonex4" }
