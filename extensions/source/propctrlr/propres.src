@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:29:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,13 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22.6.1  2003/07/16 17:08:05  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.22  2003/07/03 17:29:02  hr
+ *  INTEGRATION: CWS rc2merge (1.21.8); FILE MERGED
+ *  2003/07/03 14:40:49 ihi 1.21.8.1: rc-2 merge all languages
+ *
  *  Revision 1.21.8.1  2003/07/03 14:40:49  ihi
  *  rc-2 merge all languages
  *
@@ -287,6 +294,8 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
+
 
 
 
