@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuitphfedit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:14:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,22 @@
 #include "tphfedit.hxx"
 
 //===================================================================
+enum ScHFEntryId
+{
+    eNoneEntry  ,
+    ePageEntry  ,
+    ePagesEntry ,
+    eSheetEntry ,
+    eConfidentialEntry ,
+    eFileNamePageEntry ,
+    eExtFileNameEntry ,
+    ePageSheetEntry  ,
+    ePageFileNameEntry  ,
+    ePageExtFileNameEntry  ,
+    eUserNameEntry  ,
+    eCreatedByEntry ,
+    eEntryCount
+};
 
 class ScHeaderEditEngine;
 class ScPatternAttr;
@@ -81,12 +97,13 @@ public:
     virtual void    Reset       ( const SfxItemSet& rCoreSet );
 
     void            SetNumType(SvxNumType eNumType);
+    void            ClearTextAreas();
 
 protected:
                 ScHFEditPage( Window*           pParent,
                               USHORT            nResId,
                               const SfxItemSet& rCoreSet,
-                              USHORT            nWhich );
+                              USHORT            nWhich, bool bHeader );
     virtual     ~ScHFEditPage();
 
 private:
@@ -96,6 +113,9 @@ private:
     ScEditWindow    aWndCenter;
     FixedText       aFtRight;
     ScEditWindow    aWndRight;
+    FixedText       maFtDefinedHF;
+        ListBox                 maLbDefined;
+    FixedText       maFtCustomHF;
     ImageButton     aBtnText;
     ScExtIButton    aBtnFile;
     ImageButton     aBtnTable;
@@ -113,6 +133,15 @@ private:
 private:
 #ifdef _TPHFEDIT_CXX
     void FillCmdArr();
+    void InitPreDefinedList();
+    void ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling = false);
+    void InsertToDefinedList();
+    void RemoveFromDefinedList();
+    void SetSelectDefinedList();
+    bool IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj);
+    bool IsDateEntry(EditTextObject* pTextObj);
+    bool IsExtFileNameEntry(EditTextObject* pTextObj);
+    DECL_LINK( ListHdl_Impl, ListBox* );
     DECL_LINK( ClickHdl, ImageButton* );
     DECL_LINK( MenuHdl, ScExtIButton* );
 #endif
