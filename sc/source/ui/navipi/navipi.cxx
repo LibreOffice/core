@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:22:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,9 +436,6 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     :   ToolBox ( pParent, rResId ),
         rDlg    ( *pParent )
 {
-    //  #52973# grosse Images haben wir nicht, darum nur fuer CHANGEOUTSTYLE anmelden
-    rDlg.GetBindings().GetImageManager()->RegisterToolBox( this, SFX_TOOLBOX_CHANGEOUTSTYLE );
-
     InitImageList();    // ImageList members of ScNavigatorDlg must be initialized before!
 
     SetSizePixel( CalcWindowSizePixel() );
@@ -451,7 +448,6 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
 
 __EXPORT CommandToolBox::~CommandToolBox()
 {
-    rDlg.GetBindings().GetImageManager()->ReleaseToolBox( this );
 }
 
 //------------------------------------------------------------------------
