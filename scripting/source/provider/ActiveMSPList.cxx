@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:05:33 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,9 +155,8 @@ ActiveMSPList::createMSP( const Any& aContext )
         }
         else
         {
-            ::rtl::OUString message =
-                OUSTR( "Failed to extract XModel from context, could not create MasterScriptProvider" );
-            throw RuntimeException( message, Reference< XInterface >() );
+              createNonDocMSPs();
+              return m_hMsps[ shareDirString ];
         }
 
     }
