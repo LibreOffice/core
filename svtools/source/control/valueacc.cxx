@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:49:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,7 @@ void SAL_CALL ValueSetAcc::clearAccessibleSelection()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSetAcc::selectAllAccessible()
+void SAL_CALL ValueSetAcc::selectAllAccessibleChildren()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
