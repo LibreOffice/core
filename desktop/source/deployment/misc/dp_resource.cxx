@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2004-07-30 09:59:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,16 @@
 #include "tools/isolang.hxx"
 
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-namespace dp_misc
-{
+namespace dp_misc {
 
 static ::vos::OMutex s_mutex;
 ::vos::IMutex * g_pResMgrMmutex = &s_mutex;
+
+static lang::Locale s_locale;
 
 //==============================================================================
 static ResMgr * getResMgr()
@@ -88,11 +90,7 @@ static ResMgr * getResMgr()
             throw RuntimeException( OUSTR("Cannot determine language!"),
                                     Reference<XInterface>() );
 
-        sal_Int32 nIndex = 0;
-        ::com::sun::star::lang::Locale aLocale;
-        aLocale.Language = slang.getToken( 0, '-', nIndex );
-        aLocale.Country = slang.getToken( 1, '-', nIndex );
-        aLocale.Variant = slang.getToken( 2, '-', nIndex );
+        s_locale = toLocale(slang);
 
         OUString path;
         ::osl::Module::getUrlFromAddress( (void *) getResMgr, path );
@@ -100,8 +98,7 @@ static ResMgr * getResMgr()
         String resourcePath( path );
 
         s_pResMgr = ResMgr::CreateResMgr(
-            "deployment" LIBRARY_SOLARUPD(),
-            aLocale, NULL, &resourcePath );
+            "deployment" LIBRARY_SOLARUPD(), s_locale, NULL, &resourcePath );
         OSL_ASSERT( s_pResMgr != 0 );
     }
     return s_pResMgr;
@@ -119,11 +116,9 @@ String getResourceString( USHORT id )
 {
     ::vos::OGuard guard( g_pResMgrMmutex );
     String ret( ResId( id, getResMgr() ) );
-    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND)
-    {
+    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
         static String s_brandName;
-        if (s_brandName.Len() == 0)
-        {
+        if (s_brandName.Len() == 0) {
             OUString brandName(
                 extract_throw<OUString>(
                     ::utl::ConfigManager::GetDirectConfigProperty(
@@ -133,6 +128,16 @@ String getResourceString( USHORT id )
         ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", s_brandName );
     }
     return ret;
+}
+
+//==============================================================================
+lang::Locale const & getOfficeLocale()
+{
+    if (g_pResMgrMmutex == 0) {
+        ::vos::OGuard guard( g_pResMgrMmutex );
+        getResMgr(); // init locale
+    }
+    return s_locale;
 }
 
 }
