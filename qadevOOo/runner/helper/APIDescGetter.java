@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-13 11:56:14 $
+ *  last change:$Date: 2003-05-27 12:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ import java.util.StringTokenizer;
  *
  */
 
-public class APIDescGetter implements DescGetter{
+public class APIDescGetter extends DescGetter{
 
     /*
      * gets the needed information about a StarOffice component
@@ -103,32 +103,7 @@ public class APIDescGetter implements DescGetter{
         } else return null;
     }
 
-    protected DescEntry[] getScenario(String url, String descPath, boolean debug) {
-        ArrayList entryList = new ArrayList();
-        DescEntry[] entries = null;
-        String line = "";
-        BufferedReader scenario = null;
-        try {
-            scenario = new BufferedReader(new FileReader(url));
-        } catch (java.io.FileNotFoundException fnfe) {
-            if (debug) System.out.println("Couldn't find file "+url);
-            return entries;
-        }
-        while (line != null) {
-            try {
-                line = scenario.readLine();
-                if (line != null) {
-                    if (line.startsWith("-o")) {
-                        entryList.add(getDescriptionForSingleJob(
-                        line.substring(3,line.length()).trim(),descPath,debug));
-                    }
-                }
-            } catch (java.io.IOException ioe) {
-                if (debug) System.out.println("Exception while reading scenario");
-            }
-        }
-        return DescArray(entryList.toArray());
-    }
+
     protected DescEntry getDescriptionForSingleJob(
                                     String job, String descPath, boolean debug) {
         boolean isSingleInterface = job.indexOf("::")>0;
@@ -152,7 +127,7 @@ public class APIDescGetter implements DescGetter{
         if (descPath != null) {
             entry = getFromDirectory(descPath, job, debug);
         } else {
-            entry = getFromJar(job, debug);
+            entry = getFromClassPath(job, debug);
         }
         boolean foundInterface = false;
         if (isSingleInterface && entry !=null) {
@@ -216,7 +191,7 @@ public class APIDescGetter implements DescGetter{
 
                     if (!ifc_name.equals(old_ifc_name)) {
                         if (ifcDesc != null) {
-                            ifcDesc.SubEntries=DescArray(meth_names.toArray());
+                            ifcDesc.SubEntries=getDescArray(meth_names.toArray());
                             ifcDesc.SubEntryCount=meth_names.size();
                             meth_names.clear();
                             ifc_names.add(ifcDesc);
@@ -264,10 +239,10 @@ public class APIDescGetter implements DescGetter{
             }
         }
 
-        ifcDesc.SubEntries=DescArray(meth_names.toArray());
+        ifcDesc.SubEntries=getDescArray(meth_names.toArray());
         ifcDesc.SubEntryCount=meth_names.size();
         ifc_names.add(ifcDesc);
-        return DescArray(ifc_names.toArray());
+        return getDescArray(ifc_names.toArray());
     }
 
     protected static DescEntry setErrorDescription(DescEntry entry, String ErrorMsg) {
@@ -276,7 +251,7 @@ public class APIDescGetter implements DescGetter{
         return entry;
     }
 
-    protected static DescEntry[] DescArray(Object[] list) {
+    protected static DescEntry[] getDescArray(Object[] list) {
         DescEntry[] entries = new DescEntry[list.length];
         for (int i = 0; i<list.length;i++) {
             entries[i] = (DescEntry) list[i];
@@ -284,11 +259,19 @@ public class APIDescGetter implements DescGetter{
         return entries;
     }
 
-    protected DescEntry getFromJar(String aEntry, boolean debug) {
+    protected DescEntry getFromClassPath(String aEntry, boolean debug) {
         int dotindex = aEntry.indexOf('.');
         if (dotindex == -1) return null;
-        String module = aEntry.substring(0,aEntry.indexOf('.'));
-        String shortName = aEntry.substring(aEntry.indexOf('.')+1);
+        String module = null;
+        String shortName = null;
+        if (aEntry.indexOf(".uno")==-1) {
+            module = aEntry.substring(0,aEntry.indexOf('.'));
+            shortName = aEntry.substring(aEntry.indexOf('.')+1);
+        }
+        else {
+            module = aEntry.substring(0,aEntry.lastIndexOf('.'));
+            shortName = aEntry.substring(aEntry.lastIndexOf('.')+1);
+        }
         DescEntry theEntry = new DescEntry();
         theEntry.entryName = aEntry;
         theEntry.longName = aEntry;
@@ -299,40 +282,45 @@ public class APIDescGetter implements DescGetter{
 
         java.net.URL url = this.getClass().getResource("/objdsc/"+module);
         if (url == null && debug) {
-           System.out.println("Jar File doesn't contain descriptions for" +
+           System.out.println("Classpath doesn't contain descriptions for" +
                             " module '" + module +"'.");
            return null;
         }
 
         try {
-            if (url.openConnection()
-                    instanceof sun.net.www.protocol.file.FileURLConnection) {
-                //it's a file url not a jar url
-                if (debug) System.out.println("Getting description from path.");
-                return getFromDirectory(url.getPath(),aEntry,debug);
+            java.net.URLConnection con = url.openConnection();
+            if (con instanceof java.net.JarURLConnection) {
+                // get Jar file from connection
+                java.util.jar.JarFile f = ((java.net.JarURLConnection)con).getJarFile();
+                // Enumerate over all entries
+                java.util.Enumeration e = f.entries();
+                while (e.hasMoreElements()) {
+                   String entry = e.nextElement().toString();
+                   if (entry.endsWith("."+shortName.trim()+".csv")) {
+                       InputStream input =
+                                this.getClass().getResourceAsStream("/" + entry);
+                       csvFile =
+                                new BufferedReader(new InputStreamReader(input));
+                   }
+                }
             }
-        }
-        catch(java.io.IOException e) {
-           e.printStackTrace();
-        }
-
-
-        try {
-           // open connection to  Jar
-           java.net.JarURLConnection con = (java.net.JarURLConnection)url.openConnection();
-           // get Jar file from connection
-           java.util.jar.JarFile f = con.getJarFile();
-           // Enumerate over all entries
-           java.util.Enumeration e = f.entries();
-           while (e.hasMoreElements()) {
-               String entry = e.nextElement().toString();
-               if (entry.endsWith(shortName.trim()+".csv")) {
-                   InputStream input =
-                            this.getClass().getResourceAsStream("/" + entry);
-                   csvFile =
+            else {
+                InputStream in = con.getInputStream();
+                java.io.BufferedReader buf = new java.io.BufferedReader(new InputStreamReader(in));
+                boolean found = false;
+                while(buf.ready() && !found) {
+                    String entry = buf.readLine();
+                    System.out.println("Read: "+ entry);
+                    if (entry.endsWith(shortName.trim()+".csv")) {
+                        InputStream input =
+                            this.getClass().getResourceAsStream("/objdsc/"+module+"/" + entry);
+                        csvFile =
                             new BufferedReader(new InputStreamReader(input));
-               }
-           }
+                        found = true;
+                    }
+
+                }
+            }
         }
         catch(java.io.IOException e) {
            e.printStackTrace();
@@ -352,8 +340,16 @@ public class APIDescGetter implements DescGetter{
         int dotindex = entry.indexOf('.');
         if (dotindex == -1) return null;
         String fs = System.getProperty("file.separator");
-        String module = entry.substring(0,entry.indexOf('.'));
-        String shortName = entry.substring(entry.indexOf('.')+1);
+        String module = null;
+        String shortName = null;
+        if (entry.indexOf(".uno")==-1) {
+            module = entry.substring(0,entry.indexOf('.'));
+            shortName = entry.substring(entry.indexOf('.')+1);
+        }
+        else {
+            module = entry.substring(0,entry.lastIndexOf('.'));
+            shortName = entry.substring(entry.lastIndexOf('.')+1);
+        }
         DescEntry aEntry = new DescEntry();
         aEntry.entryName = entry;
         aEntry.longName = entry;
