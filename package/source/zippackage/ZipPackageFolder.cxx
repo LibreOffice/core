@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:24:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,6 +541,13 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 {
                     xStream->closeInput();
                     pStream->SetPackageMember ( sal_True );
+                }
+
+                if ( bRawStream )
+                {
+                    // the raw stream was integrated and now behaves
+                    // as usual encrypted stream
+                    pStream->SetToBeEncrypted( sal_True );
                 }
 
                 // Remove hacky bit from entry flags
