@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:33:11 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,17 +93,6 @@ public:
 
 class SwBreakPortion : public SwLinePortion
 {
-#ifdef VERTICAL_LAYOUT
-    USHORT CalcViewWidth( const SwTxtSizeInfo &rInf );
-#else
-    void CalcViewWidth( const SwTxtSizeInfo &rInf );
-#endif
-
-protected:
-#ifndef VERTICAL_LAYOUT
-    KSHORT  nViewWidth;
-#endif
-    KSHORT  nRestWidth;
 public:
             SwBreakPortion( const SwLinePortion &rPortion );
     // liefert 0 zurueck, wenn keine Nutzdaten enthalten sind.
@@ -111,7 +100,6 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
-    USHORT GetRestWidth() const { return nRestWidth; }
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
