@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ greek ] = "Απόσταση";
         QuickHelpText[ korean ] = "Distance";
         CustomUnitText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Abstand";
     };
     FixedBitmap FB_TEXTSTART
     {
@@ -550,6 +551,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ greek ] = "Εσοχή";
         QuickHelpText[ korean ] = "Indent";
         CustomUnitText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Einzug";
     };
     ToolBox TBX_SHADOW
     {
@@ -752,7 +754,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText [ italian ] = "gradi" ;
         CustomUnitText [ portuguese_brazilian ] = "Degrees" ;
         CustomUnitText [ portuguese ] = "Graus" ;
-        CustomUnitText [ french ] = "degrιs" ;
+        CustomUnitText [ french ] = " degrιs" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ spanish ] = "Grados" ;
         CustomUnitText [ danish ] = "grader" ;
@@ -791,6 +793,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ korean ] = "Distance X";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Abstand X";
     };
     FixedBitmap FB_SHADOW_Y
     {
@@ -850,6 +853,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ korean ] = "Distance Y";
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Abstand Y";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -931,6 +935,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ korean ] = "Shadow Color";
         Text[ greek ] = "Χρώμα σκιάς";
         Text[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Schattenfarbe";
     };
     Text[ chinese_simplified ] = "ΓΐΉ€ΧΦΜε";
     Text[ russian ] = "FontWork";
