@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:35:54 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,8 @@
 #define HID_OPTIONS_COLORCONFIG                 (HID_SVX_START + 429)
 #define HID_OPTIONS_COLORCONFIG_SAVE_SCHEME     (HID_SVX_START + 430)
 #define HID_OPTIONS_ACCESSIBILITYCONFIG         (HID_SVX_START + 431)
-//no new entries here!!
+
+//no new entries here!! HID_SVX_EXT0_START == 39868
 
 #define HID_FILL_ATTR_LISTBOX                   (HID_SVX_EXT0_START + 1)
 #define HID_FILL_TYPE_LISTBOX                   (HID_SVX_EXT0_START + 2)
@@ -716,8 +717,6 @@
 #define HID_VALUESET_EXTRUSION_LIGHTING             (HID_SVX_EXT0_START + 117)
 #define HID_MENU_EXTRUSION_SURFACE                  (HID_SVX_EXT0_START + 118)
 #define HID_SCRIPTORG_DIALOG                        (HID_SVX_EXT0_START + 119)
-#define HID_SELECTOR_CATEGORIES                     (HID_SVX_EXT0_START + 120)
-#define HID_SELECTOR_COMMANDS                       (HID_SVX_EXT0_START + 121)
 
 // Hangul Hanja extensions
 #define HID_HANGULHANJA_OPT_DLG                     (HID_SVX_EXT0_START + 122)
@@ -725,9 +724,7 @@
 #define HID_HANGULHANJA_EDIT_DLG                    (HID_SVX_EXT0_START + 124)
 #define HID_HANGULDLG_BUTTON_OPTIONS                (HID_SVX_EXT0_START + 125)
 #define HID_HANGULHANJA_OPT_DICTS_LB                (HID_SVX_EXT0_START + 126)
-
 #define HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (HID_SVX_EXT0_START + 127)
-
 #define HID_OPTIONS_JAVA                            (HID_SVX_EXT0_START + 128)
 #define HID_OPTIONS_JAVA_LIST                       (HID_SVX_EXT0_START + 129)
 #define HID_OPTIONS_JAVA_PARAMETER                  (HID_SVX_EXT0_START + 130)
@@ -738,7 +735,7 @@
 #define HID_SVX_CONFIG_EVENT                        (HID_SVX_EXT0_START + 133)
 #define HID_CONFIG_EVENT_OFFICE_BASED               (HID_SVX_EXT0_START + 134)
 #define HID_CONFIG_EVENT_DOCUMENT_BASED             (HID_SVX_EXT0_START + 135)
-#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 136)
+
 #define HID_SELECTOR_CATEGORIES                     (HID_SVX_EXT0_START + 137)
 #define HID_SELECTOR_COMMANDS                       (HID_SVX_EXT0_START + 138)
 #define HID_SELECTOR_DIALOG                         (HID_SVX_EXT0_START + 139)
@@ -751,6 +748,7 @@
 #define HID_SVX_BASIC_MACRO_ORGANIZER               (HID_SVX_EXT0_START + 146)
 #define HID_SVX_BASIC_DIALOG_ORGANIZER              (HID_SVX_EXT0_START + 147)
 #define HID_SVX_COMMON_MACRO_ORGANIZER              (HID_SVX_EXT0_START + 148)
+#define HID_XMLSEC_CALL                             (HID_SVX_EXT0_START + 149)
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
@@ -758,14 +756,14 @@
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END HID_OPTIONS_ACCESSIBILITYCONFIG
+#define ACT_SVX_HID_END     HID_OPTIONS_ACCESSIBILITYCONFIG
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
 #endif
 
 // overrun check 2
-#define ACT_SVX_HID_END2        HID_SVX_COMMON_MACRO_ORGANIZER
+#define ACT_SVX_HID_END2    HID_XMLSEC_CALL
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
