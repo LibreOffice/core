@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 13:28:11 $
+ *  last change: $Author: os $ $Date: 2001-04-05 15:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,34 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
 
         ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
         INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
+        String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
+        aMenuRes += ( aEntry.GetName() += '/' );
+        aMenuRes+=String::CreateFromInt32(RID_MAIN_MENU);
+
+        util::URL aURL;
+        aURL.Complete = aMenuRes;
+
+        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+        Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+        if( xTrans.is() )
+        {
+            // Datei laden
+            xTrans->parseStrict( aURL );
+
+            Reference< frame::XDispatchProvider >  xProv( rFrame, UNO_QUERY );
+            if ( xProv.is() )
+            {
+                Reference< frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 12 );
+                if ( aDisp.is() )
+                    aDisp->dispatch( aURL, Sequence<PropertyValue>() );
+            }
+        }
+        if ( rListener.is() )
+            rListener->loadFinished( this );
+
+/*
+        ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
+        INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
         String aResFile = String::CreateFromAscii(".component:");
         ( aResFile += aEntry.GetName() ) += '/';
         String aMenuRes = aResFile;
@@ -484,6 +512,7 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
         }
         if ( rListener.is() )
             rListener->loadFinished( this );
+*/
     }
     else
     {

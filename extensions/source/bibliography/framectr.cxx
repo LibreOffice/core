@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: os $ $Date: 2001-04-05 15:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,12 +254,19 @@ void BibFrameController_Impl::dispose()
 {
     util::URL aURL;
     aURL.Complete = C2U("0");
-        uno::Reference< XDispatchProvider >  xProv( xFrame, UNO_QUERY );
+    uno::Reference< XDispatchProvider >  xProv( xFrame, UNO_QUERY );
+
     if ( xProv.is() )
     {
-        uno::Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_tool:_menubar"), 0 );
+        uno::Sequence<beans::PropertyValue> aArgs( 1 );
+        Any aValue;
+        aValue <<= C2U( "remove" );
+        aArgs[0].Value  = aValue;
+        aArgs[0].Name   = C2U( "command" );
+
+        uno::Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 0 );
         if ( aDisp.is() )
-            aDisp->dispatch( aURL, uno::Sequence<beans::PropertyValue>() );
+            aDisp->dispatch( aURL, aArgs );
     }
 
 
