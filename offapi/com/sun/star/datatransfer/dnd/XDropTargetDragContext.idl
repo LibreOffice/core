@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetDragContext.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:47 $
+ *  last change: $Author: pl $ $Date: 2001-01-30 14:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_datatransfer_dnd_XDropTargetContext_idl__
-#define __com_sun_star_datatransfer_dnd_XDropTargetContext_idl__
+#ifndef __com_sun_star_datatransfer_dnd_XDropTargetDragContext_idl__
+#define __com_sun_star_datatransfer_dnd_XDropTargetDragContext_idl__
 
 #ifndef __com_sun_star_datatransfer_dnd_InvalidDNDOperationException_idl__
 #include <com/sun/star/datatransfer/dnd/InvalidDNDOperationException.idl>
@@ -96,11 +96,12 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDropTargetDragContext: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** accept the Drag.
+    /** accept the Drag or Drop.
 
         <p>This method should be called from the <type>XDropTargetListener</type>s
-        <member>XDropTarget::dragEnter</member>, <member>XDropTarget::dragOver</member>
-        and <member>XDropTarget::dragActionChanged</member> methods if the
+        <member>XDropTargetListener::dragEnter</member>, <member>XDropTargetListener::dragOver</member>,
+        <member>XDropTargetListener::dragActionChanged</member> and
+        <member>XDropTargetListener::drop</member> methods if the
         implementation wishes to accept an operation from the srcActions
         <em>other</em> than the one selected by the user as represented by the
         <member>DropTargetDragEvent::dropAction</member>.</p>
@@ -109,53 +110,47 @@ interface XDropTargetDragContext: com::sun::star::uno::XInterface
         the operation accepted by the target.
 
         @throws InvalidDNDOperationException
-        if the drop target is not in drag state.
+        if the drop target is not in drag or drop state.
 
         @see DNDConstants
         @see DropTargetDragEvent
     */
 
-    void acceptDrag( [in] byte dragOperation )
+    void accept( [in] byte dragOperation )
         raises (InvalidDNDOperationException);
 
     //-------------------------------------------------------------------------
-    /** reject the Drag.
+    /** reject the Drag or Drop.
 
-        <p>Reject the drag as a result of examinig either or the available
+        <p>Reject the drag or drop as a result of examinig either or the available
         <type scope="com::sun::star::datatransfer">DataFlavor</type> types.
 
         @throws InvalidDNDOperationException
-        if the drop target is not in drag state.
+        if the drop target is not in drag or drop state.
     */
 
-    void rejectDrag()
+    void reject()
         raises (InvalidDNDOperationException);
 
     //-------------------------------------------------------------------------
     /** @returns the available DataFlavors of the Transferable operand of this
-        operation.
-
-        @throws InvalidDNDOperationException
-        if the drop target is not in drag state.
+        operation. If the drop target is not in drag or drop state the
+        returned sequence is empty.
     */
 
-    sequence< com::sun::star::datatransfer::DataFlavor > getCurrentDataFlavors()
-        raises (InvalidDNDOperationException);
+    sequence< com::sun::star::datatransfer::DataFlavor > getCurrentDataFlavors();
 
     //-------------------------------------------------------------------------
     /** @returns a boolean indicating if the given
         <type scope="com::sun::star::datatransfer">DataFlavor</type>is supported
-        by this <type>DropTargetContext</type>.
+        by this <type>DropTargetDragContext</type>. Returns false
+        if the drop target is not in drag or drop state.
 
         @param df
         the DataFlavor
-
-        @throws InvalidDNDOperationException
-        if the drop target is not in drag state.
     */
 
-    boolean isDataFlavorSupported( [in] com::sun::star::datatransfer::DataFlavor df )
-        raises (InvalidDNDOperationException);
+    boolean isDataFlavorSupported( [in] com::sun::star::datatransfer::DataFlavor df );
 
 };
 
