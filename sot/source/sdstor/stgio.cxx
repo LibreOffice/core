@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgio.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:31:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
-#pragma hdrstop
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 ///////////////////////////// class StgIo //////////////////////////////
 
@@ -369,11 +371,16 @@ ULONG Validator::FindUnrefedChains()
         return FAT_OK;
 }
 
-Link StgIo::aErrorLink;
+namespace { struct ErrorLink : public rtl::Static<Link, ErrorLink > {}; }
 
 void StgIo::SetErrorLink( const Link& rLink )
 {
-    aErrorLink = rLink;
+    ErrorLink::get() = rLink;
+}
+
+const Link& StgIo::GetErrorLink()
+{
+    return ErrorLink::get();
 }
 
 ULONG StgIo::ValidateFATs()
@@ -403,7 +410,7 @@ ULONG StgIo::ValidateFATs()
             StgLinkArg aArg;
             aArg.aFile = pFileStrm->GetFileName();
             aArg.nErr = nErr;
-            aErrorLink.Call( &aArg );
+            ErrorLink::get().Call( &aArg );
             bCopied = TRUE;
         }
 //      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
