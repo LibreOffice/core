@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:59:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ portuguese_brazilian ] = "~Autom�tico" ;
         Text [ portuguese ] = "~Autom�tico" ;
         Text [ finnish ] = "~Automaattinen" ;
-        Text [ danish ] = "Automatisk" ;
+        Text [ danish ] = "~Automatisk" ;
         Text [ french ] = "Automatique" ;
         Text [ swedish ] = "~Automatisk" ;
         Text [ dutch ] = "~Automatisch" ;
@@ -167,6 +167,8 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~स्वचालित";
         Text[ slovak ] = "~Automaticky";
+        Text[ hungarian ] = "~Automatikus";
+        Text[ slovenian ] = "S~amodejno";
     };
     RadioButton RB_NUMBER_CHAR
     {
@@ -179,7 +181,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ portuguese_brazilian ] = "~Caracter" ;
         Text [ portuguese ] = "~Caracteres" ;
         Text [ finnish ] = "~Merkki" ;
-        Text [ danish ] = "Tegn" ;
+        Text [ danish ] = "Te~gn" ;
         Text [ french ] = "Caract�res" ;
         Text [ swedish ] = "~Tecken" ;
         Text [ dutch ] = "~Teken" ;
@@ -201,6 +203,8 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ hebrew ] = "~Zeichen";
         Text[ hindi ] = "~अक्षर";
         Text[ slovak ] = "~Znak";
+        Text[ hungarian ] = "~Egyedi";
+        Text[ slovenian ] = "~Znak";
     };
     FixedLine FL_NUMBER
     {
@@ -235,6 +239,8 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "संख्या देना";
         Text[ slovak ] = "Číslovanie";
+        Text[ hungarian ] = "Számozás";
+        Text[ slovenian ] = "Oštevilčevanje";
     };
     PushButton BT_NUMBER_CHAR
     {
@@ -255,7 +261,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ english_us ] = "~Footnote" ;
         Text [ portuguese_brazilian ] = "~Nota de Rodap�" ;
         Text [ swedish ] = "~Fotnot" ;
-        Text [ danish ] = "Fodnote" ;
+        Text [ danish ] = "~Fodnote" ;
         Text [ italian ] = "Nota a pi� pagina" ;
         Text [ spanish ] = "N~ota al pie" ;
         Text [ french ] = "Note de bas de page" ;
@@ -277,6 +283,8 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ hebrew ] = "‮הערת שוליים‬";
         Text[ hindi ] = "पृष्ठ के ~नीचे की टीका";
         Text[ slovak ] = "~Poznámka pod čiarou";
+        Text[ hungarian ] = "~Lábjegyzet";
+        Text[ slovenian ] = "~Sprotna opomba";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
@@ -288,7 +296,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ english_us ] = "~Endnote" ;
         Text [ portuguese_brazilian ] = "~Nota de Fim" ;
         Text [ swedish ] = "~Slutnot" ;
-        Text [ danish ] = "Slutnote" ;
+        Text [ danish ] = "~Slutnote" ;
         Text [ italian ] = "Nota di chiusura" ;
         Text [ spanish ] = "Nota ~final" ;
         Text [ french ] = "~Note de fin" ;
@@ -310,6 +318,8 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ hebrew ] = "~Endnote";
         Text[ hindi ] = "अंतिम टीका";
         Text[ slovak ] = "~Vysvetlivka";
+        Text[ hungarian ] = "~Végjegyzet";
+        Text[ slovenian ] = "~Končna opomba";
     };
     FixedLine FL_TYPE
     {
@@ -320,7 +330,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ english_us ] = "Type" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ swedish ] = "Typ" ;
-        Text [ danish ] = "F" ;
+        Text [ danish ] = "Type" ;
         Text [ italian ] = "Tipo" ;
         Text [ spanish ] = "Tipo" ;
         Text [ french ] = "Type" ;
@@ -343,6 +353,8 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
     Text[ chinese_simplified ] = "插入注脚";
     Text[ russian ] = "�������� ������";
@@ -360,6 +372,8 @@ ModalDialog DLG_INS_FOOTNOTE
     Text[ hebrew ] = "‮הוספת הערת שוליים‬";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका जोड़ो";
     Text[ slovak ] = "Vložiť poznámku pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet beszúrása";
+    Text[ slovenian ] = "Vstavi sprotno opombo";
 };
 
 
