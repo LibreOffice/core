@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:54:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SFXPAGE_SPELL
     Text [ italian ] = "Controllo ortografico" ;
     Text [ portuguese_brazilian ] = "Verificação de ortográfica" ;
     Text [ portuguese ] = "Correcção ortográfica" ;
-    Text [ finnish ] = "Korjausluku" ;
+    Text [ finnish ] = "Oikeinkirjoituksen tarkistus" ;
     Text [ danish ] = "Stavekontrol" ;
     Text [ french ] = "Orthographe" ;
     Text [ swedish ] = "Rättstavning" ;
@@ -93,7 +93,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Modifica..." ;
         Text [ portuguese_brazilian ] = "~Editar..." ;
         Text [ portuguese ] = "~Editar..." ;
-        Text [ finnish ] = "~Muokkaa..." ;
+        Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Rediger..." ;
         Text [ french ] = "~Modifier..." ;
         Text [ swedish ] = "~Redigera..." ;
@@ -133,7 +133,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Dizionari" ;
         Text [ portuguese_brazilian ] = "Dicionários" ;
         Text [ portuguese ] = "Dicionários" ;
-        Text [ finnish ] = "Sanastot" ;
+        Text [ finnish ] = "Wörterbücher" ;
         Text [ danish ] = "Ordbøger" ;
         Text [ french ] = "Dictionnaires" ;
         Text [ swedish ] = "Ordlistor" ;
@@ -164,7 +164,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "~Parole maiuscole" ;
         Text [ portuguese_brazilian ] = "~Palavras em maiúsculas" ;
         Text [ portuguese ] = "~Palavras maiúsculas" ;
-        Text [ finnish ] = "~Isolla kirjoitetut sanat" ;
+        Text [ finnish ] = "~Isolla kirjoitettavat sanat" ;
         Text [ danish ] = "Ord med store bogstaver" ;
         Text [ french ] = "les mots écrits en ~majuscules" ;
         Text [ swedish ] = "Or~d med stora bokstäver" ;
@@ -228,7 +228,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Mai~uscole e minuscole " ;
         Text [ portuguese_brazilian ] = "~Caixa alta e baixa " ;
         Text [ portuguese ] = "~Maiúsculas & Minúsculas " ;
-        Text [ finnish ] = "~Isot ja pienet kirjaimet" ;
+        Text [ finnish ] = "~Kirjainkoon erottelu" ;
         Text [ danish ] = "Store og små bogstaver " ;
         Text [ french ] = "la ~casse  " ;
         Text [ swedish ] = "Versal~känslig " ;
@@ -260,7 +260,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Verifica" ;
         Text [ portuguese_brazilian ] = "Verificar" ;
         Text [ portuguese ] = "Verificar" ;
-        Text [ finnish ] = "Tarkistus" ;
+        Text [ finnish ] = "Prüfen" ;
         Text [ danish ] = "Kontroller" ;
         Text [ french ] = "Vérifier" ;
         Text [ swedish ] = "Kontrollera" ;
