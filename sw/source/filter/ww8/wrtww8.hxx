@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 12:59:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode );
 Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
 
-
+sal_uInt16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
 #endif  //  _WRTWW8_HXX
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
