@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:59:30 $
+ *  last change: $Author: kz $ $Date: 2004-09-08 10:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,9 +552,13 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
             // c)
             if (!sDetectService.getLength())
             {
+                // let first flat type win, if no deep detection is possible
+                return sFlatType;
+                /*
                 if (!rLastChance.getLength())
                     rLastChance = sFlatType;
                 continue;
+                */
             }
 
             // dont forget to add every real asked deep detection service here.
