@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-15 17:00:10 $
+ *  last change: $Author: nn $ $Date: 2001-02-21 11:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@
 #define SC_UNONAME_INSBRK           "InsertPageBreaks"
 #define SC_UNONAME_KEEPFORM         "KeepFormats"
 #define SC_UNONAME_MOVCELLS         "MoveCells"
+#define SC_UNONAME_ISUSER           "IsUserDefined"
 #define SC_UNONAME_NATIVE           "Native"
 #define SC_UNONAME_REGEXP           "RegularExpressions"
 #define SC_UNONAME_SAVEOUT          "SaveOutputPosition"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 19:31:26 $
+ *  last change: $Author: nn $ $Date: 2001-02-21 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "dbdocfun.hxx"
 #include "unoguard.hxx"
 #include "unonames.hxx"
+#include "globstr.hrc"
 
 using namespace com::sun::star;
 
@@ -138,6 +139,7 @@ const SfxItemPropertyMap* lcl_GetDBRangePropertyMap()
 {
     static SfxItemPropertyMap aDBRangePropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ISUSER),   0,  &getBooleanCppuType(),           beans::PropertyAttribute::READONLY },
         {MAP_CHAR_LEN(SC_UNONAME_KEEPFORM), 0,  &getBooleanCppuType(),           0},
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0), beans::PropertyAttribute::READONLY, 0 },
@@ -1769,6 +1771,12 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
             ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsDoSize() );
         else if ( aString.EqualsAscii( SC_UNONAME_STRIPDAT ) )
             ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsStripData() );
+        else if ( aString.EqualsAscii( SC_UNONAME_ISUSER ) )
+        {
+            //  all database ranges except "unnamed" are user defined
+            ScUnoHelpFunctions::SetBoolInAny( aRet,
+                        ( pData->GetName() != ScGlobal::GetRscString(STR_DB_NONAME) ) );
+        }
         else if ( aString.EqualsAscii( SC_UNO_LINKDISPBIT ) )
         {
             //  no target bitmaps for individual entries (would be all equal)
