@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:58:16 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,8 @@ extern "C" {
    fixes of that version. Because a version 1.4.2_1 from vendor X may contain
    different fixes as the same version from vendor Y it is important to see
    version an vendor as one entity. One without the other does not guarantee
-   the existence of a particular set of features or bug fixes. To keep the
-   API simple it was designed so that an implementation may act on behalf of
-   only ONE vendor. </p>
+   the existence of a particular set of features or bug fixes. An implementation
+   of this API may support multiple vendors. </p>
    <p>
    Libraries which implement this interface will be dynamically loaded and
    unloaded by the java framework (jvmfwk/framework.h). Therefore they must not
@@ -111,14 +110,14 @@ typedef enum
 
 
 /** obtains information about installations of Java Runtime Environments (JREs).
+
+    <p>The function gathers information about available JREs which have the same
+    vendor as determined by the <code>sVendor</code> parameter. Only information
+    about those JREs which match the version requirements are returned. These
+    requirements are specified by the parameters <code>sMinVersion</code>,
+    <code>sMaxVersion</code> and <code>arExcludeList</code>.
+    </p>
     <p>
-    The function has parameters which determines which versions of the respective
-    JREs are supported. A JRE which does not meet the version requirements will
-    be ignored. When no vendor is specified, then the version arguments must not
-    be specified as well. That is, if  <code>sVendor</code> is an empty string then
-    <code>sMinVersion</code>,<code>sMaxVersion</code> must also be empty,
-    <code>arExcludeList</code> must have the size null and <code>nSizeExcludeList</code>
-    must also be null</p>
     The JavaInfo structures returned in <code>parJavaInfo</code> should be ordered
     according to their version. The one, representing a JRE with the highest
     version should be the first in the array. </p>
@@ -130,11 +129,14 @@ typedef enum
     In case an error occurred <code>parJavaInfo</code> need not be freed.
     </p>
     @param sVendor
-        [in] only JRE from this vendor are examined.
+        [in] only JREs from this vendor are examined. This parameter always contains
+        a vendor string. That is, the string it is not empty.
     @param sMinVersion
-        [in] represents the minimum version of a JRE. It can be NULL.
+        [in] represents the minimum version of a JRE. The string can be empty but
+        a null pointer is not allowed.
     @param sMaxVersion
-        [in] represents the maximum version of a JRE. It can be NULL.
+        [in] represents the maximum version of a JRE. The string can be empty but
+        a null pointer is not allowed.
     @param arExcludeList
         [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
         versions must not be returned by this function. It can be NULL.
@@ -152,7 +154,7 @@ typedef enum
     JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
     JFW_PLUGIN_E_INVALID_ARG an argument was not valid. For example
     <code>nSizeExcludeList</code> is greater null but <code>arExcludeList</code>
-    is NULL.</br>
+    is NULL or NULL pointer were passed for at least on of the strings.</br>
     JFW_PLUGIN_E_WRONG_VERSION_FORMAT the version strings in
     <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
     version strings.
@@ -167,18 +169,22 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     sal_Int32 *nSizeJavaInfo);
 
 /** obtains information for a JRE at a given location.
-   <p>
-   If the given location belongs to a JRE whoose vendor is supported by
-   this library and the JRE has a version which meets the requirements as
+
+   <p>If the given location belongs to a JRE whoose vendor matches the
+   sVendor argument and the JRE has a version which meets the requirements as
    specified by <code>sMinVersion, sMaxVersion, arExcludeList</code> then
-   this function returns a JavaInfo object for this JRE.</p>
+   this function shall return a JavaInfo object for this JRE if this implementation
+   supports this vendor.</p>
 
    @param sLocation
        [in] a file URL to the directory of the JRE.
+   @param sVendor
+      [in] a name of a vendor. This parameter always contains
+        a vendor string. That is, the string it is not empty.
    @param sMinVersion
-       [in] represents the minimum version of a JRE. It can be NULL.
+       [in] represents the minimum version of a JRE.
    @param sMaxVersion
-       [in] represents the maximum version of a JRE. It can be NULL.
+       [in] represents the maximum version of a JRE.
    @param arExcludeList
        [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
         versions must not be returned by this function. It can be NULL.
@@ -193,7 +199,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
    JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
    JFW_PLUGIN_E_INVALID_ARG an argument was not valid. For example
     <code>nSizeExcludeList</code> is greater null but <code>arExcludeList</code>
-    is NULL.</br>
+    is NULL, NULL pointer were passed for at least on of the strings, sLocation
+    is an empty string.</br>
    JFW_PLUGIN_E_WRONG_VERSION_FORMAT the version strings in
     <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
     version strings.
@@ -205,6 +212,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
  */
 javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString *sLocation,
+    rtl_uString *sVendor,
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
     rtl_uString * *arExcludeList,
@@ -212,8 +220,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     JavaInfo ** ppInfo);
 
 /** starts a Java Virtual Machine.
-    <p>
-    The caller should provide all essential JavaVMOptions, such as the
+
+    <p>The caller should provide all essential JavaVMOptions, such as the
     class path (-Djava.class.path=xxx). It is assumed that the caller
     knows what JRE is used. Hence the implementation does not need to check
     the options for validity. If a user configured the application to
@@ -248,7 +256,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     JFW_PLUGIN_E_NONE the function ran successfully.</br>
     JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
     JFW_PLUGIN_E_WRONG_VENDOR the <code>JavaInfo</code> object was not created
-    in by this library.</br>
+    in by this library and the VM cannot be started.</br>
     JFW_PLUGIN_E_INVALID_ARG an argument was not valid. For example
     <code>pInfo</code> or , <code>ppVM</code> or <code>ppEnv</code> are NULL.
     </br>
