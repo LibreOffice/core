@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-29 08:21:58 $
+ *  last change: $Author: ama $ $Date: 2002-05-24 08:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1943,7 +1943,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
                             aRelPos.X() = GetAnchor()->Frm().Left() +
                                           GetAnchor()->Frm().Width() -
                                           pNextLay->Frm().Left() -
-                                          pNextLay->Frm().Width();
+                                          pNextLay->Prt().Left()-
+                                          pNextLay->Prt().Width();
                         else
                             aRelPos.Y() = pNextLay->Frm().Top() +
                                 pNextLay->Prt().Top() -GetAnchor()->Frm().Top();
