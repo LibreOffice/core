@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-01-28 13:13:17 $
+ *  last change: $Author: vg $ $Date: 2002-01-30 14:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3130,7 +3130,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 
-    Color aLineColor(Color(COL_LIGHTGRAY));
+    Color aLineColor(COL_LIGHTGRAY);
     if(aLineColor == aBackColor)
         aLineColor.Invert();
     pVDev->SetLineColor(aLineColor);
