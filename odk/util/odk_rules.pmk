@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-27 11:56:50 $
+#   last change: $Author: rt $ $Date: 2004-05-03 07:41:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -262,6 +262,10 @@ $(DESTDIREXAMPLES)$/%.bas : $(PRJ)$/examples$/%.bas
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
+$(DESTDIREXAMPLES)$/%.mf : $(PRJ)$/examples$/%.mf
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
 $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
@@ -291,10 +295,19 @@ $(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
 .IF "$(GUI)"=="UNX"
     +-strip $@    
 .ENDIF
+
+# special rule for special Java UNO native library
+# (used for all platforms but built only under windows)
+$(DESTDIRJAR)$/win$/unowinreg.dll : $(SOLARCOMMONBINDIR)$/unowinreg.dll
+    +-rm -f $@ >& $(NULLDEV)
+    $(GNUCOPY) $< $@
     
 $(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(DLLOUT)$/$(@:f) $@
+
+$(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/%.class : $(SOLARBINDIR)$/juh_loader_classes.zip
+    +unzip -quod $(DESTDIRJAR) $<
     
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
