@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 11:15:59 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 12:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,44 +278,38 @@ IMPL_LINK( ScRefEdit, UpdateHdl, Timer*, pTi )
 
 ScRefButton::ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit ) :
     ImageButton( pParent, rResId ),
+    aImgRefStart( ScResId( RID_BMP_REFBTN1 ) ),
+    aImgRefStartHC( ScResId( RID_BMP_REFBTN1_H ) ),
+    aImgRefDone( ScResId( RID_BMP_REFBTN2 ) ),
+    aImgRefDoneHC( ScResId( RID_BMP_REFBTN2_H ) ),
     pAnyRefDlg( pParent ),
-    pRefEdit( pEdit ),
-    bIsStartImage( sal_True )
+    pRefEdit( pEdit )
 {
-    InitImages();
+    SetStartImage();
 }
 
 ScRefButton::ScRefButton( Window *pParent, const ResId& rResId ) :
     ImageButton( pParent, rResId ),
+    aImgRefStart( ScResId( RID_BMP_REFBTN1 ) ),
+    aImgRefStartHC( ScResId( RID_BMP_REFBTN1_H ) ),
+    aImgRefDone( ScResId( RID_BMP_REFBTN2 ) ),
+    aImgRefDoneHC( ScResId( RID_BMP_REFBTN2_H ) ),
     pAnyRefDlg( NULL ),
-    pRefEdit( NULL ),
-    bIsStartImage( sal_True )
+    pRefEdit( NULL )
 {
-    InitImages();
-}
-
-void ScRefButton::InitImages()
-{
-    sal_Bool bDark = GetDisplayBackground().GetColor().IsDark();
-    aImgRefStart = Image( ScResId( bDark ? RID_BMP_REFBTN1_H : RID_BMP_REFBTN1 ) );
-    aImgRefDone = Image( ScResId( bDark ? RID_BMP_REFBTN2_H : RID_BMP_REFBTN2 ) );
-    ShowImage( bIsStartImage );
-}
-
-void ScRefButton::ShowImage( sal_Bool bStartImage )
-{
-    SetImage( bStartImage ? aImgRefStart : aImgRefDone );
-    bIsStartImage = bStartImage;
+    SetStartImage();
 }
 
 void ScRefButton::SetStartImage()
 {
-    ShowImage( sal_True );
+    SetModeImage( aImgRefStart );
+    SetModeImage( aImgRefStartHC, BMP_COLOR_HIGHCONTRAST );
 }
 
 void ScRefButton::SetEndImage()
 {
-    ShowImage( sal_False );
+    SetModeImage( aImgRefDone );
+    SetModeImage( aImgRefDoneHC, BMP_COLOR_HIGHCONTRAST );
 }
 
 void ScRefButton::SetReferences( ScAnyRefDlg* pDlg, ScRefEdit* pEdit )
@@ -353,13 +347,6 @@ void ScRefButton::LoseFocus()
     ImageButton::LoseFocus();
     if( pRefEdit )
         pRefEdit->Modify();
-}
-
-void ScRefButton::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-        InitImages();
-    ImageButton::DataChanged( rDCEvt );
 }
 
 
