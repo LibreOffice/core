@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.14 $
- *  last change: $Author: pl $ $Date: 2001-03-07 14:50:02 $
+ *  $Revision: 1.15 $
+ *  last change: $Author: pl $ $Date: 2001-03-07 15:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
         rTo.mnAscent        = (long)( +pOS2->usWinAscent * fScale + 0.5 );
         rTo.mnDescent       = (long)( +pOS2->usWinDescent * fScale + 0.5 );
-        rTo.mnLeading       = (long)( (+pOS2->usWinAscent - pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
+        rTo.mnLeading       = (long)( (+pOS2->usWinAscent + pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
 
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
         rTo.mnLastChar      = pOS2->usLastCharIndex;
