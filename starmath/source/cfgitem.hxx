@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-09 08:30:35 $
+ *  last change: $Author: tl $ $Date: 2001-07-06 14:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ SV_DECL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry, 8, 8 );
 class SmFontFormatList
 {
     SmFntFmtListEntryArr    aEntries;
+    BOOL                    bModified;
 
     // disallow copy-constructor and assignment-operator for now
     SmFontFormatList( const SmFontFormatList & );
@@ -202,12 +203,18 @@ public:
 
     void    Clear();
     void    AddFontFormat( const String &rFntFmtId, const SmFontFormat &rFntFmt );
+    void    RemoveFontFormat( const String &rFntFmtId );
 
     const SmFontFormat *    GetFontFormat( const String &rFntFmtId ) const;
+    const SmFontFormat *    GetFontFormat( USHORT nPos ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
+    const String            GetFontFormatId( const SmFontFormat &rFntFmt, BOOL bAdd );
+    const String            GetFontFormatId( USHORT nPos ) const;
     const String            GetNewFontFormatId() const;
     USHORT                  GetCount() const    { return aEntries.Count(); }
-    const String            GetFontFormatId( USHORT nPos ) const;
+
+    BOOL    IsModified() const          { return bModified; }
+    void    SetModified( BOOL bVal )    { bModified = bVal; }
 };
 
 
@@ -236,7 +243,9 @@ class SmMathConfig
     void    SaveFormat();
     void    LoadFontFormatList();
     void    SaveFontFormatList();
-    void    UpdateFontFormatList();
+
+    void    StripFontFormatList( const SmSym *pUsedSymbols[], USHORT nCount );
+
 
     void    Save();
 

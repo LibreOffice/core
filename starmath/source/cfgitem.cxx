@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-22 12:43:06 $
+ *  last change: $Author: tl $ $Date: 2001-07-06 14:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,12 +315,18 @@ SmFntFmtListEntry::SmFntFmtListEntry( const String &rId, const SmFontFormat &rFn
 
 SmFontFormatList::SmFontFormatList()
 {
+    bModified = FALSE;
 }
 
 
 void SmFontFormatList::Clear()
 {
-    aEntries.Remove( 0, aEntries.Count() );
+    USHORT nCnt = aEntries.Count();
+    if (nCnt)
+    {
+        aEntries.Remove( 0, nCnt );
+        SetModified( TRUE );
+    }
 }
 
 
@@ -333,6 +339,28 @@ void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
     {
         SmFntFmtListEntry aEntry( rFntFmtId, rFntFmt );
         aEntries.Insert( aEntry, aEntries.Count() );
+        SetModified( TRUE );
+    }
+}
+
+
+void SmFontFormatList::RemoveFontFormat( const String &rFntFmtId )
+{
+    USHORT nPos = 0xFFFF;
+
+    // search for entry
+    USHORT nCnt = aEntries.Count();
+    for (USHORT i = 0;  i < nCnt  &&  nPos == 0xFFFF;  ++i)
+    {
+        if (aEntries[i].aId == rFntFmtId)
+            nPos = i;
+    }
+
+    // remove entry if found
+    if (nPos != 0xFFFF)
+    {
+        aEntries.Remove( nPos );
+        SetModified( TRUE );
     }
 }
 
@@ -353,6 +381,16 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( const String &rFntFmtId ) 
 }
 
 
+
+const SmFontFormat * SmFontFormatList::GetFontFormat( USHORT nPos ) const
+{
+    SmFontFormat *pRes = 0;
+    if (nPos < aEntries.Count())
+        pRes = &aEntries[ nPos ].aFntFmt;
+    return pRes;
+}
+
+
 const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) const
 {
     String aRes;
@@ -369,21 +407,17 @@ const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) co
 }
 
 
-const String SmFontFormatList::GetNewFontFormatId() const
+const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, BOOL bAdd )
 {
-    String aRes;
-
-    INT32 nCnt = GetCount();
-    for (INT32 i = 0;  i < nCnt + 1  &&  0 == aRes.Len();  ++i)
+    String aRes( GetFontFormatId( rFntFmt) );
+    if (0 == aRes.Len()  &&  bAdd)
     {
-        String aTmpId( String::CreateFromInt32( i ) );
-        if (!GetFontFormat( aTmpId ))
-            aRes = aTmpId;
+        aRes = GetNewFontFormatId();
+        AddFontFormat( aRes, rFntFmt );
     }
-    DBG_ASSERT( 0 != aRes.Len(), "failed to create new FontFormatId" );
-
     return aRes;
 }
+
 
 const String SmFontFormatList::GetFontFormatId( USHORT nPos ) const
 {
@@ -393,6 +427,26 @@ const String SmFontFormatList::GetFontFormatId( USHORT nPos ) const
     return aRes;
 }
 
+
+const String SmFontFormatList::GetNewFontFormatId() const
+{
+    // returns first unused FormatId
+
+    String aRes;
+
+    String aPrefix( RTL_CONSTASCII_STRINGPARAM( "Id" ) );
+    INT32 nCnt = GetCount();
+    for (INT32 i = 1;  i <= nCnt + 1  &&  0 == aRes.Len();  ++i)
+    {
+        String aTmpId( aPrefix );
+        aTmpId += String::CreateFromInt32( i );
+        if (!GetFontFormat( aTmpId ))
+            aRes = aTmpId;
+    }
+    DBG_ASSERT( 0 != aRes.Len(), "failed to create new FontFormatId" );
+
+    return aRes;
+}
 
 /////////////////////////////////////////////////////////////////
 
@@ -520,6 +574,10 @@ SmSym SmMathConfig::ReadSymbol( SmMathConfigItem &rCfg,
             if (aUiName != String(rSymbolName))
                 aRes.SetExportName( rSymbolName );
         }
+        else
+        {
+            DBG_ERROR( "symbol read error" );
+        }
     }
 
     return aRes;
@@ -550,7 +608,6 @@ void SmMathConfig::Save()
 {
     SaveOther();
     SaveFormat();
-    UpdateFontFormatList();
     SaveFontFormatList();
 }
 
@@ -626,7 +683,7 @@ void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
         pVal++;
         // FontFormatId
         SmFontFormat aFntFmt( rSymbol.GetFace() );
-        String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt ) );
+        String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt, TRUE ) );
         DBG_ASSERT( aFntFmtId.Len(), "FontFormatId not found" );
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
@@ -636,7 +693,7 @@ void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
     DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
     aCfg.ReplaceSetProperties( A2OU( SYMBOL_LIST ) , aValues );
 
-    UpdateFontFormatList();
+    StripFontFormatList( pNewSymbols, nCount );
     SaveFontFormatList();
 }
 
@@ -668,8 +725,13 @@ void SmMathConfig::LoadFontFormatList()
     {
         SmFontFormat aFntFmt( ReadFontFormat( aCfg, pNode[i], A2OU( FONT_FORMAT_LIST ) ) );
         if (!pFontFormatList->GetFontFormat( pNode[i] ))
+        {
+            DBG_ASSERT( 0 == pFontFormatList->GetFontFormat( pNode[i] ),
+                    "FontFormat ID already exists" );
             pFontFormatList->AddFontFormat( pNode[i], aFntFmt );
+        }
     }
+    pFontFormatList->SetModified( FALSE );
 }
 
 
@@ -744,13 +806,17 @@ SmFontFormat SmMathConfig::ReadFontFormat( SmMathConfigItem &rCfg,
 
 void SmMathConfig::SaveFontFormatList()
 {
+    SmFontFormatList &rFntFmtList = GetFontFormatList();
+
+    if (!rFntFmtList.IsModified())
+        return;
+
     SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ) );
 
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
     const OUString *pNames = aNames.getConstArray();
     INT32 nSymbolProps = aNames.getLength();
 
-    SmFontFormatList &rFntFmtList = GetFontFormatList();
     USHORT nCount = rFntFmtList.GetCount();
 
     Sequence< PropertyValue > aValues( nCount * nSymbolProps );
@@ -803,11 +869,49 @@ void SmMathConfig::SaveFontFormatList()
     }
     DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
     aCfg.ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
+
+    rFntFmtList.SetModified( FALSE );
 }
 
 
-void SmMathConfig::UpdateFontFormatList()
+void SmMathConfig::StripFontFormatList( const SmSym *pUsedSymbols[], USHORT nCount )
 {
+    USHORT i;
+
+    // build list of used font-formats
+    //!! font-format IDs may be different !!
+    SmFontFormatList aUsedList;
+    for (i = 0;  i < nCount;  ++i)
+    {
+        DBG_ASSERT( pUsedSymbols[i], "null pointer for symbol" );
+        aUsedList.GetFontFormatId( SmFontFormat( pUsedSymbols[i]->GetFace() ) , TRUE );
+    }
+    const SmFormat & rStdFmt = GetStandardFormat();
+    for (i = FNT_BEGIN;  i <= FNT_END;  ++i)
+    {
+        aUsedList.GetFontFormatId( SmFontFormat( rStdFmt.GetFont( i ) ) , TRUE );
+    }
+
+    // remove unused font-formats from list
+    SmFontFormatList &rFntFmtList = GetFontFormatList();
+    USHORT nCnt = rFntFmtList.GetCount();
+    SmFontFormat *pFormat = new SmFontFormat[ nCnt ];
+    String       *pId     = new String      [ nCnt ];
+    INT32 k;
+    for (k = 0;  k < nCnt;  ++k)
+    {
+        pFormat[k] = *rFntFmtList.GetFontFormat( (USHORT) k );
+        pId[k]     = rFntFmtList.GetFontFormatId( (USHORT) k );
+    }
+    for (k = 0;  k < nCnt;  ++k)
+    {
+        if (0 == aUsedList.GetFontFormatId( pFormat[k] ))
+        {
+            rFntFmtList.RemoveFontFormat( pId[k] );
+        }
+    }
+    delete [] pId;
+    delete [] pFormat;
 }
 
 
