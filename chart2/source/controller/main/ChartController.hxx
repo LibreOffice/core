@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-09 17:13:34 $
+ *  last change: $Author: iha $ $Date: 2003-12-10 18:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ private:
     bool                EndTextEdit();
 
     void SAL_CALL       executeDispatch_RotateDiagram();
+    void SAL_CALL       executeDispatch_PositionAndSize( const ::rtl::OUString& rObjectCID );
 
     //
     void execute_DoubleClick();
