@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 08:51:02 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1623,3 +1623,18 @@ Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
 
     return xTxtCntnt;
 }
+
+// --> OD 2004-08-24 #33242#
+Reference < XShape > XMLTextFrameContext::GetShape() const
+{
+    Reference < XShape > xShape;
+    SvXMLImportContext* pContext = &m_xImplContext;
+    SvXMLShapeContext* pImpl = PTR_CAST( SvXMLShapeContext, pContext );
+    if ( pImpl )
+    {
+        xShape = pImpl->getShape();
+    }
+
+    return xShape;
+}
+// <--
