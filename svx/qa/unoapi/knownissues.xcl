@@ -1,0 +1,49 @@
+### 100941 ###
+svx.SvxUnoText::com::sun::star::text::XTextRangeMover
+
+### 101696 ###
+svx.SvxUnoTextRange::com::sun::star::text::XTextRange
+
+### 112813 ###
+svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleEditableText
+
+### 114134 ###
+svx.SvxDrawPage::com::sun::star::drawing::XShapeGrouper
+
+### 97139 ###
+svx.SvxUnoTextCursor::com::sun::star::beans::XMultiPropertyStates
+
+### i23298 ###
+svx.SvxDrawPage::com::sun::star::drawing::GenericDrawPage
+
+### i23458 ###
+svx.GraphicExporter::com::sun::star::document::XFilter
+
+### i23460 ###
+svx.SvxDrawPage::com::sun::star::form::XFormsSupplier
+
+### i23461 ###
+svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
+
+### i23462 ###
+svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
+
+### i23466 ###
+svx.SvxShapeCircle::com::sun::star::drawing::TextProperties
+svx.SvxShapeConnector::com::sun::star::drawing::TextProperties
+svx.SvxShapeDimensioning::com::sun::star::drawing::TextProperties
+svx.SvxShapePolyPolygon::com::sun::star::drawing::TextProperties
+svx.SvxShapePolyPolygonBezier::com::sun::star::drawing::TextProperties
+svx.SvxShapeCircle::com::sun::star::beans::XPropertySet
+svx.SvxShapeConnector::com::sun::star::beans::XPropertySet
+svx.SvxShapeDimensioning::com::sun::star::beans::XPropertySet
+svx.SvxShapePolyPolygon::com::sun::star::beans::XPropertySet
+svx.SvxShapePolyPolygonBezier::com::sun::star::beans::XPropertySet
+
+### i23469 ###
+svx.SvxUnoNumberingRules::com::sun::star::container::XIndexReplace
+
+### no bugid yet ###
+svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svx.SvxGraphCtrlAccessibleContext::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
