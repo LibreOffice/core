@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:33:13 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 13:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,28 +60,56 @@
  ************************************************************************/
 
 #ifdef PRECOMPILED
-#include "core_pch.hxx"
+#include <core_pch.hxx>
 #endif
 
 #pragma hdrstop
 
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "doc.hxx"
-#include "node.hxx"
-#include "errhdl.hxx"
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _NODE_HXX
+#include <node.hxx>
+#endif
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
 
-#include "dview.hxx"
-#include "dcontact.hxx"
-#include "dflyobj.hxx"
-#include "flyfrm.hxx"
-#include "txtfrm.hxx"       // ClearPara()
+#ifndef _DVIEW_HXX
+#include <dview.hxx>
+#endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
+#endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>       // ClearPara()
+#endif
 
-#include "frmtool.hxx"
-#include "pagedesc.hxx"
+#ifndef _FRMTOOL_HXX
+#include <frmtool.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-#include "hints.hxx"        //fuer SwFmtChg
+#ifndef _HINTS_HXX
+#include <hints.hxx>        //fuer SwFmtChg
+#endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -225,6 +253,11 @@ SwFrm::~SwFrm()
         if ( pDrawObjs )
             delete pDrawObjs;
     }
+
+#ifndef PRODUCT
+    // JP 15.10.2001: for detection of access to deleted frames
+    pDrawObjs = (SwDrawObjs*)0x33333333;
+#endif
 }
 
 /*************************************************************************
