@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamedValue.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef __com_sun_star_beans_NamedValue_idl__
 #define __com_sun_star_beans_NamedValue_idl__
-
 //=============================================================================
 
  module com {  module sun {  module star {  module beans {
@@ -69,7 +68,7 @@
 
 /** specifies a pair assembled from a name and a value.
  */
-struct NamedValue
+published struct NamedValue
 {
     /** specifies the name part of the pair
      */
