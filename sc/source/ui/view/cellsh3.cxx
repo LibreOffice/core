@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:02:27 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,10 +165,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
 
                 pTabViewShell->LockModifiers( nMode );
-                rBindings.Invalidate( SID_STATUS_SELMODE );
-
-                rReq.Done();
             }
+            else
+            {
+                //  no arguments (also executed by double click on the status bar controller):
+                //  advance to next selection mode
+
+                USHORT nModifiers = pTabViewShell->GetLockedModifiers();
+                switch ( nModifiers )
+                {
+                    case KEY_SHIFT: nModifiers = KEY_MOD1;  break;      // EXT -> ADD
+                    case KEY_MOD1:  nModifiers = 0;         break;      // ADD -> STD
+                    default:        nModifiers = KEY_SHIFT; break;      // STD -> EXT
+                }
+                pTabViewShell->LockModifiers( nModifiers );
+            }
+
+            rBindings.Invalidate( SID_STATUS_SELMODE );
+            rReq.Done();
             break;
 
         //  SID_STATUS_SELMODE_NORM wird nicht benutzt ???

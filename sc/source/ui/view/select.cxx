@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-16 13:09:35 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,7 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
         pView->AlignToCursor( nPosX, nPosY, SC_FOLLOW_LINE );
     pView->SetCursor( nPosX, nPosY );
 
-    if (!bAnchor)
+    if ( !bAnchor || !pView->IsBlockMode() )
     {
         pView->DoneBlockMode( TRUE );
         pViewData->GetMarkData().MarkToMulti();         //! wer verstellt das ???

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 15:09:15 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,9 +259,9 @@ void ScTabView::MarkCursor( USHORT nCurX, USHORT nCurY, USHORT nCurZ, BOOL bCols
         InitBlockMode( nCurX, nCurY, nCurZ, FALSE, bCols, bRows );
     }
 
-    if (bBlockCols)
+    if (bCols)
         nCurY = MAXROW;
-    if (bBlockRows)
+    if (bRows)
         nCurX = MAXCOL;
 
     ScMarkData& rMark = aViewData.GetMarkData();
@@ -325,6 +325,9 @@ void ScTabView::MarkCursor( USHORT nCurX, USHORT nCurY, USHORT nCurZ, BOOL bCols
         aViewData.GetViewShell()->UpdateInputHandler();
 //      InvalidateAttribs();
     }
+
+    if ( !bCols && !bRows )
+        aHdrFunc.SetAnchorFlag( FALSE );
 }
 
 //!

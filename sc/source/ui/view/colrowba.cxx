@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 16:08:14 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,6 @@ void ScColBar::SetMarking( BOOL bSet )
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
     {
-        pFuncSet->SetAnchorFlag(FALSE);
         pViewData->GetView()->UpdateAutoFillMark();
     }
 }
@@ -369,7 +368,6 @@ void ScRowBar::SetMarking( BOOL bSet )
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
     {
-        pFuncSet->SetAnchorFlag(FALSE);
         pViewData->GetView()->UpdateAutoFillMark();
     }
 }
