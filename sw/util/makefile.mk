@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 13:26:35 $
+#   last change: $Author: rt $ $Date: 2004-09-27 10:32:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -311,8 +311,8 @@ LIB3OBJFILES = \
         $(SLO)$/swdialmgr.obj \
         $(SLO)$/swuiidxmrk.obj \
         $(SLO)$/DropDownFieldDialog.obj \
-        $(SLO)$/macassgn.obj
-                $(SLO)$/wordcountdialog.obj \
+        $(SLO)$/macassgn.obj \
+        $(SLO)$/wordcountdialog.obj \
         $(SLO)$/mailconfigpage.obj \
         $(SLO)$/addresslistdialog.obj \
         $(SLO)$/createaddresslistdialog.obj \
