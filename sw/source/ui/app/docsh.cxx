@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:29:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,10 +522,9 @@ BOOL SwDocShell::Save()
         case SFX_CREATE_MODE_ORGANIZER:
             {
                 WriterRef xWrt;
-                ::GetXMLWriter( aEmptyStr, xWrt );
+                ::GetXMLWriter( aEmptyStr, GetMedium()->GetBaseURL( true ), xWrt );
                 xWrt->SetOrganizerMode( TRUE );
-
-                SwWriter aWrt( GetStorage(), *pDoc );
+                SwWriter aWrt( *GetMedium(), *pDoc );
                 nErr = aWrt.Write( xWrt );
                 xWrt->SetOrganizerMode( FALSE );
             }
@@ -556,7 +555,7 @@ BOOL SwDocShell::Save()
                     pWrtShell->EndAllTblBoxEdit();
 
                 WriterRef xWrt;
-                ::GetXMLWriter( aEmptyStr, xWrt );
+                ::GetXMLWriter( aEmptyStr, GetMedium()->GetBaseURL( true ), xWrt );
 
                 BOOL bLockedView(FALSE);
                 if ( pWrtShell )
@@ -565,7 +564,7 @@ BOOL SwDocShell::Save()
                     pWrtShell->LockView( TRUE );    //lock visible section
                 }
 
-                SwWriter aWrt( GetStorage(), *pDoc );
+                SwWriter aWrt( *GetMedium(), *pDoc );
                 nErr = aWrt.Write( xWrt );
 
                 if ( pWrtShell )
@@ -590,7 +589,7 @@ BOOL SwDocShell::Save()
  --------------------------------------------------------------------*/
 
 
-sal_Bool SwDocShell::SaveAs( const uno::Reference < embed::XStorage >& xStor )
+sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
 
@@ -627,7 +626,8 @@ sal_Bool SwDocShell::SaveAs( const uno::Reference < embed::XStorage >& xStor )
     CalcLayoutForOLEObjects();  // format for OLE objets
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
-    if( SfxObjectShell::SaveAs( xStor ) )
+    uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
+    if( SfxObjectShell::SaveAs( rMedium ) )
     {
         if( GetDoc()->IsGlobalDoc() && !ISA( SwGlobalDocShell ) )
         {
@@ -671,7 +671,7 @@ sal_Bool SwDocShell::SaveAs( const uno::Reference < embed::XStorage >& xStor )
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
         WriterRef xWrt;
-        ::GetXMLWriter( aEmptyStr, xWrt );
+        ::GetXMLWriter( aEmptyStr, rMedium.GetBaseURL( true ), xWrt );
 
         BOOL bLockedView(FALSE);
         if ( pWrtShell )
@@ -680,7 +680,7 @@ sal_Bool SwDocShell::SaveAs( const uno::Reference < embed::XStorage >& xStor )
             pWrtShell->LockView( TRUE );    //lock visible section
         }
 
-        SwWriter aWrt( xStor, *pDoc );
+        SwWriter aWrt( rMedium, *pDoc );
         nErr = aWrt.Write( xWrt );
 
         if ( pWrtShell )
@@ -716,7 +716,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         return FALSE;
 
     WriterRef xWriter;
-    SwIoSystem::GetWriter( pFlt->GetUserData(), xWriter );
+    SwIoSystem::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
     if( !xWriter.Is() )
     {   // Der Filter ist nicht vorhanden
         InfoBox( 0,
@@ -832,7 +832,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         }
 
         // Jetzt das Dokument normal speichern
-        BOOL bRet = SaveAs( rMedium.GetOutputStorage() );
+        BOOL bRet = SaveAs( rMedium );
 
         if( nMyType != nSaveType )
         {
