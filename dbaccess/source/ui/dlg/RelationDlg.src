@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.28 2002-09-05 13:57:22 kz Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.29 2002-11-25 15:18:36 kz Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: kz $ $Date: 2002-09-05 13:57:22 $ $Revision: 1.28 $
+ //  $Author: kz $ $Date: 2002-11-25 15:18:36 $ $Revision: 1.29 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -224,7 +224,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ swedish ] = "Sätt ~null" ;
         Text [ danish ] = "Angiv nul" ;
         Text [ italian ] = "Imposta ~zero" ;
-        Text [ spanish ] = "Poner ~null" ;
+        Text [ spanish ] = "Definir ~null" ;
         Text [ french ] = "Définir ~Null" ;
         Text [ dutch ] = "~Op nul zetten" ;
         Text[ chinese_simplified ] = "è®¾å®šé›¶(~S)";
@@ -375,7 +375,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ swedish ] = "Sätt nu~ll" ;
         Text [ danish ] = "Angiv nul" ;
         Text [ italian ] = "~Imposta zero" ;
-        Text [ spanish ] = "Poner ~null" ;
+        Text [ spanish ] = "Definir ~null" ;
         Text [ french ] = "Définir N~ull" ;
         Text [ dutch ] = "Op n~ul zetten" ;
         Text[ chinese_simplified ] = "è®¾å®šé›¶(~S)";
