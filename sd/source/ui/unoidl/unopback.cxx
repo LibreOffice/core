@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-26 15:27:47 $
+ *  last change: $Author: cl $ $Date: 2001-02-26 15:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
     {
         if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
         {
-            aAny <<= (sal_Int32)0;
+            aAny <<= drawing::BitmapMode_REPEAT;
         }
         else
         {
