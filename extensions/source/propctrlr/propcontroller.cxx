@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:05:33 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 #include "propcontroller.hxx"
 #endif
@@ -178,12 +177,12 @@ namespace pcr
             ,m_pPropertyInfo(NULL)
             ,m_pChangeMultiplexer(NULL)
             ,m_pView(NULL)
-            ,m_bHasListSource( sal_False )
-            ,m_bHasCursorSource( sal_False )
+            ,m_sStandard(ModuleRes(RID_STR_STANDARD))
             ,m_nGenericPageId(0)
             ,m_nDataPageId(0)
             ,m_nEventPageId(0)
-            ,m_sStandard(ModuleRes(RID_STR_STANDARD))
+            ,m_bHasListSource( sal_False )
+            ,m_bHasCursorSource( sal_False )
             ,m_bContainerFocusListening(sal_False)
             ,m_bSuspendingDependentComp( sal_False )
             ,m_bInspectingSubForm( sal_False )
