@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilePickerControlAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module ui { module dialogs {
 
     @see com::sun::star::ui::dialogs::FilePicker
 */
-interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFilePicker
+published interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFilePicker
 {
 
 //-------------------------------------------------------------------------
