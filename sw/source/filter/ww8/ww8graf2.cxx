@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:05:10 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef __SGI_STL_ITERATOR
 #include <iterator>
@@ -585,7 +583,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         return 0;
     }
 
-    ::SetProgressState( nProgress, rDoc.GetDocShell() );         // Update
+    ::SetProgressState(nProgress, mpDocShell);         // Update
 
     GrafikCtor();
 
