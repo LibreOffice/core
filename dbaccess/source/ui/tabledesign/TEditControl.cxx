@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 12:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
-#include <com/sun/star/container/XIndexAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1483,29 +1480,20 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
     if( !GetSelectRowCount() )
         return sal_False;
 
-    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    OTableController* pController = GetView()->getController();
+    Reference<XConnection> xCon = pController->getConnection();
 
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
-    Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
-    Reference<XIndexAccess> xIndexAccess;
-    if(xKeySup.is())
-        xIndexAccess = xKeySup->getKeys();
-
-    if(!xIndexAccess.is() && (!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar()))
+    if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
         return sal_False; // no primary keys allowed
 
+    Reference<XPropertySet> xTable = pController->getTable();
     //////////////////////////////////////////////////////////////
     // Key darf nicht veraendert werden
     // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgeführt
 
-    sal_Bool bDropNotAllowed = sal_False;
-    if (!(  GetView()->getController()->isDropAllowed() ||
-                !(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY)) &&
-            GetView()->getController()->isAddAllowed() &&
-                (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) != ::rtl::OUString::createFromAscii("VIEW")))
-        bDropNotAllowed = sal_True;
-
+    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW"))
+        return sal_False;
     //////////////////////////////////////////////////////////////
     // Wenn leeres Feld, kein PrimKey
     // Eintrag wird nur erlaubt, wenn
@@ -1527,10 +1515,9 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
             // oder wenn Spalten nicht gedroped werden können und das Required Flag ist nicht gesetzt
             // oder wenn eine ::com::sun::star::sdbcx::View vorhanden ist und das Required Flag nicht gesetzt ist
             const OTypeInfo* pTypeInfo = pFieldDescr->getTypeInfo();
-            if( pTypeInfo->nSearchType == ColumnSearch::NONE ||
-                (bDropNotAllowed && pFieldDescr->IsNullable()) ||
-                (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW") &&
-                !(!pFieldDescr->IsNullable() || pFieldDescr->IsAutoIncrement())))
+            if( pTypeInfo->nSearchType == ColumnSearch::NONE                    ||
+                (pFieldDescr->IsNullable() && pRow->IsReadOnly())
+              )
                 return sal_False;
         }
 

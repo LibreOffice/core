@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:46:24 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 12:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,7 +1595,10 @@ sal_Bool OTableController::isDropAllowed() const
     Reference<XColumnsSupplier> xColsSup(m_xTable,UNO_QUERY);
     sal_Bool bDropAllowed = !m_xTable.is();
     if(xColsSup.is())
-        bDropAllowed = Reference<XDrop>(xColsSup->getColumns(),UNO_QUERY).is();
+    {
+        Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
+        bDropAllowed = Reference<XDrop>(xNameAccess,UNO_QUERY).is() && xNameAccess->hasElements();
+    }
 
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
     bDropAllowed = bDropAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithDropColumn());
