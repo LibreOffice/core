@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 18:16:52 $
+ *  last change: $Author: pb $ $Date: 2002-04-05 08:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #define _SVSTDARR_ULONGSSORT
 
+#include <stdio.h>
 #include <string.h>
 #ifndef _SVEDI_HXX
 #include <svmedit.hxx>
@@ -1112,8 +1113,10 @@ BOOL SvLBox::MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget )
                                     (SvListEntry*)pNewParent, nInsertionPos );
             }
             else
+            {
                 pModel->Move( (SvListEntry*)pSourceEntry,
                               (SvListEntry*)pNewParent, nInsertionPos );
+            }
         }
         else
             bSuccess = FALSE;
@@ -1150,12 +1153,15 @@ void SvLBox::RemoveSelection()
     }
 }
 
+SvLBox* SvLBox::GetSourceView() const
+{
+    return pDDSource;
+}
 
-SvLBox* __EXPORT SvLBox::GetSourceView() const
-    { return pDDSource; }
-
-SvLBox* __EXPORT SvLBox::GetTargetView() const
-    { return pDDTarget; }
+SvLBox* SvLBox::GetTargetView() const
+{
+    return pDDTarget;
+}
 
 void SvLBox::RequestingChilds( SvLBoxEntry*  )
 {
@@ -1544,12 +1550,13 @@ sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvLBox* pSourceView )
 {
     DBG_CHKTHIS(SvLBox,0);
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    GetSourceView()->EnableSelectionAsDropTarget( TRUE, TRUE );
+    DBG_ASSERT( pSourceView, "SvLBox::ExecuteDrop(): no source view" );
+    pSourceView->EnableSelectionAsDropTarget( TRUE, TRUE );
 
     ImplShowTargetEmphasis( pTargetEntry, FALSE );
     pDDTarget = this;
@@ -1583,6 +1590,12 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
             nRet = rEvt.mnAction;
     }
     return nRet;
+}
+
+sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    DBG_CHKTHIS(SvLBox,0);
+    return ExecuteDrop( rEvt, GetSourceView() );
 }
 
 void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
