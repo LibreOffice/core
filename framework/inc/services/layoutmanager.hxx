@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:18:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,10 @@
 #include <drafts/com/sun/star/frame/XInplaceLayout.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMENUBARMERGINGACCEPTOR_HPP_
+#include <drafts/com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -193,6 +197,7 @@ namespace framework
                           public  css::frame::XFrameActionListener                      ,
                           public  drafts::com::sun::star::ui::XUIConfigurationListener  ,
                           public  drafts::com::sun::star::frame::XInplaceLayout         ,
+                          public  drafts::com::sun::star::frame::XMenuBarMergingAcceptor,
                           // base classes
                           // Order is neccessary for right initialization!
                           private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
@@ -215,6 +220,7 @@ namespace framework
             virtual void SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setDockingAreaAcceptor( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL createElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL destroyElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
@@ -235,12 +241,24 @@ namespace framework
             virtual void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL unlock(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL doLayout(  ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isVisible() throw (::com::sun::star::uno::RuntimeException);
 
             //---------------------------------------------------------------------------------------------------------
             //  XInplaceLayout
             //---------------------------------------------------------------------------------------------------------
             virtual void SAL_CALL setInplaceMenuBar( sal_Int64 pInplaceMenuBarPointer ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL resetInplaceMenuBar(  ) throw (::com::sun::star::uno::RuntimeException);
+
+            //---------------------------------------------------------------------------------------------------------
+            // XMenuBarMergingAcceptor
+            //---------------------------------------------------------------------------------------------------------
+            virtual sal_Bool SAL_CALL setMergeMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& ContainerMenuBar,
+                                                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& ContainerDispatchProvider,
+                                                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& EmbedObjectMenuBar,
+                                                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& EmbedObjectDispatchProvider )
+                                                       throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeMergedMenuBar(  ) throw (::com::sun::star::uno::RuntimeException);
 
             //---------------------------------------------------------------------------------------------------------
             //  XWindowListener
@@ -279,7 +297,7 @@ namespace framework
             void implts_clearMenuBarCloser();
             void implts_setMenuBarCloser( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& StatusListener );
             void implts_updateMenuBarClose();
-
+            void implts_updateUIElementsVisibleState( sal_Bool bShow );
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 
             //---------------------------------------------------------------------------------------------------------
@@ -304,6 +322,7 @@ namespace framework
                 UIElement( const rtl::OUString& rName, const rtl::OUString& rType, const com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement >& rUIElement ) :
                     aName( rName ), aType( rType ), xUIElement( rUIElement ) {}
 
+                sal_Bool                                                                 bMasterHide; // Hidden because layout manager is non-visible
                 rtl::OUString                                                            aName;
                 rtl::OUString                                                            aType;
                 com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > xUIElement;
@@ -321,9 +340,10 @@ namespace framework
             css::uno::Reference< css::awt::XWindow >                                    m_xTopDockingWindow;
             sal_Int32                                                                   m_nLockCount;
             UIElementVector                                                             m_aUIElements;
-            sal_Bool                                                                    m_bActive;
-            sal_Bool                                                                    m_bInplaceMenuSet;
-            sal_Bool                                                                    m_bMenuVisible;
+            sal_Bool                                                                    m_bActive : 1,
+                                                                                        m_bInplaceMenuSet : 1,
+                                                                                        m_bVisible : 1,
+                                                                                        m_bMenuVisible : 1;
             css::awt::Rectangle                                                         m_aDockingArea;
             css::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >   m_xDockingAreaAcceptor;
             css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xInplaceMenuBar;
