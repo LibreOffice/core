@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 12:56:33 $
+#   last change: $Author: kz $ $Date: 2004-08-31 14:58:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ SLOFILES=	\
         $(SLO)$/bootstrap.obj	\
         $(SLO)$/providerfactory.obj	\
         $(SLO)$/providerwrapper.obj	\
+        $(SLO)$/logger.obj	\
         $(SLO)$/tracer.obj	\
         $(SLO)$/configunoreg.obj	\
         $(SLO)$/serviceinfohelper.obj \
