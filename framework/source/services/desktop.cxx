@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:55:05 $
+ *  last change: $Author: as $ $Date: 2001-08-14 12:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    RTL_LOGFILE_CONTEXT( aLog, "framework (as) ::Desktop::loadComponentFromURL" );
+    RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::Desktop::loadComponentFromURL" );
 
     // CHeck incoming parameter and throw an exception for wrong values!
     if(
