@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,31 +59,31 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCONARC_HXX
-#define _SD_FUCONARC_HXX
+#ifndef SD_FU_CONSTRUCT_ARC_HXX
+#define SD_FU_CONSTRUCT_ARC_HXX
 
-#ifndef _SD_FUCONSTR_HXX
+#ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
 #endif
 
+namespace sd {
 
-/*************************************************************************
-|*
-|* Rechteck zeichnen
-|*
-\************************************************************************/
 
-class FuConstArc : public FuConstruct
+class FuConstructArc
+    : public FuConstruct
 {
- public:
+public:
     TYPEINFO();
 
-    FuConstArc( SdViewShell* pViewSh, SdWindow* pWin,
-                SdView* pView, SdDrawDocument* pDoc,
-                SfxRequest& rReq);
+    FuConstructArc (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuConstructArc (void);
 
-    virtual ~FuConstArc();
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -96,7 +96,7 @@ class FuConstArc : public FuConstruct
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUCONARC_HXX
+#endif
 

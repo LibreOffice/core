@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,35 +59,35 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCON3D_HXX
-#define _SD_FUCON3D_HXX
+#ifndef SD_FU_CONSTRUCT_3D_OBJECT_HXX
+#define SD_FU_CONSTRUCT_3D_OBJECT_HXX
 
-#ifndef _SD_FUCONSTR_HXX
+#ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
 #endif
 
+class E3dCompoundObject;
+class E3dScene;
+class SdDrawDocument;
+class SfxRequest;
 
-/*************************************************************************
-|*
-|* Rechteck zeichnen
-|*
-\************************************************************************/
+namespace sd {
 
-class FuConst3dObj : public FuConstruct
+class FuConstruct3dObject
+    : public FuConstruct
 {
-    // #97016#
-    void ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene);
-    E3dCompoundObject* ImpCreateBasic3DShape();
-
- public:
+public:
     TYPEINFO();
 
-    FuConst3dObj(SdViewShell* pViewSh, SdWindow* pWin,
-                 SdView* pView, SdDrawDocument* pDoc,
-                 SfxRequest& rReq);
+    FuConstruct3dObject (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuConstruct3dObject (void);
 
-    virtual ~FuConst3dObj();
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -98,9 +98,14 @@ class FuConst3dObj : public FuConstruct
 
     // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
+private:
+    // #97016#
+    void ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene);
+    E3dCompoundObject* ImpCreateBasic3DShape();
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUCON3D_HXX
+#endif
 
