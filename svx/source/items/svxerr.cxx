@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,19 @@
 
 #include "dialogs.hrc"
 
+static SvxErrorHandler* pHandler=NULL;
+
 SvxErrorHandler::SvxErrorHandler() :
 
   SfxErrorHandler(
       RID_SVXERRCODE, ERRCODE_AREA_SVX, ERRCODE_AREA_SVX_END, DIALOG_MGR() )
 {
+    pHandler = this;
 }
 
+void SvxErrorHandler::Get()
+{
+    if ( !pHandler )
+        new SvxErrorHandler;
+}
 
