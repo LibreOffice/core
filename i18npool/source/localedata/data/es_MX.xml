@@ -24,7 +24,7 @@
 <Currency default="true" usedInCompatibleFormatCodes="true">
 <CurrencyID>$</CurrencyID>
 <CurrencySymbol>$</CurrencySymbol>
-<BankSymbol>MXP</BankSymbol>
+<BankSymbol>MXN</BankSymbol>
 <CurrencyName>Peso</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
