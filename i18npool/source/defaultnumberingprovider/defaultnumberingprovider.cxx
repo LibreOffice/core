@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-29 19:13:11 $
+ *  last change: $Author: khong $ $Date: 2002-09-07 01:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,12 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
+#include <bullet.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace drafts::com::sun::star::i18n;
 using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -196,6 +198,19 @@ void lcl_formatChars( char A, int n, OUString& s )
 }
 
 static
+void lcl_formatChars1( char A, int n, OUString& s )
+{
+     // string representation of n is appended to s.
+     // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>AA, 27=>BB, ...
+     // if A=='a' then 0=>a, 1=>b, ..., 25=>z, 26=>aa, 27=>bb, ...
+
+     int repeat_count = n / 26 + 1;
+
+     for( int i=0; i<repeat_count; i++ )
+     s += OUString::valueOf( (sal_Unicode) (( n%26 ) + A) );
+}
+
+static
 should_ignore( OUString s )
 {
     // return true if blank or null
@@ -207,12 +222,8 @@ Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
                                                 const char* name, sal_Bool bRequired )
 {
     for( int i=0; i<aProperties.getLength(); i++ )
-    {
         if( aProperties[i].Name.equalsAscii(name) )
-        {
             return aProperties[i].Value;
-        }
-    }
     if(bRequired)
         throw IllegalArgumentException();
     return Any();
@@ -241,6 +252,12 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      // A: an Any can't hold a style::NumberingType for some reason.
     //  add.: style::NumberingType holds constants of type sal_Int16, it's not an enum type
 
+     sal_Int16 natNum = 0;
+     sal_Int16 tableSize = 0;
+     sal_Unicode *table;
+     sal_Bool recycleSymbol = sal_False;
+     Locale locale;
+
      OUString  prefix;
      sal_Int16        numType; // type of formatting from style::NumberingType (roman, arabic, etc)
      OUString  suffix;
@@ -249,59 +266,40 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      int nProperties = aProperties.getLength();
      int last        = nProperties-1;
 
-     try
-     {
+     try {
         getPropertyByName(aProperties, "Prefix", sal_False)      >>=prefix;
-     }
-     catch (Exception&)
-     {
+     } catch (Exception&) {
         //prefix _must_ be empty here!
      }
-     try
-     {
+     try {
         getPropertyByName(aProperties, "Suffix", sal_False)      >>=suffix;
-     }
-     catch (Exception&)
-     {
+     } catch (Exception&) {
         //suffix _must_ be empty here!
      }
-     try
-     {
+     try {
         getPropertyByName(aProperties, "NumberingType", sal_True)   >>=numType;
-     }
-     catch (Exception& )
-     {
+     } catch (Exception& ) {
         numType = -1;
      }
-     try
-     {
+     try {
         getPropertyByName(aProperties, "Value", sal_True)       >>=number;
-     }
-     catch (Exception& )
-     {
+     } catch (Exception& ) {
         number = -1;
      }
 
      if( number <= 0 )
-     {
           throw IllegalArgumentException();
-     }
 
      // start empty
      OUString result;
 
-     // this should be locale dependent.
-     // for now, assume en_US
+      // append prefix
+      if( !should_ignore(prefix) ) result += prefix;
 
-     // en_US
-     {
-          // append prefix
-          if( !should_ignore(prefix) ) result += prefix;
-
-          // append formatted number
-          using namespace style::NumberingType;
-          switch( numType )
-          {
+      // append formatted number
+      using namespace style::NumberingType;
+      switch( numType )
+      {
           case CHARS_UPPER_LETTER:
                lcl_formatChars( 'A', number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>AB, ...
                break;
@@ -330,39 +328,11 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                throw IllegalArgumentException();
                break;
           case CHARS_UPPER_LETTER_N:
-               {
-                    sal_Unicode c    = ((--number)%26) + 'A';
-                    int repeat_count = number / 26 + 1;
-                    for( int i=0; i<repeat_count; i++ )
-                        result += OUString::valueOf( c );
-               }
+               lcl_formatChars1( 'A', number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
                break;
           case CHARS_LOWER_LETTER_N:
-               {
-                    sal_Unicode c    = ((--number)%26) + 'a';
-                    int repeat_count = number / 26 + 1;
-                    for( int i=0; i<repeat_count; i++ )
-                        result += OUString::valueOf( c );
-               }
+               lcl_formatChars1( 'a', number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
                break;
-#ifdef DEBUG
-        case 20:
-        {
-            if(number >= 0 && number <= 5)
-            {
-                    static const sal_Char* aTestNumbers[] =
-                    {
-                        "None","First","Second","Third","Fourth","Fifth"
-                    };
-                    result = OUString::createFromAscii(aTestNumbers[number]);
-            }
-            else
-                result = OUString::createFromAscii("too big!");
-        }
-        break;
-
-#endif
-
           case TRANSLITERATION:
            try {
              OUString &tmp = OUString::valueOf( number );
@@ -378,35 +348,105 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                     // throw IllegalArgumentException();
            }
                break;
-
           case NATIVE_NUMBERING:
-           try {
-             OUString &tmp = OUString::valueOf( number );
-            NativeNumberSupplier sNatNum;
-            sal_Int16 nNatNum;
-            getPropertyByName(aProperties, "NatNum", sal_True) >>= nNatNum;
-            result += sNatNum.getNativeNumberString(tmp, aLocale, nNatNum);
-           } catch (Exception& ) {
-            // When NatNum property is missing, return default number (bug #101141#)
-            result += OUString::valueOf( number );
-                    // assert(0);
-                    // throw IllegalArgumentException();
-           }
-               break;
+          natNum = NativeNumberMode::NATNUM1;
+        locale = aLocale;
+                break;
+      case FULLWIDTH_ARABIC:
+          natNum = NativeNumberMode::NATNUM3;
+        locale = aLocale;
+                break;
+      case NUMBER_LOWER_ZH:
+          natNum = NativeNumberMode::NATNUM7;
+        locale.Language = OUString::createFromAscii("zh");
+                break;
+      case NUMBER_UPPER_ZH_TW:
+        locale.Country = OUString::createFromAscii("TW");
+      case NUMBER_UPPER_ZH:
+          natNum = NativeNumberMode::NATNUM8;
+        locale.Language = OUString::createFromAscii("zh");
+                break;
+          natNum = NativeNumberMode::NATNUM8;
+        locale.Language = OUString::createFromAscii("zh");
+                break;
+      case NUMBER_TRADITIONAL_JA:
+          natNum = NativeNumberMode::NATNUM8;
+        locale.Language = OUString::createFromAscii("ja");
+                break;
+      case NUMBER_UPPER_KO:
+          natNum = NativeNumberMode::NATNUM8;
+        locale.Language = OUString::createFromAscii("ko");
+                break;
+      case NUMBER_HANGUL_KO:
+          natNum = NativeNumberMode::NATNUM11;
+        locale.Language = OUString::createFromAscii("ko");
+                break;
+
+      case CIRCLE_NUMBER:
+          table = table_CircledNumber;
+          tableSize = sizeof(table_CircledNumber) / sizeof(sal_Unicode);
+          break;
+      case TIAN_GAN_ZH:
+          table = table_TianGan_zh;
+          tableSize = sizeof(table_TianGan_zh) / sizeof(sal_Unicode);
+          break;
+      case DI_ZI_ZH:
+          table = table_DiZi_zh;
+          tableSize = sizeof(table_DiZi_zh) / sizeof(sal_Unicode);
+          break;
+      case AIU_FULLWIDTH_JA:
+          table = table_AIUFullWidth_ja_JP;
+          tableSize = sizeof(table_AIUFullWidth_ja_JP) / sizeof(sal_Unicode);
+          break;
+      case AIU_HALFWIDTH_JA:
+          table = table_AIUHalfWidth_ja_JP;
+          tableSize = sizeof(table_AIUHalfWidth_ja_JP) / sizeof(sal_Unicode);
+          break;
+      case IROHA_FULLWIDTH_JA:
+          table = table_IROHAFullWidth_ja_JP;
+          tableSize = sizeof(table_IROHAFullWidth_ja_JP) / sizeof(sal_Unicode);
+          break;
+      case IROHA_HALFWIDTH_JA:
+          table = table_IROHAHalfWidth_ja_JP;
+          tableSize = sizeof(table_IROHAHalfWidth_ja_JP) / sizeof(sal_Unicode);
+          break;
+      case HANGUL_JAMO_KO:
+          table = table_HangulJamo_ko;
+          tableSize = sizeof(table_HangulJamo_ko) / sizeof(sal_Unicode);
+          break;
+      case HANGUL_SYLLABLE_KO:
+          table = table_HangulSyllable_ko;
+          tableSize = sizeof(table_HangulSyllable_ko) / sizeof(sal_Unicode);
+          break;
+      case HANGUL_CIRCLED_JAMO_KO:
+          table = table_HangulCircledJamo_ko;
+          tableSize = sizeof(table_HangulCircledJamo_ko) / sizeof(sal_Unicode);
+          break;
+      case HANGUL_CIRCLED_SYLLABLE_KO:
+          table = table_HangulCircledSyllable_ko;
+          tableSize = sizeof(table_HangulCircledSyllable_ko) / sizeof(sal_Unicode);
+          break;
 
           default:
                assert(0);
                throw IllegalArgumentException();
                break;
-          }
+      }
 
-          // append suffix
-      if( !should_ignore(suffix) ) result += suffix;
-     }
-     // en_US
+    if (natNum) {
+        NativeNumberSupplier sNatNum;
+        result += sNatNum.getNativeNumberString(OUString::valueOf( number ), locale, natNum);
+    } else if (tableSize) {
+        if ( number > tableSize && !recycleSymbol)
+        result += OUString::valueOf( number);
+        else
+        result += OUString(table[--number % tableSize]);
+    }
 
+    // append suffix
+    if( !should_ignore(suffix) ) result += suffix;
 
-     return result;
+    return result;
 }
 /* -----------------------------21.02.01 15:57--------------------------------
 
@@ -429,10 +469,25 @@ static const Supported_NumberingType aSupportedTypes[] =
     {style::NumberingType::BITMAP,              "Bitmap"},
     {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA"},
     {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa"},
-#ifdef DEBUG
-    {20,    "First"},
-#endif
-    {style::NumberingType::CHARS_LOWER_LETTER_N,    "Transliteration"}
+    {style::NumberingType::NATIVE_NUMBERING,    "Native Numbering"},
+    {style::NumberingType::FULLWIDTH_ARABIC,    NULL},
+    {style::NumberingType::CIRCLE_NUMBER,       NULL},
+    {style::NumberingType::NUMBER_LOWER_ZH,     NULL},
+    {style::NumberingType::NUMBER_UPPER_ZH,     NULL},
+    {style::NumberingType::NUMBER_UPPER_ZH_TW,  NULL},
+    {style::NumberingType::TIAN_GAN_ZH,     NULL},
+    {style::NumberingType::DI_ZI_ZH,        NULL},
+    {style::NumberingType::NUMBER_TRADITIONAL_JA,   NULL},
+    {style::NumberingType::AIU_FULLWIDTH_JA,    NULL},
+    {style::NumberingType::AIU_HALFWIDTH_JA,    NULL},
+    {style::NumberingType::IROHA_FULLWIDTH_JA,  NULL},
+    {style::NumberingType::IROHA_HALFWIDTH_JA,  NULL},
+    {style::NumberingType::NUMBER_UPPER_KO,     NULL},
+    {style::NumberingType::NUMBER_HANGUL_KO,    NULL},
+    {style::NumberingType::HANGUL_JAMO_KO,      NULL},
+    {style::NumberingType::HANGUL_SYLLABLE_KO,  NULL},
+    {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL},
+    {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,  NULL},
 };
     static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
@@ -477,8 +532,25 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
                 throw(RuntimeException)
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(nNumberingType == aSupportedTypes[i].nType)
+        if(nNumberingType == aSupportedTypes[i].nType) {
+        if (aSupportedTypes[i].cSymbol)
             return OUString::createFromAscii(aSupportedTypes[i].cSymbol);
+        else {
+            OUString result;
+            Locale aLocale(OUString::createFromAscii("en"), OUString(), OUString());
+            Sequence<beans::PropertyValue> aProperties(2);
+            aProperties[0].Name = OUString::createFromAscii("NumberingType");
+            aProperties[0].Value <<= nNumberingType;
+            aProperties[1].Name = OUString::createFromAscii("Value");
+            for (sal_Int32 j = 1; j <= 3; j++) {
+            aProperties[1].Value <<= j;
+            result += makeNumberingString( aProperties, aLocale );
+            result += OUString::createFromAscii(", ");
+            }
+            result += OUString::createFromAscii("...");
+            return result;
+        }
+        }
     return OUString();
 }
 /* -----------------------------05.07.01 13:34--------------------------------
