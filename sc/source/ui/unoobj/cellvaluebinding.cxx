@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellvaluebinding.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:20:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,10 +321,8 @@ namespace calc
                         Reference<XPropertySet> xProp( m_xCell, UNO_QUERY );
                         if ( xProp.is() )
                         {
-                            Any aTypeAny = xProp->getPropertyValue(
-                                ::rtl::OUString::createFromAscii( "FormulaResultType" ) );
                             CellContentType eResultType;
-                            if ( (aTypeAny >>= eResultType) && eResultType == CellContentType_VALUE )
+                            if ( (xProp->getPropertyValue(::rtl::OUString::createFromAscii( "FormulaResultType" ) ) >>= eResultType) && eResultType == CellContentType_VALUE )
                                 bHasValue = sal_True;
                         }
                     }
@@ -467,7 +465,7 @@ namespace calc
         Reference<XNumberFormatsSupplier> xSupplier( m_xDocument, UNO_QUERY );
         if ( xSupplier.is() && xCellProp.is() )
         {
-            Reference<XNumberFormats> xFormats = xSupplier->getNumberFormats();
+            Reference<XNumberFormats> xFormats(xSupplier->getNumberFormats());
             Reference<XNumberFormatTypes> xTypes( xFormats, UNO_QUERY );
             if ( xTypes.is() )
             {
@@ -478,7 +476,7 @@ namespace calc
                 Reference<XPropertySet> xOldFormat;
                 try
                 {
-                    xOldFormat = xFormats->getByKey( nOldIndex );
+                    xOldFormat.set(xFormats->getByKey( nOldIndex ));
                 }
                 catch ( Exception& )
                 {
@@ -590,7 +588,7 @@ namespace calc
     void OCellValueBinding::notifyModified()
     {
         EventObject aEvent;
-        aEvent.Source = *this;
+        aEvent.Source.set(*this);
 
         ::cppu::OInterfaceIteratorHelper aIter( m_aModifyListeners );
         while ( aIter.hasMoreElements() )
@@ -668,20 +666,19 @@ namespace calc
             // first the sheets collection
             Reference< XIndexAccess > xSheets;
             if ( m_xDocument.is() )
-                xSheets = xSheets.query( m_xDocument->getSheets( ) );
+                xSheets.set(xSheets.query( m_xDocument->getSheets( ) ));
             DBG_ASSERT( xSheets.is(), "OCellValueBinding::initialize: could not retrieve the sheets!" );
 
             if ( xSheets.is() )
             {
                 // the concrete sheet
-                Reference< XCellRange > xSheet;
-                xSheets->getByIndex( aAddress.Sheet ) >>= xSheet;
+                Reference< XCellRange > xSheet(xSheets->getByIndex( aAddress.Sheet ), UNO_QUERY);
                 DBG_ASSERT( xSheet.is(), "OCellValueBinding::initialize: NULL sheet, but no exception!" );
 
                 // the concrete cell
                 if ( xSheet.is() )
                 {
-                    m_xCell = xSheet->getCellByPosition( aAddress.Column, aAddress.Row );
+                    m_xCell.set(xSheet->getCellByPosition( aAddress.Column, aAddress.Row ));
                     Reference< XCellAddressable > xAddressAccess( m_xCell, UNO_QUERY );
                     DBG_ASSERT( xAddressAccess.is(), "OCellValueBinding::initialize: either NULL cell, or cell without address access!" );
                 }
@@ -696,7 +693,7 @@ namespace calc
             throw Exception();
             // TODO error message
 
-        m_xCellText = m_xCellText.query( m_xCell );
+        m_xCellText.set(m_xCellText.query( m_xCell ));
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xCell, UNO_QUERY );
         if ( xBroadcaster.is() )
