@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-08 15:09:55 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:13:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -260,13 +260,10 @@ SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL$(TNR)RES)"!=""
-SHL$(TNR)RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL$(TNR)RES))
 SHL$(TNR)ALLRES+=$(SHL$(TNR)RES)
 SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
 .ENDIF			# "$(SHL$(TNR)RES)"!=""
-.ENDIF
 
 .IF "$(SHL$(TNR)DEFAULTRES)$(use_shl_versions)"!=""
 SHL$(TNR)DEFAULTRES*=$(MISC)$/$(SHL$(TNR)TARGET)_def.res
