@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:47:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text [ danish ] = "Opret 3D-rotationslegeme" ;
     Text [ portuguese_brazilian ] = "Erstelle 3D-Rotationsobjekt" ;
     Text [ portuguese ] = "Criar objectos de rotação 3D" ;
-    Text[ chinese_simplified ] = "½¨Á¢ 3 Î¬Ğı×ªÌå";
+    Text[ chinese_simplified ] = "½¨Á¢3Î¬Ğı×ªÌå";
     Text[ russian ] = "Ñîçäàòü îáúåêò âğàùåíèÿ";
     Text[ polish ] = "Utwórz 3-W obiekt obrotowy";
     Text[ japanese ] = "3D ‰ñ“]‘ÌµÌŞ¼Şª¸Ä‚Ìì¬";
@@ -300,7 +300,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text [ spanish ] = "Quebrar objeto 3D" ;
     Text [ french ] = "Fractionner l'objet 3D" ;
     Text [ dutch ] = "3D-object opsplitsen" ;
-    Text[ chinese_simplified ] = "·Ö¿ª 3 Î¬¶ÔÏó";
+    Text[ chinese_simplified ] = "·Ö¿ª3Î¬¶ÔÏó";
     Text[ russian ] = "Ğàçáèòü 3-Ì-Îáúåêò";
     Text[ polish ] = "Rozdziel obiekt 3-W";
     Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä‚Ì•ªŠ„";
@@ -324,7 +324,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text [ spanish ] = "Atributos en 3D" ;
     Text [ french ] = "Attributs 3D" ;
     Text [ dutch ] = "3D-attributen" ;
-    Text[ chinese_simplified ] = "3 Î¬ÊôĞÔ";
+    Text[ chinese_simplified ] = "3Î¬ÊôĞÔ";
     Text[ russian ] = "Àòğèáóòû 3-Ì";
     Text[ polish ] = "Atrybuty 3-W";
     Text[ japanese ] = "3D ‘Ì‚Ì‘®«";
