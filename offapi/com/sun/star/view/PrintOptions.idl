@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintOptions.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 13:33:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com {  module sun {  module star {  module view {
     <p>These options are only valid for a single print job. They do not
     change layout or formatting of the document.
  */
-service PrintOptions
+published service PrintOptions
 {
     //-------------------------------------------------------------------------
     /** specifies the number of copies to print.
