@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:42:20 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                     rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
                     for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
                     {
+                        nCurrentTable = nTable;
                         uno::Any aTable = xIndex->getByIndex(nTable);
                         uno::Reference<sheet::XSpreadsheet> xTable;
                         if (aTable>>=xTable)
@@ -1390,6 +1391,7 @@ void ScXMLExport::SetBodyAttributes()
 
 void ScXMLExport::_ExportContent()
 {
+    nCurrentTable = 0;
     if (!pSharedData)
     {
         sal_Int32 nTableCount(0);
@@ -2032,7 +2034,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
             sal_Bool        bRedLine;
             ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
                 pObject, aPosition, aSourceRange, bRedLine );
-            pSharedData->GetDetectiveObjContainer()->AddObject( eObjType, aPosition, aSourceRange, bRedLine );
+            pSharedData->GetDetectiveObjContainer()->AddObject( eObjType, nCurrentTable, aPosition, aSourceRange, bRedLine );
         }
     }
 }
