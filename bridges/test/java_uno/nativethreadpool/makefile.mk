@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-09 10:20:30 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:52:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,7 @@ SHL2IMPLIB = i$(TARGET)_server
 SLOFILES = $(SHL1OBJS) $(SHL2OBJS)
 
 JAVAFILES = Relay.java
-JARFILES = java_uno.jar juh.jar jurt.jar ridl.jar sandbox.jar
+JARFILES = java_uno.jar juh.jar jurt.jar ridl.jar
 
 .INCLUDE: target.mk
 
