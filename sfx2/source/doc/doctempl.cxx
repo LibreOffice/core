@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-06 14:12:28 $
+ *  last change: $Author: dv $ $Date: 2001-04-06 14:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,8 +358,6 @@ public:
 
     long                GetRegionPos( const OUString& rTitle,
                                       sal_Bool& rFound ) const;
-
-    sal_Bool            DoUpdate();
 
     void                GetTitleFromURL( const OUString& rURL, OUString& aTitle );
     sal_Bool            InsertRegion( RegionData_Impl *pData, ULONG nPos = LIST_APPEND );
@@ -1125,7 +1123,7 @@ BOOL SfxDocumentTemplates::CopyTo
 
     OUString aTitle( aTargetURL.getName( INetURLObject::LAST_SEGMENT, true,
                                          INetURLObject::DECODE_WITH_CHARSET ) );
-    aTargetURL.CutName();
+    aTargetURL.removeSegment();
 
     OUString aParentURL = aTargetURL.GetMainURL();
 
@@ -2158,9 +2156,8 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     // now get the content of the region
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(2);
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString::createFromAscii( TITLE );
-    pProps[1] = OUString::createFromAscii( TARGET_URL );
+    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[1] = OUString::createFromAscii( TARGET_URL );
 
     try
     {
@@ -2201,8 +2198,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString::createFromAscii( TITLE );
 
     try
     {
@@ -2299,9 +2295,8 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
 {
     Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
-    OUString* pProps = aProps.getArray();
 
-    pProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString::createFromAscii( TITLE );
 
     try
     {
