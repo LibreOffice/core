@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:09:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,12 +967,17 @@ void SwRTFParser::ReadField()
                 else if (RTFFLD_UNKNOWN == nRet)
                 {
                     // FieldResult wurde eingelesen
-                    SwTxtNode* pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode();
-                    SwTxtAttr* pFldAttr = pTxtNd->GetTxtAttr(
-                            pPam->GetPoint()->nContent.GetIndex()-1 );
+                    if (SwTxtNode* pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode())
+                    {
+                        SwTxtAttr* pFldAttr = pTxtNd->GetTxtAttr(
+                                pPam->GetPoint()->nContent.GetIndex()-1 );
 
-                    ((SwUserFieldType*)pFldAttr->GetFld().GetFld()->GetTyp())->
-                                SetContent( sFieldStr );
+                        if (pFldAttr)
+                        {
+                            ((SwUserFieldType*)pFldAttr->GetFld().GetFld()->GetTyp())->
+                                        SetContent( sFieldStr );
+                        }
+                    }
                 }
                 else if( sFieldNm.Len() )
                 {
@@ -1103,6 +1108,12 @@ INSINGLECHAR:
                     += String::CreateFromInt32( nTokenValue )) += ' ';
                 sFieldStr.Insert( sTmp, 3 );
             }
+            break;
+        case RTF_FFNAME:
+        case RTF_FORMFIELD:
+            break;
+        case RTF_PAR:
+            sFieldStr.Append('\x0a');
             break;
         default:
             SvxRTFParser::NextToken( nToken );
