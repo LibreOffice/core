@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FormHandler.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:37:24 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:16:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -64,6 +64,7 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
@@ -117,8 +118,8 @@ public class FormHandler {
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
     int iXPixelFactor = -1;
     int iYPixelFactor = -1;
-    int iXNirwanaPos = 40000;
-    int iYNirwanaPos = 40000;
+    int iXNirwanaPos = 50000;
+    int iYNirwanaPos = 50000;
     public int nLabelHeight = -1;
     public int nDBRefHeight = -1;
     public int BasicLabelDiffHeight= -1;
@@ -414,8 +415,14 @@ public class FormHandler {
     if (ControlList != null){
         for (int i = 0; i < ControlList.length; i++){
             if (ControlList[i] != null)
-                ControlList[i].setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
-        }
+                try {
+                    String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue("Name");
+                    if (xNamedForm.hasByName(sControlName))
+                        xNamedForm.removeByName(sControlName);
+                } catch (Exception e) {
+                    e.printStackTrace(System.out);
+                }
+            }
     }}
 
 
