@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-14 12:59:55 $
+ *  last change: $Author: sj $ $Date: 2002-10-29 15:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
+#include <tools/rcid.h>
 #include <tools/vcompat.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/itempool.hxx>
@@ -178,6 +179,48 @@ void SgaObject::ReadData(SvStream& rIn, UINT16& rReadVersion )
         rIn >> aThumbMtf;
 
     rIn >> aTmpStr; aURL = INetURLObject( String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+}
+
+// ------------------------------------------------------------------------
+
+const String SgaObject::GetTitle() const
+{
+    String aReturnValue( aTitle );
+    if ( !getenv( "GALLERY_SHOW_PRIVATE_TITLE" ) )
+    {
+        if ( aReturnValue.GetTokenCount( ':' ) == 3 )
+        {
+            String      aPrivateInd  ( aReturnValue.GetToken( 0, ':' ) );
+            String      aResourceName( aReturnValue.GetToken( 1, ':' ) );
+            sal_Int32   nResId       ( aReturnValue.GetToken( 2, ':' ).ToInt32() );
+            if ( aReturnValue.GetToken( 0, ':' ).EqualsAscii( "private" ) &&
+                aResourceName.Len() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
+            {
+                ByteString aMgrName( aResourceName, RTL_TEXTENCODING_UTF8 );
+                aMgrName += ByteString::CreateFromInt32( SOLARUPD );
+                ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.GetBuffer(),
+                            Application::GetSettings().GetUILanguage() );
+                if ( pResMgr )
+                {
+                    ResId aResId( (sal_uInt16)nResId, pResMgr );
+                    aResId.SetRT( RSC_STRING );
+                    if ( pResMgr->IsAvailable( aResId ) )
+                    {
+                        aReturnValue = String( aResId );
+                    }
+                    delete pResMgr;
+                }
+            }
+        }
+    }
+    return aReturnValue;
+}
+
+// ------------------------------------------------------------------------
+
+void SgaObject::SetTitle( const String& rTitle )
+{
+    aTitle = rTitle;
 }
 
 // ------------------------------------------------------------------------
