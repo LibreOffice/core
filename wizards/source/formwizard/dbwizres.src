@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 21:14:08 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String RID_DB_COMMON_START + 0
     Text[ korean ] = "~ ¸¸µé±â";
     Text[ turkish ] = "~Oluştur";
     Text[ catalan ] = "C~reate";
+    Text[ finnish ] = "~Fertig stellen";
 };
 String RID_DB_COMMON_START + 1
 {
@@ -108,7 +109,7 @@ String RID_DB_COMMON_START + 1
     Text[ swedish ] = "Av~bryt";
     Text[ polish ] = "~Anuluj";
     Text[ portuguese_brazilian ] = "~Cancel";
-    Text[ japanese ] = "~·¬İ¾Ù";
+    Text[ japanese ] = "·¬İ¾Ù";
     Text[ chinese_simplified ] = "È¡Ïû(~A)";
     Text[ chinese_traditional ] = "¨ú®ø(~A)";
     Text[ arabic ] = "~ÅáÛÇÁ ÇáÃãÑ";
@@ -118,6 +119,7 @@ String RID_DB_COMMON_START + 1
     Text[ korean ] = "Ãë¼Ò";
     Text[ turkish ] = "~İptal";
     Text[ catalan ] = "~Cancel";
+    Text[ finnish ] = "A~bbrechen";
 };
 String RID_DB_COMMON_START + 2
 {
@@ -133,7 +135,7 @@ String RID_DB_COMMON_START + 2
     Text[ swedish ] = "<< ~Tillbaka";
     Text[ polish ] = "<< ~Wstecz";
     Text[ portuguese_brazilian ] = "<< ~Back";
-    Text[ japanese ] = "<< ~–ß‚é";
+    Text[ japanese ] = "<< –ß‚é";
     Text[ chinese_simplified ] = "<< ·µ»Ø(~B)";
     Text[ chinese_traditional ] = "<< ªğ¦^(~B)";
     Text[ arabic ] = "<< ~ÇáÓÇÈŞ";
@@ -143,6 +145,7 @@ String RID_DB_COMMON_START + 2
     Text[ korean ] = "<< µÚ·Î";
     Text[ turkish ] = "<< Ge~ri";
     Text[ catalan ] = "<< ~Back";
+    Text[ finnish ] = "<< ~Zurück";
 };
 String RID_DB_COMMON_START + 3
 {
@@ -168,6 +171,7 @@ String RID_DB_COMMON_START + 3
     Text[ korean ] = "´ÙÀ½ >>";
     Text[ turkish ] = "~İleri >>";
     Text[ catalan ] = "~Next >>";
+    Text[ finnish ] = "~Weiter >>";
 };
 String RID_DB_COMMON_START + 4
 {
@@ -183,7 +187,7 @@ String RID_DB_COMMON_START + 4
     Text[ swedish ] = "~Databas";
     Text[ polish ] = "~Baza danych";
     Text[ portuguese_brazilian ] = "~Database";
-    Text[ japanese ] = "~ÃŞ°ÀÍŞ°½";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
     Text[ chinese_simplified ] = "Êı¾İ¿â(~D)";
     Text[ chinese_traditional ] = "¸ê®Æ®w(~D)";
     Text[ arabic ] = "~ŞÇÚÏÉ ÇáÈíÇäÇÊ";
@@ -193,6 +197,7 @@ String RID_DB_COMMON_START + 4
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
     Text[ turkish ] = "~Veritabanı";
     Text[ catalan ] = "~Database";
+    Text[ finnish ] = "~Datenbank";
 };
 String RID_DB_COMMON_START + 5
 {
@@ -208,7 +213,7 @@ String RID_DB_COMMON_START + 5
     Text[ swedish ] = "~Tabellnamn";
     Text[ polish ] = "~Nazwa tabeli";
     Text[ portuguese_brazilian ] = "~Table name";
-    Text[ japanese ] = "~•\\–¼";
+    Text[ japanese ] = "Ã°ÌŞÙ–¼";
     Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~T)";
     Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~T)";
     Text[ arabic ] = "~ÇÓã ÇáÌÏæá";
@@ -219,6 +224,7 @@ String RID_DB_COMMON_START + 5
     Text[ turkish ] = "~Tablo adı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Table name";
+    Text[ finnish ] = "~Tabellenname";
 };
 String RID_DB_COMMON_START + 6
 {
@@ -244,6 +250,7 @@ String RID_DB_COMMON_START + 6
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µÀÌ ½ÇÇàµÇ´Â µ¿¾È ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ÀÚµ¿ÆÄÀÏ·µÀº Á¾·áµË´Ï´Ù";
     Text[ turkish ] = "OtoPilot çalıştırılırken bir hata oluştu. Otopilot kapatılacak.";
     Text[ catalan ] = "An error occurred while running the AutoPilot. The AutoPilot will be terminated.";
+    Text[ finnish ] = "Während der Ausführung des AutoPiloten ist ein Fehler aufgetreten. Der AutoPilot wird beendet.";
 };
 String RID_DB_COMMON_START + 7
 {
@@ -269,6 +276,7 @@ String RID_DB_COMMON_START + 7
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µÀÌ ½ÇÇàµÇ´Â µ¿¾È ¾ç½ÄÀ»¡¡¿­¾î¼­´Â¡¡¾ÈµË´Ï´Ù. ¾ç½ÄÀ» ´İ¾Æ ÁÖ½Ê½Ã¿À.";
     Text[ turkish ] = "OtoPilot çalışırken açık form bulunmamalıdır. Lütfen formu kapatın.";
     Text[ catalan ] = "A form cannot be open while running the AutoPilots. Please close the form.";
+    Text[ finnish ] = "Während der Ausführung des Autopiloten darf kein Formular geöffnet sein. Bitte schließen Sie das Formular.";
 };
 String RID_DB_COMMON_START + 8
 {
@@ -284,9 +292,9 @@ String RID_DB_COMMON_START + 8
     Text[ swedish ] = "Ingen databas är installerad. Du behöver minst en databas för att kunna starta AutoPiloten för formulär.";
     Text[ polish ] = "Nie zainstalowano ¿adnej bazy danych. Do uruchomienia AutoPilota forrmularzy wymagana jest co najmniej jedna baza danych.";
     Text[ portuguese_brazilian ] = "Es ist keine Datenbank installiert. Sie benötigen mindestens eine Datenbank um den AutoPiloten für Formulare starten zu können.";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÌ«°Ñì¬‚Ìµ°ÄÊß²Û¯ÄŠJn‚Ì‚½‚ß‚É‚ÍA­‚È‚­‚Æ‚à1‚Â‚ÌÃŞ°ÀÍŞ°½‚ª•K—v‚Å‚·B";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBµ°ÄÊß²Û¯Ä Ì«°Ñ‚ğŠJn‚·‚é‚É‚ÍAÃŞ°ÀÍŞ°½‚ªÅ’á‚P‚Â‚Í•K—v‚Å‚·B";
     Text[ chinese_simplified ] = "Ã»ÓĞ°²×°Êı¾İ¿â¡£ÄúĞèÒªÒ»¸öÊı¾İ¿âÀ´Æô¶¯×Ô¶¯ÎÄ¼şÖúÀí£¬ÖÆ×÷±íµ¥¡£";
-    Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¸ê®Æ®w¡C±Ò°Ê¦Û°Êªí³æ§U²zµ{¦¡¦Ü¤Ö±z»İ­n«Ø¥ß¤F¤@­Ó¸ê®Æ®w¡C";
+    Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¥ô¦óªº¸ê®Æ®w¡C±Ò°Ê¦Û°Êªí³æ§U²zµ{¦¡¦Ü¤Ö±z»İ­n«Ø¥ß¤F¤@­Ó¸ê®Æ®w¡C";
     Text[ arabic ] = "áíÓ åäÇß ÃíÉ ŞÇÚÏÉ ÈíÇäÇÊ ãËÈÊÉ. ÃäÊ ÈÍÇÌÉ Åáì ŞÇÚÏÉ ÈíÇäÇÊ æÇÍÏÉ Úáì ÇáÃŞá áßí ÊÊãßä ãä ÈÏÁ ÇáãÑÔÏ ÇáÂáí ááÇÓÊãÇÑÇÊ.";
     Text[ dutch ] = "Er is geen database geïnstalleerd. U heeft minstens één database nodig om de AutoPiloot voor formulieren te kunnen starten.";
     Text[ chinese_simplified ] = "Ã»ÓĞ°²×°Êı¾İ¿â¡£ÄúĞèÒªÒ»¸öÊı¾İ¿âÀ´Æô¶¯×Ô¶¯ÎÄ¼şÖúÀí£¬ÖÆ×÷±íµ¥¡£";
@@ -294,12 +302,13 @@ String RID_DB_COMMON_START + 8
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. ¹İµå½Ã ½Ã½ºÅÛ¿¡ ÇÏ³ª ÀÌ»óÀÇ µ¥ÀÌÅÍº£ÀÌ½º°¡ ÀÖ¾î¾ß ÀÚµ¿ÆÄÀÏ·µ ¾ç½ÄÀÌ ½ÃÀÛµÉ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Kurulmuş veritabanı yok. Form OtoPilot'unu başlatabilmek için en az bir veritabanı mevcut olmalıdır.";
     Text[ catalan ] = "A database has not been installed. At least one database is required before the AutoPilot for forms can be started.";
+    Text[ finnish ] = "Es ist keine Datenbank installiert. Sie benötigen mindestens eine Datenbank um den AutoPiloten für Formulare starten zu können.";
 };
 String RID_DB_COMMON_START + 9
 {
     Text = "Die Datenbank enthält keine Tabelle.";
     Text [ english_us] = "The database does not contain any tables.";
-    Text[ portuguese ] = "A base de dados não tem nenhuma tabela.";
+    Text[ portuguese ] = "A base de dados não contém tabelas.";
     Text[ russian ] = "Áàçà äàííûõ íå ñîäåğæèò íè îäíîé òàáëèöû.";
     Text[ dutch ] = "De database bevat geen tabel.";
     Text[ french ] = "La base de données ne contient aucune table.";
@@ -311,7 +320,7 @@ String RID_DB_COMMON_START + 9
     Text[ portuguese_brazilian ] = "The database does not have any table.";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚É‚ÍÃ°ÌŞÙ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Text[ chinese_simplified ] = "Êı¾İ¿âÃ»ÓĞÈÎºÎ±í¸ñ¡£";
-    Text[ chinese_traditional ] = "¸ê®Æ®w¨S¦³¥ô¦óªí®æ¡C";
+    Text[ chinese_traditional ] = "¸ê®Æ®w¤§¤¤¨S¦³¥ô¦óªí®æ¡C";
     Text[ arabic ] = "áÇ ÊÍÊæí ŞÇÚÏÉ ÇáÈíÇäÇÊ Úáì Ãí ÌÏæá.";
     Text[ dutch ] = "De database bevat geen tabel.";
     Text[ chinese_simplified ] = "Êı¾İ¿âÃ»ÓĞÈÎºÎ±í¸ñ¡£";
@@ -320,6 +329,7 @@ String RID_DB_COMMON_START + 9
     Text[ turkish ] = "Veritabanı tablo içermiyor.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The database does not contain any tables.";
+    Text[ finnish ] = "Die Datenbank enthält keine Tabelle.";
 };
 String RID_DB_COMMON_START + 10
 {
@@ -346,6 +356,7 @@ String RID_DB_COMMON_START + 10
     Text[ turkish ] = "Bu başlık veritabanında zaten mevcut. Lütfen başka bir başlık adı seçiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "This title already exists in the database. Please enter another name.";
+    Text[ finnish ] = "Der Titel existiert bereits in der Datenbank. Bitte wählen Sie einen anderen.";
 };
 String RID_DB_COMMON_START + 11
 {
@@ -361,9 +372,9 @@ String RID_DB_COMMON_START + 11
     Text[ swedish ] = "Namnet får inte innehålla några blanksteg eller specialtecken.";
     Text[ polish ] = "Nazwa nie mo¿e zawieraæ spacji ani znaków specjalnych.";
     Text[ portuguese_brazilian ] = "The title must not contain any spaces or escape characters.";
-    Text[ japanese ] = "À²ÄÙ‚Í‹ó”’‚Ü‚½‚Í“Áê•¶š‚ğŠÜ‚ß‚Ü‚¹‚ñB";
+    Text[ japanese ] = "À²ÄÙ‚É‹ó”’A‚Ü‚½‚Í‹L†‚Æ“Áê•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ä‚Í‚¢‚¯‚Ü‚¹‚ñB";
     Text[ chinese_simplified ] = "±êÌâ²»µÃº¬ÓĞ¿Õ°××Ö·û»òÌØÊâ×Ö·û¡£";
-    Text[ chinese_traditional ] = "¼ĞÃD¤£±o§t¦³ªÅ®æ©M¯S®í¦r¤¸¡C";
+    Text[ chinese_traditional ] = "¼ĞÃD¤£±o§t¦³ªÅ®æ¤Î¯S®í¦r¤¸¡C";
     Text[ arabic ] = "áÇ íÌÈ Ãä íÍÊæí ÇáÚäæÇä Úáì ÃÍÑİ ãÓÇİÉ Ãæ ÑãæÒ ÎÇÕÉ.";
     Text[ dutch ] = "De naam mag geen spaties of speciale tekens bevatten.";
     Text[ chinese_simplified ] = "±êÌâ²»µÃº¬ÓĞ¿Õ°××Ö·û»òÌØÊâ×Ö·û¡£";
@@ -371,6 +382,7 @@ String RID_DB_COMMON_START + 11
     Text[ korean ] = "Á¦¸ñ¿¡ ½ºÆäÀÌ½º³ª Æ¯¼ö±âÈ£°¡ µé¾î°¡¼­´Â ¾ÈµË´Ï´Ù.";
     Text[ turkish ] = "Başlıkta boşluk ya da özel karakterler bulunmamalıdır.";
     Text[ catalan ] = "The title must not contain any spaces or special characters.";
+    Text[ finnish ] = "Der Titel darf keine Leer- oder Sonderzeichen enthalten.";
 };
 
 String RID_DB_COMMON_START + 12
@@ -387,7 +399,7 @@ String RID_DB_COMMON_START + 12
     Text[ swedish ] = "Det gick inte att instantiera databasservicen (com.sun.data.DatabaseEngine).";
     Text[ polish ] = "Nie mo¿na by³o udostêpniæ serwisu bazy danych (com.sun.star.data.DatabaseEngine).";
     Text[ portuguese_brazilian ] = "The database service (stardiv.one.data.DatabaseEngine) could not be loaded.";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½ »°ËŞ½ (com.sun.star.data.DatabaseEngine)‚Í²İ½Ä°Ù‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì»°ËŞ½ (com.sun.star.data.DatabaseEngine)‚Í²İ½Ä°Ù‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ chinese_simplified ] = "ÎŞ·¨°²×°Êı¾İ¿â·şÎñ¹¦ÄÜ(com.sun.star.data.DatabaseEngine)¡£";
     Text[ chinese_traditional ] = "µLªkªì©l¤Æ¸ê®Æ®wªA°È(stardiv.one.data.DatabaseEngine)¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊåíÆÉ ÎÏãÉ ŞÇÚÏÉ ÇáÈíÇäÇÊ (com.sun.star.data.DatabaseEngine).";
@@ -398,6 +410,7 @@ String RID_DB_COMMON_START + 12
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼­ºñ½º(com.sun.star.data.DatabaseEngine)¸¦ ÀÎ½ºÅÏ½º»ı¼ºÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Veritabanı hizmeti (com.sun.star.data.DatabaseEngine) oluşturulamadı.";
     Text[ catalan ] = "The database service (com.sun.data.DatabaseEngine) could not be instantiated.";
+    Text[ finnish ] = "Der Datenbank-Service (com.sun.star.data.DatabaseEngine) konnte nicht instantiiert werden.";
 };
 
 String RID_DB_COMMON_START + 13
@@ -416,14 +429,15 @@ String RID_DB_COMMON_START + 13
     Text[ danish ] = "Det var ikke muligt at åbne den valgte tabel eller forespørgsel.";
     Text[ polish ] = "Nie mo¿na otworzyæ ¿¹danej tabeli lub kwerendy.";
     Text[ portuguese_brazilian ] = "The selected table or query could not be opened.";
-    Text[ japanese ] = "‘I‘ğ‚µ‚½Ã-ÌŞÙ‚ ‚é‚¢‚Í¸´Ø°‚ÍŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ japanese ] = "‘I‘ğ‚µ‚½Ã-ÌŞÙA‚Ü‚½‚Í¸´Ø°‚ÍŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "¼±ÅÃµÈ Ç¥³ª ÁúÀÇ¸¦ ¿­Áö ¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÑ¡ÖĞµÄ±í¸ñºÍ²éÑ¯¡£";
-    Text[ chinese_traditional ] = "µLªk¶}±Ò¿ï¨úªºªí®æ©Î¬d¸ß¡C";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò¤w¸g¿ï¤¤ªºªí®æ©Î¬d¸ß¡C";
     Text[ arabic ] = "ÊÚĞÑ İÊÍ ÇáÌÏæá Ãæ ÇáÇÓÊİÓÇÑ ÇáãÍÏÏ.";
     Text[ turkish ] = "Seçilen tablo ya da sorgu açılamadı.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The selected table or query could not be opened.";
+    Text[ finnish ] = "Die ausgewählte Tabelle oder Abfrage konnte nicht geöffnet werden.";
 };
 
 // ============================================================================
@@ -442,7 +456,7 @@ String RID_DB_GROUP_WIZARD_START + 0
     Text[ swedish ] = "AutoPilot för gruppelement";
     Text[ polish ] = "AutoPilot - Element grupowy";
     Text[ portuguese_brazilian ] = "AutoPilot Gruppenelement";
-    Text[ japanese ] = "µ°ÄÊß²Û¯Ä Šî–{—v‘f";
+    Text[ japanese ] = "µ°ÄÊß²Û¯Ä ¸ŞÙ°Ìß—v‘f";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí Ğ¡×éµ¥Ôª";
     Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ¸s²Õ¤¸¥ó";
     Text[ arabic ] = "ÚäÕÑ ãÌãæÚÉ ÇáãÑÔÏ ÇáÂáí";
@@ -453,6 +467,7 @@ String RID_DB_GROUP_WIZARD_START + 0
     Text[ turkish ] = "OtoPilot Grup öğesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot Group Element";
+    Text[ finnish ] = "AutoPilot Gruppenelement";
 };
 
 String RID_DB_GROUP_WIZARD_START + 1
@@ -471,7 +486,7 @@ String RID_DB_GROUP_WIZARD_START + 1
     Text[ portuguese_brazilian ] = "Die Datenbank enthält keine Tabelle.";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚É‚ÍÃ°ÌŞÙ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Text[ chinese_simplified ] = "Êı¾İ¿âÖĞÃ»ÓĞÈÎºÎ±í¸ñ¡£";
-    Text[ chinese_traditional ] = "¸ê®Æ®w¨S¦³¥ô¦óªí®æ¡C";
+    Text[ chinese_traditional ] = "¸ê®Æ®w¤§¤¤¨S¦³¥ô¦óªí®æ¡C";
     Text[ arabic ] = "áÇ ÊÍÊæí ŞÇÚÏÉ ÇáÈíÇäÇÊ Úáì Ãí ÌÏæá.";
     Text[ dutch ] = "De database bevat geen tabel.";
     Text[ chinese_simplified ] = "Êı¾İ¿âÖĞÃ»ÓĞÈÎºÎ±í¸ñ¡£";
@@ -479,6 +494,7 @@ String RID_DB_GROUP_WIZARD_START + 1
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º¿¡ Ç¥°¡ ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Veritabanı tablo içermiyor.";
     Text[ catalan ] = "The database does not contain any tables.";
+    Text[ finnish ] = "Die Datenbank enthält keine Tabelle.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 2
@@ -497,7 +513,7 @@ String RID_DB_GROUP_WIZARD_START + 2
     Text[ portuguese_brazilian ] = "Gruppe erzeugen";
     Text[ japanese ] = "¸ŞÙ°Ìß‚Ìì¬";
     Text[ chinese_simplified ] = "Éú³ÉĞ¡×é";
-    Text[ chinese_traditional ] = "«Ø¥ß¸s²Õ";
+    Text[ chinese_traditional ] = "»s§@¸s²Õ";
     Text[ arabic ] = "ÅäÔÇÁ ãÌãæÚÉ";
     Text[ dutch ] = "Groep maken";
     Text[ chinese_simplified ] = "Éú³ÉĞ¡×é";
@@ -505,6 +521,7 @@ String RID_DB_GROUP_WIZARD_START + 2
     Text[ korean ] = "±×·ì¡¡¸¸µé±â";
     Text[ turkish ] = "Grup oluştur";
     Text[ catalan ] = "Create Group";
+    Text[ finnish ] = "Gruppe erzeugen";
 };
 
 String RID_DB_GROUP_WIZARD_START + 3
@@ -532,6 +549,7 @@ String RID_DB_GROUP_WIZARD_START + 3
     Text[ korean ] = ":  Ç¥¡¡¼±ÅÃ";
     Text[ turkish ] = ": Tablo seçimi";
     Text[ catalan ] = ": Table Selection";
+    Text[ finnish ] = ": Tabellenauswahl";
 };
 
 String RID_DB_GROUP_WIZARD_START + 4
@@ -559,6 +577,7 @@ String RID_DB_GROUP_WIZARD_START + 4
     Text[ turkish ] = ": Alan seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Field Selection";
+    Text[ finnish ] = ": Feldauswahl";
 };
 
 String RID_DB_GROUP_WIZARD_START + 5
@@ -586,6 +605,7 @@ String RID_DB_GROUP_WIZARD_START + 5
     Text[ turkish ] = ": Standart alan seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Default Field Selection";
+    Text[ finnish ] = ": Standardfeldauswahl";
 };
 
 String RID_DB_GROUP_WIZARD_START + 6
@@ -613,6 +633,7 @@ String RID_DB_GROUP_WIZARD_START + 6
     Text[ turkish ] = ": Alan değerleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Field Value";
+    Text[ finnish ] = ": Feldwerte";
 };
 
 String RID_DB_GROUP_WIZARD_START + 7
@@ -640,6 +661,7 @@ String RID_DB_GROUP_WIZARD_START + 7
     Text[ turkish ] = ": Veritabanı alanı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Database Field";
+    Text[ finnish ] = ": Datenbankfeld";
 };
 
 String RID_DB_GROUP_WIZARD_START + 8
@@ -666,6 +688,7 @@ String RID_DB_GROUP_WIZARD_START + 8
     Text[ korean ] = ": ¿É¼Ç ±×·ì ¸¸µé±â";
     Text[ turkish ] = ": Seçenek grubu oluştur";
     Text[ catalan ] = ": Create Option Group";
+    Text[ finnish ] = ": Optionsgruppe erstellen";
 };
 
 String RID_DB_GROUP_WIZARD_START + 9
@@ -682,9 +705,9 @@ String RID_DB_GROUP_WIZARD_START + 9
     Text[ swedish ] = "Ange alla alternativfält i den här dialogen.";
     Text[ polish ] = "WprowadŸ w danym oknie dialogowym wszystkie pola opcji.";
     Text[ portuguese_brazilian ] = "Geben Sie in diesem Dialog bitte alle Optionsfelder ein.";
-    Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚Å‚Í‚·‚×‚Ä‚ÌµÌß¼®İÌ¨°ÙÄŞ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+    Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚Å‚Í‚·‚×‚Ä‚ÌµÌß¼®İÌ¨°ÙÄŞ‚É“ü—Í‚µ‚Ü‚·B";
     Text[ chinese_simplified ] = "ÇëÄúÍùÕâ¸ö¶Ô»°¿òÄÚÊäÈëËùÓĞµÄÑ¡Ïî×Ö¶Î¡£";
-    Text[ chinese_traditional ] = "½Ğ±z¦b³o­Ó¹ï¸ÜÄæ¤º¶ñ¼g¥ş³¡ªº¿ï¶µÄæ¦ì¡C";
+    Text[ chinese_traditional ] = "½Ğ±z¦b³o­Ó¹ï¸Ü¤è¶ô¤º³]©w¥ş³¡ªº¿ï¶µÄæ¦ì¡C";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÌãíÚ ÃÒÑÇÑ ÇáÎíÇÑ İí ãÑÈÚ ÇáÍæÇÑ åĞÇ.";
     Text[ dutch ] = "Vul in deze dialoog alle optievelden in";
     Text[ chinese_simplified ] = "ÇëÄúÍùÕâ¸ö¶Ô»°¿òÄÚÊäÈëËùÓĞµÄÑ¡Ïî×Ö¶Î¡£";
@@ -692,6 +715,7 @@ String RID_DB_GROUP_WIZARD_START + 9
     Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡ ¸ğµç ¿É¼Ç ÇÊµå¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bu pencerede tüm seçenek alanlarını giriniz.";
     Text[ catalan ] = "Enter all Option Fields into this dialog.";
+    Text[ finnish ] = "Geben Sie in diesem Dialog bitte alle Optionsfelder ein.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 10
@@ -718,13 +742,14 @@ String RID_DB_GROUP_WIZARD_START + 10
     Text[ korean ] = "¾î´À ÀÌ¸§À» ¿É¼Ç ÇÊµå¿¡ ÁöÁ¤ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Seçenek alanlarına hangi adları vermek istiyorsunuz?";
     Text[ catalan ] = "Which names do you want to give the Option Fields?";
+    Text[ finnish ] = "Welche Bezeichnungen sollen die Optionsfelder erhalten?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 11
 {
     Text = "~Optionsfelder";
     Text [ english_us ] = "~Option Fields";
-    Text[ portuguese ] = "~campos de opção";
+    Text[ portuguese ] = "~Campos de opção";
     Text[ russian ] = "~Ïîëÿ ïàğàìåòğîâ";
     Text[ dutch ] = "~Optievelden";
     Text[ french ] = "~Boutons radio";
@@ -744,6 +769,7 @@ String RID_DB_GROUP_WIZARD_START + 11
     Text[ korean ] = "¿É¼Ç ÇÊµå";
     Text[ turkish ] = "~Seçenek alanları";
     Text[ catalan ] = "~Option Fields";
+    Text[ finnish ] = "~Optionsfelder";
 };
 
 String RID_DB_GROUP_WIZARD_START + 12
@@ -760,7 +786,7 @@ String RID_DB_GROUP_WIZARD_START + 12
     Text[ swedish ] = "Skall ett alternativfält vara utvalt som standard?";
     Text[ polish ] = "Czy wybraæ domyœlne pole opcji ?";
     Text[ portuguese_brazilian ] = "Soll ein Optionsfeld standardmäßig ausgewählt sein ?";
-    Text[ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ‚P‚Â‚Í•W€‚Æ‚µ‚Ä‘I‘ğ‚µ‚Ü‚·‚©B";
+    Text[ japanese ] = "•W€‚ÅµÌß¼®İÌ¨°ÙÄŞ‚P‚Â‚Í‘I‘ğ‚µ‚Ü‚·‚©B";
     Text[ chinese_simplified ] = "ÒªÑ¡ÔñÒ»¸öÄ¬ÈÏÑ¡ÏîÀ¸£¿";
     Text[ chinese_traditional ] = "­n¿ï¾Ü¼Ğ·ÇÄæ¦ì¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÇÎÊíÇÑ ÃÍÏ ÃÒÑÇÑ ÇáÎíÇÑÇÊ ßİÊÑÇÖí¿";
@@ -770,6 +796,7 @@ String RID_DB_GROUP_WIZARD_START + 12
     Text[ korean ] = "¿É¼Ç ÇÊµå¸¦ ±âº»À¸·Î ¼±ÅÃÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bir seçenek alanı standart olarak seçili olsun mu?";
     Text[ catalan ] = "Should one option field be selected as a default?";
+    Text[ finnish ] = "Soll ein Optionsfeld standardmäßig ausgewählt sein?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 13
@@ -786,7 +813,7 @@ String RID_DB_GROUP_WIZARD_START + 13
     Text[ swedish ] = "Ja, följande:";
     Text[ polish ] = "Tak, wybierz nastêpuj¹ce:";
     Text[ portuguese_brazilian ] = "Ja, und zwar folgendes:";
-    Text[ japanese ] = "‚Í‚¢AˆÈ‰º‚Ì‚²‚Æ‚­:";
+    Text[ japanese ] = "‚Í‚¢AˆÈ‰º‚Ì‚Æ‚¨‚è‚Å‚·:";
     Text[ chinese_simplified ] = "ÊÇ£¬Ñ¡ÔñÏÂÁĞ£º";
     Text[ chinese_traditional ] = "¬O¡A¿ï¾Ü¤U¦C¡G";
     Text[ arabic ] = "äÚã¡ ÇáÍŞá ÇáÊÇáí:";
@@ -797,6 +824,7 @@ String RID_DB_GROUP_WIZARD_START + 13
     Text[ turkish ] = "Evet, aşağıdaki:";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Yes, the following:";
+    Text[ finnish ] = "Ja, und zwar folgendes:";
 };
 
 String RID_DB_GROUP_WIZARD_START + 14
@@ -813,9 +841,9 @@ String RID_DB_GROUP_WIZARD_START + 14
     Text[ swedish ] = "Nej, inget fält skall vara utvalt.";
     Text[ polish ] = "Nie, nie wybieraj ¿adnego pola.";
     Text[ portuguese_brazilian ] = "Nein, kein Feld soll ausgewählt sein.";
-    Text[ japanese ] = "‚¢‚¢‚¦AÌ¨°ÙÄŞ‚Í‘I‘ğ‚µ‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‚¢‚¢‚¦AÌ¨°ÙÄŞ‚Ì‘I‘ğ‚È‚µB";
     Text[ chinese_simplified ] = "·ñ£¬²»ÒªÑ¡ÔñÈÎºÎÀ¸¡£";
-    Text[ chinese_traditional ] = "§_¡A¤£­n¿ï¾Ü¡C";
+    Text[ chinese_traditional ] = "§_¡A¤£­n¿ï¾Ü¥ô¦óÄæ¦ì¡C";
     Text[ arabic ] = "ßáÇ¡ áÇ ÃÑíÏ ÇÎÊíÇÑ Ãí ÍŞá.";
     Text[ dutch ] = "Nee, geen veld selecteren.";
     Text[ chinese_simplified ] = "·ñ£¬²»ÒªÑ¡ÔñÈÎºÎÀ¸¡£";
@@ -823,6 +851,7 @@ String RID_DB_GROUP_WIZARD_START + 14
     Text[ korean ] = "¾Æ´Ï¿À, ÇÊµå°¡ ¼±ÅÃµÇ¾î ÀÖ¾î¼­´Â ¾ÈµË´Ï´Ù.";
     Text[ turkish ] = "Hayır, hiçbir alan seçili olmamalıdır.";
     Text[ catalan ] = "No, one particular field is not going to be selected.";
+    Text[ finnish ] = "Nein, kein Feld soll ausgewählt sein.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 15
@@ -850,6 +879,7 @@ String RID_DB_GROUP_WIZARD_START + 15
     Text[ turkish ] = "Bir seçenek belirlendiğinde, seçenek grubuna belirli bir değer atanır.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "When you select an option, the option group is given a specific value.";
+    Text[ finnish ] = "Wenn Sie eine Option auswählen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 16
@@ -868,7 +898,7 @@ String RID_DB_GROUP_WIZARD_START + 16
     Text[ portuguese_brazilian ] = "Welchen Wert möchten Sie jeder Option zuweisen ?";
     Text[ japanese ] = "ŠeµÌß¼®İ‚É‚Ç‚Ì’l‚ğŠ„‚è“–‚Ä‚Ü‚·‚©B";
     Text[ chinese_simplified ] = "ÄúÒª·ÖÅä¸øÑ¡ÏîµÄÊıÖµÊÇ£¿";
-    Text[ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µªº¼Æ­È¡H";
+    Text[ chinese_traditional ] = "­n³]©w¨C­Ó¿ï¶µªº¼Æ­È¡H";
     Text[ arabic ] = "ãÇ åí ÇáŞíãÉ ÇáÊí ÊÑíÏ ÊÚííäåÇ áßá ÎíÇÑ¿";
     Text[ dutch ] = "Welke waarden wilt u toewijzen aan de opties ?";
     Text[ chinese_simplified ] = "ÄúÒª·ÖÅä¸øÑ¡ÏîµÄÊıÖµÊÇ£¿";
@@ -876,13 +906,14 @@ String RID_DB_GROUP_WIZARD_START + 16
     Text[ korean ] = "¾î´À °ªÀ» °¢ ¿É¼Ç¿¡ ÇÒ´çÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Her bir seçeneğe hangi değeri atamak istiyorsunuz?";
     Text[ catalan ] = "Which value do you want to assign to each option?";
+    Text[ finnish ] = "Welchen Wert möchten Sie jeder Option zuweisen?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 17
 {
     Text = "~Optionsfelder";
     Text [ english_us ] = "~Option Fields";
-    Text[ portuguese ] = "~campos de opção";
+    Text[ portuguese ] = "~Campos de opção";
     Text[ russian ] = "~Ïîëÿ ïàğàìåòğîâ";
     Text[ dutch ] = "~Optievelden";
     Text[ french ] = "~Boutons radio";
@@ -902,6 +933,7 @@ String RID_DB_GROUP_WIZARD_START + 17
     Text[ korean ] = "¿É¼Ç ÇÊµå";
     Text[ turkish ] = "~Seçenek alanları";
     Text[ catalan ] = "~Option Fields";
+    Text[ finnish ] = "~Optionsfelder";
 };
 
 String RID_DB_GROUP_WIZARD_START + 18
@@ -918,9 +950,9 @@ String RID_DB_GROUP_WIZARD_START + 18
     Text[ swedish ] = "Du kan antingen spara alternativgruppens värde i ett databasfält eller använda det till en senare åtgärd.";
     Text[ polish ] = "Wartoœæ grupy opcji mo¿na zapisaæ w polu bazy danych lub u¿yæ jej do póŸniejszej operacji.";
     Text[ portuguese_brazilian ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
-    Text[ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ì’l‚ÍAÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚·‚é‚©A‚ ‚é‚¢‚ÍŸ‚Ì±¸¼®İ‚Åg—p‚µ‚Ü‚·B";
+    Text[ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ì’l‚ÍAÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚·‚é‚©A‚ ‚é‚¢‚ÍŸ‚Ì±¸¼®İ‚Åg—p‚Å‚«‚Ü‚·B";
     Text[ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîĞ¡×éµÄÊıÖµ´æÈëÒ»¸öÊı¾İ¿â»òÒÔºóµ÷ÓÃËü¡£";
-    Text[ chinese_traditional ] = "±z¯à°÷¦b¤@­Ó¸ê®Æ®w¤ºÀx¦s¿ï¶µ¸s²Õªº¼Æ­È¡A¥H³Æ¤µ«á¯à°÷¨Ï¥Î¥¦¡C";
+    Text[ chinese_traditional ] = "±z¯à°÷¦b¤@­Ó¸ê®Æ®w¤ºÀx¦s¿ï¶µ¸s²Õªº¼Æ­È¡A¥H³Æ«á¥Î¡C";
     Text[ arabic ] = "íãßäß ÍİÙ ŞíãÉ ãÌãæÚÉ ÇáÎíÇÑÇÊ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ Ãæ ÇÓÊÎÏÇãå İí ÚãáíÉ áÇÍŞÉ.";
     Text[ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
     Text[ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîĞ¡×éµÄÊıÖµ´æÈëÒ»¸öÊı¾İ¿â»òÒÔºóµ÷ÓÃËü¡£";
@@ -928,6 +960,7 @@ String RID_DB_GROUP_WIZARD_START + 18
     Text[ korean ] = "¿É¼Ç ±×·ìÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ¾ÕÀ¸·ÎÀÇ ÀÛ¾÷¿¡ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Seçenek alanının değerini bir veritabanı alanında kaydedebilir ya da bu değeri daha sonra yapılacak bir işlemde kullanabilirsiniz.";
     Text[ catalan ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
+    Text[ finnish ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 19
@@ -954,6 +987,7 @@ String RID_DB_GROUP_WIZARD_START + 19
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµåÀÇ °ªÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Değeri bir veritabanı alanında kaydetmek istiyor musunuz?";
     Text[ catalan ] = "Do you want to save the value in a database field?";
+    Text[ finnish ] = "Möchten Sie den Wert in einem Datenbankfeld speichern?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 20
@@ -972,7 +1006,7 @@ String RID_DB_GROUP_WIZARD_START + 20
     Text[ portuguese_brazilian ] = "Ja, und zwar in folgendem Datenbankfeld :";
     Text[ japanese ] = "‚Í‚¢AŸ‚ÌÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶:";
     Text[ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊı¾İ¿âÀ¸£º";
-    Text[ chinese_traditional ] = "¬O¡A¤U¦Cªº¸ê®Æ®wÄæ¦ì¡G";
+    Text[ chinese_traditional ] = "¬O¡A¥H¤Uªº¸ê®Æ®wÄæ¦ì¡G";
     Text[ arabic ] = "äÚã¡ İí ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÊÇáí:";
     Text[ dutch ] = "Ja, en wel in het volgende databaseveld :";
     Text[ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊı¾İ¿âÀ¸£º";
@@ -980,6 +1014,7 @@ String RID_DB_GROUP_WIZARD_START + 20
     Text[ korean ] = "¿¹, ´ÙÀ½ µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Evet, aşağıdaki veritabanı alanında kaydedebilirsiniz :";
     Text[ catalan ] = "Yes, save it in the following database field:";
+    Text[ finnish ] = "Ja, und zwar in folgendem Datenbankfeld :";
 };
 
 String RID_DB_GROUP_WIZARD_START + 21
@@ -996,7 +1031,7 @@ String RID_DB_GROUP_WIZARD_START + 21
     Text[ swedish ] = "Nej, jag vill bara spara värdet i formuläret.";
     Text[ polish ] = "Nie, zapisz tê wartoœæ tylko w formularzu.";
     Text[ portuguese_brazilian ] = "Nein, ich möchte den Wert nur im Formular speichern.";
-    Text[ japanese ] = "‚¢‚¢‚¦A’l‚ğÌ«°Ñ‚É‚µ‚©•Û‘¶‚µ‚È‚¢B";
+    Text[ japanese ] = "‚¢‚¢‚¦A’l‚ÍÌ«°Ñ‚É‚µ‚©•Û‘¶‚µ‚È‚¢B";
     Text[ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊıÖµ´æÈë±íµ¥¡£";
     Text[ chinese_traditional ] = "§_¡A¥u¦s¤J¤@­Óªí³æ¤º¡C";
     Text[ arabic ] = "ßáÇ¡ ÃÑíÏ ÍİÙ ÇáŞíãÉ İí ÇáÇÓÊãÇÑÉ İŞØ.";
@@ -1006,6 +1041,7 @@ String RID_DB_GROUP_WIZARD_START + 21
     Text[ korean ] = "¾Æ´Ï¿À, °ªÀ» ¾ç½Ä¿¡¸¸ ÀúÀåÇÏ°Ú½À´Ï´Ù.";
     Text[ turkish ] = "Hayır, değeri yalnızca form içinde kaydetmek istiyorum.";
     Text[ catalan ] = "No, I only want to save the value in the form.";
+    Text[ finnish ] = "Nein, ich möchte den Wert nur im Formular speichern.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 22
@@ -1032,6 +1068,7 @@ String RID_DB_GROUP_WIZARD_START + 22
     Text[ korean ] = "¿É¼Ç ±×·ì¿¡ ¾î´À Ä¸¼ÇÀ» ÁöÁ¤ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Seçenek grubunuza hangi resim altyazısı verilsin?";
     Text[ catalan ] = "Which caption is to be given to your option group?";
+    Text[ finnish ] = "Welche Beschriftung soll Ihre Optionsgruppe haben?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 23
@@ -1048,9 +1085,9 @@ String RID_DB_GROUP_WIZARD_START + 23
     Text[ swedish ] = "Detta var alla uppgifter som behövdes för att alternativgruppen ska kunna skapas.";
     Text[ polish ] = "By³y to ju¿ wszystkie dane wymagane do utworzenia grupy opcji.";
     Text[ portuguese_brazilian ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
-    Text[ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ìì¬‚É•K—v‚È–€‚ÍA‚±‚ê‚Å‘S•”‚Å‚·B";
+    Text[ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ìì¬‚É•K—v‚È€–Ú‚ÍA‚±‚ê‚Å‘S•”‚Å‚·B";
     Text[ chinese_simplified ] = "ÕâĞ©ÊÇÖÆ×÷Ñ¡ÏîĞ¡×éËùĞèµÄËùÓĞ×ÊÁÏ¡£";
-    Text[ chinese_traditional ] = "³o¨Ç¬O¨î§@¿ï¶µ¸s²Õ©Ò»İªº¥ş³¡¸ê®Æ¡C";
+    Text[ chinese_traditional ] = "³o¨Ç¬O»s§@¿ï¶µ¸s²Õ©Ò¥²»İ­nªº¥ş³¡¸ê®Æ¡C";
     Text[ arabic ] = "ßÇäÊ åĞå åí ßÇİÉ ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãÌãæÚÉ ÇáÎíÇÑÇÊ.";
     Text[ dutch ] = "De gegevens voor het maken van de optiegroep zijn nu compleet.";
     Text[ chinese_simplified ] = "ÕâĞ©ÊÇÖÆ×÷Ñ¡ÏîĞ¡×éËùĞèµÄËùÓĞ×ÊÁÏ¡£";
@@ -1058,6 +1095,7 @@ String RID_DB_GROUP_WIZARD_START + 23
     Text[ korean ] = "ÀÌ°ÍÀÌ ¿É¼Ç ±×·ì ÀÛ¼º¿¡ ÇÊ¿äÇÑ ¸ğµç ÁöÁ¤»çÇ×ÀÌ¾ú½À´Ï´Ù.";
     Text[ turkish ] = "Seçenek grubunun oluşturulması için gereken tüm bilgiler bunlardır.";
     Text[ catalan ] = "These were all details needed to create the option group.";
+    Text[ finnish ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
 };
 
 // ============================================================================
@@ -1078,7 +1116,7 @@ String RID_DB_FORM_WIZARD_START + 0
     Text[ portuguese_brazilian ] = "AutoPilot Formulare";
     Text[ japanese ] = "µ°ÄÊß²Û¯Ä Ì«°Ñ";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±íµ¥";
-    Text[ chinese_traditional ] = "ÀÉ®×§U²z ªí³æ";
+    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ªí³æ";
     Text[ arabic ] = "ÇÓÊãÇÑÇÊ ÇáãÑÔÏ ÇáÂáí";
     Text[ dutch ] = "AutoPiloot Formulieren";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±íµ¥";
@@ -1086,6 +1124,7 @@ String RID_DB_FORM_WIZARD_START + 0
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¾ç½Ä";
     Text[ turkish ] = "Form OtoPilotu";
     Text[ catalan ] = "AutoPilot Forms";
+    Text[ finnish ] = "AutoPilot Formulare";
 };
 
 String RID_DB_FORM_WIZARD_START + 1
@@ -1112,6 +1151,7 @@ String RID_DB_FORM_WIZARD_START + 1
     Text[ korean ] = "ÀÌ Á¦¸ñÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. ´Ù¸¥ Á¦¸ñÀ» ¼±ÅÃÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bu başlık kullanılamıyor. Lütfen başka bir başlık adı seçiniz.";
     Text[ catalan ] = "This title can not be used. Please select a different one.";
+    Text[ finnish ] = "Der Titel kann nicht verwendet werden. Bitte wählen Sie einen anderen.";
 };
 
 String RID_DB_FORM_WIZARD_START + 2
@@ -1130,7 +1170,7 @@ String RID_DB_FORM_WIZARD_START + 2
     Text[ portuguese_brazilian ] = "Formular erzeugen";
     Text[ japanese ] = "Ì«°Ñ‚Ìì¬";
     Text[ chinese_simplified ] = "Éú³É±íµ¥";
-    Text[ chinese_traditional ] = "¨î§@ªí³æ";
+    Text[ chinese_traditional ] = "»s§@ªí³æ";
     Text[ arabic ] = "ÅäÔÇÁ ÇÓÊãÇÑÉ";
     Text[ dutch ] = "Formulier maken";
     Text[ chinese_simplified ] = "Éú³É±íµ¥";
@@ -1138,6 +1178,7 @@ String RID_DB_FORM_WIZARD_START + 2
     Text[ korean ] = "¾ç½Ä ¸¸µé±â";
     Text[ turkish ] = "Form oluştur";
     Text[ catalan ] = "Create Form";
+    Text[ finnish ] = "Formular erzeugen";
 };
 
 String RID_DB_FORM_WIZARD_START + 3
@@ -1165,6 +1206,7 @@ String RID_DB_FORM_WIZARD_START + 3
     Text[ turkish ] = "Form_";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Form_";
+    Text[ finnish ] = "Formular_";
 };
 
 String RID_DB_FORM_WIZARD_START + 4
@@ -1183,7 +1225,7 @@ String RID_DB_FORM_WIZARD_START + 4
     Text[ portuguese_brazilian ] = "(Datum)";
     Text[ japanese ] = "(“ú•t)";
     Text[ chinese_simplified ] = "(ÈÕÆÚ)";
-    Text[ chinese_traditional ] = "(¤é´Á)";
+    Text[ chinese_traditional ] = " (¤é´Á)";
     Text[ arabic ] = "(ÇáÊÇÑíÎ)";
     Text[ dutch ] = "(Datum)";
     Text[ chinese_simplified ] = "(ÈÕÆÚ)";
@@ -1191,6 +1233,7 @@ String RID_DB_FORM_WIZARD_START + 4
     Text[ korean ] = " (³¯Â¥)";
     Text[ turkish ] = "(Tarih)";
     Text[ catalan ] = "(Date)";
+    Text[ finnish ] = " (Datum)";
 };
 
 String RID_DB_FORM_WIZARD_START + 5
@@ -1207,9 +1250,9 @@ String RID_DB_FORM_WIZARD_START + 5
     Text[ swedish ] = "(Tid)";
     Text[ polish ] = "(Godzina)";
     Text[ portuguese_brazilian ] = "(Zeit)";
-    Text[ japanese ] = "(ŠÔ)";
+    Text[ japanese ] = "()";
     Text[ chinese_simplified ] = "(Ê±¼ä)";
-    Text[ chinese_traditional ] = "(®É¶¡)";
+    Text[ chinese_traditional ] = " (®É¶¡)";
     Text[ arabic ] = "(ÇáæŞÊ)";
     Text[ dutch ] = "(Tijd)";
     Text[ chinese_simplified ] = "(Ê±¼ä)";
@@ -1217,6 +1260,7 @@ String RID_DB_FORM_WIZARD_START + 5
     Text[ korean ] = "(½Ã°£)";
     Text[ turkish ] = "(Saat)";
     Text[ catalan ] = "(Time)";
+    Text[ finnish ] = " (Zeit)";
 };
 
 String RID_DB_FORM_WIZARD_START + 6
@@ -1243,6 +1287,7 @@ String RID_DB_FORM_WIZARD_START + 6
     Text[ korean ] = ":  Ç¥¡¡¼±ÅÃ";
     Text[ turkish ] = ": Tablo seçimi";
     Text[ catalan ] = ": Table Selection";
+    Text[ finnish ] = ": Tabellenauswahl";
 };
 
 String RID_DB_FORM_WIZARD_START + 7
@@ -1269,6 +1314,7 @@ String RID_DB_FORM_WIZARD_START + 7
     Text[ korean ] = ": ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = ": Alan seçimi";
     Text[ catalan ] = ": Field Selection";
+    Text[ finnish ] = ": Feldauswahl";
 };
 
 String RID_DB_FORM_WIZARD_START + 8
@@ -1295,6 +1341,7 @@ String RID_DB_FORM_WIZARD_START + 8
     Text[ korean ] = ": ÇÊµå ¸ÂÃã";
     Text[ turkish ] = ": Alan hizalaması";
     Text[ catalan ] = ": Field Alignment";
+    Text[ finnish ] = ": Feldausrichtung";
 };
 
 String RID_DB_FORM_WIZARD_START + 9
@@ -1321,6 +1368,7 @@ String RID_DB_FORM_WIZARD_START + 9
     Text[ korean ] = ": À¯Çü";
     Text[ turkish ] = ": Şablonlar";
     Text[ catalan ] = ": Styles";
+    Text[ finnish ] = ": Vorlagen";
 };
 
 String RID_DB_FORM_WIZARD_START + 10
@@ -1339,7 +1387,7 @@ String RID_DB_FORM_WIZARD_START + 10
     Text[ portuguese_brazilian ] = ": Formular erstellen";
     Text[ japanese ] = ": Ì«°Ñ‚Ìì¬";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±íµ¥";
-    Text[ chinese_traditional ] = "¡G¨î§@ªí³æ";
+    Text[ chinese_traditional ] = "¡G»s§@ªí³æ";
     Text[ arabic ] = ": ÅäÔÇÁ ÇÓÊãÇÑÉ";
     Text[ dutch ] = ": formulier maken";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±íµ¥";
@@ -1347,6 +1395,7 @@ String RID_DB_FORM_WIZARD_START + 10
     Text[ korean ] = ": ¾ç½Ä ¸¸µé±â";
     Text[ turkish ] = ": Form oluştur";
     Text[ catalan ] = ": Create Form";
+    Text[ finnish ] = ": Formular erstellen";
 };
 
 String RID_DB_FORM_WIZARD_START + 11
@@ -1363,7 +1412,7 @@ String RID_DB_FORM_WIZARD_START + 11
     Text[ swedish ] = "Data~källa";
     Text[ polish ] = "ród³o danych";
     Text[ portuguese_brazilian ] = "Datenq~uelle";
-    Text[ japanese ] = "“ú•t~¿°½";
+    Text[ japanese ] = "ÃŞ°À¿°½";
     Text[ chinese_simplified ] = "Êı¾İÔ´";
     Text[ chinese_traditional ] = "¸ê®Æ·½";
     Text[ arabic ] = "~ŞÇÚÏÉ ÇáÈíÇäÇÊ";
@@ -1374,6 +1423,7 @@ String RID_DB_FORM_WIZARD_START + 11
     Text[ turkish ] = "Veri kaynağı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Data So~urce";
+    Text[ finnish ] = "Datenq~uelle";
 };
 
 String RID_DB_FORM_WIZARD_START + 12
@@ -1390,7 +1440,7 @@ String RID_DB_FORM_WIZARD_START + 12
     Text[ swedish ] = "~Existerande fält";
     Text[ polish ] = "~Istniej¹ce pola";
     Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "~g—p‚Å‚«‚éÌ¨°ÙÄŞ";
+    Text[ japanese ] = "Šù‘¶Ì¨°ÙÄŞ";
     Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
     Text[ chinese_traditional ] = "²{¦sªºÄæ¦ì(~V)";
     Text[ arabic ] = "~ÇáÍŞæá ÇáãæÌæÏÉ";
@@ -1400,6 +1450,7 @@ String RID_DB_FORM_WIZARD_START + 12
     Text[ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
     Text[ turkish ] = "~Mevcut alanlar";
     Text[ catalan ] = "Ex~isting Fields";
+    Text[ finnish ] = "~Vorhandene Felder";
 };
 
 String RID_DB_FORM_WIZARD_START + 13
@@ -1416,9 +1467,9 @@ String RID_DB_FORM_WIZARD_START + 13
     Text[ swedish ] = "Fält i ~formulär";
     Text[ polish ] = "Pola w formularzu";
     Text[ portuguese_brazilian ] = "Felder im ~Formular";
-    Text[ japanese ] = "Ì«°Ñ‚Ì ~Ì¨°ÙÄŞ";
+    Text[ japanese ] = "Ì«°Ñ‚ÌÌ¨°ÙÄŞ";
     Text[ chinese_simplified ] = "±íµ¥ÄÚµÄ×Ö¶Î";
-    Text[ chinese_traditional ] = "ªí³æ¤ºªºÄæ¦ì(~F)";
+    Text[ chinese_traditional ] = "ªí³æ¤§¤¤ªºÄæ¦ì(~F)";
     Text[ arabic ] = "ÍŞæá ~ÇáÇÓÊãÇÑÉ";
     Text[ dutch ] = "Velden in ~formulier";
     Text[ chinese_simplified ] = "±íµ¥ÄÚµÄ×Ö¶Î";
@@ -1426,6 +1477,7 @@ String RID_DB_FORM_WIZARD_START + 13
     Text[ korean ] = "¾ç½Ä³» ÇÊµå";
     Text[ turkish ] = "Form içindeki alanlar";
     Text[ catalan ] = "Fields in Form";
+    Text[ finnish ] = "Felder im ~Formular";
 };
 
 String RID_DB_FORM_WIZARD_START + 14
@@ -1442,7 +1494,7 @@ String RID_DB_FORM_WIZARD_START + 14
     Text[ swedish ] = "~Stil";
     Text[ polish ] = "~Styl";
     Text[ portuguese_brazilian ] = "~Stil";
-    Text[ japanese ] = "~½À²Ù";
+    Text[ japanese ] = "½À²Ù";
     Text[ chinese_simplified ] = "·ç¸ñ(~S)";
     Text[ chinese_traditional ] = "­·®æ(~S)";
     Text[ arabic ] = "~ÇáäãØ";
@@ -1452,6 +1504,7 @@ String RID_DB_FORM_WIZARD_START + 14
     Text[ korean ] = "½ºÅ¸ÀÏ";
     Text[ turkish ] = "~Biçim";
     Text[ catalan ] = "~Style";
+    Text[ finnish ] = "~Stil";
 };
 
 String RID_DB_FORM_WIZARD_START + 15
@@ -1468,7 +1521,7 @@ String RID_DB_FORM_WIZARD_START + 15
     Text[ swedish ] = "~Kolumnorienterad";
     Text[ polish ] = "W postaci kolumn";
     Text[ portuguese_brazilian ] = "S~paltenorientiert";
-    Text[ japanese ] = "—ñ‚É‚µ‚½‚ª‚¤";
+    Text[ japanese ] = "—ñ•ûŒü";
     Text[ chinese_simplified ] = "°´ÁĞ";
     Text[ chinese_traditional ] = "«ö·ÓÄæ(~P)";
     Text[ arabic ] = "Úáì Ôßá ~ÃÚãÏÉ";
@@ -1478,6 +1531,7 @@ String RID_DB_FORM_WIZARD_START + 15
     Text[ korean ] = "¿­ ±âÁØ";
     Text[ turkish ] = "Sütunlar halinde";
     Text[ catalan ] = "Column oriented";
+    Text[ finnish ] = "S~paltenorientiert";
 };
 
 String RID_DB_FORM_WIZARD_START + 16
@@ -1494,7 +1548,7 @@ String RID_DB_FORM_WIZARD_START + 16
     Text[ swedish ] = "~Optimerad";
     Text[ polish ] = "~Optymalny";
     Text[ portuguese_brazilian ] = "~Optimiert";
-    Text[ japanese ] = "~Å“K‰»";
+    Text[ japanese ] = "Å“K‰»";
     Text[ chinese_simplified ] = "ÒÑ¾­×î¼Ñ»¯(~O)";
     Text[ chinese_traditional ] = "³Ì¨Î¤Æ(~O)";
     Text[ arabic ] = "~Úáì äÍæ ÃãËá";
@@ -1504,6 +1558,7 @@ String RID_DB_FORM_WIZARD_START + 16
     Text[ korean ] = "ÃÖÀûÈ­";
     Text[ turkish ] = "~Optimum";
     Text[ catalan ] = "~Optimized";
+    Text[ finnish ] = "~Optimiert";
 };
 
 String RID_DB_FORM_WIZARD_START + 17
@@ -1520,7 +1575,7 @@ String RID_DB_FORM_WIZARD_START + 17
     Text[ swedish ] = "I t~abellform";
     Text[ polish ] = "~W postaci tabeli";
     Text[ portuguese_brazilian ] = "~Tabellarisch";
-    Text[ japanese ] = "~Ã°ÌŞÙ";
+    Text[ japanese ] = "•\\‚É‚µ‚Ä";
     Text[ chinese_simplified ] = "±í¸ñÊ½(~T)";
     Text[ chinese_traditional ] = "ªí®æ¦¡";
     Text[ arabic ] = "Úáì Ôßá ~ÌÏæá";
@@ -1530,6 +1585,7 @@ String RID_DB_FORM_WIZARD_START + 17
     Text[ korean ] = "Ç¥ Çü½ÄÀÇ";
     Text[ turkish ] = "~Tablo halinde";
     Text[ catalan ] = "~Tabular";
+    Text[ finnish ] = "~Tabellarisch";
 };
 
 String RID_DB_FORM_WIZARD_START + 18
@@ -1546,9 +1602,9 @@ String RID_DB_FORM_WIZARD_START + 18
     Text[ swedish ] = "Titel / ~data";
     Text[ polish ] = "Tytu³ / ~Dane";
     Text[ portuguese_brazilian ] = "Titel / ~Daten";
-    Text[ japanese ] = "À²ÄÙ/“ú•t";
+    Text[ japanese ] = "À²ÄÙ‚ÆÃŞ°À";
     Text[ chinese_simplified ] = "±êÌâ/Êı¾İ";
-    Text[ chinese_traditional ] = "¼ĞÃD©M¼Æ¾Ú";
+    Text[ chinese_traditional ] = "¼ĞÃD©M¸ê®Æ";
     Text[ arabic ] = "ÇáÚäæÇä / ~ÇáÈíÇäÇÊ";
     Text[ dutch ] = "Naam / ~gegevens";
     Text[ chinese_simplified ] = "±êÌâ/Êı¾İ";
@@ -1557,6 +1613,7 @@ String RID_DB_FORM_WIZARD_START + 18
     Text[ turkish ] = "Başlık / ~Veriler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Title / ~Data";
+    Text[ finnish ] = "Titel / ~Daten";
 };
 
 String RID_DB_FORM_WIZARD_START + 19
@@ -1573,9 +1630,9 @@ String RID_DB_FORM_WIZARD_START + 19
     Text[ swedish ] = "~Bredvid varandra";
     Text[ polish ] = "~S¹siaduj¹ce";
     Text[ portuguese_brazilian ] = "~Nebeneinander";
-    Text[ japanese ] = "~‰¡‘±‚«";
+    Text[ japanese ] = "‰¡‘±‚«";
     Text[ chinese_simplified ] = "²¢ÅÅ(~N)";
-    Text[ chinese_traditional ] = "¦}±Æ";
+    Text[ chinese_traditional ] = "¨Ã±Æ";
     Text[ arabic ] = "~ÊÌÇäÈ";
     Text[ dutch ] = "~Naast elkaar";
     Text[ chinese_simplified ] = "²¢ÅÅ(~N)";
@@ -1583,13 +1640,14 @@ String RID_DB_FORM_WIZARD_START + 19
     Text[ korean ] = "¹ÙµÏÆÇ½Ä";
     Text[ turkish ] = "~Yan yana";
     Text[ catalan ] = "~Tile";
+    Text[ finnish ] = "~Nebeneinander";
 };
 
 String RID_DB_FORM_WIZARD_START + 20
 {
     Text = "~Übereinander";
     Text [ english_us ] = "~Stacked";
-    Text[ portuguese ] = "~Sobrepostos";
+    Text[ portuguese ] = "~Empilhar";
     Text[ russian ] = "~Ïîâåğõ";
     Text[ dutch ] = "~Onder elkaar";
     Text[ french ] = "~Empiler";
@@ -1599,7 +1657,7 @@ String RID_DB_FORM_WIZARD_START + 20
     Text[ swedish ] = "~Över varandra";
     Text[ polish ] = "~Jeden nad drugim";
     Text[ portuguese_brazilian ] = "~Übereinander";
-    Text[ japanese ] = "~c‘±‚«";
+    Text[ japanese ] = "c‘±‚«";
     Text[ chinese_simplified ] = "ÖØµş(~U)";
     Text[ chinese_traditional ] = "­«Å|";
     Text[ arabic ] = "~ÊÑÇßã";
@@ -1609,6 +1667,7 @@ String RID_DB_FORM_WIZARD_START + 20
     Text[ korean ] = "~»óÇÏ·Î";
     Text[ turkish ] = "~Üst üste";
     Text[ catalan ] = "~Stacked";
+    Text[ finnish ] = "~Übereinander";
 };
 
 String RID_DB_FORM_WIZARD_START + 21
@@ -1625,7 +1684,7 @@ String RID_DB_FORM_WIZARD_START + 21
     Text[ swedish ] = "~Sidformatmallar";
     Text[ polish ] = "~Style strony";
     Text[ portuguese_brazilian ] = "~Seitenvorlagen";
-    Text[ japanese ] = "~Íß°¼Ş½À²Ù";
+    Text[ japanese ] = "Íß°¼Ş½À²Ù";
     Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½(~S)";
     Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
     Text[ arabic ] = "~ŞæÇáÈ ÕİÍÉ";
@@ -1636,6 +1695,7 @@ String RID_DB_FORM_WIZARD_START + 21
     Text[ turkish ] = "~Sayfa biçimleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Page Style";
+    Text[ finnish ] = "~Seitenvorlagen";
 };
 
 String RID_DB_FORM_WIZARD_START + 22
@@ -1652,7 +1712,7 @@ String RID_DB_FORM_WIZARD_START + 22
     Text[ swedish ] = "~Dokumentnamn";
     Text[ polish ] = "~Tytu³ dokumentu";
     Text[ portuguese_brazilian ] = "~Dokumententitel";
-    Text[ japanese ] = "~ÄŞ·­ÒİÄÀ²ÄÙ";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌÀ²ÄÙ";
     Text[ chinese_simplified ] = "ÎÄµµ±êÌâ(~D)";
     Text[ chinese_traditional ] = "¤å¥ó¼ĞÃD";
     Text[ arabic ] = "~ÚäæÇä ÇáãÓÊäÏ";
@@ -1662,6 +1722,7 @@ String RID_DB_FORM_WIZARD_START + 22
     Text[ korean ] = "¹®¼­ Á¦¸ñ";
     Text[ turkish ] = "~Belge başlığı";
     Text[ catalan ] = "~Document title";
+    Text[ finnish ] = "~Dokumententitel";
 };
 
 String RID_DB_FORM_WIZARD_START + 23
@@ -1678,7 +1739,7 @@ String RID_DB_FORM_WIZARD_START + 23
     Text[ swedish ] = "~När det är färdigt...";
     Text[ polish ] = "~Po wykonaniu...";
     Text[ portuguese_brazilian ] = "~Nach der Fertigstellung...";
-    Text[ japanese ] = "~Š®—¹Œã...";
+    Text[ japanese ] = "Š®—¹Œã...";
     Text[ chinese_simplified ] = "Íê³Éºó(~N)...";
     Text[ chinese_traditional ] = "¦b§¹¦¨¤§«á(~N)...";
     Text[ arabic ] = "~ÈÚÏ ÇáÅäÔÇÁ...";
@@ -1688,6 +1749,7 @@ String RID_DB_FORM_WIZARD_START + 23
     Text[ korean ] = "¿Ï·á ÈÄ...";
     Text[ turkish ] = "~Oluşturulduktan sonra...";
     Text[ catalan ] = "~After completion...";
+    Text[ finnish ] = "~Nach der Fertigstellung...";
 };
 
 String RID_DB_FORM_WIZARD_START + 24
@@ -1704,7 +1766,7 @@ String RID_DB_FORM_WIZARD_START + 24
     Text[ swedish ] = "Använd d~okument direkt";
     Text[ polish ] = "Zastosuj dokument od razu";
     Text[ portuguese_brazilian ] = "Dokument ~sofort benutzen";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ ~‚·‚®‚Ég—p";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ‚·‚®‚Ég—p";
     Text[ chinese_simplified ] = "Á¢¿ÌÊ¹ÓÃÎÄµµ";
     Text[ chinese_traditional ] = "¥ß¨è¨Ï¥Î¤å¥ó(~S)";
     Text[ arabic ] = "~ÇÓÊÎÏÇã ÇáãÓÊäÏ İæÑÇğ";
@@ -1714,6 +1776,7 @@ String RID_DB_FORM_WIZARD_START + 24
     Text[ korean ] = "¹®¼­ Áï½Ã¡¡»ç¿ë";
     Text[ turkish ] = "Belgeyi hemen kullan";
     Text[ catalan ] = "use document immediately";
+    Text[ finnish ] = "Dokument ~sofort benutzen";
 };
 
 String RID_DB_FORM_WIZARD_START + 25
@@ -1730,7 +1793,7 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ swedish ] = "~Arkivera dokument";
     Text[ polish ] = "Zapisz ~dokument";
     Text[ portuguese_brazilian ] = "Dokument ~ablegen";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ ~Ši”[‚·‚é";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğŠi”[";
     Text[ chinese_simplified ] = "½¨Á¢ÎÄµµ";
     Text[ chinese_traditional ] = "«O¦s¤å¥ó(~A)";
     Text[ arabic ] = "~ÍİÙ ÇáãÓÊäÏ";
@@ -1740,6 +1803,7 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ korean ] = "¹®¼­ ÀúÀå";
     Text[ turkish ] = "Belgeyi kaydet";
     Text[ catalan ] = "save document";
+    Text[ finnish ] = "Dokument ~ablegen";
 };
 
 String RID_DB_FORM_WIZARD_START + 26
@@ -1757,7 +1821,7 @@ String RID_DB_FORM_WIZARD_START + 26
     Text[ danish ] = "Formularen er blevet oprettet og arkiveret i databesen.";
     Text[ polish ] = "Formularz zosta³ utworzony i zapisany w bazie danych.";
     Text[ portuguese_brazilian ] = "The form was created and abgelegt in the database.";
-    Text[ japanese ] = "Ì«°Ñ‚Íì¬‚³‚ê‚ÄÃŞ°ÀÍŞ°½‚ÉŠi”[‚³‚ê‚Ä‚¢‚Ü‚·B";
+    Text[ japanese ] = "Ì«°Ñ‚Íì¬‚³‚êÃŞ°ÀÍŞ°½‚ÉŠi”[‚³‚ê‚Ä‚¢‚Ü‚·B";
     Text[ korean ] = "¾ç½ÄÀº  ¸¸µé¾îÁ³À¸¸ç µ¥ÀÌÅÍ º£ÀÌ½º¿¡  ÀúÀåµÇ¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Õâ¸ö±íµ¥ÒÑ¾­½¨Á¢ÇÒ´æÅÌÔÚÊı¾İ¿âÄÚ¡£";
     Text[ chinese_traditional ] = "¦b¸ê®Æ®w¤º¤w¸g«Ø¥ß©MÀx¦s¤F³o­Óªí³æ¡C";
@@ -1765,6 +1829,7 @@ String RID_DB_FORM_WIZARD_START + 26
     Text[ turkish ] = "Form oluşturuldu ve veritabanına kaydedildi.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The form has been created and saved in the database.";
+    Text[ finnish ] = "Das Formular wurde erstellt und in der Datenbank abgelegt.";
 };
 
 String RID_DB_FORM_WIZARD_START + 27
@@ -1786,10 +1851,11 @@ String RID_DB_FORM_WIZARD_START + 27
     Text[ japanese ] = "Ì«°Ñ–¼‚ÍÅ‚32•¶š‚Ü‚Å‚Å‚·B";
     Text[ korean ] = "¼ö½Ä ÀÌ¸§ÀÇ ±æÀÌ°¡ 32ÀÚ¸¦ ÃÊ°úÇØ¼­´Â¡¡¾ÈµË´Ï´Ù.";
     Text[ chinese_simplified ] = "±íµ¥Ãû³Æ×î¶àÖ»ÄÜÓÉ32¸ö×Ö·û×é³É¡£";
-    Text[ chinese_traditional ] = "³øªí¦WºÙ³Ìªø¤£±o¶W¹L 32 ­Ó¦r¤¸¡C";
+    Text[ chinese_traditional ] = "³øªí¦WºÙ³Ìªø¤£±o¶W¹L32­Ó¦r¤¸¡C";
     Text[ arabic ] = "íÌÈ ÃáÇ íÒíÏ Øæá ÃÓãÇÁ ÇáÇÓÊãÇÑÉ Úä 32 ÍÑİÇğ.";
     Text[ turkish ] = "Form adları en fazla 32 karakterden oluşabilir.";
     Text[ catalan ] = "Form names cannot be longer than 32 characters.";
+    Text[ finnish ] = "Formular-Namen dürfen maximal 32 Zeichen lang sein.";
 };
 
 String RID_DB_FORM_WIZARD_START + 28
@@ -1815,6 +1881,7 @@ String RID_DB_FORM_WIZARD_START + 28
     Text[ turkish ] = "Controlframes";
     Text[ arabic ] = "ßÇÏÑ ÇáÍŞá¡ Ãæ ÍÏæÏ ÇáÍŞá¿¿¿¿ ŞÇÑä ÑŞã 47566";
     Text[ catalan ] = "Field border";
+    Text[ finnish ] = "Feldumrandung";
 };
 
 String RID_DB_FORM_WIZARD_START + 29
@@ -1840,6 +1907,7 @@ String RID_DB_FORM_WIZARD_START + 29
     Text[ turkish ] = "No Border";
     Text[ arabic ] = "ÈÏæä ÍÏæÏ¡ Ãæ ÈÏæä ßÇÏÑ¿¿¿¿¿¿¿¿ ŞÇÑä ÑŞã 47565";
     Text[ catalan ] = "No border";
+    Text[ finnish ] = "Ohne Umrandung";
 };
 
 
@@ -1866,6 +1934,7 @@ String RID_DB_FORM_WIZARD_START + 30
     Text[ turkish ] = "3D Look";
     Text[ arabic ] = "ãÙåÑ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ catalan ] = "3D Look";
+    Text[ finnish ] = "3-D Look";
 };
 
 String RID_DB_FORM_WIZARD_START + 31
@@ -1891,6 +1960,7 @@ String RID_DB_FORM_WIZARD_START + 31
     Text[ turkish ] = "Flat";
     Text[ arabic ] = "ãÓØøÍ";
     Text[ catalan ] = "Flat";
+    Text[ finnish ] = "Flach";
 };
 // ============================================================================
 
@@ -1918,6 +1988,7 @@ String RID_DB_QUERY_WIZARD_START + 0
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ÁúÀÇ";
     Text[ turkish ] = "Sorgu OtoPilotu";
     Text[ catalan ] = "AutoPilot Query";
+    Text[ finnish ] = "AutoPilot Abfrage";
 };
 
 String RID_DB_QUERY_WIZARD_START + 1
@@ -1934,7 +2005,7 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text[ swedish ] = "Ingen databas är installerad. Du behöver minst en databas för att kunna starta AutoPiloten för sökningar.";
     Text[ polish ] = "Nie zainstalowano bazy danych. Do uruchomienia AutoPilota kwerend potrzebna jest co najmniej jedna baza danych.";
     Text[ portuguese_brazilian ] = "Es ist keine Datenbank installiert. Sie benötigen mindestens eine Datenbank um den AutoPiloten für Abfragen starten zu können.";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB¸´Ø°ì¬—p‚Ìµ°ÄÊß²Û¯Ä‚ğŠJn‚³‚¹‚é‚É‚ÍAÃŞ°ÀÍŞ°½‚ªÅ’áˆê‚Â‚Í•K—v‚Å‚·B";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBµ°ÄÊß²Û¯Ä ¸´Ø°‚ğŠJn‚·‚é‚É‚ÍAÃŞ°ÀÍŞ°½‚ªÅ’áˆê‚Â‚Í•K—v‚Å‚·B";
     Text[ chinese_simplified ] = "Ã»ÓĞ°²×°ÈÎºÎÊı¾İ¿â¡£ÒªÖ´ĞĞ×Ô¶¯ÎÄ¼şÖúÀíµÄÑ¯ÎÊ¹¦ÄÜÄú±ØĞë°²×°Ò»¸öÊı¾İ¿â¡£";
     Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¸ê®Æ®w¡C¦]¦¹µLªk°õ¦æ¬d¸ß¸ê®Æ®w¡C±z¥²¶·¦w¸Ë¤@­Ó¸ê®Æ®w¡C";
     Text[ arabic ] = "áíÓ åäÇß ÃíÉ ŞÇÚÏÉ ÈíÇäÇÊ ãËÈÊÉ. ÃäÊ ÈÍÇÌÉ Åáì ŞÇÚÏÉ ÈíÇäÇÊ æÇÍÏÉ Úáì ÇáÃŞá áßí ÊÊãßä ãä ÈÏÁ ÇáãÑÔÏ ÇáÂáí ááÇÓÊİÓÇÑÇÊ.";
@@ -1944,6 +2015,7 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ ÇÏ³ªµµ ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù. ÁúÀÇ ÀÚµ¿ÆÄÀÏ·µÀ» ½ÃÀÛÇÏ·Á¸é µ¥ÀÌÅÍº£ÀÌ½º°¡ ÃÖ¼ÒÇÑ ÇÏ³ª´Â ÇÊ¿äÇÕ´Ï´Ù.";
     Text[ turkish ] = "Kurulmuş veritabanı yok. Sorgu OtoPilot'unu başlatabilmek için en az bir veritabanı mevcut olmalıdır.";
     Text[ catalan ] = "A database has not been installed.  There must be at least one database on the system before the AutoPilot Query can be started.";
+    Text[ finnish ] = "Es ist keine Datenbank installiert. Sie benötigen mindestens eine Datenbank um den AutoPiloten für Abfragen starten zu können.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 2
@@ -1970,6 +2042,7 @@ String RID_DB_QUERY_WIZARD_START + 2
     Text[ korean ] = "ÁúÀÇ¸¦ ¼öÇàÇÏ°Å³ª ÁöÁ¤ÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
     Text[ turkish ] = "Yürütmede ya da sorgu oluşturmada bir hata oluştu.";
     Text[ catalan ] = "An error occurred during the execution or defining of a query.";
+    Text[ finnish ] = "In der Ausführung, oder beim Anlegen der Abfrage ist ein Fehler aufgetreten.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 3
@@ -1986,7 +2059,7 @@ String RID_DB_QUERY_WIZARD_START + 3
     Text[ swedish ] = "Sökningen har arkiverats i Explorer.";
     Text[ polish ] = "Kwerendê zapisano w Eksploratorze.";
     Text[ portuguese_brazilian ] = "Die Abfrage wurde im Explorer abgelegt.";
-    Text[ japanese ] = "¸´Ø°‚ğ´¸½ÌßÛ°×‚ÉŠi”[‚µ‚Ü‚µ‚½B";
+    Text[ japanese ] = "¸´Ø°‚Í´¸½ÌßÛ°×‚ÉŠi”[‚³‚ê‚Ü‚µ‚½B";
     Text[ chinese_simplified ] = "Õâ¸ö²éÑ¯½¨Á¢ÔÚ×ÊÔ´¹ÜÀíÆ÷ÄÚ¡£";
     Text[ chinese_traditional ] = "¤w¸g¦bÀÉ®×Á`ºŞ¤ºÀx¦s¤F¬d¸ß¡C";
     Text[ arabic ] = "Êã ÍİÙ ÇáÇÓÊİÓÇÑ İí ÇáãÓÊßÔİ.";
@@ -1997,6 +2070,7 @@ String RID_DB_QUERY_WIZARD_START + 3
     Text[ turkish ] = "Sorgu Explorer'da kaydedildi.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The query has been saved in the Explorer.";
+    Text[ finnish ] = "Die Abfrage wurde im Explorer abgelegt.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 4
@@ -2023,6 +2097,7 @@ String RID_DB_QUERY_WIZARD_START + 4
     Text[ korean ] = "¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ÁúÀÇ¸¦ ÀúÀåÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Bir hata oluştu. Sorgu kaydedilemedi.";
     Text[ catalan ] = "An error occurred. The query could not be saved.";
+    Text[ finnish ] = "Es ist ein Fehler aufgetreten. Die Abfrage konnte nicht abgelegt werden.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 5
@@ -2039,7 +2114,7 @@ String RID_DB_QUERY_WIZARD_START + 5
     Text[ swedish ] = "Dubbelt fältnamn. Det finns redan ett fält med beteckningen $1.";
     Text[ polish ] = "Podwójna nazwa pola. Pole o nazwie $1 ju¿ istnieje.";
     Text[ portuguese_brazilian ] = "Doppelter Feldname. Es existiert bereits ein Feld mit der Bezeichnung $1.";
-    Text[ japanese ] = "Ì¨°ÙÄŞ–¼‚Ìd•¡B$1‚Ì–¼‘O‚ÌÌ¨°ÙÄŞ‚Í‚·‚Å‚É‘¶İ‚µ‚Ä‚¢‚Ü‚·B";
+    Text[ japanese ] = "Ì¨°ÙÄŞ–¼‚Ìd•¡BÌ¨°ÙÄŞ–¼ $1 ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B";
     Text[ chinese_simplified ] = "Ë«ÖØ×Ö¶ÎÃû³Æ¡£ÒÑ¾­´æÔÚÒ»¸ö×Ö¶ÎÃû³Æ $1¡£";
     Text[ chinese_traditional ] = "Âù­«Äæ¦ì¦WºÙ¡C¤w¸g¦³¤@­ÓÄæ¦ì¦WºÙ $1 ¡C";
     Text[ arabic ] = "ÇÓã ÍŞá ãÒÏæÌ. íæÌÏ ÈÇáİÚá ÍŞá áå äİÓ ÇáÊÓãíÉ $1.";
@@ -2049,6 +2124,7 @@ String RID_DB_QUERY_WIZARD_START + 5
     Text[ korean ] = "ÇÊµåÀÌ¸§ÀÌ Áßº¹µÇ¾ú½À´Ï´Ù. ÀÌ¸§ÀÌ $1ÀÎ ÇÊµå°¡ ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Alan adı kullanımda. $1 adında başka bir alan mevcut.";
     Text[ catalan ] = "Duplicate field name. A field named $1 already exists.";
+    Text[ finnish ] = "Doppelter Feldname. Es existiert bereits ein Feld mit der Bezeichnung $1.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 6
@@ -2075,6 +2151,7 @@ String RID_DB_QUERY_WIZARD_START + 6
     Text[ korean ] = "ÁúÀÇ_";
     Text[ turkish ] = "Sorgu_";
     Text[ catalan ] = "Query_";
+    Text[ finnish ] = "Abfrage_";
 };
 
 String RID_DB_QUERY_WIZARD_START + 7
@@ -2101,6 +2178,7 @@ String RID_DB_QUERY_WIZARD_START + 7
     Text[ korean ] = "(¾øÀ½)";
     Text[ turkish ] = "(yok)";
     Text[ catalan ] = "(none)";
+    Text[ finnish ] = "(kein)";
 };
 
 String RID_DB_QUERY_WIZARD_START + 8
@@ -2127,6 +2205,7 @@ String RID_DB_QUERY_WIZARD_START + 8
     Text[ korean ] = "°ø¹é";
     Text[ turkish ] = "boş";
     Text[ catalan ] = "empty";
+    Text[ finnish ] = "leer";
 };
 
 String RID_DB_QUERY_WIZARD_START + 9
@@ -2153,6 +2232,7 @@ String RID_DB_QUERY_WIZARD_START + 9
     Text[ korean ] = "ºñ¾îÀÖÁö ¾ÊÀ½.";
     Text[ turkish ] = "boş değil";
     Text[ catalan ] = "not empty";
+    Text[ finnish ] = "nicht leer";
 };
 
 String RID_DB_QUERY_WIZARD_START + 10
@@ -2179,6 +2259,7 @@ String RID_DB_QUERY_WIZARD_START + 10
     Text[ korean ] = "¿Í °°Àº";
     Text[ turkish ] = "şöyle";
     Text[ catalan ] = "like";
+    Text[ finnish ] = "wie";
 };
 
 String RID_DB_QUERY_WIZARD_START + 11
@@ -2205,6 +2286,7 @@ String RID_DB_QUERY_WIZARD_START + 11
     Text[ korean ] = "¿Í °°Áö ¾ÊÀº";
     Text[ turkish ] = "şöyle değil";
     Text[ catalan ] = "not like";
+    Text[ finnish ] = "nicht wie";
 };
 
 String RID_DB_QUERY_WIZARD_START + 12
@@ -2221,7 +2303,7 @@ String RID_DB_QUERY_WIZARD_START + 12
     Text[ swedish ] = "OCH";
     Text[ polish ] = "ORAZ";
     Text[ portuguese_brazilian ] = "UND";
-    Text[ japanese ] = "‚»‚µ‚Ä";
+    Text[ japanese ] = "‚©‚Â";
     Text[ chinese_simplified ] = "AND";
     Text[ chinese_traditional ] = "©M";
     Text[ arabic ] = "AND";
@@ -2231,6 +2313,7 @@ String RID_DB_QUERY_WIZARD_START + 12
     Text[ korean ] = "±×¸®°í";
     Text[ turkish ] = "VE";
     Text[ catalan ] = "AND";
+    Text[ finnish ] = "UND";
 };
 
 String RID_DB_QUERY_WIZARD_START + 13
@@ -2257,6 +2340,7 @@ String RID_DB_QUERY_WIZARD_START + 13
     Text[ korean ] = "¶Ç´Â";
     Text[ turkish ] = "VEYA";
     Text[ catalan ] = "OR";
+    Text[ finnish ] = "ODER";
 };
 
 String RID_DB_QUERY_WIZARD_START + 14
@@ -2283,6 +2367,7 @@ String RID_DB_QUERY_WIZARD_START + 14
     Text[ korean ] = ":  Ç¥¼±ÅÃ";
     Text[ turkish ] = ": Tablo seçimi";
     Text[ catalan ] = ": Table Selection";
+    Text[ finnish ] = ": Tabellenauswahl";
 };
 
 String RID_DB_QUERY_WIZARD_START + 15
@@ -2309,6 +2394,7 @@ String RID_DB_QUERY_WIZARD_START + 15
     Text[ korean ] = ": ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = ": Alan seçimi";
     Text[ catalan ] = ": Field Selection";
+    Text[ finnish ] = ": Feldauswahl";
 };
 
 String RID_DB_QUERY_WIZARD_START + 16
@@ -2336,6 +2422,7 @@ String RID_DB_QUERY_WIZARD_START + 16
     Text[ turkish ] = ": Filtreleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Filter";
+    Text[ finnish ] = ": Filterung";
 };
 
 String RID_DB_QUERY_WIZARD_START + 17
@@ -2363,6 +2450,7 @@ String RID_DB_QUERY_WIZARD_START + 17
     Text[ turkish ] = ": Sıralama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Sorting";
+    Text[ finnish ] = ": Sortierung";
 };
 
 String RID_DB_QUERY_WIZARD_START + 18
@@ -2390,6 +2478,7 @@ String RID_DB_QUERY_WIZARD_START + 18
     Text[ turkish ] = ": Oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Create";
+    Text[ finnish ] = ": Fertig stellen";
 };
 
 String RID_DB_QUERY_WIZARD_START + 19
@@ -2406,7 +2495,7 @@ String RID_DB_QUERY_WIZARD_START + 19
     Text[ swedish ] = "Förhands~visning";
     Text[ polish ] = "~Podgl¹d";
     Text[ portuguese_brazilian ] = "~Vorschau";
-    Text[ japanese ] = "~ËŞ­°";
+    Text[ japanese ] = "ÌßÚËŞ­°";
     Text[ chinese_simplified ] = "Ô¤ÀÀ(~V)";
     Text[ chinese_traditional ] = "¹wÄı(~V)";
     Text[ arabic ] = "~ãÚÇíäÉ";
@@ -2416,6 +2505,7 @@ String RID_DB_QUERY_WIZARD_START + 19
     Text[ korean ] = "¹Ì¸®º¸±â";
     Text[ turkish ] = "~Önizleme";
     Text[ catalan ] = "~Preview";
+    Text[ finnish ] = "~Vorschau";
 };
 
 String RID_DB_QUERY_WIZARD_START + 20
@@ -2432,7 +2522,7 @@ String RID_DB_QUERY_WIZARD_START + 20
     Text[ swedish ] = "Data~källa";
     Text[ polish ] = "ród³o danych";
     Text[ portuguese_brazilian ] = "Datenq~uelle";
-    Text[ japanese ] = "“ú•t~¿°½";
+    Text[ japanese ] = "ÃŞ°À¿°½";
     Text[ chinese_simplified ] = "Êı¾İÔ´";
     Text[ chinese_traditional ] = "¸ê®Æ·½";
     Text[ arabic ] = "~ãÕÏÑ ÇáÈíÇäÇÊ";
@@ -2443,6 +2533,7 @@ String RID_DB_QUERY_WIZARD_START + 20
     Text[ turkish ] = "Veri kaynağı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Data Source";
+    Text[ finnish ] = "Datenq~uelle";
 };
 
 String RID_DB_QUERY_WIZARD_START + 21
@@ -2459,7 +2550,7 @@ String RID_DB_QUERY_WIZARD_START + 21
     Text[ swedish ] = "E~xisterande fält";
     Text[ polish ] = "~Istniej¹ce pola";
     Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "~g—p‚Å‚«‚éÌ¨°ÙÄŞ";
+    Text[ japanese ] = "Šù‘¶Ì¨°ÙÄŞ";
     Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
     Text[ chinese_traditional ] = "²{¦sªºÄæ¦ì";
     Text[ arabic ] = "~ÇáÍŞæá ÇáãæÌæÏÉ";
@@ -2470,6 +2561,7 @@ String RID_DB_QUERY_WIZARD_START + 21
     Text[ turkish ] = "~Mevcut alanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Existing Fields";
+    Text[ finnish ] = "~Vorhandene Felder";
 };
 
 String RID_DB_QUERY_WIZARD_START + 22
@@ -2488,7 +2580,7 @@ String RID_DB_QUERY_WIZARD_START + 22
     Text[ portuguese_brazilian ] = "Felder in ~Abfrage";
     Text[ japanese ] = "¸´Ø‚ÌÌ¨°ÙÄŞ";
     Text[ chinese_simplified ] = "²éÑ¯ÄÚµÄ×Ö¶Î";
-    Text[ chinese_traditional ] = "¬d¸ß¤ºªºÄæ¦ì";
+    Text[ chinese_traditional ] = "¬d¸ß¤§¤¤ªºÄæ¦ì";
     Text[ arabic ] = "ÍŞæá ~ÇáÇÓÊİÓÇÑ";
     Text[ dutch ] = "Velden in ~query";
     Text[ chinese_simplified ] = "²éÑ¯ÄÚµÄ×Ö¶Î";
@@ -2496,6 +2588,7 @@ String RID_DB_QUERY_WIZARD_START + 22
     Text[ korean ] = "ÁúÀÇ³» ÇÊµå";
     Text[ turkish ] = "Sorgu içindeki alanlar";
     Text[ catalan ] = "Fields in Query";
+    Text[ finnish ] = "Felder in ~Abfrage";
 };
 
 String RID_DB_QUERY_WIZARD_START + 23
@@ -2523,6 +2616,7 @@ String RID_DB_QUERY_WIZARD_START + 23
     Text[ turkish ] = "Filtreleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filter";
+    Text[ finnish ] = "Filterung";
 };
 
 String RID_DB_QUERY_WIZARD_START + 24
@@ -2549,6 +2643,7 @@ String RID_DB_QUERY_WIZARD_START + 24
     Text[ korean ] = "¿¬°á";
     Text[ turkish ] = "Bağlantı";
     Text[ catalan ] = "Link";
+    Text[ finnish ] = "Verknüpfung";
 };
 
 String RID_DB_QUERY_WIZARD_START + 25
@@ -2567,7 +2662,7 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text[ portuguese_brazilian ] = "Feldname";
     Text[ japanese ] = "Ì¨°ÙÄŞ–¼";
     Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ";
-    Text[ chinese_traditional ] = "Äæ¦ì¦W";
+    Text[ chinese_traditional ] = "Äæ¦ì¦WºÙ";
     Text[ arabic ] = "ÇÓã ÇáÍŞá";
     Text[ dutch ] = "Veldnaam";
     Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ";
@@ -2576,6 +2671,7 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text[ turkish ] = "Alan adı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Field name";
+    Text[ finnish ] = "Feldname";
 };
 
 String RID_DB_QUERY_WIZARD_START + 26
@@ -2602,6 +2698,7 @@ String RID_DB_QUERY_WIZARD_START + 26
     Text[ korean ] = "Á¶°Ç";
     Text[ turkish ] = "Koşul";
     Text[ catalan ] = "Condition";
+    Text[ finnish ] = "Bedingung";
 };
 
 String RID_DB_QUERY_WIZARD_START + 27
@@ -2628,6 +2725,7 @@ String RID_DB_QUERY_WIZARD_START + 27
     Text[ korean ] = "°ª";
     Text[ turkish ] = "Değer";
     Text[ catalan ] = "Value";
+    Text[ finnish ] = "Wert";
 };
 
 String RID_DB_QUERY_WIZARD_START + 28
@@ -2655,6 +2753,7 @@ String RID_DB_QUERY_WIZARD_START + 28
     Text[ turkish ] = "Sıralama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sorting";
+    Text[ finnish ] = "Sortierung";
 };
 
 String RID_DB_QUERY_WIZARD_START + 29
@@ -2681,6 +2780,7 @@ String RID_DB_QUERY_WIZARD_START + 29
     Text[ korean ] = "ÁúÀÇ Á¦¸ñ";
     Text[ turkish ] = "Sorgu başlığı";
     Text[ catalan ] = "Query title";
+    Text[ finnish ] = "Abfrage~titel";
 };
 
 String RID_DB_QUERY_WIZARD_START + 30
@@ -2707,6 +2807,7 @@ String RID_DB_QUERY_WIZARD_START + 30
     Text[ korean ] = "¿Ï·á ÈÄ...";
     Text[ turkish ] = "Oluşturulduktan sonra...";
     Text[ catalan ] = "After completion...";
+    Text[ finnish ] = "Nach der Fertigstellung...";
 };
 
 String RID_DB_QUERY_WIZARD_START + 31
@@ -2733,6 +2834,7 @@ String RID_DB_QUERY_WIZARD_START + 31
     Text[ korean ] = "ÁúÀÇ Áï½Ã ½ÇÇà";
     Text[ turkish ] = "Sorguyu hemen yürüt";
     Text[ catalan ] = "Execute query immediately";
+    Text[ finnish ] = "Abfrage sofort ~durchführen";
 };
 
 String RID_DB_QUERY_WIZARD_START + 32
@@ -2759,6 +2861,7 @@ String RID_DB_QUERY_WIZARD_START + 32
     Text[ korean ] = "ÁúÀÇ ÀúÀå";
     Text[ turkish ] = "Sorguyu kaydet";
     Text[ catalan ] = "Save query";
+    Text[ finnish ] = "Abfrage ~ablegen";
 };
 
 // ============================================================================
@@ -2787,6 +2890,7 @@ String RID_DB_REPORT_WIZARD_START + 0
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¸®Æ÷Æ®";
     Text[ turkish ] = "Rapor OtoPilotu";
     Text[ catalan ] = "AutoPilot Report";
+    Text[ finnish ] = "AutoPilot Berichte";
 };
 
 String RID_DB_REPORT_WIZARD_START + 1
@@ -2814,6 +2918,7 @@ String RID_DB_REPORT_WIZARD_START + 1
     Text[ turkish ] = "Rapor, Explorer'da kaydedilemedi.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The report could not be saved in the Explorer.";
+    Text[ finnish ] = "Der Bericht konnte nicht im Explorer abgelegt werden.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 2
@@ -2830,7 +2935,7 @@ String RID_DB_REPORT_WIZARD_START + 2
     Text[ swedish ] = "Ingen databas är installerad. Du behöver minst en databas för att kunna starta AutoPiloten för rapporter.";
     Text[ polish ] = "Nie zainstalowana ¿adnej bazy danych. Wymagana jest co najmniej jedna baza danych, aby uruchomiæ AutoPilota raportów.";
     Text[ portuguese_brazilian ] = "Es ist keine Datenbank installiert. Sie benötigen mindestens eine Datenbank um den AutoPiloten für Berichte starten zu können.";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÚÎß°Ä‚Ìµ°ÄÊß²Û¯Ä‚ğŠJn‚·‚é‚É‚Í­‚È‚­‚Æ‚à1‚Â‚ÌÃŞ°ÀÍŞ°½‚ª•K—v‚Å‚·B";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBµ°ÄÊß²Û¯Ä ÚÎß°Ä‚ğŠJn‚·‚é‚É‚ÍAÃŞ°ÀÍŞ°½‚ªÅ’á‚P‚Â‚Í•K—v‚Å‚·B";
     Text[ chinese_simplified ] = "Ã»ÓĞ°²×°Êı¾İ¿â¡£ÒªÖ´ĞĞ×Ô¶¯ÎÄ¼şÖúÀíµÄ±¨¸æ¹¦ÄÜÄú±ØĞë°²×°Ò»¸öÊı¾İ¿â¡£";
     Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¥ô¦ó¤@­Ó¸ê®Æ®w¡C¦]¦¹µLªk°õ¦æ¦Û°ÊÀÉ®×§U²z¡§³øªí¡¨µ{¦¡¡C";
     Text[ arabic ] = "áíÓ åäÇß ÃíÉ ŞÇÚÏÉ ÈíÇäÇÊ ãËÈÊÉ. ÃäÊ ÈÍÇÌÉ Åáì ŞÇÚÏÉ ÈíÇäÇÊ æÇÍÏÉ Úáì ÇáÃŞá áßí ÊÊãßä ãä ÈÏÁ ÇáãÑÔÏ ÇáÂáí ááÊŞÇÑíÑ.";
@@ -2840,6 +2945,7 @@ String RID_DB_REPORT_WIZARD_START + 2
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. ¹İµå½Ã ½Ã½ºÅÛ¿¡ ÇÏ³ª ÀÌ»óÀÇ µ¥ÀÌÅÍº£ÀÌ½º°¡ ÀÖ¾î¾ß ÀÚµ¿ÆÄÀÏ·µ ¸®Æ÷Æ®°¡ ½ÃÀÛµÉ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Kurulmuş veritabanı yok. Rapor OtoPilot'unu başlatabilmek için en az bir veritabanı mevcut olmalıdır.";
     Text[ catalan ] = "No hay ninguna base de datos instalada. Necesita al menos una base de datos para poder iniciar el AutoPiloto para informes.";
+    Text[ finnish ] = "A database has not been installed. There must be at least one database on the system so that the AutoPilot Report can be started.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 3
@@ -2867,6 +2973,7 @@ String RID_DB_REPORT_WIZARD_START + 3
     Text[ turkish ] = "~Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Table";
+    Text[ finnish ] = "~Tabelle";
 };
 
 String RID_DB_REPORT_WIZARD_START + 4
@@ -2894,6 +3001,7 @@ String RID_DB_REPORT_WIZARD_START + 4
     Text[ turkish ] = "~Sütunlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Colu~mns";
+    Text[ finnish ] = "~Spalten";
 };
 
 String RID_DB_REPORT_WIZARD_START + 5
@@ -2920,6 +3028,7 @@ String RID_DB_REPORT_WIZARD_START + 5
     Text[ korean ] = "´Ù´Ü°è A";
     Text[ turkish ] = "~Anahat A";
     Text[ catalan ] = "Outline A";
+    Text[ finnish ] = "~Gliederung A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 6
@@ -2946,6 +3055,7 @@ String RID_DB_REPORT_WIZARD_START + 6
     Text[ korean ] = "¿ŞÂÊ A";
     Text[ turkish ] = "S~ol A";
     Text[ catalan ] = "Left A";
+    Text[ finnish ] = "~Links A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 7
@@ -2972,6 +3082,7 @@ String RID_DB_REPORT_WIZARD_START + 7
     Text[ korean ] = "¸®Æ÷Æ®_";
     Text[ turkish ] = "Rapor_";
     Text[ catalan ] = "Report_";
+    Text[ finnish ] = "Bericht_";
 };
 
 String RID_DB_REPORT_WIZARD_START + 8
@@ -2998,6 +3109,7 @@ String RID_DB_REPORT_WIZARD_START + 8
     Text[ korean ] = "(¾øÀ½)";
     Text[ turkish ] = "(yok)";
     Text[ catalan ] = "(none)";
+    Text[ finnish ] = "(kein)";
 };
 
 String RID_DB_REPORT_WIZARD_START + 9
@@ -3024,6 +3136,7 @@ String RID_DB_REPORT_WIZARD_START + 9
     Text[ korean ] = ": Ç¥¡¡¼±ÅÃ";
     Text[ turkish ] = ": Tablo seçimi";
     Text[ catalan ] = ": Table Selection";
+    Text[ finnish ] = ": Tabellenauswahl";
 };
 
 String RID_DB_REPORT_WIZARD_START + 10
@@ -3050,6 +3163,7 @@ String RID_DB_REPORT_WIZARD_START + 10
     Text[ korean ] = ": ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = ": Alan seçimi";
     Text[ catalan ] = ": Field Selection";
+    Text[ finnish ] = ": Feldauswahl";
 };
 
 String RID_DB_REPORT_WIZARD_START + 11
@@ -3076,6 +3190,7 @@ String RID_DB_REPORT_WIZARD_START + 11
     Text[ korean ] = ": ´Ù´Ü°è";
     Text[ turkish ] = ": Yapı";
     Text[ catalan ] = ": Structure";
+    Text[ finnish ] = ": Gliederung";
 };
 
 String RID_DB_REPORT_WIZARD_START + 12
@@ -3103,6 +3218,7 @@ String RID_DB_REPORT_WIZARD_START + 12
     Text[ turkish ] = ": Sıralama seçenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Sort Options";
+    Text[ finnish ] = ": Sortieroptionen";
 };
 
 String RID_DB_REPORT_WIZARD_START + 13
@@ -3129,6 +3245,7 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text[ korean ] = ": ½ºÅ¸ÀÏ ¼±ÅÃ";
     Text[ turkish ] = ": Biçim seçimi";
     Text[ catalan ] = ": Style Selection";
+    Text[ finnish ] = ": Stilauswahl";
 };
 
 String RID_DB_REPORT_WIZARD_START + 14
@@ -3155,6 +3272,7 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text[ korean ] = ": ¼­½Ä À¯Çü";
     Text[ turkish ] = ": Format şablonları";
     Text[ catalan ] = ": Styles";
+    Text[ finnish ] = ": Formatvorlagen";
 };
 
 String RID_DB_REPORT_WIZARD_START + 15
@@ -3181,6 +3299,7 @@ String RID_DB_REPORT_WIZARD_START + 15
     Text[ korean ] = ": ¸¸µé±â";
     Text[ turkish ] = ": Oluştur";
     Text[ catalan ] = ": Create";
+    Text[ finnish ] = ": Fertig stellen";
 };
 
 String RID_DB_REPORT_WIZARD_START + 16
@@ -3197,7 +3316,7 @@ String RID_DB_REPORT_WIZARD_START + 16
     Text[ swedish ] = "Data~källa";
     Text[ polish ] = "ród³o danych";
     Text[ portuguese_brazilian ] = "Datenq~uelle";
-    Text[ japanese ] = "“ú•t~¿°½";
+    Text[ japanese ] = "ÃŞ°À¿°½";
     Text[ chinese_simplified ] = "Êı¾İÔ´";
     Text[ chinese_traditional ] = "¸ê®Æ·½";
     Text[ arabic ] = "~ãÕÏÑ ÇáÈíÇäÇÊ";
@@ -3208,6 +3327,7 @@ String RID_DB_REPORT_WIZARD_START + 16
     Text[ turkish ] = "Veri kaynağı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Data Source";
+    Text[ finnish ] = "Datenq~uelle";
 };
 
 String RID_DB_REPORT_WIZARD_START + 17
@@ -3224,9 +3344,9 @@ String RID_DB_REPORT_WIZARD_START + 17
     Text[ swedish ] = "~Existerande fält";
     Text[ polish ] = "Istniej¹ce pola";
     Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "~g—p‚Å‚«‚éÌ¨°ÙÄŞ";
+    Text[ japanese ] = "Šù‘¶Ì¨°ÙÄŞ";
     Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
-    Text[ chinese_traditional ] = "²{¦sªºÄæ¦ì(~V)";
+    Text[ chinese_traditional ] = "²{¦sªºÄæ¦ì";
     Text[ arabic ] = "~ÇáÍŞæá ÇáãÊæİÑÉ";
     Text[ dutch ] = "~Bestaande velden";
     Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
@@ -3234,6 +3354,7 @@ String RID_DB_REPORT_WIZARD_START + 17
     Text[ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
     Text[ turkish ] = "~Mevcut alanlar";
     Text[ catalan ] = "Existing fields";
+    Text[ finnish ] = "~Vorhandene Felder";
 };
 
 String RID_DB_REPORT_WIZARD_START + 18
@@ -3250,9 +3371,9 @@ String RID_DB_REPORT_WIZARD_START + 18
     Text[ swedish ] = "Över~tagna";
     Text[ polish ] = "~Zastosowano";
     Text[ portuguese_brazilian ] = "~Übernommen";
-    Text[ japanese ] = "~ˆø—p";
+    Text[ japanese ] = "“K—p";
     Text[ chinese_simplified ] = "Ì×ÓÃ(~U)";
-    Text[ chinese_traditional ] = "®M¥Î";
+    Text[ chinese_traditional ] = "±Ä¥Î";
     Text[ arabic ] = "~ÊØÈíŞ";
     Text[ dutch ] = "~Overgenomen";
     Text[ chinese_simplified ] = "Ì×ÓÃ(~U)";
@@ -3260,6 +3381,7 @@ String RID_DB_REPORT_WIZARD_START + 18
     Text[ korean ] = "~Àû¿ëµÊ";
     Text[ turkish ] = "~Seçilen";
     Text[ catalan ] = "~Applied";
+    Text[ finnish ] = "~Übernommen";
 };
 
 String RID_DB_REPORT_WIZARD_START + 19
@@ -3276,7 +3398,7 @@ String RID_DB_REPORT_WIZARD_START + 19
     Text[ swedish ] = "Disponera ~fält";
     Text[ polish ] = "Organizuj pola";
     Text[ portuguese_brazilian ] = "Felder ~Gliedern";
-    Text[ japanese ] = "Ì¨°ÙÄŞ‚Ì~±³Ä×²İ";
+    Text[ japanese ] = "Ì¨°ÙÄŞ‚Ì±³Ä×²İ";
     Text[ chinese_simplified ] = "±àÅÅ×Ö¶Î";
     Text[ chinese_traditional ] = "½s±ÆÄæ¦ì";
     Text[ arabic ] = "~ÊŞÓíã ÇáÍŞæá";
@@ -3286,6 +3408,7 @@ String RID_DB_REPORT_WIZARD_START + 19
     Text[ korean ] = "ÇÊµå£¦´Ù´Ü°è";
     Text[ turkish ] = "Alanları düzenle";
     Text[ catalan ] = "Organize fields";
+    Text[ finnish ] = "Felder ~Gliedern";
 };
 
 String RID_DB_REPORT_WIZARD_START + 20
@@ -3302,7 +3425,7 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ swedish ] = "~Sortering";
     Text[ polish ] = "~Sortowanie";
     Text[ portuguese_brazilian ] = "~Sortierung";
-    Text[ japanese ] = "~•À‚×‘Ö‚¦";
+    Text[ japanese ] = "•À‚×‘Ö‚¦";
     Text[ chinese_simplified ] = "ÅÅĞò(~S)";
     Text[ chinese_traditional ] = "±Æ§Ç(~S)";
     Text[ arabic ] = "~ÇáİÑÒ";
@@ -3312,6 +3435,7 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ korean ] = "Á¤·Ä";
     Text[ turkish ] = "~Sıralama";
     Text[ catalan ] = "~Sorting";
+    Text[ finnish ] = "~Sortierung";
 };
 
 String RID_DB_REPORT_WIZARD_START + 21
@@ -3328,7 +3452,7 @@ String RID_DB_REPORT_WIZARD_START + 21
     Text[ swedish ] = "~Justering";
     Text[ polish ] = "~Wyrównanie";
     Text[ portuguese_brazilian ] = "~Ausrichtung";
-    Text[ japanese ] = "~”z’u";
+    Text[ japanese ] = "”z’u";
     Text[ chinese_simplified ] = "¶ÔÆë(~A)";
     Text[ chinese_traditional ] = "½Õ¾ã(~A)";
     Text[ arabic ] = "~ÇáãÍÇĞÇÉ";
@@ -3338,6 +3462,7 @@ String RID_DB_REPORT_WIZARD_START + 21
     Text[ korean ] = "¸ÂÃã";
     Text[ turkish ] = "~Hizalama";
     Text[ catalan ] = "~Alignment";
+    Text[ finnish ] = "~Ausrichtung";
 };
 
 String RID_DB_REPORT_WIZARD_START + 22
@@ -3354,7 +3479,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ swedish ] = "~Stående";
     Text[ polish ] = "~Format pionowy";
     Text[ portuguese_brazilian ] = "~Hochformat";
-    Text[ japanese ] = "c‘‚«";
+    Text[ japanese ] = "c";
     Text[ chinese_simplified ] = "×İÏò(~H)";
     Text[ chinese_traditional ] = "Áa¦V®æ¦¡(~H)";
     Text[ arabic ] = "~ÈÇáØæá";
@@ -3364,6 +3489,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ korean ] = "¼¼·Î";
     Text[ turkish ] = "~Dikey";
     Text[ catalan ] = "~Portrait";
+    Text[ finnish ] = "~Hochformat";
 };
 
 String RID_DB_REPORT_WIZARD_START + 23
@@ -3380,7 +3506,7 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ swedish ] = "~Liggande";
     Text[ polish ] = "~Format poziomy";
     Text[ portuguese_brazilian ] = "~Querformat";
-    Text[ japanese ] = "~‰¡";
+    Text[ japanese ] = "‰¡";
     Text[ chinese_simplified ] = "ºáÏò(~Q)";
     Text[ chinese_traditional ] = "¾î¦V®æ¦¡(~Q)";
     Text[ arabic ] = "~ÈÇáÚÑÖ";
@@ -3390,6 +3516,7 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ korean ] = "°¡·Î";
     Text[ turkish ] = "~Yatay";
     Text[ catalan ] = "~Landscape";
+    Text[ finnish ] = "~Querformat";
 };
 
 String RID_DB_REPORT_WIZARD_START + 24
@@ -3406,7 +3533,7 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ swedish ] = "~Stil";
     Text[ polish ] = "~Styl";
     Text[ portuguese_brazilian ] = "~Stil";
-    Text[ japanese ] = "~½À²Ù";
+    Text[ japanese ] = "½À²Ù";
     Text[ chinese_simplified ] = "Ê½Ñù(~S)";
     Text[ chinese_traditional ] = "­·®æ(~S)";
     Text[ arabic ] = "~ÇáäãØ";
@@ -3416,6 +3543,7 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ korean ] = "½ºÅ¸ÀÏ";
     Text[ turkish ] = "~Biçim";
     Text[ catalan ] = "~Style";
+    Text[ finnish ] = "~Stil";
 };
 
 String RID_DB_REPORT_WIZARD_START + 25
@@ -3432,7 +3560,7 @@ String RID_DB_REPORT_WIZARD_START + 25
     Text[ swedish ] = "~Disposition A";
     Text[ polish ] = "~Konspekt A";
     Text[ portuguese_brazilian ] = "~Gliederung A";
-    Text[ japanese ] = "~±³Ä×²İ A";
+    Text[ japanese ] = "±³Ä×²İ A";
     Text[ chinese_simplified ] = "´ó¸Ù A";
     Text[ chinese_traditional ] = "½s±Æ A";
     Text[ arabic ] = "~ÇáÊŞÓíã A";
@@ -3442,6 +3570,7 @@ String RID_DB_REPORT_WIZARD_START + 25
     Text[ korean ] = "´Ù´Ü°è A";
     Text[ turkish ] = "~ Anahat A";
     Text[ catalan ] = "~Outline A";
+    Text[ finnish ] = "~Gliederung A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 26
@@ -3458,7 +3587,7 @@ String RID_DB_REPORT_WIZARD_START + 26
     Text[ swedish ] = "Dis~position B";
     Text[ polish ] = "Konspekt B";
     Text[ portuguese_brazilian ] = "Glie~derung B";
-    Text[ japanese ] = "±³Ä×²İ~B";
+    Text[ japanese ] = "±³Ä×²İ B";
     Text[ chinese_simplified ] = "´ó¸Ù B";
     Text[ chinese_traditional ] = "½s±Æ B";
     Text[ arabic ] = "ÇáÊŞÓíã B";
@@ -3468,6 +3597,7 @@ String RID_DB_REPORT_WIZARD_START + 26
     Text[ korean ] = "´Ù´Ü°è B";
     Text[ turkish ] = "Anahat B";
     Text[ catalan ] = "Outline~ B";
+    Text[ finnish ] = "Glie~derung B";
 };
 
 String RID_DB_REPORT_WIZARD_START + 27
@@ -3484,7 +3614,7 @@ String RID_DB_REPORT_WIZARD_START + 27
     Text[ swedish ] = "~Vänster A";
     Text[ polish ] = "~Z lewej A";
     Text[ portuguese_brazilian ] = "~Links A";
-    Text[ japanese ] = "~¶ A";
+    Text[ japanese ] = "¶ A";
     Text[ chinese_simplified ] = "×óÏòA(~L)";
     Text[ chinese_traditional ] = "¦V¥ª A";
     Text[ arabic ] = "~íÓÇÑ A";
@@ -3494,6 +3624,7 @@ String RID_DB_REPORT_WIZARD_START + 27
     Text[ korean ] = "¿ŞÂÊ A";
     Text[ turkish ] = "S~ol A";
     Text[ catalan ] = "~Left A";
+    Text[ finnish ] = "~Links A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 28
@@ -3510,7 +3641,7 @@ String RID_DB_REPORT_WIZARD_START + 28
     Text[ swedish ] = "V~änster B";
     Text[ polish ] = "~Z lewej B";
     Text[ portuguese_brazilian ] = "L~inks B";
-    Text[ japanese ] = "¶~ B";
+    Text[ japanese ] = "¶ B";
     Text[ chinese_simplified ] = "×óÏò B";
     Text[ chinese_traditional ] = "¦V¥ª B";
     Text[ arabic ] = "~íÓÇÑ B";
@@ -3520,6 +3651,7 @@ String RID_DB_REPORT_WIZARD_START + 28
     Text[ korean ] = "¿ŞÂÊ B";
     Text[ turkish ] = "So~l B";
     Text[ catalan ] = "L~eft B";
+    Text[ finnish ] = "L~inks B";
 };
 
 String RID_DB_REPORT_WIZARD_START + 29
@@ -3536,7 +3668,7 @@ String RID_DB_REPORT_WIZARD_START + 29
     Text[ swedish ] = "Uppd~elad";
     Text[ polish ] = "~Stopniowy";
     Text[ portuguese_brazilian ] = "~Stufig";
-    Text[ japanese ] = "~’iŠK“I";
+    Text[ japanese ] = "’iŠK“I";
     Text[ chinese_simplified ] = "·Ö¼¶(~S)";
     Text[ chinese_traditional ] = "µ¥¯Å";
     Text[ arabic ] = "~ãÊÏÑÌ";
@@ -3547,6 +3679,7 @@ String RID_DB_REPORT_WIZARD_START + 29
     Text[ turkish ] = "~Girintilenmiş";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Indented";
+    Text[ finnish ] = "~Stufig";
 };
 
 String RID_DB_REPORT_WIZARD_START + 30
@@ -3563,7 +3696,7 @@ String RID_DB_REPORT_WIZARD_START + 30
     Text[ swedish ] = "~Justerad";
     Text[ polish ] = "~Wyrównany";
     Text[ portuguese_brazilian ] = "~Bündig";
-    Text[ japanese ] = "~’iŠK‚È‚µ";
+    Text[ japanese ] = "’iŠK‚È‚µ";
     Text[ chinese_simplified ] = "¶ÔÆë(~B)";
     Text[ chinese_traditional ] = "¹ï»ô";
     Text[ arabic ] = "~ÖÈØ";
@@ -3573,6 +3706,7 @@ String RID_DB_REPORT_WIZARD_START + 30
     Text[ korean ] = "¾çÂÊ ¸ÂÃã";
     Text[ turkish ] = "~İki yana yasla";
     Text[ catalan ] = "~Justified";
+    Text[ finnish ] = "~Bündig";
 };
 
 String RID_DB_REPORT_WIZARD_START + 31
@@ -3599,6 +3733,7 @@ String RID_DB_REPORT_WIZARD_START + 31
     Text[ korean ] = "¼­½Ä°ú¡¡À¯Çü";
     Text[ turkish ] = "Format şablonları";
     Text[ catalan ] = "Styles";
+    Text[ finnish ] = "Format~vorlagen";
 };
 
 String RID_DB_REPORT_WIZARD_START + 32
@@ -3615,7 +3750,7 @@ String RID_DB_REPORT_WIZARD_START + 32
     Text[ swedish ] = "~Namn på rapport";
     Text[ polish ] = "~Nazwa raportu";
     Text[ portuguese_brazilian ] = "~Name des Berichts";
-    Text[ japanese ] = "~ÚÎß°Ä–¼";
+    Text[ japanese ] = "ÚÎß°Ä–¼";
     Text[ chinese_simplified ] = "±¨±íÃû³Æ(~N)";
     Text[ chinese_traditional ] = "³øªí¦WºÙ";
     Text[ arabic ] = "~ÇÓã ÇáÊŞÑíÑ";
@@ -3625,6 +3760,7 @@ String RID_DB_REPORT_WIZARD_START + 32
     Text[ korean ] = "¸®Æ÷Æ® ÀÌ¸§";
     Text[ turkish ] = "~Raporun adı";
     Text[ catalan ] = "~Name of Report";
+    Text[ finnish ] = "~Name des Berichts";
 };
 
 String RID_DB_REPORT_WIZARD_START + 33
@@ -3643,7 +3779,7 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ portuguese_brazilian ] = "Nach dem ~Beenden...";
     Text[ japanese ] = "Š®—¹Œã...";
     Text[ chinese_simplified ] = "½áÊøÖ®ºó...";
-    Text[ chinese_traditional ] = "¦bµ²§ô¤§«á(~B)...";
+    Text[ chinese_traditional ] = "¦bµ²§ô¤§«á...";
     Text[ arabic ] = "ÈÚÏ ÇáÅäåÇÁ...";
     Text[ dutch ] = "Na het ~beëindigen...";
     Text[ chinese_simplified ] = "½áÊøÖ®ºó...";
@@ -3652,6 +3788,7 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ turkish ] = "Oluşturulduktan sonra...";
     Text[ language_user1 ] = "EM2.Mai.01: Die gleiche Übersetzung wie für \"Nach der Fertigstellung...\".";
     Text[ catalan ] = "After completion...";
+    Text[ finnish ] = "Nach dem ~Beenden...";
 };
 
 String RID_DB_REPORT_WIZARD_START + 34
@@ -3668,7 +3805,7 @@ String RID_DB_REPORT_WIZARD_START + 34
     Text[ swedish ] = "~Visa rapport";
     Text[ polish ] = "Poka¿ raport";
     Text[ portuguese_brazilian ] = "Bericht an~zeigen";
-    Text[ japanese ] = "ÚÎß°Ä‚ğ~•\\¦‚·‚é";
+    Text[ japanese ] = "ÚÎß°Ä‚ğ•\\¦‚·‚é";
     Text[ chinese_simplified ] = "ÏÔÊ¾±¨±í";
     Text[ chinese_traditional ] = "Åã¥Ü³øªí";
     Text[ arabic ] = "~ÅÙåÇÑ ÇáÊŞÑíÑ";
@@ -3678,6 +3815,7 @@ String RID_DB_REPORT_WIZARD_START + 34
     Text[ korean ] = "º¸°í¼­ Ç¥½Ã";
     Text[ turkish ] = "Raporu görüntüle";
     Text[ catalan ] = "display Report";
+    Text[ finnish ] = "Bericht an~zeigen";
 };
 
 String RID_DB_REPORT_WIZARD_START + 35
@@ -3694,7 +3832,7 @@ String RID_DB_REPORT_WIZARD_START + 35
     Text[ swedish ] = "~Arkivera rapport";
     Text[ polish ] = "Zapisz raport";
     Text[ portuguese_brazilian ] = "Bericht ab~legen";
-    Text[ japanese ] = "ÚÎß°Ä‚ğ~Ši”[‚·‚é";
+    Text[ japanese ] = "ÚÎß°Ä‚ğŠi”[";
     Text[ chinese_simplified ] = "´æÅÌ±¨±í";
     Text[ chinese_traditional ] = "Àx¦s³øªí";
     Text[ arabic ] = "ÍİÙ ~ÇáÊŞÑíÑ";
@@ -3704,6 +3842,7 @@ String RID_DB_REPORT_WIZARD_START + 35
     Text[ korean ] = "¸®Æ÷Æ® ÀúÀå";
     Text[ turkish ] = "Raporu kaydet";
     Text[ catalan ] = "save Report";
+    Text[ finnish ] = "Bericht ab~legen";
 };
 
 String RID_DB_REPORT_WIZARD_START + 36
@@ -3728,6 +3867,7 @@ String RID_DB_REPORT_WIZARD_START + 36
     Text[ arabic ] = "A;Z";
     Text[ turkish ] = "A;Z";
     Text[ catalan ] = "A;Z";
+    Text[ finnish ] = "A;Z";
 };
 
 String RID_DB_REPORT_WIZARD_START + 37
@@ -3749,10 +3889,11 @@ String RID_DB_REPORT_WIZARD_START + 37
     Text[ japanese ] = "ÚÎß°Ä–¼‚ÍÅ‚32•¶š‚Ü‚Å‚Å‚·B";
     Text[ korean ] = "¸®Æ÷Æ®ÀÇ ÀÌ¸§Àº 32¹®ÀÚ¸¦ ÃÊ°úÇØ¼­´Â¡¡¾ÈµË´Ï´Ù.";
     Text[ chinese_simplified ] = "±¨±íÃû³Æ×î¶àÖ»ÄÜÓÉ32¸ö×Ö·û×é³É¡£";
-    Text[ chinese_traditional ] = "³ø§i¦WºÙ³Ìªø¤£±o¶W¹L  32 ­Ó¦r¤¸";
+    Text[ chinese_traditional ] = "³ø§i¦WºÙ³Ìªø¤£±o¶W¹L32­Ó¦r¤¸¡C";
     Text[ arabic ] = "íÌÈ ÃáÇ íÒíÏ Øæá ÃÓãÇÁ ÇáÊŞÑíÑ Úä 32 ÍÑİÇğ.";
     Text[ turkish ] = "Rapor adları en fazla 32 karakter olmalıdır.";
     Text[ catalan ] = "Report names cannot be longer than 32 characters.";
+    Text[ finnish ] = "Berichts-Namen dürfen maximal 32 Zeichen lang sein.";
 };
 
 // ============================================================================
@@ -3781,6 +3922,7 @@ String RID_DB_TABLE_WIZARD_START + 0
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ Ç¥";
     Text[ turkish ] = "Tablo OtoPilotu";
     Text[ catalan ] = "AutoPilot Table";
+    Text[ finnish ] = "AutoPilot Tabelle";
 };
 
 String RID_DB_TABLE_WIZARD_START + 1
@@ -3807,6 +3949,7 @@ String RID_DB_TABLE_WIZARD_START + 1
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù. Ç¥ ÀÚµ¿ÆÄÀÏ·µÀ» ½ÃÀÛÇÏ·Á¸é ÃÖ¼Ò ÇÏ³ªÀÇ µ¥ÀÌÅÍº£ÀÌ½º°¡ ÇÊ¿äÇÕ´Ï´Ù.";
     Text[ turkish ] = "Kurulmuş veritabanı yok. Tablo OtoPilot'unu başlatabilmek için en az bir veritabanı mevcut olmalıdır.";
     Text[ catalan ] = "A database has not been installed. There must be at least one database so that the AutoPilot Table can be started.";
+    Text[ finnish ] = "Es ist keine Datenbank installiert. Sie benötigen mind. eine Datenbank um den AutoPiloten für Tabellen starten zu können.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 2
@@ -3823,7 +3966,7 @@ String RID_DB_TABLE_WIZARD_START + 2
     Text[ swedish ] = "Identifikatorn $1 finns redan i listan.";
     Text[ polish ] = "Identyfikator $1 znajduje siê ju¿ na liœcie.";
     Text[ portuguese_brazilian ] = "Der Bezeichner $1 ist bereits in der Liste vorhanden.";
-    Text[ japanese ] = "–¼‘O $1 ‚Í‚·‚Å‚ÉØ½Ä‚Ì’†‚Ég—p‚³‚ê‚Ä‚¢‚Ü‚·B";
+    Text[ japanese ] = "ID $1 ‚Í‚·‚Å‚ÉØ½Ä‚É‚ ‚è‚Ü‚·B";
     Text[ chinese_simplified ] = "Õâ¸öÃû³Æ $1 ÒÑ¾­ÔÚÁĞµ¥Ö®ÖĞ¡£";
     Text[ chinese_traditional ] = "²M³æ¤º¤w¸g¦s¦b¤@­Ó¦WºÙ $1¡C";
     Text[ arabic ] = "ÇáÇÓã $1 ãæÌæÏ ÈÇáİÚá İí ÇáŞÇÆãÉ.";
@@ -3833,6 +3976,7 @@ String RID_DB_TABLE_WIZARD_START + 2
     Text[ korean ] = "È®ÀÎÀÚ $1Àº£¨´Â£© ÀÌ¹Ì ¸ñ·Ï¿¡ ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Tanıtıcı $1 listede mevcut.";
     Text[ catalan ] = "This identifier $1 is already contained in the list.";
+    Text[ finnish ] = "Der Bezeichner $1 ist bereits in der Liste vorhanden.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 3
@@ -3849,7 +3993,7 @@ String RID_DB_TABLE_WIZARD_START + 3
     Text[ swedish ] = "Det gick inte att öppna databasen $1.";
     Text[ polish ] = "Otwarcie bazy danych $1 nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Die Datenbank $1 konnte nicht geöffnet werden.";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½ $1 ‚ÍŠJ‚¯‚é‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½ $1 ‚ğŠJ‚¯‚ç‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÊı¾İ¿â $1 ¡£";
     Text[ chinese_traditional ] = "µLªk¶}±Ò¸ê®Æ®w $1";
     Text[ arabic ] = "ÊÚĞÑ İÊÍ ŞÇÚÏÉ ÇáÈíÇäÇÊ $1.";
@@ -3859,6 +4003,7 @@ String RID_DB_TABLE_WIZARD_START + 3
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º $1À»£¨¸¦£© ¿­Áö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "$1 veritabanı açılamadı.";
     Text[ catalan ] = "The database $1 could not be opened.";
+    Text[ finnish ] = "Die Datenbank $1 konnte nicht geöffnet werden.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 4
@@ -3877,7 +4022,7 @@ String RID_DB_TABLE_WIZARD_START + 4
     Text[ portuguese_brazilian ] = "Die Tabelle wurde erstellt.";
     Text[ japanese ] = "Ã°ÌŞÙ‚Íì¬‚³‚ê‚Ü‚µ‚½B";
     Text[ chinese_simplified ] = "Õâ¸ö±í¸ñÒÑ¾­½¨Á¢¡£";
-    Text[ chinese_traditional ] = "¤w¸g¨î§@ªí®æ¡C";
+    Text[ chinese_traditional ] = "ªí®æ¤w¸g»s§@§¹²¦¡C";
     Text[ arabic ] = "Êã ÅäÔÇÁ ÇáÌÏæá.";
     Text[ dutch ] = "De tabel werd gemaakt.";
     Text[ chinese_simplified ] = "Õâ¸ö±í¸ñÒÑ¾­½¨Á¢¡£";
@@ -3885,6 +4030,7 @@ String RID_DB_TABLE_WIZARD_START + 4
     Text[ korean ] = "Ç¥°¡ ¸¸µé¾îÁ³½À´Ï´Ù.";
     Text[ turkish ] = "Tablo oluşturuldu.";
     Text[ catalan ] = "The table has been created.";
+    Text[ finnish ] = "Die Tabelle wurde erstellt.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 5
@@ -3903,7 +4049,7 @@ String RID_DB_TABLE_WIZARD_START + 5
     Text[ portuguese_brazilian ] = "Die Tabelle konnte nicht erstellt werden.";
     Text[ japanese ] = "Ã°ÌŞÙ‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Õâ¸ö±í¸ñ¡£";
-    Text[ chinese_traditional ] = "µLªk¨î§@ªí®æ¡C";
+    Text[ chinese_traditional ] = "µLªk§¹¦¨»s§@ªí®æ¡C";
     Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáÌÏæá.";
     Text[ dutch ] = "De tabel kon niet worden gemaakt.";
     Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Õâ¸ö±í¸ñ¡£";
@@ -3911,6 +4057,7 @@ String RID_DB_TABLE_WIZARD_START + 5
     Text[ korean ] = "Ç¥°¡ ¸¸µé¾îÁöÁö¡¡¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Tablo oluşturulamadı.";
     Text[ catalan ] = "The table could not be created.";
+    Text[ finnish ] = "Die Tabelle konnte nicht erstellt werden.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 6
@@ -3937,6 +4084,7 @@ String RID_DB_TABLE_WIZARD_START + 6
     Text[ korean ] = ":  Ç¥ À¯Çü";
     Text[ turkish ] = ": Tablo tipi";
     Text[ catalan ] = ": Table type";
+    Text[ finnish ] = ": Tabellentyp";
 };
 
 String RID_DB_TABLE_WIZARD_START + 7
@@ -3963,6 +4111,7 @@ String RID_DB_TABLE_WIZARD_START + 7
     Text[ korean ] = ": ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = ": Alan seçimi";
     Text[ catalan ] = ": Field Selection";
+    Text[ finnish ] = ": Feldauswahl";
 };
 
 String RID_DB_TABLE_WIZARD_START + 8
@@ -3981,7 +4130,7 @@ String RID_DB_TABLE_WIZARD_START + 8
     Text[ portuguese_brazilian ] = ": Individualisierung";
     Text[ japanese ] = ": ¶½ÀÏ²½Ş";
     Text[ chinese_simplified ] = "£º¸öĞÔ»¯";
-    Text[ chinese_traditional ] = "¡G­Ó¤H¤Æ";
+    Text[ chinese_traditional ] = "¡G¨Ï¥ÎªÌ¦Û­q";
     Text[ arabic ] = ": ÇáÊÔÎíÕ";
     Text[ dutch ] = ": individualiseren";
     Text[ chinese_simplified ] = "£º¸öĞÔ»¯";
@@ -3989,6 +4138,7 @@ String RID_DB_TABLE_WIZARD_START + 8
     Text[ korean ] = ": »ç¿ëÀÚ ¼³Á¤";
     Text[ turkish ] = ": Özelleştirme";
     Text[ catalan ] = ": Customization";
+    Text[ finnish ] = ": Individualisierung";
 };
 
 String RID_DB_TABLE_WIZARD_START + 9
@@ -4007,7 +4157,7 @@ String RID_DB_TABLE_WIZARD_START + 9
     Text[ portuguese_brazilian ] = ": Tabelle Erstellen";
     Text[ japanese ] = ": Ã°ÌŞÙ‚Ìì¬";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±í¸ñ";
-    Text[ chinese_traditional ] = "¡G¨î§@ªí®æ";
+    Text[ chinese_traditional ] = "¡G»s§@ªí®æ";
     Text[ arabic ] = ": ÅäÔÇÁ ÌÏæá";
     Text[ dutch ] = ": tabel maken";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±í¸ñ";
@@ -4015,6 +4165,7 @@ String RID_DB_TABLE_WIZARD_START + 9
     Text[ korean ] = ":  Ç¥ ¸¸µé±â";
     Text[ turkish ] = ": Tablo oluştur";
     Text[ catalan ] = ": Create Table";
+    Text[ finnish ] = ": Tabelle Erstellen";
 };
 
 String RID_DB_TABLE_WIZARD_START + 10
@@ -4042,6 +4193,7 @@ String RID_DB_TABLE_WIZARD_START + 10
     Text[ turkish ] = "Veritabanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Databases";
+    Text[ finnish ] = "Datenbanken";
 };
 
 String RID_DB_TABLE_WIZARD_START + 11
@@ -4058,7 +4210,7 @@ String RID_DB_TABLE_WIZARD_START + 11
     Text[ swedish ] = "~Tabell";
     Text[ polish ] = "~Tabela";
     Text[ portuguese_brazilian ] = "~Tabelle";
-    Text[ japanese ] = "~•\\";
+    Text[ japanese ] = "Ã°ÌŞÙ";
     Text[ chinese_simplified ] = "±í¸ñ(~T)";
     Text[ chinese_traditional ] = "ªí®æ";
     Text[ arabic ] = "~ÌÏæá";
@@ -4068,6 +4220,7 @@ String RID_DB_TABLE_WIZARD_START + 11
     Text[ korean ] = "~  Ç¥";
     Text[ turkish ] = "~Tablo";
     Text[ catalan ] = "~Table";
+    Text[ finnish ] = "~Tabelle";
 };
 
 String RID_DB_TABLE_WIZARD_START + 12
@@ -4086,7 +4239,7 @@ String RID_DB_TABLE_WIZARD_START + 12
     Text[ portuguese_brazilian ] = "~Feldvorschläge";
     Text[ japanese ] = "Ì¨°ÙÄŞŒó•â(~P)";
     Text[ chinese_simplified ] = "×Ö¶Î½¨Òé(~F)";
-    Text[ chinese_traditional ] = "Äæ¦ì«ØÄ³";
+    Text[ chinese_traditional ] = "«ØÄ³ªºÄæ¦ì";
     Text[ arabic ] = "~ÇŞÊÑÇÍÇÊ ÇáÍŞá";
     Text[ dutch ] = "~Veldvoorstellen";
     Text[ chinese_simplified ] = "×Ö¶Î½¨Òé(~F)";
@@ -4094,6 +4247,7 @@ String RID_DB_TABLE_WIZARD_START + 12
     Text[ korean ] = "Á¦¾ÈµÈ ÇÊµå";
     Text[ turkish ] = "~Önerilen alanlar";
     Text[ catalan ] = "~Proposed Fields";
+    Text[ finnish ] = "~Feldvorschläge";
 };
 
 String RID_DB_TABLE_WIZARD_START + 13
@@ -4110,9 +4264,9 @@ String RID_DB_TABLE_WIZARD_START + 13
     Text[ swedish ] = "Ö~vertagna";
     Text[ polish ] = "~Zastosowano";
     Text[ portuguese_brazilian ] = "~Übernommen";
-    Text[ japanese ] = "~ˆø—p";
+    Text[ japanese ] = "“K—p";
     Text[ chinese_simplified ] = "Ì×ÓÃ(~U)";
-    Text[ chinese_traditional ] = "®M¥Î";
+    Text[ chinese_traditional ] = "±Ä¥Î";
     Text[ arabic ] = "~ÊØÈíŞ";
     Text[ dutch ] = "~Overgenomen";
     Text[ chinese_simplified ] = "Ì×ÓÃ(~U)";
@@ -4120,6 +4274,7 @@ String RID_DB_TABLE_WIZARD_START + 13
     Text[ korean ] = "Àû¿ëµÊ";
     Text[ turkish ] = "~Seçilen";
     Text[ catalan ] = "~Applied";
+    Text[ finnish ] = "~Übernommen";
 };
 
 String RID_DB_TABLE_WIZARD_START + 14
@@ -4136,9 +4291,9 @@ String RID_DB_TABLE_WIZARD_START + 14
     Text[ swedish ] = "~Fältnamn";
     Text[ polish ] = "~Nazwa pola";
     Text[ portuguese_brazilian ] = "~Feldname";
-    Text[ japanese ] = "~Ì¨°ÙÄŞ–¼";
+    Text[ japanese ] = "Ì¨°ÙÄŞ–¼";
     Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ(~F)";
-    Text[ chinese_traditional ] = "Äæ¦ì¦W";
+    Text[ chinese_traditional ] = "Äæ¦ì¦WºÙ";
     Text[ arabic ] = "~ÇÓã ÇáÍŞá";
     Text[ dutch ] = "~Veldnaam";
     Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ(~F)";
@@ -4146,6 +4301,7 @@ String RID_DB_TABLE_WIZARD_START + 14
     Text[ korean ] = "ÆÄÀÏ ÀÌ¸§";
     Text[ turkish ] = "~Alan adı";
     Text[ catalan ] = "~Field name";
+    Text[ finnish ] = "~Feldname";
 };
 
 String RID_DB_TABLE_WIZARD_START + 15
@@ -4162,9 +4318,9 @@ String RID_DB_TABLE_WIZARD_START + 15
     Text[ swedish ] = "~Överta";
     Text[ polish ] = "~Zastosuj";
     Text[ portuguese_brazilian ] = "~Übernehmen";
-    Text[ japanese ] = "~ˆø—p";
+    Text[ japanese ] = "“K—p";
     Text[ chinese_simplified ] = "Ì×ÓÃ(~U)";
-    Text[ chinese_traditional ] = "®M¥Î";
+    Text[ chinese_traditional ] = "±Ä¥Î";
     Text[ arabic ] = "~ÊØÈíŞ";
     Text[ dutch ] = "~Overnemen";
     Text[ chinese_simplified ] = "Ì×ÓÃ(~U)";
@@ -4172,6 +4328,7 @@ String RID_DB_TABLE_WIZARD_START + 15
     Text[ korean ] = "Àû¿ë";
     Text[ turkish ] = "~Seçilen";
     Text[ catalan ] = "~Apply";
+    Text[ finnish ] = "~Übernehmen";
 };
 
 String RID_DB_TABLE_WIZARD_START + 16
@@ -4188,7 +4345,7 @@ String RID_DB_TABLE_WIZARD_START + 16
     Text[ swedish ] = "När den är färdig...";
     Text[ polish ] = "Po zakoñczeniu...";
     Text[ portuguese_brazilian ] = "Nach dem Beenden...";
-    Text[ japanese ] = "I—¹Œã...";
+    Text[ japanese ] = "Š®—¹Œã...";
     Text[ chinese_simplified ] = "½áÊøÖ®ºó...";
     Text[ chinese_traditional ] = "¦bµ²§ô¤§«á...";
     Text[ arabic ] = "ÈÚÏ ÇáÅäåÇÁ...";
@@ -4198,12 +4355,13 @@ String RID_DB_TABLE_WIZARD_START + 16
     Text[ korean ] = "Á¾·á ÈÄ...";
     Text[ turkish ] = "Oluşturulduktan sonra...";
     Text[ catalan ] = "After completion...";
+    Text[ finnish ] = "Nach dem Beenden...";
 };
 
 String RID_DB_TABLE_WIZARD_START + 17
 {
     Text = "~Daten in Tabelle eingeben";
-    Text [ english_us ] = "Enter data into the table";
+    Text [ english_us ] = "Enter data in the table";
     Text[ portuguese ] = "~Inserir dados na tabela";
     Text[ russian ] = "~Ââåñòè äàííûå â òàáëèöó";
     Text[ dutch ] = "~Gegevens invoeren in tabel";
@@ -4214,9 +4372,9 @@ String RID_DB_TABLE_WIZARD_START + 17
     Text[ swedish ] = "Mata in ~data i tabell";
     Text[ polish ] = "~WprowadŸ dane do tabeli";
     Text[ portuguese_brazilian ] = "~Daten in Tabelle eingeben";
-    Text[ japanese ] = "~ÃŞ°À‚ğ•\\‚É“ü—Í";
+    Text[ japanese ] = "Ã°ÌŞÙ‚ÉÃŞ°À“ü—Í";
     Text[ chinese_simplified ] = "Íù±í¸ñÄÚÊäÈëÊı¾İ(~D)";
-    Text[ chinese_traditional ] = "¦bªí®æ¤º¿é¤J ¼Æ¾Ú";
+    Text[ chinese_traditional ] = "¦bªí®æ¤º¿é¤J¼Æ¾Ú";
     Text[ arabic ] = "~ÅÏÎÇá ÇáÈíÇäÇÊ İí ÇáÌÏæá";
     Text[ dutch ] = "~Gegevens invoeren in tabel";
     Text[ chinese_simplified ] = "Íù±í¸ñÄÚÊäÈëÊı¾İ(~D)";
@@ -4225,6 +4383,7 @@ String RID_DB_TABLE_WIZARD_START + 17
     Text[ turkish ] = "~Verileri tabloya gir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enter data into the table";
+    Text[ finnish ] = "~Daten in Tabelle eingeben";
 };
 
 String RID_DB_TABLE_WIZARD_START + 18
@@ -4241,7 +4400,7 @@ String RID_DB_TABLE_WIZARD_START + 18
     Text[ swedish ] = "~Visa tabell";
     Text[ polish ] = "Poka¿ tabelê";
     Text[ portuguese_brazilian ] = "Tabelle ~anzeigen";
-    Text[ japanese ] = "•\\‚ğ~•\\¦‚·‚é";
+    Text[ japanese ] = "Ã°ÌŞÙ‚ğ•\\¦‚·‚é";
     Text[ chinese_simplified ] = "ÏÔÊ¾±í¸ñ";
     Text[ chinese_traditional ] = "Åã¥Üªí®æ";
     Text[ arabic ] = "~ÅÙåÇÑ ÇáÌÏæá";
@@ -4251,6 +4410,7 @@ String RID_DB_TABLE_WIZARD_START + 18
     Text[ korean ] = "Ç¥ º¸ÀÌ±â";
     Text[ turkish ] = "Tabloyu görüntüle";
     Text[ catalan ] = "~Mostrar tabla";
+    Text[ finnish ] = "show table";
 };
 
 String RID_DB_TABLE_WIZARD_START + 19
@@ -4267,9 +4427,9 @@ String RID_DB_TABLE_WIZARD_START + 19
     Text[ swedish ] = "Visa i~nte tabell";
     Text[ polish ] = "Nie pokazuj tabeli";
     Text[ portuguese_brazilian ] = "Tabelle ~nicht anzeigen";
-    Text[ japanese ] = "•\\‚ğ~•\\¦‚µ‚È‚¢";
+    Text[ japanese ] = "Ã°ÌŞÙ‚ğ•\\¦‚µ‚È‚¢";
     Text[ chinese_simplified ] = "²»ÏÔÊ¾±í¸ñ";
-    Text[ chinese_traditional ] = "Áô¤Jªí®æ";
+    Text[ chinese_traditional ] = "¤£Åã¥Üªí®æ";
     Text[ arabic ] = "~ÚÏã ÅÙåÇÑ ÇáÌÏæá";
     Text[ dutch ] = "Tabel ~niet weergeven";
     Text[ chinese_simplified ] = "²»ÏÔÊ¾±í¸ñ";
@@ -4277,6 +4437,7 @@ String RID_DB_TABLE_WIZARD_START + 19
     Text[ korean ] = "Ç¥¡¡º¸ÀÌÁö ¾Ê±â";
     Text[ turkish ] = "Tabloyu görüntüleme";
     Text[ catalan ] = "do not show table";
+    Text[ finnish ] = "Tabelle ~nicht anzeigen";
 };
 
 // ============================================================================
@@ -4306,6 +4467,7 @@ String RID_DB_GRID_WIZARD_START + 0
     Text[ turkish ] = "OtoPilot Tablo öğesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot Table Element";
+    Text[ finnish ] = "AutoPilot Tabellenelement";
 };
 
 String RID_DB_GRID_WIZARD_START + 1
@@ -4324,7 +4486,7 @@ String RID_DB_GRID_WIZARD_START + 1
     Text[ portuguese_brazilian ] = "Tabellenelement erzeugen";
     Text[ japanese ] = "Ã°ÌŞÙ\\¬—v‘f‚Ìì¬";
     Text[ chinese_simplified ] = "Éú³É±í¸ñÔª¼ş";
-    Text[ chinese_traditional ] = "¨î§@ªí®æ¤¸¥ó";
+    Text[ chinese_traditional ] = "»s§@ªí®æ¤¸¥ó";
     Text[ arabic ] = "ÅäÔÇÁ ÚäÕÑ ÌÏæá";
     Text[ dutch ] = "Tabelelement maken";
     Text[ chinese_simplified ] = "Éú³É±í¸ñÔª¼ş";
@@ -4333,6 +4495,7 @@ String RID_DB_GRID_WIZARD_START + 1
     Text[ turkish ] = "Tablo öğesi oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Create table element";
+    Text[ finnish ] = "Tabellenelement erzeugen";
 };
 
 String RID_DB_GRID_WIZARD_START + 2
@@ -4351,7 +4514,7 @@ String RID_DB_GRID_WIZARD_START + 2
     Text[ portuguese_brazilian ] = "(Datum)";
     Text[ japanese ] = "(“ú•t)";
     Text[ chinese_simplified ] = "(ÈÕÆÚ)";
-    Text[ chinese_traditional ] = "(¤é´Á)";
+    Text[ chinese_traditional ] = " (¤é´Á)";
     Text[ arabic ] = "(ÇáÊÇÑíÎ)";
     Text[ dutch ] = "(Datum)";
     Text[ chinese_simplified ] = "(ÈÕÆÚ)";
@@ -4359,6 +4522,7 @@ String RID_DB_GRID_WIZARD_START + 2
     Text[ korean ] = " (³¯Â¥)";
     Text[ turkish ] = "(Tarih)";
     Text[ catalan ] = "(Date)";
+    Text[ finnish ] = " (Datum)";
 };
 
 String RID_DB_GRID_WIZARD_START + 3
@@ -4377,7 +4541,7 @@ String RID_DB_GRID_WIZARD_START + 3
     Text[ portuguese_brazilian ] = "(Zeit)";
     Text[ japanese ] = "()";
     Text[ chinese_simplified ] = "(Ê±¼ä)";
-    Text[ chinese_traditional ] = "(®É¶¡)";
+    Text[ chinese_traditional ] = " (®É¶¡)";
     Text[ arabic ] = "(ÇáæŞÊ)";
     Text[ dutch ] = "(Tijd)";
     Text[ chinese_simplified ] = "(Ê±¼ä)";
@@ -4385,6 +4549,7 @@ String RID_DB_GRID_WIZARD_START + 3
     Text[ korean ] = "(½Ã°£)";
     Text[ turkish ] = "(Saat)";
     Text[ catalan ] = "(time)";
+    Text[ finnish ] = " (Zeit)";
 };
 
 String RID_DB_GRID_WIZARD_START + 4
@@ -4412,6 +4577,7 @@ String RID_DB_GRID_WIZARD_START + 4
     Text[ turkish ] = "Tablo öğesi_";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Table Element_";
+    Text[ finnish ] = "Tabellenelement_";
 };
 
 String RID_DB_GRID_WIZARD_START + 5
@@ -4438,6 +4604,7 @@ String RID_DB_GRID_WIZARD_START + 5
     Text[ korean ] = ":  Ç¥¡¡¼±ÅÃ";
     Text[ turkish ] = ": Tablo seçimi";
     Text[ catalan ] = ": Table Selection";
+    Text[ finnish ] = ": Tabellenauswahl";
 };
 
 String RID_DB_GRID_WIZARD_START + 6
@@ -4464,6 +4631,7 @@ String RID_DB_GRID_WIZARD_START + 6
     Text[ korean ] = ": ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = ": Alan seçimi";
     Text[ catalan ] = ": Field Selection";
+    Text[ finnish ] = ": Feldauswahl";
 };
 
 String RID_DB_GRID_WIZARD_START + 7
@@ -4490,6 +4658,7 @@ String RID_DB_GRID_WIZARD_START + 7
     Text[ korean ] = ": ÇÊµå Á¤·Ä";
     Text[ turkish ] = ": Alan hizalaması";
     Text[ catalan ] = ": Field Alignment";
+    Text[ finnish ] = ": Feldausrichtung";
 };
 
 String RID_DB_GRID_WIZARD_START + 8
@@ -4516,6 +4685,7 @@ String RID_DB_GRID_WIZARD_START + 8
     Text[ korean ] = ": À¯Çü";
     Text[ turkish ] = ": Şablonlar";
     Text[ catalan ] = ": Styles";
+    Text[ finnish ] = ": Vorlagen";
 };
 
 String RID_DB_GRID_WIZARD_START + 9
@@ -4534,7 +4704,7 @@ String RID_DB_GRID_WIZARD_START + 9
     Text[ portuguese_brazilian ] = ": Formular erstellen";
     Text[ japanese ] = ": Ì«°Ñ‚Ìì¬";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±íµ¥";
-    Text[ chinese_traditional ] = "¡G¨î§@ªí³æ";
+    Text[ chinese_traditional ] = "¡G»s§@ªí³æ";
     Text[ arabic ] = ": ÅäÔÇÁ ÇÓÊãÇÑÉ";
     Text[ dutch ] = ": formulier maken";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±íµ¥";
@@ -4542,6 +4712,7 @@ String RID_DB_GRID_WIZARD_START + 9
     Text[ korean ] = ": ¾ç½Ä ¸¸µé±â";
     Text[ turkish ] = ": Form oluştur";
     Text[ catalan ] = ": Create Form";
+    Text[ finnish ] = ": Formular erstellen";
 };
 
 String RID_DB_GRID_WIZARD_START + 10
@@ -4569,6 +4740,7 @@ String RID_DB_GRID_WIZARD_START + 10
     Text[ turkish ] = "Veritabanı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Database";
+    Text[ finnish ] = "Datenbank";
 };
 
 String RID_DB_GRID_WIZARD_START + 11
@@ -4585,16 +4757,17 @@ String RID_DB_GRID_WIZARD_START + 11
     Text[ swedish ] = "~Existerande fält";
     Text[ polish ] = "~Istniej¹ce pola";
     Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "~g—p‚Å‚«‚éÌ¨°ÙÄŞ";
-    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
-    Text[ chinese_traditional ] = "²{¦sªºÄæ¦ì";
+    Text[ japanese ] = "Šù‘¶Ì¨°ÙÄŞ";
+    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î";
+    Text[ chinese_traditional ] = "²{¦³ªºÄæ¦ì";
     Text[ arabic ] = "~ÇáÍŞæá ÇáãÊæİÑÉ";
     Text[ dutch ] = "~Bestaande velden";
-    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
+    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î";
     Text[ greek ] = "Äéá~èİóéìá ğåäßá";
     Text[ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
     Text[ turkish ] = "Mevcut alanlar";
     Text[ catalan ] = "Existing fields";
+    Text[ finnish ] = "~Vorhandene Felder";
 };
 
 String RID_DB_GRID_WIZARD_START + 12
@@ -4612,15 +4785,16 @@ String RID_DB_GRID_WIZARD_START + 12
     Text[ polish ] = "~Wybrane pola";
     Text[ portuguese_brazilian ] = "~Ausgewählte Felder";
     Text[ japanese ] = "‘I‘ğ‚µ‚½Ì¨°ÙÄŞ";
-    Text[ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î(~A)";
-    Text[ chinese_traditional ] = "¿ï¾ÜªºÄæ¦ì";
+    Text[ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î";
+    Text[ chinese_traditional ] = "¤w¸g¿ï¤¤ªºÄæ¦ì";
     Text[ arabic ] = "~ÇáÍŞæá ÇáãõÍÏÏÉ";
     Text[ dutch ] = "~Geselecteerde velden";
-    Text[ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î(~A)";
+    Text[ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î";
     Text[ greek ] = "Åğéëåãìİí~á ğåäßá";
     Text[ korean ] = "ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = "~Seçilmiş alanlar";
     Text[ catalan ] = "Selected fields";
+    Text[ finnish ] = "~Ausgewählte Felder";
 };
 
 // ============================================================================
@@ -4650,6 +4824,7 @@ String RID_DB_COMBO_WIZARD_START + 0
     Text[ turkish ] = "OtoPilot - Kombinasyon alanı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot - Combo Box";
+    Text[ finnish ] = "AutoPilot - Kombinationsfeld";
 };
 
 String RID_DB_COMBO_WIZARD_START + 1
@@ -4676,6 +4851,7 @@ String RID_DB_COMBO_WIZARD_START + 1
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ - ¸ñ·Ï ÇÊµå";
     Text[ turkish ] = "OtoPilot - Liste alanı";
     Text[ catalan ] = "Auto Pilot - List field";
+    Text[ finnish ] = "AutoPilot - Listenfeld";
 };
 
 String RID_DB_COMBO_WIZARD_START + 2
@@ -4703,6 +4879,7 @@ String RID_DB_COMBO_WIZARD_START + 2
     Text[ turkish ] = "Komut alanı oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Create Control";
+    Text[ finnish ] = "Kontrollfeld erzeugen";
 };
 
 String RID_DB_COMBO_WIZARD_START + 3
@@ -4729,6 +4906,7 @@ String RID_DB_COMBO_WIZARD_START + 3
     Text[ korean ] = "ÄŞº¸¹Ú½º ÇÊµå_";
     Text[ turkish ] = "Kombinasyon alanı_";
     Text[ catalan ] = "Combo Box Field_";
+    Text[ finnish ] = "KombinationsListfeld_";
 };
 
 String RID_DB_COMBO_WIZARD_START + 4
@@ -4756,6 +4934,7 @@ String RID_DB_COMBO_WIZARD_START + 4
     Text[ turkish ] = ": Tablo seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Table Selection";
+    Text[ finnish ] = ": Tabellenauswahl";
 };
 
 String RID_DB_COMBO_WIZARD_START + 5
@@ -4782,6 +4961,7 @@ String RID_DB_COMBO_WIZARD_START + 5
     Text[ korean ] = ": ÇÊµå ¼±ÅÃ";
     Text[ turkish ] = ": Alan seçimi";
     Text[ catalan ] = ": Field Selection";
+    Text[ finnish ] = ": Feldauswahl";
 };
 
 String RID_DB_COMBO_WIZARD_START + 6
@@ -4799,15 +4979,16 @@ String RID_DB_COMBO_WIZARD_START + 6
     Text[ polish ] = ": Po³¹czenie pól";
     Text[ portuguese_brazilian ] = ": Database Field";
     Text[ japanese ] = ": Ì¨°ÙÄŞ‚Ö‚ÌØİ¸";
-    Text[ chinese_simplified ] = "£ºÁ´½Ó×Ö¶Î";
+    Text[ chinese_simplified ] = "£º×Ö¶ÎÁ´½Ó";
     Text[ chinese_traditional ] = "¡GÄæ¦ì±¶®|";
     Text[ arabic ] = ": ÇÑÊÈÇØ ÇáÍŞá";
     Text[ dutch ] = ": velden koppelen";
-    Text[ chinese_simplified ] = "£ºÁ´½Ó×Ö¶Î";
+    Text[ chinese_simplified ] = "£º×Ö¶ÎÁ´½Ó";
     Text[ greek ] = ": Óıíäåóç ğåäßïõ";
     Text[ korean ] = ":ÇÊµå ¿¬°á";
     Text[ turkish ] = ": Alan bağlantısı";
     Text[ catalan ] = ": Field Link";
+    Text[ finnish ] = ": Feldverknüpfung";
 };
 
 String RID_DB_COMBO_WIZARD_START + 7
@@ -4834,6 +5015,7 @@ String RID_DB_COMBO_WIZARD_START + 7
     Text[ korean ] = ": µ¥ÀÌÅÍ Ã³¸®";
     Text[ turkish ] = ": Veri işlem";
     Text[ catalan ] = ": Data Processing";
+    Text[ finnish ] = ": Datenverarbeitung";
 };
 
 String RID_DB_COMBO_WIZARD_START + 8
@@ -4852,7 +5034,7 @@ String RID_DB_COMBO_WIZARD_START + 8
     Text[ portuguese_brazilian ] = "In this dialog, you can specify all label names for the options.";
     Text[ japanese ] = ": Ì«°Ñ‚Ìì¬";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±íµ¥";
-    Text[ chinese_traditional ] = "¡G¨î§@ªí³æ";
+    Text[ chinese_traditional ] = "¡G»s§@ªí³æ";
     Text[ arabic ] = ": ÅäÔÇÁ ÇÓÊãÇÑÉ";
     Text[ dutch ] = ": formulier maken";
     Text[ chinese_simplified ] = "£ºÖÆ×÷±íµ¥";
@@ -4860,6 +5042,7 @@ String RID_DB_COMBO_WIZARD_START + 8
     Text[ korean ] = ":¾ç½Ä ¸¸µé±â";
     Text[ turkish ] = ": Form oluştur";
     Text[ catalan ] = ": Create Form";
+    Text[ finnish ] = ": Formular erstellen";
 };
 
 String RID_DB_COMBO_WIZARD_START + 9
@@ -4877,15 +5060,16 @@ String RID_DB_COMBO_WIZARD_START + 9
     Text[ polish ] = "Tabela z wartoœciami";
     Text[ portuguese_brazilian ] = "Which label do you want for each option?";
     Text[ japanese ] = "”’lÃ°ÌŞÙ";
-    Text[ chinese_simplified ] = "ÊıÖµ±í¸ñ(~W)";
+    Text[ chinese_simplified ] = "ÊıÖµ±í¸ñ";
     Text[ chinese_traditional ] = "¼Æ­Èªí®æ";
     Text[ arabic ] = "ÌÏæá ÇáŞíã";
     Text[ dutch ] = "~Waardentabel";
-    Text[ chinese_simplified ] = "ÊıÖµ±í¸ñ(~W)";
+    Text[ chinese_simplified ] = "ÊıÖµ±í¸ñ";
     Text[ greek ] = "~Ğßíáêáò ôéìşí";
     Text[ korean ] = "°ª¡¡Ç¥";
     Text[ turkish ] = "Değer tablosu";
     Text[ catalan ] = "Table of Values";
+    Text[ finnish ] = "~Wertetabelle";
 };
 
 String RID_DB_COMBO_WIZARD_START + 10
@@ -4903,15 +5087,16 @@ String RID_DB_COMBO_WIZARD_START + 10
     Text[ polish ] = "Tabela na zawartoœæ listy";
     Text[ portuguese_brazilian ] = "~Option";
     Text[ japanese ] = "Ø½Ä“à—e‚Ì•\\";
-    Text[ chinese_simplified ] = "ÁĞµ¥ÄÚÈİ±í¸ñ";
+    Text[ chinese_simplified ] = "ÁĞµ¥ÄÚÈİµÄ±í¸ñ";
     Text[ chinese_traditional ] = "²M³æ¤º®eªí®æ";
     Text[ arabic ] = "ÌÏæá ~ãÍÊæíÇÊ ÇáŞÇÆãÉ";
     Text[ dutch ] = "Tabel voor ~lijstinhoud";
-    Text[ chinese_simplified ] = "ÁĞµ¥ÄÚÈİ±í¸ñ";
+    Text[ chinese_simplified ] = "ÁĞµ¥ÄÚÈİµÄ±í¸ñ";
     Text[ greek ] = "Ğßíáêáò ãéá ğåñéå÷üìåíá ~ëßóôáò";
     Text[ korean ] = "~¸ñ·Ï³»¿ë¿¡¡¡´ëÇÑ  Ç¥";
     Text[ turkish ] = "Liste içeriği tablosu";
     Text[ catalan ] = "Table for List Content";
+    Text[ finnish ] = "Tabelle für ~Listeninhalt";
 };
 
 String RID_DB_COMBO_WIZARD_START + 11
@@ -4928,16 +5113,17 @@ String RID_DB_COMBO_WIZARD_START + 11
     Text[ swedish ] = "~Existerande fält";
     Text[ polish ] = "Istniej¹ce pola";
     Text[ portuguese_brazilian ] = "Should one option button be the default choice?";
-    Text[ japanese ] = "~g—p‚Å‚«‚éÌ¨°ÙÄŞ";
-    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
+    Text[ japanese ] = "Šù‘¶Ì¨°ÙÄŞ";
+    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î";
     Text[ chinese_traditional ] = "²{¦sªºÄæ¦ì";
     Text[ arabic ] = "~ÇáÍŞæá ÇáãæÌæÏÉ";
     Text[ dutch ] = "~Voorhanden velden";
-    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
+    Text[ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î";
     Text[ greek ] = "Äéá~èİóéìá ğåäßá";
     Text[ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
     Text[ turkish ] = "~Mevcut alanlar";
     Text[ catalan ] = "Existing Fields";
+    Text[ finnish ] = "~Vorhandene Felder";
 };
 
 String RID_DB_COMBO_WIZARD_START + 12
@@ -4955,15 +5141,16 @@ String RID_DB_COMBO_WIZARD_START + 12
     Text[ polish ] = "Pole wyœwietlania";
     Text[ portuguese_brazilian ] = "Yes, the default choice is:";
     Text[ japanese ] = "•\\¦Ì¨°ÙÄŞ";
-    Text[ chinese_simplified ] = "ÏÔÊ¾À¸(~A)";
+    Text[ chinese_simplified ] = "ÏÔÊ¾À¸";
     Text[ chinese_traditional ] = "Åã¥ÜÄæ¦ì";
     Text[ arabic ] = "~ÍŞá ÇáÚÑÖ";
     Text[ dutch ] = "~Weergaveveld";
-    Text[ chinese_simplified ] = "ÏÔÊ¾À¸(~A)";
+    Text[ chinese_simplified ] = "ÏÔÊ¾À¸";
     Text[ greek ] = "Ğåäßï åìöÜíéóçò";
     Text[ korean ] = "³ªÅ¸³»´Â¡¡ÇÊµå";
     Text[ turkish ] = "~Görüntü alanı";
     Text[ catalan ] = "Display Field";
+    Text[ finnish ] = "~Anzeigefeld";
 };
 
 String RID_DB_COMBO_WIZARD_START + 13
@@ -4981,15 +5168,16 @@ String RID_DB_COMBO_WIZARD_START + 13
     Text[ polish ] = "Zawartoœæ wybranego pola wyœwietlona zostanie na liœcie pola kombi.";
     Text[ portuguese_brazilian ] = "No, no I don't want an option to be the default.";
     Text[ japanese ] = "‘I‘ğ‚µ‚½Ì¨°ÙÄŞ‚Ì“à—e‚ÍAºİÎŞÎŞ¯¸½‚ÌØ½Ä‚É•\\¦‚³‚ê‚Ü‚·";
-    Text[ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁĞµ¥ÄÚ¡£";
-    Text[ chinese_traditional ] = "¿ï¾ÜªºÄæ¦ìªº¤º®e·|³QÅã¥Ü¦b²Õ¦XÄæ¦ìªº²M³æ¤§¤¤¡C";
+    Text[ chinese_simplified ] = "Ñ¡ÖĞµÄ×Ö¶ÎµÄÄÚÈİ»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁĞµ¥ÄÚ¡£";
+    Text[ chinese_traditional ] = "¤w¸g¿ï¤¤ªºÄæ¦ì¤º®e·|Åã¥Ü¦b²Õ¦XÄæ¦ìªº²M³æ¤è¶ô¤§¤¤¡C";
     Text[ arabic ] = "Óæİ íÊã ÅÙåÇÑ ãÍÊæíÇÊ ÇáÍŞá ÇáãõÍÏÏ İí ŞÇÆãÉ ãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ.";
     Text[ dutch ] = "De inhoud van het geselecteerde veld wordt in de lijst onder het combinatieveld weergegeven..";
-    Text[ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁĞµ¥ÄÚ¡£";
+    Text[ chinese_simplified ] = "Ñ¡ÖĞµÄ×Ö¶ÎµÄÄÚÈİ»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁĞµ¥ÄÚ¡£";
     Text[ greek ] = "Ôï ğåñéå÷üìåíï ôïõ åğéëåãìİíïõ ğåäßïõ åìöáíßæåôáé óôçí ëßóôá ôïõ ğåäßïõ óõíäõáóìïı.";
     Text[ korean ] = "¼±ÅÃµÈ ÇÊµåÀÇ ³»¿ëÀÌ ÄŞº¸¹Ú½ºÀÇ ¸ñ·Ï¿¡ Ç¥½ÃµË´Ï´Ù.";
     Text[ turkish ] = "Seçilen alanın içeriği, kombinasyon alanı listesinde görüntülenecek.";
     Text[ catalan ] = "The contents of the field selected will be shown in the combo box field list.";
+    Text[ finnish ] = "Der Inhalt des ausgewählten Feldes wird in der Liste des Kombinationsfeldes angezeigt.";
 };
 
 String RID_DB_COMBO_WIZARD_START + 14
@@ -5007,15 +5195,16 @@ String RID_DB_COMBO_WIZARD_START + 14
     Text[ polish ] = "Jeœli po³¹czone pola siê zgadzaj¹, zawartoœæ wybranego pola wyœwietlona zostanie w polu listy.";
     Text[ portuguese_brazilian ] = "If an option has been selected, a specific value will be assigned to the option group.";
     Text[ japanese ] = "‘I‘ğ‚µ‚½Ì¨°ÙÄŞ‚Ì“à—e‚ÍAØİ¸‚·‚éÌ¨°ÙÄŞ‚Æˆê’v‚·‚é‚Æ‚«‚ÉØ½ÄÎŞ¯¸½‚É•\\¦‚³‚ê‚Ü‚·B";
-    Text[ chinese_simplified ] = "Èç¹ûÏàÁ´½ÓµÄ×Ö¶ÎÒ»ÖÂ£¬×Ö¶ÎÁĞµ¥ÄÚ»áÏÔÊ¾Ñ¡ÔñµÄÄÚÈİ¡£";
-    Text[ chinese_traditional ] = "¦pªG³sµ²ªº¤è¶ô¬Û²Å¡A¿ï¾Üªº¤è¶ô¤º®e·|Åã¥Ü¦b²M³æ¤è¶ô¤º¡C";
+    Text[ chinese_simplified ] = "Èç¹ûÁ´½ÓµÄ×Ö¶ÎÏàÒ»ÖÂ£¬Ñ¡ÖĞµÄ×Ö¶ÎÄÚÈİ¾Í»áÏÔÊ¾ÔÚÁĞµ¥À¸ÄÚ¡£";
+    Text[ chinese_traditional ] = "¦pªG³sµ²ªºÄæ¦ì¬Û¤@­P¡A³Q¿ï¤¤ªºÄæ¦ì¤º®e·|Åã¥Ü¦b²M³æ¤è¶ô¤º¡C";
     Text[ arabic ] = "Óæİ ÊÙåÑ ãÍÊæíÇÊ ÇáÍŞá ÇáãõÍÏÏ İí ãÑÈÚ ÇáŞÇÆãÉ İí ÍÇáÉ ÊØÇÈŞ ÇáÍŞæá ÇáãÑÊÈØÉ";
     Text[ dutch ] = "De inhoud van het geselecteerde veld wordt in de keuzelijst weergegeven als de gekoppelde velden overeenkomen.";
-    Text[ chinese_simplified ] = "Èç¹ûÏàÁ´½ÓµÄ×Ö¶ÎÒ»ÖÂ£¬×Ö¶ÎÁĞµ¥ÄÚ»áÏÔÊ¾Ñ¡ÔñµÄÄÚÈİ¡£";
+    Text[ chinese_simplified ] = "Èç¹ûÁ´½ÓµÄ×Ö¶ÎÏàÒ»ÖÂ£¬Ñ¡ÖĞµÄ×Ö¶ÎÄÚÈİ¾Í»áÏÔÊ¾ÔÚÁĞµ¥À¸ÄÚ¡£";
     Text[ greek ] = "Ôï ğåñéå÷üìåíï ôïõ åğéëåãìİíïõ ğåäßïõ åìöáíßæåôáé óôï ğåäßï ëßóôáò üôáí óõìğßğôïõí ôá óõíäåäåìİíá ğåäßá.";
     Text[ korean ] = "¿¬°áµÈ ÇÊµåµéÀÌ ÀÏÄ¡ÇÏ¸é ¼±ÅÃµÈ ÇÊµåÀÇ ³»¿ëÀÌ ¸ñ·Ï ÇÊµå¿¡ Ç¥½ÃµË´Ï´Ù£®";
     Text[ turkish ] = "Seçilen alanın içeriği, bağlantılı alanların eşleşmesi durumunda liste alanında görüntülenir";
     Text[ catalan ] = "The contents of the selected field will be shown if the linked fields are identical.";
+    Text[ finnish ] = "Der Inhalt des ausgewählten Feldes wird in dem Listenfeld angezeigt, wenn die ver- knüpften Felder überein- stimmen";
 };
 
 String RID_DB_COMBO_WIZARD_START + 15
@@ -5042,6 +5231,7 @@ String RID_DB_COMBO_WIZARD_START + 15
     Text[ korean ] = "Á¤º¸";
     Text[ turkish ] = "Bilgi";
     Text[ catalan ] = "Information";
+    Text[ finnish ] = "Info";
 };
 
 String RID_DB_COMBO_WIZARD_START + 16
@@ -5068,6 +5258,7 @@ String RID_DB_COMBO_WIZARD_START + 16
     Text[ korean ] = "°ªÇ¥·Î ºÎÅÍÀÇ ÇÊµå";
     Text[ turkish ] = "Değer tablosu alanı";
     Text[ catalan ] = "Field from the Value Table";
+    Text[ finnish ] = "Feld aus der ~Wertetabelle";
 };
 
 String RID_DB_COMBO_WIZARD_START + 17
@@ -5094,6 +5285,7 @@ String RID_DB_COMBO_WIZARD_START + 17
     Text[ korean ] = "¸ñ·Ï Ç¥·ÎºÎÅÍÀÇ ÇÊµå";
     Text[ turkish ] = "Liste tablosu alanı";
     Text[ catalan ] = "Field from the List Table";
+    Text[ finnish ] = "Feld aus der ~Listentabelle";
 };
 
 String RID_DB_COMBO_WIZARD_START + 18
@@ -5111,16 +5303,17 @@ String RID_DB_COMBO_WIZARD_START + 18
     Text[ polish ] = "Wartoœæ pola kombi mo¿na zapisaæ w polu bazy danych lub u¿yæ jej tylko do wyœwietlenia.";
     Text[ portuguese_brazilian ] = "Yes, in the following database:";
     Text[ japanese ] = "ºİÎŞÎŞ¯¸½‚Ì’l‚ÍAÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚·‚é‚©A‚ ‚é‚¢‚Í•\\¦—p‚Å‚µ‚©g—p‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖĞµÄÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
-    Text[ chinese_traditional ] = "±z¯à°÷±N²Õ¦XÄæ¦ìªº¼Æ­È¦s¤J¤@­Ó¸ê®Æ®w¤º©ÎÅã¥Ü³o¨Ç¼Æ¾Ú¡C";
+    Text[ chinese_simplified ] = "×éºÏÀ¸Ö®ÖĞµÄÊıÖµ¿ÉÒÔ´æÈëÊı¾İ¿â×Ö¶Î»òÕßÓÃÓÚÏÔÊ¾¡£";
+    Text[ chinese_traditional ] = "±z¯à°÷±N²Õ¦XÄæ¦ìªº¼Æ­È¦s¤J¤@­Ó¸ê®Æ®w¤º©Î¥Î©óÅã¥Ü³o¨Ç¼Æ­È¡C";
     Text[ arabic ] = "íãßäß ÍİÙ ŞíãÉ ãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¡ Ãæ ÇÓÊÎÏÇãåÇ ááÚÑÖ İŞØ.";
     Text[ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
-    Text[ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖĞµÄÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
+    Text[ chinese_simplified ] = "×éºÏÀ¸Ö®ÖĞµÄÊıÖµ¿ÉÒÔ´æÈëÊı¾İ¿â×Ö¶Î»òÕßÓÃÓÚÏÔÊ¾¡£";
     Text[ greek ] = "Ìğïñåßôå íá áğïèçêåıóåôå ôçí ôéìŞ ôïõ ğåäßïõ óõíäõáóìïı óå İíá ğåäßï ôçò âÜóçò äåäïìİíùí Ş íá ôï ÷ñçóéìïğïéŞóåôå ìüíï ãéá ôçí åìöÜíéóŞ ôïõ.";
     Text[ korean ] = "ÄŞº¸¹Ú½ºÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ³ªÅ¸³»±â¿¡¸¸ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Kombinasyon alanının değerini bir veritabanı alanında kaydedebilir ya da yalnızca görüntüleme için kullanabilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "You can either save the value of the combo box field in a database field or use it for display purposes.";
+    Text[ finnish ] = "Sie können den Wert des Kombinationsfeldes entweder in einem Datenbankfeld speichern oder ihn nur zum Anzeigen verwenden.";
 };
 
 String RID_DB_COMBO_WIZARD_START + 19
@@ -5138,15 +5331,16 @@ String RID_DB_COMBO_WIZARD_START + 19
     Text[ polish ] = "Wartoœæ pola listy mo¿na zapisaæ w polu bazy danych lub u¿yæ jej tylko do wyœwietlenia.";
     Text[ portuguese_brazilian ] = "No, I want to save the value only in the form.";
     Text[ japanese ] = "Ø½ÄÌ¨°ÙÄŞ‚Ì’l‚ÍAÃŞ°ÀÍŞ°½‚É•Û‘¶‚·‚é‚©A‚ ‚é‚¢‚Í•\\¦—p‚Å‚µ‚©g—p‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_simplified ] = "ÄúÄÜ¹»½«ÁĞµ¥À¸ÖĞµÄÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
-    Text[ chinese_traditional ] = "±z¯à°÷¦b¸ê®Æ®w¤ºÀx¦s¤@­Ó¼Æ­È©Î¥u¥Î©óÅã¥Ü³o­Ó¸ê®Æ¡C";
+    Text[ chinese_simplified ] = "ÁĞµ¥×Ö¶ÎÖ®ÖĞµÄÊıÖµ¿ÉÒÔ´æÈëÊı¾İ¿â×Ö¶Î»òÕßÓÃÓÚÏÔÊ¾¡£";
+    Text[ chinese_traditional ] = "±z¯à°÷¦b¸ê®Æ®w¤ºÀx¦s¤@­Ó¼Æ­È©Î¶È©óÅã¥Ü³o­Ó¸ê®Æ¡C";
     Text[ arabic ] = "íãßäß ÍİÙ ŞíãÉ ãÑÈÚ ÇáŞÇÆãÉ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¡ Ãæ ÇÓÊÎÏÇãåÇ ááÚÑÖ İŞØ.";
     Text[ dutch ] = "U kunt de waarde van de keuzelijst in een databaseveld opslaan of deze alleen laten weergeven.";
-    Text[ chinese_simplified ] = "ÄúÄÜ¹»½«ÁĞµ¥À¸ÖĞµÄÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
+    Text[ chinese_simplified ] = "ÁĞµ¥×Ö¶ÎÖ®ÖĞµÄÊıÖµ¿ÉÒÔ´æÈëÊı¾İ¿â×Ö¶Î»òÕßÓÃÓÚÏÔÊ¾¡£";
     Text[ greek ] = "Ìğïñåßôå íá áğïèçêåıóåôå ôçí ôéìŞ ôïõ ğåäßïõ ëßóôáò óå İíá ğåäßï âÜóçò äåäïìİíùí Ş íá ôï ÷ñçóéìïğïéŞóåôå ìüíï ãéá ôçí ğñïâïëŞ.";
     Text[ korean ] = "¸ñ·Ï ÇÊµåÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ³ªÅ¸³»±â¿¡¸¸ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Liste alanının değerini bir veritabanı alanında kaydedebilir ya da yalnızca görüntüleme için kullanabilirsiniz.";
     Text[ catalan ] = "You can either save the value of the list field in a database field or use it for display purposes.";
+    Text[ finnish ] = "Sie können den Wert des Listenfeldes entweder in einem Datenbankfeld speichern oder ihn nur zum Anzeigen verwenden.";
 };
 
 String RID_DB_COMBO_WIZARD_START + 20
@@ -5164,15 +5358,16 @@ String RID_DB_COMBO_WIZARD_START + 20
     Text[ polish ] = "Czy zapisaæ wartoœæ w polu bazy danych?";
     Text[ portuguese_brazilian ] = "What caption do you want for the option group ?";
     Text[ japanese ] = "’l‚ğÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚µ‚Ü‚·‚©B";
-    Text[ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚÂğ£¿";
-    Text[ chinese_traditional ] = "±z­n¦b¤@­Ó¸ê®Æ®w¤ºÀx¦s³o­Ó¼Æ¾Ú¡H";
+    Text[ chinese_simplified ] = "Òª½«Õâ¸öÊıÖµ´æÈëÊı¾İ¿â×Ö¶Î£¿";
+    Text[ chinese_traditional ] = "±z­n¦b¤@­Ó¸ê®Æ®w¤ºÀx¦s³o­Ó¼Æ­È¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáŞíãÉ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¿";
     Text[ dutch ] = "Wilt u de waarde in een databaseveld opslaan?";
-    Text[ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚÂğ£¿";
+    Text[ chinese_simplified ] = "Òª½«Õâ¸öÊıÖµ´æÈëÊı¾İ¿â×Ö¶Î£¿";
     Text[ greek ] = "Èİëåôå íá ãßíåé ç áğïèŞêåõóç ôçò ôéìŞò óå İíá ğåäßï âÜóçò äåäïìİíùí;";
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½ºÀÇ °ªÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Değeri bir veritabanı alanında kaydetmek istiyor musunuz?";
     Text[ catalan ] = "Do you want to save the value in a database field?";
+    Text[ finnish ] = "Möchten Sie den Wert in einem Datenbankfeld speichern?";
 };
 
 String RID_DB_COMBO_WIZARD_START + 21
@@ -5190,15 +5385,16 @@ String RID_DB_COMBO_WIZARD_START + 21
     Text[ polish ] = "Tak, w nastêpuj¹cym polu bazy danych :";
     Text[ portuguese_brazilian ] = "As all the information needed has been entered you can click the last button now.";
     Text[ japanese ] = "‚Í‚¢AŸ‚ÌÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚µ‚Ü‚·B";
-    Text[ chinese_simplified ] = "ÊÇ£¬ÔÚÏÂÁĞÊı¾İ¿âÀ¸£º";
-    Text[ chinese_traditional ] = "¬O¡A¤U¦C¸ê®Æ®wÄæ¦ì¡G";
+    Text[ chinese_simplified ] = "ÊÇ£¬ÔÚÏÂÁĞÊı¾İ¿â×Ö¶Î£º";
+    Text[ chinese_traditional ] = "¬O¡A¥H¤Uªº¸ê®Æ®wÄæ¦ì¡G";
     Text[ arabic ] = "~äÚã¡ İí ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÊÇáí:";
     Text[ dutch ] = "~Ja, en wel in het volgende databaseveld : ";
-    Text[ chinese_simplified ] = "ÊÇ£¬ÔÚÏÂÁĞÊı¾İ¿âÀ¸£º";
+    Text[ chinese_simplified ] = "ÊÇ£¬ÔÚÏÂÁĞÊı¾İ¿â×Ö¶Î£º";
     Text[ greek ] = "~Íáé, óôï åîŞò ğåäßï âÜóçò äåäïìİíùí :";
     Text[ korean ] = "¿¹, ´ÙÀ½ µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Ú½À´Ï´Ù:";
     Text[ turkish ] = "~Evet, aşağıda belirtilen veritabanı alanına kaydet :";
     Text[ catalan ] = "Yes, save in the following database field :";
+    Text[ finnish ] = "~Ja, und zwar folgendem Datenbankfeld :";
 };
 
 String RID_DB_COMBO_WIZARD_START + 22
@@ -5217,7 +5413,7 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ portuguese_brazilian ] = "~Nein, ich möchte den Wert nur zum Anzeigen verwenden.";
     Text[ japanese ] = "‚¢‚¢‚¦A’l‚Í•\\¦—p‚É‚µ‚©g—p‚µ‚Ü‚¹‚ñB";
     Text[ chinese_simplified ] = "·ñ£¬ÎÒÖ»ÒªÏÔÊ¾ÊıÖµ¡£";
-    Text[ chinese_traditional ] = "§_¡A¥u­nÅã¥Ü¼Æ­È¡C";
+    Text[ chinese_traditional ] = "§_¡A¶È¨Ï¥Î©óÅã¥Ü¼Æ­È¡C";
     Text[ arabic ] = "~ßáÇ¡ ÃÑíÏ ÇÓÊÎÏÇã ÇáŞíãÉ ááÚÑÖ İŞØ.";
     Text[ dutch ] = "~Nee, ik wil de waarde alleen laten weergeven.";
     Text[ chinese_simplified ] = "·ñ£¬ÎÒÖ»ÒªÏÔÊ¾ÊıÖµ¡£";
@@ -5225,5 +5421,6 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ korean ] = "¾Æ´Ï¿À, °ªÀ» È­¸é¿¡¡¡³ªÅ¸³»±â¿¡¸¸ »ç¿ëÇÏ°íÀÚ ÇÕ´Ï´Ù.";
     Text[ turkish ] = "~Hayır, değeri yalnızca görüntüleme için kullanmak istiyorum.";
     Text[ catalan ] = "No, I only wish to use the value for display purposes";
+    Text[ finnish ] = "~Nein, ich möchte den Wert nur zum Anzeigen verwenden.";
 };
 
