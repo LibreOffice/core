@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-11 08:33:16 $
+#   last change: $Author: fs $ $Date: 2000-11-24 12:32:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,9 +77,14 @@ SRCFILES=		filedlg2.src	\
                 prnsetup.src	\
                 printdlg.src	\
                 colrdlg.src		\
-                logindlg.src
+                logindlg.src	\
+                addresstemplate.src
 
-SLOFILES=		$(SLO)$/filedlg.obj 	\
+EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj
+
+
+SLOFILES=		$(SLO)$/addresstemplate.obj 	\
+                $(SLO)$/filedlg.obj 	\
                 $(SLO)$/filedlg2.obj	\
                 $(SLO)$/prnsetup.obj	\
                 $(SLO)$/printdlg.obj	\
