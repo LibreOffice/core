@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: image.dtd,v 1.1 2001-11-08 06:22:57 cd Exp $
+	$Id: image.dtd,v 1.2 2001-11-08 07:55:09 cd Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,8 +54,12 @@
 -->
 
 <!ENTITY % url "CDATA">
+
+<!-- URI reference -->
 <!ENTITY % uriReference "CDATA">
-<!ENTITY % color "CDATA">
+
+<!-- a color value having the format #rrggbb -->
+<!ENTITY % color				"CDATA">
 
 <!ELEMENT image:entry EMPTY>
 <!ATTLIST image:entry
@@ -75,7 +79,7 @@
 <!ATTLIST image:images
 	xlink:href %uriReference; #REQUIRED
 	xlink:type CDATA #FIXED "simple"
-	image:maskcolor %color; #REQUIRED
+	image:maskcolor %color; "#000000"
 >
 
 <!ELEMENT image:imagescontainer (image:images*, image:externalimages?)>
