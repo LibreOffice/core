@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:37 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
-    virtual void EndElement();
+    virtual void CreateAndInsert( sal_Bool bOverwrite );
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-01-04 14:46:31 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ protected:
         enum LineNumberingToken eToken,
         ::rtl::OUString sValue);
 
-    virtual void EndElement();
+    virtual void CreateAndInsert(sal_Bool bOverwrite);
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,

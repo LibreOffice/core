@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 22:19:14 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,8 +285,11 @@ void XMLLineNumberingImportContext::ProcessAttribute(
     }
 }
 
-void XMLLineNumberingImportContext::EndElement()
+void XMLLineNumberingImportContext::CreateAndInsert(
+    sal_Bool bOverwrite)
 {
+    // insert and block mode is handled in insertStyleFamily
+
     // we'll try to get the LineNumberingProperties
     Reference<XLineNumberingProperties> xSupplier(GetImport().GetModel(),
                                                   UNO_QUERY);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 22:19:14 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,9 +273,12 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
                                                   xAttrList);
 }
 
-void XMLIndexBibliographyConfigurationContext::EndElement()
+void XMLIndexBibliographyConfigurationContext::CreateAndInsert(
+    sal_Bool bOverwrite)
 {
     // (code almost the same as export...)
+
+    // insert and block mode is handled in insertStyleFamily
 
     // first: get field master
     // (we'll create one, and get the only master for this type)
