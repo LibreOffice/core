@@ -24,11 +24,11 @@
         <SupportedService>com.sun.star.form.component.Form</SupportedService>
         <SupportedService>com.sun.star.form.component.HTMLForm</SupportedService>
         <SupportedService>com.sun.star.form.component.DataForm</SupportedService>
-        <SupportedService>com.sun.star.form.sdb.RowSet</SupportedService>
-        <SupportedService>com.sun.star.form.sdbc.RowSet</SupportedService>
-        <SupportedService>com.sun.star.form.sdb.ResultSet</SupportedService>
-        <SupportedService>com.sun.star.form.sdbcx.ResultSet</SupportedService>
-        <SupportedService>com.sun.star.form.sdbc.ResultSet</SupportedService>
+        <SupportedService>com.sun.star.sdb.RowSet</SupportedService>
+        <SupportedService>com.sun.star.sdbc.RowSet</SupportedService>
+        <SupportedService>com.sun.star.sdb.ResultSet</SupportedService>
+        <SupportedService>com.sun.star.sdbcx.ResultSet</SupportedService>
+        <SupportedService>com.sun.star.sdbc.ResultSet</SupportedService>
         <ServiceDependency>com.sun.star.util.URLTransformer</ServiceDependency>
     </COMPONENTDESCRIPTION>
     <COMPONENTDESCRIPTION>
