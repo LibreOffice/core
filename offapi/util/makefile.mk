@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:59:55 $
+#   last change: $Author: obo $ $Date: 2004-06-04 02:28:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,9 +180,12 @@ $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udk
 #JSC: The type library has changed, all temporary not checked types are removed
 #     and will be check from now on.
 # ATTENTION: no special handling for types is allowed.
+#
+#SB: Once the reference rdbs are new-style registries with explicit published
+# types, the "-u" should be removed again from the calls to regcompare:
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db \
+    +$(REGCOMPARE) -f -t -u -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db
+    +$(REGCOMPARE) -f -t -u -r1 $(REFERENCE_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db \
         && echo > $(REGISTRYCHECKFLAG)
 
 .INCLUDE :  target.mk
