@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:06:06 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 14:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,14 +101,14 @@ TabPage RID_SFXPAGE_SPELL
         Text [ spanish ] = "~Editar..." ;
         Text [ english_us ] = "~Edit..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "±à¼­(~E)...";
+        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)...";
         Text[ russian ] = "Ïğàâêà...";
         Text[ polish ] = "Edytuj...";
-        Text[ japanese ] = "•ÒW(~E)...";
-        Text[ chinese_traditional ] = "½s¿è(~E)...";
+        Text[ japanese ] = "ç·¨é›†(~E)...";
+        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)...";
         Text[ arabic ] = "ÊÍÑíÑ...";
         Text[ greek ] = "~Åğåîåñãáóßá...";
-        Text[ korean ] = "ÆíÁı(~E)...";
+        Text[ korean ] = "í¸ì§‘(~E)...";
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editar...";
@@ -140,14 +140,14 @@ TabPage RID_SFXPAGE_SPELL
         Text [ dutch ] = "Woordenboeken" ;
         Text [ spanish ] = "Diccionarios" ;
         Text [ english_us ] = "Dictionaries" ;
-        Text[ chinese_simplified ] = "×Öµä";
+        Text[ chinese_simplified ] = "å­—å…¸";
         Text[ russian ] = "Ñëîâàğè";
         Text[ polish ] = "S³owniki";
-        Text[ japanese ] = "«‘";
-        Text[ chinese_traditional ] = "¦r¨å";
+        Text[ japanese ] = "è¾æ›¸";
+        Text[ chinese_traditional ] = "å­—å…¸";
         Text[ arabic ] = "ÇáŞæÇãíÓ";
         Text[ greek ] = "ËåîéêÜ";
-        Text[ korean ] = "»çÀü";
+        Text[ korean ] = "ì‚¬ì „";
         Text[ turkish ] = "Sözlükler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Diccionarios";
@@ -172,14 +172,14 @@ TabPage RID_SFXPAGE_SPELL
         Text [ spanish ] = "~Palabras en mayúscula" ;
         Text [ english_us ] = "~Capital words" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "´óĞ´µ¥´Ê(~C)";
+        Text[ chinese_simplified ] = "å¤§å†™å•è¯(~C)";
         Text[ russian ] = "Ñëîâà èç ïğîïèñíûõ áóêâ";
         Text[ polish ] = "S³owa napisane wielkimi literami";
-        Text[ japanese ] = "‚·‚×‚Ä‘å•¶š‚Ì’PŒê(~C)";
-        Text[ chinese_traditional ] = "¤j¼g¦r(~C)";
+        Text[ japanese ] = "ã™ã¹ã¦å¤§æ–‡å­—ã®å˜èª(~C)";
+        Text[ chinese_traditional ] = "å¤§å¯«å­—(~C)";
         Text[ arabic ] = "ÇáßáãÇÊ ÇáãßÊæÈÉ ÈÃÍÑİ ßÈíÑÉ";
         Text[ greek ] = "Ëİîåéò ìå êåöáëáßá ãñÜììáôá";
-        Text[ korean ] = "´ë¹®ÀÚ·Î ¾²ÀÎ ´Ü¾î(~C)";
+        Text[ korean ] = "ëŒ€ë¬¸ìë¡œ ì“°ì¸ ë‹¨ì–´(~C)";
         Text[ turkish ] = "Büyük harfli sözcükler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Palabras en mayúscula";
@@ -204,14 +204,14 @@ TabPage RID_SFXPAGE_SPELL
         Text [ spanish ] = "P~alabras con números  " ;
         Text [ english_us ] = "~Words with numbers " ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "º¬ÓĞÊı×ÖµÄ´Ê(~W)";
+        Text[ chinese_simplified ] = "å«æœ‰æ•°å­—çš„è¯(~W)";
         Text[ russian ] = "Ñëîâà ñ öèôğàìè ";
         Text[ polish ] = "S³owa z cyframi ";
-        Text[ japanese ] = "”š‚ğŠÜ‚Ş’PŒê(~W)";
-        Text[ chinese_traditional ] = "§t¦³¼Æ¦rªºµü(~W)";
+        Text[ japanese ] = "æ•°å­—ã‚’å«ã‚€å˜èª(~W)";
+        Text[ chinese_traditional ] = "å«æœ‰æ•¸å­—çš„è©(~W)";
         Text[ arabic ] = "ÇáßáãÇÊ ÇáÊí ÊÍÊæí Úáì ÃÑŞÇã ";
         Text[ greek ] = "Ëİîåéò ìå áñéèìïıò ";
-        Text[ korean ] = "¼ıÀÚ°¡ ÀÖ´Â ´Ü¾î (~W)";
+        Text[ korean ] = "ìˆ«ìê°€ ìˆëŠ” ë‹¨ì–´ (~W)";
         Text[ turkish ] = "Rakamlı sözcükler ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~alabras con números  ";
@@ -236,14 +236,14 @@ TabPage RID_SFXPAGE_SPELL
         Text [ spanish ] = "~Mayúsculas y minúsculas  " ;
         Text [ english_us ] = "~Case sensitive " ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´ (~C)";
+        Text[ chinese_simplified ] = "å­—æ¯å¤§å°å†™ (~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ ";
         Text[ polish ] = "Wielkie i ma³e litery ";
-        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê (~C)";
-        Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g(~C)";
+        Text[ japanese ] = "å¤§æ–‡å­—/å°æ–‡å­—ã‚’åŒºåˆ¥ (~C)";
+        Text[ chinese_traditional ] = "å­—æ¯å¤§å°å¯«(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá ";
-        Text[ korean ] = "´ë¹®ÀÚ¿Í ¼Ò¹®ÀÚ (~C)";
+        Text[ korean ] = "ëŒ€ë¬¸ìì™€ ì†Œë¬¸ì (~C)";
         Text[ turkish ] = "Büyük/küçük yazım ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mayúsculas y minúsculas  ";
@@ -267,31 +267,32 @@ TabPage RID_SFXPAGE_SPELL
         Text [ dutch ] = "Controleren" ;
         Text [ spanish ] = "Revisar" ;
         Text [ english_us ] = "Check" ;
-        Text[ chinese_simplified ] = "¼ì²é";
+        Text[ chinese_simplified ] = "æ£€æŸ¥";
         Text[ russian ] = "Ïğîâåğÿòü";
         Text[ polish ] = "SprawdŸ";
-        Text[ japanese ] = "½ÍßÙÁª¯¸";
-        Text[ chinese_traditional ] = "ÀË¬d";
+        Text[ japanese ] = "ï½½ï¾ï¾Ÿï¾™ï¾ï½ªï½¯ï½¸";
+        Text[ chinese_traditional ] = "æª¢æŸ¥";
         Text[ arabic ] = "ÇáÊÏŞíŞ";
         Text[ greek ] = "¸ëåã÷ïò";
-        Text[ korean ] = "°Ë»ç";
+        Text[ korean ] = "ê²€ì‚¬";
         Text[ turkish ] = "Denetim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Revisar";
     };
-    Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é";
+    Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥";
     Text[ russian ] = "Ïğàâîïèñàíèå";
     Text[ polish ] = "Pisownia";
-    Text[ japanese ] = "•¶ÍZ³";
-    Text[ chinese_traditional ] = "«÷¼gÀË¬d";
+    Text[ japanese ] = "æ–‡ç« æ ¡æ­£";
+    Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥";
     Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí";
     Text[ greek ] = "Ïñèïãñáößá";
-    Text[ korean ] = "¸ÂÃã¹ı °Ë»ç";
+    Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬";
     Text[ turkish ] = "Yazım kılavuzu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ortografía";
 };
  // ********************************************************************** EOF
+
 
 
 
