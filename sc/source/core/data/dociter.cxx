@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-09-05 09:39:27 $
+ *  last change: $Author: mh $ $Date: 2001-12-05 10:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                             rValue = ((ScValueCell*)pCell)->GetValue();
                             if ( bCalcAsShown )
                             {
-#if ! ( defined WTC || defined IRIX || defined ICC || defined HPUX || defined C50 || defined C52 )
+#if ! ( defined WTC || defined IRIX || defined ICC || defined HPUX || defined C50 || defined C52  || ( defined GCC && __GNUC__ >= 3 ) )
                                 lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
 #else
                                 lcl_IterGetNumberFormat( nNumFormat,
@@ -919,7 +919,7 @@ ScBaseCell* ScQueryCellIterator::GetNext()
 ULONG ScQueryCellIterator::GetNumberFormat()
 {
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-#if ! ( defined WTC || defined IRIX  || defined ICC || defined HPUX || defined C50 || defined C52 )
+#if ! ( defined WTC || defined IRIX  || defined ICC || defined HPUX || defined C50 || defined C52 || ( defined GCC && __GNUC__ >= 3 ) )
     lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
 #else
     lcl_IterGetNumberFormat( nNumFormat,
