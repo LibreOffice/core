@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:31:08 $
+ *  last change: $Author: nn $ $Date: 2001-11-26 20:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,10 +1283,9 @@ void ScPosWnd::DoEnter()
 
 long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
 {
-    ComboBox::Notify( rNEvt );
     long nHandled = 0;
 
-    if ( rNEvt.GetType() == EVENT_KEYUP )
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 
@@ -1305,6 +1304,10 @@ long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
+
+    if ( !nHandled )
+        nHandled = ComboBox::Notify( rNEvt );
+
     return nHandled;
 }
 
