@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:02:45 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1708,7 +1708,7 @@ IMPL_LINK( AssistentDlg, FinishHdl, OKButton *, EMPTYARG )
         String aFileToOpen = GetDocPath();
         if(aFileToOpen.Len() == 0)
         {
-            sfx2::FileDialogHelper aFileDlg( WB_OPEN, SdDrawDocShell::Factory() );
+            sfx2::FileDialogHelper aFileDlg( WB_OPEN, ::String::CreateFromAscii("simpress") );
 
             if ( aFileDlg.Execute() == ERRCODE_NONE )
                 aFileToOpen = aFileDlg.GetPath();
