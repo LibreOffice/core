@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-19 20:11:01 $
+ *  last change: $Author: kz $ $Date: 2002-04-24 20:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2591,7 +2591,7 @@ TabPage TP_FRM_ADD
     StringList [ language_user1 ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ english_us ] =
@@ -2603,25 +2603,25 @@ TabPage TP_FRM_ADD
     StringList [ portuguese ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ russian ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des ?bergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ greek ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des ?bergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ dutch ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ french ] =
@@ -2633,13 +2633,13 @@ TabPage TP_FRM_ADD
     StringList [ spanish ] =
     {
          < "De izquierda a derecha (horizontal)" ; 0; > ;
-        < "De derecha a izquierda (vertical)" ; 2; > ;
+        < "Derecha-hacia-izquierda (vertical)" ; 2; > ;
         < "Utilizar la configuración del objeto superior " ; 4; > ;
     };
     StringList [ finnish ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ italian ] =
@@ -2651,7 +2651,7 @@ TabPage TP_FRM_ADD
     StringList [ danish ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ swedish ] =
@@ -2663,13 +2663,13 @@ TabPage TP_FRM_ADD
     StringList [ polish ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ japanese ] =
@@ -2699,19 +2699,19 @@ TabPage TP_FRM_ADD
     StringList [ turkish ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ arabic ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ catalan ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
+        < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des übergeordneten Objektes verwenden" ; 4; > ;
     };
     };
