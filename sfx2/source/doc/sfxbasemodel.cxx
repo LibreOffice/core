@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,7 @@ public:
         virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException);
         virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException);
         virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException);
+        virtual void SAL_CALL cancelJob() throw (RuntimeException);
 };
 
 SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_SfxBaseModel_DataContainer* pData )
@@ -368,6 +369,11 @@ Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPr
 {
     Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
     return xPrintable;
+}
+
+void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException)
+{
+    m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2, NULL, NULL ) );
 }
 
 //________________________________________________________________________________________________________
@@ -1851,7 +1857,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     m_pData->m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
                 }
             }
-            else
+            else if ( pPrintHint->GetWhich() != -2 )
             {
                 view::PrintJobEvent aEvent;
                 aEvent.Source = m_pData->m_xPrintJob;
