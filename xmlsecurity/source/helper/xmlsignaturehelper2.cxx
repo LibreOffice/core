@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mt $ $Date: 2004-07-16 15:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,9 @@ uno::Reference < io::XStream > UriBindingHelper::OpenInputStream( uno::Reference
     sal_Int32 nSepPos = rURI.indexOf( '/' );
     if ( nSepPos == -1 )
     {
-        xStream = rxStore->openStreamElement( rURI, embed::ElementModes::READ );
+        // Cloning because of I can't keep all storage references open
+        // MBA with think about a better API...
+        xStream = rxStore->cloneStreamElement( rURI );
     }
     else
     {

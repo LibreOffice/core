@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 09:28:32 $
+ *  last change: $Author: mt $ $Date: 2004-07-16 15:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,30 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
     return aInfos;
 
 }
+
+void DocumentDigitalSignatures::manageTrustedSources(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+::sal_Bool DocumentDigitalSignatures::isAuthorTrusted( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+::sal_Bool DocumentDigitalSignatures::isLocationTrusted( const ::rtl::OUString& Location ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void DocumentDigitalSignatures::addAuthorToTrustedSources( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void DocumentDigitalSignatures::addLocationToTrustedSources( const ::rtl::OUString& Location ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+
 
 rtl::OUString DocumentDigitalSignatures::GetImplementationName() throw (uno::RuntimeException)
 {

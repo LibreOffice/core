@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mt $ $Date: 2004-07-16 15:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ namespace embed {
     class XStorage; }
 }}}
 
+
+// MT: Not needed any more, remove later...
+
 class ImplXMLSignatureListener : public cppu::WeakImplHelper3
 <
     com::sun::star::xml::crypto::sax::XSignatureCreationResultListener,
@@ -148,6 +151,7 @@ class UriBindingHelper : public cppu::WeakImplHelper1
 {
 private:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorage;
+
 
 public:
     UriBindingHelper();
