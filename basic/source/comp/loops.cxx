@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loops.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,29 +238,45 @@ void SbiParser::While()
 
 void SbiParser::For()
 {
+    bool bForEach = ( Peek() == EACH );
+    if( bForEach )
+        Next();
     SbiExpression aLvalue( this, SbOPERAND );
     aLvalue.Gen();      // Variable auf dem Stack
-    TestToken( EQ );
-    SbiExpression aStartExpr( this );
-    aStartExpr.Gen();   // Startausdruck auf dem Stack
-    TestToken( TO );
-    SbiExpression aStopExpr( this );
-    aStopExpr.Gen();    // Endausdruck auf dem Stack
-    if( Peek() == STEP )
+
+    if( bForEach )
     {
-        Next();
-        SbiExpression aStepExpr( this );
-        aStepExpr.Gen();
+        TestToken( _IN_ );
+        SbiExpression aCollExpr( this, SbOPERAND );
+        aCollExpr.Gen();    // Colletion var to for stack
+        TestEoln();
+        aGen.Gen( _INITFOREACH );
     }
     else
     {
-        SbiExpression aOne( this, 1, SbxINTEGER );
-        aOne.Gen();
+        TestToken( EQ );
+        SbiExpression aStartExpr( this );
+        aStartExpr.Gen();   // Startausdruck auf dem Stack
+        TestToken( TO );
+        SbiExpression aStopExpr( this );
+        aStopExpr.Gen();    // Endausdruck auf dem Stack
+        if( Peek() == STEP )
+        {
+            Next();
+            SbiExpression aStepExpr( this );
+            aStepExpr.Gen();
+        }
+        else
+        {
+            SbiExpression aOne( this, 1, SbxINTEGER );
+            aOne.Gen();
+        }
+        TestEoln();
+        // Der Stack hat jetzt 4 Elemente: Variable, Start, Ende, Inkrement
+        // Startwert binden
+        aGen.Gen( _INITFOR );
     }
-    TestEoln();
-    // Der Stack hat jetzt 4 Elemente: Variable, Start, Ende, Inkrement
-    // Startwert binden
-    aGen.Gen( _INITFOR );
+
     USHORT nLoop = aGen.GetPC();
     // Test durchfuehren, evtl. Stack freigeben
     USHORT nEndTarget = aGen.Gen( _TESTFOR, 0 );
@@ -273,7 +289,7 @@ void SbiParser::For()
     {
         SbiExpression aVar( this, SbOPERAND );
         if( aVar.GetRealVar() != aLvalue.GetRealVar() )
-            Error( SbERR_EXPECTED, aVar.GetRealVar()->GetName() );
+            Error( SbERR_EXPECTED, aLvalue.GetRealVar()->GetName() );
     }
     aGen.BackChain( nEndTarget );
     CloseBlock();
