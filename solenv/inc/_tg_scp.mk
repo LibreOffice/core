@@ -11,6 +11,7 @@ LOCALSCP1FILES=$(foreach,i,$(SCP1FILES) $(foreach,j,$(SCP1LINK_PRODUCT_TYPE) $(P
 $(SCP1TARGETN): $(LOCALSCP1FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP1LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP1FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -30,6 +31,7 @@ LOCALSCP2FILES=$(foreach,i,$(SCP2FILES) $(foreach,j,$(SCP2LINK_PRODUCT_TYPE) $(P
 $(SCP2TARGETN): $(LOCALSCP2FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP2LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP2FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -49,6 +51,7 @@ LOCALSCP3FILES=$(foreach,i,$(SCP3FILES) $(foreach,j,$(SCP3LINK_PRODUCT_TYPE) $(P
 $(SCP3TARGETN): $(LOCALSCP3FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP3LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP3FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -68,6 +71,7 @@ LOCALSCP4FILES=$(foreach,i,$(SCP4FILES) $(foreach,j,$(SCP4LINK_PRODUCT_TYPE) $(P
 $(SCP4TARGETN): $(LOCALSCP4FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP4LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP4FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -87,6 +91,7 @@ LOCALSCP5FILES=$(foreach,i,$(SCP5FILES) $(foreach,j,$(SCP5LINK_PRODUCT_TYPE) $(P
 $(SCP5TARGETN): $(LOCALSCP5FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP5LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP5FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -106,6 +111,7 @@ LOCALSCP6FILES=$(foreach,i,$(SCP6FILES) $(foreach,j,$(SCP6LINK_PRODUCT_TYPE) $(P
 $(SCP6TARGETN): $(LOCALSCP6FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP6LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP6FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -125,6 +131,7 @@ LOCALSCP7FILES=$(foreach,i,$(SCP7FILES) $(foreach,j,$(SCP7LINK_PRODUCT_TYPE) $(P
 $(SCP7TARGETN): $(LOCALSCP7FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP7LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP7FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -144,6 +151,7 @@ LOCALSCP8FILES=$(foreach,i,$(SCP8FILES) $(foreach,j,$(SCP8LINK_PRODUCT_TYPE) $(P
 $(SCP8TARGETN): $(LOCALSCP8FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP8LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP8FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -163,6 +171,7 @@ LOCALSCP9FILES=$(foreach,i,$(SCP9FILES) $(foreach,j,$(SCP9LINK_PRODUCT_TYPE) $(P
 $(SCP9TARGETN): $(LOCALSCP9FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP9LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP9FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
@@ -182,6 +191,7 @@ LOCALSCP10FILES=$(foreach,i,$(SCP10FILES) $(foreach,j,$(SCP10LINK_PRODUCT_TYPE) 
 $(SCP10TARGETN): $(LOCALSCP10FILES)
     @echo ------------------------------
     @echo Making: $@
+    @+-$(MKDIRHIER) $(BIN)$/$(SCP10LINK_PRODUCT_TYPE) >& $(NULLDEV)
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP10FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
     $(SCP_CHECK_TOOL) $@
 .ENDIF
