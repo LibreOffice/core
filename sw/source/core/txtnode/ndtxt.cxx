@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 10:55:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,14 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _SHL_HXX //autogen
+#include <tools/shl.hxx>
 #endif
 
 #ifndef _TXTFLD_HXX //autogen
@@ -1634,9 +1640,9 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
     // We check only buffers which contain less than MAX_SEQUENCE_CHECK_LEN
     // characters. This is for performance reasons, because a "copy and paste"
     // can give us a really big input string.
-    SvtLanguageOptions aLangOptions;
-    if ( aLangOptions.IsCTLFontEnabled() &&
-         aLangOptions.IsCTLSequenceChecking() && aPos &&
+    SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+    if ( rCTLOptions.IsCTLFontEnabled() &&
+         rCTLOptions.IsCTLSequenceChecking() && aPos &&
          rStr.Len() < MAX_SEQUENCE_CHECK_LEN && pBreakIt->xBreak.is() &&
          ::com::sun::star::i18n::ScriptType::COMPLEX ==
          pBreakIt->xBreak->getScriptType( rStr, 0 ) )
