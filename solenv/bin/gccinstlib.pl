@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: gccinstlib.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-08 15:09:22 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:35:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,7 @@ $LibPaths = $SearchDirs{'libraries'} || die 'None or invalid output from \"gcc -
 $Dest = pop(@ARGV) || die "No destination to copy to";
 
 if ($Dest =~ /--help/ || @ARGV < 1) {
-    printf ("Syntax:\n  gcc-instlib <library-in-libpath ...>
-        <destination-dir>\n");
+    print "Syntax:\n  gcc-instlib <library-in-libpath ...> <destination-dir>\n";
     exit (0);
 }
 foreach $File (@ARGV) {
@@ -105,7 +104,7 @@ sub GetGccSearchDirs {
 
     $cc = $ENV{'CC'} || die "No CC environment set";
 
-    open (GCCOut, "$cc -print-search-dirs|") || die "Failed to exec $cc -print-search-dirs: $!";
+    open (GCCOut, "LANGUAGE=C LC_ALL=C $cc -print-search-dirs|") || die "Failed to exec $cc -print-search-dirs: $!";
 
     while (<GCCOut>) {
         if (/^([a-zA-Z]+): [=]{0,1}(.*)/) {
