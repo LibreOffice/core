@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:32:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,14 +344,8 @@ FuInsertFile::FuInsertFile (
 
             if ( bIsStream &&
                     ( !pFilter ||
-                    ( aFilterName.SearchAscii( "StarOffice XML (Draw)" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "StarOffice XML (Impress)" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "draw_StarOffice_XML_Impress" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "impress_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "impress_StarOffice_XML_Impress_Template" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "draw_StarOffice_XML_Draw_Template" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "draw_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "impress_StarOffice_XML_Impress" ) != STRING_NOTFOUND ) ) )
+                    ( pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
+                      pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" ) ) ) )
             {
                 pMedium->Close();
 
