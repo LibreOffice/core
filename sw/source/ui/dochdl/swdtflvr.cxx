@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 17:45:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 15:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,6 +1064,7 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                               const TransferableDataHelper& rData )
 {
     ULONG nFormat;
+    Reference<XTransferable> xTransferable( rData.GetXTransferable() );
     USHORT nEventAction,
            nDestination = SwTransferable::GetSotDestination( rSh ),
            nSourceOptions =
@@ -1079,7 +1080,7 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                                 nSourceOptions,             /* ?? */
                                 EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                 nFormat, nEventAction, 0,
-                                lcl_getTransferPointer ( rData.GetXTransferable() ) );
+                                lcl_getTransferPointer ( xTransferable ) );
 
     return EXCHG_INOUT_ACTION_NONE != nAction;
 }
@@ -1103,13 +1104,14 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
                        EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
                                     ? EXCHG_IN_ACTION_COPY
                                     : EXCHG_IN_ACTION_MOVE);
+        Reference<XTransferable> xTransferable( rData.GetXTransferable() );
         nAction = SotExchange::GetExchangeAction(
                                     rData.GetDataFlavorExVector(),
                                     nDestination,
                                     nSourceOptions,             /* ?? */
                                     EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                     nFormat, nEventAction, 0,
-                                    lcl_getTransferPointer ( rData.GetXTransferable() ) );
+                                    lcl_getTransferPointer ( xTransferable ) );
     }
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
@@ -2609,6 +2611,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
         nRet = pClipboard->PrivatePaste( rSh );
     else if( rData.HasFormat( nFormat ) )
     {
+        Reference<XTransferable> xTransferable( rData.GetXTransferable() );
         USHORT nEventAction,
                nDestination = SwTransferable::GetSotDestination( rSh ),
                nSourceOptions =
@@ -2624,7 +2627,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     nSourceOptions,             /* ?? */
                                     EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                     nFormat, nEventAction, nFormat,
-                                    lcl_getTransferPointer ( rData.GetXTransferable() ) );
+                                    lcl_getTransferPointer ( xTransferable ) );
 
         if( EXCHG_INOUT_ACTION_NONE != nAction )
             nRet = SwTransferable::PasteData( rData, rSh, nAction, nFormat,
@@ -2639,13 +2642,15 @@ int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
                                         ULONG nFormat, USHORT nDestination )
 {
     USHORT nAction = EXCHG_INOUT_ACTION_NONE, nEventAction;
-    if( rData.HasFormat( nFormat ))
+    if( rData.HasFormat( nFormat )) {
+        Reference<XTransferable> xTransferable( rData.GetXTransferable() );
         nAction = SotExchange::GetExchangeAction(
                         rData.GetDataFlavorExVector(),
                         nDestination, EXCHG_IN_ACTION_COPY,
                         EXCHG_IN_ACTION_COPY, nFormat,
                         nEventAction, nFormat,
-                        lcl_getTransferPointer ( rData.GetXTransferable() ) );
+                        lcl_getTransferPointer ( xTransferable ) );
+    }
     return EXCHG_INOUT_ACTION_NONE != nAction;
 }
 
