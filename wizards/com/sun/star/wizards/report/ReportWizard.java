@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: bc $ $Date: 2002-12-11 17:40:48 $
+ *  last change: $Author: bc $ $Date: 2002-12-13 09:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1415,11 +1415,14 @@ public class ReportWizard {
 
     XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xDBListBox);
     CurDBMetaData.DataSourceName = (String) Tools.getPropertyValueFromAny(CurPropertyValue, "DataSourceName");
+    System.out.println(CurDBMetaData.DataSourceName);
     if (CurDBMetaData.DataSourceName != null){
         if (CurDBMetaData.DataSourceName.equals("") == false){
         short iPos = (short) Tools.FieldInList(DatabaseNames, CurDBMetaData.DataSourceName);
+        System.out.println("ipos: " + iPos);
         if (iPos > -1){
             Short[] SelList = new Short[] {new Short(iPos)};
+            System.out.println("ipos Array: " + SelList[0]);
             CurUNODialog.assignPropertyToDialogControl("lstDatabases", "SelectedItems", SelList);
             xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xTableListBox);
         }
