@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:59:14 $
+ *  last change: $Author: pb $ $Date: 2000-11-23 09:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,7 @@ void SfxFilterContainer::RealLoad_Impl()
     }
 
     Config* pConfig = SFX_APP()->GetFilterIni();
+    DBG_ASSERT( pConfig, "can not load the filter ini" );
     if( pArg->bInstallIni )
         pConfig->SetGroup( U2S(aString) );
 
