@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:06:26 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef __com_sun_star_task_XStatusIndicatorFactory_idl__
 #include <com/sun/star/task/XStatusIndicatorFactory.idl>
+#endif
+
+#ifndef __drafts_com_sun_star_frame_XLayoutManager_idl__
+#include <drafts/com/sun/star/frame/XLayoutManager.idl>
 #endif
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
@@ -204,6 +208,11 @@ service Frame
     @since #107627#
      */
     [optional, property] XDispatchRecorderSupplier RecorderSupplier;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the layout manager of the frame
+    */
+    [optional, property] drafts::com::sun::star::frame::XLayoutManager LayoutManger;
 };
 
 //=============================================================================
