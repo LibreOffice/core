@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:44 $
+ *  last change: $Author: cl $ $Date: 2002-07-31 14:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
                 aBulletFont = *pFont;
             else
             {
-                aBulletFont.SetColor( COL_BLACK );
+                aBulletFont.SetColor( COL_AUTO );
                 aBulletFont.SetHeight( 1552 );
             }
             aBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);   // and replacing other values by standard
@@ -248,8 +248,15 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
         pOutlinerView[nView] = NULL;
     }
 
+    svx::ColorConfig aColorConfig;
+    svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
+
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        pOutliner->ForceAutoColor( true );
+
+
     pOutlinerView[0] = new OutlinerView(pOutliner, pWindow);
-    Color aWhiteColor( COL_WHITE );
+    Color aWhiteColor( aDocColor.nColor );
     pOutlinerView[0]->SetBackgroundColor( aWhiteColor );
     Rectangle aNullRect;
     pOutlinerView[0]->SetOutputArea(aNullRect);
