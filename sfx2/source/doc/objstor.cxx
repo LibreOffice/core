@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 10:27:30 $
+ *  last change: $Author: mba $ $Date: 2001-08-22 08:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,7 +1070,6 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
     {
         delete pMedium;
         pMedium = pNewMed;
-        Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
         //MI? DELETEZ(pImp->pDocInfo);
     }
 
@@ -1130,6 +1129,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
                  SFX_CREATE_MODE_EMBEDDED != eCreateMode )
                 InvalidateName();
             SetModified(sal_False); // nur bei gesetztem Medium zur"ucksetzen
+            Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
         }
     }
 
