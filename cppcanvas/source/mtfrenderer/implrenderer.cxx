@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:04:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <boost/scoped_array.hpp>
+
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
@@ -150,6 +152,12 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP__
 #include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP__
+#include <drafts/com/sun/star/rendering/PathCapType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP__
+#include <drafts/com/sun/star/rendering/PathJoinType.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -225,6 +233,59 @@ namespace
         }
     };
 
+    void setupStrokeAttributes( rendering::StrokeAttributes& o_rStrokeAttributes,
+                                const VirtualDevice&         rVDev,
+                                const LineInfo&              rLineInfo              )
+    {
+        const Size aWidth( rLineInfo.GetWidth(), 0 );
+        o_rStrokeAttributes.StrokeWidth =
+            rVDev.LogicToPixel( aWidth ).Width();
+
+        // setup reasonable defaults
+        o_rStrokeAttributes.MiterLimit   = 1.0;
+        o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
+        o_rStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
+        o_rStrokeAttributes.JoinType     = rendering::PathJoinType::MITER;
+
+        if( LINE_DASH == rLineInfo.GetStyle() )
+        {
+            // interpret dash info only if explicitely enabled as
+            // style
+            const Size aDistance( rLineInfo.GetDistance(), 0 );
+            const sal_Int32 nDistance( rVDev.LogicToPixel( aDistance ).Width() );
+
+            const Size aDashLen( rLineInfo.GetDashLen(), 0 );
+            const sal_Int32 nDashLen( rVDev.LogicToPixel( aDashLen ).Width() );
+
+            const Size aDotLen( rLineInfo.GetDotLen(), 0 );
+            const sal_Int32 nDotLen( rVDev.LogicToPixel( aDotLen ).Width() );
+
+            const sal_Int32 nNumArryEntries( 2*rLineInfo.GetDashCount() +
+                                             2*rLineInfo.GetDotCount() );
+
+            o_rStrokeAttributes.DashArray.realloc( nNumArryEntries );
+
+
+            // iteratively fill dash array, first with dashs, then
+            // with dots.
+            // ===================================================
+
+            sal_Int32 nCurrEntry=0;
+
+            for( sal_Int32 i=0; i<rLineInfo.GetDashCount(); ++i )
+            {
+                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDashLen;
+                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDistance;
+            }
+            for( sal_Int32 i=0; i<rLineInfo.GetDotCount(); ++i )
+            {
+                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDotLen;
+                o_rStrokeAttributes.DashArray[nCurrEntry++] = nDistance;
+            }
+        }
+    }
+
+
     // state stack manipulators
     // ------------------------
     void clearStateStack( ::cppcanvas::internal::VectorOfOutDevStates& rStates )
@@ -239,14 +300,114 @@ namespace
         return rStates.back();
     }
 
-    void pushState( ::cppcanvas::internal::VectorOfOutDevStates& rStates )
+    void pushState( ::cppcanvas::internal::VectorOfOutDevStates& rStates,
+                    USHORT nFlags                                           )
     {
         rStates.push_back( getState( rStates ) );
+        getState( rStates ).pushFlags = nFlags;
     }
 
     void popState( ::cppcanvas::internal::VectorOfOutDevStates& rStates )
     {
-        rStates.pop_back();
+        if( getState( rStates ).pushFlags != PUSH_ALL )
+        {
+            // a state is pushed which is incomplete, i.e. does not
+            // restore everything to the previous stack level when
+            // popped.
+            // That means, we take the old state, and restore every
+            // OutDevState member whose flag is set, from the new to the
+            // old state. Then the new state gets overwritten by the
+            // calculated state
+
+            // preset to-be-calculated new state with old state
+            ::cppcanvas::internal::OutDevState aCalculatedNewState( getState( rStates ) );
+
+            // selectively copy to-be-restored content over saved old
+            // state
+            rStates.pop_back();
+
+            const ::cppcanvas::internal::OutDevState& rNewState( getState( rStates ) );
+
+            if( (aCalculatedNewState.pushFlags & PUSH_LINECOLOR) )
+            {
+                aCalculatedNewState.lineColor = rNewState.lineColor;
+            }
+
+            if( (aCalculatedNewState.pushFlags & PUSH_FILLCOLOR) )
+            {
+                aCalculatedNewState.fillColor = rNewState.fillColor;
+            }
+
+            if( (aCalculatedNewState.pushFlags & PUSH_FONT) )
+            {
+                aCalculatedNewState.xFont = rNewState.xFont;
+            }
+
+            if( (aCalculatedNewState.pushFlags & PUSH_TEXTCOLOR) )
+            {
+                aCalculatedNewState.textColor = rNewState.textColor;
+            }
+
+            // is handled by state tracking VDev
+            // if( (aCalculatedNewState.pushFlags & PUSH_MAPMODE) )
+            // {
+            // }
+
+            if( (aCalculatedNewState.pushFlags & PUSH_CLIPREGION) )
+            {
+                aCalculatedNewState.clip        = rNewState.clip;
+                aCalculatedNewState.clipRect    = rNewState.clipRect;
+                aCalculatedNewState.xClipPoly   = rNewState.xClipPoly;
+            }
+
+            // TODO(F2): Raster ops NYI
+            // if( (aCalculatedNewState.pushFlags & PUSH_RASTEROP) )
+            // {
+            // }
+
+            if( (aCalculatedNewState.pushFlags & PUSH_TEXTFILLCOLOR) )
+            {
+                aCalculatedNewState.textFillColor = rNewState.textFillColor;
+            }
+
+            // TODO(F2): Text alignment (top, bottom, base) NYI. NOT
+            // be to confused with textAlignment member, which is in
+            // fact layout mode!
+            // if( (aCalculatedNewState.pushFlags & PUSH_TEXTALIGN) )
+            // {
+            // }
+
+            // TODO(F1): Refpoint handling NYI
+            // if( (aCalculatedNewState.pushFlags & PUSH_REFPOINT) )
+            // {
+            // }
+
+            if( (aCalculatedNewState.pushFlags & PUSH_TEXTLINECOLOR) )
+            {
+                aCalculatedNewState.textLineColor = rNewState.textLineColor;
+            }
+
+            if( (aCalculatedNewState.pushFlags & PUSH_TEXTLAYOUTMODE) )
+            {
+                aCalculatedNewState.textAlignment = rNewState.textAlignment;
+                aCalculatedNewState.textDirection = rNewState.textDirection;
+            }
+
+            // TODO(F2): Text language handling NYI
+            // if( (aCalculatedNewState.pushFlags & PUSH_TEXTLANGUAGE) )
+            // {
+            // }
+
+            // always copy push mode
+            aCalculatedNewState.pushFlags = rNewState.pushFlags;
+
+            // flush to stack
+            getState( rStates ) = aCalculatedNewState;
+        }
+        else
+        {
+            rStates.pop_back();
+        }
     }
 
 }
@@ -612,7 +773,7 @@ namespace cppcanvas
             // cannot currently use native canvas gradients, as a
             // finite step size is given (this funny feature is not
             // supported by the XCanvas API)
-            pushState( rStates );
+            pushState( rStates, PUSH_ALL );
 
             if( !bIsPolygonRectangle )
             {
@@ -740,7 +901,7 @@ namespace cppcanvas
 
                 // draw shadow text and restore original rState
                 // TODO(P2): just restore textColor instead of push/pop
-                pushState( rStates );
+                pushState( rStates, PUSH_ALL );
                 // ::com::sun::star::uno::Sequence< double > origTextColor = rState.textColor;
                 getState( rStates ).textColor = ::vcl::unotools::colorToDoubleSequence(
                     rCanvas->getUNOCanvas()->getDevice(), aShadowColor );
@@ -781,7 +942,7 @@ namespace cppcanvas
 
                 // draw relief text and restore original rState
                 // TODO(P2): just restore textColor instead of push/pop
-                pushState( rStates );
+                pushState( rStates, PUSH_ALL );
                 // ::com::sun::star::uno::Sequence< double > origTextColor = rState.textColor;
                 getState( rStates ).textColor = ::vcl::unotools::colorToDoubleSequence(
                     rCanvas->getUNOCanvas()->getDevice(), aReliefColor );
@@ -896,7 +1057,7 @@ namespace cppcanvas
                 const Parameters&       rParms,
                 int                     nCurrActionIndex )
         {
-            pushState( rStates );
+            pushState( rStates, PUSH_ALL );
             ::cppcanvas::internal::OutDevState& rState = getState( rStates );
 
             // initialize the color of the text lines
@@ -1069,13 +1230,36 @@ namespace cppcanvas
             ::cppcanvas::internal::OutDevState& rState( getState( rStates ) );
             ::basegfx::B2DPolyPolygon aClipPoly( rClipPoly );
 
+            const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
+            const bool bEmptyClipPoly( rState.clip.count() == 0 );
+
+            ENSURE_AND_THROW( bEmptyClipPoly || bEmptyClipRect,
+                              "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+
             if( !bIntersect ||
-                rState.clip.count() == 0 )
+                (bEmptyClipRect && bEmptyClipPoly) )
             {
                 rState.clip = rClipPoly;
             }
             else
             {
+                if( !bEmptyClipRect )
+                {
+                    // TODO(P3): Use Liang-Barsky polygon clip here,
+                    // after all, one object is just a rectangle!
+
+                    // convert rect to polygon beforehand, must revert
+                    // to general polygon clipping here.
+                    rState.clip = ::basegfx::B2DPolyPolygon(
+                        ::basegfx::tools::createPolygonFromRect(
+                            ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                     rState.clipRect.Top(),
+                                                     rState.clipRect.Right(),
+                                                     rState.clipRect.Bottom() ) ) );
+
+                    rState.clipRect.SetEmpty();
+                }
+
                 rState.clip = ::basegfx::tools::correctOrientations( rState.clip );
                 aClipPoly = ::basegfx::tools::correctOrientations( aClipPoly );
 
@@ -1092,6 +1276,85 @@ namespace cppcanvas
             if( rState.clip.count() == 0 )
             {
                 rState.xClipPoly.clear();
+            }
+            else
+            {
+                rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    rCanvas->getUNOCanvas()->getDevice(),
+                    rState.clip );
+            }
+        }
+
+        void ImplRenderer::updateClipping( VectorOfOutDevStates&    rStates,
+                                           const ::Rectangle&       rClipRect,
+                                           const CanvasSharedPtr&   rCanvas,
+                                           bool                     bIntersect )
+        {
+            ::cppcanvas::internal::OutDevState& rState( getState( rStates ) );
+
+            const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
+            const bool bEmptyClipPoly( rState.clip.count() == 0 );
+
+            ENSURE_AND_THROW( bEmptyClipPoly || bEmptyClipRect,
+                              "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+
+            if( !bIntersect ||
+                (bEmptyClipRect && bEmptyClipPoly) )
+            {
+                rState.clipRect = rClipRect;
+            }
+            else if( bEmptyClipPoly )
+            {
+                rState.clipRect.Intersection( rClipRect );
+            }
+            else
+            {
+                // TODO(P3): Handle a fourth case here, when all clip
+                // polygons are rectangular, once B2DMultiRange's
+                // sweep line implementation is done.
+
+                // general case: convert to polygon and clip
+                // -----------------------------------------
+
+                // convert rect to polygon beforehand, must revert
+                // to general polygon clipping here.
+                ::basegfx::B2DPolyPolygon aClipPoly(
+                    ::basegfx::tools::createPolygonFromRect(
+                        ::basegfx::B2DRectangle( rClipRect.Left(),
+                                                 rClipRect.Top(),
+                                                 rClipRect.Right(),
+                                                 rClipRect.Bottom() ) ) );
+
+                rState.clip = ::basegfx::tools::correctOrientations( rState.clip );
+                aClipPoly = ::basegfx::tools::correctOrientations( aClipPoly );
+
+                // intersect the two poly-polygons
+                rState.clip = ::basegfx::tools::removeAllIntersections(rState.clip);
+                rState.clip = ::basegfx::tools::removeNeutralPolygons(rState.clip, sal_True);
+                aClipPoly = ::basegfx::tools::removeAllIntersections(aClipPoly);
+                aClipPoly = ::basegfx::tools::removeNeutralPolygons(aClipPoly, sal_True);
+                rState.clip.append(aClipPoly);
+                rState.clip = ::basegfx::tools::removeAllIntersections(rState.clip);
+                rState.clip = ::basegfx::tools::removeNeutralPolygons(rState.clip, sal_False);
+            }
+
+            if( rState.clip.count() == 0 )
+            {
+                if( rState.clipRect.IsEmpty() )
+                {
+                    rState.xClipPoly.clear();
+                }
+                else
+                {
+                    rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rCanvas->getUNOCanvas()->getDevice(),
+                        ::basegfx::B2DPolyPolygon(
+                            ::basegfx::tools::createPolygonFromRect(
+                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                         rState.clipRect.Top(),
+                                                         rState.clipRect.Right(),
+                                                         rState.clipRect.Bottom() ) ) ) );
+                }
             }
             else
             {
@@ -1154,8 +1417,12 @@ namespace cppcanvas
                     // ------------------------------------------------------------
 
                     case META_PUSH_ACTION:
-                        pushState( rStates );
-                        break;
+                    {
+                        MetaPushAction* pPushAction = static_cast<MetaPushAction*>(pCurrAct);
+                        pushState( rStates,
+                                   pPushAction->GetFlags() );
+                    }
+                    break;
 
                     case META_POP_ACTION:
                         popState( rStates );
@@ -1185,12 +1452,7 @@ namespace cppcanvas
                                 // intersect current clip with given rect
                                 updateClipping(
                                     rStates,
-                                    ::basegfx::B2DPolyPolygon(
-                                        ::basegfx::tools::createPolygonFromRect(
-                                            ::basegfx::B2DRectangle( aClipRect.Left(),
-                                                                     aClipRect.Top(),
-                                                                     aClipRect.Right(),
-                                                                     aClipRect.Bottom() ) ) ),
+                                    aClipRect,
                                     rCanvas,
                                     false );
                             }
@@ -1219,12 +1481,7 @@ namespace cppcanvas
                         // intersect current clip with given rect
                         updateClipping(
                             rStates,
-                            ::basegfx::B2DPolyPolygon(
-                                ::basegfx::tools::createPolygonFromRect(
-                                    ::basegfx::B2DRectangle( aClipRect.Left(),
-                                                             aClipRect.Top(),
-                                                             aClipRect.Right(),
-                                                             aClipRect.Bottom() ) ) ),
+                            aClipRect,
                             rCanvas,
                             true );
 
@@ -1246,12 +1503,7 @@ namespace cppcanvas
                             // intersect current clip with given rect
                             updateClipping(
                                 rStates,
-                                ::basegfx::B2DPolyPolygon(
-                                    ::basegfx::tools::createPolygonFromRect(
-                                        ::basegfx::B2DRectangle( aClipRect.Left(),
-                                                                 aClipRect.Top(),
-                                                                 aClipRect.Right(),
-                                                                 aClipRect.Bottom() ) ) ),
+                                aClipRect,
                                 rCanvas,
                                 true );
                         }
@@ -1456,7 +1708,7 @@ namespace cppcanvas
                             // Setup local transform, such that the
                             // metafile renders itself into the given
                             // output rectangle
-                            pushState( rStates );
+                            pushState( rStates, PUSH_ALL );
 
                             getState( rStates ).transform.translate( -aMtfOriginPix.X(), -aMtfOriginPix.Y() );
                             getState( rStates ).transform.scale( 1.0 / aMtfSizePix.Width(),
@@ -1685,12 +1937,15 @@ namespace cppcanvas
                         const OutDevState& rState( getState( rStates ) );
                         if( rState.lineColor.getLength() )
                         {
+                            MetaLineAction* pLineAct = static_cast<MetaLineAction*>(pCurrAct);
+
+                            // plain hair line
                             maActions.push_back(
                                 MtfAction(
                                     ActionSharedPtr(
                                         new internal::LineAction(
-                                            rVDev.LogicToPixel( static_cast<MetaLineAction*>(pCurrAct)->GetStartPoint() ),
-                                            rVDev.LogicToPixel( static_cast<MetaLineAction*>(pCurrAct)->GetEndPoint() ),
+                                            rVDev.LogicToPixel( pLineAct->GetStartPoint() ),
+                                            rVDev.LogicToPixel( pLineAct->GetEndPoint() ),
                                             rCanvas,
                                             rState ) ),
                                     io_rCurrActionIndex ) );
@@ -1753,11 +2008,14 @@ namespace cppcanvas
                         if( rState.lineColor.getLength() ||
                             rState.fillColor.getLength() )
                         {
+                            MetaPolyLineAction* pPolyLineAct = static_cast<MetaPolyLineAction*>(pCurrAct);
+
+                            // plain hair line polygon
                             maActions.push_back(
                                 MtfAction(
                                     ActionSharedPtr(
                                         new internal::PolyPolyAction(
-                                            rVDev.LogicToPixel( static_cast<MetaPolyLineAction*>(pCurrAct)->GetPolygon() ),
+                                            rVDev.LogicToPixel( pPolyLineAct->GetPolygon() ),
                                             rCanvas,
                                             rState,
                                             internal::PolyPolyAction::strokeOnly ) ),
@@ -2049,9 +2307,50 @@ namespace cppcanvas
                         break;
 
                     case META_STRETCHTEXT_ACTION:
-                        // TODO(F2): NYI
-                        DBG_ERROR("META_STRETCHTEXT not yet supported");
-                        break;
+                    {
+                        MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pCurrAct);
+
+                        const USHORT nLen( pAct->GetLen() == (USHORT)STRING_LEN ?
+                                           pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen() );
+
+                        // have to fit the text into the given
+                        // width. This is achieved by internally
+                        // generating a DX array, and uniformly
+                        // distributing the excess/insufficient width
+                        // to every logical character.
+                        ::boost::scoped_array< sal_Int32 > pDXArray( new sal_Int32[nLen] );
+
+                        rVDev.GetTextArray( pAct->GetText(), pDXArray.get(),
+                                            pAct->GetIndex(), pAct->GetLen() );
+
+                        const sal_Int32 nWidthDifference( pAct->GetWidth() - pDXArray[ nLen-1 ] );
+
+                        // Last entry of pDXArray contains total width of the text
+                        sal_Int32* p=pDXArray.get();
+                        for( USHORT i=1; i<=nLen; ++i )
+                        {
+                            // calc ratio for every array entry, to
+                            // distribute rounding errors 'evenly'
+                            // across the characters. Note that each
+                            // entry represents the 'end' position of
+                            // the corresponding character, thus, we
+                            // let i run from 1 to nLen.
+                            *p++ += (sal_Int32)i*nWidthDifference/nLen;
+                        }
+
+                        createTextWithEffectsAction(
+                            pAct->GetPoint(),
+                            pAct->GetText(),
+                            pAct->GetIndex(),
+                            pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pDXArray.get(),
+                            rVDev,
+                            rCanvas,
+                            rStates,
+                            rParms,
+                            io_rCurrActionIndex );
+                    }
+                    break;
 
                     default:
                         break;
