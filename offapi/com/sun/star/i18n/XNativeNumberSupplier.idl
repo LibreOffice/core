@@ -2,9 +2,9 @@
  *
  * $RCSfile: XNativeNumberSupplier.idl,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
- * last change: $ Author: $ $Date: 2003-06-10 11:13:08 $
+ * last change: $ Author: $ $Date: 2004-06-03 20:45:41 $
  *
  * The Contents of this file are made available subject to the terms of
  * either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module i18n {
      @since #107627#
  */
 
-interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
+published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Returns native number string for given number string.
