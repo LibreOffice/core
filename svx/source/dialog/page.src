@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:10:29 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SVXPAGE_PAGE
     Text [ English ] = "Page" ;
     Text [ norwegian ] = "Page" ;
     Text [ italian ] = "Pagina" ;
-    Text [ portuguese_brazilian ] = "Página" ;
+    Text [ portuguese_brazilian ] = "P?gina" ;
     Text [ portuguese ] = "Página" ;
     Text [ finnish ] = "Sivu" ;
     Text [ danish ] = "Side" ;
@@ -163,7 +163,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "Lan~d." ;
         Text [ norwegian ] = "+++Lan~d." ;
         Text [ italian ] = "~Orizzont." ;
-        Text [ portuguese_brazilian ] = "Paí~s." ;
+        Text [ portuguese_brazilian ] = "Pa?~s." ;
         Text [ portuguese ] = "Hori~zontal" ;
         Text [ finnish ] = "~Vaaka" ;
         Text [ danish ] = "Liggende" ;
@@ -317,7 +317,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "Page layout" ;
         Text [ norwegian ] = "Side oppsett" ;
         Text [ italian ] = "Layout di pagina" ;
-        Text [ portuguese_brazilian ] = "Layout da página" ;
+        Text [ portuguese_brazilian ] = "Layout da p?gina" ;
         Text [ portuguese ] = "Configurar página" ;
         Text [ finnish ] = "Sivun taitto" ;
         Text [ danish ] = "Sidelayout" ;
@@ -1009,7 +1009,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "Numbering" ;
         Text [ norwegian ] = "Nummering" ;
         Text [ italian ] = "Numerazione" ;
-        Text [ portuguese_brazilian ] = "Numeração" ;
+        Text [ portuguese_brazilian ] = "Numera??o" ;
         Text [ portuguese ] = "Numeração" ;
         Text [ finnish ] = "Numerointi" ;
         Text [ danish ] = "Nummerering" ;
@@ -1142,7 +1142,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "Page" ;
         Text [ norwegian ] = "Page" ;
         Text [ italian ] = "Modello successivo" ;
-        Text [ portuguese_brazilian ] = "Página" ;
+        Text [ portuguese_brazilian ] = "P?gina" ;
         Text [ portuguese ] = "Estilo seguinte" ;
         Text [ finnish ] = "Seuraava tyyli" ;
         Text [ danish ] = "Næste typografi" ;
@@ -1301,7 +1301,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ dutch ] = "B~uiten" ;
         Text [ swedish ] = "~Yttre" ;
         Text [ danish ] = "Ydre" ;
-        Text [ portuguese_brazilian ] = "Au~ßen" ;
+        Text [ portuguese_brazilian ] = "Au~?en" ;
         Text [ portuguese ] = "E~xterior" ;
         Text[ chinese_simplified ] = "Íâ²¿(~U)";
         Text[ russian ] = "Ñíàğóæè";
@@ -1330,7 +1330,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ danish ] = "Dine margenindstillinger ligger udenfor udskriftsområdet.\n\nVil du overtage disse indstillinger alligevel?";
         Text[ swedish ] = "Dina inställningar för mariginalerna ligger utanför utskriftsområdet.\n\nVill Du trots det överta inställningarna?";
         Text[ polish ] = "Twoje ustawienia krawêdzi znajduj¹ siê poza obszarem wydruku.\n\nCzy chcesz mimo to zastosowaæ te ustawienia?";
-        Text[ portuguese_brazilian ] = "Ihre Einstellungen für die Ränder liegen außerhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen übernehmen?";
+        Text[ portuguese_brazilian ] = "Ihre Einstellungen f? die R?nder liegen au?erhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen ?ernehmen?";
         Text[ japanese ] = "ˆóü”ÍˆÍŠO‚É—]”’‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚·B\n\n‚»‚ê‚Å‚à‚±‚Ìİ’è‚ğ“K—p‚µ‚Ü‚·‚©H";
         Text[ chinese_simplified ] = "ÄúµÄÒ³±ßÉè¶¨ÓĞÎó£¬Ò³±ß²»ÔÚ´òÓ¡·¶Î§Ö®ÄÚ¡£\n\nÄú»¹ÊÇÒª½ÓÊÜÕâ¸öÉè¶¨Âğ£¿";
         Text[ chinese_traditional ] = "±zªº­¶Ãä³]©w¦³»~¡M­¶Ãä¤£¦b¦C¦L½d³ò¤§¤º¡C\n\n±zÁÙ¬O­n±µ¨ü³o­Ó³]©w¡H";
@@ -1357,7 +1357,7 @@ String RID_SVXSTR_CALC_PAGE
     Text [ ENGLISH ] = "Orientation" ;
     Text [ norwegian ] = "Orientation" ;
     Text [ italian ] = "Allineamento" ;
-    Text [ portuguese_brazilian ] = "Orientação" ;
+    Text [ portuguese_brazilian ] = "Orienta??o" ;
     Text [ portuguese ] = "Alinhamento" ;
     Text [ finnish ] = "Tasaus" ;
     Text [ danish ] = "Justering" ;
@@ -1411,7 +1411,7 @@ String RID_SVXSTR_WRITER_PAGE
     Text [ ENGLISH ] = "Next Page" ;
     Text [ norwegian ] = "Neste side" ;
     Text [ italian ] = "Pagina successiva" ;
-    Text [ portuguese_brazilian ] = "Próxima Página" ;
+    Text [ portuguese_brazilian ] = "Pr?ima P?gina" ;
     Text [ portuguese ] = "Página seguinte" ;
     Text [ finnish ] = "Jatkosivu" ;
     Text [ danish ] = "Næste side" ;
@@ -1723,7 +1723,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
         < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
-        < "Env. #6¾ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. #6? 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
         < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
         < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
         < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
@@ -1731,7 +1731,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai gro? 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     itemlist [ swedish ] =
     {
@@ -2001,7 +2001,7 @@ ItemList [ chinese_simplified ] =
         < "Kop. #12 4,75 x 11 cali" ; PAPERSIZE_COM12; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai wielkoœæ140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai wielko?æ140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ japanese ] =
     {
@@ -2377,7 +2377,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai gro? 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     itemlist [ swedish ] =
     {
@@ -2911,7 +2911,7 @@ String RID_SVXSTR_FULLSIZE
     Text [ french ] = "Remplir toute la page" ;
     Text [ swedish ] = "Fyll hela sidan" ;
     Text [ danish ] = "Fyld hele siden" ;
-    Text [ portuguese_brazilian ] = "Seite ganz füllen" ;
+    Text [ portuguese_brazilian ] = "Seite ganz f?len" ;
     Text [ portuguese ] = "Página inteira" ;
     Text[ chinese_simplified ] = "³äÌîÕûÒ³";
     Text[ russian ] = "Íà âñş ñòğàíèöó";
