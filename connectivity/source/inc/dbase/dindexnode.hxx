@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace connectivity
 
         class ONDXNode;
         class ODbaseIndex;
-        typedef file::OFileValue OFileValue_BASE;
+        typedef file::ORowSetValue ORowSetValue_BASE;
         //==================================================================
         // Index Key
         //==================================================================
@@ -90,11 +90,11 @@ namespace connectivity
         {
             friend class ONDXNode;
             UINT32              nRecord;                /* Satzzeiger               */
-            OFileValue_BASE xValue;                 /* Schluesselwert           */
+            ORowSetValue_BASE   xValue;                 /* Schluesselwert           */
 
         public:
             ONDXKey():nRecord(0){}
-            inline ONDXKey(const OFileValue_BASE& rVal, sal_Int32 eType, UINT32 nRec)
+            inline ONDXKey(const ORowSetValue_BASE& rVal, sal_Int32 eType, UINT32 nRec)
                 : ONDXKey_BASE(eType)
                 , nRecord(nRec)
                 , xValue(rVal)
@@ -124,7 +124,7 @@ namespace connectivity
 
             virtual ::com::sun::star::uno::Any getValue() const
             {
-                return xValue;
+                return xValue.makeAny();
             }
 
             UINT32 GetRecord() const {return nRecord;}
@@ -325,7 +325,7 @@ namespace connectivity
         //==================================================================
         // inline implementation
         //==================================================================
-//      inline ONDXKey::ONDXKey(const OFileValue_BASE& rVal, sal_Int32 eType, UINT32 nRec)
+//      inline ONDXKey::ONDXKey(const ORowSetValue_BASE& rVal, sal_Int32 eType, UINT32 nRec)
 //          : ONDXKey_BASE(eType)
 //          , nRecord(nRec),xValue(rVal)
 //      {

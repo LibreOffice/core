@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:40:52 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,9 @@ namespace connectivity
             BOOL CreateMemoFile(const INetURLObject& aFile);
             BOOL HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
             BOOL ReadMemoHeader();
-            BOOL ReadMemo(ULONG nBlockNo, file::OFileValue& aVariable);
+            BOOL ReadMemo(ULONG nBlockNo, file::ORowSetValue& aVariable);
 
-            BOOL WriteMemo(file::OFileValue& aVariable, ULONG& rBlockNr);
+            BOOL WriteMemo(file::ORowSetValue& aVariable, ULONG& rBlockNr);
             BOOL WriteBuffer();
             BOOL UpdateBuffer(file::OValueVector& rRow, file::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> isUniqueByColumnName(const ::rtl::OUString& _rColName);
