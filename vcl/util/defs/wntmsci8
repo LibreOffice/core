@@ -8051,3 +8051,16 @@ _real@4096800000000000
 ?skew@Matrix3@vcl@@QAEXNN@Z
 ?transform@Matrix3@vcl@@QAE?AVPoint@@ABV3@@Z
 ?translate@Matrix3@vcl@@QAEXNN@Z
+??0bad_alloc@std@@QAE@ABV01@@Z
+??0bad_alloc@std@@QAE@PBD@Z
+??1bad_alloc@std@@UAE@XZ
+??_7bad_alloc@std@@6B@
+??_C@_0P@GHFPNOJB@bad?5allocation?$AA@
+??_Gbad_alloc@std@@UAEPAXI@Z
+??_R0?AVbad_alloc@std@@@8
+??_R0?AVexception@@@8
+?getArray@?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@QAAPAVAny@2345@XZ
+_TI2?AVbad_alloc@std@@
+?getArray@?$Sequence@J@uno@star@sun@com@@QAAPAJXZ
+?SetBorderStyle@ComboBox@@QAEXG@Z
+?getArray@?$Sequence@UCalendarItem@i18n@star@sun@com@@@uno@star@sun@com@@QAAPAUCalendarItem@i18n@345@XZ
