@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-25 11:39:19 $
+ *  last change: $Author: pl $ $Date: 2002-07-04 11:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <stdio.h>
 #endif
 
+#include <salunx.h>
+#include <saldisp.hxx>
+
 // -----------------------------------------------------------------------
 
 String GetSalSummarySystemInfos( ULONG nFlags )
@@ -98,3 +101,27 @@ String GetSalSummarySystemInfos( ULONG nFlags )
     return String( aRet, RTL_TEXTENCODING_ISO_8859_1 );
 }
 
+bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
+{
+    bool bSuccess = false;
+    Display* pDisplay = XOpenDisplay( NULL );
+    if( pDisplay )
+    {
+        int nScreen = DefaultScreen( pDisplay );
+        XVisualInfo aVI;
+        /*  note: SalDisplay::BestVisual does not
+         *  access saldata or any other data available
+         *  only after InitVCL; nor does SalOpenGL:MakeVisualWeights
+         *  which gets called by SalDisplay::BestVisual.
+         *  this is crucial since GetSalSystemDisplayInfo
+         *  gets called BEFORE Init.
+         */
+        SalDisplay::BestVisual( pDisplay, nScreen, aVI );
+        rInfo.nDepth    = aVI.depth;
+        rInfo.nWidth    = DisplayWidth( pDisplay, nScreen );
+        rInfo.nHeight   = DisplayHeight( pDisplay, nScreen );
+        XCloseDisplay( pDisplay );
+        bSuccess = true;
+    }
+    return bSuccess;
+}
