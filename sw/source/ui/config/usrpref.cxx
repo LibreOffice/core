@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 11:12:46 $
+ *  last change: $Author: os $ $Date: 2001-01-24 15:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void SwContentViewConfig::Commit()
             case  3: bVal = rParent.IsFldName();    break;// "Display/FieldCode",
             case  4: bVal = rParent.IsPostIts();    break;// "Display/Note",
             case  5: bVal = rParent.IsField();  break;// "Highlighting/Field",
-            case  6: bVal = rParent.IsPageBreak(); break;// "NonprintingCharacter/ParagraphEnd",
+            case  6: bVal = rParent.IsParagraph(); break;// "NonprintingCharacter/ParagraphEnd",
             case  7: bVal = rParent.IsSoftHyph(); break;// "NonprintingCharacter/OptionalHyphen",
             case  8: bVal = rParent.IsBlank();  break;// "NonprintingCharacter/Space",
             case  9: bVal = rParent.IsHardBlank(); break;// "NonprintingCharacter/ProtectedSpace",
@@ -260,7 +260,7 @@ void SwContentViewConfig::Load()
                     case  3: rParent.SetFldName(bSet);  break;// "Display/FieldCode",
                     case  4: rParent.SetPostIts(bSet);  break;// "Display/Note",
                     case  5: rParent.SetField(bSet);    break;// "Highlighting/Field",
-                    case  6: rParent.SetPageBreak(bSet); break;// "NonprintingCharacter/ParagraphEnd",
+                    case  6: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
                     case  7: rParent.SetSoftHyph(bSet); break;// "NonprintingCharacter/OptionalHyphen",
                     case  8: rParent.SetBlank(bSet);    break;// "NonprintingCharacter/Space",
                     case  9: rParent.SetHardBlank(bSet); break;// "NonprintingCharacter/ProtectedSpace",
