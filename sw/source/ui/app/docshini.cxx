@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-09-24 14:07:39 $
+ *  last change: $Author: os $ $Date: 2002-09-26 13:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,12 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
 
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -125,6 +130,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
 #ifndef _RTL_LOGFILE_HXX_
@@ -441,7 +449,8 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     pFontList(0),
     SfxObjectShell ( eMode ),
     pView( 0 ),
-    pWrtShell( 0 )
+    pWrtShell( 0 ),
+    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
@@ -458,7 +467,8 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     pFontList(0),
     SfxObjectShell ( eMode ),
     pView( 0 ),
-    pWrtShell( 0 )
+    pWrtShell( 0 ),
+    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
@@ -613,6 +623,13 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
             ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
             pBasePool = new SwDocStyleSheetPool( *pDoc,
                             SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+            if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
+            {
+                SfxMedium* pMedium = GetMedium();
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+            }
+
         }
 
         SwWait aWait( *this, sal_True );
