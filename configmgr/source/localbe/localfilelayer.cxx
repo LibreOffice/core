@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:26:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,12 +133,30 @@ FlatLocalFileLayer::FlatLocalFileLayer(
 }
 //------------------------------------------------------------------------------
 
+BasicCompositeLocalFileLayer::BasicCompositeLocalFileLayer(
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+        const rtl::OUString& aComponentFile)
+: BasicLocalFileLayer(xFactory,aComponentFile)
+{
+}
+//------------------------------------------------------------------------------
+
 CompositeLocalFileLayer::CompositeLocalFileLayer(
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+        const rtl::OUString& aComponent,
+        const SubLayerFiles& aSublayerDirectories)
+: BasicCompositeLocalFileLayer(xFactory,rtl::OUString())
+{
+    fillSubLayerLists(aSublayerDirectories, aComponent) ;
+}
+//------------------------------------------------------------------------------
+
+FullCompositeLocalFileLayer::FullCompositeLocalFileLayer(
         const uno::Reference<lang::XMultiServiceFactory>& xFactory,
         const rtl::OUString& aBaseDir,
         const rtl::OUString& aComponent,
         const SubLayerFiles& aSublayerDirectories)
-: BasicLocalFileLayer(xFactory,aBaseDir + aComponent)
+: BasicCompositeLocalFileLayer(xFactory,aBaseDir + aComponent)
 , mLayerWriter( createLayerWriter() )
 {
     fillSubLayerLists(aSublayerDirectories, aComponent) ;
@@ -155,6 +173,9 @@ FlatLocalFileLayer::~FlatLocalFileLayer() {}
 //------------------------------------------------------------------------------
 
 CompositeLocalFileLayer::~CompositeLocalFileLayer() {}
+//------------------------------------------------------------------------------
+
+FullCompositeLocalFileLayer::~FullCompositeLocalFileLayer() {}
 //------------------------------------------------------------------------------
 
 uno::Reference<backend::XLayerHandler> BasicLocalFileLayer::createLayerWriter()
@@ -262,11 +283,31 @@ void SAL_CALL CompositeLocalFileLayer::readData(
             lang::WrappedTargetException,
             uno::RuntimeException)
 {
+    if (!xHandler.is())
+    {
+        rtl::OUString const sMessage(RTL_CONSTASCII_USTRINGPARAM(
+            "LocalFileLayer - Cannot readData: Handler is NULL."));
+
+        throw  lang::NullPointerException(sMessage,*this);
+    }
+
+    readEmptyLayer(xHandler) ;
+}
+//------------------------------------------------------------------------------
+
+void SAL_CALL FullCompositeLocalFileLayer::readData(
+        const uno::Reference<backend::XLayerHandler>& xHandler)
+    throw ( backend::MalformedDataException,
+            lang::NullPointerException,
+            lang::WrappedTargetException,
+            uno::RuntimeException)
+{
     BasicLocalFileLayer::readData(static_cast<backend::XCompositeLayer*>(this),xHandler, getFileUrl() ) ;
 }
 //------------------------------------------------------------------------------
 
-void SAL_CALL CompositeLocalFileLayer::readSubLayerData(
+void SAL_CALL BasicCompositeLocalFileLayer::readSubLayerData(
+        backend::XCompositeLayer * pContext,
         const uno::Reference<backend::XLayerHandler>& xHandler,
         const rtl::OUString& aSubLayerId)
     throw ( backend::MalformedDataException,
@@ -275,6 +316,14 @@ void SAL_CALL CompositeLocalFileLayer::readSubLayerData(
             lang::WrappedTargetException,
             uno::RuntimeException)
 {
+    if (!xHandler.is())
+    {
+        rtl::OUString const sMessage(RTL_CONSTASCII_USTRINGPARAM(
+            "CompositeLocalFileLayer - Cannot readSubLayerData: Handler is NULL."));
+
+        throw  lang::NullPointerException(sMessage,pContext);
+    }
+
     sal_Int32 i ;
 
     for (i = 0 ; i < mSubLayers.getLength() ; ++ i) {
@@ -287,12 +336,38 @@ void SAL_CALL CompositeLocalFileLayer::readSubLayerData(
         message.appendAscii("Sublayer Id '").append(aSubLayerId) ;
         message.appendAscii("' is unknown") ;
         throw lang::IllegalArgumentException(message.makeStringAndClear(),
-                                             *this, 2) ;
+                                             pContext, 2) ;
     }
     if (mSubLayerFiles[i].getLength() != 0)
-        BasicLocalFileLayer::readData(static_cast<backend::XCompositeLayer*>(this),xHandler, mSubLayerFiles [i]) ;
+        BasicLocalFileLayer::readData(pContext,xHandler, mSubLayerFiles [i]) ;
     else
         readEmptyLayer(xHandler);
+}
+//------------------------------------------------------------------------------
+
+void SAL_CALL CompositeLocalFileLayer::readSubLayerData(
+        const uno::Reference<backend::XLayerHandler>& xHandler,
+        const rtl::OUString& aSubLayerId)
+    throw ( backend::MalformedDataException,
+            lang::IllegalArgumentException,
+            lang::NullPointerException,
+            lang::WrappedTargetException,
+            uno::RuntimeException)
+{
+    return BasicCompositeLocalFileLayer::readSubLayerData(this,xHandler,aSubLayerId);
+}
+//------------------------------------------------------------------------------
+
+void SAL_CALL FullCompositeLocalFileLayer::readSubLayerData(
+        const uno::Reference<backend::XLayerHandler>& xHandler,
+        const rtl::OUString& aSubLayerId)
+    throw ( backend::MalformedDataException,
+            lang::IllegalArgumentException,
+            lang::NullPointerException,
+            lang::WrappedTargetException,
+            uno::RuntimeException)
+{
+    return BasicCompositeLocalFileLayer::readSubLayerData(this,xHandler,aSubLayerId);
 }
 //------------------------------------------------------------------------------
 
@@ -330,7 +405,7 @@ void SAL_CALL FlatLocalFileLayer::replaceWith(
 }
 //------------------------------------------------------------------------------
 
-void SAL_CALL CompositeLocalFileLayer::replaceWith(
+void SAL_CALL FullCompositeLocalFileLayer::replaceWith(
         const uno::Reference<backend::XLayer>& aNewLayer)
     throw (backend::MalformedDataException, lang::NullPointerException,
             lang::WrappedTargetException, uno::RuntimeException)
@@ -364,19 +439,34 @@ void SAL_CALL CompositeLocalFileLayer::replaceWith(
 
 rtl::OUString BasicLocalFileLayer::getTimestamp(const rtl::OUString& aFileUrl)
 {
-    TimeValue timevalue = FileHelper::getModifyTime(aFileUrl) ;
+    TimeValue timevalue  = {0,0};
+    sal_uInt64 aSize = FileHelper::getModifyStatus(aFileUrl,timevalue) ;
     oslDateTime fileStamp ;
     rtl::OUString retCode ;
 
-    if (osl_getDateTimeFromTimeValue(&timevalue, &fileStamp)) {
-        sal_Char asciiStamp [20] ;
+    if (osl_getDateTimeFromTimeValue(&timevalue, &fileStamp))
+    {
+        // truncate to 32 bits
+        unsigned long aLongSize = static_cast<sal_Int32>(aSize);
 
-        sprintf(asciiStamp, "%04d%02d%02d%02d%02d%02dZ",
-                fileStamp.Year, fileStamp.Month, fileStamp.Day,
-                fileStamp.Hours, fileStamp.Minutes, fileStamp.Seconds) ;
+        sal_Char asciiStamp [50] ;
+
+        sprintf(asciiStamp, "%04u%02u%02u%02u%02u%02uZ%010lu",
+                unsigned(fileStamp.Year), unsigned(fileStamp.Month), unsigned(fileStamp.Day),
+                unsigned(fileStamp.Hours), unsigned(fileStamp.Minutes), unsigned(fileStamp.Seconds),
+                aLongSize) ;
         retCode = rtl::OUString::createFromAscii(asciiStamp) ;
     }
     return retCode ;
+}
+//------------------------------------------------------------------------------
+
+rtl::OUString SimpleLocalFileLayer::getTimestamp()
+    throw (uno::RuntimeException)
+{
+    rtl::OUString sStamp = BasicLocalFileLayer::getTimestamp(getFileUrl());
+
+    return sStamp;
 }
 //------------------------------------------------------------------------------
 
@@ -389,7 +479,7 @@ rtl::OUString FlatLocalFileLayer::getTimestamp()
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString CompositeLocalFileLayer::getTimestamp()
+rtl::OUString FullCompositeLocalFileLayer::getTimestamp()
     throw (uno::RuntimeException)
 {
     rtl::OUString sStamp = BasicLocalFileLayer::getTimestamp(getFileUrl());
@@ -407,7 +497,7 @@ rtl::OUString CompositeLocalFileLayer::getTimestamp()
 }
 //------------------------------------------------------------------------------
 
-void CompositeLocalFileLayer::fillSubLayerLists( const SubLayerFiles& aSublayerDirectories,
+void BasicCompositeLocalFileLayer::fillSubLayerLists( const SubLayerFiles& aSublayerDirectories,
                                                 const rtl::OUString& aComponent)
 {
     SubLayerFiles::size_type const nSublayerCount = aSublayerDirectories.size();
@@ -458,7 +548,36 @@ static bool findSubLayers(const rtl::OUString& aResDir,
 }
 //------------------------------------------------------------------------------
 
-uno::Reference<backend::XUpdatableLayer> createLocalFileLayer(
+uno::Reference<backend::XLayer> createReadonlyLocalFileLayer(
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+        const rtl::OUString& aBaseDir,
+        const rtl::OUString& aComponent,
+        const rtl::OUString& aResDir)
+{
+    uno::Reference<backend::XLayer> xResult;
+
+    CompositeLocalFileLayer::SubLayerFiles aSublayers;
+    if (aBaseDir.getLength() == 0)
+    {
+        findSubLayers(aResDir,aSublayers);
+        xResult.set( new CompositeLocalFileLayer(xFactory,aComponent,aSublayers) );
+    }
+    else if (findSubLayers(aResDir,aSublayers))
+    {
+        // there is no readonly full composite layer - take the updatable one
+        backend::XCompositeLayer * pNewLayer =
+            new FullCompositeLocalFileLayer(xFactory,aBaseDir,aComponent,aSublayers);
+        xResult.set( pNewLayer );
+    }
+    else
+    {
+        xResult.set( new SimpleLocalFileLayer(xFactory,aBaseDir,aComponent) );
+    }
+    return xResult;
+}
+//------------------------------------------------------------------------------
+
+uno::Reference<backend::XUpdatableLayer> createUpdatableLocalFileLayer(
         const uno::Reference<lang::XMultiServiceFactory>& xFactory,
         const rtl::OUString& aBaseDir,
         const rtl::OUString& aComponent,
@@ -469,12 +588,15 @@ uno::Reference<backend::XUpdatableLayer> createLocalFileLayer(
     CompositeLocalFileLayer::SubLayerFiles aSublayers;
     if (findSubLayers(aResDir,aSublayers))
     {
-        xResult.set( new CompositeLocalFileLayer(xFactory,aBaseDir,aComponent,aSublayers) );
+        xResult.set( new FullCompositeLocalFileLayer(xFactory,aBaseDir,aComponent,aSublayers) );
     }
-    else
+    else if (aBaseDir.getLength() != 0)
     {
         xResult.set( new FlatLocalFileLayer(xFactory,aBaseDir,aComponent) );
     }
+    else
+        OSL_ENSURE(false,"WARNING: Trying to create an updatable ressource-only layer");
+
     return xResult;
 }
 //------------------------------------------------------------------------------
