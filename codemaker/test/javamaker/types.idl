@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:54:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 #include "com/sun/star/lang/ClassNotFoundException.idl"
 #include "com/sun/star/lang/IllegalAccessException.idl"
-#include "com/sun/star/lang/Locale.idl"
 #include "com/sun/star/uno/DeploymentException.idl"
 #include "com/sun/star/uno/Exception.idl"
 #include "com/sun/star/uno/RuntimeException.idl"
@@ -69,6 +68,17 @@
 #include "com/sun/star/uno/XNamingService.idl"
 
 module test { module codemaker { module javamaker {
+
+enum Enum1 { VALUE1 = -100, VALUE2 = 100 };
+
+enum Enum2 { VALUE0 = 0, VALUE1 = 1, VALUE2 = 2, VALUE4 = 4 };
+
+struct Struct1 { long member1; };
+
+struct PolyStruct<if,else> {
+    if member1;
+    long member2;
+};
 
 interface XTest {
     boolean test();
@@ -100,7 +110,8 @@ typedef char Char;
 typedef string String;
 typedef type Type;
 typedef any Any;
-typedef com::sun::star::lang::Locale Locale;
+typedef Enum2 Enum;
+typedef Struct1 Struct;
 typedef com::sun::star::uno::XInterface XInterface;
 typedef com::sun::star::uno::XNamingService XNamingService;
 
@@ -118,9 +129,103 @@ typedef sequence< Char > SequenceChar;
 typedef sequence< String > SequenceString;
 typedef sequence< Type > SequenceType;
 typedef sequence< Any > SequenceAny;
-typedef sequence< Locale > SequenceLocale;
+typedef sequence< Enum > SequenceEnum;
+typedef sequence< Struct > SequenceStruct;
 typedef sequence< XInterface > SequenceXInterface;
 typedef sequence< XNamingService > SequenceXNamingService;
+
+struct Struct2 {
+    boolean p1;
+    byte p2;
+    short p3;
+    unsigned short p4;
+    long p5;
+    unsigned long p6;
+    hyper p7;
+    unsigned hyper p8;
+    float p9;
+    double p10;
+    char p11;
+    string p12;
+    type p13;
+    any p14;
+    Enum2 p15;
+    Struct1 p16;
+    com::sun::star::uno::XInterface p17;
+    com::sun::star::uno::XNamingService p18;
+    Boolean t1;
+    Byte t2;
+    Short t3;
+    UnsignedShort t4;
+    Long t5;
+    UnsignedLong t6;
+    Hyper t7;
+    UnsignedHyper t8;
+    Float t9;
+    Double t10;
+    Char t11;
+    String t12;
+    Type t13;
+    Any t14;
+    Enum t15;
+    Struct t16;
+    XInterface t17;
+    XNamingService t18;
+    sequence< boolean > a1;
+    sequence< byte > a2;
+    sequence< short > a3;
+    sequence< unsigned short > a4;
+    sequence< long > a5;
+    sequence< unsigned long > a6;
+    sequence< hyper > a7;
+    sequence< unsigned hyper > a8;
+    sequence< float > a9;
+    sequence< double > a10;
+    sequence< char > a11;
+    sequence< string > a12;
+    sequence< type > a13;
+    sequence< any > a14;
+    sequence< Enum2 > a15;
+    sequence< Struct1 > a16;
+    sequence< com::sun::star::uno::XInterface > a17;
+    sequence< com::sun::star::uno::XNamingService > a18;
+    sequence< sequence< boolean > > aa1;
+    sequence< sequence< byte > > aa2;
+    sequence< sequence< short > > aa3;
+    sequence< sequence< unsigned short > > aa4;
+    sequence< sequence< long > > aa5;
+    sequence< sequence< unsigned long > > aa6;
+    sequence< sequence< hyper > > aa7;
+    sequence< sequence< unsigned hyper > > aa8;
+    sequence< sequence< float > > aa9;
+    sequence< sequence< double > > aa10;
+    sequence< sequence< char > > aa11;
+    sequence< sequence< string > > aa12;
+    sequence< sequence< type > > aa13;
+    sequence< sequence< any > > aa14;
+    sequence< sequence< Enum2 > > aa15;
+    sequence< sequence< Struct1 > > aa16;
+    sequence< sequence< com::sun::star::uno::XInterface > > aa17;
+    sequence< sequence< com::sun::star::uno::XNamingService > > aa18;
+    sequence< SequenceBoolean > at1;
+    sequence< SequenceByte > at2;
+    sequence< SequenceShort > at3;
+    sequence< SequenceUnsignedShort > at4;
+    sequence< SequenceLong > at5;
+    sequence< SequenceUnsignedLong > at6;
+    sequence< SequenceHyper > at7;
+    sequence< SequenceUnsignedHyper > at8;
+    sequence< SequenceFloat > at9;
+    sequence< SequenceDouble > at10;
+    sequence< SequenceChar > at11;
+    sequence< SequenceString > at12;
+    sequence< SequenceType > at13;
+    sequence< SequenceAny > at14;
+    sequence< SequenceEnum > at15;
+    sequence< SequenceStruct > at16;
+    sequence< SequenceXInterface > at17;
+    sequence< SequenceXNamingService > at18;
+};
 
 service S1: XTest {
     create1();
@@ -155,9 +260,10 @@ service S1: XTest {
         [in] string p12,
         [in] type p13,
         [in] any p14,
-        [in] com::sun::star::lang::Locale p15,
-        [in] com::sun::star::uno::XInterface p16,
-        [in] com::sun::star::uno::XNamingService p17,
+        [in] Enum2 p15,
+        [in] Struct1 p16,
+        [in] com::sun::star::uno::XInterface p17,
+        [in] com::sun::star::uno::XNamingService p18,
         [in] Boolean t1,
         [in] Byte t2,
         [in] Short t3,
@@ -172,27 +278,46 @@ service S1: XTest {
         [in] String t12,
         [in] Type t13,
         [in] Any t14,
-        [in] Locale t15,
-        [in] XInterface t16,
-        [in] XNamingService t17,
-        [in] sequence< sequence< boolean > > a1,
-        [in] sequence< sequence< byte > > a2,
-        [in] sequence< sequence< short > > a3,
-        [in] sequence< sequence< unsigned short > > a4,
-        [in] sequence< sequence< long > > a5,
-        [in] sequence< sequence< unsigned long > > a6,
-        [in] sequence< sequence< hyper > > a7,
-        [in] sequence< sequence< unsigned hyper > > a8,
-        [in] sequence< sequence< float > > a9,
-        [in] sequence< sequence< double > > a10,
-        [in] sequence< sequence< char > > a11,
-        [in] sequence< sequence< string > > a12,
-        [in] sequence< sequence< type > > a13,
-        [in] sequence< sequence< any > > a14,
-        [in] sequence< sequence< com::sun::star::lang::Locale > > a15,
-        [in] sequence< sequence< com::sun::star::uno::XInterface > > a16,
-        [in] sequence< sequence<
-            com::sun::star::uno::XNamingService > > a17,
+        [in] Enum t15,
+        [in] Struct t16,
+        [in] XInterface t17,
+        [in] XNamingService t18,
+        [in] sequence< boolean > a1,
+        [in] sequence< byte > a2,
+        [in] sequence< short > a3,
+        [in] sequence< unsigned short > a4,
+        [in] sequence< long > a5,
+        [in] sequence< unsigned long > a6,
+        [in] sequence< hyper > a7,
+        [in] sequence< unsigned hyper > a8,
+        [in] sequence< float > a9,
+        [in] sequence< double > a10,
+        [in] sequence< char > a11,
+        [in] sequence< string > a12,
+        [in] sequence< type > a13,
+        [in] sequence< any > a14,
+        [in] sequence< Enum2 > a15,
+        [in] sequence< Struct1 > a16,
+        [in] sequence< com::sun::star::uno::XInterface > a17,
+        [in] sequence< com::sun::star::uno::XNamingService > a18,
+        [in] sequence< sequence< boolean > > aa1,
+        [in] sequence< sequence< byte > > aa2,
+        [in] sequence< sequence< short > > aa3,
+        [in] sequence< sequence< unsigned short > > aa4,
+        [in] sequence< sequence< long > > aa5,
+        [in] sequence< sequence< unsigned long > > aa6,
+        [in] sequence< sequence< hyper > > aa7,
+        [in] sequence< sequence< unsigned hyper > > aa8,
+        [in] sequence< sequence< float > > aa9,
+        [in] sequence< sequence< double > > aa10,
+        [in] sequence< sequence< char > > aa11,
+        [in] sequence< sequence< string > > aa12,
+        [in] sequence< sequence< type > > aa13,
+        [in] sequence< sequence< any > > aa14,
+        [in] sequence< sequence< Enum2 > > aa15,
+        [in] sequence< sequence< Struct1 > > aa16,
+        [in] sequence< sequence< com::sun::star::uno::XInterface > > aa17,
+        [in] sequence< sequence< com::sun::star::uno::XNamingService > > aa18,
         [in] sequence< SequenceBoolean > at1,
         [in] sequence< SequenceByte > at2,
         [in] sequence< SequenceShort > at3,
@@ -207,9 +332,10 @@ service S1: XTest {
         [in] sequence< SequenceString > at12,
         [in] sequence< SequenceType > at13,
         [in] sequence< SequenceAny > at14,
-        [in] sequence< SequenceLocale > at15,
-        [in] sequence< SequenceXInterface > at16,
-        [in] sequence< SequenceXNamingService > at17);
+        [in] sequence< SequenceEnum > at15,
+        [in] sequence< SequenceStruct > at16,
+        [in] sequence< SequenceXInterface > at17,
+        [in] sequence< SequenceXNamingService > at18);
 
     abstract([in] long abstract);
     assert([in] long assert);
@@ -267,7 +393,9 @@ service S2: XTest;
 
 service S3 { interface XTest; };
 
-singleton S4 { service S2; };
+singleton S4: XTest;
+
+singleton S5 { service S2; };
 
 singleton abstract: com::sun::star::uno::XNamingService;
 singleton assert: com::sun::star::uno::XNamingService;
