@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.36 2002-03-06 13:02:44 hjs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.37 2002-04-04 07:59:46 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hjs $ $Date: 2002-03-06 13:02:44 $ $Revision: 1.36 $
+//	$Author: oj $ $Date: 2002-04-04 07:59:46 $ $Revision: 1.37 $
 //
 // Description:
 //
@@ -1803,6 +1803,13 @@ set_fct_spec:
 			$$->append($1 = newNode("{", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 			$$->append($3 = newNode("}", SQL_NODE_PUNCTUATION));
+		}
+	|	function_name '(' ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	|	function_name '(' value_exp_commalist ')'
 		{
