@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: er $ $Date: 2002-07-19 16:29:38 $
+#   last change: $Author: mh $ $Date: 2002-08-27 09:03:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,9 @@ CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 
 CONFIGURE_DIR=source
+
 CONFIGURE_ACTION=sh ./configure
+
 CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -146,7 +148,9 @@ all: \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-TG_DELIVER : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+#.IF "$(GUI)"=="WNT"
+
+TG_DELIVER : $(PACKAGE_DIR)$/so_predeliver
         $(DELIVER)
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
@@ -165,4 +169,6 @@ $(MISC)$/remove_build.flag : $(BINARY_PATCH_FILE_NAME) $(PATCH_FILE_NAME)
 .IF "$(BUILD_SOSL)"!=""
 ALLTAR : TG_DELIVER
 .ENDIF
+
+#.ENDIF
 
