@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-30 15:50:44 $
+ *  last change: $Author: er $ $Date: 2001-08-21 15:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
 
 
-ScProgress theDummyInterpretProgress;
+static ScProgress theDummyInterpretProgress;
 SfxProgress*    ScProgress::pGlobalProgress = NULL;
 ULONG           ScProgress::nGlobalRange = 0;
 ULONG           ScProgress::nGlobalPercent = 0;
@@ -205,13 +205,17 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, BOOL bWait )
             nInterpretProgress++;
         else if ( pDoc->GetAutoCalc() )
         {
+            nInterpretProgress = 1;
             bIdleWasDisabled = pDoc->IsIdleDisabled();
             pDoc->DisableIdle( TRUE );
-            pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
-                ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
-                pDoc->GetFormulaCodeInTree(), FALSE, bWait );
+            // Interpreter may be called in many circumstances, also if another
+            // progress bar is active, for example while adapting row heights.
+            // Keep the dummy interpret progress.
+            if ( !pGlobalProgress )
+                pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
+                    ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
+                    pDoc->GetFormulaCodeInTree(), FALSE, bWait );
             pInterpretDoc = pDoc;
-            nInterpretProgress = 1;
         }
     }
 }
@@ -229,13 +233,9 @@ void ScProgress::DeleteInterpretProgress()
             {
                 delete pInterpretProgress;
                 pInterpretProgress = &theDummyInterpretProgress;
+            }
+            if ( pInterpretDoc )
                 pInterpretDoc->DisableIdle( bIdleWasDisabled );
-            }
-            else
-            {
-                DBG_ASSERT( pInterpretProgress != &theDummyInterpretProgress,
-                    "DeleteInterpretProgress: Dummy loeschen?!?"  )
-            }
         }
     }
 }
