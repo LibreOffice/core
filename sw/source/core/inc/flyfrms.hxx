@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:05:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,18 @@ public:
         }
     }
     // <--
+
+    /** method to determine, if a format on the Writer fly frame is possible
+
+        OD 2004-05-11 #i28701#
+        refine 'IsFormatPossible'-conditions of method
+        <SwFlyFrm::IsFormatPossible()> by:
+        format isn't possible, if Writer fly frame isn't registered at a page frame
+        and its anchor frame isn't inside another Writer fly frame.
+
+        @author OD
+    */
+    virtual bool IsFormatPossible() const;
 };
 
 
