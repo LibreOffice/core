@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:55:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabPage TP_MANAGE_STYLES
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮שם‬";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_NAME
     {
@@ -140,6 +141,7 @@ TabPage TP_MANAGE_STYLES
         Text[ czech ] = "Automatická aktualizace";
         Text[ hebrew ] = "‮עידכון אוטומטי‬";
         Text[ hindi ] = "~स्वचालित ढंग से अपडेट्";
+        Text[ slovak ] = "~Automatická aktualizácia";
     };
     FixedText FT_NEXT
     {
@@ -173,6 +175,7 @@ TabPage TP_MANAGE_STYLES
         Text[ czech ] = "Další styl";
         Text[ hebrew ] = "‮סגנון הבא‬";
         Text[ hindi ] = "अग~ला शैली";
+        Text[ slovak ] = "Ďa~lší štýl";
     };
     ListBox LB_NEXT
     {
@@ -216,6 +219,7 @@ TabPage TP_MANAGE_STYLES
         Text[ czech ] = "Spojeno s";
         Text[ hebrew ] = "‮קשור ל‬";
         Text[ hindi ] = "के ~आधार पर";
+        Text[ slovak ] = "Spojené s";
     };
     ListBox LB_BASE
     {
@@ -257,6 +261,7 @@ TabPage TP_MANAGE_STYLES
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "K~ategórie";
     };
     ListBox LB_REGION
     {
@@ -311,9 +316,12 @@ TabPage TP_MANAGE_STYLES
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮מכיל‬";
         Text[ hindi ] = "सम्मिलित";
+        Text[ slovak ] = "Obsahuje";
     };
 };
  // ********************************************************************** EOF
+
+
 
 
 
