@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:01:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,22 @@ public:
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 
-    uno::Reference< uno::XInterface >
-        Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
+    uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
+};
+
+/*************************************************************************
+ *                     class SwConvIter
+ * used for text conversion
+ *************************************************************************/
+
+class SwConvIter : public SwLinguIter
+{
+public:
+    SwConvIter() {}
+
+    void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
+
+    uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 };
 
 /*************************************************************************
@@ -213,8 +227,7 @@ public:
 
     void Ignore();
 
-    uno::Reference< uno::XInterface >
-        Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
+    uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     sal_Bool IsAuto();
     void InsertSoftHyph( const xub_StrLen nHyphPos );
@@ -222,6 +235,7 @@ public:
 };
 
 static SwSpellIter* pSpellIter = 0;
+static SwConvIter*  pConvIter = 0;
 static SwHyphIter*  pHyphIter = 0;
 
 // Wir ersparen uns in Hyphenate ein GetFrm()
@@ -367,18 +381,22 @@ void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
 // SwSpellIter::Continue ist das alte Original von
 // SwEditShell::SpellContinue()
 
-uno::Reference< uno::XInterface >
-    SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
+uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
-     uno::Reference< uno::XInterface >  xSpellRet;
+    //!!
+    //!! Please check SwConvIter also when modifying this
+    //!!
+
+    uno::Any    aSpellRet;
     SwEditShell *pSh = GetSh();
     if( !pSh )
-        return xSpellRet;
+        return aSpellRet;
 
 //  const SwPosition *pEnd = GetEnd();
 
     ASSERT( GetEnd(), "SwEditShell::SpellContinue() ohne Start?");
 
+    uno::Reference< uno::XInterface >  xSpellRet;
     sal_Bool bGoOn = sal_True;
     do {
         SwPaM *pCrsr = pSh->GetCrsr();
@@ -398,8 +416,8 @@ uno::Reference< uno::XInterface >
             *pSh->GetCrsr()->GetPoint() = *GetCurr();
             *pSh->GetCrsr()->GetMark() = *GetEnd();
         }
-        xSpellRet = pSh->GetDoc()->Spell(*pSh->GetCrsr(),
-                    xSpeller, pPageCnt, pPageSt );
+        pSh->GetDoc()->Spell(*pSh->GetCrsr(),
+                    xSpeller, pPageCnt, pPageSt ) >>= xSpellRet;
         bGoOn = GetCrsrCnt() > 1;
         if( xSpellRet.is() )
         {
@@ -440,8 +458,106 @@ uno::Reference< uno::XInterface >
             --GetCrsrCnt();
         }
     }while ( bGoOn );
-    return xSpellRet;
+    aSpellRet <<= xSpellRet;
+    return aSpellRet;
 }
+
+/*************************************************************************
+ *               virtual SwConvIter::Start()
+ *************************************************************************/
+
+
+
+void SwConvIter::Start( SwEditShell *pShell, SwDocPositions eStart,
+                        SwDocPositions eEnd )
+{
+    if( GetSh() )
+        return;
+    _Start( pShell, eStart, eEnd, FALSE );
+}
+
+/*************************************************************************
+ *                   SwConvIter::Continue
+ *************************************************************************/
+
+uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
+{
+    //!!
+    //!! Please check SwSpellIter also when modifying this
+    //!!
+
+    uno::Any    aConvRet( makeAny( rtl::OUString() ) );
+    SwEditShell *pSh = GetSh();
+    if( !pSh )
+        return aConvRet;
+
+//  const SwPosition *pEnd = GetEnd();
+
+    ASSERT( GetEnd(), "SwConvIter::Continue() ohne Start?");
+
+    rtl::OUString aConvText;
+    sal_Bool bGoOn = sal_True;
+    do {
+        SwPaM *pCrsr = pSh->GetCrsr();
+        if ( !pCrsr->HasMark() )
+            pCrsr->SetMark();
+
+        *pSh->GetCrsr()->GetPoint() = *GetCurr();
+        *pSh->GetCrsr()->GetMark() = *GetEnd();
+
+        // call function to find next text portion to be converted
+        uno::Reference< linguistic2::XSpellChecker1 > xEmpty;
+        pSh->GetDoc()->Spell( *pSh->GetCrsr(),
+                    xEmpty, pPageCnt, pPageSt, sal_True ) >>= aConvText;
+
+        sal_Bool bRev = sal_False;  // currently no wrap reverse wanted
+        bGoOn = GetCrsrCnt() > 1;
+        if( aConvText.getLength() )
+        {
+            bGoOn = sal_False;
+            SwPosition* pNewPoint = new SwPosition( *pCrsr->GetPoint() );
+            SwPosition* pNewMark = new SwPosition( *pCrsr->GetMark() );
+            if( bRev )
+            {
+                SetCurr( pNewMark );
+                // Noch steht der sdbcx::Index zwar am Anfang des falschen Wortes,
+                // wenn dies ersetzt wird (Delete,Insert), ist der sdbcx::Index
+                // hinter diesem und das Wort wird erneut geprueft (51308)
+                if( pNewPoint->nContent.GetIndex() )
+                    --pNewPoint->nContent;
+                SetCurrX( pNewPoint );
+            }
+            else
+            {
+                SetCurr( pNewPoint );
+                SetCurrX( pNewMark );
+            }
+        }
+        if( bGoOn )
+        {
+            pSh->Pop( sal_False );
+            pCrsr = pSh->GetCrsr();
+            if ( *pCrsr->GetPoint() > *pCrsr->GetMark() )
+                pCrsr->Exchange();
+            SwPosition* pNew = new SwPosition( *pCrsr->GetPoint() );
+            SetStart( pNew );
+            pNew = new SwPosition( *pCrsr->GetMark() );
+            SetEnd( pNew );
+            pNew = new SwPosition( bRev ? *GetEnd() : *GetStart() );
+            SetCurr( pNew );
+            pNew = new SwPosition( *pNew );
+            SetCurrX( pNew );
+            pCrsr->SetMark();
+            --GetCrsrCnt();
+        }
+    }while ( bGoOn );
+    return makeAny( aConvText );
+}
+
+
+/*************************************************************************
+ *                   SwHyphIter
+ *************************************************************************/
 
 
 sal_Bool SwHyphIter::IsAuto()
@@ -507,12 +623,12 @@ void SwHyphIter::End()
  *                   SwHyphIter::Continue
  *************************************************************************/
 
-uno::Reference< uno::XInterface >
-    SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
+uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
+    uno::Any    aHyphRet;
     SwEditShell *pSh = GetSh();
     if( !pSh )
-        return 0;
+        return aHyphRet;
 
     const sal_Bool bAuto = IsAuto();
      uno::Reference< XHyphenatedWord >  xHyphWord;
@@ -563,7 +679,8 @@ uno::Reference< uno::XInterface >
             --GetCrsrCnt();
         }
     } while ( bGoOn );
-    return xHyphWord;
+    aHyphRet <<= xHyphWord;
+    return aHyphRet;
 }
 
 /*************************************************************************
@@ -654,6 +771,15 @@ BOOL SwEditShell::HasSpellIter() const
 }
 
 /*************************************************************************
+ *                      SwEditShell::HasConvIter
+ *************************************************************************/
+
+BOOL SwEditShell::HasConvIter() const
+{
+    return 0 != pConvIter;
+}
+
+/*************************************************************************
  *                      SwEditShell::HasHyphIter
  *************************************************************************/
 
@@ -679,29 +805,43 @@ void SwEditShell::SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd )
  *************************************************************************/
 
 // Selektionen sichern
-
-
-
-void SwEditShell::SpellStart( SwDocPositions eStart, SwDocPositions eEnd,
-                                SwDocPositions eCurr )
+void SwEditShell::SpellStart(
+        SwDocPositions eStart, SwDocPositions eEnd, SwDocPositions eCurr,
+        sal_Bool bIsConversion )
 {
+    SwLinguIter *pLinguIter = 0;
+
     // do not spell if interactive spelling is active elsewhere
-    if (!pSpellIter)
+    if (!bIsConversion && !pSpellIter)
     {
         ASSERT( !pSpellIter, "wer ist da schon am spellen?" );
         pSpellIter = new SwSpellIter;
+        pLinguIter = pSpellIter;
+    }
+    // do not do text conversion if it is active elsewhere
+    if (bIsConversion && !pConvIter)
+    {
+        ASSERT( !pConvIter, "text conversion already active!" );
+        pConvIter = new SwConvIter;
+        pLinguIter = pConvIter;
+    }
 
+    if (pLinguIter)
+    {
         SwCursor* pSwCrsr = GetSwCrsr();
 
         SwPosition *pTmp = new SwPosition( *pSwCrsr->GetPoint() );
         pSwCrsr->FillFindPos( eCurr, *pTmp );
-        pSpellIter->SetCurr( pTmp );
+        pLinguIter->SetCurr( pTmp );
 
         pTmp = new SwPosition( *pTmp );
-        pSpellIter->SetCurrX( pTmp );
-
-        pSpellIter->Start( this, eStart, eEnd );
+        pLinguIter->SetCurrX( pTmp );
     }
+
+    if (!bIsConversion && pSpellIter)
+        pSpellIter->Start( this, eStart, eEnd );
+    if (bIsConversion && pConvIter)
+        pConvIter->Start( this, eStart, eEnd );
 }
 
 /*************************************************************************
@@ -709,16 +849,19 @@ void SwEditShell::SpellStart( SwDocPositions eStart, SwDocPositions eEnd,
  *************************************************************************/
 
 // Selektionen wiederherstellen
-
-
-
-void SwEditShell::SpellEnd()
+void SwEditShell::SpellEnd( sal_Bool bIsConversion )
 {
-    if (pSpellIter->GetSh() == this)
+    if (!bIsConversion && pSpellIter->GetSh() == this)
     {
         ASSERT( pSpellIter, "wo ist mein Iterator?" );
         pSpellIter->_End();
         delete pSpellIter, pSpellIter = 0;
+    }
+    if (bIsConversion && pConvIter && pConvIter->GetSh() == this)
+    {
+        ASSERT( pConvIter, "wo ist mein Iterator?" );
+        pConvIter->_End();
+        delete pConvIter, pConvIter = 0;
     }
 }
 
@@ -728,11 +871,15 @@ void SwEditShell::SpellEnd()
 
 // liefert Rueckgabewerte entsprechend SPL_ in splchk.hxx
 
-uno::Reference< uno::XInterface >
-    SwEditShell::SpellContinue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
+uno::Any SwEditShell::SpellContinue(
+        sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
+        sal_Bool bIsConversion )
 {
-    if (pSpellIter->GetSh() != this)
-        return 0;
+    uno::Any aRes;
+
+    if ((!bIsConversion && pSpellIter->GetSh() != this) ||
+        ( bIsConversion && pConvIter->GetSh() != this))
+        return aRes;
 
     if( pPageCnt && !*pPageCnt )
     {
@@ -743,21 +890,33 @@ uno::Reference< uno::XInterface >
             ::StartProgress( STR_STATSTR_SPELL, 0, nEndPage, GetDoc()->GetDocShell() );
     }
 
-    ASSERT( pSpellIter, "wo ist mein Iterator?" );
+    ASSERT(  bIsConversion || pSpellIter, "SpellIter missing" );
+    ASSERT( !bIsConversion || pConvIter,  "ConvIter missing" );
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
     ++nStartAction;
-     uno::Reference< uno::XInterface >  xRet = pSpellIter->Continue( pPageCnt, pPageSt );
+    rtl::OUString aRet;
+    uno::Reference< uno::XInterface >  xRet;
+    if (bIsConversion)
+    {
+        pConvIter->Continue( pPageCnt, pPageSt ) >>= aRet;
+        aRes <<= aRet;
+    }
+    else
+    {
+        pSpellIter->Continue( pPageCnt, pPageSt ) >>= xRet;
+        aRes <<= xRet;
+    }
     --nStartAction;
 
-    if( xRet.is() )
+    if( aRet.getLength() || xRet.is() )
     {
         // dann die awt::Selection sichtbar machen
         StartAction();
         EndAction();
     }
-    return xRet;
+    return aRes;
 }
 
 /*************************************************************************
@@ -855,7 +1014,8 @@ uno::Reference< uno::XInterface >
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
     ++nStartAction;
-     uno::Reference< uno::XInterface >  xRet = pHyphIter->Continue( pPageCnt, pPageSt );
+    uno::Reference< uno::XInterface >  xRet;
+    pHyphIter->Continue( pPageCnt, pPageSt ) >>= xRet;
     --nStartAction;
 
     if( xRet.is() )
