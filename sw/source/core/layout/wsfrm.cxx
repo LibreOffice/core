@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 15:21:04 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 11:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3147,27 +3147,25 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
         return;
 
     const USHORT nLeft = (USHORT)pAttrs->CalcLeft( this );
-    const USHORT nLR = nLeft + (USHORT)pAttrs->CalcRight();
     const USHORT nUpper = pAttrs->CalcTop();
-    const USHORT nUL = nUpper + pAttrs->CalcBottom();
 
 #ifdef VERTICAL_LAYOUT
+    const USHORT nRight = (USHORT)pAttrs->CalcRight();
+    const USHORT nLower = pAttrs->CalcBottom();
     BOOL bVert = IsVertical();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     if ( !bValidPrtArea )
     {
         bValidPrtArea = TRUE;
-        (aPrt.*fnRect->fnSetPosX)( nLeft );
-        (aPrt.*fnRect->fnSetPosY)( nUpper );
-        (aPrt.*fnRect->fnSetWidth)( (aFrm.*fnRect->fnGetWidth)() - nLR );
-        (aPrt.*fnRect->fnSetHeight)( (aFrm.*fnRect->fnGetHeight)()- nUL );
+        (this->*fnRect->fnSetXMargins)( nLeft, nRight );
+        (this->*fnRect->fnSetYMargins)( nUpper, nLower );
     }
 
     if ( !bValidSize )
     {
         if ( !HasFixSize() )
         {
-            const SwTwips nBorder = nUL;
+            const SwTwips nBorder = nUpper + nLower;
             const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
             SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
             do
@@ -3225,6 +3223,8 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
             bValidSize = TRUE;
     }
 #else
+    const USHORT nLR = nLeft + (USHORT)pAttrs->CalcRight();
+    const USHORT nUL = nUpper + pAttrs->CalcBottom();
     if ( !bValidPrtArea )
     {
         bValidPrtArea = TRUE;
