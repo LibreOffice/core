@@ -23519,3 +23519,11 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?HaveEditView@AccessibleEditableTextPara@accessibility@@QBEEXZ
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx1633126883@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx260832770@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?SetPosAndSize@?%O:\SRC659\src\svx\source\fmcomp\gridctrl.cxx1215423626@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRC659\src\svx\source\fmcomp\gridcell.cxx374113200@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRC659\src\svx\source\fmcomp\fmgridcl.cxx1042732495@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+??0SvXMLGraphicHelper@@QAE@W4SvXMLGraphicHelperMode@@@Z
+??1?$set@VOUString@rtl@@U?$less@VOUString@rtl@@@_STL@@V?$allocator@VOUString@rtl@@@4@@_STL@@QAE@XZ
+?disposing@SvXMLGraphicHelper@@MAAXXZ
+??0SvXMLEmbeddedObjectHelper@@QAE@AAVSvPersist@@W4SvXMLEmbeddedObjectHelperMode@@@Z
+?disposing@SvXMLEmbeddedObjectHelper@@MAAXXZ
