@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 14:51:51 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 20:26:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,6 @@ TARGET=rscrsc
 NOOPTFILES=  $(OBJ)$/rsc.obj
 .ENDIF
 
-OBJFILES=	 $(OBJ)$/rsc.obj              \
-                 $(OBJ)$/rscinst.obj
-         
-CXXFILES=        rsc.cxx	\
-             rscinst.cxx
+OBJFILES=	 $(OBJ)$/rsc.obj
 
 .INCLUDE :  target.mk
