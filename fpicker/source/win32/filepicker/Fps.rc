@@ -222,7 +222,7 @@ BEGIN
                     WS_TABSTOP,54,32,184,14
     CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,54,
                     46,184,14
-    LTEXT           "",1119,0,0,238,32    
+    LTEXT           "",1119,0,0,238,32
 END
 
 8001 DIALOG DISCARDABLE  0, 0, 278, 65
@@ -233,7 +233,25 @@ BEGIN
                     WS_TABSTOP,130,38,144,14
     CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,
                     51,144,16
-    LTEXT           "",1119,0,0,277,38    
+    LTEXT           "",1119,0,0,277,38
+END
+
+9000 DIALOG DISCARDABLE  0, 0, 237, 48
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,54,32,184,14
+    LTEXT           "",1119,0,0,238,32
+END
+
+9001 DIALOG DISCARDABLE  0, 0, 278, 54
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,14
+    LTEXT           "",1119,0,0,277,38
 END
 
 
@@ -331,6 +349,19 @@ BEGIN
     BEGIN
         VERTGUIDE, 61
         HORZGUIDE, 25
+    END
+
+    9000, DIALOG
+    BEGIN
+        VERTGUIDE, 54
+        HORZGUIDE, 34
+    END
+
+    9001, DIALOG
+    BEGIN
+        RIGHTMARGIN, 277
+        VERTGUIDE, 76
+        HORZGUIDE, 52
     END
 END
 #endif    // APSTUDIO_INVOKED
