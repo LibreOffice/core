@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:41:21 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SVX_COMMON_LINGUI_HXX
 #include "commonlingui.hxx"
 #endif
@@ -140,6 +139,7 @@ SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     ,aIgnoreAllBtn  ( this, ResId( BTN_IGNOREALL ) )
     ,aChangeBtn     ( this, ResId( BTN_CHANGE ) )
     ,aChangeAllBtn  ( this, ResId( BTN_CHANGEALL ) )
+    ,aOptionsBtn    ( this, ResId( BTN_OPTIONS ) )
     ,aStatusText    ( this, ResId( FT_STATUS ) )
     ,aCancelBtn     ( this, ResId( BTN_SPL_CANCEL ) )
     ,aHelpBtn       ( this, ResId( BTN_SPL_HELP ) )
@@ -165,6 +165,7 @@ PushButton* SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) cons
         case eIgnoreAll: pButton = &aIgnoreAllBtn; break;
         case eChange: pButton = &aChangeBtn; break;
         case eChangeAll: pButton = &aChangeAllBtn; break;
+        case eOptions: pButton = &aOptionsBtn; break;
     }
     return const_cast< PushButton* >( pButton );
 }
@@ -317,7 +318,7 @@ void SvxCommonLinguisticControl::Enlarge( sal_Int32 _nX, sal_Int32 _nY )
     {
         Window* pMoveRight[] =
         {
-            &aIgnoreBtn, &aIgnoreAllBtn, &aChangeBtn, &aChangeAllBtn, &aHelpBtn, &aCancelBtn
+            &aIgnoreBtn, &aIgnoreAllBtn, &aChangeBtn, &aChangeAllBtn, &aOptionsBtn, &aHelpBtn, &aCancelBtn
         };
         for ( sal_Int32 i = 0; i < sizeof( pMoveRight ) / sizeof( pMoveRight[0] ); ++i )
         {
