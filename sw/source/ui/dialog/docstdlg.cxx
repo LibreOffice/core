@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:48:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -225,6 +224,7 @@ void SwDocStatPage::Update()
 
     SwWait aWait( *pSh->GetDoc()->GetDocShell(), TRUE );
     pSh->StartAction();
+    aDocStat = pSh->GetDoc()->GetDocStat();
     pSh->GetDoc()->UpdateDocStat( aDocStat );
     pSh->EndAction();
 
