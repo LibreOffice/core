@@ -83,9 +83,6 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\form
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework\security
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework\storage
 
 ..\%__SRC%\inc\com\sun\star\auth\*.hdl %_DEST%\inc%_EXT%\com\sun\star\auth\*.hdl
 ..\%__SRC%\inc\com\sun\star\auth\*.hpp %_DEST%\inc%_EXT%\com\sun\star\auth\*.hpp
@@ -232,10 +229,6 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework\storage
 ..\%__SRC%\inc\drafts\com\sun\star\script\browse\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse\*.hdl
 ..\%__SRC%\inc\drafts\com\sun\star\script\provider\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\script\provider\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider\*.hdl
-..\%__SRC%\inc\drafts\com\sun\star\script\framework\security\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework\security\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\script\framework\security\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework\security\*.hdl
-..\%__SRC%\inc\drafts\com\sun\star\script\framework\storage\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework\storage\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\script\framework\storage\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\script\framework\storage\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\form\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\form\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\form\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\form\*.hdl
