@@ -11,6 +11,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\connection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\data
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\datatransfer
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\datatransfer\clipboard
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\datatransfer\dnd
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\daemons
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\document
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\drawing
@@ -74,6 +75,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\datatransfer\*.hdl %_DEST%\inc%_EXT%\com\sun\star\datatransfer\*.hdl
 ..\%__SRC%\inc\com\sun\star\datatransfer\clipboard\*.hpp %_DEST%\inc%_EXT%\com\sun\star\datatransfer\clipboard\*.hpp
 ..\%__SRC%\inc\com\sun\star\datatransfer\clipboard\*.hdl %_DEST%\inc%_EXT%\com\sun\star\datatransfer\clipboard\*.hdl
+..\%__SRC%\inc\com\sun\star\datatransfer\dnd\*.hpp %_DEST%\inc%_EXT%\com\sun\star\datatransfer\dnd\*.hpp
+..\%__SRC%\inc\com\sun\star\datatransfer\dnd\*.hdl %_DEST%\inc%_EXT%\com\sun\star\datatransfer\dnd\*.hdl
 ..\%__SRC%\inc\com\sun\star\daemons\*.hdl %_DEST%\inc%_EXT%\com\sun\star\daemons\*.hdl
 ..\%__SRC%\inc\com\sun\star\daemons\*.hpp %_DEST%\inc%_EXT%\com\sun\star\daemons\*.hpp
 ..\%__SRC%\inc\com\sun\star\document\*.hdl %_DEST%\inc%_EXT%\com\sun\star\document\*.hdl
