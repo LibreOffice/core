@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:27:45 $
+ *  last change: $Author: vg $ $Date: 2002-04-02 14:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,8 +472,8 @@ uno::Reference< XAccessible > ScAccessibleDocument::GetShape(sal_Int32 nIndex)
                 uno::Reference< drawing::XShape > xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                 new ScShapeObj(xShape);
                 accessibility::ShapeTypeHandler& rShapeHandler = accessibility::ShapeTypeHandler::Instance();
-                maShapes[nIndex].pAccShape = rShapeHandler.CreateAccessibleObject(
-                    xShape, this, maShapeTreeInfo);
+                //maShapes[nIndex].pAccShape = rShapeHandler.CreateAccessibleObject(
+                //  xShape, this, maShapeTreeInfo);
             }
         }
     }
