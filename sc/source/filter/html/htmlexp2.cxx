@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:17:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,9 @@
 
 #include "htmlexp.hxx"
 #include "global.hxx"
-#include "flttools.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
+#include "ftools.hxx"
 
 using namespace com::sun::star;
 
@@ -262,7 +262,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
             String aGrfNm( aStreamPath );
             nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
             USHORT nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
-                _STRINGCONST( "JPG" ), nXOutFlags );
+                CREATE_STRING( "JPG" ), nXOutFlags );
             if( !nErr )     // sonst fehlerhaft, da ist nichts auszugeben
             {
                 rLinkName = URIHelper::SmartRel2Abs(
