@@ -989,6 +989,9 @@ SfxVoidItem Paste SID_PASTE
     Container = FALSE,
     Synchron;
 
+    /* status: */
+    SlotType = SfxBoolItem
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
