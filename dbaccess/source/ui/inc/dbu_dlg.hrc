@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbu_dlg.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:27:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_DLG_HRC_
+#define _DBU_DLG_HRC_
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define STR_ADABAS_HELP_SYSDEVSPACE         RID_STR_DLG_START
+#define STR_ADABAS_HELP_TRANSACT            RID_STR_DLG_START + 1
+#define STR_ADABAS_HELP_DATADEVSPACES       RID_STR_DLG_START + 2
+#define STR_ADABAS_HELP_SIZE                RID_STR_DLG_START + 3
+#define STR_ADABAS_HELP_FREESIZE            RID_STR_DLG_START + 4
+#define STR_ADABAS_HELP_MEMORYUSING         RID_STR_DLG_START + 5
+#define STR_ADABAS_ERROR_SYSTEMTABLES       RID_STR_DLG_START + 6
+#define STR_ERROR_PASSWORDS_NOT_IDENTICAL   RID_STR_DLG_START + 7
+#define STR_INDEXDESIGN_DOUBLE_COLUMN_NAME  RID_STR_DLG_START + 8
+#define STR_DATASOURCE_DEFAULTNAME          RID_STR_DLG_START + 9
+#define STR_ERR_EMPTY_DSN_NAME              RID_STR_DLG_START + 10
+#define STR_QUERY_OBJECTS                   RID_STR_DLG_START + 11
+#define STR_DOCUMENT_OBJECTS                RID_STR_DLG_START + 12
+#define STR_QUERY_DROP_ALL                  RID_STR_DLG_START + 13
+#define STR_INDEX_NAME_ALREADY_USED         RID_STR_DLG_START + 14
+#define STR_ASK_FOR_DIRECTORY_CREATION      RID_STR_DLG_START + 15
+#define STR_COULD_NOT_CREATE_DIRECTORY      RID_STR_DLG_START + 16
+#define STR_ADDRESSBOOK_SYSTEM              RID_STR_DLG_START + 17
+#define STR_ADDRESSBOOK_MOZILLA             RID_STR_DLG_START + 18
+#define STR_ADDRESSBOOK_LDAP                RID_STR_DLG_START + 19
+#define STR_ADDRESSBOOK_OUTLOOK             RID_STR_DLG_START + 20
+#define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STR_DLG_START + 21
+#define STR_DIRECTSQL_CONNECTIONLOST        RID_STR_DLG_START + 22
+#define STR_CALCDOC_DOESNOTEXIST            RID_STR_DLG_START + 23
+#define STR_HINT_READONLY_CONNECTION        RID_STR_DLG_START + 24
+#define STR_HINT_CONNECTION_NOT_CAPABLE     RID_STR_DLG_START + 25
+#define STR_LINKEDDOC_DOESNOTEXIST          RID_STR_DLG_START + 26
+#define STR_TAB_INDEX_SORTORDER             RID_STR_DLG_START + 27
+#define STR_TAB_INDEX_FIELD                 RID_STR_DLG_START + 28
+#define STR_ORDER_ASCENDING                 RID_STR_DLG_START + 29
+#define STR_ORDER_DESCENDING                RID_STR_DLG_START + 30
+#define STR_CONFIRM_DROP_INDEX              RID_STR_DLG_START + 31
+#define STR_LOGICAL_INDEX_NAME              RID_STR_DLG_START + 32
+
+// please adjust checking before insert new strings
+
+#if STR_LOGICAL_INDEX_NAME > RID_STR_DLG_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif //_DBU_DLG_HRC_
+
+

@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbu_tbl.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:24:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_TBL_HRC_
+#define _DBU_TBL_HRC_
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define STR_HELP_AUTOINCREMENT_VALUE        RID_STR_TBL_START
+#define STR_TABLEDESIGN_UNDO_PRIMKEY        RID_STR_TBL_START + 1
+#define STR_VALUE_YES                       RID_STR_TBL_START + 2
+#define STR_VALUE_NO                        RID_STR_TBL_START + 3
+#define STR_VALUE_ASC                       RID_STR_TBL_START + 4
+#define STR_VALUE_DESC                      RID_STR_TBL_START + 5
+#define STR_VALUE_NONE                      RID_STR_TBL_START + 6
+#define STR_TAB_FIELD_NAME                  RID_STR_TBL_START + 7
+#define STR_TAB_FIELD_DATATYPE              RID_STR_TBL_START + 8
+#define STR_TAB_FIELD_LENGTH                RID_STR_TBL_START + 9
+#define STR_TAB_FIELD_DESCR                 RID_STR_TBL_START + 10
+#define STR_TAB_FIELD_NULLABLE              RID_STR_TBL_START + 11
+#define STR_FIELD_AUTOINCREMENT             RID_STR_TBL_START + 12
+#define STR_TAB_PROPERTIES                  RID_STR_TBL_START + 13
+#define STR_TABPAGE_GENERAL                 RID_STR_TBL_START + 14
+#define STR_TAB_TABLE_DESCRIPTION           RID_STR_TBL_START + 15
+#define STR_TAB_TABLE_PROPERTIES            RID_STR_TBL_START + 16
+#define STR_TABED_UNDO_TYPE_CHANGED         RID_STR_TBL_START + 17
+#define STR_TABED_UNDO_ROWDELETED           RID_STR_TBL_START + 18
+#define STR_TABED_UNDO_ROWINSERTED          RID_STR_TBL_START + 19
+#define STR_TABED_UNDO_NEWROWINSERTED       RID_STR_TBL_START + 20
+#define STR_TABED_UNDO_PRIMKEY              RID_STR_TBL_START + 21
+#define STR_HELP_AUTOINCREMENT              RID_STR_TBL_START + 22
+#define STR_HELP_FORMAT_CODE                RID_STR_TBL_START + 23
+#define STR_HELP_SCALE                      RID_STR_TBL_START + 24
+#define STR_HELP_LENGTH                     RID_STR_TBL_START + 25
+#define STR_HELP_NUMERIC_TYPE               RID_STR_TBL_START + 26
+#define STR_HELP_TEXT_LENGTH                RID_STR_TBL_START + 27
+#define STR_HELP_FIELD_REQUIRED             RID_STR_TBL_START + 28
+#define STR_HELP_DEFAULT_VALUE              RID_STR_TBL_START + 29
+#define STR_HELP_BOOL_DEFAULT               RID_STR_TBL_START + 30
+#define STR_FORMAT                          RID_STR_TBL_START + 31
+#define STR_SCALE                           RID_STR_TBL_START + 32
+#define STR_LENGTH                          RID_STR_TBL_START + 33
+#define STR_NUMERIC_TYPE                    RID_STR_TBL_START + 34
+#define STR_TEXT_LENGTH                     RID_STR_TBL_START + 35
+#define STR_FIELD_REQUIRED                  RID_STR_TBL_START + 36
+#define STR_DEFAULT_VALUE                   RID_STR_TBL_START + 37
+#define STR_TABED_UNDO_CELLMODIFIED         RID_STR_TBL_START + 38
+#define STR_TABLEDESIGN_DUPLICATE_NAME      RID_STR_TBL_START + 39
+#define STR_TBL_COLUMN_IS_KEYCOLUMN         RID_STR_TBL_START + 40
+#define STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE   RID_STR_TBL_START + 41
+#define STR_TABLEDESIGN_ALTER_ERROR         RID_STR_TBL_START + 42
+#define STR_AUTOINCREMENT_VALUE             RID_STR_TBL_START + 43
+#define STR_HELP_FORMAT_BUTTON              RID_STR_TBL_START + 44
+#define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STR_TBL_START + 45
+#define STR_TABLEDESIGN_NO_PRIM_KEY_HEAD    RID_STR_TBL_START + 46
+#define STR_TABLEDESIGN_NO_PRIM_KEY         RID_STR_TBL_START + 47
+#define STR_TABLEDESIGN_TITLE               RID_STR_TBL_START + 48
+
+// please adjust checking before insert new strings
+
+#if STR_TABLEDESIGN_TITLE > RID_STR_TBL_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif // _DBU_TBL_HRC_
+
+

@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbu_qry.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:24:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_QRY_HRC_
+#define _DBU_QRY_HRC_
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+
+#define STR_QRY_FUNCTIONS                   RID_STR_QRY_START
+#define STR_QRY_SORTTEXT                    RID_STR_QRY_START + 1
+#define STR_QUERY_UNDO_MOVETABWIN           RID_STR_QRY_START + 2
+#define STR_QUERY_UNDO_SIZETABWIN           RID_STR_QRY_START + 3
+#define STR_QUERY_UNDO_INSERTCONNECTION     RID_STR_QRY_START + 4
+#define STR_QUERY_UNDO_REMOVECONNECTION     RID_STR_QRY_START + 5
+#define STR_QUERY_UNDO_TABWINSHOW           RID_STR_QRY_START + 6
+#define STR_QUERY_UNDO_TABWINDELETE         RID_STR_QRY_START + 7
+#define STR_QUERY_UNDO_MODIFY_CELL          RID_STR_QRY_START + 8
+#define STR_QUERY_UNDO_SIZE_COLUMN          RID_STR_QRY_START + 9
+#define STR_QUERY_UNDO_TABFIELDDELETE       RID_STR_QRY_START + 10
+#define STR_QUERY_UNDO_TABFIELDCREATE       RID_STR_QRY_START + 11
+#define STR_QRY_TOOCOMPLEX                  RID_STR_QRY_START + 12
+#define RID_STR_TABLE_DOESNT_EXIST          RID_STR_QRY_START + 13
+#define RID_STR_FIELD_DOESNT_EXIST          RID_STR_QRY_START + 14
+#define RID_STR_TOMUCHTABLES                RID_STR_QRY_START + 15
+#define STR_QUERY_INNER_JOIN                RID_STR_QRY_START + 16
+#define STR_QUERY_LEFTRIGHT_JOIN            RID_STR_QRY_START + 17
+#define STR_QUERY_FULL_JOIN                 RID_STR_QRY_START + 18
+#define STR_QUERY_SORTTEXT                  RID_STR_QRY_START + 19
+#define STR_QUERY_FUNCTIONS                 RID_STR_QRY_START + 20
+#define STR_QUERY_NOTABLE                   RID_STR_QRY_START + 21
+#define STR_QRY_ORDERBY_UNRELATED           RID_STR_QRY_START + 22
+#define STR_QUERY_HANDLETEXT                RID_STR_QRY_START + 23
+#define STR_QUERY_FALSE                     RID_STR_QRY_START + 24
+#define STR_QUERY_TRUE                      RID_STR_QRY_START + 25
+#define STR_SVT_SQL_INTERNATIONAL           RID_STR_QRY_START + 26
+#define STR_SVT_SQL_SYNTAX_ERROR            RID_STR_QRY_START + 27
+#define STR_SVT_SQL_SYNTAX_ERROR_BEFORE     RID_STR_QRY_START + 28
+#define STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE    RID_STR_QRY_START + 29
+#define STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE    RID_STR_QRY_START + 30
+#define STR_SVT_SQL_SYNTAX_NO_NUM           RID_STR_QRY_START + 31
+#define STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID  RID_STR_QRY_START + 32
+#define STR_SVT_SQL_SYNTAX_INT_NO_VALID     RID_STR_QRY_START + 33
+#define STR_SVT_SQL_SYNTAX_REAL_NO_VALID    RID_STR_QRY_START + 34
+#define STR_SVT_SQL_SYNTAX_REAL_NO_INT      RID_STR_QRY_START + 35
+#define STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE  RID_STR_QRY_START + 36
+#define STR_SVT_SQL_SYNTAX_TABLE            RID_STR_QRY_START + 37
+#define STR_SVT_SQL_SYNTAX_COLUMN           RID_STR_QRY_START + 38
+#define STR_QUERYDESIGN_NO_VIEW_SUPPORT     RID_STR_QRY_START + 39
+#define STR_QUERYDESIGN_NO_VIEW_ASK         RID_STR_QRY_START + 40
+#define STR_QRY_NOSELECT                    RID_STR_QRY_START + 41
+#define STR_QRY_COLUMN_NOT_FOUND            RID_STR_QRY_START + 42
+#define STR_QRY_JOIN_COLUMN_COMPARE         RID_STR_QRY_START + 43
+#define STR_QRY_LIKE_LEFT_NO_COLUMN         RID_STR_QRY_START + 44
+#define STR_QRY_CHECK_CASESENSITIVE         RID_STR_QRY_START + 45
+#define STR_QUERY_UNDO_TABFIELDMOVED        RID_STR_QRY_START + 46
+#define STR_QRY_ILLEGAL_JOIN                RID_STR_QRY_START + 47
+#define STR_QRY_TOO_LONG_STATEMENT          RID_STR_QRY_START + 48
+#define STR_QRY_SYNTAX                      RID_STR_QRY_START + 49
+#define STR_QRY_NATIVE                      RID_STR_QRY_START + 50
+#define STR_QRY_TOO_MANY_TABLES             RID_STR_QRY_START + 51
+#define STR_QRY_TOOMANYCOND                 RID_STR_QRY_START + 52
+#define STR_QRY_TOO_MANY_COLUMNS            RID_STR_QRY_START + 53
+
+// please adjust checking before insert new strings
+
+#if STR_QRY_TOO_MANY_COLUMNS > RID_STR_QRY_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif // _DBU_QRY_HRC_
+
