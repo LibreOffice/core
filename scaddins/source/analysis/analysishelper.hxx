@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:14:26 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef ANALYSISHELPER_HXX
 #define ANALYSISHELPER_HXX
 
@@ -535,7 +534,7 @@ class Complex
     sal_Unicode             c;
 
 public:
-    inline                  Complex( double fReal, double fImag = 0.0, sal_Char cC = 'i' );
+    inline                  Complex( double fReal, double fImag = 0.0, sal_Char cC = '\0' );
                             Complex( const STRING& rComplexAsString ) THROWDEF_RTE_IAE;
 
     inline static sal_Bool  IsImagUnit( sal_Unicode c );
@@ -915,6 +914,8 @@ inline void Complex::Mult( const Complex& rM )
 
     r = r_ * rM.r - i_ * rM.i;
     i = r_ * rM.i + i_ * rM.r;
+
+    if( !c ) c = rM.c;
 }
 
 
@@ -922,6 +923,7 @@ inline void Complex::Sub( const Complex& rC )
 {
     r -= rC.r;
     i -= rC.i;
+    if( !c ) c = rC.c;
 }
 
 
@@ -929,6 +931,7 @@ inline void Complex::Add( const Complex& rAdd )
 {
     r += rAdd.r;
     i += rAdd.i;
+    if( !c ) c = rAdd.c;
 }
 
 
