@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2000-09-21 15:03:19 $
+#   last change: $Author: pl $ $Date: 2000-10-04 14:28:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,13 +78,16 @@ TARGET=helper
 SLOFILES=\
     $(SLO)$/evntpost.obj		\
     $(SLO)$/sunowrap.obj		\
-    $(SLO)$/atom.obj			\
     $(SLO)$/threadex.obj
 
 .IF "$(GUI)" == "UNX"
 SLOFILES+=\
     $(SLO)$/ppdparser.obj	\
     $(SLO)$/strhelper.obj
+.ENDIF
+
+.IF "$(remote)" != ""
+SLOFILES+=$(SLO)$/atom.obj
 .ENDIF
 
 # NETBSD: somewhere we have to instantiate the static data members.
