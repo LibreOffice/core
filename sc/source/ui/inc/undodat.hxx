@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undodat.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:14:27 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class ScRangeName;
 class ScDBData;
 class ScDBCollection;
 class ScDPObject;
+class SdrUndoAction;
 
 //----------------------------------------------------------------------------
 
@@ -257,7 +258,7 @@ private:
 };
 
 
-class ScUndoSubTotals: public ScSimpleUndo
+class ScUndoSubTotals: public ScDBFuncUndo
 {
 public:
                     TYPEINFO();
@@ -287,7 +288,7 @@ private:
 };
 
 
-class ScUndoSort: public ScSimpleUndo
+class ScUndoSort: public ScDBFuncUndo
 {
 public:
                     TYPEINFO();
@@ -315,7 +316,7 @@ private:
 };
 
 
-class ScUndoQuery: public ScSimpleUndo
+class ScUndoQuery: public ScDBFuncUndo
 {
 public:
                     TYPEINFO();
@@ -333,6 +334,7 @@ public:
     virtual String  GetComment() const;
 
 private:
+    SdrUndoAction*  pDrawUndo;
     SCTAB           nTab;
     ScQueryParam    aQueryParam;
     ScDocument*     pUndoDoc;
@@ -342,6 +344,29 @@ private:
     BOOL            bIsAdvanced;
     BOOL            bDestArea;
     BOOL            bDoSize;
+};
+
+
+class ScUndoAutoFilter: public ScDBFuncUndo
+{
+private:
+    String          aDBName;
+    BOOL            bFilterSet;
+
+    void            DoChange( BOOL bUndo );
+
+public:
+                    TYPEINFO();
+                    ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
+                            const String& rName, BOOL bSet );
+    virtual         ~ScUndoAutoFilter();
+
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
 };
 
 
