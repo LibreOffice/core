@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 09:37:25 $
+ *  last change: $Author: fme $ $Date: 2001-11-23 14:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,6 +706,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     BOOL bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType();
     Font* pTmpFont = bPrt ? pPrtFont : GetScrFont();
+
+    // robust: better use the printer font instead of using no font at all
+    ASSERT( pTmpFont, "No screen or printer font?" );
+    if ( ! pTmpFont )
+        pTmpFont = pPrtFont;
+
     // HACK: UNDERLINE_WAVE darf nicht mehr missbraucht werden, daher
     // wird die graue Wellenlinie des ExtendedAttributSets zunaechst
     // in der Fontfarbe erscheinen.

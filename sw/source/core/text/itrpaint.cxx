@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-06 09:45:22 $
+ *  last change: $Author: fme $ $Date: 2001-11-23 14:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const sal_Bool bUnderSz )
 {
 #ifdef DEBUG
-    USHORT nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
-    USHORT nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    USHORT nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    USHORT nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
 #endif
 
     // Adjustierung ggf. nachholen
@@ -504,6 +504,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             // portion as a reference for the adjustment of the paragraph
             // end symbol, otherwise we take the line layout portion
             const SwTmpEndPortion aEnd( *pEndTempl );
+            GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), pOut );
 
             if ( GetLineInfo().HasSpecialAlign() )
             {
