@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-20 15:07:21 $
+ *  last change: $Author: sj $ $Date: 2002-08-21 10:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1722,55 +1722,51 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                         ULONG nFPos = pPersistPtr[ nPersist ];
                         if ( nFPos < nStreamLen )
                         {
-                            if ( nFPos )
+                            rStCtrl.Seek( nFPos );
+                            DffRecordHeader aSlideHd;
+                            rStCtrl >> aSlideHd;
+                            if ( SeekToRec( rStCtrl, PPT_PST_SlideAtom, aSlideHd.GetRecEndFilePos() ) )
+                                rStCtrl >> pE->aSlideAtom;
+                            else if ( SeekToRec( rStCtrl, PPT_PST_NotesAtom, aSlideHd.GetRecEndFilePos() ) )
+                                rStCtrl >> pE->aNotesAtom;
+                            aSlideHd.SeekToContent( rStCtrl );
+
+                            DffRecordHeader aPPTDrawingHd;
+                            if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, aSlideHd.GetRecEndFilePos(), &aPPTDrawingHd ) )
                             {
-                                rStCtrl.Seek( nFPos );
-                                DffRecordHeader aSlideHd;
-                                rStCtrl >> aSlideHd;
-                                if ( SeekToRec( rStCtrl, PPT_PST_SlideAtom, aSlideHd.GetRecEndFilePos() ) )
-                                    rStCtrl >> pE->aSlideAtom;
-                                else if ( SeekToRec( rStCtrl, PPT_PST_NotesAtom, aSlideHd.GetRecEndFilePos() ) )
-                                    rStCtrl >> pE->aNotesAtom;
-                                aSlideHd.SeekToContent( rStCtrl );
-
-                                DffRecordHeader aPPTDrawingHd;
-                                if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, aSlideHd.GetRecEndFilePos(), &aPPTDrawingHd ) )
+                                DffRecordHeader aPPTDgContainer;
+                                if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, aPPTDrawingHd.GetRecEndFilePos(), &aPPTDgContainer ) )
                                 {
-                                    DffRecordHeader aPPTDgContainer;
-                                    if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, aPPTDrawingHd.GetRecEndFilePos(), &aPPTDgContainer ) )
+                                    if ( SeekToRec( rStCtrl, DFF_msofbtDg, aPPTDrawingHd.GetRecEndFilePos() ) )
                                     {
-                                        if ( SeekToRec( rStCtrl, DFF_msofbtDg, aPPTDrawingHd.GetRecEndFilePos() ) )
-                                        {
-                                            DffRecordHeader aDgRecordHeader;
-                                            rStCtrl >> aDgRecordHeader;
-                                            pE->nDrawingDgId = aDgRecordHeader.nRecInstance;
-                                            aDgRecordHeader.SeekToEndOfRecord( rStCtrl );
-                                        }
-                                        if ( SeekToRec( rStCtrl, DFF_msofbtSolverContainer, aPPTDgContainer.GetRecEndFilePos() ) )
-                                        {
-                                            pE->pSolverContainer = new PptSolverContainer;
-                                            rStCtrl >> *( pE->pSolverContainer );
-                                        }
-                                        aPPTDgContainer.SeekToBegOfRecord( rStCtrl );
-                                        SetDgContainer( rStCtrl );  // set this, so that the escherimport is knowing of our drawings
+                                        DffRecordHeader aDgRecordHeader;
+                                        rStCtrl >> aDgRecordHeader;
+                                        pE->nDrawingDgId = aDgRecordHeader.nRecInstance;
+                                        aDgRecordHeader.SeekToEndOfRecord( rStCtrl );
                                     }
+                                    if ( SeekToRec( rStCtrl, DFF_msofbtSolverContainer, aPPTDgContainer.GetRecEndFilePos() ) )
+                                    {
+                                        pE->pSolverContainer = new PptSolverContainer;
+                                        rStCtrl >> *( pE->pSolverContainer );
+                                    }
+                                    aPPTDgContainer.SeekToBegOfRecord( rStCtrl );
+                                    SetDgContainer( rStCtrl );  // set this, so that the escherimport is knowing of our drawings
                                 }
-                                // office xp is supporting more than one stylesheet
-                                if ( ( pE->ePageKind == PPT_MASTERPAGE ) && ( pE->aSlideAtom.nMasterId == 0 ) && ( pE->bNotesMaster == 0 ) )
-                                {
-                                    PPTTextSpecInfo aTxSI( 0 );
-                                    if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
-                                        aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
-
-                                    pE->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI );
-                                    pDefaultSheet = pE->pStyleSheet;
-                                }
-                                if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
-                                    rStCtrl >> pE->aColorScheme;
-                                else
-                                    DBG_ERROR( "SdrPowerPointImport::Ctor(): could not get SlideColorScheme! (SJ)" );
                             }
+                            // office xp is supporting more than one stylesheet
+                            if ( ( pE->ePageKind == PPT_MASTERPAGE ) && ( pE->aSlideAtom.nMasterId == 0 ) && ( pE->bNotesMaster == 0 ) )
+                            {
+                                PPTTextSpecInfo aTxSI( 0 );
+                                if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
+                                    aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
 
+                                pE->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI );
+                                pDefaultSheet = pE->pStyleSheet;
+                            }
+                            if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
+                                rStCtrl >> pE->aColorScheme;
+                            else
+                                DBG_ERROR( "SdrPowerPointImport::Ctor(): could not get SlideColorScheme! (SJ)" );
                         }
                         else
                         {
