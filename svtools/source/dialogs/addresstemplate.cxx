@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 09:31:56 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 16:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,7 @@ namespace svt
         ,m_aFieldScroller           (&m_aFieldsFrame, ResId(SB_FIELDSCROLLER))
         ,m_aOK                      (this, ResId(PB_OK))
         ,m_aCancel                  (this, ResId(PB_CANCEL))
+        ,m_aHelp                    (this, ResId(PB_HELP))
         ,m_sNoFieldSelection(ResId(STR_NO_FIELD_SELECTION))
         ,m_xORB(_rxORB)
         ,m_bOddFieldNumber(sal_False)

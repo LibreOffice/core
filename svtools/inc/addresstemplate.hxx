@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:19:19 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 16:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ namespace svt
         ScrollBar       m_aFieldScroller;
         OKButton        m_aOK;
         CancelButton    m_aCancel;
+        HelpButton      m_aHelp;
 
         // string to display for "no selection"
         const String    m_sNoFieldSelection;

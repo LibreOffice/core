@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:07:12 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 16:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,11 +337,18 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     {
         SVLook = TRUE;
         DefButton = TRUE;
-        Pos = MAP_APPFONT ( 151, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Pos = MAP_APPFONT ( 97, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 
     CancelButton PB_CANCEL
+    {
+        SVLook = TRUE;
+        Pos = MAP_APPFONT ( 150, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    HelpButton PB_HELP
     {
         SVLook = TRUE;
         Pos = MAP_APPFONT ( 204, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
