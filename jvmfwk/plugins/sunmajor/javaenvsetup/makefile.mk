@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2004-05-03 14:27:38 $
+#   last change: $Author: hr $ $Date: 2004-07-23 11:50:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 
-.IF "$(SOLAR_JAVA)"==""
+.IF "$(SOLAR_JAVA)"=="" || "$(OS)"=="MACOSX"
 nojava:
     @echo "Not building jvmfwk/plugins/javaenvsetup/ because Java is disabled"
 .ENDIF
@@ -87,9 +87,7 @@ OBJFILES=$(OBJ)$/javaldx.obj
 APP1TARGET=javaldx
 APP1OBJS=$(OBJFILES)
 APP1STDLIBS=$(SALLIB) $(CPPULIB) $(CPPUHELPERLIB) $(JVMFWKLIB)
-.IF "$(OS)"=="MACOSX"
-APP1STDLIBS+= -lstdc++
-.ENDIF
+
 
 # --- Targets ------------------------------------------------------
 
