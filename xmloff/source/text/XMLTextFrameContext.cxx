@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:36:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,7 +1491,35 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
                                     GetImport(), nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
                 }
-                else
+                else if( XML_TEXT_FRAME_PLUGIN == nFrameType )
+                {
+                    bool bMedia = false;
+
+                    // check, if we have a media object
+                    for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
+                    {
+                        OUString    aLocalName;
+                        sal_uInt16  nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
+
+                        if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
+                        {
+                            if( 0 == xAttrList->getValueByIndex( n ).compareToAscii( "application/vnd.sun.star.media" ) )
+                                bMedia = true;
+
+                            // leave this loop
+                            n = nAttrCount - 1;
+                        }
+                    }
+
+                    if( bMedia )
+                    {
+                        Reference < XShapes > xShapes;
+                        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                                        GetImport(), nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
+                    }
+                }
+
+                if( !pContext )
                 {
 
                     pContext = new XMLTextFrameContext_Impl( GetImport(), nPrefix,
@@ -1500,6 +1528,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                                         nFrameType,
                                                         m_xAttrList );
                 }
+
                 m_xImplContext = pContext;
             }
         }
