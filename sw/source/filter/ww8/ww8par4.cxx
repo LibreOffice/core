@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:22:29 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
 
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
@@ -314,98 +318,6 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
     return SwWW8ImplReader::GetPictGrafFromStream( rGraph, *pStp );
 }
 
-class DrawingOLEAdaptor
-{
-private:
-    String msOrigPersistName;
-    SvInPlaceObjectRef mxIPRef;
-    SvPersist &mrPers;
-public:
-    /** Take ownership of a SdrOle2Objs OLE object
-
-        @param rObj
-        The SdrOle2Obj whose OLE object we want to take control of
-
-        @param rPers
-        The SvPersist of a SwDoc (SwDoc::GetPersist()) into which we
-        may want to move the object, or remove it from if unwanted.
-    */
-    DrawingOLEAdaptor(SdrOle2Obj &rObj, SvPersist &rPers);
-
-    /// Destructor will destroy the owned OLE object if not transferred
-    ~DrawingOLEAdaptor();
-
-    /** Transfer ownership of the OLE object to a document's SvPersist
-
-        TransferToDoc moves the object into the persist under the name
-        passed in. This name is then suitable to be used as an argument
-        to SwDoc::InsertOLE.
-
-        The object is no longer owned by the adaptor after this call,
-        subsequent calls are an error and return false.
-
-        @param rName
-        The name to store the object under in the document.
-
-        @return On success true is returned, otherwise false. On
-        success rName is then suitable for user with SwDoc::InsertOLE
-    */
-    bool TransferToDoc(const String &rName);
-private:
-    /// No assigning allowed
-    DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&);
-    /// No copying allowed
-    DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc);
-};
-
-DrawingOLEAdaptor::DrawingOLEAdaptor(SdrOle2Obj &rObj,
-    SvPersist &rPers)
-    : mxIPRef(rObj.GetObjRef()),
-    msOrigPersistName(rObj.GetPersistName()), mrPers(rPers)
-{
-    rObj.SetPersistName(String());
-    rObj.SetObjRef(SvInPlaceObjectRef());
-}
-
-bool DrawingOLEAdaptor::TransferToDoc(const String &rName)
-{
-    ASSERT(mxIPRef.Is(), "Transferring invalid object to doc");
-    if (!mxIPRef.Is())
-        return false;
-
-    SvInfoObjectRef refObj = new SvEmbeddedInfoObject(mxIPRef, rName);
-    bool bSuccess = mrPers.Move(refObj, rName);
-    if (bSuccess)
-    {
-        SvPersist *pO = mxIPRef;
-        ASSERT(!pO->IsModified(), "Not expected to be modified here");
-        if (pO->IsModified())
-        {
-            pO->DoSave();
-            pO->DoSaveCompleted();
-        }
-        mxIPRef.Clear();
-        bSuccess = mrPers.Unload(pO);
-    }
-
-    return bSuccess;
-}
-
-DrawingOLEAdaptor::~DrawingOLEAdaptor()
-{
-    if (mxIPRef.Is())
-    {
-        if (SvInfoObject* pInfo = mrPers.Find(msOrigPersistName))
-        {
-            pInfo->SetDeleted(TRUE);
-            pInfo->SetObj(0);
-        }
-        mxIPRef->DoClose();
-        mrPers.Remove(mxIPRef);
-        mxIPRef.Clear();
-    }
-}
-
 SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     const SfxItemSet &rFlySet)
 {
@@ -433,7 +345,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     Take complete responsibility of the object away from SdrOle2Obj and to
     me here locally. This utility class now owns the object.
     */
-    DrawingOLEAdaptor aOLEObj(rObject, *pPersist);
+    sw::hack::DrawingOLEAdaptor aOLEObj(rObject, *pPersist);
 
     bool bSuccess = aOLEObj.TransferToDoc(sNewName);
 
