@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:33:52 $
+ *  last change: $Author: kz $ $Date: 2002-01-18 21:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,7 +1019,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ chinese_traditional ] = "θ¶…ι,ζ¥θ‘—εΎθµ·ε§‹δ½η½®ζε°‹;θ¶…ι,ζ¥θ‘—εΎηµε°Ύδ½η½®ζε°‹";
     Text[ arabic ] = "έΗΖΦ΅ Κγ γζΗΥαΙ ΗαΘΝΛ ΪδΟ ΗαΘΟΗνΙ; έΗΖΦ΅ Κγ γζΗΥαΙ ΗαΘΝΛ ΪδΟ ΗαδεΗνΙ";
     Text[ greek ] = "Υπερχείλιση, Η αναζήτηση συνεχίστηκε από την αρχή,Υπερχείλιση, Η αναζήτηση συνεχίστηκε από το τέλος";
-    Text[ korean ] = "μ¤λ²„ν”λ΅- μ°ΎκΈ°κ°€ μ‹μ‘ λ¶€λ¶„λ¶€ν„° μ§„ν–‰λμ—μ;μ¤λ²„ν”λ΅-μ°ΎκΈ°κ°€ λμ—μ„λ¶€ν„° μ§„ν–‰λμ—μ";
+    Text[ korean ] = "μ¤λ²„ν”λ΅, μ°ΎκΈ°κ°€ μ‹μ‘ λ¶€λ¶„μ—μ„ κ³„μ†λμ—μµλ‹λ‹¤;μ¤λ²„ν”λ΅, μ°ΎκΈ°κ°€ λ λ¶€λ¶„μ—μ„ κ³„μ†λμ—μµλ‹λ‹¤";
     Text[ turkish ] = "Taώma, Arama iώlemine baώtan devam edildi;Taώma, Arama iώlemine sondan devam edildi";
     Text[ catalan ] = "Desbordamiento; la bϊsqueda continϊa por el principio;Desbordamiento; la bϊsqueda continϊa por el final";
     Text[ finnish ] = "Ylivuoto, hakua jatkettiin alusta;Ylivuoto, hakua jatkettiin lopusta";
