@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:34:39 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:10:37 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -81,7 +81,7 @@ OOoBeanViewer: $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make OOoBeanViewer.run
+	@echo $(MAKE) OOoBeanViewer.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(CLASSFILES)
