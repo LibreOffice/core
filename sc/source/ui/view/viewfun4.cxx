@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 11:54:38 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,18 +273,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     //!     return;
     //! }
 
-    const SfxPoolItem* pItem = pDoc->GetAttr(nCol, nRow, nTab, ATTR_FONT_LANGUAGE);
-    SvxLanguageItem*   pLangIt = PTR_CAST( SvxLanguageItem, pItem );
-    if (pLangIt)
-    {
-        eLnge = (LanguageType) pLangIt->GetValue();
-        if (eLnge == LANGUAGE_DONTKNOW)         //! can this happen?
-            eLnge = pDoc->GetLanguage();
-    }
-    else
-        eLnge = LANGUAGE_ENGLISH_US;
-    if ( eLnge == LANGUAGE_SYSTEM )
-        eLnge = System::GetLanguage();          // Spelling nie mit SYSTEM
+    eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
 
     pThesaurusEngine = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
     pThesaurusEngine->SetEditTextObjectPool( pDoc->GetEditPool() );

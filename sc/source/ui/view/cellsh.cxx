@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 15:49:43 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,29 +122,6 @@ ScCellShell::ScCellShell(ScViewData* pData) :
 
 ScCellShell::~ScCellShell()
 {
-}
-
-//------------------------------------------------------------------
-
-//! move this function elsewhere
-LanguageType lcl_GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
-{
-    const SfxPoolItem* pItem = pDoc->GetAttr(
-                    rPos.Col(), rPos.Row(), rPos.Tab(), ATTR_FONT_LANGUAGE);
-    SvxLanguageItem* pLangIt = PTR_CAST( SvxLanguageItem, pItem );
-    LanguageType eLnge;
-    if (pLangIt)
-    {
-        eLnge = (LanguageType) pLangIt->GetValue();
-        if (eLnge == LANGUAGE_DONTKNOW)                 //! can this happen?
-            eLnge = pDoc->GetLanguage();
-    }
-    else
-        eLnge = LANGUAGE_ENGLISH_US;
-    if ( eLnge == LANGUAGE_SYSTEM )
-        eLnge = System::GetLanguage();      // never use SYSTEM for spelling
-
-    return eLnge;
 }
 
 //------------------------------------------------------------------
@@ -287,7 +264,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                     if (!bDisable)
                     {
                         //  test for available languages
-                        USHORT nLang = lcl_GetEffLanguage( pDoc, aCursor );
+                        USHORT nLang = ScViewUtil::GetEffLanguage( pDoc, aCursor );
                         bDisable = !ScModule::HasThesaurusLanguage( nLang );
                     }
                 }
