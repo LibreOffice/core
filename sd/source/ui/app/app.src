@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:11:22 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,9 +392,26 @@
             SID_HYPHENATION;\
             SID_THESAURUS;\
             SID_AUTOSPELL_CHECK;\
+            SID_EXTRUSION_TOOGLE;\
+            SID_EXTRUSION_TILT_DOWN;\
+            SID_EXTRUSION_TILT_UP;\
+            SID_EXTRUSION_TILT_LEFT;\
+            SID_EXTRUSION_TILT_RIGHT;\
+            SID_EXTRUSION_DEPTH_FLOATER;\
+            SID_EXTRUSION_DIRECTION_FLOATER;\
+            SID_EXTRUSION_LIGHTING_FLOATER;\
+            SID_EXTRUSION_SURFACE_FLOATER;\
+            SID_EXTRUSION_3D_COLOR;\
+            SID_FONTWORK_GALLERY_FLOATER;\
+            SID_FONTWORK_SHAPE_FLOATER;\
+            SID_FONTWORK_SAME_LETTER_HEIGHTS;\
+            SID_FONTWORK_ALIGNMENT_FLOATER;\
+            SID_FONTWORK_CHARACTER_SPACING_FLOATER;\
+            SID_DRAW_FONTWORK;\
+            SID_DRAW_FONTWORK_VERTICAL;\
     };\
     IdCount = {\
-        285;\
+        302;\
     };
 
 
