@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class7.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ void CGM::ImplDoClass7()
             sal_uInt8*  pAppData = mpSource + 12;
             sal_uInt16* pTemp = (sal_uInt16*)mpSource;
             sal_uInt16 nOpcode = pTemp[ 4 ];
-            sal_uInt16 nOpcSize = pTemp[ 5 ];
 
             if ( mpChart || ( nOpcode == 0 ) )
             {
@@ -162,7 +161,7 @@ void CGM::ImplDoClass7()
                         memcpy( pTextEntry->pText, pAppData, nLen );
                         pAppData += nLen;
 
-                        TextAttribute* pTextOld;
+                        TextAttribute* pTextOld = 0;
                         for ( sal_uInt16 i = 0; i < nAttributes; i++ )
                         {
                             TextAttribute* pTextAttr = new TextAttribute;
