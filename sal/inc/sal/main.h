@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-21 20:15:20 $
+ *  last change: $Author: hro $ $Date: 2001-02-22 15:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,28 @@ int SAL_CALL sal_main();
 #ifdef SAL_W32
 
 /* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
+
+#if 0
+
 #ifndef _WINDOWS_
 #include <windows.h>
+#endif
+
+#else /* Simulated what windows.h does */
+
+#ifndef WINAPI
+#   define WINAPI   __stdcall
+#endif
+
+#if !defined(DECLARE_HANDLE)
+#   ifdef STRICT
+#       define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
+#   else
+#       define DECLARE_HANDLE(name) typedef HANDLE name
+#   endif
+DECLARE_HANDLE(HINSTANCE);
+#endif
+
 #endif
 
 
@@ -90,7 +110,7 @@ int __cdecl main() \
 { \
     return sal_main(); \
 } \
-int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, LPSTR _cmdline, int _nshow ) \
+int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nshow ) \
 { \
     return sal_main(); \
 }
