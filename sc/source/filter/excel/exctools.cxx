@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:25:25 $
+ *  last change: $Author: dr $ $Date: 2001-01-16 14:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,6 +1320,20 @@ BOOL GetExcRKValue( double fValue, INT32& rRKValue )
     return FALSE;
 }
 
+
+
+
+UINT16 GetExcRotation( long nRot )
+{
+    nRot /= 100;
+    if( nRot <= 90 )
+        return (UINT16) nRot;
+    if( nRot < 180 )
+        return (UINT16)(270 - nRot);
+    if( nRot < 270 )
+        return (UINT16)(nRot - 180);
+    return (UINT16)(450 - nRot);
+}
 
 
 
