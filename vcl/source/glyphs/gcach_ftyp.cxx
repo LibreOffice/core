@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:08:00 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,7 +947,8 @@ static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyph
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT ) const
+int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
+    FT_GlyphRec_* pGlyphFT, bool bForBitmapProcessing ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
     // shortcut most common case
@@ -1000,10 +1001,10 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
     {
         FT_Glyph_Transform( pGlyphFT, NULL, &aVector );
 
-        // orthogonal transforms are handled by bitmap operations
-        // apply non-orthogonal or stretch transformations here
-        if( (nAngle % 900) != 0 || bStretched )
+        // orthogonal transforms are better handled by bitmap operations
+        if( bStretched || (bForBitmapProcessing && (nAngle % 900) != 0) )
         {
+            // apply non-orthogonal or stretch transformations
             FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
             nAngle = 0;
         }
@@ -1184,7 +1185,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
-    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
     rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
@@ -1255,7 +1256,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     if( rc != FT_Err_Ok )
         return false;
 
-    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT, true );
 
     if( pGlyphFT->format != ft_glyph_format_bitmap )
     {
@@ -1356,7 +1357,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     if( rc != FT_Err_Ok )
         return false;
 
-    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT, true );
 
     if( pGlyphFT->format == ft_glyph_format_outline )
         ((FT_OutlineGlyph)pGlyphFT)->outline.flags |= ft_outline_high_precision;
@@ -1970,7 +1971,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
     long nMaxPoints = 1 + rOutline.n_points * 3;
     PolyArgs aPolyArg( rPolyPoly, nMaxPoints );
 
-    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
 
     FT_Outline_Funcs aFuncs;
     aFuncs.move_to  = &FT_move_to;
