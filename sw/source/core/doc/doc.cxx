@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:26:20 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,3 +1260,25 @@ bool SwDoc::ContainsHiddenChars() const
     return false;
 }
 
+// #111955#
+void SwDoc::SetOldNumbering(sal_Bool _bOldNumbering)
+{
+    if (bOldNumbering != _bOldNumbering)
+    {
+        bOldNumbering = _bOldNumbering;
+
+        SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
+        for( USHORT n = 0; n < rNmTbl.Count(); ++n )
+            rNmTbl[n]->SetInvalidRule(TRUE);
+
+        UpdateNumRule();
+
+        if (bOldNumbering)
+            GetNodes().UpdateOutlineNodes();
+        else
+        {
+            if (pOutlineRule)
+                UpdateNumRule(*pOutlineRule, 0, TRUE);
+        }
+    }
+}
