@@ -269,12 +269,20 @@ ErrorOcurred:
 End Function
 
 
-Function CutPathView(sDocUrl as String, PathLen as Integer)
+Function CutPathView(sDocUrl as String, Optional PathLen as Integer)
 Dim sViewPath as String
+Dim FileName as String
+Dim iFileLen as Integer
 	sViewPath = ConvertfromURL(sDocURL)
 	iViewPathLen = Len(sViewPath)
 	If iViewPathLen &gt; 60 Then
-		sViewPath = &quot;...&quot; &amp; Right(sViewPath,58)
+		FileName = FileNameoutofPath(sViewPath, &quot;/&quot;)
+		iFileLen = Len(FileName)
+		If iFileLen &lt; 44 Then
+			sViewPath = Left(sViewPath,57-iFileLen-10) &amp; &quot;...&quot; &amp; Right(sViewPath,iFileLen + 10)
+		Else
+			sViewPath = Left(sViewPath,27) &amp; &quot;...&quot; &amp; Right(sViewPath,30)
+		End If
 	End If
 	CutPathView = sViewPath
 End Function

@@ -3,6 +3,12 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Strings" script:language="StarBasic">Option Explicit
 Public sProductname as String
 
+
+Sub Main()
+	Msgbox Round(0.1223,2)
+End Sub
+
+
 &apos; Deletes out of a String &apos;BigString&apos; all possible PartStrings, that are summed up
 &apos; in the Array &apos;ElimArray&apos;
 Function ElimChar(ByVal BigString as String, ElimArray() as String)
