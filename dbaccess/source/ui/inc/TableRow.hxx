@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: TableDesignControl.hxx,v $
+ *  $RCSfile: TableRow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:45:19 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,76 +58,68 @@
  *
  *
  ************************************************************************/
-#ifndef DBAUI_TABLEDESIGNCONTROL_HXX
-#define DBAUI_TABLEDESIGNCONTROL_HXX
+#ifndef DBAUI_TABLEROW_HXX
+#define DBAUI_TABLEROW_HXX
 
-#ifndef _TABBAR_HXX //autogen
-#include <svtools/tabbar.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _SVX_DBBROWSE_HXX
-#include <svx/dbbrowse.hxx>
-#endif // _SVX_DBBROWSE_HXX
-
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#define TABPAGESIZE 70
+
 namespace dbaui
 {
-    class OTableDesignView;
+//  class OTableRow;
+//  friend SvStream& operator<<( SvStream& rStr, OTableRow& _rRow );
+
+    class OFieldDescription;
     class OTypeInfo;
-    //==================================================================
-    class OTableRowView : public DbBrowseBox
+    class OTableRow
     {
-        friend class OTableDesignUndoAct;
-
-    protected:
-        long    m_nDataPos;             // derzeit benoetigte Zeile
-        long    m_nCurrentPos;          // Aktuelle Position der ausgewaehlten Column
     private:
-        USHORT  m_nCurUndoActId;
-    protected:
-        BOOL    m_bCurrentModified;
-        BOOL    m_bUpdatable;
-        BOOL    m_bClipboardFilled;
+        OFieldDescription*      m_pActFieldDescr;
+        long                    m_nPos;
+        BOOL                    m_bReadOnly;
+        BOOL                    m_bFirstNameModify;
+        BOOL                    m_bFirstDescrModify;
+        BOOL                    m_bOwnsDescriptions;
 
+    protected:
     public:
-        OTableRowView(Window* pParent);
-        virtual ~OTableRowView();
+        OTableRow();
+        OTableRow(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAffectedCol);
+        OTableRow( const OTableRow& rRow, long nPosition = -1 );
+        virtual ~OTableRow();
 
-        virtual void                SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo ) = 0;
-        virtual void                SetData( long nRow, USHORT nColId, const String& _rNewData ) = 0;
-        virtual String              GetData( long nRow, USHORT nColId ) = 0;
-        virtual void                SetControlText( long nRow, USHORT nColId, const String& rText ) = 0;
-        virtual String              GetControlText( long nRow, USHORT nColId ) = 0;
+        OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
 
-        virtual OTableDesignView* GetView() const = 0;
+        void SetFieldType( const OTypeInfo* _pType );
 
-        USHORT  GetCurUndoActId(){ return m_nCurUndoActId; }
+        void SetPrimaryKey( BOOL bSet );
+        BOOL IsPrimaryKey() const;
 
-        virtual void Cut();
-        virtual void Copy();
-        virtual void Paste();
+        long GetPos() const { return m_nPos; }
 
-    protected:
-        void Paste( long nRow );
+        void SetReadOnly( BOOL bRead=TRUE ){ m_bReadOnly = bRead; }
+        BOOL IsReadOnly() const { return m_bReadOnly; }
 
-        virtual void CopyRows() = 0;
-        virtual void DeleteRows() = 0;
-        virtual void InsertRows( long nRow ) = 0;
-        virtual void InsertNewRows( long nRow ) = 0;
+        void SetFirstNameModify( BOOL bMod ){ m_bFirstNameModify = bMod; }
+        void SetFirstDescrModify( BOOL bMod ){ m_bFirstDescrModify = bMod; }
 
-        virtual BOOL IsUpdatable() const {return m_bUpdatable;}
-        virtual void SetUpdatable( BOOL bUpdate=TRUE );
+        BOOL IsFirstNameModify() const { return m_bFirstNameModify; }
+        BOOL IsFirstDescrModify() const { return m_bFirstDescrModify; }
 
-        virtual RowStatus GetRowStatus(long nRow) const;
-        virtual void KeyInput(const KeyEvent& rEvt);
-        virtual void Command( const CommandEvent& rEvt );
-
-        virtual void Init();
+        friend SvStream& operator<<( SvStream& rStr,const OTableRow& _rRow );
+        friend SvStream& operator>>( SvStream& rStr, OTableRow& _rRow );
     };
 }
-#endif // DBAUI_TABLEDESIGNCONTROL_HXX
-
+#endif // DBAUI_TABLEROW_HXX
 

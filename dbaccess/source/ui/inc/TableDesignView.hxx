@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:37:21 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ namespace dbaui
         virtual void setReadOnly(sal_Bool _bReadOnly);
 
         virtual void initialize();
+        void reSync(); // resync window data with realdata
 
         DECL_LINK( SwitchHdl, Accelerator* );
     };

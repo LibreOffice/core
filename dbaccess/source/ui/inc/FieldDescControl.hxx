@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 07:38:32 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ namespace dbaui
     private:
         OTableDesignHelpBar*    pHelp;
         Window*                 pLastFocusWindow;
+        Window*                 m_pActFocusWindow;
 
         FixedText*              pDefaultText;
         FixedText*              pRequiredText;
@@ -216,8 +217,6 @@ namespace dbaui
         void                SaveData( OFieldDescription* pFieldDescr );
         //  void                SaveData( OColumn* pColumn);
 
-        BOOL                ChildHasFocus();
-
         void                SetControlText( USHORT nControlId, const String& rText );
         String              GetControlText( USHORT nControlId );
         void                SetReadOnly( BOOL bReadOnly );
@@ -227,6 +226,10 @@ namespace dbaui
 
         // Resize aufegrufen
         void                CheckScrollBars();
+        sal_Bool            isCutAllowed();
+        void                cut();
+        void                copy();
+        void                paste();
 
         virtual void        Init();
         virtual void        GetFocus();

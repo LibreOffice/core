@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: TableDesignControl.hxx,v $
+ *  $RCSfile: TableRowExchange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:45:19 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,76 +58,33 @@
  *
  *
  ************************************************************************/
-#ifndef DBAUI_TABLEDESIGNCONTROL_HXX
-#define DBAUI_TABLEDESIGNCONTROL_HXX
+#ifndef DBAUI_TABLEROW_EXCHANGE_HXX
+#define DBAUI_TABLEROW_EXCHANGE_HXX
 
-#ifndef _TABBAR_HXX //autogen
-#include <svtools/tabbar.hxx>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _SVX_DBBROWSE_HXX
-#include <svx/dbbrowse.hxx>
-#endif // _SVX_DBBROWSE_HXX
-
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
 #endif
 
-#define TABPAGESIZE 70
 namespace dbaui
 {
-    class OTableDesignView;
-    class OTypeInfo;
-    //==================================================================
-    class OTableRowView : public DbBrowseBox
+    class OTableRow;
+    class OTableRowExchange : public TransferableHelper
     {
-        friend class OTableDesignUndoAct;
-
-    protected:
-        long    m_nDataPos;             // derzeit benoetigte Zeile
-        long    m_nCurrentPos;          // Aktuelle Position der ausgewaehlten Column
-    private:
-        USHORT  m_nCurUndoActId;
-    protected:
-        BOOL    m_bCurrentModified;
-        BOOL    m_bUpdatable;
-        BOOL    m_bClipboardFilled;
-
+        ::std::vector<OTableRow*> m_vTableRow;
     public:
-        OTableRowView(Window* pParent);
-        virtual ~OTableRowView();
-
-        virtual void                SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo ) = 0;
-        virtual void                SetData( long nRow, USHORT nColId, const String& _rNewData ) = 0;
-        virtual String              GetData( long nRow, USHORT nColId ) = 0;
-        virtual void                SetControlText( long nRow, USHORT nColId, const String& rText ) = 0;
-        virtual String              GetControlText( long nRow, USHORT nColId ) = 0;
-
-        virtual OTableDesignView* GetView() const = 0;
-
-        USHORT  GetCurUndoActId(){ return m_nCurUndoActId; }
-
-        virtual void Cut();
-        virtual void Copy();
-        virtual void Paste();
-
+        OTableRowExchange(const ::std::vector<OTableRow*>& _rvTableRow);
     protected:
-        void Paste( long nRow );
-
-        virtual void CopyRows() = 0;
-        virtual void DeleteRows() = 0;
-        virtual void InsertRows( long nRow ) = 0;
-        virtual void InsertNewRows( long nRow ) = 0;
-
-        virtual BOOL IsUpdatable() const {return m_bUpdatable;}
-        virtual void SetUpdatable( BOOL bUpdate=TRUE );
-
-        virtual RowStatus GetRowStatus(long nRow) const;
-        virtual void KeyInput(const KeyEvent& rEvt);
-        virtual void Command( const CommandEvent& rEvt );
-
-        virtual void Init();
+        virtual void        AddSupportedFormats();
+        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        ObjectReleased();
     };
 }
-#endif // DBAUI_TABLEDESIGNCONTROL_HXX
-
+#endif // DBAUI_TABLEROW_EXCHANGE_HXX
 

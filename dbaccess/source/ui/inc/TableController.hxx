@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:00:59 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ namespace dbaui
         sal_Bool        m_bOwnConnection : 1;   // is true when we created our own connection
         sal_Bool        m_bNew : 1;             // is true when we create a new table
 
+        void reSyncRows();
         void assignTable();                 // set the table if a name is given
         void loadData();
         void fillTypeInfo();        // fills a vector with type info
@@ -158,11 +159,14 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       getTable() { return m_xTable;}
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter() const  { return m_xFormatter; }
 
-        // should the statement be parsed by our own sql parser
-        sal_Bool        isReadOnly()            const { return !m_bEditable; }
-        sal_Bool        isModified()            const { return m_bModified; }
 
-        void            setModified(sal_Bool _bModified=sal_True);
+        sal_Bool isAddAllowed()     const;
+        sal_Bool isDropAllowed()    const;
+        sal_Bool isAlterAllowed()   const;
+        sal_Bool isReadOnly()       const { return !m_bEditable; }
+        sal_Bool isModified()       const { return m_bModified; }
+
+        void     setModified(sal_Bool _bModified=sal_True);
 
         //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's

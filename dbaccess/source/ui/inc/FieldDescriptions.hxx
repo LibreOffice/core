@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:37:35 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 namespace dbaui
 {
@@ -82,6 +88,7 @@ namespace dbaui
         ::rtl::OUString     m_sTypeName;
         ::rtl::OUString     m_sDescription;
         ::rtl::OUString     m_sDefaultValue;
+        sal_Int32           m_nType;    // only used when m_pType is null
         sal_Int32           m_nPrecision;
         sal_Int32           m_nScale;
         sal_Int32           m_nIsNullable;
@@ -93,6 +100,7 @@ namespace dbaui
 
     public:
         OFieldDescription();
+        OFieldDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xAffectedCol);
         OFieldDescription(  const ::rtl::OUString&  _sName,
                             const ::rtl::OUString&  _sTypeName,
                             const ::rtl::OUString&  _sDescription,
@@ -129,6 +137,7 @@ namespace dbaui
         void SetDescription(const ::rtl::OUString& _rDescription)   { m_sDescription = _rDescription; }
         void SetDefaultValue(const ::rtl::OUString& _rDefaultValue) { m_sDefaultValue = _rDefaultValue; }
         void SetType(const OTypeInfo* _pType)                       { m_pType = _pType; }
+        void SetTypeValue(sal_Int32 _nType)                         { m_nType = _nType; OSL_ENSURE(!m_pType,"Invalid call here!");}
         void SetPrecision(const sal_Int32& _rPrecision)             { m_nPrecision = _rPrecision; }
         void SetScale(const sal_Int32& _rScale)                     { m_nScale = _rScale; }
         void SetIsNullable(const sal_Int32& _rIsNullable)           { m_nIsNullable = _rIsNullable; }
@@ -142,7 +151,7 @@ namespace dbaui
         //  ::rtl::OUString     GetTypeName()       const { return m_sTypeName; }
         ::rtl::OUString     GetDescription()    const { return m_sDescription; }
         ::rtl::OUString     GetDefaultValue()   const { return m_sDefaultValue; }
-        sal_Int32           GetType()           const { return m_pType ? m_pType->nType : ::com::sun::star::sdbc::DataType::VARCHAR; }
+        sal_Int32           GetType()           const { return m_pType ? m_pType->nType : m_nType; }
         sal_Int32           GetPrecision()      const { return m_nPrecision; }
         sal_Int32           GetScale()          const { return m_nScale; }
         sal_Int32           GetIsNullable()     const { return m_nIsNullable; }
