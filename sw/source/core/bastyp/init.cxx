@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:12:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,13 +668,6 @@ SvPtrarr *pGlobalOLEExcludeList = 0;
 
 SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
-SwBreakIt* pBreakIt = 0;
-//CHINA001 add for swui to access sw global variable.
-SwBreakIt* GetBreakIt()
-{
-    return pBreakIt;
-}
-//CHINA001 end of add
 SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
 SwCalendarWrapper* pCalendarWrapper = 0;
@@ -986,14 +979,14 @@ void _InitCore()
     for ( i = 110; i <= 130; ++i )
         SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
 
-    pBreakIt = new SwBreakIt;
-    const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
-                                            (LanguageType)GetAppLanguage() );
-    pCheckIt = NULL;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
-    pAppCharClass = new CharClass( xMSF, rLcl );
+
+    SwBreakIt::_Create( xMSF );
+    pCheckIt = NULL;
+    pAppCharClass = new CharClass(
+        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
     pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
@@ -1022,7 +1015,7 @@ void _FinitCore()
     _FrmFinit();
     _TextFinit();
 
-    delete pBreakIt;
+    SwBreakIt::_Delete();
     delete pCheckIt;
     delete pAppCharClass;
     delete pCalendarWrapper;
