@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:33:03 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1524,7 +1524,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 Sequence< OUString > ImplementationRegistration::checkInstantiation(const OUString& implementationName)
     throw ( RuntimeException )
 {
-    VOS_ENSHURE( sal_False, "ImplementationRegistration::checkInstantiation not implemented" );
+    OSL_ENSURE( sal_False, "ImplementationRegistration::checkInstantiation not implemented" );
     return Sequence<OUString>();
 }
 

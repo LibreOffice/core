@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,9 @@
 #endif
 
 #ifdef _DEBUG
-#define TEST_ENSHURE(c, m)   VOS_ENSHURE(c, m)
+#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
 #else
-#define TEST_ENSHURE(c, m)   VOS_VERIFY(c)
+#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
 
 
@@ -110,7 +110,7 @@ OUString getExePath()
     OStartupInfo    startupInfo;
     OUString        exe;
 
-    VOS_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
+    OSL_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
 
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 16);

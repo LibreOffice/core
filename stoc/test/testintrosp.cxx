@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,10 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/servicefactory.hxx>
 
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
 //#include <vos/dynload.hxx>
 
 #include <ModuleA/XIntroTest.hpp>
@@ -110,9 +113,9 @@ typedef WeakImplHelper1< XPropertySetInfo > ImplPropertySetInfoHelper;
 #define DEFAULT_NAME_ACCESS_COUNT   5
 
 #ifdef _DEBUG
-#define TEST_ENSHURE(c, m)   VOS_ENSHURE(c, m)
+#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
 #else
-#define TEST_ENSHURE(c, m)   VOS_VERIFY(c)
+#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
 
 //class IntroTestWritelnOutput;
@@ -137,7 +140,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         {
             xRefl = Reference< XIdlReflection >( xMgr->createInstance(
                 OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
-            VOS_ENSHURE( xRefl.is(), "### no corereflection!" );
+            OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );
     }
@@ -1589,7 +1592,7 @@ int __cdecl main( int argc, char * argv[] )
     {
         Reference< XImplementationRegistration > xImplReg(
             xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
-        VOS_ENSHURE( xImplReg.is(), "### no impl reg!" );
+        OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         // Register services
         OUString libName;
@@ -1608,7 +1611,7 @@ int __cdecl main( int argc, char * argv[] )
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
-        VOS_ENSHURE( xRefl.is(), "### no corereflection!" );
+        OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection
 #ifdef SAL_W32
@@ -1624,18 +1627,18 @@ int __cdecl main( int argc, char * argv[] )
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ), UNO_QUERY );
-        VOS_ENSHURE( xRefl.is(), "### no corereflection!" );
+        OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         bSucc = test_introsp( xMgr, xRefl, xIntrosp );
         //bSucc = test_corefl( xRefl );
     }
     catch (Exception & rExc)
     {
-        VOS_ENSHURE( sal_False, "### exception occured!" );
+        OSL_ENSURE( sal_False, "### exception occured!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        VOS_TRACE( "### exception occured: " );
-        VOS_TRACE( aMsg.getStr() );
-        VOS_TRACE( "\n" );
+        OSL_TRACE( "### exception occured: " );
+        OSL_TRACE( aMsg.getStr() );
+        OSL_TRACE( "\n" );
     }
 
     Reference< XComponent >( xMgr, UNO_QUERY )->dispose();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _VOS_MODULE_HXX_
 #include <vos/module.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 
@@ -93,9 +93,9 @@ using namespace vos;
 using namespace rtl;
 
 #ifdef _DEBUG
-#define TEST_ENSHURE(c, m)   VOS_ENSHURE(c, m)
+#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
 #else
-#define TEST_ENSHURE(c, m)   VOS_VERIFY(c)
+#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
 
 #if (defined UNX) || (defined OS2)

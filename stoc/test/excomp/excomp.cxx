@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excomp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:36 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
@@ -94,9 +94,9 @@ using namespace vos;
 using namespace rtl;
 
 #ifdef _DEBUG
-#define TEST_ENSHURE(c, m)   VOS_ENSHURE(c, m)
+#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
 #else
-#define TEST_ENSHURE(c, m)   VOS_VERIFY(c)
+#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
 
 OUString getExePath()
@@ -104,7 +104,7 @@ OUString getExePath()
     OStartupInfo    startupInfo;
     OUString        exe;
 
-    VOS_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
+    OSL_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
 
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 10);

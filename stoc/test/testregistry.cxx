@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:43:55 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _VOS_MODULE_HXX_
 #include <vos/module.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
@@ -109,9 +109,9 @@ using namespace vos;
 using namespace rtl;
 
 #ifdef _DEBUG
-#define TEST_ENSHURE(c, m)   VOS_ENSHURE(c, m)
+#define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
 #else
-#define TEST_ENSHURE(c, m)   VOS_VERIFY(c)
+#define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
 
 OString userRegEnv("STAR_USER_REGISTRY=");
@@ -121,7 +121,7 @@ OUString getExePath()
     OStartupInfo    startupInfo;
     OUString        exe;
 
-    VOS_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
+    OSL_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
 
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 16);
@@ -649,7 +649,7 @@ void test_DefaultRegistry()
 
     // shutdown
     Reference< ::com::sun::star::lang::XComponent > xComp( rSMgr, UNO_QUERY );
-    VOS_ENSHURE( xComp.is(), "### serivce manager has to implement XComponent!" );
+    OSL_ENSURE( xComp.is(), "### serivce manager has to implement XComponent!" );
     xComp->dispose();
 
     printf("Test DefaultRegistry, OK!\n");

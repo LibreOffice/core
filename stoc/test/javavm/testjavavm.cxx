@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testjavavm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:28:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <stdio.h>
 #include <uno/api.h>
 
-//#include <vos/diagnose.hxx>
 #include <vos/dynload.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
@@ -143,25 +142,25 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 
     jclass cls = p_env->FindClass( "TestJavaVM");
     if (cls == 0) {
-        VOS_TRACE( "Can't find Prog class\n");
+        OSL_TRACE( "Can't find Prog class\n");
         exit(1);
     }
 
 //   jmethodID methid = p_env->GetStaticMethodID( cls, "main", "([Ljava/lang/String;)V");
 //    if (methid == 0) {
-//        VOS_TRACE("Can't find Prog.main\n");
+//        OSL_TRACE("Can't find Prog.main\n");
 //        exit(1);
 //    }
 
 //    jstring jstr = p_env->NewStringUTF(" from C!");
 //    if (jstr == 0) {
-//        VOS_TRACE("Out of memory\n");
+//        OSL_TRACE("Out of memory\n");
 //        exit(1);
 //    }
 //    jobjectArray args = p_env->NewObjectArray( 1,
 //                        p_env->FindClass("java/lang/String"), jstr);
 //    if (args == 0) {
-//        VOS_TRACE( "Out of memory\n");
+//        OSL_TRACE( "Out of memory\n");
 //        exit(1);
 //    }
 //    p_env->CallStaticVoidMethod( cls, methid, args);
@@ -197,7 +196,7 @@ int __cdecl main( int argc, char * argv[] )
     {
         Reference<com::sun::star::registry::XImplementationRegistration> xImplReg(
             xMgr->createInstance( L"com.sun.star.registry.ImplementationRegistration" ), UNO_QUERY );
-        VOS_ENSHURE( xImplReg.is(), "### no impl reg!" );
+        OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         sal_Char pLibName[256];
         ORealDynamicLoader::computeLibraryName("je558mi", pLibName, 255);
@@ -208,11 +207,11 @@ int __cdecl main( int argc, char * argv[] )
     }
     catch (Exception & rExc)
     {
-        VOS_ENSHURE( sal_False, "### exception occured!" );
+        OSL_ENSURE( sal_False, "### exception occured!" );
         OString aMsg( OWStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        VOS_TRACE( "### exception occured: " );
-        VOS_TRACE( aMsg.getStr() );
-        VOS_TRACE( "\n" );
+        OSL_TRACE( "### exception occured: " );
+        OSL_TRACE( aMsg.getStr() );
+        OSL_TRACE( "\n" );
     }
 
     Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
