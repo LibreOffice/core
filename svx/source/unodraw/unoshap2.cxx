@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-06 09:23:41 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 12:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ awt::Point SAL_CALL SvxShapeConnector::getPosition() throw(uno::RuntimeException
 //----------------------------------------------------------------------
 void SAL_CALL SvxShapeConnector::setPosition( const awt::Point& Position ) throw(uno::RuntimeException)
 {
-    SvxShapeText::setPosition(aPosition);
+    SvxShapeText::setPosition(Position);
 }
 
 //----------------------------------------------------------------------
