@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:43 $
+ *  last change: $Author: cl $ $Date: 2002-11-06 12:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@
 #include "app.hrc"
 #include "unmovss.hxx"
 #include "inspagob.hxx"
+#include "sdoutl.hxx"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -587,11 +588,11 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // was zeichnen muessen;
         // der globale Outliner koennte in SdPage::CreatePresObj
         // benutzt werden
-        SfxItemPool* pPool = pDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
-        SdrOutliner* pOutliner = new SdrOutliner( pPool, OUTLINERMODE_TEXTOBJECT );
-        pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
-        pOutliner->SetEditTextObjectPool(pPool);
-        pOutliner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
+//      SfxItemPool* pPool = pDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
+        SdrOutliner* pOutliner = new SdOutliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+//      pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
+//      pOutliner->SetEditTextObjectPool(pPool);
+//      pOutliner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
