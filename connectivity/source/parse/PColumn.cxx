@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,5 +150,83 @@ void OParseColumn::construct()
     return *OParseColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 // -----------------------------------------------------------------------------
+OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn
+                                     ,sal_Bool  _bCase
+                                     ,sal_Bool _bAscending)
+    : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
+                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
+                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
+                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
+                                ,   getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)))
+                                ,   sal_False
+                                ,   getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))
+                                ,   _bCase
+                                )
+    , m_bAscending(_bAscending)
+{
+    construct();
+}
+// -------------------------------------------------------------------------
+OOrderColumn::OOrderColumn( const ::rtl::OUString& _Name,
+                    const ::rtl::OUString& _TypeName,
+                    const ::rtl::OUString& _DefaultValue,
+                    sal_Int32       _IsNullable,
+                    sal_Int32       _Precision,
+                    sal_Int32       _Scale,
+                    sal_Int32       _Type,
+                    sal_Bool        _IsAutoIncrement,
+                    sal_Bool        _IsCurrency,
+                    sal_Bool        _bCase
+                    ,sal_Bool _bAscending
+                ) : connectivity::sdbcx::OColumn(_Name,
+                                  _TypeName,
+                                  _DefaultValue,
+                                  _IsNullable,
+                                  _Precision,
+                                  _Scale,
+                                  _Type,
+                                  _IsAutoIncrement,
+                                  sal_False,
+                                  _IsCurrency,
+                                  _bCase)
+    , m_bAscending(_bAscending)
+{
+    construct();
+}
+// -------------------------------------------------------------------------
+OOrderColumn::~OOrderColumn()
+{
+}
+// -------------------------------------------------------------------------
+void OOrderColumn::construct()
+{
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),PROPERTY_ID_ISASCENDING,0,&m_bAscending,     ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OOrderColumn::createArrayHelper( sal_Int32 _nId) const
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    describeProperties(aProps);
+    changePropertyAttributte(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper & SAL_CALL OOrderColumn::getInfoHelper()
+{
+    return *OOrderColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    if ( m_bOrder )
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.OrderColumn");
+    else
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.GroupColumn");
 
-
+    return aSupported;
+}
+// -----------------------------------------------------------------------------
