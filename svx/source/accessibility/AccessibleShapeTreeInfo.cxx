@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeTreeInfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-05-08 09:45:28 $
+ *  last change: $Author: af $ $Date: 2002-05-13 12:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,25 @@ SdrView* AccessibleShapeTreeInfo::GetSdrView (void) const
 {
     return mpView;
 }
+
+
+
+
+void AccessibleShapeTreeInfo::SetController (
+    const Reference<frame::XController>& rxController)
+{
+    mxController = rxController;
+}
+
+
+
+
+Reference<frame::XController>
+    AccessibleShapeTreeInfo::GetController (void) const
+{
+    return mxController;
+}
+
 
 
 
