@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:21:50 $
+ *  last change: $Author: fme $ $Date: 2002-05-14 13:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,9 @@
 #endif
 #ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _HELPID_H
@@ -1116,6 +1119,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
                     KS_Fly_Change,
                     KS_AppendNodeInSection,
+                    KS_EnterCharCell,
                     KS_Ende };
 
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
@@ -1278,7 +1282,7 @@ KEYINPUT_CHECKTABLE:
                         if( pFlyFmt )
                             eKeyState = eFlyState;
                         else
-                            eKeyState = KS_KeyToView;
+                            eKeyState = KS_EnterCharCell;
                     }
                     break;
 
@@ -1587,6 +1591,25 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                     }
                     break;
+                }
+            }
+            break;
+
+        case KS_EnterCharCell:
+            {
+                eKeyState = KS_KeyToView;
+                switch ( rKeyCode.GetModifier() | rKeyCode.GetCode() )
+                {
+                    case KEY_RIGHT | KEY_MOD2:
+                        rSh.Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+                        eKeyState = KS_Ende;
+                        FlushInBuffer( &rSh );
+                        break;
+                    case KEY_LEFT | KEY_MOD2:
+                        rSh.Left( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+                        eKeyState = KS_Ende;
+                        FlushInBuffer( &rSh );
+                        break;
                 }
             }
             break;
