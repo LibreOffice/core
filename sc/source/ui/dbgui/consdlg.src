@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 17:53:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,15 +304,15 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
             < "Suma" ; Default ; > ;
         < "Liczba" ; Default ; > ;
-        < "?rednia warto?æ" ; Default ; > ;
+        < "Œrednia wartoœæ" ; Default ; > ;
         < "Max" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Iloczyn" ; Default ; > ;
-        < "Ilo?æ (tylko liczby)" ; Default ; > ;
+        < "Iloœæ (tylko liczby)" ; Default ; > ;
         < "Odchylenie standardowe (Próbka)" ; Default ; > ;
         < "Odch.standard. (populacja)" ; Default ; > ;
         < "Wariancja (Próbka)" ; Default ; > ;
-        < "Wariancje (Zbiorowo?æ generalna)" ; Default ; > ;
+        < "Wariancje (Zbiorowoœæ generalna)" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -458,7 +458,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "×îĞ¡/×î´ó";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -488,7 +488,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "×îĞ¡/×î´ó";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -602,7 +602,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ english_us ] = "~Source data area" ;
         Text[ chinese_simplified ] = "Ô´Êı¾İÇøÓò(~S)";
         Text[ russian ] = "Îáëàñòü èñõîäíûõ äàííûõ";
-        Text[ polish ] = "Obszar danych ?ród³a";
+        Text[ polish ] = "Obszar danych Ÿród³a";
         Text[ japanese ] = "¿°½ÃŞ°À”ÍˆÍ(~S)";
         Text[ chinese_traditional ] = "·½¸ê®Æ°Ï°ì(~S)";
         Text[ arabic ] = "äØÇŞ ÈíÇäÇÊ ÇáãÕÏÑ";
@@ -785,7 +785,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ºÍÔ´Êı¾İÁ¬½Ó(~L)";
         Text[ russian ] = "Ñâÿçàòü ñ èñõîäíûìè äàííûìè";
-        Text[ polish ] = "Utwórz ³¹cze z danymi ?ród³a";
+        Text[ polish ] = "Utwórz ³¹cze z danymi Ÿród³a";
         Text[ japanese ] = "¿°½ÃŞ°À‚ÖØİ¸‚·‚é(~L)";
         Text[ chinese_traditional ] = "©M·½¸ê®Æ³sµ²(~L)";
         Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
