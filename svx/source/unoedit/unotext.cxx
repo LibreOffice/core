@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:54:10 $
+ *  last change: $Author: cl $ $Date: 2001-08-14 09:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,9 +485,10 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
                 do
                 {
                     // we have a paragraph
-                    SfxItemSet aNewSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
+                    SfxItemSet aOldSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
+                    SfxItemSet aNewSet( *aOldSet.GetPool(), aOldSet.GetRanges() );
 
-                    setPropertyValue( pMap, aValue, aSelection, aNewSet, aNewSet );
+                    setPropertyValue( pMap, aValue, aSelection, aOldSet, aNewSet );
 
                     pForwarder->SetParaAttribs( (USHORT)nPara, aNewSet );
                     nPara++;
