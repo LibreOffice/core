@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:42:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,12 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
 OResultSet::~OResultSet()
 {
     DBG_DTOR(OResultSet, NULL);
-    delete m_pColumns;
+    if ( m_pColumns )
+    {
+        m_pColumns->acquire();
+        m_pColumns->disposing();
+        delete m_pColumns;
+    }
 }
 
 // com::sun::star::lang::XTypeProvider
@@ -905,7 +910,7 @@ Reference< XInterface > OResultSet::getStatement(void) throw( SQLException, Runt
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OResultSetBase::rBHelper.bDisposed);
 
-    return m_aStatement.get();
+    return m_aStatement;
 }
 
 // ::com::sun::star::sdbcx::XRowLocate
