@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:57:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -659,6 +659,12 @@ $(OBJ)$/%.obj : %.asm
 #.ENDIF
 
 .SOURCE.idl : . $(SOLARVER)$/$(INPATH)$/idl$/remote $(SOLARVER)$/$(INPATH)$/idl $(SOLARVER)$/$(INPATH)$/idl$(UPDMINOREXT)$/$(PACKAGE)
+
+$(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
+        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $< )
+
+$(OUT)$/ucrdoc$/$(IDLPACKAGE)$/%.urd : %.idl
+        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $< )		
 
 .IF "$(GUI)"=="WNTtest"
 $(MISC)$/%.hid : %.src
