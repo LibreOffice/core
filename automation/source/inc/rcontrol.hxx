@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rcontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@
 
 #define M_OpenMenu          84      // MenuButtons and Menus in ToolBoxes
 
+#define M_Restore           85      // Window Control together with M_Maximize and M_Minimize
+
 #define M_DisplayPercent    200     // Zum Anzeigen der Prozente des Windows
 
 #define M_LAST_NO_RETURN    200
@@ -316,11 +318,17 @@
 #define M_IsScrollBarEnabled ( M_WITH_RETURN | 39 )
 
 // Diese befehle werden nur intern im Controller verwendet. Sie tauchen nicht im Testtool auf!
-#define _M_IsEnabled        ( M_WITH_RETURN |  50 )
+#define _M_IsEnabled        ( M_WITH_RETURN | 50 )
 
 
-#define M_GetFixedTextCount ( M_WITH_RETURN |  51 )
-#define M_GetFixedText      ( M_WITH_RETURN |  52 )
+#define M_GetFixedTextCount ( M_WITH_RETURN | 51 )
+#define M_GetFixedText      ( M_WITH_RETURN | 52 )
+
+
+#define M_IsMin             ( M_WITH_RETURN | 53 )
+#define M_IsRestore         ( M_WITH_RETURN | 54 )
+
+
 
 //#define M_SOFFICE           0x0800  // Command valid for Star/Open Office
 //#define M_MOZILLA           0x1000  // Command valid for Mozilla
@@ -457,8 +465,9 @@
 // Verschiedene Typen von Controls für den Befehl SetControlType
 // !!!!!!!!!!!  Müssen alle bei SetControlType eingetragen werden  !!!!!!!!!!!!
 #define CONST_CTBrowseBox       100
-#define CONST_CTTreeListBox     101
+//#define CONST_CTTreeListBox       101
 #define CONST_CTProgressBar     102     // Eigentlich ein Window, aber der Einheitlichen Namensgebung wegen
+#define CONST_CTValueSet        103
 
 // Konstanten für das ALignment des gesuchten Splitters
 #define CONST_ALIGN_LEFT        120
