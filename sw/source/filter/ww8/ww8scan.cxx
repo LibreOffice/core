@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
+ *  last change: $Author: cmc $ $Date: 2001-07-11 15:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, WW8Fib* pWwF )
         if( 1 == clxt )                         // clxtGrpprl ?
         {
             BYTE* p = new BYTE[nLen+2];         // alloziere
-            memcpy( p, &nLen, 2 );              // trage Laenge ein
+            ShortToSVBT16(nLen, p);             // trage Laenge ein
             pStr->Read( p+2, nLen );            // lies grpprl
             pPieceGrpprls[nAktGrpprl++] = p;    // trage in Array ein
         }
@@ -6415,11 +6415,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.19 2001-06-12 09:24:43 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.20 2001-07-11 15:35:45 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/06/12 09:24:43  cmc
+      #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
+
       Revision 1.18  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 
