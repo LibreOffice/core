@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:33:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1802,14 +1802,14 @@ IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, pNil)
     // ...um Kompatibel zu bleiben, kann spaeter wieder raus
     //InteractiveChange(NULL);
 
-    return NULL;
+    return 0;
 }
 
 IMPL_LINK( SvxLightCtl3D, ButtonPress, void*, pNil)
 {
     aLightControl.SetGeometry(bSphereUsed);
     bSphereUsed = !bSphereUsed;
-    return NULL;
+    return 0;
 }
 
 IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, pNil)
@@ -1826,7 +1826,7 @@ IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, pNil)
     // ...um Kompatibel zu bleiben, kann spaeter wieder raus
     //InteractiveChange(NULL);
 
-    return NULL;
+    return 0;
 }
 
 IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, pNil)
@@ -1839,7 +1839,7 @@ IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, pNil)
     // ...um Kompatibel zu bleiben, kann spaeter wieder raus
     //SelectionChange(NULL);
 
-    return NULL;
+    return 0;
 }
 
 // ...um Kompatibel zu bleiben, kann spaeter wieder raus
