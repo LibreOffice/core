@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:25 $
+ *  last change: $Author: rt $ $Date: 2001-05-08 10:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ namespace connectivity
                                 ,public ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>
 
         {
-            friend class ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>;
+            friend class OSubComponent<OStatement_BASE2, OStatement_BASE>;
         public:
             OStatement_BASE2(OConnection* _pConnection ) :  OStatement_Base(_pConnection ),
                                     ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this){}
