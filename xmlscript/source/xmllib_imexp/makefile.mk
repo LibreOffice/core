@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
+#   last change: $Author: dbo $ $Date: 2001-05-04 09:14:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..$/..
 
 PRJNAME=xmlscript
-TARGET=xmldlg_imexp
+TARGET=xmllib_imexp
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
@@ -75,11 +75,8 @@ ENABLE_EXCEPTIONS=TRUE
 #-----------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/xmldlg_import.obj		\
-    $(SLO)$/xmldlg_impmodels.obj		\
-    $(SLO)$/xmldlg_export.obj		\
-    $(SLO)$/xmldlg_expmodels.obj		\
-    $(SLO)$/xmldlg_addfunc.obj
+    $(SLO)$/xmllib_import.obj		\
+    $(SLO)$/xmllib_export.obj
 
 # --- Targets ------------------------------------------------------
 

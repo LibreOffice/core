@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@ public:
     void readNumericFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readPatternFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readTimeFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readFixedLineModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readProgressBarModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readScrollBarModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
 };
 //__________________________________________________________________________________________________
 inline void ElementDescriptor::addBoolAttr( OUString const & rAttrName, sal_Bool bValue )

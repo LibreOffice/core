@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,6 +1044,30 @@ void SAL_CALL exportDialogModel(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":patternfield") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readPatternFieldModel( &all_styles );
+            }
+            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":fixed-line") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readFixedLineModel( &all_styles );
+            }
+            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":scrollbar") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readScrollBarModel( &all_styles );
+            }
+            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":progressmeter") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readProgressBarModel( &all_styles );
             }
             //
 

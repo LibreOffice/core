@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,57 @@ using namespace ::com::sun::star::uno;
 
 namespace xmlscript
 {
+
+// progessmeter
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > ProgressBarElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    return Reference< xml::XImportContext >();
+}
+//__________________________________________________________________________________________________
+void ProgressBarElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+}
+
+//##################################################################################################
+
+// scrollbar
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > ScrollBarElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    return Reference< xml::XImportContext >();
+}
+//__________________________________________________________________________________________________
+void ScrollBarElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+}
+
+//##################################################################################################
+
+// fixed-line
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > FixedLineElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    return Reference< xml::XImportContext >();
+}
+//__________________________________________________________________________________________________
+void FixedLineElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+}
+
+//##################################################################################################
 
 // patternfield
 //__________________________________________________________________________________________________
@@ -1364,6 +1415,21 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("patternfield") ))
     {
         return new PatternFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // fixed-line
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fixed-line") ))
+    {
+        return new FixedLineElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // scrollbar
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("scrollbar") ))
+    {
+        return new ScrollBarElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // progressmeter
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("progressmeter") ))
+    {
+        return new ProgressBarElement( rLocalName, xAttributes, this, _pImport );
     }
     // bulletinboard
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))

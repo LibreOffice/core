@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-12 08:07:18 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,6 +679,21 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LiteralMask") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":literal-mask") ) );
     readEvents();
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
+    SAL_THROW( (Exception) )
+{
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
+    SAL_THROW( (Exception) )
+{
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
+    SAL_THROW( (Exception) )
+{
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readDialogModel( StyleBag * all_styles )

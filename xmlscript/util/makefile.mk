@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2001-03-06 09:58:35 $
+#   last change: $Author: dbo $ $Date: 2001-05-04 09:14:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,9 @@ LIB1TARGET=	$(SLB)$/$(TARGET).lib
 
 LIB1FILES= \
         $(SLB)$/xml_helper.lib		\
-        $(SLB)$/xmldlg_imexp.lib
+        $(SLB)$/xmldlg_imexp.lib	\
+        $(SLB)$/xmllib_imexp.lib	\
+        $(SLB)$/xmlmod_imexp.lib
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
