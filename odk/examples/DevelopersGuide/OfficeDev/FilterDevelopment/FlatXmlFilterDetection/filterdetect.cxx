@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:38:53 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,20 +38,14 @@
  *
  *************************************************************************/
 
-#include <iostream.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <stdio.h>
-#ifndef _FILTERDETECT_HXX
 #include "filterdetect.hxx"
-#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
@@ -64,14 +58,12 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_XML_XIMPORTFILTER_HPP_
 #include <com/sun/star/xml/XImportFilter.hpp>
 #endif
@@ -96,24 +88,18 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLELOADER_HPP_
 #include <com/sun/star/style/XStyleLoader.hpp>
 #endif
-
-
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_DOCUMENT_XEXTENDEDFILTERDETECTION_HPP_
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNamesAccess.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #endif
@@ -122,170 +108,103 @@
 #endif
 
 
-
-
-using rtl::OUString;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Exception;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::lang::XMultiServiceFactory;
-using com::sun::star::io::XActiveDataSource;
-using com::sun::star::io::XOutputStream;
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XExporter;
-using com::sun::star::document::XFilter;
-using com::sun::star::document::XExtendedFilterDetection;
-
-using com::sun::star::io::XInputStream;
-using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::InputSource;
-using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
-using com::sun::star::task::XInteractionHandler;
-
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star;
-using namespace com::sun::star::container;
+using namespace rtl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::document;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::xml::sax;
+using namespace com::sun::star::xml;
+using namespace com::sun::star::task;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
 
 
-Reference< com::sun::star::frame::XModel > xModel;
-
-::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat  ,  const ::rtl::OString resultString, const ::rtl::OUString checkType);
-
-
-::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
+OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
+    throw( RuntimeException )
 {
-    ::rtl::OUString sTypeName = OUString::createFromAscii("");
-    ::rtl::OUString sUrl;
-    ::rtl::OUString originalTypeName;
-    Sequence<PropertyValue > lProps ;
-
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
-    ::rtl::OUString temp;
-    OSL_ENSURE( sal_False, "starting Detect" );
-    const PropertyValue * pValue = aArguments.getConstArray();
-    sal_Int32 nLength;
-    ::rtl::OString resultString;
-    sal_Int32 location=0;
-
-    nLength = aArguments.getLength();
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
+    // type name to return
+    OUString sOriginalTypeName;
+    OUString sTypeName;
+    OUString sURL;
+    // stream of the document to be detected
+    Reference< XInputStream > xInStream;
+    for ( sal_Int32 i = 0 ; i < aArguments.getLength(); i++)
     {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
-        {
-            //pValue[i].Value >>= originalTypeName;
-            location=i;
-            // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
-        }
-        else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
-        {
-
-            pValue[i].Value >>= sUrl;
-            //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sUrl,RTL_TEXTENCODING_ASCII_US).getStr() );
-        }
+        OUString aName = aArguments[i].Name;
+        if (aName.equalsAscii("TypeName" ) )
+            aArguments[i].Value >>= sOriginalTypeName;
+        if (aName.equalsAscii("URL" ) )
+            aArguments[i].Value >>= sURL;
+        if (aName.equalsAscii("InputStream" ) )
+            aArguments[i].Value >>= xInStream;
     }
-    try{
-    Reference< XSimpleFileAccess > xSFI( mxMSF->createInstance
-                ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
-        //OSL_ENSURE( sal_False, "Opening file" );
-      try
-      {
-          xInStream = xSFI->openFileRead( sUrl);
-      }
-      catch( Exception& )
-               //catch( Exception& e )
-      {
-        OSL_ENSURE( sal_False, " No InputStream" );
-            return sTypeName;
-      }
-         //OSL_ENSURE( sal_False, "file open" );
-        com::sun::star::uno::Sequence< sal_Int8 > aData;
-        if (!xInStream.is())
-        {
-        OSL_ENSURE( sal_False, " No InputStream" );
-            return sTypeName;
-        }
-       // OSL_ENSURE( sal_False, "file read" );
-        long nBytesToRead=xInStream->available();
-        xInStream->skipBytes (0);
-        long bytestRead =xInStream->readBytes (aData,  1000);
-        resultString=::rtl::OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
-        //OSL_ENSURE( sal_False, "file read finished" );
-        // test typedetect code
-        xInStream->closeInput();
-        Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString::createFromAscii("com.sun.star.document.TypeDetection")),UNO_QUERY);
-        Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
-        nLength = myTypes.getLength();
-        sal_Int32 new_nlength=0;
-        sal_Int32 i = 0 ;
-        while(  (i < nLength) && (sTypeName.equalsAscii("")))
-        {
-            Any elem = xTypeCont->getByName(myTypes[i]);
-            elem >>=lProps;
-            new_nlength = lProps.getLength();
-            sal_Int32 j =0;
 
-            while( j < new_nlength && sTypeName.equalsAscii(""))
+    if (!xInStream.is())
+    {
+        // open the stream if it was not suplied by the framework
+        Reference< XSimpleFileAccess > xSFI(mxMSF->createInstance(
+            OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+        if (sURL.getLength() > 0 && xSFI.is())
+        {
+            try
             {
-                ::rtl::OUString tmpStr =OUString::createFromAscii("");
-                lProps[j].Value >>=tmpStr;
-                //OSL_ENSURE( sal_False,::rtl::OUStringToOString(tmpStr,RTL_TEXTENCODING_ASCII_US).getStr());
-                if((lProps[j].Name.equalsAscii("ClipboardFormat")) && (!tmpStr.equalsAscii("")) )
-                {
-                    //OSL_ENSURE( sal_False, "found" );
-                    sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
-                }
-               j++;
+                xInStream = xSFI->openFileRead( sURL);
             }
-            i++;
+            catch( Exception& )
+            {
+                return sTypeName;
+            }
+        } else {
+            // failed to access UCB
+            return sTypeName;
         }
-        //end test
-    }
-    catch(Exception &)
-    {
-        OSL_ENSURE( sal_False, "An Exception occured while opening File stream" );
     }
 
-    if(sTypeName.equalsAscii(""))
+    // flatxml starts with an office:document element. this element
+    // conatains a clas="..." attribut by which we can deduct the
+    // type of document that is to be loaded
+    //
+    // WARNING:
+    // parsing the plain text of the document is an easy way to do this
+    // but not the purest solution, since namespaces and other xml details
+    // may lead to another syntactic expression of the same document.
+    // this example works for the way the office serializes it's XML stream
+    // but might need extension for other data sources...
+    static OString aDocToken("office:document");
+    static OString aClassToken("office:class=\"");
+
+    sal_Int32 nHeadSize = 4096;
+    Sequence< sal_Int8 > aHeadData(nHeadSize);
+    long bytestRead = xInStream->readBytes(aHeadData, nHeadSize);
+
+    OString aHead = OString((const sal_Char *)aHeadData.getConstArray(), bytestRead).toAsciiLowerCase();
+
+    // check for document element of flatxml format
+    if (aHead.indexOf(aDocToken) >= 0)
     {
-        //sTypeName=::rtl::OUString::createFromAscii("devguide_FlatXML_Cpp");
+        // read document class
+        sal_Int32 n = aHead.indexOf(aClassToken);
+        if (n >= 0)
+        {
+            n += aClassToken.getLength();
+            OString aClass = aHead.copy(n, aHead.indexOf('\"', n) - n);
+            // return type for class found
+            if (aClass.equals("text"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_writer");
+            else if (aClass.equals("spreadsheet"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_calc");
+            else if (aClass.equals("drawing"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_draw");
+            else if (aClass.equals("presentation"))
+                sTypeName = OUString::createFromAscii("devguide_FlatXML_Cpp_impress");
+        }
     }
-    else
-    {
-        aArguments[location].Value <<=sTypeName;
-    }
-    //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
     return sTypeName;
 }
 
-::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
-{
-    sal_Int32 i=0;
-    sal_Int32 checked =0;
-    ::rtl::OUString sTypeName= OUString::createFromAscii("");
-    if((clipBoardFormat.match(OUString::createFromAscii("doctype:"))))
-    {
-            ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
-            // OSL_ENSURE( sal_False, tryStr);
-            while((checked <=resultString.getLength())&& (sTypeName.equalsAscii("")))
-            {
-                if( resultString.match(tryStr,checked))
-                {
-                    sTypeName = checkType;
-                    break;
-                }
-                checked++;
-            }
-    }
-    return sTypeName;
-}
 
 // XInitialization
 void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
@@ -318,7 +237,7 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
 OUString FilterDetect_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.filters.FlatXMLFilterDetect" ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "devguide.officedev.samples.filter.FlatXmlDetect" ) );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
