@@ -26,7 +26,7 @@ all: ..$/misc$/deltree.txt
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME).zip >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME).tar.gz >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME).tar >& $(NULLDEV)
-    $(GNUCOPY) $(UDKPATH) .
+    $(GNUCOPY) -p $(UDKPATH) .
 .IF "$(GUI)"=="WNT"
     unzip -q -d . $(UDKNAME)
 .ELSE
