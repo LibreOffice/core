@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.107 $
+#   $Revision: 1.108 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-22 10:53:37 $
+#   last change: $Author: hjs $ $Date: 2002-03-27 16:15:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2146,36 +2146,36 @@ make_uno_doc:
 
 makedoc:
         @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
-        +idlc @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
 #		+-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
 
 .IF "$(LOCALDBTARGET)"!=""
 $(LOCALDBTARGET) : $(URDFILES)
     +-$(RM) $@
-    +regmerge $@ UCR @$(mktmp $(URDFILES))
+    +$(REGMERGE) $@ UCR @$(mktmp $(URDFILES))
 .ENDIF
 
 .IF "$(LOCALDOCDBTARGET)"!=""
 $(LOCALDOCDBTARGET) : $(URDDOCFILES)
     +-$(RM) $@
-    +regmerge $@ UCR @$(mktmp $(URDDOCFILES))
+    +$(REGMERGE) $@ UCR @$(mktmp $(URDDOCFILES))
 .ENDIF
 
 .IF "$(UNOIDLDBTARGET)"!=""
 $(UNOIDLDBTARGET) : $(UNOIDLDBFILES) $(UNOIDLDBREGS)
     +-$(RM) $@
-    +regmerge $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
+    +$(REGMERGE) $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
 .IF "$(LOCALREGDB)"!=""
-    +regmerge $(LOCALREGDB) / $@
+    +$(REGMERGE) $(LOCALREGDB) / $@
 .ENDIF
 .ENDIF			# "$(UNOIDLDBTARGET)"!=""
 
 .IF "$(UNOIDLDBDOCTARGET)"!=""
 $(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS)
     +-$(RM) $@
-    +regmerge $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
+    +$(REGMERGE) $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
 .IF "$(LOCALREGDB)"!=""
-    +regmerge $(LOCALREGDB) / $@
+    +$(REGMERGE) $(LOCALREGDB) / $@
 .ENDIF
 .ENDIF			# "$(UNOIDLDBDOCTARGET)"!=""
 
@@ -2424,7 +2424,7 @@ $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 
 $(URDTARGET) : $(DEPIDLFILES)
 .IF "$(MAXPROCESS)"<="1"
-        +idlc @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 #		+$(UNOIDL) @$(mktmp -Wb,c $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
@@ -2434,7 +2434,7 @@ $(URDTARGET) : $(DEPIDLFILES)
 $(URDDOCTARGET) : $(DEPIDLFILES)
         @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
 .IF "$(MAXPROCESS)"<="1"
-        +idlc @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
 #		+$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
@@ -2879,7 +2879,7 @@ $(MISC)$/$(TARGET).dpz : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARG
 .ENDIF
 
 $(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
         @+echo "#define" _BUILD \"$(BUILD)\"	> $@
         @+echo "#define" _UPD \"$(UPD)\"		>> $@
         @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $@

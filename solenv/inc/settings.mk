@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.102 $
+#   $Revision: 1.103 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-26 13:04:55 $
+#   last change: $Author: hjs $ $Date: 2002-03-27 16:15:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1082,8 +1082,13 @@ SVIDL=svidl.exe
 LDUMP=ldump -Gy
 .ENDIF
 .ELSE
+.IF "$(USE_SHELL)"=="4nt"
+LDUMP=ldump_w
+LDUMP2=ldump_w
+.ELSE
 LDUMP=ldump4
 LDUMP2=ldump4
+.ENDIF
 .ENDIF
 
 .IF "$(MKDEPENDALL)"!=""
@@ -1115,13 +1120,19 @@ LANGDIR=LANGDIR
 SCPLINKFLAGS=-i $(PAR),$(SOLARPARDIR)
 
 .IF "$(make_srs_deps)"!=""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 RSC=rscdep
-.ELSE
-RSC=rscdep
+.IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"!="4nt"
+RSC=rscdep_w
+.ENDIF
 .ENDIF
 .ELSE
 RSC=rsc
+.IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"!="4nt"
+RSC=rsc_w
+.ENDIF
+.ENDIF
 .ENDIF
 
 RSCUPDVER=$(UPD)$(UPDMINOR)
@@ -1203,6 +1214,9 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 .IF "$(GUI)" == "MAC"
 .INCLUDE : mac.mk
 .ENDIF
+
+IDLC*=idlc
+REGMERGE*=regmerge
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk

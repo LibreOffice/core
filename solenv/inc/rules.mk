@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-26 18:15:34 $
+#   last change: $Author: hjs $ $Date: 2002-03-27 16:16:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -652,10 +652,10 @@ $(OBJ)$/%.obj : %.asm
 .SOURCE.idl : . $(SOLARVER)$/$(INPATH)$/idl$/remote $(SOLARVER)$/$(INPATH)$/idl $(SOLARVER)$/$(INPATH)$/idl$(UPDMINOREXT)$/$(PACKAGE)
 
 $(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
-        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $< )
+        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $< )
 
 $(OUT)$/ucrdoc$/$(IDLPACKAGE)$/%.urd : %.idl
-        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $< )		
+        +$(IDLC) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $< )		
 
 .IF "$(GUI)"=="WNTtest"
 $(MISC)$/%.hid : %.src
