@@ -167,7 +167,6 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:InsertAVMedia" menu:helpid="6695" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertSpreadsheet" menu:helpid="10217" menu:label="" />
             <menu:menu menu:id=".uno:ObjectMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject" menu:helpid="5561" menu:label="" />
@@ -252,10 +251,7 @@
                 </menu:menupopup>
             </menu:menu>
 
-            <menu:menuseparator/>
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
-            <menu:menuseparator/>
-
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:helpid="10958" menu:label="" />
             <menu:menuitem menu:id=".uno:ConfigureDialog" menu:helpid="5904" menu:label="" />
             <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
