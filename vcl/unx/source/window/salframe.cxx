@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 16:26:39 $
+ *  last change: $Author: pl $ $Date: 2001-11-08 13:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1384,9 +1384,6 @@ void SalFrameData::SetSize( const Size &rSize )
         if( GetWindow() != GetShellWindow() )
             XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
 
-        if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
-            MarkWindowAsGoodPositioned( GetShellWindow() );
-
         pFrame_->maGeometry.nWidth  = rSize.Width();
         pFrame_->maGeometry.nHeight = rSize.Height();
 
@@ -1441,15 +1438,11 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     if( values.width != pFrame_->maGeometry.nWidth || values.height != pFrame_->maGeometry.nHeight )
         bSized = true;
 
-    if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
+    if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
+        && !(pDisplay_->GetProperties() & PROPERTY_SUPPORT_WM_ClientPos) )
     {
-        MarkWindowAsGoodPositioned( GetShellWindow() );
-
-        if( !(pDisplay_->GetProperties() & PROPERTY_SUPPORT_WM_ClientPos) )
-        {
-            values.x    -= pFrame_->maGeometry.nLeftDecoration;
-            values.y    -= pFrame_->maGeometry.nTopDecoration;
-        }
+        values.x    -= pFrame_->maGeometry.nLeftDecoration;
+        values.y    -= pFrame_->maGeometry.nTopDecoration;
     }
 
     if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
@@ -2832,39 +2825,27 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 
     XFree (pHints);
 
-    if( (pFrame_->maGeometry.nWidth < 1 || pFrame_->maGeometry.nHeight < 1 || WindowNeedGoodPosition( GetShellWindow() ) )
-        && pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
+    // limit width and height if we are too large: #47757
+    // olwm and fvwm need this, it doesnt harm the rest
+
+    int nScreenWidth  = pDisplay_->GetScreenSize().Width();
+    int nScreenHeight = pDisplay_->GetScreenSize().Height();
+    int nFrameWidth   = pFrame_->maGeometry.nWidth + pFrame_->maGeometry.nLeftDecoration + pFrame_->maGeometry.nRightDecoration;
+    int nFrameHeight  = pFrame_->maGeometry.nHeight + pFrame_->maGeometry.nTopDecoration  + pFrame_->maGeometry.nBottomDecoration;
+
+    if ((nFrameWidth > nScreenWidth) || (nFrameHeight > nScreenHeight))
     {
-        nShowState_ = SHOWSTATE_NORMAL;
-        Maximize();
-        aRestoreFullScreen_ =
-            Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ),
-                       Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) );
+        Size aSize(pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight);
+
+        if (nFrameWidth  > nScreenWidth)
+            aSize.Width()  = nScreenWidth  - pFrame_->maGeometry.nRightDecoration - pFrame_->maGeometry.nLeftDecoration;
+        if (nFrameHeight > nScreenHeight)
+            aSize.Height() = nScreenHeight - pFrame_->maGeometry.nBottomDecoration - pFrame_->maGeometry.nTopDecoration;
+
+        SetSize (aSize);
     }
-    else
-    {
-        // limit width and height if we are too large: #47757
-        // olwm and fvwm need this, it doesnt harm the rest
-
-        int nScreenWidth  = pDisplay_->GetScreenSize().Width();
-        int nScreenHeight = pDisplay_->GetScreenSize().Height();
-        int nFrameWidth   = pFrame_->maGeometry.nWidth + pFrame_->maGeometry.nLeftDecoration + pFrame_->maGeometry.nRightDecoration;
-        int nFrameHeight  = pFrame_->maGeometry.nHeight + pFrame_->maGeometry.nTopDecoration  + pFrame_->maGeometry.nBottomDecoration;
-
-        if ((nFrameWidth > nScreenWidth) || (nFrameHeight > nScreenHeight))
-        {
-            Size aSize(pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight);
-
-            if (nFrameWidth  > nScreenWidth)
-                aSize.Width()  = nScreenWidth  - pFrame_->maGeometry.nRightDecoration - pFrame_->maGeometry.nLeftDecoration;
-            if (nFrameHeight > nScreenHeight)
-                aSize.Height() = nScreenHeight - pFrame_->maGeometry.nBottomDecoration - pFrame_->maGeometry.nTopDecoration;
-
-            SetSize (aSize);
-        }
-        else if( bResized )
-            Call( SALEVENT_RESIZE, NULL );
-    }
+    else if( bResized )
+        Call( SALEVENT_RESIZE, NULL );
 
     return 1;
 }

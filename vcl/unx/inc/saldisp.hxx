@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2001-11-08 13:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,14 +525,6 @@ inline int SalColormap::GetClass() const
 /*----------------------------------------------------------
  keep track of correct size of the initial window
  */
-extern "C" {
-
-void    MarkWindowAsBadPositioned  ( unsigned int nWindow );
-void    MarkWindowAsGoodPositioned ( unsigned int nWindow );
-sal_Bool WindowNeedGoodPosition     ( unsigned int nWindow );
-
-} /* extern "C" */
-
 // get foreign key names
 namespace vcl_sal {
     String getKeysymReplacementName(

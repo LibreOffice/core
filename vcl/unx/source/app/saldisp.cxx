@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2001-11-08 13:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,34 +1249,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     aConvert = GetKeyNameFromKeySym( XK_Alt_R );
     fprintf( stderr, "AltGr: %s\n", aConvert.Len() ? ByteString( aConvert, gsl_getSystemTextEncoding() ).GetBuffer() : "<nil>" );
 #endif
-}
-
-/*----------------------------
- keep track of windows that are sized in ::Init but repositioned
- by the window-mgr. If they are not resized by SalFrame::Set[Pos]Size
- then SalFrameData::HandleReparentEvent takes a look at it, to prevent it
- from beeing moved outside the screen
- ------------------------------*/
-
-static unsigned int nRefWindow = 0;
-
-void
-MarkWindowAsBadPositioned( unsigned int nWindow )
-{
-    nRefWindow = nWindow;
-}
-
-void
-MarkWindowAsGoodPositioned( unsigned int nWindow )
-{
-    if ( nRefWindow == nWindow )
-        nRefWindow = 0;
-}
-
-sal_Bool
-WindowNeedGoodPosition( unsigned int nWindow )
-{
-    return (sal_Bool) nWindow == nRefWindow;
 }
 
 // Sound
