@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:39:54 $
+ *  last change: $Author: sab $ $Date: 2001-10-04 15:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #endif
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 // STL includes
@@ -305,9 +309,16 @@ void SvXMLImportPropertyMapper::importXML(
                         xAttrContainer = xNew;
 
                         // find map entry and create new property state
-                        nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                        if( nIndex == -1 )
-                            nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        sal_Int32 nTextIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        sal_Int32 nUserIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        if ((nTextIndex > -1) && (nUserIndex > -1))
+                            nIndex = (nTextIndex < nUserIndex) ? nTextIndex : nUserIndex;
+                        else if (nTextIndex > -1)
+                            nIndex = nTextIndex;
+                        else if (nUserIndex > -1)
+                            nIndex = nUserIndex;
+                        else
+                            DBG_ERROR("not able to store alien attribute");
 
                         Any aAny;
                         aAny <<= xAttrContainer;
