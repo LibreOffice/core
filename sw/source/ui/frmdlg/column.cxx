@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ma $ $Date: 2001-04-12 15:37:15 $
+ *  last change: $Author: os $ $Date: 2001-04-22 15:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,11 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
 
         const SwFrmFmt &rFmt = pPageDesc->GetMaster();
         nPageWidth = rFmt.GetFrmSize().GetSize().Width();
+
+        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rFmt.GetLRSpace();
+        const SvxBoxItem& rBox = (const SvxBoxItem&) rFmt.GetBox();
+        nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetDistance();
+
         pPageSet->Put(rFmt.GetCol());
         pPageSet->Put(rFmt.GetLRSpace());
         pColPgSet = pPageSet;
