@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:08:22 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
-#endif
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
 #endif
@@ -88,6 +85,8 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+
+#include <sot/exchange.hxx>
 
 #ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
@@ -213,7 +212,7 @@ BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
             SvInPlaceObject* pObj = pIPClient->GetIPObj();
             SvGlobalName aObjClsId( *pObj->GetSvFactory() );
             SchMemChart* pMemChart;
-            if( SchModuleDummy::HasID( aObjClsId ) &&
+            if( SotExchange::IsChart( aObjClsId ) &&
                 0 != (pMemChart = SchDLL::GetChartData( pObj ) ))
             {
                 pMemChart->SetSelectionHdl( Link() );
