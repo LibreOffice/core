@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cretstrm.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:53:42 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,10 @@ void CRetStream::Read ( String &aString )
 void CRetStream::Read( SbxValue &aValue )
 {
     *pSammel >> nId;
-    if (nId != BinSbxValue) DBG_ERROR1( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
+    if (nId != BinSbxValue)
+    {
+        DBG_ERROR1( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
+    }
     SbxBaseRef xBase = SbxBase::Load( *pSammel );
     if ( IS_TYPE( SbxValue, xBase ) )
         aValue = *PTR_CAST( SbxValue, &xBase );
