@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:14 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ struct SdXMLDataStyleNumber
     { XML_AM_PM,        sal_False,      sal_False,      sal_False,      NULL },
     { XML_SECONDS,      sal_False,      sal_False,      sal_False,      NULL },
     { XML_SECONDS,      sal_False,      sal_False,      sal_True,       NULL },
-    { XML_TOKEN_INVALID, NULL }
+    { XML_TOKEN_INVALID,        0,              0,             0,       NULL  }
 };
 
 // date
