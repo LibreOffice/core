@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:57:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "¤£¶¡Â_(~C)";
         Text[ arabic ] = "æÑŞ ÛíÑ ãÊŞØÚ";
         Text[ greek ] = "Óõíå÷Şò";
-        Text[ korean ] = "°è¼Ó";
+        Text[ korean ] = "°è¼Ó(~C)";
         Text[ turkish ] = "Sonsuz form";
         Text[ language_user1 ] = " ";
     };
@@ -539,7 +539,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "¯È±i(~S)";
         Text[ arabic ] = "İÑÎ æÑŞ";
         Text[ greek ] = "~ÖÜêåëïò";
-        Text[ korean ] = "½ÃÆ®";
+        Text[ korean ] = "½ÃÆ®(~S)";
         Text[ turkish ] = "Föy";
         Text[ language_user1 ] = " ";
     };
@@ -605,7 +605,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "~Ôığïò";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "À¯Çü(~T)";
         Text[ turkish ] = "Tipi";
         Text[ language_user1 ] = " ";
     };
@@ -950,8 +950,8 @@ TabPage TP_PRIVATE_DATA
         Text[ portuguese_brazilian ] = "First/Last ~name 2";
         Text[ japanese ] = "©/–¼/²Æ¼¬Ù 2i~Nj";
         Text[ korean ] = "ÀÌ¸§/¼º/¸Ó¸®±ÛÀÚ 2(~N)";
-        Text[ chinese_simplified ] = "Ãû×Ö/ĞÕÊÏ/ËõĞ´ 2";
-        Text[ chinese_traditional ] = "¦W¦r/©m¤ó/ÁY¼g 2";
+        Text[ chinese_simplified ] = "Ãû×Ö/ĞÕÊÏ/ËõĞ´ 2(~N)";
+        Text[ chinese_traditional ] = "¦W¦r/©m¤ó/ÁY¼g 2(~N)";
         Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ 2";
         Text[ turkish ] = "Ad/Soyad/Başharfler 2";
     };
@@ -1580,10 +1580,10 @@ TabPage TP_BUSINESS_DATA
         Text[ swedish ] = "He~msida / e-post";
         Text[ polish ] = "Strona macierzysta/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / eMail";
-        Text[ japanese ] = "Î°ÑÍß°¼Ş/E-mail";
-        Text[ korean ] = "È¨ÆäÀÌÁö /E-Mail";
-        Text[ chinese_simplified ] = "Ö÷Ò³/µç×ÓÓÊ¼ş";
-        Text[ chinese_traditional ] = "­º­¶/¹q¤l¶l¥ó";
+        Text[ japanese ] = "Î°ÑÍß°¼Ş/E-~mail";
+        Text[ korean ] = "È¨ÆäÀÌÁö /E-~Mail";
+        Text[ chinese_simplified ] = "Ö÷Ò³/µç×ÓÓÊ¼ş(~M)";
+        Text[ chinese_traditional ] = "­º­¶/¹q¤l¶l¥ó(~M)";
         Text[ arabic ] = "ãæŞÚ ÇáÅäÊÑäÊ / ÇáÈÑíÏ ÇáÅáßÊÑæäí";
         Text[ turkish ] = "Web sayfası  / E-posta";
         Text[ language_user1 ] = " ";
