@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:05:57 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Setup" oor:package="org.openoffice" xml:lang="en-US">
-	<info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Setup" oor:package="org.openoffice" xml:lang="en-US"> <info>
 		<author>DG</author>
 		<desc xml:lang="en-US">Contains Setup preferences, such as the installed UI locales or the available modules.</desc>
 	</info>
@@ -945,17 +944,14 @@
 			<prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean" oor:nillable="false">
 				<info>
 					<author>JB</author>
-					<desc xml:lang="en-US">Indicates that user settings should be imported, 
-						if the backend does not yet contain data for this user. 
-						This only takes effect, if the source of the import is configured locally.
-					</desc>
+					<desc xml:lang="en-US">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="el">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="nl">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="fr">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="fi">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="cs">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="da">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
-						<desc xml:lang="zh-CN">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
+						<desc xml:lang="zh-CN">决定如果备件不包含该用户的数据，则输入用户自订的设定。只有当输入的数据属于本机的配置时，此设定才会生效。</desc>
 						<desc xml:lang="zh-TW">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="ar">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="he">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
@@ -969,10 +965,11 @@
 						<desc xml:lang="sv">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="pl">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="pt-BR">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
-						<desc xml:lang="ja">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
+						<desc xml:lang="ja">終端にこのユーザーのデータが含まれていない場合、ユーザー設定がインポートされることを示します。これは、インポート元がローカルで設定されている場合にのみ有効です。</desc>
 						<desc xml:lang="ko">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="tr">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="th">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
+						<desc xml:lang="x-comment">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 					<label xml:lang="en-US">Transfer User Settings Once on First Start</label>
 					<label xml:lang="el">Transfer User Settings Once on First Start</label>
 					<label xml:lang="nl">Transfer User Settings Once on First Start</label>
@@ -980,7 +977,7 @@
 					<label xml:lang="fi">Transfer User Settings Once on First Start</label>
 					<label xml:lang="cs">Transfer User Settings Once on First Start</label>
 					<label xml:lang="da">Transfer User Settings Once on First Start</label>
-					<label xml:lang="zh-CN">Transfer User Settings Once on First Start</label>
+					<label xml:lang="zh-CN">当第一次启动时传递用户设定</label>
 					<label xml:lang="zh-TW">Transfer User Settings Once on First Start</label>
 					<label xml:lang="ar">Transfer User Settings Once on First Start</label>
 					<label xml:lang="he">Transfer User Settings Once on First Start</label>
@@ -994,15 +991,17 @@
 					<label xml:lang="sv">Transfer User Settings Once on First Start</label>
 					<label xml:lang="pl">Transfer User Settings Once on First Start</label>
 					<label xml:lang="pt-BR">Transfer User Settings Once on First Start</label>
-					<label xml:lang="ja">Transfer User Settings Once on First Start</label>
+					<label xml:lang="ja">最初の起動時に 1 度だけユーザー設定を転送します。</label>
 					<label xml:lang="ko">Transfer User Settings Once on First Start</label>
 					<label xml:lang="tr">Transfer User Settings Once on First Start</label>
 					<label xml:lang="th">Transfer User Settings Once on First Start</label>
+					<label xml:lang="x-comment">Transfer User Settings Once on First Start</label>
 				</info>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
