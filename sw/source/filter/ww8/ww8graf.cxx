@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-03 17:21:04 $
+ *  last change: $Author: cmc $ $Date: 2001-04-05 14:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2335,6 +2335,27 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             SwRelationOrient eHoriRel;
             eHoriRel = aRelOriTab[  nXRelTo ];
 
+            /*
+            ##640##
+            If we are inside another frame we have to adjust our x and y
+            offsets correspondingly by the offsets of the parent
+            */
+            const SwFrmFmt *pFmt = pPaM->GetCntntNode()->GetFrmFmt();
+            if (pFmt)
+            {
+                const SvxBoxItem &rParentBox = pFmt->GetBox();
+                rFSPA.nYaTop -= rParentBox.GetDistance();
+
+                if (eHoriRel == FRAME)
+                {
+                    const SwFmtHoriOrient &rParentHori = pFmt->GetHoriOrient();
+                    rFSPA.nXaLeft += rParentHori.GetPos();
+                    rFSPA.nXaLeft += rParentBox.GetDistance();
+                    if (rParentHori.GetRelationOrient() == REL_PG_FRAME)
+                        rFSPA.nXaLeft -= nPgLeft;
+                }
+            }
+
             SwFmtHoriOrient aHoriOri( pFSPA->nXaLeft, eHoriOri, eHoriRel );
             if( 4 <= nXAlign )
                 aHoriOri.SetPosToggle( TRUE );
@@ -3135,11 +3156,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.18 2001-04-03 17:21:04 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.19 2001-04-05 14:03:48 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/04/03 17:21:04  cmc
+      ##505## Test for special case of textbox that contains only another textbox whose size is greater than container so as to disable autogrow
+
       Revision 1.17  2001/03/30 11:21:05  cmc
       ##575## Convert WW6/95 TextBox to FlyFrame when we are in a header/footer
 
