@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 11:25:03 $
+ *  last change: $Author: os $ $Date: 2002-10-24 10:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,15 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
         for ( ULONG i = nCount - 1; i > m_nCurPos; i-- )
             delete m_pHistory->Remove(i);
     }
+    Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
+    Reference<XController> xController = xFrame.is() ? xFrame->getController() : 0;
+    Any aViewData;
+    if(xController.is() && m_pHistory->Count())
+    {
+        m_pHistory->GetObject(m_nCurPos)->aViewData = xController->getViewData();
+    }
 
     m_aCurrentURL = rURL;
-
     m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), LIST_APPEND );
     m_nCurPos = m_pHistory->Count() - 1;
 
@@ -162,21 +168,17 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
 
 void HelpInterceptor_Impl::LeavePage()
 {
-    if( m_pHistory )
+    if( m_pHistory && m_pHistory->Count() > m_nCurPos)
     {
         // get view position of _current_ URL
         HelpHistoryEntry_Impl* pCurEntry = m_pHistory->GetObject( m_nCurPos );
-
-        if( pCurEntry )
+        try
         {
-            try
-            {
-                Reference< XController > xContr( getController() );
-                if( xContr.is() )
-                    pCurEntry->aViewData = xContr->getViewData();
-            }
-            catch( const Exception& ) {}
+            Reference< XController > xContr( getController() );
+            if( xContr.is() )
+                pCurEntry->aViewData = xContr->getViewData();
         }
+        catch( const Exception& ) {}
     }
 }
 
@@ -333,7 +335,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     {
         if ( m_pHistory )
         {
-            LeavePage();        // save actual position
+            LeavePage();       // save current position
 
             ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                                     : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
@@ -350,20 +352,21 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                     Reference < XDispatch > xDisp = m_xSlaveDispatcher->queryDispatch( aURL, String(), 0 );
                     if ( xDisp.is() )
                     {
-                        if ( m_pWindow && !m_pWindow->IsWait() )
-                            m_pWindow->EnterWait();
-
+                        if ( m_pOpenListener && m_pWindow )
+                        {
+                            if ( !m_pWindow->IsWait() )
+                                m_pWindow->EnterWait();
+                        }
                         m_aCurrentURL = aURL.Complete;
-                        Sequence< PropertyValue > aPropSeq( 1 );
-                        aPropSeq[ 0 ].Name = ::rtl::OUString::createFromAscii( "ViewData" );
-                        aPropSeq[ 0 ].Value = pEntry->aViewData;
+                        m_aViewData = pEntry->aViewData;
+
                         Reference < XNotifyingDispatch > xNotifyingDisp( xDisp, UNO_QUERY );
                         if ( xNotifyingDisp.is() )
                         {
                             OpenStatusListener_Impl* pListener = (OpenStatusListener_Impl*)m_pWindow->getOpenListener().get();
                             DBG_ASSERT( pListener, "invalid XDispatchResultListener" );
                             pListener->SetURL( aURL.Complete );
-                            xNotifyingDisp->dispatchWithNotification( aURL, aPropSeq, pListener );
+                            xNotifyingDisp->dispatchWithNotification( aURL, Sequence < PropertyValue >(), pListener );
                         }
                     }
                 }

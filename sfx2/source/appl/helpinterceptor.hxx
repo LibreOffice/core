@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 11:25:01 $
+ *  last change: $Author: os $ $Date: 2002-10-24 10:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ struct HelpHistoryEntry_Impl
     ::com::sun::star::uno::Any  aViewData;
 
     HelpHistoryEntry_Impl( const String& rURL ) : aURL( rURL ) {}
-    HelpHistoryEntry_Impl( const String& rURL, const ::com::sun::star::uno::Any& rViewData ) : aURL( rURL ), aViewData( rViewData ) {}
+    HelpHistoryEntry_Impl( const String& rURL, const com::sun::star::uno::Any& rViewData ) :
+        aURL( rURL ), aViewData(rViewData) {}
 };
 
 DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*);
@@ -139,6 +140,7 @@ friend class HelpDispatch_Impl;
     SfxHelpWindow_Impl*         m_pWindow;
     ULONG                       m_nCurPos;
     String                      m_aCurrentURL;
+    com::sun::star::uno::Any    m_aViewData;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 getController() const throw( ::com::sun::star::uno::RuntimeException );
@@ -151,6 +153,10 @@ public:
     void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
     void                    SetStartURL( const String& rURL );
     String                  GetCurrentURL() const { return m_aCurrentURL; }
+
+
+
+    const com::sun::star::uno::Any&     GetViewData()const {return m_aViewData;}
 
     sal_Bool                HasHistoryPred() const;     // is there a predecessor for the current in the history
     sal_Bool                HasHistorySucc() const;     // is there a successor for the current in the history
