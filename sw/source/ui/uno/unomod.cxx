@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-26 16:03:59 $
+ *  last change: $Author: mtg $ $Date: 2001-07-26 17:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _COMPHELPER_CHAINABLEPROPERTYSETINFO_HXX_
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #endif
+#ifndef _PVPRTDAT_HXX
+#include <pvprtdat.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -182,7 +185,16 @@ enum SwPrintSettingsPropertyHandles
     HANDLE_PRINTSET_FAX_NAME,
     HANDLE_PRINTSET_PAPER_FROM_SETUP,
     HANDLE_PRINTSET_TABLES,
-    HANDLE_PRINTSET_SINGLE_JOBS
+    HANDLE_PRINTSET_SINGLE_JOBS,
+    HANDLE_PRINTSET_PREVIEW_LEFT_MARGIN,
+    HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN,
+    HANDLE_PRINTSET_PREVIEW_TOP_MARGIN,
+    HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN,
+    HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING,
+    HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING,
+    HANDLE_PRINTSET_PREVIEW_NUM_ROWS,
+    HANDLE_PRINTSET_PREVIEW_NUM_COLUMNS,
+    HANDLE_PRINTSET_PREVIEW_LANDSCAPE
 };
 
 ChainablePropertySetInfo * lcl_createViewSettingsInfo()
@@ -238,6 +250,15 @@ ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP   , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintTables" ),          HANDLE_PRINTSET_TABLES             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" ),      HANDLE_PRINTSET_SINGLE_JOBS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintLeftMargin" ),  HANDLE_PRINTSET_PREVIEW_LEFT_MARGIN,    CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintRightMargin" ), HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN,   CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintTopMargin" ),   HANDLE_PRINTSET_PREVIEW_TOP_MARGIN,     CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintBottomMargin" ),HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN,  CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintHorizontalSpacing" ),HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING,    CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintVerticalSpacing" ), HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING,   CPPUTYPE_INT32, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintNumRows" ), HANDLE_PRINTSET_PREVIEW_NUM_ROWS,           CPPUTYPE_INT8, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintNumColumns" ),  HANDLE_PRINTSET_PREVIEW_NUM_COLUMNS,    CPPUTYPE_INT8, PropertyAttribute::MAYBEVOID, 0 },
+        { RTL_CONSTASCII_STRINGPARAM ( "PreviewPrintLandscape" ),   HANDLE_PRINTSET_PREVIEW_LANDSCAPE,      CPPUTYPE_BOOLEAN, PropertyAttribute::MAYBEVOID, 0 },
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
     };
     return new ChainablePropertySetInfo ( aPrintSettingsMap_Impl );
@@ -311,7 +332,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     {
         ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
         DBG_ERROR("Web oder Text?")
-        *pxPrintSettings = new SwXPrintSettings(sal_False);
+        *pxPrintSettings = new SwXPrintSettings(sal_False, SW_MOD()->GetView()->GetDocShell()->GetDoc());
     }
     return *pxPrintSettings;
 }
@@ -350,10 +371,12 @@ Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeExc
 /*-- 17.12.98 12:54:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXPrintSettings::SwXPrintSettings(sal_Bool bWebView)
+SwXPrintSettings::SwXPrintSettings(sal_Bool bWebView, SwDoc *pDoc)
 : ChainablePropertySet ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
-, bWeb(bWebView)
-, pPrtOpt ( NULL )
+, mbWeb(bWebView)
+, mbPreviewDataChanged( sal_False )
+, mpDoc( pDoc)
+, mpPrtOpt ( NULL )
 {
 }
 /*-- 17.12.98 12:54:05---------------------------------------------------
@@ -389,7 +412,21 @@ void SwXPrintSettings::release ()
 void SwXPrintSettings::_preSetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
+    mpPrtOpt = SW_MOD()->GetPrtOptions(mbWeb);
+    const SwPagePreViewPrtData *pConstPrtData = mpDoc->GetPreViewPrtData();
+    mpPreViewData = new SwPagePreViewPrtData;
+    if ( pConstPrtData )
+    {
+        mpPreViewData->SetLeftSpace     ( pConstPrtData->GetLeftSpace() );
+        mpPreViewData->SetRightSpace    ( pConstPrtData->GetRightSpace() );
+        mpPreViewData->SetTopSpace      ( pConstPrtData->GetTopSpace() );
+        mpPreViewData->SetBottomSpace   ( pConstPrtData->GetBottomSpace() );
+        mpPreViewData->SetHorzSpace     ( pConstPrtData->GetHorzSpace() );
+        mpPreViewData->SetVertSpace     ( pConstPrtData->GetVertSpace() );
+        mpPreViewData->SetRow           ( pConstPrtData->GetRow() );
+        mpPreViewData->SetCol           ( pConstPrtData->GetCol() );
+        mpPreViewData->SetLandscape     ( pConstPrtData->GetLandscape() );
+    }
 }
 
 void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
@@ -402,24 +439,84 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
 
     switch( rInfo.mnHandle )
     {
-        case HANDLE_PRINTSET_LEFT_PAGES     : pPrtOpt->SetPrintLeftPage(bVal);      break;
-        case HANDLE_PRINTSET_RIGHT_PAGES    : pPrtOpt->SetPrintRightPage(bVal);     break;
-        case HANDLE_PRINTSET_REVERSED       : pPrtOpt->SetPrintReverse(bVal);       break;
-        case HANDLE_PRINTSET_PROSPECT       : pPrtOpt->SetPrintProspect(bVal);      break;
-        case HANDLE_PRINTSET_GRAPHICS       : pPrtOpt->SetPrintGraphic(bVal);       break;
-        case HANDLE_PRINTSET_TABLES         : pPrtOpt->SetPrintTable(bVal);         break;
-        case HANDLE_PRINTSET_DRAWINGS       : pPrtOpt->SetPrintDraw(bVal);          break;
-        case HANDLE_PRINTSET_CONTROLS       : pPrtOpt->SetPrintControl(bVal);       break;
-        case HANDLE_PRINTSET_PAGE_BACKGROUND: pPrtOpt->SetPrintPageBackground(bVal);break;
-        case HANDLE_PRINTSET_BLACK_FONTS    : pPrtOpt->SetPrintBlackFont(bVal);     break;
-        case HANDLE_PRINTSET_SINGLE_JOBS    : pPrtOpt->SetPrintSingleJobs(bVal);    break;
-        case HANDLE_PRINTSET_PAPER_FROM_SETUP: pPrtOpt->SetPaperFromSetup(bVal);    break;
+        case HANDLE_PRINTSET_LEFT_PAGES:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintLeftPage(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_RIGHT_PAGES:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintRightPage(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_REVERSED:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintReverse(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_PROSPECT:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintProspect(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_GRAPHICS:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintGraphic(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_TABLES:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintTable(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_DRAWINGS:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintDraw(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_CONTROLS:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintControl(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_PAGE_BACKGROUND:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintPageBackground(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_BLACK_FONTS:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintBlackFont(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_SINGLE_JOBS:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintSingleJobs(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_PAPER_FROM_SETUP:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPaperFromSetup(bVal);
+        }
+        break;
         case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
             sal_Int16 nVal;
             rValue >>= nVal;
             if(nVal <= text::NotePrintMode_PAGE_END)
-                pPrtOpt->SetPrintPostIts(nVal);
+                mpPrtOpt->SetPrintPostIts(nVal);
             else
                 throw lang::IllegalArgumentException();
         }
@@ -428,9 +525,113 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         {
             OUString sString;
             if ( rValue >>= sString)
-                pPrtOpt->SetFaxName(sString);
+                mpPrtOpt->SetFaxName(sString);
             else
                 throw lang::IllegalArgumentException();
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_LEFT_MARGIN:
+        {
+            sal_Int32 nVal;
+            rValue >>= nVal;
+            nVal = MM100_TO_TWIP( nVal );
+            if ( nVal != static_cast < sal_Int32 > (mpPreViewData->GetLeftSpace() ) )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetLeftSpace( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN:
+        {
+            sal_Int32 nVal;
+            rValue >>= nVal;
+            nVal = MM100_TO_TWIP( nVal );
+            if ( nVal != static_cast < sal_Int32 > (mpPreViewData->GetRightSpace() ) )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetRightSpace( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_TOP_MARGIN:
+        {
+            sal_Int32 nVal;
+            rValue >>= nVal;
+            nVal = MM100_TO_TWIP( nVal );
+            if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetTopSpace() ) )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetTopSpace( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN:
+        {
+            sal_Int32 nVal;
+            rValue >>= nVal;
+            nVal = MM100_TO_TWIP( nVal );
+            if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetBottomSpace() ) )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetBottomSpace( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING:
+        {
+            sal_Int32 nVal;
+            rValue >>= nVal;
+            nVal = MM100_TO_TWIP( nVal );
+            if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetHorzSpace() ) )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetHorzSpace( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING:
+        {
+            sal_Int32 nVal;
+            rValue >>= nVal;
+            nVal = MM100_TO_TWIP( nVal );
+            if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetVertSpace() ) )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetVertSpace( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_NUM_ROWS:
+        {
+            sal_Int8 nVal;
+            rValue >>= nVal;
+            if ( nVal != mpPreViewData->GetRow() )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetRow( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_NUM_COLUMNS:
+        {
+            sal_Int8 nVal;
+            rValue >>= nVal;
+            if ( nVal != mpPreViewData->GetCol() )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetCol( nVal );
+            }
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_LANDSCAPE:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            if ( bVal != mpPreViewData->GetLandscape() )
+            {
+                mbPreviewDataChanged = sal_True;
+                mpPreViewData->SetLandscape ( bVal );
+            }
         }
         break;
         default:
@@ -440,13 +641,22 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
 void SwXPrintSettings::_postSetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    pPrtOpt = NULL;
+    mpPrtOpt = NULL;
+    if ( mbPreviewDataChanged )
+    {
+        mpDoc->SetPreViewPrtData ( mpPreViewData );
+        mbPreviewDataChanged = sal_False;
+    }
+    delete mpPreViewData;
+    mpPreViewData = NULL;
 }
 
 void SwXPrintSettings::_preGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
+    mpPrtOpt = SW_MOD()->GetPrtOptions(mbWeb);
+    if (mpDoc)
+        mpConstPreViewData = mpDoc->GetPreViewPrtData();
 }
 void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
@@ -455,28 +665,92 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
     sal_Bool bBoolVal;
     switch( rInfo.mnHandle )
     {
-        case HANDLE_PRINTSET_LEFT_PAGES     : bBoolVal = pPrtOpt->IsPrintLeftPage();        break;
-        case HANDLE_PRINTSET_RIGHT_PAGES    : bBoolVal = pPrtOpt->IsPrintRightPage();   break;
-        case HANDLE_PRINTSET_REVERSED       : bBoolVal = pPrtOpt->IsPrintReverse();     break;
-        case HANDLE_PRINTSET_PROSPECT       : bBoolVal = bBoolVal = pPrtOpt->IsPrintProspect();  break;
-        case HANDLE_PRINTSET_GRAPHICS       : bBoolVal = pPrtOpt->IsPrintGraphic();  break;
-        case HANDLE_PRINTSET_TABLES         : bBoolVal = pPrtOpt->IsPrintTable();  break;
-        case HANDLE_PRINTSET_DRAWINGS       : bBoolVal = pPrtOpt->IsPrintDraw();  break;
-        case HANDLE_PRINTSET_CONTROLS       : bBoolVal = pPrtOpt->IsPrintControl();  break;
-        case HANDLE_PRINTSET_PAGE_BACKGROUND: bBoolVal = pPrtOpt->IsPrintPageBackground();  break;
-        case HANDLE_PRINTSET_BLACK_FONTS    : bBoolVal = pPrtOpt->IsPrintBlackFont();  break;
-        case HANDLE_PRINTSET_SINGLE_JOBS    : bBoolVal = pPrtOpt->IsPrintSingleJobs();  break;
-        case HANDLE_PRINTSET_PAPER_FROM_SETUP: bBoolVal = pPrtOpt->IsPaperFromSetup();  break;
+        case HANDLE_PRINTSET_LEFT_PAGES     : bBoolVal = mpPrtOpt->IsPrintLeftPage();       break;
+        case HANDLE_PRINTSET_RIGHT_PAGES    : bBoolVal = mpPrtOpt->IsPrintRightPage();  break;
+        case HANDLE_PRINTSET_REVERSED       : bBoolVal = mpPrtOpt->IsPrintReverse();        break;
+        case HANDLE_PRINTSET_PROSPECT       : bBoolVal = bBoolVal = mpPrtOpt->IsPrintProspect();
+        case HANDLE_PRINTSET_GRAPHICS       : bBoolVal = mpPrtOpt->IsPrintGraphic();
+        case HANDLE_PRINTSET_TABLES         : bBoolVal = mpPrtOpt->IsPrintTable();
+        case HANDLE_PRINTSET_DRAWINGS       : bBoolVal = mpPrtOpt->IsPrintDraw();
+        case HANDLE_PRINTSET_CONTROLS       : bBoolVal = mpPrtOpt->IsPrintControl();
+        case HANDLE_PRINTSET_PAGE_BACKGROUND: bBoolVal = mpPrtOpt->IsPrintPageBackground();
+        case HANDLE_PRINTSET_BLACK_FONTS    : bBoolVal = mpPrtOpt->IsPrintBlackFont();
+        case HANDLE_PRINTSET_SINGLE_JOBS    : bBoolVal = mpPrtOpt->IsPrintSingleJobs();
+        case HANDLE_PRINTSET_PAPER_FROM_SETUP: bBoolVal = mpPrtOpt->IsPaperFromSetup();
         case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
             bBool = FALSE;
-            rValue <<= static_cast < sal_Int16 > ( pPrtOpt->GetPrintPostIts() );
+            rValue <<= static_cast < sal_Int16 > ( mpPrtOpt->GetPrintPostIts() );
         }
         break;
         case HANDLE_PRINTSET_FAX_NAME :
         {
             bBool = FALSE;
-            rValue <<= pPrtOpt->GetFaxName();
+            rValue <<= mpPrtOpt->GetFaxName();
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_LEFT_MARGIN:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetLeftSpace() ) );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetRightSpace() ) );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_TOP_MARGIN:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetTopSpace() ) );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetBottomSpace() ) );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetHorzSpace() ) );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetVertSpace() ) );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_NUM_ROWS:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int8 > ( mpConstPreViewData->GetRow() );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_NUM_COLUMNS:
+        {
+            bBool = FALSE;
+            if ( mpConstPreViewData )
+                rValue <<= static_cast < sal_Int8 > ( mpConstPreViewData->GetCol() );
+        }
+        break;
+        case HANDLE_PRINTSET_PREVIEW_LANDSCAPE:
+        {
+            if (mpConstPreViewData)
+                bBoolVal = mpConstPreViewData->GetLandscape();
+            else
+                bBool = FALSE;
         }
         break;
         default:
@@ -488,7 +762,8 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
 void SwXPrintSettings::_postGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    pPrtOpt = NULL;
+    mpPrtOpt = NULL;
+    mpConstPreViewData = NULL;
 }
 /* -----------------------------06.04.00 11:02--------------------------------
 
