@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jbu $ $Date: 2001-11-29 16:04:45 $
+ *  last change: $Author: tbe $ $Date: 2001-12-07 14:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,20 +160,21 @@ public:
 
 void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
 {
-
     Font aOldFont( rDev.GetFont() );
     Font aFont( aOldFont );
-    DBG_ASSERT( pEntry && pEntry->GetUserData(), "BasicLibLBoxString::Paint: Entry or UserData invalid!" );
 
     // change text color, if library is readonly
-    SfxObjectShell* pShell = ((BasicLibUserData*)pEntry->GetUserData())->GetShell();
-    ::rtl::OUString aOULibName( ((SvLBoxString*)pEntry->GetItem(1))->GetText() );
-    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-    Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+    if ( pEntry && pEntry->GetUserData() )
     {
-        aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
+        SfxObjectShell* pShell = ((BasicLibUserData*)pEntry->GetUserData())->GetShell();
+        ::rtl::OUString aOULibName( ((SvLBoxString*)pEntry->GetItem(1))->GetText() );
+        Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+        Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+        if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+             ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+        {
+            aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
+        }
     }
 
     rDev.SetFont( aFont );
