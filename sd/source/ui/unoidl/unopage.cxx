@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 07:53:54 $
+ *  last change: $Author: cl $ $Date: 2001-08-13 16:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1605,13 +1605,34 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
 
     DBG_ASSERT( GetPage() && !GetPage()->IsMasterPage(), "Don't call base implementation for masterpages!" );
 
+    OUString aName( rName );
+
     if(GetPage() && GetPage()->GetPageKind() != PK_NOTES)
     {
-        OUString aName( rName );
-
+        // check if this is the default 'page1234' name
         if(aName.compareToAscii( sEmptyPageName, sizeof( sEmptyPageName ) - 1 ) == 0)
         {
-            sal_Int32 nPageNumber = aName.copy( sizeof( sEmptyPageName ) - 1 ).toInt32();
+            // ok, it maybe is, first get the number part after 'page'
+            OUString aNumber( aName.copy( sizeof( sEmptyPageName ) - 1 ) );
+
+            // create the page number
+            sal_Int32 nPageNumber = aNumber.toInt32();
+
+            // check if there are non number characters in the number part
+            const sal_Int32 nChars = aNumber.getLength();
+            const sal_Unicode* pString = aNumber.getStr();
+            sal_Int32 nChar;
+            for( nChar = 0; nChar < nChars; nChar++, pString++ )
+            {
+                if((*pString < '0') || (*pString > '9'))
+                {
+                    // found a non number character, so this is not the default
+                    // name for this page
+                    nPageNumber = -1;
+                    break;
+                }
+            }
+
             if( nPageNumber == ( ( GetPage()->GetPageNum() - 1 ) >> 1 ) + 1 )
                 aName = OUString();
         }
