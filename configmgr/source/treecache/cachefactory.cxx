@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachefactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 14:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,14 @@
 
 #include "cachefactory.hxx"
 
-#ifndef _CONFIGMGR_TREECACHE_HXX_
-#include "treecache.hxx"
+#ifndef CONFIGMGR_TREEMANAGER_HXX_
+#include "treemanager.hxx"
+#endif
+#ifndef CONFIGMGR_BACKEND_CACHECONTROLLER_HXX
+#include "cachecontroller.hxx"
+#endif
+#ifndef CONFIGMGR_HEAPFACTORY_HXX
+#include "heapfactory.hxx"
 #endif
 #ifndef CONFIGMGR_BACKENDWRAP_HXX
 #include "backendwrap.hxx"
@@ -75,16 +81,23 @@ namespace configmgr
 {
 // -------------------------------------------------------------------------
 
-    rtl::Reference<TreeManager> CacheFactory::createCacheManager(IConfigSession * _pSession, OOptions const & _rOptions)
+    rtl::Reference<TreeManager>
+        CacheFactory::createCacheManager(IConfigSession * _pSession,
+                                            TypeConverterRef const & _xTCV)
     {
         rtl::Reference< TreeManager > xCache;
 
         if (_pSession)
         {
-            using namespace backend;
-            rtl::Reference< IMergedDataProvider > xBackend = wrapSession(*_pSession, _rOptions.getTypeConverter());
+            memory::HeapManager & rHeap = memory::cacheHeap();
 
-            xCache.set( new TreeManager(xBackend.get()) );
+            using namespace backend;
+            rtl::Reference< IMergedDataProvider > xBackend = wrapSession(*_pSession,_xTCV);
+
+            rtl::Reference< ICachedDataProvider > xLoader
+                = new CacheController(xBackend.get(),rHeap);
+
+            xCache.set( new TreeManager(xLoader.get(),rHeap) );
         }
 
         return xCache;
