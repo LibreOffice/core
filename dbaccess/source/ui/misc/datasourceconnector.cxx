@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ namespace dbaui
             {
                 Reference< XInterface > xContext = m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT);
                 OSL_ENSURE(xContext.is(), "ODatasourceConnector::implConstruct: got no data source context!");
-                m_xDatabaseContext = Reference< XNameAccess >(xContext, UNO_QUERY);
+                m_xDatabaseContext.set(xContext,UNO_QUERY);
                 OSL_ENSURE(m_xDatabaseContext.is() || !xContext.is(), "ODatasourceConnector::ODatasourceConnector: missing the XNameAccess interface on the data source context!");
             }
             catch(const Exception&)
@@ -168,7 +168,7 @@ namespace dbaui
             return xConnection;
 
         // get the data source
-        Reference< XPropertySet > xDatasource;
+        Reference< XDataSource > xDatasource;
         try
         {
             m_xDatabaseContext->getByName(_rDataSourceName) >>= xDatasource;
@@ -176,23 +176,32 @@ namespace dbaui
         catch(Exception&)
         {
         }
+        return connect(xDatasource,_bShowError);
+    }
+    //---------------------------------------------------------------------
+    Reference< XConnection > ODatasourceConnector::connect(const Reference< XDataSource>& _xDataSource, sal_Bool _bShowError) const
+    {
+        Reference< XConnection > xConnection;
 
-        if (!xDatasource.is())
+        OSL_ENSURE(isValid(), "ODatasourceConnector::connect: invalid object!");
+        if (!isValid())
+            return xConnection;
+
+        if (!_xDataSource.is())
         {
-            OSL_ENSURE(sal_False,(  ::rtl::OString("ODatasourceConnector::connect: could not retrieve the data source named ")
-                                +=  ::rtl::OString(_rDataSourceName.getStr(), _rDataSourceName.getLength(), osl_getThreadTextEncoding())
-                                +=  ::rtl::OString(" !")).getStr());
+            OSL_ENSURE(sal_False,   "ODatasourceConnector::connect: could not retrieve the data source!");
             return xConnection;
         }
 
         // get user/password
         ::rtl::OUString sPassword, sUser;
         sal_Bool bPwdRequired = sal_False;
+        Reference<XPropertySet> xProp(_xDataSource,UNO_QUERY);
         try
         {
-            xDatasource->getPropertyValue(PROPERTY_PASSWORD) >>= sPassword;
-            bPwdRequired = ::cppu::any2bool(xDatasource->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
-            xDatasource->getPropertyValue(PROPERTY_USER) >>= sUser;
+            xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPassword;
+            xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED) >>= bPwdRequired;
+            xProp->getPropertyValue(PROPERTY_USER) >>= sUser;
         }
         catch(Exception&)
         {
@@ -205,7 +214,7 @@ namespace dbaui
         {
             if (bPwdRequired && !sPassword.getLength())
             {   // password required, but empty -> connect using an interaction handler
-                Reference< XCompletedConnection > xConnectionCompletion(xDatasource, UNO_QUERY);
+                Reference< XCompletedConnection > xConnectionCompletion(_xDataSource, UNO_QUERY);
                 if (!xConnectionCompletion.is())
                 {
                     OSL_ENSURE(sal_False, "ODatasourceConnector::connect: missing an interface ... need an error message here!");
@@ -225,8 +234,7 @@ namespace dbaui
             }
             else
             {
-                Reference< XDataSource > xDataSource(xDatasource,UNO_QUERY);
-                xConnection = xDataSource->getConnection(sUser, sPassword);
+                xConnection = _xDataSource->getConnection(sUser, sPassword);
             }
         }
         catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
