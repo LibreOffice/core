@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Semaphore.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $  $Date: 2003-09-08 13:22:52 $
+ *  last change: $Author: kz $  $Date: 2003-12-11 12:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ namespace osl_Semaphore
 
         void ctors_001( )
         {
-            ::osl::Semaphore aSem(0);
+            ::osl::Semaphore aSem(sal_uInt32(0));
             bRes = aSem.tryToAcquire( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: create semaphore with initialCount = 0. the first acquire will block.",
@@ -259,7 +259,7 @@ namespace osl_Semaphore
 
         void ctors_002( )
         {
-            ::osl::Semaphore aSem(1);
+            ::osl::Semaphore aSem(sal_uInt32(1));
             bRes = aSem.tryToAcquire( );
             if ( sal_True == bRes )
                 aSem.release( );
@@ -270,7 +270,7 @@ namespace osl_Semaphore
 
         void ctors_003( )
         {
-            ::osl::Semaphore aSem(1);
+            ::osl::Semaphore aSem(sal_uInt32(1));
             bRes = aSem.tryToAcquire( );
             bRes1 = aSem.tryToAcquire( );
 
@@ -280,7 +280,7 @@ namespace osl_Semaphore
 
         void ctors_004( )
         {
-            oslSemaphore hSem = new ::osl::Semaphore(1);
+            oslSemaphore hSem = new ::osl::Semaphore(sal_uInt32(1));
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test return value of the constructor, it should not be NULL.",
                                     NULL != hSem );
@@ -288,7 +288,7 @@ namespace osl_Semaphore
 
         void ctors_005( )
         {
-            ::osl::Semaphore aSemaphore(2);
+            ::osl::Semaphore aSemaphore(sal_uInt32(2));
             bRes =  aSemaphore.tryToAcquire( )&&
                     aSemaphore.tryToAcquire( )&&
                     !aSemaphore.tryToAcquire( );
@@ -395,7 +395,7 @@ namespace osl_Semaphore
         void acquire_003( )
         {
             // initialization.
-            ::osl::Semaphore aSemOccupied( 0 );
+            ::osl::Semaphore aSemOccupied( sal_uInt32(0) );
             ::osl::Semaphore aSemEmpty( BSIZE );
             ::osl::Mutex aMutex;
 
@@ -514,7 +514,7 @@ namespace osl_Semaphore
 
         void release_002()
         {
-            Semaphore aSemaphore(0);
+            Semaphore aSemaphore(sal_uInt32(0));
             bRes1 = sal_True;
             for ( nCount = 0; nCount < 10; nCount++, aSemaphore.release( ) ) { }
             for ( nCount = 0; nCount < 10; nCount++, bRes1 = bRes1 && aSemaphore.tryToAcquire( ) ) { }
