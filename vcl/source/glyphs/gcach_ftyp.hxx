@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 12:51:33 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,9 @@
 #include <glyphcache.hxx>
 #include <rtl/textcvt.h>
 
-typedef int FT_Int;
-struct FT_GlyphRec_;
+#include <freetype/freetype.h>
 class FreetypeServerFont;
-struct FT_FaceRec_;
-struct FT_SizeRec_;
+struct FT_GlyphRec_;
 
 // -----------------------------------------------------------------------
 
@@ -206,6 +204,7 @@ public:
     const unsigned char*        GetTable( const char* pName, ULONG* pLength )
                                 { return mpFontInfo->GetTable( pName, pLength ); }
     int                         GetEmUnits() const;
+    const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }
 
 protected:
 friend GlyphCache;
