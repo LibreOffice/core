@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:55:30 $
+ *  last change: $Author: od $ $Date: 2002-12-03 15:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,17 @@ class SvtAccessibilityOptions;
 
 class SwPagePreViewWin : public Window
 {
-    ViewShell*          pViewShell;
-    USHORT              nSttPage, nVirtPage, nSelectedPage;
-    BYTE                nRow, nCol;
-    Size                aWinSize, aPgSize;
-    Fraction            aScale;
-    SwPagePreView&      rView;
+    ViewShell*          mpViewShell;
+    USHORT              mnSttPage, mnVirtPage, mnSelectedPage;
+    BYTE                mnRow, mnCol;
+    Size                maPxWinSize, maPgSize;
+    // OD 02.12.2002 #103492
+    Size                maPreviewDocSize;
+    Fraction            maScale;
+    SwPagePreView&      mrView;
+    // OD 02.12.2002 #103492#
+    bool                mbCalcScaleForPreviewLayout;
+    Rectangle           maPaintedPreviewDocRect;
 
     void SetPagePreview( BYTE nRow, BYTE nCol );
 
@@ -115,27 +120,27 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt);
     virtual void DataChanged( const DataChangedEvent& );
 
-    void SetViewShell( ViewShell* pShell ) { pViewShell = pShell; }
-    ViewShell* GetViewShell() const { return pViewShell; }
+    void SetViewShell( ViewShell* pShell ) { mpViewShell = pShell; }
+    ViewShell* GetViewShell() const { return mpViewShell; }
 
-    BYTE    GetRow() const      { return nRow; }
-    void    SetRow( BYTE n )    { if( n ) nRow = n; }
+    BYTE    GetRow() const      { return mnRow; }
+    void    SetRow( BYTE n )    { if( n ) mnRow = n; }
 
-    BYTE    GetCol() const      { return nCol; }
-    void    SetCol( BYTE n )    { if( n ) nCol = n; }
+    BYTE    GetCol() const      { return mnCol; }
+    void    SetCol( BYTE n )    { if( n ) mnCol = n; }
 
-    USHORT  GetVirtPage() const     { return nVirtPage; }
-    USHORT  GetSttPage() const      { return nSttPage; }
+    USHORT  GetVirtPage() const     { return mnVirtPage; }
+    USHORT  GetSttPage() const      { return mnSttPage; }
     void    SetSttPage( USHORT n )
-        { nSttPage = nVirtPage = n; if( !n ) ++nVirtPage; }
+        { mnSttPage = mnVirtPage = n; if( !n ) ++mnVirtPage; }
 
-    USHORT& GetSelectedPage() {return nSelectedPage;}
+    USHORT& GetSelectedPage() {return mnSelectedPage;}
     //JP 19.08.98: bei Einspaltigkeit gibt es keine 0. Seite!
-    USHORT  GetDefSttPage() const   { return 1 == nCol ? 1 : 0; }
+    USHORT  GetDefSttPage() const   { return 1 == mnCol ? 1 : 0; }
 
     void CalcWish( BYTE nNewRow, BYTE nNewCol );
 
-    const Size& GetWinSize() const  { return aWinSize; }
+    const Size& GetWinSize() const  { return maPxWinSize; }
     void SetWinSize( const Size& rNewSize );
 
     enum MoveMode{ MV_CALC, MV_PAGE_UP, MV_PAGE_DOWN, MV_DOC_STT, MV_DOC_END };
@@ -146,6 +151,15 @@ public:
     void GetOptimalSize( Size& rSize ) const;
 
     void RepaintCoreRect( const SwRect& rRect );
+
+    /** method to adjust preview to a new zoom factor
+
+        OD 02.12.2002 #103492#
+        paint of preview is prepare and performed for a new zoom factor
+
+        @author OD
+    */
+    void AdjustPreviewToNewZoom( const sal_uInt16 nZoomFactor );
 
 #ifdef ACCESSIBLE_LAYOUT
     virtual ::com::sun::star::uno::Reference<
