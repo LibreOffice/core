@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-16 11:25:39 $
+ *  last change: $Author: obr $ $Date: 2002-05-17 14:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4135,7 +4135,6 @@ Window::~Window()
         try
         {
 #ifndef REMOTE_APPSERVER
-#if defined WNT
             const SystemEnvData * pEnvData = GetSystemData();
             ImplSVData* pSVData = ImplGetSVData();
 
@@ -4144,10 +4143,13 @@ Window::~Window()
             {
                 if( pSVData->mxAccessBridge.is() )
                 {
+#ifdef WNT
                     pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->hWnd));
+#else
+                    pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->aWindow));
+#endif
                 }
             }
-#endif
 #endif
 
             // deregister drop target listener
@@ -5828,7 +5830,6 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
         ImplShowAllOverlaps();
 
 #ifndef REMOTE_APPSERVER
-#if defined WNT
 
         // filter system windows that are accessible over the Accessibility API anyway
         if( mbFrame && (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE)) )
@@ -5844,11 +5845,14 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
                 {
                     Reference< XTopWindow > xTopWindow( ImplGetWindow()->GetComponentInterface(), UNO_QUERY );
                     if(xTopWindow.is())
+#ifdef WNT
                         pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->hWnd), GetAccessible(), xTopWindow);
+#else
+                        pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->aWindow), GetAccessible(), xTopWindow);
+#endif
                 }
             }
         }
-#endif
 #endif
     }
 
