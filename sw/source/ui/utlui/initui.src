@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:47:52 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı";
         TEXT[ arabic ] = "İåÑÓ ÃÈÌÏí";
         TEXT[ greek ] = "ÅõñåôŞñéï ëİîåùí";
-        TEXT[ korean ] = "Ç¥Á¦¾î¡¡»öÀÎ";
+        TEXT[ korean ] = "Å°¿öµå¡¡»öÀÎ";
         TEXT[ turkish ] = "Alfabetik dizin";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Índice alfabético";
@@ -1088,7 +1088,7 @@ Resource RID_SW_SHELLRES
         Text[ polish ] = "Konwersja $(ARG1)";
         Text[ portuguese_brazilian ] = "Convert $(ARG1)";
         Text[ japanese ] = "$(ARG1) ‚ğ•ÏŠ·";
-        Text[ korean ] = "Convert $(ARG1)";
+        Text[ korean ] = "º¯È¯ $(ARG1)";
         Text[ chinese_simplified ] = "×ª»» $(ARG1)";
         Text[ chinese_traditional ] = "Âà´« $(ARG1)";
         Text[ turkish ] = "Convert $(ARG1)";
@@ -1114,7 +1114,7 @@ Resource RID_SW_SHELLRES
         Text[ polish ] = "Pierwsza konwersja $(ARG1)";
         Text[ portuguese_brazilian ] = "First convert $(ARG1)";
         Text[ japanese ] = "Å‰‚É $(ARG1) ‚ğ•ÏŠ·";
-        Text[ korean ] = "First convert $(ARG1)";
+        Text[ korean ] = "Ã¹¹øÂ° º¯È¯ $(ARG1)";
         Text[ chinese_simplified ] = "µÚÒ»¸ö×ª»» $(ARG1)";
         Text[ chinese_traditional ] = "²Ä¤@­ÓÂà´« $(ARG1)";
         Text[ turkish ] = "First convert $(ARG1)";
@@ -1140,7 +1140,7 @@ Resource RID_SW_SHELLRES
         Text[ polish ] = "Kolejnoœæ konwersji $(ARG1)";
         Text[ portuguese_brazilian ] = "Convert follow $(ARG1)";
         Text[ japanese ] = "Ÿ‚É $(ARG1) ‚ğ•ÏŠ·";
-        Text[ korean ] = "Convert follow $(ARG1)";
+        Text[ korean ] = "º¯È¯ $(ARG1)";
         Text[ chinese_simplified ] = "×ª»»×é $(ARG1)";
         Text[ chinese_traditional ] = "Âà´«²Õ $(ARG1)";
         Text[ turkish ] = "Convert follow $(ARG1)";
