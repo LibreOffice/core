@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tl $ $Date: 2000-11-21 16:41:26 $
+#   last change: $Author: mh $ $Date: 2000-11-21 18:17:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,12 +60,12 @@
 #
 #*************************************************************************
 
-PRJ = ..
+PRJ=..
 
-PRJNAME	= linguistic
-TARGET	= oolng
+PRJNAME=linguistic
+TARGET=lng
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
+#USE_DEFFILE=TRUE
 
 #----- Settings ---------------------------------------------------------
 
@@ -107,8 +107,6 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-.IF "$(header)" == ""
-
 EXCEPTIONSFILES=\
         $(SLO)$/dicimp.obj\
         $(SLO)$/dlistimp.obj\
@@ -120,7 +118,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/thesdsp.obj
 
-LNGOBJS = \
+SLOFILES = \
         $(SLO)$/dicimp.obj\
         $(SLO)$/dlistimp.obj\
         $(SLO)$/hyphdsp.obj\
@@ -131,28 +129,11 @@ LNGOBJS = \
         $(SLO)$/misc.obj\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/spelldta.obj\
-        $(SLO)$/thesdsp.obj
-#		$(SLO)$/thesdta.obj
-
-REGOBJS = \
+        $(SLO)$/thesdsp.obj\
         $(SLO)$/lngreg.obj
 
-SLOFILES = \
-        $(LNGOBJS) $(REGOBJ)
 
-TARGET1 = lng
-TARGET2 = lngreg
-
-
-LIB1TARGET		= $(SLB)$/$(TARGET1).lib
-LIB1ARCHIV		= $(LB)$/lib$(TARGET1).a
-LIB1OBJFILES	= $(LNGOBJS)
-
-LIB2TARGET		= $(SLB)$/$(TARGET2).lib
-LIB2OBJFILES    = $(REGOBJS)
-
-
-SHL1TARGET= $(TARGET1)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
@@ -167,33 +148,33 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)
-
         
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS += $(LNGLIB)
-.ENDIF
-.IF "$(GUI)"=="WNT"
-LIB1STDLIBS += $(LNGLIB)
-.ENDIF
-
 # build DLL
-.IF "$(GUI)" == "WNT"
-SHL1LIBS=		$(SLB)$/$(TARGET1).lib $(SLB)$/$(TARGET2).lib 
-.ELSE
-SHL1LIBS=		$(SLB)$/$(TARGET2).lib
-.ENDIF
-SHL1DEPN=		$(SLB)$/$(TARGET1).lib $(SLB)$/$(TARGET2).lib  
+SHL1LIBS=		$(SLB)$/$(TARGET).lib
+SHL1DEPN=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP= $(TARGET1).map
+SHL1VERSIONMAP= $(TARGET).map
+SHL1IMPLIB= ilng
 
 # build DEF file
 DEF1NAME	=$(SHL1TARGET)
-#DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME =$(TARGET)
-#DEF1DES     =Linguistic main DLL
-DEF1EXPORTFILE=	exports.dxp
+DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
+DEFLIB1NAME =$(TARGET)
+DEF1DES     =Linguistic main DLL
+#DEF1EXPORTFILE=	exports.dxp
 
 
+.IF "$(GUI)"=="WNT"
+DEF1EXPORT1 = component_writeInfo
+DEF1EXPORT2 = component_getFactory
+.ELSE
+.IF "$(COM)"=="ICC"
+DEF1EXPORT1 = component_writeInfo
+DEF1EXPORT2 = component_getFactory
+.ELSE
+DEF1EXPORT1 = _component_writeInfo
+DEF1EXPORT2 = _component_getFactory
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -202,8 +183,9 @@ DEF1EXPORTFILE=	exports.dxp
 .INCLUDE : target.mk
 
 
-#$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-#    @echo ------------------------------
-#    @echo Making: $@
-#    @echo lcl > $@
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo lcl > $@
+    @echo component > $@
 
