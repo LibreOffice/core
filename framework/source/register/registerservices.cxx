@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:48:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,10 @@
 #include <uielement/controlmenucontroller.hxx>
 #endif
 
+#ifndef __FRAMEWORK_UIELEMENT_MACROSMENUCONTROLLER_HXX_
+#include <uielement/macrosmenucontroller.hxx>
+#endif
+
 #ifndef __FRAMEWORK_UIELEMENT_UICOMMANDDESCRIPTION_HXX_
 #include <uielement/uicommanddescription.hxx>
 #endif
@@ -232,6 +236,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::HeaderMenuController                    )
                         COMPONENTINFO( ::framework::FooterMenuController                    )
                         COMPONENTINFO( ::framework::ControlMenuController                   )
+                        COMPONENTINFO( ::framework::MacrosMenuController                   )
                         COMPONENTINFO( ::framework::UICommandDescription                    )
                         COMPONENTINFO( ::framework::ModuleManager                           )
                         COMPONENTINFO( ::framework::UIConfigurationManager                  )
@@ -263,6 +268,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::HeaderMenuController                    )   else
                         IFFACTORY( ::framework::FooterMenuController                    )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
+                        IFFACTORY( ::framework::MacrosMenuController                   )   else
                         IFFACTORY( ::framework::UICommandDescription                    )   else
                         IFFACTORY( ::framework::ModuleManager                           )   else
                         IFFACTORY( ::framework::UIConfigurationManager                  )   else
