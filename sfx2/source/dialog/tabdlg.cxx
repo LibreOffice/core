@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 11:00:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "sfxhelp.hxx"
 #include "ctrlitem.hxx"
 #include "bindings.hxx"
+#include "sfxdlg.hxx"
 #include "itemconnect.hxx"
 
 #include "dialog.hrc"
@@ -118,7 +119,17 @@ struct Data_Impl
         pTabPage    ( 0 ),
         bOnDemand   ( bDemand ),
         bRefresh    ( FALSE )
-    {}
+    {
+        if ( !fnCreatePage  )
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                fnGetRanges = pFact->GetTabPageRangesFunc( nId );
+            }
+        }
+    }
 };
 
 TYPEINIT1(SfxTabDialogItem,SfxSetItem);
@@ -452,6 +463,10 @@ const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
     else
         return GetOldItem( rSet, nSlot );
 }
+
+// add CHINA001  begin
+void SfxTabPage::PageCreated (SfxAllItemSet aSet){DBG_ASSERT(0, "SfxTabPage::PageCreated should not be called"); }//CHINA001
+// add CHINA001 end
 
 // -----------------------------------------------------------------------
 
@@ -804,6 +819,25 @@ void SfxTabDialog::Start_Impl()
     aTabCtrl.SetCurPageId( nActPage );
     ActivatePageHdl( &aTabCtrl );
 }
+
+void SfxTabDialog::AddTabPage( USHORT nId, BOOL bItemsOnDemand )
+{
+    AddTabPage( nId, 0, 0, bItemsOnDemand );
+}
+
+void SfxTabDialog::AddTabPage( USHORT nId, const String &rRiderText, BOOL bItemsOnDemand, USHORT nPos )
+{
+    AddTabPage( nId, rRiderText, 0, 0, bItemsOnDemand, nPos );
+}
+
+#ifdef SV_HAS_RIDERBITMAPS
+
+void SfxTabDialog::AddTabPage( USHORT nId, const Bitmap &rRiderBitmap, BOOL bItemsOnDemand, USHORT nPos )
+{
+    AddTabPage( nId, rRiderBitmap, 0, 0, bItemsOnDemand, nPos );
+}
+
+#endif
 
 // -----------------------------------------------------------------------
 
