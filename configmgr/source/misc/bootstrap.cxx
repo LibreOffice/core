@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-22 11:21:41 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 15:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
-#endif
-#ifndef _CONFIGMGR_MISC_HASHHELPER_HXX
-#include "hashhelper.hxx"
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
@@ -1121,6 +1118,13 @@ namespace configmgr
 
             OUString const sService( RTL_CONSTASCII_USTRINGPARAM(c_sDefaultService) );
             this->setService(sService, Settings::SO_DEFAULT);
+        }
+
+        if ( !hasAsyncSetting() )
+        {
+            Any aDefaultNoAsync = makeAny(sal_Bool(false));
+            putSetting( SETTING_ASYNC, Settings::Setting(aDefaultNoAsync, Settings::SO_DEFAULT) );
+            OSL_ASSERT( hasAsyncSetting() && !getAsyncSetting() );
         }
 
         if (!hasLocale())
