@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 12:40:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1346,7 +1346,7 @@ void SaneDlg::SaveState()
                     if( mrSane.GetOptionValue( nOption, bValue ) )
                     {
                         ByteString aString( "BOOL=" );
-                        aString += (ULONG)bValue;
+                        aString += ByteString::CreateFromInt32(bValue);
                         aConfig.WriteKey( aOption, aString );
                     }
                 }
