@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 10:23:37 $
+#   last change: $Author: rt $ $Date: 2003-04-17 14:31:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,9 +82,13 @@ TARGET=offapi_db
 #	$(SOLARBINDIR)$/udkapi.rdb
 
 UNOIDLDBFILES= \
+    $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
     $(UCR)$/csschart.db \
     $(UCR)$/cssconfiguration.db \
+    $(UCR)$/csscbootstrap.db\
+    $(UCR)$/csscbackend.db\
+    $(UCR)$/csscbxml.db\
     $(UCR)$/cssdatatransfer.db \
     $(UCR)$/cssdclipboard.db \
     $(UCR)$/cssddnd.db \
@@ -97,6 +101,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssframe.db \
     $(UCR)$/cssinstallation.db \
     $(UCR)$/cssi18n.db \
+    $(UCR)$/cssldap.db \
     $(UCR)$/csslinguistic2.db \
     $(UCR)$/cssmozilla.db \
     $(UCR)$/csspackages.db \
@@ -134,9 +139,7 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssaccessibility.db\
     $(UCR)$/dcssawt.db\
     $(UCR)$/dcssabridge.db\
-    $(UCR)$/dcsscbackend.db\
     $(UCR)$/dcssi18n.db\
-    $(UCR)$/dcssauth.db\
     $(UCR)$/dcssdrawing.db\
     $(UCR)$/dcssformula.db \
     $(UCR)$/dcsssheet.db\
@@ -173,8 +176,12 @@ ALLTAR: $(REGISTRYCHECKFLAG)
 # ATTENTION: no special handling for other types is allowed.
 # JSC -> temporary special handling for sheet/SheetSortDescriptor and text/BaseIndex
 # only for build reasons, otherwise the build will break, the changes are not really incompatible
+# JB: configuration: services were documented, but not tagged, as optional
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
     +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UCR)$/types.db -x /UCR/com/sun/star/i18n/reservedWords
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords -x /UCR/com/sun/star/sheet/SheetSortDescriptor -x /UCR/com/sun/star/text/BaseIndex && echo > $(REGISTRYCHECKFLAG)
+    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords \
+        -x /UCR/com/sun/star/sheet/SheetSortDescriptor -x /UCR/com/sun/star/text/BaseIndex \
+        -x /UCR/com/sun/star/configuration/ConfigurationAccess -x /UCR/com/sun/star/configuration/ConfigurationUpdateAccess \
+        && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
