@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-19 11:56:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "~Bereik";
         Text[ chinese_simplified ] = "ÇøÓò(~A)";
         Text[ greek ] = "Ğåñéï÷Ş";
-        Text[ korean ] = "¿µ¿ª";
+        Text[ korean ] = "¿µ¿ª(~A)";
         Text[ turkish ] = "~Aralık";
     };
     Edit ED_RANGE
@@ -153,16 +153,16 @@ ModelessDialog DLG_INSERT_CHART
         Text [ danish ] = "Første række som etiket" ;
         Text [ portuguese_brazilian ] = "Erste ~Reihe als Beschriftung" ;
         Text [ portuguese ] = "Primeira ~linha como etiqueta" ;
-        Text[ chinese_simplified ] = "µÚÒ»ĞĞ×÷Îª±êÌâ(~R)";
+        Text[ chinese_simplified ] = "µÚÒ»ĞĞ×÷Îª±êÌâ(~F)";
         Text[ russian ] = "Ïåğâàÿ ñòğîêà êàê ïîäïèñü";
         Text[ polish ] = "Pierwszy wiersz jako etykieta";
-        Text[ japanese ] = "Å‰‚Ìs‚ğ€–Ú–¼‚Éˆø—p(~Rj";
-        Text[ chinese_traditional ] = "²Ä¤@¦æ§@¬°¼ĞÃD(~R)";
+        Text[ japanese ] = "Å‰‚Ìs‚ğ€–Ú–¼‚Éˆø—p(~F)";
+        Text[ chinese_traditional ] = "²Ä¤@¦æ§@¬°¼ĞÃD(~F)";
         Text[ arabic ] = "ÇáÕİ ÇáÃæá ßÚäæÇä";
         Text[ dutch ] = "Eerste ~rij als kop";
-        Text[ chinese_simplified ] = "µÚÒ»ĞĞ×÷Îª±êÌâ(~R)";
+        Text[ chinese_simplified ] = "µÚÒ»ĞĞ×÷Îª±êÌâ(~F)";
         Text[ greek ] = "Ğñşôç ãñáììŞ ùò åğéãñáöŞ";
-        Text[ korean ] = "Ã¹¹øÂ° ÇàÀ» Ä¸¼ÇÀ¸·Î";
+        Text[ korean ] = "Ã¹¹øÂ° ÇàÀ» Ä¸¼ÇÀ¸·Î(~F)";
         Text[ turkish ] = "Başlıklar ~birinci satırda";
     };
     CheckBox CB_FIRST_COL
@@ -191,7 +191,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "Eerste ~kolom als kop";
         Text[ chinese_simplified ] = "µÚÒ»ÁĞ×÷Îª±êÌâ(~C)";
         Text[ greek ] = "Ğñşôç óôŞëç ùò åğéãñáöŞ";
-        Text[ korean ] = "Ã¹¹øÂ° ¿­À» Ä¸¼ÇÀ¸·Î";
+        Text[ korean ] = "Ã¹¹øÂ° ¿­À» Ä¸¼ÇÀ¸·Î(~C)";
         Text[ turkish ] = "Başlıklar ~birinci sütunda";
     };
     GroupBox GB_1
@@ -267,7 +267,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ dutch ] = "<< Vor~ige";
         Text[ chinese_simplified ] = "<< ·µ»Ø(~B)";
         Text[ greek ] = "<< Ğßóù";
-        Text[ korean ] = "<<µÚ·Î)";
+        Text[ korean ] = "<<µÚ·Î)(~B)";
         Text[ turkish ] = "<< G~eri";
     };
     PushButton BT_NEXT
@@ -287,16 +287,16 @@ ModelessDialog DLG_INSERT_CHART
         Text [ danish ] = "Næste >>" ;
         Text [ portuguese ] = "~Continuar >>" ;
         Text [ portuguese_brazilian ] = "~Weiter >>" ;
-        Text[ chinese_simplified ] = "¼ÌĞø(~N)>>";
+        Text[ chinese_simplified ] = "¼ÌĞø(~N) >>";
         Text[ russian ] = "Äàëåå >>";
         Text[ polish ] = "Dalej >>";
-        Text[ japanese ] = "Ÿ‚Ö(~N) >>";
+        Text[ japanese ] = "Ÿ‚Ö (~N) >>";
         Text[ chinese_traditional ] = "Ä~Äò(~N)";
         Text[ arabic ] = "ÇáÊÇáí <<";
         Text[ dutch ] = "~Volgende >>";
-        Text[ chinese_simplified ] = "¼ÌĞø(~N)>>";
+        Text[ chinese_simplified ] = "¼ÌĞø(~N) >>";
         Text[ greek ] = "Åğüìåíï >>";
-        Text[ korean ] = "´ÙÀ½ >>";
+        Text[ korean ] = "´ÙÀ½ (~N) >>";
         Text[ turkish ] = "~İleri >>";
     };
     PushButton BT_FINISH
