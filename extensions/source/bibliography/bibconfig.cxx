@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-20 08:33:52 $
+ *  last change: $Author: os $ $Date: 2002-08-14 15:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ Sequence<OUString>& BibConfig::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        aNames.realloc(7);
+        aNames.realloc(8);
         OUString* pNames = aNames.getArray();
         pNames[0] = C2U("CurrentDataSource/DataSourceName");
         pNames[1] = C2U("CurrentDataSource/Command");
@@ -118,6 +118,7 @@ Sequence<OUString>& BibConfig::GetPropertyNames()
         pNames[4] = C2U("ViewHeight");
         pNames[5] = C2U("QueryText");
         pNames[6] = C2U("QueryField");
+        pNames[7] = C2U("ShowColumnAssignmentWarning");
     }
     return aNames;
 }
@@ -128,7 +129,8 @@ BibConfig::BibConfig() :
     ConfigItem(C2U("Office.DataAccess/Bibliography"), CONFIG_MODE_DELAYED_UPDATE),
     pMappingsArr(new MappingArray),
     nBeamerSize(0),
-    nViewSize(0)
+    nViewSize(0),
+    bShowColumnAssignmentWarning(sal_False)
 {
     //Names of the default columns
     aColumnDefaults[0] = C2U("Identifier");
@@ -182,6 +184,9 @@ BibConfig::BibConfig() :
                     case  4: pValues[nProp] >>= nViewSize  ;  break;
                     case  5: pValues[nProp] >>= sQueryText ;  break;
                     case  6: pValues[nProp] >>= sQueryField;  break;
+                    case  7:
+                        bShowColumnAssignmentWarning = *(sal_Bool*)pValues[nProp].getValue();
+                    break;
                 }
             }
         }
@@ -312,6 +317,9 @@ void    BibConfig::Commit()
             case  4: pValues[nProp] <<= nViewSize;  break;
             case  5: pValues[nProp] <<= sQueryText;  break;
             case  6: pValues[nProp] <<= sQueryField;  break;
+            case  7:
+                pValues[nProp].setValue(&bShowColumnAssignmentWarning, ::getBooleanCppuType());
+            break;
         }
     }
     PutProperties(aNames, aValues);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
+ *  last change: $Author: os $ $Date: 2002-08-14 15:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include "bibmod.hxx"
 #endif
 #include "sections.hrc"
+#ifndef _BIBCONFIG_HXX
+#include "bibconfig.hxx"
+#endif
 
 
 #ifndef _SV_SVAPP_HXX
@@ -192,10 +195,22 @@ namespace bib
         String sErrorString( m_pGeneralPage->GetErrorString() );
         if ( sErrorString.Len() )
         {
-            sErrorString += '\n';
-            sErrorString += String( BibResId( RID_MAP_QUESTION ) );
-            QueryBox aQuery( this, WB_YES_NO, sErrorString );
-            if ( RET_YES == aQuery.Execute() )
+            sal_Bool bExecute = sal_True;
+            if(BibModul::GetConfig()->IsShowColumnAssignmentWarning())
+            {
+                sErrorString += '\n';
+                sErrorString += String( BibResId( RID_MAP_QUESTION ) );
+                QueryBox aQuery( this, WB_YES_NO, sErrorString );
+                aQuery.SetDefaultCheckBoxText();
+                short nResult = aQuery.Execute();
+                BibModul::GetConfig()->SetShowColumnAssignmentWarning(
+                    !aQuery.GetCheckBoxState());
+                if( RET_YES != nResult )
+                {
+                    bExecute = sal_False;
+                }
+            }
+            if(bExecute)
             {
                 Application::PostUserEvent( STATIC_LINK( this, BibView, CallMappingHdl ) );
             }

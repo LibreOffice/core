@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 12:28:21 $
+ *  last change: $Author: os $ $Date: 2002-08-14 15:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ class BibConfig : public utl::ConfigItem
     rtl::OUString   sQueryText;
     long            nBeamerSize;
     long            nViewSize;
+    sal_Bool        bShowColumnAssignmentWarning;
 
     MappingArray*               pMappingsArr;
     rtl::OUString               aColumnDefaults[COLUMN_COUNT];
@@ -168,6 +169,10 @@ public:
     const rtl::OUString&    getQueryText() const {return sQueryText;}
     void                    setQueryText(const rtl::OUString& rSet) {SetModified(); sQueryText = rSet;}
 
+    sal_Bool                IsShowColumnAssignmentWarning() const
+                                { return bShowColumnAssignmentWarning;}
+    void                    SetShowColumnAssignmentWarning(sal_Bool bSet)
+                                { bShowColumnAssignmentWarning = bSet;}
 };
 /* -----------------------------20.11.00 11:47--------------------------------
 
