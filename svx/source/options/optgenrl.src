@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:49:15 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ portuguese_brazilian ] = "Bitte beachten Sie, daί Straίe, Postleitzahl und Ort fόr die Berechnung des Registrierungsschlόssels herangezogen werden. Bis zur Registrierung kφnnen diese Benutzerdaten nicht mehr geδndert werden.  Wollen Sie diese Benutzerdaten jetzt noch δndern?";
         Text[ japanese ] = "s’¬‘Ί–Ό‚β—X•Φ”Τ†‚βB–ΌA“s“Ή•{§–Ό‚Ν“o^·°‚π”­s‚·‚ιθ‚ª‚©‚θ‚Ζ‚Θ‚θ‚ά‚·B“o^‚ªΟ‚ή‚ά‚Ε‚ΝΥ°»ή°Γή°ΐ‚Ν•ΟX‚Ε‚«‚ά‚Ή‚ρB‚±‚ΜΥ°»ή°Γή°ΐ‚π‚ά‚Ύ•ΟX‚µ‚ά‚·‚©H";
         Text[ chinese_simplified ] = "ΗλΧΆÒβ£Ί½Φµΐ£¬ΣΚ±ΰΊΝ³ΗΚΠΚΗΣΓΐ΄Ιϊ³ΙΧΆ²αΓάΒλµΔΚύΎέ΅£ΤΪΥύΚ½ΧΆ²αΗ°Δϊ²»ΔάΤΩΈόΈΔΥβΠ©ΣΓ»§ΧΚΑΟ΅£ΔϊΟΦΤΪÒªΈόΈΔΥβΠ©ΣΓ»§ΧΚΑΟΒπ£Ώ";
-        Text[ chinese_traditional ] = "½Πª`·N±zΏι¤JªΊµσΉD©M«°¥«¬O¥Ξ¨Σ¥Ν¦¨µω¥UΑδ½XªΊΈκ®Ζ΅C¦b¥Ώ¦΅µω¥U®Ι±z¤£―ΰ­Χ§ο³o¨Η¨Ο¥ΞªΜΈκ®Ζ΅C±z²{¦b­n­Χ§ο³o¨Η¨Ο¥ΞªΜΈκ®Ζ΅H";
+        Text[ chinese_traditional ] = "½Πª`·N±zΏι¤JªΊµσΉD©M«°¥«µ¥Έκ®Ζ¬O¥Ξ¨Σ²£¥Νµω¥UΑδ½X΅C¥Ώ¦΅µω¥U®Ι±z¤£―ΰ­Χ§ο³o¨Η¨Ο¥ΞªΜΈκ®Ζ΅C±z²{¦b­n­Χ§ο³o¨Η¨Ο¥ΞªΜΈκ®Ζ΅H";
         Text[ arabic ] = "ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗαΘνΗδΗΚ ΗαΞΗΥΙ ΘΗαΤΗΡΪ ζΗαΡγÒ ΗαΘΡνΟν ζΗαγΟνδΙ ΚΟΞα Φγδ ΗαΘνΗδΗΚ ΗααΗÒγΙ αΕδΤΗΑ γέΚΗΝ ΗαΚΣΜνα. αΗ νγίδί ΚΫννΡ ΘνΗδΗΚ ΗαγΣΚΞΟγ ΝΚμ ΕδεΗΑ ΪγανΙ ΗαΚΣΜνα. εα ΚΡνΟ ΚΫννΡ ΘνΗδΗΚ ΗαγΣΚΞΟγ εΠε ΗαΒδΏ";
         Text[ greek ] = "Παρακαλώ προσέξτε ότι η οδός, ο Τ.Κ. και η πόλη χρησιμοποιούνται για τον δημιουργία του κλειδιού δήλωσης. Έως την δήλωση δεν θα μπορέσετε να αλλάξετε αυτά τα δεδομένα. Θέλετε να αλλάξετε κάποιο από αυτά τα δεδομένα του χρήστη;";
         Text[ korean ] = "ΑΦΌÒ³ª ΏμΖνΉψΘ£ µξΐΊ µξ·Ο Ε° ±ΈΌΊΏ΅ ΐΜΏλµΘ΄Ω΄Β »η½Ηΐ» Έν½ΙΗΟ½Κ½ΓΏΐ. µξ·ΟΐΜ ΏΟ·αµΙ ¶§±ξΑφ΄Β ΐΜ »ηΏλΐΪ µ¥ΐΜΕΝΈ¦ ΄υ ΐΜ»σ ΉΩ²ά Όφ Ύψ½ΐ΄Ο΄Ω. Αφ±έΐΜ¶σµµ ΐΜ »ηΏλΐΪ µ¥ΐΜΕΝΈ¦ Ί―°ζΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
