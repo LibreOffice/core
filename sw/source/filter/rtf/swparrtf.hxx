@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 11:49:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,16 @@
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
+#endif
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+
+#ifndef _FLTSHELL_HXX
+#include <fltshell.hxx>         // fuer den Attribut Stack
+#endif
 
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
@@ -118,7 +128,6 @@ class SwRelNumRuleSpaces;
 class SwNodeNum;
 class SwTxtNode;
 struct SvxRTFPictureType;
-
 
 class SwNodeIdx : public SvxNodeIdx
 {
@@ -316,6 +325,9 @@ public:
         const SwNode &rNode);
 };
 
+
+
+
 class SwRTFParser : public SvxRTFParser
 {
     /*
@@ -323,6 +335,8 @@ class SwRTFParser : public SvxRTFParser
     */
     sw::util::ParaStyleMapper maParaStyleMapper;
     sw::util::CharStyleMapper maCharStyleMapper;
+
+    std::vector<String> aRevTbl;
 
     friend class rtfSections;
     DocPageInformation maPageDefaults;
@@ -337,6 +351,8 @@ class SwRTFParser : public SvxRTFParser
     SvPtrarr aTblFmts;
     SvPtrarr aRubyCharFmts;
     BookmarkPosition* mpBookmarkStart;
+    sw::util::RedlineStack *mpRedlineStack;
+    sw::util::AuthorInfos* pAuthorInfos;
 
     SfxItemSet* pGrfAttrSet;
     SwTableNode* pTableNode, *pOldTblNd; // fuers Lesen von Tabellen: akt. Tab
@@ -347,6 +363,8 @@ class SwRTFParser : public SvxRTFParser
     SwRelNumRuleSpaces* pRelNumRule;    // Liste aller benannten NumRules
 
     String sNestedFieldStr;
+    SwFltRedline *pRedlineInsert;
+    SwFltRedline *pRedlineDelete;
 
     USHORT nAktPageDesc, nAktFirstPageDesc;
     USHORT nAktBox;         // akt. Box
@@ -376,6 +394,8 @@ class SwRTFParser : public SvxRTFParser
     virtual void InsertText();
     virtual void MovePos( int bForward = TRUE );
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos );
+    void EnterEnvironment();
+    void LeaveEnvironment();
 
     SwFmtPageDesc* GetCurrentPageDesc(SwPaM *pPam);
     void CheckInsNewTblLine();
@@ -388,6 +408,7 @@ class SwRTFParser : public SvxRTFParser
     void ReadListLevel( SwNumRule& rRule, BYTE nLvl );
     void SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine);
     void ReadListTable();
+    USHORT ReadRevTbl();
     void ReadShpRslt();
     void ReadListOverrideTable();
     SwNumRule *ReadNumSecLevel( int nToken );
