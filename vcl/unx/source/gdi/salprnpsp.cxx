@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-21 16:34:48 $
+ *  last change: $Author: svesik $ $Date: 2001-07-13 17:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,11 @@ SalPrinter::~SalPrinter()
 static inline String getTmpName()
 {
     char tmpNam[ L_tmpnam ];
+#if defined(IRIX)
+    mkstemp ( tmpNam );
+#else
     tmpnam_r( tmpNam );
+#endif
     return String( ByteString( tmpNam ), gsl_getSystemTextEncoding() );
 }
 
