@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:17:53 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
         KEY_READ | DELETE,
         &hKey);
 
+    if ( rc == ERROR_FILE_NOT_FOUND )
+        return true;
+
     if (ERROR_SUCCESS == rc)
     {
         char* SubKey;
@@ -188,7 +191,7 @@ std::string ClsidToString(const CLSID& clsid)
 {
     // Get CLSID
     LPOLESTR wszCLSID = NULL;
-    HRESULT hr = StringFromCLSID(clsid, &wszCLSID);
+    StringFromCLSID(clsid, &wszCLSID);
 
     char buff[39];
     // Covert from wide characters to non-wide.
@@ -204,7 +207,7 @@ std::string ClsidToString(const CLSID& clsid)
 //
 //---------------------------------------
 
-bool QueryRegistryKey(HKEY RootKey, const char* KeyName, char szProductType[], DWORD dwBufLen)
+bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen)
 {
     HKEY hKey;
 
@@ -218,7 +221,7 @@ bool QueryRegistryKey(HKEY RootKey, const char* KeyName, char szProductType[], D
     if (ERROR_SUCCESS == rc)
     {
         rc = RegQueryValueExA(
-            hKey, NULL, NULL, NULL, (LPBYTE)szProductType,&dwBufLen);
+            hKey, ValueName, NULL, NULL, (LPBYTE)pszData,&dwBufLen);
 
         RegCloseKey(hKey);
     }
