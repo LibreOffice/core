@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:42:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2559,7 +2559,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                 bMemChart = sal_True;
                                 rtl::OUString sRanges;
                                 ScXMLConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
-                                SvXMLAttributeList* pAttrList;
+                                SvXMLAttributeList* pAttrList = NULL;
                                 if (sRanges.getLength())
                                 {
                                     pAttrList = new SvXMLAttributeList();
