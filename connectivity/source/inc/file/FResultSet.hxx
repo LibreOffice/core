@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-10 14:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
+#endif
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
 #endif
 
 namespace connectivity
@@ -249,61 +252,64 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
         {
 
         protected:
-            ::std::vector<void*>                                m_aBindVector;
-            ::std::vector<sal_Int32>                            m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<void*>                    m_aBindVector;
+            ::std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
-            OValueRow                                           m_aRow;
-            OValueRow                                           m_aEvaluateRow; // contains all values of a row
-            OValueRow                                           m_aParameterRow;
-            OValueRow                                           m_aInsertRow;   // needed for insert by cursor
-            ORefAssignValues                                    m_aAssignValues; // needed for insert,update and parameters
+            OValueRow                               m_aRow;
+            OValueRow                               m_aEvaluateRow; // contains all values of a row
+            OValueRow                               m_aParameterRow;
+            OValueRow                               m_aInsertRow;   // needed for insert by cursor
+            ORefAssignValues                        m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
-            ::std::vector<sal_Int32>*                           m_pEvaluationKeySet;
-            ::std::vector<sal_Int32>::iterator                  m_aEvaluateIter;
+            TIntVector*                             m_pEvaluationKeySet;
+            TIntVector::iterator                    m_aEvaluateIter;
 
-            ::std::map<sal_Int32,sal_Int32>                     m_aBookmarkToPos;
 
-            OKeySet*                                            m_pFileSet;
-            OKeySet::iterator                                   m_aFileSetIter;
+            TInt2IntMap                             m_aBookmarks;         // map from bookmarks to logical position
+            ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
 
-            sal_Int32                                           m_nOrderbyColumnNumber[SQL_ORDERBYKEYS];
-            BOOL                                                bOrderbyAscending[SQL_ORDERBYKEYS];
+            OKeySet*                                m_pFileSet;
+            OKeySet::iterator                       m_aFileSetIter;
 
-            OFILESortIndex*                                     m_pSortIndex;
-            ::vos::ORef<connectivity::OSQLColumns>              m_xColumns; // this are the select columns
-            ::vos::ORef<connectivity::OSQLColumns>              m_xParamColumns;
-            OFileTable*                                         m_pTable;
-            connectivity::OSQLParseNode*                        m_pParseTree;
+            sal_Int32                               m_nOrderbyColumnNumber[SQL_ORDERBYKEYS];
+            BOOL                                    bOrderbyAscending[SQL_ORDERBYKEYS];
 
-            OSQLAnalyzer*                                       m_pSQLAnalyzer;
-            connectivity::OSQLParseTreeIterator&                m_aSQLIterator;
+            OFILESortIndex*                         m_pSortIndex;
+            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
+            ::vos::ORef<connectivity::OSQLColumns>  m_xParamColumns;
+            OFileTable*                             m_pTable;
+            connectivity::OSQLParseNode*            m_pParseTree;
 
-            sal_Int32                                           m_nFetchSize;
-            sal_Int32                                           m_nResultSetType;
-            sal_Int32                                           m_nFetchDirection;
-            sal_Int32                                           m_nResultSetConcurrency;
+            OSQLAnalyzer*                           m_pSQLAnalyzer;
+            connectivity::OSQLParseTreeIterator&    m_aSQLIterator;
+
+            sal_Int32                               m_nFetchSize;
+            sal_Int32                               m_nResultSetType;
+            sal_Int32                               m_nFetchDirection;
+            sal_Int32                               m_nResultSetConcurrency;
 
             ::com::sun::star::uno::WeakReferenceHelper                                      m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDBMetaData;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColNames; // table columns
 
-            ::rtl::OUString                                     m_aTableRange;
-            rtl_TextEncoding                                    m_nTextEncoding;
-            sal_Int32                                           m_nRowPos;
-            sal_Int32                                           m_nFilePos;
-            sal_Int32                                           m_nLastVisitedPos;
-            sal_Int32                                           m_nRowCountResult;
-            sal_Bool                                            m_bWasNull;
-            sal_Bool                                            m_bBOF;                 // before first record
-            sal_Bool                                            m_bEOF;                 // after last record
-            sal_Bool                                            m_bLastRecord;
-            sal_Bool                                            m_bFileSetFrozen;
-            sal_Bool                                            m_bInserted;            // true when moveToInsertRow was called
-                                                                                        // set to false when cursor moved or cancel
-            sal_Bool                                            m_bRowUpdated;
-            sal_Bool                                            m_bRowInserted;
-            sal_Bool                                            m_bRowDeleted;
+            ::rtl::OUString                         m_aTableRange;
+            rtl_TextEncoding                        m_nTextEncoding;
+            sal_Int32                               m_nRowPos;
+            sal_Int32                               m_nFilePos;
+            sal_Int32                               m_nLastVisitedPos;
+            sal_Int32                               m_nRowCountResult;
+            sal_Int32                               m_nCurrentPosition;     // current position of the resultset is returned when ask for getRow()
+            sal_Bool                                m_bWasNull;
+            sal_Bool                                m_bBOF;                 // before first record
+            sal_Bool                                m_bEOF;                 // after last record
+            sal_Bool                                m_bLastRecord;
+            sal_Bool                                m_bFileSetFrozen;
+            sal_Bool                                m_bInserted;            // true when moveToInsertRow was called
+                                                                            // set to false when cursor moved or cancel
+            sal_Bool                                m_bRowUpdated;
+            sal_Bool                                m_bRowInserted;
+            sal_Bool                                m_bRowDeleted;
 
             void construct();
             sal_Bool evaluate();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-10 14:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBASE_DRESULTSET_HXX_
+#include "dbase/DResultSet.hxx"
 #endif
 // define the properties of this lib
 // this file includes the properties for this dll
@@ -692,6 +695,11 @@ BOOL ODbaseIndex::CreateImpl()
 
     if(xSet->last())
     {
+        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xSet,UNO_QUERY);
+        ODbaseResultSet* pDbaseRes = NULL;
+        if(xTunnel.is())
+            pDbaseRes = (ODbaseResultSet*)xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId());
+        OSL_ENSURE(pDbaseRes,"No dbase resultset found? What's going on here!");
         Reference<XRowLocate> xRowLocate(xSet,UNO_QUERY);
         nRowsLeft = xSet->getRow();
 
@@ -718,7 +726,7 @@ BOOL ODbaseIndex::CreateImpl()
                 }
             }
             aInsertKey.setValue(aValue);
-            aInsertKey.setRecord(::comphelper::getINT32(xRowLocate->getBookmark()));
+            aInsertKey.setRecord(pDbaseRes->getCurrentFilePos());
 
             ONDXNode aNewNode(aInsertKey);
             if (!m_aCurLeaf->Insert(aNewNode, --nRowsLeft))

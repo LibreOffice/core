@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-10 14:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,11 @@ void SAL_CALL ODbaseResultSet::release() throw(::com::sun::star::uno::RuntimeExc
 OSQLAnalyzer* ODbaseResultSet::createAnalyzer()
 {
     return new OFILEAnalyzer();
+}
+// -----------------------------------------------------------------------------
+sal_Int32 ODbaseResultSet::getCurrentFilePos() const
+{
+    return m_pTable->getFilePos();
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-10 14:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ ONDXPage::~ONDXPage()
 void ONDXPage::QueryDelete()
 {
     // Ablegen im GarbageCollector
-    if (IsModified())
+    if (IsModified() && rIndex.m_pFileStream)
         (*rIndex.m_pFileStream) << *this;
 
     bModified = FALSE;
