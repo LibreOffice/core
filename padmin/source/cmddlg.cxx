@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-03 16:34:53 $
+ *  last change: $Author: pl $ $Date: 2002-03-01 15:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
         String aCommand;
         rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
 
-        pPipe = popen( "which gs", "r" );
+        pPipe = popen( "which gs 2>/dev/null", "r" );
         if( pPipe )
         {
             fgets( pBuffer, sizeof( pBuffer ), pPipe );
@@ -136,7 +136,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
             pclose( pPipe );
         }
 
-        pPipe = popen( "which distill", "r" );
+        pPipe = popen( "which distill 2>/dev/null", "r" );
         if( pPipe )
         {
             fgets( pBuffer, sizeof( pBuffer ), pPipe );
