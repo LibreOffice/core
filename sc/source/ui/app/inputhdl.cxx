@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:43:49 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,9 @@ __EXPORT ScInputHandler::~ScInputHandler()
 
     if (SC_MOD()->GetRefInputHdl()==this)
         SC_MOD()->SetRefInputHdl(NULL);
+
+    if ( pInputWin && pInputWin->GetInputHandler() == this )
+        pInputWin->SetInputHandler( NULL );
 
     delete pRangeFindList;
     delete pEditDefaults;
