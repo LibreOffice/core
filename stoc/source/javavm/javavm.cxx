@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 16:24:27 $
+ *  last change: $Author: jl $ $Date: 2001-04-25 11:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,15 +587,36 @@ namespace stoc_javavm {
             throw RuntimeException(message, Reference<XInterface>());
         }
 
-        JDK1_1InitArgs vm_args;
-        initArgs(&vm_args);
-
-        jvm.setArgs(&vm_args);
-
         JNIEnv * pJNIEnv = NULL;
         JavaVM * pJavaVM;
-        jint err = pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args);
 
+        // Try VM 1.1
+        JDK1_1InitArgs vm_args;
+        vm_args.version= 0x00010001;
+        jint ret= initArgs(&vm_args);
+        jvm.setArgs(&vm_args);
+
+        jint err;
+        err= pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args);
+
+        if( err != 0)
+        {
+            // Try VM 1.2
+            JavaVMInitArgs vm_args2;
+            JavaVMOption options[1];
+
+            OString _path(vm_args.classpath);
+            OString _prepath( "-Djava.class.path=");
+            OString _allpath= _prepath + _path;
+            options[0].optionString= (char*)_allpath.getStr();
+            options[0].extraInfo= NULL;
+            vm_args2.version= 0x00010002;
+            vm_args2.options= options;
+            vm_args2.nOptions= 1;
+            vm_args2.ignoreUnrecognized= JNI_TRUE;
+
+            err= pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args2);
+        }
         if(err) {
             OUString message(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::createJavaVM - can not create vm, cause of err:"));
             message += OUString::valueOf((sal_Int32)err);
