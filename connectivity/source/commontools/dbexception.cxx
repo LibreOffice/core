@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,15 @@ SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdbc::SQLWarning& _rE
 SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdb::SQLContext& _rError)
 {
     m_aContent <<= _rError;
+    implDetermineType();
+}
+
+//------------------------------------------------------------------------------
+SQLExceptionInfo::SQLExceptionInfo( const ::rtl::OUString& _rSimpleErrorMessage )
+{
+    SQLException aError;
+    aError.Message = _rSimpleErrorMessage;
+    m_aContent <<= aError;
     implDetermineType();
 }
 
