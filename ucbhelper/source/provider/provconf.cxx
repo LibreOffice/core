@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provconf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 12:14:35 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 14:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
@@ -96,6 +99,43 @@ using namespace com::sun::star;
 
 namespace ucb {
 
+void makeAndAppendXMLName(
+                rtl::OUStringBuffer & rBuffer, const rtl::OUString & rIn )
+{
+    sal_Int32 nCount = rIn.getLength();
+    for ( sal_Int32 n = 0; n < nCount; ++n )
+    {
+        const sal_Unicode c = rIn.getStr()[ n ];
+        switch ( c )
+        {
+            case '&':
+                rBuffer.appendAscii( "&amp;" );
+                break;
+
+            case '"':
+                rBuffer.appendAscii( "&quot;" );
+                break;
+
+            case '\'':
+                rBuffer.appendAscii( "&apos;" );
+                break;
+
+            case '<':
+                rBuffer.appendAscii( "&lt;" );
+                break;
+
+            case '>':
+                rBuffer.appendAscii( "&gt;" );
+                break;
+
+            default:
+                rBuffer.append( c );
+                break;
+        }
+    }
+}
+
+//=========================================================================
 bool getContentProviderData(
             const uno::Reference< lang::XMultiServiceFactory > & rServiceMgr,
             const rtl::OUString & rKey1,
@@ -124,27 +164,26 @@ bool getContentProviderData(
             return false;
         }
 
-        rtl::OUString aFullPath( RTL_CONSTASCII_USTRINGPARAM(
-                                            CONFIG_CONTENTPROVIDERS_KEY ) );
+        rtl::OUStringBuffer aFullPath;
 #if SUPD<638
-        aFullPath += rtl::OUString::createFromAscii( "/" );
-        aFullPath += rKey1;
-        aFullPath += rtl::OUString::createFromAscii( "/SecondaryKeys/" );
-        aFullPath += rKey2;
-        aFullPath += rtl::OUString::createFromAscii( "/ProviderData" );
+        aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/" );
+        aFullPath.append( rKey1 );
+        aFullPath.appendAscii( "/SecondaryKeys/" );
+        aFullPath.append( rKey2 );
+        aFullPath.appendAscii( "/ProviderData" );
 #else
-        aFullPath += rtl::OUString::createFromAscii( "/['" );
-        aFullPath += rKey1;
-        aFullPath += rtl::OUString::createFromAscii( "']/SecondaryKeys/['" );
-        aFullPath += rKey2;
-        aFullPath += rtl::OUString::createFromAscii( "']/ProviderData" );
+        aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/['" );
+        makeAndAppendXMLName( aFullPath, rKey1 );
+        aFullPath.appendAscii( "']/SecondaryKeys/['" );
+        makeAndAppendXMLName( aFullPath, rKey2 );
+        aFullPath.appendAscii( "']/ProviderData" );
 #endif
 
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
         aProperty.Name
             = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-        aProperty.Value <<= aFullPath;
+        aProperty.Value <<= aFullPath.makeStringAndClear();
         aArguments[ 0 ] <<= aProperty;
 
         uno::Reference< uno::XInterface > xInterface(
@@ -187,47 +226,30 @@ bool getContentProviderData(
                 return false;
             }
 
-#if SUPD<638
-            const rtl::OUString aServiceKey(
-                            RTL_CONSTASCII_USTRINGPARAM( "/ServiceName" ) );
-            const rtl::OUString aTemplateKey(
-                            RTL_CONSTASCII_USTRINGPARAM( "/URLTemplate" ) );
-            const rtl::OUString aArgsKey(
-                            RTL_CONSTASCII_USTRINGPARAM( "/Arguments" ) );
-#else
-            const rtl::OUString aKeyPrefix(
-                            RTL_CONSTASCII_USTRINGPARAM( "['" ) );
-            const rtl::OUString aPostfixService(
-                            RTL_CONSTASCII_USTRINGPARAM( "']/ServiceName" ) );
-            const rtl::OUString aPostfixTemplate(
-                            RTL_CONSTASCII_USTRINGPARAM( "']/URLTemplate" ) );
-            const rtl::OUString aPostfixArgs(
-                            RTL_CONSTASCII_USTRINGPARAM( "']/Arguments" ) );
-#endif
             // Iterate over children.
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {
+                rtl::OUStringBuffer aElemBuffer;
 #if SUPD<638
-                const rtl::OUString& rElem = pElems[ n ];
+                aElemBuffer.append( pElems[ n ] );
 #else
-                rtl::OUString aElem = aKeyPrefix;
-                aElem += pElems[ n ];
+                aElemBuffer.appendAscii( "['" );
+                makeAndAppendXMLName( aElemBuffer, pElems[ n ] );
 #endif
                 try
                 {
                     ContentProviderData aInfo;
 
                     // Obtain service name.
+                    rtl::OUStringBuffer aKeyBuffer = aElemBuffer;
 #if SUPD<638
-                    rtl::OUString aKey = rElem;
-                    aKey += aServiceKey;
+                    aKeyBuffer.appendAscii( "/ServiceName" );
 #else
-                    rtl::OUString aKey = aElem;
-                    aKey += aPostfixService;
+                    aKeyBuffer.appendAscii( "']/ServiceName" );
 #endif
                     rtl::OUString aValue;
-                    if ( !( xHierNameAccess->getByHierarchicalName( aKey )
-                        >>= aValue ) )
+                    if ( !( xHierNameAccess->getByHierarchicalName(
+                                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
                         OSL_ENSURE( false,
                                     "getContentProviderData - "
@@ -238,15 +260,14 @@ bool getContentProviderData(
                     aInfo.ServiceName = aValue;
 
                     // Obtain URL Template.
+                    aKeyBuffer = aElemBuffer;
 #if SUPD<638
-                    aKey = rElem;
-                    aKey += aTemplateKey;
+                    aKeyBuffer.appendAscii( "/URLTemplate" );
 #else
-                    aKey = aElem;
-                    aKey += aPostfixTemplate;
+                    aKeyBuffer.appendAscii( "']/URLTemplate" );
 #endif
-                    if ( !( xHierNameAccess->getByHierarchicalName( aKey )
-                        >>= aValue ) )
+                    if ( !( xHierNameAccess->getByHierarchicalName(
+                                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
                         OSL_ENSURE( false,
                                     "getContentProviderData - "
@@ -257,15 +278,14 @@ bool getContentProviderData(
                     aInfo.URLTemplate = aValue;
 
                     // Obtain Arguments.
+                    aKeyBuffer = aElemBuffer;
 #if SUPD<638
-                    aKey = rElem;
-                    aKey += aArgsKey;
+                    aKeyBuffer.appendAscii( "/Arguments" );
 #else
-                    aKey = aElem;
-                    aKey += aPostfixArgs;
+                    aKeyBuffer.appendAscii( "']/Arguments" );
 #endif
-                    if ( !( xHierNameAccess->getByHierarchicalName( aKey )
-                        >>= aValue ) )
+                    if ( !( xHierNameAccess->getByHierarchicalName(
+                                aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
                         OSL_ENSURE( false,
                                     "getContentProviderData - "
