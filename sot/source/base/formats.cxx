@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 15:55:01 $
+ *  last change: $Author: ka $ $Date: 2001-03-22 17:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,28 +1733,34 @@ USHORT SotExchange::GetExchangeAction(
 
     if( rxTransferable.is() )
     {
-        const Sequence< DataFlavor > aFlavors( rxTransferable->getTransferDataFlavors() );
-
-        for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
+        try
         {
-            DataFlavorEx        aFlavorEx;
-            const DataFlavor&   rFlavor = aFlavors[ i ];
+            const Sequence< DataFlavor > aFlavors( rxTransferable->getTransferDataFlavors() );
 
-            aFlavorEx.MimeType = rFlavor.MimeType;
-            aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
-            aFlavorEx.DataType = rFlavor.DataType;
-            aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
-
-            aVector.push_back( aFlavorEx );
-
-            if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !HasFormat_Impl( aVector, SOT_FORMAT_GDIMETAFILE ) )
+            for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
             {
-                if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
+                DataFlavorEx        aFlavorEx;
+                const DataFlavor&   rFlavor = aFlavors[ i ];
+
+                aFlavorEx.MimeType = rFlavor.MimeType;
+                aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
+                aFlavorEx.DataType = rFlavor.DataType;
+                aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
+
+                aVector.push_back( aFlavorEx );
+
+                if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !HasFormat_Impl( aVector, SOT_FORMAT_GDIMETAFILE ) )
                 {
-                    aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
-                    aVector.push_back( aFlavorEx );
+                    if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
+                    {
+                        aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
+                        aVector.push_back( aFlavorEx );
+                    }
                 }
             }
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
         }
     }
 
