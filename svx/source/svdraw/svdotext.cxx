@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-01 15:37:15 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 14:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,7 +1145,12 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                     // - nicht mehr die Methode mit dem PaintRect verwenden
                         if (!bFitKorreg)
                         {
-                            rOutliner.Draw(pOutDev,aPaintRect);
+                            // #82826# for correct preview of outliner views
+                            // rOutliner.Draw(pOutDev,aPaintRect);
+                            if(aPaintRect.Top() > aAnchorRect.Top())
+                                rOutliner.Draw(pOutDev, aPaintRect);
+                            else
+                                rOutliner.Draw(pOutDev, aAnchorRect);
                         }
                         else
                         {
