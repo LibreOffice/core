@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:25:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,14 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+// --> OD 2004-07-22 #i31698#
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx> // helper for implementations
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#endif
+// <--
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
@@ -182,13 +187,16 @@ public:
 class SwShapeDescriptor_Impl;
 class SwXGroupShape;
 typedef
-cppu::WeakAggImplHelper5
+cppu::WeakAggImplHelper6
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::beans::XPropertyState,
     ::com::sun::star::text::XTextContent,
     ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XUnoTunnel
+    ::com::sun::star::lang::XUnoTunnel,
+    // --> OD 2004-07-22 #i31698#
+    ::com::sun::star::drawing::XShape
+    // <--
 >
 SwXShapeBaseClass;
 class SwXShape : public SwXShapeBaseClass,
@@ -199,10 +207,15 @@ class SwXShape : public SwXShapeBaseClass,
     friend class SwXGroupShape;
     friend class SwXDrawPage;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 xShapeAgg;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > xShapeAgg;
+    // --> OD 2004-07-23 #i31698# - reference to <XShape>, determined in the
+    // constructor by <queryAggregation> at <xShapeAgg>.
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
+    // <--
+
     SfxItemPropertySet          aPropSet;
     const SfxItemPropertyMap*   _pMap;
-    com::sun::star::uno::Sequence< sal_Int8 >*                                              pImplementationId;
+    com::sun::star::uno::Sequence< sal_Int8 >* pImplementationId;
 
     SwShapeDescriptor_Impl*     pImpl;
 
@@ -211,6 +224,68 @@ class SwXShape : public SwXShapeBaseClass,
     SwFrmFmt*               GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
     SvxShape*               GetSvxShape();
+
+    /** method to determine top group object
+
+        OD 2004-08-03 #i31698#
+
+        @author OD
+    */
+    SdrObject* _GetTopGroupObj( SvxShape* _pSvxShape = 0L );
+
+    /** method to determine position according to the positioning attributes
+
+        OD 2004-08-03 #i31698#
+
+        @author OD
+    */
+    com::sun::star::awt::Point _GetAttrPosition();
+
+    /** method to convert the position (translation) of the drawing object to
+        the layout direction, the drawing object is in
+
+        OD 2004-07-27 #i31698#
+
+        @author OD
+    */
+    ::com::sun::star::awt::Point _ConvertPositionToLayoutDir(
+                            const ::com::sun::star::awt::Point _aObjPosInHoriL2R,
+                            const ::com::sun::star::awt::Size _aObjSize );
+
+    /** method to convert the position (translation) of the drawing object to
+        the layout direction horizontal left-to-right.
+
+        OD 2004-07-27 #i31698#
+
+        @author OD
+    */
+    ::com::sun::star::awt::Point _ConvertPositionToHoriL2R(
+                                    const ::com::sun::star::awt::Point _aObjPos,
+                                    const ::com::sun::star::awt::Size _aObjSize );
+
+    /** method to convert the transformation of the drawing object to the layout
+        direction, the drawing object is in
+
+        OD 2004-07-27 #i31698#
+
+        @author OD
+    */
+    ::com::sun::star::drawing::HomogenMatrix3 _ConvertTransformationToLayoutDir(
+                ::com::sun::star::drawing::HomogenMatrix3 _aMatrixInHoriL2R );
+
+    /** method to adjust the positioning properties
+
+        OD 2004-08-02 #i31698#
+
+        @author OD
+
+        @param _aPosition
+        input parameter - point representing the new shape position. The position
+        has to be given in the layout direction the shape is in and relative to
+        its position alignment areas.
+    */
+    void _AdjustPositionProperties( const ::com::sun::star::awt::Point _aPosition );
+
 protected:
     virtual ~SwXShape();
 public:
@@ -255,6 +330,16 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    // --> OD 2004-07-22 #i31698# XShape
+    virtual ::com::sun::star::awt::Point SAL_CALL getPosition(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
+    // <--
+    // --> OD 2004-07-22 #i31698# XShapeDescriptor - superclass of XShape
+    virtual ::rtl::OUString SAL_CALL getShapeType(  ) throw (::com::sun::star::uno::RuntimeException);
+    // <--
 
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
