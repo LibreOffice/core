@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:21:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
         SetActivateMode( pDockingWin->GetWindow()->GetActivateMode() );
     }
 
-    SetBackground();
+    SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     maDockTimer.SetTimeoutHdl( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
     maDockTimer.SetTimeout( 50 );
@@ -1453,6 +1453,15 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
 //#endif
                                           : mnFloatBits,
                                          this );
+
+                // reduce the border width for seamless NWF painting
+                // (especially for the toolbar gradient on Windows XP)
+                AllSettings aSettings( pWin->GetSettings() );
+                StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
+                aStyleSettings.SetBorderSize( 0 );
+                aSettings.SetStyleSettings( aStyleSettings );
+                pWin->SetSettings( aSettings );
+
                 mpFloatWin      = pWin;
 
 
