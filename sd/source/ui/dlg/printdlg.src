@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ danish ] = "Sideindstillingerne svarer ikke til udskriftsområdet.\nDu kan vælge følgende muligheder" ;
         Text [ italian ] = "Le impostazioni della pagina non corrispondono all'area di stampa.\nÈ possibile scegliere le seguenti opzioni" ;
         Text [ spanish ] = "La configuración de página no coincide con el área de impresión.\nSeleccione una de las siguientes opciones." ;
-        Text [ french ] = "Les mises en page ne concordent pas avec la zone d'impression.\nVous pouvez choisir les options suivantes" ;
+        Text [ french ] = "Les paramètres de la page ne concordent pas avec la zone d'impression.\nVous pouvez choisir les options suivantes" ;
         Text [ dutch ] = "De pagina-instellingen komen niet overeen met het afdrukbereik.\nU kunt de volgende opties kiezen" ;
         Text [ ENGLISH ] = "The page layout does not match the print area.\nChoose one of the following options:" ;
         Text [ english_us ] = "The page settings do not match the print range.\nChoose one of the following options" ;
