@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-01 13:10:06 $
+ *  last change: $Author: mav $ $Date: 2003-04-02 15:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,13 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb( LONG iVerb, LPMSG lpmsg, IOleClientSite
          iVerb == OLEIVERB_OPEN )
     {
         if( m_pDocHolder )
+        {
+            SIZEL aEmbSize;
+
+            GetExtent( DVASPECT_CONTENT, &aEmbSize );
             m_pDocHolder->show();
+            m_pDocHolder->resizeWin( aEmbSize );
+        }
 
         if ( m_pClientSite )
             m_pClientSite->OnShowWindow( TRUE );

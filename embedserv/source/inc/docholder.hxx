@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-01 13:10:07 $
+ *  last change: $Author: mav $ $Date: 2003-04-02 15:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ public:
     void CloseDocument();
     void CloseFrame();
     void FreeOffice();
+
+    void resizeWin( const SIZEL& rNewSize );
 
     void setTitle(const rtl::OUString& aDocumentName);
 

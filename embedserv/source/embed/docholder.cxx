@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-01 13:10:06 $
+ *  last change: $Author: mav $ $Date: 2003-04-02 15:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,13 @@
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XVIEW_HPP_
+#include <com/sun/star/awt/XView.hpp>
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -305,6 +312,52 @@ void DocumentHolder::show()
     }
 }
 
+void DocumentHolder::resizeWin( const SIZEL& rNewSize )
+{
+    if ( m_xFrame.is() && m_pOLEInterface )
+    {
+        uno::Reference< awt::XWindow > xWindow( m_xFrame->getContainerWindow(), uno::UNO_QUERY );
+        uno::Reference< awt::XView > xView( xWindow, uno::UNO_QUERY );
+
+        if ( xWindow.is() && xView.is() )
+        {
+            float fScale = 0.1;
+            xView->setZoom( fScale, fScale );
+
+            SIZEL aOldSize;
+            m_pOLEInterface->GetExtent( DVASPECT_CONTENT, &aOldSize );
+
+            if ( aOldSize.cx != rNewSize.cx || aOldSize.cy != rNewSize.cy )
+            {
+                HDC hdc = GetDC( NULL );
+                SetMapMode( hdc, MM_HIMETRIC );
+
+                RECT aRectOld = { 0, 0, 0, 0 };
+                aRectOld.right = aOldSize.cx;
+                aRectOld.bottom = -aOldSize.cy;
+                LPtoDP( hdc, (POINT*)&aRectOld, 2 );
+
+                RECT aRectNew = { 0, 0, 0, 0 };
+                aRectNew.right = rNewSize.cx;
+                aRectNew.bottom = -rNewSize.cy;
+                LPtoDP( hdc, (POINT*)&aRectNew, 2 );
+
+                ReleaseDC( NULL, hdc );
+
+                awt::Rectangle aWinRect = xWindow->getPosSize();
+                sal_Int32 aWidthDelta = aWinRect.Width - ( aRectOld.right - aRectOld.left );
+                sal_Int32 aHeightDelta = aWinRect.Height - ( aRectOld.bottom - aRectOld.top );
+
+                if ( aWidthDelta > 0 && aHeightDelta > 0 )
+                    xWindow->setPosSize(0,
+                                        0,
+                                        aRectNew.right - aRectNew.left + aWidthDelta,
+                                        aRectNew.bottom - aRectNew.top + aHeightDelta,
+                                        awt::PosSize::SIZE );
+            }
+        }
+    }
+}
 
 void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
 {
