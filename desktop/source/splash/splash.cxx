@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:55:34 $
+ *  last change: $Author: vg $ $Date: 2003-07-15 14:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     , _bPaintBitmap(sal_True)
     , _bPaintProgress(sal_False)
     , _xoffset(12)
-    , _yoffset(16)
+    , _yoffset(18)
     , _barheight(6)
     , _barspace(2)
 {
