@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-27 11:01:07 $
+ *  last change: $Author: dbo $ $Date: 2001-05-07 15:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,13 @@
 #include <test/Base1.hpp>
 #include <test/Base2.hpp>
 
+#include <uno/current_context.hxx>
 #include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <test/XSimpleInterface.hpp>
 #include <test/XLanguageBindingTest.hpp>
 
@@ -93,6 +97,7 @@ using namespace test;
 using namespace rtl;
 using namespace osl;
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
@@ -853,6 +858,67 @@ inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( const Sequence< 
     return getCppuSequenceType< OUString[2][4] >( getCppuArrayType2( (const OUString (*)[2][4])0 ) );
 }
 
+//==================================================================================================
+class Test_CContext
+    : public ::cppu::WeakImplHelper1< XCurrentContext >
+{
+    Reference< XCurrentContext > m_xDel;
+    sal_Int32 m_value;
+    OUString m_name;
+public:
+    inline Test_CContext( sal_Int32 val, OUString const & rName,
+                          Reference< XCurrentContext > const & xDel )
+        SAL_THROW( () )
+        : m_xDel( xDel )
+        , m_value( val )
+        , m_name( rName )
+        {}
+
+    virtual Any SAL_CALL getValueByName( OUString const & rName )
+        throw (RuntimeException);
+};
+//__________________________________________________________________________________________________
+Any Test_CContext::getValueByName( OUString const & rName )
+    throw (RuntimeException)
+{
+    if (rName == m_name)
+    {
+        return makeAny( m_value );
+    }
+    else if (m_xDel.is())
+    {
+        return m_xDel->getValueByName( rName );
+    }
+    return Any();
+}
+//==================================================================================================
+static void testCurrentContext()
+{
+    setCurrentContext( new Test_CContext(
+        5, OUString( RTL_CONSTASCII_USTRINGPARAM("Value1") ),
+        Reference< XCurrentContext >() ) );
+    Reference< XCurrentContext > xCC( getCurrentContext() );
+    OSL_ASSERT(
+        xCC.is() &&
+        xCC->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("Value1") ) ) == (sal_Int16)5 &&
+        !xCC->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("Value2") ) ).hasValue() );
+
+    setCurrentContext( new Test_CContext(
+        7, OUString( RTL_CONSTASCII_USTRINGPARAM("Value2") ),
+        xCC ) );
+    xCC = getCurrentContext();
+    OSL_ASSERT(
+        xCC.is() &&
+        xCC->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("Value1") ) ) == (sal_Int16)5 &&
+        xCC->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("Value2") ) ) == (sal_Int16)7 &&
+        !xCC->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("dummy") ) ).hasValue() );
+
+    uno_Interface * pContext = 0;
+    OUString aEnvName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+    OSL_VERIFY( ::uno_getCurrentContext( (void **)&pContext, aEnvName.pData, 0 ) );
+    (*pContext->release)( pContext );
+}
+
 void testArray(void)
 {
     long a[5][6];
@@ -1026,6 +1092,7 @@ int SAL_CALL main(int argc, char **argv)
 //      test_CBridge();
 //      test_CBridge2();
 
+    testCurrentContext();
     testAssignment();
     testCppu();
 //  testArray();
@@ -1037,10 +1104,15 @@ int SAL_CALL main(int argc, char **argv)
 
       // shutdown
 #ifdef SAL_W32
-    Reference< XComponent > xComp( xMgr, UNO_QUERY );
-    OSL_ENSURE( xComp.is(), "### serivce manager has to implement XComponent!" );
+    {
+    Reference< XComponent > xComp;
+    Reference< beans::XPropertySet > xProps( xMgr, UNO_QUERY );
+    OSL_ENSURE( xProps.is(), "### servicemanager has to implement XPropertySet!" );
+    xProps->getPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xComp;
+    OSL_ENSURE( xComp.is(), "### serivce manager's default (root) context has to implement XComponent!" );
     xComp->dispose();
-    xMgr.clear();
+    }
 #endif
     typelib_setCacheSize( 0 );
     testEnvironments();

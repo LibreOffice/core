@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: dbo $ $Date: 2001-04-27 11:01:07 $
+#   last change: $Author: dbo $ $Date: 2001-05-07 15:07:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,9 +154,9 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.uno.XAdapter \
         -Tcom.sun.star.uno.XAggregation \
         -Tcom.sun.star.uno.XWeak \
-        -Tcom.sun.star.reflection.XIdlClassProvider
-
-# 		-Tcom.sun.star.uno.XCurrentContext \
+        -Tcom.sun.star.beans.XPropertySet \
+        -Tcom.sun.star.reflection.XIdlClassProvider \
+         -Tcom.sun.star.uno.XCurrentContext
 
 $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?

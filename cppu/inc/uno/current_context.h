@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
+ *  last change: $Author: dbo $ $Date: 2001-05-07 15:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,27 @@ extern "C"
 {
 #endif
 
-/** Gets the current thread's context.
+/** Gets the current task's context.
 
-    @param ppCompEnv out param current context of type com.sun.star.uno.XCurrentContext
+    @param ppCurrentContext inout param current context of type com.sun.star.uno.XCurrentContext
     @param pEnvTypeName type name of returned interface's environment
     @param pEnvContext context of returned interface's environment (commonly 0)
+    @return true, if context ref was transferred (even if null ref)
 */
-void SAL_CALL uno_getCurrentContext(
+sal_Bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext,
+    rtl_uString * pEnvTypeName, void * pEnvContext )
+    SAL_THROW_EXTERN_C();
+
+/** Sets the current task's context.
+
+    @param pCurrentContext in param current context of type com.sun.star.uno.XCurrentContext
+    @param pEnvTypeName type name of interface's environment
+    @param pEnvContext context of interface's environment (commonly 0)
+    @return true, if context ref was transferred (even if null ref)
+*/
+sal_Bool SAL_CALL uno_setCurrentContext(
+    void * pCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-05-07 15:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,7 @@
 #ifndef _UNO_CURRENT_CONTEXT_HXX_
 #define _UNO_CURRENT_CONTEXT_HXX_
 
-#include <osl/diagnose.h>
 #include <uno/current_context.h>
-
 #include <cppu/macros.hxx>
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
@@ -82,37 +80,48 @@ namespace star
 namespace uno
 {
 
-/** Current context.
+/** Getting the current context.
+
+    @return current context or null ref, if none is set
 */
-inline Reference< XCurrentContext > SAL_CALL getCurrentContext() SAL_THROW( () )
+inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
+    SAL_THROW( () )
 {
-    ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-
     Reference< XCurrentContext > xRet;
+    ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
     ::uno_getCurrentContext( (void **)&xRet, aEnvTypeName.pData, 0 );
-
     return xRet;
 }
+/** Setting the current context.
 
-/** Security support.
+    @param xContext current context to be set
+    @return true, if context has been successfully set
 */
-inline void SAL_CALL checkPermission(
-    const ::com::sun::star::security::Permission & rPerm )
-    SAL_THROW( (::com::sun::star::security::AccessControlException) )
+inline bool SAL_CALL setCurrentContext(
+    Reference< XCurrentContext > const & xContext )
+    SAL_THROW( () )
 {
-    Reference< XCurrentContext > xContext( getCurrentContext() );
-    OSL_ENSURE( xContext.is(), "### cannot get current thread's uno context!" );
-
-    if (xContext.is())
-    {
-        Reference< ::com::sun::star::security::XAccessController > xAC(
-            xContext->getAccessController() );
-        if (xAC.is()) // access controller installed?
-        {
-            xAC->checkPermission( rPerm );
-        }
-    }
+    ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    return (::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, 0 ) != sal_False);
 }
+
+//  /** Permission check.
+//  */
+//  inline void SAL_CALL checkPermission(
+//      ::com::sun::star::security::Permission const & rPerm )
+//      SAL_THROW( (::com::sun::star::security::AccessControlException) )
+//  {
+//      Reference< XCurrentContext > xContext( getCurrentContext() );
+//      if (xContext.is())
+//      {
+//          Reference< ::com::sun::star::security::XAccessController > xAC;
+//          if (xContext->getValueByName( OUString(
+//              RTL_CONSTASCII_USTRINGPARAM("com.sun.star.security.AccessController") ) ) >>= xAC)
+//          {
+//              xAC->checkPermission( rPerm );
+//          }
+//      }
+//  }
 
 }
 }
