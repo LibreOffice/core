@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:36:24 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ portuguese_brazilian ] = "Current selection";
         Text[ japanese ] = "Œ»İ‚Ì‘I‘ğ(~C)";
         Text[ korean ] = "ÇöÀç ¼±ÅÃ(~C)";
-        Text[ chinese_simplified ] = "µ±Ç°µÄÑ¡Ôñ(~C)";
+        Text[ chinese_simplified ] = "µ±Ç°µÄÑ¡ÖĞ(~C)";
         Text[ chinese_traditional ] = "·í«eªº¿ï¨ú(~C)";
         Text[ arabic ] = "ÇáÊÍÏíÏ ÇáÍÇáí";
         Text[ turkish ] = "~Yürürlükteki seçim";
@@ -847,6 +847,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ catalan ] = "Seleccionar fuente de datos";
     Text[ finnish ] = "Valitse tietolähde";
 };
+
 
 
 
