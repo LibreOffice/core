@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:16:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,12 +201,13 @@ void SwWW8Writer::OutListTab()
         return ;            // no numbering is used
 
     USHORT nCount = pUsedNumTbl->Count();
+    USHORT n;
 
     pFib->fcPlcfLst = pTableStrm->Tell();
     SwWW8Writer::WriteShort( *pTableStrm, nCount );
 
     // First Loop - write static data of SwNumRule - LSTF
-    for( USHORT n = 0; n < nCount; ++n )
+    for( n = 0; n < nCount; ++n )
     {
         const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
 
@@ -416,11 +417,12 @@ void SwWW8Writer::OutOverrideListTab()
 
     // write the "list format override" - LFO
     USHORT nCount = pUsedNumTbl->Count();
+    USHORT n;
 
     pFib->fcPlfLfo = pTableStrm->Tell();
     SwWW8Writer::WriteLong( *pTableStrm, nCount );
 
-    for( USHORT n = 0; n < nCount; ++n )
+    for( n = 0; n < nCount; ++n )
     {
         SwWW8Writer::WriteLong( *pTableStrm, n + 1 );
         SwWW8Writer::FillCount( *pTableStrm, 12 );
