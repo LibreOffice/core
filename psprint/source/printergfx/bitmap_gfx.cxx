@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap_gfx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:07 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,7 @@ PrinterGfx::writePS2ImageHeader (const Rectangle& rArea, psp::ImageType nType)
     sal_Int32 nChar = 0;
     sal_Char  pImage [512];
 
-    sal_Int32 nDictType;
+    sal_Int32 nDictType = 0;
     switch (nType)
     {
         case psp::TrueColorImage:  nDictType = 0; break;
