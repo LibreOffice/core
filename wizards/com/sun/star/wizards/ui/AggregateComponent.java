@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AggregateComponent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:40:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): _____________________________________
  *
  */
-
 package com.sun.star.wizards.ui;
 
 import java.util.Vector;
@@ -106,27 +105,27 @@ public class AggregateComponent extends ControlScroller{
 
     /** Creates a new instance of AggrgateComponent */
     public AggregateComponent(WizardDialog _CurUnoDialog, QueryMetaData _CurDBMetaData, int _iStep, int _iPosX, int _iPosY, int _iWidth, int _uitextfieldcount, int _firstHelpID){
-    super(_CurUnoDialog, _CurDBMetaData.xMSF,  _iStep, _iPosX, _iPosY, _iWidth, _uitextfieldcount, 18, _firstHelpID+2);
+    super(_CurUnoDialog, _CurDBMetaData.xMSF,  _iStep, _iPosX+10, _iPosY, _iWidth-12, _uitextfieldcount, 18, _firstHelpID+2);
     try{
         curHelpID = _firstHelpID;
         this.CurDBMetaData = _CurDBMetaData;;
         Count = 1;
         optDetailQuery = CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-            new Object[] { new Integer(8), "HID:" + curHelpID, soptDetailQuery, new Integer(iCompPosX), new Integer(iCompPosY-34), new Short((short)1), IStep, new Short(curtabindex++), new Integer(iCompWidth)}
+            new Object[] { new Integer(8), "HID:" + curHelpID, soptDetailQuery, new Integer(_iPosX), new Integer(iCompPosY-42), new Short((short)1), IStep, new Short(curtabindex++), new Integer(iCompWidth)}
         );
 
         optSummaryQuery = CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
-            new String[] {"Height", "HelpURL","Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-            new Object[] { new Integer(10), "HID:" + (curHelpID+1), soptSummaryQuery, new Integer(iCompPosX), new Integer(iCompPosY-24), IStep, new Short(curtabindex++), new Integer(iCompWidth)}
+            new String[] {"Height", "HelpURL", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+            new Object[] { new Integer(16), "HID:" + (curHelpID+1), soptSummaryQuery, Boolean.TRUE, new Integer(_iPosX), new Integer(iCompPosY-32), IStep, new Short(curtabindex++), new Integer(iCompWidth)}
         );
         CurUnoDialog.insertLabel("lblAggregate",
             new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-            new Object[] { new Integer(8),slblAggregate, new Integer( iCompPosX + 5), new Integer(iCompPosY-10), IStep, new Short(curtabindex++), new Integer(50)}
+            new Object[] { new Integer(8),slblAggregate, new Integer( iCompPosX + 5), new Integer(iCompPosY-10), IStep, new Short(curtabindex++), new Integer(90)}
         );
         CurUnoDialog.insertLabel("lblFieldnames",
             new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-            new Object[] {new Integer(8),slblFieldNames, new Integer(iCompPosX + 107), new Integer(iCompPosY-10),IStep, new Short(curtabindex++), new Integer(57)}
+            new Object[] {new Integer(8),slblFieldNames, new Integer(iCompPosX + 101), new Integer(iCompPosY-10),IStep, new Short(curtabindex++), new Integer(90)}
         );
         this.setTotalFieldCount(1);
         FontDescriptor oFontDescriptor = new FontDescriptor();
@@ -224,6 +223,7 @@ public class AggregateComponent extends ControlScroller{
         if ( fieldcount < super.getBlockIncrementation()){
             ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(fieldcount);
             oControlRow.setVisible(true);
+            oControlRow.settovoid();
         }
         else{
              ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(super.getBlockIncrementation()-1);
@@ -233,12 +233,13 @@ public class AggregateComponent extends ControlScroller{
         fieldcount++;
         super.setTotalFieldCount(fieldcount);
         toggleButtons();
+        CurUnoDialog.repaintDialogStep();
     }
 
 
     protected void removeRow(){
         int fieldcount = super.getTotalFieldCount();
-        if ( fieldcount > 1){
+        if ( fieldcount > 0){
             ControlRow oControlRow;
             fieldcount--;
             if ((fieldcount+1) <= super.getBlockIncrementation()){
@@ -250,47 +251,79 @@ public class AggregateComponent extends ControlScroller{
 
         }
         toggleButtons();
+        CurUnoDialog.repaintDialogStep();
     }
 
 
     protected void toggleButtons(){
+        ControlRow curcontrolrow = null;
+        boolean biscomplete = true;
         CurDBMetaData.Type = getQueryType();
-        CurUnoDialog.setControlProperty("btnminus", "Enabled",  new Boolean((super.getTotalFieldCount()> 1) && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
-        ControlRow curcontrolrow = (ControlRow) ControlRowVector.elementAt(super.getCurFieldCount()-1);
-        CurUnoDialog.setControlProperty("btnplus", "Enabled",  new Boolean((curcontrolrow.isComplete()) && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
+        CurUnoDialog.setControlProperty("btnminus", "Enabled",  new Boolean((super.getTotalFieldCount()> 0) && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
+        int fieldcount = super.getCurFieldCount();
+        if (fieldcount > 0){
+            curcontrolrow = (ControlRow) ControlRowVector.elementAt(super.getCurFieldCount()-1);
+            biscomplete = curcontrolrow.isComplete();
+        }
+        CurUnoDialog.setControlProperty("btnplus", "Enabled",  new Boolean(biscomplete && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
+        togglefollowingDialogSteps();
     }
 
 
     public void toggleComponent(){
         CurDBMetaData.Type = getQueryType();
-        boolean benableComponent = (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY);
+        boolean benableComponent = isAggregateComponentEnabled();
         CurUnoDialog.setControlProperty("lblAggregate", "Enabled", new Boolean(benableComponent));
         CurUnoDialog.setControlProperty("lblFieldnames", "Enabled", new Boolean(benableComponent));
         toggleButtons();
         super.toggleComponent(benableComponent);
         super.toggleControls(benableComponent);
-        togglefollowingDialogSteps(benableComponent);
+        togglefollowingDialogSteps();
     }
 
 
-    private void togglefollowingDialogSteps(boolean _benableComponent){
+    private boolean isAggregateComponentEnabled(){
+        return(CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY);
+    }
+
+
+    public boolean isGroupingpossible(){
     try {
-        boolean benableGroupPage = _benableComponent && CurDBMetaData.xDBMetaData.supportsGroupBy() && hascompletefunctions();
+        boolean benableGroupPage = isAggregateComponentEnabled() && CurDBMetaData.xDBMetaData.supportsGroupBy() && hasonlycompletefunctions();
+        String[][] sAggregateFieldNames = this.getAggregateFieldNames();
+        if (benableGroupPage){
+            for (int i = 0; i < CurDBMetaData.NumericFieldNames.length; i++){
+                boolean bisthere = (JavaTools.FieldInTable(sAggregateFieldNames, CurDBMetaData.NumericFieldNames[i]) > -1);
+                if (!bisthere)
+                    return true;
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(System.out);
+    }
+    return false;
+    }
+
+
+    private void togglefollowingDialogSteps(){
+        boolean benabletherest = true;
+        boolean benableGroupPage = isGroupingpossible();
         CurUnoDialog.setStepEnabled(UIConsts.SOGROUPSELECTIONPAGE, benableGroupPage);
         CurUnoDialog.setStepEnabled(UIConsts.SOGROUPFILTERPAGE, benableGroupPage && CurDBMetaData.GroupFieldNames.length > 0);
-        boolean benabletherest = (!_benableComponent) || (_benableComponent && hascompletefunctions());
+        if (isAggregateComponentEnabled())
+            benabletherest = hasonlycompletefunctions();
         CurUnoDialog.enablefromStep(UIConsts.SOTITLESPAGE, benabletherest);
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }}
+        CurUnoDialog.enableNextButton(benabletherest);
+    }
+
 
     private void hideControlRowsfromindex(int _index){
         if (_index < this.ControlRowVector.size()){
             for (int i = _index; i < ControlRowVector.size();i++){
                 ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(i);
-                if (i == _index)
-                    oControlRow.settovoid();
-                else
+//              if (i == _index)
+//                  oControlRow.settovoid();
+//              else
                     oControlRow.setVisible(false);
             }
         }
@@ -348,9 +381,17 @@ public class AggregateComponent extends ControlScroller{
     public void initialize(){
         CurDBMetaData.setNumericFields();
         initializeScrollFields();
-        super.initialize(CurDBMetaData.AggregateFieldNames.length+1);
-        hideControlRowsfromindex(CurDBMetaData.AggregateFieldNames.length);
+        int icount = CurDBMetaData.AggregateFieldNames.length;
+        if (icount == 0){
+            super.initialize(1);
+            hideControlRowsfromindex(1);
+        }
+        else{
+            super.initialize(icount);
+            hideControlRowsfromindex(icount);
+        }
         toggleComponent();
+        CurUnoDialog.repaintDialogStep();
     }
 
 
@@ -394,10 +435,10 @@ public class AggregateComponent extends ControlScroller{
     }
 
 
-    private boolean hascompletefunctions(){
+    private boolean hasonlycompletefunctions(){
         int maxfieldcount = super.getCurFieldCount();
         if (maxfieldcount > 0){
-            ControlRow curcontrolrow = (ControlRow) this.ControlRowVector.elementAt(0);
+            ControlRow curcontrolrow = (ControlRow) this.ControlRowVector.elementAt(maxfieldcount-1);
             return curcontrolrow.isComplete();
         }
         else
@@ -407,7 +448,6 @@ public class AggregateComponent extends ControlScroller{
 
 
     protected class ControlRow{
-        private String NameSuffix;
         private XListBox xFieldListBox;
         private XListBox xFunctionListBox;
         private int index;
@@ -417,12 +457,12 @@ public class AggregateComponent extends ControlScroller{
             this.index = _index;
             xFunctionListBox = CurUnoDialog.insertListBox(getFunctionControlName(index), 1, null, new ItemListenerImpl(),
                 new String[] { "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
-                new Object[] { Boolean.TRUE, new Integer(12), "HID:" + _curHelpID++, new Integer(iCompPosX+4), new Integer(ypos), UIConsts.INVISIBLESTEP, sFunctions, new Short(curtabindex++), new Integer(94)}
+                new Object[] { Boolean.TRUE, new Integer(12), "HID:" + _curHelpID++, new Integer(iCompPosX+4), new Integer(ypos), UIConsts.INVISIBLESTEP, sFunctions, new Short(curtabindex++), new Integer(88)}
             );
 
             xFieldListBox = CurUnoDialog.insertListBox(getFieldsControlName(index),1, null, new ItemListenerImpl(),
                 new String[] {"Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                new Object[] { Boolean.TRUE, new Integer(12), "HID:" + _curHelpID++, new Integer(iCompPosX + 104), new Integer(ypos), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(90)}
+                new Object[] { Boolean.TRUE, new Integer(12), "HID:" + _curHelpID++, new Integer(iCompPosX + 98), new Integer(ypos), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(86)}
             );
             lastHelpIndex = _curHelpID-1;
         }
@@ -441,10 +481,9 @@ public class AggregateComponent extends ControlScroller{
         }
 
 
-        private void setVisible(boolean bHidden){
-            CurUnoDialog.setControlVisible(getFunctionControlName(index), bHidden);
-            CurUnoDialog.setControlVisible(getFieldsControlName(index), bHidden);
-            CurUnoDialog.repaintDialogStep();
+        private void setVisible(boolean _bvisible){
+            CurUnoDialog.setControlVisible(getFunctionControlName(index), _bvisible);
+            CurUnoDialog.setControlVisible(getFieldsControlName(index), _bvisible);
         }
 
 
@@ -470,7 +509,7 @@ public class AggregateComponent extends ControlScroller{
             public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject){
             try{
                 toggleButtons();
-                togglefollowingDialogSteps(true);
+                togglefollowingDialogSteps();
             }
             catch (Exception exception){
                 exception.printStackTrace(System.out);
