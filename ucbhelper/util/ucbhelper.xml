@@ -82,6 +82,7 @@
     <type> com.sun.star.ucb.ContentCreationException           </type>
     <type> com.sun.star.ucb.GlobalTransferCommandArgument      </type>
     <type> com.sun.star.ucb.InsertCommandArgument              </type>
+    <type> com.sun.star.ucb.InteractiveIOException             </type>
     <type> com.sun.star.ucb.ListActionType                     </type>
     <type> com.sun.star.ucb.NameClash                          </type>
     <type> com.sun.star.ucb.NameClashResolveRequest            </type>
