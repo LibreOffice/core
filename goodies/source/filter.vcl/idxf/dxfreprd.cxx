@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfreprd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:25:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,12 +320,12 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_TEXT: {
-                const DXFTextEntity * pE = (DXFTextEntity*)pBE;
+                //const DXFTextEntity * pE = (DXFTextEntity*)pBE;
                 //???
                 break;
             }
             case DXF_SHAPE: {
-                const DXFShapeEntity * pE = (DXFShapeEntity*)pBE;
+                //const DXFShapeEntity * pE = (DXFShapeEntity*)pBE;
                 //???
                 break;
             }
@@ -349,12 +349,12 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 break;
             }
             case DXF_ATTDEF: {
-                const DXFAttDefEntity * pE = (DXFAttDefEntity*)pBE;
+                //const DXFAttDefEntity * pE = (DXFAttDefEntity*)pBE;
                 //???
                 break;
             }
             case DXF_ATTRIB: {
-                const DXFAttribEntity * pE = (DXFAttribEntity*)pBE;
+                //const DXFAttribEntity * pE = (DXFAttribEntity*)pBE;
                 //???
                 break;
             }
@@ -390,8 +390,17 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 rBox.Union(aP);
                 break;
             }
+            case DXF_POLYLINE: {
+                //const DXFAttribEntity * pE = (DXFAttribEntity*)pBE;
+                //???
+                break;
+            }
+            case DXF_SEQEND: {
+                //const DXFAttribEntity * pE = (DXFAttribEntity*)pBE;
+                //???
+                break;
+            }
         }
         pBE=pBE->pSucc;
     }
 }
-
