@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-13 14:28:49 $
+ *  last change: $Author: gt $ $Date: 2002-03-14 13:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,9 @@
 
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include "syslocale.hxx"
@@ -648,6 +651,8 @@ public:
     sal_Bool                mbOnlyFolder    : 1;
     sal_Bool                mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
     sal_Bool                mbSuspendSelectCallback : 1;
+
+    IntlWrapper             aIntlWrapper;
 
     String                  maViewURL;
     String                  maAllFilter;
@@ -1464,7 +1469,7 @@ void SvtFileView::ExecuteFilter( const String& rFilter )
     mpImp->GetFolderContent_Impl( mpImp->maViewURL );
     mpImp->FilterFolderContent_Impl( rFilter );
 
-    mpImp->SortFolderContent_Impl();
+    mpImp->SortFolderContent_Impl();    // possibly not necessary!!!!!!!!!!
     mpImp->CreateDisplayText_Impl();
     mpImp->OpenFolder_Impl();
 }
@@ -1686,6 +1691,7 @@ SvtFileView_Impl::SvtFileView_Impl( Window* pParent,
     ,mbAscending                ( sal_True )
     ,mbOnlyFolder               ( bOnlyFolder )
     ,mbReplaceNames             ( sal_False )
+    ,aIntlWrapper               ( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() )
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
     ,mpNameTrans                ( NULL )
     ,mbSuspendSelectCallback    ( sal_False )
@@ -2233,14 +2239,16 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
 }
 
 // -----------------------------------------------------------------------
-static sal_Bool     gbAscending = sal_True;
-static sal_Int16    gnColumn = COLUMN_TITLE;
+static sal_Bool                 gbAscending = sal_True;
+static sal_Int16                gnColumn = COLUMN_TITLE;
+static const CollatorWrapper*   pCollatorWrapper = NULL;
 
 /* this functions returns true, if aOne is less then aTwo
 */
-sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne,
-                                  SortingData_Impl* const aTwo )
+sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl* const aTwo )
 {
+    DBG_ASSERT( pCollatorWrapper, "*CompareSortingData_Impl(): Can't work this way!" );
+
     sal_Int32   nComp;
     sal_Bool    bRet;
     sal_Bool    bEqual = sal_False;
@@ -2254,45 +2262,45 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne,
     {
         switch ( gnColumn )
         {
-        case COLUMN_TITLE:
-            // compare case insensitiv first
-            nComp = aOne->GetLowerTitle().compareTo( aTwo->GetLowerTitle() );
+            case COLUMN_TITLE:
+                // compare case insensitiv first
+                nComp = pCollatorWrapper->compareString( aOne->GetLowerTitle(), aTwo->GetLowerTitle() );
 
-            if ( nComp == 0 )
-                nComp = aOne->GetTitle().compareTo( aTwo->GetTitle() );
+                if ( nComp == 0 )
+                    nComp = pCollatorWrapper->compareString( aOne->GetTitle(), aTwo->GetTitle() );
 
-            if ( nComp < 0 )
-                bRet = sal_True;
-            else if ( nComp > 0 )
-                bRet = sal_False;
-            else
-                bEqual = sal_True;
-            break;
-        case COLUMN_TYPE:
-            nComp = aOne->maType.compareTo( aTwo->maType );
-            if ( nComp < 0 )
-                bRet = sal_True;
-            else if ( nComp > 0 )
-                bRet = sal_False;
-            else
-                bEqual = sal_True;
-            break;
-        case COLUMN_SIZE:
-            if ( aOne->maSize < aTwo->maSize )
-                bRet = sal_True;
-            else if ( aOne->maSize > aTwo->maSize )
-                bRet = sal_False;
-            else
-                bEqual = sal_True;
-            break;
-        case COLUMN_DATE:
-            if ( aOne->maModDate < aTwo->maModDate )
-                bRet = sal_True;
-            else if ( aOne->maModDate > aTwo->maModDate )
-                bRet = sal_False;
-            else
-                bEqual = sal_True;
-            break;
+                if ( nComp < 0 )
+                    bRet = sal_True;
+                else if ( nComp > 0 )
+                    bRet = sal_False;
+                else
+                    bEqual = sal_True;
+                break;
+            case COLUMN_TYPE:
+                nComp = pCollatorWrapper->compareString( aOne->maType, aTwo->maType );
+                if ( nComp < 0 )
+                    bRet = sal_True;
+                else if ( nComp > 0 )
+                    bRet = sal_False;
+                else
+                    bEqual = sal_True;
+                break;
+            case COLUMN_SIZE:
+                if ( aOne->maSize < aTwo->maSize )
+                    bRet = sal_True;
+                else if ( aOne->maSize > aTwo->maSize )
+                    bRet = sal_False;
+                else
+                    bEqual = sal_True;
+                break;
+            case COLUMN_DATE:
+                if ( aOne->maModDate < aTwo->maModDate )
+                    bRet = sal_True;
+                else if ( aOne->maModDate > aTwo->maModDate )
+                    bRet = sal_False;
+                else
+                    bEqual = sal_True;
+                break;
         }
     }
 
@@ -2318,10 +2326,11 @@ void SvtFileView_Impl::SortFolderContent_Impl()
     {
         gbAscending = mbAscending;
         gnColumn = mnSortColumn;
+        pCollatorWrapper = aIntlWrapper.getCaseCollator();
 
-        std::stable_sort( maContent.begin(),
-                          maContent.end(),
-                          CompareSortingData_Impl );
+        std::stable_sort( maContent.begin(), maContent.end(), CompareSortingData_Impl );
+
+        pCollatorWrapper = NULL;
     }
 }
 
