@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:27:46 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,6 +655,44 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
     }
 }
 
+//------------------------------------------------------------------
+
+void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
+{
+    ScViewFunc* pView = pViewData->GetView();
+    if ( pView->HasPaintBrush() )
+    {
+        // cancel paintbrush mode
+        pView->ResetBrushDocument();
+    }
+    else
+    {
+        BOOL bLock = FALSE;
+        const SfxItemSet *pArgs = rReq.GetArgs();
+        if( pArgs && pArgs->Count() >= 1 )
+            bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
+
+        ScDrawView* pDrawView = pViewData->GetScDrawView();
+        if ( pDrawView && pDrawView->HasMarked() )
+        {
+            BOOL bOnlyHardAttr = TRUE;
+            SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
+            pView->SetDrawBrushSet( pItemSet, bLock );
+        }
+    }
+}
+
+void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
+{
+    ScDrawView* pDrawView = pViewData->GetScDrawView();
+    BOOL bSelection = pDrawView && pDrawView->HasMarked();
+    BOOL bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
+
+    if ( !bHasPaintBrush && !bSelection )
+        rSet.DisableItem( SID_FORMATPAINTBRUSH );
+    else
+        rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, bHasPaintBrush ) );
+}
 
 
 
